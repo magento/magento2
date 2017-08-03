@@ -10,10 +10,11 @@ use Magento\Catalog\Model\Product;
 /**
  * Quantity and Stock Status attribute processing
  *
- * @deprecated as this attribute should be removed
+ * @deprecated 2.2.0 as this attribute should be removed
  * @see StockItemInterface when you want to change the stock data
  * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
  * @see StockItemRepositoryInterface::save as extension point for customization of saving process
+ * @since 2.0.0
  */
 class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -21,6 +22,7 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Stock Registry
      *
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     * @since 2.0.0
      */
     protected $stockRegistry;
 
@@ -28,6 +30,7 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Construct
      *
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
@@ -40,6 +43,7 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param Product $object
      * @return $this
+     * @since 2.0.0
      */
     public function afterLoad($object)
     {
@@ -57,6 +61,7 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param Product $object
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
+     * @since 2.0.0
      */
     public function validate($object)
     {

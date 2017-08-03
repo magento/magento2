@@ -11,11 +11,13 @@ use Magento\Framework\Config\DataInterface;
  * Class Config
  *
  * Config of ReportXml
+ * @since 2.2.0
  */
 class Config implements ConfigInterface
 {
     /**
      * @var DataInterface
+     * @since 2.2.0
      */
     private $data;
 
@@ -23,6 +25,7 @@ class Config implements ConfigInterface
      * Config constructor.
      *
      * @param DataInterface $data
+     * @since 2.2.0
      */
     public function __construct(
         DataInterface $data
@@ -35,6 +38,7 @@ class Config implements ConfigInterface
      *
      * @param string $queryName
      * @return array
+     * @since 2.2.0
      */
     public function get($queryName)
     {

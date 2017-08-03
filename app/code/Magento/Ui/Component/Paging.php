@@ -7,6 +7,7 @@ namespace Magento\Ui\Component;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Paging extends AbstractComponent
 {
@@ -16,6 +17,7 @@ class Paging extends AbstractComponent
      * Default component data
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_data = [
         'config' => [
@@ -50,6 +52,7 @@ class Paging extends AbstractComponent
      * Get component name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComponentName()
     {
@@ -60,6 +63,7 @@ class Paging extends AbstractComponent
      * Register component and apply paging settings to Data Provider
      *
      * @return void
+     * @since 2.0.0
      */
     public function prepare()
     {
@@ -78,6 +82,7 @@ class Paging extends AbstractComponent
      * Prepare paging options
      *
      * @return void
+     * @since 2.0.0
      */
     protected function prepareOptions()
     {
@@ -97,6 +102,7 @@ class Paging extends AbstractComponent
      *
      * @param array|null $paging
      * @return int
+     * @since 2.0.0
      */
     protected function getOffset($paging)
     {
@@ -109,6 +115,7 @@ class Paging extends AbstractComponent
      *
      * @param array|null $paging
      * @return int
+     * @since 2.0.0
      */
     protected function getSize($paging)
     {

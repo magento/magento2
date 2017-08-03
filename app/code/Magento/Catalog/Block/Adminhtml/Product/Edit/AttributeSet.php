@@ -11,12 +11,18 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Edit\AttributeSet
+ *
+ * @since 2.0.0
+ */
 class AttributeSet extends \Magento\Backend\Block\Widget\Form
 {
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -24,6 +30,7 @@ class AttributeSet extends \Magento\Backend\Block\Widget\Form
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -38,6 +45,7 @@ class AttributeSet extends \Magento\Backend\Block\Widget\Form
      * Get options for suggest widget
      *
      * @return array
+     * @since 2.0.0
      */
     public function getSelectorOptions()
     {

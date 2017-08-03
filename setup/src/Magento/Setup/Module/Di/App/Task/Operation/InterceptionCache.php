@@ -7,20 +7,28 @@ namespace Magento\Setup\Module\Di\App\Task\Operation;
 
 use Magento\Setup\Module\Di\App\Task\OperationInterface;
 
+/**
+ * Class \Magento\Setup\Module\Di\App\Task\Operation\InterceptionCache
+ *
+ * @since 2.0.0
+ */
 class InterceptionCache implements OperationInterface
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     private $data = [];
 
     /**
      * @var \Magento\Framework\Interception\Config\Config
+     * @since 2.0.0
      */
     private $configInterface;
 
     /**
      * @var \Magento\Setup\Module\Di\Code\Reader\Decorator\Interceptions
+     * @since 2.0.0
      */
     private $interceptionsInstancesNamesList;
 
@@ -28,6 +36,7 @@ class InterceptionCache implements OperationInterface
      * @param \Magento\Framework\Interception\Config\Config $configInterface
      * @param \Magento\Setup\Module\Di\Code\Reader\Decorator\Interceptions $interceptionsInstancesNamesList
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Interception\Config\Config $configInterface,
@@ -43,6 +52,7 @@ class InterceptionCache implements OperationInterface
      * Flushes interception cached configuration and generates a new one
      *
      * @return void
+     * @since 2.0.0
      */
     public function doOperation()
     {
@@ -67,6 +77,7 @@ class InterceptionCache implements OperationInterface
      * Returns operation name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName()
     {

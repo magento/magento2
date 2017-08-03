@@ -7,15 +7,22 @@ namespace Magento\Checkout\Helper;
 
 use Magento\Checkout\Controller\Express\RedirectLoginInterface;
 
+/**
+ * Class \Magento\Checkout\Helper\ExpressRedirect
+ *
+ * @since 2.0.0
+ */
 class ExpressRedirect extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * @var \Magento\Framework\App\ActionFlag
+     * @since 2.0.0
      */
     protected $_actionFlag;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -23,6 +30,7 @@ class ExpressRedirect extends \Magento\Framework\App\Helper\AbstractHelper
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
@@ -32,6 +40,7 @@ class ExpressRedirect extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\App\Helper\Context $context
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ActionFlag $actionFlag,
@@ -51,6 +60,7 @@ class ExpressRedirect extends \Magento\Framework\App\Helper\AbstractHelper
      * @param RedirectLoginInterface $expressRedirect
      * @param string|null $customerBeforeAuthUrlDefault
      * @return void
+     * @since 2.0.0
      */
     public function redirectLogin(RedirectLoginInterface $expressRedirect, $customerBeforeAuthUrlDefault = null)
     {

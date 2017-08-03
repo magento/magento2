@@ -11,26 +11,31 @@ use Magento\Framework\Phrase;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Cleaner
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     private $requestData;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $mappedQueries;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $mappedFilters;
 
     /**
      * @var AggregationStatus
+     * @since 2.0.0
      */
     private $aggregationStatus;
 
@@ -38,6 +43,7 @@ class Cleaner
      * Cleaner constructor
      *
      * @param AggregationStatus $aggregationStatus
+     * @since 2.0.0
      */
     public function __construct(AggregationStatus $aggregationStatus)
     {
@@ -49,6 +55,7 @@ class Cleaner
      *
      * @param array $requestData
      * @return array
+     * @since 2.0.0
      */
     public function clean(array $requestData)
     {
@@ -75,6 +82,7 @@ class Cleaner
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     private function cleanQuery($queryName)
     {
@@ -127,6 +135,7 @@ class Cleaner
      * Clean aggregations if we don't need to process them
      *
      * @return void
+     * @since 2.0.0
      */
     private function cleanAggregations()
     {
@@ -156,6 +165,7 @@ class Cleaner
      * @throws StateException
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     private function cleanFilter($filterName)
     {
@@ -205,6 +215,7 @@ class Cleaner
      *
      * @param array $queryReference
      * @return array
+     * @since 2.0.0
      */
     private function processQueryReference($queryReference)
     {
@@ -222,6 +233,7 @@ class Cleaner
      *
      * @param array $filterReference
      * @return array
+     * @since 2.0.0
      */
     private function processFilterReference($filterReference)
     {
@@ -238,6 +250,7 @@ class Cleaner
      * Clear variables to default status
      *
      * @return void
+     * @since 2.0.0
      */
     private function clear()
     {

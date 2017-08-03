@@ -13,11 +13,13 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class StoreView
+ * @since 2.1.0
  */
 class StoreView extends Column
 {
     /**
      * @var StoreManagerInterface
+     * @since 2.1.0
      */
     protected $storeManager;
 
@@ -29,6 +31,7 @@ class StoreView extends Column
      * @param StoreManagerInterface $storeManager
      * @param array $components
      * @param array $data
+     * @since 2.1.0
      */
     public function __construct(
         ContextInterface $context,
@@ -46,6 +49,7 @@ class StoreView extends Column
      *
      * @param array $dataSource
      * @return array
+     * @since 2.1.0
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -62,6 +66,7 @@ class StoreView extends Column
      *
      * @param array $item
      * @return string
+     * @since 2.1.0
      */
     protected function prepareItem(array $item)
     {

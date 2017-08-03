@@ -5,12 +5,18 @@
  */
 namespace Magento\Framework\Indexer\SaveHandler;
 
+/**
+ * Class \Magento\Framework\Indexer\SaveHandler\Batch
+ *
+ * @since 2.0.0
+ */
 class Batch
 {
     /**
      * @param \Traversable $documents
      * @param int $size
      * @return \Generator
+     * @since 2.0.0
      */
     public function getItems(\Traversable $documents, $size)
     {

@@ -17,31 +17,37 @@ namespace Magento\Setup\Fixtures;
  * <cart_price_rules_floor>{int}</cart_price_rules_floor>
  *
  * @see setup/performance-toolkit/profiles/ce/small.xml
+ * @since 2.0.0
  */
 class CartPriceRulesFixture extends Fixture
 {
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $priority = 80;
 
     /**
      * @var float
+     * @since 2.1.0
      */
     protected $cartPriceRulesCount = 0;
 
     /**
      * @var float
+     * @since 2.1.0
      */
     protected $cartPriceRulesProductsFloor = 3;
 
     /**
      * @var bool
+     * @since 2.1.0
      */
     protected $cartRulesAdvancedType = false;
 
     /**
      * @var \Magento\SalesRule\Model\RuleFactory
+     * @since 2.2.0
      */
     private $ruleFactory;
 
@@ -50,6 +56,7 @@ class CartPriceRulesFixture extends Fixture
      *
      * @param FixtureModel $fixtureModel
      * @param \Magento\SalesRule\Model\RuleFactory|null $ruleFactory
+     * @since 2.2.0
      */
     public function __construct(
         FixtureModel $fixtureModel,
@@ -63,6 +70,7 @@ class CartPriceRulesFixture extends Fixture
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD)
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -118,6 +126,7 @@ class CartPriceRulesFixture extends Fixture
      * @param int $ruleId
      * @param array $categoriesArray
      * @return array
+     * @since 2.1.0
      */
     public function generateCondition($ruleId, $categoriesArray)
     {
@@ -163,6 +172,7 @@ class CartPriceRulesFixture extends Fixture
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param array $categoriesArray
      * @return void
+     * @since 2.1.0
      */
     public function generateRules($ruleFactory, $categoriesArray)
     {
@@ -248,6 +258,7 @@ class CartPriceRulesFixture extends Fixture
      * @param int $ruleId
      * @param array $categoriesArray
      * @return array
+     * @since 2.1.0
      */
     public function generateAdvancedCondition($ruleId, $categoriesArray)
     {
@@ -348,6 +359,7 @@ class CartPriceRulesFixture extends Fixture
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param array $categoriesArray
      * @return void
+     * @since 2.1.0
      */
     public function generateAdvancedRules($ruleFactory, $categoriesArray)
     {
@@ -437,6 +449,7 @@ class CartPriceRulesFixture extends Fixture
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getActionTitle()
     {
@@ -445,6 +458,7 @@ class CartPriceRulesFixture extends Fixture
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function introduceParamLabels()
     {

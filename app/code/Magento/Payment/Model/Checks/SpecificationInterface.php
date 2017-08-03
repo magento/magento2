@@ -12,6 +12,7 @@ use Magento\Quote\Model\Quote;
  * Specification checks interface
  *
  * @api
+ * @since 2.0.0
  */
 interface SpecificationInterface
 {
@@ -21,6 +22,7 @@ interface SpecificationInterface
      * @param MethodInterface $paymentMethod
      * @param \Magento\Quote\Model\Quote $quote
      * @return bool
+     * @since 2.0.0
      */
     public function isApplicable(MethodInterface $paymentMethod, Quote $quote);
 }

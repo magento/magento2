@@ -9,6 +9,7 @@ namespace Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection
 {
@@ -16,6 +17,7 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -23,6 +25,7 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
      * Product types config
      *
      * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
+     * @since 2.0.0
      */
     protected $_config;
 
@@ -53,6 +56,7 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -108,6 +112,7 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
      * Retrieve currently edited product model
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     protected function _getProduct()
     {
@@ -116,6 +121,7 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function _initSelect()
     {

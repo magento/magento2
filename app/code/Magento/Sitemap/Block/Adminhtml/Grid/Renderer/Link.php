@@ -14,20 +14,28 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\Sitemap\Block\Adminhtml\Grid\Renderer\Link
+ *
+ * @since 2.0.0
+ */
 class Link extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var \Magento\Framework\Filesystem $filesystem
+     * @since 2.0.0
      */
     protected $_filesystem;
 
     /**
      * @var \Magento\Sitemap\Model\SitemapFactory
+     * @since 2.0.0
      */
     protected $_sitemapFactory;
 
     /**
      * @var DocumentRoot
+     * @since 2.2.0
      */
     protected $documentRoot;
 
@@ -37,6 +45,7 @@ class Link extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      * @param \Magento\Framework\Filesystem $filesystem
      * @param array $data
      * @param DocumentRoot $documentRoot
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -57,6 +66,7 @@ class Link extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

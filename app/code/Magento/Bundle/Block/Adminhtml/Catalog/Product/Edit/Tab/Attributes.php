@@ -11,6 +11,7 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab;
 /**
  * Bundle product attributes tab
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes
 {
@@ -20,6 +21,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
      * @return void
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -132,6 +134,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
      * Get current product from registry
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function getProduct()
     {

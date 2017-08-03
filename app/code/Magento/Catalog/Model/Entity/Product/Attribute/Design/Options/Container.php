@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Entity\Product\Attribute\Design\Options;
  * Entity/Attribute/Model - select product design options container from config
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Container extends \Magento\Eav\Model\Entity\Attribute\Source\Config
 {
@@ -17,6 +18,7 @@ class Container extends \Magento\Eav\Model\Entity\Attribute\Source\Config
      *
      * @param string|integer $value
      * @return string|false
+     * @since 2.0.0
      */
     public function getOptionText($value)
     {

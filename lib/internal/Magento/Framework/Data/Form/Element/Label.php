@@ -11,6 +11,11 @@
  */
 namespace Magento\Framework\Data\Form\Element;
 
+/**
+ * Class \Magento\Framework\Data\Form\Element\Label
+ *
+ * @since 2.0.0
+ */
 class Label extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**
@@ -18,6 +23,7 @@ class Label extends \Magento\Framework\Data\Form\Element\AbstractElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
@@ -33,6 +39,7 @@ class Label extends \Magento\Framework\Data\Form\Element\AbstractElement
      * Retrieve Element HTML
      *
      * @return string
+     * @since 2.0.0
      */
     public function getElementHtml()
     {

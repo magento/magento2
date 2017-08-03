@@ -10,6 +10,7 @@ namespace Magento\Framework\Interception;
  *
  * This interface exposes the parent method of the interception class, which allows the caller to bypass
  * the interception logic.
+ * @since 2.0.0
  */
 interface InterceptorInterface
 {
@@ -19,6 +20,7 @@ interface InterceptorInterface
      * @param string $method
      * @param array $arguments
      * @return mixed
+     * @since 2.0.0
      */
     public function ___callParent($method, array $arguments);
 }

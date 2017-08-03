@@ -15,6 +15,7 @@ use Magento\Framework\View\Element\Template;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Navigation extends \Magento\Framework\View\Element\Template
 {
@@ -22,16 +23,19 @@ class Navigation extends \Magento\Framework\View\Element\Template
      * Catalog layer
      *
      * @var \Magento\Catalog\Model\Layer
+     * @since 2.0.0
      */
     protected $_catalogLayer;
 
     /**
      * @var \Magento\Catalog\Model\Layer\FilterList
+     * @since 2.0.0
      */
     protected $filterList;
 
     /**
      * @var \Magento\Catalog\Model\Layer\AvailabilityFlagInterface
+     * @since 2.0.0
      */
     protected $visibilityFlag;
 
@@ -41,6 +45,7 @@ class Navigation extends \Magento\Framework\View\Element\Template
      * @param \Magento\Catalog\Model\Layer\FilterList $filterList
      * @param \Magento\Catalog\Model\Layer\AvailabilityFlagInterface $visibilityFlag
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -59,6 +64,7 @@ class Navigation extends \Magento\Framework\View\Element\Template
      * Apply layer
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -73,6 +79,7 @@ class Navigation extends \Magento\Framework\View\Element\Template
      * Get layer object
      *
      * @return \Magento\Catalog\Model\Layer
+     * @since 2.0.0
      */
     public function getLayer()
     {
@@ -83,6 +90,7 @@ class Navigation extends \Magento\Framework\View\Element\Template
      * Get layered navigation state html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getStateHtml()
     {
@@ -93,6 +101,7 @@ class Navigation extends \Magento\Framework\View\Element\Template
      * Get all layer filters
      *
      * @return array
+     * @since 2.0.0
      */
     public function getFilters()
     {
@@ -103,6 +112,7 @@ class Navigation extends \Magento\Framework\View\Element\Template
      * Check availability display layer block
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canShowBlock()
     {
@@ -113,6 +123,7 @@ class Navigation extends \Magento\Framework\View\Element\Template
      * Get url for 'Clear All' link
      *
      * @return string
+     * @since 2.0.0
      */
     public function getClearUrl()
     {

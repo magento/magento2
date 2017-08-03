@@ -9,12 +9,18 @@ namespace Magento\Multishipping\Controller\Checkout;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 use Magento\Framework\App\ResponseInterface;
 
+/**
+ * Class \Magento\Multishipping\Controller\Checkout\Billing
+ *
+ * @since 2.0.0
+ */
 class Billing extends \Magento\Multishipping\Controller\Checkout
 {
     /**
      * Validation of selecting of billing address
      *
      * @return boolean
+     * @since 2.0.0
      */
     protected function _validateBilling()
     {
@@ -29,6 +35,7 @@ class Billing extends \Magento\Multishipping\Controller\Checkout
      * Multishipping checkout billing information page
      *
      * @return void|ResponseInterface
+     * @since 2.0.0
      */
     public function execute()
     {

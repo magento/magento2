@@ -19,6 +19,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @since 2.0.0
  */
 class Item extends AbstractExtensibleModel implements StockItemInterface
 {
@@ -31,6 +32,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Prefix of model events names
      *
      * @var string
+     * @since 2.2.0
      */
     protected $_eventPrefix = 'cataloginventory_stock_item';
 
@@ -42,6 +44,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * In observe method you can use $observer->getEvent()->getItem() in this case
      *
      * @var string
+     * @since 2.2.0
      */
     protected $_eventObject = 'item';
 
@@ -49,26 +52,31 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Store model manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var StockConfigurationInterface
+     * @since 2.0.0
      */
     protected $stockConfiguration;
 
     /**
      * @var StockRegistryInterface
+     * @since 2.0.0
      */
     protected $stockRegistry;
 
     /**
      * @var StockConfigurationInterface
+     * @since 2.0.0
      */
     protected $stockItemRepository;
 
     /**
      * @var float|false
+     * @since 2.0.0
      */
     protected $qtyIncrements;
 
@@ -76,6 +84,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Store id
      *
      * @var int|null
+     * @since 2.0.0
      */
     protected $storeId;
 
@@ -83,11 +92,13 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Customer group id
      *
      * @var int|null
+     * @since 2.0.0
      */
     protected $customerGroupId;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $customerSession;
 
@@ -105,6 +116,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -140,6 +152,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -148,6 +161,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
 
     /**
      * @return int|null
+     * @since 2.0.0
      */
     public function getItemId()
     {
@@ -158,6 +172,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Retrieve Website Id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getWebsiteId()
     {
@@ -172,6 +187,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Retrieve stock identifier
      *
      * @return int
+     * @since 2.0.0
      */
     public function getStockId()
     {
@@ -186,6 +202,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Retrieve Product Id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getProductId()
     {
@@ -195,6 +212,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getStockStatusChangedAuto()
     {
@@ -203,6 +221,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
 
     /**
      * @return float
+     * @since 2.0.0
      */
     public function getQty()
     {
@@ -213,6 +232,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Retrieve Stock Availability
      *
      * @return bool|int
+     * @since 2.0.0
      */
     public function getIsInStock()
     {
@@ -225,6 +245,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsQtyDecimal()
     {
@@ -234,6 +255,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsDecimalDivided()
     {
@@ -242,6 +264,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
 
     /**
      * @return string Timestamp
+     * @since 2.0.0
      */
     public function getLowStockDate()
     {
@@ -253,6 +276,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getShowDefaultNotificationMessage()
     {
@@ -262,6 +286,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getUseConfigMinQty()
     {
@@ -272,6 +297,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Retrieve minimal quantity available for item status in stock
      *
      * @return float
+     * @since 2.0.0
      */
     public function getMinQty()
     {
@@ -286,6 +312,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getUseConfigMinSaleQty()
     {
@@ -296,6 +323,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Retrieve Minimum Qty Allowed in Shopping Cart or NULL when there is no limitation
      *
      * @return float
+     * @since 2.0.0
      */
     public function getMinSaleQty()
     {
@@ -311,6 +339,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getUseConfigMaxSaleQty()
     {
@@ -321,6 +350,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Retrieve Maximum Qty Allowed in Shopping Cart data wrapper
      *
      * @return float
+     * @since 2.0.0
      */
     public function getMaxSaleQty()
     {
@@ -336,6 +366,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getUseConfigNotifyStockQty()
     {
@@ -346,6 +377,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Retrieve Notify for Quantity Below data wrapper
      *
      * @return float
+     * @since 2.0.0
      */
     public function getNotifyStockQty()
     {
@@ -358,6 +390,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getUseConfigEnableQtyInc()
     {
@@ -369,6 +402,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getEnableQtyIncrements()
     {
@@ -383,6 +417,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getUseConfigQtyIncrements()
     {
@@ -393,6 +428,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Retrieve Quantity Increments
      *
      * @return int|false
+     * @since 2.0.0
      */
     public function getQtyIncrements()
     {
@@ -414,6 +450,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getUseConfigBackorders()
     {
@@ -424,6 +461,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Retrieve backorders status
      *
      * @return int
+     * @since 2.0.0
      */
     public function getBackorders()
     {
@@ -436,6 +474,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getUseConfigManageStock()
     {
@@ -446,6 +485,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Retrieve can Manage Stock
      *
      * @return int
+     * @since 2.0.0
      */
     public function getManageStock()
     {
@@ -463,6 +503,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * @param string $quoteError
      * @param string $errorIndex
      * @return $this
+     * @since 2.0.0
      */
     protected function _addQuoteItemError(
         \Magento\Quote\Model\Quote\Item $item,
@@ -482,6 +523,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @return $this
      * @throws \Exception
+     * @since 2.0.0
      */
     public function save()
     {
@@ -494,6 +536,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @param Product $product
      * @return $this
+     * @since 2.0.0
      */
     public function setProduct(Product $product)
     {
@@ -511,6 +554,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @param int $value Value of store id
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreId($value)
     {
@@ -522,6 +566,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Retrieve Store Id (product or current)
      *
      * @return int
+     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -535,6 +580,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Getter for customer group id, return current customer group if not set
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCustomerGroupId()
     {
@@ -549,6 +595,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @param int $value Value of customer group id
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerGroupId($value)
     {
@@ -561,6 +608,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @param int $itemId
      * @return $this
+     * @since 2.0.0
      */
     public function setItemId($itemId)
     {
@@ -570,6 +618,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @param int $productId
      * @return $this
+     * @since 2.0.0
      */
     public function setProductId($productId)
     {
@@ -581,6 +630,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @param int $websiteId
      * @return $this
+     * @since 2.0.0
      */
     public function setWebsiteId($websiteId)
     {
@@ -592,6 +642,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @param int $stockId
      * @return $this
+     * @since 2.0.0
      */
     public function setStockId($stockId)
     {
@@ -601,6 +652,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @param float $qty
      * @return $this
+     * @since 2.0.0
      */
     public function setQty($qty)
     {
@@ -612,6 +664,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @param bool|int $isInStock
      * @return $this
+     * @since 2.0.0
      */
     public function setIsInStock($isInStock)
     {
@@ -621,6 +674,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @param bool $isQtyDecimal
      * @return $this
+     * @since 2.0.0
      */
     public function setIsQtyDecimal($isQtyDecimal)
     {
@@ -630,6 +684,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @param bool $useConfigMinQty
      * @return $this
+     * @since 2.0.0
      */
     public function setUseConfigMinQty($useConfigMinQty)
     {
@@ -641,6 +696,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @param float $minQty
      * @return $this
+     * @since 2.0.0
      */
     public function setMinQty($minQty)
     {
@@ -650,6 +706,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @param int $useConfigMinSaleQty
      * @return $this
+     * @since 2.0.0
      */
     public function setUseConfigMinSaleQty($useConfigMinSaleQty)
     {
@@ -661,6 +718,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @param float $minSaleQty
      * @return $this
+     * @since 2.0.0
      */
     public function setMinSaleQty($minSaleQty)
     {
@@ -670,6 +728,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @param bool $useConfigMaxSaleQty
      * @return $this
+     * @since 2.0.0
      */
     public function setUseConfigMaxSaleQty($useConfigMaxSaleQty)
     {
@@ -681,6 +740,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @param float $maxSaleQty
      * @return $this
+     * @since 2.0.0
      */
     public function setMaxSaleQty($maxSaleQty)
     {
@@ -690,6 +750,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @param bool $useConfigBackorders
      * @return $this
+     * @since 2.0.0
      */
     public function setUseConfigBackorders($useConfigBackorders)
     {
@@ -701,6 +762,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @param int $backOrders
      * @return $this
+     * @since 2.0.0
      */
     public function setBackorders($backOrders)
     {
@@ -710,6 +772,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @param bool $useConfigNotifyStockQty
      * @return $this
+     * @since 2.0.0
      */
     public function setUseConfigNotifyStockQty($useConfigNotifyStockQty)
     {
@@ -721,6 +784,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @param float $notifyStockQty
      * @return $this
+     * @since 2.0.0
      */
     public function setNotifyStockQty($notifyStockQty)
     {
@@ -730,6 +794,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @param bool $useConfigQtyIncrements
      * @return $this
+     * @since 2.0.0
      */
     public function setUseConfigQtyIncrements($useConfigQtyIncrements)
     {
@@ -741,6 +806,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @param float $qtyIncrements
      * @return $this
+     * @since 2.0.0
      */
     public function setQtyIncrements($qtyIncrements)
     {
@@ -750,6 +816,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @param bool $useConfigEnableQtyInc
      * @return $this
+     * @since 2.0.0
      */
     public function setUseConfigEnableQtyInc($useConfigEnableQtyInc)
     {
@@ -761,6 +828,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @param bool $enableQtyIncrements
      * @return $this
+     * @since 2.0.0
      */
     public function setEnableQtyIncrements($enableQtyIncrements)
     {
@@ -770,6 +838,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @param bool $useConfigManageStock
      * @return $this
+     * @since 2.0.0
      */
     public function setUseConfigManageStock($useConfigManageStock)
     {
@@ -779,6 +848,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @param bool $manageStock
      * @return $this
+     * @since 2.0.0
      */
     public function setManageStock($manageStock)
     {
@@ -788,6 +858,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @param string $lowStockDate
      * @return $this
+     * @since 2.0.0
      */
     public function setLowStockDate($lowStockDate)
     {
@@ -797,6 +868,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @param bool $isDecimalDivided
      * @return $this
+     * @since 2.0.0
      */
     public function setIsDecimalDivided($isDecimalDivided)
     {
@@ -806,6 +878,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @param int $stockStatusChangedAuto
      * @return $this
+     * @since 2.0.0
      */
     public function setStockStatusChangedAuto($stockStatusChangedAuto)
     {
@@ -816,6 +889,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * {@inheritdoc}
      *
      * @return \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -827,6 +901,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @param \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface $extensionAttributes

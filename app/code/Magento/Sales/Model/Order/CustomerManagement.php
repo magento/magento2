@@ -10,36 +10,43 @@ use Magento\Quote\Model\Quote\Address as QuoteAddress;
 
 /**
  * Class CustomerManagement
+ * @since 2.0.0
  */
 class CustomerManagement implements \Magento\Sales\Api\OrderCustomerManagementInterface
 {
     /**
      * @var \Magento\Customer\Api\AccountManagementInterface
+     * @since 2.0.0
      */
     protected $accountManagement;
 
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
+     * @since 2.0.0
      */
     protected $customerFactory;
 
     /**
      * @var \Magento\Customer\Api\Data\AddressInterfaceFactory
+     * @since 2.0.0
      */
     protected $addressFactory;
 
     /**
      * @var \Magento\Customer\Api\Data\RegionInterfaceFactory
+     * @since 2.0.0
      */
     protected $regionFactory;
 
     /**
      * @var \Magento\Sales\Api\OrderRepositoryInterface
+     * @since 2.0.0
      */
     protected $orderRepository;
 
     /**
      * @var \Magento\Framework\DataObject\Copy
+     * @since 2.0.0
      */
     protected $objectCopyService;
 
@@ -50,6 +57,7 @@ class CustomerManagement implements \Magento\Sales\Api\OrderCustomerManagementIn
      * @param \Magento\Customer\Api\Data\AddressInterfaceFactory $addressFactory
      * @param \Magento\Customer\Api\Data\RegionInterfaceFactory $regionFactory
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\DataObject\Copy $objectCopyService,
@@ -69,6 +77,7 @@ class CustomerManagement implements \Magento\Sales\Api\OrderCustomerManagementIn
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function create($orderId)
     {

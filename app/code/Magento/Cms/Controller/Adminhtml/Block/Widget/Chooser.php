@@ -10,15 +10,22 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\Controller\Result\RawFactory;
 
+/**
+ * Class \Magento\Cms\Controller\Adminhtml\Block\Widget\Chooser
+ *
+ * @since 2.0.0
+ */
 class Chooser extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\View\LayoutFactory
+     * @since 2.0.0
      */
     protected $layoutFactory;
 
     /**
      * @var RawFactory
+     * @since 2.0.0
      */
     protected $resultRawFactory;
 
@@ -26,6 +33,7 @@ class Chooser extends \Magento\Backend\App\Action
      * @param Context $context
      * @param LayoutFactory $layoutFactory
      * @param RawFactory $resultRawFactory
+     * @since 2.0.0
      */
     public function __construct(Context $context, LayoutFactory $layoutFactory, RawFactory $resultRawFactory)
     {
@@ -38,6 +46,7 @@ class Chooser extends \Magento\Backend\App\Action
      * Chooser Source action
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -10,30 +10,40 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use Magento\Framework\Controller\AbstractResult;
 
+/**
+ * Class \Magento\Framework\Controller\Result\Forward
+ *
+ * @since 2.0.0
+ */
 class Forward extends AbstractResult
 {
     /**
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $module;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $controller;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $params = [];
 
     /**
      * @param RequestInterface $request
+     * @since 2.0.0
      */
     public function __construct(RequestInterface $request)
     {
@@ -43,6 +53,7 @@ class Forward extends AbstractResult
     /**
      * @param string $module
      * @return $this
+     * @since 2.0.0
      */
     public function setModule($module)
     {
@@ -53,6 +64,7 @@ class Forward extends AbstractResult
     /**
      * @param string $controller
      * @return $this
+     * @since 2.0.0
      */
     public function setController($controller)
     {
@@ -63,6 +75,7 @@ class Forward extends AbstractResult
     /**
      * @param array $params
      * @return $this
+     * @since 2.0.0
      */
     public function setParams(array $params)
     {
@@ -73,6 +86,7 @@ class Forward extends AbstractResult
     /**
      * @param string $action
      * @return $this
+     * @since 2.0.0
      */
     public function forward($action)
     {
@@ -98,6 +112,7 @@ class Forward extends AbstractResult
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function render(HttpResponseInterface $response)
     {

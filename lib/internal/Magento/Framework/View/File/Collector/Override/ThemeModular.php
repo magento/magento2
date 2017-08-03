@@ -16,6 +16,7 @@ use Magento\Framework\View\File\Factory as FileFactory;
 
 /**
  * Source of view files that explicitly override modular files of ancestor themes
+ * @since 2.0.0
  */
 class ThemeModular implements CollectorInterface
 {
@@ -23,6 +24,7 @@ class ThemeModular implements CollectorInterface
      * Path pattern helper
      *
      * @var \Magento\Framework\View\Helper\PathPattern
+     * @since 2.0.0
      */
     private $pathPatternHelper;
 
@@ -30,6 +32,7 @@ class ThemeModular implements CollectorInterface
      * View file factopry
      *
      * @var FileFactory
+     * @since 2.0.0
      */
     private $fileFactory;
 
@@ -37,6 +40,7 @@ class ThemeModular implements CollectorInterface
      * Read directory factory
      *
      * @var \Magento\Framework\Filesystem\Directory\ReadFactory
+     * @since 2.0.0
      */
     private $readDirFactory;
 
@@ -44,6 +48,7 @@ class ThemeModular implements CollectorInterface
      * Component registrar
      *
      * @var ComponentRegistrarInterface
+     * @since 2.0.0
      */
     private $componentRegistrar;
 
@@ -51,6 +56,7 @@ class ThemeModular implements CollectorInterface
      * Sub-directory path
      *
      * @var string
+     * @since 2.0.0
      */
     private $subDir;
 
@@ -62,6 +68,7 @@ class ThemeModular implements CollectorInterface
      * @param ComponentRegistrarInterface $componentRegistrar
      * @param PathPattern $pathPatternHelper
      * @param string $subDir
+     * @since 2.0.0
      */
     public function __construct(
         FileFactory $fileFactory,
@@ -84,6 +91,7 @@ class ThemeModular implements CollectorInterface
      * @param string $filePath
      * @return \Magento\Framework\View\File[]
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getFiles(ThemeInterface $theme, $filePath)
     {

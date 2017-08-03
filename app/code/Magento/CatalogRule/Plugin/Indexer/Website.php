@@ -7,15 +7,22 @@ namespace Magento\CatalogRule\Plugin\Indexer;
 
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 
+/**
+ * Class \Magento\CatalogRule\Plugin\Indexer\Website
+ *
+ * @since 2.0.0
+ */
 class Website
 {
     /**
      * @var RuleProductProcessor
+     * @since 2.0.0
      */
     protected $ruleProductProcessor;
 
     /**
      * @param RuleProductProcessor $ruleProductProcessor
+     * @since 2.0.0
      */
     public function __construct(RuleProductProcessor $ruleProductProcessor)
     {
@@ -30,6 +37,7 @@ class Website
      * @return \Magento\Store\Model\Website
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function afterDelete(
         \Magento\Store\Model\Website $subject,

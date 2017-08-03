@@ -9,6 +9,7 @@ namespace Magento\Payment\Block\Info;
  * Payment information container block
  *
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractContainer extends \Magento\Framework\View\Element\Template
 {
@@ -16,6 +17,7 @@ abstract class AbstractContainer extends \Magento\Framework\View\Element\Templat
      * Payment data
      *
      * @var \Magento\Payment\Helper\Data
+     * @since 2.0.0
      */
     protected $_paymentData = null;
 
@@ -23,6 +25,7 @@ abstract class AbstractContainer extends \Magento\Framework\View\Element\Templat
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -37,6 +40,7 @@ abstract class AbstractContainer extends \Magento\Framework\View\Element\Templat
      * Add payment info block to layout
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -50,6 +54,7 @@ abstract class AbstractContainer extends \Magento\Framework\View\Element\Templat
      * Retrieve info block name
      *
      * @return string|false
+     * @since 2.0.0
      */
     protected function _getInfoBlockName()
     {
@@ -63,6 +68,7 @@ abstract class AbstractContainer extends \Magento\Framework\View\Element\Templat
      * Retrieve payment info model
      *
      * @return \Magento\Payment\Model\Info|false
+     * @since 2.0.0
      */
     abstract public function getPaymentInfo();
 
@@ -72,6 +78,7 @@ abstract class AbstractContainer extends \Magento\Framework\View\Element\Templat
      * @param string $method
      * @param string $template
      * @return $this
+     * @since 2.0.0
      */
     public function setInfoTemplate($method = '', $template = '')
     {

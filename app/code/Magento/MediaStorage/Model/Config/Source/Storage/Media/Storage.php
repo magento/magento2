@@ -9,12 +9,18 @@
  */
 namespace Magento\MediaStorage\Model\Config\Source\Storage\Media;
 
+/**
+ * Class \Magento\MediaStorage\Model\Config\Source\Storage\Media\Storage
+ *
+ * @since 2.0.0
+ */
 class Storage implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Options getter
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

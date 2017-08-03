@@ -8,12 +8,18 @@ namespace Magento\Multishipping\Controller\Checkout;
 
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 
+/**
+ * Class \Magento\Multishipping\Controller\Checkout\Overview
+ *
+ * @since 2.0.0
+ */
 class Overview extends \Magento\Multishipping\Controller\Checkout
 {
     /**
      * Multishipping checkout place order page
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

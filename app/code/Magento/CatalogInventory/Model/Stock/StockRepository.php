@@ -20,36 +20,43 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Class StockRepository
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class StockRepository implements StockRepositoryInterface
 {
     /**
      * @var StockResource
+     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var StockFactory
+     * @since 2.0.0
      */
     protected $stockFactory;
 
     /**
      * @var StockCollectionInterfaceFactory
+     * @since 2.0.0
      */
     protected $stockCollectionFactory;
 
     /**
      * @var QueryBuilderFactory
+     * @since 2.0.0
      */
     protected $queryBuilderFactory;
 
     /**
      * @var MapperFactory
+     * @since 2.0.0
      */
     protected $mapperFactory;
 
     /**
      * @var StockRegistryStorage
+     * @since 2.1.0
      */
     protected $stockRegistryStorage;
 
@@ -59,6 +66,7 @@ class StockRepository implements StockRepositoryInterface
      * @param StockCollectionInterfaceFactory $collectionFactory
      * @param QueryBuilderFactory $queryBuilderFactory
      * @param MapperFactory $mapperFactory
+     * @since 2.0.0
      */
     public function __construct(
         StockResource $resource,
@@ -78,6 +86,7 @@ class StockRepository implements StockRepositoryInterface
      * @param StockInterface $stock
      * @return StockInterface
      * @throws CouldNotSaveException
+     * @since 2.0.0
      */
     public function save(StockInterface $stock)
     {
@@ -93,6 +102,7 @@ class StockRepository implements StockRepositoryInterface
      * @param int $stockId
      * @return StockInterface
      * @throws NoSuchEntityException
+     * @since 2.0.0
      */
     public function get($stockId)
     {
@@ -107,6 +117,7 @@ class StockRepository implements StockRepositoryInterface
     /**
      * @param \Magento\CatalogInventory\Api\StockCriteriaInterface $criteria
      * @return \Magento\CatalogInventory\Api\Data\StockCollectionInterface
+     * @since 2.0.0
      */
     public function getList(\Magento\CatalogInventory\Api\StockCriteriaInterface $criteria)
     {
@@ -122,6 +133,7 @@ class StockRepository implements StockRepositoryInterface
      * @param StockInterface $stock
      * @return bool|true
      * @throws CouldNotDeleteException
+     * @since 2.0.0
      */
     public function delete(StockInterface $stock)
     {
@@ -141,6 +153,7 @@ class StockRepository implements StockRepositoryInterface
      * @param int $id
      * @return bool
      * @throws CouldNotDeleteException
+     * @since 2.0.0
      */
     public function deleteById($id)
     {
@@ -158,6 +171,7 @@ class StockRepository implements StockRepositoryInterface
 
     /**
      * @return StockRegistryStorage
+     * @since 2.1.0
      */
     private function getStockRegistryStorage()
     {

@@ -16,6 +16,7 @@ use Magento\Sales\Model\AbstractModel;
  * @method \Magento\Sales\Model\ResourceModel\Order\Status\History _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Status\History getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class History extends AbstractModel implements OrderStatusHistoryInterface
 {
@@ -25,21 +26,25 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      * Order instance
      *
      * @var \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     protected $_order;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_status_history';
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'status_history';
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -53,6 +58,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -80,6 +86,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -91,6 +98,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      *
      * @param \Magento\Sales\Model\Order $order
      * @return $this
+     * @since 2.0.0
      */
     public function setOrder(\Magento\Sales\Model\Order $order)
     {
@@ -104,6 +112,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      *
      * @param  mixed $flag OPTIONAL (notification is not applicable by default)
      * @return $this
+     * @since 2.0.0
      */
     public function setIsCustomerNotified($flag = null)
     {
@@ -118,6 +127,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      * Customer Notification Applicable check method
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isCustomerNotificationNotApplicable()
     {
@@ -130,6 +140,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      * @codeCoverageIgnore
      *
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -140,6 +151,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      * Retrieve status label
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getStatusLabel()
     {
@@ -153,6 +165,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      * Get store object
      *
      * @return \Magento\Store\Model\Store
+     * @since 2.0.0
      */
     public function getStore()
     {
@@ -166,6 +179,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      * Set order again if required
      *
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -184,6 +198,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      * Returns comment
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComment()
     {
@@ -194,6 +209,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      * Returns created_at
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCreatedAt()
     {
@@ -202,6 +218,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCreatedAt($createdAt)
     {
@@ -212,6 +229,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      * Returns entity_id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getEntityId()
     {
@@ -222,6 +240,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      * Returns entity_name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEntityName()
     {
@@ -232,6 +251,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      * Returns is_customer_notified
      *
      * @return int
+     * @since 2.0.0
      */
     public function getIsCustomerNotified()
     {
@@ -242,6 +262,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      * Returns is_visible_on_front
      *
      * @return int
+     * @since 2.0.0
      */
     public function getIsVisibleOnFront()
     {
@@ -252,6 +273,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      * Returns parent_id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getParentId()
     {
@@ -262,6 +284,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      * Returns status
      *
      * @return string
+     * @since 2.0.0
      */
     public function getStatus()
     {
@@ -270,6 +293,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setParentId($id)
     {
@@ -278,6 +302,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setIsVisibleOnFront($isVisibleOnFront)
     {
@@ -286,6 +311,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setComment($comment)
     {
@@ -294,6 +320,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setStatus($status)
     {
@@ -302,6 +329,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setEntityName($entityName)
     {
@@ -312,6 +340,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      * {@inheritdoc}
      *
      * @return \Magento\Sales\Api\Data\OrderStatusHistoryExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -323,6 +352,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      *
      * @param \Magento\Sales\Api\Data\OrderStatusHistoryExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\OrderStatusHistoryExtensionInterface $extensionAttributes

@@ -7,11 +7,13 @@ namespace Magento\Ui\Block\Component\StepsWizard;
 
 /**
  * Abstract block for multi-step wizard UI
+ * @since 2.0.0
  */
 abstract class StepAbstract extends \Magento\Framework\View\Element\Template implements StepInterface
 {
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getContent()
     {
@@ -20,6 +22,7 @@ abstract class StepAbstract extends \Magento\Framework\View\Element\Template imp
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getParentComponentName()
     {
@@ -28,6 +31,7 @@ abstract class StepAbstract extends \Magento\Framework\View\Element\Template imp
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getComponentName()
     {

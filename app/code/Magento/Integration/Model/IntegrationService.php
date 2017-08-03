@@ -14,16 +14,19 @@ use Magento\Framework\Exception\IntegrationException;
  * Integration Service.
  *
  * This service is used to interact with integrations.
+ * @since 2.0.0
  */
 class IntegrationService implements \Magento\Integration\Api\IntegrationServiceInterface
 {
     /**
      * @var IntegrationFactory
+     * @since 2.0.0
      */
     protected $_integrationFactory;
 
     /**
      * @var IntegrationOauthService
+     * @since 2.0.0
      */
     protected $_oauthService;
 
@@ -32,6 +35,7 @@ class IntegrationService implements \Magento\Integration\Api\IntegrationServiceI
      *
      * @param IntegrationFactory $integrationFactory
      * @param IntegrationOauthService $oauthService
+     * @since 2.0.0
      */
     public function __construct(IntegrationFactory $integrationFactory, IntegrationOauthService $oauthService)
     {
@@ -41,6 +45,7 @@ class IntegrationService implements \Magento\Integration\Api\IntegrationServiceI
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function create(array $integrationData)
     {
@@ -56,6 +61,7 @@ class IntegrationService implements \Magento\Integration\Api\IntegrationServiceI
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function update(array $integrationData)
     {
@@ -71,6 +77,7 @@ class IntegrationService implements \Magento\Integration\Api\IntegrationServiceI
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function delete($integrationId)
     {
@@ -82,6 +89,7 @@ class IntegrationService implements \Magento\Integration\Api\IntegrationServiceI
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function get($integrationId)
     {
@@ -93,6 +101,7 @@ class IntegrationService implements \Magento\Integration\Api\IntegrationServiceI
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function findByName($name)
     {
@@ -102,6 +111,7 @@ class IntegrationService implements \Magento\Integration\Api\IntegrationServiceI
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function findByConsumerId($consumerId)
     {
@@ -111,6 +121,7 @@ class IntegrationService implements \Magento\Integration\Api\IntegrationServiceI
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function findActiveIntegrationByConsumerId($consumerId)
     {
@@ -124,6 +135,7 @@ class IntegrationService implements \Magento\Integration\Api\IntegrationServiceI
      * @param string $name
      * @return void
      * @throws \Magento\Framework\Exception\IntegrationException
+     * @since 2.0.0
      */
     private function _checkIntegrationByName($name)
     {
@@ -139,6 +151,7 @@ class IntegrationService implements \Magento\Integration\Api\IntegrationServiceI
      * @param int $integrationId
      * @return IntegrationModel
      * @throws \Magento\Framework\Exception\IntegrationException
+     * @since 2.0.0
      */
     protected function _loadIntegrationById($integrationId)
     {
@@ -154,6 +167,7 @@ class IntegrationService implements \Magento\Integration\Api\IntegrationServiceI
      *
      * @param IntegrationModel $integration
      * @return void
+     * @since 2.0.0
      */
     protected function _addOauthConsumerData(IntegrationModel $integration)
     {
@@ -169,6 +183,7 @@ class IntegrationService implements \Magento\Integration\Api\IntegrationServiceI
      *
      * @param IntegrationModel $integration
      * @return void
+     * @since 2.0.0
      */
     protected function _addOauthTokenData(IntegrationModel $integration)
     {
@@ -183,6 +198,7 @@ class IntegrationService implements \Magento\Integration\Api\IntegrationServiceI
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getSelectedResources($integrationId)
     {

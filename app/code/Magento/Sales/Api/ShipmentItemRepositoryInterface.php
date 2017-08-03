@@ -11,6 +11,7 @@ namespace Magento\Sales\Api;
  * A shipment is a delivery package that contains products. A shipment document accompanies the shipment. This
  * document lists the products and their quantities in the delivery package. A product is an item in a shipment.
  * @api
+ * @since 2.0.0
  */
 interface ShipmentItemRepositoryInterface
 {
@@ -19,6 +20,7 @@ interface ShipmentItemRepositoryInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
      * @return \Magento\Sales\Api\Data\ShipmentItemSearchResultInterface Shipment item search result interface.
+     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -27,6 +29,7 @@ interface ShipmentItemRepositoryInterface
      *
      * @param int $id
      * @return \Magento\Sales\Api\Data\ShipmentItemInterface
+     * @since 2.0.0
      */
     public function get($id);
 
@@ -35,6 +38,7 @@ interface ShipmentItemRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\ShipmentItemInterface $entity The shipment item.
      * @return bool
+     * @since 2.0.0
      */
     public function delete(\Magento\Sales\Api\Data\ShipmentItemInterface $entity);
 
@@ -43,6 +47,7 @@ interface ShipmentItemRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\ShipmentItemInterface $entity The shipment item.
      * @return \Magento\Sales\Api\Data\ShipmentItemInterface Shipment interface.
+     * @since 2.0.0
      */
     public function save(\Magento\Sales\Api\Data\ShipmentItemInterface $entity);
 }

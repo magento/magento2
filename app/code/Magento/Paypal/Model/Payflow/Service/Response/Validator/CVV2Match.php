@@ -11,6 +11,7 @@ use Magento\Paypal\Model\Payflow\Transparent;
 
 /**
  * Class CVV2Match
+ * @since 2.0.0
  */
 class CVV2Match implements ValidatorInterface
 {
@@ -52,6 +53,7 @@ class CVV2Match implements ValidatorInterface
      * @param DataObject $response
      * @param Transparent $transparentModel
      * @return bool
+     * @since 2.0.0
      */
     public function validate(DataObject $response, Transparent $transparentModel)
     {
@@ -81,6 +83,7 @@ class CVV2Match implements ValidatorInterface
      *
      * @param DataObject $response
      * @return bool
+     * @since 2.0.0
      */
     protected function isMatchCvv(DataObject $response)
     {
@@ -93,6 +96,7 @@ class CVV2Match implements ValidatorInterface
      *
      * @param DataObject $response
      * @return bool
+     * @since 2.0.0
      */
     protected function isNotMatchCvv(DataObject $response)
     {
@@ -104,6 +108,7 @@ class CVV2Match implements ValidatorInterface
      *
      * @param DataObject $response
      * @return bool
+     * @since 2.0.0
      */
     protected function isCvvDoNotExists(DataObject $response)
     {

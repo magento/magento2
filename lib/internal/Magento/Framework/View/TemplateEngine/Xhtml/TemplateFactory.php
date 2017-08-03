@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class TemplateFactory
+ * @since 2.0.0
  */
 class TemplateFactory
 {
@@ -18,6 +19,7 @@ class TemplateFactory
      * Object manager
      *
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -25,6 +27,7 @@ class TemplateFactory
      * Instance name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $instanceName;
 
@@ -33,6 +36,7 @@ class TemplateFactory
      *
      * @param ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -48,6 +52,7 @@ class TemplateFactory
      * @param array $arguments
      * @return Template
      * @throws LocalizedException
+     * @since 2.0.0
      */
     public function create(array $arguments = [])
     {

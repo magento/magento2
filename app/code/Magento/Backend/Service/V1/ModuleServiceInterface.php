@@ -9,6 +9,7 @@ namespace Magento\Backend\Service\V1;
 /**
  * Interface for module service.
  * @api
+ * @since 2.0.0
  */
 interface ModuleServiceInterface
 {
@@ -16,6 +17,7 @@ interface ModuleServiceInterface
      * Returns an array of enabled modules
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getModules();
 }

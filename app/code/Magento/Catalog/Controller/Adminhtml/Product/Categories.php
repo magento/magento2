@@ -6,10 +6,16 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\Categories
+ *
+ * @since 2.0.0
+ */
 class Categories extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
+     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -17,6 +23,7 @@ class Categories extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -31,6 +38,7 @@ class Categories extends \Magento\Catalog\Controller\Adminhtml\Product
      * Get categories fieldset block
      *
      * @return \Magento\Backend\Model\View\Result\Page
+     * @since 2.0.0
      */
     public function execute()
     {

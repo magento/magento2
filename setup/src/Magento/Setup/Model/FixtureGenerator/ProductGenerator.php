@@ -35,66 +35,79 @@ use Magento\Store\Model\ScopeInterface;
  * ]
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.2.0
  */
 class ProductGenerator
 {
     /**
      * @var \Magento\Catalog\Model\ProductFactory
+     * @since 2.2.0
      */
     private $productFactory;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
+     * @since 2.2.0
      */
     private $categoryCollectionFactory;
 
     /**
      * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory
+     * @since 2.2.0
      */
     private $urlRewriteFactory;
 
     /**
      * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory
+     * @since 2.2.0
      */
     private $storeCollectionFactory;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $categories = [];
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $storesPerWebsite = [];
 
     /**
      * @var EntityGeneratorFactory
+     * @since 2.2.0
      */
     private $entityGeneratorFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var ProductTemplateGeneratorFactory
+     * @since 2.2.0
      */
     private $productTemplateGeneratorFactory;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $productUrlSuffix = [];
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.2.0
      */
     private $scopeConfig;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $customTableMap;
 
@@ -108,6 +121,7 @@ class ProductGenerator
      * @param ProductTemplateGeneratorFactory $productTemplateGeneratorFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param array $customTableMap
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Catalog\Model\ProductFactory $productFactory,
@@ -137,6 +151,7 @@ class ProductGenerator
      * @param int $products
      * @param array $fixtureMap
      * @return void
+     * @since 2.2.0
      */
     public function generate($products, $fixtureMap)
     {
@@ -203,6 +218,7 @@ class ProductGenerator
     /**
      * @param array $fixture
      * @return void
+     * @since 2.2.0
      */
     private function initializeFixtureDefaultValues(array &$fixture)
     {
@@ -234,6 +250,7 @@ class ProductGenerator
      * @param int $entityNumber
      * @param array $fixtureMap
      * @return mixed|string
+     * @since 2.2.0
      */
     private function getFixtureValue($fixtureKey, $productId, $entityNumber, $fixtureMap)
     {
@@ -246,6 +263,7 @@ class ProductGenerator
      * @param int $productId
      * @param int $entityNumber
      * @return mixed
+     * @since 2.2.0
      */
     private function getBindValue($fixtureValue, $productId, $entityNumber)
     {
@@ -261,6 +279,7 @@ class ProductGenerator
      * @param int $entityNumber
      * @param array $fixtureMap
      * @return array
+     * @since 2.2.0
      */
     private function urlRewriteHandler($productId, $entityNumber, $fixtureMap)
     {
@@ -320,6 +339,7 @@ class ProductGenerator
      *
      * @param int $storeId
      * @return string
+     * @since 2.2.0
      */
     private function getUrlSuffix($storeId)
     {

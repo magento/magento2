@@ -11,11 +11,13 @@ namespace Magento\Config\Model\Config\Backend;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Store extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Framework\App\Config\MutableScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_mutableConfig;
 
@@ -28,6 +30,7 @@ class Store extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -45,6 +48,7 @@ class Store extends \Magento\Framework\App\Config\Value
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     public function afterSave()
     {

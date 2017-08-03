@@ -7,6 +7,7 @@ namespace Magento\Setup\Module\Dependency;
 
 /**
  * Parser Interface
+ * @since 2.0.0
  */
 interface ParserInterface
 {
@@ -15,6 +16,7 @@ interface ParserInterface
      *
      * @param array $options
      * @return array
+     * @since 2.0.0
      */
     public function parse(array $options);
 }

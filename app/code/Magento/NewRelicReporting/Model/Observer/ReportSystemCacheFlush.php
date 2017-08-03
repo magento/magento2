@@ -11,21 +11,25 @@ use Magento\NewRelicReporting\Model\Config;
 
 /**
  * Class ReportSystemCacheFlush
+ * @since 2.0.0
  */
 class ReportSystemCacheFlush implements ObserverInterface
 {
     /**
      * @var Config
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\NewRelicReporting\Model\SystemFactory
+     * @since 2.0.0
      */
     protected $systemFactory;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
+     * @since 2.0.0
      */
     protected $jsonEncoder;
 
@@ -33,6 +37,7 @@ class ReportSystemCacheFlush implements ObserverInterface
      * @param Config $config
      * @param \Magento\NewRelicReporting\Model\SystemFactory $systemFactory
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * @since 2.0.0
      */
     public function __construct(
         Config $config,
@@ -50,6 +55,7 @@ class ReportSystemCacheFlush implements ObserverInterface
      * @param Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

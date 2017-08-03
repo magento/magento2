@@ -9,11 +9,13 @@ namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttri
  * New product attribute created on product edit page
  *
  * @api
+ * @since 2.0.0
  */
 class Created extends \Magento\Backend\Block\Widget
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'catalog/product/attribute/new/created.phtml';
 
@@ -21,21 +23,25 @@ class Created extends \Magento\Backend\Block\Widget
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Eav\Model\Entity\AttributeFactory
+     * @since 2.0.0
      */
     protected $_attributeFactory;
 
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\SetFactory
+     * @since 2.0.0
      */
     protected $_setFactory;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
+     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
@@ -46,6 +52,7 @@ class Created extends \Magento\Backend\Block\Widget
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -66,6 +73,7 @@ class Created extends \Magento\Backend\Block\Widget
      * Retrieve list of product attributes
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getGroupAttributes()
     {
@@ -85,6 +93,7 @@ class Created extends \Magento\Backend\Block\Widget
      * Retrieve HTML for 'Close' button
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCloseButtonHtml()
     {
@@ -95,6 +104,7 @@ class Created extends \Magento\Backend\Block\Widget
      * Retrieve attributes data as JSON
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAttributesBlockJson()
     {

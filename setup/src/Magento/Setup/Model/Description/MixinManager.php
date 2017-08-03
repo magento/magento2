@@ -7,16 +7,19 @@ namespace Magento\Setup\Model\Description;
 
 /**
  * Apply mixin to description
+ * @since 2.2.0
  */
 class MixinManager
 {
     /**
      * @var \Magento\Setup\Model\Description\Mixin\MixinFactory
+     * @since 2.2.0
      */
     private $mixinFactory;
 
     /**
      * @param \Magento\Setup\Model\Description\Mixin\MixinFactory $mixinFactory
+     * @since 2.2.0
      */
     public function __construct(\Magento\Setup\Model\Description\Mixin\MixinFactory $mixinFactory)
     {
@@ -29,6 +32,7 @@ class MixinManager
      * @param string $description
      * @param array $mixinList
      * @return mixed
+     * @since 2.2.0
      */
     public function apply($description, array $mixinList)
     {

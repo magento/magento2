@@ -8,6 +8,7 @@ namespace Magento\CatalogInventory\Api;
 /**
  * Interface StockItemCriteriaInterface
  * @api
+ * @since 2.0.0
  */
 interface StockItemCriteriaInterface extends \Magento\Framework\Api\CriteriaInterface
 {
@@ -16,6 +17,7 @@ interface StockItemCriteriaInterface extends \Magento\Framework\Api\CriteriaInte
      *
      * @param \Magento\CatalogInventory\Api\StockItemCriteriaInterface $criteria
      * @return bool
+     * @since 2.0.0
      */
     public function addCriteria(\Magento\CatalogInventory\Api\StockItemCriteriaInterface $criteria);
 
@@ -24,6 +26,7 @@ interface StockItemCriteriaInterface extends \Magento\Framework\Api\CriteriaInte
      *
      * @param int $storeId
      * @return bool
+     * @since 2.0.0
      */
     public function setStockStatus($storeId = null);
 
@@ -32,6 +35,7 @@ interface StockItemCriteriaInterface extends \Magento\Framework\Api\CriteriaInte
      *
      * @param \Magento\CatalogInventory\Api\Data\StockInterface $stock
      * @return bool
+     * @since 2.0.0
      */
     public function setStockFilter($stock);
 
@@ -40,6 +44,7 @@ interface StockItemCriteriaInterface extends \Magento\Framework\Api\CriteriaInte
      *
      * @param int $scope
      * @return bool
+     * @since 2.0.0
      */
     public function setScopeFilter($scope);
 
@@ -48,6 +53,7 @@ interface StockItemCriteriaInterface extends \Magento\Framework\Api\CriteriaInte
      *
      * @param int|int[] $products
      * @return bool
+     * @since 2.0.0
      */
     public function setProductsFilter($products);
 
@@ -56,6 +62,7 @@ interface StockItemCriteriaInterface extends \Magento\Framework\Api\CriteriaInte
      *
      * @param bool $isStockManagedInConfig
      * @return bool
+     * @since 2.0.0
      */
     public function setManagedFilter($isStockManagedInConfig);
 
@@ -65,6 +72,7 @@ interface StockItemCriteriaInterface extends \Magento\Framework\Api\CriteriaInte
      * @param string $comparisonMethod
      * @param float $qty
      * @return bool
+     * @since 2.0.0
      */
     public function setQtyFilter($comparisonMethod, $qty);
 }

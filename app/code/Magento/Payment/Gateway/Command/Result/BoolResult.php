@@ -11,11 +11,13 @@ use Magento\Payment\Gateway\Command\ResultInterface;
  * Container for boolean value that should be returned as command result.
  *
  * @api
+ * @since 2.0.0
  */
 class BoolResult implements ResultInterface
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     private $result;
 
@@ -23,6 +25,7 @@ class BoolResult implements ResultInterface
      * Constructor
      *
      * @param bool $result
+     * @since 2.0.0
      */
     public function __construct($result = true)
     {
@@ -33,6 +36,7 @@ class BoolResult implements ResultInterface
      * Returns result interpretation
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function get()
     {

@@ -7,16 +7,19 @@ namespace Magento\Catalog\Model\Category\Attribute;
 
 /**
  * Product options management class
+ * @since 2.0.0
  */
 class OptionManagement implements \Magento\Catalog\Api\CategoryAttributeOptionManagementInterface
 {
     /**
      * @var \Magento\Eav\Api\AttributeOptionManagementInterface
+     * @since 2.0.0
      */
     protected $eavOptionManagement;
 
     /**
      * @param \Magento\Eav\Api\AttributeOptionManagementInterface $eavOptionManagement
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Api\AttributeOptionManagementInterface $eavOptionManagement
@@ -27,6 +30,7 @@ class OptionManagement implements \Magento\Catalog\Api\CategoryAttributeOptionMa
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getItems($attributeCode)
     {

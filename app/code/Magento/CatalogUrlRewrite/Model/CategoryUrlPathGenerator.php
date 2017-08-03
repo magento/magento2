@@ -8,6 +8,11 @@ namespace Magento\CatalogUrlRewrite\Model;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
+ *
+ * @since 2.0.0
+ */
 class CategoryUrlPathGenerator
 {
     /**
@@ -24,17 +29,25 @@ class CategoryUrlPathGenerator
      * Cache for category rewrite suffix
      *
      * @var array
+     * @since 2.0.0
      */
     protected $categoryUrlSuffix = [];
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
+     */
     protected $scopeConfig;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
+     */
     protected $storeManager;
 
     /**
      * @var CategoryRepositoryInterface
+     * @since 2.0.0
      */
     protected $categoryRepository;
 
@@ -42,6 +55,7 @@ class CategoryUrlPathGenerator
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param CategoryRepositoryInterface $categoryRepository
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -58,6 +72,7 @@ class CategoryUrlPathGenerator
      *
      * @param \Magento\Catalog\Api\Data\CategoryInterface|\Magento\Framework\Model\AbstractModel $category
      * @return string
+     * @since 2.0.0
      */
     public function getUrlPath($category)
     {
@@ -84,6 +99,7 @@ class CategoryUrlPathGenerator
     /**
      * @param \Magento\Catalog\Model\Category $category
      * @return bool
+     * @since 2.0.0
      */
     protected function isNeedToGenerateUrlPathForParent($category)
     {
@@ -96,6 +112,7 @@ class CategoryUrlPathGenerator
      * @param \Magento\Catalog\Model\Category $category
      * @param int $storeId
      * @return string
+     * @since 2.0.0
      */
     public function getUrlPathWithSuffix($category, $storeId = null)
     {
@@ -110,6 +127,7 @@ class CategoryUrlPathGenerator
      *
      * @param int $storeId
      * @return string
+     * @since 2.0.0
      */
     protected function getCategoryUrlSuffix($storeId = null)
     {
@@ -131,6 +149,7 @@ class CategoryUrlPathGenerator
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return string
+     * @since 2.0.0
      */
     public function getCanonicalUrlPath($category)
     {
@@ -142,6 +161,7 @@ class CategoryUrlPathGenerator
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return string
+     * @since 2.0.0
      */
     public function getUrlKey($category)
     {

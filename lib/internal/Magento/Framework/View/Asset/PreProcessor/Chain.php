@@ -13,51 +13,61 @@ use Magento\Framework\View\Asset\LocalInterface;
  * Encapsulates complexity of all necessary context and parameters
  *
  * @api
+ * @since 2.0.0
  */
 class Chain
 {
     /**
      * @var array
+     * @since 2.2.0
      */
     private $compatibleTypes;
 
     /**
      * @var LocalInterface
+     * @since 2.0.0
      */
     private $asset;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $origContent;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $origContentType;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $content;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $contentType;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $targetContentType;
 
     /**
      * @var null|string
+     * @since 2.0.0
      */
     protected $targetAssetPath;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $origAssetPath;
 
@@ -67,6 +77,7 @@ class Chain
      * @param string $origContentType
      * @param string $origAssetPath
      * @param array $compatibleTypes
+     * @since 2.0.0
      */
     public function __construct(
         LocalInterface $asset,
@@ -90,6 +101,7 @@ class Chain
      * Get asset object
      *
      * @return LocalInterface
+     * @since 2.0.0
      */
     public function getAsset()
     {
@@ -100,6 +112,7 @@ class Chain
      * Get original content
      *
      * @return string
+     * @since 2.0.0
      */
     public function getOrigContent()
     {
@@ -110,6 +123,7 @@ class Chain
      * Get current content
      *
      * @return string
+     * @since 2.0.0
      */
     public function getContent()
     {
@@ -121,6 +135,7 @@ class Chain
      *
      * @param string $content
      * @return void
+     * @since 2.0.0
      */
     public function setContent($content)
     {
@@ -131,6 +146,7 @@ class Chain
      * Get original content type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getOrigContentType()
     {
@@ -141,6 +157,7 @@ class Chain
      * Get current content type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getContentType()
     {
@@ -152,6 +169,7 @@ class Chain
      *
      * @param string $contentType
      * @return void
+     * @since 2.0.0
      */
     public function setContentType($contentType)
     {
@@ -162,6 +180,7 @@ class Chain
      * Get the intended content type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTargetContentType()
     {
@@ -172,6 +191,7 @@ class Chain
      * Get the target asset path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTargetAssetPath()
     {
@@ -185,6 +205,7 @@ class Chain
      *
      * @return void
      * @throws \LogicException
+     * @since 2.0.0
      */
     public function assertValid()
     {
@@ -200,6 +221,7 @@ class Chain
      * Whether the contents or type have changed during the lifetime of the object
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isChanged()
     {
@@ -209,6 +231,7 @@ class Chain
     /**
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getOrigAssetPath()
     {

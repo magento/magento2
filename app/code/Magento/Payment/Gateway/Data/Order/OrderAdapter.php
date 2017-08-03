@@ -11,22 +11,26 @@ use Magento\Sales\Model\Order;
 
 /**
  * Class OrderAdapter
+ * @since 2.0.0
  */
 class OrderAdapter implements OrderAdapterInterface
 {
     /**
      * @var Order
+     * @since 2.0.0
      */
     private $order;
 
     /**
      * @var AddressAdapter
+     * @since 2.0.0
      */
     private $addressAdapterFactory;
 
     /**
      * @param Order $order
      * @param AddressAdapterFactory $addressAdapterFactory
+     * @since 2.0.0
      */
     public function __construct(
         Order $order,
@@ -40,6 +44,7 @@ class OrderAdapter implements OrderAdapterInterface
      * Returns currency code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCurrencyCode()
     {
@@ -50,6 +55,7 @@ class OrderAdapter implements OrderAdapterInterface
      * Returns order increment id
      *
      * @return string
+     * @since 2.0.0
      */
     public function getOrderIncrementId()
     {
@@ -60,6 +66,7 @@ class OrderAdapter implements OrderAdapterInterface
      * Returns customer ID
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getCustomerId()
     {
@@ -70,6 +77,7 @@ class OrderAdapter implements OrderAdapterInterface
      * Returns billing address
      *
      * @return AddressAdapterInterface|null
+     * @since 2.0.0
      */
     public function getBillingAddress()
     {
@@ -86,6 +94,7 @@ class OrderAdapter implements OrderAdapterInterface
      * Returns shipping address
      *
      * @return AddressAdapterInterface|null
+     * @since 2.0.0
      */
     public function getShippingAddress()
     {
@@ -102,6 +111,7 @@ class OrderAdapter implements OrderAdapterInterface
      * Returns order store id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -112,6 +122,7 @@ class OrderAdapter implements OrderAdapterInterface
      * Returns order id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getId()
     {
@@ -122,6 +133,7 @@ class OrderAdapter implements OrderAdapterInterface
      * Returns order grand total amount
      *
      * @return float|null
+     * @since 2.0.0
      */
     public function getGrandTotalAmount()
     {
@@ -132,6 +144,7 @@ class OrderAdapter implements OrderAdapterInterface
      * Returns list of line items in the cart
      *
      * @return \Magento\Sales\Api\Data\OrderItemInterface[]
+     * @since 2.0.0
      */
     public function getItems()
     {
@@ -142,6 +155,7 @@ class OrderAdapter implements OrderAdapterInterface
      * Gets the remote IP address for the order.
      *
      * @return string|null Remote IP address.
+     * @since 2.0.0
      */
     public function getRemoteIp()
     {

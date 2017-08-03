@@ -10,15 +10,20 @@ namespace Magento\UrlRewrite\Block\Cms\Page\Edit;
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Form extends \Magento\UrlRewrite\Block\Edit\Form
 {
     /**
      * @var \Magento\Cms\Model\PageFactory
+     * @since 2.0.0
      */
     protected $_pageFactory;
 
-    /** @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator */
+    /**
+     * @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator
+     * @since 2.0.0
+     */
     protected $cmsPageUrlPathGenerator;
 
     /**
@@ -34,6 +39,7 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -66,6 +72,7 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
      *
      * @param \Magento\Framework\Data\Form $form
      * @return \Magento\UrlRewrite\Block\Cms\Page\Edit\Form
+     * @since 2.0.0
      */
     protected function _formPostInit($form)
     {
@@ -100,6 +107,7 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
      *
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _getEntityStores()
     {
@@ -125,6 +133,7 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
      * Get CMS page model instance
      *
      * @return \Magento\Cms\Model\Page
+     * @since 2.0.0
      */
     protected function _getCmsPage()
     {

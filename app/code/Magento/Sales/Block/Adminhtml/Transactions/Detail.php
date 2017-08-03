@@ -13,6 +13,7 @@ use Magento\Sales\Api\OrderPaymentRepositoryInterface;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Detail extends \Magento\Backend\Block\Widget\Container
 {
@@ -20,6 +21,7 @@ class Detail extends \Magento\Backend\Block\Widget\Container
      * Transaction model
      *
      * @var \Magento\Sales\Model\Order\Payment\Transaction
+     * @since 2.0.0
      */
     protected $_txn;
 
@@ -27,16 +29,19 @@ class Detail extends \Magento\Backend\Block\Widget\Container
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Sales\Helper\Admin
+     * @since 2.0.0
      */
     private $adminHelper;
 
     /**
      * @var OrderPaymentRepositoryInterface
+     * @since 2.0.0
      */
     protected $orderPaymentRepository;
 
@@ -46,6 +51,7 @@ class Detail extends \Magento\Backend\Block\Widget\Container
      * @param \Magento\Sales\Helper\Admin $adminHelper
      * @param \Magento\Sales\Api\OrderPaymentRepositoryInterface $orderPaymentRepository
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -64,6 +70,7 @@ class Detail extends \Magento\Backend\Block\Widget\Container
      * Add control buttons
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -98,6 +105,7 @@ class Detail extends \Magento\Backend\Block\Widget\Container
      * Retrieve header text
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -116,6 +124,7 @@ class Detail extends \Magento\Backend\Block\Widget\Container
      * Render block html
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

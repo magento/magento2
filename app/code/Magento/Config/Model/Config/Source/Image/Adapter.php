@@ -7,16 +7,19 @@ namespace Magento\Config\Model\Config\Source\Image;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Adapter implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\Framework\Image\Adapter\ConfigInterface
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @param \Magento\Framework\Image\Adapter\ConfigInterface $config
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Image\Adapter\ConfigInterface $config)
     {
@@ -27,6 +30,7 @@ class Adapter implements \Magento\Framework\Option\ArrayInterface
      * Return hash of image adapter codes and labels
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

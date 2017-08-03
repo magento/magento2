@@ -9,6 +9,7 @@ namespace Magento\NewRelicReporting\Model;
  * Wrapper for New Relic functions
  *
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class NewRelicWrapper
 {
@@ -18,6 +19,7 @@ class NewRelicWrapper
      * @param string $param
      * @param string|int $value
      * @return bool
+     * @since 2.0.0
      */
     public function addCustomParameter($param, $value)
     {
@@ -32,6 +34,7 @@ class NewRelicWrapper
      * Checks whether newrelic-php5 agent is installed
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isExtensionInstalled()
     {

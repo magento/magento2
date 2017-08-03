@@ -10,6 +10,7 @@ use Magento\Quote\Api\Data\ShippingInterface;
 
 /**
  * Class Shipping
+ * @since 2.0.0
  */
 class Shipping extends \Magento\Framework\Model\AbstractExtensibleModel implements ShippingInterface
 {
@@ -18,6 +19,7 @@ class Shipping extends \Magento\Framework\Model\AbstractExtensibleModel implemen
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getAddress()
     {
@@ -26,6 +28,7 @@ class Shipping extends \Magento\Framework\Model\AbstractExtensibleModel implemen
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setAddress(\Magento\Quote\Api\Data\AddressInterface $value)
     {
@@ -35,6 +38,7 @@ class Shipping extends \Magento\Framework\Model\AbstractExtensibleModel implemen
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getMethod()
     {
@@ -43,6 +47,7 @@ class Shipping extends \Magento\Framework\Model\AbstractExtensibleModel implemen
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setMethod($value)
     {
@@ -52,6 +57,7 @@ class Shipping extends \Magento\Framework\Model\AbstractExtensibleModel implemen
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -60,6 +66,7 @@ class Shipping extends \Magento\Framework\Model\AbstractExtensibleModel implemen
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Quote\Api\Data\ShippingExtensionInterface $extensionAttributes)
     {

@@ -6,12 +6,18 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\Dashboard\ProductsViewed
+ *
+ * @since 2.0.0
+ */
 class ProductsViewed extends AjaxBlock
 {
     /**
      * Gets most viewed products list
      *
      * @return \Magento\Backend\Model\View\Result\Page
+     * @since 2.0.0
      */
     public function execute()
     {

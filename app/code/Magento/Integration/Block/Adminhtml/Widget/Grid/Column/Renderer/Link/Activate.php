@@ -11,10 +11,16 @@ use Magento\Framework\DataObject;
 use Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link;
 use Magento\Integration\Model\Integration;
 
+/**
+ * Class \Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link\Activate
+ *
+ * @since 2.0.0
+ */
 class Activate extends Link
 {
     /**
      * {@inheritDoc}
+     * @since 2.0.0
      */
     public function getCaption()
     {
@@ -24,6 +30,7 @@ class Activate extends Link
     /**
      * {@inheritDoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _getUrl(DataObject $row)
     {
@@ -32,6 +39,7 @@ class Activate extends Link
 
     /**
      * {@inheritDoc}
+     * @since 2.0.0
      */
     protected function _getAttributes()
     {
@@ -40,6 +48,7 @@ class Activate extends Link
 
     /**
      * {@inheritDoc}
+     * @since 2.0.0
      */
     protected function _getDataAttributes()
     {

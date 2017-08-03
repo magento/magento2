@@ -6,6 +6,11 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 
+/**
+ * Class \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\DeleteFiles
+ *
+ * @since 2.0.0
+ */
 class DeleteFiles extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
 {
     /**
@@ -13,6 +18,7 @@ class DeleteFiles extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysi
      *
      * @return void
      * @throws \Exception
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -13,6 +13,7 @@ use Magento\Theme\Model\Theme\Registration;
 
 /**
  * Upgrade registered themes
+ * @since 2.1.0
  */
 class RecurringData implements InstallDataInterface
 {
@@ -20,6 +21,7 @@ class RecurringData implements InstallDataInterface
      * Theme registration
      *
      * @var Registration
+     * @since 2.1.0
      */
     private $themeRegistration;
 
@@ -27,6 +29,7 @@ class RecurringData implements InstallDataInterface
      * Init
      *
      * @param Registration $themeRegistration
+     * @since 2.1.0
      */
     public function __construct(Registration $themeRegistration)
     {
@@ -35,6 +38,7 @@ class RecurringData implements InstallDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

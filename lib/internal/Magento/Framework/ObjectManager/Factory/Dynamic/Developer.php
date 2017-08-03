@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\ObjectManager\Factory\Dynamic;
 
+/**
+ * Class \Magento\Framework\ObjectManager\Factory\Dynamic\Developer
+ *
+ * @since 2.0.0
+ */
 class Developer extends \Magento\Framework\ObjectManager\Factory\AbstractFactory
 {
     /**
@@ -18,6 +23,7 @@ class Developer extends \Magento\Framework\ObjectManager\Factory\AbstractFactory
      *
      * @throws \UnexpectedValueException
      * @throws \BadMethodCallException
+     * @since 2.0.0
      */
     protected function _resolveArguments($requestedType, array $parameters, array $arguments = [])
     {
@@ -41,6 +47,7 @@ class Developer extends \Magento\Framework\ObjectManager\Factory\AbstractFactory
      * @param array $arguments
      * @return object
      * @throws \Exception
+     * @since 2.0.0
      */
     public function create($requestedType, array $arguments = [])
     {

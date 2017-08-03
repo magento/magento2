@@ -11,6 +11,7 @@ use Magento\Review\Model\ResourceModel\Review\Product\Collection;
  * Recent Customer Reviews Block
  *
  * @api
+ * @since 2.0.0
  */
 class Recent extends \Magento\Framework\View\Element\Template
 {
@@ -18,6 +19,7 @@ class Recent extends \Magento\Framework\View\Element\Template
      * Customer list template name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'customer/list.phtml';
 
@@ -25,6 +27,7 @@ class Recent extends \Magento\Framework\View\Element\Template
      * Product reviews collection
      *
      * @var Collection
+     * @since 2.0.0
      */
     protected $_collection;
 
@@ -32,11 +35,13 @@ class Recent extends \Magento\Framework\View\Element\Template
      * Review resource model
      *
      * @var \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory
+     * @since 2.0.0
      */
     protected $_collectionFactory;
 
     /**
      * @var \Magento\Customer\Helper\Session\CurrentCustomer
+     * @since 2.0.0
      */
     protected $currentCustomer;
 
@@ -45,6 +50,7 @@ class Recent extends \Magento\Framework\View\Element\Template
      * @param \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory $collectionFactory
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -66,6 +72,7 @@ class Recent extends \Magento\Framework\View\Element\Template
      * @param string &$remainder
      * @param bool $breakWords
      * @return string
+     * @since 2.0.0
      */
     public function truncateString($value, $length = 80, $etc = '...', &$remainder = '', $breakWords = true)
     {
@@ -79,6 +86,7 @@ class Recent extends \Magento\Framework\View\Element\Template
      * Return collection of reviews
      *
      * @return array|\Magento\Review\Model\ResourceModel\Review\Product\Collection
+     * @since 2.0.0
      */
     public function getReviews()
     {
@@ -102,6 +110,7 @@ class Recent extends \Magento\Framework\View\Element\Template
      * Return review customer view url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getReviewLink()
     {
@@ -112,6 +121,7 @@ class Recent extends \Magento\Framework\View\Element\Template
      * Return catalog product view url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getProductLink()
     {
@@ -123,6 +133,7 @@ class Recent extends \Magento\Framework\View\Element\Template
      *
      * @param string $date
      * @return string
+     * @since 2.0.0
      */
     public function dateFormat($date)
     {
@@ -133,6 +144,7 @@ class Recent extends \Magento\Framework\View\Element\Template
      * Return review customer url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAllReviewsUrl()
     {
@@ -144,6 +156,7 @@ class Recent extends \Magento\Framework\View\Element\Template
      *
      * @param int $id
      * @return string
+     * @since 2.0.0
      */
     public function getReviewUrl($id)
     {

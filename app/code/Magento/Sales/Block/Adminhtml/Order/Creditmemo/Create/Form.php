@@ -9,6 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create;
  * Adminhtml creditmemo create form
  *
  * @api
+ * @since 2.0.0
  */
 class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 {
@@ -16,6 +17,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Retrieve invoice order
      *
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -26,6 +28,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Retrieve source
      *
      * @return \Magento\Sales\Model\Order\Invoice
+     * @since 2.0.0
      */
     public function getSource()
     {
@@ -36,6 +39,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Retrieve creditmemo model instance
      *
      * @return \Magento\Sales\Model\Order\Creditmemo
+     * @since 2.0.0
      */
     public function getCreditmemo()
     {
@@ -46,6 +50,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Get save url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSaveUrl()
     {

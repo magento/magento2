@@ -12,6 +12,7 @@ use Magento\Framework\Search\Request\Filter\BoolExpression;
 /**
  * Class FiltersExtractor
  * Extracts filters from QueryInterface
+ * @since 2.2.0
  */
 class FiltersExtractor
 {
@@ -20,6 +21,7 @@ class FiltersExtractor
      *
      * @param QueryInterface $query
      * @return FilterInterface[]
+     * @since 2.2.0
      */
     public function extractFiltersFromQuery(QueryInterface $query)
     {
@@ -59,6 +61,7 @@ class FiltersExtractor
     /**
      * @param BoolExpression $boolExpression
      * @return FilterInterface[]
+     * @since 2.2.0
      */
     private function getFiltersFromBoolFilter(BoolExpression $boolExpression)
     {

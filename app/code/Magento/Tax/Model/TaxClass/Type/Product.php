@@ -9,10 +9,16 @@
  */
 namespace Magento\Tax\Model\TaxClass\Type;
 
+/**
+ * Class \Magento\Tax\Model\TaxClass\Type\Product
+ *
+ * @since 2.0.0
+ */
 class Product extends \Magento\Tax\Model\TaxClass\AbstractType
 {
     /**
      * @var \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     protected $_modelProduct;
 
@@ -20,6 +26,7 @@ class Product extends \Magento\Tax\Model\TaxClass\AbstractType
      * Class Type
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_classType = \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT;
 
@@ -27,6 +34,7 @@ class Product extends \Magento\Tax\Model\TaxClass\AbstractType
      * @param \Magento\Tax\Model\Calculation\Rule $calculationRule
      * @param \Magento\Catalog\Model\Product $modelProduct
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Tax\Model\Calculation\Rule $calculationRule,
@@ -39,6 +47,7 @@ class Product extends \Magento\Tax\Model\TaxClass\AbstractType
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isAssignedToObjects()
     {
@@ -50,6 +59,7 @@ class Product extends \Magento\Tax\Model\TaxClass\AbstractType
      * Get Name of Objects that use this Tax Class Type
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getObjectTypeName()
     {

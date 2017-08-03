@@ -8,6 +8,7 @@ namespace Magento\Quote\Api\Data;
 /**
  * Interface CartSearchResultsInterface
  * @api
+ * @since 2.0.0
  */
 interface CartSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
@@ -26,6 +27,7 @@ interface CartSearchResultsInterface extends \Magento\Framework\Api\SearchResult
      * Get carts list.
      *
      * @return \Magento\Quote\Api\Data\CartInterface[]
+     * @since 2.0.0
      */
     public function getItems();
 
@@ -34,6 +36,7 @@ interface CartSearchResultsInterface extends \Magento\Framework\Api\SearchResult
      *
      * @param \Magento\Quote\Api\Data\CartInterface[] $items
      * @return $this
+     * @since 2.0.0
      */
     public function setItems(array $items);
 
@@ -41,6 +44,7 @@ interface CartSearchResultsInterface extends \Magento\Framework\Api\SearchResult
      * Get search criteria.
      *
      * @return \Magento\Framework\Api\SearchCriteriaInterface
+     * @since 2.0.0
      */
     public function getSearchCriteria();
 
@@ -49,6 +53,7 @@ interface CartSearchResultsInterface extends \Magento\Framework\Api\SearchResult
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return $this
+     * @since 2.0.0
      */
     public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -56,6 +61,7 @@ interface CartSearchResultsInterface extends \Magento\Framework\Api\SearchResult
      * Get total count.
      *
      * @return int
+     * @since 2.0.0
      */
     public function getTotalCount();
 
@@ -64,6 +70,7 @@ interface CartSearchResultsInterface extends \Magento\Framework\Api\SearchResult
      *
      * @param int $totalCount
      * @return $this
+     * @since 2.0.0
      */
     public function setTotalCount($totalCount);
 }

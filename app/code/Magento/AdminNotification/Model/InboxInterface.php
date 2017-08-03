@@ -10,6 +10,7 @@ namespace Magento\AdminNotification\Model;
  *
  * @author Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 2.0.0
  */
 interface InboxInterface
 {
@@ -19,6 +20,7 @@ interface InboxInterface
      * @param int|null $severity
      * @return array|string|null
      * @api
+     * @since 2.0.0
      */
     public function getSeverities($severity = null);
 
@@ -27,6 +29,7 @@ interface InboxInterface
      *
      * @return $this
      * @api
+     * @since 2.0.0
      */
     public function loadLatestNotice();
 
@@ -35,6 +38,7 @@ interface InboxInterface
      *
      * @return array
      * @api
+     * @since 2.0.0
      */
     public function getNoticeStatus();
 }

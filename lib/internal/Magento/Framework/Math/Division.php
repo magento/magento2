@@ -9,6 +9,7 @@ namespace Magento\Framework\Math;
  * Division library
  *
  * @api
+ * @since 2.0.0
  */
 class Division
 {
@@ -23,6 +24,7 @@ class Division
      * @param float|int $dividend
      * @param float|int $divisor
      * @return float|int
+     * @since 2.0.0
      */
     public function getExactDivision($dividend, $divisor)
     {

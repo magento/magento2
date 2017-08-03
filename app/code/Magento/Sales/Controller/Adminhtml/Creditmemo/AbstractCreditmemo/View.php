@@ -5,6 +5,11 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\View
+ *
+ * @since 2.0.0
+ */
 class View extends \Magento\Backend\App\Action
 {
     /**
@@ -16,12 +21,14 @@ class View extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -35,6 +42,7 @@ class View extends \Magento\Backend\App\Action
      * Creditmemo information page
      *
      * @return \Magento\Backend\Model\View\Result\Forward
+     * @since 2.0.0
      */
     public function execute()
     {

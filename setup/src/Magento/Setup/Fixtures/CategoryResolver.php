@@ -13,31 +13,37 @@ use Magento\Store\Model\StoreManager;
 
 /**
  * Provide category id. Find category in default store group by specified website and category name or create new one
+ * @since 2.2.0
  */
 class CategoryResolver
 {
     /**
      * @var StoreManager
+     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var CategoryFactory
+     * @since 2.2.0
      */
     private $categoryFactory;
 
     /**
      * @var CollectionFactory
+     * @since 2.2.0
      */
     private $collectionFactory;
 
     /**
      * @var CategoryRepositoryInterface
+     * @since 2.2.0
      */
     private $categoryRepository;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $categories = [];
 
@@ -47,6 +53,7 @@ class CategoryResolver
      * @param CategoryRepositoryInterface $categoryRepository
      * @param CollectionFactory $collectionFactory
      * @internal param Category $category
+     * @since 2.2.0
      */
     public function __construct(
         StoreManager $storeManager,
@@ -66,6 +73,7 @@ class CategoryResolver
      * @param int $websiteId
      * @param string $categoryName
      * @return int
+     * @since 2.2.0
      */
     public function getCategory($websiteId, $categoryName)
     {

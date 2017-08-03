@@ -13,6 +13,7 @@ use Magento\Framework\Search\Request\QueryInterface;
  * Search Request
  *
  * @api
+ * @since 2.0.0
  */
 interface RequestInterface
 {
@@ -20,6 +21,7 @@ interface RequestInterface
      * Get Name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName();
 
@@ -27,6 +29,7 @@ interface RequestInterface
      * Get Index name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getIndex();
 
@@ -34,6 +37,7 @@ interface RequestInterface
      * Get all dimensions
      *
      * @return Dimension[]
+     * @since 2.0.0
      */
     public function getDimensions();
 
@@ -41,6 +45,7 @@ interface RequestInterface
      * Get Aggregation Buckets
      *
      * @return RequestBucketInterface[]
+     * @since 2.0.0
      */
     public function getAggregation();
 
@@ -48,6 +53,7 @@ interface RequestInterface
      * Get Main Request Query
      *
      * @return QueryInterface
+     * @since 2.0.0
      */
     public function getQuery();
 
@@ -55,6 +61,7 @@ interface RequestInterface
      * Get From
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getFrom();
 
@@ -62,6 +69,7 @@ interface RequestInterface
      * Get Size
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getSize();
 }

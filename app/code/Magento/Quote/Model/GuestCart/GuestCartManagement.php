@@ -17,21 +17,25 @@ use Magento\Quote\Api\CartRepositoryInterface;
  * Cart Management class for guest carts.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class GuestCartManagement implements GuestCartManagementInterface
 {
     /**
      * @var CartManagementInterface
+     * @since 2.0.0
      */
     protected $quoteManagement;
 
     /**
      * @var QuoteIdMaskFactory
+     * @since 2.0.0
      */
     protected $quoteIdMaskFactory;
 
     /**
      * @var CartRepositoryInterface
+     * @since 2.0.0
      */
     protected $cartRepository;
 
@@ -42,6 +46,7 @@ class GuestCartManagement implements GuestCartManagementInterface
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      * @param CartRepositoryInterface $cartRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         CartManagementInterface $quoteManagement,
@@ -55,6 +60,7 @@ class GuestCartManagement implements GuestCartManagementInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function createEmptyCart()
     {
@@ -67,6 +73,7 @@ class GuestCartManagement implements GuestCartManagementInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function assignCustomer($cartId, $customerId, $storeId)
     {
@@ -77,6 +84,7 @@ class GuestCartManagement implements GuestCartManagementInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function placeOrder($cartId, PaymentInterface $paymentMethod = null)
     {

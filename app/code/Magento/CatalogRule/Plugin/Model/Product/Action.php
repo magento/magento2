@@ -9,15 +9,22 @@ namespace Magento\CatalogRule\Plugin\Model\Product;
 use Magento\Catalog\Model\Product\Action as ProductAction;
 use Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor;
 
+/**
+ * Class \Magento\CatalogRule\Plugin\Model\Product\Action
+ *
+ * @since 2.0.0
+ */
 class Action
 {
     /**
      * @var ProductRuleProcessor
+     * @since 2.0.0
      */
     protected $productRuleProcessor;
 
     /**
      * @param ProductRuleProcessor $productRuleProcessor
+     * @since 2.0.0
      */
     public function __construct(ProductRuleProcessor $productRuleProcessor)
     {
@@ -31,6 +38,7 @@ class Action
      *
      * @SuppressWarnings(PHPMD.UnusedFormatParameter)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function afterUpdateAttributes(ProductAction $object, ProductAction $result)
     {

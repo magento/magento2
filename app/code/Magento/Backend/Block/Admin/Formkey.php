@@ -11,6 +11,7 @@ namespace Magento\Backend\Block\Admin;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Formkey extends \Magento\Backend\Block\Template
 {
@@ -18,6 +19,7 @@ class Formkey extends \Magento\Backend\Block\Template
      * Get form key
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFormKey()
     {

@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Asset;
 
 /**
  * Interface for merging multiple assets into one
+ * @since 2.0.0
  */
 interface MergeStrategyInterface
 {
@@ -18,6 +19,7 @@ interface MergeStrategyInterface
      * @param MergeableInterface[] $assetsToMerge
      * @param LocalInterface $resultAsset
      * @return void
+     * @since 2.0.0
      */
     public function merge(array $assetsToMerge, LocalInterface $resultAsset);
 }

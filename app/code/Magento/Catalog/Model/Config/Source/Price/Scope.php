@@ -5,12 +5,18 @@
  */
 namespace Magento\Catalog\Model\Config\Source\Price;
 
+/**
+ * Class \Magento\Catalog\Model\Config\Source\Price\Scope
+ *
+ * @since 2.0.0
+ */
 class Scope implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * {@inheritdoc}
      *
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

@@ -9,31 +9,37 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Favicon implementation
+ * @since 2.0.0
  */
 class Favicon implements \Magento\Framework\View\Page\FaviconInterface
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $faviconFile;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @since 2.0.0
      */
     protected $fileStorageDatabase;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @since 2.0.0
      */
     protected $mediaDirectory;
 
@@ -42,6 +48,7 @@ class Favicon implements \Magento\Framework\View\Page\FaviconInterface
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDatabase
      * @param \Magento\Framework\Filesystem $filesystem
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -57,6 +64,7 @@ class Favicon implements \Magento\Framework\View\Page\FaviconInterface
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getFaviconFile()
     {
@@ -68,6 +76,7 @@ class Favicon implements \Magento\Framework\View\Page\FaviconInterface
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getDefaultFavicon()
     {
@@ -76,6 +85,7 @@ class Favicon implements \Magento\Framework\View\Page\FaviconInterface
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function prepareFaviconFile()
     {
@@ -100,6 +110,7 @@ class Favicon implements \Magento\Framework\View\Page\FaviconInterface
      *
      * @param string $filename relative file path
      * @return bool
+     * @since 2.0.0
      */
     protected function checkIsFile($filename)
     {

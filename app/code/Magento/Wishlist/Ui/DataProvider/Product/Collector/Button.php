@@ -17,6 +17,7 @@ use Magento\Wishlist\Helper\Data;
 
 /**
  * Collect information needed to render wishlist button on front
+ * @since 2.2.0
  */
 class Button implements ProductRenderCollectorInterface
 {
@@ -25,16 +26,19 @@ class Button implements ProductRenderCollectorInterface
 
     /**
      * @var Data
+     * @since 2.2.0
      */
     private $wishlistHelper;
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductRender\ProductRenderExtensionInterfaceFactory
+     * @since 2.2.0
      */
     private $productRenderExtensionFactory;
 
     /**
      * @var ButtonInterfaceFactory
+     * @since 2.2.0
      */
     private $buttonInterfaceFactory;
 
@@ -42,6 +46,7 @@ class Button implements ProductRenderCollectorInterface
      * @param Data $wishlistHelper
      * @param \Magento\Catalog\Api\Data\ProductRenderExtensionFactory $productRenderExtensionFactory
      * @param ButtonInterfaceFactory $buttonInterfaceFactory
+     * @since 2.2.0
      */
     public function __construct(
         Data $wishlistHelper,
@@ -55,6 +60,7 @@ class Button implements ProductRenderCollectorInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function collect(ProductInterface $product, ProductRenderInterface $productRender)
     {

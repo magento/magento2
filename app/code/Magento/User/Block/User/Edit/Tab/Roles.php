@@ -9,6 +9,7 @@ use Magento\Backend\Block\Widget\Grid\Column;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -16,16 +17,19 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory
+     * @since 2.0.0
      */
     protected $_userRolesFactory;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
+     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
@@ -36,6 +40,7 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory $userRolesFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -55,6 +60,7 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
      * Class constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -69,6 +75,7 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @param Column $column
      * @return $this
+     * @since 2.0.0
      */
     protected function _addColumnFilterToCollection($column)
     {
@@ -92,6 +99,7 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -103,6 +111,7 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -126,6 +135,7 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getGridUrl()
     {
@@ -136,6 +146,7 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @param bool $json
      * @return array|string
+     * @since 2.0.0
      */
     public function getSelectedRoles($json = false)
     {

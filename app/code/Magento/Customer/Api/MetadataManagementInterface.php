@@ -10,6 +10,7 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface;
 /**
  * Interface for managing attributes metadata.
  * @api
+ * @since 2.0.0
  */
 interface MetadataManagementInterface
 {
@@ -20,6 +21,7 @@ interface MetadataManagementInterface
      * @param AttributeMetadataInterface $attribute
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     public function canBeSearchableInGrid(AttributeMetadataInterface $attribute);
 
@@ -30,6 +32,7 @@ interface MetadataManagementInterface
      * @param AttributeMetadataInterface $attribute
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     public function canBeFilterableInGrid(AttributeMetadataInterface $attribute);
 }

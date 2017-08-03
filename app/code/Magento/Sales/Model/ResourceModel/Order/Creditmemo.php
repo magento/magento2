@@ -16,6 +16,7 @@ use Magento\Sales\Model\Spi\CreditmemoResourceInterface;
  * Flat sales order creditmemo resource
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Creditmemo extends SalesResource implements CreditmemoResourceInterface
 {
@@ -23,6 +24,7 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
      * Event prefix
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_creditmemo_resource';
 
@@ -30,6 +32,7 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
      * Model initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -41,6 +44,7 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {

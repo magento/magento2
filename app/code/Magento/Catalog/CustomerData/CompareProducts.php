@@ -7,18 +7,30 @@ namespace Magento\Catalog\CustomerData;
 
 use Magento\Customer\CustomerData\SectionSourceInterface;
 
+/**
+ * Class \Magento\Catalog\CustomerData\CompareProducts
+ *
+ * @since 2.0.0
+ */
 class CompareProducts implements SectionSourceInterface
 {
-    /** @var \Magento\Catalog\Helper\Product\Compare */
+    /**
+     * @var \Magento\Catalog\Helper\Product\Compare
+     * @since 2.0.0
+     */
     protected $helper;
 
-    /** @var \Magento\Catalog\Model\Product\Url */
+    /**
+     * @var \Magento\Catalog\Model\Product\Url
+     * @since 2.0.0
+     */
     protected $productUrl;
 
     /**
      * @param \Magento\Catalog\Helper\Product\Compare $helper
      * @param \Magento\Catalog\Model\Product\Url $productUrl
      * @param \Magento\Catalog\Helper\Output $outputHelper
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Helper\Product\Compare $helper,
@@ -32,6 +44,7 @@ class CompareProducts implements SectionSourceInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getSectionData()
     {
@@ -46,6 +59,7 @@ class CompareProducts implements SectionSourceInterface
 
     /**
      * @return array
+     * @since 2.0.0
      */
     protected function getItems()
     {

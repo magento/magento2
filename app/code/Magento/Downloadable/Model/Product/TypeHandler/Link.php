@@ -12,21 +12,25 @@ use Magento\Downloadable\Model\ComponentInterface;
 /**
  * Class Link
  * @api
+ * @since 2.0.0
  */
 class Link extends AbstractTypeHandler
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     private $sampleItem = [];
 
     /**
      * @var \Magento\Downloadable\Model\ComponentInterfaceFactory
+     * @since 2.0.0
      */
     private $linkFactory;
 
     /**
      * @var \Magento\Downloadable\Model\ResourceModel\Link
+     * @since 2.0.0
      */
     private $linkResource;
 
@@ -35,6 +39,7 @@ class Link extends AbstractTypeHandler
      * @param \Magento\Downloadable\Helper\File $downloadableFile
      * @param \Magento\Downloadable\Model\LinkFactory $linkFactory
      * @param \Magento\Downloadable\Model\ResourceModel\Link $linkResource
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
@@ -49,6 +54,7 @@ class Link extends AbstractTypeHandler
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getDataKey()
     {
@@ -57,6 +63,7 @@ class Link extends AbstractTypeHandler
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getIdentifierKey()
     {
@@ -65,6 +72,7 @@ class Link extends AbstractTypeHandler
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function save(Product $product, array $data)
     {
@@ -76,6 +84,7 @@ class Link extends AbstractTypeHandler
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function clear()
     {
@@ -85,6 +94,7 @@ class Link extends AbstractTypeHandler
 
     /**
      * @return ComponentInterface
+     * @since 2.0.0
      */
     protected function createItem()
     {
@@ -96,6 +106,7 @@ class Link extends AbstractTypeHandler
      * @param array $data
      * @param Product $product
      * @return void
+     * @since 2.0.0
      */
     protected function setDataToModel(ComponentInterface $model, array $data, Product $product)
     {
@@ -126,6 +137,7 @@ class Link extends AbstractTypeHandler
      * @param ComponentInterface $model
      * @param Product $product
      * @return void
+     * @since 2.0.0
      */
     protected function linkToProduct(ComponentInterface $model, Product $product)
     {
@@ -134,6 +146,7 @@ class Link extends AbstractTypeHandler
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function processDelete()
     {
@@ -144,6 +157,7 @@ class Link extends AbstractTypeHandler
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function saveItem(Product $product, array $item)
     {
@@ -158,6 +172,7 @@ class Link extends AbstractTypeHandler
      * @param ComponentInterface $model
      * @param array $files
      * @return void
+     * @since 2.0.0
      */
     protected function setFiles(ComponentInterface $model, array $files)
     {

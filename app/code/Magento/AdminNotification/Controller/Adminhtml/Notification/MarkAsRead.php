@@ -6,6 +6,11 @@
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
+/**
+ * Class \Magento\AdminNotification\Controller\Adminhtml\Notification\MarkAsRead
+ *
+ * @since 2.0.0
+ */
 class MarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Notification
 {
     /**
@@ -17,6 +22,7 @@ class MarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Notific
 
     /**
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

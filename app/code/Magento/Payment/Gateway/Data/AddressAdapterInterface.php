@@ -8,6 +8,7 @@ namespace Magento\Payment\Gateway\Data;
 /**
  * Interface AddressAdapterInterface
  * @api
+ * @since 2.0.0
  */
 interface AddressAdapterInterface
 {
@@ -15,6 +16,7 @@ interface AddressAdapterInterface
      * Get region name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRegionCode();
 
@@ -22,6 +24,7 @@ interface AddressAdapterInterface
      * Get country id
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCountryId();
 
@@ -29,6 +32,7 @@ interface AddressAdapterInterface
      * Get street line 1
      *
      * @return string
+     * @since 2.0.0
      */
     public function getStreetLine1();
 
@@ -36,6 +40,7 @@ interface AddressAdapterInterface
      * Get street line 2
      *
      * @return string
+     * @since 2.0.0
      */
     public function getStreetLine2();
 
@@ -43,6 +48,7 @@ interface AddressAdapterInterface
      * Get telephone number
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTelephone();
 
@@ -50,6 +56,7 @@ interface AddressAdapterInterface
      * Get postcode
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPostcode();
 
@@ -57,6 +64,7 @@ interface AddressAdapterInterface
      * Get city name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCity();
 
@@ -64,6 +72,7 @@ interface AddressAdapterInterface
      * Get first name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFirstname();
 
@@ -71,6 +80,7 @@ interface AddressAdapterInterface
      * Get last name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLastname();
 
@@ -78,6 +88,7 @@ interface AddressAdapterInterface
      * Get middle name
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getMiddlename();
 
@@ -85,6 +96,7 @@ interface AddressAdapterInterface
      * Get customer id
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getCustomerId();
 
@@ -92,6 +104,7 @@ interface AddressAdapterInterface
      * Get billing/shipping email
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEmail();
 
@@ -99,6 +112,7 @@ interface AddressAdapterInterface
      * Returns name prefix
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPrefix();
 
@@ -106,6 +120,7 @@ interface AddressAdapterInterface
      * Returns name suffix
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSuffix();
 
@@ -113,6 +128,7 @@ interface AddressAdapterInterface
      * Get company
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCompany();
 }

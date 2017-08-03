@@ -14,6 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for i18n dictionary generation
+ * @since 2.0.0
  */
 class I18nCollectPhrasesCommand extends Command
 {
@@ -29,6 +30,7 @@ class I18nCollectPhrasesCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -58,6 +60,7 @@ class I18nCollectPhrasesCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

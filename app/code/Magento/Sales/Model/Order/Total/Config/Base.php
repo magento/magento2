@@ -9,6 +9,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Configuration class for totals
+ * @since 2.0.0
  */
 class Base extends \Magento\Sales\Model\Config\Ordered
 {
@@ -16,6 +17,7 @@ class Base extends \Magento\Sales\Model\Config\Ordered
      * Cache key for collectors
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_collectorsCacheKey = 'sorted_collectors';
 
@@ -23,6 +25,7 @@ class Base extends \Magento\Sales\Model\Config\Ordered
      * Total models list
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_totalModels = [];
 
@@ -30,11 +33,13 @@ class Base extends \Magento\Sales\Model\Config\Ordered
      * Configuration path where to collect registered totals
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_configGroup = 'totals';
 
     /**
      * @var \Magento\Sales\Model\Order\TotalFactory
+     * @since 2.0.0
      */
     protected $_orderTotalFactory;
 
@@ -45,6 +50,7 @@ class Base extends \Magento\Sales\Model\Config\Ordered
      * @param \Magento\Sales\Model\Order\TotalFactory $orderTotalFactory
      * @param \Magento\Framework\Simplexml\Element|mixed $sourceData
      * @param SerializerInterface $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
@@ -66,6 +72,7 @@ class Base extends \Magento\Sales\Model\Config\Ordered
      * @param array $totalConfig
      * @return \Magento\Sales\Model\Order\Total\AbstractTotal
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _initModelInstance($class, $totalCode, $totalConfig)
     {
@@ -87,6 +94,7 @@ class Base extends \Magento\Sales\Model\Config\Ordered
      * Retrieve total calculation models
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTotalModels()
     {

@@ -10,6 +10,7 @@ use \Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
  * Resource Model
+ * @since 2.0.0
  */
 class ModuleResource extends AbstractDb implements ResourceInterface
 {
@@ -17,6 +18,7 @@ class ModuleResource extends AbstractDb implements ResourceInterface
      * Database versions
      *
      * @var array
+     * @since 2.0.0
      */
     protected static $schemaVersions = null;
 
@@ -24,6 +26,7 @@ class ModuleResource extends AbstractDb implements ResourceInterface
      * Resource data versions cache array
      *
      * @var array
+     * @since 2.0.0
      */
     protected static $dataVersions = null;
 
@@ -31,6 +34,7 @@ class ModuleResource extends AbstractDb implements ResourceInterface
      * Define main table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -46,6 +50,7 @@ class ModuleResource extends AbstractDb implements ResourceInterface
      *
      * @param string $needType Can be 'db' or 'data'
      * @return $this
+     * @since 2.0.0
      */
     protected function _loadVersion($needType)
     {
@@ -77,6 +82,7 @@ class ModuleResource extends AbstractDb implements ResourceInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getDbVersion($moduleName)
     {
@@ -89,6 +95,7 @@ class ModuleResource extends AbstractDb implements ResourceInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setDbVersion($moduleName, $version)
     {
@@ -109,6 +116,7 @@ class ModuleResource extends AbstractDb implements ResourceInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getDataVersion($moduleName)
     {
@@ -121,6 +129,7 @@ class ModuleResource extends AbstractDb implements ResourceInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setDataVersion($moduleName, $version)
     {

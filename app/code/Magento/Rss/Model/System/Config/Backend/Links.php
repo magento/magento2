@@ -8,6 +8,7 @@ namespace Magento\Rss\Model\System\Config\Backend;
 /**
  * Cache cleaner backend model
  *
+ * @since 2.0.0
  */
 class Links extends \Magento\Framework\App\Config\Value
 {
@@ -15,6 +16,7 @@ class Links extends \Magento\Framework\App\Config\Value
      * Invalidate cache type, when value was changed
      *
      * @return $this
+     * @since 2.0.0
      */
     public function afterSave()
     {

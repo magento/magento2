@@ -9,16 +9,23 @@ namespace Magento\Framework\Phrase\Renderer;
 
 use Magento\Framework\Phrase\RendererInterface;
 
+/**
+ * Class \Magento\Framework\Phrase\Renderer\Composite
+ *
+ * @since 2.0.0
+ */
 class Composite implements RendererInterface
 {
     /**
      * @var RendererInterface[]
+     * @since 2.0.0
      */
     protected $_renderers;
 
     /**
      * @param \Magento\Framework\Phrase\RendererInterface[] $renderers
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function __construct(array $renderers)
     {
@@ -38,6 +45,7 @@ class Composite implements RendererInterface
      * @param [] $source
      * @param [] $arguments
      * @return string
+     * @since 2.0.0
      */
     public function render(array $source, array $arguments = [])
     {

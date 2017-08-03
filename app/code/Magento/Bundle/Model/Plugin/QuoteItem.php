@@ -11,6 +11,7 @@ use Magento\Quote\Model\Quote\Item\AbstractItem;
 
 /**
  * Plugin for Magento\Quote\Model\Quote\Item\ToOrderItem
+ * @since 2.0.0
  */
 class QuoteItem
 {
@@ -24,6 +25,7 @@ class QuoteItem
      * @return OrderItemInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterConvert(ToOrderItem $subject, OrderItemInterface $orderItem, AbstractItem $item, $data = [])
     {

@@ -16,11 +16,13 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class PlaceOrder
+ * @since 2.1.0
  */
 class PlaceOrder extends AbstractAction
 {
     /**
      * @var Helper\OrderPlace
+     * @since 2.1.0
      */
     private $orderPlace;
 
@@ -28,6 +30,7 @@ class PlaceOrder extends AbstractAction
      * Logger for exception details
      *
      * @var LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 
@@ -39,6 +42,7 @@ class PlaceOrder extends AbstractAction
      * @param Session $checkoutSession
      * @param Helper\OrderPlace $orderPlace
      * @param LoggerInterface|null $logger
+     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -55,6 +59,7 @@ class PlaceOrder extends AbstractAction
     /**
      * @inheritdoc
      * @throws LocalizedException
+     * @since 2.1.0
      */
     public function execute()
     {

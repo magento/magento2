@@ -10,16 +10,23 @@ use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * Class \Magento\ProductAlert\Controller\Add
+ *
+ * @since 2.0.0
+ */
 abstract class Add extends Action
 {
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -34,6 +41,7 @@ abstract class Add extends Action
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
+     * @since 2.0.0
      */
     public function dispatch(RequestInterface $request)
     {

@@ -6,15 +6,22 @@
 
 namespace Magento\Catalog\Model\Indexer\Product\Eav\Plugin\AttributeSet;
 
+/**
+ * Class \Magento\Catalog\Model\Indexer\Product\Eav\Plugin\AttributeSet\IndexableAttributeFilter
+ *
+ * @since 2.0.0
+ */
 class IndexableAttributeFilter
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
+     * @since 2.0.0
      */
     protected $_attributeFactory;
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory
+     * @since 2.0.0
      */
     public function __construct(\Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory)
     {
@@ -26,6 +33,7 @@ class IndexableAttributeFilter
      *
      * @param \Magento\Eav\Model\Entity\Attribute\Set $set
      * @return array
+     * @since 2.0.0
      */
     public function filter(\Magento\Eav\Model\Entity\Attribute\Set $set)
     {

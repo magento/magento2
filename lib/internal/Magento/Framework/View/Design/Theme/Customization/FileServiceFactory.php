@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Design\Theme\Customization;
 
 /**
  * Theme customization files factory
+ * @since 2.0.0
  */
 class FileServiceFactory
 {
@@ -14,6 +15,7 @@ class FileServiceFactory
      * Object manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -22,6 +24,7 @@ class FileServiceFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param ConfigInterface $config
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, ConfigInterface $config)
     {
@@ -36,6 +39,7 @@ class FileServiceFactory
      * @param array $data
      * @return \Magento\Framework\View\Design\Theme\Customization\FileInterface
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function create($type, array $data = [])
     {

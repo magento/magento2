@@ -16,6 +16,7 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 {
@@ -23,6 +24,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -30,6 +32,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * Model factory
      *
      * @var \Magento\Catalog\Model\Factory
+     * @since 2.0.0
      */
     protected $_modelFactory;
 
@@ -38,6 +41,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
@@ -54,6 +58,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * Re-declare attribute model
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getDefaultAttributeModel()
     {
@@ -64,6 +69,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * Returns default Store ID
      *
      * @return int
+     * @since 2.0.0
      */
     public function getDefaultStoreId()
     {
@@ -76,6 +82,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param \Magento\Framework\DataObject $object
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return boolean
+     * @since 2.0.0
      */
     protected function _isApplicableAttribute($object, $attribute)
     {
@@ -91,6 +98,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param string $method
      * @param array $args array of arguments
      * @return boolean
+     * @since 2.0.0
      */
     protected function _isCallableAttributeInstance($instance, $method, $args)
     {
@@ -113,6 +121,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param \Magento\Framework\DataObject $object
      * @param string $table
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function _getLoadAttributesSelect($object, $table)
     {
@@ -157,6 +166,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      *
      * @param array $selects
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function _prepareLoadSelect(array $selects)
     {
@@ -172,6 +182,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param AbstractAttribute $attribute
      * @param mixed $value
      * @return $this
+     * @since 2.0.0
      */
     protected function _saveAttributeValue($object, $attribute, $value)
     {
@@ -239,6 +250,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param AbstractAttribute $attribute
      * @param mixed $value
      * @return $this
+     * @since 2.0.0
      */
     protected function _insertAttribute($object, $attribute, $value)
     {
@@ -284,6 +296,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param mixed $value
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _updateAttribute($object, $attribute, $valueId, $value)
     {
@@ -298,6 +311,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param mixed $value
      * @param int $storeId
      * @return $this
+     * @since 2.0.0
      */
     protected function _updateAttributeForStore($object, $attribute, $value, $storeId)
     {
@@ -344,6 +358,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param string $table
      * @param array $info
      * @return $this
+     * @since 2.0.0
      */
     protected function _deleteAttributes($object, $table, $info)
     {
@@ -411,6 +426,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      *
      * @param \Magento\Framework\DataObject $object
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     protected function _getOrigObject($object)
     {
@@ -433,6 +449,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param mixed $value New value of the attribute.
      * @param array &$origData
      * @return bool
+     * @since 2.0.0
      */
     protected function _canUpdateAttribute(AbstractAttribute $attribute, $value, array &$origData)
     {
@@ -460,6 +477,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function getAttributeRawValue($entityId, $attribute, $store)
     {

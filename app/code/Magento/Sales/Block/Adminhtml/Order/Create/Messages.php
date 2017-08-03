@@ -10,6 +10,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Messages extends \Magento\Framework\View\Element\Messages
 {
@@ -17,6 +18,7 @@ class Messages extends \Magento\Framework\View\Element\Messages
      * Preparing global layout
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {

@@ -12,7 +12,8 @@ use Magento\Quote\Model\Quote;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @deprecated
+ * @deprecated 2.1.0
+ * @since 2.0.0
  */
 interface CartInterface
 {
@@ -22,6 +23,7 @@ interface CartInterface
      * @param int|\Magento\Catalog\Model\Product $productInfo
      * @param array|float|int|\Magento\Framework\DataObject|null $requestInfo
      * @return $this
+     * @since 2.0.0
      */
     public function addProduct($productInfo, $requestInfo = null);
 
@@ -30,6 +32,7 @@ interface CartInterface
      *
      * @return $this
      * @abstract
+     * @since 2.0.0
      */
     public function saveQuote();
 
@@ -39,6 +42,7 @@ interface CartInterface
      * @param Quote $quote
      * @return $this
      * @abstract
+     * @since 2.0.0
      */
     public function setQuote(Quote $quote);
 
@@ -47,6 +51,7 @@ interface CartInterface
      *
      * @return Quote
      * @abstract
+     * @since 2.0.0
      */
     public function getQuote();
 }

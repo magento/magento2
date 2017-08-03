@@ -15,6 +15,7 @@ namespace Magento\Customer\Model;
  * @method \Magento\Customer\Model\Group setCustomerGroupCode(string $value)
  * @method \Magento\Customer\Model\Group setTaxClassId(int $value)
  * @method Group setTaxClassName(string $value)
+ * @since 2.0.0
  */
 class Group extends \Magento\Framework\Model\AbstractModel
 {
@@ -30,6 +31,7 @@ class Group extends \Magento\Framework\Model\AbstractModel
      * Prefix of model events names
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'customer_group';
 
@@ -39,21 +41,25 @@ class Group extends \Magento\Framework\Model\AbstractModel
      * In observe method you can use $observer->getEvent()->getObject() in this case
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'object';
 
     /**
      * @var \Magento\Store\Model\StoresConfig
+     * @since 2.0.0
      */
     protected $_storesConfig;
 
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
+     * @since 2.0.0
      */
     protected $dataObjectProcessor;
 
     /**
      * @var \Magento\Tax\Model\ClassModelFactory
+     * @since 2.0.0
      */
     protected $classModelFactory;
 
@@ -69,6 +75,7 @@ class Group extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -94,6 +101,7 @@ class Group extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -105,6 +113,7 @@ class Group extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $value
      * @return $this
+     * @since 2.0.0
      */
     public function setCode($value)
     {
@@ -115,6 +124,7 @@ class Group extends \Magento\Framework\Model\AbstractModel
      * Alias for getCustomerGroupCode
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCode()
     {
@@ -125,6 +135,7 @@ class Group extends \Magento\Framework\Model\AbstractModel
      * Get tax class name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTaxClassName()
     {
@@ -143,6 +154,7 @@ class Group extends \Magento\Framework\Model\AbstractModel
      * Determine if this group is used as the create account default group
      *
      * @return bool
+     * @since 2.0.0
      */
     public function usesAsDefault()
     {
@@ -159,6 +171,7 @@ class Group extends \Magento\Framework\Model\AbstractModel
      * Prepare data before save
      *
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -170,6 +183,7 @@ class Group extends \Magento\Framework\Model\AbstractModel
      * Prepare customer group data
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareData()
     {

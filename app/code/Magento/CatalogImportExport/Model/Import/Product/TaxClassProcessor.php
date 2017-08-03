@@ -8,6 +8,11 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType;
 use Magento\Tax\Model\ClassModel;
 
+/**
+ * Class \Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor
+ *
+ * @since 2.0.0
+ */
 class TaxClassProcessor
 {
     /**
@@ -19,6 +24,7 @@ class TaxClassProcessor
      * Tax classes.
      *
      * @var array
+     * @since 2.0.0
      */
     protected $taxClasses;
 
@@ -26,6 +32,7 @@ class TaxClassProcessor
      * Instance of tax class collection factory.
      *
      * @var \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory
+     * @since 2.0.0
      */
     protected $collectionFactory;
 
@@ -33,12 +40,14 @@ class TaxClassProcessor
      * Instance of tax model factory.
      *
      * @var \Magento\Tax\Model\ClassModelFactory
+     * @since 2.0.0
      */
     protected $classModelFactory;
 
     /**
      * @param \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory $collectionFactory
      * @param \Magento\Tax\Model\ClassModelFactory $classModelFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory $collectionFactory,
@@ -53,6 +62,7 @@ class TaxClassProcessor
      * Initiate tax classes.
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function initTaxClasses()
     {
@@ -73,6 +83,7 @@ class TaxClassProcessor
      * @param string $taxClassName
      * @param AbstractType $productTypeModel
      * @return integer
+     * @since 2.0.0
      */
     protected function createTaxClass($taxClassName, AbstractType $productTypeModel)
     {
@@ -95,6 +106,7 @@ class TaxClassProcessor
      * @param string $taxClassName
      * @param AbstractType $productTypeModel
      * @return object
+     * @since 2.0.0
      */
     public function upsertTaxClass($taxClassName, AbstractType $productTypeModel)
     {

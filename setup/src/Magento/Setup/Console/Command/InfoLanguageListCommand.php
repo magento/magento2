@@ -13,6 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command prints list of available language locales
+ * @since 2.0.0
  */
 class InfoLanguageListCommand extends Command
 {
@@ -20,11 +21,13 @@ class InfoLanguageListCommand extends Command
      * List model provides lists of available options for currency, language locales, timezones
      *
      * @var Lists
+     * @since 2.0.0
      */
     private $lists;
 
     /**
      * @param Lists $lists
+     * @since 2.0.0
      */
     public function __construct(Lists $lists)
     {
@@ -34,6 +37,7 @@ class InfoLanguageListCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -45,6 +49,7 @@ class InfoLanguageListCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

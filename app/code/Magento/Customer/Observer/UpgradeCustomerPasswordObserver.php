@@ -11,22 +11,30 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\CustomerRegistry;
 
+/**
+ * Class \Magento\Customer\Observer\UpgradeCustomerPasswordObserver
+ *
+ * @since 2.0.0
+ */
 class UpgradeCustomerPasswordObserver implements ObserverInterface
 {
     /**
      * Encryption model
      *
      * @var EncryptorInterface
+     * @since 2.0.0
      */
     protected $encryptor;
 
     /**
      * @var CustomerRegistry
+     * @since 2.0.0
      */
     private $customerRegistry;
 
     /**
      * @var CustomerRepositoryInterface
+     * @since 2.0.0
      */
     private $customerRepository;
 
@@ -34,6 +42,7 @@ class UpgradeCustomerPasswordObserver implements ObserverInterface
      * @param EncryptorInterface $encryptor
      * @param CustomerRegistry $customerRegistry
      * @param CustomerRepositoryInterface $customerRepository
+     * @since 2.0.0
      */
     public function __construct(
         EncryptorInterface $encryptor,
@@ -50,6 +59,7 @@ class UpgradeCustomerPasswordObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

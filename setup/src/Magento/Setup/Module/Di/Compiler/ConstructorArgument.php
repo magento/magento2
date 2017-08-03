@@ -7,30 +7,40 @@
 
 namespace Magento\Setup\Module\Di\Compiler;
 
+/**
+ * Class \Magento\Setup\Module\Di\Compiler\ConstructorArgument
+ *
+ * @since 2.0.0
+ */
 class ConstructorArgument
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     private $name;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $type;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     private $isRequired;
 
     /**
      * @var mixed
+     * @since 2.0.0
      */
     private $defaultValue;
 
     /**
      * @param array $configuration
+     * @since 2.0.0
      */
     public function __construct(array $configuration)
     {
@@ -44,6 +54,7 @@ class ConstructorArgument
      * Returns attribute name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -54,6 +65,7 @@ class ConstructorArgument
      * Returns attribute type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getType()
     {
@@ -64,6 +76,7 @@ class ConstructorArgument
      * Whether attribute is required
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isRequired()
     {
@@ -74,6 +87,7 @@ class ConstructorArgument
      * Returns attribute default value
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getDefaultValue()
     {

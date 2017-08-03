@@ -11,12 +11,18 @@
  */
 namespace Magento\Framework\App\Cache\Type;
 
+/**
+ * Class \Magento\Framework\App\Cache\Type\AccessProxy
+ *
+ * @since 2.0.0
+ */
 class AccessProxy extends \Magento\Framework\Cache\Frontend\Decorator\Bare
 {
     /**
      * Cache types manager
      *
      * @var \Magento\Framework\App\Cache\StateInterface
+     * @since 2.0.0
      */
     private $_cacheState;
 
@@ -24,6 +30,7 @@ class AccessProxy extends \Magento\Framework\Cache\Frontend\Decorator\Bare
      * Cache type identifier
      *
      * @var string
+     * @since 2.0.0
      */
     private $_identifier;
 
@@ -31,6 +38,7 @@ class AccessProxy extends \Magento\Framework\Cache\Frontend\Decorator\Bare
      * @param \Magento\Framework\Cache\FrontendInterface $frontend
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param string $identifier Cache type identifier
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Cache\FrontendInterface $frontend,
@@ -46,6 +54,7 @@ class AccessProxy extends \Magento\Framework\Cache\Frontend\Decorator\Bare
      * Whether a cache type is enabled at the moment or not
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function _isEnabled()
     {
@@ -54,6 +63,7 @@ class AccessProxy extends \Magento\Framework\Cache\Frontend\Decorator\Bare
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function test($identifier)
     {
@@ -65,6 +75,7 @@ class AccessProxy extends \Magento\Framework\Cache\Frontend\Decorator\Bare
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function load($identifier)
     {
@@ -76,6 +87,7 @@ class AccessProxy extends \Magento\Framework\Cache\Frontend\Decorator\Bare
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
@@ -87,6 +99,7 @@ class AccessProxy extends \Magento\Framework\Cache\Frontend\Decorator\Bare
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function remove($identifier)
     {
@@ -98,6 +111,7 @@ class AccessProxy extends \Magento\Framework\Cache\Frontend\Decorator\Bare
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
     {

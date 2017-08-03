@@ -13,6 +13,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\AbstractResource
 {
@@ -20,11 +21,13 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
      * Eav config
      *
      * @var \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     protected $_eavConfig;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
@@ -35,6 +38,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -51,6 +55,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
      *
      * @param string $attributeCode
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
+     * @since 2.0.0
      */
     protected function _getAttribute($attributeCode)
     {
@@ -69,6 +74,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
      * @param \Zend_Db_Expr $condition       the limitation condition
      * @param bool $required                if required or has condition used INNER join, else - LEFT
      * @return \Zend_Db_Expr                 the attribute value expression
+     * @since 2.0.0
      */
     protected function _addAttributeToSelect($select, $attrCode, $entity, $store, $condition = null, $required = false)
     {
@@ -130,6 +136,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
      * @param bool $store add default store join
      * @param string|\Zend_Db_Expr $joinCondition the limitation for website_id
      * @return $this
+     * @since 2.0.0
      */
     protected function _addWebsiteJoinToSelect($select, $store = true, $joinCondition = null)
     {
@@ -162,6 +169,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
      * @param string|\Zend_Db_Expr $website the limitation of website_id
      * @param string|\Zend_Db_Expr $product the limitation of product_id
      * @return $this
+     * @since 2.0.0
      */
     protected function _addProductWebsiteJoinToSelect($select, $website, $product)
     {
@@ -179,6 +187,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
      *
      * @param int|array $childIds
      * @return array
+     * @since 2.0.0
      */
     public function getRelationsByChild($childIds)
     {
@@ -204,6 +213,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
      *
      * @param int|array $parentIds
      * @return array
+     * @since 2.0.0
      */
     public function getRelationsByParent($parentIds)
     {
@@ -233,6 +243,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.0
      */
     protected function getMetadataPool()
     {

@@ -19,6 +19,7 @@ namespace Magento\Widget\Model\Layout;
  * @method \Magento\Widget\Model\Layout\Update setThemeId() setThemeId(int $themeId)
  * @method \Magento\Widget\Model\Layout\Update setUpdatedAt() setUpdatedAt(string $updateDateTime)
  * @method \Magento\Widget\Model\ResourceModel\Layout\Update\Collection getCollection()
+ * @since 2.0.0
  */
 class Update extends \Magento\Framework\Model\AbstractModel
 {
@@ -28,6 +29,7 @@ class Update extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -43,6 +45,7 @@ class Update extends \Magento\Framework\Model\AbstractModel
      * Layout Update model initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

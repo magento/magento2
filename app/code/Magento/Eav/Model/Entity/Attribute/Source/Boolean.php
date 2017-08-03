@@ -7,6 +7,7 @@ namespace Magento\Eav\Model\Entity\Attribute\Source;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
@@ -19,12 +20,14 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\AttributeFactory
+     * @since 2.0.0
      */
     protected $_eavAttrEntity;
 
     /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\AttributeFactory $eavAttrEntity
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\AttributeFactory $eavAttrEntity
@@ -36,6 +39,7 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Retrieve all options array
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllOptions()
     {
@@ -52,6 +56,7 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Retrieve option array
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOptionArray()
     {
@@ -67,6 +72,7 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @param string|int $value
      * @return string|false
+     * @since 2.0.0
      */
     public function getOptionText($value)
     {
@@ -83,6 +89,7 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Retrieve flat column definition
      *
      * @return array
+     * @since 2.0.0
      */
     public function getFlatColumns()
     {
@@ -105,6 +112,7 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Retrieve Indexes(s) for Flat
      *
      * @return array
+     * @since 2.0.0
      */
     public function getFlatIndexes()
     {
@@ -121,6 +129,7 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @param int $store
      * @return \Magento\Framework\DB\Select|null
+     * @since 2.0.0
      */
     public function getFlatUpdateSelect($store)
     {
@@ -132,6 +141,7 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @param  string|int $value
      * @return string|bool
+     * @since 2.0.0
      */
     public function getIndexOptionText($value)
     {
@@ -152,6 +162,7 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * @param string $dir
      *
      * @return \Magento\Eav\Model\Entity\Attribute\Source\Boolean
+     * @since 2.0.0
      */
     public function addValueSortToCollection($collection, $dir = \Magento\Framework\DB\Select::SQL_ASC)
     {

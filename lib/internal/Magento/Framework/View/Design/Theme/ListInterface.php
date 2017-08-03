@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Design\Theme;
  * Theme list interface
  *
  * @api
+ * @since 2.0.0
  */
 interface ListInterface
 {
@@ -17,6 +18,7 @@ interface ListInterface
      *
      * @param string $fullPath
      * @return \Magento\Framework\View\Design\ThemeInterface
+     * @since 2.0.0
      */
     public function getThemeByFullPath($fullPath);
 }

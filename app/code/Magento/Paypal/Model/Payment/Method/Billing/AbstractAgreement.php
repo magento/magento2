@@ -14,6 +14,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractMethod
 {
@@ -26,11 +27,13 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_infoBlockType = \Magento\Paypal\Block\Payment\Info\Billing\Agreement::class;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_formBlockType = \Magento\Paypal\Block\Payment\Form\Billing\Agreement::class;
 
@@ -38,11 +41,13 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
      * Is method instance available
      *
      * @var null|bool
+     * @since 2.0.0
      */
     protected $_isAvailable = null;
 
     /**
      * @var \Magento\Paypal\Model\Billing\AgreementFactory
+     * @since 2.0.0
      */
     protected $_agreementFactory;
 
@@ -59,6 +64,7 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -93,6 +99,7 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
      *
      * @param \Magento\Paypal\Model\Quote|\Magento\Quote\Api\Data\CartInterface|null $quote
      * @return bool
+     * @since 2.0.0
      */
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
@@ -110,6 +117,7 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
      * @param \Magento\Framework\DataObject $data
      * @return \Magento\Payment\Model\Info
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function assignData(\Magento\Framework\DataObject $data)
     {
@@ -142,6 +150,7 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
     /**
      * @param object $quote
      * @return bool
+     * @since 2.0.0
      */
     abstract protected function _isAvailable($quote);
 }

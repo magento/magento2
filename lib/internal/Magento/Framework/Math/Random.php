@@ -9,6 +9,7 @@ namespace Magento\Framework\Math;
  * Random data generator
  *
  * @api
+ * @since 2.0.0
  */
 class Random
 {
@@ -30,6 +31,7 @@ class Random
      * @param null|string $chars
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getRandomString($length, $chars = null)
     {
@@ -71,6 +73,7 @@ class Random
      * @param $max [optional]
      * @return int A random integer value between min (or 0) and max
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public static function getRandomNumber($min = 0, $max = null)
     {
@@ -105,6 +108,7 @@ class Random
      *
      * @param string $prefix
      * @return string
+     * @since 2.0.0
      */
     public function getUniqueHash($prefix = '')
     {

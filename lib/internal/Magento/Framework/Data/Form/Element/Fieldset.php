@@ -13,6 +13,7 @@ use Magento\Framework\Escaper;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Fieldset extends AbstractElement
 {
@@ -21,6 +22,7 @@ class Fieldset extends AbstractElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -40,6 +42,7 @@ class Fieldset extends AbstractElement
      * Get elements html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -59,6 +62,7 @@ class Fieldset extends AbstractElement
      * Get Children element's array
      *
      * @return AbstractElement[]
+     * @since 2.0.0
      */
     public function getChildren()
     {
@@ -75,6 +79,7 @@ class Fieldset extends AbstractElement
      * Get Children element's html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getChildrenHtml()
     {
@@ -85,6 +90,7 @@ class Fieldset extends AbstractElement
      * Get Basic elements' array
      *
      * @return AbstractElement[]
+     * @since 2.0.0
      */
     public function getBasicChildren()
     {
@@ -101,6 +107,7 @@ class Fieldset extends AbstractElement
      * Get Basic elements' html in sorted order
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBasicChildrenHtml()
     {
@@ -111,6 +118,7 @@ class Fieldset extends AbstractElement
      * Get Number of Basic Children
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCountBasicChildren()
     {
@@ -121,6 +129,7 @@ class Fieldset extends AbstractElement
      * Get Advanced elements'
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAdvancedChildren()
     {
@@ -137,6 +146,7 @@ class Fieldset extends AbstractElement
      * Get Advanced elements' html in sorted order
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAdvancedChildrenHtml()
     {
@@ -147,6 +157,7 @@ class Fieldset extends AbstractElement
      * Whether fieldset contains advance section
      *
      * @return bool
+     * @since 2.0.0
      */
     public function hasAdvanced()
     {
@@ -162,6 +173,7 @@ class Fieldset extends AbstractElement
      * Get SubFieldset
      *
      * @return AbstractElement[]
+     * @since 2.0.0
      */
     public function getSubFieldset()
     {
@@ -178,6 +190,7 @@ class Fieldset extends AbstractElement
      * Enter description here...
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSubFieldsetHtml()
     {
@@ -188,6 +201,7 @@ class Fieldset extends AbstractElement
      * Enter description here...
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDefaultHtml()
     {
@@ -206,6 +220,7 @@ class Fieldset extends AbstractElement
      * @param bool $after
      * @param bool $isAdvanced
      * @return AbstractElement
+     * @since 2.0.0
      */
     public function addField($elementId, $type, $config, $after = false, $isAdvanced = false)
     {
@@ -222,6 +237,7 @@ class Fieldset extends AbstractElement
      *
      * @param AbstractElement[] $elements
      * @return string
+     * @since 2.0.0
      */
     protected function _elementsToHtml($elements)
     {

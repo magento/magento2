@@ -9,6 +9,7 @@ namespace Magento\Framework\Stdlib\Cookie;
 /**
  * CookieReaderInterface provides the ability to read cookies sent in a request.
  * @api
+ * @since 2.0.0
  */
 interface CookieReaderInterface
 {
@@ -18,6 +19,7 @@ interface CookieReaderInterface
      * @param string $name
      * @param string|null $default The default value to return if no value could be found for the given $name.
      * @return string|null
+     * @since 2.0.0
      */
     public function getCookie($name, $default = null);
 }

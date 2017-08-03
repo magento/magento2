@@ -9,6 +9,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Provides product options configuration
+ * @since 2.0.0
  */
 class Config extends \Magento\Framework\Config\Data implements
     \Magento\Catalog\Model\ProductOptions\ConfigInterface
@@ -20,6 +21,7 @@ class Config extends \Magento\Framework\Config\Data implements
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ProductOptions\Config\Reader $reader,
@@ -35,6 +37,7 @@ class Config extends \Magento\Framework\Config\Data implements
      *
      * @param string $name
      * @return array
+     * @since 2.0.0
      */
     public function getOption($name)
     {
@@ -45,6 +48,7 @@ class Config extends \Magento\Framework\Config\Data implements
      * Get configuration of all registered product types
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAll()
     {

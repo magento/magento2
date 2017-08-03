@@ -12,11 +12,13 @@ namespace Magento\GoogleOptimizer\Block\Code;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Product extends \Magento\GoogleOptimizer\Block\AbstractCode implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var Product name in registry
+     * @since 2.0.0
      */
     protected $_registryName = 'current_product';
 
@@ -24,6 +26,7 @@ class Product extends \Magento\GoogleOptimizer\Block\AbstractCode implements \Ma
      * Return identifiers for produced content
      *
      * @return array
+     * @since 2.0.0
      */
     public function getIdentities()
     {

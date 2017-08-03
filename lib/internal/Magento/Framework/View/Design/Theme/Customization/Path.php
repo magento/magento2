@@ -11,6 +11,7 @@ use Magento\Framework\Component\ComponentRegistrarInterface;
 
 /**
  * Theme Customization Path
+ * @since 2.0.0
  */
 class Path
 {
@@ -23,6 +24,7 @@ class Path
      * File name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $filename;
 
@@ -30,6 +32,7 @@ class Path
      * File system
      *
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $filesystem;
 
@@ -37,6 +40,7 @@ class Path
      * Media directory read
      *
      * @var \Magento\Framework\Filesystem\Directory\Read
+     * @since 2.0.0
      */
     protected $mediaDirectoryRead;
 
@@ -44,6 +48,7 @@ class Path
      * Component registrar
      *
      * @var ComponentRegistrarInterface
+     * @since 2.0.0
      */
     private $componentRegistrar;
 
@@ -53,6 +58,7 @@ class Path
      * @param \Magento\Framework\Filesystem $filesystem
      * @param ComponentRegistrarInterface $componentRegistrar
      * @param string $filename
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -70,6 +76,7 @@ class Path
      *
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @return string|null
+     * @since 2.0.0
      */
     public function getCustomizationPath(\Magento\Framework\View\Design\ThemeInterface $theme)
     {
@@ -85,6 +92,7 @@ class Path
      *
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @return string|null
+     * @since 2.0.0
      */
     public function getThemeFilesPath(\Magento\Framework\View\Design\ThemeInterface $theme)
     {
@@ -100,6 +108,7 @@ class Path
      *
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @return string|null
+     * @since 2.0.0
      */
     public function getCustomViewConfigPath(\Magento\Framework\View\Design\ThemeInterface $theme)
     {

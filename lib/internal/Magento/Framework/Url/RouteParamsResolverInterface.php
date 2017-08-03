@@ -9,6 +9,7 @@ namespace Magento\Framework\Url;
  * Route parameters resolver.
  *
  * @api
+ * @since 2.0.0
  */
 interface RouteParamsResolverInterface
 {
@@ -18,6 +19,7 @@ interface RouteParamsResolverInterface
      * @param array $data
      * @param boolean $unsetOldParams
      * @return RouteParamsResolverInterface
+     * @since 2.0.0
      */
     public function setRouteParams(array $data, $unsetOldParams = true);
 
@@ -27,6 +29,7 @@ interface RouteParamsResolverInterface
      * @param string $key
      * @param mixed $data
      * @return RouteParamsResolverInterface
+     * @since 2.0.0
      */
     public function setRouteParam($key, $data);
 
@@ -34,6 +37,7 @@ interface RouteParamsResolverInterface
      * Retrieve route params
      *
      * @return array
+     * @since 2.0.0
      */
     public function getRouteParams();
 
@@ -42,6 +46,7 @@ interface RouteParamsResolverInterface
      *
      * @param string $key
      * @return mixed
+     * @since 2.0.0
      */
     public function getRouteParam($key);
 }

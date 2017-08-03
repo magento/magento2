@@ -6,16 +6,23 @@
  */
 namespace Magento\Cms\Controller\Page;
 
+/**
+ * Class \Magento\Cms\Controller\Page\View
+ *
+ * @since 2.0.0
+ */
 class View extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Framework\Controller\Result\ForwardFactory
+     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -29,6 +36,7 @@ class View extends \Magento\Framework\App\Action\Action
      * View CMS page action
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {

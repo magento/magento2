@@ -16,25 +16,34 @@ use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\Result\RawFactory;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Invoice\AddComment
+ *
+ * @since 2.0.0
+ */
 class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {
     /**
      * @var InvoiceCommentSender
+     * @since 2.0.0
      */
     protected $invoiceCommentSender;
 
     /**
      * @var JsonFactory
+     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var PageFactory
+     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @var RawFactory
+     * @since 2.0.0
      */
     protected $resultRawFactory;
 
@@ -46,6 +55,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
      * @param JsonFactory $resultJsonFactory
      * @param PageFactory $resultPageFactory
      * @param RawFactory $resultRawFactory
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -67,6 +77,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
      * Add comment to invoice action
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {

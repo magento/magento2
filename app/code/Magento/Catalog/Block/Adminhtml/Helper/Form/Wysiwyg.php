@@ -11,12 +11,18 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Helper\Form;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Helper\Form\Wysiwyg
+ *
+ * @since 2.0.0
+ */
 class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
 {
     /**
      * Adminhtml data
      *
      * @var \Magento\Backend\Helper\Data
+     * @since 2.0.0
      */
     protected $_backendData = null;
 
@@ -24,16 +30,19 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
      * Catalog data
      *
      * @var \Magento\Framework\Module\Manager
+     * @since 2.0.0
      */
     protected $_moduleManager = null;
 
     /**
      * @var \Magento\Cms\Model\Wysiwyg\Config
+     * @since 2.0.0
      */
     protected $_wysiwygConfig;
 
     /**
      * @var \Magento\Framework\View\LayoutInterface
+     * @since 2.0.0
      */
     protected $_layout;
 
@@ -46,6 +55,7 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Backend\Helper\Data $backendData
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
@@ -68,6 +78,7 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
      * Retrieve additional html and put it at the end of element html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAfterElementHtml()
     {
@@ -139,6 +150,7 @@ HTML;
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsWysiwygEnabled()
     {

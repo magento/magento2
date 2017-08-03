@@ -19,6 +19,7 @@ namespace Magento\Tax\Model\Sales\Order;
  * @method float getBaseRealAmount()
  * @method \Magento\Tax\Model\Sales\Order\Tax setBaseRealAmount(float $value)
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface
@@ -36,6 +37,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -44,6 +46,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getCode()
     {
@@ -52,6 +55,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -60,6 +64,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getPercent()
     {
@@ -68,6 +73,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getAmount()
     {
@@ -76,6 +82,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getBaseAmount()
     {
@@ -87,6 +94,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function setCode($code)
     {
@@ -98,6 +106,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $title
      * @return $this
+     * @since 2.0.0
      */
     public function setTitle($title)
     {
@@ -109,6 +118,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param float $percent
      * @return $this
+     * @since 2.0.0
      */
     public function setPercent($percent)
     {
@@ -120,6 +130,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setAmount($amount)
     {
@@ -131,6 +142,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param float $baseAmount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseAmount($baseAmount)
     {
@@ -140,6 +152,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      *
      * @return \Magento\Tax\Api\Data\AppliedTaxRateInterface[]
+     * @since 2.1.0
      */
     public function getRates()
     {
@@ -150,6 +163,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param \Magento\Tax\Api\Data\AppliedTaxRateInterface[] $rates
      * @return $this
+     * @since 2.1.0
      */
     public function setRates($rates)
     {
@@ -160,6 +174,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * {@inheritdoc}
      *
      * @return \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -171,6 +186,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxExtensionInterface $extensionAttributes

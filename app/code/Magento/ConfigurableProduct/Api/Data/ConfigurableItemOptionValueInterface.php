@@ -8,6 +8,7 @@ namespace Magento\ConfigurableProduct\Api\Data;
 /**
  * Interface ConfigurableItemOptionValueInterface
  * @api
+ * @since 2.0.0
  */
 interface ConfigurableItemOptionValueInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -24,6 +25,7 @@ interface ConfigurableItemOptionValueInterface extends \Magento\Framework\Api\Ex
      * Get option SKU
      *
      * @return string
+     * @since 2.0.0
      */
     public function getOptionId();
 
@@ -32,6 +34,7 @@ interface ConfigurableItemOptionValueInterface extends \Magento\Framework\Api\Ex
      *
      * @param string $value
      * @return void
+     * @since 2.0.0
      */
     public function setOptionId($value);
 
@@ -39,6 +42,7 @@ interface ConfigurableItemOptionValueInterface extends \Magento\Framework\Api\Ex
      * Get item id
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getOptionValue();
 
@@ -47,6 +51,7 @@ interface ConfigurableItemOptionValueInterface extends \Magento\Framework\Api\Ex
      *
      * @param int|null $value
      * @return void
+     * @since 2.0.0
      */
     public function setOptionValue($value);
 
@@ -54,6 +59,7 @@ interface ConfigurableItemOptionValueInterface extends \Magento\Framework\Api\Ex
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -62,6 +68,7 @@ interface ConfigurableItemOptionValueInterface extends \Magento\Framework\Api\Ex
      *
      * @param \Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueExtensionInterface $extensionAttributes

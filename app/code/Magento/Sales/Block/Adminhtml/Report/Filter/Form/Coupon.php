@@ -11,6 +11,7 @@ namespace Magento\Sales\Block\Adminhtml\Report\Filter\Form;
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
 {
@@ -18,6 +19,7 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
      * Flag that keep info should we render specific dependent element or not
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_renderDependentElement = false;
 
@@ -25,6 +27,7 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
      * Rule factory
      *
      * @var \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory
+     * @since 2.0.0
      */
     protected $_reportRule;
 
@@ -35,6 +38,7 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
      * @param \Magento\Sales\Model\Order\ConfigFactory $orderConfig
      * @param \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory $reportRule
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -52,6 +56,7 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
      * Prepare form
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -102,6 +107,7 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
      *
      * @param string $html
      * @return string
+     * @since 2.0.0
      */
     protected function _afterToHtml($html)
     {

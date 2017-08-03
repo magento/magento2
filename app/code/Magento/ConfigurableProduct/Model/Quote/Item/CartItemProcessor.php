@@ -10,30 +10,40 @@ use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\ConfigurableProduct\Model\Quote\Item\CartItemProcessor
+ *
+ * @since 2.0.0
+ */
 class CartItemProcessor implements CartItemProcessorInterface
 {
     /**
      * @var \Magento\Framework\DataObject\Factory
+     * @since 2.0.0
      */
     protected $objectFactory;
 
     /**
      * @var \Magento\Quote\Model\Quote\ProductOptionFactory
+     * @since 2.0.0
      */
     protected $productOptionFactory;
 
     /**
      * @var \Magento\Quote\Api\Data\ProductOptionExtensionFactory
+     * @since 2.0.0
      */
     protected $extensionFactory;
 
     /**
      * @var \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory
+     * @since 2.0.0
      */
     protected $itemOptionValueFactory;
 
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -43,6 +53,7 @@ class CartItemProcessor implements CartItemProcessorInterface
      * @param \Magento\Quote\Api\Data\ProductOptionExtensionFactory $extensionFactory
      * @param \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory $itemOptionValueFactory
      * @param Json $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\DataObject\Factory $objectFactory,
@@ -60,6 +71,7 @@ class CartItemProcessor implements CartItemProcessorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function convertToBuyRequest(CartItemInterface $cartItem)
     {
@@ -79,6 +91,7 @@ class CartItemProcessor implements CartItemProcessorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function processOptions(CartItemInterface $cartItem)
     {

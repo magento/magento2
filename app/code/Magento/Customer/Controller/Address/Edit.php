@@ -6,12 +6,18 @@
  */
 namespace Magento\Customer\Controller\Address;
 
+/**
+ * Class \Magento\Customer\Controller\Address\Edit
+ *
+ * @since 2.0.0
+ */
 class Edit extends \Magento\Customer\Controller\Address
 {
     /**
      * Customer address edit action
      *
      * @return \Magento\Framework\Controller\Result\Forward
+     * @since 2.0.0
      */
     public function execute()
     {

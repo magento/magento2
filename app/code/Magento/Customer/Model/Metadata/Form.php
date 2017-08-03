@@ -10,6 +10,7 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Form
 {
@@ -24,41 +25,49 @@ class Form
 
     /**
      * @var CustomerMetadataInterface
+     * @since 2.0.0
      */
     protected $_customerMetadataService;
 
     /**
      * @var AddressMetadataInterface
+     * @since 2.0.0
      */
     protected $_addressMetadataService;
 
     /**
      * @var ElementFactory
+     * @since 2.0.0
      */
     protected $_elementFactory;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_entityType;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_formCode;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $_ignoreInvisible = true;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_filterAttributes = [];
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $_isAjax = false;
 
@@ -66,31 +75,37 @@ class Form
      * Attribute values
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_attributeValues = [];
 
     /**
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     protected $_httpRequest;
 
     /**
      * @var \Magento\Framework\Module\Dir\Reader
+     * @since 2.0.0
      */
     protected $_modulesReader;
 
     /**
      * @var \Magento\Framework\Validator\ConfigFactory
+     * @since 2.0.0
      */
     protected $_validatorConfigFactory;
 
     /**
      * @var \Magento\Framework\Validator
+     * @since 2.0.0
      */
     protected $_validator;
 
     /**
      * @var \Magento\Customer\Api\Data\AttributeMetadataInterface[]
+     * @since 2.0.0
      */
     protected $_attributes;
 
@@ -109,6 +124,7 @@ class Form
      * @param bool $isAjax
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         CustomerMetadataInterface $customerMetadataService,
@@ -143,6 +159,7 @@ class Form
      *
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface[]
      * @throws \LogicException For undefined entity type
+     * @since 2.0.0
      */
     public function getAttributes()
     {
@@ -163,6 +180,7 @@ class Form
      *
      * @param string $attributeCode
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface|false
+     * @since 2.0.0
      */
     public function getAttribute($attributeCode)
     {
@@ -177,6 +195,7 @@ class Form
      * Retrieve user defined attributes
      *
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface[]
+     * @since 2.0.0
      */
     public function getUserAttributes()
     {
@@ -193,6 +212,7 @@ class Form
      * Retrieve system required attributes
      *
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface[]
+     * @since 2.0.0
      */
     public function getSystemAttributes()
     {
@@ -209,6 +229,7 @@ class Form
      * Retrieve filtered attributes
      *
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface[]
+     * @since 2.0.0
      */
     public function getAllowedAttributes()
     {
@@ -232,6 +253,7 @@ class Form
      * @param string $scope the request scope
      * @param boolean $scopeOnly search value only in scope or search value in global too
      * @return array
+     * @since 2.0.0
      */
     public function extractData(\Magento\Framework\App\RequestInterface $request, $scope = null, $scopeOnly = true)
     {
@@ -250,6 +272,7 @@ class Form
      *
      * @param array $data
      * @return array attribute values
+     * @since 2.0.0
      */
     public function compactData(array $data)
     {
@@ -271,6 +294,7 @@ class Form
      *
      * @param array $data
      * @return array
+     * @since 2.0.0
      */
     public function restoreData(array $data)
     {
@@ -291,6 +315,7 @@ class Form
      *
      * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
      * @return \Magento\Eav\Model\Attribute\Data\AbstractData
+     * @since 2.0.0
      */
     protected function _getAttributeDataModel($attribute)
     {
@@ -310,6 +335,7 @@ class Form
      *
      * @param array $data
      * @return \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     public function prepareRequest(array $data)
     {
@@ -324,6 +350,7 @@ class Form
      *
      * @param array $data
      * @return \Magento\Framework\Validator
+     * @since 2.0.0
      */
     protected function _getValidator(array $data)
     {
@@ -357,6 +384,7 @@ class Form
      *
      * @param array $data
      * @return boolean|array
+     * @since 2.0.0
      */
     public function validateData(array $data)
     {
@@ -376,6 +404,7 @@ class Form
      *
      * @param string $format
      * @return array
+     * @since 2.0.0
      */
     public function outputData($format = \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT)
     {
@@ -392,6 +421,7 @@ class Form
      *
      * @param bool $ignoreInvisible
      * @return void
+     * @since 2.0.0
      */
     public function setInvisibleIgnored($ignoreInvisible)
     {

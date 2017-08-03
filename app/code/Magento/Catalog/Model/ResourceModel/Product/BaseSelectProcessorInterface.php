@@ -10,6 +10,7 @@ use Magento\Framework\DB\Select;
 /**
  * Interface BaseSelectProcessorInterface
  * @api
+ * @since 2.2.0
  */
 interface BaseSelectProcessorInterface
 {
@@ -21,6 +22,7 @@ interface BaseSelectProcessorInterface
     /**
      * @param Select $select
      * @return Select
+     * @since 2.2.0
      */
     public function process(Select $select);
 }

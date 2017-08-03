@@ -6,12 +6,18 @@
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol;
 
+/**
+ * Class \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol\Index
+ *
+ * @since 2.0.0
+ */
 class Index extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol
 {
     /**
      * Show Currency Symbols Management dialog
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

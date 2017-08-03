@@ -7,6 +7,7 @@ namespace Magento\Framework\App\Cache\Type;
 
 /**
  * System / Cache Management / Cache type "Translations"
+ * @since 2.0.0
  */
 class Translate extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 {
@@ -22,6 +23,7 @@ class Translate extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 
     /**
      * @param FrontendPool $cacheFrontendPool
+     * @since 2.0.0
      */
     public function __construct(FrontendPool $cacheFrontendPool)
     {

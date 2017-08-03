@@ -13,6 +13,7 @@ use Magento\Framework\Controller\ResultFactory;
  * Class Email
  *
  * @package Magento\Shipping\Controller\Adminhtml\Order\Shipment
+ * @since 2.0.0
  */
 class Email extends \Magento\Backend\App\Action
 {
@@ -25,12 +26,14 @@ class Email extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
+     * @since 2.0.0
      */
     protected $shipmentLoader;
 
     /**
      * @param Action\Context $context
      * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -44,6 +47,7 @@ class Email extends \Magento\Backend\App\Action
      * Send email with shipment data to customer
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

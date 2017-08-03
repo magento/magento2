@@ -9,12 +9,18 @@ namespace Magento\Framework\App\View\Asset\MaterializationStrategy;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Asset;
 
+/**
+ * Class \Magento\Framework\App\View\Asset\MaterializationStrategy\Factory
+ *
+ * @since 2.0.0
+ */
 class Factory
 {
     /**
      * Object Manager instance
      *
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -22,6 +28,7 @@ class Factory
      * Strategies list
      *
      * @var array
+     * @since 2.0.0
      */
     protected $strategiesList;
 
@@ -33,6 +40,7 @@ class Factory
     /**
      * @param ObjectManagerInterface $objectManager
      * @param StrategyInterface[] $strategiesList
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager, $strategiesList = [])
     {
@@ -47,6 +55,7 @@ class Factory
      * @return StrategyInterface
      *
      * @throws \LogicException
+     * @since 2.0.0
      */
     public function create(Asset\LocalInterface $asset)
     {

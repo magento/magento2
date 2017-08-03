@@ -10,11 +10,13 @@ use Magento\Search\Model\Autocomplete\ItemInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface AutocompleteInterface
 {
     /**
      * @return ItemInterface[]
+     * @since 2.0.0
      */
     public function getItems();
 }

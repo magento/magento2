@@ -12,6 +12,7 @@ namespace Magento\Persistent\Model;
  * @method int getCustomerId()
  * @method Session setCustomerId()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Session extends \Magento\Framework\Model\AbstractModel
 {
@@ -29,6 +30,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Fields which model does not save into `info` db field
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_unserializableFields = [
         'persistent_id',
@@ -43,6 +45,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * If model loads expired sessions
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_loadExpired = false;
 
@@ -50,6 +53,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Persistent data
      *
      * @var \Magento\Persistent\Helper\Data
+     * @since 2.0.0
      */
     protected $_persistentData;
 
@@ -57,11 +61,13 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Json Helper
      *
      * @var \Magento\Framework\Json\Helper\Data
+     * @since 2.0.0
      */
     protected $jsonHelper;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_coreConfig;
 
@@ -69,6 +75,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -76,6 +83,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Cookie manager
      *
      * @var \Magento\Framework\Stdlib\CookieManagerInterface
+     * @since 2.0.0
      */
     protected $_cookieManager;
 
@@ -83,16 +91,19 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Cookie metadata factory
      *
      * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     * @since 2.0.0
      */
     protected $_cookieMetadataFactory;
 
     /**
      * @var \Magento\Framework\Math\Random
+     * @since 2.0.0
      */
     protected $mathRandom;
 
     /**
      * @var \Magento\Framework\Session\Config\ConfigInterface
+     * @since 2.0.0
      */
     protected $sessionConfig;
 
@@ -100,6 +111,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Request
      *
      * @var \Magento\Framework\App\Request\Http
+     * @since 2.1.0
      */
     private $request;
 
@@ -120,6 +132,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -152,6 +165,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      *
      * @return void
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -164,6 +178,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * @param bool $loadExpired
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setLoadExpired($loadExpired = true)
     {
@@ -176,6 +191,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getLoadExpired()
     {
@@ -188,6 +204,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * @param int|string|\Magento\Store\Model\Store $store
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getExpiredBefore($store = null)
     {
@@ -199,6 +216,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * For new model check and set available cookie key
      *
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -228,6 +246,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Set model data from info field
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -249,6 +268,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $key
      * @return $this
+     * @since 2.0.0
      */
     public function loadByCookieKey($key = null)
     {
@@ -268,6 +288,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * @param int $id
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function loadByCustomerId($id)
     {
@@ -280,6 +301,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * @param int $customerId
      * @param bool $clearCookie
      * @return $this
+     * @since 2.0.0
      */
     public function deleteByCustomerId($customerId, $clearCookie = true)
     {
@@ -295,6 +317,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      *
      * @return $this
      * @api
+     * @since 2.0.0
      */
     public function removePersistentCookie()
     {
@@ -311,6 +334,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * @param string $path
      * @return $this
      * @api
+     * @since 2.0.0
      */
     public function setPersistentCookie($duration, $path)
     {
@@ -325,6 +349,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * @param int $duration Time in seconds.
      * @param string $path
      * @return $this
+     * @since 2.0.0
      */
     public function renewPersistentCookie($duration, $path)
     {
@@ -343,6 +368,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      *
      * @param null|int $websiteId
      * @return $this
+     * @since 2.0.0
      */
     public function deleteExpired($websiteId = null)
     {
@@ -368,6 +394,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      *
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function afterDeleteCommit()
     {
@@ -382,6 +409,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * @param int $duration
      * @param string $path
      * @return void
+     * @since 2.0.0
      */
     private function setCookie($value, $duration, $path)
     {
@@ -401,7 +429,8 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Get request object
      *
      * @return \Magento\Framework\App\Request\Http
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getRequest()
     {
@@ -416,6 +445,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Set `updated_at` to be always changed
      *
      * @return $this
+     * @since 2.1.0
      */
     public function save()
     {

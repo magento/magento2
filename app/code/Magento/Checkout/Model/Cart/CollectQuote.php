@@ -5,35 +5,46 @@
  */
 namespace Magento\Checkout\Model\Cart;
 
+/**
+ * Class \Magento\Checkout\Model\Cart\CollectQuote
+ *
+ * @since 2.0.0
+ */
 class CollectQuote
 {
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Customer\Api\AddressRepositoryInterface
+     * @since 2.0.0
      */
     protected $addressRepository;
 
     /**
      * @var \Magento\Quote\Api\Data\EstimateAddressInterfaceFactory
+     * @since 2.0.0
      */
     protected $estimatedAddressFactory;
 
     /**
      * @var \Magento\Quote\Api\ShippingMethodManagementInterface
+     * @since 2.0.0
      */
     protected $shippingMethodManager;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @since 2.0.0
      */
     protected $quoteRepository;
 
@@ -45,6 +56,7 @@ class CollectQuote
      * @param \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManager
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
@@ -65,6 +77,7 @@ class CollectQuote
     /**
      * @param \Magento\Quote\Model\Quote $quote
      * @return void
+     * @since 2.0.0
      */
     public function collect(\Magento\Quote\Model\Quote $quote)
     {

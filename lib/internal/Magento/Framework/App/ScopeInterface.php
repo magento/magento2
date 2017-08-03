@@ -7,6 +7,7 @@ namespace Magento\Framework\App;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface ScopeInterface
 {
@@ -19,6 +20,7 @@ interface ScopeInterface
      * Retrieve scope code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCode();
 
@@ -26,6 +28,7 @@ interface ScopeInterface
      * Get scope identifier
      *
      * @return int
+     * @since 2.0.0
      */
     public function getId();
 
@@ -33,6 +36,7 @@ interface ScopeInterface
      * Get scope type
      *
      * @return string
+     * @since 2.1.0
      */
     public function getScopeType();
 
@@ -40,6 +44,7 @@ interface ScopeInterface
      * Get scope type name
      *
      * @return string
+     * @since 2.1.0
      */
     public function getScopeTypeName();
 
@@ -47,6 +52,7 @@ interface ScopeInterface
      * Get scope name
      *
      * @return string
+     * @since 2.1.0
      */
     public function getName();
 }

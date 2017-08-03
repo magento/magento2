@@ -11,28 +11,33 @@ use Magento\Vault\Model\Ui\VaultConfigProvider;
 
 /**
  * Vault Data Builder
+ * @since 2.2.0
  */
 class VaultDataBuilder implements BuilderInterface
 {
     /**
      * Additional options in request to gateway
+     * @since 2.2.0
      */
     private static $optionsKey = 'options';
 
     /**
      * The option that determines whether the payment method associated with
      * the successful transaction should be stored in the Vault.
+     * @since 2.2.0
      */
     private static $storeInVaultOnSuccess = 'storeInVaultOnSuccess';
 
     /**
      * @var SubjectReader
+     * @since 2.2.0
      */
     private $subjectReader;
 
     /**
      * VaultDataBuilder constructor.
      * @param SubjectReader $subjectReader
+     * @since 2.2.0
      */
     public function __construct(SubjectReader $subjectReader)
     {
@@ -41,6 +46,7 @@ class VaultDataBuilder implements BuilderInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function build(array $buildSubject)
     {

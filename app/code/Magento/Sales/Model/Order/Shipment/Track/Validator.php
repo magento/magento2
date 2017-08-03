@@ -9,6 +9,7 @@ use Magento\Sales\Model\Order\Shipment\Track;
 
 /**
  * Class Validator
+ * @since 2.0.0
  */
 class Validator
 {
@@ -16,6 +17,7 @@ class Validator
      * Required field
      *
      * @var array
+     * @since 2.0.0
      */
     protected $required = [
         'parent_id' => 'Parent Track Id',
@@ -29,6 +31,7 @@ class Validator
      *
      * @param \Magento\Sales\Model\Order\Shipment\Track $track
      * @return array
+     * @since 2.0.0
      */
     public function validate(Track $track)
     {

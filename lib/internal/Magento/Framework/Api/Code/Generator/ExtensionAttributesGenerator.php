@@ -12,6 +12,7 @@ use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 
 /**
  * Code generator for data object extensions.
+ * @since 2.0.0
  */
 class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\EntityAbstract
 {
@@ -21,16 +22,19 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\Config
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Framework\Reflection\TypeProcessor
+     * @since 2.1.0
      */
     private $typeProcessor;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $allCustomAttributes;
 
@@ -43,6 +47,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
      * @param Io $ioObject
      * @param \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator
      * @param DefinedClasses $definedClasses
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Api\ExtensionAttribute\Config $config,
@@ -67,7 +72,8 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
      * Get type processor
      *
      * @return \Magento\Framework\Reflection\TypeProcessor
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getTypeProcessor()
     {
@@ -81,6 +87,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _getDefaultConstructorDefinition()
     {
@@ -89,6 +96,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _getClassProperties()
     {
@@ -97,6 +105,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _getClassMethods()
     {
@@ -140,6 +149,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _validateData()
     {
@@ -149,6 +159,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _generateCode()
     {
@@ -161,6 +172,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
      * Get class, which should be used as a parent for generated class.
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getExtendedClass()
     {
@@ -171,6 +183,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
      * Retrieve a list of attributes associated with current source class.
      *
      * @return array
+     * @since 2.0.0
      */
     protected function getCustomAttributes()
     {
@@ -198,6 +211,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
      * Ensure that result class name corresponds to the source class name.
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function validateResultClassName()
     {

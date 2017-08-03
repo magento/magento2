@@ -17,22 +17,26 @@ use Magento\Framework\View\Url\CssResolver;
  * based off the current location of CSS-file. So context of base path can be known ONLY at the moment
  * of traversing the CSS contents in context of the file location.
  * Other than that, the algorithm of resolving notation "Module_Name::file/path.ext" is generic
+ * @since 2.0.0
  */
 class ModuleNotation implements Asset\PreProcessorInterface
 {
     /**
      * @var \Magento\Framework\View\Url\CssResolver
+     * @since 2.0.0
      */
     private $cssResolver;
 
     /**
      * @var \Magento\Framework\View\Asset\NotationResolver\Module
+     * @since 2.0.0
      */
     private $notationResolver;
 
     /**
      * @param CssResolver $cssResolver
      * @param \Magento\Framework\View\Asset\NotationResolver\Module $notationResolver
+     * @since 2.0.0
      */
     public function __construct(
         CssResolver $cssResolver,
@@ -44,6 +48,7 @@ class ModuleNotation implements Asset\PreProcessorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function process(Chain $chain)
     {

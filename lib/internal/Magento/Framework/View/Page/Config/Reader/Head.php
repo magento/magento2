@@ -10,6 +10,7 @@ use Magento\Framework\View\Page\Config as PageConfig;
 
 /**
  * Head structure reader is intended for collecting assets, title and metadata
+ * @since 2.0.0
  */
 class Head implements Layout\ReaderInterface
 {
@@ -35,6 +36,7 @@ class Head implements Layout\ReaderInterface
      * {@inheritdoc}
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getSupportedNodes()
     {
@@ -46,6 +48,7 @@ class Head implements Layout\ReaderInterface
      *
      * @param Layout\Element $node
      * @return void
+     * @since 2.0.0
      */
     protected function addContentTypeByNodeName(Layout\Element $node)
     {
@@ -65,6 +68,7 @@ class Head implements Layout\ReaderInterface
      * @param Layout\Reader\Context $readerContext
      * @param Layout\Element $headElement
      * @return $this
+     * @since 2.0.0
      */
     public function interpret(
         Layout\Reader\Context $readerContext,
@@ -113,6 +117,7 @@ class Head implements Layout\ReaderInterface
      *
      * @param \Magento\Framework\View\Layout\Element $element
      * @return array
+     * @since 2.0.0
      */
     protected function getAttributes($element)
     {
@@ -129,6 +134,7 @@ class Head implements Layout\ReaderInterface
      * @param \Magento\Framework\View\Page\Config\Structure $pageConfigStructure
      * @param \Magento\Framework\View\Layout\Element $node
      * @return void
+     * @since 2.1.0
      */
     private function setMetadata($pageConfigStructure, $node)
     {

@@ -16,26 +16,31 @@ use Magento\Framework\View\Element\UiComponent\Config\Provider\Template as Templ
 
 /**
  * Class Xhtml
+ * @since 2.0.0
  */
 class Xhtml implements TemplateEngineInterface
 {
     /**
      * @var TemplateProvider
+     * @since 2.0.0
      */
     protected $templateProvider;
 
     /**
      * @var ResultFactory
+     * @since 2.0.0
      */
     protected $resultFactory;
 
     /**
      * @var TemplateFactory
+     * @since 2.0.0
      */
     protected $templateFactory;
 
     /**
      * @var CompilerFactory
+     * @since 2.0.0
      */
     protected $compilerFactory;
 
@@ -46,6 +51,7 @@ class Xhtml implements TemplateEngineInterface
      * @param ResultFactory $resultFactory
      * @param TemplateFactory $templateFactory
      * @param CompilerFactory $compilerFactory
+     * @since 2.0.0
      */
     public function __construct(
         TemplateProvider $templateProvider,
@@ -71,6 +77,7 @@ class Xhtml implements TemplateEngineInterface
      * @return ResultInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function render(BlockInterface $block, $templateFile, array $dictionary = [])
     {

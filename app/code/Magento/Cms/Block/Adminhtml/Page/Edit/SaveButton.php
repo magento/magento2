@@ -10,11 +10,13 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 /**
  * Class SaveButton
  * @package Magento\Customer\Block\Adminhtml\Edit
+ * @since 2.1.0
  */
 class SaveButton extends GenericButton implements ButtonProviderInterface
 {
     /**
      * @return array
+     * @since 2.1.0
      */
     public function getButtonData()
     {

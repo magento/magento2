@@ -8,12 +8,18 @@ namespace Magento\Setup\Module\Di\Compiler\Log\Writer;
 use Magento\Setup\Module\Di\Compiler\Log\Log;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class \Magento\Setup\Module\Di\Compiler\Log\Writer\Console
+ *
+ * @since 2.0.0
+ */
 class Console
 {
     /**
      * Report messages by type
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_messages = [
         Log::GENERATION_SUCCESS => 'Generated classes:',
@@ -26,11 +32,13 @@ class Console
      * Console
      *
      * @var OutputInterface
+     * @since 2.0.0
      */
     protected $console;
 
     /**
      * @param OutputInterface $output
+     * @since 2.0.0
      */
     public function __construct(OutputInterface $output)
     {
@@ -42,6 +50,7 @@ class Console
      *
      * @param array $data
      * @return void
+     * @since 2.0.0
      */
     public function write(array $data)
     {
@@ -78,6 +87,7 @@ class Console
      *
      * @param string $type
      * @return string
+     * @since 2.0.0
      */
     private function getStartTag($type)
     {
@@ -93,6 +103,7 @@ class Console
      *
      * @param string $type
      * @return string
+     * @since 2.0.0
      */
     private function getEndTag($type)
     {

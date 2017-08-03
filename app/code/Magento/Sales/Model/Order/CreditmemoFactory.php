@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Order;
 
 /**
  * Factory class for @see \Magento\Sales\Model\Order\Creditmemo
+ * @since 2.0.0
  */
 class CreditmemoFactory
 {
@@ -14,22 +15,26 @@ class CreditmemoFactory
      * Quote convert object
      *
      * @var \Magento\Sales\Model\Convert\Order
+     * @since 2.0.0
      */
     protected $convertor;
 
     /**
      * @var \Magento\Tax\Model\Config
+     * @since 2.0.0
      */
     protected $taxConfig;
 
     /**
      * @var \Magento\Framework\Unserialize\Unserialize
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     protected $unserialize;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -39,6 +44,7 @@ class CreditmemoFactory
      * @param \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory,
@@ -58,6 +64,7 @@ class CreditmemoFactory
      * @param \Magento\Sales\Model\Order $order
      * @param array $data
      * @return Creditmemo
+     * @since 2.0.0
      */
     public function createByOrder(\Magento\Sales\Model\Order $order, array $data = [])
     {
@@ -108,6 +115,7 @@ class CreditmemoFactory
      * @return Creditmemo
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function createByInvoice(\Magento\Sales\Model\Order\Invoice $invoice, array $data = [])
     {
@@ -203,6 +211,7 @@ class CreditmemoFactory
      * @param array $invoiceQtysRefundLimits
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function canRefundItem($item, $qtys = [], $invoiceQtysRefundLimits = [])
     {
@@ -239,6 +248,7 @@ class CreditmemoFactory
      * @param \Magento\Sales\Model\Order\Item $item
      * @param array $invoiceQtysRefundLimits
      * @return bool
+     * @since 2.0.0
      */
     protected function canRefundNoDummyItem($item, $invoiceQtysRefundLimits = [])
     {
@@ -257,6 +267,7 @@ class CreditmemoFactory
      * @param Creditmemo $creditmemo
      * @param array $data
      * @return void
+     * @since 2.0.0
      */
     protected function initData($creditmemo, $data)
     {
@@ -275,6 +286,7 @@ class CreditmemoFactory
      * @param \Magento\Sales\Api\Data\OrderItemInterface $orderItem
      * @param int $parentQty
      * @return int
+     * @since 2.2.0
      */
     private function calculateProductOptions(\Magento\Sales\Api\Data\OrderItemInterface $orderItem, $parentQty)
     {

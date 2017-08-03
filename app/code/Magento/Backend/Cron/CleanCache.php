@@ -7,16 +7,19 @@ namespace Magento\Backend\Cron;
 
 /**
  * Backend event observer
+ * @since 2.0.0
  */
 class CleanCache
 {
     /**
      * @var \Magento\Framework\App\Cache\Frontend\Pool
+     * @since 2.0.0
      */
     private $cacheFrontendPool;
 
     /**
      * @param \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
@@ -28,6 +31,7 @@ class CleanCache
      * Cron job method to clean old cache resources
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

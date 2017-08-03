@@ -12,6 +12,7 @@ namespace Magento\Store\Model\ResourceModel;
  * Website Resource Model
  *
  * @api
+ * @since 2.0.0
  */
 class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -19,6 +20,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -29,6 +31,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize unique fields
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initUniqueFields()
     {
@@ -43,6 +46,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * [website_code => [website_data (website_id, code, name, etc...)]]
      *
      * @return array
+     * @since 2.2.0
      */
     public function readAllWebsites()
     {
@@ -64,6 +68,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -84,6 +89,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -100,6 +106,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $model
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $model)
     {
@@ -119,6 +126,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param bool $includeDefault include/exclude default admin website
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     public function getDefaultStoresSelect($includeDefault = false)
     {
@@ -147,6 +155,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param bool $includeDefault
      * @return int
+     * @since 2.0.0
      */
     public function countAll($includeDefault = false)
     {

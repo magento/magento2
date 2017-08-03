@@ -12,6 +12,7 @@ namespace Magento\Sales\Api\Data;
  * to refund all or part of the amount paid for any returned or undelivered items. The memo restores funds to the
  * customer account so that the customer can make future purchases.
  * @api
+ * @since 2.0.0
  */
 interface CreditmemoSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
@@ -19,6 +20,7 @@ interface CreditmemoSearchResultInterface extends \Magento\Framework\Api\SearchR
      * Gets collection items.
      *
      * @return \Magento\Sales\Api\Data\CreditmemoInterface[] Array of collection items.
+     * @since 2.0.0
      */
     public function getItems();
 
@@ -27,6 +29,7 @@ interface CreditmemoSearchResultInterface extends \Magento\Framework\Api\SearchR
      *
      * @param \Magento\Sales\Api\Data\CreditmemoInterface[] $items
      * @return $this
+     * @since 2.0.0
      */
     public function setItems(array $items);
 }

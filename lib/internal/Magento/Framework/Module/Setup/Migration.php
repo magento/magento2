@@ -15,6 +15,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
  * @api
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Migration
 {
@@ -53,6 +54,7 @@ class Migration
      * Config key for path to aliases map file
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_confPathToMapFile;
 
@@ -60,6 +62,7 @@ class Migration
      * List of possible entity types sorted by possibility of usage
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_entityTypes = [self::ENTITY_TYPE_MODEL, self::ENTITY_TYPE_BLOCK, self::ENTITY_TYPE_RESOURCE];
 
@@ -67,6 +70,7 @@ class Migration
      * Rows per page. To split processing data from tables
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_rowsPerPage = 100;
 
@@ -82,6 +86,7 @@ class Migration
      * )
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_replaceRules = [];
 
@@ -93,6 +98,7 @@ class Migration
      * )
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_aliasesMap;
 
@@ -100,6 +106,7 @@ class Migration
      * Replacement regexps for specified content types
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_replacePatterns = [];
 
@@ -107,6 +114,7 @@ class Migration
      * Path to map file from config
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_pathToMapFile;
 
@@ -114,21 +122,25 @@ class Migration
      * List of composite module names
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_compositeModules;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\Read
+     * @since 2.0.0
      */
     protected $_directory;
 
     /**
      * @var MigrationData
+     * @since 2.0.0
      */
     protected $_migrationData;
 
     /**
      * @var ModuleDataSetupInterface
+     * @since 2.0.0
      */
     private $setup;
 
@@ -138,6 +150,7 @@ class Migration
      * @param MigrationData $migrationData
      * @param string $confPathToMapFile
      * @param array $compositeModules
+     * @since 2.0.0
      */
     public function __construct(
         ModuleDataSetupInterface $setup,
@@ -167,6 +180,7 @@ class Migration
      * @param array $primaryKeyFields row pk field(s) to update by
      * @param string $additionalWhere additional where condition
      * @return void
+     * @since 2.0.0
      */
     public function appendClassAliasReplace(
         $tableName,
@@ -194,6 +208,7 @@ class Migration
      * Start process of replacing aliases with class names using rules
      *
      * @return void
+     * @since 2.0.0
      */
     public function doUpdateClassAliases()
     {
@@ -208,6 +223,7 @@ class Migration
      * @param string $tableName name of table to replace aliases in
      * @param array $tableRules replacing rules for table
      * @return void
+     * @since 2.0.0
      */
     protected function _updateClassAliasesInTable($tableName, array $tableRules)
     {
@@ -229,6 +245,7 @@ class Migration
      * @param string $fieldName name of table column to replace aliases in
      * @param string $additionalWhere additional where condition
      * @return int
+     * @since 2.0.0
      */
     protected function _getRowsCount($tableName, $fieldName, $additionalWhere = '')
     {
@@ -256,6 +273,7 @@ class Migration
      * @param array $fieldRule
      * @param int $currentPage
      * @return void
+     * @since 2.0.0
      */
     protected function _applyFieldRule($tableName, $fieldName, array $fieldRule, $currentPage = 0)
     {
@@ -302,6 +320,7 @@ class Migration
      * @param string $fieldName
      * @param array $fieldReplacements
      * @return void
+     * @since 2.0.0
      */
     protected function _updateRowsData($tableName, $fieldName, array $fieldReplacements)
     {
@@ -331,6 +350,7 @@ class Migration
      * @param string $additionalWhere additional where condition
      * @param int $currPage
      * @return array
+     * @since 2.0.0
      */
     protected function _getTableData(
         $tableName,
@@ -366,6 +386,7 @@ class Migration
      * @param string $contentType type of data (field content)
      * @param string $entityType entity type of alias
      * @return string
+     * @since 2.0.0
      */
     protected function _getReplacement($data, $contentType, $entityType = '')
     {
@@ -393,6 +414,7 @@ class Migration
      * @param string $alias
      * @param string $entityType entity type of alias
      * @return string
+     * @since 2.0.0
      */
     protected function _getCorrespondingClassName($alias, $entityType = '')
     {
@@ -433,6 +455,7 @@ class Migration
      * @param string $data
      * @param string $entityType
      * @return string
+     * @since 2.0.0
      */
     protected function _getModelReplacement($data, $entityType = '')
     {
@@ -459,6 +482,7 @@ class Migration
      * @param string $contentType
      * @param string $entityType
      * @return string|null
+     * @since 2.0.0
      */
     protected function _getPatternReplacement($data, $contentType, $entityType = '')
     {
@@ -493,6 +517,7 @@ class Migration
      * @param string $type
      * @param string $name
      * @return string
+     * @since 2.0.0
      */
     protected function _getClassName($module, $type, $name = null)
     {
@@ -510,6 +535,7 @@ class Migration
      *
      * @param string $factoryName
      * @return bool
+     * @since 2.0.0
      */
     protected function _isFactoryName($factoryName)
     {
@@ -521,6 +547,7 @@ class Migration
      *
      * @param string $factoryName
      * @return array
+     * @since 2.0.0
      */
     protected function _getModuleName($factoryName)
     {
@@ -544,6 +571,7 @@ class Migration
      *
      * @param string $moduleAlias
      * @return string|null
+     * @since 2.0.0
      */
     protected function _getCompositeModuleName($moduleAlias)
     {
@@ -559,6 +587,7 @@ class Migration
      * @param string $alias
      * @param string $entityType
      * @return string
+     * @since 2.0.0
      */
     protected function _getAliasFromMap($alias, $entityType = '')
     {
@@ -590,6 +619,7 @@ class Migration
      * @param string $alias
      * @param string $className
      * @return void
+     * @since 2.0.0
      */
     protected function _pushToMap($entityType, $alias, $className)
     {
@@ -609,6 +639,7 @@ class Migration
      * Retrieve aliases to classes map if exit
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getAliasesMap()
     {
@@ -630,6 +661,7 @@ class Migration
      *
      * @param string $pathToMapFile
      * @return string
+     * @since 2.0.0
      */
     protected function _loadMap($pathToMapFile)
     {
@@ -644,6 +676,7 @@ class Migration
      * @param string $data
      * @param string $entityType
      * @return string
+     * @since 2.0.0
      */
     protected function _getAliasInSerializedStringReplacement($data, $entityType = '')
     {
@@ -667,6 +700,7 @@ class Migration
      *
      * @param string $string
      * @return array
+     * @since 2.0.0
      */
     protected function _parseSerializedString($string)
     {
@@ -682,6 +716,7 @@ class Migration
      * List of correspondence between composite module aliases and module names
      *
      * @return array
+     * @since 2.0.0
      */
     public function getCompositeModules()
     {
@@ -695,6 +730,7 @@ class Migration
      * @param string $encodedValue
      * @param int $objectDecodeType
      * @return mixed
+     * @since 2.0.0
      */
     protected function _jsonDecode($encodedValue, $objectDecodeType = \Zend_Json::TYPE_ARRAY)
     {

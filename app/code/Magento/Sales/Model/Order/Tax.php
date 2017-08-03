@@ -31,11 +31,13 @@ namespace Magento\Sales\Model\Order;
  * @method \Magento\Sales\Model\Order\Tax setBaseRealAmount(float $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Tax extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

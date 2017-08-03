@@ -10,11 +10,13 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Order shipment pdf items renderer
+ * @since 2.0.0
  */
 class Shipment extends AbstractItems
 {
     /**
      * @var \Magento\Framework\Stdlib\StringUtils
+     * @since 2.0.0
      */
     protected $string;
 
@@ -32,6 +34,7 @@ class Shipment extends AbstractItems
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -66,6 +69,7 @@ class Shipment extends AbstractItems
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function draw()
     {

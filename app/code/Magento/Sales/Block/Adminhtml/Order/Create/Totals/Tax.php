@@ -10,6 +10,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Totals;
  *
  * @author Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Tax extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals
 {
@@ -17,6 +18,7 @@ class Tax extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTota
      * Template
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'order/create/totals/tax.phtml';
 }

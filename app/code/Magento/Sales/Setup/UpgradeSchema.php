@@ -11,16 +11,19 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 
 /**
  * @codeCoverageIgnore
+ * @since 2.1.0
  */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
      * @var string
+     * @since 2.2.0
      */
     private static $connectionName = 'sales';
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -111,6 +114,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     /**
      * @param SchemaSetupInterface $installer
      * @return void
+     * @since 2.2.0
      */
     private function addColumnBaseGrandTotal(SchemaSetupInterface $installer)
     {
@@ -131,6 +135,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     /**
      * @param SchemaSetupInterface $installer
      * @return void
+     * @since 2.2.0
      */
     private function addIndexBaseGrandTotal(SchemaSetupInterface $installer)
     {

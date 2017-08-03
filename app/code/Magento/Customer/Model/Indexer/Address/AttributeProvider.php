@@ -9,6 +9,11 @@ use Magento\Customer\Model\ResourceModel\Address\Attribute\Collection;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute;
 
+/**
+ * Class \Magento\Customer\Model\Indexer\Address\AttributeProvider
+ *
+ * @since 2.0.0
+ */
 class AttributeProvider extends \Magento\Customer\Model\Indexer\AttributeProvider
 {
     /**
@@ -18,6 +23,7 @@ class AttributeProvider extends \Magento\Customer\Model\Indexer\AttributeProvide
 
     /**
      * @param Config $eavConfig
+     * @since 2.0.0
      */
     public function __construct(
         Config $eavConfig

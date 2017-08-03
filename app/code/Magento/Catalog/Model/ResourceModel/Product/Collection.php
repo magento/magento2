@@ -30,6 +30,7 @@ use Magento\Store\Model\Store;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @method \Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface getResource()
+ * @since 2.0.0
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
 {
@@ -45,6 +46,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_idFieldName = 'entity_id';
 
@@ -52,6 +54,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Catalog Product Flat is enabled cache per store
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_flatEnabled = [];
 
@@ -59,6 +62,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Product websites table name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_productWebsiteTable;
 
@@ -66,6 +70,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Product categories table name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_productCategoryTable;
 
@@ -73,6 +78,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Is add URL rewrites to collection flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_addUrlRewrite = false;
 
@@ -80,6 +86,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Add URL rewrite for category
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_urlRewriteCategory = '';
 
@@ -87,6 +94,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Is add final price to product collection flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_addFinalPrice = false;
 
@@ -94,6 +102,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Cache for all ids
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_allIdsCache = null;
 
@@ -101,11 +110,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Is add tax percents to product collection flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_addTaxPercents = false;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation
+     * @since 2.0.0
      */
     protected $_productLimitationFilters;
 
@@ -113,11 +124,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Category product count select
      *
      * @var \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected $_productCountSelect = null;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $_isWebsiteFilter = false;
 
@@ -125,6 +138,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Additional field filters, applied in _productLimitationJoinPrice()
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_priceDataFieldFilters = [];
 
@@ -132,6 +146,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Price expression sql
      *
      * @var string|null
+     * @since 2.0.0
      */
     protected $_priceExpression;
 
@@ -139,6 +154,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Additional price expression sql part
      *
      * @var string|null
+     * @since 2.0.0
      */
     protected $_additionalPriceExpression;
 
@@ -146,6 +162,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Max prise (statistics data)
      *
      * @var float
+     * @since 2.0.0
      */
     protected $_maxPrice;
 
@@ -153,6 +170,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Min prise (statistics data)
      *
      * @var float
+     * @since 2.0.0
      */
     protected $_minPrice;
 
@@ -160,6 +178,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Prise standard deviation (statistics data)
      *
      * @var float
+     * @since 2.0.0
      */
     protected $_priceStandardDeviation;
 
@@ -167,6 +186,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Prises count (statistics data)
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_pricesCount = null;
 
@@ -174,6 +194,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Cloned Select after dispatching 'catalog_prepare_price_select' event
      *
      * @var \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected $_catalogPreparePriceSelect = null;
 
@@ -181,6 +202,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Catalog product flat
      *
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\State
+     * @since 2.0.0
      */
     protected $_catalogProductFlatState = null;
 
@@ -188,6 +210,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Catalog data
      *
      * @var \Magento\Framework\Module\Manager
+     * @since 2.0.0
      */
     protected $moduleManager = null;
 
@@ -195,6 +218,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -202,11 +226,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @since 2.0.0
      */
     protected $_localeDate;
 
@@ -214,6 +240,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Catalog url
      *
      * @var \Magento\Catalog\Model\ResourceModel\Url
+     * @since 2.0.0
      */
     protected $_catalogUrl;
 
@@ -221,6 +248,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Product option factory
      *
      * @var \Magento\Catalog\Model\Product\OptionFactory
+     * @since 2.0.0
      */
     protected $_productOptionFactory;
 
@@ -228,16 +256,19 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Catalog resource helper
      *
      * @var \Magento\Catalog\Model\ResourceModel\Helper
+     * @since 2.0.0
      */
     protected $_resourceHelper;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
+     * @since 2.0.0
      */
     protected $dateTime;
 
     /**
      * @var \Magento\Customer\Api\GroupManagementInterface
+     * @since 2.0.0
      */
     protected $_groupManagement;
 
@@ -245,31 +276,37 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Need to add websites to result flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $needToAddWebsiteNamesToResult;
 
     /**
      * @var Gallery
+     * @since 2.2.0
      */
     private $mediaGalleryResource;
 
     /**
      * @var GalleryReadHandler
+     * @since 2.2.0
      */
     private $productGalleryReadHandler;
 
     /**
      * @var MetadataPool
+     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var bool|string
+     * @since 2.2.0
      */
     private $linkField;
 
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @since 2.2.0
      */
     private $backend;
 
@@ -300,6 +337,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param MetadataPool|null $metadataPool
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -359,6 +397,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get cloned Select after dispatching 'catalog_prepare_price_select' event
      *
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     public function getCatalogPreparedSelect()
     {
@@ -370,6 +409,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param \Magento\Framework\DB\Select $select
      * @return $this
+     * @since 2.0.0
      */
     protected function _preparePriceExpressionParameters($select)
     {
@@ -406,6 +446,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param \Magento\Framework\DB\Select $select
      * @return string
+     * @since 2.0.0
      */
     public function getPriceExpression($select)
     {
@@ -419,6 +460,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param \Magento\Framework\DB\Select $select
      * @return string
+     * @since 2.0.0
      */
     public function getAdditionalPriceExpression($select)
     {
@@ -432,6 +474,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get currency rate
      *
      * @return float
+     * @since 2.0.0
      */
     public function getCurrencyRate()
     {
@@ -442,6 +485,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Retrieve Catalog Product Flat Helper object
      *
      * @return \Magento\Catalog\Model\Indexer\Product\Flat\State
+     * @since 2.0.0
      */
     public function getFlatState()
     {
@@ -453,6 +497,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Return always false if magento run admin
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isEnabledFlat()
     {
@@ -466,6 +511,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Initialize resources
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -484,6 +530,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param string $model
      * @param string $entityModel
      * @return $this
+     * @since 2.0.0
      */
     protected function _init($model, $entityModel)
     {
@@ -497,6 +544,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Define product website and category product tables
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _initTables()
     {
@@ -508,6 +556,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Prepare static entity fields
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareStaticFields()
     {
@@ -522,6 +571,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Redeclared for specifying id field name without getting resource model inside model
      *
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function getNewEmptyItem()
     {
@@ -537,6 +587,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param \Magento\Eav\Model\Entity\AbstractEntity $entity
      * @return $this
+     * @since 2.0.0
      */
     public function setEntity($entity)
     {
@@ -552,6 +603,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param mixed $store
      * @return $this
+     * @since 2.0.0
      */
     public function setStore($store)
     {
@@ -568,6 +620,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * in catalog_product_entity we store just products
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initSelect()
     {
@@ -595,6 +648,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
+     * @since 2.0.0
      */
     public function _loadAttributes($printQuery = false, $logQuery = false)
     {
@@ -611,6 +665,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param array|string|integer|\Magento\Framework\App\Config\Element $attribute
      * @param bool|string $joinType
      * @return $this
+     * @since 2.0.0
      */
     public function addAttributeToSelect($attribute, $joinType = false)
     {
@@ -646,6 +701,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Adding url rewrites, minimal prices, final prices, tax percents
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -666,6 +722,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Prepare Url Data object
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareUrlDataObject()
     {
@@ -699,6 +756,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param mixed $productId
      * @param boolean $exclude
      * @return $this
+     * @since 2.0.0
      */
     public function addIdFilter($productId, $exclude = false)
     {
@@ -732,6 +790,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Add for each product websites information
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addWebsiteNamesToResult()
     {
@@ -741,6 +800,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -759,6 +819,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Processs adding product website names to result collection
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function doAddWebsiteNamesToResult()
     {
@@ -802,6 +863,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param null|string|bool|int|Store $store
      * @return $this
+     * @since 2.0.0
      */
     public function addStoreFilter($store = null)
     {
@@ -824,6 +886,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param null|bool|int|string|array $websites
      * @return $this
+     * @since 2.0.0
      */
     public function addWebsiteFilter($websites = null)
     {
@@ -841,6 +904,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get filters applied to collection
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation
+     * @since 2.0.0
      */
     public function getLimitationFilters()
     {
@@ -852,6 +916,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return $this
+     * @since 2.0.0
      */
     public function addCategoryFilter(\Magento\Catalog\Model\Category $category)
     {
@@ -876,6 +941,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param array $categoriesFilter
      * @return $this
+     * @since 2.0.0
      */
     public function addCategoriesFilter(array $categoriesFilter)
     {
@@ -897,6 +963,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param string $conditionType
      * @return mixed
+     * @since 2.0.0
      */
     private function mapConditionType($conditionType)
     {
@@ -911,6 +978,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Join minimal price attribute to result
      *
      * @return $this
+     * @since 2.0.0
      */
     public function joinMinimalPrice()
     {
@@ -923,6 +991,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param string $attribute
      * @return array|null
+     * @since 2.0.0
      */
     public function getMaxAttributeValue($attribute)
     {
@@ -958,6 +1027,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param string $attribute
      * @param int $range
      * @return array
+     * @since 2.0.0
      */
     public function getAttributeValueCountByRange($attribute, $range)
     {
@@ -997,6 +1067,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param string $attribute
      * @return array ($value => $count)
+     * @since 2.0.0
      */
     public function getAttributeValueCount($attribute)
     {
@@ -1045,6 +1116,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param string $attribute attribute code
      * @return array
+     * @since 2.0.0
      */
     public function getAllAttributeValues($attribute)
     {
@@ -1077,6 +1149,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get SQL for get record count without left JOINs
      *
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     public function getSelectCountSql()
     {
@@ -1089,6 +1162,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param null $select
      * @param bool $resetLeftJoins
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function _getSelectCountSql($select = null, $resetLeftJoins = true)
     {
@@ -1105,6 +1179,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Prepare statistics data
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareStatisticsData()
     {
@@ -1133,6 +1208,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Retrieve clear select
      *
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function _getClearSelect()
     {
@@ -1144,6 +1220,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param \Magento\Framework\DB\Select $select
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function _buildClearSelect($select = null)
     {
@@ -1164,6 +1241,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param int|string $limit
      * @param int|string $offset
      * @return array
+     * @since 2.0.0
      */
     public function getAllIds($limit = null, $offset = null)
     {
@@ -1179,6 +1257,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Retrieve product count select for categories
      *
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     public function getProductCountSelect()
     {
@@ -1214,6 +1293,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Destruct product count select
      *
      * @return $this
+     * @since 2.0.0
      */
     public function unsProductCountSelect()
     {
@@ -1226,6 +1306,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $categoryCollection
      * @return $this
+     * @since 2.0.0
      */
     public function addCountToCategories($categoryCollection)
     {
@@ -1283,6 +1364,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Retrieve unique attribute set ids in collection
      *
      * @return array
+     * @since 2.0.0
      */
     public function getSetIds()
     {
@@ -1299,6 +1381,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Return array of unique product type ids in collection
      *
      * @return array
+     * @since 2.0.0
      */
     public function getProductTypeIds()
     {
@@ -1314,6 +1397,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Joins url rewrite rules to collection
      *
      * @return $this
+     * @since 2.0.0
      */
     public function joinUrlRewrite()
     {
@@ -1333,6 +1417,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param int|string $categoryId
      * @return $this
+     * @since 2.0.0
      */
     public function addUrlRewrite($categoryId = '')
     {
@@ -1359,6 +1444,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Add URL rewrites to collection
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _addUrlRewrite()
     {
@@ -1407,6 +1493,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Add minimal price data to result
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addMinimalPrice()
     {
@@ -1417,6 +1504,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Add price data for calculate final price
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addFinalPrice()
     {
@@ -1428,6 +1516,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param boolean $resetCache
      * @return array
+     * @since 2.0.0
      */
     public function getAllIdsCache($resetCache = false)
     {
@@ -1449,6 +1538,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param array $value
      * @return $this
+     * @since 2.0.0
      */
     public function setAllIdsCache($value)
     {
@@ -1462,6 +1552,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param int $customerGroupId
      * @param int $websiteId
      * @return $this
+     * @since 2.0.0
      */
     public function addPriceData($customerGroupId = null, $websiteId = null)
     {
@@ -1494,6 +1585,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param string $joinType
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function addAttributeToFilter($attribute, $condition = null, $joinType = 'inner')
     {
@@ -1553,6 +1645,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     protected function getEntityPkName(\Magento\Eav\Model\Entity\AbstractEntity $entity)
     {
@@ -1563,6 +1656,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Add requere tax percent flag for product collection
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addTaxPercents()
     {
@@ -1574,6 +1668,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get require tax percent flag value
      *
      * @return bool
+     * @since 2.0.0
      */
     public function requireTaxPercent()
     {
@@ -1584,6 +1679,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Adding product custom options to result collection
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addOptionsToResult()
     {
@@ -1620,6 +1716,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Filter products with required options
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addFilterByRequiredOptions()
     {
@@ -1632,6 +1729,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param array $visibility
      * @return $this
+     * @since 2.0.0
      */
     public function setVisibility($visibility)
     {
@@ -1649,6 +1747,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function addAttributeToSort($attribute, $dir = self::SORT_ORDER_ASC)
     {
@@ -1708,6 +1807,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Prepare limitation filters
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareProductLimitationFilters()
     {
@@ -1748,6 +1848,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _productLimitationJoinWebsite()
     {
@@ -1802,6 +1903,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _productLimitationJoinStore()
     {
@@ -1837,6 +1939,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Join Product Price Table
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _productLimitationJoinPrice()
     {
@@ -1849,6 +1952,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @see \Magento\Catalog\Model\ResourceModel\Product\Collection::_productLimitationJoinPrice()
      * @param bool $joinLeft
      * @return $this
+     * @since 2.0.0
      */
     protected function _productLimitationPrice($joinLeft = false)
     {
@@ -1912,6 +2016,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Apply front-end price limitation filters to the collection
      *
      * @return $this
+     * @since 2.0.0
      */
     public function applyFrontendPriceLimitations()
     {
@@ -1935,6 +2040,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Method supports multiple changes in one collection object for this parameters
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _applyProductLimitations()
     {
@@ -1986,6 +2092,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * for combinations of category_id filter states
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _applyZeroStoreProductLimitations()
     {
@@ -2020,6 +2127,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Add category ids to loaded items
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addCategoryIds()
     {
@@ -2064,6 +2172,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Add tier price data to loaded items.
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addTierPriceData()
     {
@@ -2090,6 +2199,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param int $customerGroupId
      * @return $this
+     * @since 2.2.0
      */
     public function addTierPriceDataByGroupId($customerGroupId)
     {
@@ -2120,6 +2230,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param array $productIds
      * @return \Magento\Framework\DB\Select
+     * @since 2.2.0
      */
     private function getTierPriceSelect(array $productIds)
     {
@@ -2146,6 +2257,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param Select $select
      * @return void
+     * @since 2.2.0
      */
     private function fillTierPriceData(\Magento\Framework\DB\Select $select)
     {
@@ -2163,6 +2275,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Retrieve link field and cache it.
      *
      * @return bool|string
+     * @since 2.2.0
      */
     private function getLinkField()
     {
@@ -2176,6 +2289,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Retrieve backend model and cache it.
      *
      * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @since 2.2.0
      */
     private function getBackend()
     {
@@ -2192,6 +2306,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param array $fields - list of fields
      * @return $this
      * @throws \Exception
+     * @since 2.0.0
      */
     public function addPriceDataFieldFilter($comparisonFormat, $fields)
     {
@@ -2216,6 +2331,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.2.0
      */
     public function addMediaGalleryData()
     {
@@ -2265,6 +2381,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get product entity metadata
      *
      * @return \Magento\Framework\EntityManager\EntityMetadataInterface
+     * @since 2.2.0
      */
     public function getProductEntityMetadata()
     {
@@ -2275,7 +2392,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Retrieve GalleryReadHandler
      *
      * @return GalleryReadHandler
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getGalleryReadHandler()
     {
@@ -2286,8 +2404,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.2.0
      * @return \Magento\Catalog\Model\ResourceModel\Product\Gallery
+     * @since 2.2.0
      */
     private function getMediaGalleryResource()
     {
@@ -2301,6 +2420,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Clear collection
      *
      * @return $this
+     * @since 2.0.0
      */
     public function clear()
     {
@@ -2326,6 +2446,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param string $attribute
      * @param string $dir
      * @return $this
+     * @since 2.0.0
      */
     public function setOrder($attribute, $dir = Select::SQL_DESC)
     {
@@ -2341,6 +2462,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get products max price
      *
      * @return float
+     * @since 2.0.0
      */
     public function getMaxPrice()
     {
@@ -2355,6 +2477,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get products min price
      *
      * @return float
+     * @since 2.0.0
      */
     public function getMinPrice()
     {
@@ -2369,6 +2492,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get standard deviation of products price
      *
      * @return float
+     * @since 2.0.0
      */
     public function getPriceStandardDeviation()
     {
@@ -2383,6 +2507,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get count of product prices
      *
      * @return int
+     * @since 2.0.0
      */
     public function getPricesCount()
     {

@@ -10,6 +10,7 @@ namespace Magento\Framework\Api;
  * Search criteria interface.
  *
  * @api
+ * @since 2.0.0
  */
 interface SearchCriteriaInterface
 {
@@ -17,6 +18,7 @@ interface SearchCriteriaInterface
      * Get a list of filter groups.
      *
      * @return \Magento\Framework\Api\Search\FilterGroup[]
+     * @since 2.0.0
      */
     public function getFilterGroups();
 
@@ -25,6 +27,7 @@ interface SearchCriteriaInterface
      *
      * @param \Magento\Framework\Api\Search\FilterGroup[] $filterGroups
      * @return $this
+     * @since 2.0.0
      */
     public function setFilterGroups(array $filterGroups = null);
 
@@ -32,6 +35,7 @@ interface SearchCriteriaInterface
      * Get sort order.
      *
      * @return \Magento\Framework\Api\SortOrder[]|null
+     * @since 2.0.0
      */
     public function getSortOrders();
 
@@ -40,6 +44,7 @@ interface SearchCriteriaInterface
      *
      * @param \Magento\Framework\Api\SortOrder[] $sortOrders
      * @return $this
+     * @since 2.0.0
      */
     public function setSortOrders(array $sortOrders = null);
 
@@ -47,6 +52,7 @@ interface SearchCriteriaInterface
      * Get page size.
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getPageSize();
 
@@ -55,6 +61,7 @@ interface SearchCriteriaInterface
      *
      * @param int $pageSize
      * @return $this
+     * @since 2.0.0
      */
     public function setPageSize($pageSize);
 
@@ -62,6 +69,7 @@ interface SearchCriteriaInterface
      * Get current page.
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getCurrentPage();
 
@@ -70,6 +78,7 @@ interface SearchCriteriaInterface
      *
      * @param int $currentPage
      * @return $this
+     * @since 2.0.0
      */
     public function setCurrentPage($currentPage);
 }

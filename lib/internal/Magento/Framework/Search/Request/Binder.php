@@ -7,6 +7,7 @@ namespace Magento\Framework\Search\Request;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Binder
 {
@@ -16,6 +17,7 @@ class Binder
      * @param array $requestData
      * @param array $bindData
      * @return array
+     * @since 2.0.0
      */
     public function bind(array $requestData, array $bindData)
     {
@@ -34,6 +36,7 @@ class Binder
      * @param array $data
      * @param array $bindData
      * @return array
+     * @since 2.0.0
      */
     private function processLimits($data, $bindData)
     {
@@ -52,6 +55,7 @@ class Binder
      * @param array $bindData
      * @return array
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     private function processDimensions($data, $bindData)
     {
@@ -70,6 +74,7 @@ class Binder
      * @param array $data
      * @param array $bindData
      * @return array
+     * @since 2.0.0
      */
     private function processData($data, $bindData)
     {

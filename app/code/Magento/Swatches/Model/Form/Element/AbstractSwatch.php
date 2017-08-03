@@ -5,6 +5,11 @@
  */
 namespace Magento\Swatches\Model\Form\Element;
 
+/**
+ * Class \Magento\Swatches\Model\Form\Element\AbstractSwatch
+ *
+ * @since 2.0.0
+ */
 class AbstractSwatch extends \Magento\Framework\Data\Form\Element\Select
 {
     /**
@@ -12,6 +17,7 @@ class AbstractSwatch extends \Magento\Framework\Data\Form\Element\Select
      *
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function getValues()
     {

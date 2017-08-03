@@ -8,26 +8,35 @@ namespace Magento\Authorizenet\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Sales\Model\Order;
 
+/**
+ * Class \Magento\Authorizenet\Observer\AddFieldsToResponseObserver
+ *
+ * @since 2.0.0
+ */
 class AddFieldsToResponseObserver implements ObserverInterface
 {
     /**
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $coreRegistry;
 
     /**
      * @var \Magento\Authorizenet\Model\Directpost
+     * @since 2.0.0
      */
     protected $payment;
 
     /**
      * @var \Magento\Authorizenet\Model\Directpost\Session
+     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -36,6 +45,7 @@ class AddFieldsToResponseObserver implements ObserverInterface
      * @param \Magento\Authorizenet\Model\Directpost $payment
      * @param \Magento\Authorizenet\Model\Directpost\Session $session
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Registry $coreRegistry,
@@ -54,6 +64,7 @@ class AddFieldsToResponseObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

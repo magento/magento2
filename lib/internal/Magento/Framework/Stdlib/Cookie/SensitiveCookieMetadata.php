@@ -15,17 +15,20 @@ use Magento\Framework\App\RequestInterface;
  * as path and domain are only data to be exposed by SensitiveCookieMetadata
  *
  * @api
+ * @since 2.0.0
  */
 class SensitiveCookieMetadata extends CookieMetadata
 {
     /**
      * @var RequestInterface
+     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @param RequestInterface $request
      * @param array $metadata
+     * @since 2.0.0
      */
     public function __construct(RequestInterface $request, $metadata = [])
     {
@@ -38,6 +41,7 @@ class SensitiveCookieMetadata extends CookieMetadata
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getSecure()
     {
@@ -47,6 +51,7 @@ class SensitiveCookieMetadata extends CookieMetadata
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function __toArray()
     {
@@ -58,6 +63,7 @@ class SensitiveCookieMetadata extends CookieMetadata
      * Update secure value, set it to request setting if it has no explicit value assigned.
      *
      * @return void
+     * @since 2.0.0
      */
     private function updateSecureValue()
     {

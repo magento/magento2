@@ -6,12 +6,18 @@
  */
 namespace Magento\Customer\Controller\Address;
 
+/**
+ * Class \Magento\Customer\Controller\Address\Form
+ *
+ * @since 2.0.0
+ */
 class Form extends \Magento\Customer\Controller\Address
 {
     /**
      * Address book form
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {

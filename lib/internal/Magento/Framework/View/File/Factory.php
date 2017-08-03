@@ -11,6 +11,7 @@ use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Factory that produces view file instances
+ * @since 2.0.0
  */
 class Factory
 {
@@ -18,6 +19,7 @@ class Factory
      * Object manager
      *
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     private $objectManager;
 
@@ -25,6 +27,7 @@ class Factory
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -39,6 +42,7 @@ class Factory
      * @param ThemeInterface|null $theme
      * @param bool $isBase
      * @return \Magento\Framework\View\File
+     * @since 2.0.0
      */
     public function create($filename, $module = '', ThemeInterface $theme = null, $isBase = false)
     {

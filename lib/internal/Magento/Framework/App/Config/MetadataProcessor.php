@@ -7,21 +7,29 @@
  */
 namespace Magento\Framework\App\Config;
 
+/**
+ * Class \Magento\Framework\App\Config\MetadataProcessor
+ *
+ * @since 2.0.0
+ */
 class MetadataProcessor
 {
     /**
      * @var \Magento\Framework\App\Config\Data\ProcessorFactory
+     * @since 2.0.0
      */
     protected $_processorFactory;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_metadata = [];
 
     /**
      * @param \Magento\Framework\App\Config\Data\ProcessorFactory $processorFactory
      * @param Initial $initialConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\Data\ProcessorFactory $processorFactory,
@@ -37,6 +45,7 @@ class MetadataProcessor
      * @param array $data
      * @param string $path
      * @return string|null
+     * @since 2.0.0
      */
     protected function _getValue(array $data, $path)
     {
@@ -58,6 +67,7 @@ class MetadataProcessor
      * @param string $path
      * @param string $value
      * @return void
+     * @since 2.0.0
      */
     protected function _setValue(array &$container, $path, $value)
     {
@@ -77,6 +87,7 @@ class MetadataProcessor
      *
      * @param array $data
      * @return array
+     * @since 2.0.0
      */
     public function process(array $data)
     {

@@ -7,6 +7,7 @@ namespace Magento\User\Block\Role;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Edit extends \Magento\Backend\Block\Widget\Tabs
 {
@@ -14,6 +15,7 @@ class Edit extends \Magento\Backend\Block\Widget\Tabs
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -23,6 +25,7 @@ class Edit extends \Magento\Backend\Block\Widget\Tabs
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -39,6 +42,7 @@ class Edit extends \Magento\Backend\Block\Widget\Tabs
      * Class constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -50,6 +54,7 @@ class Edit extends \Magento\Backend\Block\Widget\Tabs
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {

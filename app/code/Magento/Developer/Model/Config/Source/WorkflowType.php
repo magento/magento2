@@ -11,6 +11,7 @@ use Magento\Framework\Option\ArrayInterface;
  * Class WorkflowType
  *
  * @api
+ * @since 2.0.0
  */
 class WorkflowType implements ArrayInterface
 {
@@ -33,6 +34,7 @@ class WorkflowType implements ArrayInterface
      * Return list of Workflow types
      *
      * @return array Format: array(array('value' => '<value>', 'label' => '<label>'), ...)
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

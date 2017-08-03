@@ -8,6 +8,7 @@ namespace Magento\Backend\Model\Menu\Director;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Director extends \Magento\Backend\Model\Menu\AbstractDirector
 {
@@ -15,6 +16,7 @@ class Director extends \Magento\Backend\Model\Menu\AbstractDirector
      * Log message patterns
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_messagePatterns = ['update' => 'Item %s was updated', 'remove' => 'Item %s was removed'];
 
@@ -24,6 +26,7 @@ class Director extends \Magento\Backend\Model\Menu\AbstractDirector
      * @param array $data command params
      * @param \Psr\Log\LoggerInterface $logger
      * @return \Magento\Backend\Model\Menu\Builder\AbstractCommand
+     * @since 2.0.0
      */
     protected function _getCommand($data, $logger)
     {
@@ -43,6 +46,7 @@ class Director extends \Magento\Backend\Model\Menu\AbstractDirector
      * @param \Magento\Backend\Model\Menu\Builder $builder
      * @param \Psr\Log\LoggerInterface $logger
      * @return void
+     * @since 2.0.0
      */
     public function direct(
         array $config,

@@ -15,16 +15,19 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
  * Class Bundle customizes Bundle product creation flow
+ * @since 2.1.0
  */
 class Composite extends AbstractModifier
 {
     /**
      * @var LocatorInterface
+     * @since 2.1.0
      */
     protected $locator;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $modifiers = [];
 
@@ -32,16 +35,19 @@ class Composite extends AbstractModifier
      * Object Manager
      *
      * @var ObjectManagerInterface
+     * @since 2.1.0
      */
     protected $objectManager;
 
     /**
      * @var ProductOptionRepositoryInterface
+     * @since 2.1.0
      */
     protected $optionsRepository;
 
     /**
      * @var ProductRepositoryInterface
+     * @since 2.1.0
      */
     protected $productRepository;
 
@@ -51,6 +57,7 @@ class Composite extends AbstractModifier
      * @param ProductOptionRepositoryInterface $optionsRepository
      * @param ProductRepositoryInterface $productRepository
      * @param array $modifiers
+     * @since 2.1.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -68,6 +75,7 @@ class Composite extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -90,6 +98,7 @@ class Composite extends AbstractModifier
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.1.0
      */
     public function modifyData(array $data)
     {

@@ -10,6 +10,7 @@ use Magento\Framework\View\Element\UiComponent\Config\FileCollector\AggregatedFi
 
 /**
  * Class Template
+ * @since 2.0.0
  */
 class Template
 {
@@ -25,16 +26,19 @@ class Template
 
     /**
      * @var AggregatedFileCollector
+     * @since 2.0.0
      */
     protected $aggregatedFileCollector;
 
     /**
      * @var \Magento\Framework\View\Element\UiComponent\Config\DomMergerInterface
+     * @since 2.0.0
      */
     protected $domMerger;
 
     /**
      * @var \Magento\Framework\Config\CacheInterface
+     * @since 2.0.0
      */
     protected $cache;
 
@@ -42,21 +46,25 @@ class Template
      * Factory for UI config reader
      *
      * @var \Magento\Framework\View\Element\UiComponent\Config\ReaderFactory
+     * @since 2.0.0
      */
     protected $readerFactory;
 
     /**
      * @var AggregatedFileCollectorFactory
+     * @since 2.0.0
      */
     protected $aggregatedFileCollectorFactory;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $cachedTemplates = [];
 
     /**
      * @var \Magento\Framework\Serialize\SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -68,6 +76,7 @@ class Template
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param \Magento\Framework\View\Element\UiComponent\Config\ReaderFactory $readerFactory
      * @param AggregatedFileCollectorFactory $aggregatedFileCollectorFactory
+     * @since 2.0.0
      */
     public function __construct(
         AggregatedFileCollector $aggregatedFileCollector,
@@ -94,6 +103,7 @@ class Template
      * @param string $template
      * @return string
      * @throws \Exception
+     * @since 2.0.0
      */
     public function getTemplate($template)
     {
@@ -117,7 +127,8 @@ class Template
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getSerializer()
     {

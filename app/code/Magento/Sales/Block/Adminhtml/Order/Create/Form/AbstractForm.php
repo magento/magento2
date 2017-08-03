@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * Sales Order Create Form Abstract Block
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
@@ -19,6 +20,7 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
      * Form factory
      *
      * @var \Magento\Framework\Data\FormFactory
+     * @since 2.0.0
      */
     protected $_formFactory;
 
@@ -26,11 +28,13 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
      * Data Form object
      *
      * @var \Magento\Framework\Data\Form
+     * @since 2.0.0
      */
     protected $_form;
 
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
+     * @since 2.0.0
      */
     protected $dataObjectProcessor;
 
@@ -42,6 +46,7 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -62,6 +67,7 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
      * Add renderers to \Magento\Framework\Data\Form
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -93,6 +99,7 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
      * Return Form object
      *
      * @return \Magento\Framework\Data\Form
+     * @since 2.0.0
      */
     public function getForm()
     {
@@ -107,6 +114,7 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
      * Prepare Form and add elements to form
      *
      * @return $this
+     * @since 2.0.0
      */
     abstract protected function _prepareForm();
 
@@ -114,6 +122,7 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
      * Return array of additional form element types by type
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getAdditionalFormElementTypes()
     {
@@ -128,6 +137,7 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
      * Return array of additional form element renderers by element id
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getAdditionalFormElementRenderers()
     {
@@ -144,6 +154,7 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _addAdditionalFormElementData(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -157,6 +168,7 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
      * @param \Magento\Framework\Data\Form\AbstractForm $form
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _addAttributesToForm($attributes, \Magento\Framework\Data\Form\AbstractForm $form)
     {
@@ -223,6 +235,7 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
      * Return Form Elements values
      *
      * @return array
+     * @since 2.0.0
      */
     public function getFormValues()
     {

@@ -9,6 +9,7 @@ use Magento\Customer\CustomerData\SectionSourceInterface;
 
 /**
  * Wishlist section
+ * @since 2.0.0
  */
 class Wishlist implements SectionSourceInterface
 {
@@ -19,21 +20,25 @@ class Wishlist implements SectionSourceInterface
 
     /**
      * @var \Magento\Wishlist\Helper\Data
+     * @since 2.0.0
      */
     protected $wishlistHelper;
 
     /**
      * @var \Magento\Catalog\Helper\ImageFactory
+     * @since 2.0.0
      */
     protected $imageHelperFactory;
 
     /**
      * @var \Magento\Framework\App\ViewInterface
+     * @since 2.0.0
      */
     protected $view;
 
     /**
      * @var \Magento\Wishlist\Block\Customer\Sidebar
+     * @since 2.0.0
      */
     protected $block;
 
@@ -42,6 +47,7 @@ class Wishlist implements SectionSourceInterface
      * @param \Magento\Wishlist\Block\Customer\Sidebar $block
      * @param \Magento\Catalog\Helper\ImageFactory $imageHelperFactory
      * @param \Magento\Framework\App\ViewInterface $view
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Wishlist\Helper\Data $wishlistHelper,
@@ -57,6 +63,7 @@ class Wishlist implements SectionSourceInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getSectionData()
     {
@@ -69,6 +76,7 @@ class Wishlist implements SectionSourceInterface
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function getCounter()
     {
@@ -80,6 +88,7 @@ class Wishlist implements SectionSourceInterface
      *
      * @param int $count
      * @return \Magento\Framework\Phrase|null
+     * @since 2.0.0
      */
     protected function createCounter($count)
     {
@@ -95,6 +104,7 @@ class Wishlist implements SectionSourceInterface
      * Get wishlist items
      *
      * @return array
+     * @since 2.0.0
      */
     protected function getItems()
     {
@@ -116,6 +126,7 @@ class Wishlist implements SectionSourceInterface
      *
      * @param \Magento\Wishlist\Model\Item $wishlistItem
      * @return array
+     * @since 2.0.0
      */
     protected function getItemData(\Magento\Wishlist\Model\Item $wishlistItem)
     {
@@ -143,6 +154,7 @@ class Wishlist implements SectionSourceInterface
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Block\Product\Image
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function getImageData($product)
     {

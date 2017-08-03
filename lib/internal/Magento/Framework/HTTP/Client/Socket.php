@@ -16,72 +16,84 @@ namespace Magento\Framework\HTTP\Client;
  */
 /**
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ * @since 2.0.0
  */
 class Socket implements \Magento\Framework\HTTP\ClientInterface
 {
     /**
      * Hostname
      * @var string
+     * @since 2.0.0
      */
     private $_host = 'localhost';
 
     /**
      * Port
      * @var int
+     * @since 2.0.0
      */
     private $_port = 80;
 
     /**
      * Stream resource
      * @var object
+     * @since 2.0.0
      */
     private $_sock = null;
 
     /**
      * Request headers
      * @var array
+     * @since 2.0.0
      */
     private $_headers = [];
 
     /**
      * Fields for POST method - hash
      * @var array
+     * @since 2.0.0
      */
     private $_postFields = [];
 
     /**
      * Request cookies
      * @var array
+     * @since 2.0.0
      */
     private $_cookies = [];
 
     /**
      * Response headers
      * @var array
+     * @since 2.0.0
      */
     private $_responseHeaders = [];
 
     /**
      * Response body
      * @var string
+     * @since 2.0.0
      */
     private $_responseBody = '';
 
     /**
      * Response status
      * @var int
+     * @since 2.0.0
      */
     private $_responseStatus = 0;
 
     /**
      * Request timeout
      * @var int
+     * @since 2.0.0
      */
     private $_timeout = 300;
 
     /**
      * TODO
      * @var int
+     * @since 2.0.0
      */
     private $_redirectCount = 0;
 
@@ -90,6 +102,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      *
      * @param int $value
      * @return void
+     * @since 2.0.0
      */
     public function setTimeout($value)
     {
@@ -101,6 +114,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      *
      * @param string $host
      * @param int $port
+     * @since 2.0.0
      */
     public function __construct($host = null, $port = 80)
     {
@@ -115,6 +129,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param string $host
      * @param int $port
      * @return void
+     * @since 2.0.0
      */
     public function connect($host, $port = 80)
     {
@@ -126,6 +141,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * Disconnect
      *
      * @return void
+     * @since 2.0.0
      */
     public function disconnect()
     {
@@ -136,6 +152,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * Set headers from hash
      * @param array $headers
      * @return void
+     * @since 2.0.0
      */
     public function setHeaders($headers)
     {
@@ -148,6 +165,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param string $name name, ex. "Location"
      * @param string $value value ex. "http://google.com"
      * @return void
+     * @since 2.0.0
      */
     public function addHeader($name, $value)
     {
@@ -159,6 +177,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      *
      * @param string $name
      * @return void
+     * @since 2.0.0
      */
     public function removeHeader($name)
     {
@@ -172,6 +191,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param string $login username
      * @param string $pass password
      * @return void
+     * @since 2.0.0
      */
     public function setCredentials($login, $pass)
     {
@@ -185,6 +205,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param string $name
      * @param string $value
      * @return void
+     * @since 2.0.0
      */
     public function addCookie($name, $value)
     {
@@ -196,6 +217,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      *
      * @param string $name
      * @return void
+     * @since 2.0.0
      */
     public function removeCookie($name)
     {
@@ -207,6 +229,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      *
      * @param array $cookies
      * @return void
+     * @since 2.0.0
      */
     public function setCookies($cookies)
     {
@@ -217,6 +240,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * Clear cookies
      *
      * @return void
+     * @since 2.0.0
      */
     public function removeCookies()
     {
@@ -228,6 +252,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      *
      * @param string $uri full uri path
      * @return void
+     * @since 2.0.0
      */
     public function get($uri)
     {
@@ -241,6 +266,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param string $uri ex. http://google.com/index.php?a=b
      * @return string ex. /index.php?a=b
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function parseUrl($uri)
     {
@@ -275,6 +301,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param string $uri
      * @param array $params
      * @return void
+     * @since 2.0.0
      */
     public function post($uri, $params)
     {
@@ -285,6 +312,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * Get response headers
      *
      * @return array
+     * @since 2.0.0
      */
     public function getHeaders()
     {
@@ -295,6 +323,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * Get response body
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBody()
     {
@@ -305,6 +334,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * Get cookies response hash
      *
      * @return array
+     * @since 2.0.0
      */
     public function getCookies()
     {
@@ -331,6 +361,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * Get cookies array with details
      * (domain, expire time etc)
      * @return array
+     * @since 2.0.0
      */
     public function getCookiesFull()
     {
@@ -366,6 +397,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * Process response headers
      *
      * @return void
+     * @since 2.0.0
      */
     protected function processResponseHeaders()
     {
@@ -399,6 +431,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * Process response body
      *
      * @return void
+     * @since 2.0.0
      */
     protected function processResponseBody()
     {
@@ -414,6 +447,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     protected function processResponse()
     {
@@ -436,6 +470,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * Process redirect
      *
      * @return void
+     * @since 2.0.0
      */
     protected function processRedirect()
     {
@@ -447,6 +482,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @see \Magento\Framework\HTTP\Client#getStatus()
      *
      * @return int
+     * @since 2.0.0
      */
     public function getStatus()
     {
@@ -459,6 +495,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param string $uri
      * @param array $params
      * @return void
+     * @since 2.0.0
      */
     protected function makeRequest($method, $uri, $params = [])
     {
@@ -495,6 +532,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param string $string
      * @return void
      * @throws \Exception
+     * @since 2.0.0
      */
     public function doError($string)
     {
@@ -505,6 +543,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * Convert headers hash to string
      * @param array $append
      * @return string
+     * @since 2.0.0
      */
     protected function headersToString($append = [])
     {
@@ -525,6 +564,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param array $arr
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function setOptions($arr)
     {
@@ -538,6 +578,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param string $value
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function setOption($name, $value)
     {

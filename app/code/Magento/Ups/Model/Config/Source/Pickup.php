@@ -7,6 +7,7 @@ namespace Magento\Ups\Model\Config\Source;
 
 /**
  * Class Pickup
+ * @since 2.0.0
  */
 class Pickup extends \Magento\Ups\Model\Config\Source\Generic
 {
@@ -14,11 +15,13 @@ class Pickup extends \Magento\Ups\Model\Config\Source\Generic
      * Carrier code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_code = 'pickup';
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

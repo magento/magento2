@@ -13,6 +13,7 @@ namespace Magento\ImportExport\Block\Adminhtml\Import\Edit;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Before extends \Magento\Backend\Block\Template
 {
@@ -20,11 +21,13 @@ class Before extends \Magento\Backend\Block\Template
      * Basic import model
      *
      * @var \Magento\ImportExport\Model\Import
+     * @since 2.0.0
      */
     protected $_importModel;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
+     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
@@ -33,6 +36,7 @@ class Before extends \Magento\Backend\Block\Template
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\ImportExport\Model\Import $importModel
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -49,6 +53,7 @@ class Before extends \Magento\Backend\Block\Template
      * Returns json-encoded entity behaviors array
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEntityBehaviors()
     {
@@ -63,6 +68,7 @@ class Before extends \Magento\Backend\Block\Template
      * Returns json-encoded entity behaviors notes array
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEntityBehaviorsNotes()
     {
@@ -77,6 +83,7 @@ class Before extends \Magento\Backend\Block\Template
      * Return json-encoded list of existing behaviors
      *
      * @return string
+     * @since 2.0.0
      */
     public function getUniqueBehaviors()
     {

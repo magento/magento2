@@ -6,10 +6,16 @@
 
 namespace Magento\Catalog\Model\ProductLink\Converter;
 
+/**
+ * Class \Magento\Catalog\Model\ProductLink\Converter\DefaultConverter
+ *
+ * @since 2.0.0
+ */
 class DefaultConverter implements ConverterInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function convert(\Magento\Catalog\Model\Product $product)
     {

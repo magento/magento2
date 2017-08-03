@@ -10,26 +10,31 @@ use Magento\Framework\App\Rss\DataProviderInterface;
 /**
  * Class NewProducts
  * @package Magento\Catalog\Block\Rss\Product
+ * @since 2.0.0
  */
 class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface
 {
     /**
      * @var \Magento\Catalog\Helper\Image
+     * @since 2.0.0
      */
     protected $imageHelper;
 
     /**
      * @var \Magento\Catalog\Model\Rss\Product\NewProducts
+     * @since 2.0.0
      */
     protected $rssModel;
 
     /**
      * @var \Magento\Framework\App\Rss\UrlBuilderInterface
+     * @since 2.0.0
      */
     protected $rssUrlBuilder;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -39,6 +44,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
      * @param \Magento\Catalog\Model\Rss\Product\NewProducts $rssModel
      * @param \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -56,6 +62,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -65,6 +72,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isAllowed()
     {
@@ -73,6 +81,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getRssData()
     {
@@ -133,6 +142,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
 
     /**
      * @return int
+     * @since 2.0.0
      */
     protected function getStoreId()
     {
@@ -148,6 +158,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return string
+     * @since 2.0.0
      */
     protected function renderPriceHtml(\Magento\Catalog\Model\Product $product)
     {
@@ -178,6 +189,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getCacheLifetime()
     {
@@ -186,6 +198,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getFeeds()
     {
@@ -200,6 +213,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isAuthRequired()
     {

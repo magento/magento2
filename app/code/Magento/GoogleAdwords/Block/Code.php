@@ -9,11 +9,13 @@ namespace Magento\GoogleAdwords\Block;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Code extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\GoogleAdwords\Helper\Data
+     * @since 2.0.0
      */
     protected $_googleAdwordsData;
 
@@ -21,6 +23,7 @@ class Code extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\GoogleAdwords\Helper\Data $googleAdwordsData
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -35,6 +38,7 @@ class Code extends \Magento\Framework\View\Element\Template
      * Render block html if Google AdWords is active
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -43,6 +47,7 @@ class Code extends \Magento\Framework\View\Element\Template
 
     /**
      * @return \Magento\GoogleAdwords\Helper\Data
+     * @since 2.0.0
      */
     public function getHelper()
     {

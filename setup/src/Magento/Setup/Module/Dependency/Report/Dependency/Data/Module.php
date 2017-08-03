@@ -7,6 +7,7 @@ namespace Magento\Setup\Module\Dependency\Report\Dependency\Data;
 
 /**
  * Module
+ * @since 2.0.0
  */
 class Module
 {
@@ -14,6 +15,7 @@ class Module
      * Module name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $name;
 
@@ -21,6 +23,7 @@ class Module
      * Module dependencies
      *
      * @var \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency[]
+     * @since 2.0.0
      */
     protected $dependencies;
 
@@ -29,6 +32,7 @@ class Module
      *
      * @param array $name
      * @param \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency[] $dependencies
+     * @since 2.0.0
      */
     public function __construct($name, array $dependencies = [])
     {
@@ -40,6 +44,7 @@ class Module
      * Get name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -50,6 +55,7 @@ class Module
      * Get dependencies
      *
      * @return \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency[]
+     * @since 2.0.0
      */
     public function getDependencies()
     {
@@ -60,6 +66,7 @@ class Module
      * Get total dependencies count
      *
      * @return int
+     * @since 2.0.0
      */
     public function getDependenciesCount()
     {
@@ -70,6 +77,7 @@ class Module
      * Get hard dependencies count
      *
      * @return int
+     * @since 2.0.0
      */
     public function getHardDependenciesCount()
     {
@@ -86,6 +94,7 @@ class Module
      * Get soft dependencies count
      *
      * @return int
+     * @since 2.0.0
      */
     public function getSoftDependenciesCount()
     {

@@ -9,8 +9,9 @@ use Magento\Framework\App\Helper\AbstractHelper;
 
 /**
  * @api
- * @deprecated
+ * @deprecated 2.2.0
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 2.0.0
  */
 class Data extends AbstractHelper
 {
@@ -18,36 +19,43 @@ class Data extends AbstractHelper
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_pageHelpUrl;
 
     /**
      * @var \Magento\Framework\App\Route\Config
+     * @since 2.0.0
      */
     protected $_routeConfig;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
+     * @since 2.0.0
      */
     protected $_locale;
 
     /**
      * @var \Magento\Backend\Model\UrlInterface
+     * @since 2.0.0
      */
     protected $_backendUrl;
 
     /**
      * @var \Magento\Backend\Model\Auth
+     * @since 2.0.0
      */
     protected $_auth;
 
     /**
      * @var \Magento\Backend\App\Area\FrontNameResolver
+     * @since 2.0.0
      */
     protected $_frontNameResolver;
 
     /**
      * @var \Magento\Framework\Math\Random
+     * @since 2.0.0
      */
     protected $mathRandom;
 
@@ -59,6 +67,7 @@ class Data extends AbstractHelper
      * @param \Magento\Backend\Model\Auth $auth
      * @param \Magento\Backend\App\Area\FrontNameResolver $frontNameResolver
      * @param \Magento\Framework\Math\Random $mathRandom
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -80,6 +89,7 @@ class Data extends AbstractHelper
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getPageHelpUrl()
     {
@@ -92,6 +102,7 @@ class Data extends AbstractHelper
     /**
      * @param string|null $url
      * @return $this
+     * @since 2.0.0
      */
     public function setPageHelpUrl($url = null)
     {
@@ -122,6 +133,7 @@ class Data extends AbstractHelper
     /**
      * @param string $suffix
      * @return $this
+     * @since 2.0.0
      */
     public function addPageHelpUrl($suffix)
     {
@@ -133,6 +145,7 @@ class Data extends AbstractHelper
      * @param string $route
      * @param array $params
      * @return string
+     * @since 2.0.0
      */
     public function getUrl($route = '', $params = [])
     {
@@ -141,6 +154,7 @@ class Data extends AbstractHelper
 
     /**
      * @return int|bool
+     * @since 2.0.0
      */
     public function getCurrentUserId()
     {
@@ -155,6 +169,7 @@ class Data extends AbstractHelper
      *
      * @param string $filterString
      * @return array
+     * @since 2.0.0
      */
     public function prepareFilterString($filterString)
     {
@@ -181,6 +196,7 @@ class Data extends AbstractHelper
      * Generate unique token for reset password confirmation link
      *
      * @return string
+     * @since 2.0.0
      */
     public function generateResetPasswordLinkToken()
     {
@@ -191,6 +207,7 @@ class Data extends AbstractHelper
      * Get backend start page URL
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHomePageUrl()
     {
@@ -202,6 +219,7 @@ class Data extends AbstractHelper
      *
      * @param bool $checkHost
      * @return bool|string
+     * @since 2.0.0
      */
     public function getAreaFrontName($checkHost = false)
     {

@@ -11,6 +11,11 @@
  */
 namespace Magento\Customer\Model\ResourceModel;
 
+/**
+ * Class \Magento\Customer\Model\ResourceModel\Attribute
+ *
+ * @since 2.0.0
+ */
 class Attribute extends \Magento\Eav\Model\ResourceModel\Attribute
 {
     /**
@@ -20,6 +25,7 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Attribute
      * If realization doesn't demand this functionality, let this function just return null
      *
      * @return string|null
+     * @since 2.0.0
      */
     protected function _getEavWebsiteTable()
     {
@@ -32,6 +38,7 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Attribute
      * Get table, where dependency between form name and attribute ids is stored
      *
      * @return string|null
+     * @since 2.0.0
      */
     protected function _getFormAttributeTable()
     {

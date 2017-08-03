@@ -10,6 +10,7 @@ use Magento\Framework\App\DeploymentConfig;
 
 /**
  * In-memory readonly pool of all cache front-end instances known to the system
+ * @since 2.0.0
  */
 class Pool implements \Iterator
 {
@@ -20,21 +21,25 @@ class Pool implements \Iterator
 
     /**
      * @var DeploymentConfig
+     * @since 2.0.0
      */
     private $deploymentConfig;
 
     /**
      * @var Factory
+     * @since 2.0.0
      */
     private $_factory;
 
     /**
      * @var \Magento\Framework\Cache\FrontendInterface[]
+     * @since 2.0.0
      */
     private $_instances;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $_frontendSettings;
 
@@ -42,6 +47,7 @@ class Pool implements \Iterator
      * @param DeploymentConfig $deploymentConfig
      * @param Factory $frontendFactory
      * @param array $frontendSettings Format: array('<frontend_id>' => array(<cache_settings>), ...)
+     * @since 2.0.0
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
@@ -58,6 +64,7 @@ class Pool implements \Iterator
      * Method is to be used for delayed initialization of the iterator.
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _initialize()
     {
@@ -73,6 +80,7 @@ class Pool implements \Iterator
      * Retrieve settings for all cache front-ends known to the system
      *
      * @return array Format: array('<frontend_id>' => array(<cache_settings>), ...)
+     * @since 2.0.0
      */
     protected function _getCacheSettings()
     {
@@ -91,6 +99,7 @@ class Pool implements \Iterator
      * {@inheritdoc}
      *
      * @return \Magento\Framework\Cache\FrontendInterface
+     * @since 2.0.0
      */
     public function current()
     {
@@ -100,6 +109,7 @@ class Pool implements \Iterator
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function key()
     {
@@ -109,6 +119,7 @@ class Pool implements \Iterator
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function next()
     {
@@ -118,6 +129,7 @@ class Pool implements \Iterator
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function rewind()
     {
@@ -127,6 +139,7 @@ class Pool implements \Iterator
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function valid()
     {
@@ -140,6 +153,7 @@ class Pool implements \Iterator
      * @param string $identifier Cache frontend identifier
      * @return \Magento\Framework\Cache\FrontendInterface Cache frontend instance
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function get($identifier)
     {

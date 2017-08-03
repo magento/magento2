@@ -14,36 +14,43 @@ use Magento\Framework\Webapi\Request;
 
 /**
  * A user context determined by tokens in a HTTP request Authorization header.
+ * @since 2.0.0
  */
 class TokenUserContext implements UserContextInterface
 {
     /**
      * @var Request
+     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var Token
+     * @since 2.0.0
      */
     protected $tokenFactory;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $userId;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $userType;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $isRequestProcessed;
 
     /**
      * @var IntegrationServiceInterface
+     * @since 2.0.0
      */
     protected $integrationService;
 
@@ -53,6 +60,7 @@ class TokenUserContext implements UserContextInterface
      * @param Request $request
      * @param TokenFactory $tokenFactory
      * @param IntegrationServiceInterface $integrationService
+     * @since 2.0.0
      */
     public function __construct(
         Request $request,
@@ -66,6 +74,7 @@ class TokenUserContext implements UserContextInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getUserId()
     {
@@ -75,6 +84,7 @@ class TokenUserContext implements UserContextInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getUserType()
     {
@@ -86,6 +96,7 @@ class TokenUserContext implements UserContextInterface
      * Finds the bearer token and looks up the value.
      *
      * @return void
+     * @since 2.0.0
      */
     protected function processRequest()
     {
@@ -126,6 +137,7 @@ class TokenUserContext implements UserContextInterface
     /**
      * @param Token $token
      * @return void
+     * @since 2.0.0
      */
     protected function setUserDataViaToken(Token $token)
     {

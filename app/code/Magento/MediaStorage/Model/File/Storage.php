@@ -17,6 +17,7 @@ use Magento\Framework\Model\AbstractModel;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 2.0.0
  */
 class Storage extends AbstractModel
 {
@@ -42,6 +43,7 @@ class Storage extends AbstractModel
      * Prefix of model events names
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'media_storage_file_storage';
 
@@ -49,6 +51,7 @@ class Storage extends AbstractModel
      * Core file storage
      *
      * @var \Magento\MediaStorage\Helper\File\Storage
+     * @since 2.0.0
      */
     protected $_coreFileStorage = null;
 
@@ -56,11 +59,13 @@ class Storage extends AbstractModel
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_coreConfig;
 
@@ -68,6 +73,7 @@ class Storage extends AbstractModel
      * Core file storage flag
      *
      * @var \Magento\MediaStorage\Model\File\Storage\Flag
+     * @since 2.0.0
      */
     protected $_fileFlag;
 
@@ -75,11 +81,13 @@ class Storage extends AbstractModel
      * File factory
      *
      * @var \Magento\MediaStorage\Model\File\Storage\FileFactory
+     * @since 2.0.0
      */
     protected $_fileFactory;
 
     /**
      * @var \Magento\MediaStorage\Model\File\Storage\DatabaseFactory
+     * @since 2.0.0
      */
     protected $_databaseFactory;
 
@@ -87,6 +95,7 @@ class Storage extends AbstractModel
      * Filesystem instance
      *
      * @var Filesystem
+     * @since 2.0.0
      */
     protected $filesystem;
 
@@ -104,6 +113,7 @@ class Storage extends AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -135,6 +145,7 @@ class Storage extends AbstractModel
      * @param \Magento\Framework\Model\AbstractModel $sourceModel
      * @param \Magento\Framework\Model\AbstractModel $destinationModel
      * @return bool
+     * @since 2.0.0
      */
     protected function _synchronizeHasErrors($sourceModel, $destinationModel)
     {
@@ -149,6 +160,7 @@ class Storage extends AbstractModel
      * Return synchronize process status flag
      *
      * @return \Magento\MediaStorage\Model\File\Storage\Flag
+     * @since 2.0.0
      */
     public function getSyncFlag()
     {
@@ -167,6 +179,7 @@ class Storage extends AbstractModel
      * @param  int|null $storage
      * @param  array $params
      * @return AbstractModel|bool
+     * @since 2.0.0
      */
     public function getStorageModel($storage = null, $params = [])
     {
@@ -204,6 +217,7 @@ class Storage extends AbstractModel
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function synchronize($storage)
     {
@@ -283,6 +297,7 @@ class Storage extends AbstractModel
      * Return current media directory, allowed resources for get.php script, etc.
      *
      * @return array
+     * @since 2.0.0
      */
     public function getScriptConfig()
     {

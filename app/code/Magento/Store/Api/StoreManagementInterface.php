@@ -7,6 +7,7 @@ namespace Magento\Store\Api;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface StoreManagementInterface
 {
@@ -14,6 +15,7 @@ interface StoreManagementInterface
      * Provide the number of store count
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCount();
 }

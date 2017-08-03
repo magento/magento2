@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Config\Source;
  * Catalog products per page on Grid mode source
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class GridPerPage implements \Magento\Framework\Option\ArrayInterface
 {
@@ -16,6 +17,7 @@ class GridPerPage implements \Magento\Framework\Option\ArrayInterface
      * Options
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_options;
 
@@ -23,6 +25,7 @@ class GridPerPage implements \Magento\Framework\Option\ArrayInterface
      * Constructor
      *
      * @param string $perPageValues
+     * @since 2.0.0
      */
     public function __construct($perPageValues)
     {
@@ -31,6 +34,7 @@ class GridPerPage implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

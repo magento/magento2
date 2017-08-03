@@ -7,6 +7,7 @@ namespace Magento\ImportExport\Model\Import\Source;
 
 /**
  * Zip import adapter.
+ * @since 2.0.0
  */
 class Zip extends Csv
 {
@@ -14,6 +15,7 @@ class Zip extends Csv
      * @param string $file
      * @param \Magento\Framework\Filesystem\Directory\Write $directory
      * @param string $options
+     * @since 2.0.0
      */
     public function __construct(
         $file,

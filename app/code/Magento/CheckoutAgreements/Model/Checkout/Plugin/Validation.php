@@ -10,21 +10,25 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class Validation
+ * @since 2.0.0
  */
 class Validation
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfiguration;
 
     /**
      * @var \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface
+     * @since 2.0.0
      */
     protected $checkoutAgreementsRepository;
 
     /**
      * @var \Magento\Checkout\Api\AgreementsValidatorInterface
+     * @since 2.0.0
      */
     protected $agreementsValidator;
 
@@ -32,6 +36,7 @@ class Validation
      * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementsValidator
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration
      * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Checkout\Api\AgreementsValidatorInterface $agreementsValidator,
@@ -50,6 +55,7 @@ class Validation
      * @param \Magento\Quote\Api\Data\AddressInterface|null $billingAddress
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function beforeSavePaymentInformationAndPlaceOrder(
         \Magento\Checkout\Api\PaymentInformationManagementInterface $subject,
@@ -69,6 +75,7 @@ class Validation
      * @param \Magento\Quote\Api\Data\AddressInterface|null $billingAddress
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function beforeSavePaymentInformation(
         \Magento\Checkout\Api\PaymentInformationManagementInterface $subject,
@@ -85,6 +92,7 @@ class Validation
      * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return void
+     * @since 2.0.0
      */
     protected function validateAgreements(\Magento\Quote\Api\Data\PaymentInterface $paymentMethod)
     {
@@ -102,6 +110,7 @@ class Validation
     /**
      * Verify if agreement validation needed
      * @return bool
+     * @since 2.0.0
      */
     protected function isAgreementEnabled()
     {

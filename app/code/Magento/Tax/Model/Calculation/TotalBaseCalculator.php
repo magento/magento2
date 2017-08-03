@@ -5,10 +5,16 @@
  */
 namespace Magento\Tax\Model\Calculation;
 
+/**
+ * Class \Magento\Tax\Model\Calculation\TotalBaseCalculator
+ *
+ * @since 2.0.0
+ */
 class TotalBaseCalculator extends AbstractAggregateCalculator
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function roundAmount(
         $amount,

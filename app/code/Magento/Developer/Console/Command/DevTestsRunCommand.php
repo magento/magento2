@@ -14,6 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class DevTestsRunCommand
  *
  * Runs tests (unit, static, integration, etc.)
+ * @since 2.0.0
  */
 class DevTestsRunCommand extends Command
 {
@@ -31,6 +32,7 @@ class DevTestsRunCommand extends Command
      * Maps types (from user input) to phpunit test names
      *
      * @var array
+     * @since 2.0.0
      */
     private $types;
 
@@ -38,11 +40,13 @@ class DevTestsRunCommand extends Command
      * Maps phpunit test names to directory and target name
      *
      * @var array
+     * @since 2.0.0
      */
     private $commands;
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -66,6 +70,7 @@ class DevTestsRunCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int Non zero if invalid type, 0 otherwise
+     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -113,6 +118,7 @@ class DevTestsRunCommand extends Command
      * Fills in arrays that link test types to php unit tests and directories.
      *
      * @return void
+     * @since 2.0.0
      */
     private function setupTestInfo()
     {

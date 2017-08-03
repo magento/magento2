@@ -9,6 +9,7 @@ namespace Magento\EncryptionKey\Block\Adminhtml\Crypt\Key;
  * Encryption key change edit page block
  *
  * @api
+ * @since 2.0.0
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -16,6 +17,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Block module name
      *
      * @var string|null
+     * @since 2.0.0
      */
     protected $_blockGroup = null;
 
@@ -23,6 +25,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Controller name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_controller = 'crypt_key';
 
@@ -30,6 +33,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Instantiate save button
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -51,6 +55,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Header text getter
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getHeaderText()
     {

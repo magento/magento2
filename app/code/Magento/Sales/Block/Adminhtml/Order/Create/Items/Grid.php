@@ -16,6 +16,7 @@ use Magento\Quote\Model\Quote\Item;
  * Adminhtml sales order create items grid block
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
@@ -23,6 +24,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Flag to check can items be move to customer storage
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_moveToCustomerStorage = true;
 
@@ -30,6 +32,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Tax data
      *
      * @var \Magento\Tax\Helper\Data
+     * @since 2.0.0
      */
     protected $_taxData;
 
@@ -37,6 +40,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Wishlist factory
      *
      * @var \Magento\Wishlist\Model\WishlistFactory
+     * @since 2.0.0
      */
     protected $_wishlistFactory;
 
@@ -44,6 +48,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Gift message save
      *
      * @var \Magento\GiftMessage\Model\Save
+     * @since 2.0.0
      */
     protected $_giftMessageSave;
 
@@ -51,6 +56,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Tax config
      *
      * @var \Magento\Tax\Model\Config
+     * @since 2.0.0
      */
     protected $_taxConfig;
 
@@ -58,16 +64,19 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Message helper
      *
      * @var \Magento\GiftMessage\Helper\Message
+     * @since 2.0.0
      */
     protected $_messageHelper;
 
     /**
      * @var StockRegistryInterface
+     * @since 2.0.0
      */
     protected $stockRegistry;
 
     /**
      * @var StockStateInterface
+     * @since 2.0.0
      */
     protected $stockState;
 
@@ -85,6 +94,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param StockStateInterface $stockState
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -114,6 +124,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -125,6 +136,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get items
      *
      * @return Item[]
+     * @since 2.0.0
      */
     public function getItems()
     {
@@ -174,6 +186,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get session
      *
      * @return SessionManagerInterface
+     * @since 2.0.0
      */
     public function getSession()
     {
@@ -185,6 +198,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param Item $item
      * @return float
+     * @since 2.0.0
      */
     public function getItemEditablePrice($item)
     {
@@ -196,6 +210,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param Item $item
      * @return float
+     * @since 2.0.0
      */
     public function getOriginalEditablePrice($item)
     {
@@ -218,6 +233,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param Item $item
      * @return float
+     * @since 2.0.0
      */
     public function getItemOrigPrice($item)
     {
@@ -229,6 +245,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param Item|null $item
      * @return bool|null|string
+     * @since 2.0.0
      */
     public function isGiftMessagesAvailable($item = null)
     {
@@ -243,6 +260,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param Item $item
      * @return bool
+     * @since 2.0.0
      */
     public function isAllowedForGiftMessage($item)
     {
@@ -253,6 +271,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Check if we need display grid totals include tax
      *
      * @return bool
+     * @since 2.0.0
      */
     public function displayTotalsIncludeTax()
     {
@@ -265,6 +284,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get subtotal
      *
      * @return false|float
+     * @since 2.0.0
      */
     public function getSubtotal()
     {
@@ -282,6 +302,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get subtotal with discount
      *
      * @return float
+     * @since 2.0.0
      */
     public function getSubtotalWithDiscount()
     {
@@ -300,6 +321,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get discount amount
      *
      * @return float
+     * @since 2.0.0
      */
     public function getDiscountAmount()
     {
@@ -310,6 +332,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Retrieve quote address
      *
      * @return \Magento\Quote\Model\Quote\Address
+     * @since 2.0.0
      */
     public function getQuoteAddress()
     {
@@ -325,6 +348,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param Item $item
      * @return bool
+     * @since 2.0.0
      */
     public function usedCustomPriceForItem($item)
     {
@@ -336,6 +360,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param Item $item
      * @return bool
+     * @since 2.0.0
      */
     public function canApplyCustomPrice($item)
     {
@@ -347,6 +372,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param Item $item
      * @return \Magento\Framework\Phrase|string
+     * @since 2.0.0
      */
     public function getQtyTitle($item)
     {
@@ -371,6 +397,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param Item $item
      * @return string
+     * @since 2.0.0
      */
     public function getTierHtml($item)
     {
@@ -393,6 +420,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param array $prices
      * @return string[]
+     * @since 2.0.0
      */
     protected function _getBundleTierPriceInfo($prices)
     {
@@ -409,6 +437,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param array $prices
      * @return string[]
+     * @since 2.0.0
      */
     protected function _getTierPriceInfo($prices)
     {
@@ -427,7 +456,8 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param Item $item
      * @return string
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     public function getCustomOptions(Item $item)
     {
@@ -456,6 +486,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getMoveToCustomerStorage()
     {
@@ -467,6 +498,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param Item $item
      * @return string
+     * @since 2.0.0
      */
     public function displaySubtotalInclTax($item)
     {
@@ -483,6 +515,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param Item $item
      * @return float
+     * @since 2.0.0
      */
     public function displayOriginalPriceInclTax($item)
     {
@@ -498,6 +531,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param Item $item
      * @return string
+     * @since 2.0.0
      */
     public function displayRowTotalWithDiscountInclTax($item)
     {
@@ -509,6 +543,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get including/excluding tax message
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getInclExclTaxMessage()
     {
@@ -523,6 +558,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get store
      *
      * @return \Magento\Store\Model\Store
+     * @since 2.0.0
      */
     public function getStore()
     {
@@ -534,6 +570,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param Item $item
      * @return string
+     * @since 2.0.0
      */
     public function getConfigureButtonHtml($item)
     {
@@ -557,6 +594,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param Item $item
      * @return \Magento\Framework\View\Element\AbstractBlock
+     * @since 2.0.0
      */
     public function getItemExtraInfo($item)
     {
@@ -568,6 +606,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param Item $item
      * @return bool
+     * @since 2.0.0
      */
     public function isMoveToWishlistAllowed($item)
     {
@@ -578,6 +617,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Retrieve collection of customer wishlists
      *
      * @return \Magento\Wishlist\Model\ResourceModel\Wishlist\Collection
+     * @since 2.0.0
      */
     public function getCustomerWishlists()
     {
@@ -589,6 +629,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param Item $item
      * @return string
+     * @since 2.0.0
      */
     public function getItemUnitPriceHtml(Item $item)
     {
@@ -602,6 +643,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param Item $item
      * @return string
+     * @since 2.0.0
      */
     public function getItemRowTotalHtml(Item $item)
     {
@@ -615,6 +657,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param Item $item
      * @return string
+     * @since 2.0.0
      */
     public function getItemRowTotalWithDiscountHtml(Item $item)
     {

@@ -10,6 +10,7 @@ namespace Magento\Backend\Model\Auth\Credential;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 2.0.0
  */
 interface StorageInterface
 {
@@ -19,6 +20,7 @@ interface StorageInterface
      * @param string $username
      * @param string $password
      * @return bool
+     * @since 2.0.0
      */
     public function authenticate($username, $password);
 
@@ -29,6 +31,7 @@ interface StorageInterface
      * @param string $password
      * @return $this
      * @abstract
+     * @since 2.0.0
      */
     public function login($username, $password);
 
@@ -37,6 +40,7 @@ interface StorageInterface
      *
      * @return $this
      * @abstract
+     * @since 2.0.0
      */
     public function reload();
 
@@ -45,6 +49,7 @@ interface StorageInterface
      *
      * @return bool
      * @abstract
+     * @since 2.0.0
      */
     public function hasAvailableResources();
 
@@ -54,6 +59,7 @@ interface StorageInterface
      * @param bool $hasResources
      * @return $this
      * @abstract
+     * @since 2.0.0
      */
     public function setHasAvailableResources($hasResources);
 }

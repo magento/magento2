@@ -9,6 +9,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Provides event configuration
+ * @since 2.0.0
  */
 class Data extends \Magento\Framework\Config\Data\Scoped
 {
@@ -16,6 +17,7 @@ class Data extends \Magento\Framework\Config\Data\Scoped
      * Scope priority loading scheme
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_scopePriorityScheme = ['global'];
 
@@ -27,6 +29,7 @@ class Data extends \Magento\Framework\Config\Data\Scoped
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Event\Config\Reader $reader,

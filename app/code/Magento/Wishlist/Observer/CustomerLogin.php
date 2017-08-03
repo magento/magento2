@@ -13,14 +13,19 @@ use Magento\Wishlist\Helper\Data;
 /**
  * Class CustomerLogin
  * @package Magento\Wishlist\Observer
+ * @since 2.0.0
  */
 class CustomerLogin implements ObserverInterface
 {
-    /** @var Data */
+    /**
+     * @var \Magento\Wishlist\Helper\Data
+     * @since 2.0.0
+     */
     protected $wishlistData;
 
     /**
      * @param Data $wishlistData
+     * @since 2.0.0
      */
     public function __construct(Data $wishlistData)
     {
@@ -30,6 +35,7 @@ class CustomerLogin implements ObserverInterface
     /**
      * @param Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

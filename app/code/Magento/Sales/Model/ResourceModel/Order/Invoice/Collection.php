@@ -13,6 +13,7 @@ use Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Collection extends AbstractCollection implements InvoiceSearchResultInterface
 {
@@ -20,6 +21,7 @@ class Collection extends AbstractCollection implements InvoiceSearchResultInterf
      * Id field name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_idFieldName = 'entity_id';
 
@@ -27,6 +29,7 @@ class Collection extends AbstractCollection implements InvoiceSearchResultInterf
      * Event prefix
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_invoice_collection';
 
@@ -34,6 +37,7 @@ class Collection extends AbstractCollection implements InvoiceSearchResultInterf
      * Event object
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'order_invoice_collection';
 
@@ -41,6 +45,7 @@ class Collection extends AbstractCollection implements InvoiceSearchResultInterf
      * Order field for setOrderFilter
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_orderField = 'order_id';
 
@@ -48,6 +53,7 @@ class Collection extends AbstractCollection implements InvoiceSearchResultInterf
      * Model initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -61,6 +67,7 @@ class Collection extends AbstractCollection implements InvoiceSearchResultInterf
      * Used to emulate after load functionality for each item without loading them
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _afterLoad()
     {

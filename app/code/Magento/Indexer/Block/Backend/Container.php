@@ -7,6 +7,7 @@ namespace Magento\Indexer\Block\Backend;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Container extends \Magento\Backend\Block\Widget\Grid\Container
 {
@@ -14,6 +15,7 @@ class Container extends \Magento\Backend\Block\Widget\Grid\Container
      * Initialize object state with incoming parameters
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

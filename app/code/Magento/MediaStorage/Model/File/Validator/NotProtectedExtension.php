@@ -10,6 +10,7 @@ namespace Magento\MediaStorage\Model\File\Validator;
 
 /**
  * Validator for check not protected file extensions
+ * @since 2.0.0
  */
 class NotProtectedExtension extends \Zend_Validate_Abstract
 {
@@ -27,6 +28,7 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
      * The file extension
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_value;
 
@@ -34,6 +36,7 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
      * Protected file types
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_protectedFileExtensions = [];
 
@@ -41,6 +44,7 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -48,6 +52,7 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
      * Init validator
      *
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
     {
@@ -60,6 +65,7 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
      * Initialize message templates with translating
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initMessageTemplates()
     {
@@ -75,6 +81,7 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
      * Initialize protected file extensions
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initProtectedFileExtensions()
     {
@@ -96,6 +103,7 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
      *
      * @param \Magento\Store\Model\Store|string|int $store
      * @return string|string[]
+     * @since 2.0.0
      */
     public function getProtectedFileExtensions($store = null)
     {
@@ -111,6 +119,7 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
      *
      * @param string $value         Extension of file
      * @return bool
+     * @since 2.0.0
      */
     public function isValid($value)
     {

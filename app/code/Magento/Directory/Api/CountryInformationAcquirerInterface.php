@@ -9,6 +9,7 @@ namespace Magento\Directory\Api;
  * Country information acquirer interface
  *
  * @api
+ * @since 2.0.0
  */
 interface CountryInformationAcquirerInterface
 {
@@ -16,6 +17,7 @@ interface CountryInformationAcquirerInterface
      * Get all countries and regions information for the store.
      *
      * @return \Magento\Directory\Api\Data\CountryInformationInterface[]
+     * @since 2.0.0
      */
     public function getCountriesInfo();
 
@@ -25,6 +27,7 @@ interface CountryInformationAcquirerInterface
      * @param string $countryId
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @return \Magento\Directory\Api\Data\CountryInformationInterface
+     * @since 2.0.0
      */
     public function getCountryInfo($countryId);
 }

@@ -5,6 +5,11 @@
  */
 namespace Magento\GroupedProduct\Helper\Product\Configuration\Plugin;
 
+/**
+ * Class \Magento\GroupedProduct\Helper\Product\Configuration\Plugin\Grouped
+ *
+ * @since 2.0.0
+ */
 class Grouped
 {
     /**
@@ -16,6 +21,7 @@ class Grouped
      *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function aroundGetOptions(
         \Magento\Catalog\Helper\Product\Configuration $subject,

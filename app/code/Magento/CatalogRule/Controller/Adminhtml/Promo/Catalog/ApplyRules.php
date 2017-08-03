@@ -9,12 +9,18 @@ namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 use Magento\CatalogRule\Model\Rule\Job;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog\ApplyRules
+ *
+ * @since 2.0.0
+ */
 class ApplyRules extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
     /**
      * Apply all active catalog price rules
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

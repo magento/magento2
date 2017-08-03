@@ -10,45 +10,58 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 
+/**
+ * Class \Magento\Catalog\Cron\RefreshSpecialPrices
+ *
+ * @since 2.0.0
+ */
 class RefreshSpecialPrices
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var Resource
+     * @since 2.0.0
      */
     protected $_resource;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
+     * @since 2.0.0
      */
     protected $_dateTime;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @since 2.0.0
      */
     protected $_localeDate;
 
     /**
      * @var \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     protected $_eavConfig;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
+     * @since 2.0.0
      */
     protected $_processor;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.0.0
      */
     protected $_connection;
 
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     private $metadataPool;
 
@@ -59,6 +72,7 @@ class RefreshSpecialPrices
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $processor
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -80,6 +94,7 @@ class RefreshSpecialPrices
      * Retrieve write connection instance
      *
      * @return bool|\Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.0.0
      */
     protected function _getConnection()
     {
@@ -93,6 +108,7 @@ class RefreshSpecialPrices
      * Add products to changes list with price which depends on date
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -133,6 +149,7 @@ class RefreshSpecialPrices
      * @param string $attrCode
      * @param \Zend_Db_Expr $attrConditionValue
      * @return void
+     * @since 2.0.0
      */
     protected function _refreshSpecialPriceByStore($storeId, $attrCode, $attrConditionValue)
     {
@@ -175,7 +192,8 @@ class RefreshSpecialPrices
      * Get MetadataPool instance
      * @return MetadataPool
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {

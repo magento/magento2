@@ -11,6 +11,7 @@ namespace Magento\Reports\Block\Adminhtml\Sales\Tax;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 {
@@ -18,6 +19,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
      * GROUP BY criteria
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_columnGroupBy = 'period';
 
@@ -25,6 +27,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
      * Config factory
      *
      * @var \Magento\Sales\Model\Order\ConfigFactory
+     * @since 2.0.0
      */
     protected $_configFactory;
 
@@ -38,6 +41,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
      * @param \Magento\Reports\Helper\Data $reportsData
      * @param \Magento\Sales\Model\Order\ConfigFactory $configFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -55,6 +59,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -65,6 +70,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getResourceCollectionName()
     {
@@ -75,6 +81,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -162,6 +169,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
      *
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {

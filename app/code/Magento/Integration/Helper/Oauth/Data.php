@@ -7,14 +7,19 @@ namespace Magento\Integration\Helper\Oauth;
 
 /**
  * OAuth View Helper for Controllers
+ * @since 2.0.0
  */
 class Data
 {
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
+     */
     protected $_scopeConfig;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
     {
@@ -59,6 +64,7 @@ class Data
      * Calculate cleanup possibility for data with lifetime property
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isCleanupProbability()
     {
@@ -71,6 +77,7 @@ class Data
      * Get cleanup expiration period value from system configuration in minutes
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCleanupExpirationPeriod()
     {
@@ -82,6 +89,7 @@ class Data
      * Get consumer expiration period value from system configuration in seconds
      *
      * @return int
+     * @since 2.0.0
      */
     public function getConsumerExpirationPeriod()
     {
@@ -93,6 +101,7 @@ class Data
      * Get the number of consumer post maximum redirects
      *
      * @return int
+     * @since 2.0.0
      */
     public function getConsumerPostMaxRedirects()
     {
@@ -104,6 +113,7 @@ class Data
      * Get the number seconds for the consumer post timeout
      *
      * @return int
+     * @since 2.0.0
      */
     public function getConsumerPostTimeout()
     {
@@ -115,6 +125,7 @@ class Data
      * Get customer token lifetime from config.
      *
      * @return int hours
+     * @since 2.2.0
      */
     public function getCustomerTokenLifetime()
     {
@@ -126,6 +137,7 @@ class Data
      * Get customer token lifetime from config.
      *
      * @return int hours
+     * @since 2.2.0
      */
     public function getAdminTokenLifetime()
     {

@@ -15,11 +15,13 @@ use Magento\Framework\ObjectManager\FactoryInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class ObjectManager extends \Magento\Framework\ObjectManager\ObjectManager
 {
     /**
      * @var ObjectManager
+     * @since 2.0.0
      */
     protected static $_instance;
 
@@ -28,6 +30,7 @@ class ObjectManager extends \Magento\Framework\ObjectManager\ObjectManager
      *
      * @return ObjectManager
      * @throws \RuntimeException
+     * @since 2.0.0
      */
     public static function getInstance()
     {
@@ -43,6 +46,7 @@ class ObjectManager extends \Magento\Framework\ObjectManager\ObjectManager
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @throws \LogicException
      * @return void
+     * @since 2.0.0
      */
     public static function setInstance(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -53,6 +57,7 @@ class ObjectManager extends \Magento\Framework\ObjectManager\ObjectManager
      * @param FactoryInterface $factory
      * @param \Magento\Framework\ObjectManager\ConfigInterface $config
      * @param array $sharedInstances
+     * @since 2.0.0
      */
     public function __construct(
         FactoryInterface $factory,

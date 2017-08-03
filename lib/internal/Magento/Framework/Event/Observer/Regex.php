@@ -11,6 +11,11 @@
  */
 namespace Magento\Framework\Event\Observer;
 
+/**
+ * Class \Magento\Framework\Event\Observer\Regex
+ *
+ * @since 2.0.0
+ */
 class Regex extends \Magento\Framework\Event\Observer
 {
     /**
@@ -18,6 +23,7 @@ class Regex extends \Magento\Framework\Event\Observer
      *
      * @param \Magento\Framework\Event $event
      * @return boolean
+     * @since 2.0.0
      */
     public function isValidFor(\Magento\Framework\Event $event)
     {

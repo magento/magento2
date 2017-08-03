@@ -10,11 +10,13 @@ namespace Magento\Backend\Console\Command;
  * Command for disabling cache
  *
  * @api
+ * @since 2.0.0
  */
 class CacheDisableCommand extends AbstractCacheSetCommand
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -27,6 +29,7 @@ class CacheDisableCommand extends AbstractCacheSetCommand
      * Is Disable cache
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function isEnable()
     {

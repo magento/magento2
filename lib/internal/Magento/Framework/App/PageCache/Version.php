@@ -8,6 +8,7 @@ namespace Magento\Framework\App\PageCache;
 /**
  * Class Version
  *
+ * @since 2.0.0
  */
 class Version
 {
@@ -25,6 +26,7 @@ class Version
      * Cookie Manager
      *
      * @var \Magento\Framework\Stdlib\CookieManagerInterface
+     * @since 2.0.0
      */
     protected $cookieManager;
 
@@ -32,11 +34,13 @@ class Version
      * Request
      *
      * @var \Magento\Framework\App\Request\Http
+     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     * @since 2.0.0
      */
     protected $cookieMetadataFactory;
 
@@ -44,6 +48,7 @@ class Version
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\App\Request\Http $request
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
@@ -59,6 +64,7 @@ class Version
      * Generate unique version identifier
      *
      * @return string
+     * @since 2.0.0
      */
     protected function generateValue()
     {
@@ -72,6 +78,7 @@ class Version
      * In all other cases do nothing.
      *
      * @return void
+     * @since 2.0.0
      */
     public function process()
     {

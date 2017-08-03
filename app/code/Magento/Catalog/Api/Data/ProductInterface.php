@@ -9,6 +9,7 @@ namespace Magento\Catalog\Api\Data;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
@@ -41,6 +42,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * Product id
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getId();
 
@@ -49,6 +51,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setId($id);
 
@@ -56,6 +59,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * Product sku
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSku();
 
@@ -64,6 +68,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      *
      * @param string $sku
      * @return $this
+     * @since 2.0.0
      */
     public function setSku($sku);
 
@@ -71,6 +76,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * Product name
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getName();
 
@@ -79,6 +85,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      *
      * @param string $name
      * @return $this
+     * @since 2.0.0
      */
     public function setName($name);
 
@@ -86,6 +93,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * Product attribute set id
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getAttributeSetId();
 
@@ -94,6 +102,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      *
      * @param int $attributeSetId
      * @return $this
+     * @since 2.0.0
      */
     public function setAttributeSetId($attributeSetId);
 
@@ -101,6 +110,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * Product price
      *
      * @return float|null
+     * @since 2.0.0
      */
     public function getPrice();
 
@@ -109,6 +119,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      *
      * @param float $price
      * @return $this
+     * @since 2.0.0
      */
     public function setPrice($price);
 
@@ -116,6 +127,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * Product status
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getStatus();
 
@@ -124,6 +136,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      *
      * @param int $status
      * @return $this
+     * @since 2.0.0
      */
     public function setStatus($status);
 
@@ -131,6 +144,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * Product visibility
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getVisibility();
 
@@ -139,6 +153,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      *
      * @param int $visibility
      * @return $this
+     * @since 2.0.0
      */
     public function setVisibility($visibility);
 
@@ -146,6 +161,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * Product type id
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getTypeId();
 
@@ -154,6 +170,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      *
      * @param string $typeId
      * @return $this
+     * @since 2.0.0
      */
     public function setTypeId($typeId);
 
@@ -161,6 +178,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * Product created date
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getCreatedAt();
 
@@ -169,6 +187,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      *
      * @param string $createdAt
      * @return $this
+     * @since 2.0.0
      */
     public function setCreatedAt($createdAt);
 
@@ -176,6 +195,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * Product updated date
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getUpdatedAt();
 
@@ -184,6 +204,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      *
      * @param string $updatedAt
      * @return $this
+     * @since 2.0.0
      */
     public function setUpdatedAt($updatedAt);
 
@@ -191,6 +212,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * Product weight
      *
      * @return float|null
+     * @since 2.0.0
      */
     public function getWeight();
 
@@ -199,6 +221,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      *
      * @param float $weight
      * @return $this
+     * @since 2.0.0
      */
     public function setWeight($weight);
 
@@ -206,6 +229,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Catalog\Api\Data\ProductExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -214,6 +238,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      *
      * @param \Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes);
 
@@ -221,6 +246,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * Get product links info
      *
      * @return \Magento\Catalog\Api\Data\ProductLinkInterface[]|null
+     * @since 2.0.0
      */
     public function getProductLinks();
 
@@ -229,6 +255,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      *
      * @param \Magento\Catalog\Api\Data\ProductLinkInterface[] $links
      * @return $this
+     * @since 2.0.0
      */
     public function setProductLinks(array $links = null);
 
@@ -236,6 +263,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * Get list of product options
      *
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface[]|null
+     * @since 2.0.0
      */
     public function getOptions();
 
@@ -244,6 +272,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      *
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionInterface[] $options
      * @return $this
+     * @since 2.0.0
      */
     public function setOptions(array $options = null);
 
@@ -251,6 +280,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * Get media gallery entries
      *
      * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[]|null
+     * @since 2.0.0
      */
     public function getMediaGalleryEntries();
 
@@ -259,6 +289,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      *
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[] $mediaGalleryEntries
      * @return $this
+     * @since 2.0.0
      */
     public function setMediaGalleryEntries(array $mediaGalleryEntries = null);
 
@@ -266,6 +297,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * Gets list of product tier prices
      *
      * @return \Magento\Catalog\Api\Data\ProductTierPriceInterface[]|null
+     * @since 2.0.0
      */
     public function getTierPrices();
 
@@ -274,6 +306,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      *
      * @param \Magento\Catalog\Api\Data\ProductTierPriceInterface[] $tierPrices
      * @return $this
+     * @since 2.0.0
      */
     public function setTierPrices(array $tierPrices = null);
 }

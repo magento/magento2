@@ -6,6 +6,11 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Edit;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Edit\LoadBlock
+ *
+ * @since 2.0.0
+ */
 class LoadBlock extends \Magento\Sales\Controller\Adminhtml\Order\Create\LoadBlock
 {
     /**

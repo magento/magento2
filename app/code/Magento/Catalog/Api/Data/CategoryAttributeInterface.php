@@ -8,6 +8,7 @@ namespace Magento\Catalog\Api\Data;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface CategoryAttributeInterface extends \Magento\Catalog\Api\Data\EavAttributeInterface
 {

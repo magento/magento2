@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Asset;
  * View asset configuration interface
  *
  * @api
+ * @since 2.0.0
  */
 interface ConfigInterface
 {
@@ -16,6 +17,7 @@ interface ConfigInterface
      * Check whether merging of CSS files is on
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isMergeCssFiles();
 
@@ -23,6 +25,7 @@ interface ConfigInterface
      * Check whether merging of JavScript files is on
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isMergeJsFiles();
 
@@ -30,6 +33,7 @@ interface ConfigInterface
      * Check whether bundling of JavScript files is on
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isBundlingJsFiles();
 
@@ -37,6 +41,7 @@ interface ConfigInterface
      * Check whether minify of HTML is on
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isMinifyHtml();
 }

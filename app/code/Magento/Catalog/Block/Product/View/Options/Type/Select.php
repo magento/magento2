@@ -9,6 +9,7 @@ namespace Magento\Catalog\Block\Product\View\Options\Type;
  * Product options text type block
  *
  * @api
+ * @since 2.0.0
  */
 class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
 {
@@ -19,6 +20,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function getValuesHtml()
     {

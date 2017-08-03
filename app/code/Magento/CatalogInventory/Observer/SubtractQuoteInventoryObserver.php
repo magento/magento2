@@ -12,21 +12,25 @@ use Magento\Framework\Event\Observer as EventObserver;
 
 /**
  * Catalog inventory module observer
+ * @since 2.0.0
  */
 class SubtractQuoteInventoryObserver implements ObserverInterface
 {
     /**
      * @var StockManagementInterface
+     * @since 2.0.0
      */
     protected $stockManagement;
 
     /**
      * @var ProductQty
+     * @since 2.0.0
      */
     protected $productQty;
 
     /**
      * @var \Magento\CatalogInventory\Observer\ItemsForReindex
+     * @since 2.0.0
      */
     protected $itemsForReindex;
 
@@ -35,6 +39,7 @@ class SubtractQuoteInventoryObserver implements ObserverInterface
      * @param StockManagementInterface $stockManagement
      * @param ProductQty $productQty
      * @param ItemsForReindex $itemsForReindex
+     * @since 2.0.0
      */
     public function __construct(
         StockManagementInterface $stockManagement,
@@ -54,6 +59,7 @@ class SubtractQuoteInventoryObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return $this
+     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

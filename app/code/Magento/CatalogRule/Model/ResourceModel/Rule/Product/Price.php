@@ -11,6 +11,11 @@
  */
 namespace Magento\CatalogRule\Model\ResourceModel\Rule\Product;
 
+/**
+ * Class \Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price
+ *
+ * @since 2.0.0
+ */
 class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -18,6 +23,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return void
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -35,6 +41,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $updateFields       the array of fields for compare with rule price and update
      * @param string $websiteDate
      * @return \Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price
+     * @since 2.0.0
      */
     public function applyPriceRuleToIndexTable(
         \Magento\Framework\DB\Select $select,

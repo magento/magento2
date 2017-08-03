@@ -12,11 +12,13 @@ use Magento\Bundle\Model\ResourceModel\Selection\Collection;
  *
  * The class is introduced to extend filtering abilities of the collection
  * without backward incompatible changes in a corresponding collection class.
+ * @since 2.2.0
  */
 class FilterApplier
 {
     /**
      * @var array
+     * @since 2.2.0
      */
     private $conditionTypesMap = [
         'eq' => ' = ?',
@@ -32,6 +34,7 @@ class FilterApplier
      * @param string $conditionType
      *
      * @return void
+     * @since 2.2.0
      */
     public function apply(Collection $collection, $field, $value, $conditionType = 'eq')
     {

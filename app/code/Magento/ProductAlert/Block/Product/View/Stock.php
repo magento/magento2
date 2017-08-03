@@ -9,6 +9,7 @@ namespace Magento\ProductAlert\Block\Product\View;
  * Recurring payment view stock
  *
  * @api
+ * @since 2.0.0
  */
 class Stock extends \Magento\ProductAlert\Block\Product\View
 {
@@ -17,6 +18,7 @@ class Stock extends \Magento\ProductAlert\Block\Product\View
      *
      * @param string $template
      * @return $this
+     * @since 2.0.0
      */
     public function setTemplate($template)
     {

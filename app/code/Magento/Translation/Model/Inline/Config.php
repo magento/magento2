@@ -7,6 +7,7 @@ namespace Magento\Translation\Model\Inline;
 
 /**
  * Inline Translation config
+ * @since 2.0.0
  */
 class Config implements \Magento\Framework\Translate\Inline\ConfigInterface
 {
@@ -14,17 +15,20 @@ class Config implements \Magento\Framework\Translate\Inline\ConfigInterface
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\Developer\Helper\Data
+     * @since 2.0.0
      */
     protected $devHelper;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Developer\Helper\Data $helper
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -36,6 +40,7 @@ class Config implements \Magento\Framework\Translate\Inline\ConfigInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function isActive($scope = null)
     {
@@ -48,6 +53,7 @@ class Config implements \Magento\Framework\Translate\Inline\ConfigInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function isDevAllowed($scope = null)
     {

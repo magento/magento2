@@ -11,6 +11,7 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * User backend observer model for passwords
+ * @since 2.0.0
  */
 class TrackAdminNewPasswordObserver implements ObserverInterface
 {
@@ -18,6 +19,7 @@ class TrackAdminNewPasswordObserver implements ObserverInterface
      * Backend configuration interface
      *
      * @var \Magento\User\Model\Backend\Config\ObserverConfig
+     * @since 2.0.0
      */
     protected $observerConfig;
 
@@ -25,6 +27,7 @@ class TrackAdminNewPasswordObserver implements ObserverInterface
      * Admin user resource model
      *
      * @var \Magento\User\Model\ResourceModel\User
+     * @since 2.0.0
      */
     protected $userResource;
 
@@ -32,6 +35,7 @@ class TrackAdminNewPasswordObserver implements ObserverInterface
      * Backend authorization session
      *
      * @var \Magento\Backend\Model\Auth\Session
+     * @since 2.0.0
      */
     protected $authSession;
 
@@ -39,6 +43,7 @@ class TrackAdminNewPasswordObserver implements ObserverInterface
      * Message manager interface
      *
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
@@ -47,6 +52,7 @@ class TrackAdminNewPasswordObserver implements ObserverInterface
      * @param \Magento\User\Model\ResourceModel\User $userResource
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\User\Model\Backend\Config\ObserverConfig $observerConfig,
@@ -65,6 +71,7 @@ class TrackAdminNewPasswordObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

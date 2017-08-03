@@ -12,11 +12,13 @@ use Magento\Framework\Data\AbstractSearchResult;
 /**
  * Class Collection
  * @package Magento\CatalogInventory\Model\ResourceModel\Stock\Item
+ * @since 2.0.0
  */
 class Collection extends AbstractSearchResult implements StockItemCollectionInterface
 {
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     protected function init()
     {

@@ -13,6 +13,7 @@ use Magento\Catalog\Model\Product;
  * Interface EntryConverterInterface. Create Media Gallery Entry and extract Entry data
  *
  * @api
+ * @since 2.0.0
  */
 interface EntryConverterInterface
 {
@@ -20,6 +21,7 @@ interface EntryConverterInterface
      * Return Media Gallery Entry type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMediaEntryType();
 
@@ -29,6 +31,7 @@ interface EntryConverterInterface
      * @param Product $product
      * @param array $rowData
      * @return ProductAttributeMediaGalleryEntryInterface[]
+     * @since 2.0.0
      */
     public function convertTo(Product $product, array $rowData);
 
@@ -37,6 +40,7 @@ interface EntryConverterInterface
      *
      * @param ProductAttributeMediaGalleryEntryInterface $entry
      * @return array
+     * @since 2.0.0
      */
     public function convertFrom(ProductAttributeMediaGalleryEntryInterface $entry);
 }

@@ -15,21 +15,25 @@ use Magento\Payment\Model\Method\Logger;
  * Class Soap
  * @package Magento\Payment\Gateway\Http\Client
  * @api
+ * @since 2.0.0
  */
 class Soap implements ClientInterface
 {
     /**
      * @var Logger
+     * @since 2.0.0
      */
     private $logger;
 
     /**
      * @var ConverterInterface | null
+     * @since 2.0.0
      */
     private $converter;
 
     /**
      * @var ClientFactory
+     * @since 2.0.0
      */
     private $clientFactory;
 
@@ -37,6 +41,7 @@ class Soap implements ClientInterface
      * @param Logger $logger
      * @param ClientFactory $clientFactory
      * @param ConverterInterface | null $converter
+     * @since 2.0.0
      */
     public function __construct(
         Logger $logger,
@@ -56,6 +61,7 @@ class Soap implements ClientInterface
      * @throws \Magento\Payment\Gateway\Http\ClientException
      * @throws \Magento\Payment\Gateway\Http\ConverterException
      * @throws \Exception
+     * @since 2.0.0
      */
     public function placeRequest(TransferInterface $transferObject)
     {

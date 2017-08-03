@@ -8,15 +8,22 @@ namespace Magento\Backend\Controller\Adminhtml\Ajax;
 
 use Magento\Backend\App\Action;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\Ajax\Translate
+ *
+ * @since 2.0.0
+ */
 class Translate extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\Translate\Inline\ParserInterface
+     * @since 2.0.0
      */
     protected $inlineParser;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
@@ -24,6 +31,7 @@ class Translate extends \Magento\Backend\App\Action
      * @param Action\Context $context
      * @param \Magento\Framework\Translate\Inline\ParserInterface $inlineParser
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -39,6 +47,7 @@ class Translate extends \Magento\Backend\App\Action
      * Ajax action for inline translation
      *
      * @return \Magento\Framework\Controller\Result\Json
+     * @since 2.0.0
      */
     public function execute()
     {

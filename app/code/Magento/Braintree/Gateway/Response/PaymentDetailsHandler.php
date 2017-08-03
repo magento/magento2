@@ -14,6 +14,7 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
  * Payment Details Handler
+ * @since 2.1.0
  */
 class PaymentDetailsHandler implements HandlerInterface
 {
@@ -32,6 +33,7 @@ class PaymentDetailsHandler implements HandlerInterface
     /**
      * List of additional details
      * @var array
+     * @since 2.1.0
      */
     protected $additionalInformationMapping = [
         self::AVS_POSTAL_RESPONSE_CODE,
@@ -44,6 +46,7 @@ class PaymentDetailsHandler implements HandlerInterface
 
     /**
      * @var SubjectReader
+     * @since 2.1.0
      */
     private $subjectReader;
 
@@ -51,6 +54,7 @@ class PaymentDetailsHandler implements HandlerInterface
      * Constructor
      *
      * @param SubjectReader $subjectReader
+     * @since 2.1.0
      */
     public function __construct(SubjectReader $subjectReader)
     {
@@ -59,6 +63,7 @@ class PaymentDetailsHandler implements HandlerInterface
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     public function handle(array $handlingSubject, array $response)
     {

@@ -12,22 +12,26 @@ use Magento\Ui\Config\ConverterUtils;
 
 /**
  * Converter for array inner items
+ * @since 2.2.0
  */
 class Item implements ConverterInterface
 {
     /**
      * @var ConverterInterface
+     * @since 2.2.0
      */
     private $converter;
 
     /**
      * @var ConverterUtils
+     * @since 2.2.0
      */
     private $converterUtils;
 
     /**
      * @param ConverterInterface $converter
      * @param ConverterUtils $converterUtils
+     * @since 2.2.0
      */
     public function __construct(ConverterInterface $converter, ConverterUtils $converterUtils)
     {
@@ -37,6 +41,7 @@ class Item implements ConverterInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function convert(\DOMNode $node, array $data = [])
     {
@@ -52,6 +57,7 @@ class Item implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return array
+     * @since 2.2.0
      */
     private function toArray(\DOMNode $node)
     {
@@ -81,6 +87,7 @@ class Item implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return bool
+     * @since 2.2.0
      */
     private function hasChildNodes(\DOMNode $node)
     {
@@ -99,6 +106,7 @@ class Item implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return array
+     * @since 2.2.0
      */
     private function processAttributes(\DOMNode $node)
     {
@@ -118,6 +126,7 @@ class Item implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return array
+     * @since 2.2.0
      */
     private function processChildNodes(\DOMNode $node)
     {

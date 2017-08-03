@@ -7,6 +7,7 @@ namespace Magento\Paypal\Controller\Adminhtml\Paypal;
 
 /**
  * PayPal Settlement Reports Controller
+ * @since 2.0.0
  */
 abstract class Reports extends \Magento\Backend\App\Action
 {
@@ -21,21 +22,25 @@ abstract class Reports extends \Magento\Backend\App\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\Paypal\Model\Report\Settlement\RowFactory
+     * @since 2.0.0
      */
     protected $_rowFactory;
 
     /**
      * @var \Magento\Paypal\Model\Report\SettlementFactory
+     * @since 2.0.0
      */
     protected $_settlementFactory;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $_logger;
 
@@ -45,6 +50,7 @@ abstract class Reports extends \Magento\Backend\App\Action
      * @param \Magento\Paypal\Model\Report\Settlement\RowFactory $rowFactory
      * @param \Magento\Paypal\Model\Report\SettlementFactory $settlementFactory
      * @param \Psr\Log\LoggerInterface $logger
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -64,6 +70,7 @@ abstract class Reports extends \Magento\Backend\App\Action
      * Initialize titles, navigation
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initAction()
     {

@@ -15,15 +15,22 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
+/**
+ * Class \Magento\Framework\Data\Form\Element\Date
+ *
+ * @since 2.0.0
+ */
 class Date extends AbstractElement
 {
     /**
      * @var \DateTime
+     * @since 2.0.0
      */
     protected $_value;
 
     /**
      * @var TimezoneInterface
+     * @since 2.0.0
      */
     protected $localeDate;
 
@@ -33,6 +40,7 @@ class Date extends AbstractElement
      * @param Escaper $escaper
      * @param TimezoneInterface $localeDate
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -56,6 +64,7 @@ class Date extends AbstractElement
      *
      * @param int $value
      * @return int
+     * @since 2.0.0
      */
     protected function _toTimestamp($value)
     {
@@ -72,6 +81,7 @@ class Date extends AbstractElement
      *
      * @param mixed $value
      * @return $this
+     * @since 2.0.0
      */
     public function setValue($value)
     {
@@ -102,6 +112,7 @@ class Date extends AbstractElement
      *
      * @param string $format (compatible with \DateTime)
      * @return string
+     * @since 2.0.0
      */
     public function getValue($format = null)
     {
@@ -127,6 +138,7 @@ class Date extends AbstractElement
      * Get value instance, if any
      *
      * @return \DateTime
+     * @since 2.0.0
      */
     public function getValueInstance()
     {
@@ -144,6 +156,7 @@ class Date extends AbstractElement
      *
      * @throws \Exception
      * @return string
+     * @since 2.0.0
      */
     public function getElementHtml()
     {

@@ -10,16 +10,19 @@ use Magento\Tax\Model\Config;
 
 /**
  * Tax Config Notification
+ * @since 2.0.0
  */
 class Notification extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var string
+     * @since 2.2.0
      */
     protected $_eventPrefix = 'tax_config_notification';
 
     /**
      * @var \Magento\Config\Model\ResourceModel\Config
+     * @since 2.0.0
      */
     protected $resourceConfig;
 
@@ -32,6 +35,7 @@ class Notification extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -51,6 +55,7 @@ class Notification extends \Magento\Framework\App\Config\Value
      * Prepare and store cron settings after save
      *
      * @return $this
+     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -67,6 +72,7 @@ class Notification extends \Magento\Framework\App\Config\Value
      *
      * @param string $path
      * @return \Magento\Tax\Model\Config\Notification
+     * @since 2.0.0
      */
     protected function _resetNotificationFlag($path)
     {

@@ -10,22 +10,26 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Provides latest updated entities ids list
+ * @since 2.2.0
  */
 class UpdatedIdListProvider implements NotSyncedDataProviderInterface
 {
     /**
      * @var ResourceConnection
+     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var AdapterInterface
+     * @since 2.2.0
      */
     private $connection;
 
     /**
      * NotSyncedDataProvider constructor.
      * @param ResourceConnection $resourceConnection
+     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $resourceConnection
@@ -35,6 +39,7 @@ class UpdatedIdListProvider implements NotSyncedDataProviderInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getIds($mainTableName, $gridTableName)
     {
@@ -60,6 +65,7 @@ class UpdatedIdListProvider implements NotSyncedDataProviderInterface
      * Returns connection.
      *
      * @return AdapterInterface
+     * @since 2.2.0
      */
     private function getConnection()
     {

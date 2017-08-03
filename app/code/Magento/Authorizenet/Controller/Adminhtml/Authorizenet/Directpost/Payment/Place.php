@@ -16,11 +16,13 @@ use Magento\Authorizenet\Helper\Backend\Data as DataHelper;
  * Class Place
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Place extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
     /**
      * @var DataHelper
+     * @since 2.0.0
      */
     protected $helper;
 
@@ -33,6 +35,7 @@ class Place extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * @param PageFactory $resultPageFactory
      * @param ForwardFactory $resultForwardFactory
      * @param DataHelper $helper
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -52,6 +55,7 @@ class Place extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     public function execute()
     {

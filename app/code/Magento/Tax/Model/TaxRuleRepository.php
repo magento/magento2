@@ -23,41 +23,49 @@ use Magento\Tax\Model\ResourceModel\Calculation\Rule\CollectionFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class TaxRuleRepository implements TaxRuleRepositoryInterface
 {
     /**
      * @var TaxRuleRegistry
+     * @since 2.0.0
      */
     protected $taxRuleRegistry;
 
     /**
      * @var TaxRuleSearchResultsInterfaceFactory
+     * @since 2.0.0
      */
     protected $taxRuleSearchResultsFactory;
 
     /**
      * @var RuleFactory
+     * @since 2.0.0
      */
     protected $taxRuleModelFactory;
 
     /**
      * @var CollectionFactory
+     * @since 2.0.0
      */
     protected $collectionFactory;
 
     /**
      * @var ResourceRule
+     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     * @since 2.0.0
      */
     protected $joinProcessor;
 
     /**
      * @var CollectionProcessorInterface
+     * @since 2.2.0
      */
     private $collectionProcessor;
 
@@ -69,6 +77,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
      * @param ResourceRule $resource
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param CollectionProcessorInterface | null $collectionProcessor
+     * @since 2.0.0
      */
     public function __construct(
         TaxRuleRegistry $taxRuleRegistry,
@@ -90,6 +99,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function get($ruleId)
     {
@@ -98,6 +108,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function save(TaxRuleInterface $rule)
     {
@@ -120,6 +131,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function delete(TaxRuleInterface $rule)
     {
@@ -131,6 +143,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function deleteById($ruleId)
     {
@@ -140,6 +153,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -161,8 +175,9 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
-     * @deprecated
+     * @deprecated 2.2.0
      * @throws \Magento\Framework\Exception\InputException
+     * @since 2.0.0
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
     {
@@ -196,8 +211,9 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
      * Translates a field name to a DB column name for use in collection queries.
      *
      * @param string $field a field name that should be translated to a DB column name.
-     * @deprecated
+     * @deprecated 2.2.0
      * @return string
+     * @since 2.0.0
      */
     protected function translateField($field)
     {
@@ -220,8 +236,9 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return CollectionProcessorInterface
+     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

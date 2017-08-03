@@ -12,6 +12,7 @@ use Magento\Framework\Filesystem\File\ReadFactory;
 /**
  * Class FileIterator
  * @api
+ * @since 2.0.0
  */
 class FileIterator implements \Iterator, \Countable
 {
@@ -19,6 +20,7 @@ class FileIterator implements \Iterator, \Countable
      * Paths
      *
      * @var array
+     * @since 2.0.0
      */
     protected $paths = [];
 
@@ -26,6 +28,7 @@ class FileIterator implements \Iterator, \Countable
      * Position
      *
      * @var int
+     * @since 2.0.0
      */
     protected $position;
 
@@ -33,6 +36,7 @@ class FileIterator implements \Iterator, \Countable
      * File read factory
      *
      * @var ReadFactory
+     * @since 2.0.0
      */
     protected $fileReadFactory;
 
@@ -41,6 +45,7 @@ class FileIterator implements \Iterator, \Countable
      *
      * @param ReadFactory $readFactory
      * @param array $paths
+     * @since 2.0.0
      */
     public function __construct(ReadFactory $readFactory, array $paths)
     {
@@ -53,6 +58,7 @@ class FileIterator implements \Iterator, \Countable
      * Rewind
      *
      * @return void
+     * @since 2.0.0
      */
     public function rewind()
     {
@@ -63,6 +69,7 @@ class FileIterator implements \Iterator, \Countable
      * Current
      *
      * @return string
+     * @since 2.0.0
      */
     public function current()
     {
@@ -75,6 +82,7 @@ class FileIterator implements \Iterator, \Countable
      * Key
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function key()
     {
@@ -85,6 +93,7 @@ class FileIterator implements \Iterator, \Countable
      * Next
      *
      * @return void
+     * @since 2.0.0
      */
     public function next()
     {
@@ -95,6 +104,7 @@ class FileIterator implements \Iterator, \Countable
      * Valid
      *
      * @return bool
+     * @since 2.0.0
      */
     public function valid()
     {
@@ -105,6 +115,7 @@ class FileIterator implements \Iterator, \Countable
      * Convert to an array
      *
      * @return array
+     * @since 2.0.0
      */
     public function toArray()
     {
@@ -119,6 +130,7 @@ class FileIterator implements \Iterator, \Countable
      * Count
      *
      * @return int
+     * @since 2.0.0
      */
     public function count()
     {

@@ -13,10 +13,16 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
+/**
+ * Class \Magento\ImportExport\Controller\Adminhtml\Import\Validate
+ *
+ * @since 2.0.0
+ */
 class Validate extends ImportResultController
 {
     /**
      * @var Import
+     * @since 2.1.0
      */
     private $import;
 
@@ -24,6 +30,7 @@ class Validate extends ImportResultController
      * Validate uploaded files action
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -72,6 +79,7 @@ class Validate extends ImportResultController
      * @param bool $validationResult
      * @param Result $resultBlock
      * @return void
+     * @since 2.1.0
      */
     private function processValidationResult($validationResult, $resultBlock)
     {
@@ -110,7 +118,8 @@ class Validate extends ImportResultController
 
     /**
      * @return Import
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getImport()
     {
@@ -128,6 +137,7 @@ class Validate extends ImportResultController
      *
      * @param Result $resultBlock
      * @return void
+     * @since 2.2.0
      */
     private function addMessageToSkipErrors(Result $resultBlock)
     {
@@ -148,6 +158,7 @@ class Validate extends ImportResultController
      *
      * @param Result $resultBlock
      * @return void
+     * @since 2.2.0
      */
     private function addMessageForValidResult(Result $resultBlock)
     {
@@ -166,6 +177,7 @@ class Validate extends ImportResultController
      *
      * @param Result $resultBlock
      * @return void
+     * @since 2.2.0
      */
     private function collectErrors(Result $resultBlock)
     {

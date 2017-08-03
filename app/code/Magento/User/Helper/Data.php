@@ -9,6 +9,7 @@ namespace Magento\User\Helper;
  * User data helper
  *
  * @api
+ * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -19,11 +20,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @var \Magento\Backend\App\ConfigInterface
+     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @var \Magento\Framework\Math\Random
+     * @since 2.0.0
      */
     protected $mathRandom;
 
@@ -31,6 +34,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Backend\App\ConfigInterface $config
      * @param \Magento\Framework\Math\Random $mathRandom
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -46,6 +50,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Generate unique token for reset password confirmation link
      *
      * @return string
+     * @since 2.0.0
      */
     public function generateResetPasswordLinkToken()
     {
@@ -56,6 +61,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve customer reset password link expiration period in days
      *
      * @return int
+     * @since 2.0.0
      */
     public function getResetPasswordLinkExpirationPeriod()
     {

@@ -10,10 +10,16 @@ use Magento\Framework\Indexer\ActionInterface as IndexerActionInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Indexer\CacheContext;
 
+/**
+ * Class \Magento\CatalogRule\Model\Indexer\AbstractIndexer
+ *
+ * @since 2.0.0
+ */
 abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInterface, IdentityInterface
 {
     /**
      * @var IndexBuilder
+     * @since 2.0.0
      */
     protected $indexBuilder;
 
@@ -21,22 +27,26 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * Application Event Dispatcher
      *
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $_eventManager;
 
     /**
      * @var \Magento\Framework\App\CacheInterface
+     * @since 2.1.0
      */
     private $cacheManager;
 
     /**
      * @var \Magento\Framework\Indexer\CacheContext
+     * @since 2.1.0
      */
     protected $cacheContext;
 
     /**
      * @param IndexBuilder $indexBuilder
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @since 2.0.0
      */
     public function __construct(
         IndexBuilder $indexBuilder,
@@ -51,6 +61,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      *
      * @param int[] $ids
      * @return void
+     * @since 2.0.0
      */
     public function execute($ids)
     {
@@ -61,6 +72,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * Execute full indexation
      *
      * @return void
+     * @since 2.0.0
      */
     public function executeFull()
     {
@@ -75,6 +87,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      *
      * @return array
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getIdentities()
     {
@@ -91,6 +104,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * @param int[] $ids
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
+     * @since 2.0.0
      */
     public function executeList(array $ids)
     {
@@ -107,6 +121,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      *
      * @param int[] $ids
      * @return void
+     * @since 2.0.0
      */
     abstract protected function doExecuteList($ids);
 
@@ -116,6 +131,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * @param int $id
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
+     * @since 2.0.0
      */
     public function executeRow($id)
     {
@@ -133,13 +149,15 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * @param int $id
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
+     * @since 2.0.0
      */
     abstract protected function doExecuteRow($id);
 
     /**
      * @return \Magento\Framework\App\CacheInterface|mixed
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getCacheManager()
     {
@@ -155,7 +173,8 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * Get cache context
      *
      * @return \Magento\Framework\Indexer\CacheContext
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     protected function getCacheContext()
     {

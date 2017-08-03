@@ -14,22 +14,38 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * UrlRewrite Controller Router
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Router implements \Magento\Framework\App\RouterInterface
 {
-    /** var \Magento\Framework\App\ActionFactory */
+    /**
+     * @var \Magento\Framework\App\ActionFactory
+     * @since 2.0.0
+     */
     protected $actionFactory;
 
-    /** @var \Magento\Framework\UrlInterface */
+    /**
+     * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
+     */
     protected $url;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
+     */
     protected $storeManager;
 
-    /** @var \Magento\Framework\App\ResponseInterface */
+    /**
+     * @var \Magento\Framework\App\ResponseInterface
+     * @since 2.0.0
+     */
     protected $response;
 
-    /** @var UrlFinderInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     * @since 2.0.0
+     */
     protected $urlFinder;
 
     /**
@@ -38,6 +54,7 @@ class Router implements \Magento\Framework\App\RouterInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\ResponseInterface $response
      * @param UrlFinderInterface $urlFinder
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ActionFactory $actionFactory,
@@ -58,6 +75,7 @@ class Router implements \Magento\Framework\App\RouterInterface
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ActionInterface|null
+     * @since 2.0.0
      */
     public function match(\Magento\Framework\App\RequestInterface $request)
     {
@@ -96,6 +114,7 @@ class Router implements \Magento\Framework\App\RouterInterface
      * @param \Magento\Framework\App\RequestInterface $request
      * @param UrlRewrite $rewrite
      * @return \Magento\Framework\App\ActionInterface|null
+     * @since 2.0.0
      */
     protected function processRedirect($request, $rewrite)
     {
@@ -113,6 +132,7 @@ class Router implements \Magento\Framework\App\RouterInterface
      * @param string $url
      * @param int $code
      * @return \Magento\Framework\App\ActionInterface
+     * @since 2.0.0
      */
     protected function redirect($request, $url, $code)
     {
@@ -125,6 +145,7 @@ class Router implements \Magento\Framework\App\RouterInterface
      * @param string $requestPath
      * @param int $storeId
      * @return UrlRewrite|null
+     * @since 2.0.0
      */
     protected function getRewrite($requestPath, $storeId)
     {

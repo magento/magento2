@@ -5,11 +5,17 @@
  */
 namespace Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price;
 
+/**
+ * Class \Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price\Collection
+ *
+ * @since 2.0.0
+ */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * @return void
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -23,6 +29,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * @return array
      * @api
+     * @since 2.0.0
      */
     public function getProductIds()
     {

@@ -7,16 +7,19 @@ namespace Magento\Paypal\Model\ResourceModel;
 
 /**
  * PayPal resource model for certificate based authentication
+ * @since 2.0.0
  */
 class Cert extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.0.0
      */
     protected $_coreDate;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
+     * @since 2.0.0
      */
     protected $dateTime;
 
@@ -25,6 +28,7 @@ class Cert extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $coreDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -41,6 +45,7 @@ class Cert extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize connection
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -52,6 +57,7 @@ class Cert extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -65,6 +71,7 @@ class Cert extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Paypal\Model\Cert $object
      * @param bool $strictLoad
      * @return \Magento\Paypal\Model\Cert
+     * @since 2.0.0
      */
     public function loadByWebsite($object, $strictLoad = true)
     {

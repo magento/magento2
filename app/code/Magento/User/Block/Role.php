@@ -10,16 +10,19 @@ namespace Magento\User\Block;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Role extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_controller = 'user_role';
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_blockGroup = 'Magento_User';
 
@@ -27,6 +30,7 @@ class Role extends \Magento\Backend\Block\Widget\Grid\Container
      * Class constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -37,6 +41,7 @@ class Role extends \Magento\Backend\Block\Widget\Grid\Container
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getCreateUrl()
     {
@@ -45,6 +50,7 @@ class Role extends \Magento\Backend\Block\Widget\Grid\Container
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -66,6 +72,7 @@ class Role extends \Magento\Backend\Block\Widget\Grid\Container
      * Prepare output HTML
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

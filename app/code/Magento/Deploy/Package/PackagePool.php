@@ -13,31 +13,37 @@ use Magento\Framework\View\Design\Theme\ListInterface;
 
 /**
  * Deployment Packages Pool class
+ * @since 2.2.0
  */
 class PackagePool
 {
     /**
      * @var Collector
+     * @since 2.2.0
      */
     private $collector;
 
     /**
      * @var ThemeInterface[]
+     * @since 2.2.0
      */
     private $themes;
 
     /**
      * @var PackageFactory
+     * @since 2.2.0
      */
     private $packageFactory;
 
     /**
      * @var Package[]
+     * @since 2.2.0
      */
     private $packages = [];
 
     /**
      * @var bool
+     * @since 2.2.0
      */
     private $collected = false;
 
@@ -47,6 +53,7 @@ class PackagePool
      * @param Collector $collector
      * @param ListInterface $themeCollection
      * @param PackageFactory $packageFactory
+     * @since 2.2.0
      */
     public function __construct(
         Collector $collector,
@@ -62,6 +69,7 @@ class PackagePool
     /**
      * @param string $path
      * @return Package|null
+     * @since 2.2.0
      */
     public function getPackage($path)
     {
@@ -71,6 +79,7 @@ class PackagePool
 
     /**
      * @return Package[]
+     * @since 2.2.0
      */
     public function getPackages()
     {
@@ -82,6 +91,7 @@ class PackagePool
      * @param string $areaCode
      * @param string $themePath
      * @return ThemeInterface|null
+     * @since 2.2.0
      */
     public function getThemeModel($areaCode, $themePath)
     {
@@ -95,6 +105,7 @@ class PackagePool
     /**
      * @param array $options
      * @return Package[]
+     * @since 2.2.0
      */
     public function getPackagesForDeployment(array $options)
     {
@@ -127,6 +138,7 @@ class PackagePool
      * @param Package $excludedPackage
      * @param Package[] $deployedPackages
      * @return bool
+     * @since 2.2.0
      */
     private function isAncestorForDeployedPackages(Package $excludedPackage, array $deployedPackages)
     {
@@ -142,6 +154,7 @@ class PackagePool
     /**
      * @param string $fullPath
      * @return ThemeInterface|null
+     * @since 2.2.0
      */
     private function getThemeByFullPath($fullPath)
     {
@@ -156,6 +169,7 @@ class PackagePool
     /**
      * @param bool $recollect
      * @return void
+     * @since 2.2.0
      */
     private function collect($recollect = false)
     {
@@ -170,6 +184,7 @@ class PackagePool
      *
      * @param array $options
      * @return void
+     * @since 2.2.0
      */
     private function ensurePackagesForRequiredLocales(array $options)
     {
@@ -205,6 +220,7 @@ class PackagePool
      *
      * @param array $options
      * @return void
+     * @since 2.2.0
      */
     private function ensureRequiredLocales(array $options)
     {
@@ -235,6 +251,7 @@ class PackagePool
      * @param Package $package
      * @param array $options
      * @return bool
+     * @since 2.2.0
      */
     private function checkPackageSkip(Package $package, array $options)
     {
@@ -247,6 +264,7 @@ class PackagePool
      * @param Package $package
      * @param array $options
      * @return bool
+     * @since 2.2.0
      */
     private function canDeployArea(Package $package, array $options)
     {
@@ -267,6 +285,7 @@ class PackagePool
      * @param Package $package
      * @param array $options
      * @return bool
+     * @since 2.2.0
      */
     private function canDeployTheme(Package $package, array $options)
     {
@@ -284,6 +303,7 @@ class PackagePool
      * @param Package $package
      * @param array $options
      * @return bool
+     * @since 2.2.0
      */
     private function canDeployLocale(Package $package, array $options)
     {
@@ -301,6 +321,7 @@ class PackagePool
      * @param array $includedEntities
      * @param array $excludedEntities
      * @return bool
+     * @since 2.2.0
      */
     private function isIncluded($entity, array $includedEntities, array $excludedEntities)
     {
@@ -319,6 +340,7 @@ class PackagePool
      * @param string $name
      * @param array $options
      * @return mixed|null
+     * @since 2.2.0
      */
     private function getOption($name, $options)
     {
@@ -328,6 +350,7 @@ class PackagePool
     /**
      * @param array $params
      * @return void
+     * @since 2.2.0
      */
     private function ensurePackage(array $params)
     {

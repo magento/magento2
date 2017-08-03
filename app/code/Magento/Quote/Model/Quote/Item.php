@@ -95,6 +95,7 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @since 2.0.0
  */
 class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Magento\Quote\Api\Data\CartItemInterface
 {
@@ -102,6 +103,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Prefix of model events names
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_quote_item';
 
@@ -111,6 +113,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * In observe method you can use $observer->getEvent()->getObject() in this case
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'item';
 
@@ -118,6 +121,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Quote model object
      *
      * @var \Magento\Quote\Model\Quote
+     * @since 2.0.0
      */
     protected $_quote;
 
@@ -125,6 +129,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Item options array
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_options = [];
 
@@ -132,6 +137,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Item options by code cache
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_optionsByCode = [];
 
@@ -139,12 +145,14 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Not Represent options
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_notRepresentOptions = ['info_buyRequest'];
 
     /**
      * Flag stating that options were successfully saved
      *
+     * @since 2.0.0
      */
     protected $_flagOptionsSaved;
 
@@ -152,27 +160,32 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Array of errors associated with this quote item
      *
      * @var \Magento\Sales\Model\Status\ListStatus
+     * @since 2.0.0
      */
     protected $_errorInfos;
 
     /**
      * @var \Magento\Framework\Locale\FormatInterface
+     * @since 2.0.0
      */
     protected $_localeFormat;
 
     /**
      * @var \Magento\Quote\Model\Quote\Item\OptionFactory
+     * @since 2.0.0
      */
     protected $_itemOptionFactory;
 
     /**
      * @var \Magento\Quote\Model\Quote\Item\Compare
+     * @since 2.0.0
      */
     protected $quoteItemCompare;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected $stockRegistry;
 
@@ -180,6 +193,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Serializer interface instance.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -201,6 +215,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -243,6 +258,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -253,6 +269,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Quote Item Before Save prepare data process
      *
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -268,6 +285,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Retrieve address model
      *
      * @return \Magento\Quote\Model\Quote\Address
+     * @since 2.0.0
      */
     public function getAddress()
     {
@@ -285,6 +303,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param   \Magento\Quote\Model\Quote $quote
      * @return $this
+     * @since 2.0.0
      */
     public function setQuote(\Magento\Quote\Model\Quote $quote)
     {
@@ -300,6 +319,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * @codeCoverageIgnore
      *
      * @return \Magento\Quote\Model\Quote
+     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -311,6 +331,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param float|int $qty
      * @return int|float
+     * @since 2.0.0
      */
     protected function _prepareQty($qty)
     {
@@ -324,6 +345,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param float $qty
      * @return $this
+     * @since 2.0.0
      */
     public function addQty($qty)
     {
@@ -344,6 +366,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param float $qty
      * @return $this
+     * @since 2.0.0
      */
     public function setQty($qty)
     {
@@ -372,6 +395,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * 'product'    => the product model
      *
      * @return array
+     * @since 2.0.0
      */
     public function getQtyOptions()
     {
@@ -408,6 +432,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param array $qtyOptions
      * @return $this
+     * @since 2.0.0
      */
     public function setQtyOptions($qtyOptions)
     {
@@ -419,6 +444,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
+     * @since 2.0.0
      */
     public function setProduct($product)
     {
@@ -451,6 +477,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param   \Magento\Catalog\Model\Product $product
      * @return  bool
+     * @since 2.0.0
      */
     public function representProduct($product)
     {
@@ -491,6 +518,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * @param array $options1
      * @param array $options2
      * @return bool
+     * @since 2.0.0
      */
     public function compareOptions($options1, $options2)
     {
@@ -511,6 +539,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param   \Magento\Quote\Model\Quote\Item $item
      * @return  bool
+     * @since 2.0.0
      */
     public function compare($item)
     {
@@ -521,6 +550,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Get item product type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getProductType()
     {
@@ -542,6 +572,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * @codeCoverageIgnore
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRealProductType()
     {
@@ -553,6 +584,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param array $arrAttributes
      * @return array
+     * @since 2.0.0
      */
     public function toArray(array $arrAttributes = [])
     {
@@ -570,6 +602,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param array $options
      * @return $this
+     * @since 2.0.0
      */
     public function setOptions($options)
     {
@@ -587,6 +620,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * @codeCoverageIgnore
      *
      * @return \Magento\Quote\Model\Quote\Item\Option[]
+     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -599,6 +633,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * @codeCoverageIgnore
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOptionsByCode()
     {
@@ -611,6 +646,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * @param \Magento\Quote\Model\Quote\Item\Option|\Magento\Framework\DataObject $option
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function addOption($option)
     {
@@ -650,6 +686,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * @param \Magento\Framework\DataObject $option
      * @param int|float|null $value
      * @return $this
+     * @since 2.0.0
      */
     public function updateQtyOption(\Magento\Framework\DataObject $option, $value)
     {
@@ -675,6 +712,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function removeOption($code)
     {
@@ -691,6 +729,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * @param \Magento\Quote\Model\Quote\Item\Option $option
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _addOptionCode($option)
     {
@@ -709,6 +748,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param   string $code
      * @return  \Magento\Quote\Model\Quote\Item\Option || null
+     * @since 2.0.0
      */
     public function getOptionByCode($code)
     {
@@ -723,6 +763,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Call save item options if model isn't need to save in DB
      *
      * @return boolean
+     * @since 2.0.0
      */
     protected function _hasModelChanged()
     {
@@ -737,6 +778,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Save item options
      *
      * @return $this
+     * @since 2.0.0
      */
     public function saveItemOptions()
     {
@@ -763,6 +805,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param bool $flag
      * @return void
+     * @since 2.0.0
      */
     public function setIsOptionsSaved($flag)
     {
@@ -775,6 +818,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * @codeCoverageIgnore
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isOptionsSaved()
     {
@@ -785,6 +829,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Save item options after item saved
      *
      * @return \Magento\Quote\Model\Quote\Item
+     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -796,6 +841,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Clone quote item
      *
      * @return $this
+     * @since 2.0.0
      */
     public function __clone()
     {
@@ -815,6 +861,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * product view page with keys and options for configured product
      *
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function getBuyRequest()
     {
@@ -833,6 +880,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param bool $flag
      * @return \Magento\Quote\Model\Quote\Item
+     * @since 2.0.0
      */
     protected function _setHasError($flag)
     {
@@ -848,6 +896,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * @param bool $flag
      * @return $this
      * @see addErrorInfo()
+     * @since 2.0.0
      */
     public function setHasError($flag)
     {
@@ -864,6 +913,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Also automatically removes error-flag from oneself.
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _clearErrorInfo()
     {
@@ -881,6 +931,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * @param string|null $message Error message
      * @param \Magento\Framework\DataObject|null $additionalData Any additional data, that caller would like to store
      * @return $this
+     * @since 2.0.0
      */
     public function addErrorInfo($origin = null, $code = null, $message = null, $additionalData = null)
     {
@@ -897,6 +948,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Retrieves all error infos, associated with this item
      *
      * @return array
+     * @since 2.0.0
      */
     public function getErrorInfos()
     {
@@ -910,6 +962,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param array $params
      * @return $this
+     * @since 2.0.0
      */
     public function removeErrorInfosByParams($params)
     {
@@ -931,6 +984,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * @codeCoverageIgnoreStart
      *
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getItemId()
     {
@@ -939,6 +993,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setItemId($itemID)
     {
@@ -947,6 +1002,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getSku()
     {
@@ -955,6 +1011,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setSku($sku)
     {
@@ -963,6 +1020,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getQty()
     {
@@ -971,6 +1029,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -979,6 +1038,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -987,6 +1047,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getPrice()
     {
@@ -995,6 +1056,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setPrice($price)
     {
@@ -1003,6 +1065,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setProductType($productType)
     {
@@ -1011,6 +1074,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getQuoteId()
     {
@@ -1019,6 +1083,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setQuoteId($quoteId)
     {
@@ -1029,6 +1094,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Returns product option
      *
      * @return \Magento\Quote\Api\Data\ProductOptionInterface|null
+     * @since 2.0.0
      */
     public function getProductOption()
     {
@@ -1040,6 +1106,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param \Magento\Quote\Api\Data\ProductOptionInterface $productOption
      * @return $this
+     * @since 2.0.0
      */
     public function setProductOption(\Magento\Quote\Api\Data\ProductOptionInterface $productOption)
     {
@@ -1052,6 +1119,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * {@inheritdoc}
      *
      * @return \Magento\Quote\Api\Data\CartItemExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -1063,6 +1131,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param \Magento\Quote\Api\Data\CartItemExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Quote\Api\Data\CartItemExtensionInterface $extensionAttributes)
     {

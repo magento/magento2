@@ -9,6 +9,11 @@
  */
 namespace Magento\User\Controller\Adminhtml;
 
+/**
+ * Class \Magento\User\Controller\Adminhtml\Locks
+ *
+ * @since 2.0.0
+ */
 abstract class Locks extends \Magento\Backend\App\Action
 {
     /**

@@ -10,6 +10,7 @@ namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab;
  *
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Js extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab
 {
@@ -17,6 +18,7 @@ class Js extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstrac
      * Create a form element with necessary controls
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -32,6 +34,7 @@ class Js extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstrac
      * Set theme js fieldset
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _addThemeJsFieldset()
     {
@@ -77,6 +80,7 @@ class Js extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstrac
      * Set additional form field type
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getAdditionalElementTypes()
     {
@@ -88,6 +92,7 @@ class Js extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstrac
      * Return Tab label
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -98,6 +103,7 @@ class Js extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstrac
      * Get upload js url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getJsUploadUrl()
     {
@@ -111,6 +117,7 @@ class Js extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstrac
      * Get note string for js file to Upload
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     protected function _getUploadJsFileNote()
     {

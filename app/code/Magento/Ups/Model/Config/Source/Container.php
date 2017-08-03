@@ -7,6 +7,7 @@ namespace Magento\Ups\Model\Config\Source;
 
 /**
  * Class Container
+ * @since 2.0.0
  */
 class Container extends \Magento\Ups\Model\Config\Source\Generic
 {
@@ -14,6 +15,7 @@ class Container extends \Magento\Ups\Model\Config\Source\Generic
      * Carrier code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_code = 'container_description';
 }

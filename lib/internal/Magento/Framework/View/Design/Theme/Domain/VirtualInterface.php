@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Design\Theme\Domain;
 
 /**
  * Interface VirtualInterface
+ * @since 2.0.0
  */
 interface VirtualInterface
 {
@@ -14,6 +15,7 @@ interface VirtualInterface
      * Get 'staging' theme
      *
      * @return \Magento\Framework\View\Design\ThemeInterface
+     * @since 2.0.0
      */
     public function getStagingTheme();
 
@@ -21,6 +23,7 @@ interface VirtualInterface
      * Get 'physical' theme
      *
      * @return \Magento\Framework\View\Design\ThemeInterface
+     * @since 2.0.0
      */
     public function getPhysicalTheme();
 }

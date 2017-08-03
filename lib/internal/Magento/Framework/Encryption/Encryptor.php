@@ -11,6 +11,7 @@ use Magento\Framework\Math\Random;
 
 /**
  * Class Encryptor provides basic logic for hashing strings and encrypting/decrypting misc data
+ * @since 2.0.0
  */
 class Encryptor implements EncryptorInterface
 {
@@ -66,6 +67,7 @@ class Encryptor implements EncryptorInterface
 
     /**
      * @var array map of hash versions
+     * @since 2.0.0
      */
     private $hashVersionMap = [
         self::HASH_VERSION_MD5 => 'md5',
@@ -74,6 +76,7 @@ class Encryptor implements EncryptorInterface
 
     /**
      * @var array map of password hash
+     * @since 2.0.0
      */
     private $passwordHashMap = [
         self::PASSWORD_HASH => '',
@@ -85,6 +88,7 @@ class Encryptor implements EncryptorInterface
      * Indicate cipher
      *
      * @var int
+     * @since 2.0.0
      */
     protected $cipher = self::CIPHER_LATEST;
 
@@ -92,6 +96,7 @@ class Encryptor implements EncryptorInterface
      * Version of encryption key
      *
      * @var int
+     * @since 2.0.0
      */
     protected $keyVersion;
 
@@ -99,12 +104,14 @@ class Encryptor implements EncryptorInterface
      * Array of encryption keys
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $keys = [];
 
     /**
      * @param Random $random
      * @param DeploymentConfig $deploymentConfig
+     * @since 2.0.0
      */
     public function __construct(
         Random $random,
@@ -125,6 +132,7 @@ class Encryptor implements EncryptorInterface
      * @param int $version
      * @return int
      * @throws \Exception
+     * @since 2.0.0
      */
     public function validateCipher($version)
     {
@@ -139,6 +147,7 @@ class Encryptor implements EncryptorInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getHash($password, $salt = false, $version = self::HASH_VERSION_LATEST)
     {
@@ -164,6 +173,7 @@ class Encryptor implements EncryptorInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function hash($data, $version = self::HASH_VERSION_LATEST)
     {
@@ -172,6 +182,7 @@ class Encryptor implements EncryptorInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function validateHash($password, $hash)
     {
@@ -180,6 +191,7 @@ class Encryptor implements EncryptorInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function isValidHash($password, $hash)
     {
@@ -197,6 +209,7 @@ class Encryptor implements EncryptorInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function validateHashVersion($hash, $validateCount = false)
     {
@@ -211,6 +224,7 @@ class Encryptor implements EncryptorInterface
     /**
      * @param string $hash
      * @return array
+     * @since 2.0.0
      */
     private function explodePasswordHash($hash)
     {
@@ -225,6 +239,7 @@ class Encryptor implements EncryptorInterface
 
     /**
      * @return string
+     * @since 2.0.0
      */
     private function getPasswordHash()
     {
@@ -233,6 +248,7 @@ class Encryptor implements EncryptorInterface
 
     /**
      * @return string
+     * @since 2.0.0
      */
     private function getPasswordSalt()
     {
@@ -241,6 +257,7 @@ class Encryptor implements EncryptorInterface
 
     /**
      * @return array
+     * @since 2.0.0
      */
     private function getPasswordVersion()
     {
@@ -252,6 +269,7 @@ class Encryptor implements EncryptorInterface
      *
      * @param string $data
      * @return string
+     * @since 2.0.0
      */
     public function encrypt($data)
     {
@@ -274,6 +292,7 @@ class Encryptor implements EncryptorInterface
      *
      * @param string $data
      * @return string
+     * @since 2.0.0
      */
     public function decrypt($data)
     {
@@ -325,6 +344,7 @@ class Encryptor implements EncryptorInterface
      * @param string|null $key NULL value means usage of the default key specified on constructor
      * @return \Magento\Framework\Encryption\Crypt
      * @throws \Exception
+     * @since 2.0.0
      */
     public function validateKey($key)
     {
@@ -339,6 +359,7 @@ class Encryptor implements EncryptorInterface
      *
      * @param string $key
      * @return $this
+     * @since 2.0.0
      */
     public function setNewKey($key)
     {
@@ -352,6 +373,7 @@ class Encryptor implements EncryptorInterface
      * Export current keys as string
      *
      * @return string
+     * @since 2.0.0
      */
     public function exportKeys()
     {
@@ -367,6 +389,7 @@ class Encryptor implements EncryptorInterface
      * @param int $cipherVersion
      * @param bool $initVector
      * @return Crypt|null
+     * @since 2.0.0
      */
     protected function getCrypt($key = null, $cipherVersion = null, $initVector = true)
     {

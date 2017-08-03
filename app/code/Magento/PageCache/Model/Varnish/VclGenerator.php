@@ -9,40 +9,52 @@ namespace Magento\PageCache\Model\Varnish;
 use Magento\PageCache\Model\VclGeneratorInterface;
 use Magento\PageCache\Model\VclTemplateLocatorInterface;
 
+/**
+ * Class \Magento\PageCache\Model\Varnish\VclGenerator
+ *
+ * @since 2.2.0
+ */
 class VclGenerator implements VclGeneratorInterface
 {
     /**
      * @var string|null
+     * @since 2.2.0
      */
     private $backendHost;
 
     /**
      * @var int|null
+     * @since 2.2.0
      */
     private $backendPort;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $accessList;
 
     /**
      * @var int|null
+     * @since 2.2.0
      */
     private $gracePeriod;
 
     /**
      * @var VclTemplateLocatorInterface
+     * @since 2.2.0
      */
     private $vclTemplateLocator;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $sslOffloadedHeader;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $designExceptions;
 
@@ -56,6 +68,7 @@ class VclGenerator implements VclGeneratorInterface
      * @param int $gracePeriod
      * @param string $sslOffloadedHeader
      * @param array $designExceptions
+     * @since 2.2.0
      */
     public function __construct(
         VclTemplateLocatorInterface $vclTemplateLocator,
@@ -81,6 +94,7 @@ class VclGenerator implements VclGeneratorInterface
      * @param int $version
      * @return string
      * @api
+     * @since 2.2.0
      */
     public function generateVcl($version)
     {
@@ -92,6 +106,7 @@ class VclGenerator implements VclGeneratorInterface
      * Prepare data for VCL config
      *
      * @return array
+     * @since 2.2.0
      */
     private function getReplacements()
     {
@@ -115,6 +130,7 @@ class VclGenerator implements VclGeneratorInterface
      * we have to convert "/pattern/iU" into "(?Ui)pattern"
      *
      * @return string
+     * @since 2.2.0
      */
     private function getRegexForDesignExceptions()
     {
@@ -150,6 +166,7 @@ class VclGenerator implements VclGeneratorInterface
      *  "127.0.0.2";
      *
      * @return string
+     * @since 2.2.0
      */
     private function getTransformedAccessList()
     {
@@ -169,6 +186,7 @@ class VclGenerator implements VclGeneratorInterface
      * Get access list
      *
      * @return array
+     * @since 2.2.0
      */
     private function getAccessList()
     {
@@ -179,6 +197,7 @@ class VclGenerator implements VclGeneratorInterface
      * Get backend host
      *
      * @return string
+     * @since 2.2.0
      */
     private function getBackendHost()
     {
@@ -189,6 +208,7 @@ class VclGenerator implements VclGeneratorInterface
      * Get backend post
      *
      * @return int
+     * @since 2.2.0
      */
     private function getBackendPort()
     {
@@ -199,6 +219,7 @@ class VclGenerator implements VclGeneratorInterface
      * Get grace period
      *
      * @return int
+     * @since 2.2.0
      */
     private function getGracePeriod()
     {
@@ -209,6 +230,7 @@ class VclGenerator implements VclGeneratorInterface
      * Get SSL Offloaded Header
      *
      * @return string
+     * @since 2.2.0
      */
     private function getSslOffloadedHeader()
     {
@@ -217,6 +239,7 @@ class VclGenerator implements VclGeneratorInterface
 
     /**
      * @return array
+     * @since 2.2.0
      */
     private function getDesignExceptions()
     {

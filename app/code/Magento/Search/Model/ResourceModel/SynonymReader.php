@@ -12,11 +12,13 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Synonym Reader resource model
+ * @since 2.1.0
  */
 class SynonymReader extends AbstractDb
 {
     /**
      * @var \Magento\Framework\DB\Helper\Mysql\Fulltext $fullTextSelect
+     * @since 2.1.0
      */
     private $fullTextSelect;
 
@@ -24,6 +26,7 @@ class SynonymReader extends AbstractDb
      * Store manager
      *
      * @var StoreManagerInterface
+     * @since 2.1.0
      */
     protected $storeManager;
 
@@ -32,6 +35,7 @@ class SynonymReader extends AbstractDb
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\DB\Helper\Mysql\Fulltext $fulltext
      * @param string $connectionName
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -50,6 +54,7 @@ class SynonymReader extends AbstractDb
      * @param \Magento\Search\Model\SynonymReader $object
      * @param string $phrase
      * @return $this
+     * @since 2.1.0
      */
     public function loadByPhrase(\Magento\Search\Model\SynonymReader $object, $phrase)
     {
@@ -71,6 +76,7 @@ class SynonymReader extends AbstractDb
      * Init resource data
      *
      * @return void
+     * @since 2.1.0
      */
     protected function _construct()
     {
@@ -82,6 +88,7 @@ class SynonymReader extends AbstractDb
      *
      * @param string $phrase
      * @return array
+     * @since 2.1.0
      */
     private function queryByPhrase($phrase)
     {
@@ -102,6 +109,7 @@ class SynonymReader extends AbstractDb
      *
      * @param array $rows
      * @return array
+     * @since 2.1.0
      */
     private function getSynRowsPerScope($rows)
     {
@@ -137,6 +145,7 @@ class SynonymReader extends AbstractDb
      *
      * @param array $row
      * @return bool
+     * @since 2.1.0
      */
     private function isSynRowForStoreView($row)
     {
@@ -149,6 +158,7 @@ class SynonymReader extends AbstractDb
      *
      * @param array $row
      * @return bool
+     * @since 2.1.0
      */
     private function isSynRowForWebsite($row)
     {
@@ -161,6 +171,7 @@ class SynonymReader extends AbstractDb
      *
      * @param array $row
      * @return bool
+     * @since 2.1.0
      */
     private function isSynRowForDefaultScope($row)
     {

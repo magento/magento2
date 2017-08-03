@@ -5,21 +5,29 @@
  */
 namespace Magento\Shipping\Model;
 
+/**
+ * Class \Magento\Shipping\Model\Observer
+ *
+ * @since 2.0.0
+ */
 class Observer
 {
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
+     * @since 2.0.0
      */
     protected $_localeResolver;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Report\ShippingFactory
+     * @since 2.0.0
      */
     protected $_shippingFactory;
 
     /**
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Sales\Model\ResourceModel\Report\ShippingFactory $shippingFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
@@ -33,6 +41,7 @@ class Observer
      * Refresh sales shipment report statistics for last day
      *
      * @return $this
+     * @since 2.0.0
      */
     public function aggregateSalesReportShipmentData()
     {

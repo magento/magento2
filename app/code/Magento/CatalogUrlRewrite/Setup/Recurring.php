@@ -16,22 +16,26 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 
 /**
  * CatalogUrlRewrite recurring setup
+ * @since 2.1.0
  */
 class Recurring implements InstallSchemaInterface
 {
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @var ExternalFKSetup
+     * @since 2.1.0
      */
     protected $externalFKSetup;
 
     /**
      * @param MetadataPool $metadataPool
      * @param ExternalFKSetup $externalFKSetup
+     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -43,6 +47,7 @@ class Recurring implements InstallSchemaInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {

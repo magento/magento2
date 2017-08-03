@@ -9,26 +9,31 @@ namespace Magento\Cms\Block\Adminhtml\Page\Widget;
  * CMS page chooser for Wysiwyg CMS widget
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * @var \Magento\Cms\Model\Page
+     * @since 2.0.0
      */
     protected $_cmsPage;
 
     /**
      * @var \Magento\Cms\Model\PageFactory
+     * @since 2.0.0
      */
     protected $_pageFactory;
 
     /**
      * @var \Magento\Cms\Model\ResourceModel\Page\CollectionFactory
+     * @since 2.0.0
      */
     protected $_collectionFactory;
 
     /**
      * @var \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface
+     * @since 2.0.0
      */
     protected $pageLayoutBuilder;
 
@@ -40,6 +45,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Cms\Model\ResourceModel\Page\CollectionFactory $collectionFactory
      * @param \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface $pageLayoutBuilder
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -61,6 +67,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * Block construction, prepare grid params
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -75,6 +82,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element Form Element
      * @return \Magento\Framework\Data\Form\Element\AbstractElement
+     * @since 2.0.0
      */
     public function prepareElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -110,6 +118,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * Grid Row JS Callback
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRowClickCallback()
     {
@@ -137,6 +146,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare pages collection
      *
      * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -152,6 +162,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare columns for pages grid
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -216,6 +227,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * Get grid url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGridUrl()
     {

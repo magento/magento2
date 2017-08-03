@@ -9,6 +9,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Class Html
+ * @since 2.0.0
  */
 class Html extends AbstractContentType
 {
@@ -18,6 +19,7 @@ class Html extends AbstractContentType
      * @param UiComponentInterface $component
      * @param string $template
      * @return string
+     * @since 2.0.0
      */
     public function render(UiComponentInterface $component, $template = '')
     {
@@ -36,6 +38,7 @@ class Html extends AbstractContentType
      * @param string $extension
      * @param string $template
      * @return string
+     * @since 2.0.0
      */
     protected function getTemplate($extension, $template)
     {

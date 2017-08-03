@@ -17,16 +17,19 @@ use Magento\Framework\Event\ManagerInterface;
 /**
  * Class OrderSender
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class OrderSender extends Sender
 {
     /**
      * @var PaymentHelper
+     * @since 2.0.0
      */
     protected $paymentHelper;
 
     /**
      * @var OrderResource
+     * @since 2.0.0
      */
     protected $orderResource;
 
@@ -34,11 +37,13 @@ class OrderSender extends Sender
      * Global configuration storage.
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $globalConfig;
 
     /**
      * @var Renderer
+     * @since 2.0.0
      */
     protected $addressRenderer;
 
@@ -46,6 +51,7 @@ class OrderSender extends Sender
      * Application Event Dispatcher
      *
      * @var ManagerInterface
+     * @since 2.0.0
      */
     protected $eventManager;
 
@@ -59,6 +65,7 @@ class OrderSender extends Sender
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
      * @param Renderer $addressRenderer
      * @param ManagerInterface $eventManager
+     * @since 2.0.0
      */
     public function __construct(
         Template $templateContainer,
@@ -93,6 +100,7 @@ class OrderSender extends Sender
      * @param Order $order
      * @param bool $forceSyncMode
      * @return bool
+     * @since 2.0.0
      */
     public function send(Order $order, $forceSyncMode = false)
     {
@@ -119,6 +127,7 @@ class OrderSender extends Sender
      *
      * @param Order $order
      * @return void
+     * @since 2.0.0
      */
     protected function prepareTemplate(Order $order)
     {
@@ -147,6 +156,7 @@ class OrderSender extends Sender
      *
      * @param Order $order
      * @return string
+     * @since 2.0.0
      */
     protected function getPaymentHtml(Order $order)
     {

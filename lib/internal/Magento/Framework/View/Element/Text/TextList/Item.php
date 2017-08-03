@@ -9,6 +9,7 @@ use Magento\Framework\View\Element\Text;
 
 /**
  * Class Item
+ * @since 2.0.0
  */
 class Item extends \Magento\Framework\View\Element\Text
 {
@@ -18,6 +19,7 @@ class Item extends \Magento\Framework\View\Element\Text
      * @param array|string $liParams
      * @param string $innerText
      * @return $this
+     * @since 2.0.0
      */
     public function setLink($liParams, $innerText)
     {
@@ -31,6 +33,7 @@ class Item extends \Magento\Framework\View\Element\Text
      * Render html output
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

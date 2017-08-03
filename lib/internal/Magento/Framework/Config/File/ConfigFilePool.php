@@ -9,6 +9,7 @@ namespace Magento\Framework\Config\File;
 /**
  * Stores file key to file name config
  * @api
+ * @since 2.0.0
  */
 class ConfigFilePool
 {
@@ -29,6 +30,7 @@ class ConfigFilePool
      * Default files for configuration
      *
      * @var array
+     * @since 2.0.0
      */
     private $applicationConfigFiles = [
         self::APP_CONFIG => 'config.php',
@@ -39,7 +41,8 @@ class ConfigFilePool
      * Initial files for configuration
      *
      * @var array
-     * @deprecated Magento does not support custom config file pools since 2.2.0 version
+     * @deprecated 2.2.0 Magento does not support custom config file pools since 2.2.0 version
+     * @since 2.2.0
      */
     private $initialConfigFiles = [
         self::DIST => [
@@ -56,6 +59,7 @@ class ConfigFilePool
      * Constructor
      *
      * @param array $additionalConfigFiles
+     * @since 2.0.0
      */
     public function __construct($additionalConfigFiles = [])
     {
@@ -66,6 +70,7 @@ class ConfigFilePool
      * Returns application config files.
      *
      * @return array
+     * @since 2.0.0
      */
     public function getPaths()
     {
@@ -78,6 +83,7 @@ class ConfigFilePool
      * @param string $fileKey
      * @return string
      * @throws \Exception
+     * @since 2.0.0
      */
     public function getPath($fileKey)
     {
@@ -91,7 +97,8 @@ class ConfigFilePool
      * Returns application initial config files.
      *
      * @return array
-     * @deprecated Magento does not support custom config file pools since 2.2.0 version
+     * @deprecated 2.2.0 Magento does not support custom config file pools since 2.2.0 version
+     * @since 2.2.0
      */
     public function getInitialFilePools()
     {
@@ -103,7 +110,8 @@ class ConfigFilePool
      *
      * @param string $pool
      * @return array
-     * @deprecated Magento does not support custom config file pools since 2.2.0 version
+     * @deprecated 2.2.0 Magento does not support custom config file pools since 2.2.0 version
+     * @since 2.2.0
      */
     public function getPathsByPool($pool)
     {

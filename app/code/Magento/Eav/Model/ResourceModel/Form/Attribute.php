@@ -11,6 +11,11 @@
  */
 namespace Magento\Eav\Model\ResourceModel\Form;
 
+/**
+ * Class \Magento\Eav\Model\ResourceModel\Form\Attribute
+ *
+ * @since 2.0.0
+ */
 abstract class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -18,6 +23,7 @@ abstract class Attribute extends \Magento\Framework\Model\ResourceModel\Db\Abstr
      *
      * @param string $formCode
      * @return array
+     * @since 2.0.0
      */
     public function getFormAttributeIds($formCode)
     {

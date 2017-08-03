@@ -12,6 +12,7 @@ use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 
 /**
  * Estimate index memory size for largest composite product in catalog.
+ * @since 2.2.0
  */
 class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInterface
 {
@@ -22,16 +23,19 @@ class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInte
 
     /**
      * @var DefaultPrice
+     * @since 2.2.0
      */
     private $indexerResource;
 
     /**
      * @var WebsiteManagementInterface
+     * @since 2.2.0
      */
     private $websiteManagement;
 
     /**
      * @var CollectionFactory
+     * @since 2.2.0
      */
     private $collectionFactory;
 
@@ -39,6 +43,7 @@ class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInte
      * @param DefaultPrice $indexerResource
      * @param WebsiteManagementInterface $websiteManagement
      * @param CollectionFactory $collectionFactory
+     * @since 2.2.0
      */
     public function __construct(
         DefaultPrice $indexerResource,
@@ -54,6 +59,7 @@ class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInte
      * Calculate memory size for largest composite product in database.
      *
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function estimateRowSize()
     {

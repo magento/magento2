@@ -15,12 +15,18 @@ use Magento\Catalog\Helper\Data;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\Store;
 
+/**
+ * Class \Magento\Catalog\Block\Breadcrumbs
+ *
+ * @since 2.0.0
+ */
 class Breadcrumbs extends \Magento\Framework\View\Element\Template
 {
     /**
      * Catalog data
      *
      * @var Data
+     * @since 2.0.0
      */
     protected $_catalogData = null;
 
@@ -28,6 +34,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      * @param Context $context
      * @param Data $catalogData
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(Context $context, Data $catalogData, array $data = [])
     {
@@ -40,6 +47,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      *
      * @param null|string|bool|int|Store $store
      * @return string
+     * @since 2.0.0
      */
     public function getTitleSeparator($store = null)
     {
@@ -51,6 +59,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      * Preparing layout
      *
      * @return \Magento\Catalog\Block\Breadcrumbs
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {

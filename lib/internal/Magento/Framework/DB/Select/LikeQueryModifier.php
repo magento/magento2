@@ -9,11 +9,13 @@ use Magento\Framework\DB\Select;
 
 /**
  * Add LIKE condition to select
+ * @since 2.2.0
  */
 class LikeQueryModifier implements QueryModifierInterface
 {
     /**
      * @var array
+     * @since 2.2.0
      */
     private $values;
 
@@ -22,6 +24,7 @@ class LikeQueryModifier implements QueryModifierInterface
      *
      * @param array $values array of field and pattern pairs of Like Clause,
      *                      for example: [<field1> => <pattern1>, <field2> => <pattern2>, ...]
+     * @since 2.2.0
      */
     public function __construct(
         $values = []
@@ -31,6 +34,7 @@ class LikeQueryModifier implements QueryModifierInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function modify(Select $select)
     {

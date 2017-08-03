@@ -9,6 +9,7 @@ namespace Magento\Backend\Model\Widget\Grid\Row;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class UrlGeneratorId implements \Magento\Backend\Model\Widget\Grid\Row\GeneratorInterface
 {
@@ -17,6 +18,7 @@ class UrlGeneratorId implements \Magento\Backend\Model\Widget\Grid\Row\Generator
      *
      * @param \Magento\Framework\DataObject $item
      * @return string
+     * @since 2.0.0
      */
     public function getUrl($item)
     {

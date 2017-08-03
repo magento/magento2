@@ -7,6 +7,7 @@ namespace Magento\Analytics\Model;
 
 /**
  * Contain information about encrypted file.
+ * @since 2.2.0
  */
 class FileInfo
 {
@@ -14,6 +15,7 @@ class FileInfo
      * Initialization vector that was used for encryption.
      *
      * @var string
+     * @since 2.2.0
      */
     private $initializationVector;
 
@@ -21,12 +23,14 @@ class FileInfo
      * Relative path to an encrypted file.
      *
      * @var string
+     * @since 2.2.0
      */
     private $path;
 
     /**
      * @param string $path
      * @param string $initializationVector
+     * @since 2.2.0
      */
     public function __construct($path = '', $initializationVector = '')
     {
@@ -36,6 +40,7 @@ class FileInfo
 
     /**
      * @return string
+     * @since 2.2.0
      */
     public function getPath()
     {
@@ -44,6 +49,7 @@ class FileInfo
 
     /**
      * @return string
+     * @since 2.2.0
      */
     public function getInitializationVector()
     {

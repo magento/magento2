@@ -8,6 +8,7 @@ namespace Magento\Framework\Intl;
 /**
  * Class DateTimeFactory
  * @package Magento\Framework
+ * @since 2.0.0
  */
 class DateTimeFactory
 {
@@ -17,6 +18,7 @@ class DateTimeFactory
      * @param string $time
      * @param \DateTimeZone $timezone
      * @return \DateTime
+     * @since 2.0.0
      */
     public function create($time = 'now', \DateTimeZone $timezone = null)
     {

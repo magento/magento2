@@ -10,6 +10,7 @@ namespace Magento\Framework\Pricing\Amount;
  * Amount interface, the amount values are in display currency
  *
  * @api
+ * @since 2.0.0
  */
 interface AmountInterface
 {
@@ -18,6 +19,7 @@ interface AmountInterface
      *
      * @param null|string|array $exclude
      * @return float
+     * @since 2.0.0
      */
     public function getValue($exclude = null);
 
@@ -25,6 +27,7 @@ interface AmountInterface
      * Return full amount value in string format
      *
      * @return string
+     * @since 2.0.0
      */
     public function __toString();
 
@@ -32,6 +35,7 @@ interface AmountInterface
      * Return base amount part value
      *
      * @return float
+     * @since 2.0.0
      */
     public function getBaseAmount();
 
@@ -40,6 +44,7 @@ interface AmountInterface
      *
      * @param string $adjustmentCode
      * @return float
+     * @since 2.0.0
      */
     public function getAdjustmentAmount($adjustmentCode);
 
@@ -47,6 +52,7 @@ interface AmountInterface
      * Return sum amount of all applied adjustments
      *
      * @return float
+     * @since 2.0.0
      */
     public function getTotalAdjustmentAmount();
 
@@ -54,6 +60,7 @@ interface AmountInterface
      * Return all applied adjustments as array
      *
      * @return float[]
+     * @since 2.0.0
      */
     public function getAdjustmentAmounts();
 
@@ -62,6 +69,7 @@ interface AmountInterface
      *
      * @param string $adjustmentCode
      * @return boolean
+     * @since 2.0.0
      */
     public function hasAdjustment($adjustmentCode);
 }

@@ -6,15 +6,22 @@
 
 namespace Magento\CatalogRule\Cron;
 
+/**
+ * Class \Magento\CatalogRule\Cron\DailyCatalogUpdate
+ *
+ * @since 2.0.0
+ */
 class DailyCatalogUpdate
 {
     /**
      * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor
+     * @since 2.0.0
      */
     protected $ruleProductProcessor;
 
     /**
      * @param \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor $ruleProductProcessor
+     * @since 2.0.0
      */
     public function __construct(\Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor $ruleProductProcessor)
     {
@@ -28,6 +35,7 @@ class DailyCatalogUpdate
      * we should generate data for interval -1 day ... +1 day
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

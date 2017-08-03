@@ -8,22 +8,26 @@ namespace Magento\Wishlist\Model;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class LocaleQuantityProcessor
 {
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
+     * @since 2.0.0
      */
     protected $localeResolver;
 
     /**
      * @var \Magento\Framework\Filter\LocalizedToNormalized
+     * @since 2.0.0
      */
     protected $localFilter;
 
     /**
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Filter\LocalizedToNormalized $localFilter
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
@@ -38,6 +42,7 @@ class LocaleQuantityProcessor
      *
      * @param float $qty
      * @return array|string
+     * @since 2.0.0
      */
     public function process($qty)
     {

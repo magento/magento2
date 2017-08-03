@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Design\Theme\Image;
 
 /**
  * Theme Image Uploader
+ * @since 2.0.0
  */
 class Uploader
 {
@@ -14,6 +15,7 @@ class Uploader
      * Allowed file extensions to upload
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_allowedExtensions = ['jpg', 'jpeg', 'gif', 'png', 'xbm', 'wbmp'];
 
@@ -21,6 +23,7 @@ class Uploader
      * File system
      *
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $_filesystem;
 
@@ -28,6 +31,7 @@ class Uploader
      * Transfer adapter
      *
      * @var \Zend_File_Transfer_Adapter_Http
+     * @since 2.0.0
      */
     protected $_transferAdapter;
 
@@ -35,6 +39,7 @@ class Uploader
      * Uploader factory
      *
      * @var \Magento\Framework\File\UploaderFactory
+     * @since 2.0.0
      */
     protected $_uploaderFactory;
 
@@ -44,6 +49,7 @@ class Uploader
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\HTTP\Adapter\FileTransferFactory $adapterFactory
      * @param \Magento\Framework\File\UploaderFactory $uploaderFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -62,6 +68,7 @@ class Uploader
      * @param string $destinationPath path to upload directory
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function uploadPreviewImage($scope, $destinationPath)
     {

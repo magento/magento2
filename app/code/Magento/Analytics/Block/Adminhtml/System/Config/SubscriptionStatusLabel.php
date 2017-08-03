@@ -13,11 +13,13 @@ use Magento\Backend\Block\Template\Context;
  *
  * Provides labels for subscription status
  * Status can be reviewed in System Configuration
+ * @since 2.2.0
  */
 class SubscriptionStatusLabel extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * @var SubscriptionStatusProvider
+     * @since 2.2.0
      */
     private $subscriptionStatusProvider;
 
@@ -27,6 +29,7 @@ class SubscriptionStatusLabel extends \Magento\Config\Block\System\Config\Form\F
      * @param Context $context
      * @param SubscriptionStatusProvider $labelStatusProvider
      * @param array $data
+     * @since 2.2.0
      */
     public function __construct(
         Context $context,
@@ -42,6 +45,7 @@ class SubscriptionStatusLabel extends \Magento\Config\Block\System\Config\Form\F
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
+     * @since 2.2.0
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -56,6 +60,7 @@ class SubscriptionStatusLabel extends \Magento\Config\Block\System\Config\Form\F
      * Prepare label for subscription status
      *
      * @return string
+     * @since 2.2.0
      */
     private function prepareLabelValue()
     {

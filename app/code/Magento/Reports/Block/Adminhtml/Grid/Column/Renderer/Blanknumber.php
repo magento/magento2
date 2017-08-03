@@ -9,6 +9,7 @@ namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
  * Adminhtml grid item renderer number or blank line
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Blanknumber extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Number
 {
@@ -16,6 +17,7 @@ class Blanknumber extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Num
      * @param \Magento\Framework\DataObject $row
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getValue(\Magento\Framework\DataObject $row)
     {

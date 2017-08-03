@@ -7,13 +7,24 @@ namespace Magento\Catalog\Model\ResourceModel\Indexer;
 
 /**
  * Logic for switching active and replica index tables.
+ * @since 2.2.0
  */
 class ActiveTableSwitcher
 {
-    /** Suffix for replica index table. */
+    /**
+     * Suffix for replica index table.
+     *
+     * @var string
+     * @since 2.2.0
+     */
     private $additionalTableSuffix = '_replica';
 
-    /** Suffix for outdated index table. */
+    /**
+     * Suffix for outdated index table.
+     *
+     * @var string
+     * @since 2.2.0
+     */
     private $outdatedTableSuffix = '_outdated';
 
     /**
@@ -22,6 +33,7 @@ class ActiveTableSwitcher
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param array $tableNames
      * @return void
+     * @since 2.2.0
      */
     public function switchTable(\Magento\Framework\DB\Adapter\AdapterInterface $connection, array $tableNames)
     {
@@ -55,6 +67,7 @@ class ActiveTableSwitcher
     /**
      * @param string $tableName
      * @return string
+     * @since 2.2.0
      */
     public function getAdditionalTableName($tableName)
     {

@@ -11,21 +11,25 @@ use Magento\Framework\DB\Select;
 
 /**
  * Class SwatchAttributeCodes for getting codes of swatch attributes.
+ * @since 2.2.0
  */
 class SwatchAttributeCodes
 {
     /**
      * @var string
+     * @since 2.2.0
      */
     private $cacheKey;
 
     /**
      * @var CacheInterface
+     * @since 2.2.0
      */
     private $cache;
 
     /**
      * @var ResourceConnection
+     * @since 2.2.0
      */
     private $resourceConnection;
 
@@ -33,11 +37,13 @@ class SwatchAttributeCodes
      * Key is attribute_id, value is attribute_code
      *
      * @var array
+     * @since 2.2.0
      */
     private $swatchAttributeCodes;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $cacheTags;
 
@@ -48,6 +54,7 @@ class SwatchAttributeCodes
      * @param ResourceConnection $resourceConnection
      * @param string $cacheKey
      * @param array $cacheTags
+     * @since 2.2.0
      */
     public function __construct(
         CacheInterface $cache,
@@ -66,6 +73,7 @@ class SwatchAttributeCodes
      * Key is attribute_id, value is attribute_code
      *
      * @return array
+     * @since 2.2.0
      */
     public function getCodes()
     {
@@ -89,6 +97,7 @@ class SwatchAttributeCodes
      * Returns a map of id and code for all EAV attributes with swatches
      *
      * @return array
+     * @since 2.2.0
      */
     private function getSwatchAttributeCodes()
     {
@@ -113,6 +122,7 @@ class SwatchAttributeCodes
      * Builds a "Select" object which loads all EAV attributes that has "swatch" options
      *
      * @return Select
+     * @since 2.2.0
      */
     private function getAttributeIdsSelect()
     {

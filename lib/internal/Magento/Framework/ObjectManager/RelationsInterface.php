@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\ObjectManager;
 
+/**
+ * Interface \Magento\Framework\ObjectManager\RelationsInterface
+ *
+ * @since 2.0.0
+ */
 interface RelationsInterface
 {
     /**
@@ -12,6 +17,7 @@ interface RelationsInterface
      *
      * @param string $type
      * @return bool
+     * @since 2.0.0
      */
     public function has($type);
 
@@ -20,6 +26,7 @@ interface RelationsInterface
      *
      * @param string $type
      * @return array
+     * @since 2.0.0
      */
     public function getParents($type);
 }

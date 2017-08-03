@@ -10,11 +10,13 @@ namespace Magento\Reports\Block\Adminhtml\Product;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Lowstock extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

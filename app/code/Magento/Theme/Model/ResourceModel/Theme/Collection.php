@@ -7,6 +7,7 @@ namespace Magento\Theme\Model\ResourceModel\Theme;
 
 /**
  * Theme collection
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection implements
     \Magento\Framework\View\Design\Theme\Label\ListInterface,
@@ -21,6 +22,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Collection initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -31,6 +33,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add title for parent themes
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addParentTitle()
     {
@@ -47,6 +50,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $area
      * @return $this
+     * @since 2.0.0
      */
     public function addAreaFilter($area = \Magento\Framework\App\Area::AREA_FRONTEND)
     {
@@ -60,6 +64,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $typeParent
      * @param int $typeChild
      * @return $this
+     * @since 2.0.0
      */
     public function addTypeRelationFilter($typeParent, $typeChild)
     {
@@ -82,6 +87,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string|array $type
      * @return $this
+     * @since 2.0.0
      */
     public function addTypeFilter($type)
     {
@@ -93,6 +99,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Filter visible themes in backend (physical and virtual only)
      *
      * @return $this
+     * @since 2.0.0
      */
     public function filterVisibleThemes()
     {
@@ -109,6 +116,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Return array for select field
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {
@@ -119,6 +127,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Return array for grid column
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionHash()
     {
@@ -130,6 +139,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $fullPath
      * @return \Magento\Theme\Model\Theme
+     * @since 2.0.0
      */
     public function getThemeByFullPath($fullPath)
     {
@@ -146,6 +156,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $size
      * @return $this
+     * @since 2.0.0
      */
     public function setPageSize($size = self::DEFAULT_PAGE_SIZE)
     {
@@ -157,6 +168,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param \Magento\Framework\View\Design\ThemeInterface $themeModel
      * @return $this
+     * @since 2.0.0
      */
     public function updateChildRelations(\Magento\Framework\View\Design\ThemeInterface $themeModel)
     {
@@ -177,6 +189,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $page
      * @param int $pageSize
      * @return $this
+     * @since 2.0.0
      */
     public function filterPhysicalThemes(
         $page = null,
@@ -199,6 +212,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $area
      * @param int $type
      * @return $this
+     * @since 2.0.0
      */
     public function filterThemeCustomizations(
         $area = \Magento\Framework\App\Area::AREA_FRONTEND,
@@ -210,6 +224,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getLabels()
     {
@@ -219,6 +234,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     public function loadRegisteredThemes()
     {

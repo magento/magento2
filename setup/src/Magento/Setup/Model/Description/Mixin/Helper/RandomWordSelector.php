@@ -7,6 +7,7 @@ namespace Magento\Setup\Model\Description\Mixin\Helper;
 
 /**
  * Return random words from source
+ * @since 2.2.0
  */
 class RandomWordSelector
 {
@@ -16,6 +17,7 @@ class RandomWordSelector
      * @param string $source
      * @param int $count
      * @return array
+     * @since 2.2.0
      */
     public function getRandomWords($source, $count)
     {

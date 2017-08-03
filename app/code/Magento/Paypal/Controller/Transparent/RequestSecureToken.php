@@ -20,31 +20,37 @@ use Magento\Quote\Model\Quote;
  *
  * @package Magento\Paypal\Controller\Transparent
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class RequestSecureToken extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var JsonFactory
+     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var Generic
+     * @since 2.0.0
      */
     private $sessionTransparent;
 
     /**
      * @var SecureToken
+     * @since 2.0.0
      */
     private $secureTokenService;
 
     /**
      * @var SessionManager
+     * @since 2.0.0
      */
     private $sessionManager;
 
     /**
      * @var Transparent
+     * @since 2.0.0
      */
     private $transparent;
 
@@ -55,6 +61,7 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action
      * @param SecureToken $secureTokenService
      * @param SessionManager $sessionManager
      * @param Transparent $transparent
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -76,6 +83,7 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action
      * Send request to PayfloPro gateway for get Secure Token
      *
      * @return ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -107,6 +115,7 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action
 
     /**
      * @return Json
+     * @since 2.0.0
      */
     private function getErrorResponse()
     {

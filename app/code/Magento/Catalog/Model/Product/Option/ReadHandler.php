@@ -13,16 +13,19 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class ReadHandler
+ * @since 2.1.0
  */
 class ReadHandler implements ExtensionInterface
 {
     /**
      * @var ProductCustomOptionRepositoryInterface
+     * @since 2.1.0
      */
     protected $optionRepository;
 
     /**
      * @param ProductCustomOptionRepositoryInterface $optionRepository
+     * @since 2.1.0
      */
     public function __construct(
         ProductCustomOptionRepositoryInterface $optionRepository
@@ -35,6 +38,7 @@ class ReadHandler implements ExtensionInterface
      * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function execute($entity, $arguments = [])
     {

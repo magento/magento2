@@ -9,12 +9,18 @@ namespace Magento\Newsletter\Controller\Adminhtml\Template;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class \Magento\Newsletter\Controller\Adminhtml\Template\Save
+ *
+ * @since 2.0.0
+ */
 class Save extends \Magento\Newsletter\Controller\Adminhtml\Template
 {
     /**
      * Save Newsletter Template
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

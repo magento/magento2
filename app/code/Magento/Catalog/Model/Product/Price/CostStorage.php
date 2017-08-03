@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\Product\Price;
 
 /**
  * Product cost storage.
+ * @since 2.2.0
  */
 class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
 {
@@ -15,31 +16,37 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
      * Attribute code.
      *
      * @var string
+     * @since 2.2.0
      */
     private $attributeCode = 'cost';
 
     /**
      * @var PricePersistence
+     * @since 2.2.0
      */
     private $pricePersistence;
 
     /**
      * @var \Magento\Catalog\Api\Data\CostInterfaceFactory
+     * @since 2.2.0
      */
     private $costInterfaceFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductIdLocatorInterface
+     * @since 2.2.0
      */
     private $productIdLocator;
 
     /**
      * @var \Magento\Catalog\Model\Product\Price\Validation\Result
+     * @since 2.2.0
      */
     private $validationResult;
 
     /**
      * @var \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor
+     * @since 2.2.0
      */
     private $invalidSkuProcessor;
 
@@ -47,16 +54,19 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
      * Allowed product types.
      *
      * @var array
+     * @since 2.2.0
      */
     private $allowedProductTypes = [];
 
     /**
      * @var PricePersistenceFactory
+     * @since 2.2.0
      */
     private $pricePersistenceFactory;
 
     /**
      * @var \Magento\Store\Api\StoreRepositoryInterface
+     * @since 2.2.0
      */
     private $storeRepository;
 
@@ -70,6 +80,7 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
      * @param \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult
      * @param \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor $invalidSkuProcessor
      * @param array $allowedProductTypes [optional]
+     * @since 2.2.0
      */
     public function __construct(
         PricePersistenceFactory $pricePersistenceFactory,
@@ -91,6 +102,7 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function get(array $skus)
     {
@@ -112,6 +124,7 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function update(array $prices)
     {
@@ -137,6 +150,7 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function delete(array $skus)
     {
@@ -150,6 +164,7 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
      * Get price persistence.
      *
      * @return PricePersistence
+     * @since 2.2.0
      */
     private function getPricePersistence()
     {
@@ -165,6 +180,7 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
      *
      * @param array $prices
      * @return array
+     * @since 2.2.0
      */
     private function retrieveValidPrices(array $prices)
     {

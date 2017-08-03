@@ -13,14 +13,19 @@ use Magento\Customer\Model\Session;
 /**
  * Class CustomerLogout
  * @package Magento\Wishlist\Observer
+ * @since 2.0.0
  */
 class CustomerLogout implements ObserverInterface
 {
-    /** @var Session */
+    /**
+     * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
+     */
     protected $customerSession;
 
     /**
      * @param Session $customerSession
+     * @since 2.0.0
      */
     public function __construct(Session $customerSession)
     {
@@ -32,6 +37,7 @@ class CustomerLogout implements ObserverInterface
      *
      * @param Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

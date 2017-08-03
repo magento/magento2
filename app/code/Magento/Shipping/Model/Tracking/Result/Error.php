@@ -5,10 +5,16 @@
  */
 namespace Magento\Shipping\Model\Tracking\Result;
 
+/**
+ * Class \Magento\Shipping\Model\Tracking\Result\Error
+ *
+ * @since 2.0.0
+ */
 class Error extends \Magento\Shipping\Model\Tracking\Result\AbstractResult
 {
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getAllData()
     {
@@ -17,6 +23,7 @@ class Error extends \Magento\Shipping\Model\Tracking\Result\AbstractResult
 
     /**
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getErrorMessage()
     {

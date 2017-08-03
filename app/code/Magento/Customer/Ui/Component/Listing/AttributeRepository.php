@@ -13,26 +13,49 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\MetadataManagementInterface;
 use Magento\Customer\Model\Indexer\Attribute\Filter;
 
+/**
+ * Class \Magento\Customer\Ui\Component\Listing\AttributeRepository
+ *
+ * @since 2.0.0
+ */
 class AttributeRepository
 {
     const BILLING_ADDRESS_PREFIX = 'billing_';
 
-    /** @var [] */
+    /**
+     * @var array
+     * @since 2.0.0
+     */
     protected $attributes;
 
-    /** @var CustomerMetadataInterface */
+    /**
+     * @var \Magento\Customer\Api\CustomerMetadataInterface
+     * @since 2.0.0
+     */
     protected $customerMetadata;
 
-    /** @var AddressMetadataInterface */
+    /**
+     * @var \Magento\Customer\Api\AddressMetadataInterface
+     * @since 2.0.0
+     */
     protected $addressMetadata;
 
-    /** @var CustomerMetadataManagementInterface */
+    /**
+     * @var \Magento\Customer\Api\CustomerMetadataManagementInterface
+     * @since 2.0.0
+     */
     protected $customerMetadataManagement;
 
-    /** @var AddressMetadataManagementInterface */
+    /**
+     * @var \Magento\Customer\Api\AddressMetadataManagementInterface
+     * @since 2.0.0
+     */
     protected $addressMetadataManagement;
 
-    /** @var Filter */
+    /**
+     * @var \Magento\Customer\Model\Indexer\Attribute\Filter
+     * @since 2.0.0
+     */
     protected $attributeFilter;
 
     /**
@@ -41,6 +64,7 @@ class AttributeRepository
      * @param CustomerMetadataInterface $customerMetadata
      * @param AddressMetadataInterface $addressMetadata
      * @param Filter $attributeFiltering
+     * @since 2.0.0
      */
     public function __construct(
         CustomerMetadataManagementInterface $customerMetadataManagement,
@@ -58,6 +82,7 @@ class AttributeRepository
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getList()
     {
@@ -85,6 +110,7 @@ class AttributeRepository
      * @param string $entityTypeCode
      * @param MetadataManagementInterface $management
      * @return array
+     * @since 2.0.0
      */
     protected function getListForEntity(array $metadata, $entityTypeCode, MetadataManagementInterface $management)
     {
@@ -119,6 +145,7 @@ class AttributeRepository
      *
      * @param array $options
      * @return array
+     * @since 2.0.0
      */
     protected function getOptionArray(array $options)
     {
@@ -132,6 +159,7 @@ class AttributeRepository
     /**
      * @param string $code
      * @return []
+     * @since 2.0.0
      */
     public function getMetadataByCode($code)
     {

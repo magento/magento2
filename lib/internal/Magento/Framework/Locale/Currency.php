@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Locale;
 
+/**
+ * Class \Magento\Framework\Locale\Currency
+ *
+ * @since 2.0.0
+ */
 class Currency implements \Magento\Framework\Locale\CurrencyInterface
 {
     /**
@@ -25,6 +30,7 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected static $_currencyCache = [];
 
@@ -32,16 +38,19 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $_eventManager = null;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
+     * @since 2.0.0
      */
     protected $_localeResolver;
 
     /**
      * @var \Magento\Framework\CurrencyFactory
+     * @since 2.0.0
      */
     protected $_currencyFactory;
 
@@ -49,6 +58,7 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param ResolverInterface $localeResolver
      * @param \Magento\Framework\CurrencyFactory $currencyFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -62,6 +72,7 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getDefaultCurrency()
     {
@@ -70,6 +81,7 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getCurrency($currency)
     {

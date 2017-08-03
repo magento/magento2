@@ -13,21 +13,25 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Provides link to file with collected report data.
+ * @since 2.2.0
  */
 class LinkProvider implements LinkProviderInterface
 {
     /**
      * @var LinkInterfaceFactory
+     * @since 2.2.0
      */
     private $linkFactory;
 
     /**
      * @var FileInfoManager
+     * @since 2.2.0
      */
     private $fileInfoManager;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.2.0
      */
     private $storeManager;
 
@@ -35,6 +39,7 @@ class LinkProvider implements LinkProviderInterface
      * @param LinkInterfaceFactory $linkInterfaceFactory
      * @param FileInfoManager $fileInfoManager
      * @param StoreManagerInterface $storeManager
+     * @since 2.2.0
      */
     public function __construct(
         LinkInterfaceFactory $linkFactory,
@@ -51,6 +56,7 @@ class LinkProvider implements LinkProviderInterface
      *
      * @param FileInfo $fileInfo
      * @return string
+     * @since 2.2.0
      */
     private function getBaseUrl(FileInfo $fileInfo)
     {
@@ -62,6 +68,7 @@ class LinkProvider implements LinkProviderInterface
      *
      * @param FileInfo $fileInfo
      * @return bool
+     * @since 2.2.0
      */
     private function isFileReady(FileInfo $fileInfo)
     {
@@ -70,6 +77,7 @@ class LinkProvider implements LinkProviderInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function get()
     {

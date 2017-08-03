@@ -10,15 +10,22 @@ use Magento\Customer\Model\AttributeMetadataDataProvider;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class \Magento\Customer\Model\Metadata\AttributeResolver
+ *
+ * @since 2.0.0
+ */
 class AttributeResolver
 {
     /**
      * @var AttributeMetadataDataProvider
+     * @since 2.0.0
      */
     protected $attributeMetadataDataProvider;
 
     /**
      * @param AttributeMetadataDataProvider $attributeMetadataDataProvider
+     * @since 2.0.0
      */
     public function __construct(
         AttributeMetadataDataProvider $attributeMetadataDataProvider
@@ -33,6 +40,7 @@ class AttributeResolver
      * @param AttributeMetadataInterface $attribute
      * @return Attribute
      * @throws NoSuchEntityException
+     * @since 2.0.0
      */
     public function getModelByAttribute($entityType, AttributeMetadataInterface $attribute)
     {

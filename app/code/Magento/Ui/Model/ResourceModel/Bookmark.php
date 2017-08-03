@@ -9,12 +9,14 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
  * Bookmark resource
+ * @since 2.0.0
  */
 class Bookmark extends AbstractDb
 {
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -27,6 +29,7 @@ class Bookmark extends AbstractDb
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

@@ -9,11 +9,13 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Captcha cron actions
+ * @since 2.0.0
  */
 class DeleteExpiredImages
 {
     /**
      * @var \Magento\Captcha\Helper\Data
+     * @since 2.0.0
      */
     protected $_helper;
 
@@ -21,16 +23,19 @@ class DeleteExpiredImages
      * CAPTCHA helper
      *
      * @var \Magento\Captcha\Helper\Adminhtml\Data
+     * @since 2.0.0
      */
     protected $_adminHelper;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @since 2.0.0
      */
     protected $_mediaDirectory;
 
     /**
      * @var \Magento\Store\Model\StoreManager
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -39,6 +44,7 @@ class DeleteExpiredImages
      * @param \Magento\Captcha\Helper\Adminhtml\Data $adminHelper
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Store\Model\StoreManager $storeManager
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Captcha\Helper\Data $helper,
@@ -56,6 +62,7 @@ class DeleteExpiredImages
      * Delete Expired Captcha Images
      *
      * @return \Magento\Captcha\Cron\DeleteExpiredImages
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -74,6 +81,7 @@ class DeleteExpiredImages
      * @param \Magento\Store\Model\Website|null $website
      * @param \Magento\Store\Model\Store|null $store
      * @return void
+     * @since 2.0.0
      */
     protected function _deleteExpiredImagesForWebsite(
         \Magento\Captcha\Helper\Data $helper,

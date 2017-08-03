@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Element;
 
 /**
  * Customer Redirect Page
+ * @since 2.0.0
  */
 class Redirect extends Template
 {
@@ -14,6 +15,7 @@ class Redirect extends Template
      *  HTML form hidden fields
      *
      * @var array
+     * @since 2.0.0
      */
     protected $formFields = [];
 
@@ -21,6 +23,7 @@ class Redirect extends Template
      * Form factory
      *
      * @var \Magento\Framework\Data\FormFactory
+     * @since 2.0.0
      */
     protected $formFactory;
 
@@ -30,6 +33,7 @@ class Redirect extends Template
      * @param Template\Context $context
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Template\Context $context,
@@ -44,6 +48,7 @@ class Redirect extends Template
      * URL for redirect location
      *
      * @return string URL
+     * @since 2.0.0
      */
     public function getTargetURL()
     {
@@ -54,6 +59,7 @@ class Redirect extends Template
      * Additional custom message
      *
      * @return string Output message
+     * @since 2.0.0
      */
     public function getMessage()
     {
@@ -64,6 +70,7 @@ class Redirect extends Template
      * Client-side redirect engine output
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRedirectOutput()
     {
@@ -78,6 +85,7 @@ class Redirect extends Template
      * Redirect via JS location
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRedirect()
     {
@@ -94,6 +102,7 @@ class Redirect extends Template
      * Redirect via HTML form submission
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHtmlFormRedirect()
     {
@@ -123,6 +132,7 @@ class Redirect extends Template
      * HTML form or JS redirect
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isHtmlFormRedirect()
     {
@@ -133,6 +143,7 @@ class Redirect extends Template
      * HTML form id/name attributes
      *
      * @return string Id/name
+     * @since 2.0.0
      */
     public function getFormId()
     {
@@ -143,6 +154,7 @@ class Redirect extends Template
      * HTML form method attribute
      *
      * @return string Method
+     * @since 2.0.0
      */
     public function getFormMethod()
     {
@@ -153,6 +165,7 @@ class Redirect extends Template
      * Array of hidden form fields (name => value)
      *
      * @return array
+     * @since 2.0.0
      */
     public function getFormFields()
     {
@@ -163,6 +176,7 @@ class Redirect extends Template
      * Optimized getFormFields() method
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getFormFields()
     {
@@ -176,6 +190,7 @@ class Redirect extends Template
      * Get default HTML
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getDefaultHtml()
     {
@@ -204,6 +219,7 @@ class Redirect extends Template
      * Render block HTML
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

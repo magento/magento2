@@ -10,12 +10,18 @@ namespace Magento\Shipping\Model;
 
 use Magento\Sales\Model\Order\Shipment;
 
+/**
+ * Class \Magento\Shipping\Model\Info
+ *
+ * @since 2.0.0
+ */
 class Info extends \Magento\Framework\DataObject
 {
     /**
      * Tracking info
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_trackingInfo = [];
 
@@ -23,26 +29,31 @@ class Info extends \Magento\Framework\DataObject
      * Shipping data
      *
      * @var \Magento\Shipping\Helper\Data
+     * @since 2.0.0
      */
     protected $_shippingData;
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
+     * @since 2.0.0
      */
     protected $_orderFactory;
 
     /**
      * @var \Magento\Sales\Api\ShipmentRepositoryInterface
+     * @since 2.0.0
      */
     protected $shipmentRepository;
 
     /**
      * @var \Magento\Shipping\Model\Order\TrackFactory
+     * @since 2.0.0
      */
     protected $_trackFactory;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory
+     * @since 2.0.0
      */
     protected $_trackCollectionFactory;
 
@@ -53,6 +64,7 @@ class Info extends \Magento\Framework\DataObject
      * @param \Magento\Shipping\Model\Order\TrackFactory $trackFactory
      * @param \Magento\Shipping\Model\ResourceModel\Order\Track\CollectionFactory $trackCollectionFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Shipping\Helper\Data $shippingData,
@@ -75,6 +87,7 @@ class Info extends \Magento\Framework\DataObject
      *
      * @param array $hash
      * @return $this
+     * @since 2.0.0
      */
     public function loadByHash($hash)
     {
@@ -100,6 +113,7 @@ class Info extends \Magento\Framework\DataObject
      * Retrieve tracking info
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTrackingInfo()
     {
@@ -110,6 +124,7 @@ class Info extends \Magento\Framework\DataObject
      * Instantiate order model
      *
      * @return \Magento\Sales\Model\Order|bool
+     * @since 2.0.0
      */
     protected function _initOrder()
     {
@@ -127,6 +142,7 @@ class Info extends \Magento\Framework\DataObject
      * Instantiate ship model
      *
      * @return Shipment|bool
+     * @since 2.0.0
      */
     protected function _initShipment()
     {
@@ -143,6 +159,7 @@ class Info extends \Magento\Framework\DataObject
      * Retrieve all tracking by order id
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTrackingInfoByOrder()
     {
@@ -169,6 +186,7 @@ class Info extends \Magento\Framework\DataObject
      * Retrieve all tracking by ship id
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTrackingInfoByShip()
     {
@@ -192,6 +210,7 @@ class Info extends \Magento\Framework\DataObject
      * Retrieve tracking by tracking entity id
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTrackingInfoByTrackId()
     {
@@ -206,6 +225,7 @@ class Info extends \Magento\Framework\DataObject
     /**
      * @param Shipment $shipment
      * @return \Magento\Shipping\Model\ResourceModel\Order\Track\Collection
+     * @since 2.0.0
      */
     protected function _getTracksCollection(Shipment $shipment)
     {

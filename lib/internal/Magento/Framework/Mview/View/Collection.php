@@ -5,22 +5,30 @@
  */
 namespace Magento\Framework\Mview\View;
 
+/**
+ * Class \Magento\Framework\Mview\View\Collection
+ *
+ * @since 2.0.0
+ */
 class Collection extends \Magento\Framework\Data\Collection implements CollectionInterface
 {
     /**
      * Item object class name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_itemObjectClass = \Magento\Framework\Mview\ViewInterface::class;
 
     /**
      * @var \Magento\Framework\Mview\ConfigInterface
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Framework\Mview\View\State\CollectionFactory
+     * @since 2.0.0
      */
     protected $statesFactory;
 
@@ -28,6 +36,7 @@ class Collection extends \Magento\Framework\Data\Collection implements Collectio
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Magento\Framework\Mview\ConfigInterface $config
      * @param State\CollectionFactory $statesFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
@@ -47,6 +56,7 @@ class Collection extends \Magento\Framework\Data\Collection implements Collectio
      * @return \Magento\Framework\Mview\View\CollectionInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function loadData($printQuery = false, $logQuery = false)
     {
@@ -75,6 +85,7 @@ class Collection extends \Magento\Framework\Data\Collection implements Collectio
      *
      * @param string $mode
      * @return \Magento\Framework\Mview\ViewInterface[]
+     * @since 2.0.0
      */
     public function getViewsByStateMode($mode)
     {

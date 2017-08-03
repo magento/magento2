@@ -5,15 +5,22 @@
  */
 namespace Magento\Checkout\Model;
 
+/**
+ * Class \Magento\Checkout\Model\GuestShippingInformationManagement
+ *
+ * @since 2.0.0
+ */
 class GuestShippingInformationManagement implements \Magento\Checkout\Api\GuestShippingInformationManagementInterface
 {
     /**
      * @var \Magento\Quote\Model\QuoteIdMaskFactory
+     * @since 2.0.0
      */
     protected $quoteIdMaskFactory;
 
     /**
      * @var \Magento\Checkout\Api\ShippingInformationManagementInterface
+     * @since 2.0.0
      */
     protected $shippingInformationManagement;
 
@@ -21,6 +28,7 @@ class GuestShippingInformationManagement implements \Magento\Checkout\Api\GuestS
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      * @param \Magento\Checkout\Api\ShippingInformationManagementInterface $shippingInformationManagement
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
@@ -32,6 +40,7 @@ class GuestShippingInformationManagement implements \Magento\Checkout\Api\GuestS
 
     /**
      * {@inheritDoc}
+     * @since 2.0.0
      */
     public function saveAddressInformation(
         $cartId,

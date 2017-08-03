@@ -9,6 +9,7 @@ namespace Magento\Store\Model\ResourceModel\Group;
  * Store group collection
  *
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -16,6 +17,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Define resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -28,6 +30,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param boolean $loadDefault
      * @return $this
+     * @since 2.0.0
      */
     public function setLoadDefault($loadDefault)
     {
@@ -39,6 +42,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return boolean
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getLoadDefault()
     {
@@ -49,6 +53,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add disable default store group filter to collection
      *
      * @return $this
+     * @since 2.0.0
      */
     public function setWithoutDefaultFilter()
     {
@@ -59,6 +64,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Filter to discard stores without views
      *
      * @return $this
+     * @since 2.0.0
      */
     public function setWithoutStoreViewFilter()
     {
@@ -69,6 +75,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Filter to discard default group and groups with assigned category
      *
      * @return $this
+     * @since 2.2.0
      */
     public function setWithoutAssignedCategoryFilter()
     {
@@ -80,6 +87,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Load collection data
      *
      * @return $this
+     * @since 2.0.0
      */
     public function _beforeLoad()
     {
@@ -94,6 +102,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Convert collection items to array for select options
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {
@@ -105,6 +114,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int|array $website
      * @return $this
+     * @since 2.0.0
      */
     public function addWebsiteFilter($website)
     {

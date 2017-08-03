@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\Product\Price;
 
 /**
  * Base prices storage.
+ * @since 2.2.0
  */
 class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
 {
@@ -15,46 +16,55 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
      * Attribute code.
      *
      * @var string
+     * @since 2.2.0
      */
     private $attributeCode = 'price';
 
     /**
      * @var PricePersistence
+     * @since 2.2.0
      */
     private $pricePersistence;
 
     /**
      * @var \Magento\Catalog\Api\Data\BasePriceInterfaceFactory
+     * @since 2.2.0
      */
     private $basePriceInterfaceFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductIdLocatorInterface
+     * @since 2.2.0
      */
     private $productIdLocator;
 
     /**
      * @var \Magento\Store\Api\StoreRepositoryInterface
+     * @since 2.2.0
      */
     private $storeRepository;
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @since 2.2.0
      */
     private $productRepository;
 
     /**
      * @var \Magento\Catalog\Model\Product\Price\Validation\Result
+     * @since 2.2.0
      */
     private $validationResult;
 
     /**
      * @var PricePersistenceFactory
+     * @since 2.2.0
      */
     private $pricePersistenceFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor
+     * @since 2.2.0
      */
     private $invalidSkuProcessor;
 
@@ -62,6 +72,7 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
      * Price type allowed.
      *
      * @var int
+     * @since 2.2.0
      */
     private $priceTypeAllowed = 1;
 
@@ -69,6 +80,7 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
      * Allowed product types.
      *
      * @var array
+     * @since 2.2.0
      */
     private $allowedProductTypes = [];
 
@@ -81,6 +93,7 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
      * @param \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult
      * @param \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor $invalidSkuProcessor
      * @param array $allowedProductTypes [optional]
+     * @since 2.2.0
      */
     public function __construct(
         PricePersistenceFactory $pricePersistenceFactory,
@@ -104,6 +117,7 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function get(array $skus)
     {
@@ -129,6 +143,7 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function update(array $prices)
     {
@@ -155,6 +170,7 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
      * Get price persistence.
      *
      * @return PricePersistence
+     * @since 2.2.0
      */
     private function getPricePersistence()
     {
@@ -170,6 +186,7 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
      *
      * @param \Magento\Catalog\Api\Data\BasePriceInterface[] $prices
      * @return array
+     * @since 2.2.0
      */
     private function retrieveValidPrices(array $prices)
     {

@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\ResourceModel;
  * Catalog Config Resource Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -16,6 +17,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * catalog_product entity type id
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_entityTypeId;
 
@@ -23,6 +25,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Store id
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_storeId = null;
 
@@ -30,6 +33,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Eav config
      *
      * @var \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     protected $_eavConfig;
 
@@ -37,6 +41,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -45,6 +50,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -61,6 +67,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize connection
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -72,6 +79,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param integer $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreId($storeId)
     {
@@ -84,6 +92,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * If is not set return current app store
      *
      * @return integer
+     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -97,6 +106,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Retrieve catalog_product entity type id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getEntityTypeId()
     {
@@ -111,6 +121,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Retrieve Product Attributes Used in Catalog Product listing
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAttributesUsedInListing()
     {
@@ -140,6 +151,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Retrieve Used Product Attributes for Catalog Product Listing Sort By
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAttributesUsedForSortBy()
     {

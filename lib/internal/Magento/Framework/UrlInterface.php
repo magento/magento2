@@ -7,6 +7,7 @@ namespace Magento\Framework;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface UrlInterface
 {
@@ -53,6 +54,7 @@ interface UrlInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getUseSession();
 
@@ -61,6 +63,7 @@ interface UrlInterface
      *
      * @param array $params
      * @return string
+     * @since 2.0.0
      */
     public function getBaseUrl($params = []);
 
@@ -68,6 +71,7 @@ interface UrlInterface
      * Retrieve current url with port number (if not default used)
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCurrentUrl();
 
@@ -77,6 +81,7 @@ interface UrlInterface
      * @param string $routePath
      * @param array $routeParams
      * @return string
+     * @since 2.0.0
      */
     public function getRouteUrl($routePath = null, $routeParams = null);
 
@@ -84,6 +89,7 @@ interface UrlInterface
      * Add session param
      *
      * @return \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     public function addSessionParam();
 
@@ -92,6 +98,7 @@ interface UrlInterface
      *
      * @param array $data
      * @return \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     public function addQueryParams(array $data);
 
@@ -101,6 +108,7 @@ interface UrlInterface
      * @param string $key
      * @param mixed $data
      * @return \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     public function setQueryParam($key, $data);
 
@@ -110,6 +118,7 @@ interface UrlInterface
      * @param   string|null $routePath
      * @param   array|null $routeParams
      * @return  string
+     * @since 2.0.0
      */
     public function getUrl($routePath = null, $routeParams = null);
 
@@ -118,6 +127,7 @@ interface UrlInterface
      *
      * @param string $value
      * @return string
+     * @since 2.0.0
      */
     public function escape($value);
 
@@ -127,6 +137,7 @@ interface UrlInterface
      * @param string $url
      * @param array $params
      * @return string
+     * @since 2.0.0
      */
     public function getDirectUrl($url, $params = []);
 
@@ -135,6 +146,7 @@ interface UrlInterface
      *
      * @param string $html
      * @return string
+     * @since 2.0.0
      */
     public function sessionUrlVar($html);
 
@@ -142,6 +154,7 @@ interface UrlInterface
      * Check if users originated URL is one of the domain URLs assigned to stores
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isOwnOriginUrl();
 
@@ -151,6 +164,7 @@ interface UrlInterface
      * @param string $url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRedirectUrl($url);
 
@@ -159,6 +173,7 @@ interface UrlInterface
      *
      * @param mixed $params
      * @return \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     public function setScope($params);
 }

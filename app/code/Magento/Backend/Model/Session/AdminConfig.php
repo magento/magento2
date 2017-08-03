@@ -15,6 +15,7 @@ use Magento\Framework\Session\Config;
 /**
  * Magento Backend session configuration
  * @api
+ * @since 2.0.0
  */
 class AdminConfig extends Config
 {
@@ -25,16 +26,19 @@ class AdminConfig extends Config
 
     /**
      * @var FrontNameResolver
+     * @since 2.0.0
      */
     protected $_frontNameResolver;
 
     /**
      * @var \Magento\Backend\App\BackendAppList
+     * @since 2.0.0
      */
     private $backendAppList;
 
     /**
      * @var \Magento\Backend\Model\UrlFactory
+     * @since 2.0.0
      */
     private $backendUrlFactory;
 
@@ -52,6 +56,7 @@ class AdminConfig extends Config
      * @param string $lifetimePath
      * @param string $sessionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ValidatorFactory $validatorFactory,
@@ -90,6 +95,7 @@ class AdminConfig extends Config
      * Determine the admin path
      *
      * @return string
+     * @since 2.0.0
      */
     private function extractAdminPath()
     {
@@ -111,6 +117,7 @@ class AdminConfig extends Config
      * Set session cookie lifetime to session duration
      *
      * @return $this
+     * @since 2.1.0
      */
     protected function configureCookieLifetime()
     {

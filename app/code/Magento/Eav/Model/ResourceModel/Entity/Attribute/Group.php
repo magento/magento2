@@ -13,16 +13,19 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * Eav Resource Entity Attribute Group
+ * @since 2.0.0
  */
 class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var Attribute
+     * @since 2.2.0
      */
     private $attributeResource;
 
     /**
      * @inheritDoc
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -38,6 +41,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return void
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -49,6 +53,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Eav\Model\Entity\Attribute\Group $object
      * @return bool
+     * @since 2.0.0
      */
     public function itemExists($object)
     {
@@ -73,6 +78,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param AbstractModel $object
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @since 2.0.0
      */
     protected function _beforeSave(AbstractModel $object)
     {
@@ -87,6 +93,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param AbstractModel $object
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @since 2.0.0
      */
     protected function _afterSave(AbstractModel $object)
     {
@@ -108,6 +115,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param AbstractModel $object
      * @return int
+     * @since 2.0.0
      */
     protected function _getMaxSortOrder($object)
     {
@@ -128,6 +136,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param integer $attributeSetId
      * @return $this
+     * @since 2.0.0
      */
     public function updateDefaultGroup($attributeSetId)
     {
@@ -157,6 +166,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     protected function saveNewObject(AbstractModel $object)
     {
@@ -174,6 +184,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     protected function updateObject(AbstractModel $object)
     {

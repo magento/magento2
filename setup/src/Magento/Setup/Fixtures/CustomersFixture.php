@@ -37,26 +37,31 @@ use Magento\Setup\Model\FixtureGenerator\CustomerGenerator;
  * </customer-config>
  *
  * @see setup/performance-toolkit/profiles/ce/small.xml
+ * @since 2.0.0
  */
 class CustomersFixture extends Fixture
 {
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $priority = 70;
 
     /**
      * @var CustomerGenerator
+     * @since 2.2.0
      */
     private $customerGenerator;
 
     /**
      * @var CustomerDataGeneratorFactory
+     * @since 2.2.0
      */
     private $customerDataGeneratorFactory;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $defaultCustomerConfig = [
         'addresses-count' => 2
@@ -64,6 +69,7 @@ class CustomersFixture extends Fixture
 
     /**
      * @var CollectionFactory
+     * @since 2.2.0
      */
     private $collectionFactory;
 
@@ -72,6 +78,7 @@ class CustomersFixture extends Fixture
      * @param CustomerGenerator $customerGenerator
      * @param CustomerDataGeneratorFactory $customerDataGeneratorFactory
      * @param CollectionFactory $collectionFactory
+     * @since 2.2.0
      */
     public function __construct(
         FixtureModel $fixtureModel,
@@ -88,6 +95,7 @@ class CustomersFixture extends Fixture
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -112,6 +120,7 @@ class CustomersFixture extends Fixture
 
     /**
      * @return int
+     * @since 2.2.0
      */
     private function getCustomersAmount()
     {
@@ -120,6 +129,7 @@ class CustomersFixture extends Fixture
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getActionTitle()
     {
@@ -128,6 +138,7 @@ class CustomersFixture extends Fixture
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function introduceParamLabels()
     {
@@ -138,6 +149,7 @@ class CustomersFixture extends Fixture
 
     /**
      * @return array
+     * @since 2.2.0
      */
     private function getCustomersConfig()
     {

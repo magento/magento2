@@ -10,10 +10,16 @@ namespace Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Model\Metadata\ElementFactory;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * Class \Magento\Customer\Model\Metadata\Form\Select
+ *
+ * @since 2.0.0
+ */
 class Select extends AbstractData
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function extractValue(RequestInterface $request)
     {
@@ -22,6 +28,7 @@ class Select extends AbstractData
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function validateValue($value)
     {
@@ -51,6 +58,7 @@ class Select extends AbstractData
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function compactValue($value)
     {
@@ -59,6 +67,7 @@ class Select extends AbstractData
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function restoreValue($value)
     {
@@ -70,6 +79,7 @@ class Select extends AbstractData
      *
      * @param string|int $value
      * @return string
+     * @since 2.0.0
      */
     protected function _getOptionText($value)
     {
@@ -86,6 +96,7 @@ class Select extends AbstractData
      *
      * @param string $format
      * @return string
+     * @since 2.0.0
      */
     public function outputValue($format = ElementFactory::OUTPUT_FORMAT_TEXT)
     {

@@ -16,6 +16,7 @@ namespace Magento\Integration\Model\Oauth;
  * @method \Magento\Integration\Model\Oauth\Nonce setTimestamp() setTimestamp(string $timestamp)
  * @method \Magento\Integration\Model\ResourceModel\Oauth\Nonce getResource()
  * @method \Magento\Integration\Model\ResourceModel\Oauth\Nonce _getResource()
+ * @since 2.0.0
  */
 class Nonce extends \Magento\Framework\Model\AbstractModel
 {
@@ -23,6 +24,7 @@ class Nonce extends \Magento\Framework\Model\AbstractModel
      * Oauth data
      *
      * @var \Magento\Integration\Helper\Oauth\Data
+     * @since 2.0.0
      */
     protected $_oauthData;
 
@@ -33,6 +35,7 @@ class Nonce extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -50,6 +53,7 @@ class Nonce extends \Magento\Framework\Model\AbstractModel
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -60,6 +64,7 @@ class Nonce extends \Magento\Framework\Model\AbstractModel
      * The "After save" actions
      *
      * @return $this
+     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -77,6 +82,7 @@ class Nonce extends \Magento\Framework\Model\AbstractModel
      * @param string $nonce - The nonce string
      * @param int $consumerId - The consumer id
      * @return $this
+     * @since 2.0.0
      */
     public function loadByCompositeKey($nonce, $consumerId)
     {

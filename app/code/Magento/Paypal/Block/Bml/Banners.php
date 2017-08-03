@@ -11,21 +11,25 @@ use Magento\Paypal\Model\Config;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Banners extends Template
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_section;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $_position;
 
     /**
      * @var \Magento\Paypal\Model\Config
+     * @since 2.0.0
      */
     protected $_paypalConfig;
 
@@ -33,6 +37,7 @@ class Banners extends Template
      * @param Template\Context $context
      * @param Config $paypalConfig
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Template\Context $context,
@@ -49,6 +54,7 @@ class Banners extends Template
      * Disable block output if banner turned off or PublisherId is miss
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

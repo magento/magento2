@@ -8,6 +8,11 @@ namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
 
+/**
+ * Class \Magento\Shipping\Controller\Adminhtml\Order\Shipment\CreateLabel
+ *
+ * @since 2.0.0
+ */
 class CreateLabel extends \Magento\Backend\App\Action
 {
     /**
@@ -19,11 +24,13 @@ class CreateLabel extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
+     * @since 2.0.0
      */
     protected $shipmentLoader;
 
     /**
      * @var \Magento\Shipping\Model\Shipping\LabelGenerator
+     * @since 2.0.0
      */
     protected $labelGenerator;
 
@@ -31,6 +38,7 @@ class CreateLabel extends \Magento\Backend\App\Action
      * @param Action\Context $context
      * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
      * @param \Magento\Shipping\Model\Shipping\LabelGenerator $labelGenerator
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -46,6 +54,7 @@ class CreateLabel extends \Magento\Backend\App\Action
      * Create shipping label action for specific shipment
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

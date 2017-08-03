@@ -6,12 +6,18 @@
  */
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
+/**
+ * Class \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite\Delete
+ *
+ * @since 2.0.0
+ */
 class Delete extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
 {
     /**
      * URL rewrite delete action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

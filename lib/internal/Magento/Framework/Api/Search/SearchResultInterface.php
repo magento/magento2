@@ -11,6 +11,7 @@ use Magento\Framework\Api\SearchResultsInterface;
  * Interface SearchResultInterface
  *
  * @api
+ * @since 2.0.0
  */
 interface SearchResultInterface extends SearchResultsInterface
 {
@@ -25,6 +26,7 @@ interface SearchResultInterface extends SearchResultsInterface
 
     /**
      * @return \Magento\Framework\Api\Search\DocumentInterface[]
+     * @since 2.0.0
      */
     public function getItems();
 
@@ -33,17 +35,20 @@ interface SearchResultInterface extends SearchResultsInterface
      *
      * @param \Magento\Framework\Api\Search\DocumentInterface[] $items
      * @return $this
+     * @since 2.0.0
      */
     public function setItems(array $items = null);
 
     /**
      * @return \Magento\Framework\Api\Search\AggregationInterface
+     * @since 2.0.0
      */
     public function getAggregations();
 
     /**
      * @param \Magento\Framework\Api\Search\AggregationInterface $aggregations
      * @return $this
+     * @since 2.0.0
      */
     public function setAggregations($aggregations);
 
@@ -51,6 +56,7 @@ interface SearchResultInterface extends SearchResultsInterface
      * Get search criteria.
      *
      * @return \Magento\Framework\Api\Search\SearchCriteriaInterface
+     * @since 2.0.0
      */
     public function getSearchCriteria();
 }

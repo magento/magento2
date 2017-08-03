@@ -14,31 +14,37 @@ use Magento\Sales\Model\Order\Address\Renderer;
  * Class Sender
  * @api
  *
+ * @since 2.0.0
  */
 abstract class Sender
 {
     /**
      * @var \Magento\Sales\Model\Order\Email\SenderBuilderFactory
+     * @since 2.0.0
      */
     protected $senderBuilderFactory;
 
     /**
      * @var Template
+     * @since 2.0.0
      */
     protected $templateContainer;
 
     /**
      * @var IdentityInterface
+     * @since 2.0.0
      */
     protected $identityContainer;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var Renderer
+     * @since 2.0.0
      */
     protected $addressRenderer;
 
@@ -48,6 +54,7 @@ abstract class Sender
      * @param SenderBuilderFactory $senderBuilderFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param Renderer $addressRenderer
+     * @since 2.0.0
      */
     public function __construct(
         Template $templateContainer,
@@ -66,6 +73,7 @@ abstract class Sender
     /**
      * @param Order $order
      * @return bool
+     * @since 2.0.0
      */
     protected function checkAndSend(Order $order)
     {
@@ -91,6 +99,7 @@ abstract class Sender
     /**
      * @param Order $order
      * @return void
+     * @since 2.0.0
      */
     protected function prepareTemplate(Order $order)
     {
@@ -111,6 +120,7 @@ abstract class Sender
 
     /**
      * @return Sender
+     * @since 2.0.0
      */
     protected function getSender()
     {
@@ -124,6 +134,7 @@ abstract class Sender
 
     /**
      * @return array
+     * @since 2.0.0
      */
     protected function getTemplateOptions()
     {
@@ -136,6 +147,7 @@ abstract class Sender
     /**
      * @param Order $order
      * @return string|null
+     * @since 2.0.0
      */
     protected function getFormattedShippingAddress($order)
     {
@@ -147,6 +159,7 @@ abstract class Sender
     /**
      * @param Order $order
      * @return string|null
+     * @since 2.0.0
      */
     protected function getFormattedBillingAddress($order)
     {

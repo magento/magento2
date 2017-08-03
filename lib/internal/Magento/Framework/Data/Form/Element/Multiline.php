@@ -13,6 +13,11 @@ namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 
+/**
+ * Class \Magento\Framework\Data\Form\Element\Multiline
+ *
+ * @since 2.0.0
+ */
 class Multiline extends AbstractElement
 {
     /**
@@ -20,6 +25,7 @@ class Multiline extends AbstractElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -34,6 +40,7 @@ class Multiline extends AbstractElement
 
     /**
      * @return string[]
+     * @since 2.0.0
      */
     public function getHtmlAttributes()
     {
@@ -56,6 +63,7 @@ class Multiline extends AbstractElement
      * @param int $suffix
      * @param string $scopeLabel
      * @return string
+     * @since 2.0.0
      */
     public function getLabelHtml($suffix = 0, $scopeLabel = '')
     {
@@ -66,6 +74,7 @@ class Multiline extends AbstractElement
      * Get element HTML
      *
      * @return string
+     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -105,6 +114,7 @@ class Multiline extends AbstractElement
     /**
      * @return mixed
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function getDefaultHtml()
     {
@@ -153,6 +163,7 @@ class Multiline extends AbstractElement
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getEscapedValue($index = null)
     {

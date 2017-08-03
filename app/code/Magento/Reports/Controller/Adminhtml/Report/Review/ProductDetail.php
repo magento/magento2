@@ -6,12 +6,18 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Review;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Review\ProductDetail
+ *
+ * @since 2.0.0
+ */
 class ProductDetail extends \Magento\Reports\Controller\Adminhtml\Report\Review
 {
     /**
      * Details action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

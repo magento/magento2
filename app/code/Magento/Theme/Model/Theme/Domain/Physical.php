@@ -9,27 +9,36 @@
  */
 namespace Magento\Theme\Model\Theme\Domain;
 
+/**
+ * Class \Magento\Theme\Model\Theme\Domain\Physical
+ *
+ * @since 2.0.0
+ */
 class Physical implements \Magento\Framework\View\Design\Theme\Domain\PhysicalInterface
 {
     /**
      * Physical theme model instance
      *
      * @var \Magento\Framework\View\Design\ThemeInterface
+     * @since 2.0.0
      */
     protected $_theme;
 
     /**
      * @var \Magento\Theme\Model\ThemeFactory
+     * @since 2.0.0
      */
     protected $_themeFactory;
 
     /**
      * @var \Magento\Theme\Model\CopyService
+     * @since 2.0.0
      */
     protected $_themeCopyService;
 
     /**
      * @var \Magento\Theme\Model\ResourceModel\Theme\Collection
+     * @since 2.0.0
      */
     protected $_themeCollection;
 
@@ -38,6 +47,7 @@ class Physical implements \Magento\Framework\View\Design\Theme\Domain\PhysicalIn
      * @param \Magento\Theme\Model\ThemeFactory $themeFactory
      * @param \Magento\Theme\Model\CopyService $themeCopyService
      * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Design\ThemeInterface $theme,
@@ -56,6 +66,7 @@ class Physical implements \Magento\Framework\View\Design\Theme\Domain\PhysicalIn
      *
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @return \Magento\Framework\View\Design\ThemeInterface
+     * @since 2.0.0
      */
     public function createVirtualTheme($theme)
     {
@@ -81,6 +92,7 @@ class Physical implements \Magento\Framework\View\Design\Theme\Domain\PhysicalIn
      *
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @return string
+     * @since 2.0.0
      */
     protected function _getVirtualThemeTitle($theme)
     {

@@ -8,6 +8,7 @@ namespace Magento\Cms\Api\Data;
 /**
  * CMS page interface.
  * @api
+ * @since 2.0.0
  */
 interface PageInterface
 {
@@ -39,6 +40,7 @@ interface PageInterface
      * Get ID
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getId();
 
@@ -46,6 +48,7 @@ interface PageInterface
      * Get identifier
      *
      * @return string
+     * @since 2.0.0
      */
     public function getIdentifier();
 
@@ -53,6 +56,7 @@ interface PageInterface
      * Get title
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getTitle();
 
@@ -60,6 +64,7 @@ interface PageInterface
      * Get page layout
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getPageLayout();
 
@@ -67,6 +72,7 @@ interface PageInterface
      * Get meta title
      *
      * @return string|null
+     * @since 2.1.0
      */
     public function getMetaTitle();
 
@@ -74,6 +80,7 @@ interface PageInterface
      * Get meta keywords
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getMetaKeywords();
 
@@ -81,6 +88,7 @@ interface PageInterface
      * Get meta description
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getMetaDescription();
 
@@ -88,6 +96,7 @@ interface PageInterface
      * Get content heading
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getContentHeading();
 
@@ -95,6 +104,7 @@ interface PageInterface
      * Get content
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getContent();
 
@@ -102,6 +112,7 @@ interface PageInterface
      * Get creation time
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getCreationTime();
 
@@ -109,6 +120,7 @@ interface PageInterface
      * Get update time
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getUpdateTime();
 
@@ -116,6 +128,7 @@ interface PageInterface
      * Get sort order
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getSortOrder();
 
@@ -123,6 +136,7 @@ interface PageInterface
      * Get layout update xml
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getLayoutUpdateXml();
 
@@ -130,6 +144,7 @@ interface PageInterface
      * Get custom theme
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getCustomTheme();
 
@@ -137,6 +152,7 @@ interface PageInterface
      * Get custom root template
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getCustomRootTemplate();
 
@@ -144,6 +160,7 @@ interface PageInterface
      * Get custom layout update xml
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getCustomLayoutUpdateXml();
 
@@ -151,6 +168,7 @@ interface PageInterface
      * Get custom theme from
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getCustomThemeFrom();
 
@@ -158,6 +176,7 @@ interface PageInterface
      * Get custom theme to
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getCustomThemeTo();
 
@@ -165,6 +184,7 @@ interface PageInterface
      * Is active
      *
      * @return bool|null
+     * @since 2.0.0
      */
     public function isActive();
 
@@ -173,6 +193,7 @@ interface PageInterface
      *
      * @param int $id
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setId($id);
 
@@ -181,6 +202,7 @@ interface PageInterface
      *
      * @param string $identifier
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setIdentifier($identifier);
 
@@ -189,6 +211,7 @@ interface PageInterface
      *
      * @param string $title
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setTitle($title);
 
@@ -197,6 +220,7 @@ interface PageInterface
      *
      * @param string $pageLayout
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setPageLayout($pageLayout);
 
@@ -205,6 +229,7 @@ interface PageInterface
      *
      * @param string $metaTitle
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.1.0
      */
     public function setMetaTitle($metaTitle);
 
@@ -213,6 +238,7 @@ interface PageInterface
      *
      * @param string $metaKeywords
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setMetaKeywords($metaKeywords);
 
@@ -221,6 +247,7 @@ interface PageInterface
      *
      * @param string $metaDescription
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setMetaDescription($metaDescription);
 
@@ -229,6 +256,7 @@ interface PageInterface
      *
      * @param string $contentHeading
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setContentHeading($contentHeading);
 
@@ -237,6 +265,7 @@ interface PageInterface
      *
      * @param string $content
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setContent($content);
 
@@ -245,6 +274,7 @@ interface PageInterface
      *
      * @param string $creationTime
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setCreationTime($creationTime);
 
@@ -253,6 +283,7 @@ interface PageInterface
      *
      * @param string $updateTime
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setUpdateTime($updateTime);
 
@@ -261,6 +292,7 @@ interface PageInterface
      *
      * @param string $sortOrder
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setSortOrder($sortOrder);
 
@@ -269,6 +301,7 @@ interface PageInterface
      *
      * @param string $layoutUpdateXml
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setLayoutUpdateXml($layoutUpdateXml);
 
@@ -277,6 +310,7 @@ interface PageInterface
      *
      * @param string $customTheme
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setCustomTheme($customTheme);
 
@@ -285,6 +319,7 @@ interface PageInterface
      *
      * @param string $customRootTemplate
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setCustomRootTemplate($customRootTemplate);
 
@@ -293,6 +328,7 @@ interface PageInterface
      *
      * @param string $customLayoutUpdateXml
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setCustomLayoutUpdateXml($customLayoutUpdateXml);
 
@@ -301,6 +337,7 @@ interface PageInterface
      *
      * @param string $customThemeFrom
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setCustomThemeFrom($customThemeFrom);
 
@@ -309,6 +346,7 @@ interface PageInterface
      *
      * @param string $customThemeTo
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setCustomThemeTo($customThemeTo);
 
@@ -317,6 +355,7 @@ interface PageInterface
      *
      * @param int|bool $isActive
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setIsActive($isActive);
 }

@@ -7,11 +7,13 @@ namespace Magento\Msrp\Model\Quote;
 
 /**
  * Class Msrp
+ * @since 2.0.0
  */
 class Msrp
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $canApplyMsrpData = [];
 
@@ -19,6 +21,7 @@ class Msrp
      * @param int $quoteId
      * @param bool $canApply
      * @return $this
+     * @since 2.0.0
      */
     public function setCanApplyMsrp($quoteId, $canApply)
     {
@@ -30,6 +33,7 @@ class Msrp
      * @param int $quoteId
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getCanApplyMsrp($quoteId)
     {

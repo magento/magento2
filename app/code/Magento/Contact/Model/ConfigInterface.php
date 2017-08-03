@@ -9,6 +9,7 @@ namespace Magento\Contact\Model;
  * Contact module configuration
  *
  * @api
+ * @since 2.2.0
  */
 interface ConfigInterface
 {
@@ -36,6 +37,7 @@ interface ConfigInterface
      * Check if contacts module is enabled
      *
      * @return bool
+     * @since 2.2.0
      */
     public function isEnabled();
 
@@ -43,6 +45,7 @@ interface ConfigInterface
      * Return email template identifier
      *
      * @return string
+     * @since 2.2.0
      */
     public function emailTemplate();
 
@@ -50,6 +53,7 @@ interface ConfigInterface
      * Return email sender address
      *
      * @return string
+     * @since 2.2.0
      */
     public function emailSender();
 
@@ -57,6 +61,7 @@ interface ConfigInterface
      * Return email recipient address
      *
      * @return string
+     * @since 2.2.0
      */
     public function emailRecipient();
 }

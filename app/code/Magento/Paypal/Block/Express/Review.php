@@ -16,21 +16,25 @@ use Magento\Quote\Model\Quote\Address\Rate;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Review extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Quote\Model\Quote
+     * @since 2.0.0
      */
     protected $_quote;
 
     /**
      * @var \Magento\Quote\Model\Quote\Address
+     * @since 2.0.0
      */
     protected $_address;
 
     /**
      * @var \Magento\Customer\Model\Address\Config
+     * @since 2.0.0
      */
     protected $_addressConfig;
 
@@ -38,6 +42,7 @@ class Review extends \Magento\Framework\View\Element\Template
      * Currently selected shipping rate
      *
      * @var Rate
+     * @since 2.0.0
      */
     protected $_currentShippingRate = null;
 
@@ -45,16 +50,19 @@ class Review extends \Magento\Framework\View\Element\Template
      * Paypal controller path
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_controllerPath = 'paypal/express';
 
     /**
      * @var \Magento\Tax\Helper\Data
+     * @since 2.0.0
      */
     protected $_taxHelper;
 
     /**
      * @var PriceCurrencyInterface
+     * @since 2.0.0
      */
     protected $priceCurrency;
 
@@ -64,6 +72,7 @@ class Review extends \Magento\Framework\View\Element\Template
      * @param \Magento\Customer\Model\Address\Config $addressConfig
      * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -83,6 +92,7 @@ class Review extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Quote\Model\Quote $quote
      * @return $this
+     * @since 2.0.0
      */
     public function setQuote(\Magento\Quote\Model\Quote $quote)
     {
@@ -94,6 +104,7 @@ class Review extends \Magento\Framework\View\Element\Template
      * Return quote billing address
      *
      * @return \Magento\Quote\Model\Quote\Address
+     * @since 2.0.0
      */
     public function getBillingAddress()
     {
@@ -104,6 +115,7 @@ class Review extends \Magento\Framework\View\Element\Template
      * Return quote shipping address
      *
      * @return false|\Magento\Quote\Model\Quote\Address
+     * @since 2.0.0
      */
     public function getShippingAddress()
     {
@@ -118,6 +130,7 @@ class Review extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Quote\Model\Quote\Address $address
      * @return string
+     * @since 2.0.0
      */
     public function renderAddress($address)
     {
@@ -132,6 +145,7 @@ class Review extends \Magento\Framework\View\Element\Template
      *
      * @param string $carrierCode
      * @return string
+     * @since 2.0.0
      */
     public function getCarrierName($carrierCode)
     {
@@ -146,6 +160,7 @@ class Review extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Framework\DataObject $rate
      * @return string
+     * @since 2.0.0
      */
     public function renderShippingRateValue(\Magento\Framework\DataObject $rate)
     {
@@ -162,6 +177,7 @@ class Review extends \Magento\Framework\View\Element\Template
      * @param string $format
      * @param string $inclTaxFormat
      * @return string
+     * @since 2.0.0
      */
     public function renderShippingRateOption($rate, $format = '%s - %s%s', $inclTaxFormat = ' (%s %s)')
     {
@@ -186,6 +202,7 @@ class Review extends \Magento\Framework\View\Element\Template
      * Getter for current shipping rate
      *
      * @return Rate
+     * @since 2.0.0
      */
     public function getCurrentShippingRate()
     {
@@ -196,6 +213,7 @@ class Review extends \Magento\Framework\View\Element\Template
      * Whether can edit shipping method
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canEditShippingMethod()
     {
@@ -206,6 +224,7 @@ class Review extends \Magento\Framework\View\Element\Template
      * Get quote email
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEmail()
     {
@@ -218,6 +237,7 @@ class Review extends \Magento\Framework\View\Element\Template
      *
      * @param string $prefix
      * @return void
+     * @since 2.0.0
      */
     public function setControllerPath($prefix)
     {
@@ -230,6 +250,7 @@ class Review extends \Magento\Framework\View\Element\Template
      * @param float $price
      * @param bool $isInclTax
      * @return string
+     * @since 2.0.0
      */
     protected function _getShippingPrice($price, $isInclTax)
     {
@@ -241,6 +262,7 @@ class Review extends \Magento\Framework\View\Element\Template
      *
      * @param float $price
      * @return string
+     * @since 2.0.0
      */
     protected function _formatPrice($price)
     {
@@ -257,6 +279,7 @@ class Review extends \Magento\Framework\View\Element\Template
      *
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {

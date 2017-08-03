@@ -7,6 +7,7 @@ namespace Magento\Framework\Data;
 
 /**
  * Class SearchResultProcessor
+ * @since 2.0.0
  */
 class SearchResultProcessor extends AbstractDataObject implements SearchResultProcessorInterface
 {
@@ -14,16 +15,19 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
      * Data Interface name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $dataInterface = \Magento\Framework\DataObject::class;
 
     /**
      * @var AbstractSearchResult
+     * @since 2.0.0
      */
     protected $searchResult;
 
     /**
      * @param AbstractSearchResult $searchResult
+     * @since 2.0.0
      */
     public function __construct(AbstractSearchResult $searchResult)
     {
@@ -32,6 +36,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
 
     /**
      * @return int
+     * @since 2.0.0
      */
     public function getCurrentPage()
     {
@@ -40,6 +45,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
 
     /**
      * @return int
+     * @since 2.0.0
      */
     public function getPageSize()
     {
@@ -48,6 +54,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
 
     /**
      * @return \Magento\Framework\DataObject|mixed
+     * @since 2.0.0
      */
     public function getFirstItem()
     {
@@ -56,6 +63,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
 
     /**
      * @return \Magento\Framework\DataObject|mixed
+     * @since 2.0.0
      */
     public function getLastItem()
     {
@@ -65,6 +73,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getAllIds()
     {
@@ -78,6 +87,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
     /**
      * @param int $id
      * @return \Magento\Framework\DataObject|null
+     * @since 2.0.0
      */
     public function getItemById($id)
     {
@@ -91,6 +101,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
     /**
      * @param string $colName
      * @return array
+     * @since 2.0.0
      */
     public function getColumnValues($colName)
     {
@@ -105,6 +116,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
      * @param string $column
      * @param mixed $value
      * @return array
+     * @since 2.0.0
      */
     public function getItemsByColumnValue($column, $value)
     {
@@ -121,6 +133,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
      * @param string $column
      * @param mixed $value
      * @return \Magento\Framework\DataObject|null
+     * @since 2.0.0
      */
     public function getItemByColumnValue($column, $value)
     {
@@ -136,6 +149,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
      * @param string $callback
      * @param array $args
      * @return array
+     * @since 2.0.0
      */
     public function walk($callback, array $args = [])
     {
@@ -155,6 +169,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function toXml()
     {
@@ -175,6 +190,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
     /**
      * @param array $arrRequiredFields
      * @return array
+     * @since 2.0.0
      */
     public function toArray($arrRequiredFields = [])
     {
@@ -192,6 +208,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
      * @param null $labelField
      * @param array $additional
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray($valueField = null, $labelField = null, $additional = [])
     {
@@ -218,6 +235,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
      * @param string $valueField
      * @param string $labelField
      * @return array
+     * @since 2.0.0
      */
     public function toOptionHash($valueField, $labelField)
     {
@@ -230,6 +248,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function getDataInterfaceName()
     {

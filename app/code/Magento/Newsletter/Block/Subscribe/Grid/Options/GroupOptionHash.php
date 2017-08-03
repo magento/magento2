@@ -7,17 +7,24 @@
  */
 namespace Magento\Newsletter\Block\Subscribe\Grid\Options;
 
+/**
+ * Class \Magento\Newsletter\Block\Subscribe\Grid\Options\GroupOptionHash
+ *
+ * @since 2.0.0
+ */
 class GroupOptionHash implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * System Store Model
      *
      * @var \Magento\Store\Model\System\Store
+     * @since 2.0.0
      */
     protected $_systemStore;
 
     /**
      * @param \Magento\Store\Model\System\Store $systemStore
+     * @since 2.0.0
      */
     public function __construct(\Magento\Store\Model\System\Store $systemStore)
     {
@@ -28,6 +35,7 @@ class GroupOptionHash implements \Magento\Framework\Option\ArrayInterface
      * Return store group array
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

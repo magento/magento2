@@ -13,22 +13,26 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Manager works with cron tasks
+ * @since 2.2.0
  */
 class CrontabManager implements CrontabManagerInterface
 {
     /**
      * @var ShellInterface
+     * @since 2.2.0
      */
     private $shell;
 
     /**
      * @var Filesystem
+     * @since 2.2.0
      */
     private $filesystem;
 
     /**
      * @param ShellInterface $shell
      * @param Filesystem $filesystem
+     * @since 2.2.0
      */
     public function __construct(
         ShellInterface $shell,
@@ -40,6 +44,7 @@ class CrontabManager implements CrontabManagerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getTasks()
     {
@@ -58,6 +63,7 @@ class CrontabManager implements CrontabManagerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function saveTasks(array $tasks)
     {
@@ -95,6 +101,7 @@ class CrontabManager implements CrontabManagerInterface
     /**
      * {@inheritdoc}
      * @throws LocalizedException
+     * @since 2.2.0
      */
     public function removeTasks()
     {
@@ -110,6 +117,7 @@ class CrontabManager implements CrontabManagerInterface
      * @param string $content
      * @param array $tasks
      * @return string
+     * @since 2.2.0
      */
     private function generateSection($content, $tasks = [])
     {
@@ -129,6 +137,7 @@ class CrontabManager implements CrontabManagerInterface
      *
      * @param string $content
      * @return string
+     * @since 2.2.0
      */
     private function cleanMagentoSection($content)
     {
@@ -147,6 +156,7 @@ class CrontabManager implements CrontabManagerInterface
      * In case of some exceptions the empty content is returned
      *
      * @return string
+     * @since 2.2.0
      */
     private function getCrontabContent()
     {
@@ -165,6 +175,7 @@ class CrontabManager implements CrontabManagerInterface
      * @param string $content
      * @return void
      * @throws LocalizedException
+     * @since 2.2.0
      */
     private function save($content)
     {
@@ -187,6 +198,7 @@ class CrontabManager implements CrontabManagerInterface
      *
      * @return void
      * @throws LocalizedException
+     * @since 2.2.0
      */
     private function checkSupportedOs()
     {

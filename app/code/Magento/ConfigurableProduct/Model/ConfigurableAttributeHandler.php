@@ -5,17 +5,24 @@
  */
 namespace Magento\ConfigurableProduct\Model;
 
+/**
+ * Class \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler
+ *
+ * @since 2.0.0
+ */
 class ConfigurableAttributeHandler
 {
     /**
      * Attribute collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
+     * @since 2.0.0
      */
     protected $collectionFactory;
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory
@@ -27,6 +34,7 @@ class ConfigurableAttributeHandler
      * Retrieve list of attributes applicable for configurable product
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
+     * @since 2.0.0
      */
     public function getApplicableAttributes()
     {
@@ -47,6 +55,7 @@ class ConfigurableAttributeHandler
     /**
      * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
      * @return bool
+     * @since 2.0.0
      */
     public function isAttributeApplicable($attribute)
     {

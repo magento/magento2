@@ -7,10 +7,16 @@
  */
 namespace Magento\Framework\App\Config;
 
+/**
+ * Class \Magento\Framework\App\Config\ConfigSourceAggregated
+ *
+ * @since 2.2.0
+ */
 class ConfigSourceAggregated implements ConfigSourceInterface
 {
     /**
      * @var ConfigSourceInterface[]
+     * @since 2.2.0
      */
     private $sources;
 
@@ -18,6 +24,7 @@ class ConfigSourceAggregated implements ConfigSourceInterface
      * ConfigSourceAggregated constructor.
      *
      * @param array $sources
+     * @since 2.2.0
      */
     public function __construct(array $sources = [])
     {
@@ -29,6 +36,7 @@ class ConfigSourceAggregated implements ConfigSourceInterface
      *
      * @param string $path
      * @return string|array
+     * @since 2.2.0
      */
     public function get($path = '')
     {
@@ -51,6 +59,7 @@ class ConfigSourceAggregated implements ConfigSourceInterface
      * Sort sources
      *
      * @return void
+     * @since 2.2.0
      */
     private function sortSources()
     {

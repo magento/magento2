@@ -5,10 +5,16 @@
  */
 namespace Magento\Setup\Module\Di\App\Task;
 
+/**
+ * Class \Magento\Setup\Module\Di\App\Task\OperationFactory
+ *
+ * @since 2.0.0
+ */
 class OperationFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     private $objectManager;
 
@@ -51,6 +57,7 @@ class OperationFactory
      * Operations definitions
      *
      * @var array
+     * @since 2.0.0
      */
     private $operationsDefinitions = [
         self::DATA_ATTRIBUTES_GENERATOR =>
@@ -65,6 +72,7 @@ class OperationFactory
 
     /**
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
+     * @since 2.0.0
      */
     public function __construct(\Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider)
     {
@@ -78,6 +86,7 @@ class OperationFactory
      * @param mixed $arguments
      * @return OperationInterface
      * @throws OperationException
+     * @since 2.0.0
      */
     public function create($operationAlias, $arguments = null)
     {

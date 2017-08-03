@@ -9,12 +9,14 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 
 /**
  * Interpreter that pass through params
+ * @since 2.0.0
  */
 class Passthrough implements InterpreterInterface
 {
     /**
      * {@inheritdoc}
      * @return array
+     * @since 2.0.0
      */
     public function evaluate(array $data)
     {

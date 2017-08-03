@@ -12,6 +12,7 @@ use Magento\Backend\App\Action;
 
 /**
  * Adminhtml catalog product action attribute update controller
+ * @since 2.0.0
  */
 abstract class Attribute extends Action
 {
@@ -24,12 +25,14 @@ abstract class Attribute extends Action
 
     /**
      *  @var \Magento\Catalog\Helper\Product\Edit\Action\Attribute
+     * @since 2.0.0
      */
     protected $attributeHelper;
 
     /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -43,6 +46,7 @@ abstract class Attribute extends Action
      * Validate selection of products for mass update
      *
      * @return boolean
+     * @since 2.0.0
      */
     protected function _validateProducts()
     {

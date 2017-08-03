@@ -6,11 +6,17 @@
  */
 namespace Magento\Paypal\Controller\Payflowadvanced;
 
+/**
+ * Class \Magento\Paypal\Controller\Payflowadvanced\CancelPayment
+ *
+ * @since 2.0.0
+ */
 class CancelPayment extends \Magento\Paypal\Controller\Payflow\CancelPayment
 {
     /**
      * Redirect block name
      * @var string
+     * @since 2.0.0
      */
     protected $_redirectBlockName = 'payflow.advanced.iframe';
 }

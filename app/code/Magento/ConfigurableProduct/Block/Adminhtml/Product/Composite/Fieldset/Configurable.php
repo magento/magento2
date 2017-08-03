@@ -9,6 +9,7 @@ namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Composite\Fieldset
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable
 {
@@ -16,6 +17,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * Retrieve product
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -37,6 +39,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * Retrieve current store
      *
      * @return \Magento\Store\Model\Store
+     * @since 2.0.0
      */
     public function getCurrentStore()
     {
@@ -47,6 +50,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * Returns additional values for js config, con be overridden by descendants
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getAdditionalConfig()
     {

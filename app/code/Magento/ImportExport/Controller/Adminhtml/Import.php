@@ -11,6 +11,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 
 /**
  * Import controller
+ * @since 2.0.0
  */
 abstract class Import extends Action
 {

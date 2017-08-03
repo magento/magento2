@@ -10,16 +10,19 @@ use Zend\View\Model\ViewModel;
 
 /**
  * Controller for Setup Landing page
+ * @since 2.0.0
  */
 class LandingInstaller extends AbstractActionController
 {
     /**
      * @var \Magento\Framework\App\ProductMetadata
+     * @since 2.1.0
      */
     protected $productMetadata;
 
     /**
      * @param \Magento\Framework\App\ProductMetadata $productMetadata
+     * @since 2.1.0
      */
     public function __construct(\Magento\Framework\App\ProductMetadata $productMetadata)
     {
@@ -28,6 +31,7 @@ class LandingInstaller extends AbstractActionController
 
     /**
      * @return array|ViewModel
+     * @since 2.0.0
      */
     public function indexAction()
     {

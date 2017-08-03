@@ -9,12 +9,18 @@
  */
 namespace Magento\Framework\View\Design\Theme;
 
+/**
+ * Class \Magento\Framework\View\Design\Theme\Label
+ *
+ * @since 2.0.0
+ */
 class Label implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Labels collection array
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_labelsCollection;
 
@@ -22,6 +28,7 @@ class Label implements \Magento\Framework\Option\ArrayInterface
      * Constructor
      *
      * @param \Magento\Framework\View\Design\Theme\Label\ListInterface $labelList
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\View\Design\Theme\Label\ListInterface $labelList)
     {
@@ -33,6 +40,7 @@ class Label implements \Magento\Framework\Option\ArrayInterface
      *
      * @param bool|string $label add empty values to result with specific label
      * @return array
+     * @since 2.0.0
      */
     public function getLabelsCollection($label = false)
     {
@@ -47,6 +55,7 @@ class Label implements \Magento\Framework\Option\ArrayInterface
      * Return labels collection for backend system configuration with empty value "No Theme"
      *
      * @return array
+     * @since 2.0.0
      */
     public function getLabelsCollectionForSystemConfiguration()
     {
@@ -55,6 +64,7 @@ class Label implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function toOptionArray()
     {

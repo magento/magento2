@@ -6,12 +6,18 @@
  */
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
+/**
+ * Class \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite\CategoriesJson
+ *
+ * @since 2.0.0
+ */
 class CategoriesJson extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
 {
     /**
      * Ajax categories tree loader action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

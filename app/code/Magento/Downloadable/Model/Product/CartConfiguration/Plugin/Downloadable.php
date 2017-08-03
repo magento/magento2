@@ -7,6 +7,11 @@
  */
 namespace Magento\Downloadable\Model\Product\CartConfiguration\Plugin;
 
+/**
+ * Class \Magento\Downloadable\Model\Product\CartConfiguration\Plugin\Downloadable
+ *
+ * @since 2.0.0
+ */
 class Downloadable
 {
     /**
@@ -19,6 +24,7 @@ class Downloadable
      *
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function aroundIsProductConfigured(
         \Magento\Catalog\Model\Product\CartConfiguration $subject,

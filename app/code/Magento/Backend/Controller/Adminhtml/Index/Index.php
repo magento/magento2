@@ -6,6 +6,11 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Index;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\Index\Index
+ *
+ * @since 2.0.0
+ */
 class Index extends \Magento\Backend\Controller\Adminhtml\Index
 {
     /**
@@ -13,6 +18,7 @@ class Index extends \Magento\Backend\Controller\Adminhtml\Index
      * Always redirects to the startup page url
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

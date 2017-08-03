@@ -7,16 +7,19 @@ namespace Magento\Sales\Model\ResourceModel\Report;
 
 /**
  * Order entity resource model
+ * @since 2.0.0
  */
 class Order extends AbstractReport
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Report\Order\CreatedatFactory
+     * @since 2.0.0
      */
     protected $_createDatFactory;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Report\Order\UpdatedatFactory
+     * @since 2.0.0
      */
     protected $_updateDatFactory;
 
@@ -30,6 +33,7 @@ class Order extends AbstractReport
      * @param \Magento\Sales\Model\ResourceModel\Report\Order\CreatedatFactory $createDatFactory
      * @param \Magento\Sales\Model\ResourceModel\Report\Order\UpdatedatFactory $updateDatFactory
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -59,6 +63,7 @@ class Order extends AbstractReport
      * Model initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -71,6 +76,7 @@ class Order extends AbstractReport
      * @param string|int|\DateTime|array|null $from
      * @param string|int|\DateTime|array|null $to
      * @return $this
+     * @since 2.0.0
      */
     public function aggregate($from = null, $to = null)
     {

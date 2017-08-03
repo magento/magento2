@@ -7,21 +7,29 @@
  */
 namespace Magento\Framework\App;
 
+/**
+ * Class \Magento\Framework\App\FrontController
+ *
+ * @since 2.0.0
+ */
 class FrontController implements FrontControllerInterface
 {
     /**
      * @var RouterListInterface
+     * @since 2.0.0
      */
     protected $_routerList;
 
     /**
      * @var \Magento\Framework\App\ResponseInterface
+     * @since 2.0.0
      */
     protected $response;
 
     /**
      * @param RouterListInterface $routerList
      * @param \Magento\Framework\App\ResponseInterface $response
+     * @since 2.0.0
      */
     public function __construct(
         RouterListInterface $routerList,
@@ -37,6 +45,7 @@ class FrontController implements FrontControllerInterface
      * @param RequestInterface $request
      * @return ResponseInterface|\Magento\Framework\Controller\ResultInterface
      * @throws \LogicException
+     * @since 2.0.0
      */
     public function dispatch(RequestInterface $request)
     {

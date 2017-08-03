@@ -9,6 +9,7 @@ use Magento\Setup\Module\Dependency\Report\Builder\AbstractBuilder;
 
 /**
  *  Modules dependencies report builder
+ * @since 2.0.0
  */
 class Builder extends AbstractBuilder
 {
@@ -17,6 +18,7 @@ class Builder extends AbstractBuilder
      *
      * @param array $modulesData
      * @return \Magento\Setup\Module\Dependency\Report\Dependency\Data\Config
+     * @since 2.0.0
      */
     protected function buildData($modulesData)
     {

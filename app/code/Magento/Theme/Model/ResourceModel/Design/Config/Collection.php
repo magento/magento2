@@ -14,10 +14,16 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Theme\Model\Design\Config\ValueProcessor;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class \Magento\Theme\Model\ResourceModel\Design\Config\Collection
+ *
+ * @since 2.1.0
+ */
 class Collection extends ConfigCollection
 {
     /**
      * @var \Magento\Theme\Model\Design\Config\ValueProcessor
+     * @since 2.1.0
      */
     protected $valueProcessor;
 
@@ -29,6 +35,7 @@ class Collection extends ConfigCollection
      * @param ValueProcessor $valueProcessor
      * @param AdapterInterface|null $connection
      * @param AbstractDb|null $resource
+     * @since 2.1.0
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
@@ -48,6 +55,7 @@ class Collection extends ConfigCollection
      *
      * @param array $paths
      * @return $this
+     * @since 2.1.0
      */
     public function addPathsFilter(array $paths)
     {
@@ -60,6 +68,7 @@ class Collection extends ConfigCollection
      *
      * @param int $scopeId
      * @return $this
+     * @since 2.1.0
      */
     public function addScopeIdFilter($scopeId)
     {
@@ -69,6 +78,7 @@ class Collection extends ConfigCollection
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     protected function _afterLoad()
     {

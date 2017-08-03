@@ -10,6 +10,7 @@ use Magento\Framework\Event\Observer as EventObserver;
 
 /**
  * PayPal module observer
+ * @since 2.0.0
  */
 class SetResponseAfterSaveOrderObserver implements ObserverInterface
 {
@@ -17,6 +18,7 @@ class SetResponseAfterSaveOrderObserver implements ObserverInterface
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry;
 
@@ -24,16 +26,19 @@ class SetResponseAfterSaveOrderObserver implements ObserverInterface
      * Paypal hss
      *
      * @var \Magento\Paypal\Helper\Hss
+     * @since 2.0.0
      */
     protected $_paypalHss;
 
     /**
      * @var \Magento\Paypal\Model\Report\SettlementFactory
+     * @since 2.0.0
      */
     protected $_settlementFactory;
 
     /**
      * @var \Magento\Framework\App\ViewInterface
+     * @since 2.0.0
      */
     protected $_view;
 
@@ -43,6 +48,7 @@ class SetResponseAfterSaveOrderObserver implements ObserverInterface
      * @param \Magento\Paypal\Helper\Hss $paypalHss
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\App\ViewInterface $view
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Paypal\Helper\Hss $paypalHss,
@@ -59,6 +65,7 @@ class SetResponseAfterSaveOrderObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

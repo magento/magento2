@@ -10,6 +10,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class SaveDownloadableOrderItemObserver implements ObserverInterface
 {
@@ -17,31 +18,37 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Downloadable\Model\Link\PurchasedFactory
+     * @since 2.0.0
      */
     protected $_purchasedFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
+     * @since 2.0.0
      */
     protected $_productFactory;
 
     /**
      * @var \Magento\Downloadable\Model\Link\Purchased\ItemFactory
+     * @since 2.0.0
      */
     protected $_itemFactory;
 
     /**
      * @var \Magento\Framework\DataObject\Copy
+     * @since 2.0.0
      */
     protected $_objectCopyService;
 
     /**
      * @var \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory
+     * @since 2.0.0
      */
     protected $_itemsFactory;
 
@@ -52,6 +59,7 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
      * @param \Magento\Downloadable\Model\Link\Purchased\ItemFactory $itemFactory
      * @param \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory
      * @param \Magento\Framework\DataObject\Copy $objectCopyService
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -76,6 +84,7 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
@@ -166,6 +175,7 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
 
     /**
      * @return \Magento\Downloadable\Model\Link\Purchased
+     * @since 2.0.0
      */
     protected function _createPurchasedModel()
     {
@@ -174,6 +184,7 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
 
     /**
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     protected function _createProductModel()
     {
@@ -182,6 +193,7 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
 
     /**
      * @return \Magento\Downloadable\Model\Link\Purchased\Item
+     * @since 2.0.0
      */
     protected function _createPurchasedItemModel()
     {
@@ -190,6 +202,7 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
 
     /**
      * @return \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection
+     * @since 2.0.0
      */
     protected function _createItemsCollection()
     {

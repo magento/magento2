@@ -10,6 +10,7 @@ namespace Magento\Analytics\ReportXml;
  * Interface ConfigInterface
  *
  * Interface for ReportXml Config
+ * @since 2.2.0
  */
 interface ConfigInterface
 {
@@ -18,6 +19,7 @@ interface ConfigInterface
      *
      * @param string $queryName
      * @return array
+     * @since 2.2.0
      */
     public function get($queryName);
 }

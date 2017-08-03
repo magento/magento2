@@ -15,21 +15,25 @@ use Magento\Payment\Model\Method\Online\GatewayInterface;
 
 /**
  * Gateway Service
+ * @since 2.0.0
  */
 class Gateway implements GatewayInterface
 {
     /**
      * @var ZendClientFactory
+     * @since 2.0.0
      */
     protected $httpClientFactory;
 
     /**
      * @var Random
+     * @since 2.0.0
      */
     protected $mathRandom;
 
     /**
      * @var Logger
+     * @since 2.0.0
      */
     protected $logger;
 
@@ -37,6 +41,7 @@ class Gateway implements GatewayInterface
      * @param ZendClientFactory $httpClientFactory
      * @param Random $mathRandom
      * @param Logger $logger
+     * @since 2.0.0
      */
     public function __construct(
         ZendClientFactory $httpClientFactory,
@@ -56,6 +61,7 @@ class Gateway implements GatewayInterface
      *
      * @return DataObject
      * @throws \Zend_Http_Client_Exception
+     * @since 2.0.0
      */
     public function postRequest(DataObject $request, ConfigInterface $config)
     {

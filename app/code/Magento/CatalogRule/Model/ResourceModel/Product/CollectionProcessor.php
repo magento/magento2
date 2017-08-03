@@ -11,31 +11,37 @@ use Magento\CatalogRule\Pricing\Price\CatalogRulePrice;
 
 /**
  * Add catalog rule prices to collection
+ * @since 2.2.0
  */
 class CollectionProcessor
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.2.0
      */
     private $resource;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.2.0
      */
     private $customerSession;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
+     * @since 2.2.0
      */
     private $dateTime;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @since 2.2.0
      */
     private $localeDate;
 
@@ -45,6 +51,7 @@ class CollectionProcessor
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -64,6 +71,7 @@ class CollectionProcessor
      * @param ProductCollection $productCollection
      * @param string $joinColumn
      * @return ProductCollection
+     * @since 2.2.0
      */
     public function addPriceData(ProductCollection $productCollection, $joinColumn = 'e.entity_id')
     {

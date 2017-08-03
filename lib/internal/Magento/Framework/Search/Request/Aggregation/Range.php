@@ -8,16 +8,19 @@ namespace Magento\Framework\Search\Request\Aggregation;
 /**
  * Range
  * @SuppressWarnings(PHPMD.ShortVariable)
+ * @since 2.0.0
  */
 class Range
 {
     /**
      * @var int|null
+     * @since 2.0.0
      */
     protected $from;
 
     /**
      * @var int|null
+     * @since 2.0.0
      */
     protected $to;
 
@@ -25,6 +28,7 @@ class Range
      * @param int|null $from
      * @param int|null $to
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct($from, $to)
     {
@@ -37,6 +41,7 @@ class Range
      *
      * @return int|null
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getFrom()
     {
@@ -48,6 +53,7 @@ class Range
      *
      * @return int|null
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getTo()
     {

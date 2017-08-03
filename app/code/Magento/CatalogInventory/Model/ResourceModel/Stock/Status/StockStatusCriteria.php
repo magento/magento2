@@ -12,11 +12,13 @@ use Magento\Framework\Data\AbstractCriteria;
 
 /**
  * Class StockStatusCriteria
+ * @since 2.0.0
  */
 class StockStatusCriteria extends AbstractCriteria implements \Magento\CatalogInventory\Api\StockStatusCriteriaInterface
 {
     /**
      * @param string $mapper
+     * @since 2.0.0
      */
     public function __construct($mapper = '')
     {
@@ -26,6 +28,7 @@ class StockStatusCriteria extends AbstractCriteria implements \Magento\CatalogIn
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function setScopeFilter($scope)
     {
@@ -34,6 +37,7 @@ class StockStatusCriteria extends AbstractCriteria implements \Magento\CatalogIn
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function setProductsFilter($products)
     {
@@ -42,6 +46,7 @@ class StockStatusCriteria extends AbstractCriteria implements \Magento\CatalogIn
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function setQtyFilter($qty)
     {
@@ -50,6 +55,7 @@ class StockStatusCriteria extends AbstractCriteria implements \Magento\CatalogIn
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function addCriteria(\Magento\CatalogInventory\Api\StockStatusCriteriaInterface $criteria)
     {

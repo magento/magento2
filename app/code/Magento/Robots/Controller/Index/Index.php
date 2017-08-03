@@ -12,17 +12,20 @@ use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Processes request to robots.txt file and returns robots.txt content as result
+ * @since 2.2.0
  */
 class Index extends Action
 {
     /**
      * @var PageFactory
+     * @since 2.2.0
      */
     private $resultPageFactory;
 
     /**
      * @param Context $context
      * @param PageFactory $resultPageFactory
+     * @since 2.2.0
      */
     public function __construct(
         Context $context,
@@ -37,6 +40,7 @@ class Index extends Action
      * Generates robots.txt data and returns it as result
      *
      * @return Page
+     * @since 2.2.0
      */
     public function execute()
     {

@@ -9,6 +9,7 @@ namespace Magento\Framework\Validator;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Constraint extends \Magento\Framework\Validator\AbstractValidator
 {
@@ -16,6 +17,7 @@ class Constraint extends \Magento\Framework\Validator\AbstractValidator
      * Wrapped validator
      *
      * @var \Magento\Framework\Validator\ValidatorInterface
+     * @since 2.0.0
      */
     protected $_wrappedValidator;
 
@@ -23,6 +25,7 @@ class Constraint extends \Magento\Framework\Validator\AbstractValidator
      * Alias can be used for search
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_alias;
 
@@ -31,6 +34,7 @@ class Constraint extends \Magento\Framework\Validator\AbstractValidator
      *
      * @param \Magento\Framework\Validator\ValidatorInterface $validator
      * @param string $alias
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Validator\ValidatorInterface $validator, $alias = null)
     {
@@ -44,6 +48,7 @@ class Constraint extends \Magento\Framework\Validator\AbstractValidator
      * @param mixed $value
      * @return boolean
      * @api
+     * @since 2.0.0
      */
     public function isValid($value)
     {
@@ -63,6 +68,7 @@ class Constraint extends \Magento\Framework\Validator\AbstractValidator
      *
      * @param mixed $value
      * @return mixed
+     * @since 2.0.0
      */
     protected function _getValidatorValue($value)
     {
@@ -77,6 +83,7 @@ class Constraint extends \Magento\Framework\Validator\AbstractValidator
      *
      * @return string
      * @api
+     * @since 2.0.0
      */
     public function getAlias()
     {
@@ -88,6 +95,7 @@ class Constraint extends \Magento\Framework\Validator\AbstractValidator
      *
      * @param \Magento\Framework\Translate\AdapterInterface|null $translator
      * @return \Magento\Framework\Validator\AbstractValidator
+     * @since 2.0.0
      */
     public function setTranslator($translator = null)
     {
@@ -99,6 +107,7 @@ class Constraint extends \Magento\Framework\Validator\AbstractValidator
      * Get translator instance of wrapped validator
      *
      * @return \Magento\Framework\Translate\AdapterInterface|null
+     * @since 2.0.0
      */
     public function getTranslator()
     {

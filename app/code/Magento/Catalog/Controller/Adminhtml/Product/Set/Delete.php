@@ -6,10 +6,16 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\Set\Delete
+ *
+ * @since 2.0.0
+ */
 class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Set
 {
     /**
      * @var \Magento\Eav\Api\AttributeSetRepositoryInterface
+     * @since 2.0.0
      */
     protected $attributeSetRepository;
 
@@ -17,6 +23,7 @@ class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Set
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Eav\Api\AttributeSetRepositoryInterface $attributeSetRepository
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -29,6 +36,7 @@ class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Set
 
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

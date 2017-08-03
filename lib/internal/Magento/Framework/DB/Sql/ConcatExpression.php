@@ -10,21 +10,25 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Class Concat
+ * @since 2.0.0
  */
 class ConcatExpression extends Expression
 {
     /**
      * @var AdapterInterface
+     * @since 2.0.0
      */
     protected $adapter;
 
     /**
      * @var string[]
+     * @since 2.0.0
      */
     protected $columns;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $separator;
 
@@ -32,6 +36,7 @@ class ConcatExpression extends Expression
      * @param ResourceConnection $resource
      * @param array $columns
      * @param string $separator
+     * @since 2.0.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -48,6 +53,7 @@ class ConcatExpression extends Expression
      *   TRIM(CONCAT_WS(separator, IF(str1 <> '', str1, NULL), IF(str2 <> '', str2, NULL) ...))
      *
      * @return string
+     * @since 2.0.0
      */
     public function __toString()
     {

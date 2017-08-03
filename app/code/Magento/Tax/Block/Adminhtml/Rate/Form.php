@@ -19,6 +19,7 @@ use Magento\Tax\Controller\RegistryConstants;
 /**
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -26,11 +27,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @var null
+     * @since 2.0.0
      */
     protected $_titles = null;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'rate/form.phtml';
 
@@ -38,36 +41,43 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Tax data
      *
      * @var \Magento\Tax\Helper\Data|null
+     * @since 2.0.0
      */
     protected $_taxData = null;
 
     /**
      * @var \Magento\Tax\Block\Adminhtml\Rate\Title\FieldsetFactory
+     * @since 2.0.0
      */
     protected $_fieldsetFactory;
 
     /**
      * @var \Magento\Directory\Model\Config\Source\Country
+     * @since 2.0.0
      */
     protected $_country;
 
     /**
      * @var \Magento\Directory\Model\RegionFactory
+     * @since 2.0.0
      */
     protected $_regionFactory;
 
     /**
      * @var \Magento\Tax\Api\TaxRateRepositoryInterface
+     * @since 2.0.0
      */
     protected $_taxRateRepository;
 
     /**
      * @var \Magento\Tax\Model\TaxRateCollection
+     * @since 2.0.0
      */
     protected $_taxRateCollection;
 
     /**
      * @var \Magento\Tax\Model\Calculation\Rate\Converter
+     * @since 2.0.0
      */
     protected $_taxRateConverter;
 
@@ -84,6 +94,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Tax\Model\Calculation\Rate\Converter $taxRateConverter
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -110,6 +121,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -122,6 +134,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {

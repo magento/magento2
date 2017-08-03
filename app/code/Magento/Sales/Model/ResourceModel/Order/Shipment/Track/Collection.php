@@ -13,6 +13,7 @@ use Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Collection extends AbstractCollection implements ShipmentTrackSearchResultInterface
 {
@@ -20,6 +21,7 @@ class Collection extends AbstractCollection implements ShipmentTrackSearchResult
      * Event prefix
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_shipment_track_collection';
 
@@ -27,6 +29,7 @@ class Collection extends AbstractCollection implements ShipmentTrackSearchResult
      * Event object
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'order_shipment_track_collection';
 
@@ -34,6 +37,7 @@ class Collection extends AbstractCollection implements ShipmentTrackSearchResult
      * Order field
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_orderField = 'order_id';
 
@@ -41,6 +45,7 @@ class Collection extends AbstractCollection implements ShipmentTrackSearchResult
      * Model initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -55,6 +60,7 @@ class Collection extends AbstractCollection implements ShipmentTrackSearchResult
      *
      * @param int $shipmentId
      * @return $this
+     * @since 2.0.0
      */
     public function setShipmentFilter($shipmentId)
     {

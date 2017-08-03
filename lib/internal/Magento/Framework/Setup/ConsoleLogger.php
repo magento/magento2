@@ -13,6 +13,7 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
  * Console Logger
  *
  * @package Magento\Setup\Model
+ * @since 2.0.0
  */
 class ConsoleLogger implements LoggerInterface
 {
@@ -20,6 +21,7 @@ class ConsoleLogger implements LoggerInterface
      * Indicator of whether inline output is started
      *
      * @var bool
+     * @since 2.0.0
      */
     private $isInline = false;
 
@@ -27,6 +29,7 @@ class ConsoleLogger implements LoggerInterface
      * Console
      *
      * @var OutputInterface
+     * @since 2.0.0
      */
     protected $console;
 
@@ -34,6 +37,7 @@ class ConsoleLogger implements LoggerInterface
      * Constructor
      *
      * @param OutputInterface $output
+     * @since 2.0.0
      */
     public function __construct(OutputInterface $output)
     {
@@ -45,6 +49,7 @@ class ConsoleLogger implements LoggerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function logSuccess($message)
     {
@@ -54,6 +59,7 @@ class ConsoleLogger implements LoggerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function logError(\Exception $e)
     {
@@ -63,6 +69,7 @@ class ConsoleLogger implements LoggerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function log($message)
     {
@@ -72,6 +79,7 @@ class ConsoleLogger implements LoggerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function logInline($message)
     {
@@ -81,6 +89,7 @@ class ConsoleLogger implements LoggerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function logMeta($message)
     {
@@ -92,6 +101,7 @@ class ConsoleLogger implements LoggerInterface
      * Terminates line if the inline logging is started
      *
      * @return void
+     * @since 2.0.0
      */
     private function terminateLine()
     {

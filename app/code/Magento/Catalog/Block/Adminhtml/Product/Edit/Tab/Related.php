@@ -10,6 +10,7 @@ use Magento\Backend\Block\Widget\Grid\Extended;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Related extends Extended
 {
@@ -17,36 +18,43 @@ class Related extends Extended
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Catalog\Model\Product\LinkFactory
+     * @since 2.0.0
      */
     protected $_linkFactory;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory]
+     * @since 2.0.0
      */
     protected $_setsFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
+     * @since 2.0.0
      */
     protected $_productFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product\Type
+     * @since 2.0.0
      */
     protected $_type;
 
     /**
      * @var \Magento\Catalog\Model\Product\Attribute\Source\Status
+     * @since 2.0.0
      */
     protected $_status;
 
     /**
      * @var \Magento\Catalog\Model\Product\Visibility
+     * @since 2.0.0
      */
     protected $_visibility;
 
@@ -63,6 +71,7 @@ class Related extends Extended
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -90,6 +99,7 @@ class Related extends Extended
      * Set grid params
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -109,6 +119,7 @@ class Related extends Extended
      * Retrieve currently edited product model
      *
      * @return array|null
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -120,6 +131,7 @@ class Related extends Extended
      *
      * @param Column $column
      * @return $this
+     * @since 2.0.0
      */
     protected function _addColumnFilterToCollection($column)
     {
@@ -146,6 +158,7 @@ class Related extends Extended
      * Prepare collection
      *
      * @return Extended
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -171,6 +184,7 @@ class Related extends Extended
      * Checks when this block is readonly
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isReadonly()
     {
@@ -182,6 +196,7 @@ class Related extends Extended
      *
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -320,6 +335,7 @@ class Related extends Extended
      * Rerieve grid URL
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGridUrl()
     {
@@ -337,6 +353,7 @@ class Related extends Extended
      * Retrieve selected related products
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getSelectedProducts()
     {
@@ -351,6 +368,7 @@ class Related extends Extended
      * Retrieve related products
      *
      * @return array
+     * @since 2.0.0
      */
     public function getSelectedRelatedProducts()
     {

@@ -10,6 +10,7 @@ use Magento\Framework\DB\Select;
 
 /**
  * @api
+ * @since 2.1.0
  */
 interface QueryProcessorInterface
 {
@@ -18,6 +19,7 @@ interface QueryProcessorInterface
      * @param null|array $entityIds
      * @param bool $usePrimaryTable
      * @return Select
+     * @since 2.1.0
      */
     public function processQuery(Select $select, $entityIds = null, $usePrimaryTable = false);
 }

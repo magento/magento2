@@ -46,6 +46,7 @@ use Magento\Store\Model\Store;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @since 2.0.0
  */
 class Installer
 {
@@ -83,6 +84,7 @@ class Installer
      * File permissions checker
      *
      * @var FilePermissions
+     * @since 2.0.0
      */
     private $filePermissions;
 
@@ -90,6 +92,7 @@ class Installer
      * Deployment configuration repository
      *
      * @var Writer
+     * @since 2.0.0
      */
     private $deploymentConfigWriter;
 
@@ -97,6 +100,7 @@ class Installer
      * Deployment configuration reader
      *
      * @var Reader
+     * @since 2.0.0
      */
     private $deploymentConfigReader;
 
@@ -104,6 +108,7 @@ class Installer
      * Module list
      *
      * @var ModuleListInterface
+     * @since 2.0.0
      */
     private $moduleList;
 
@@ -111,6 +116,7 @@ class Installer
      * Module list loader
      *
      * @var ModuleLoader
+     * @since 2.0.0
      */
     private $moduleLoader;
 
@@ -118,6 +124,7 @@ class Installer
      * Admin account factory
      *
      * @var AdminAccountFactory
+     * @since 2.0.0
      */
     private $adminAccountFactory;
 
@@ -125,6 +132,7 @@ class Installer
      * Logger
      *
      * @var LoggerInterface
+     * @since 2.0.0
      */
     private $log;
 
@@ -132,6 +140,7 @@ class Installer
      * DB connection factory
      *
      * @var ConnectionFactory
+     * @since 2.0.0
      */
     private $connectionFactory;
 
@@ -139,6 +148,7 @@ class Installer
      * Progress indicator
      *
      * @var Installer\Progress
+     * @since 2.0.0
      */
     private $progress;
 
@@ -146,6 +156,7 @@ class Installer
      * Maintenance mode handler
      *
      * @var MaintenanceMode
+     * @since 2.0.0
      */
     private $maintenanceMode;
 
@@ -153,6 +164,7 @@ class Installer
      * Magento filesystem
      *
      * @var Filesystem
+     * @since 2.0.0
      */
     private $filesystem;
 
@@ -160,36 +172,43 @@ class Installer
      * Installation information
      *
      * @var array
+     * @since 2.0.0
      */
     private $installInfo = [];
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig
+     * @since 2.0.0
      */
     private $deploymentConfig;
 
     /**
      * @var ObjectManagerProvider
+     * @since 2.0.0
      */
     private $objectManagerProvider;
 
     /**
      * @var Context
+     * @since 2.0.0
      */
     private $context;
 
     /**
      * @var SetupConfigModel
+     * @since 2.0.0
      */
     private $setupConfigModel;
 
     /**
      * @var CleanupFiles
+     * @since 2.0.0
      */
     private $cleanupFiles;
 
     /**
      * @var DbValidator
+     * @since 2.0.0
      */
     private $dbValidator;
 
@@ -197,6 +216,7 @@ class Installer
      * Factory to create \Magento\Setup\Module\Setup
      *
      * @var SetupFactory
+     * @since 2.0.0
      */
     private $setupFactory;
 
@@ -204,11 +224,13 @@ class Installer
      * Factory to create \Magento\Setup\Module\DataSetup
      *
      * @var DataSetupFactory
+     * @since 2.0.0
      */
     private $dataSetupFactory;
 
     /**
      * @var \Magento\Framework\Setup\SampleData\State
+     * @since 2.0.0
      */
     protected $sampleDataState;
 
@@ -216,11 +238,13 @@ class Installer
      * Component Registrar
      *
      * @var ComponentRegistrar
+     * @since 2.0.0
      */
     private $componentRegistrar;
 
     /**
      * @var PhpReadinessCheck
+     * @since 2.1.0
      */
     private $phpReadinessCheck;
 
@@ -250,6 +274,7 @@ class Installer
      * @param PhpReadinessCheck $phpReadinessCheck
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         FilePermissions $filePermissions,
@@ -304,6 +329,7 @@ class Installer
      * @param \ArrayObject|array $request
      * @return void
      * @throws \LogicException
+     * @since 2.0.0
      */
     public function install($request)
     {
@@ -362,6 +388,7 @@ class Installer
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
+     * @since 2.1.0
      */
     private function writeInstallationDate()
     {
@@ -378,6 +405,7 @@ class Installer
      * @param bool $dryRun
      * @return array
      * @throws \LogicException
+     * @since 2.0.0
      */
     private function createModulesConfig($request, $dryRun = false)
     {
@@ -415,6 +443,7 @@ class Installer
      * @param string $key
      * @return string[]
      * @throws \LogicException
+     * @since 2.0.0
      */
     private function readListOfModules($all, $request, $key)
     {
@@ -438,6 +467,7 @@ class Installer
      * Logs progress
      *
      * @return void
+     * @since 2.0.0
      */
     private function logProgress()
     {
@@ -455,6 +485,7 @@ class Installer
      *
      * @return void
      * @throws \Exception
+     * @since 2.0.0
      */
     public function checkInstallationFilePermissions()
     {
@@ -468,6 +499,7 @@ class Installer
      *
      * @return void
      * @throws \Exception
+     * @since 2.1.0
      */
     public function checkExtensions()
     {
@@ -485,6 +517,7 @@ class Installer
      * Check permissions of directories that are expected to be non-writable for application
      *
      * @return void
+     * @since 2.0.0
      */
     public function checkApplicationFilePermissions()
     {
@@ -502,6 +535,7 @@ class Installer
      *
      * @param \ArrayObject|array $data
      * @return void
+     * @since 2.0.0
      */
     public function installDeploymentConfig($data)
     {
@@ -522,6 +556,7 @@ class Installer
      *
      * @param SchemaSetupInterface $setup
      * @return void
+     * @since 2.0.0
      */
     private function setupModuleRegistry(SchemaSetupInterface $setup)
     {
@@ -560,6 +595,7 @@ class Installer
      *
      * @param SchemaSetupInterface $setup
      * @return void
+     * @since 2.0.0
      */
     private function setupCoreTables(SchemaSetupInterface $setup)
     {
@@ -582,6 +618,7 @@ class Installer
      * @param SchemaSetupInterface $setup
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return void
+     * @since 2.0.0
      */
     private function setupSessionTable(
         SchemaSetupInterface $setup,
@@ -621,6 +658,7 @@ class Installer
      * @param SchemaSetupInterface $setup
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return void
+     * @since 2.0.0
      */
     private function setupCacheTable(
         SchemaSetupInterface $setup,
@@ -675,6 +713,7 @@ class Installer
      * @param SchemaSetupInterface $setup
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return void
+     * @since 2.0.0
      */
     private function setupCacheTagTable(
         SchemaSetupInterface $setup,
@@ -711,6 +750,7 @@ class Installer
      * @param SchemaSetupInterface $setup
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return void
+     * @since 2.0.0
      */
     private function setupFlagTable(
         SchemaSetupInterface $setup,
@@ -763,6 +803,7 @@ class Installer
      * Installs DB schema
      *
      * @return void
+     * @since 2.0.0
      */
     public function installSchema()
     {
@@ -780,6 +821,7 @@ class Installer
      *
      * @return void
      * @throws \Exception
+     * @since 2.0.0
      */
     public function installDataFixtures()
     {
@@ -796,6 +838,7 @@ class Installer
      *
      * @return void
      * @throws \Exception If some of the required directories isn't writable
+     * @since 2.2.0
      */
     public function checkFilePermissionsForDbUpgrade()
     {
@@ -810,6 +853,7 @@ class Installer
      * @param array $paths List of not writable paths
      * @return void
      * @throws \Exception If given not empty array of not writable paths
+     * @since 2.2.0
      */
     private function throwExceptionForNotWritablePaths(array $paths)
     {
@@ -829,6 +873,7 @@ class Installer
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     private function handleDBSchemaData($setup, $type)
     {
@@ -901,6 +946,7 @@ class Installer
     /**
      * @return void
      * @throws \Magento\Setup\Exception
+     * @since 2.1.0
      */
     private function assertDbConfigExists()
     {
@@ -917,6 +963,7 @@ class Installer
      *
      * @param \ArrayObject|array $data
      * @return void
+     * @since 2.0.0
      */
     public function installUserConfig($data)
     {
@@ -944,6 +991,7 @@ class Installer
      * @param string $interfaceName
      * @return mixed|null
      * @throws \Magento\Setup\Exception
+     * @since 2.0.0
      */
     protected function createSchemaDataHandler($className, $interfaceName)
     {
@@ -964,6 +1012,7 @@ class Installer
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
+     * @since 2.0.0
      */
     private function installOrderIncrementPrefix($orderIncrementPrefix)
     {
@@ -1006,6 +1055,7 @@ class Installer
      *
      * @param \ArrayObject|array $data
      * @return void
+     * @since 2.0.0
      */
     public function installAdminUser($data)
     {
@@ -1021,6 +1071,7 @@ class Installer
      * @param bool $keepGeneratedFiles Cleanup generated classes and view files and reset ObjectManager
      * @return void
      * @throws \Magento\Setup\Exception
+     * @since 2.0.0
      */
     public function updateModulesSequence($keepGeneratedFiles = false)
     {
@@ -1043,6 +1094,7 @@ class Installer
      * Uninstall Magento application
      *
      * @return void
+     * @since 2.0.0
      */
     public function uninstall()
     {
@@ -1077,6 +1129,7 @@ class Installer
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
+     * @since 2.0.0
      */
     private function enableCaches()
     {
@@ -1096,6 +1149,7 @@ class Installer
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
+     * @since 2.0.0
      */
     private function cleanCaches()
     {
@@ -1113,6 +1167,7 @@ class Installer
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
+     * @since 2.0.0
      */
     private function setMaintenanceMode($value)
     {
@@ -1123,6 +1178,7 @@ class Installer
      * Return messages
      *
      * @return array
+     * @since 2.0.0
      */
     public function getInstallInfo()
     {
@@ -1133,6 +1189,7 @@ class Installer
      * Deletes the database and creates it again
      *
      * @return void
+     * @since 2.0.0
      */
     public function cleanupDb()
     {
@@ -1160,6 +1217,7 @@ class Installer
      * Removes deployment configuration
      *
      * @return void
+     * @since 2.0.0
      */
     private function deleteDeploymentConfig()
     {
@@ -1184,6 +1242,7 @@ class Installer
      * Validates that MySQL is accessible and MySQL version is supported
      *
      * @return void
+     * @since 2.0.0
      */
     private function assertDbAccessible()
     {
@@ -1221,6 +1280,7 @@ class Installer
      * @param string $type
      * @return InstallSchemaInterface | UpgradeSchemaInterface | InstallDataInterface | UpgradeDataInterface | null
      * @throws \Magento\Setup\Exception
+     * @since 2.0.0
      */
     private function getSchemaDataHandler($moduleName, $type)
     {
@@ -1264,6 +1324,7 @@ class Installer
      * @param string $type
      * @return ModuleContext[]
      * @throws \Magento\Setup\Exception
+     * @since 2.0.0
      */
     private function generateListOfModuleContext($resource, $type)
     {
@@ -1289,6 +1350,7 @@ class Installer
      * Clear generated/code and reset object manager
      *
      * @return void
+     * @since 2.1.0
      */
     private function cleanupGeneratedFiles()
     {

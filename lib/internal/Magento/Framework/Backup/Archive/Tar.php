@@ -11,12 +11,18 @@
  */
 namespace Magento\Framework\Backup\Archive;
 
+/**
+ * Class \Magento\Framework\Backup\Archive\Tar
+ *
+ * @since 2.0.0
+ */
 class Tar extends \Magento\Framework\Archive\Tar
 {
     /**
      * Filenames or filename parts that are used for filtering files
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_skipFiles = [];
 
@@ -30,6 +36,7 @@ class Tar extends \Magento\Framework\Archive\Tar
      *
      * @see \Magento\Framework\Archive\Tar::_createTar()
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _createTar($skipRoot = false, $finalize = false)
     {
@@ -60,6 +67,7 @@ class Tar extends \Magento\Framework\Archive\Tar
      *
      * @param array $skipFiles
      * @return $this
+     * @since 2.0.0
      */
     public function setSkipFiles(array $skipFiles)
     {

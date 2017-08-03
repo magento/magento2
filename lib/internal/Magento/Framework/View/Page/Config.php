@@ -23,6 +23,7 @@ use Magento\Framework\View;
  * @SuppressWarnings(PHPMD.TooManyFields)
  *
  * @api
+ * @since 2.0.0
  */
 class Config
 {
@@ -48,6 +49,7 @@ class Config
      * Allowed group of types
      *
      * @var array
+     * @since 2.0.0
      */
     protected $allowedTypes = [
         self::ELEMENT_TYPE_BODY,
@@ -57,6 +59,7 @@ class Config
 
     /**
      * @var Title
+     * @since 2.0.0
      */
     protected $title;
 
@@ -64,51 +67,61 @@ class Config
      * Asset service
      *
      * @var \Magento\Framework\View\Asset\Repository
+     * @since 2.0.0
      */
     protected $assetRepo;
 
     /**
      * @var \Magento\Framework\View\Asset\GroupedCollection
+     * @since 2.0.0
      */
     protected $pageAssets;
 
     /**
      * @var string[][]
+     * @since 2.0.0
      */
     protected $elements = [];
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $pageLayout;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\Framework\View\Page\FaviconInterface
+     * @since 2.0.0
      */
     protected $favicon;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
+     * @since 2.0.0
      */
     protected $localeResolver;
 
     /**
      * @var \Magento\Framework\View\Layout\BuilderInterface
+     * @since 2.0.0
      */
     protected $builder;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $includes;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $metadata = [
         'charset' => null,
@@ -121,11 +134,13 @@ class Config
 
     /**
      * @var \Magento\Framework\App\State
+     * @since 2.1.0
      */
     private $areaResolver;
 
     /**
      * @var bool
+     * @since 2.1.0
      */
     private $isIncludesAvailable;
 
@@ -134,7 +149,8 @@ class Config
      *
      * @return \Magento\Framework\App\State
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getAreaResolver()
     {
@@ -153,6 +169,7 @@ class Config
      * @param Title $title
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param bool $isIncludesAvailable
+     * @since 2.0.0
      */
     public function __construct(
         View\Asset\Repository $assetRepo,
@@ -180,6 +197,7 @@ class Config
     /**
      * @param View\Layout\BuilderInterface $builder
      * @return $this
+     * @since 2.0.0
      */
     public function setBuilder(View\Layout\BuilderInterface $builder)
     {
@@ -190,6 +208,7 @@ class Config
     /**
      * Build page config from page configurations
      * @return void
+     * @since 2.0.0
      */
     protected function build()
     {
@@ -201,6 +220,7 @@ class Config
     /**
      * TODO Will be eliminated in MAGETWO-28359
      * @return void
+     * @since 2.0.0
      */
     public function publicBuild()
     {
@@ -211,6 +231,7 @@ class Config
      * Retrieve title element text (encoded)
      *
      * @return Title
+     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -222,6 +243,7 @@ class Config
      * @param string $name
      * @param string $content
      * @return void
+     * @since 2.0.0
      */
     public function setMetadata($name, $content)
     {
@@ -231,6 +253,7 @@ class Config
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getMetadata()
     {
@@ -241,6 +264,7 @@ class Config
     /**
      * @param string $contentType
      * @return void
+     * @since 2.0.0
      */
     public function setContentType($contentType)
     {
@@ -251,6 +275,7 @@ class Config
      * Retrieve Content Type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getContentType()
     {
@@ -264,6 +289,7 @@ class Config
     /**
      * @param string $mediaType
      * @return void
+     * @since 2.0.0
      */
     public function setMediaType($mediaType)
     {
@@ -274,6 +300,7 @@ class Config
      * Retrieve Media Type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMediaType()
     {
@@ -290,6 +317,7 @@ class Config
     /**
      * @param string $charset
      * @return void
+     * @since 2.0.0
      */
     public function setCharset($charset)
     {
@@ -300,6 +328,7 @@ class Config
      * Retrieve Charset
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCharset()
     {
@@ -316,6 +345,7 @@ class Config
     /**
      * @param string $description
      * @return void
+     * @since 2.0.0
      */
     public function setDescription($description)
     {
@@ -326,6 +356,7 @@ class Config
      * Retrieve content for description tag
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDescription()
     {
@@ -342,6 +373,7 @@ class Config
     /**
      * @param string $keywords
      * @return void
+     * @since 2.0.0
      */
     public function setKeywords($keywords)
     {
@@ -352,6 +384,7 @@ class Config
      * Retrieve content for keywords tag
      *
      * @return string
+     * @since 2.0.0
      */
     public function getKeywords()
     {
@@ -368,6 +401,7 @@ class Config
     /**
      * @param string $robots
      * @return void
+     * @since 2.0.0
      */
     public function setRobots($robots)
     {
@@ -378,6 +412,7 @@ class Config
      * Retrieve URL to robots file
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRobots()
     {
@@ -396,6 +431,7 @@ class Config
 
     /**
      * @return \Magento\Framework\View\Asset\GroupedCollection
+     * @since 2.0.0
      */
     public function getAssetCollection()
     {
@@ -408,6 +444,7 @@ class Config
      * @param array $properties
      * @param string|null $name
      * @return $this
+     * @since 2.0.0
      */
     public function addPageAsset($file, array $properties = [], $name = null)
     {
@@ -426,6 +463,7 @@ class Config
      * @param array $properties
      * @param string|null $name
      * @return $this
+     * @since 2.0.0
      */
     public function addRemotePageAsset($url, $contentType, array $properties = [], $name = null)
     {
@@ -442,6 +480,7 @@ class Config
      * @param string $title
      * @param string $href
      * @return $this
+     * @since 2.0.0
      */
     public function addRss($title, $href)
     {
@@ -460,6 +499,7 @@ class Config
      *
      * @param string $className
      * @return $this
+     * @since 2.0.0
      */
     public function addBodyClass($className)
     {
@@ -484,6 +524,7 @@ class Config
      * @param mixed $value
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function setElementAttribute($elementType, $attribute, $value)
     {
@@ -503,6 +544,7 @@ class Config
      * @param string $elementType
      * @param string $attribute
      * @return null
+     * @since 2.0.0
      */
     public function getElementAttribute($elementType, $attribute)
     {
@@ -513,6 +555,7 @@ class Config
     /**
      * @param string $elementType
      * @return string[]
+     * @since 2.0.0
      */
     public function getElementAttributes($elementType)
     {
@@ -525,6 +568,7 @@ class Config
      *
      * @param string $handle
      * @return $this
+     * @since 2.0.0
      */
     public function setPageLayout($handle)
     {
@@ -536,6 +580,7 @@ class Config
      * Return current page layout
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPageLayout()
     {
@@ -544,6 +589,7 @@ class Config
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getFaviconFile()
     {
@@ -552,6 +598,7 @@ class Config
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getDefaultFavicon()
     {
@@ -562,6 +609,7 @@ class Config
      * Get miscellaneous scripts/styles to be included in head before head closing tag
      *
      * @return string
+     * @since 2.0.0
      */
     public function getIncludes()
     {

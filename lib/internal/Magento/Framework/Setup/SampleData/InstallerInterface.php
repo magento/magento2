@@ -7,6 +7,7 @@ namespace Magento\Framework\Setup\SampleData;
 
 /**
  * Interface for SampleData modules installation
+ * @since 2.0.0
  */
 interface InstallerInterface
 {
@@ -14,6 +15,7 @@ interface InstallerInterface
      * Install SampleData module
      *
      * @return void
+     * @since 2.0.0
      */
     public function install();
 }

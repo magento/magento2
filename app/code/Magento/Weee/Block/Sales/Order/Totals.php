@@ -7,11 +7,13 @@ namespace Magento\Weee\Block\Sales\Order;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Totals extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Weee\Helper\Data
+     * @since 2.0.0
      */
     protected $weeeData;
 
@@ -19,6 +21,7 @@ class Totals extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Weee\Helper\Data $weeeData
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -33,6 +36,7 @@ class Totals extends \Magento\Framework\View\Element\Template
      * Get totals source object
      *
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     public function getSource()
     {
@@ -43,6 +47,7 @@ class Totals extends \Magento\Framework\View\Element\Template
      * Create the weee ("FPT") totals summary
      *
      * @return $this
+     * @since 2.0.0
      */
     public function initTotals()
     {

@@ -17,16 +17,19 @@ use Magento\Catalog\Helper\Image;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
     /**
      * @var \Magento\Framework\Config\View
+     * @since 2.0.0
      */
     protected $configView;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
+     * @since 2.0.0
      */
     protected $jsonEncoder;
 
@@ -35,6 +38,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param EncoderInterface $jsonEncoder
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -50,6 +54,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      * Retrieve collection of gallery images
      *
      * @return Collection
+     * @since 2.0.0
      */
     public function getGalleryImages()
     {
@@ -86,6 +91,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      * Return magnifier options
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMagnifier()
     {
@@ -96,6 +102,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      * Return breakpoints options
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBreakpoints()
     {
@@ -106,6 +113,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      * Retrieve product images in JSON format
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGalleryImagesJson()
     {
@@ -142,6 +150,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      *
      * @param null|\Magento\Framework\DataObject $image
      * @return string
+     * @since 2.0.0
      */
     public function getGalleryUrl($image = null)
     {
@@ -157,6 +166,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      *
      * @param \Magento\Framework\DataObject $image
      * @return bool
+     * @since 2.0.0
      */
     public function isMainImage($image)
     {
@@ -169,6 +179,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param string $attributeName
      * @param string $default
      * @return string
+     * @since 2.0.0
      */
     public function getImageAttribute($imageId, $attributeName, $default = null)
     {
@@ -181,6 +192,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      * Retrieve config view
      *
      * @return \Magento\Framework\Config\View
+     * @since 2.0.0
      */
     private function getConfigView()
     {

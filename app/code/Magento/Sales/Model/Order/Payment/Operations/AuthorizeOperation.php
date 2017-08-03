@@ -10,6 +10,11 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 
+/**
+ * Class \Magento\Sales\Model\Order\Payment\Operations\AuthorizeOperation
+ *
+ * @since 2.0.0
+ */
 class AuthorizeOperation extends AbstractOperation
 {
     /**
@@ -19,6 +24,7 @@ class AuthorizeOperation extends AbstractOperation
      * @param bool $isOnline
      * @param string|float $amount
      * @return OrderPaymentInterface
+     * @since 2.0.0
      */
     public function authorize(OrderPaymentInterface $payment, $isOnline, $amount)
     {

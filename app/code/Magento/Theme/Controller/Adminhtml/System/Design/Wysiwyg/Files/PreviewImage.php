@@ -9,12 +9,18 @@ namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\PreviewImage
+ *
+ * @since 2.0.0
+ */
 class PreviewImage extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
 {
     /**
      * Preview image action
      *
      * @return ResponseInterface|void
+     * @since 2.0.0
      */
     public function execute()
     {

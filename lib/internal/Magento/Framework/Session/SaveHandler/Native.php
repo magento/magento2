@@ -7,6 +7,7 @@ namespace Magento\Framework\Session\SaveHandler;
 
 /**
  * Php native session save handler
+ * @since 2.0.0
  */
 class Native extends \SessionHandler
 {
@@ -16,6 +17,7 @@ class Native extends \SessionHandler
      *
      * @param string $sessionId
      * @return string
+     * @since 2.1.0
      */
     public function read($sessionId)
     {

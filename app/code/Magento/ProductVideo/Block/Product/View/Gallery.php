@@ -13,11 +13,13 @@ namespace Magento\ProductVideo\Block\Product\View;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
 {
     /**
      * @var \Magento\ProductVideo\Helper\Media
+     * @since 2.0.0
      */
     protected $mediaHelper;
 
@@ -27,6 +29,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
      * @param \Magento\ProductVideo\Helper\Media $mediaHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -48,6 +51,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
      * Retrieve media gallery data in JSON format
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMediaGalleryDataJson()
     {
@@ -66,6 +70,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
      * Retrieve video settings data in JSON format
      *
      * @return string
+     * @since 2.0.0
      */
     public function getVideoSettingsJson()
     {
@@ -80,6 +85,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
     /**
      * Return media gallery for product options
      * @return string
+     * @since 2.1.0
      */
     public function getOptionsMediaGalleryDataJson()
     {

@@ -10,6 +10,7 @@ use Magento\Setup\Module\I18n\Parser\AdapterInterface;
 
 /**
  * Abstract parser adapter
+ * @since 2.0.0
  */
 abstract class AbstractAdapter implements AdapterInterface
 {
@@ -17,6 +18,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * Processed file
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_file;
 
@@ -24,11 +26,13 @@ abstract class AbstractAdapter implements AdapterInterface
      * Parsed phrases
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_phrases = [];
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function parse($file)
     {
@@ -41,11 +45,13 @@ abstract class AbstractAdapter implements AdapterInterface
      * Template method
      *
      * @return void
+     * @since 2.0.0
      */
     abstract protected function _parse();
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getPhrases()
     {
@@ -59,6 +65,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param string|int $line
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function _addPhrase($phrase, $line = '')
     {
@@ -85,6 +92,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param string $phrase
      * @return string
+     * @since 2.0.0
      */
     protected function _stripFirstAndLastChar($phrase)
     {
@@ -96,6 +104,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param string $phrase
      * @return bool
+     * @since 2.0.0
      */
     protected function _isFirstAndLastCharIsQuote($phrase)
     {
@@ -109,6 +118,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param string $phrase
      * @return string
+     * @since 2.0.0
      */
     protected function getEnclosureCharacter($phrase)
     {
@@ -123,6 +133,7 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * @param string $phrase
      * @return string
+     * @since 2.0.0
      */
     protected function trimEnclosure($phrase)
     {
@@ -132,6 +143,7 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * @param string $char
      * @return bool
+     * @since 2.0.0
      */
     protected function isQuote($char)
     {

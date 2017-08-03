@@ -18,6 +18,7 @@ use Magento\Framework\View\Design\Fallback\RulePool;
 /**
  * Class FileResolver
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class FileResolver implements \Magento\Framework\Config\FileResolverInterface, DesignResolverInterface
 {
@@ -25,31 +26,37 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface, D
      * Module configuration file reader
      *
      * @var DirReader
+     * @since 2.0.0
      */
     protected $moduleReader;
 
     /**
      * @var \Magento\Framework\Config\FileIteratorFactory
+     * @since 2.0.0
      */
     protected $iteratorFactory;
 
     /**
      * @var \Magento\Framework\View\DesignInterface
+     * @since 2.0.0
      */
     protected $currentTheme;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $area;
 
     /**
      * @var Filesystem\Directory\ReadInterface
+     * @since 2.0.0
      */
     protected $rootDirectory;
 
     /**
      * @var \Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface
+     * @since 2.0.0
      */
     protected $resolver;
 
@@ -60,6 +67,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface, D
      * @param DirectoryList $directoryList
      * @param Filesystem $filesystem
      * @param ResolverInterface $resolver
+     * @since 2.0.0
      */
     public function __construct(
         DirReader $moduleReader,
@@ -80,6 +88,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface, D
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function get($filename, $scope)
     {
@@ -125,6 +134,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface, D
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getParents($filename, $scope)
     {
@@ -163,6 +173,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface, D
      * @param array $iterator
      * @param int $index
      * @return array
+     * @since 2.1.0
      */
     private function getParentConfigs(ThemeInterface $theme, array $iterator, $index = 0)
     {

@@ -13,12 +13,18 @@
  */
 namespace Magento\UrlRewrite\Block;
 
+/**
+ * Class \Magento\UrlRewrite\Block\Link
+ *
+ * @since 2.0.0
+ */
 class Link extends \Magento\Framework\View\Element\AbstractBlock
 {
     /**
      * Render output
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

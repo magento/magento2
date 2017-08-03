@@ -9,6 +9,11 @@ namespace Magento\Framework\Api;
 
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Class \Magento\Framework\Api\AttributeValueFactory
+ *
+ * @since 2.0.0
+ */
 class AttributeValueFactory
 {
     /**
@@ -20,6 +25,7 @@ class AttributeValueFactory
      * Object Manager instance
      *
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager = null;
 
@@ -27,6 +33,7 @@ class AttributeValueFactory
      * Factory constructor
      *
      * @param ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -37,6 +44,7 @@ class AttributeValueFactory
      * Create class instance with specified parameters
      *
      * @return AttributeValue
+     * @since 2.0.0
      */
     public function create()
     {

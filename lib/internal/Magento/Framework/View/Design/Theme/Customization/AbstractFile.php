@@ -9,6 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Theme file service abstract class
+ * @since 2.0.0
  */
 abstract class AbstractFile implements
     \Magento\Framework\View\Design\Theme\Customization\FileInterface,
@@ -18,6 +19,7 @@ abstract class AbstractFile implements
      * Customization path
      *
      * @var \Magento\Framework\View\Design\Theme\Customization\Path
+     * @since 2.0.0
      */
     protected $_customizationPath;
 
@@ -25,6 +27,7 @@ abstract class AbstractFile implements
      * File factory
      *
      * @var \Magento\Framework\View\Design\Theme\FileFactory
+     * @since 2.0.0
      */
     protected $_fileFactory;
 
@@ -32,6 +35,7 @@ abstract class AbstractFile implements
      * File system
      *
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $_filesystem;
 
@@ -41,6 +45,7 @@ abstract class AbstractFile implements
      * @param \Magento\Framework\View\Design\Theme\Customization\Path $customizationPath
      * @param \Magento\Framework\View\Design\Theme\FileFactory $fileFactory
      * @param \Magento\Framework\Filesystem $filesystem
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Design\Theme\Customization\Path $customizationPath,
@@ -56,6 +61,7 @@ abstract class AbstractFile implements
      * Create class instance with specified parameters
      *
      * @return \Magento\Framework\View\Design\Theme\FileInterface
+     * @since 2.0.0
      */
     public function create()
     {
@@ -69,6 +75,7 @@ abstract class AbstractFile implements
      *
      * @param \Magento\Framework\View\Design\Theme\FileInterface $file
      * @return string
+     * @since 2.0.0
      */
     public function getFullPath(\Magento\Framework\View\Design\Theme\FileInterface $file)
     {
@@ -81,6 +88,7 @@ abstract class AbstractFile implements
      *
      * @param \Magento\Framework\View\Design\Theme\FileInterface $file
      * @return $this
+     * @since 2.0.0
      */
     public function prepareFile(\Magento\Framework\View\Design\Theme\FileInterface $file)
     {
@@ -98,6 +106,7 @@ abstract class AbstractFile implements
      *
      * @param \Magento\Framework\View\Design\Theme\FileInterface $file
      * @return $this
+     * @since 2.0.0
      */
     public function save(\Magento\Framework\View\Design\Theme\FileInterface $file)
     {
@@ -110,6 +119,7 @@ abstract class AbstractFile implements
      *
      * @param \Magento\Framework\View\Design\Theme\FileInterface $file
      * @return $this
+     * @since 2.0.0
      */
     public function delete(\Magento\Framework\View\Design\Theme\FileInterface $file)
     {
@@ -122,6 +132,7 @@ abstract class AbstractFile implements
      *
      * @param \Magento\Framework\View\Design\Theme\FileInterface $file
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareFileName(\Magento\Framework\View\Design\Theme\FileInterface $file)
     {
@@ -144,6 +155,7 @@ abstract class AbstractFile implements
      *
      * @param \Magento\Framework\View\Design\Theme\FileInterface $file
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareFilePath(\Magento\Framework\View\Design\Theme\FileInterface $file)
     {
@@ -155,6 +167,7 @@ abstract class AbstractFile implements
      *
      * @param \Magento\Framework\View\Design\Theme\FileInterface $file
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareSortOrder(\Magento\Framework\View\Design\Theme\FileInterface $file)
     {
@@ -175,6 +188,7 @@ abstract class AbstractFile implements
      * @param string $filePath
      * @param string $content
      * @return void
+     * @since 2.0.0
      */
     protected function _saveFileContent($filePath, $content)
     {
@@ -189,6 +203,7 @@ abstract class AbstractFile implements
      *
      * @param string $filePath
      * @return void
+     * @since 2.0.0
      */
     protected function _deleteFileContent($filePath)
     {
@@ -202,6 +217,7 @@ abstract class AbstractFile implements
      * Returns filesystem directory instance for write operations
      *
      * @return \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @since 2.0.0
      */
     protected function getDirectoryWrite()
     {

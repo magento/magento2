@@ -9,21 +9,29 @@ use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
 use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractImportValidator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
+/**
+ * Class \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website
+ *
+ * @since 2.0.0
+ */
 class Website extends AbstractImportValidator implements RowValidatorInterface
 {
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
+     * @since 2.0.0
      */
     protected $storeResolver;
 
     /**
      * @var \Magento\Store\Model\Website
+     * @since 2.0.0
      */
     protected $websiteModel;
 
     /**
      * @param \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver
      * @param \Magento\Store\Model\Website $websiteModel
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver,
@@ -35,6 +43,7 @@ class Website extends AbstractImportValidator implements RowValidatorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function init($context)
     {
@@ -47,6 +56,7 @@ class Website extends AbstractImportValidator implements RowValidatorInterface
      * @param array $value
      * @param string $websiteCode
      * @return bool
+     * @since 2.0.0
      */
     protected function isWebsiteValid($value, $websiteCode)
     {
@@ -64,6 +74,7 @@ class Website extends AbstractImportValidator implements RowValidatorInterface
      *
      * @param mixed $value
      * @return bool
+     * @since 2.0.0
      */
     public function isValid($value)
     {
@@ -82,6 +93,7 @@ class Website extends AbstractImportValidator implements RowValidatorInterface
      * Get all websites value with currency code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAllWebsitesValue()
     {

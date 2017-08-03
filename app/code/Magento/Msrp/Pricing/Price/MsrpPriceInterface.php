@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product;
  * MSRP price interface
  *
  * @api
+ * @since 2.0.0
  */
 interface MsrpPriceInterface
 {
@@ -19,6 +20,7 @@ interface MsrpPriceInterface
      * Check is product need gesture to show price
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isShowPriceOnGesture();
 
@@ -26,6 +28,7 @@ interface MsrpPriceInterface
      * Get Msrp message for price
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMsrpPriceMessage();
 
@@ -33,6 +36,7 @@ interface MsrpPriceInterface
      * Check if Minimum Advertised Price is enabled
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isMsrpEnabled();
 
@@ -41,6 +45,7 @@ interface MsrpPriceInterface
      *
      * @param Product $saleableItem
      * @return bool
+     * @since 2.0.0
      */
     public function canApplyMsrp(Product $saleableItem);
 }

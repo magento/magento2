@@ -21,6 +21,7 @@ use Magento\Indexer\Model\ResourceModel\Indexer\State\CollectionFactory;
 /**
  * @codeCoverageIgnore
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Recurring implements InstallSchemaInterface
 {
@@ -28,26 +29,31 @@ class Recurring implements InstallSchemaInterface
      * Indexer collection factory
      *
      * @var CollectionFactory
+     * @since 2.0.0
      */
     private $statesFactory;
 
     /**
      * @var ConfigInterface
+     * @since 2.0.0
      */
     private $config;
 
     /**
      * @var EncryptorInterface
+     * @since 2.0.0
      */
     private $encryptor;
 
     /**
      * @var EncoderInterface
+     * @since 2.0.0
      */
     private $encoder;
 
     /**
      * @var StateFactory
+     * @since 2.0.0
      */
     private $stateFactory;
 
@@ -59,6 +65,7 @@ class Recurring implements InstallSchemaInterface
      * @param ConfigInterface $config
      * @param EncryptorInterface $encryptor
      * @param EncoderInterface $encoder
+     * @since 2.0.0
      */
     public function __construct(
         CollectionFactory $statesFactory,
@@ -76,6 +83,7 @@ class Recurring implements InstallSchemaInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {

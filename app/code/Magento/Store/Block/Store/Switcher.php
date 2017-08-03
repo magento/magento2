@@ -11,20 +11,28 @@ namespace Magento\Store\Block\Store;
 
 use Magento\Directory\Helper\Data;
 
+/**
+ * Class \Magento\Store\Block\Store\Switcher
+ *
+ * @since 2.0.0
+ */
 class Switcher extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_groups = [];
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_stores = [];
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $_loaded = false;
 
@@ -32,6 +40,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
      * Store factory
      *
      * @var \Magento\Store\Model\StoreFactory
+     * @since 2.0.0
      */
     protected $_storeFactory;
 
@@ -39,6 +48,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
      * Store group factory
      *
      * @var \Magento\Store\Model\GroupFactory
+     * @since 2.0.0
      */
     protected $_storeGroupFactory;
 
@@ -47,6 +57,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
      * @param \Magento\Store\Model\GroupFactory $storeGroupFactory
      * @param \Magento\Store\Model\StoreFactory $storeFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -61,6 +72,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -72,6 +84,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _loadData()
     {
@@ -105,6 +118,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
 
     /**
      * @return int
+     * @since 2.0.0
      */
     public function getStoreCount()
     {
@@ -135,6 +149,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
 
     /**
      * @return int
+     * @since 2.0.0
      */
     public function getLanguageCount()
     {
@@ -149,6 +164,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
 
     /**
      * @return int
+     * @since 2.0.0
      */
     public function getCurrentStoreId()
     {
@@ -157,6 +173,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getCurrentStoreCode()
     {

@@ -18,6 +18,7 @@ use Magento\Framework\Validator\EmailAddress;
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 abstract class AbstractData
 {
@@ -25,6 +26,7 @@ abstract class AbstractData
      * Attribute instance
      *
      * @var \Magento\Eav\Model\Attribute
+     * @since 2.0.0
      */
     protected $_attribute;
 
@@ -32,6 +34,7 @@ abstract class AbstractData
      * Entity instance
      *
      * @var \Magento\Framework\Model\AbstractModel
+     * @since 2.0.0
      */
     protected $_entity;
 
@@ -39,6 +42,7 @@ abstract class AbstractData
      * Request Scope name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_requestScope;
 
@@ -46,6 +50,7 @@ abstract class AbstractData
      * Scope visibility flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_requestScopeOnly = true;
 
@@ -53,6 +58,7 @@ abstract class AbstractData
      * Is AJAX request flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isAjax = false;
 
@@ -61,6 +67,7 @@ abstract class AbstractData
      * Needed for depends attributes
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_extractedData = [];
 
@@ -68,21 +75,25 @@ abstract class AbstractData
      * Date filter format
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_dateFilterFormat;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @since 2.0.0
      */
     protected $_localeDate;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
+     * @since 2.0.0
      */
     protected $_localeResolver;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $_logger;
 
@@ -91,6 +102,7 @@ abstract class AbstractData
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -108,6 +120,7 @@ abstract class AbstractData
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setAttribute(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute)
     {
@@ -120,6 +133,7 @@ abstract class AbstractData
      *
      * @throws CoreException
      * @return \Magento\Eav\Model\Attribute
+     * @since 2.0.0
      */
     public function getAttribute()
     {
@@ -135,6 +149,7 @@ abstract class AbstractData
      * @param string $scope
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setRequestScope($scope)
     {
@@ -149,6 +164,7 @@ abstract class AbstractData
      * @param bool $flag
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setRequestScopeOnly($flag)
     {
@@ -162,6 +178,7 @@ abstract class AbstractData
      * @param \Magento\Framework\Model\AbstractModel $entity
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setEntity(\Magento\Framework\Model\AbstractModel $entity)
     {
@@ -174,6 +191,7 @@ abstract class AbstractData
      *
      * @return \Magento\Framework\Model\AbstractModel
      * @throws CoreException
+     * @since 2.0.0
      */
     public function getEntity()
     {
@@ -189,6 +207,7 @@ abstract class AbstractData
      * @param array $data
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setExtractedData(array $data)
     {
@@ -201,6 +220,7 @@ abstract class AbstractData
      *
      * @param string $index
      * @return mixed
+     * @since 2.0.0
      */
     public function getExtractedData($index = null)
     {
@@ -218,6 +238,7 @@ abstract class AbstractData
      *
      * @param string $value
      * @return string
+     * @since 2.0.0
      */
     protected function _applyInputFilter($value)
     {
@@ -237,6 +258,7 @@ abstract class AbstractData
      * Return Data Form Input/Output Filter
      *
      * @return \Magento\Framework\Data\Form\Filter\FilterInterface|false
+     * @since 2.0.0
      */
     protected function _getFormFilter()
     {
@@ -258,6 +280,7 @@ abstract class AbstractData
      *
      * @param string|null|false $format
      * @return $this|string
+     * @since 2.0.0
      */
     protected function _dateFilterFormat($format = null)
     {
@@ -282,6 +305,7 @@ abstract class AbstractData
      *
      * @param string $value
      * @return string
+     * @since 2.0.0
      */
     protected function _applyOutputFilter($value)
     {
@@ -300,6 +324,7 @@ abstract class AbstractData
      * @return string|true
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _validateInputRule($value)
     {
@@ -478,6 +503,7 @@ abstract class AbstractData
      * @param bool $flag
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setIsAjaxRequest($flag = true)
     {
@@ -491,6 +517,7 @@ abstract class AbstractData
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getIsAjaxRequest()
     {
@@ -502,6 +529,7 @@ abstract class AbstractData
      *
      * @param RequestInterface $request
      * @return mixed
+     * @since 2.0.0
      */
     protected function _getRequestValue(RequestInterface $request)
     {
@@ -541,6 +569,7 @@ abstract class AbstractData
      *
      * @param RequestInterface $request
      * @return array|string|bool
+     * @since 2.0.0
      */
     abstract public function extractValue(RequestInterface $request);
 
@@ -550,6 +579,7 @@ abstract class AbstractData
      * @param array|string $value
      * @throws CoreException
      * @return bool
+     * @since 2.0.0
      */
     abstract public function validateValue($value);
 
@@ -558,6 +588,7 @@ abstract class AbstractData
      *
      * @param array|string $value
      * @return $this
+     * @since 2.0.0
      */
     abstract public function compactValue($value);
 
@@ -566,6 +597,7 @@ abstract class AbstractData
      *
      * @param array|string $value
      * @return $this
+     * @since 2.0.0
      */
     abstract public function restoreValue($value);
 
@@ -574,6 +606,7 @@ abstract class AbstractData
      *
      * @param string $format
      * @return string|array
+     * @since 2.0.0
      */
     abstract public function outputValue($format = \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT);
 }

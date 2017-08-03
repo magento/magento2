@@ -11,15 +11,22 @@ use Magento\Framework\Phrase\RendererInterface;
 use Magento\Framework\TranslateInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class \Magento\Framework\Phrase\Renderer\Translate
+ *
+ * @since 2.0.0
+ */
 class Translate implements RendererInterface
 {
     /**
      * @var \Magento\Framework\TranslateInterface
+     * @since 2.0.0
      */
     protected $translator;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $logger;
 
@@ -28,6 +35,7 @@ class Translate implements RendererInterface
      *
      * @param \Magento\Framework\TranslateInterface $translator
      * @param \Psr\Log\LoggerInterface $logger
+     * @since 2.0.0
      */
     public function __construct(
         TranslateInterface $translator,
@@ -45,6 +53,7 @@ class Translate implements RendererInterface
      * @return string
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function render(array $source, array $arguments)
     {

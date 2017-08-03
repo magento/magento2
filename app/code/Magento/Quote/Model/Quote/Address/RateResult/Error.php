@@ -5,10 +5,16 @@
  */
 namespace Magento\Quote\Model\Quote\Address\RateResult;
 
+/**
+ * Class \Magento\Quote\Model\Quote\Address\RateResult\Error
+ *
+ * @since 2.0.0
+ */
 class Error extends AbstractResult
 {
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getErrorMessage()
     {

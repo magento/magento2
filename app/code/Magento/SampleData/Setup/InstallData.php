@@ -9,16 +9,19 @@ use Magento\Framework\Setup;
 
 /**
  * Class PostInstallSampleData
+ * @since 2.0.0
  */
 class InstallData implements Setup\InstallDataInterface
 {
     /**
      * @var \Magento\Framework\Setup\SampleData\State
+     * @since 2.0.0
      */
     protected $state;
 
     /**
      * @param \Magento\Framework\Setup\SampleData\State $state
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Setup\SampleData\State $state
@@ -28,6 +31,7 @@ class InstallData implements Setup\InstallDataInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function install(Setup\ModuleDataSetupInterface $setup, Setup\ModuleContextInterface $moduleContext)
     {

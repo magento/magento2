@@ -10,22 +10,26 @@ use Magento\Braintree\Gateway\Config\Config;
 
 /**
  * Class DescriptorDataBuilder
+ * @since 2.2.0
  */
 class DescriptorDataBuilder implements BuilderInterface
 {
     /**
      * @var string
+     * @since 2.2.0
      */
     private static $descriptorKey = 'descriptor';
 
     /**
      * @var Config
+     * @since 2.2.0
      */
     private $config;
 
     /**
      * DescriptorDataBuilder constructor.
      * @param Config $config
+     * @since 2.2.0
      */
     public function __construct(Config $config)
     {
@@ -35,6 +39,7 @@ class DescriptorDataBuilder implements BuilderInterface
     /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function build(array $buildSubject)
     {

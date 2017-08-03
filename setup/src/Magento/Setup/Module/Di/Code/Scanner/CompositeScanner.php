@@ -5,10 +5,16 @@
  */
 namespace Magento\Setup\Module\Di\Code\Scanner;
 
+/**
+ * Class \Magento\Setup\Module\Di\Code\Scanner\CompositeScanner
+ *
+ * @since 2.0.0
+ */
 class CompositeScanner implements ScannerInterface
 {
     /**
      * @var ScannerInterface[]
+     * @since 2.0.0
      */
     protected $_children = [];
 
@@ -18,6 +24,7 @@ class CompositeScanner implements ScannerInterface
      * @param ScannerInterface $scanner
      * @param string $type
      * @return void
+     * @since 2.0.0
      */
     public function addChild(ScannerInterface $scanner, $type)
     {
@@ -29,6 +36,7 @@ class CompositeScanner implements ScannerInterface
      *
      * @param array $files
      * @return array
+     * @since 2.0.0
      */
     public function collectEntities(array $files)
     {

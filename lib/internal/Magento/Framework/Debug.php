@@ -7,11 +7,13 @@ namespace Magento\Framework;
 
 /**
  * Magento Debug methods
+ * @since 2.0.0
  */
 class Debug
 {
     /**
      * @var int
+     * @since 2.0.0
      */
     public static $argLength = 16;
 
@@ -19,6 +21,7 @@ class Debug
      * Magento Root path
      *
      * @var string
+     * @since 2.0.0
      */
     protected static $_filePath;
 
@@ -26,6 +29,7 @@ class Debug
      * Retrieve real root path with last directory separator
      *
      * @return string
+     * @since 2.0.0
      */
     public static function getRootPath()
     {
@@ -46,6 +50,7 @@ class Debug
      * @param bool $html        output in HTML format
      * @param bool $withArgs    add short arguments of methods
      * @return string|bool
+     * @since 2.0.0
      */
     public static function backtrace($return = false, $html = true, $withArgs = true)
     {
@@ -63,6 +68,7 @@ class Debug
      * @return string|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public static function trace(array $trace, $return = false, $html = true, $withArgs = true)
     {
@@ -144,6 +150,7 @@ class Debug
      * @param mixed $arg
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected static function _formatCalledArgument($arg)
     {

@@ -11,6 +11,7 @@ use Magento\Tax\Api\Data\TaxRateInterface;
 /**
  * Interface for managing tax rates.
  * @api
+ * @since 2.0.0
  */
 interface TaxRateManagementInterface
 {
@@ -20,6 +21,7 @@ interface TaxRateManagementInterface
      * @param int $customerTaxClassId
      * @param int $productTaxClassId
      * @return TaxRateInterface[]
+     * @since 2.0.0
      */
     public function getRatesByCustomerAndProductTaxClassId($customerTaxClassId, $productTaxClassId);
 }

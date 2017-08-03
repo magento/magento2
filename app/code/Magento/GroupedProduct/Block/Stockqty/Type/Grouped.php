@@ -11,6 +11,7 @@ use Magento\Framework\DataObject\IdentityInterface;
  * Product stock qty block for grouped product type
  *
  * @api
+ * @since 2.0.0
  */
 class Grouped extends \Magento\CatalogInventory\Block\Stockqty\Composite implements IdentityInterface
 {
@@ -18,6 +19,7 @@ class Grouped extends \Magento\CatalogInventory\Block\Stockqty\Composite impleme
      * Retrieve child products
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getChildProducts()
     {
@@ -28,6 +30,7 @@ class Grouped extends \Magento\CatalogInventory\Block\Stockqty\Composite impleme
      * Return identifiers for produced content
      *
      * @return array
+     * @since 2.0.0
      */
     public function getIdentities()
     {

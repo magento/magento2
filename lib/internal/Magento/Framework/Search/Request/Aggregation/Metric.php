@@ -7,17 +7,20 @@ namespace Magento\Framework\Search\Request\Aggregation;
 
 /**
  * Metric
+ * @since 2.0.0
  */
 class Metric
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $type;
 
     /**
      * @param string $type
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct($type)
     {
@@ -29,6 +32,7 @@ class Metric
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getType()
     {

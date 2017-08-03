@@ -9,6 +9,7 @@ namespace Magento\Shipping\Block\Adminhtml\Order;
  * Adminhtml shipment packaging
  *
  * @api
+ * @since 2.0.0
  */
 class Packaging extends \Magento\Backend\Block\Template
 {
@@ -16,6 +17,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * Source size model
      *
      * @var \Magento\Shipping\Model\Carrier\Source\GenericInterface
+     * @since 2.0.0
      */
     protected $_sourceSizeModel;
 
@@ -23,16 +25,19 @@ class Packaging extends \Magento\Backend\Block\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
+     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
     /**
      * @var \Magento\Shipping\Model\CarrierFactory
+     * @since 2.0.0
      */
     protected $_carrierFactory;
 
@@ -43,6 +48,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -63,6 +69,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * Retrieve shipment model instance
      *
      * @return \Magento\Sales\Model\Order\Shipment
+     * @since 2.0.0
      */
     public function getShipment()
     {
@@ -73,6 +80,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * Configuration for popup window for packaging
      *
      * @return string
+     * @since 2.0.0
      */
     public function getConfigDataJson()
     {
@@ -137,6 +145,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * Return container types of carrier
      *
      * @return array
+     * @since 2.0.0
      */
     public function getContainers()
     {
@@ -166,6 +175,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * Get codes of customizable container types of carrier
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getCustomizableContainers()
     {
@@ -182,6 +192,7 @@ class Packaging extends \Magento\Backend\Block\Template
      *
      * @param string $code
      * @return string
+     * @since 2.0.0
      */
     public function getContainerTypeByCode($code)
     {
@@ -200,6 +211,7 @@ class Packaging extends \Magento\Backend\Block\Template
      *
      * @param string $code
      * @return string
+     * @since 2.0.0
      */
     public function getDeliveryConfirmationTypeByCode($code)
     {
@@ -220,6 +232,7 @@ class Packaging extends \Magento\Backend\Block\Template
      *
      * @param string $code
      * @return string
+     * @since 2.0.0
      */
     public function getContentTypeByCode($code)
     {
@@ -234,6 +247,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * Get packed products in packages
      *
      * @return array
+     * @since 2.0.0
      */
     public function getPackages()
     {
@@ -246,6 +260,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * @param string $itemId
      * @param string $itemsOf
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function getShipmentItem($itemId, $itemsOf)
     {
@@ -266,6 +281,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * Can display customs value
      *
      * @return bool
+     * @since 2.0.0
      */
     public function displayCustomsValue()
     {
@@ -288,6 +304,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * Return delivery confirmation types of current carrier
      *
      * @return array
+     * @since 2.0.0
      */
     public function getDeliveryConfirmationTypes()
     {
@@ -305,6 +322,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * Print button for creating pdf
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPrintButton()
     {
@@ -316,6 +334,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * Check whether girth is allowed for current carrier
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isGirthAllowed()
     {
@@ -328,6 +347,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * Is display girth value
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isDisplayGirthValue()
     {
@@ -338,6 +358,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * Return content types of package
      *
      * @return array
+     * @since 2.0.0
      */
     public function getContentTypes()
     {
@@ -367,6 +388,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * Get Currency Code for Custom Value
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCustomValueCurrencyCode()
     {
@@ -379,6 +401,7 @@ class Packaging extends \Magento\Backend\Block\Template
      *
      * @param float $price
      * @return string
+     * @since 2.0.0
      */
     public function displayPrice($price)
     {
@@ -390,6 +413,7 @@ class Packaging extends \Magento\Backend\Block\Template
      *
      * @param float $price
      * @return string
+     * @since 2.0.0
      */
     public function displayCustomsPrice($price)
     {
@@ -402,6 +426,7 @@ class Packaging extends \Magento\Backend\Block\Template
      *
      * @param int $itemId
      * @return int|null
+     * @since 2.0.0
      */
     public function getQtyOrderedItem($itemId)
     {
@@ -416,6 +441,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * Get source size model
      *
      * @return \Magento\Shipping\Model\Carrier\Source\GenericInterface
+     * @since 2.0.0
      */
     public function getSourceSizeModel()
     {

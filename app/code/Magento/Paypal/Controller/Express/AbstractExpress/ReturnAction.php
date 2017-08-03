@@ -8,12 +8,18 @@ namespace Magento\Paypal\Controller\Express\AbstractExpress;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Paypal\Controller\Express\AbstractExpress\ReturnAction
+ *
+ * @since 2.0.0
+ */
 class ReturnAction extends \Magento\Paypal\Controller\Express\AbstractExpress
 {
     /**
      * Return from PayPal and dispatch customer to order review page
      *
      * @return void|\Magento\Framework\Controller\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -11,10 +11,16 @@
  */
 namespace Magento\Multishipping\Block\Checkout;
 
+/**
+ * Class \Magento\Multishipping\Block\Checkout\State
+ *
+ * @since 2.0.0
+ */
 class State extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Multishipping\Model\Checkout\Type\Multishipping\State
+     * @since 2.0.0
      */
     protected $_multishippingState;
 
@@ -22,6 +28,7 @@ class State extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Multishipping\Model\Checkout\Type\Multishipping\State $multishippingState
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -34,6 +41,7 @@ class State extends \Magento\Framework\View\Element\Template
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getSteps()
     {

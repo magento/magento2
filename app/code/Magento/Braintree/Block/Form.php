@@ -18,27 +18,32 @@ use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
  * Class Form
+ * @since 2.0.0
  */
 class Form extends Cc
 {
 
     /**
      * @var Quote
+     * @since 2.0.0
      */
     protected $sessionQuote;
 
     /**
      * @var Config
+     * @since 2.1.0
      */
     protected $gatewayConfig;
 
     /**
      * @var CcType
+     * @since 2.1.0
      */
     protected $ccType;
 
     /**
      * @var Data
+     * @since 2.1.0
      */
     private $paymentDataHelper;
 
@@ -49,6 +54,7 @@ class Form extends Cc
      * @param GatewayConfig $gatewayConfig
      * @param CcType $ccType
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -67,6 +73,7 @@ class Form extends Cc
     /**
      * Get list of available card types of order billing address country
      * @return array
+     * @since 2.0.0
      */
     public function getCcAvailableTypes()
     {
@@ -78,6 +85,7 @@ class Form extends Cc
     /**
      * Check if cvv validation is available
      * @return boolean
+     * @since 2.0.0
      */
     public function useCvv()
     {
@@ -87,6 +95,7 @@ class Form extends Cc
     /**
      * Check if vault enabled
      * @return bool
+     * @since 2.1.0
      */
     public function isVaultEnabled()
     {
@@ -98,6 +107,7 @@ class Form extends Cc
     /**
      * Get card types available for Braintree
      * @return array
+     * @since 2.1.0
      */
     private function getConfiguredCardTypes()
     {
@@ -112,6 +122,7 @@ class Form extends Cc
      * @param array $configCardTypes
      * @param string $countryId
      * @return array
+     * @since 2.1.0
      */
     private function filterCardTypesForCountry(array $configCardTypes, $countryId)
     {
@@ -128,6 +139,7 @@ class Form extends Cc
     /**
      * Get configured vault payment for Braintree
      * @return VaultPaymentInterface
+     * @since 2.1.0
      */
     private function getVaultPayment()
     {
@@ -137,7 +149,8 @@ class Form extends Cc
     /**
      * Get payment data helper instance
      * @return Data
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getPaymentDataHelper()
     {

@@ -8,6 +8,11 @@ namespace Magento\Framework\Indexer\Handler;
 use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 use Magento\Framework\Indexer\HandlerInterface;
 
+/**
+ * Class \Magento\Framework\Indexer\Handler\AttributeHandler
+ *
+ * @since 2.0.0
+ */
 class AttributeHandler implements HandlerInterface
 {
     /**
@@ -19,6 +24,7 @@ class AttributeHandler implements HandlerInterface
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function prepareSql(SourceProviderInterface $source, $alias, $fieldInfo)
     {

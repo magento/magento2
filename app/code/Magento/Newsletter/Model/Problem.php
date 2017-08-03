@@ -22,6 +22,7 @@ namespace Magento\Newsletter\Model;
  * @author     Magento Core Team <core@magentocommerce.com>
  *
  * @api
+ * @since 2.0.0
  */
 class Problem extends \Magento\Framework\Model\AbstractModel
 {
@@ -29,6 +30,7 @@ class Problem extends \Magento\Framework\Model\AbstractModel
      * Current Subscriber
      *
      * @var \Magento\Newsletter\Model\Subscriber
+     * @since 2.0.0
      */
     protected $_subscriber = null;
 
@@ -36,6 +38,7 @@ class Problem extends \Magento\Framework\Model\AbstractModel
      * Subscriber factory
      *
      * @var \Magento\Newsletter\Model\SubscriberFactory
+     * @since 2.0.0
      */
     protected $_subscriberFactory;
 
@@ -48,6 +51,7 @@ class Problem extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -65,6 +69,7 @@ class Problem extends \Magento\Framework\Model\AbstractModel
      * Initialize Newsletter Problem Model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -76,6 +81,7 @@ class Problem extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Magento\Newsletter\Model\Subscriber $subscriber
      * @return $this
+     * @since 2.0.0
      */
     public function addSubscriberData(\Magento\Newsletter\Model\Subscriber $subscriber)
     {
@@ -88,6 +94,7 @@ class Problem extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Magento\Newsletter\Model\Queue $queue
      * @return $this
+     * @since 2.0.0
      */
     public function addQueueData(\Magento\Newsletter\Model\Queue $queue)
     {
@@ -100,6 +107,7 @@ class Problem extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Exception $e
      * @return $this
+     * @since 2.0.0
      */
     public function addErrorData(\Exception $e)
     {
@@ -112,6 +120,7 @@ class Problem extends \Magento\Framework\Model\AbstractModel
      * Retrieve Subscriber
      *
      * @return \Magento\Newsletter\Model\Subscriber
+     * @since 2.0.0
      */
     public function getSubscriber()
     {
@@ -130,6 +139,7 @@ class Problem extends \Magento\Framework\Model\AbstractModel
      * Unsubscribe Subscriber
      *
      * @return $this
+     * @since 2.0.0
      */
     public function unsubscribe()
     {

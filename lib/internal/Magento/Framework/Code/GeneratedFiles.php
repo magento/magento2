@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
  * Regenerates generated code and DI configuration
+ * @since 2.1.0
  */
 class GeneratedFiles
 {
@@ -23,11 +24,13 @@ class GeneratedFiles
 
     /**
      * @var DirectoryList
+     * @since 2.1.0
      */
     private $directoryList;
 
     /**
      * @var WriteInterface
+     * @since 2.1.0
      */
     private $write;
 
@@ -36,6 +39,7 @@ class GeneratedFiles
      *
      * @param DirectoryList $directoryList
      * @param WriteFactory $writeFactory
+     * @since 2.1.0
      */
     public function __construct(DirectoryList $directoryList, WriteFactory $writeFactory)
     {
@@ -48,8 +52,9 @@ class GeneratedFiles
      *
      * @return void
      *
-     * @deprecated
+     * @deprecated 2.1.0
      * @see \Magento\Framework\Code\GeneratedFiles::cleanGeneratedFiles
+     * @since 2.1.0
      */
     public function regenerate()
     {
@@ -60,6 +65,7 @@ class GeneratedFiles
      * Clean generated/code, generated/metadata and var/cache
      *
      * @return void
+     * @since 2.1.0
      */
     public function cleanGeneratedFiles()
     {
@@ -106,6 +112,7 @@ class GeneratedFiles
      * regeneration of this content
      *
      * @return void
+     * @since 2.1.0
      */
     public function requestRegeneration()
     {
@@ -116,6 +123,7 @@ class GeneratedFiles
      * Reads Cache configuration from env.php and returns indexed array containing all the enabled cache types.
      *
      * @return string[]
+     * @since 2.1.0
      */
     private function getEnabledCacheTypes()
     {
@@ -139,6 +147,7 @@ class GeneratedFiles
      *
      * @return string
      * @throws \Exception
+     * @since 2.1.0
      */
     private function getEnvPath()
     {
@@ -152,6 +161,7 @@ class GeneratedFiles
      * Disables all cache types by updating env.php.
      *
      * @return void
+     * @since 2.1.0
      */
     private function disableAllCacheTypes()
     {
@@ -185,6 +195,7 @@ class GeneratedFiles
      *
      * @param string[] $cacheTypes
      * @return void
+     * @since 2.1.0
      */
     private function enableCacheTypes($cacheTypes)
     {

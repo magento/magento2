@@ -10,6 +10,7 @@ use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 
 /**
  * Class for configured_price rendering
+ * @since 2.0.0
  */
 class ConfiguredPriceBox extends FinalPriceBox
 {
@@ -17,6 +18,7 @@ class ConfiguredPriceBox extends FinalPriceBox
      * Retrieve an item instance to the configured price model
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {

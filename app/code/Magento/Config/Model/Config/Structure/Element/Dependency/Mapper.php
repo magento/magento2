@@ -7,6 +7,7 @@ namespace Magento\Config\Model\Config\Structure\Element\Dependency;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Mapper
 {
@@ -14,6 +15,7 @@ class Mapper
      * Field locator model
      *
      * @var \Magento\Config\Model\Config\Structure\SearchInterface
+     * @since 2.0.0
      */
     protected $_fieldLocator;
 
@@ -21,11 +23,13 @@ class Mapper
      * Dependency Field model
      *
      * @var FieldFactory
+     * @since 2.0.0
      */
     protected $_fieldFactory;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -33,6 +37,7 @@ class Mapper
      * @param \Magento\Config\Model\Config\Structure\SearchInterface $fieldLocator
      * @param FieldFactory $fieldFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Config\Model\Config\Structure\SearchInterface $fieldLocator,
@@ -51,6 +56,7 @@ class Mapper
      * @param string $storeCode
      * @param string $fieldPrefix
      * @return array
+     * @since 2.0.0
      */
     public function getDependencies($dependencies, $storeCode, $fieldPrefix = '')
     {

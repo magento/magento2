@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Category;
  * Class Attribute
  *
  * @method \Magento\Eav\Api\Data\AttributeExtensionInterface getExtensionAttributes()
+ * @since 2.0.0
  */
 class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
     \Magento\Catalog\Api\Data\CategoryAttributeInterface
@@ -26,6 +27,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
      * Return empty array if applied to all products
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getApplyTo()
     {
@@ -44,6 +46,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
      *
      * @param string []|string
      * @return $this
+     * @since 2.0.0
      */
     public function setApplyTo($applyTo)
     {
@@ -56,6 +59,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
     /**
      * @codeCoverageIgnoreStart
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getIsWysiwygEnabled()
     {
@@ -67,6 +71,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
      *
      * @param bool $isWysiwygEnabled
      * @return $this
+     * @since 2.0.0
      */
     public function setIsWysiwygEnabled($isWysiwygEnabled)
     {
@@ -75,6 +80,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getIsHtmlAllowedOnFront()
     {
@@ -86,6 +92,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
      *
      * @param bool $isHtmlAllowedOnFront
      * @return $this
+     * @since 2.0.0
      */
     public function setIsHtmlAllowedOnFront($isHtmlAllowedOnFront)
     {
@@ -94,6 +101,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getUsedForSortBy()
     {
@@ -105,6 +113,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
      *
      * @param bool $usedForSortBy
      * @return $this
+     * @since 2.0.0
      */
     public function setUsedForSortBy($usedForSortBy)
     {
@@ -113,6 +122,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getIsFilterable()
     {
@@ -124,6 +134,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
      *
      * @param bool $isFilterable
      * @return $this
+     * @since 2.0.0
      */
     public function setIsFilterable($isFilterable)
     {
@@ -132,6 +143,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getIsFilterableInSearch()
     {
@@ -140,6 +152,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getIsUsedInGrid()
     {
@@ -148,6 +161,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getIsVisibleInGrid()
     {
@@ -156,6 +170,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getIsFilterableInGrid()
     {
@@ -167,6 +182,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
      *
      * @param bool $isFilterableInSearch
      * @return $this
+     * @since 2.0.0
      */
     public function setIsFilterableInSearch($isFilterableInSearch)
     {
@@ -175,6 +191,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getPosition()
     {
@@ -186,6 +203,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
      *
      * @param int $position
      * @return $this
+     * @since 2.0.0
      */
     public function setPosition($position)
     {
@@ -194,6 +212,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getIsSearchable()
     {
@@ -205,6 +224,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
      *
      * @param string $isSearchable
      * @return $this
+     * @since 2.0.0
      */
     public function setIsSearchable($isSearchable)
     {
@@ -213,6 +233,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getIsVisibleInAdvancedSearch()
     {
@@ -224,6 +245,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
      *
      * @param string $isVisibleInAdvancedSearch
      * @return $this
+     * @since 2.0.0
      */
     public function setIsVisibleInAdvancedSearch($isVisibleInAdvancedSearch)
     {
@@ -232,6 +254,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getIsComparable()
     {
@@ -243,6 +266,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
      *
      * @param string $isComparable
      * @return $this
+     * @since 2.0.0
      */
     public function setIsComparable($isComparable)
     {
@@ -251,6 +275,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getIsUsedForPromoRules()
     {
@@ -262,6 +287,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
      *
      * @param string $isUsedForPromoRules
      * @return $this
+     * @since 2.0.0
      */
     public function setIsUsedForPromoRules($isUsedForPromoRules)
     {
@@ -270,6 +296,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getIsVisibleOnFront()
     {
@@ -281,6 +308,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
      *
      * @param string $isVisibleOnFront
      * @return $this
+     * @since 2.0.0
      */
     public function setIsVisibleOnFront($isVisibleOnFront)
     {
@@ -289,6 +317,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getUsedInProductListing()
     {
@@ -300,6 +329,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
      *
      * @param string $usedInProductListing
      * @return $this
+     * @since 2.0.0
      */
     public function setUsedInProductListing($usedInProductListing)
     {
@@ -308,6 +338,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getIsVisible()
     {
@@ -319,6 +350,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
      *
      * @param bool $isVisible
      * @return $this
+     * @since 2.0.0
      */
     public function setIsVisible($isVisible)
     {
@@ -329,6 +361,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getScope()
     {
@@ -347,6 +380,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
      *
      * @param string $scope
      * @return $this
+     * @since 2.0.0
      */
     public function setScope($scope)
     {
@@ -364,6 +398,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setIsUsedInGrid($isUsedInGrid)
     {
@@ -373,6 +408,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setIsVisibleInGrid($isVisibleInGrid)
     {
@@ -382,6 +418,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setIsFilterableInGrid($isFilterableInGrid)
     {

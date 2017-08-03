@@ -13,12 +13,18 @@
  */
 namespace Magento\Catalog\Model\Layer\Filter;
 
+/**
+ * Class \Magento\Catalog\Model\Layer\Filter\Item
+ *
+ * @since 2.0.0
+ */
 class Item extends \Magento\Framework\DataObject
 {
     /**
      * Url
      *
      * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $_url;
 
@@ -26,6 +32,7 @@ class Item extends \Magento\Framework\DataObject
      * Html pager block
      *
      * @var \Magento\Theme\Block\Html\Pager
+     * @since 2.0.0
      */
     protected $_htmlPagerBlock;
 
@@ -35,6 +42,7 @@ class Item extends \Magento\Framework\DataObject
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Theme\Block\Html\Pager $htmlPagerBlock
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\UrlInterface $url,
@@ -51,6 +59,7 @@ class Item extends \Magento\Framework\DataObject
      *
      * @return \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getFilter()
     {
@@ -67,6 +76,7 @@ class Item extends \Magento\Framework\DataObject
      * Get filter item url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getUrl()
     {
@@ -82,6 +92,7 @@ class Item extends \Magento\Framework\DataObject
      * Get url for remove item from filter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRemoveUrl()
     {
@@ -97,6 +108,7 @@ class Item extends \Magento\Framework\DataObject
      * Get url for "clear" link
      *
      * @return false|string
+     * @since 2.0.0
      */
     public function getClearLinkUrl()
     {
@@ -118,6 +130,7 @@ class Item extends \Magento\Framework\DataObject
      * Get item filter name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -128,6 +141,7 @@ class Item extends \Magento\Framework\DataObject
      * Get item value as string
      *
      * @return string
+     * @since 2.0.0
      */
     public function getValueString()
     {

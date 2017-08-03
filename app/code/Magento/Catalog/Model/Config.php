@@ -13,6 +13,7 @@ use Magento\Framework\Serialize\SerializerInterface;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Config extends \Magento\Eav\Model\Config
 {
@@ -20,26 +21,31 @@ class Config extends \Magento\Eav\Model\Config
 
     /**
      * @var mixed
+     * @since 2.0.0
      */
     protected $_attributeSetsById;
 
     /**
      * @var mixed
+     * @since 2.0.0
      */
     protected $_attributeSetsByName;
 
     /**
      * @var mixed
+     * @since 2.0.0
      */
     protected $_attributeGroupsById;
 
     /**
      * @var mixed
+     * @since 2.0.0
      */
     protected $_attributeGroupsByName;
 
     /**
      * @var mixed
+     * @since 2.0.0
      */
     protected $_productTypesById;
 
@@ -47,6 +53,7 @@ class Config extends \Magento\Eav\Model\Config
      * Array of attributes codes needed for product load
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_productAttributes;
 
@@ -54,6 +61,7 @@ class Config extends \Magento\Eav\Model\Config
      * Product Attributes used in product listing
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_usedInProductListing;
 
@@ -61,11 +69,13 @@ class Config extends \Magento\Eav\Model\Config
      * Product Attributes For Sort By
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_usedForSortBy;
 
     /**
      * @var int|float|string|null
+     * @since 2.0.0
      */
     protected $_storeId = null;
 
@@ -73,6 +83,7 @@ class Config extends \Magento\Eav\Model\Config
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -80,6 +91,7 @@ class Config extends \Magento\Eav\Model\Config
      * Eav config
      *
      * @var \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     protected $_eavConfig;
 
@@ -87,6 +99,7 @@ class Config extends \Magento\Eav\Model\Config
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -94,6 +107,7 @@ class Config extends \Magento\Eav\Model\Config
      * Set collection factory
      *
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory
+     * @since 2.0.0
      */
     protected $_setCollectionFactory;
 
@@ -101,6 +115,7 @@ class Config extends \Magento\Eav\Model\Config
      * Group collection factory
      *
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory
+     * @since 2.0.0
      */
     protected $_groupCollectionFactory;
 
@@ -108,6 +123,7 @@ class Config extends \Magento\Eav\Model\Config
      * Product type factory
      *
      * @var \Magento\Catalog\Model\Product\TypeFactory
+     * @since 2.0.0
      */
     protected $_productTypeFactory;
 
@@ -115,6 +131,7 @@ class Config extends \Magento\Eav\Model\Config
      * Config factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\ConfigFactory
+     * @since 2.0.0
      */
     protected $_configFactory;
 
@@ -136,6 +153,7 @@ class Config extends \Magento\Eav\Model\Config
      * @param SerializerInterface $serializer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\CacheInterface $cache,
@@ -174,6 +192,7 @@ class Config extends \Magento\Eav\Model\Config
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -185,6 +204,7 @@ class Config extends \Magento\Eav\Model\Config
      *
      * @param integer $storeId
      * @return \Magento\Catalog\Model\Config
+     * @since 2.0.0
      */
     public function setStoreId($storeId)
     {
@@ -196,6 +216,7 @@ class Config extends \Magento\Eav\Model\Config
      * Return store id, if is not set return current app store
      *
      * @return integer
+     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -207,6 +228,7 @@ class Config extends \Magento\Eav\Model\Config
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     public function loadAttributeSets()
     {
@@ -231,6 +253,7 @@ class Config extends \Magento\Eav\Model\Config
      * @param string|int|float $entityTypeId
      * @param float|int $id
      * @return false|string
+     * @since 2.0.0
      */
     public function getAttributeSetName($entityTypeId, $id)
     {
@@ -251,6 +274,7 @@ class Config extends \Magento\Eav\Model\Config
      * @param string|int|float $entityTypeId
      * @param string|null $name
      * @return false|string|int
+     * @since 2.0.0
      */
     public function getAttributeSetId($entityTypeId, $name = null)
     {
@@ -270,6 +294,7 @@ class Config extends \Magento\Eav\Model\Config
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     public function loadAttributeGroups()
     {
@@ -294,6 +319,7 @@ class Config extends \Magento\Eav\Model\Config
      * @param float|int|string $attributeSetId
      * @param float|int|string $id
      * @return bool|string
+     * @since 2.0.0
      */
     public function getAttributeGroupName($attributeSetId, $id)
     {
@@ -315,6 +341,7 @@ class Config extends \Magento\Eav\Model\Config
      * @param float|int|string $attributeSetId
      * @param string $name
      * @return bool|string|int|float
+     * @since 2.0.0
      */
     public function getAttributeGroupId($attributeSetId, $name)
     {
@@ -335,6 +362,7 @@ class Config extends \Magento\Eav\Model\Config
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     public function loadProductTypes()
     {
@@ -357,6 +385,7 @@ class Config extends \Magento\Eav\Model\Config
     /**
      * @param string $name
      * @return false|string
+     * @since 2.0.0
      */
     public function getProductTypeId($name)
     {
@@ -373,6 +402,7 @@ class Config extends \Magento\Eav\Model\Config
     /**
      * @param float|int|string $id
      * @return false|string
+     * @since 2.0.0
      */
     public function getProductTypeName($id)
     {
@@ -389,6 +419,7 @@ class Config extends \Magento\Eav\Model\Config
      * @param \Magento\Framework\DataObject $source
      * @param string $value
      * @return null|mixed
+     * @since 2.0.0
      */
     public function getSourceOptionId($source, $value)
     {
@@ -404,6 +435,7 @@ class Config extends \Magento\Eav\Model\Config
      * Load Product attributes
      *
      * @return array
+     * @since 2.0.0
      */
     public function getProductAttributes()
     {
@@ -417,6 +449,7 @@ class Config extends \Magento\Eav\Model\Config
      * Retrieve resource model
      *
      * @return \Magento\Catalog\Model\ResourceModel\Config
+     * @since 2.0.0
      */
     protected function _getResource()
     {
@@ -427,6 +460,7 @@ class Config extends \Magento\Eav\Model\Config
      * Retrieve Attributes used in product listing
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAttributesUsedInProductListing()
     {
@@ -450,6 +484,7 @@ class Config extends \Magento\Eav\Model\Config
      * Retrieve Attributes array used for sort by
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAttributesUsedForSortBy()
     {
@@ -471,6 +506,7 @@ class Config extends \Magento\Eav\Model\Config
      * key = code, value = name
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAttributeUsedForSortByArray()
     {
@@ -488,6 +524,7 @@ class Config extends \Magento\Eav\Model\Config
      *
      * @param mixed $store
      * @return string
+     * @since 2.0.0
      */
     public function getProductListDefaultSortBy($store = null)
     {

@@ -18,11 +18,13 @@ use Magento\Framework\View\Element\Template;
  * @api
  * @method string getPriceRender()
  * @method string getPriceTypeCode()
+ * @since 2.0.0
  */
 class Render extends Template
 {
     /**
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $registry;
 
@@ -32,6 +34,7 @@ class Render extends Template
      * @param Template\Context $context
      * @param Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Template\Context $context,
@@ -46,6 +49,7 @@ class Render extends Template
      * Produce and return block's html output
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -66,6 +70,7 @@ class Render extends Template
      * Returns saleable item instance
      *
      * @return Product
+     * @since 2.0.0
      */
     protected function getProduct()
     {

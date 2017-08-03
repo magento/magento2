@@ -10,11 +10,13 @@ namespace Magento\Backend\Console\Command;
  * Command for enabling cache
  *
  * @api
+ * @since 2.0.0
  */
 class CacheEnableCommand extends AbstractCacheSetCommand
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -27,6 +29,7 @@ class CacheEnableCommand extends AbstractCacheSetCommand
      * Is enable cache
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function isEnable()
     {

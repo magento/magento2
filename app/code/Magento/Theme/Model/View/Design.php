@@ -11,6 +11,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Keeps design settings for current request
+ * @since 2.0.0
  */
 class Design implements \Magento\Framework\View\DesignInterface
 {
@@ -18,6 +19,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * Package area
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_area;
 
@@ -25,6 +27,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * Package theme
      *
      * @var \Magento\Theme\Model\Theme
+     * @since 2.0.0
      */
     protected $_theme;
 
@@ -33,6 +36,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * Using only to transmit additional parameter in callback functions
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_callbackFileDir;
 
@@ -40,36 +44,43 @@ class Design implements \Magento\Framework\View\DesignInterface
      * Store list manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\FlyweightFactory
+     * @since 2.0.0
      */
     protected $_flyweightFactory;
 
     /**
      * @var \Magento\Theme\Model\ThemeFactory
+     * @since 2.0.0
      */
     protected $_themeFactory;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     private $_scopeConfig;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
+     * @since 2.0.0
      */
     protected $_locale;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var \Magento\Framework\App\State
+     * @since 2.0.0
      */
     protected $_appState;
 
@@ -81,6 +92,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\App\State $appState
      * @param array $themes
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -105,6 +117,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      *
      * @param string $area
      * @return $this
+     * @since 2.0.0
      */
     public function setArea($area)
     {
@@ -117,6 +130,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * Retrieve package area
      *
      * @return string
+     * @since 2.0.0
      */
     public function getArea()
     {
@@ -133,6 +147,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * @param \Magento\Framework\View\Design\ThemeInterface|string $theme
      * @param string $area
      * @return $this
+     * @since 2.0.0
      */
     public function setDesignTheme($theme, $area = null)
     {
@@ -159,6 +174,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * @param string|null $area
      * @param array $params
      * @return string|int
+     * @since 2.0.0
      */
     public function getConfigurationDesignTheme($area = null, array $params = [])
     {
@@ -196,6 +212,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      *
      * @param string $area
      * @return bool
+     * @since 2.0.0
      */
     private function _isThemePerStoreView($area)
     {
@@ -206,6 +223,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * Set default design theme
      *
      * @return $this
+     * @since 2.0.0
      */
     public function setDefaultDesignTheme()
     {
@@ -217,6 +235,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * Design theme model getter
      *
      * @return \Magento\Theme\Model\Theme
+     * @since 2.0.0
      */
     public function getDesignTheme()
     {
@@ -228,6 +247,7 @@ class Design implements \Magento\Framework\View\DesignInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getThemePath(\Magento\Framework\View\Design\ThemeInterface $theme)
     {
@@ -247,6 +267,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * Get locale
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLocale()
     {
@@ -259,6 +280,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     /**
      * @param \Magento\Framework\Locale\ResolverInterface $locale
      * @return $this
+     * @since 2.2.0
      */
     public function setLocale(\Magento\Framework\Locale\ResolverInterface $locale)
     {
@@ -268,6 +290,7 @@ class Design implements \Magento\Framework\View\DesignInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getDesignParams()
     {

@@ -10,6 +10,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Resource configuration, uses application configuration to retrieve resource connection information
+ * @since 2.0.0
  */
 class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInterface
 {
@@ -17,16 +18,19 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
      * List of connection names per resource
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_connectionNames = [];
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig
+     * @since 2.2.0
      */
     private $deploymentConfig;
 
     /**
      * @var bool
+     * @since 2.2.0
      */
     private $initialized = false;
 
@@ -40,6 +44,7 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function __construct(
         Config\Reader $reader,
@@ -58,6 +63,7 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
      *
      * @param string $resourceName
      * @return string
+     * @since 2.0.0
      */
     public function getConnectionName($resourceName)
     {
@@ -93,6 +99,7 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
      * Initialise connections
      *
      * @return void
+     * @since 2.2.0
      */
     private function initConnections()
     {

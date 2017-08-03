@@ -13,6 +13,7 @@ namespace Magento\Framework;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Event extends \Magento\Framework\DataObject
 {
@@ -20,6 +21,7 @@ class Event extends \Magento\Framework\DataObject
      * Observers collection
      *
      * @var \Magento\Framework\Event\Observer\Collection
+     * @since 2.0.0
      */
     protected $_observers;
 
@@ -29,6 +31,7 @@ class Event extends \Magento\Framework\DataObject
      * Initializes observers collection
      *
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(array $data = [])
     {
@@ -40,6 +43,7 @@ class Event extends \Magento\Framework\DataObject
      * Returns all the registered observers for the event
      *
      * @return \Magento\Framework\Event\Observer\Collection
+     * @since 2.0.0
      */
     public function getObservers()
     {
@@ -51,6 +55,7 @@ class Event extends \Magento\Framework\DataObject
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @since 2.0.0
      */
     public function addObserver(\Magento\Framework\Event\Observer $observer)
     {
@@ -63,6 +68,7 @@ class Event extends \Magento\Framework\DataObject
      *
      * @param string $observerName
      * @return $this
+     * @since 2.0.0
      */
     public function removeObserverByName($observerName)
     {
@@ -74,6 +80,7 @@ class Event extends \Magento\Framework\DataObject
      * Dispatches the event to registered observers
      *
      * @return $this
+     * @since 2.0.0
      */
     public function dispatch()
     {
@@ -85,6 +92,7 @@ class Event extends \Magento\Framework\DataObject
      * Retrieve event name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -94,6 +102,7 @@ class Event extends \Magento\Framework\DataObject
     /**
      * @param string $data
      * @return $this
+     * @since 2.0.0
      */
     public function setName($data)
     {
@@ -103,6 +112,7 @@ class Event extends \Magento\Framework\DataObject
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getBlock()
     {

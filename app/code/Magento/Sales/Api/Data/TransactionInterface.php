@@ -10,6 +10,7 @@ namespace Magento\Sales\Api\Data;
  *
  * A transaction is an interaction between a merchant and a customer such as a purchase, a credit, a refund, and so on.
  * @api
+ * @since 2.0.0
  */
 interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -91,6 +92,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Gets the transaction ID for the transaction.
      *
      * @return int Transaction ID.
+     * @since 2.0.0
      */
     public function getTransactionId();
 
@@ -99,6 +101,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setTransactionId($id);
 
@@ -106,6 +109,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Gets the parent ID for the transaction.
      *
      * @return int|null The parent ID for the transaction. Otherwise, null.
+     * @since 2.0.0
      */
     public function getParentId();
 
@@ -113,6 +117,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Gets the order ID for the transaction.
      *
      * @return int Order ID.
+     * @since 2.0.0
      */
     public function getOrderId();
 
@@ -120,6 +125,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Gets the payment ID for the transaction.
      *
      * @return int Payment ID.
+     * @since 2.0.0
      */
     public function getPaymentId();
 
@@ -127,6 +133,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Gets the transaction business ID for the transaction.
      *
      * @return string Transaction business ID.
+     * @since 2.0.0
      */
     public function getTxnId();
 
@@ -134,6 +141,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Gets the parent transaction business ID for the transaction.
      *
      * @return string Parent transaction business ID.
+     * @since 2.0.0
      */
     public function getParentTxnId();
 
@@ -141,6 +149,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Gets the transaction type for the transaction.
      *
      * @return string Transaction type.
+     * @since 2.0.0
      */
     public function getTxnType();
 
@@ -148,6 +157,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Gets the value of the is-closed flag for the transaction.
      *
      * @return int Is-closed flag value.
+     * @since 2.0.0
      */
     public function getIsClosed();
 
@@ -155,6 +165,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Gets any additional information for the transaction.
      *
      * @return string[]|null Array of additional information. Otherwise, null.
+     * @since 2.0.0
      */
     public function getAdditionalInformation();
 
@@ -162,6 +173,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Gets the created-at timestamp for the transaction.
      *
      * @return string Created-at timestamp.
+     * @since 2.0.0
      */
     public function getCreatedAt();
 
@@ -170,6 +182,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $createdAt timestamp
      * @return $this
+     * @since 2.0.0
      */
     public function setCreatedAt($createdAt);
 
@@ -177,6 +190,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Gets an array of child transactions for the transaction.
      *
      * @return \Magento\Sales\Api\Data\TransactionInterface[] Array of child transactions.
+     * @since 2.0.0
      */
     public function getChildTransactions();
 
@@ -185,6 +199,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setParentId($id);
 
@@ -193,6 +208,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setOrderId($id);
 
@@ -201,6 +217,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setPaymentId($id);
 
@@ -209,6 +226,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $id
      * @return $this
+     * @since 2.0.0
      */
     public function setTxnId($id);
 
@@ -217,6 +235,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $id
      * @return $this
+     * @since 2.0.0
      */
     public function setParentTxnId($id);
 
@@ -225,6 +244,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $txnType
      * @return $this
+     * @since 2.0.0
      */
     public function setTxnType($txnType);
 
@@ -233,6 +253,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param int $isClosed
      * @return $this
+     * @since 2.0.0
      */
     public function setIsClosed($isClosed);
 
@@ -245,6 +266,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @param mixed $value
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function setAdditionalInformation($key, $value);
 
@@ -252,6 +274,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\TransactionExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -260,6 +283,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param \Magento\Sales\Api\Data\TransactionExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Sales\Api\Data\TransactionExtensionInterface $extensionAttributes);
 }

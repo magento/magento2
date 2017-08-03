@@ -10,6 +10,7 @@ use Magento\Framework\View\TemplateEngineInterface;
 
 /**
  * Template engine that enables PHP templates to be used for rendering
+ * @since 2.0.0
  */
 class Php implements TemplateEngineInterface
 {
@@ -17,6 +18,7 @@ class Php implements TemplateEngineInterface
      * Current block
      *
      * @var BlockInterface
+     * @since 2.0.0
      */
     protected $_currentBlock;
 
@@ -24,6 +26,7 @@ class Php implements TemplateEngineInterface
      * Helper factory
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_helperFactory;
 
@@ -31,6 +34,7 @@ class Php implements TemplateEngineInterface
      * Constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $helperFactory
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $helperFactory)
     {
@@ -48,6 +52,7 @@ class Php implements TemplateEngineInterface
      * @param array                    $dictionary
      * @return string
      * @throws \Exception
+     * @since 2.0.0
      */
     public function render(BlockInterface $block, $fileName, array $dictionary = [])
     {
@@ -76,6 +81,7 @@ class Php implements TemplateEngineInterface
      * @param   string $method
      * @param   array  $args
      * @return  mixed
+     * @since 2.0.0
      */
     public function __call($method, $args)
     {
@@ -90,6 +96,7 @@ class Php implements TemplateEngineInterface
      *
      * @param string $name
      * @return bool
+     * @since 2.0.0
      */
     public function __isset($name)
     {
@@ -104,6 +111,7 @@ class Php implements TemplateEngineInterface
      *
      * @param string $name
      * @return mixed
+     * @since 2.0.0
      */
     public function __get($name)
     {
@@ -116,6 +124,7 @@ class Php implements TemplateEngineInterface
      * @param string $className
      * @return \Magento\Framework\App\Helper\AbstractHelper
      * @throws \LogicException
+     * @since 2.0.0
      */
     public function helper($className)
     {

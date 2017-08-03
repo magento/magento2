@@ -8,6 +8,7 @@ namespace Magento\PageCache\Model\App\Response;
 
 /**
  * HTTP response plugin for frontend.
+ * @since 2.0.0
  */
 class HttpPlugin
 {
@@ -16,6 +17,7 @@ class HttpPlugin
      *
      * @param \Magento\Framework\App\Response\Http $subject
      * @return void
+     * @since 2.0.0
      */
     public function beforeSendResponse(\Magento\Framework\App\Response\Http $subject)
     {

@@ -12,6 +12,7 @@ use Magento\Payment\Model\InfoInterface;
  * Usage of this class should be avoided. This class introduced for supporting backward compatibility.
  *
  * @api
+ * @since 2.0.0
  */
 class ContextHelper
 {
@@ -21,6 +22,7 @@ class ContextHelper
      * @param InfoInterface $paymentInfo
      * @throws \LogicException
      * @return null
+     * @since 2.0.0
      */
     public static function assertOrderPayment(InfoInterface $paymentInfo)
     {
@@ -35,6 +37,7 @@ class ContextHelper
      * @param InfoInterface $paymentInfo
      * @throws \LogicException
      * @return null
+     * @since 2.0.0
      */
     public static function assertQuotePayment(InfoInterface $paymentInfo)
     {

@@ -8,6 +8,11 @@ namespace Magento\Catalog\Plugin\Model\ResourceModel;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Class \Magento\Catalog\Plugin\Model\ResourceModel\Config
+ *
+ * @since 2.0.0
+ */
 class Config
 {
     /**#@+
@@ -17,14 +22,21 @@ class Config
     const PRODUCT_LISTING_SORT_BY_ATTRIBUTES_CACHE_ID = 'PRODUCT_LISTING_SORT_BY_ATTRIBUTES';
     /**#@-*/
 
-    /** @var \Magento\Framework\App\CacheInterface */
+    /**
+     * @var \Magento\Framework\App\CacheInterface
+     * @since 2.0.0
+     */
     protected $cache;
 
-    /** @var bool|null */
+    /**
+     * @var bool|null
+     * @since 2.0.0
+     */
     protected $isCacheEnabled = null;
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -32,6 +44,7 @@ class Config
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param SerializerInterface $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\CacheInterface $cache,
@@ -47,6 +60,7 @@ class Config
      * @param \Magento\Catalog\Model\ResourceModel\Config $config
      * @param callable $proceed
      * @return array
+     * @since 2.0.0
      */
     public function aroundGetAttributesUsedInListing(
         \Magento\Catalog\Model\ResourceModel\Config $config,
@@ -74,6 +88,7 @@ class Config
      * @param \Magento\Catalog\Model\ResourceModel\Config $config
      * @param callable $proceed
      * @return array
+     * @since 2.0.0
      */
     public function aroundGetAttributesUsedForSortBy(
         \Magento\Catalog\Model\ResourceModel\Config $config,

@@ -9,12 +9,18 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Review\Controller\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Review\Controller\Product\ListAjax
+ *
+ * @since 2.0.0
+ */
 class ListAjax extends ProductController
 {
     /**
      * Show list of product's reviews
      *
      * @return \Magento\Framework\View\Result\Layout
+     * @since 2.0.0
      */
     public function execute()
     {

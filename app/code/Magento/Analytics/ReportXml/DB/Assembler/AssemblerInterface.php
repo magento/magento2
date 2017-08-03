@@ -13,6 +13,7 @@ use Magento\Analytics\ReportXml\DB\SelectBuilder;
  * Introduces family of SQL assemblers
  * Each assembler populates SelectBuilder with config information
  * @see usage examples at \Magento\Analytics\ReportXml\QueryFactory
+ * @since 2.2.0
  */
 interface AssemblerInterface
 {
@@ -22,6 +23,7 @@ interface AssemblerInterface
      * @param SelectBuilder $selectBuilder
      * @param array $queryConfig
      * @return SelectBuilder
+     * @since 2.2.0
      */
     public function assemble(SelectBuilder $selectBuilder, $queryConfig);
 }

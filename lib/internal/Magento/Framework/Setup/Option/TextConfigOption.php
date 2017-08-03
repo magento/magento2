@@ -7,6 +7,7 @@ namespace Magento\Framework\Setup\Option;
 
 /**
  * Text option in deployment config tool
+ * @since 2.0.0
  */
 class TextConfigOption extends AbstractConfigOption
 {
@@ -28,6 +29,7 @@ class TextConfigOption extends AbstractConfigOption
      * @param string|null $defaultValue
      * @param string|array|null $shortCut
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function __construct(
         $name,
@@ -59,6 +61,7 @@ class TextConfigOption extends AbstractConfigOption
      * @param mixed $data
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function validate($data)
     {

@@ -10,21 +10,29 @@ use Magento\Setup\Model\ObjectManagerProvider;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class \Magento\Setup\Controller\Success
+ *
+ * @since 2.0.0
+ */
 class Success extends AbstractActionController
 {
     /**
      * @var ModuleList
+     * @since 2.0.0
      */
     protected $moduleList;
 
     /**
      * @var ObjectManagerProvider
+     * @since 2.0.0
      */
     protected $objectManagerProvider;
 
     /**
      * @param ModuleList $moduleList
      * @param ObjectManagerProvider $objectManagerProvider
+     * @since 2.0.0
      */
     public function __construct(ModuleList $moduleList, ObjectManagerProvider $objectManagerProvider)
     {
@@ -34,6 +42,7 @@ class Success extends AbstractActionController
 
     /**
      * @return ViewModel
+     * @since 2.0.0
      */
     public function indexAction()
     {

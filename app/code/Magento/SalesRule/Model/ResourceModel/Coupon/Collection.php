@@ -13,6 +13,7 @@ use Magento\SalesRule\Model\Rule;
  * SalesRule Model Resource Coupon_Collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Collection extends AbstractCollection
 {
@@ -20,6 +21,7 @@ class Collection extends AbstractCollection
      * Constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -32,6 +34,7 @@ class Collection extends AbstractCollection
      *
      * @param Rule|int $rule
      * @return $this
+     * @since 2.0.0
      */
     public function addRuleToFilter($rule)
     {
@@ -51,6 +54,7 @@ class Collection extends AbstractCollection
      *
      * @param array $ruleIds
      * @return $this
+     * @since 2.0.0
      */
     public function addRuleIdsToFilter(array $ruleIds)
     {
@@ -62,6 +66,7 @@ class Collection extends AbstractCollection
      * Filter collection to be filled with auto-generated coupons only
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addGeneratedCouponsFilter()
     {
@@ -75,6 +80,7 @@ class Collection extends AbstractCollection
      * @param AbstractCollection $collection
      * @param Column $column
      * @return void
+     * @since 2.0.0
      */
     public function addIsUsedFilterCallback($collection, $column)
     {

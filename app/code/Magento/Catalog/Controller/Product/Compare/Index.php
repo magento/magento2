@@ -12,11 +12,13 @@ use Magento\Framework\View\Result\PageFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Index extends \Magento\Catalog\Controller\Product\Compare
 {
     /**
      * @var \Magento\Framework\Url\DecoderInterface
+     * @since 2.0.0
      */
     protected $urlDecoder;
 
@@ -35,6 +37,7 @@ class Index extends \Magento\Catalog\Controller\Product\Compare
      * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -70,6 +73,7 @@ class Index extends \Magento\Catalog\Controller\Product\Compare
      * Compare index action
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {

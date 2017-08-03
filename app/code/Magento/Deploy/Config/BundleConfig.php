@@ -12,6 +12,7 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
  * Static files bundling configuration
  *
  * Use this to get configuration settings related to JavaScript built-in bundling
+ * @since 2.2.0
  */
 class BundleConfig
 {
@@ -29,6 +30,7 @@ class BundleConfig
      * Interface provides theme configuration settings
      *
      * @var View\ConfigInterface
+     * @since 2.2.0
      */
     private $viewConfig;
 
@@ -38,6 +40,7 @@ class BundleConfig
      * Allows to retrieve theme by the them full path: "{area}/{vendor}/{theme}/{locale}"
      *
      * @var ThemeProviderInterface
+     * @since 2.2.0
      */
     private $themeProvider;
 
@@ -45,6 +48,7 @@ class BundleConfig
      * Configuration object cache
      *
      * @var \Magento\Framework\Config\View[]
+     * @since 2.2.0
      */
     private $config = [];
 
@@ -53,6 +57,7 @@ class BundleConfig
      *
      * @param View\ConfigInterface $viewConfig
      * @param ThemeProviderInterface $themeProvider
+     * @since 2.2.0
      */
     public function __construct(
         View\ConfigInterface $viewConfig,
@@ -68,6 +73,7 @@ class BundleConfig
      * @param string $area
      * @param string $theme
      * @return int
+     * @since 2.2.0
      */
     public function getBundleFileMaxSize($area, $theme)
     {
@@ -93,6 +99,7 @@ class BundleConfig
      * @param string $area
      * @param string $theme
      * @return array
+     * @since 2.2.0
      */
     public function getExcludedDirectories($area, $theme)
     {
@@ -105,6 +112,7 @@ class BundleConfig
      * @param string $area
      * @param string $theme
      * @return array
+     * @since 2.2.0
      */
     public function getExcludedFiles($area, $theme)
     {
@@ -117,6 +125,7 @@ class BundleConfig
      * @param string $area
      * @param string $theme
      * @return \Magento\Framework\Config\View
+     * @since 2.2.0
      */
     private function getConfig($area, $theme)
     {

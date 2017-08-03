@@ -7,21 +7,25 @@ namespace Magento\Config\Model\Config\Source\Locale\Currency;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class All implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_options;
 
     /**
      * @var \Magento\Framework\Locale\ListsInterface
+     * @since 2.0.0
      */
     protected $_localeLists;
 
     /**
      * @param \Magento\Framework\Locale\ListsInterface $localeLists
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Locale\ListsInterface $localeLists)
     {
@@ -31,6 +35,7 @@ class All implements \Magento\Framework\Option\ArrayInterface
     /**
      * @param bool $isMultiselect
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray($isMultiselect = false)
     {

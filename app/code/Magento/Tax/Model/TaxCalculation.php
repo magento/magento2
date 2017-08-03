@@ -22,6 +22,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class TaxCalculation implements TaxCalculationInterface
 {
@@ -29,6 +30,7 @@ class TaxCalculation implements TaxCalculationInterface
      * Tax Details factory
      *
      * @var TaxDetailsInterfaceFactory
+     * @since 2.0.0
      */
     protected $taxDetailsDataObjectFactory;
 
@@ -36,6 +38,7 @@ class TaxCalculation implements TaxCalculationInterface
      * Tax configuration object
      *
      * @var Config
+     * @since 2.0.0
      */
     protected $config;
 
@@ -43,6 +46,7 @@ class TaxCalculation implements TaxCalculationInterface
      * Tax calculation model
      *
      * @var Calculation
+     * @since 2.0.0
      */
     protected $calculationTool;
 
@@ -50,6 +54,7 @@ class TaxCalculation implements TaxCalculationInterface
      * Array to hold discount compensations for items
      *
      * @var array
+     * @since 2.0.0
      */
     protected $discountTaxCompensations;
 
@@ -57,11 +62,13 @@ class TaxCalculation implements TaxCalculationInterface
      * Tax details item factory
      *
      * @var TaxDetailsItemInterfaceFactory
+     * @since 2.0.0
      */
     protected $taxDetailsItemDataObjectFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -69,6 +76,7 @@ class TaxCalculation implements TaxCalculationInterface
      * Item code to Item object array.
      *
      * @var QuoteDetailsItemInterface[]
+     * @since 2.0.0
      */
     private $keyedItems;
 
@@ -76,6 +84,7 @@ class TaxCalculation implements TaxCalculationInterface
      * Parent item code to children item array.
      *
      * @var QuoteDetailsItemInterface[][]
+     * @since 2.0.0
      */
     private $parentToChildren;
 
@@ -83,6 +92,7 @@ class TaxCalculation implements TaxCalculationInterface
      * Tax Class Management
      *
      * @var TaxClassManagementInterface
+     * @since 2.0.0
      */
     protected $taxClassManagement;
 
@@ -90,11 +100,13 @@ class TaxCalculation implements TaxCalculationInterface
      * Calculator Factory
      *
      * @var CalculatorFactory
+     * @since 2.0.0
      */
     protected $calculatorFactory;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
+     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
@@ -107,6 +119,7 @@ class TaxCalculation implements TaxCalculationInterface
      * @param StoreManagerInterface $storeManager
      * @param TaxClassManagementInterface $taxClassManagement
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @since 2.0.0
      */
     public function __construct(
         Calculation $calculation,
@@ -130,6 +143,7 @@ class TaxCalculation implements TaxCalculationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function calculateTax(
         \Magento\Tax\Api\Data\QuoteDetailsInterface $quoteDetails,
@@ -201,6 +215,7 @@ class TaxCalculation implements TaxCalculationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getDefaultCalculatedRate(
         $productTaxClassID,
@@ -212,6 +227,7 @@ class TaxCalculation implements TaxCalculationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getCalculatedRate(
         $productTaxClassID,
@@ -229,6 +245,7 @@ class TaxCalculation implements TaxCalculationInterface
      * @param string|null $storeId
      * @param bool $isDefault
      * @return float
+     * @since 2.0.0
      */
     protected function getRate(
         $productTaxClassID,
@@ -253,6 +270,7 @@ class TaxCalculation implements TaxCalculationInterface
      *
      * @param QuoteDetailsItemInterface[] $items
      * @return void
+     * @since 2.0.0
      */
     private function computeRelationships($items)
     {
@@ -274,6 +292,7 @@ class TaxCalculation implements TaxCalculationInterface
      * @param AbstractCalculator $calculator
      * @param bool $round
      * @return TaxDetailsItemInterface
+     * @since 2.0.0
      */
     protected function processItem(
         QuoteDetailsItemInterface $item,
@@ -290,6 +309,7 @@ class TaxCalculation implements TaxCalculationInterface
      * @param TaxDetailsItemInterface[] $children
      * @param int $quantity
      * @return TaxDetailsItemInterface
+     * @since 2.0.0
      */
     protected function calculateParent($children, $quantity)
     {
@@ -324,6 +344,7 @@ class TaxCalculation implements TaxCalculationInterface
      * @param array $taxDetailsData
      * @param TaxDetailsItemInterface $item
      * @return array
+     * @since 2.0.0
      */
     protected function aggregateItemData($taxDetailsData, TaxDetailsItemInterface $item)
     {
@@ -377,6 +398,7 @@ class TaxCalculation implements TaxCalculationInterface
      *
      * @param QuoteDetailsItemInterface $item
      * @return float
+     * @since 2.0.0
      */
     protected function getTotalQuantity(QuoteDetailsItemInterface $item)
     {

@@ -9,26 +9,31 @@ namespace Magento\UrlRewrite\Block\Edit;
  * URL rewrites edit form
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_sessionData = null;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_allStores = null;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $_requireStoresFilter = false;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_formValues = [];
 
@@ -36,21 +41,25 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Adminhtml data
      *
      * @var \Magento\Backend\Helper\Data
+     * @since 2.0.0
      */
     protected $_adminhtmlData = null;
 
     /**
      * @var \Magento\Store\Model\System\Store
+     * @since 2.0.0
      */
     protected $_systemStore;
 
     /**
      * @var \Magento\UrlRewrite\Model\UrlRewriteFactory
+     * @since 2.0.0
      */
     protected $_rewriteFactory;
 
     /**
      * @var \Magento\UrlRewrite\Model\OptionProvider
+     * @since 2.0.0
      */
     protected $optionProvider;
 
@@ -63,6 +72,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param \Magento\Backend\Helper\Data $adminhtmlData
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -85,6 +95,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Set form id and title
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -98,6 +109,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Set form data either from model values or from session
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initFormValues()
     {
@@ -129,6 +141,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -224,6 +237,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareStoreElement($fieldset)
     {
@@ -268,6 +282,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param \Magento\Framework\Data\Form $form
      * @return $this
+     * @since 2.0.0
      */
     protected function _formPostInit($form)
     {
@@ -281,6 +296,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Get session data
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getSessionData()
     {
@@ -294,6 +310,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Get URL rewrite model instance
      *
      * @return \Magento\UrlRewrite\Model\UrlRewrite
+     * @since 2.0.0
      */
     protected function _getModel()
     {
@@ -307,6 +324,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Get request stores
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getAllStores()
     {
@@ -321,6 +339,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Get entity stores
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getEntityStores()
     {
@@ -334,6 +353,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param array $entityStores
      * @return array
+     * @since 2.0.0
      */
     private function _getStoresListRestrictedByEntityStores(array $entityStores)
     {

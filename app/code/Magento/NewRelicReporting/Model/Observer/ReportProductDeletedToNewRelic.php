@@ -12,22 +12,26 @@ use Magento\NewRelicReporting\Model\NewRelicWrapper;
 
 /**
  * Class ReportProductDeletedToNewRelic
+ * @since 2.0.0
  */
 class ReportProductDeletedToNewRelic implements ObserverInterface
 {
     /**
      * @var Config
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var NewRelicWrapper
+     * @since 2.0.0
      */
     protected $newRelicWrapper;
 
     /**
      * @param Config $config
      * @param NewRelicWrapper $newRelicWrapper
+     * @since 2.0.0
      */
     public function __construct(
         Config $config,
@@ -43,6 +47,7 @@ class ReportProductDeletedToNewRelic implements ObserverInterface
      * @param Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

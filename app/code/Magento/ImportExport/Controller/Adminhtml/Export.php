@@ -9,6 +9,7 @@ use Magento\Backend\App\Action;
 
 /**
  * Export controller
+ * @since 2.0.0
  */
 abstract class Export extends Action
 {

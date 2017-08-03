@@ -14,26 +14,31 @@ use Magento\Analytics\Model\Connector\Http\ResponseFactory;
  * A CURL HTTP client.
  *
  * Sends requests via a CURL adapter.
+ * @since 2.2.0
  */
 class Curl implements \Magento\Analytics\Model\Connector\Http\ClientInterface
 {
     /**
      * @var CurlFactory
+     * @since 2.2.0
      */
     private $curlFactory;
 
     /**
      * @var ResponseFactory
+     * @since 2.2.0
      */
     private $responseFactory;
 
     /**
      * @var ConverterInterface
+     * @since 2.2.0
      */
     private $converter;
 
     /**
      * @var LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 
@@ -42,6 +47,7 @@ class Curl implements \Magento\Analytics\Model\Connector\Http\ClientInterface
      * @param ResponseFactory $responseFactory
      * @param ConverterInterface $converter
      * @param LoggerInterface $logger
+     * @since 2.2.0
      */
     public function __construct(
         CurlFactory $curlFactory,
@@ -57,6 +63,7 @@ class Curl implements \Magento\Analytics\Model\Connector\Http\ClientInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function request($method, $url, array $body = [], array $headers = [], $version = '1.1')
     {
@@ -96,6 +103,7 @@ class Curl implements \Magento\Analytics\Model\Connector\Http\ClientInterface
      * @param array $headers
      *
      * @return array
+     * @since 2.2.0
      */
     private function applyContentTypeHeaderFromConverter(array $headers)
     {

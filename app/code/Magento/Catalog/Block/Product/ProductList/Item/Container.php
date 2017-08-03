@@ -11,11 +11,13 @@ use Magento\Catalog\Block\Product\AwareInterface as ProductAwareInterface;
  * Class List Item Block Container
  *
  * @api
+ * @since 2.2.0
  */
 class Container extends Block
 {
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getChildHtml($alias = '', $useCache = false)
     {

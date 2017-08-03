@@ -9,6 +9,7 @@ use Magento\Framework\Config\Theme;
 
 /**
  * Value-object for a theme package
+ * @since 2.0.0
  */
 class ThemePackage
 {
@@ -16,6 +17,7 @@ class ThemePackage
      * Area
      *
      * @var string
+     * @since 2.0.0
      */
     private $area;
 
@@ -23,6 +25,7 @@ class ThemePackage
      * Vendor name
      *
      * @var string
+     * @since 2.0.0
      */
     private $vendor;
 
@@ -30,6 +33,7 @@ class ThemePackage
      * Theme name
      *
      * @var string
+     * @since 2.0.0
      */
     private $name;
 
@@ -37,6 +41,7 @@ class ThemePackage
      * Theme path key
      *
      * @var string
+     * @since 2.0.0
      */
     private $key;
 
@@ -44,6 +49,7 @@ class ThemePackage
      * Full path to the theme
      *
      * @var string
+     * @since 2.0.0
      */
     private $path;
 
@@ -52,6 +58,7 @@ class ThemePackage
      *
      * @param string $key
      * @param string $path
+     * @since 2.0.0
      */
     public function __construct($key, $path)
     {
@@ -73,6 +80,7 @@ class ThemePackage
      * Get area
      *
      * @return string
+     * @since 2.0.0
      */
     public function getArea()
     {
@@ -83,6 +91,7 @@ class ThemePackage
      * Get vendor name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getVendor()
     {
@@ -93,6 +102,7 @@ class ThemePackage
      * Get theme name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -103,6 +113,7 @@ class ThemePackage
      * Get path key
      *
      * @return string
+     * @since 2.0.0
      */
     public function getKey()
     {
@@ -113,6 +124,7 @@ class ThemePackage
      * Get full path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPath()
     {

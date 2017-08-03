@@ -10,22 +10,26 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class ValidatorPool
+ * @since 2.1.0
  */
 class ValidatorPool
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.1.0
      */
     protected $objectManager;
 
     /**
      * @var object[]
+     * @since 2.1.0
      */
     protected $validators;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param array $extensionActions
+     * @since 2.1.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -40,6 +44,7 @@ class ValidatorPool
      * @param string $actionName
      * @return object[]
      * @throws \Exception
+     * @since 2.1.0
      */
     public function getValidators($entityType, $actionName)
     {

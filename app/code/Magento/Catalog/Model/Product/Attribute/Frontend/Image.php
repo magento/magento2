@@ -11,12 +11,18 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Frontend;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Attribute\Frontend\Image
+ *
+ * @since 2.0.0
+ */
 class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
 {
     /**
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -24,6 +30,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFronten
      * Construct
      *
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
     {
@@ -36,6 +43,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFronten
      * @param  \Magento\Catalog\Model\Product $product
      *
      * @return string|false
+     * @since 2.0.0
      */
     public function getUrl($product)
     {

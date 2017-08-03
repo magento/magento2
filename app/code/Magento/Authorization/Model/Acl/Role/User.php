@@ -7,6 +7,7 @@ namespace Magento\Authorization\Model\Acl\Role;
 
 /**
  * User acl role
+ * @since 2.0.0
  */
 class User extends \Magento\Authorization\Model\Acl\Role\Generic
 {

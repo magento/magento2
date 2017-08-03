@@ -14,6 +14,11 @@ use Magento\Framework\Search\Request\Aggregation\RangeBucket;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 use Magento\Framework\Translate\AdapterInterface;
 
+/**
+ * Class \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Range
+ *
+ * @since 2.0.0
+ */
 class Range implements BucketInterface
 {
     const GREATER_THAN = '>=';
@@ -21,22 +26,26 @@ class Range implements BucketInterface
 
     /**
      * @var Metrics
+     * @since 2.0.0
      */
     private $metricsBuilder;
 
     /**
      * @var Resource
+     * @since 2.0.0
      */
     private $resource;
 
     /**
      * @var AdapterInterface
+     * @since 2.0.0
      */
     private $connection;
 
     /**
      * @param Metrics $metricsBuilder
      * @param ResourceConnection $resource
+     * @since 2.0.0
      */
     public function __construct(Metrics $metricsBuilder, ResourceConnection $resource)
     {
@@ -47,6 +56,7 @@ class Range implements BucketInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function build(
         DataProviderInterface $dataProvider,
@@ -73,6 +83,7 @@ class Range implements BucketInterface
      * @param Select $select
      * @param AggregationRange[] $ranges
      * @return Select
+     * @since 2.0.0
      */
     private function generateCase(Select $select, array $ranges)
     {

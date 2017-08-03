@@ -14,6 +14,7 @@ use Magento\Ui\Component\Filters\FilterModifier;
 /**
  * Abstract class AbstractFilter
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractFilter extends AbstractComponent
 {
@@ -31,21 +32,25 @@ abstract class AbstractFilter extends AbstractComponent
      * Filter data
      *
      * @var array
+     * @since 2.0.0
      */
     protected $filterData;
 
     /**
      * @var UiComponentFactory
+     * @since 2.0.0
      */
     protected $uiComponentFactory;
 
     /**
      * @var FilterBuilder
+     * @since 2.0.0
      */
     protected $filterBuilder;
 
     /**
      * @var FilterModifier
+     * @since 2.0.0
      */
     protected $filterModifier;
 
@@ -56,6 +61,7 @@ abstract class AbstractFilter extends AbstractComponent
      * @param FilterModifier $filterModifier
      * @param array $components
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -76,6 +82,7 @@ abstract class AbstractFilter extends AbstractComponent
      * Get component name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComponentName()
     {
@@ -84,6 +91,7 @@ abstract class AbstractFilter extends AbstractComponent
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function prepare()
     {

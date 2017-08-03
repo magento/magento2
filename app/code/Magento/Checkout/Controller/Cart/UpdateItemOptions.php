@@ -6,6 +6,11 @@
  */
 namespace Magento\Checkout\Controller\Cart;
 
+/**
+ * Class \Magento\Checkout\Controller\Cart\UpdateItemOptions
+ *
+ * @since 2.0.0
+ */
 class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
 {
     /**
@@ -14,6 +19,7 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
      * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function execute()
     {

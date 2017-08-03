@@ -10,6 +10,7 @@ namespace Magento\Integration\Api;
  * Interface providing token generation for Admins
  *
  * @api
+ * @since 2.0.0
  */
 interface AdminTokenServiceInterface
 {
@@ -22,6 +23,7 @@ interface AdminTokenServiceInterface
      * @throws \Magento\Framework\Exception\InputException For invalid input
      * @throws \Magento\Framework\Exception\AuthenticationException
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function createAdminAccessToken($username, $password);
 
@@ -31,6 +33,7 @@ interface AdminTokenServiceInterface
      * @param int $adminId
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function revokeAdminAccessToken($adminId);
 }

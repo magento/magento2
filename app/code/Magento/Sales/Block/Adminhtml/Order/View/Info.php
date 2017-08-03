@@ -14,6 +14,7 @@ use Magento\Sales\Model\Order\Address;
  * Class Info
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 {
@@ -21,6 +22,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Customer service
      *
      * @var \Magento\Customer\Api\CustomerMetadataInterface
+     * @since 2.0.0
      */
     protected $metadata;
 
@@ -28,6 +30,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Group service
      *
      * @var \Magento\Customer\Api\GroupRepositoryInterface
+     * @since 2.0.0
      */
     protected $groupRepository;
 
@@ -35,11 +38,13 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Metadata element factory
      *
      * @var \Magento\Customer\Model\Metadata\ElementFactory
+     * @since 2.0.0
      */
     protected $_metadataElementFactory;
 
     /**
      * @var Address\Renderer
+     * @since 2.0.0
      */
     protected $addressRenderer;
 
@@ -54,6 +59,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * @param \Magento\Customer\Model\Metadata\ElementFactory $elementFactory
      * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -77,6 +83,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
+     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -98,6 +105,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Get order store name
      *
      * @return null|string
+     * @since 2.0.0
      */
     public function getOrderStoreName()
     {
@@ -119,6 +127,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Return name of the customer group.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCustomerGroupName()
     {
@@ -140,6 +149,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Get URL to edit the customer.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCustomerViewUrl()
     {
@@ -155,6 +165,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      *
      * @param int $orderId
      * @return string
+     * @since 2.0.0
      */
     public function getViewUrl($orderId)
     {
@@ -168,6 +179,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * @param array $data
      * @param int $sortOrder
      * @return int
+     * @since 2.0.0
      */
     protected function _prepareAccountDataSortOrder(array $data, $sortOrder)
     {
@@ -183,6 +195,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Value is option style array
      *
      * @return array
+     * @since 2.0.0
      */
     public function getCustomerAccountData()
     {
@@ -218,6 +231,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * @param \Magento\Sales\Model\Order\Address $address
      * @param string $label
      * @return string
+     * @since 2.0.0
      */
     public function getAddressEditLink($address, $label = '')
     {
@@ -236,6 +250,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Whether Customer IP address should be displayed on sales documents
      *
      * @return bool
+     * @since 2.0.0
      */
     public function shouldDisplayCustomerIp()
     {
@@ -250,6 +265,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Check if is single store mode
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isSingleStoreMode()
     {
@@ -262,6 +278,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * @param mixed $store
      * @param string $createdAt
      * @return \DateTime
+     * @since 2.0.0
      */
     public function getCreatedAtStoreDate($store, $createdAt)
     {
@@ -273,6 +290,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      *
      * @param mixed $store
      * @return string
+     * @since 2.0.0
      */
     public function getTimezoneForStore($store)
     {
@@ -287,6 +305,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      *
      * @param string $createdAt
      * @return \DateTime
+     * @since 2.0.0
      */
     public function getOrderAdminDate($createdAt)
     {
@@ -298,6 +317,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      *
      * @param Address $address
      * @return null|string
+     * @since 2.0.0
      */
     public function getFormattedAddress(Address $address)
     {
@@ -306,6 +326,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getChildHtml($alias = '', $useCache = true)
     {

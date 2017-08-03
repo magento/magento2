@@ -9,11 +9,13 @@ namespace Magento\Review\Model\ResourceModel\Review\Summary;
  * Review summery collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -29,6 +31,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int|string $entityId
      * @param int $entityType
      * @return $this
+     * @since 2.0.0
      */
     public function addEntityFilter($entityId, $entityType = 1)
     {
@@ -41,6 +44,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function addStoreFilter($storeId)
     {

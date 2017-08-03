@@ -9,6 +9,7 @@ namespace Magento\Framework\Math;
  * Calculations Library
  *
  * @api
+ * @since 2.0.0
  */
 class Calculator
 {
@@ -16,16 +17,19 @@ class Calculator
      * Delta collected during rounding steps
      *
      * @var float
+     * @since 2.0.0
      */
     protected $_delta = 0.0;
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface|null
+     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency)
     {
@@ -38,6 +42,7 @@ class Calculator
      * @param float $price
      * @param bool $negative Indicates if we perform addition (true) or subtraction (false) of rounded value
      * @return float
+     * @since 2.0.0
      */
     public function deltaRound($price, $negative = false)
     {

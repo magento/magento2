@@ -10,6 +10,7 @@ namespace Magento\OfflineShipping\Block\Adminhtml\Carrier\Tablerate;
  * WARNING: This grid used for export table rates
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -17,6 +18,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Website filter
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_websiteId;
 
@@ -24,16 +26,19 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Condition filter
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_conditionName;
 
     /**
      * @var \Magento\OfflineShipping\Model\Carrier\Tablerate
+     * @since 2.0.0
      */
     protected $_tablerate;
 
     /**
      * @var \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CollectionFactory
+     * @since 2.0.0
      */
     protected $_collectionFactory;
 
@@ -43,6 +48,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CollectionFactory $collectionFactory
      * @param \Magento\OfflineShipping\Model\Carrier\Tablerate $tablerate
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -60,6 +66,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Define grid properties
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -73,6 +80,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param int $websiteId
      * @return $this
+     * @since 2.0.0
      */
     public function setWebsiteId($websiteId)
     {
@@ -84,6 +92,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Retrieve current website id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getWebsiteId()
     {
@@ -98,6 +107,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param string $name
      * @return $this
+     * @since 2.0.0
      */
     public function setConditionName($name)
     {
@@ -109,6 +119,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Retrieve current website id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getConditionName()
     {
@@ -119,6 +130,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare shipping table rate collection
      *
      * @return \Magento\OfflineShipping\Block\Adminhtml\Carrier\Tablerate\Grid
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -135,6 +147,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare table columns
      *
      * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {

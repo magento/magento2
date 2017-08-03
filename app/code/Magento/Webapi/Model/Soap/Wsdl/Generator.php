@@ -16,6 +16,7 @@ use Magento\Framework\Exception\AuthorizationException;
 
 /**
  * WSDL generator.
+ * @since 2.0.0
  */
 class Generator extends AbstractSchemaGenerator
 {
@@ -26,6 +27,7 @@ class Generator extends AbstractSchemaGenerator
      * WSDL factory instance.
      *
      * @var WsdlFactory
+     * @since 2.0.0
      */
     protected $_wsdlFactory;
 
@@ -38,6 +40,7 @@ class Generator extends AbstractSchemaGenerator
      * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
      * @param Authorization $authorization
      * @param WsdlFactory $wsdlFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Webapi\Model\Cache\Type\Webapi $cache,
@@ -59,6 +62,7 @@ class Generator extends AbstractSchemaGenerator
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function generateSchema($requestedServiceMetadata, $requestScheme, $requestHost, $endPointUrl)
     {
@@ -117,6 +121,7 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param \Magento\Webapi\Model\Soap\Wsdl $wsdl
      * @return \Magento\Webapi\Model\Soap\Wsdl
+     * @since 2.0.0
      */
     protected function addCustomAttributeTypes($wsdl)
     {
@@ -134,6 +139,7 @@ class Generator extends AbstractSchemaGenerator
      * @param string $operationName
      * @param array $methodData
      * @return string input message name
+     * @since 2.0.0
      */
     protected function _createOperationInput(Wsdl $wsdl, $operationName, $methodData)
     {
@@ -177,6 +183,7 @@ class Generator extends AbstractSchemaGenerator
      * @param string $operationName
      * @param array $methodData
      * @return string output message name
+     * @since 2.0.0
      */
     protected function _createOperationOutput(Wsdl $wsdl, $operationName, $methodData)
     {
@@ -213,6 +220,7 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param string $serviceName
      * @return string
+     * @since 2.0.0
      */
     public function getPortTypeName($serviceName)
     {
@@ -224,6 +232,7 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param string $serviceName
      * @return string
+     * @since 2.0.0
      */
     public function getBindingName($serviceName)
     {
@@ -235,6 +244,7 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param string $serviceName
      * @return string
+     * @since 2.0.0
      */
     public function getPortName($serviceName)
     {
@@ -246,6 +256,7 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param string $serviceName
      * @return string
+     * @since 2.0.0
      */
     public function getServiceName($serviceName)
     {
@@ -257,6 +268,7 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param string $operationName
      * @return string
+     * @since 2.0.0
      */
     public function getInputMessageName($operationName)
     {
@@ -268,6 +280,7 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param string $operationName
      * @return string
+     * @since 2.0.0
      */
     public function getOutputMessageName($operationName)
     {
@@ -279,6 +292,7 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param Wsdl $wsdl
      * @return string Default fault message name
+     * @since 2.0.0
      */
     protected function _addGenericFaultComplexTypeNodes($wsdl)
     {
@@ -360,6 +374,7 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param string $serviceName
      * @return array
+     * @since 2.0.0
      */
     protected function getServiceMetadata($serviceName)
     {
@@ -368,6 +383,7 @@ class Generator extends AbstractSchemaGenerator
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     protected function getAllowedServicesMetadata($requestedServices)
     {

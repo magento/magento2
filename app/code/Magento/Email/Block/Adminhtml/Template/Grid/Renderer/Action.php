@@ -9,6 +9,7 @@ namespace Magento\Email\Block\Adminhtml\Template\Grid\Renderer;
  * Email templates grid block action item renderer
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
 {
@@ -17,6 +18,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {
@@ -38,6 +40,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
      *
      * @param string $value
      * @return string
+     * @since 2.0.0
      */
     protected function _getEscapedValue($value)
     {
@@ -49,6 +52,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
      *
      * @param array $actions
      * @return string
+     * @since 2.0.0
      */
     protected function _actionsToHtml(array $actions)
     {

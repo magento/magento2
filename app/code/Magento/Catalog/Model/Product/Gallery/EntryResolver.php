@@ -9,6 +9,11 @@ namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Catalog\Model\Product;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Gallery\EntryResolver
+ *
+ * @since 2.0.0
+ */
 class EntryResolver
 {
     /**
@@ -17,6 +22,7 @@ class EntryResolver
      * @param Product $product
      * @param int $entryId
      * @return string|null
+     * @since 2.0.0
      */
     public function getEntryFilePathById(Product $product, $entryId)
     {
@@ -39,6 +45,7 @@ class EntryResolver
      * @param Product $product
      * @param string $filePath
      * @return int|null
+     * @since 2.0.0
      */
     public function getEntryIdByFilePath(Product $product, $filePath)
     {

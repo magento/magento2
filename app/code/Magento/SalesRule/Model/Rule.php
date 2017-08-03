@@ -65,6 +65,7 @@ use Magento\Quote\Model\Quote\Address;
  * @method int getRuleId()
  * @method \Magento\SalesRule\Model\Rule setRuleId(int $ruleId)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Rule extends \Magento\Rule\Model\AbstractModel
 {
@@ -96,6 +97,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Store coupon code generator instance
      *
      * @var \Magento\SalesRule\Model\Coupon\CodegeneratorInterface
+     * @since 2.0.0
      */
     protected $_couponCodeGenerator;
 
@@ -103,6 +105,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Prefix of model events names
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'salesrule_rule';
 
@@ -112,6 +115,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * In observe method you can use $observer->getEvent()->getRule() in this case
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'rule';
 
@@ -119,6 +123,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Rule's primary coupon
      *
      * @var \Magento\SalesRule\Model\Coupon
+     * @since 2.0.0
      */
     protected $_primaryCoupon;
 
@@ -126,6 +131,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Rule's subordinate coupons
      *
      * @var \Magento\SalesRule\Model\Coupon[]
+     * @since 2.0.0
      */
     protected $_coupons;
 
@@ -133,6 +139,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Coupon types cache for lazy getter
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_couponTypes;
 
@@ -140,36 +147,43 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Store already validated addresses and validation results
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_validatedAddresses = [];
 
     /**
      * @var \Magento\SalesRule\Model\CouponFactory
+     * @since 2.0.0
      */
     protected $_couponFactory;
 
     /**
      * @var \Magento\SalesRule\Model\Coupon\CodegeneratorFactory
+     * @since 2.0.0
      */
     protected $_codegenFactory;
 
     /**
      * @var \Magento\SalesRule\Model\Rule\Condition\CombineFactory
+     * @since 2.0.0
      */
     protected $_condCombineFactory;
 
     /**
      * @var \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory
+     * @since 2.0.0
      */
     protected $_condProdCombineF;
 
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Coupon\Collection
+     * @since 2.0.0
      */
     protected $_couponCollection;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -194,6 +208,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -237,6 +252,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Set resource model and Id field name
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -249,6 +265,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Set coupon code and uses per coupon
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -260,6 +277,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Load all relative data
      *
      * @return void
+     * @since 2.0.0
      */
     public function loadRelations()
     {
@@ -270,6 +288,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Load coupon code
      *
      * @return void
+     * @since 2.0.0
      */
     public function loadCouponCode()
     {
@@ -283,6 +302,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Save/delete coupon
      *
      * @return $this
+     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -314,6 +334,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      *
      * @param array $data
      * @return $this
+     * @since 2.0.0
      */
     public function loadPost(array $data)
     {
@@ -330,6 +351,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Get rule condition combine model instance
      *
      * @return \Magento\SalesRule\Model\Rule\Condition\Combine
+     * @since 2.0.0
      */
     public function getConditionsInstance()
     {
@@ -340,6 +362,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Get rule condition product combine model instance
      *
      * @return \Magento\SalesRule\Model\Rule\Condition\Product\Combine
+     * @since 2.0.0
      */
     public function getActionsInstance()
     {
@@ -350,6 +373,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Returns code generator instance for auto generated coupons
      *
      * @return \Magento\SalesRule\Model\Coupon\CodegeneratorInterface
+     * @since 2.0.0
      */
     public function getCouponCodeGenerator()
     {
@@ -364,6 +388,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      *
      * @param \Magento\SalesRule\Model\Coupon\CodegeneratorInterface $codeGenerator
      * @return void
+     * @since 2.0.0
      */
     public function setCouponCodeGenerator(\Magento\SalesRule\Model\Coupon\CodegeneratorInterface $codeGenerator)
     {
@@ -374,6 +399,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Retrieve rule's primary coupon
      *
      * @return \Magento\SalesRule\Model\Coupon
+     * @since 2.0.0
      */
     public function getPrimaryCoupon()
     {
@@ -389,6 +415,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Get sales rule customer group Ids
      *
      * @return array
+     * @since 2.0.0
      */
     public function getCustomerGroupIds()
     {
@@ -404,6 +431,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      *
      * @param \Magento\Store\Model\Store|int|bool|null $store
      * @return string|bool
+     * @since 2.0.0
      */
     public function getStoreLabel($store = null)
     {
@@ -423,6 +451,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Set if not yet and retrieve rule store labels
      *
      * @return array
+     * @since 2.0.0
      */
     public function getStoreLabels()
     {
@@ -438,6 +467,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Retrieve subordinate coupons
      *
      * @return \Magento\SalesRule\Model\Coupon[]
+     * @since 2.0.0
      */
     public function getCoupons()
     {
@@ -452,6 +482,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Retrieve coupon types
      *
      * @return array
+     * @since 2.0.0
      */
     public function getCouponTypes()
     {
@@ -481,6 +512,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @throws \Exception|\Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function acquireCoupon($saveNewlyCreated = true, $saveAttemptCount = 10)
     {
@@ -541,6 +573,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
 
     /**
      * @return string
+     * @since 2.1.0
      */
     public function getFromDate()
     {
@@ -549,6 +582,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
 
     /**
      * @return string
+     * @since 2.1.0
      */
     public function getToDate()
     {
@@ -560,6 +594,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      *
      * @param Address $address
      * @return bool
+     * @since 2.0.0
      */
     public function hasIsValidForAddress($address)
     {
@@ -573,6 +608,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param Address $address
      * @param bool $validationResult
      * @return $this
+     * @since 2.0.0
      */
     public function setIsValidForAddress($address, $validationResult)
     {
@@ -587,6 +623,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param Address $address
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsValidForAddress($address)
     {
@@ -599,6 +636,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      *
      * @param Address $address
      * @return string
+     * @since 2.0.0
      */
     private function _getAddressId($address)
     {
@@ -611,6 +649,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * @param string $formName
      * @return string
+     * @since 2.1.0
      */
     public function getConditionsFieldSetId($formName = '')
     {
@@ -620,6 +659,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * @param string $formName
      * @return string
+     * @since 2.1.0
      */
     public function getActionsFieldSetId($formName = '')
     {

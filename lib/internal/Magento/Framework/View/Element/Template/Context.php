@@ -18,6 +18,7 @@ namespace Magento\Framework\View\Element\Template;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Context extends \Magento\Framework\View\Element\Context
 {
@@ -25,6 +26,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * Logger instance
      *
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $_logger;
 
@@ -32,6 +34,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * Filesystem instance
      *
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $_filesystem;
 
@@ -39,6 +42,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * View file system
      *
      * @var \Magento\Framework\View\FileSystem
+     * @since 2.0.0
      */
     protected $_viewFileSystem;
 
@@ -46,6 +50,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * Template engine pool
      *
      * @var \Magento\Framework\View\TemplateEnginePool
+     * @since 2.0.0
      */
     protected $enginePool;
 
@@ -53,6 +58,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * Application state
      *
      * @var \Magento\Framework\App\State
+     * @since 2.0.0
      */
     protected $_appState;
 
@@ -60,21 +66,25 @@ class Context extends \Magento\Framework\View\Element\Context
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\View\Page\Config
+     * @since 2.0.0
      */
     protected $pageConfig;
 
     /**
      * @var \Magento\Framework\View\Element\Template\File\Resolver
+     * @since 2.0.0
      */
     protected $resolver;
 
     /**
      * @var \Magento\Framework\View\Element\Template\File\Validator
+     * @since 2.0.0
      */
     protected $validator;
 
@@ -107,6 +117,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * @param \Magento\Framework\View\Element\Template\File\Validator $validator
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -169,6 +180,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * Get template file resolver
      *
      * @return File\Resolver
+     * @since 2.0.0
      */
     public function getResolver()
     {
@@ -179,6 +191,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * Get validator
      *
      * @return File\Validator
+     * @since 2.0.0
      */
     public function getValidator()
     {
@@ -189,6 +202,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * Get filesystem instance
      *
      * @return \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     public function getFilesystem()
     {
@@ -199,6 +213,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * Get logger instance
      *
      * @return \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     public function getLogger()
     {
@@ -209,6 +224,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * Get view file system model
      *
      * @return \Magento\Framework\View\FileSystem
+     * @since 2.0.0
      */
     public function getViewFileSystem()
     {
@@ -219,6 +235,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * Get the template engine pool instance
      *
      * @return \Magento\Framework\View\TemplateEnginePool
+     * @since 2.0.0
      */
     public function getEnginePool()
     {
@@ -229,6 +246,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * Get app state object
      *
      * @return \Magento\Framework\App\State
+     * @since 2.0.0
      */
     public function getAppState()
     {
@@ -239,6 +257,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * Get store manager
      *
      * @return \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     public function getStoreManager()
     {
@@ -247,6 +266,7 @@ class Context extends \Magento\Framework\View\Element\Context
 
     /**
      * @return \Magento\Framework\View\Page\Config
+     * @since 2.0.0
      */
     public function getPageConfig()
     {

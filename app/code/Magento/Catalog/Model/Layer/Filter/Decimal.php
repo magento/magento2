@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model\Layer\Filter;
 
 /**
  * Catalog Layer Decimal Attribute Filter Model
+ * @since 2.0.0
  */
 class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
 {
@@ -14,16 +15,19 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Resource instance
      *
      * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal
+     * @since 2.0.0
      */
     protected $_resource;
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
+     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var DataProvider\Decimal
+     * @since 2.0.0
      */
     private $dataProvider;
 
@@ -35,6 +39,7 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * @param \Magento\Catalog\Model\ResourceModel\Layer\Filter\DecimalFactory $filterDecimalFactory
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
@@ -56,6 +61,7 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return $this
+     * @since 2.0.0
      */
     public function apply(\Magento\Framework\App\RequestInterface $request)
     {
@@ -95,6 +101,7 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * @param   int $range
      * @param   float $value
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     protected function _renderItemLabel($range, $value)
     {
@@ -107,6 +114,7 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Retrieve data for build decimal filter items
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getItemsData()
     {

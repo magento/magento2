@@ -9,6 +9,11 @@ namespace Magento\Framework\App\Config\Storage;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * Interface \Magento\Framework\App\Config\Storage\WriterInterface
+ *
+ * @since 2.0.0
+ */
 interface WriterInterface
 {
     /**
@@ -18,6 +23,7 @@ interface WriterInterface
      * @param   string $scope
      * @param   int $scopeId
      * @return void
+     * @since 2.0.0
      */
     public function delete($path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeId = 0);
 
@@ -29,6 +35,7 @@ interface WriterInterface
      * @param string $scope
      * @param int $scopeId
      * @return void
+     * @since 2.0.0
      */
     public function save($path, $value, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeId = 0);
 }

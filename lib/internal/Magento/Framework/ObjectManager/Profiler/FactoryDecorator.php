@@ -6,6 +6,11 @@
  */
 namespace Magento\Framework\ObjectManager\Profiler;
 
+/**
+ * Class \Magento\Framework\ObjectManager\Profiler\FactoryDecorator
+ *
+ * @since 2.0.0
+ */
 class FactoryDecorator implements \Magento\Framework\ObjectManager\FactoryInterface
 {
     /**
@@ -15,17 +20,20 @@ class FactoryDecorator implements \Magento\Framework\ObjectManager\FactoryInterf
 
     /**
      * @var \Magento\Framework\ObjectManager\FactoryInterface
+     * @since 2.0.0
      */
     protected $subject;
 
     /**
      * @var Log
+     * @since 2.0.0
      */
     protected $log;
 
     /**
      * @param \Magento\Framework\ObjectManager\FactoryInterface $subject
      * @param Log $log
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManager\FactoryInterface $subject, Log $log)
     {
@@ -37,6 +45,7 @@ class FactoryDecorator implements \Magento\Framework\ObjectManager\FactoryInterf
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      *
      * @return void
+     * @since 2.0.0
      */
     public function setObjectManager(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -45,6 +54,7 @@ class FactoryDecorator implements \Magento\Framework\ObjectManager\FactoryInterf
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function create($requestedType, array $arguments = [])
     {

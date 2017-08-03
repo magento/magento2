@@ -14,22 +14,26 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
  * Class SelectFactory
  *
  * @api
+ * @since 2.1.0
  */
 class SelectFactory
 {
     /**
      * @var SelectRenderer
+     * @since 2.1.0
      */
     protected $selectRenderer;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $parts;
 
     /**
      * @param SelectRenderer $selectRenderer
      * @param array $parts
+     * @since 2.1.0
      */
     public function __construct(
         SelectRenderer $selectRenderer,
@@ -42,6 +46,7 @@ class SelectFactory
     /**
      * @param AdapterInterface $adapter
      * @return \Magento\Framework\DB\Select
+     * @since 2.1.0
      */
     public function create(AdapterInterface $adapter)
     {

@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Spi;
 
 /**
  * Interface ResourceInterface
+ * @since 2.0.0
  */
 interface CreditmemoResourceInterface
 {
@@ -15,6 +16,7 @@ interface CreditmemoResourceInterface
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     public function save(\Magento\Framework\Model\AbstractModel $object);
 
@@ -25,6 +27,7 @@ interface CreditmemoResourceInterface
      * @param \Magento\Framework\Model\AbstractModel $object
      * @param string|null $field field to load by (defaults to model id)
      * @return mixed
+     * @since 2.0.0
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null);
 
@@ -33,6 +36,7 @@ interface CreditmemoResourceInterface
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return mixed
+     * @since 2.0.0
      */
     public function delete(\Magento\Framework\Model\AbstractModel $object);
 }

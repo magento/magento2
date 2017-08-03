@@ -9,6 +9,11 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Product\ExportLowstockCsv
+ *
+ * @since 2.0.0
+ */
 class ExportLowstockCsv extends \Magento\Reports\Controller\Adminhtml\Report\Product
 {
     /**
@@ -22,6 +27,7 @@ class ExportLowstockCsv extends \Magento\Reports\Controller\Adminhtml\Report\Pro
      * Export low stock products report to CSV format
      *
      * @return ResponseInterface
+     * @since 2.0.0
      */
     public function execute()
     {

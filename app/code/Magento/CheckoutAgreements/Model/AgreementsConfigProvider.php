@@ -10,21 +10,25 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Configuration provider for GiftMessage rendering on "Shipping Method" step of checkout.
+ * @since 2.0.0
  */
 class AgreementsConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfiguration;
 
     /**
      * @var \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface
+     * @since 2.0.0
      */
     protected $checkoutAgreementsRepository;
 
     /**
      * @var \Magento\Framework\Escaper
+     * @since 2.0.0
      */
     protected $escaper;
 
@@ -33,6 +37,7 @@ class AgreementsConfigProvider implements ConfigProviderInterface
      * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository
      * @param \Magento\Framework\Escaper $escaper
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration,
@@ -46,6 +51,7 @@ class AgreementsConfigProvider implements ConfigProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -58,6 +64,7 @@ class AgreementsConfigProvider implements ConfigProviderInterface
      * Returns agreements config
      *
      * @return array
+     * @since 2.0.0
      */
     protected function getAgreementsConfig()
     {

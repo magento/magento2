@@ -13,6 +13,7 @@ use Magento\Store\Model\ScopeInterface;
  * Factory class for \Magento\Framework\View\Page\Config\RendererInterface
  *
  * @api
+ * @since 2.0.0
  */
 class RendererFactory extends \Magento\Framework\View\Page\Config\RendererFactory
 {
@@ -20,11 +21,13 @@ class RendererFactory extends \Magento\Framework\View\Page\Config\RendererFactor
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
@@ -32,6 +35,7 @@ class RendererFactory extends \Magento\Framework\View\Page\Config\RendererFactor
      * Renderer Types
      *
      * @var array
+     * @since 2.0.0
      */
     private $rendererTypes;
 
@@ -41,6 +45,7 @@ class RendererFactory extends \Magento\Framework\View\Page\Config\RendererFactor
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param array $rendererTypes
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -58,6 +63,7 @@ class RendererFactory extends \Magento\Framework\View\Page\Config\RendererFactor
      * @param array $data
      *
      * @return \Magento\Framework\View\Page\Config\RendererInterface
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

@@ -9,10 +9,16 @@ namespace Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit;
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 
+/**
+ * Class \Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit\Form
+ *
+ * @since 2.0.0
+ */
 class Form extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper
+     * @since 2.0.0
      */
     protected $initializationHelper;
 
@@ -20,6 +26,7 @@ class Form extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param Action\Context $context
      * @param Product\Builder $productBuilder
      * @param Product\Initialization\Helper $initializationHelper
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -32,6 +39,7 @@ class Form extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

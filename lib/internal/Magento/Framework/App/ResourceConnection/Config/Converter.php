@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\App\ResourceConnection\Config;
 
+/**
+ * Class \Magento\Framework\App\ResourceConnection\Config\Converter
+ *
+ * @since 2.0.0
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
@@ -15,6 +20,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param \DOMDocument $source
      * @return array
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function convert($source)
     {

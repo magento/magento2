@@ -12,46 +12,55 @@ use Magento\Framework\Search\Request\FilterInterface;
 /**
  * Class SelectContainer
  * This class is a container for all data that is required for creating select query by search request
+ * @since 2.2.0
  */
 class SelectContainer
 {
     /**
      * @var array FilterInterface[]
+     * @since 2.2.0
      */
     private $nonCustomAttributesFilters;
 
     /**
      * @var array FilterInterface[]
+     * @since 2.2.0
      */
     private $customAttributesFilters;
 
     /**
      * @var FilterInterface
+     * @since 2.2.0
      */
     private $visibilityFilter;
 
     /**
      * @var bool
+     * @since 2.2.0
      */
     private $isFullTextSearchRequired;
 
     /**
      * @var bool
+     * @since 2.2.0
      */
     private $isShowOutOfStockEnabled;
 
     /**
      * @var Select
+     * @since 2.2.0
      */
     private $select;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $usedIndex;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $dimensions;
 
@@ -64,6 +73,7 @@ class SelectContainer
      * @param bool $isShowOutOfStockEnabled
      * @param string $usedIndex
      * @param FilterInterface|null $visibilityFilter
+     * @since 2.2.0
      */
     public function __construct(
         Select $select,
@@ -87,6 +97,7 @@ class SelectContainer
 
     /**
      * @return array
+     * @since 2.2.0
      */
     public function getNonCustomAttributesFilters()
     {
@@ -95,6 +106,7 @@ class SelectContainer
 
     /**
      * @return array
+     * @since 2.2.0
      */
     public function getCustomAttributesFilters()
     {
@@ -103,6 +115,7 @@ class SelectContainer
 
     /**
      * @return bool
+     * @since 2.2.0
      */
     public function hasCustomAttributesFilters()
     {
@@ -111,6 +124,7 @@ class SelectContainer
 
     /**
      * @return bool
+     * @since 2.2.0
      */
     public function hasVisibilityFilter()
     {
@@ -122,6 +136,7 @@ class SelectContainer
      * This is done to ensure that SelectContainer is immutable
      *
      * @return FilterInterface
+     * @since 2.2.0
      */
     public function getVisibilityFilter()
     {
@@ -130,6 +145,7 @@ class SelectContainer
 
     /**
      * @return bool
+     * @since 2.2.0
      */
     public function isFullTextSearchRequired()
     {
@@ -138,6 +154,7 @@ class SelectContainer
 
     /**
      * @return bool
+     * @since 2.2.0
      */
     public function isShowOutOfStockEnabled()
     {
@@ -146,6 +163,7 @@ class SelectContainer
 
     /**
      * @return string
+     * @since 2.2.0
      */
     public function getUsedIndex()
     {
@@ -154,6 +172,7 @@ class SelectContainer
 
     /**
      * @return array
+     * @since 2.2.0
      */
     public function getDimensions()
     {
@@ -165,6 +184,7 @@ class SelectContainer
      * This is done to ensure that SelectContainer is immutable
      *
      * @return Select
+     * @since 2.2.0
      */
     public function getSelect()
     {
@@ -177,6 +197,7 @@ class SelectContainer
      *
      * @param Select $select
      * @return SelectContainer
+     * @since 2.2.0
      */
     public function updateSelect(Select $select)
     {

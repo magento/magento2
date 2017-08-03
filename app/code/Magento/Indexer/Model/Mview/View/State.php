@@ -7,6 +7,7 @@ namespace Magento\Indexer\Model\Mview\View;
 
 /**
  * @method \Magento\Indexer\Model\Mview\View\State setViewId(string $value)
+ * @since 2.0.0
  */
 class State extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\Mview\View\StateInterface
 {
@@ -14,6 +15,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      * Prefix of model events names
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'mview_state';
 
@@ -21,6 +23,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      * Parameter name in event
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'mview_state';
 
@@ -30,6 +33,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      * @param \Magento\Indexer\Model\ResourceModel\Mview\View\State $resource
      * @param \Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -52,6 +56,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      *
      * @param string $viewId
      * @return $this
+     * @since 2.0.0
      */
     public function loadByView($viewId)
     {
@@ -66,6 +71,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      * Processing object before save data
      *
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -77,6 +83,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      * Get state view ID
      *
      * @return string
+     * @since 2.0.0
      */
     public function getViewId()
     {
@@ -87,6 +94,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      * Get state mode
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMode()
     {
@@ -98,6 +106,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      *
      * @param string $mode
      * @return $this
+     * @since 2.0.0
      */
     public function setMode($mode)
     {
@@ -109,6 +118,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      * Get state status
      *
      * @return string
+     * @since 2.0.0
      */
     public function getStatus()
     {
@@ -120,6 +130,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      *
      * @param string $status
      * @return $this
+     * @since 2.0.0
      */
     public function setStatus($status)
     {
@@ -131,6 +142,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      * Get state updated time
      *
      * @return string
+     * @since 2.0.0
      */
     public function getUpdated()
     {
@@ -142,6 +154,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      *
      * @param string|int|\DateTimeInterface $updated
      * @return $this
+     * @since 2.0.0
      */
     public function setUpdated($updated)
     {
@@ -153,6 +166,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      * Get state version ID
      *
      * @return string
+     * @since 2.0.0
      */
     public function getVersionId()
     {
@@ -164,6 +178,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      *
      * @param int $versionId
      * @return $this
+     * @since 2.0.0
      */
     public function setVersionId($versionId)
     {

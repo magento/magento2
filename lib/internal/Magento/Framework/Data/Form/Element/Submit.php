@@ -13,6 +13,11 @@ namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 
+/**
+ * Class \Magento\Framework\Data\Form\Element\Submit
+ *
+ * @since 2.0.0
+ */
 class Submit extends AbstractElement
 {
     /**
@@ -20,6 +25,7 @@ class Submit extends AbstractElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -34,6 +40,7 @@ class Submit extends AbstractElement
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getHtml()
     {

@@ -9,11 +9,13 @@ namespace Magento\ImportExport\Model\ResourceModel\Import;
  * ImportExport import data resource model
  *
  * @api
+ * @since 2.0.0
  */
 class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements \IteratorAggregate
 {
     /**
      * @var \Iterator
+     * @since 2.0.0
      */
     protected $_iterator = null;
 
@@ -21,6 +23,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * Helper to encode/decode json
      *
      * @var \Magento\Framework\Json\Helper\Data
+     * @since 2.0.0
      */
     protected $jsonHelper;
 
@@ -30,6 +33,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -44,6 +48,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -54,6 +59,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * Retrieve an external iterator
      *
      * @return \Iterator
+     * @since 2.0.0
      */
     public function getIterator()
     {
@@ -77,6 +83,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * Clean all bunches from table.
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.0.0
      */
     public function cleanBunches()
     {
@@ -87,6 +94,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * Return behavior from import data table.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBehavior()
     {
@@ -97,6 +105,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * Return entity type code from import data table.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEntityTypeCode()
     {
@@ -109,6 +118,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * @param string $code parameter name
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getUniqueColumnData($code)
     {
@@ -127,6 +137,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * Get next bunch of validated rows.
      *
      * @return array|null
+     * @since 2.0.0
      */
     public function getNextBunch()
     {
@@ -155,6 +166,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * @param string $behavior
      * @param array $data
      * @return int
+     * @since 2.0.0
      */
     public function saveBunch($entity, $behavior, array $data)
     {

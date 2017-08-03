@@ -10,6 +10,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Search;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -17,6 +18,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Sales config
      *
      * @var \Magento\Sales\Model\Config
+     * @since 2.0.0
      */
     protected $_salesConfig;
 
@@ -24,6 +26,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Session quote
      *
      * @var \Magento\Backend\Model\Session\Quote
+     * @since 2.0.0
      */
     protected $_sessionQuote;
 
@@ -31,6 +34,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Catalog config
      *
      * @var \Magento\Catalog\Model\Config
+     * @since 2.0.0
      */
     protected $_catalogConfig;
 
@@ -38,6 +42,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Product factory
      *
      * @var \Magento\Catalog\Model\ProductFactory
+     * @since 2.0.0
      */
     protected $_productFactory;
 
@@ -49,6 +54,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -70,6 +76,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -89,6 +96,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Retrieve quote store object
      *
      * @return \Magento\Store\Model\Store
+     * @since 2.0.0
      */
     public function getStore()
     {
@@ -99,6 +107,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Retrieve quote object
      *
      * @return \Magento\Quote\Model\Quote
+     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -110,6 +119,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return $this
+     * @since 2.0.0
      */
     protected function _addColumnFilterToCollection($column)
     {
@@ -136,6 +146,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare collection to be displayed in the grid
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -163,6 +174,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare columns
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -234,6 +246,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Get grid url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGridUrl()
     {
@@ -247,6 +260,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Get selected products
      *
      * @return mixed
+     * @since 2.0.0
      */
     protected function _getSelectedProducts()
     {
@@ -259,6 +273,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Add custom options to product collection
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterLoadCollection()
     {

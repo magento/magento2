@@ -7,13 +7,15 @@ namespace Magento\Backend\Block\Widget\Form;
 
 /**
  * @api
- * @deprecated in favour of UI component implementation
+ * @deprecated 2.2.0 in favour of UI component implementation
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 2.0.0
  */
 class Generic extends \Magento\Backend\Block\Widget\Form
 {
     /**
      * @var \Magento\Framework\Data\FormFactory
+     * @since 2.0.0
      */
     protected $_formFactory;
 
@@ -21,6 +23,7 @@ class Generic extends \Magento\Backend\Block\Widget\Form
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry;
 
@@ -29,6 +32,7 @@ class Generic extends \Magento\Backend\Block\Widget\Form
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,

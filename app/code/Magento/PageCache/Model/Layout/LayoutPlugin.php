@@ -7,16 +7,19 @@ namespace Magento\PageCache\Model\Layout;
 
 /**
  * Class LayoutPlugin
+ * @since 2.0.0
  */
 class LayoutPlugin
 {
     /**
      * @var \Magento\PageCache\Model\Config
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Framework\App\ResponseInterface
+     * @since 2.0.0
      */
     protected $response;
 
@@ -25,6 +28,7 @@ class LayoutPlugin
      *
      * @param \Magento\Framework\App\ResponseInterface $response
      * @param \Magento\PageCache\Model\Config $config
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ResponseInterface $response,
@@ -41,6 +45,7 @@ class LayoutPlugin
      * @param \Magento\Framework\View\Layout $subject
      * @param mixed $result
      * @return mixed
+     * @since 2.0.0
      */
     public function afterGenerateXml(\Magento\Framework\View\Layout $subject, $result)
     {
@@ -56,6 +61,7 @@ class LayoutPlugin
      * @param \Magento\Framework\View\Layout $subject
      * @param mixed $result
      * @return mixed
+     * @since 2.0.0
      */
     public function afterGetOutput(\Magento\Framework\View\Layout $subject, $result)
     {

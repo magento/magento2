@@ -12,6 +12,7 @@ use \Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Collection extends AbstractCollection implements \Magento\Sales\Api\Data\OrderItemSearchResultInterface
 {
@@ -19,6 +20,7 @@ class Collection extends AbstractCollection implements \Magento\Sales\Api\Data\O
      * Event prefix
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_item_collection';
 
@@ -26,6 +28,7 @@ class Collection extends AbstractCollection implements \Magento\Sales\Api\Data\O
      * Event object
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'order_item_collection';
 
@@ -33,6 +36,7 @@ class Collection extends AbstractCollection implements \Magento\Sales\Api\Data\O
      * Order field for setOrderFilter
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_orderField = 'order_id';
 
@@ -40,6 +44,7 @@ class Collection extends AbstractCollection implements \Magento\Sales\Api\Data\O
      * Model initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -50,6 +55,7 @@ class Collection extends AbstractCollection implements \Magento\Sales\Api\Data\O
      * Assign parent items on after collection load
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -70,6 +76,7 @@ class Collection extends AbstractCollection implements \Magento\Sales\Api\Data\O
      * Set random items order
      *
      * @return $this
+     * @since 2.0.0
      */
     public function setRandomOrder()
     {
@@ -82,6 +89,7 @@ class Collection extends AbstractCollection implements \Magento\Sales\Api\Data\O
      *
      * @param mixed $item
      * @return $this
+     * @since 2.0.0
      */
     public function addIdFilter($item)
     {
@@ -100,6 +108,7 @@ class Collection extends AbstractCollection implements \Magento\Sales\Api\Data\O
      *
      * @param array $typeIds
      * @return $this
+     * @since 2.0.0
      */
     public function filterByTypes($typeIds)
     {
@@ -112,6 +121,7 @@ class Collection extends AbstractCollection implements \Magento\Sales\Api\Data\O
      *
      * @param int $parentId
      * @return $this
+     * @since 2.0.0
      */
     public function filterByParent($parentId = null)
     {

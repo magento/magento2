@@ -14,22 +14,26 @@ use Magento\Framework\DB\Select;
 
 /**
  * Class StockStatusBaseSelectProcessor
+ * @since 2.2.0
  */
 class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
 {
     /**
      * @var ResourceConnection
+     * @since 2.2.0
      */
     private $resource;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
+     * @since 2.2.0
      */
     private $stockConfig;
 
     /**
      * @param ResourceConnection $resource
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface|null $stockConfig
+     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -45,6 +49,7 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
      *
      * @param Select $select
      * @return Select
+     * @since 2.2.0
      */
     public function process(Select $select)
     {

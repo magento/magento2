@@ -10,16 +10,23 @@ use Magento\Sales\Controller\OrderInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Class \Magento\Sales\Controller\Order\History
+ *
+ * @since 2.0.0
+ */
 class History extends \Magento\Framework\App\Action\Action implements OrderInterface
 {
     /**
      * @var PageFactory
+     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @param Context $context
      * @param PageFactory $resultPageFactory
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -33,6 +40,7 @@ class History extends \Magento\Framework\App\Action\Action implements OrderInter
      * Customer order history
      *
      * @return \Magento\Framework\View\Result\Page
+     * @since 2.0.0
      */
     public function execute()
     {

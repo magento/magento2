@@ -9,10 +9,16 @@
  */
 namespace Magento\Framework\DataObject;
 
+/**
+ * Class \Magento\Framework\DataObject\Copy
+ *
+ * @since 2.0.0
+ */
 class Copy
 {
     /**
      * @var \Magento\Framework\DataObject\Copy\Config
+     * @since 2.0.0
      */
     protected $fieldsetConfig;
 
@@ -20,11 +26,13 @@ class Copy
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $eventManager = null;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttributesFactory
+     * @since 2.0.0
      */
     protected $extensionAttributesFactory;
 
@@ -32,6 +40,7 @@ class Copy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\DataObject\Copy\Config $fieldsetConfig
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionAttributesFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -58,6 +67,7 @@ class Copy
      * @throws \InvalidArgumentException
      *
      * @api
+     * @since 2.0.0
      */
     public function copyFieldsetToTarget($fieldset, $aspect, $source, $target, $root = 'global')
     {
@@ -98,6 +108,7 @@ class Copy
      * @param string $root
      * @param bool $targetIsArray
      * @return \Magento\Framework\DataObject|mixed
+     * @since 2.0.0
      */
     protected function dispatchCopyFieldSetEvent($fieldset, $aspect, $source, $target, $root, $targetIsArray)
     {
@@ -126,6 +137,7 @@ class Copy
      * @return array $data
      *
      * @api
+     * @since 2.0.0
      */
     public function getDataFromFieldset($fieldset, $aspect, $source, $root = 'global')
     {
@@ -159,6 +171,7 @@ class Copy
      * @param array|\Magento\Framework\DataObject $source
      * @param array|\Magento\Framework\DataObject $target
      * @return bool
+     * @since 2.0.0
      */
     protected function _isFieldsetInputValid($source, $target)
     {
@@ -178,6 +191,7 @@ class Copy
      *
      * @return mixed
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function _getFieldsetFieldValue($source, $code)
     {
@@ -207,6 +221,7 @@ class Copy
      *
      * @return mixed
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function _setFieldsetFieldValue($target, $targetCode, $value)
     {
@@ -237,6 +252,7 @@ class Copy
      *
      * @return mixed
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function getAttributeValueFromExtensibleDataObject($source, $code)
     {
@@ -271,6 +287,7 @@ class Copy
      *
      * @return null
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function setAttributeValueFromExtensibleDataObject($target, $code, $value)
     {

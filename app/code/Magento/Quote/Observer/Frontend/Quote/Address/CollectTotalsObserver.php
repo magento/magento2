@@ -7,35 +7,46 @@ namespace Magento\Quote\Observer\Frontend\Quote\Address;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver
+ *
+ * @since 2.0.0
+ */
 class CollectTotalsObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Customer\Api\AddressRepositoryInterface
+     * @since 2.2.0
      */
     private $addressRepository;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.2.0
      */
     private $customerSession;
 
     /**
      * @var \Magento\Customer\Helper\Address
+     * @since 2.0.0
      */
     protected $customerAddressHelper;
 
     /**
      * @var \Magento\Customer\Model\Vat
+     * @since 2.0.0
      */
     protected $customerVat;
 
     /**
      * @var VatValidator
+     * @since 2.0.0
      */
     protected $vatValidator;
 
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
+     * @since 2.0.0
      */
     protected $customerDataFactory;
 
@@ -43,6 +54,7 @@ class CollectTotalsObserver implements ObserverInterface
      * Group Management
      *
      * @var \Magento\Customer\Api\GroupManagementInterface
+     * @since 2.0.0
      */
     protected $groupManagement;
 
@@ -56,6 +68,7 @@ class CollectTotalsObserver implements ObserverInterface
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Customer\Model\Session $customerSession
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddressHelper,
@@ -81,6 +94,7 @@ class CollectTotalsObserver implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

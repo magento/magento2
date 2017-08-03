@@ -9,6 +9,7 @@ namespace Magento\Framework\Acl\Data;
 /**
  * ACL data cache layer.
  * @package Magento\Framework\Acl\Data
+ * @since 2.2.0
  */
 class Cache implements CacheInterface
 {
@@ -19,16 +20,19 @@ class Cache implements CacheInterface
 
     /**
      * @var \Magento\Framework\Config\CacheInterface
+     * @since 2.2.0
      */
     private $cache;
 
     /**
      * @var \Magento\Framework\Acl\Builder
+     * @since 2.2.0
      */
     private $aclBuilder;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $cacheTag;
 
@@ -38,6 +42,7 @@ class Cache implements CacheInterface
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param \Magento\Framework\Acl\Builder $aclBuilder
      * @param string $cacheTag
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Config\CacheInterface $cache,
@@ -51,6 +56,7 @@ class Cache implements CacheInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function test($identifier)
     {
@@ -59,6 +65,7 @@ class Cache implements CacheInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function load($identifier)
     {
@@ -67,6 +74,7 @@ class Cache implements CacheInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
@@ -75,6 +83,7 @@ class Cache implements CacheInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function remove($identifier)
     {
@@ -83,6 +92,7 @@ class Cache implements CacheInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_MATCHING_TAG, array $tags = [])
     {
@@ -92,6 +102,7 @@ class Cache implements CacheInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getBackend()
     {
@@ -100,6 +111,7 @@ class Cache implements CacheInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getLowLevelFrontend()
     {

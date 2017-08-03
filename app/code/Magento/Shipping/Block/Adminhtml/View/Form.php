@@ -13,11 +13,13 @@ namespace Magento\Shipping\Block\Adminhtml\View;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 {
     /**
      * @var \Magento\Shipping\Model\CarrierFactory
+     * @since 2.0.0
      */
     protected $_carrierFactory;
 
@@ -27,6 +29,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * @param \Magento\Sales\Helper\Admin $adminHelper
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -43,6 +46,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Retrieve shipment model instance
      *
      * @return \Magento\Sales\Model\Order\Shipment
+     * @since 2.0.0
      */
     public function getShipment()
     {
@@ -53,6 +57,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Retrieve invoice order
      *
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -63,6 +68,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Retrieve source
      *
      * @return \Magento\Sales\Model\Order\Shipment
+     * @since 2.0.0
      */
     public function getSource()
     {
@@ -74,6 +80,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      *
      * @return string
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     public function getCreateLabelButton()
     {
@@ -94,6 +101,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Get print label button html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPrintLabelButton()
     {
@@ -110,6 +118,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Show packages button html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getShowPackagesButton()
     {
@@ -124,6 +133,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Check is carrier has functionality of creation shipping labels
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canCreateShippingLabel()
     {

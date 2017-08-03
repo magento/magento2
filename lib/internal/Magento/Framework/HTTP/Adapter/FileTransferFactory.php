@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\HTTP\Adapter;
 
+/**
+ * Class \Magento\Framework\HTTP\Adapter\FileTransferFactory
+ *
+ * @since 2.0.0
+ */
 class FileTransferFactory
 {
     /**
@@ -12,6 +17,7 @@ class FileTransferFactory
      *
      * @param array $options
      * @return \Zend_File_Transfer_Adapter_Http
+     * @since 2.0.0
      */
     public function create(array $options = [])
     {

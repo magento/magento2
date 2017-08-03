@@ -7,15 +7,22 @@ namespace Magento\Framework\Indexer;
 
 use Magento\Framework\Indexer\IndexStructureInterface;
 
+/**
+ * Class \Magento\Framework\Indexer\StructureFactory
+ *
+ * @since 2.0.0
+ */
 class StructureFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -29,6 +36,7 @@ class StructureFactory
      * @param [] $arguments
      * @throws \InvalidArgumentException
      * @return IndexStructureInterface
+     * @since 2.0.0
      */
     public function create($className, $arguments = [])
     {

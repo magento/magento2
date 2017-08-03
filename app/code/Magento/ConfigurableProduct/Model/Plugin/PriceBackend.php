@@ -11,6 +11,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
  * Class PriceBackend
  *
  *  Make price validation optional for configurable product
+ * @since 2.0.0
  */
 class PriceBackend
 {
@@ -20,6 +21,7 @@ class PriceBackend
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\DataObject $object
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function aroundValidate(
         \Magento\Catalog\Model\Product\Attribute\Backend\Price $subject,

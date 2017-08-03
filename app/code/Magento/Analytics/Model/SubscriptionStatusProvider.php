@@ -12,6 +12,7 @@ use Magento\Framework\FlagManager;
 
 /**
  * Provider of subscription status.
+ * @since 2.2.0
  */
 class SubscriptionStatusProvider
 {
@@ -37,16 +38,19 @@ class SubscriptionStatusProvider
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.2.0
      */
     private $scopeConfig;
 
     /**
      * @var AnalyticsToken
+     * @since 2.2.0
      */
     private $analyticsToken;
 
     /**
      * @var FlagManager
+     * @since 2.2.0
      */
     private $flagManager;
 
@@ -54,6 +58,7 @@ class SubscriptionStatusProvider
      * @param ScopeConfigInterface $scopeConfig
      * @param AnalyticsToken $analyticsToken
      * @param FlagManager $flagManager
+     * @since 2.2.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -75,6 +80,7 @@ class SubscriptionStatusProvider
      * Failed - if subscription is enabled and token was not received after attempts ended.
      *
      * @return string
+     * @since 2.2.0
      */
     public function getStatus()
     {
@@ -90,6 +96,7 @@ class SubscriptionStatusProvider
      * Retrieve status for subscription that enabled in config.
      *
      * @return string
+     * @since 2.2.0
      */
     public function getStatusForEnabledSubscription()
     {
@@ -112,6 +119,7 @@ class SubscriptionStatusProvider
      * Retrieve status for subscription that disabled in config.
      *
      * @return string
+     * @since 2.2.0
      */
     public function getStatusForDisabledSubscription()
     {

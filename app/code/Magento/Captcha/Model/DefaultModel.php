@@ -9,6 +9,7 @@ namespace Magento\Captcha\Model;
  * Implementation of \Zend\Captcha\Image
  *
  * @api
+ * @since 2.0.0
  */
 class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model\CaptchaInterface
 {
@@ -29,12 +30,14 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
 
     /**
      * @var \Magento\Captcha\Helper\Data
+     * @since 2.2.0
      */
     protected $captchaData;
 
     /**
      * Captcha expire time
      * @var int
+     * @since 2.2.0
      */
     protected $expiration;
 
@@ -42,17 +45,20 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Override default value to prevent a captcha cut off
      * @var int
      * @see \Zend\Captcha\Image::$fsize
+     * @since 2.2.0
      */
     protected $fsize = 22;
 
     /**
      * Captcha form id
      * @var string
+     * @since 2.2.0
      */
     protected $formId;
 
     /**
      * @var \Magento\Captcha\Model\ResourceModel\LogFactory
+     * @since 2.2.0
      */
     protected $resLogFactory;
 
@@ -60,11 +66,13 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Overrides parent parameter as session comes in constructor.
      *
      * @var bool
+     * @since 2.2.0
      */
     protected $keepSession = true;
 
     /**
      * @var \Magento\Framework\Session\SessionManagerInterface
+     * @since 2.2.0
      */
     protected $session;
 
@@ -74,6 +82,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * @param ResourceModel\LogFactory $resLogFactory
      * @param string $formId
      * @throws \Zend\Captcha\Exception\ExtensionNotLoadedException
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Session\SessionManagerInterface $session,
@@ -93,6 +102,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      *
      * @param string $key
      * @return string
+     * @since 2.2.0
      */
     private function getFormIdKey($key)
     {
@@ -103,6 +113,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Get Block Name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBlockName()
     {
@@ -114,6 +125,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      *
      * @param null|string $login
      * @return bool
+     * @since 2.0.0
      */
     public function isRequired($login = null)
     {
@@ -137,6 +149,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Check if CAPTCHA has to be shown to logged in user on this form
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isShownToLoggedInUser()
     {
@@ -154,6 +167,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      *
      * @param string $login
      * @return bool
+     * @since 2.2.0
      */
     private function isOverLimitAttempts($login)
     {
@@ -164,6 +178,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Returns number of allowed attempts for same login
      *
      * @return int
+     * @since 2.2.0
      */
     private function getAllowedAttemptsForSameLogin()
     {
@@ -174,6 +189,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Returns number of allowed attempts from same IP
      *
      * @return int
+     * @since 2.2.0
      */
     private function getAllowedAttemptsFromSameIp()
     {
@@ -184,6 +200,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Check is over limit saved attempts from one ip
      *
      * @return bool
+     * @since 2.2.0
      */
     private function isOverLimitIpAttempt()
     {
@@ -196,6 +213,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      *
      * @param string $login
      * @return bool
+     * @since 2.2.0
      */
     private function isOverLimitLoginAttempts($login)
     {
@@ -210,6 +228,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Check is user auth
      *
      * @return bool
+     * @since 2.2.0
      */
     private function isUserAuth()
     {
@@ -220,6 +239,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Whether to respect case while checking the answer
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isCaseSensitive()
     {
@@ -230,6 +250,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Get font to use when generating captcha
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFont()
     {
@@ -250,6 +271,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * After this time isCorrect() is going to return FALSE even if word was guessed correctly
      *
      * @return int
+     * @since 2.0.0
      */
     public function getExpiration()
     {
@@ -267,6 +289,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Get timeout for session token
      *
      * @return int
+     * @since 2.0.0
      */
     public function getTimeout()
     {
@@ -277,6 +300,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Get captcha image directory
      *
      * @return string
+     * @since 2.0.0
      */
     public function getImgDir()
     {
@@ -287,6 +311,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Get captcha image base URL
      *
      * @return string
+     * @since 2.0.0
      */
     public function getImgUrl()
     {
@@ -298,6 +323,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      *
      * @param string $word
      * @return bool
+     * @since 2.0.0
      */
     public function isCorrect($word)
     {
@@ -319,6 +345,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Return full URL to captcha image
      *
      * @return string
+     * @since 2.0.0
      */
     public function getImgSrc()
     {
@@ -330,6 +357,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      *
      * @param string $login
      * @return $this
+     * @since 2.0.0
      */
     public function logAttempt($login)
     {
@@ -347,6 +375,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      *
      * @param bool $value
      * @return void
+     * @since 2.1.0
      */
     public function setShowCaptchaInSession($value = true)
     {
@@ -362,6 +391,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.2.0
      */
     protected function generateWord()
     {
@@ -378,6 +408,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Get symbols array to use for word generation
      *
      * @return array
+     * @since 2.2.0
      */
     private function getSymbols()
     {
@@ -389,6 +420,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      *
      * @return int
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.2.0
      */
     public function getWordLen()
     {
@@ -417,6 +449,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Whether to show captcha for this form every time
      *
      * @return bool
+     * @since 2.2.0
      */
     private function isShowAlways()
     {
@@ -444,6 +477,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Whether captcha is enabled at this area
      *
      * @return bool
+     * @since 2.2.0
      */
     private function isEnabled()
     {
@@ -456,6 +490,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * For frontend this list is based on current website
      *
      * @return array
+     * @since 2.2.0
      */
     private function getTargetForms()
     {
@@ -467,6 +502,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Get captcha word
      *
      * @return string
+     * @since 2.0.0
      */
     public function getWord()
     {
@@ -479,6 +515,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      *
      * @param  string $word
      * @return $this
+     * @since 2.2.0
      */
     protected function setWord($word)
     {
@@ -494,6 +531,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Set captcha word
      *
      * @return $this
+     * @since 2.2.0
      */
     private function clearWord()
     {
@@ -508,6 +546,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * @see \Zend\Captcha\Image::_randomSize()
      * @return int
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.2.0
      */
     protected function randomSize()
     {
@@ -524,6 +563,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      *
      * Added SuppressWarnings since this method is declared in parent class and we can not use other method name.
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @since 2.2.0
      */
     protected function gc()
     {
@@ -534,6 +574,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Get resource model
      *
      * @return \Magento\Captcha\Model\ResourceModel\Log
+     * @since 2.2.0
      */
     private function getResourceModel()
     {

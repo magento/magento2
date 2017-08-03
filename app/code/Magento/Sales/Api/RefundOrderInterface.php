@@ -9,6 +9,7 @@ namespace Magento\Sales\Api;
  * Interface RefundOrderInterface
  *
  * @api
+ * @since 2.2.0
  */
 interface RefundOrderInterface
 {
@@ -22,6 +23,7 @@ interface RefundOrderInterface
      * @param \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface|null $comment
      * @param \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface|null $arguments
      * @return int
+     * @since 2.2.0
      */
     public function execute(
         $orderId,

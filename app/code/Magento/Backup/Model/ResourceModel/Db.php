@@ -8,6 +8,7 @@ namespace Magento\Backup\Model\ResourceModel;
 /**
  * Database backup resource model
  * @api
+ * @since 2.0.0
  */
 class Db
 {
@@ -15,6 +16,7 @@ class Db
      * Database connection adapter
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.0.0
      */
     protected $connection;
 
@@ -23,6 +25,7 @@ class Db
      * [tbl_name] = array(create foreign key strings)
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_foreignKeys = [];
 
@@ -30,6 +33,7 @@ class Db
      * Backup resource helper
      *
      * @var \Magento\Backup\Model\ResourceModel\Helper
+     * @since 2.0.0
      */
     protected $_resourceHelper;
 
@@ -38,6 +42,7 @@ class Db
      *
      * @param \Magento\Backup\Model\ResourceModel\HelperFactory $resHelperFactory
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backup\Model\ResourceModel\HelperFactory $resHelperFactory,
@@ -51,6 +56,7 @@ class Db
      * Clear data
      *
      * @return void
+     * @since 2.0.0
      */
     public function clear()
     {
@@ -61,6 +67,7 @@ class Db
      * Retrieve table list
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTables()
     {
@@ -72,6 +79,7 @@ class Db
      *
      * @param string $tableName
      * @return string
+     * @since 2.0.0
      */
     public function getTableDropSql($tableName)
     {
@@ -84,6 +92,7 @@ class Db
      * @param string $tableName
      * @param bool $withForeignKeys
      * @return string
+     * @since 2.0.0
      */
     public function getTableCreateSql($tableName, $withForeignKeys = false)
     {
@@ -95,6 +104,7 @@ class Db
      *
      * @param string|null $tableName
      * @return string
+     * @since 2.0.0
      */
     public function getTableForeignKeysSql($tableName = null)
     {
@@ -118,6 +128,7 @@ class Db
      *
      * @param string $tableName
      * @return \Magento\Framework\DataObject|bool
+     * @since 2.0.0
      */
     public function getTableStatus($tableName)
     {
@@ -145,6 +156,7 @@ class Db
      * @param null|int $count
      * @param null|int $offset
      * @return string
+     * @since 2.0.0
      */
     public function getTableDataSql($tableName, $count = null, $offset = null)
     {
@@ -157,6 +169,7 @@ class Db
      * @param string|array|\Zend_Db_Expr $tableName
      * @param bool $addDropIfExists
      * @return string
+     * @since 2.0.0
      */
     public function getTableCreateScript($tableName, $addDropIfExists = false)
     {
@@ -168,6 +181,7 @@ class Db
      *
      * @param string $tableName
      * @return string
+     * @since 2.0.0
      */
     public function getTableHeader($tableName)
     {
@@ -182,6 +196,7 @@ class Db
      * @param bool $step
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getTableDataDump($tableName, $step = false)
     {
@@ -192,6 +207,7 @@ class Db
      * Returns SQL header data
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHeader()
     {
@@ -202,6 +218,7 @@ class Db
      * Returns SQL footer data
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFooter()
     {
@@ -213,6 +230,7 @@ class Db
      *
      * @param string $tableName
      * @return string
+     * @since 2.0.0
      */
     public function getTableDataBeforeSql($tableName)
     {
@@ -224,6 +242,7 @@ class Db
      *
      * @param string $tableName
      * @return string
+     * @since 2.0.0
      */
     public function getTableDataAfterSql($tableName)
     {
@@ -234,6 +253,7 @@ class Db
      * Start transaction mode
      *
      * @return $this
+     * @since 2.0.0
      */
     public function beginTransaction()
     {
@@ -246,6 +266,7 @@ class Db
      * Commit transaction
      *
      * @return $this
+     * @since 2.0.0
      */
     public function commitTransaction()
     {
@@ -258,6 +279,7 @@ class Db
      * Rollback transaction
      *
      * @return $this
+     * @since 2.0.0
      */
     public function rollBackTransaction()
     {
@@ -271,6 +293,7 @@ class Db
      *
      * @param string $command
      * @return $this
+     * @since 2.0.0
      */
     public function runCommand($command)
     {

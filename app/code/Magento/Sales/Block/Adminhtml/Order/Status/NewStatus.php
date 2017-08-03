@@ -7,6 +7,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Status;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class NewStatus extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -14,6 +15,7 @@ class NewStatus extends \Magento\Backend\Block\Widget\Form\Container
      * Constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -31,6 +33,7 @@ class NewStatus extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve text for header element depending on loaded page
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getHeaderText()
     {

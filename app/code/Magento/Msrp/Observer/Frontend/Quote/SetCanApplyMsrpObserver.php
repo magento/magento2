@@ -9,21 +9,25 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Class SetCanApplyMsrp
+ * @since 2.0.0
  */
 class SetCanApplyMsrpObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Msrp\Model\Config
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Msrp\Model\Quote\Address\CanApplyMsrp
+     * @since 2.0.0
      */
     protected $canApplyMsrp;
 
     /**
      * @var \Magento\Msrp\Model\Quote\Msrp
+     * @since 2.0.0
      */
     protected $msrp;
 
@@ -31,6 +35,7 @@ class SetCanApplyMsrpObserver implements ObserverInterface
      * @param \Magento\Msrp\Model\Config $config
      * @param \Magento\Msrp\Model\Quote\Address\CanApplyMsrp $canApplyMsrp
      * @param \Magento\Msrp\Model\Quote\Msrp $msrp
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Msrp\Model\Config $config,
@@ -47,6 +52,7 @@ class SetCanApplyMsrpObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

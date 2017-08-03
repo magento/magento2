@@ -9,16 +9,19 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Reports Event observer model
+ * @since 2.0.0
  */
 class SendfriendProductObserver implements ObserverInterface
 {
     /**
      * @var EventSaver
+     * @since 2.0.0
      */
     protected $eventSaver;
 
     /**
      * @param EventSaver $eventSaver
+     * @since 2.0.0
      */
     public function __construct(
         EventSaver $eventSaver
@@ -31,6 +34,7 @@ class SendfriendProductObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

@@ -9,6 +9,7 @@ namespace Magento\Catalog\Block\Category\Rss;
  * Class Link
  * @api
  * @package Magento\Catalog\Block\Category\Rss
+ * @since 2.0.0
  */
 class Link extends \Magento\Framework\View\Element\Template
 {
@@ -16,11 +17,13 @@ class Link extends \Magento\Framework\View\Element\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $registry = null;
 
     /**
      * @var \Magento\Framework\App\Rss\UrlBuilderInterface
+     * @since 2.0.0
      */
     protected $rssUrlBuilder;
 
@@ -29,6 +32,7 @@ class Link extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -43,6 +47,7 @@ class Link extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function isRssAllowed()
     {
@@ -54,6 +59,7 @@ class Link extends \Magento\Framework\View\Element\Template
 
     /**
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getLabel()
     {
@@ -62,6 +68,7 @@ class Link extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function getLinkParams()
     {
@@ -74,6 +81,7 @@ class Link extends \Magento\Framework\View\Element\Template
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isTopCategory()
     {
@@ -82,6 +90,7 @@ class Link extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getLink()
     {

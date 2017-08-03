@@ -10,17 +10,20 @@ namespace Magento\Eav\Model\Entity\Attribute\Backend;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @since 2.0.0
      */
     protected $_localeDate;
 
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate)
     {
@@ -36,6 +39,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
      * @param \Magento\Framework\DataObject $object
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave($object)
     {
@@ -67,6 +71,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
      *
      * @param string|int|\DateTimeInterface $date
      * @return string
+     * @since 2.0.0
      */
     public function formatDate($date)
     {

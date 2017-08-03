@@ -27,126 +27,151 @@ use Magento\Framework\Exception\ValidatorException;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 2.0.0
  */
 class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface
+     * @since 2.1.0
      */
     protected $optionRepository;
 
     /**
      * @var ProductFactory
+     * @since 2.0.0
      */
     protected $productFactory;
 
     /**
      * @var Product[]
+     * @since 2.0.0
      */
     protected $instances = [];
 
     /**
      * @var Product[]
+     * @since 2.0.0
      */
     protected $instancesById = [];
 
     /**
      * @var \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper
+     * @since 2.0.0
      */
     protected $initializationHelper;
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory
+     * @since 2.0.0
      */
     protected $searchResultsFactory;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
+     * @since 2.0.0
      */
     protected $filterBuilder;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @since 2.0.0
      */
     protected $collectionFactory;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product
+     * @since 2.0.0
      */
     protected $resourceModel;
 
     /**
      * @var Product\Initialization\Helper\ProductLinks
+     * @since 2.0.0
      */
     protected $linkInitializer;
 
     /**
      * @var Product\LinkTypeProvider
+     * @since 2.0.0
      */
     protected $linkTypeProvider;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     * @since 2.0.0
      */
     protected $attributeRepository;
 
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     * @since 2.0.0
      */
     protected $metadataService;
 
     /**
      * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
+     * @since 2.0.0
      */
     protected $extensibleDataObjectConverter;
 
     /**
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $fileSystem;
 
     /**
      * @var ImageContentInterfaceFactory
+     * @since 2.0.0
      */
     protected $contentFactory;
 
     /**
      * @var ImageProcessorInterface
+     * @since 2.0.0
      */
     protected $imageProcessor;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     * @since 2.0.0
      */
     protected $extensionAttributesJoinProcessor;
 
     /**
      * @var \Magento\Catalog\Model\Product\Gallery\Processor
+     * @since 2.1.0
      */
     protected $mediaGalleryProcessor;
 
     /**
      * @var CollectionProcessorInterface
+     * @since 2.2.0
      */
     private $collectionProcessor;
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $cacheLimit = 0;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -177,6 +202,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param int $cacheLimit [optional]
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function __construct(
         ProductFactory $productFactory,
@@ -228,6 +254,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function get($sku, $editMode = false, $storeId = null, $forceReload = false)
     {
@@ -256,6 +283,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getById($productId, $editMode = false, $storeId = null, $forceReload = false)
     {
@@ -282,6 +310,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      *
      * @param array $data
      * @return string
+     * @since 2.0.0
      */
     protected function getCacheKey($data)
     {
@@ -303,6 +332,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param string $cacheKey
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return void
+     * @since 2.2.0
      */
     private function cacheProduct($cacheKey, \Magento\Catalog\Api\Data\ProductInterface $product)
     {
@@ -323,6 +353,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param bool $createNew
      * @return \Magento\Catalog\Api\Data\ProductInterface|Product
      * @throws NoSuchEntityException
+     * @since 2.0.0
      */
     protected function initializeProductData(array $productData, $createNew)
     {
@@ -348,6 +379,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * @param \Magento\Catalog\Model\Product $product
      * @return void
+     * @since 2.0.0
      */
     private function assignProductToWebsites(\Magento\Catalog\Model\Product $product)
     {
@@ -376,6 +408,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @throws InputException
      * @throws StateException
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function processNewMediaGalleryEntry(
         ProductInterface $product,
@@ -423,6 +456,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param \Magento\Catalog\Api\Data\ProductLinkInterface[] $newLinks
      * @return $this
      * @throws NoSuchEntityException
+     * @since 2.0.0
      */
     private function processLinks(\Magento\Catalog\Api\Data\ProductInterface $product, $newLinks)
     {
@@ -488,6 +522,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @throws InputException
      * @throws StateException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function processMediaGallery(ProductInterface $product, $mediaGalleryEntries)
     {
@@ -555,6 +590,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function save(\Magento\Catalog\Api\Data\ProductInterface $product, $saveOptions = false)
     {
@@ -646,6 +682,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function delete(\Magento\Catalog\Api\Data\ProductInterface $product)
     {
@@ -669,6 +706,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function deleteById($sku)
     {
@@ -678,6 +716,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -717,10 +756,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
+     * @since 2.0.0
      */
     protected function addFilterGroupToCollection(
         \Magento\Framework\Api\Search\FilterGroup $filterGroup,
@@ -751,6 +791,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * Clean internal product cache
      *
      * @return void
+     * @since 2.1.0
      */
     public function cleanCache()
     {
@@ -760,6 +801,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
     /**
      * @return Product\Gallery\Processor
+     * @since 2.1.0
      */
     private function getMediaGalleryProcessor()
     {
@@ -773,8 +815,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return CollectionProcessorInterface
+     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

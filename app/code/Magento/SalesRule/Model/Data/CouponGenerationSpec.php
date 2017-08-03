@@ -11,6 +11,7 @@ namespace Magento\SalesRule\Model\Data;
  * Class CouponGenerationSpec
  *
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\SalesRule\Api\Data\CouponGenerationSpecInterface
@@ -28,6 +29,7 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
      * Get the id of the rule associated with the coupon
      *
      * @return int
+     * @since 2.0.0
      */
     public function getRuleId()
     {
@@ -39,6 +41,7 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
      *
      * @param int $ruleId
      * @return $this
+     * @since 2.0.0
      */
     public function setRuleId($ruleId)
     {
@@ -49,6 +52,7 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
      * Get format of generated coupon code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFormat()
     {
@@ -60,6 +64,7 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
      *
      * @param string $format
      * @return $this
+     * @since 2.0.0
      */
     public function setFormat($format)
     {
@@ -70,6 +75,7 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
      * Number of coupons to generate
      *
      * @return int
+     * @since 2.0.0
      */
     public function getQuantity()
     {
@@ -81,6 +87,7 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
      *
      * @param int $quantity
      * @return $this
+     * @since 2.0.0
      */
     public function setQuantity($quantity)
     {
@@ -91,6 +98,7 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
      * Get length of coupon code
      *
      * @return int
+     * @since 2.0.0
      */
     public function getLength()
     {
@@ -102,6 +110,7 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
      *
      * @param int $length
      * @return $this
+     * @since 2.0.0
      */
     public function setLength($length)
     {
@@ -112,6 +121,7 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
      * Get the prefix
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getPrefix()
     {
@@ -123,6 +133,7 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
      *
      * @param string $prefix
      * @return $this
+     * @since 2.0.0
      */
     public function setPrefix($prefix)
     {
@@ -133,6 +144,7 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
      * Get the suffix
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getSuffix()
     {
@@ -144,6 +156,7 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
      *
      * @param string $suffix
      * @return $this
+     * @since 2.0.0
      */
     public function setSuffix($suffix)
     {
@@ -154,6 +167,7 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
      * Get the spacing where the delimiter should exist
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getDelimiterAtEvery()
     {
@@ -165,6 +179,7 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
      *
      * @param int $delimiterAtEvery
      * @return $this
+     * @since 2.0.0
      */
     public function setDelimiterAtEvery($delimiterAtEvery)
     {
@@ -175,6 +190,7 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
      * Get the delimiter
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getDelimiter()
     {
@@ -186,6 +202,7 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
      *
      * @param string $delimiter
      * @return $this
+     * @since 2.0.0
      */
     public function setDelimiter($delimiter)
     {
@@ -196,6 +213,7 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\SalesRule\Api\Data\CouponGenerationSpecExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -207,6 +225,7 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
      *
      * @param \Magento\SalesRule\Api\Data\CouponGenerationSpecExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\SalesRule\Api\Data\CouponGenerationSpecExtensionInterface $extensionAttributes

@@ -11,36 +11,43 @@ use Magento\Framework\File\Uploader;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class RetrieveImage extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
+     * @since 2.0.0
      */
     protected $resultRawFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
+     * @since 2.0.0
      */
     protected $mediaConfig;
 
     /**
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $fileSystem;
 
     /**
      * @var \Magento\Framework\Image\Adapter\AbstractAdapter
+     * @since 2.0.0
      */
     protected $imageAdapter;
 
     /**
      * @var \Magento\Framework\HTTP\Adapter\Curl
+     * @since 2.0.0
      */
     protected $curl;
 
     /**
      * @var \Magento\MediaStorage\Model\ResourceModel\File\Storage\File
+     * @since 2.0.0
      */
     protected $fileUtility;
 
@@ -48,6 +55,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
      * URI validator
      *
      * @var \Magento\Framework\Validator\ValidatorInterface
+     * @since 2.2.0
      */
     private $protocolValidator;
 
@@ -60,6 +68,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
      * @param \Magento\Framework\HTTP\Adapter\Curl $curl
      * @param \Magento\MediaStorage\Model\ResourceModel\File\Storage\File $fileUtility
      * @param \Magento\Framework\Validator\ValidatorInterface $protocolValidator
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -86,6 +95,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
 
     /**
      * @return \Magento\Framework\Controller\Result\Raw
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -119,6 +129,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
      * @throws LocalizedException
      *
      * @return $this
+     * @since 2.2.0
      */
     private function validateRemoteFile($remoteFileUrl)
     {
@@ -134,6 +145,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
     /**
      * @param string $fileName
      * @return mixed
+     * @since 2.0.0
      */
     protected function appendResultSaveRemoteImage($fileName)
     {
@@ -155,6 +167,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
      * @param string $localFilePath
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function retrieveRemoteImage($fileUrl, $localFilePath)
     {
@@ -172,6 +185,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
     /**
      * @param string $localFilePath
      * @return string
+     * @since 2.0.0
      */
     protected function appendNewFileName($localFilePath)
     {
@@ -184,6 +198,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
     /**
      * @param string $localTmpFile
      * @return string
+     * @since 2.0.0
      */
     protected function appendAbsoluteFileSystemPath($localTmpFile)
     {

@@ -11,11 +11,13 @@ use Magento\Sales\Setup\SalesSetupFactory;
 
 /**
  * Tax Setup Resource Model
+ * @since 2.0.0
  */
 class TaxSetup
 {
     /**
      * @var \Magento\Sales\Setup\SalesSetup
+     * @since 2.0.0
      */
     protected $salesSetup;
 
@@ -23,6 +25,7 @@ class TaxSetup
      * Product type config
      *
      * @var ConfigInterface
+     * @since 2.0.0
      */
     protected $productTypeConfig;
 
@@ -32,6 +35,7 @@ class TaxSetup
      * @param ModuleDataSetupInterface $setup
      * @param SalesSetupFactory $salesSetupFactory
      * @param ConfigInterface $productTypeConfig
+     * @since 2.0.0
      */
     public function __construct(
         ModuleDataSetupInterface $setup,
@@ -46,6 +50,7 @@ class TaxSetup
      * Get taxable product types
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTaxableItems()
     {
@@ -59,6 +64,7 @@ class TaxSetup
      * @param string $code
      * @param array $attr
      * @return $this
+     * @since 2.0.0
      */
     public function addAttribute($entityTypeId, $code, array $attr)
     {
@@ -75,6 +81,7 @@ class TaxSetup
      * @param mixed $value
      * @param int $sortOrder
      * @return $this
+     * @since 2.0.0
      */
     public function updateAttribute($entityTypeId, $id, $field, $value = null, $sortOrder = null)
     {

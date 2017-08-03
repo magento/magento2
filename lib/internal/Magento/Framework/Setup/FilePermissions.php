@@ -12,16 +12,19 @@ use Magento\Framework\Filesystem\Filter\ExcludeFilter;
 
 /**
  * Checks permissions to files and folders.
+ * @since 2.1.0
  */
 class FilePermissions
 {
     /**
      * @var Filesystem
+     * @since 2.1.0
      */
     protected $filesystem;
 
     /**
      * @var DirectoryList
+     * @since 2.1.0
      */
     protected $directoryList;
 
@@ -29,6 +32,7 @@ class FilePermissions
      * List of required writable directories for installation
      *
      * @var array
+     * @since 2.1.0
      */
     protected $installationWritableDirectories = [];
 
@@ -36,6 +40,7 @@ class FilePermissions
      * List of recommended non-writable directories for application
      *
      * @var array
+     * @since 2.1.0
      */
     protected $applicationNonWritableDirectories = [];
 
@@ -43,6 +48,7 @@ class FilePermissions
      * List of current writable directories for installation
      *
      * @var array
+     * @since 2.1.0
      */
     protected $installationCurrentWritableDirectories = [];
 
@@ -50,6 +56,7 @@ class FilePermissions
      * List of current non-writable directories for application
      *
      * @var array
+     * @since 2.1.0
      */
     protected $applicationCurrentNonWritableDirectories = [];
 
@@ -57,12 +64,14 @@ class FilePermissions
      * List of non-writable paths in a specified directory
      *
      * @var array
+     * @since 2.1.0
      */
     protected $nonWritablePathsInDirectories = [];
 
     /**
      * @param Filesystem $filesystem
      * @param DirectoryList $directoryList
+     * @since 2.1.0
      */
     public function __construct(
         Filesystem $filesystem,
@@ -76,6 +85,7 @@ class FilePermissions
      * Retrieve list of required writable directories for installation
      *
      * @return array
+     * @since 2.1.0
      */
     public function getInstallationWritableDirectories()
     {
@@ -98,6 +108,7 @@ class FilePermissions
      * Retrieve list of recommended non-writable directories for application
      *
      * @return array
+     * @since 2.1.0
      */
     public function getApplicationNonWritableDirectories()
     {
@@ -116,6 +127,7 @@ class FilePermissions
      * Retrieve list of currently writable directories for installation
      *
      * @return array
+     * @since 2.1.0
      */
     public function getInstallationCurrentWritableDirectories()
     {
@@ -138,6 +150,7 @@ class FilePermissions
      *
      * @param string $directory
      * @return bool
+     * @since 2.1.0
      */
     private function checkRecursiveDirectories($directory)
     {
@@ -181,6 +194,7 @@ class FilePermissions
      * Retrieve list of currently non-writable directories for application
      *
      * @return array
+     * @since 2.1.0
      */
     public function getApplicationCurrentNonWritableDirectories()
     {
@@ -199,6 +213,7 @@ class FilePermissions
      *
      * @param string $code
      * @return bool
+     * @since 2.1.0
      */
     protected function isWritable($code)
     {
@@ -211,6 +226,7 @@ class FilePermissions
      *
      * @param string $code
      * @return bool
+     * @since 2.1.0
      */
     protected function isNonWritable($code)
     {
@@ -223,6 +239,7 @@ class FilePermissions
      *
      * @param \Magento\Framework\Filesystem\Directory\WriteInterface $directory
      * @return bool
+     * @since 2.1.0
      */
     protected function isReadableDirectory($directory)
     {
@@ -237,6 +254,7 @@ class FilePermissions
      *
      * @param bool $associative
      * @return array
+     * @since 2.1.0
      */
     public function getMissingWritablePathsForInstallation($associative = false)
     {
@@ -266,6 +284,7 @@ class FilePermissions
      * Checks writable paths for database upgrade, returns array of directory paths that requires write permission
      *
      * @return array List of directories that requires write permission for database upgrade
+     * @since 2.2.0
      */
     public function getMissingWritableDirectoriesForDbUpgrade()
     {
@@ -290,8 +309,10 @@ class FilePermissions
     /**
      * Checks writable directories for installation
      *
-     * @deprecated Use getMissingWritablePathsForInstallation() to get all missing writable paths required for install
+     * @deprecated 2.1.0 Use getMissingWritablePathsForInstallation()
+     * to get all missing writable paths required for install.
      * @return array
+     * @since 2.1.0
      */
     public function getMissingWritableDirectoriesForInstallation()
     {
@@ -304,6 +325,7 @@ class FilePermissions
      * Checks non-writable directories for application
      *
      * @return array
+     * @since 2.1.0
      */
     public function getUnnecessaryWritableDirectoriesForApplication()
     {

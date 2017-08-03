@@ -9,6 +9,7 @@ namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 /**
  * Class UploadJs
  * @depecated
+ * @since 2.0.0
  */
 class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {
@@ -17,6 +18,7 @@ class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function execute()
     {

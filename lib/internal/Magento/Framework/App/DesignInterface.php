@@ -7,6 +7,7 @@ namespace Magento\Framework\App;
 
 /**
  * Design Interface
+ * @since 2.0.0
  */
 interface DesignInterface
 {
@@ -16,6 +17,7 @@ interface DesignInterface
      * @param string $storeId
      * @param string|null $date
      * @return $this
+     * @since 2.0.0
      */
     public function loadChange($storeId, $date = null);
 
@@ -24,6 +26,7 @@ interface DesignInterface
      *
      * @param \Magento\Framework\View\DesignInterface $packageInto
      * @return $this
+     * @since 2.0.0
      */
     public function changeDesign(\Magento\Framework\View\DesignInterface $packageInto);
 }

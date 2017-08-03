@@ -14,6 +14,7 @@ use Magento\Sales\Model\Order\Address;
 
 /**
  * Class AddVatRequestParamsOrderComment
+ * @since 2.0.0
  */
 class AddVatRequestParamsOrderComment implements ObserverInterface
 {
@@ -21,11 +22,13 @@ class AddVatRequestParamsOrderComment implements ObserverInterface
      * Customer address
      *
      * @var CustomerAddress
+     * @since 2.0.0
      */
     protected $customerAddressHelper;
 
     /**
      * @param CustomerAddress $customerAddressHelper
+     * @since 2.0.0
      */
     public function __construct(CustomerAddress $customerAddressHelper)
     {
@@ -37,6 +40,7 @@ class AddVatRequestParamsOrderComment implements ObserverInterface
      *
      * @param Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {
@@ -68,6 +72,7 @@ class AddVatRequestParamsOrderComment implements ObserverInterface
      * @param Order $order
      * @param \Magento\Store\Model\Store|string|int|null $store
      * @return Address|null
+     * @since 2.0.0
      */
     protected function _getVatRequiredSalesAddress($order, $store = null)
     {

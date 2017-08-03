@@ -11,36 +11,47 @@
  */
 namespace Magento\Framework\TestFramework\Unit;
 
+/**
+ * Class \Magento\Framework\TestFramework\Unit\AbstractFactoryTestCase
+ *
+ * @since 2.0.0
+ */
 abstract class AbstractFactoryTestCase extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $factoryClassName;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $instanceClassName;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @since 2.0.0
      */
     protected $objectManagerMock;
 
     /**
      * @var object
+     * @since 2.0.0
      */
     protected $factory;
 
     /**
      * Setup function
      * @return void
+     * @since 2.0.0
      */
     protected function setUp()
     {
@@ -57,6 +68,7 @@ abstract class AbstractFactoryTestCase extends \PHPUnit_Framework_TestCase
     /**
      * Test create
      * @return void
+     * @since 2.0.0
      */
     public function testCreate()
     {

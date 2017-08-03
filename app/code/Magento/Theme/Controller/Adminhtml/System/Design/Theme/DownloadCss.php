@@ -11,7 +11,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class DownloadCss
- * @deprecated
+ * @deprecated 2.2.0
+ * @since 2.0.0
  */
 class DownloadCss extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {
@@ -19,6 +20,7 @@ class DownloadCss extends \Magento\Theme\Controller\Adminhtml\System\Design\Them
      * Download css file
      *
      * @return ResponseInterface|void
+     * @since 2.0.0
      */
     public function execute()
     {

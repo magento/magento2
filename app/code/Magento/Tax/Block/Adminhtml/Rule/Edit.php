@@ -11,6 +11,7 @@ namespace Magento\Tax\Block\Adminhtml\Rule;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -18,6 +19,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -25,6 +27,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -39,6 +42,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Init class
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

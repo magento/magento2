@@ -13,20 +13,28 @@ namespace Magento\Catalog\Block\Adminhtml\Category\Checkboxes;
 
 use Magento\Framework\Data\Tree\Node;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Category\Checkboxes\Tree
+ *
+ * @since 2.0.0
+ */
 class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
 {
     /**
      * @var int[]
+     * @since 2.0.0
      */
     protected $_selectedIds = [];
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_expandedPath = [];
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -35,6 +43,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
 
     /**
      * @return int[]
+     * @since 2.0.0
      */
     public function getCategoryIds()
     {
@@ -44,6 +53,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
     /**
      * @param mixed $ids
      * @return $this
+     * @since 2.0.0
      */
     public function setCategoryIds($ids)
     {
@@ -58,6 +68,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
 
     /**
      * @return array
+     * @since 2.0.0
      */
     protected function getExpandedPath()
     {
@@ -67,6 +78,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
     /**
      * @param string $path
      * @return $this
+     * @since 2.0.0
      */
     protected function setExpandedPath($path)
     {
@@ -79,6 +91,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
      * @param int $level
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _getNodeJson($node, $level = 1)
     {

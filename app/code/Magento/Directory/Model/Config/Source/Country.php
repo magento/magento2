@@ -9,6 +9,7 @@ namespace Magento\Directory\Model\Config\Source;
  * Options provider for countries list
  *
  * @api
+ * @since 2.0.0
  */
 class Country implements \Magento\Framework\Option\ArrayInterface
 {
@@ -16,11 +17,13 @@ class Country implements \Magento\Framework\Option\ArrayInterface
      * Countries
      *
      * @var \Magento\Directory\Model\ResourceModel\Country\Collection
+     * @since 2.0.0
      */
     protected $_countryCollection;
 
     /**
      * @param \Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection
+     * @since 2.0.0
      */
     public function __construct(\Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection)
     {
@@ -31,6 +34,7 @@ class Country implements \Magento\Framework\Option\ArrayInterface
      * Options array
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_options;
 
@@ -40,6 +44,7 @@ class Country implements \Magento\Framework\Option\ArrayInterface
      * @param boolean $isMultiselect
      * @param string|array $foregroundCountries
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray($isMultiselect = false, $foregroundCountries = '')
     {

@@ -12,6 +12,7 @@ namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configura
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
@@ -19,6 +20,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Link table name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_linkTable;
 
@@ -26,6 +28,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Assign link table name
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -36,6 +39,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Init select
      * @return $this|\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection
+     * @since 2.0.0
      */
     protected function _initSelect()
     {
@@ -55,6 +59,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
+     * @since 2.0.0
      */
     public function setProductFilter($product)
     {
@@ -69,6 +74,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Return alvays false if magento run admin
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isEnabledFlat()
     {

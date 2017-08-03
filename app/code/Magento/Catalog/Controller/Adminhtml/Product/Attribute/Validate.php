@@ -8,22 +8,30 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Framework\DataObject;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\Attribute\Validate
+ *
+ * @since 2.0.0
+ */
 class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     const DEFAULT_MESSAGE_KEY = 'message';
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
+     * @since 2.0.0
      */
     protected $layoutFactory;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $multipleAttributeList;
 
@@ -37,6 +45,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param array $multipleAttributeList
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -57,6 +66,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -121,6 +131,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @param array $optionsValues
      * @param array $deletedOptions
      * @return bool
+     * @since 2.2.0
      */
     private function isUniqueAdminValues(array $optionsValues, array $deletedOptions)
     {
@@ -140,6 +151,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @param DataObject $response
      * @param string[] $messages
      * @return DataObject
+     * @since 2.1.0
      */
     private function setMessageToResponse($response, $messages)
     {
@@ -154,6 +166,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @param DataObject $response
      * @param array|null $options
      * @return $this
+     * @since 2.2.0
      */
     private function checkUniqueOption(DataObject $response, array $options = null)
     {
@@ -174,6 +187,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @param DataObject $response
      * @param array $optionsForCheck
      * @return void
+     * @since 2.2.0
      */
     private function checkEmptyOption(DataObject $response, array $optionsForCheck = null)
     {

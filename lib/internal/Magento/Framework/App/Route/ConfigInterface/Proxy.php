@@ -9,6 +9,7 @@ namespace Magento\Framework\App\Route\ConfigInterface;
 
 /**
  * Proxy class for \Magento\Framework\App\ResourceConnection
+ * @since 2.0.0
  */
 class Proxy implements
     \Magento\Framework\App\Route\ConfigInterface,
@@ -18,6 +19,7 @@ class Proxy implements
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager = null;
 
@@ -25,6 +27,7 @@ class Proxy implements
      * Proxied instance name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_instanceName = null;
 
@@ -32,6 +35,7 @@ class Proxy implements
      * Proxied instance
      *
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.0.0
      */
     protected $_subject = null;
 
@@ -39,6 +43,7 @@ class Proxy implements
      * Instance shareability flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isShared = null;
 
@@ -48,6 +53,7 @@ class Proxy implements
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
      * @param bool $shared
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -61,6 +67,7 @@ class Proxy implements
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function __sleep()
     {
@@ -71,6 +78,7 @@ class Proxy implements
      * Retrieve ObjectManager from global scope
      *
      * @return void
+     * @since 2.0.0
      */
     public function __wakeup()
     {
@@ -81,6 +89,7 @@ class Proxy implements
      * Clone proxied instance
      *
      * @return void
+     * @since 2.0.0
      */
     public function __clone()
     {
@@ -91,6 +100,7 @@ class Proxy implements
      * Get proxied instance
      *
      * @return \Magento\Framework\App\Route\ConfigInterface
+     * @since 2.0.0
      */
     protected function _getSubject()
     {
@@ -108,6 +118,7 @@ class Proxy implements
      * @param string $routeId
      * @param string $scope
      * @return string
+     * @since 2.0.0
      */
     public function getRouteFrontName($routeId, $scope = null)
     {
@@ -120,6 +131,7 @@ class Proxy implements
      * @param string $frontName
      * @param string $scope
      * @return string
+     * @since 2.0.0
      */
     public function getRouteByFrontName($frontName, $scope = null)
     {
@@ -132,6 +144,7 @@ class Proxy implements
      * @param string $frontName
      * @param string $scope
      * @return array
+     * @since 2.0.0
      */
     public function getModulesByFrontName($frontName, $scope = null)
     {

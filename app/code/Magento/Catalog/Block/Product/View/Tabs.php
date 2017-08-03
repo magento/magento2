@@ -9,12 +9,18 @@
  */
 namespace Magento\Catalog\Block\Product\View;
 
+/**
+ * Class \Magento\Catalog\Block\Product\View\Tabs
+ *
+ * @since 2.0.0
+ */
 class Tabs extends \Magento\Framework\View\Element\Template
 {
     /**
      * Configured tabs
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_tabs = [];
 
@@ -27,6 +33,7 @@ class Tabs extends \Magento\Framework\View\Element\Template
      * @param string $template
      * @param string $header
      * @return void
+     * @since 2.0.0
      */
     public function addTab($alias, $title, $block, $template, $header = null)
     {
@@ -43,6 +50,7 @@ class Tabs extends \Magento\Framework\View\Element\Template
      * Return configured tabs
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTabs()
     {

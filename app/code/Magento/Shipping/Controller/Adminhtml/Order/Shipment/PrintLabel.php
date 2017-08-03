@@ -10,6 +10,11 @@ use Magento\Backend\App\Action;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Shipping\Controller\Adminhtml\Order\Shipment\PrintLabel
+ *
+ * @since 2.0.0
+ */
 class PrintLabel extends \Magento\Backend\App\Action
 {
     /**
@@ -21,16 +26,19 @@ class PrintLabel extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
+     * @since 2.0.0
      */
     protected $shipmentLoader;
 
     /**
      * @var \Magento\Shipping\Model\Shipping\LabelGenerator
+     * @since 2.0.0
      */
     protected $labelGenerator;
 
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @since 2.0.0
      */
     protected $_fileFactory;
 
@@ -39,6 +47,7 @@ class PrintLabel extends \Magento\Backend\App\Action
      * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
      * @param \Magento\Shipping\Model\Shipping\LabelGenerator $labelGenerator
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -56,6 +65,7 @@ class PrintLabel extends \Magento\Backend\App\Action
      * Print label for one specific shipment
      *
      * @return ResponseInterface|void
+     * @since 2.0.0
      */
     public function execute()
     {

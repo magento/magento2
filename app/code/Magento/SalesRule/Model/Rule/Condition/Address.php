@@ -5,25 +5,34 @@
  */
 namespace Magento\SalesRule\Model\Rule\Condition;
 
+/**
+ * Class \Magento\SalesRule\Model\Rule\Condition\Address
+ *
+ * @since 2.0.0
+ */
 class Address extends \Magento\Rule\Model\Condition\AbstractCondition
 {
     /**
      * @var \Magento\Directory\Model\Config\Source\Country
+     * @since 2.0.0
      */
     protected $_directoryCountry;
 
     /**
      * @var \Magento\Directory\Model\Config\Source\Allregion
+     * @since 2.0.0
      */
     protected $_directoryAllregion;
 
     /**
      * @var \Magento\Shipping\Model\Config\Source\Allmethods
+     * @since 2.0.0
      */
     protected $_shippingAllmethods;
 
     /**
      * @var \Magento\Payment\Model\Config\Source\Allmethods
+     * @since 2.0.0
      */
     protected $_paymentAllmethods;
 
@@ -34,6 +43,7 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
      * @param \Magento\Shipping\Model\Config\Source\Allmethods $shippingAllmethods
      * @param \Magento\Payment\Model\Config\Source\Allmethods $paymentAllmethods
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,
@@ -54,6 +64,7 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
      * Load attribute options
      *
      * @return $this
+     * @since 2.0.0
      */
     public function loadAttributeOptions()
     {
@@ -77,6 +88,7 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
      * Get attribute element
      *
      * @return $this
+     * @since 2.0.0
      */
     public function getAttributeElement()
     {
@@ -89,6 +101,7 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
      * Get input type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getInputType()
     {
@@ -111,6 +124,7 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
      * Get value element type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getValueElementType()
     {
@@ -128,6 +142,7 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
      * Get value select options
      *
      * @return array|mixed
+     * @since 2.0.0
      */
     public function getValueSelectOptions()
     {
@@ -162,6 +177,7 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
      *
      * @param \Magento\Framework\Model\AbstractModel $model
      * @return bool
+     * @since 2.0.0
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {

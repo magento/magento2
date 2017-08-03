@@ -6,6 +6,11 @@
  */
 namespace Magento\Paypal\Controller\Adminhtml\Billing\Agreement;
 
+/**
+ * Class \Magento\Paypal\Controller\Adminhtml\Billing\Agreement\Grid
+ *
+ * @since 2.0.0
+ */
 class Grid extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreement
 {
     /**
@@ -19,6 +24,7 @@ class Grid extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreement
      * Ajax action for billing agreements
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

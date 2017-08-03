@@ -11,11 +11,13 @@ use Magento\Backend\Model\Auth\Session as AdminSession;
 
 /**
  * Session-based admin user context
+ * @since 2.0.0
  */
 class AdminSessionUserContext implements UserContextInterface
 {
     /**
      * @var AdminSession
+     * @since 2.0.0
      */
     protected $_adminSession;
 
@@ -23,6 +25,7 @@ class AdminSessionUserContext implements UserContextInterface
      * Initialize dependencies.
      *
      * @param AdminSession $adminSession
+     * @since 2.0.0
      */
     public function __construct(AdminSession $adminSession)
     {
@@ -31,6 +34,7 @@ class AdminSessionUserContext implements UserContextInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getUserId()
     {
@@ -39,6 +43,7 @@ class AdminSessionUserContext implements UserContextInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getUserType()
     {

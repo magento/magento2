@@ -7,16 +7,19 @@ namespace Magento\Framework\Model\ResourceModel\Db\VersionControl;
 
 /**
  * Class AbstractDb with snapshot saving and relation save processing
+ * @since 2.0.0
  */
 abstract class AbstractDb extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var Snapshot
+     * @since 2.0.0
      */
     protected $entitySnapshot;
 
     /**
      * @var RelationComposite
+     * @since 2.0.0
      */
     protected $entityRelationComposite;
 
@@ -25,6 +28,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\ResourceModel\Db\Abst
      * @param RelationComposite $entityRelationComposite
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -39,6 +43,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\ResourceModel\Db\Abst
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -48,6 +53,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\ResourceModel\Db\Abst
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     protected function processAfterSaves(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -59,6 +65,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\ResourceModel\Db\Abst
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     protected function isModified(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -67,6 +74,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\ResourceModel\Db\Abst
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     protected function processNotModifiedSave(\Magento\Framework\Model\AbstractModel $object)
     {

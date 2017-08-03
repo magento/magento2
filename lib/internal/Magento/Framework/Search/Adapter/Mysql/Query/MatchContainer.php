@@ -10,15 +10,22 @@ use Magento\Framework\Search\Request\QueryInterface;
 
 // @codeCoverageIgnore
 
+/**
+ * Class \Magento\Framework\Search\Adapter\Mysql\Query\MatchContainer
+ *
+ * @since 2.0.0
+ */
 class MatchContainer
 {
     /**
      * @var QueryInterface
+     * @since 2.0.0
      */
     private $request;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $conditionType;
 
@@ -26,6 +33,7 @@ class MatchContainer
      * @param QueryInterface $request
      * @param string $conditionType
      * @internal param string $name
+     * @since 2.0.0
      */
     public function __construct(QueryInterface $request, $conditionType)
     {
@@ -35,6 +43,7 @@ class MatchContainer
 
     /**
      * @return QueryInterface
+     * @since 2.0.0
      */
     public function getRequest()
     {
@@ -43,6 +52,7 @@ class MatchContainer
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getConditionType()
     {

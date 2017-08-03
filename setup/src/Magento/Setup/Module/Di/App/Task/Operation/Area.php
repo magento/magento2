@@ -10,35 +10,46 @@ use Magento\Framework\App;
 use Magento\Setup\Module\Di\Compiler\Config;
 use Magento\Setup\Module\Di\Definition\Collection as DefinitionsCollection;
 
+/**
+ * Class \Magento\Setup\Module\Di\App\Task\Operation\Area
+ *
+ * @since 2.0.0
+ */
 class Area implements OperationInterface
 {
     /**
      * @var App\AreaList
+     * @since 2.0.0
      */
     private $areaList;
 
     /**
      * @var \Magento\Setup\Module\Di\Code\Reader\Decorator\Area
+     * @since 2.0.0
      */
     private $areaInstancesNamesList;
 
     /**
      * @var Config\Reader
+     * @since 2.0.0
      */
     private $configReader;
 
     /**
      * @var Config\WriterInterface
+     * @since 2.0.0
      */
     private $configWriter;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $data = [];
 
     /**
      * @var \Magento\Setup\Module\Di\Compiler\Config\ModificationChain
+     * @since 2.0.0
      */
     private $modificationChain;
 
@@ -49,6 +60,7 @@ class Area implements OperationInterface
      * @param Config\WriterInterface $configWriter
      * @param \Magento\Setup\Module\Di\Compiler\Config\ModificationChain $modificationChain
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         App\AreaList $areaList,
@@ -68,6 +80,7 @@ class Area implements OperationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function doOperation()
     {
@@ -102,6 +115,7 @@ class Area implements OperationInterface
      *
      * @param string $path
      * @return DefinitionsCollection
+     * @since 2.0.0
      */
     protected function getDefinitionsCollection($path)
     {
@@ -116,6 +130,7 @@ class Area implements OperationInterface
      * Returns operation name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName()
     {

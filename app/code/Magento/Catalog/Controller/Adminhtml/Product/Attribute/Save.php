@@ -14,41 +14,49 @@ use Magento\Framework\Exception\AlreadyExistsException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     /**
      * @var \Magento\Catalog\Model\Product\AttributeSet\BuildFactory
+     * @since 2.0.0
      */
     protected $buildFactory;
 
     /**
      * @var \Magento\Framework\Filter\FilterManager
+     * @since 2.0.0
      */
     protected $filterManager;
 
     /**
      * @var \Magento\Catalog\Helper\Product
+     * @since 2.0.0
      */
     protected $productHelper;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
+     * @since 2.0.0
      */
     protected $attributeFactory;
 
     /**
      * @var \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory
+     * @since 2.0.0
      */
     protected $validatorFactory;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory
+     * @since 2.0.0
      */
     protected $groupCollectionFactory;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
+     * @since 2.1.0
      */
     private $layoutFactory;
 
@@ -65,6 +73,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -94,6 +103,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -282,6 +292,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @param array $params
      * @param array $response
      * @return \Magento\Framework\Controller\Result\Json|\Magento\Backend\Model\View\Result\Redirect
+     * @since 2.1.0
      */
     private function returnResult($path = '', array $params = [], array $response = [])
     {
@@ -300,6 +311,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * Define whether request is Ajax
      *
      * @return boolean
+     * @since 2.1.0
      */
     private function isAjax()
     {

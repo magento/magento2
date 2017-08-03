@@ -10,16 +10,19 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 
 /**
  * Class ConfigurableObject
+ * @since 2.0.0
  */
 class ConfigurableObject implements InterpreterInterface
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var InterpreterInterface
+     * @since 2.0.0
      */
     protected $argumentInterpreter;
 
@@ -28,6 +31,7 @@ class ConfigurableObject implements InterpreterInterface
      *
      * @param ObjectManagerInterface $objectManager
      * @param InterpreterInterface $argumentInterpreter
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager, InterpreterInterface $argumentInterpreter)
     {
@@ -37,6 +41,7 @@ class ConfigurableObject implements InterpreterInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function evaluate(array $data)
     {

@@ -9,6 +9,7 @@ use Magento\Setup\Module\I18n;
 
 /**
  * Abstract parser
+ * @since 2.0.0
  */
 abstract class AbstractParser implements I18n\ParserInterface
 {
@@ -16,6 +17,7 @@ abstract class AbstractParser implements I18n\ParserInterface
      * Files collector
      *
      * @var \Magento\Setup\Module\I18n\FilesCollector
+     * @since 2.0.0
      */
     protected $_filesCollector = [];
 
@@ -23,6 +25,7 @@ abstract class AbstractParser implements I18n\ParserInterface
      * Domain abstract factory
      *
      * @var \Magento\Setup\Module\I18n\Factory
+     * @since 2.0.0
      */
     protected $_factory;
 
@@ -30,6 +33,7 @@ abstract class AbstractParser implements I18n\ParserInterface
      * Adapters
      *
      * @var \Magento\Setup\Module\I18n\Parser\AdapterInterface[]
+     * @since 2.0.0
      */
     protected $_adapters = [];
 
@@ -37,6 +41,7 @@ abstract class AbstractParser implements I18n\ParserInterface
      * Parsed phrases
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_phrases = [];
 
@@ -45,6 +50,7 @@ abstract class AbstractParser implements I18n\ParserInterface
      *
      * @param I18n\FilesCollector $filesCollector
      * @param I18n\Factory $factory
+     * @since 2.0.0
      */
     public function __construct(I18n\FilesCollector $filesCollector, I18n\Factory $factory)
     {
@@ -58,6 +64,7 @@ abstract class AbstractParser implements I18n\ParserInterface
      * @param string $type
      * @param AdapterInterface $adapter
      * @return void
+     * @since 2.0.0
      */
     public function addAdapter($type, AdapterInterface $adapter)
     {
@@ -66,6 +73,7 @@ abstract class AbstractParser implements I18n\ParserInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function parse(array $parseOptions)
     {
@@ -82,6 +90,7 @@ abstract class AbstractParser implements I18n\ParserInterface
      *
      * @param array $options
      * @return void
+     * @since 2.0.0
      */
     abstract protected function _parseByTypeOptions($options);
 
@@ -91,6 +100,7 @@ abstract class AbstractParser implements I18n\ParserInterface
      * @param array $parseOptions
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function _validateOptions($parseOptions)
     {
@@ -114,6 +124,7 @@ abstract class AbstractParser implements I18n\ParserInterface
      *
      * @param array $options
      * @return array
+     * @since 2.0.0
      */
     protected function _getFiles($options)
     {
@@ -124,6 +135,7 @@ abstract class AbstractParser implements I18n\ParserInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getPhrases()
     {
