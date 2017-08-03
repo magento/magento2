@@ -18,7 +18,6 @@ use Magento\Framework\Stdlib\StringUtils;
 /**
  * Class \Magento\Framework\Webapi\Request
  *
- * @since 2.0.0
  */
 class Request extends HttpRequest implements RequestInterface
 {
@@ -40,7 +39,6 @@ class Request extends HttpRequest implements RequestInterface
      * @param AreaList $areaList
      * @param ScopeInterface $configScope
      * @param null|string|\Zend_Uri $uri
-     * @since 2.0.0
      */
     public function __construct(
         CookieReaderInterface $cookieReader,
@@ -64,7 +62,6 @@ class Request extends HttpRequest implements RequestInterface
      * {@inheritdoc}
      *
      * Added CGI environment support.
-     * @since 2.0.0
      */
     public function getHeader($header, $default = false)
     {
@@ -85,7 +82,6 @@ class Request extends HttpRequest implements RequestInterface
      * @param string|null $default
      * @return array|string
      * @throws \Magento\Framework\Webapi\Exception When GET parameters are invalid
-     * @since 2.0.0
      */
     public function getRequestedServices($default = null)
     {
@@ -102,7 +98,6 @@ class Request extends HttpRequest implements RequestInterface
      *      'testModule2AllSoapNoRestV1',
      *      )</pre>
      * @throws \Magento\Framework\Webapi\Exception
-     * @since 2.0.0
      */
     protected function _convertRequestParamToServiceArray($param)
     {

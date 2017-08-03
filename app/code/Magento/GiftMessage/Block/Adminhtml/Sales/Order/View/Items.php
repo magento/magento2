@@ -10,7 +10,6 @@ namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Items extends \Magento\Backend\Block\Template
 {
@@ -18,13 +17,11 @@ class Items extends \Magento\Backend\Block\Template
      * Gift message array
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_giftMessage = [];
 
     /**
      * @var \Magento\GiftMessage\Helper\Message
-     * @since 2.0.0
      */
     protected $_messageHelper;
 
@@ -32,7 +29,6 @@ class Items extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\GiftMessage\Helper\Message $messageHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -48,7 +44,6 @@ class Items extends \Magento\Backend\Block\Template
      *
      * @return \Magento\Sales\Model\Order\Item
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getItem()
     {
@@ -59,7 +54,6 @@ class Items extends \Magento\Backend\Block\Template
      * Retrieve default value for giftmessage sender
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultSender()
     {
@@ -78,7 +72,6 @@ class Items extends \Magento\Backend\Block\Template
      * Retrieve default value for giftmessage recipient
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultRecipient()
     {
@@ -109,7 +102,6 @@ class Items extends \Magento\Backend\Block\Template
      * @param string $name
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getFieldName($name)
     {
@@ -122,7 +114,6 @@ class Items extends \Magento\Backend\Block\Template
      * @param string $id
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getFieldId($id)
     {
@@ -134,7 +125,6 @@ class Items extends \Magento\Backend\Block\Template
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getFieldIdPrefix()
     {
@@ -145,7 +135,6 @@ class Items extends \Magento\Backend\Block\Template
      * Initialize gift message for entity
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initMessage()
     {
@@ -168,7 +157,6 @@ class Items extends \Magento\Backend\Block\Template
      * Retrieve gift message for entity
      *
      * @return \Magento\GiftMessage\Model\Message
-     * @since 2.0.0
      */
     public function getMessage()
     {
@@ -184,7 +172,6 @@ class Items extends \Magento\Backend\Block\Template
      *
      * @return array
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getSaveUrl()
     {
@@ -199,7 +186,6 @@ class Items extends \Magento\Backend\Block\Template
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getHtmlId()
     {
@@ -210,7 +196,6 @@ class Items extends \Magento\Backend\Block\Template
      * Indicates that block can display giftmessages form
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function canDisplayGiftmessage()
     {
@@ -221,7 +206,6 @@ class Items extends \Magento\Backend\Block\Template
      * Retrieve gift message sender
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSender()
     {
@@ -232,7 +216,6 @@ class Items extends \Magento\Backend\Block\Template
      * Retrieve gift message recipient
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRecipient()
     {
@@ -243,7 +226,6 @@ class Items extends \Magento\Backend\Block\Template
      * Retrieve gift message text
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMessageText()
     {

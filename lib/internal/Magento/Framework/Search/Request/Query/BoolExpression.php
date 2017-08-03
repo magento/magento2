@@ -10,7 +10,6 @@ use Magento\Framework\Search\Request\QueryInterface;
 /**
  * Bool Query
  * @api
- * @since 2.0.0
  */
 class BoolExpression implements QueryInterface
 {
@@ -22,7 +21,6 @@ class BoolExpression implements QueryInterface
      * Boost
      *
      * @var int|null
-     * @since 2.0.0
      */
     protected $boost;
 
@@ -30,7 +28,6 @@ class BoolExpression implements QueryInterface
      * Query Name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $name;
 
@@ -38,7 +35,6 @@ class BoolExpression implements QueryInterface
      * Query names to which result set SHOULD satisfy
      *
      * @var array
-     * @since 2.0.0
      */
     protected $should = [];
 
@@ -46,7 +42,6 @@ class BoolExpression implements QueryInterface
      * Query names to which result set MUST satisfy
      *
      * @var array
-     * @since 2.0.0
      */
     protected $must = [];
 
@@ -54,7 +49,6 @@ class BoolExpression implements QueryInterface
      * Query names to which result set MUST NOT satisfy
      *
      * @var array
-     * @since 2.0.0
      */
     protected $mustNot = [];
 
@@ -65,7 +59,6 @@ class BoolExpression implements QueryInterface
      * @param array $should
      * @param array $not
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct($name, $boost, array $must = [], array $should = [], array $not = [])
     {
@@ -78,7 +71,6 @@ class BoolExpression implements QueryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -88,7 +80,6 @@ class BoolExpression implements QueryInterface
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -97,7 +88,6 @@ class BoolExpression implements QueryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getBoost()
     {
@@ -109,7 +99,6 @@ class BoolExpression implements QueryInterface
      *
      * @return QueryInterface[]
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getShould()
     {
@@ -121,7 +110,6 @@ class BoolExpression implements QueryInterface
      *
      * @return QueryInterface[]
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getMust()
     {
@@ -133,7 +121,6 @@ class BoolExpression implements QueryInterface
      *
      * @return QueryInterface[]
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getMustNot()
     {

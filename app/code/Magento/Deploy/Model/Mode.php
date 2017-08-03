@@ -21,37 +21,31 @@ use Magento\Framework\Exception\LocalizedException;
  *
  * @SuppressWarnings("PMD.CouplingBetweenObjects")
  * @SuppressWarnings("PMD.ExcessiveParameterList")
- * @since 2.0.0
  */
 class Mode
 {
     /**
      * @var InputInterface
-     * @since 2.0.0
      */
     private $input;
 
     /**
      * @var OutputInterface
-     * @since 2.0.0
      */
     protected $output;
 
     /**
      * @var Writer
-     * @since 2.0.0
      */
     private $writer;
 
     /**
      * @var Reader
-     * @since 2.0.0
      */
     private $reader;
 
     /**
      * @var Filesystem
-     * @since 2.0.0
      */
     private $filesystem;
 
@@ -62,7 +56,6 @@ class Mode
      * @param Reader $reader
      * @param MaintenanceMode $maintenanceMode
      * @param Filesystem $filesystem
-     * @since 2.0.0
      */
     public function __construct(
         InputInterface $input,
@@ -85,7 +78,6 @@ class Mode
      *
      * @throws LocalizedException
      * @return void
-     * @since 2.0.0
      */
     public function enableProductionMode()
     {
@@ -108,7 +100,6 @@ class Mode
      * Only lock static resource locations and set store mode, without handling static content
      *
      * @return void
-     * @since 2.0.0
      */
     public function enableProductionModeMinimal()
     {
@@ -119,7 +110,6 @@ class Mode
      * Enable Developer mode
      *
      * @return void
-     * @since 2.0.0
      */
     public function enableDeveloperMode()
     {
@@ -140,7 +130,6 @@ class Mode
      *
      * @return string
      * @throws \Exception
-     * @since 2.0.0
      */
     public function getMode()
     {
@@ -153,7 +142,6 @@ class Mode
      *
      * @param string $mode
      * @return void
-     * @since 2.0.0
      */
     protected function setStoreMode($mode)
     {
@@ -170,7 +158,6 @@ class Mode
      *
      * @param OutputInterface $output
      * @return void
-     * @since 2.0.0
      */
     protected function enableMaintenanceMode(OutputInterface $output)
     {
@@ -183,7 +170,6 @@ class Mode
      *
      * @param OutputInterface $output
      * @return void
-     * @since 2.0.0
      */
     protected function disableMaintenanceMode(OutputInterface $output)
     {

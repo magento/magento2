@@ -15,7 +15,6 @@ use Magento\Store\Model\ScopeInterface;
  * Used for retrieving configuration data by payment models
  *
  * @api
- * @since 2.0.0
  */
 class Config
 {
@@ -26,7 +25,6 @@ class Config
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_methods;
 
@@ -34,13 +32,11 @@ class Config
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Framework\Config\DataInterface
-     * @since 2.0.0
      */
     protected $_dataStorage;
 
@@ -48,7 +44,6 @@ class Config
      * Locale model
      *
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $localeResolver;
 
@@ -56,7 +51,6 @@ class Config
      * Payment method factory
      *
      * @var \Magento\Payment\Model\Method\Factory
-     * @since 2.0.0
      */
     protected $_paymentMethodFactory;
 
@@ -64,7 +58,6 @@ class Config
      * DateTime
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.0.0
      */
     protected $_date;
 
@@ -76,7 +69,6 @@ class Config
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Config\DataInterface $dataStorage
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -97,7 +89,6 @@ class Config
      *
      * @return array
      * @api
-     * @since 2.0.0
      */
     public function getActiveMethods()
     {
@@ -120,7 +111,6 @@ class Config
      *
      * @return array
      * @api
-     * @since 2.0.0
      */
     public function getCcTypes()
     {
@@ -132,7 +122,6 @@ class Config
      *
      * @return array
      * @api
-     * @since 2.0.0
      */
     public function getMethodsInfo()
     {
@@ -144,7 +133,6 @@ class Config
      *
      * @return array
      * @api
-     * @since 2.0.0
      */
     public function getGroups()
     {
@@ -156,7 +144,6 @@ class Config
      *
      * @return array
      * @api
-     * @since 2.0.0
      */
     public function getMonths()
     {
@@ -176,7 +163,6 @@ class Config
      *
      * @return array
      * @api
-     * @since 2.0.0
      */
     public function getYears()
     {

@@ -11,7 +11,6 @@ namespace Magento\Newsletter\Model\ResourceModel\Template;
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -19,7 +18,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Define resource model and model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -33,7 +31,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Load only actual template
      *
      * @return $this
-     * @since 2.0.0
      */
     public function useOnlyActual()
     {
@@ -46,7 +43,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Returns options array
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

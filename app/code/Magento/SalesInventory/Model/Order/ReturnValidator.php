@@ -13,20 +13,20 @@ use Magento\Sales\Api\OrderItemRepositoryInterface;
 
 /**
  * Class ReturnProcessor
- * @since 2.2.0
+ * @since 2.1.3
  */
 class ReturnValidator
 {
     /**
      * @var OrderItemRepositoryInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $orderItemRepository;
 
     /**
      * ReturnValidator constructor.
      * @param OrderItemRepositoryInterface $orderItemRepository
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(OrderItemRepositoryInterface $orderItemRepository)
     {
@@ -37,7 +37,7 @@ class ReturnValidator
      * @param int[] $returnToStockItems
      * @param CreditmemoInterface $creditmemo
      * @return \Magento\Framework\Phrase|null
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function validate($returnToStockItems, CreditmemoInterface $creditmemo)
     {
@@ -61,7 +61,7 @@ class ReturnValidator
      * @param CreditmemoItemInterface[] $creditmemoItems
      * @param OrderItemInterface $orderItem
      * @return bool
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function isOrderItemPartOfCreditmemo(array $creditmemoItems, OrderItemInterface $orderItem)
     {

@@ -11,7 +11,6 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface ProductTierPriceInterface extends ExtensibleDataInterface
 {
@@ -25,7 +24,6 @@ interface ProductTierPriceInterface extends ExtensibleDataInterface
      * Retrieve customer group id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCustomerGroupId();
 
@@ -34,7 +32,6 @@ interface ProductTierPriceInterface extends ExtensibleDataInterface
      *
      * @param int $customerGroupId
      * @return $this
-     * @since 2.0.0
      */
     public function setCustomerGroupId($customerGroupId);
 
@@ -42,7 +39,6 @@ interface ProductTierPriceInterface extends ExtensibleDataInterface
      * Retrieve tier qty
      *
      * @return float
-     * @since 2.0.0
      */
     public function getQty();
 
@@ -51,7 +47,6 @@ interface ProductTierPriceInterface extends ExtensibleDataInterface
      *
      * @param float $qty
      * @return $this
-     * @since 2.0.0
      */
     public function setQty($qty);
 
@@ -59,7 +54,6 @@ interface ProductTierPriceInterface extends ExtensibleDataInterface
      * Retrieve price value
      *
      * @return float
-     * @since 2.0.0
      */
     public function getValue();
 
@@ -68,7 +62,6 @@ interface ProductTierPriceInterface extends ExtensibleDataInterface
      *
      * @param float $value
      * @return $this
-     * @since 2.0.0
      */
     public function setValue($value);
 
@@ -76,7 +69,6 @@ interface ProductTierPriceInterface extends ExtensibleDataInterface
      * Retrieve existing extension attributes object.
      *
      * @return \Magento\Catalog\Api\Data\ProductTierPriceExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -85,7 +77,6 @@ interface ProductTierPriceInterface extends ExtensibleDataInterface
      *
      * @param \Magento\Catalog\Api\Data\ProductTierPriceExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductTierPriceExtensionInterface $extensionAttributes

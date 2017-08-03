@@ -9,13 +9,11 @@ namespace Magento\Framework\Search\Adapter\Mysql;
  * Class for generating sql condition for calculating store manager
  *
  * @api
- * @since 2.0.0
  */
 class ScoreBuilder
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     private $scoreCondition = '';
 
@@ -28,7 +26,6 @@ class ScoreBuilder
      * Get column alias for global score query in sql
      *
      * @return string
-     * @since 2.0.0
      */
     public function getScoreAlias()
     {
@@ -39,7 +36,6 @@ class ScoreBuilder
      * Get generated sql condition for global score
      *
      * @return string
-     * @since 2.0.0
      */
     public function build()
     {
@@ -54,7 +50,6 @@ class ScoreBuilder
      * Start Query
      *
      * @return void
-     * @since 2.0.0
      */
     public function startQuery()
     {
@@ -67,7 +62,6 @@ class ScoreBuilder
      *
      * @param float $boost
      * @return void
-     * @since 2.0.0
      */
     public function endQuery($boost)
     {
@@ -84,7 +78,6 @@ class ScoreBuilder
      * @param string $score
      * @param bool $useWeights
      * @return void
-     * @since 2.0.0
      */
     public function addCondition($score, $useWeights = true)
     {
@@ -100,7 +93,6 @@ class ScoreBuilder
      * Add Plus sign for Score calculation
      *
      * @return void
-     * @since 2.0.0
      */
     private function addPlus()
     {
@@ -113,7 +105,6 @@ class ScoreBuilder
      * Clear score manager
      *
      * @return void
-     * @since 2.0.0
      */
     private function clear()
     {

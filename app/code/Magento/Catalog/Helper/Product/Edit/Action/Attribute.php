@@ -12,7 +12,6 @@ namespace Magento\Catalog\Helper\Product\Edit\Action;
 /**
  * Class Attribute
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Attribute extends \Magento\Backend\Helper\Data
 {
@@ -20,7 +19,6 @@ class Attribute extends \Magento\Backend\Helper\Data
      * Selected products for mass-update
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
-     * @since 2.0.0
      */
     protected $_products;
 
@@ -28,7 +26,6 @@ class Attribute extends \Magento\Backend\Helper\Data
      * Array of same attributes for selected products
      *
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
-     * @since 2.0.0
      */
     protected $_attributes;
 
@@ -36,31 +33,26 @@ class Attribute extends \Magento\Backend\Helper\Data
      * Excluded from batch update attribute codes
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_excludedAttributes = ['url_key'];
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     * @since 2.0.0
      */
     protected $_productsFactory;
 
     /**
      * @var \Magento\Backend\Model\Session
-     * @since 2.0.0
      */
     protected $_session;
 
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $_eavConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -77,7 +69,6 @@ class Attribute extends \Magento\Backend\Helper\Data
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productsFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -104,7 +95,6 @@ class Attribute extends \Magento\Backend\Helper\Data
      * Product collection didn't load
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
-     * @since 2.0.0
      */
     public function getProducts()
     {
@@ -131,7 +121,6 @@ class Attribute extends \Magento\Backend\Helper\Data
      * @param array $productIds
      *
      * @return void
-     * @since 2.0.0
      */
     public function setProductIds($productIds)
     {
@@ -142,7 +131,6 @@ class Attribute extends \Magento\Backend\Helper\Data
      * Return array of selected product ids from post or session
      *
      * @return array|null
-     * @since 2.0.0
      */
     public function getProductIds()
     {
@@ -153,7 +141,6 @@ class Attribute extends \Magento\Backend\Helper\Data
      * Return selected store id from request
      *
      * @return integer
-     * @since 2.0.0
      */
     public function getSelectedStoreId()
     {
@@ -164,7 +151,6 @@ class Attribute extends \Magento\Backend\Helper\Data
      * Return array of attribute sets by selected products
      *
      * @return array
-     * @since 2.0.0
      */
     public function getProductsSetIds()
     {
@@ -175,7 +161,6 @@ class Attribute extends \Magento\Backend\Helper\Data
      * Return collection of same attributes for selected products without unique
      *
      * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
-     * @since 2.0.0
      */
     public function getAttributes()
     {
@@ -210,7 +195,6 @@ class Attribute extends \Magento\Backend\Helper\Data
     /**
      * @param int $storeId
      * @return int
-     * @since 2.0.0
      */
     public function getStoreWebsiteId($storeId)
     {

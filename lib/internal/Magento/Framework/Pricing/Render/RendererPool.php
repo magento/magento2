@@ -13,7 +13,6 @@ use Magento\Framework\View\Element\AbstractBlock;
 
 /**
  * @api
- * @since 2.0.0
  */
 class RendererPool extends AbstractBlock
 {
@@ -40,7 +39,6 @@ class RendererPool extends AbstractBlock
      * @param array $data
      * @throws \InvalidArgumentException
      * @return PriceBoxRenderInterface
-     * @since 2.0.0
      */
     public function createPriceRender(
         $priceCode,
@@ -96,7 +94,6 @@ class RendererPool extends AbstractBlock
      * @param array $data
      * @return AmountRenderInterface
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function createAmountRender(
         AmountInterface $amount,
@@ -156,7 +153,6 @@ class RendererPool extends AbstractBlock
      * @param SaleableInterface $saleableItem
      * @param PriceInterface $price
      * @return array
-     * @since 2.0.0
      */
     public function getAdjustmentRenders(SaleableInterface $saleableItem = null, PriceInterface $price = null)
     {
@@ -187,7 +183,6 @@ class RendererPool extends AbstractBlock
      * @param string $priceCode
      * @return string
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     protected function getAmountRenderBlockTemplate($type, $priceCode)
     {
@@ -211,7 +206,6 @@ class RendererPool extends AbstractBlock
      * @param string $priceCode
      * @return string
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     protected function getRenderBlockTemplate($type, $priceCode)
     {
@@ -233,7 +227,6 @@ class RendererPool extends AbstractBlock
     /**
      * @param array $pattern
      * @return null|string
-     * @since 2.0.0
      */
     protected function findDataByPattern(array $pattern)
     {

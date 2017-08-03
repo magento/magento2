@@ -11,7 +11,6 @@ use Magento\Integration\Model\Integration as IntegrationModel;
 /**
  * Class \Magento\Integration\Controller\Adminhtml\Integration\TokensExchange
  *
- * @since 2.0.0
  */
 class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integration
 {
@@ -21,7 +20,6 @@ class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integrati
      * @param bool   $isReauthorize
      * @param string $integrationName
      * @return void
-     * @since 2.0.0
      */
     protected function _setActivationInProcessMsg($isReauthorize, $integrationName)
     {
@@ -39,7 +37,6 @@ class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integrati
      * Post consumer credentials for Oauth integration.
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

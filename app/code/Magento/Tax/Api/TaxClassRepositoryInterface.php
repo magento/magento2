@@ -10,7 +10,6 @@ namespace Magento\Tax\Api;
 /**
  * Tax class CRUD interface.
  * @api
- * @since 2.0.0
  */
 interface TaxClassRepositoryInterface
 {
@@ -20,7 +19,6 @@ interface TaxClassRepositoryInterface
      * @param int $taxClassId
      * @return \Magento\Tax\Api\Data\TaxClassInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If tax class with $taxClassId does not exist
-     * @since 2.0.0
      */
     public function get($taxClassId);
 
@@ -34,7 +32,6 @@ interface TaxClassRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Tax\Api\Data\TaxClassSearchResultsInterface containing Data\TaxClassInterface
      * @throws \Magento\Framework\Exception\InputException
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -45,7 +42,6 @@ interface TaxClassRepositoryInterface
      * @return string id for the newly created Tax class
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function save(\Magento\Tax\Api\Data\TaxClassInterface $taxClass);
 
@@ -56,7 +52,6 @@ interface TaxClassRepositoryInterface
      * @return bool True if the tax class was deleted, false otherwise
      * @throws \Magento\Framework\Exception\NoSuchEntityException If tax class with $taxClassId does not exist
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @since 2.0.0
      */
     public function delete(\Magento\Tax\Api\Data\TaxClassInterface $taxClass);
 
@@ -67,7 +62,6 @@ interface TaxClassRepositoryInterface
      * @return bool True if the tax class was deleted, false otherwise
      * @throws \Magento\Framework\Exception\NoSuchEntityException If tax class with $taxClassId does not exist
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @since 2.0.0
      */
     public function deleteById($taxClassId);
 }

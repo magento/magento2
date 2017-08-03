@@ -8,7 +8,6 @@ namespace Magento\Backend\Block\Widget;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface ContainerInterface extends \Magento\Backend\Block\Widget\Button\ContextInterface
 {
@@ -21,7 +20,6 @@ interface ContainerInterface extends \Magento\Backend\Block\Widget\Button\Contex
      * @param integer $sortOrder
      * @param string|null $region That button should be displayed in ('toolbar', 'header', 'footer', null)
      * @return $this
-     * @since 2.0.0
      */
     public function addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar');
 
@@ -30,7 +28,6 @@ interface ContainerInterface extends \Magento\Backend\Block\Widget\Button\Contex
      *
      * @param string $buttonId
      * @return $this
-     * @since 2.0.0
      */
     public function removeButton($buttonId);
 
@@ -41,7 +38,6 @@ interface ContainerInterface extends \Magento\Backend\Block\Widget\Button\Contex
      * @param string|null $key
      * @param string $data
      * @return $this
-     * @since 2.0.0
      */
     public function updateButton($buttonId, $key, $data);
 }

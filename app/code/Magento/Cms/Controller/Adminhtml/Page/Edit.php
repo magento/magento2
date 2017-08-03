@@ -11,7 +11,6 @@ use Magento\Backend\App\Action;
 /**
  * Class \Magento\Cms\Controller\Adminhtml\Page\Edit
  *
- * @since 2.0.0
  */
 class Edit extends \Magento\Backend\App\Action
 {
@@ -26,13 +25,11 @@ class Edit extends \Magento\Backend\App\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -40,7 +37,6 @@ class Edit extends \Magento\Backend\App\Action
      * @param Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Registry $registry
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -56,7 +52,6 @@ class Edit extends \Magento\Backend\App\Action
      * Init actions
      *
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.0.0
      */
     protected function _initAction()
     {
@@ -74,7 +69,6 @@ class Edit extends \Magento\Backend\App\Action
      *
      * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

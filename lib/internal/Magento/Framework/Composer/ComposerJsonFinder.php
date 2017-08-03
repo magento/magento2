@@ -9,13 +9,11 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * A class to find path to root Composer json file
- * @since 2.0.0
  */
 class ComposerJsonFinder
 {
     /**
      * @var DirectoryList $directoryList
-     * @since 2.0.0
      */
     private $directoryList;
 
@@ -23,7 +21,6 @@ class ComposerJsonFinder
      * Constructor
      *
      * @param DirectoryList $directoryList
-     * @since 2.0.0
      */
     public function __construct(DirectoryList $directoryList)
     {
@@ -35,7 +32,6 @@ class ComposerJsonFinder
      *
      * @return string
      * @throws \Exception
-     * @since 2.0.0
      */
     public function findComposerJson()
     {

@@ -9,13 +9,12 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 /**
  * @api
- * @since 2.0.0
  */
 class EavValidationRules
 {
     /**
      * @var array
-     * @since 2.1.0
+     * @since 2.0.11
      */
     protected $validationRules = [
         'email' => ['validate-email' => true],
@@ -28,7 +27,6 @@ class EavValidationRules
      * @param AbstractAttribute $attribute
      * @param array $data
      * @return array
-     * @since 2.0.0
      */
     public function build(AbstractAttribute $attribute, array $data)
     {

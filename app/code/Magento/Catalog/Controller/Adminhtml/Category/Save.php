@@ -12,25 +12,21 @@ use Magento\Store\Model\StoreManagerInterface;
  * Class Save
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
-     * @since 2.0.0
      */
     protected $resultRawFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
-     * @since 2.0.0
      */
     protected $layoutFactory;
 
@@ -51,7 +47,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
     /**
      * @var StoreManagerInterface
-     * @since 2.1.0
+     * @since 2.0.12
      */
     private $storeManager;
 
@@ -70,7 +66,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -95,7 +90,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * @deprecated 2.2.0
      * @param array $rawData
      * @return array
-     * @since 2.0.0
      */
     protected function _filterCategoryPostData(array $rawData)
     {
@@ -121,7 +115,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function execute()
     {

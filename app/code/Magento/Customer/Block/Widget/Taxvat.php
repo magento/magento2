@@ -12,7 +12,6 @@ use Magento\Customer\Api\CustomerMetadataInterface;
  * Customer Value Added Tax Widget
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Taxvat extends AbstractWidget
 {
@@ -23,7 +22,6 @@ class Taxvat extends AbstractWidget
      * @param \Magento\Customer\Helper\Address $addressHelper
      * @param CustomerMetadataInterface $customerMetadata
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -39,7 +37,6 @@ class Taxvat extends AbstractWidget
      * Sets the template
      *
      * @return void
-     * @since 2.0.0
      */
     public function _construct()
     {
@@ -51,7 +48,6 @@ class Taxvat extends AbstractWidget
      * Get is enabled.
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isEnabled()
     {
@@ -62,7 +58,6 @@ class Taxvat extends AbstractWidget
      * Get is required.
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isRequired()
     {

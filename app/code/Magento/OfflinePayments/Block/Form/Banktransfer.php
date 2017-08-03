@@ -7,7 +7,6 @@ namespace Magento\OfflinePayments\Block\Form;
 
 /**
  * Block for Bank Transfer payment method form
- * @since 2.0.0
  */
 class Banktransfer extends \Magento\OfflinePayments\Block\Form\AbstractInstruction
 {
@@ -15,7 +14,6 @@ class Banktransfer extends \Magento\OfflinePayments\Block\Form\AbstractInstructi
      * Bank transfer template
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'form/banktransfer.phtml';
 }

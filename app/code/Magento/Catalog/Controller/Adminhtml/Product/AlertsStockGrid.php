@@ -14,13 +14,11 @@ use Magento\Framework\View\Result\LayoutFactory;
 /**
  * Class \Magento\Catalog\Controller\Adminhtml\Product\AlertsStockGrid
  *
- * @since 2.0.0
  */
 class AlertsStockGrid extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var LayoutFactory
-     * @since 2.0.0
      */
     protected $resultLayoutFactory;
 
@@ -30,7 +28,6 @@ class AlertsStockGrid extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param Action\Context $context
      * @param Builder $productBuilder
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -45,7 +42,6 @@ class AlertsStockGrid extends \Magento\Catalog\Controller\Adminhtml\Product
      * Get alerts stock grid
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

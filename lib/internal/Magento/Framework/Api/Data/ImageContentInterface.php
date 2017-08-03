@@ -10,7 +10,6 @@ namespace Magento\Framework\Api\Data;
  * Image Content data interface
  *
  * @api
- * @since 2.0.0
  */
 interface ImageContentInterface
 {
@@ -22,7 +21,6 @@ interface ImageContentInterface
      * Retrieve media data (base64 encoded content)
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBase64EncodedData();
 
@@ -31,7 +29,6 @@ interface ImageContentInterface
      *
      * @param string $data
      * @return $this
-     * @since 2.0.0
      */
     public function setBase64EncodedData($data);
 
@@ -39,7 +36,6 @@ interface ImageContentInterface
      * Retrieve MIME type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getType();
 
@@ -48,7 +44,6 @@ interface ImageContentInterface
      *
      * @param string $mimeType
      * @return $this
-     * @since 2.0.0
      */
     public function setType($mimeType);
 
@@ -56,7 +51,6 @@ interface ImageContentInterface
      * Retrieve image name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName();
 
@@ -65,7 +59,6 @@ interface ImageContentInterface
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setName($name);
 }

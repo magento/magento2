@@ -7,19 +7,16 @@ namespace Magento\Catalog\Model\Product;
 
 /**
  * Price model for external catalogs
- * @since 2.0.0
  */
 class CatalogPrice implements CatalogPriceInterface
 {
     /**
      * @var CatalogPriceFactory
-     * @since 2.0.0
      */
     protected $priceModelFactory;
 
     /**
      * @var array catalog price models for different product types
-     * @since 2.0.0
      */
     protected $priceModelPool;
 
@@ -27,7 +24,6 @@ class CatalogPrice implements CatalogPriceInterface
      *
      * @param CatalogPriceFactory $priceModelFactory
      * @param array $priceModelPool
-     * @since 2.0.0
      */
     public function __construct(CatalogPriceFactory $priceModelFactory, array $priceModelPool)
     {
@@ -37,7 +33,6 @@ class CatalogPrice implements CatalogPriceInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCatalogPrice(
         \Magento\Catalog\Model\Product $product,
@@ -58,7 +53,6 @@ class CatalogPrice implements CatalogPriceInterface
      * @param \Magento\Catalog\Model\Product $product
      * @return float
      * @throws \UnexpectedValueException
-     * @since 2.0.0
      */
     public function getCatalogRegularPrice(\Magento\Catalog\Model\Product $product)
     {

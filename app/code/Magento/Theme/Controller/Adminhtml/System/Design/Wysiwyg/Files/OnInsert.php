@@ -9,7 +9,6 @@ namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 /**
  * Class \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\OnInsert
  *
- * @since 2.0.0
  */
 class OnInsert extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
 {
@@ -17,7 +16,6 @@ class OnInsert extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg
      * Fire when select image
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

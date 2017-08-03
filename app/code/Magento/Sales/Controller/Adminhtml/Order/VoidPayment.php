@@ -8,7 +8,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\VoidPayment
  *
- * @since 2.0.0
  */
 class VoidPayment extends \Magento\Sales\Controller\Adminhtml\Order
 {
@@ -16,7 +15,6 @@ class VoidPayment extends \Magento\Sales\Controller\Adminhtml\Order
      * Attempt to void the order payment
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

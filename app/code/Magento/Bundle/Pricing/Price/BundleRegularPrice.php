@@ -14,19 +14,16 @@ use Magento\Bundle\Model\Product\Price;
 
 /**
  * Bundle product regular price model
- * @since 2.0.0
  */
 class BundleRegularPrice extends \Magento\Catalog\Pricing\Price\RegularPrice implements RegularPriceInterface
 {
     /**
      * @var BundleCalculatorInterface
-     * @since 2.0.0
      */
     protected $calculator;
 
     /**
      * @var AmountInterface
-     * @since 2.0.0
      */
     protected $maximalPrice;
 
@@ -35,7 +32,6 @@ class BundleRegularPrice extends \Magento\Catalog\Pricing\Price\RegularPrice imp
      * @param float $quantity
      * @param BundleCalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @since 2.0.0
      */
     public function __construct(
         Product $saleableItem,
@@ -48,7 +44,6 @@ class BundleRegularPrice extends \Magento\Catalog\Pricing\Price\RegularPrice imp
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function getAmount()
     {
@@ -68,7 +63,6 @@ class BundleRegularPrice extends \Magento\Catalog\Pricing\Price\RegularPrice imp
      * Returns max price
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     public function getMaximalPrice()
     {
@@ -88,7 +82,6 @@ class BundleRegularPrice extends \Magento\Catalog\Pricing\Price\RegularPrice imp
      * Returns min price
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     public function getMinimalPrice()
     {

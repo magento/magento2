@@ -8,7 +8,6 @@ namespace Magento\Backend\Model\Menu\Builder\Command;
 /**
  * Builder command to add menu items
  * @api
- * @since 2.0.0
  */
 class Add extends \Magento\Backend\Model\Menu\Builder\AbstractCommand
 {
@@ -16,7 +15,6 @@ class Add extends \Magento\Backend\Model\Menu\Builder\AbstractCommand
      * List of params that command requires for execution
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_requiredParams = ["id", "title", "module", "resource"];
 
@@ -26,7 +24,6 @@ class Add extends \Magento\Backend\Model\Menu\Builder\AbstractCommand
      * @param \Magento\Backend\Model\Menu\Builder\AbstractCommand $command
      * @return $this
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function chain(\Magento\Backend\Model\Menu\Builder\AbstractCommand $command)
     {
@@ -41,7 +38,6 @@ class Add extends \Magento\Backend\Model\Menu\Builder\AbstractCommand
      *
      * @param array $itemParams
      * @return array
-     * @since 2.0.0
      */
     protected function _execute(array $itemParams)
     {

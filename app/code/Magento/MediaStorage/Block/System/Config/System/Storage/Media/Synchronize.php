@@ -7,19 +7,16 @@ namespace Magento\MediaStorage\Block\System\Config\System\Storage\Media;
 
 /**
  * Synchronize button renderer
- * @since 2.0.0
  */
 class Synchronize extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_MediaStorage::system/config/system/storage/media/synchronize.phtml';
 
     /**
      * @var \Magento\MediaStorage\Model\File\Storage
-     * @since 2.0.0
      */
     protected $_fileStorage;
 
@@ -27,7 +24,6 @@ class Synchronize extends \Magento\Config\Block\System\Config\Form\Field
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\MediaStorage\Model\File\Storage $fileStorage
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -43,7 +39,6 @@ class Synchronize extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -58,7 +53,6 @@ class Synchronize extends \Magento\Config\Block\System\Config\Form\Field
      * @return string
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -69,7 +63,6 @@ class Synchronize extends \Magento\Config\Block\System\Config\Form\Field
      * Return ajax url for synchronize button
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAjaxSyncUrl()
     {
@@ -80,7 +73,6 @@ class Synchronize extends \Magento\Config\Block\System\Config\Form\Field
      * Return ajax url for synchronize button
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAjaxStatusUpdateUrl()
     {
@@ -91,7 +83,6 @@ class Synchronize extends \Magento\Config\Block\System\Config\Form\Field
      * Generate synchronize button html
      *
      * @return string
-     * @since 2.0.0
      */
     public function getButtonHtml()
     {
@@ -117,7 +108,6 @@ class Synchronize extends \Magento\Config\Block\System\Config\Form\Field
      * )
      *
      * @return array
-     * @since 2.0.0
      */
     public function getSyncStorageParams()
     {

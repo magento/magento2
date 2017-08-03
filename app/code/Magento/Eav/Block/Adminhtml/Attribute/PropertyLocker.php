@@ -12,19 +12,16 @@ use Magento\Eav\Model\Entity\Attribute\Config;
  * Disable form fields
  *
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class PropertyLocker
 {
     /**
      * @var Config
-     * @since 2.0.0
      */
     private $attributeConfig;
 
     /**
      * @var Registry
-     * @since 2.0.0
      */
     protected $registry;
 
@@ -32,7 +29,6 @@ class PropertyLocker
      * @param Registry $registry
      * @param Config $attributeConfig
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         Registry $registry,
@@ -45,7 +41,6 @@ class PropertyLocker
     /**
      * @param \Magento\Framework\Data\Form $form
      * @return void
-     * @since 2.0.0
      */
     public function lock(\Magento\Framework\Data\Form $form)
     {

@@ -16,7 +16,6 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
- * @since 2.0.0
  */
 class Repository
 {
@@ -27,74 +26,63 @@ class Repository
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     private $baseUrl;
 
     /**
      * @var \Magento\Framework\View\DesignInterface
-     * @since 2.0.0
      */
     private $design;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ListInterface
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 2.1.1
      */
     private $themeList;
 
     /**
      * @var \Magento\Framework\View\Asset\Source
-     * @since 2.0.0
      */
     private $assetSource;
 
     /**
      * @var \Magento\Framework\View\Asset\ContextInterface[]
-     * @since 2.0.0
      */
     private $fallbackContext;
 
     /**
      * @var \Magento\Framework\View\Asset\ContextInterface[]
-     * @since 2.0.0
      */
     private $fileContext;
 
     /**
      * @var null|array
-     * @since 2.0.0
      */
     private $defaults = null;
 
     /**
      * @var FileFactory
-     * @since 2.0.0
      */
     private $fileFactory;
 
     /**
      * @var File\FallbackContextFactory
-     * @since 2.0.0
      */
     private $fallbackContextFactory;
 
     /**
      * @var File\ContextFactory
-     * @since 2.0.0
      */
     private $contextFactory;
 
     /**
      * @var RemoteFactory
-     * @since 2.0.0
      */
     private $remoteFactory;
 
     /**
      * @var ThemeProviderInterface
-     * @since 2.2.0
+     * @since 2.1.1
      */
     private $themeProvider;
 
@@ -108,7 +96,6 @@ class Repository
      * @param File\FallbackContextFactory $fallbackContextFactory
      * @param File\ContextFactory $contextFactory
      * @param RemoteFactory $remoteFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\UrlInterface $baseUrl,
@@ -140,7 +127,6 @@ class Repository
      * @return $this
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function updateDesignParams(array &$params)
     {
@@ -183,7 +169,7 @@ class Repository
 
     /**
      * @return ThemeProviderInterface
-     * @since 2.2.0
+     * @since 2.1.1
      */
     private function getThemeProvider()
     {
@@ -199,7 +185,6 @@ class Repository
      *
      * @param string $name
      * @return mixed
-     * @since 2.0.0
      */
     private function getDefaultParameter($name)
     {
@@ -213,7 +198,6 @@ class Repository
      * @param string $fileId
      * @param array $params
      * @return File
-     * @since 2.0.0
      */
     public function createAsset($fileId, array $params = [])
     {
@@ -254,7 +238,6 @@ class Repository
      * Get current context for static view files
      *
      * @return \Magento\Framework\View\Asset\File\FallbackContext
-     * @since 2.0.0
      */
     public function getStaticViewFileContext()
     {
@@ -282,7 +265,6 @@ class Repository
      * @param string $themePath
      * @param string $locale
      * @return \Magento\Framework\View\Asset\File\FallbackContext
-     * @since 2.0.0
      */
     private function getFallbackContext($urlType, $isSecure, $area, $themePath, $locale)
     {
@@ -309,7 +291,6 @@ class Repository
      * @param string $fileId
      * @param LocalInterface $similarTo
      * @return File
-     * @since 2.0.0
      */
     public function createSimilar($fileId, LocalInterface $similarTo)
     {
@@ -339,7 +320,6 @@ class Repository
      * @param string $baseDirType
      * @param string $baseUrlType
      * @return File
-     * @since 2.0.0
      */
     public function createArbitrary(
         $filePath,
@@ -369,7 +349,6 @@ class Repository
      * @param string $urlType
      * @param string $dirPath
      * @return \Magento\Framework\View\Asset\File\Context
-     * @since 2.0.0
      */
     private function getFileContext($baseDirType, $urlType, $dirPath)
     {
@@ -389,7 +368,6 @@ class Repository
      * @param string $fileId
      * @param LocalInterface $relativeTo
      * @return File
-     * @since 2.0.0
      */
     public function createRelated($fileId, LocalInterface $relativeTo)
     {
@@ -408,7 +386,6 @@ class Repository
      * @param string $contentType
      * @return Remote
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function createRemoteAsset($url, $contentType)
     {
@@ -420,7 +397,6 @@ class Repository
      *
      * @param string $fileId
      * @return string
-     * @since 2.0.0
      */
     public function getUrl($fileId)
     {
@@ -437,7 +413,6 @@ class Repository
      * @param array $params
      * @return string
      * @see getUrl()
-     * @since 2.0.0
      */
     public function getUrlWithParams($fileId, array $params)
     {
@@ -451,7 +426,6 @@ class Repository
      * @param string $fileId
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public static function extractModule($fileId)
     {

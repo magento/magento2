@@ -9,13 +9,11 @@ namespace Magento\ConfigurableProduct\Ui\DataProvider;
 /**
  * Class \Magento\ConfigurableProduct\Ui\DataProvider\Attributes
  *
- * @since 2.0.0
  */
 class Attributes extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
-     * @since 2.0.0
      */
     protected $collection;
 
@@ -26,7 +24,6 @@ class Attributes extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler $configurableAttributeHandler
      * @param array $meta
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         $name,
@@ -43,7 +40,6 @@ class Attributes extends \Magento\Ui\DataProvider\AbstractDataProvider
 
     /**
      * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
-     * @since 2.0.0
      */
     public function getCollection()
     {
@@ -52,7 +48,6 @@ class Attributes extends \Magento\Ui\DataProvider\AbstractDataProvider
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getData()
     {

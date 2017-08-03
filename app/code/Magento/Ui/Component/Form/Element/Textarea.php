@@ -7,7 +7,6 @@ namespace Magento\Ui\Component\Form\Element;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Textarea extends AbstractElement
 {
@@ -17,7 +16,6 @@ class Textarea extends AbstractElement
      * Get component name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getComponentName()
     {

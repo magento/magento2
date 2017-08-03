@@ -7,7 +7,6 @@ namespace Magento\Framework\Filter;
 
 /**
  * Zend filter factory
- * @since 2.0.0
  */
 class ZendFactory extends AbstractFactory
 {
@@ -15,7 +14,6 @@ class ZendFactory extends AbstractFactory
      * Set of filters
      *
      * @var array
-     * @since 2.0.0
      */
     protected $invokableClasses = [
         'stripTags' => 'Zend_Filter_StripTags',
@@ -65,7 +63,6 @@ class ZendFactory extends AbstractFactory
      * Whether or not to share by default; default to false
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $shareByDefault = false;
 
@@ -73,7 +70,6 @@ class ZendFactory extends AbstractFactory
      * Shared instances, by default is shared
      *
      * @var array
-     * @since 2.0.0
      */
     protected $shared = [
         'Zend_Filter_StripNewlines' => true,

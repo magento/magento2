@@ -12,7 +12,6 @@ use Magento\Framework\App\State;
 
 /**
  * View asset configuration interface
- * @since 2.0.0
  */
 class Config implements \Magento\Framework\View\Asset\ConfigInterface
 {
@@ -38,13 +37,11 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @since 2.0.0
      */
     public function __construct(ScopeConfigInterface $scopeConfig)
     {
@@ -55,7 +52,6 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      * Check whether merging of CSS files is on
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isMergeCssFiles()
     {
@@ -69,7 +65,6 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      * Check whether bundling of JavScript files is on
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isBundlingJsFiles()
     {
@@ -83,7 +78,6 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      * Check whether merging of JavScript files is on
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isMergeJsFiles()
     {
@@ -97,7 +91,6 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      * Check whether minify of HTML is on
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isMinifyHtml()
     {

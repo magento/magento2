@@ -11,13 +11,11 @@ use Magento\Cms\Model\ResourceModel\Block\Collection as BlockCollection;
 
 /**
  * Collection for displaying grid of cms blocks
- * @since 2.0.0
  */
 class Collection extends BlockCollection implements SearchResultInterface
 {
     /**
      * @var AggregationInterface
-     * @since 2.0.0
      */
     protected $aggregations;
 
@@ -37,7 +35,6 @@ class Collection extends BlockCollection implements SearchResultInterface
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
@@ -72,7 +69,6 @@ class Collection extends BlockCollection implements SearchResultInterface
 
     /**
      * @return AggregationInterface
-     * @since 2.0.0
      */
     public function getAggregations()
     {
@@ -82,7 +78,6 @@ class Collection extends BlockCollection implements SearchResultInterface
     /**
      * @param AggregationInterface $aggregations
      * @return $this
-     * @since 2.0.0
      */
     public function setAggregations($aggregations)
     {
@@ -93,7 +88,6 @@ class Collection extends BlockCollection implements SearchResultInterface
      * Get search criteria.
      *
      * @return \Magento\Framework\Api\SearchCriteriaInterface|null
-     * @since 2.0.0
      */
     public function getSearchCriteria()
     {
@@ -106,7 +100,6 @@ class Collection extends BlockCollection implements SearchResultInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
     {
@@ -117,7 +110,6 @@ class Collection extends BlockCollection implements SearchResultInterface
      * Get total count.
      *
      * @return int
-     * @since 2.0.0
      */
     public function getTotalCount()
     {
@@ -130,7 +122,6 @@ class Collection extends BlockCollection implements SearchResultInterface
      * @param int $totalCount
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function setTotalCount($totalCount)
     {
@@ -143,7 +134,6 @@ class Collection extends BlockCollection implements SearchResultInterface
      * @param \Magento\Framework\Api\ExtensibleDataInterface[] $items
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function setItems(array $items = null)
     {

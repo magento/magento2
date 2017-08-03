@@ -16,13 +16,11 @@ use Magento\Framework\App\Config\Value;
 /**
  * Class \Magento\Captcha\Model\Config\Form\AbstractForm
  *
- * @since 2.0.0
  */
 abstract class AbstractForm extends Value implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_configPath;
 
@@ -30,7 +28,6 @@ abstract class AbstractForm extends Value implements \Magento\Framework\Option\A
      * Returns options for form multiselect
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

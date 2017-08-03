@@ -9,7 +9,6 @@ namespace Magento\Paypal\Controller\Adminhtml\Billing\Agreement;
 /**
  * Class \Magento\Paypal\Controller\Adminhtml\Billing\Agreement\OrdersGrid
  *
- * @since 2.0.0
  */
 class OrdersGrid extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreement
 {
@@ -17,7 +16,6 @@ class OrdersGrid extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreement
      * Related orders ajax action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

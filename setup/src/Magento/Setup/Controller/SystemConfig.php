@@ -11,13 +11,11 @@ use Zend\View\Model\ViewModel;
 /**
  * Class \Magento\Setup\Controller\SystemConfig
  *
- * @since 2.0.0
  */
 class SystemConfig extends AbstractActionController
 {
     /**
      * @return ViewModel
-     * @since 2.0.0
      */
     public function indexAction()
     {

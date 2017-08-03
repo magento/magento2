@@ -9,19 +9,16 @@ namespace Magento\Sales\Model\Order\Pdf;
 
 /**
  * Class Config
- * @since 2.0.0
  */
 class Config
 {
     /**
      * @var \Magento\Framework\Config\DataInterface
-     * @since 2.0.0
      */
     protected $_dataStorage;
 
     /**
      * @param \Magento\Framework\Config\DataInterface $dataStorage
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Config\DataInterface $dataStorage)
     {
@@ -33,7 +30,6 @@ class Config
      *
      * @param string $pageType
      * @return array
-     * @since 2.0.0
      */
     public function getRenderersPerProduct($pageType)
     {
@@ -44,7 +40,6 @@ class Config
      * Get list of settings for showing totals in PDF
      *
      * @return array
-     * @since 2.0.0
      */
     public function getTotals()
     {

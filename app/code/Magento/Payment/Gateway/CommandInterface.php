@@ -11,7 +11,6 @@ use Magento\Payment\Gateway\Command\CommandException;
  * Interface CommandInterface
  * @package Magento\Payment\Gateway
  * @api
- * @since 2.0.0
  */
 interface CommandInterface
 {
@@ -21,7 +20,6 @@ interface CommandInterface
      * @param array $commandSubject
      * @return null|Command\ResultInterface
      * @throws CommandException
-     * @since 2.0.0
      */
     public function execute(array $commandSubject);
 }

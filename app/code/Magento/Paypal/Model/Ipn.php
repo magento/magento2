@@ -16,19 +16,16 @@ use Magento\Paypal\Model\Info;
 /**
  * PayPal Instant Payment Notification processor model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
 {
     /**
      * @var \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     protected $_order;
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
-     * @since 2.0.0
      */
     protected $_orderFactory;
 
@@ -36,19 +33,16 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      * PayPal info instance
      *
      * @var Info
-     * @since 2.0.0
      */
     protected $_paypalInfo;
 
     /**
      * @var OrderSender
-     * @since 2.0.0
      */
     protected $orderSender;
 
     /**
      * @var CreditmemoSender
-     * @since 2.0.0
      */
     protected $creditmemoSender;
 
@@ -61,7 +55,6 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      * @param OrderSender $orderSender
      * @param CreditmemoSender $creditmemoSender
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Paypal\Model\ConfigFactory $configFactory,
@@ -85,7 +78,6 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      *
      * @return void
      * @throws Exception
-     * @since 2.0.0
      */
     public function processIpnRequest()
     {
@@ -108,7 +100,6 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      *
      * @return \Magento\Paypal\Model\Config
      * @throws Exception
-     * @since 2.0.0
      */
     protected function _getConfig()
     {
@@ -140,7 +131,6 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      *
      * @return \Magento\Sales\Model\Order
      * @throws Exception
-     * @since 2.0.0
      */
     protected function _getOrder()
     {
@@ -159,7 +149,6 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _processOrder()
     {
@@ -192,7 +181,6 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      * Process dispute notification
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _registerDispute()
     {
@@ -215,7 +203,6 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      * Process adjustment notification
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _registerAdjustment()
     {
@@ -239,7 +226,6 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _registerTransaction()
     {
@@ -290,7 +276,6 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      *
      * @param bool $skipFraudDetection
      * @return void
-     * @since 2.0.0
      */
     protected function _registerPaymentCapture($skipFraudDetection = false)
     {
@@ -341,7 +326,6 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      *
      * @return void
      * @throws Exception
-     * @since 2.0.0
      */
     protected function _registerPaymentDenial()
     {
@@ -366,7 +350,6 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      * Treat failed payment as order cancellation
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _registerPaymentFailure()
     {
@@ -379,7 +362,6 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      *
      * @return void
      * @throws Exception
-     * @since 2.0.0
      */
     public function _registerPaymentPending()
     {
@@ -415,7 +397,6 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      * Register authorized payment
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _registerPaymentAuthorization()
     {
@@ -449,7 +430,6 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      * The status "Processed" is used when all Masspayments are successful
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _registerMasspaymentsSuccess()
     {
@@ -461,7 +441,6 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      * Process payment reversal and cancelled reversal notification
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _registerPaymentReversal()
     {
@@ -490,7 +469,6 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      * Process a refund
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _registerPaymentRefund()
     {
@@ -527,7 +505,6 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      * Process voided authorization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _registerPaymentVoid()
     {
@@ -557,7 +534,6 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _importPaymentInformation()
     {
@@ -625,7 +601,6 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      * @param string $comment
      * @param bool $addToHistory
      * @return string|\Magento\Sales\Model\Order\Status\History
-     * @since 2.0.0
      */
     protected function _createIpnComment($comment = '', $addToHistory = false)
     {

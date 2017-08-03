@@ -17,13 +17,11 @@ use Magento\Framework\Config\Theme;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Registration
 {
     /**
      * @var \Magento\Theme\Model\Theme\Registration
-     * @since 2.0.0
      */
     protected $themeRegistration;
 
@@ -41,13 +39,11 @@ class Registration
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     protected $appState;
 
@@ -57,7 +53,6 @@ class Registration
      * @param ThemeLoader $themeLoader
      * @param LoggerInterface $logger
      * @param AppState $appState
-     * @since 2.0.0
      */
     public function __construct(
         ThemeRegistration $themeRegistration,
@@ -81,7 +76,6 @@ class Registration
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function beforeDispatch(
         AbstractAction $subject,

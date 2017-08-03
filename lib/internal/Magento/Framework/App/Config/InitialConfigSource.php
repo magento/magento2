@@ -10,26 +10,26 @@ use Magento\Framework\DataObject;
 
 /**
  * Responsible for reading sources from files: config.dist.php, config.local.php, config.php
- * @since 2.2.0
+ * @since 2.1.3
  */
 class InitialConfigSource implements ConfigSourceInterface
 {
     /**
      * @var Reader
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $reader;
 
     /**
      * @var string
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $configType;
 
     /**
      * @var string
      * @deprecated 2.2.0 Initial configs can not be separated since 2.2.0 version
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $fileKey;
 
@@ -39,7 +39,7 @@ class InitialConfigSource implements ConfigSourceInterface
      * @param Reader $reader
      * @param string $configType
      * @param string $fileKey
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(Reader $reader, $configType, $fileKey = null)
     {
@@ -50,7 +50,7 @@ class InitialConfigSource implements ConfigSourceInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function get($path = '')
     {

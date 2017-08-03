@@ -7,13 +7,11 @@ namespace Magento\UrlRewrite\Block\Cms\Page;
 
 /**
  * Block for CMS pages URL rewrites
- * @since 2.0.0
  */
 class Edit extends \Magento\UrlRewrite\Block\Edit
 {
     /**
      * @var \Magento\Cms\Model\PageFactory
-     * @since 2.0.0
      */
     protected $_pageFactory;
 
@@ -23,7 +21,6 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * @param \Magento\Backend\Helper\Data $adminhtmlData
      * @param \Magento\Cms\Model\PageFactory $pageFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -40,7 +37,6 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * Prepare layout for URL rewrite creating for CMS page
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareLayoutFeatures()
     {
@@ -66,7 +62,6 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * Get or create new instance of CMS page
      *
      * @return \Magento\Cms\Model\Page
-     * @since 2.0.0
      */
     private function _getCmsPage()
     {
@@ -80,7 +75,6 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * Add child CMS page link block
      *
      * @return void
-     * @since 2.0.0
      */
     private function _addCmsPageLinkBlock()
     {
@@ -99,7 +93,6 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * Add child CMS page block
      *
      * @return void
-     * @since 2.0.0
      */
     private function _addCmsPageGridBlock()
     {
@@ -110,7 +103,6 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * Creates edit form block
      *
      * @return \Magento\UrlRewrite\Block\Cms\Page\Edit\Form
-     * @since 2.0.0
      */
     protected function _createEditFormBlock()
     {

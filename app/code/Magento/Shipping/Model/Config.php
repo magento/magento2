@@ -11,7 +11,6 @@ namespace Magento\Shipping\Model;
 /**
  * Class Config
  * @api
- * @since 2.0.0
  */
 class Config extends \Magento\Framework\DataObject
 {
@@ -30,13 +29,11 @@ class Config extends \Magento\Framework\DataObject
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Shipping\Model\CarrierFactory
-     * @since 2.0.0
      */
     protected $_carrierFactory;
 
@@ -46,7 +43,6 @@ class Config extends \Magento\Framework\DataObject
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -63,7 +59,6 @@ class Config extends \Magento\Framework\DataObject
      *
      * @param   mixed $store
      * @return  array
-     * @since 2.0.0
      */
     public function getActiveCarriers($store = null)
     {
@@ -85,7 +80,6 @@ class Config extends \Magento\Framework\DataObject
      *
      * @param   mixed $store
      * @return  array
-     * @since 2.0.0
      */
     public function getAllCarriers($store = null)
     {

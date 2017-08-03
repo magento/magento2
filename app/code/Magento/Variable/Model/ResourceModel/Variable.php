@@ -12,7 +12,6 @@ namespace Magento\Variable\Model\ResourceModel;
  * Custom variable resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Variable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -20,7 +19,6 @@ class Variable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -33,7 +31,6 @@ class Variable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Variable\Model\Variable $object
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function loadByCode(\Magento\Variable\Model\Variable $object, $code)
     {
@@ -50,7 +47,6 @@ class Variable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param bool $withValue
      * @param integer $storeId
      * @return array
-     * @since 2.0.0
      */
     public function getVariableByCode($code, $withValue = false, $storeId = 0)
     {
@@ -71,7 +67,6 @@ class Variable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -108,7 +103,6 @@ class Variable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param mixed $value
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -123,7 +117,6 @@ class Variable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\DB\Select $select
      * @param integer $storeId
      * @return \Magento\Variable\Model\ResourceModel\Variable
-     * @since 2.0.0
      */
     protected function _addValueToSelect(
         \Magento\Framework\DB\Select $select,

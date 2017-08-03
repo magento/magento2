@@ -9,7 +9,6 @@ use Magento\Authorizenet\Model\Response\Factory as AuthorizenetResponseFactory;
 
 /**
  * Factory class for @see \Magento\Authorizenet\Model\Directpost\Response
- * @since 2.0.0
  */
 class Factory extends AuthorizenetResponseFactory
 {
@@ -18,7 +17,6 @@ class Factory extends AuthorizenetResponseFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,

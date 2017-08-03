@@ -9,13 +9,11 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 /**
  * Class \Magento\Catalog\Controller\Adminhtml\Product\Set\Add
  *
- * @since 2.0.0
  */
 class Add extends \Magento\Catalog\Controller\Adminhtml\Product\Set
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -23,7 +21,6 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Product\Set
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -36,7 +33,6 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Product\Set
 
     /**
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

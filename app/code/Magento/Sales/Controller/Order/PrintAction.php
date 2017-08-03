@@ -11,7 +11,6 @@ use Magento\Sales\Controller\OrderInterface;
 /**
  * Class \Magento\Sales\Controller\Order\PrintAction
  *
- * @since 2.0.0
  */
 class PrintAction extends \Magento\Sales\Controller\AbstractController\PrintAction implements OrderInterface
 {

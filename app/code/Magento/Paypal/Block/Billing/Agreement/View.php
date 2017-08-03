@@ -9,7 +9,6 @@ namespace Magento\Paypal\Block\Billing\Agreement;
  * Customer account billing agreement view block
  *
  * @api
- * @since 2.0.0
  */
 class View extends \Magento\Framework\View\Element\Template
 {
@@ -17,7 +16,6 @@ class View extends \Magento\Framework\View\Element\Template
      * Payment methods array
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_paymentMethods = [];
 
@@ -25,7 +23,6 @@ class View extends \Magento\Framework\View\Element\Template
      * Billing Agreement instance
      *
      * @var \Magento\Paypal\Model\Billing\Agreement
-     * @since 2.0.0
      */
     protected $_billingAgreementInstance = null;
 
@@ -33,7 +30,6 @@ class View extends \Magento\Framework\View\Element\Template
      * Related orders collection
      *
      * @var \Magento\Sales\Model\ResourceModel\Order\Collection
-     * @since 2.0.0
      */
     protected $_relatedOrders = null;
 
@@ -41,37 +37,31 @@ class View extends \Magento\Framework\View\Element\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
-     * @since 2.0.0
      */
     protected $_orderCollectionFactory;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Sales\Model\Order\Config
-     * @since 2.0.0
      */
     protected $_orderConfig;
 
     /**
      * @var \Magento\Paypal\Helper\Data
-     * @since 2.0.0
      */
     protected $_helper;
 
     /**
      * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement
-     * @since 2.0.0
      */
     protected $_agreementResource;
 
@@ -84,7 +74,6 @@ class View extends \Magento\Framework\View\Element\Template
      * @param \Magento\Paypal\Helper\Data $helper
      * @param \Magento\Paypal\Model\ResourceModel\Billing\Agreement $agreementResource
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -110,7 +99,6 @@ class View extends \Magento\Framework\View\Element\Template
      * Retrieve related orders collection
      *
      * @return \Magento\Sales\Model\ResourceModel\Order\Collection
-     * @since 2.0.0
      */
     public function getRelatedOrders()
     {
@@ -141,7 +129,6 @@ class View extends \Magento\Framework\View\Element\Template
      * @param string $key
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function getOrderItemValue(\Magento\Sales\Model\Order $order, $key)
     {
@@ -181,7 +168,6 @@ class View extends \Magento\Framework\View\Element\Template
      * Set pager
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -204,7 +190,6 @@ class View extends \Magento\Framework\View\Element\Template
      * Return current billing agreement.
      *
      * @return \Magento\Paypal\Model\Billing\Agreement|null
-     * @since 2.0.0
      */
     protected function _getBillingAgreementInstance()
     {
@@ -218,7 +203,6 @@ class View extends \Magento\Framework\View\Element\Template
      * Load available billing agreement methods
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _loadPaymentMethods()
     {
@@ -234,7 +218,6 @@ class View extends \Magento\Framework\View\Element\Template
      * Set data to block
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

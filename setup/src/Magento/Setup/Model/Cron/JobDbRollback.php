@@ -13,13 +13,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * DB Rollback job
- * @since 2.0.0
  */
 class JobDbRollback extends AbstractJob
 {
     /**
      * @var BackupRollbackFactory
-     * @since 2.0.0
      */
     private $backupRollbackFactory;
 
@@ -31,7 +29,6 @@ class JobDbRollback extends AbstractJob
      * @param ObjectManagerProvider $objectManagerProvider
      * @param array $name
      * @param array $params
-     * @since 2.0.0
      */
     public function __construct(
         BackupRollbackFactory $backupRollbackFactory,
@@ -50,7 +47,6 @@ class JobDbRollback extends AbstractJob
      *
      * @throws \RuntimeException
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -81,7 +77,6 @@ class JobDbRollback extends AbstractJob
      * Sets area code to start a session for database backup and rollback
      *
      * @return void
-     * @since 2.0.0
      */
     private function setAreaCode()
     {

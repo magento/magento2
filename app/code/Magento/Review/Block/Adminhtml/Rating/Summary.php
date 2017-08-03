@@ -9,7 +9,6 @@ use Magento\Review\Model\ResourceModel\Rating\Collection as RatingCollection;
 
 /**
  * Adminhtml summary rating stars
- * @since 2.0.0
  */
 class Summary extends \Magento\Backend\Block\Template
 {
@@ -17,7 +16,6 @@ class Summary extends \Magento\Backend\Block\Template
      * Rating summary template name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Review::rating/stars/summary.phtml';
 
@@ -25,7 +23,6 @@ class Summary extends \Magento\Backend\Block\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -33,7 +30,6 @@ class Summary extends \Magento\Backend\Block\Template
      * Rating resource option model
      *
      * @var \Magento\Review\Model\ResourceModel\Rating\Option\Vote\CollectionFactory
-     * @since 2.0.0
      */
     protected $_votesFactory;
 
@@ -41,7 +37,6 @@ class Summary extends \Magento\Backend\Block\Template
      * Rating model
      *
      * @var \Magento\Review\Model\RatingFactory
-     * @since 2.0.0
      */
     protected $_ratingFactory;
 
@@ -51,7 +46,6 @@ class Summary extends \Magento\Backend\Block\Template
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -70,7 +64,6 @@ class Summary extends \Magento\Backend\Block\Template
      * Initialize review data
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -83,7 +76,6 @@ class Summary extends \Magento\Backend\Block\Template
      * Get collection of ratings
      *
      * @return RatingCollection
-     * @since 2.0.0
      */
     public function getRating()
     {
@@ -100,7 +92,6 @@ class Summary extends \Magento\Backend\Block\Template
      * Get rating summary
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRatingSummary()
     {

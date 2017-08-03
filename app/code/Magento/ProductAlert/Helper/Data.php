@@ -13,7 +13,6 @@ use Magento\Store\Model\Store;
  * @author     Magento Core Team <core@magentocommerce.com>
  *
  * @api
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\Url\Helper\Data
 {
@@ -21,7 +20,6 @@ class Data extends \Magento\Framework\Url\Helper\Data
      * Current product instance (override registry one)
      *
      * @var null|\Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     protected $_product = null;
 
@@ -29,19 +27,16 @@ class Data extends \Magento\Framework\Url\Helper\Data
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Framework\View\LayoutInterface
-     * @since 2.0.0
      */
     protected $_layout;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     private $_storeManager;
 
@@ -50,7 +45,6 @@ class Data extends \Magento\Framework\Url\Helper\Data
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\View\LayoutInterface $layout
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -68,7 +62,6 @@ class Data extends \Magento\Framework\Url\Helper\Data
      * Get current product instance
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -83,7 +76,6 @@ class Data extends \Magento\Framework\Url\Helper\Data
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\ProductAlert\Helper\Data
-     * @since 2.0.0
      */
     public function setProduct($product)
     {
@@ -93,7 +85,6 @@ class Data extends \Magento\Framework\Url\Helper\Data
 
     /**
      * @return Store
-     * @since 2.0.0
      */
     public function getStore()
     {
@@ -103,7 +94,6 @@ class Data extends \Magento\Framework\Url\Helper\Data
     /**
      * @param string $type
      * @return string
-     * @since 2.0.0
      */
     public function getSaveUrl($type)
     {
@@ -122,7 +112,6 @@ class Data extends \Magento\Framework\Url\Helper\Data
      * @param string|\Magento\Framework\View\Element\AbstractBlock $block
      * @return \Magento\Framework\View\Element\AbstractBlock
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function createBlock($block)
     {
@@ -141,7 +130,6 @@ class Data extends \Magento\Framework\Url\Helper\Data
      * Check whether stock alert is allowed
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isStockAlertAllowed()
     {
@@ -155,7 +143,6 @@ class Data extends \Magento\Framework\Url\Helper\Data
      * Check whether price alert is allowed
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isPriceAlertAllowed()
     {

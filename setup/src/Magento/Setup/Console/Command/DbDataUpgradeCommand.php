@@ -14,7 +14,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for install and update of data in DB
- * @since 2.0.0
  */
 class DbDataUpgradeCommand extends AbstractSetupCommand
 {
@@ -22,7 +21,6 @@ class DbDataUpgradeCommand extends AbstractSetupCommand
      * Factory to create installer
      *
      * @var InstallerFactory
-     * @since 2.0.0
      */
     private $installFactory;
 
@@ -30,7 +28,6 @@ class DbDataUpgradeCommand extends AbstractSetupCommand
      * Deployment configuration
      *
      * @var DeploymentConfig
-     * @since 2.0.0
      */
     private $deploymentConfig;
 
@@ -39,7 +36,6 @@ class DbDataUpgradeCommand extends AbstractSetupCommand
      *
      * @param InstallerFactory $installFactory
      * @param DeploymentConfig $deploymentConfig
-     * @since 2.0.0
      */
     public function __construct(InstallerFactory $installFactory, DeploymentConfig $deploymentConfig)
     {
@@ -52,7 +48,6 @@ class DbDataUpgradeCommand extends AbstractSetupCommand
      * Initialization of the command
      *
      * @return void
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -62,7 +57,6 @@ class DbDataUpgradeCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

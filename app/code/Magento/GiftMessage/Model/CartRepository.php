@@ -13,7 +13,6 @@ use Magento\Framework\Exception\State\InvalidTransitionException;
 
 /**
  * Shopping cart gift message repository object for registered customer
- * @since 2.0.0
  */
 class CartRepository implements \Magento\GiftMessage\Api\CartRepositoryInterface
 {
@@ -21,7 +20,6 @@ class CartRepository implements \Magento\GiftMessage\Api\CartRepositoryInterface
      * Quote repository.
      *
      * @var \Magento\Quote\Api\CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
@@ -29,7 +27,6 @@ class CartRepository implements \Magento\GiftMessage\Api\CartRepositoryInterface
      * Store manager interface.
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -37,7 +34,6 @@ class CartRepository implements \Magento\GiftMessage\Api\CartRepositoryInterface
      * Gift message manager.
      *
      * @var \Magento\GiftMessage\Model\GiftMessageManager
-     * @since 2.0.0
      */
     protected $giftMessageManager;
 
@@ -45,7 +41,6 @@ class CartRepository implements \Magento\GiftMessage\Api\CartRepositoryInterface
      * Message helper.
      *
      * @var \Magento\GiftMessage\Helper\Message
-     * @since 2.0.0
      */
     protected $helper;
 
@@ -53,7 +48,6 @@ class CartRepository implements \Magento\GiftMessage\Api\CartRepositoryInterface
      * Message factory.
      *
      * @var \Magento\GiftMessage\Model\MessageFactory
-     * @since 2.0.0
      */
     protected $messageFactory;
 
@@ -63,7 +57,6 @@ class CartRepository implements \Magento\GiftMessage\Api\CartRepositoryInterface
      * @param GiftMessageManager $giftMessageManager
      * @param \Magento\GiftMessage\Helper\Message $helper
      * @param MessageFactory $messageFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
@@ -81,7 +74,6 @@ class CartRepository implements \Magento\GiftMessage\Api\CartRepositoryInterface
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function get($cartId)
     {
@@ -98,7 +90,6 @@ class CartRepository implements \Magento\GiftMessage\Api\CartRepositoryInterface
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function save($cartId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage)
     {

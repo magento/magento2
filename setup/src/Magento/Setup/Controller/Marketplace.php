@@ -15,7 +15,6 @@ use Magento\Setup\Model\PackagesAuth;
 /**
  * Class \Magento\Setup\Controller\Marketplace
  *
- * @since 2.0.0
  */
 class Marketplace extends AbstractActionController
 {
@@ -34,7 +33,6 @@ class Marketplace extends AbstractActionController
     /**
      * @param PackagesAuth $packagesAuth
      * @param PackagesData $packagesData
-     * @since 2.0.0
      */
     public function __construct(PackagesAuth $packagesAuth, PackagesData $packagesData)
     {
@@ -60,7 +58,6 @@ class Marketplace extends AbstractActionController
      * Save auth.json
      *
      * @return array|ViewModel
-     * @since 2.0.0
      */
     public function saveAuthJsonAction()
     {
@@ -88,7 +85,6 @@ class Marketplace extends AbstractActionController
      * Check if user authorize in connect
      *
      * @return JsonModel
-     * @since 2.0.0
      */
     public function checkAuthAction()
     {
@@ -117,7 +113,6 @@ class Marketplace extends AbstractActionController
      * Remove credentials from auth.json
      *
      * @return JsonModel
-     * @since 2.0.0
      */
     public function removeCredentialsAction()
     {
@@ -131,7 +126,6 @@ class Marketplace extends AbstractActionController
 
     /**
      * @return array|ViewModel
-     * @since 2.0.0
      */
     public function popupAuthAction()
     {

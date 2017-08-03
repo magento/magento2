@@ -13,7 +13,6 @@ use Magento\Framework\View\Element\UiComponentFactory;
 
 /**
  * Class Generic
- * @since 2.0.0
  */
 class Generic implements LayoutInterface
 {
@@ -61,7 +60,6 @@ class Generic implements LayoutInterface
      *
      * @param UiComponentInterface $component
      * @return array
-     * @since 2.0.0
      */
     public function build(UiComponentInterface $component)
     {
@@ -98,7 +96,6 @@ class Generic implements LayoutInterface
      * @param UiComponentInterface $component
      * @param string $componentType
      * @return void
-     * @since 2.0.0
      */
     protected function addChildren(
         array &$topNode,

@@ -12,7 +12,6 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
  * Customer group resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Group extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb
 {
@@ -20,13 +19,11 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Abs
      * Group Management
      *
      * @var \Magento\Customer\Api\GroupManagementInterface
-     * @since 2.0.0
      */
     protected $_groupManagement;
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory
-     * @since 2.0.0
      */
     protected $_customersFactory;
 
@@ -37,7 +34,6 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Abs
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param Customer\CollectionFactory $customersFactory
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -56,7 +52,6 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Abs
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -67,7 +62,6 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Abs
      * Initialize unique fields
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initUniqueFields()
     {
@@ -82,7 +76,6 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Abs
      * @param  \Magento\Framework\Model\AbstractModel $group
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _beforeDelete(\Magento\Framework\Model\AbstractModel $group)
     {
@@ -99,7 +92,6 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Abs
      *
      * @param \Magento\Framework\Model\AbstractModel $group
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $group)
     {
@@ -119,7 +111,6 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Abs
 
     /**
      * @return \Magento\Customer\Model\ResourceModel\Customer\Collection
-     * @since 2.0.0
      */
     protected function _createCustomersCollection()
     {
@@ -131,7 +122,6 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Abs
      *
      * @param \Magento\Framework\Model\AbstractModel $group
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $group)
     {

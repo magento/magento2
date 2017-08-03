@@ -14,31 +14,26 @@ use Magento\Catalog\Api\Data\CategoryInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInterface
 {
     /**
      * @var Category[]
-     * @since 2.0.0
      */
     protected $instances = [];
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Catalog\Model\CategoryFactory
-     * @since 2.0.0
      */
     protected $categoryFactory;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category
-     * @since 2.0.0
      */
     protected $categoryResource;
 
@@ -58,7 +53,6 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      * List of fields that can used config values in case when value does not defined directly
      *
      * @var array
-     * @since 2.0.0
      */
     protected $useConfigFields = ['available_sort_by', 'default_sort_by', 'filter_price_range'];
 
@@ -66,7 +60,6 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\ResourceModel\Category $categoryResource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
@@ -80,7 +73,6 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function save(\Magento\Catalog\Api\Data\CategoryInterface $category)
     {
@@ -136,7 +128,6 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function get($categoryId, $storeId = null)
     {
@@ -158,7 +149,6 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function delete(\Magento\Catalog\Api\Data\CategoryInterface $category)
     {
@@ -180,7 +170,6 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function deleteByIdentifier($categoryId)
     {
@@ -194,7 +183,6 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      * @param  Category $category
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function validateCategory(Category $category)
     {

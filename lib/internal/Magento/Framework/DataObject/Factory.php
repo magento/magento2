@@ -8,7 +8,6 @@ namespace Magento\Framework\DataObject;
 /**
  * Class \Magento\Framework\DataObject\Factory
  *
- * @since 2.0.0
  */
 class Factory
 {
@@ -17,7 +16,6 @@ class Factory
      *
      * @param array $data
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function create(array $data = [])
     {

@@ -7,7 +7,6 @@ namespace Magento\Framework\Backup\Db;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface BackupDbInterface
 {
@@ -16,7 +15,6 @@ interface BackupDbInterface
      *
      * @param BackupInterface $backup
      * @return void
-     * @since 2.0.0
      */
     public function createBackup(\Magento\Framework\Backup\Db\BackupInterface $backup);
 
@@ -24,7 +22,6 @@ interface BackupDbInterface
      * Get database backup size
      *
      * @return int
-     * @since 2.0.0
      */
     public function getDBBackupSize();
 }

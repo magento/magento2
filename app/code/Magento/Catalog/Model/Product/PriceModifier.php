@@ -12,19 +12,16 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Class \Magento\Catalog\Model\Product\PriceModifier
  *
- * @since 2.0.0
  */
 class PriceModifier
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
@@ -41,7 +38,6 @@ class PriceModifier
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function removeTierPrice(\Magento\Catalog\Model\Product $product, $customerGroupId, $qty, $websiteId)
     {

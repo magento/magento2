@@ -9,7 +9,6 @@ use Magento\Framework\DB\Adapter\AdapterInterface as Connection;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface TransactionManagerInterface
 {
@@ -18,7 +17,6 @@ interface TransactionManagerInterface
      *
      * @param Connection $connection
      * @return Connection
-     * @since 2.0.0
      */
     public function start(Connection $connection);
 
@@ -26,7 +24,6 @@ interface TransactionManagerInterface
      * Commit transaction
      *
      * @return void
-     * @since 2.0.0
      */
     public function commit();
 
@@ -34,7 +31,6 @@ interface TransactionManagerInterface
      * Rollback transaction
      *
      * @return void
-     * @since 2.0.0
      */
     public function rollBack();
 }

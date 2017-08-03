@@ -13,13 +13,11 @@ use Magento\Framework\Api\SimpleDataObjectConverter;
 
 /**
  * Override parameter values
- * @since 2.0.0
  */
 class ParamsOverrider
 {
     /**
      * @var ParamOverriderInterface[]
-     * @since 2.0.0
      */
     private $paramOverriders;
 
@@ -33,7 +31,6 @@ class ParamsOverrider
      * Initialize dependencies
      *
      * @param ParamOverriderInterface[] $paramOverriders
-     * @since 2.0.0
      */
     public function __construct(
         array $paramOverriders = []
@@ -47,7 +44,6 @@ class ParamsOverrider
      * @param array $inputData Incoming data from request
      * @param array $parameters Contains parameters to replace or default
      * @return array Data in same format as $inputData with appropriate parameters added or changed
-     * @since 2.0.0
      */
     public function override(array $inputData, array $parameters)
     {
@@ -72,7 +68,6 @@ class ParamsOverrider
      * @param array &$nestedArray
      * @param string[] $arrayKeys
      * @return bool true if array value is set
-     * @since 2.0.0
      */
     protected function isNestedArrayValueSet(&$nestedArray, $arrayKeys)
     {
@@ -94,7 +89,6 @@ class ParamsOverrider
      * @param string[] $arrayKeys
      * @param string $valueToSet
      * @return void
-     * @since 2.0.0
      */
     protected function setNestedArrayValue(&$nestedArray, $arrayKeys, $valueToSet)
     {

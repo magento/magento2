@@ -11,67 +11,56 @@ use Magento\Framework\App\RequestInterface;
  * Customer address controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class Address extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator
-     * @since 2.0.0
      */
     protected $_formKeyValidator;
 
     /**
      * @var \Magento\Customer\Api\AddressRepositoryInterface
-     * @since 2.0.0
      */
     protected $_addressRepository;
 
     /**
      * @var \Magento\Customer\Model\Metadata\FormFactory
-     * @since 2.0.0
      */
     protected $_formFactory;
 
     /**
      * @var \Magento\Customer\Api\Data\AddressInterfaceFactory
-     * @since 2.0.0
      */
     protected $addressDataFactory;
 
     /**
      * @var \Magento\Customer\Api\Data\RegionInterfaceFactory
-     * @since 2.0.0
      */
     protected $regionDataFactory;
 
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
-     * @since 2.0.0
      */
     protected $_dataProcessor;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
-     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
     /**
      * @var \Magento\Framework\Controller\Result\ForwardFactory
-     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -88,7 +77,6 @@ abstract class Address extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -120,7 +108,6 @@ abstract class Address extends \Magento\Framework\App\Action\Action
      * Retrieve customer session object
      *
      * @return \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected function _getSession()
     {
@@ -132,7 +119,6 @@ abstract class Address extends \Magento\Framework\App\Action\Action
      *
      * @param RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
-     * @since 2.0.0
      */
     public function dispatch(RequestInterface $request)
     {
@@ -146,7 +132,6 @@ abstract class Address extends \Magento\Framework\App\Action\Action
      * @param string $route
      * @param array $params
      * @return string
-     * @since 2.0.0
      */
     protected function _buildUrl($route = '', $params = [])
     {

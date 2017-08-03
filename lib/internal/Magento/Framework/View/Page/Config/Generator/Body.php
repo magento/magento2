@@ -11,7 +11,6 @@ use Magento\Framework\View\Page\Config\Structure;
 /**
  * Class \Magento\Framework\View\Page\Config\Generator\Body
  *
- * @since 2.0.0
  */
 class Body implements Layout\GeneratorInterface
 {
@@ -24,7 +23,6 @@ class Body implements Layout\GeneratorInterface
      * Constructor
      *
      * @param \Magento\Framework\View\Page\Config $pageConfig
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\View\Page\Config $pageConfig)
     {
@@ -35,7 +33,6 @@ class Body implements Layout\GeneratorInterface
      * {@inheritdoc}
      *
      * @return string
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -48,7 +45,6 @@ class Body implements Layout\GeneratorInterface
      * @param Layout\Reader\Context $readerContext
      * @param Layout\Generator\Context $generatorContext
      * @return $this
-     * @since 2.0.0
      */
     public function process(Layout\Reader\Context $readerContext, Layout\Generator\Context $generatorContext)
     {
@@ -62,7 +58,6 @@ class Body implements Layout\GeneratorInterface
      *
      * @param \Magento\Framework\View\Page\Config\Structure $pageStructure
      * @return $this
-     * @since 2.0.0
      */
     protected function processBodyClasses(Structure $pageStructure)
     {

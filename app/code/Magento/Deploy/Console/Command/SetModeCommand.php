@@ -17,7 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command to set application mode
- * @since 2.0.0
  */
 class SetModeCommand extends Command
 {
@@ -35,7 +34,6 @@ class SetModeCommand extends Command
      * Object manager factory
      *
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
@@ -43,7 +41,6 @@ class SetModeCommand extends Command
      * Inject dependencies
      *
      * @param ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -53,7 +50,6 @@ class SetModeCommand extends Command
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -80,7 +76,6 @@ class SetModeCommand extends Command
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

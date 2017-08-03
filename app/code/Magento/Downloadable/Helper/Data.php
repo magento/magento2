@@ -11,7 +11,6 @@ use Magento\Downloadable\Model\Link\Purchased\Item;
  * Downloadable helper
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -21,7 +20,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Downloadable\Model\Link|Item $link
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsShareable($link)
     {

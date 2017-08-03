@@ -9,7 +9,6 @@ namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 /**
  * Class \Magento\Shipping\Controller\Adminhtml\Order\Shipment\Start
  *
- * @since 2.0.0
  */
 class Start extends \Magento\Backend\App\Action
 {
@@ -24,7 +23,6 @@ class Start extends \Magento\Backend\App\Action
      * Start create shipment action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

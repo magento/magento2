@@ -8,19 +8,16 @@ namespace Magento\Store\Model\Resolver;
 /**
  * Class \Magento\Store\Model\Resolver\Website
  *
- * @since 2.0.0
  */
 class Website implements \Magento\Framework\App\ScopeResolverInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -31,7 +28,6 @@ class Website implements \Magento\Framework\App\ScopeResolverInterface
     /**
      * {@inheritdoc}
      * @throws \Magento\Framework\Exception\State\InitException
-     * @since 2.0.0
      */
     public function getScope($scopeId = null)
     {
@@ -47,7 +43,6 @@ class Website implements \Magento\Framework\App\ScopeResolverInterface
      * Retrieve a list of available websites
      *
      * @return \Magento\Store\Model\Website[]
-     * @since 2.0.0
      */
     public function getScopes()
     {

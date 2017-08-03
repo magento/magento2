@@ -8,26 +8,22 @@ namespace Magento\Catalog\Model\Rss\Product;
 /**
  * Class Special
  * @package Magento\Catalog\Model\Rss\Product
- * @since 2.0.0
  */
 class Special
 {
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $productFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ProductFactory $productFactory,
@@ -41,7 +37,6 @@ class Special
      * @param int $storeId
      * @param int $customerGroupId
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
-     * @since 2.0.0
      */
     public function getProductsCollection($storeId, $customerGroupId)
     {

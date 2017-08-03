@@ -15,31 +15,26 @@ use Magento\Framework\View\Asset\File\FallbackContext;
  * Bundle model
  * @deprecated 2.2.0 since 2.2.0
  * @see \Magento\Deploy\Package\Bundle
- * @since 2.0.0
  */
 class Bundle
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $assets = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $assetsContent = [];
 
     /**
      * @var \Magento\Framework\View\Asset\Bundle\ConfigInterface
-     * @since 2.0.0
      */
     protected $bundleConfig;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $bundleNames = [
         Manager::ASSET_TYPE_JS => 'jsbuild',
@@ -48,13 +43,11 @@ class Bundle
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $content = [];
 
     /**
      * @var Minification
-     * @since 2.0.0
      */
     protected $minification;
 
@@ -62,7 +55,6 @@ class Bundle
      * @param Filesystem $filesystem
      * @param Bundle\ConfigInterface $bundleConfig
      * @param Minification $minification
-     * @since 2.0.0
      */
     public function __construct(
         Filesystem $filesystem,
@@ -77,7 +69,6 @@ class Bundle
     /**
      * @param LocalInterface $asset
      * @return void
-     * @since 2.0.0
      */
     public function addAsset(LocalInterface $asset)
     {
@@ -90,7 +81,6 @@ class Bundle
      *
      * @param LocalInterface $asset
      * @return void
-     * @since 2.0.0
      */
     protected function add(LocalInterface $asset)
     {
@@ -105,7 +95,6 @@ class Bundle
     /**
      * @param LocalInterface $asset
      * @return void
-     * @since 2.0.0
      */
     protected function init(LocalInterface $asset)
     {
@@ -120,7 +109,6 @@ class Bundle
     /**
      * @param LocalInterface $asset
      * @return string
-     * @since 2.0.0
      */
     protected function getContextCode(LocalInterface $asset)
     {
@@ -132,7 +120,6 @@ class Bundle
     /**
      * @param LocalInterface $asset
      * @return int
-     * @since 2.0.0
      */
     protected function getPartIndex(LocalInterface $asset)
     {
@@ -157,7 +144,6 @@ class Bundle
     /**
      * @param LocalInterface $asset
      * @return int
-     * @since 2.0.0
      */
     protected function getMaxPartSize(LocalInterface $asset)
     {
@@ -170,7 +156,6 @@ class Bundle
      * @param LocalInterface $asset
      * @param LocalInterface[] $assets
      * @return float
-     * @since 2.0.0
      */
     protected function getSizePartWithNewAsset(LocalInterface $asset, $assets = [])
     {
@@ -183,7 +168,6 @@ class Bundle
      *
      * @param LocalInterface $asset
      * @return string
-     * @since 2.0.0
      */
     protected function getAssetKey(LocalInterface $asset)
     {
@@ -197,7 +181,6 @@ class Bundle
      *
      * @param LocalInterface[] $assets
      * @return array
-     * @since 2.0.0
      */
     protected function getPartContent($assets)
     {
@@ -222,7 +205,6 @@ class Bundle
      *
      * @param LocalInterface $asset
      * @return string
-     * @since 2.0.0
      */
     protected function getAssetContent(LocalInterface $asset)
     {
@@ -238,7 +220,6 @@ class Bundle
 
     /**
      * @return string
-     * @since 2.0.0
      */
     protected function getInitJs()
     {
@@ -259,7 +240,6 @@ class Bundle
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function flush()
     {
@@ -274,7 +254,6 @@ class Bundle
     /**
      * @param array $types
      * @return void
-     * @since 2.0.0
      */
     protected function save($types)
     {
@@ -301,7 +280,6 @@ class Bundle
      * @param array $parts
      * @param FallbackContext $context
      * @return void
-     * @since 2.0.0
      */
     protected function fillContent($parts, $context)
     {

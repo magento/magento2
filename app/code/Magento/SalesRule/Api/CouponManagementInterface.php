@@ -9,7 +9,6 @@ namespace Magento\SalesRule\Api;
  * Coupon management interface
  *
  * @api
- * @since 2.0.0
  */
 interface CouponManagementInterface
 {
@@ -19,7 +18,6 @@ interface CouponManagementInterface
      * @param \Magento\SalesRule\Api\Data\CouponGenerationSpecInterface $couponSpec
      * @return string[]
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function generate(\Magento\SalesRule\Api\Data\CouponGenerationSpecInterface $couponSpec);
 
@@ -31,7 +29,6 @@ interface CouponManagementInterface
      * @return \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function deleteByIds(array $ids, $ignoreInvalidCoupons = true);
 
@@ -43,7 +40,6 @@ interface CouponManagementInterface
      * @return \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function deleteByCodes(array $codes, $ignoreInvalidCoupons = true);
 }

@@ -7,13 +7,11 @@ namespace Magento\Cms\Model\Config\Source\Wysiwyg;
 
 /**
  * Configuration source model for Wysiwyg toggling
- * @since 2.0.0
  */
 class Enabled implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

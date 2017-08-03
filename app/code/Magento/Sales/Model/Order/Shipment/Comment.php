@@ -12,7 +12,6 @@ use Magento\Sales\Model\AbstractModel;
 /**
  * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment getResource()
- * @since 2.0.0
  */
 class Comment extends AbstractModel implements ShipmentCommentInterface
 {
@@ -20,13 +19,11 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
      * Shipment instance
      *
      * @var \Magento\Sales\Model\Order\Shipment
-     * @since 2.0.0
      */
     protected $_shipment;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -40,7 +37,6 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -68,7 +64,6 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -82,7 +77,6 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
      *
      * @param \Magento\Sales\Model\Order\Shipment $shipment
      * @return $this
-     * @since 2.0.0
      */
     public function setShipment(\Magento\Sales\Model\Order\Shipment $shipment)
     {
@@ -96,7 +90,6 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
      * @codeCoverageIgnore
      *
      * @return \Magento\Sales\Model\Order\Shipment
-     * @since 2.0.0
      */
     public function getShipment()
     {
@@ -107,7 +100,6 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
      * Get store object
      *
      * @return \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     public function getStore()
     {
@@ -123,7 +115,6 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
      * Returns comment
      *
      * @return string
-     * @since 2.0.0
      */
     public function getComment()
     {
@@ -134,7 +125,6 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
      * Returns created_at
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCreatedAt()
     {
@@ -143,7 +133,6 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setCreatedAt($createdAt)
     {
@@ -154,7 +143,6 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
      * Returns is_customer_notified
      *
      * @return int
-     * @since 2.0.0
      */
     public function getIsCustomerNotified()
     {
@@ -165,7 +153,6 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
      * Returns is_visible_on_front
      *
      * @return int
-     * @since 2.0.0
      */
     public function getIsVisibleOnFront()
     {
@@ -176,7 +163,6 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
      * Returns parent_id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getParentId()
     {
@@ -185,7 +171,6 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setParentId($id)
     {
@@ -194,7 +179,6 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setIsCustomerNotified($isCustomerNotified)
     {
@@ -203,7 +187,6 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setIsVisibleOnFront($isVisibleOnFront)
     {
@@ -212,7 +195,6 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setComment($comment)
     {
@@ -223,7 +205,6 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
      * {@inheritdoc}
      *
      * @return \Magento\Sales\Api\Data\ShipmentCommentExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -235,7 +216,6 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
      *
      * @param \Magento\Sales\Api\Data\ShipmentCommentExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\ShipmentCommentExtensionInterface $extensionAttributes

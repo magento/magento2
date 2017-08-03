@@ -15,25 +15,21 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 abstract class AbstractReport extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
-     * @since 2.0.0
      */
     protected $_fileFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
-     * @since 2.0.0
      */
     protected $_dateFilter;
 
     /**
      * @var TimezoneInterface
-     * @since 2.0.0
      */
     protected $timezone;
 
@@ -42,7 +38,6 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param TimezoneInterface $timezone
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -60,7 +55,6 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
      * Admin session model
      *
      * @var null|\Magento\Backend\Model\Auth\Session
-     * @since 2.0.0
      */
     protected $_adminSession = null;
 
@@ -68,7 +62,6 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
      * Retrieve admin session model
      *
      * @return \Magento\Backend\Model\Auth\Session
-     * @since 2.0.0
      */
     protected function _getSession()
     {
@@ -82,7 +75,6 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
      * Add report breadcrumbs
      *
      * @return $this
-     * @since 2.0.0
      */
     public function _initAction()
     {
@@ -96,7 +88,6 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
      *
      * @param array|\Magento\Framework\DataObject $blocks
      * @return $this
-     * @since 2.0.0
      */
     public function _initReportAction($blocks)
     {
@@ -140,7 +131,6 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
      * @param string $flagCode
      * @param string $refreshCode
      * @return $this
-     * @since 2.0.0
      */
     protected function _showLastExecutionTime($flagCode, $refreshCode)
     {

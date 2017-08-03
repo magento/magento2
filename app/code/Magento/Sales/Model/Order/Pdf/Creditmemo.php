@@ -8,13 +8,11 @@ namespace Magento\Sales\Model\Order\Pdf;
 /**
  * Sales Order Creditmemo PDF model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Creditmemo extends AbstractPdf
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -35,7 +33,6 @@ class Creditmemo extends AbstractPdf
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @internal param \Magento\Framework\TranslateInterface $translate
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Payment\Helper\Data $paymentData,
@@ -74,7 +71,6 @@ class Creditmemo extends AbstractPdf
      *
      * @param  \Zend_Pdf_Page $page
      * @return void
-     * @since 2.0.0
      */
     protected function _drawHeader(\Zend_Pdf_Page $page)
     {
@@ -137,7 +133,6 @@ class Creditmemo extends AbstractPdf
      *
      * @param  array $creditmemos
      * @return \Zend_Pdf
-     * @since 2.0.0
      */
     public function getPdf($creditmemos = [])
     {
@@ -198,7 +193,6 @@ class Creditmemo extends AbstractPdf
      *
      * @param  array $settings
      * @return \Zend_Pdf_Page
-     * @since 2.0.0
      */
     public function newPage(array $settings = [])
     {

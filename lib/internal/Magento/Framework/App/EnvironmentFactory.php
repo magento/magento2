@@ -14,26 +14,22 @@ use Magento\Framework\ObjectManager\DefinitionInterface;
 /**
  * Class \Magento\Framework\App\EnvironmentFactory
  *
- * @since 2.0.0
  */
 class EnvironmentFactory
 {
     /**
      * @var RelationsInterface
-     * @since 2.0.0
      */
     private $relations;
 
     /**
      * @var DefinitionInterface
-     * @since 2.0.0
      */
     private $definitions;
 
     /**
      * @param RelationsInterface $relations
      * @param DefinitionInterface $definitions
-     * @since 2.0.0
      */
     public function __construct(
         RelationsInterface $relations,
@@ -47,7 +43,6 @@ class EnvironmentFactory
      * Create Environment object
      *
      * @return EnvironmentInterface
-     * @since 2.0.0
      */
     public function createEnvironment()
     {
@@ -64,7 +59,6 @@ class EnvironmentFactory
      * Determinate running mode
      *
      * @return string
-     * @since 2.0.0
      */
     private function getMode()
     {
@@ -79,7 +73,6 @@ class EnvironmentFactory
      * Returns definitions
      *
      * @return DefinitionInterface
-     * @since 2.0.0
      */
     public function getDefinitions()
     {
@@ -90,7 +83,6 @@ class EnvironmentFactory
      * Returns relations
      *
      * @return RelationsInterface
-     * @since 2.0.0
      */
     public function getRelations()
     {

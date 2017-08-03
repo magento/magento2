@@ -12,13 +12,11 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 /**
  * Class \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price
  *
- * @since 2.0.0
  */
 class Price extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {

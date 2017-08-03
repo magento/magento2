@@ -13,19 +13,16 @@ use Magento\Framework\Translate\Inline\ConfigInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Emulation extends \Magento\Framework\DataObject
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\TranslateInterface
-     * @since 2.0.0
      */
     protected $_translate;
 
@@ -33,31 +30,26 @@ class Emulation extends \Magento\Framework\DataObject
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $_localeResolver;
 
     /**
      * @var \Magento\Framework\App\DesignInterface
-     * @since 2.0.0
      */
     protected $_design;
 
     /**
      * @var ConfigInterface
-     * @since 2.0.0
      */
     protected $inlineConfig;
 
     /**
      * @var \Magento\Framework\Translate\Inline\StateInterface
-     * @since 2.0.0
      */
     protected $inlineTranslation;
 
@@ -65,13 +57,11 @@ class Emulation extends \Magento\Framework\DataObject
      * Ini
      *
      * @var \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     private $initialEnvironmentInfo;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     private $logger;
 
@@ -87,7 +77,6 @@ class Emulation extends \Magento\Framework\DataObject
      * @param \Psr\Log\LoggerInterface $logger
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -122,7 +111,6 @@ class Emulation extends \Magento\Framework\DataObject
      * @param string $area
      * @param bool $force A true value will ensure that environment is always emulated, regardless of current store
      * @return void
-     * @since 2.0.0
      */
     public function startEnvironmentEmulation(
         $storeId,
@@ -176,7 +164,6 @@ class Emulation extends \Magento\Framework\DataObject
      * Function restores initial store environment
      *
      * @return \Magento\Store\Model\App\Emulation
-     * @since 2.0.0
      */
     public function stopEnvironmentEmulation()
     {
@@ -199,7 +186,6 @@ class Emulation extends \Magento\Framework\DataObject
      * Stores current environment info
      *
      * @return void
-     * @since 2.0.0
      */
     public function storeCurrentEnvironmentInfo()
     {
@@ -222,7 +208,6 @@ class Emulation extends \Magento\Framework\DataObject
      *
      * @param bool $initialTranslate
      * @return $this
-     * @since 2.0.0
      */
     protected function _restoreInitialInlineTranslation($initialTranslate)
     {
@@ -235,7 +220,6 @@ class Emulation extends \Magento\Framework\DataObject
      *
      * @param array $initialDesign
      * @return $this
-     * @since 2.0.0
      */
     protected function _restoreInitialDesign(array $initialDesign)
     {
@@ -249,7 +233,6 @@ class Emulation extends \Magento\Framework\DataObject
      * @param string $initialLocaleCode
      * @param string $initialArea
      * @return $this
-     * @since 2.0.0
      */
     protected function _restoreInitialLocale(
         $initialLocaleCode,

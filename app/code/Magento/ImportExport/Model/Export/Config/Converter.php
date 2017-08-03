@@ -11,19 +11,16 @@ use Magento\Framework\App\Utility\Classes;
 /**
  * Class \Magento\ImportExport\Model\Export\Config\Converter
  *
- * @since 2.0.0
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * @var \Magento\Framework\Module\Manager
-     * @since 2.0.0
      */
     protected $moduleManager;
 
     /**
      * @param Manager $moduleManager
-     * @since 2.0.0
      */
     public function __construct(Manager $moduleManager)
     {
@@ -36,7 +33,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param \DOMDocument $source
      * @return array
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function convert($source)
     {

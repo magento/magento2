@@ -11,13 +11,11 @@ use Magento\Customer\Api\Data\CustomerInterface;
 
 /**
  * Customer helper for view.
- * @since 2.0.0
  */
 class View extends \Magento\Framework\App\Helper\AbstractHelper implements CustomerNameGenerationInterface
 {
     /**
      * @var CustomerMetadataInterface
-     * @since 2.0.0
      */
     protected $_customerMetadataService;
 
@@ -26,7 +24,6 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper implements Custo
      *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param CustomerMetadataInterface $customerMetadataService
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -38,7 +35,6 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper implements Custo
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCustomerName(CustomerInterface $customerData)
     {

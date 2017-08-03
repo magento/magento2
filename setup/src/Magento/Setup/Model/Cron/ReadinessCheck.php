@@ -11,7 +11,6 @@ use Magento\Setup\Model\BasePackageInfo;
 /**
  * This class is used by setup:cron:run command to check if this command can be run properly. It also checks if PHP
  * version, settings and extensions are correct.
- * @since 2.0.0
  */
 class ReadinessCheck
 {
@@ -36,27 +35,21 @@ class ReadinessCheck
     const KEY_LAST_TIMESTAMP = 'last_timestamp';
     /**#@-*/
 
-    /**
-     * @var \Magento\Setup\Validator\DbValidator
-     * @since 2.0.0
-     */
+    /**#@-*/
     private $dbValidator;
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig
-     * @since 2.0.0
      */
     private $deploymentConfig;
 
     /**
      * @var \Magento\Framework\Filesystem
-     * @since 2.0.0
      */
     private $filesystem;
 
     /**
      * @var \Magento\Setup\Model\PhpReadinessCheck
-     * @since 2.0.0
      */
     private $phpReadinessCheck;
 
@@ -81,7 +74,6 @@ class ReadinessCheck
      * @param \Magento\Setup\Model\PhpReadinessCheck $phpReadinessCheck
      * @param BasePackageInfo $basePackageInfo
      * @param Status $status
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Setup\Validator\DbValidator $dbValidator,
@@ -103,7 +95,6 @@ class ReadinessCheck
      * Run the readiness check
      *
      * @return bool
-     * @since 2.0.0
      */
     public function runReadinessCheck()
     {

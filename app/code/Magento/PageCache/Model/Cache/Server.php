@@ -15,25 +15,21 @@ use Zend\Uri\UriFactory;
 /**
  * Class \Magento\PageCache\Model\Cache\Server
  *
- * @since 2.0.0
  */
 class Server
 {
     /**
      * @var UrlInterface
-     * @since 2.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var DeploymentConfig
-     * @since 2.0.0
      */
     private $config;
 
     /**
      * @var RequestInterface
-     * @since 2.0.0
      */
     private $request;
 
@@ -45,7 +41,6 @@ class Server
      * @param UrlInterface $urlBuilder
      * @param DeploymentConfig $config
      * @param RequestInterface $request
-     * @since 2.0.0
      */
     public function __construct(
         UrlInterface $urlBuilder,
@@ -61,7 +56,6 @@ class Server
      * Get cache servers' Uris
      *
      * @return Uri[]
-     * @since 2.0.0
      */
     public function getUris()
     {

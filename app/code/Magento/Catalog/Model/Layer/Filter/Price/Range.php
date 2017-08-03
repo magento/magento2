@@ -12,7 +12,6 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Range
 {
@@ -20,19 +19,16 @@ class Range
 
     /**
      * @var Registry
-     * @since 2.0.0
      */
     private $registry;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     private $scopeConfig;
 
     /**
      * @var Resolver
-     * @since 2.0.0
      */
     private $layerResolver;
 
@@ -41,7 +37,6 @@ class Range
      * @param ScopeConfigInterface $scopeConfig
      * @param Resolver $layerResolver
      * @internal param \Magento\Framework\Registry $registry
-     * @since 2.0.0
      */
     public function __construct(Registry $registry, ScopeConfigInterface $scopeConfig, Resolver $layerResolver)
     {
@@ -52,7 +47,6 @@ class Range
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getPriceRange()
     {
@@ -64,7 +58,6 @@ class Range
 
     /**
      * @return float
-     * @since 2.0.0
      */
     public function getConfigRangeStep()
     {

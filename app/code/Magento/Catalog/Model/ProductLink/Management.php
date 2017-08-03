@@ -14,26 +14,22 @@ use Magento\Framework\Exception\InputException;
 /**
  * Class \Magento\Catalog\Model\ProductLink\Management
  *
- * @since 2.0.0
  */
 class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var \Magento\Catalog\Model\Product\LinkTypeProvider
-     * @since 2.0.0
      */
     protected $linkTypeProvider;
 
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -45,7 +41,6 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getLinkedItemsByType($sku, $type)
     {
@@ -71,7 +66,6 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setProductLinks($sku, array $items)
     {

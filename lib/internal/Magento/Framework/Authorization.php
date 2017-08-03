@@ -10,7 +10,6 @@ namespace Magento\Framework;
 /**
  * Class \Magento\Framework\Authorization
  *
- * @since 2.0.0
  */
 class Authorization implements \Magento\Framework\AuthorizationInterface
 {
@@ -18,7 +17,6 @@ class Authorization implements \Magento\Framework\AuthorizationInterface
      * ACL policy
      *
      * @var \Magento\Framework\Authorization\PolicyInterface
-     * @since 2.0.0
      */
     protected $_aclPolicy;
 
@@ -26,14 +24,12 @@ class Authorization implements \Magento\Framework\AuthorizationInterface
      * ACL role locator
      *
      * @var \Magento\Framework\Authorization\RoleLocatorInterface
-     * @since 2.0.0
      */
     protected $_aclRoleLocator;
 
     /**
      * @param \Magento\Framework\Authorization\PolicyInterface $aclPolicy
      * @param \Magento\Framework\Authorization\RoleLocatorInterface $roleLocator
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Authorization\PolicyInterface $aclPolicy,
@@ -49,7 +45,6 @@ class Authorization implements \Magento\Framework\AuthorizationInterface
      * @param   string $resource
      * @param   string $privilege
      * @return  boolean
-     * @since 2.0.0
      */
     public function isAllowed($resource, $privilege = null)
     {

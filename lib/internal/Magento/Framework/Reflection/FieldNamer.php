@@ -15,7 +15,6 @@ use Zend\Code\Reflection\MethodReflection;
 
 /**
  * Determines the name to use for fields in a data output array given method metadata.
- * @since 2.0.0
  */
 class FieldNamer
 {
@@ -28,7 +27,6 @@ class FieldNamer
      *
      * @param string $methodName
      * @return string|null
-     * @since 2.0.0
      */
     public function getFieldNameForMethodName($methodName)
     {

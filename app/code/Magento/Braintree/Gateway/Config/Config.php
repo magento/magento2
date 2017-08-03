@@ -63,7 +63,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Get list of available dynamic descriptors keys
      * @var array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private static $dynamicDescriptorKeys = [
         'name', 'phone', 'url'
@@ -229,7 +229,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Get list of configured dynamic descriptors
      * @return array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function getDynamicDescriptors()
     {
@@ -247,7 +247,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get Merchant account ID
      *
      * @return string
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function getMerchantAccountId()
     {

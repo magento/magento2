@@ -13,7 +13,6 @@ use Magento\Store\Model\ResourceModel\StoreWebsiteRelation;
  * Service contract, which manage scopes
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class StoreManager implements
     \Magento\Store\Model\StoreManagerInterface,
@@ -36,19 +35,16 @@ class StoreManager implements
 
     /**
      * @var \Magento\Store\Api\StoreRepositoryInterface
-     * @since 2.0.0
      */
     protected $storeRepository;
 
     /**
      * @var \Magento\Store\Api\GroupRepositoryInterface
-     * @since 2.0.0
      */
     protected $groupRepository;
 
     /**
      * @var \Magento\Store\Api\WebsiteRepositoryInterface
-     * @since 2.0.0
      */
     protected $websiteRepository;
 
@@ -56,19 +52,16 @@ class StoreManager implements
      * Scope config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var StoreResolverInterface
-     * @since 2.0.0
      */
     protected $storeResolver;
 
     /**
      * @var \Magento\Framework\Cache\FrontendInterface
-     * @since 2.0.0
      */
     protected $cache;
 
@@ -76,7 +69,6 @@ class StoreManager implements
      * Default store code
      *
      * @var string
-     * @since 2.0.0
      */
     protected $currentStoreId = null;
 
@@ -84,7 +76,6 @@ class StoreManager implements
      * Flag that shows that system has only one store view
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_hasSingleStore;
 
@@ -92,7 +83,6 @@ class StoreManager implements
      * Flag is single store mode allowed
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $isSingleStoreAllowed;
 
@@ -104,7 +94,6 @@ class StoreManager implements
      * @param StoreResolverInterface $storeResolver
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param bool $isSingleStoreAllowed
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
@@ -126,7 +115,6 @@ class StoreManager implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setCurrentStore($store)
     {
@@ -135,7 +123,6 @@ class StoreManager implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setIsSingleStoreModeAllowed($value)
     {
@@ -144,7 +131,6 @@ class StoreManager implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function hasSingleStore()
     {
@@ -154,7 +140,6 @@ class StoreManager implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function isSingleStoreMode()
     {
@@ -163,7 +148,6 @@ class StoreManager implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getStore($storeId = null)
     {
@@ -188,7 +172,6 @@ class StoreManager implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getStores($withDefault = false, $codeKey = false)
     {
@@ -208,7 +191,6 @@ class StoreManager implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getWebsite($websiteId = null)
     {
@@ -229,7 +211,6 @@ class StoreManager implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getWebsites($withDefault = false, $codeKey = false)
     {
@@ -249,7 +230,6 @@ class StoreManager implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function reinitStores()
     {
@@ -263,7 +243,6 @@ class StoreManager implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getDefaultStoreView()
     {
@@ -274,7 +253,6 @@ class StoreManager implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getGroup($groupId = null)
     {
@@ -290,7 +268,6 @@ class StoreManager implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getGroups($withDefault = false)
     {
@@ -311,7 +288,6 @@ class StoreManager implements
      * if Magento has only one store view but it does not check the store view collection
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function isSingleStoreModeEnabled()
     {

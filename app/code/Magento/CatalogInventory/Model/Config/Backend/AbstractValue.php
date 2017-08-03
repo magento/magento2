@@ -12,19 +12,16 @@ namespace Magento\CatalogInventory\Model\Config\Backend;
 /**
  * Class \Magento\CatalogInventory\Model\Config\Backend\AbstractValue
  *
- * @since 2.0.0
  */
 abstract class AbstractValue extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\CatalogInventory\Api\StockIndexInterface
-     * @since 2.0.0
      */
     protected $stockIndex;
 
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
-     * @since 2.0.0
      */
     protected $_stockIndexerProcessor;
 
@@ -38,7 +35,6 @@ abstract class AbstractValue extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

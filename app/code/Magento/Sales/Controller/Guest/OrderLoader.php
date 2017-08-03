@@ -12,19 +12,16 @@ use Magento\Sales\Controller\AbstractController\OrderLoaderInterface;
 /**
  * Class \Magento\Sales\Controller\Guest\OrderLoader
  *
- * @since 2.0.0
  */
 class OrderLoader implements OrderLoaderInterface
 {
     /**
      * @var \Magento\Sales\Helper\Guest
-     * @since 2.0.0
      */
     protected $guestHelper;
 
     /**
      * @param \Magento\Sales\Helper\Guest $guestHelper
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Helper\Guest $guestHelper
@@ -34,7 +31,6 @@ class OrderLoader implements OrderLoaderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function load(RequestInterface $request)
     {

@@ -9,31 +9,26 @@ use Magento\Quote\Api\CartTotalManagementInterface;
 
 /**
  * @inheritDoc
- * @since 2.0.0
  */
 class CartTotalManagement implements CartTotalManagementInterface
 {
     /**
      * @var \Magento\Quote\Api\ShippingMethodManagementInterface
-     * @since 2.0.0
      */
     protected $shippingMethodManagement;
 
     /**
      * @var \Magento\Quote\Api\PaymentMethodManagementInterface
-     * @since 2.0.0
      */
     protected $paymentMethodManagement;
 
     /**
      * @var \Magento\Quote\Api\CartTotalRepositoryInterface
-     * @since 2.0.0
      */
     protected $cartTotalsRepository;
 
     /**
      * @var \Magento\Quote\Model\Cart\TotalsAdditionalDataProcessor
-     * @since 2.0.0
      */
     protected $dataProcessor;
 
@@ -42,7 +37,6 @@ class CartTotalManagement implements CartTotalManagementInterface
      * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository
      * @param \Magento\Quote\Model\Cart\TotalsAdditionalDataProcessor $dataProcessor
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagement,
@@ -58,7 +52,6 @@ class CartTotalManagement implements CartTotalManagementInterface
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function collectTotals(
         $cartId,

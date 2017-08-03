@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Design\Theme;
 
 /**
  * Theme file interface
- * @since 2.0.0
  */
 interface FileInterface
 {
@@ -16,7 +15,6 @@ interface FileInterface
      *
      * @param Customization\FileInterface $service
      * @return $this
-     * @since 2.0.0
      */
     public function setCustomizationService(Customization\FileInterface $service);
 
@@ -24,7 +22,6 @@ interface FileInterface
      * Get customization service model
      *
      * @return \Magento\Framework\View\Design\Theme\Customization\FileInterface
-     * @since 2.0.0
      */
     public function getCustomizationService();
 
@@ -33,7 +30,6 @@ interface FileInterface
      *
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @return $this
-     * @since 2.0.0
      */
     public function setTheme(\Magento\Framework\View\Design\ThemeInterface $theme);
 
@@ -41,7 +37,6 @@ interface FileInterface
      * Get theme model
      *
      * @return \Magento\Framework\View\Design\ThemeInterface
-     * @since 2.0.0
      */
     public function getTheme();
 
@@ -50,7 +45,6 @@ interface FileInterface
      *
      * @param string $fileName
      * @return $this
-     * @since 2.0.0
      */
     public function setFileName($fileName);
 
@@ -58,7 +52,6 @@ interface FileInterface
      * Get filename of custom file
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getFileName();
 
@@ -66,7 +59,6 @@ interface FileInterface
      * Return absolute path to file of customization
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFullPath();
 
@@ -74,7 +66,6 @@ interface FileInterface
      * Get short file information which can be serialized
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFileInfo();
 
@@ -82,7 +73,6 @@ interface FileInterface
      * Get content of current file
      *
      * @return string
-     * @since 2.0.0
      */
     public function getContent();
 
@@ -90,7 +80,6 @@ interface FileInterface
      * Save custom file
      *
      * @return $this
-     * @since 2.0.0
      */
     public function save();
 
@@ -98,7 +87,6 @@ interface FileInterface
      * Delete custom file
      *
      * @return $this
-     * @since 2.0.0
      */
     public function delete();
 }

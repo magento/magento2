@@ -11,7 +11,6 @@ use Magento\Framework\DataObject;
  * Interface CompilerInterface
  *
  * @api
- * @since 2.0.0
  */
 interface CompilerInterface
 {
@@ -24,7 +23,6 @@ interface CompilerInterface
      * @param Object $dataObject
      * @param Object $context
      * @return void
-     * @since 2.0.0
      */
     public function compile(\DOMNode $node, DataObject $dataObject, DataObject $context);
 
@@ -33,7 +31,6 @@ interface CompilerInterface
      *
      * @param string $content
      * @return string
-     * @since 2.0.0
      */
     public function postprocessing($content);
 
@@ -43,7 +40,6 @@ interface CompilerInterface
      * @param string $key
      * @param string $content
      * @return void
-     * @since 2.0.0
      */
     public function setPostprocessingData($key, $content);
 }

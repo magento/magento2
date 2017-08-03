@@ -10,14 +10,12 @@ namespace Magento\Framework\Module\Declaration\Converter;
 /**
  * Class \Magento\Framework\Module\Declaration\Converter\Dom
  *
- * @since 2.0.0
  */
 class Dom implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * {@inheritdoc}
      * @throws \Exception
-     * @since 2.0.0
      */
     public function convert($source)
     {
@@ -59,7 +57,6 @@ class Dom implements \Magento\Framework\Config\ConverterInterface
      * @param \DOMNode $node
      * @return array
      * @throws \Exception
-     * @since 2.0.0
      */
     protected function _readModules(\DOMNode $node)
     {

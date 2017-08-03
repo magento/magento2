@@ -8,7 +8,6 @@ namespace Magento\CatalogUrlRewrite\Model;
 /**
  * Class \Magento\CatalogUrlRewrite\Model\ObjectRegistry
  *
- * @since 2.0.0
  */
 class ObjectRegistry
 {
@@ -16,13 +15,11 @@ class ObjectRegistry
      * Key is id of entity, value is entity
      *
      * @var \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     protected $entitiesMap;
 
     /**
      * @param \Magento\Framework\DataObject[] $entities
-     * @since 2.0.0
      */
     public function __construct($entities)
     {
@@ -35,7 +32,6 @@ class ObjectRegistry
     /**
      * @param int $entityId
      * @return \Magento\Framework\DataObject|null
-     * @since 2.0.0
      */
     public function get($entityId)
     {
@@ -44,7 +40,6 @@ class ObjectRegistry
 
     /**
      * @return \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     public function getList()
     {

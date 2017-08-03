@@ -9,7 +9,6 @@ namespace Magento\User\Controller\Adminhtml\User\Role;
 /**
  * Class \Magento\User\Controller\Adminhtml\User\Role\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\User\Controller\Adminhtml\User\Role
 {
@@ -17,7 +16,6 @@ class Index extends \Magento\User\Controller\Adminhtml\User\Role
      * Show grid with roles existing in systems
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

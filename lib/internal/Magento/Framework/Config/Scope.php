@@ -8,7 +8,6 @@ namespace Magento\Framework\Config;
 /**
  * Class \Magento\Framework\Config\Scope
  *
- * @since 2.0.0
  */
 class Scope implements \Magento\Framework\Config\ScopeInterface, \Magento\Framework\Config\ScopeListInterface
 {
@@ -16,7 +15,6 @@ class Scope implements \Magento\Framework\Config\ScopeInterface, \Magento\Framew
      * Default application scope
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_defaultScope;
 
@@ -24,7 +22,6 @@ class Scope implements \Magento\Framework\Config\ScopeInterface, \Magento\Framew
      * Current config scope
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_currentScope;
 
@@ -32,7 +29,6 @@ class Scope implements \Magento\Framework\Config\ScopeInterface, \Magento\Framew
      * List of all available areas
      *
      * @var \Magento\Framework\App\AreaList
-     * @since 2.0.0
      */
     protected $_areaList;
 
@@ -41,7 +37,6 @@ class Scope implements \Magento\Framework\Config\ScopeInterface, \Magento\Framew
      *
      * @param \Magento\Framework\App\AreaList $areaList
      * @param string $defaultScope
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\AreaList $areaList, $defaultScope = 'primary')
     {
@@ -53,7 +48,6 @@ class Scope implements \Magento\Framework\Config\ScopeInterface, \Magento\Framew
      * Get current configuration scope identifier
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCurrentScope()
     {
@@ -65,7 +59,6 @@ class Scope implements \Magento\Framework\Config\ScopeInterface, \Magento\Framew
      *
      * @param string $scope
      * @return void
-     * @since 2.0.0
      */
     public function setCurrentScope($scope)
     {
@@ -76,7 +69,6 @@ class Scope implements \Magento\Framework\Config\ScopeInterface, \Magento\Framew
      * Retrieve list of available config scopes
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getAllScopes()
     {

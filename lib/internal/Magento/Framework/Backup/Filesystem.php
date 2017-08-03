@@ -12,7 +12,6 @@ use Magento\Framework\App\ObjectManager;
  * Class to work with filesystem backups
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Filesystem extends AbstractBackup
 {
@@ -20,7 +19,6 @@ class Filesystem extends AbstractBackup
      * Paths that ignored when creating or rolling back snapshot
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_ignorePaths = [];
 
@@ -28,7 +26,6 @@ class Filesystem extends AbstractBackup
      * Whether use ftp account for rollback procedure
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_useFtp = false;
 
@@ -36,7 +33,6 @@ class Filesystem extends AbstractBackup
      * Ftp host
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_ftpHost;
 
@@ -44,7 +40,6 @@ class Filesystem extends AbstractBackup
      * Ftp username
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_ftpUser;
 
@@ -52,7 +47,6 @@ class Filesystem extends AbstractBackup
      * Password to ftp account
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_ftpPass;
 
@@ -60,7 +54,6 @@ class Filesystem extends AbstractBackup
      * Ftp path to Magento installation
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_ftpPath;
 
@@ -81,7 +74,6 @@ class Filesystem extends AbstractBackup
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
-     * @since 2.0.0
      */
     public function rollback()
     {
@@ -102,7 +94,6 @@ class Filesystem extends AbstractBackup
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return boolean
-     * @since 2.0.0
      */
     public function create()
     {
@@ -164,7 +155,6 @@ class Filesystem extends AbstractBackup
      * @param int $size
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function validateAvailableDiscSpace($backupDir, $size)
     {
@@ -188,7 +178,6 @@ class Filesystem extends AbstractBackup
      * @param string $password
      * @param string $path
      * @return $this
-     * @since 2.0.0
      */
     public function setUseFtp($host, $username, $password, $path)
     {
@@ -206,7 +195,6 @@ class Filesystem extends AbstractBackup
      * @return string
      *
      * @see BackupInterface::getType()
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -218,7 +206,6 @@ class Filesystem extends AbstractBackup
      *
      * @param string|array $paths
      * @return $this
-     * @since 2.0.0
      */
     public function addIgnorePaths($paths)
     {
@@ -239,7 +226,6 @@ class Filesystem extends AbstractBackup
      * Get paths that should be ignored while creating or rolling back backup procedure
      *
      * @return array
-     * @since 2.0.0
      */
     public function getIgnorePaths()
     {
@@ -253,7 +239,6 @@ class Filesystem extends AbstractBackup
      * @return $this
      *
      * @see AbstractBackup::setBackupsDir()
-     * @since 2.0.0
      */
     public function setBackupsDir($backupsDir)
     {
@@ -266,7 +251,6 @@ class Filesystem extends AbstractBackup
      * Getter for $_ftpPath variable
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFtpPath()
     {
@@ -277,7 +261,6 @@ class Filesystem extends AbstractBackup
      * Get ftp connection string
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFtpConnectString()
     {
@@ -289,7 +272,6 @@ class Filesystem extends AbstractBackup
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _checkBackupsDir()
     {
@@ -319,7 +301,6 @@ class Filesystem extends AbstractBackup
      * Generate tmp name for tarball
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getTarTmpPath()
     {

@@ -10,19 +10,16 @@ namespace Magento\Framework\Event;
 /**
  * Class \Magento\Framework\Event\ObserverFactory
  *
- * @since 2.0.0
  */
 class ObserverFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -34,7 +31,6 @@ class ObserverFactory
      *
      * @param string $className
      * @return mixed
-     * @since 2.0.0
      */
     public function get($className)
     {
@@ -47,7 +43,6 @@ class ObserverFactory
      * @param string $className
      * @param array $arguments
      * @return mixed
-     * @since 2.0.0
      */
     public function create($className, array $arguments = [])
     {

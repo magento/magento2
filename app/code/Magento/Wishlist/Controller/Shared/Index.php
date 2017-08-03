@@ -12,7 +12,6 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Wishlist\Controller\Shared\Index
  *
- * @since 2.0.0
  */
 class Index extends Action
 {
@@ -20,19 +19,16 @@ class Index extends Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $registry = null;
 
     /**
      * @var WishlistProvider
-     * @since 2.0.0
      */
     protected $wishlistProvider;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $customerSession;
 
@@ -41,7 +37,6 @@ class Index extends Action
      * @param WishlistProvider $wishlistProvider
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Customer\Model\Session $customerSession
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -59,7 +54,6 @@ class Index extends Action
      * Shared wishlist view page
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

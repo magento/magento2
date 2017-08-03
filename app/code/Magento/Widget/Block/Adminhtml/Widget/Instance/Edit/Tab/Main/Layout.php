@@ -16,25 +16,21 @@ use Magento\Backend\Block\Template;
  * Widget Instance page groups (predefined layouts group) to display on
  *
  * @method \Magento\Widget\Model\Widget\Instance getWidgetInstance()
- * @since 2.0.0
  */
 class Layout extends Template implements RendererInterface
 {
     /**
      * @var AbstractElement|null
-     * @since 2.0.0
      */
     protected $_element = null;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'instance/edit/layout.phtml';
 
     /**
      * @var \Magento\Catalog\Model\Product\Type
-     * @since 2.0.0
      */
     protected $_productType;
 
@@ -49,7 +45,6 @@ class Layout extends Template implements RendererInterface
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param array $data
      * @param Json|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -67,7 +62,6 @@ class Layout extends Template implements RendererInterface
      *
      * @param AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     public function render(AbstractElement $element)
     {
@@ -80,7 +74,6 @@ class Layout extends Template implements RendererInterface
      *
      * @param AbstractElement $element
      * @return $this
-     * @since 2.0.0
      */
     public function setElement(AbstractElement $element)
     {
@@ -92,7 +85,6 @@ class Layout extends Template implements RendererInterface
      * Getter
      *
      * @return AbstractElement
-     * @since 2.0.0
      */
     public function getElement()
     {
@@ -103,7 +95,6 @@ class Layout extends Template implements RendererInterface
      * Generate url to get categories chooser by ajax query
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCategoriesChooserUrl()
     {
@@ -114,7 +105,6 @@ class Layout extends Template implements RendererInterface
      * Generate url to get products chooser by ajax query
      *
      * @return string
-     * @since 2.0.0
      */
     public function getProductsChooserUrl()
     {
@@ -125,7 +115,6 @@ class Layout extends Template implements RendererInterface
      * Generate url to get reference block chooser by ajax query
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBlockChooserUrl()
     {
@@ -136,7 +125,6 @@ class Layout extends Template implements RendererInterface
      * Generate url to get template chooser by ajax query
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTemplateChooserUrl()
     {
@@ -147,7 +135,6 @@ class Layout extends Template implements RendererInterface
      * Create and return html of select box Display On
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDisplayOnSelectHtml()
     {
@@ -174,7 +161,6 @@ class Layout extends Template implements RendererInterface
      * - Generic (predefined) pages (all pages and single layout update)
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getDisplayOnOptions()
     {
@@ -214,7 +200,6 @@ class Layout extends Template implements RendererInterface
      *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function getDisplayOnContainers()
     {
@@ -264,7 +249,6 @@ class Layout extends Template implements RendererInterface
      * Retrieve layout select chooser html
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLayoutsChooser()
     {
@@ -291,7 +275,6 @@ class Layout extends Template implements RendererInterface
      * Retrieve layout select chooser html
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPageLayoutsPageChooser()
     {
@@ -318,7 +301,6 @@ class Layout extends Template implements RendererInterface
      * Retrieve add layout button html
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAddLayoutButtonHtml()
     {
@@ -338,7 +320,6 @@ class Layout extends Template implements RendererInterface
      * Retrieve remove layout button html
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRemoveLayoutButtonHtml()
     {
@@ -358,7 +339,6 @@ class Layout extends Template implements RendererInterface
      * Prepare and retrieve page groups data of widget instance
      *
      * @return array
-     * @since 2.0.0
      */
     public function getPageGroups()
     {

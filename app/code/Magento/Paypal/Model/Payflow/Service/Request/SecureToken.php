@@ -15,25 +15,21 @@ use Magento\Sales\Model\Order\Payment;
 
 /**
  * Class SecureToken
- * @since 2.0.0
  */
 class SecureToken
 {
     /**
      * @var UrlInterface
-     * @since 2.0.0
      */
     private $url;
 
     /**
      * @var Random
-     * @since 2.0.0
      */
     private $mathRandom;
 
     /**
      * @var Transparent
-     * @since 2.0.0
      */
     private $transparent;
 
@@ -41,7 +37,6 @@ class SecureToken
      * @param UrlInterface $url
      * @param Random $mathRandom
      * @param Transparent $transparent
-     * @since 2.0.0
      */
     public function __construct(
         UrlInterface $url,
@@ -61,7 +56,6 @@ class SecureToken
      *
      * @return DataObject
      * @throws \Exception
-     * @since 2.0.0
      */
     public function requestToken(Quote $quote)
     {

@@ -7,25 +7,25 @@ namespace Magento\Store\Model\Config;
 
 /**
  * Placeholder configuration values processor. Replace placeholders in configuration with config values
- * @since 2.2.0
+ * @since 2.1.3
  */
 class Placeholder
 {
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     protected $request;
 
     /**
      * @var string[]
-     * @since 2.2.0
+     * @since 2.1.3
      */
     protected $urlPaths;
 
     /**
      * @var string
-     * @since 2.2.0
+     * @since 2.1.3
      */
     protected $urlPlaceholder;
 
@@ -33,7 +33,7 @@ class Placeholder
      * @param \Magento\Framework\App\RequestInterface $request
      * @param string[] $urlPaths
      * @param string $urlPlaceholder
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(\Magento\Framework\App\RequestInterface $request, $urlPaths, $urlPlaceholder)
     {
@@ -47,7 +47,7 @@ class Placeholder
      *
      * @param array $data
      * @return array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function process(array $data = [])
     {
@@ -63,7 +63,7 @@ class Placeholder
      * @param array &$data
      * @param string $path
      * @return void
-     * @since 2.2.0
+     * @since 2.1.3
      */
     protected function _processData(&$data, $path)
     {
@@ -83,7 +83,7 @@ class Placeholder
      * @param string $value
      * @param array $data
      * @return string
-     * @since 2.2.0
+     * @since 2.1.3
      */
     protected function _processPlaceholders($value, $data)
     {
@@ -115,7 +115,7 @@ class Placeholder
      *
      * @param string $value
      * @return string|null
-     * @since 2.2.0
+     * @since 2.1.3
      */
     protected function _getPlaceholder($value)
     {
@@ -138,7 +138,7 @@ class Placeholder
      * @param string $path
      * @param array $data
      * @return array|null
-     * @since 2.2.0
+     * @since 2.1.3
      */
     protected function _getValue($path, array $data)
     {
@@ -160,7 +160,7 @@ class Placeholder
      * @param string $path
      * @param string $value
      * @return void
-     * @since 2.2.0
+     * @since 2.1.3
      */
     protected function _setValue(array &$container, $path, $value)
     {

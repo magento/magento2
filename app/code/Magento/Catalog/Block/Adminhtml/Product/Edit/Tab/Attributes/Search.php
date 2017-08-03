@@ -14,7 +14,6 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes;
 /**
  * Class \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes\Search
  *
- * @since 2.0.0
  */
 class Search extends \Magento\Backend\Block\Widget
 {
@@ -22,19 +21,16 @@ class Search extends \Magento\Backend\Block\Widget
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
-     * @since 2.0.0
      */
     protected $_collectionFactory;
 
     /**
      * @var \Magento\Framework\DB\Helper
-     * @since 2.0.0
      */
     protected $_resourceHelper;
 
@@ -44,7 +40,6 @@ class Search extends \Magento\Backend\Block\Widget
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -63,7 +58,6 @@ class Search extends \Magento\Backend\Block\Widget
      * Define block template
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -73,7 +67,6 @@ class Search extends \Magento\Backend\Block\Widget
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getSelectorOptions()
     {
@@ -93,7 +86,6 @@ class Search extends \Magento\Backend\Block\Widget
      * @param string $labelPart
      * @param int $templateId
      * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
-     * @since 2.0.0
      */
     public function getSuggestedAttributes($labelPart, $templateId = null)
     {
@@ -123,7 +115,6 @@ class Search extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getAddAttributeUrl()
     {

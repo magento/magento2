@@ -22,31 +22,26 @@ use Magento\Store\Model\Store;
  * @package Magento\Catalog\Block\Adminhtml\Category
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'catalog/category/tree.phtml';
 
     /**
      * @var \Magento\Backend\Model\Auth\Session
-     * @since 2.0.0
      */
     protected $_backendSession;
 
     /**
      * @var \Magento\Framework\DB\Helper
-     * @since 2.0.0
      */
     protected $_resourceHelper;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
@@ -59,7 +54,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * @param \Magento\Framework\DB\Helper $resourceHelper
      * @param \Magento\Backend\Model\Auth\Session $backendSession
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -79,7 +73,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -89,7 +82,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -127,7 +119,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      *
      * @param string $namePart
      * @return string
-     * @since 2.0.0
      */
     public function getSuggestedCategoriesJson($namePart)
     {
@@ -191,7 +182,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getAddRootButtonHtml()
     {
@@ -200,7 +190,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getAddSubButtonHtml()
     {
@@ -209,7 +198,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getExpandButtonHtml()
     {
@@ -218,7 +206,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getCollapseButtonHtml()
     {
@@ -227,7 +214,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getStoreSwitcherHtml()
     {
@@ -237,7 +223,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     /**
      * @param bool|null $expanded
      * @return string
-     * @since 2.0.0
      */
     public function getLoadTreeUrl($expanded = null)
     {
@@ -250,7 +235,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getNodesUrl()
     {
@@ -259,7 +243,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getSwitchTreeUrl()
     {
@@ -272,7 +255,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsWasExpanded()
     {
@@ -281,7 +263,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getMoveUrl()
     {
@@ -291,7 +272,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     /**
      * @param mixed|null $parenNodeCategory
      * @return array
-     * @since 2.0.0
      */
     public function getTree($parenNodeCategory = null)
     {
@@ -303,7 +283,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     /**
      * @param mixed|null $parenNodeCategory
      * @return string
-     * @since 2.0.0
      */
     public function getTreeJson($parenNodeCategory = null)
     {
@@ -318,7 +297,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * @param string $path
      * @param string $javascriptVarName
      * @return string
-     * @since 2.0.0
      */
     public function getBreadcrumbsJavascript($path, $javascriptVarName)
     {
@@ -349,7 +327,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _getNodeJson($node, $level = 0)
     {
@@ -401,7 +378,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      *
      * @param \Magento\Framework\DataObject $node
      * @return string
-     * @since 2.0.0
      */
     public function buildNodeName($node)
     {
@@ -415,7 +391,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     /**
      * @param Node|array $node
      * @return bool
-     * @since 2.0.0
      */
     protected function _isCategoryMoveable($node)
     {
@@ -429,7 +404,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     /**
      * @param Node|array $node
      * @return bool
-     * @since 2.0.0
      */
     protected function _isParentSelectedCategory($node)
     {
@@ -447,7 +421,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * Check if page loaded by outside link to category edit
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isClearEdit()
     {
@@ -458,7 +431,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * Check availability of adding root category
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function canAddRootCategory()
     {
@@ -475,7 +447,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * Check availability of adding sub category
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function canAddSubCategory()
     {

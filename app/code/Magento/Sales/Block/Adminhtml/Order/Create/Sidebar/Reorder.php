@@ -12,7 +12,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Reorder extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
 {
@@ -20,7 +19,6 @@ class Reorder extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
      * Storage action on selected item
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_sidebarStorageAction = 'add_order_item';
 
@@ -28,7 +26,6 @@ class Reorder extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
      * Orders factory
      *
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
-     * @since 2.0.0
      */
     protected $_ordersFactory;
 
@@ -40,7 +37,6 @@ class Reorder extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $ordersFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -59,7 +55,6 @@ class Reorder extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
      * Constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -72,7 +67,6 @@ class Reorder extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
      * Get header text
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -83,7 +77,6 @@ class Reorder extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
      * Retrieve last order on current website
      *
      * @return \Magento\Sales\Model\Order|false
-     * @since 2.0.0
      */
     public function getLastOrder()
     {
@@ -111,7 +104,6 @@ class Reorder extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
      * Retrieve item collection
      *
      * @return array|false
-     * @since 2.0.0
      */
     public function getItemCollection()
     {
@@ -131,7 +123,6 @@ class Reorder extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
      * Retrieve display item qty availability
      *
      * @return false
-     * @since 2.0.0
      */
     public function canDisplayItemQty()
     {
@@ -142,7 +133,6 @@ class Reorder extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
      * Retrieve remove items availability
      *
      * @return false
-     * @since 2.0.0
      */
     public function canRemoveItems()
     {
@@ -153,7 +143,6 @@ class Reorder extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
      * Retrieve display price availability
      *
      * @return false
-     * @since 2.0.0
      */
     public function canDisplayPrice()
     {
@@ -165,7 +154,6 @@ class Reorder extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
      *
      * @param \Magento\Framework\DataObject $item
      * @return int
-     * @since 2.0.0
      */
     public function getIdentifierId($item)
     {

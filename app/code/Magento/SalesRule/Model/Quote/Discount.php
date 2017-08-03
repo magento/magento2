@@ -8,7 +8,6 @@ namespace Magento\SalesRule\Model\Quote;
 /**
  * Class \Magento\SalesRule\Model\Quote\Discount
  *
- * @since 2.0.0
  */
 class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
@@ -16,7 +15,6 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * Discount calculation object
      *
      * @var \Magento\SalesRule\Model\Validator
-     * @since 2.0.0
      */
     protected $calculator;
 
@@ -24,19 +22,16 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $eventManager = null;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
@@ -45,7 +40,6 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\SalesRule\Model\Validator $validator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -68,7 +62,6 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function collect(
         \Magento\Quote\Model\Quote $quote,
@@ -159,7 +152,6 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
-     * @since 2.0.0
      */
     protected function aggregateItemDiscount(
         \Magento\Quote\Model\Quote\Item\AbstractItem $item,
@@ -175,7 +167,6 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return $this
-     * @since 2.0.0
      */
     protected function distributeDiscount(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
     {
@@ -217,7 +208,6 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return array|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {

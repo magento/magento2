@@ -8,7 +8,6 @@ namespace Magento\SalesRule\Model\Rule\Condition\Product;
 /**
  * Class \Magento\SalesRule\Model\Rule\Condition\Product\Subselect
  *
- * @since 2.0.0
  */
 class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
 {
@@ -16,7 +15,6 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
      * @param \Magento\Rule\Model\Condition\Context $context
      * @param \Magento\SalesRule\Model\Rule\Condition\Product $ruleConditionProduct
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,
@@ -33,7 +31,6 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
      * @param array $arr
      * @param string $key
      * @return $this
-     * @since 2.0.0
      */
     public function loadArray($arr, $key = 'conditions')
     {
@@ -49,7 +46,6 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
      * @param string $containerKey
      * @param string $itemKey
      * @return string
-     * @since 2.0.0
      */
     public function asXml($containerKey = 'conditions', $itemKey = 'condition')
     {
@@ -70,7 +66,6 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
      * Load attribute options
      *
      * @return $this
-     * @since 2.0.0
      */
     public function loadAttributeOptions()
     {
@@ -82,7 +77,6 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
      * Load value options
      *
      * @return $this
-     * @since 2.0.0
      */
     public function loadValueOptions()
     {
@@ -93,7 +87,6 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
      * Load operator options
      *
      * @return $this
-     * @since 2.0.0
      */
     public function loadOperatorOptions()
     {
@@ -116,7 +109,6 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
      * Get value element type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getValueElementType()
     {
@@ -127,7 +119,6 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
      * Return as html
      *
      * @return string
-     * @since 2.0.0
      */
     public function asHtml()
     {
@@ -149,7 +140,6 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
      *
      * @param \Magento\Framework\Model\AbstractModel $model
      * @return bool
-     * @since 2.0.0
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {

@@ -9,7 +9,6 @@ namespace Magento\GroupedProduct\Block\Adminhtml\Items\Column\Name;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Grouped extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
 {
@@ -21,7 +20,6 @@ class Grouped extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
      * This method uses renderer for real product type
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

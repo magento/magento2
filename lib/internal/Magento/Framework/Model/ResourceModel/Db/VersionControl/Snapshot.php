@@ -7,7 +7,6 @@ namespace Magento\Framework\Model\ResourceModel\Db\VersionControl;
 
 /**
  * Class Snapshot register snapshot of entity data, for tracking changes
- * @since 2.0.0
  */
 class Snapshot
 {
@@ -15,13 +14,11 @@ class Snapshot
      * Array of snapshots of entities data
      *
      * @var array
-     * @since 2.0.0
      */
     protected $snapshotData = [];
 
     /**
      * @var Metadata
-     * @since 2.0.0
      */
     protected $metadata;
 
@@ -29,7 +26,6 @@ class Snapshot
      * Initialization
      *
      * @param Metadata $metadata
-     * @since 2.0.0
      */
     public function __construct(
         Metadata $metadata
@@ -43,7 +39,6 @@ class Snapshot
      * @param \Magento\Framework\DataObject $entity
      * @return void
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function registerSnapshot(\Magento\Framework\DataObject $entity)
     {
@@ -58,7 +53,6 @@ class Snapshot
      *
      * @param \Magento\Framework\DataObject $entity
      * @return bool
-     * @since 2.0.0
      */
     public function isModified(\Magento\Framework\DataObject $entity)
     {

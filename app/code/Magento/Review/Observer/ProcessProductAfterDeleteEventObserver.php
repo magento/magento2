@@ -10,7 +10,6 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\Review\Observer\ProcessProductAfterDeleteEventObserver
  *
- * @since 2.0.0
  */
 class ProcessProductAfterDeleteEventObserver implements ObserverInterface
 {
@@ -18,20 +17,17 @@ class ProcessProductAfterDeleteEventObserver implements ObserverInterface
      * Review resource model
      *
      * @var \Magento\Review\Model\ResourceModel\Review
-     * @since 2.0.0
      */
     protected $_resourceReview;
 
     /**
      * @var \Magento\Review\Model\ResourceModel\Rating
-     * @since 2.0.0
      */
     protected $_resourceRating;
 
     /**
      * @param \Magento\Review\Model\ResourceModel\Review $resourceReview
      * @param \Magento\Review\Model\ResourceModel\Rating $resourceRating
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Review\Model\ResourceModel\Review $resourceReview,
@@ -46,7 +42,6 @@ class ProcessProductAfterDeleteEventObserver implements ObserverInterface
      *
      * @param   \Magento\Framework\Event\Observer $observer
      * @return  $this
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

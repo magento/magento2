@@ -9,13 +9,11 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 /**
  * Class \Magento\Catalog\Controller\Adminhtml\Product\UpsellGrid
  *
- * @since 2.0.0
  */
 class UpsellGrid extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var \Magento\Framework\View\Result\LayoutFactory
-     * @since 2.0.0
      */
     protected $resultLayoutFactory;
 
@@ -23,7 +21,6 @@ class UpsellGrid extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -38,7 +35,6 @@ class UpsellGrid extends \Magento\Catalog\Controller\Adminhtml\Product
      * Get upsell products grid
      *
      * @return \Magento\Framework\View\Result\Layout
-     * @since 2.0.0
      */
     public function execute()
     {

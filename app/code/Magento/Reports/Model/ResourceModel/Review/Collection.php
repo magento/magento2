@@ -13,7 +13,6 @@ namespace Magento\Reports\Model\ResourceModel\Review;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
 {
@@ -21,7 +20,6 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -33,7 +31,6 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
      *
      * @param string $productId
      * @return $this
-     * @since 2.0.0
      */
     public function addProductFilter($productId)
     {
@@ -46,7 +43,6 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
      * Reset select
      *
      * @return $this
-     * @since 2.0.0
      */
     public function resetSelect()
     {
@@ -59,7 +55,6 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
      * Get select count sql
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSelectCountSql()
     {
@@ -79,7 +74,6 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
      * @param string $attribute
      * @param string $dir
      * @return $this
-     * @since 2.0.0
      */
     public function setOrder($attribute, $dir = self::SORT_ORDER_DESC)
     {

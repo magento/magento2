@@ -10,31 +10,26 @@ use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  * Dictionary generator options resolver
- * @since 2.0.0
  */
 class Resolver implements ResolverInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $directory;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $options;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $withContext;
 
     /**
      * @var ComponentRegistrar
-     * @since 2.0.0
      */
     protected $componentRegistrar;
 
@@ -44,7 +39,6 @@ class Resolver implements ResolverInterface
      * @param ComponentRegistrar $componentRegistrar
      * @param string $directory
      * @param bool $withContext
-     * @since 2.0.0
      */
     public function __construct(
         ComponentRegistrar $componentRegistrar,
@@ -58,7 +52,6 @@ class Resolver implements ResolverInterface
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -117,7 +110,6 @@ class Resolver implements ResolverInterface
      * @param array $directories
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     protected function isValidPaths($directories)
     {
@@ -137,7 +129,6 @@ class Resolver implements ResolverInterface
      *
      * @param string $componentType
      * @return array
-     * @since 2.0.0
      */
     private function getComponentDirectories($componentType)
     {

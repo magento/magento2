@@ -12,13 +12,11 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  * Rule for catalog widget
  *
  * @api
- * @since 2.0.0
  */
 class Rule extends \Magento\Rule\Model\AbstractModel
 {
     /**
      * @var Rule\Condition\CombineFactory
-     * @since 2.0.0
      */
     protected $conditionsFactory;
 
@@ -38,7 +36,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      *
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -70,7 +67,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getConditionsInstance()
     {
@@ -79,7 +75,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getActionsInstance()
     {

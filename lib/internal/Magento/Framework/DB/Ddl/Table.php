@@ -11,7 +11,6 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
  * Data Definition for table
  *
  * @api
- * @since 2.0.0
  */
 class Table
 {
@@ -83,7 +82,6 @@ class Table
      * Name of table
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_tableName;
 
@@ -91,7 +89,6 @@ class Table
      * Schema name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_schemaName;
 
@@ -99,7 +96,6 @@ class Table
      * Comment for Table
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_tableComment;
 
@@ -125,7 +121,6 @@ class Table
      * COMMENT          => string; column description
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_columns = [];
 
@@ -149,7 +144,6 @@ class Table
      * POSITION         => int; Position in index
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_indexes = [];
 
@@ -171,7 +165,6 @@ class Table
      * CASCADE | SET NULL | NONE | RESTRICT | SET DEFAULT
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_foreignKeys = [];
 
@@ -179,7 +172,6 @@ class Table
      * Additional table options
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_options = ['type' => 'INNODB', 'charset' => 'utf8', 'collate' => 'utf8_general_ci'];
 
@@ -188,7 +180,6 @@ class Table
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -204,7 +195,6 @@ class Table
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setSchema($name)
     {
@@ -217,7 +207,6 @@ class Table
      *
      * @param string $comment
      * @return $this
-     * @since 2.0.0
      */
     public function setComment($comment)
     {
@@ -230,7 +219,6 @@ class Table
      *
      * @return string
      * @throws \Zend_Db_Exception
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -244,7 +232,6 @@ class Table
      * Get schema name
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getSchema()
     {
@@ -255,7 +242,6 @@ class Table
      * Return comment for table
      *
      * @return string
-     * @since 2.0.0
      */
     public function getComment()
     {
@@ -285,7 +271,6 @@ class Table
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function addColumn($name, $type, $size = null, $options = [], $comment = null)
     {
@@ -421,7 +406,6 @@ class Table
      * @return $this
      * @throws \Zend_Db_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function addForeignKey($fkName, $column, $refTable, $refColumn, $onDelete = null)
     {
@@ -462,7 +446,6 @@ class Table
      * @return $this
      * @throws \Zend_Db_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function addIndex($indexName, $fields, $options = [])
     {
@@ -530,7 +513,6 @@ class Table
      * @param bool $normalized
      * @see $this->_columns
      * @return array
-     * @since 2.0.0
      */
     public function getColumns($normalized = true)
     {
@@ -546,7 +528,6 @@ class Table
      * @param array $column
      * @see $this->_columns
      * @return $this
-     * @since 2.0.0
      */
     public function setColumn($column)
     {
@@ -560,7 +541,6 @@ class Table
      *
      * @see $this->_indexes
      * @return array
-     * @since 2.0.0
      */
     public function getIndexes()
     {
@@ -572,7 +552,6 @@ class Table
      *
      * @see $this->_foreignKeys
      * @return array
-     * @since 2.0.0
      */
     public function getForeignKeys()
     {
@@ -585,7 +564,6 @@ class Table
      * @param string $key
      * @param string $value
      * @return $this
-     * @since 2.0.0
      */
     public function setOption($key, $value)
     {
@@ -599,7 +577,6 @@ class Table
      *
      * @param string $key
      * @return null|string
-     * @since 2.0.0
      */
     public function getOption($key)
     {
@@ -613,7 +590,6 @@ class Table
      * Retrieve array of table options
      *
      * @return array
-     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -626,7 +602,6 @@ class Table
      * @param array $a
      * @param array $b
      * @return int
-     * @since 2.0.0
      */
     protected function _sortIndexColumnPosition($a, $b)
     {
@@ -639,7 +614,6 @@ class Table
      * @param array $a
      * @param array $b
      * @return int
-     * @since 2.0.0
      */
     protected function _sortColumnPosition($a, $b)
     {
@@ -651,7 +625,6 @@ class Table
      *
      * @param array $columns
      * @return array
-     * @since 2.0.0
      */
     protected function _normalizeIndexColumnPosition($columns)
     {
@@ -669,7 +642,6 @@ class Table
      *
      * @param array $columns
      * @return array
-     * @since 2.0.0
      */
     protected function _normalizeColumnPosition($columns)
     {

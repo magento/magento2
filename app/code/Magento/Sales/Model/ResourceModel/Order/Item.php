@@ -10,7 +10,6 @@ use Magento\Sales\Model\Spi\OrderItemResourceInterface;
 
 /**
  * Flat sales order item resource
- * @since 2.0.0
  */
 class Item extends SalesResource implements OrderItemResourceInterface
 {
@@ -18,7 +17,6 @@ class Item extends SalesResource implements OrderItemResourceInterface
      * Event prefix
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_item_resource';
 
@@ -26,7 +24,6 @@ class Item extends SalesResource implements OrderItemResourceInterface
      * Fields that should be serialized before persistence
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_serializableFields = ['product_options' => [[], []]];
 
@@ -34,7 +31,6 @@ class Item extends SalesResource implements OrderItemResourceInterface
      * Model initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -46,7 +42,6 @@ class Item extends SalesResource implements OrderItemResourceInterface
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {

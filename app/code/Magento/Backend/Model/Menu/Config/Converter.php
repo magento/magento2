@@ -8,7 +8,6 @@ namespace Magento\Backend\Model\Menu\Config;
 /**
  * Class Converter converts xml to appropriate array
  * @api
- * @since 2.0.0
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
@@ -17,7 +16,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param mixed $dom
      * @return array
-     * @since 2.0.0
      */
     public function convert($dom)
     {

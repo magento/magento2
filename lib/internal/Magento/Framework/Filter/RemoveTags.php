@@ -7,7 +7,6 @@ namespace Magento\Framework\Filter;
 
 /**
  * Remove tags from string
- * @since 2.0.0
  */
 class RemoveTags implements \Zend_Filter_Interface
 {
@@ -16,7 +15,6 @@ class RemoveTags implements \Zend_Filter_Interface
      *
      * @param string[] $matches
      * @return string
-     * @since 2.0.0
      */
     protected function _convertEntities($matches)
     {
@@ -28,7 +26,6 @@ class RemoveTags implements \Zend_Filter_Interface
      *
      * @param string $value
      * @return string
-     * @since 2.0.0
      */
     public function filter($value)
     {

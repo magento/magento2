@@ -10,19 +10,16 @@ namespace Magento\GoogleAdwords\Model\Config\Backend;
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
  * @api
- * @since 2.0.0
  */
 abstract class AbstractConversion extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Framework\Validator\DataObject
-     * @since 2.0.0
      */
     protected $_validatorComposite;
 
     /**
      * @var \Magento\GoogleAdwords\Model\Validator\Factory
-     * @since 2.0.0
      */
     protected $_validatorFactory;
 
@@ -36,7 +33,6 @@ abstract class AbstractConversion extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

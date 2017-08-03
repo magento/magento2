@@ -9,19 +9,16 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
  * Class SkuProcessor
  *
  * @api
- * @since 2.0.0
  */
 class SkuProcessor
 {
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $productFactory;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $oldSkus;
 
@@ -36,13 +33,11 @@ class SkuProcessor
      * )
      *
      * @var array
-     * @since 2.0.0
      */
     protected $newSkus;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $productTypeModels;
 
@@ -72,7 +67,6 @@ class SkuProcessor
 
     /**
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ProductFactory $productFactory
@@ -83,7 +77,6 @@ class SkuProcessor
     /**
      * @param array $typeModels
      * @return $this
-     * @since 2.0.0
      */
     public function setTypeModels($typeModels)
     {
@@ -95,7 +88,6 @@ class SkuProcessor
      * Get old skus array.
      *
      * @return array
-     * @since 2.0.0
      */
     public function getOldSkus()
     {
@@ -109,7 +101,6 @@ class SkuProcessor
      * Reload old skus.
      *
      * @return $this
-     * @since 2.0.0
      */
     public function reloadOldSkus()
     {
@@ -122,7 +113,6 @@ class SkuProcessor
      * @param string $sku
      * @param array $data
      * @return $this
-     * @since 2.0.0
      */
     public function addNewSku($sku, $data)
     {
@@ -136,7 +126,6 @@ class SkuProcessor
      * @param string $key
      * @param mixed $data
      * @return $this
-     * @since 2.0.0
      */
     public function setNewSkuData($sku, $key, $data)
     {
@@ -150,7 +139,6 @@ class SkuProcessor
     /**
      * @param null|string $sku
      * @return array|null
-     * @since 2.0.0
      */
     public function getNewSku($sku = null)
     {
@@ -165,7 +153,6 @@ class SkuProcessor
      * Get skus data.
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getSkus()
     {

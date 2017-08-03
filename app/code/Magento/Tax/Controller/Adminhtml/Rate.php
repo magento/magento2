@@ -12,7 +12,6 @@ use Magento\Framework\Controller\ResultFactory;
  * Adminhtml tax rate controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 abstract class Rate extends \Magento\Backend\App\Action
 {
@@ -25,19 +24,16 @@ abstract class Rate extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\Tax\Model\Calculation\Rate\Converter
-     * @since 2.0.0
      */
     protected $_taxRateConverter;
 
     /**
      * @var \Magento\Tax\Api\TaxRateRepositoryInterface
-     * @since 2.0.0
      */
     protected $_taxRateRepository;
 
@@ -46,7 +42,6 @@ abstract class Rate extends \Magento\Backend\App\Action
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Tax\Model\Calculation\Rate\Converter $taxRateConverter
      * @param \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateRepository
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -65,7 +60,6 @@ abstract class Rate extends \Magento\Backend\App\Action
      *
      * @param array $rateData
      * @return array
-     * @since 2.0.0
      */
     protected function _processRateData($rateData)
     {
@@ -84,7 +78,6 @@ abstract class Rate extends \Magento\Backend\App\Action
      * Initialize action
      *
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.0.0
      */
     protected function initResultPage()
     {

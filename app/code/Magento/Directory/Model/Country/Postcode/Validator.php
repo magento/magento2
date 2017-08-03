@@ -8,19 +8,16 @@ namespace Magento\Directory\Model\Country\Postcode;
 /**
  * Class \Magento\Directory\Model\Country\Postcode\Validator
  *
- * @since 2.0.0
  */
 class Validator implements ValidatorInterface
 {
     /**
      * @var ConfigInterface
-     * @since 2.0.0
      */
     protected $postCodesConfig;
 
     /**
      * @param ConfigInterface $postCodesConfig
-     * @since 2.0.0
      */
     public function __construct(\Magento\Directory\Model\Country\Postcode\ConfigInterface $postCodesConfig)
     {
@@ -29,7 +26,6 @@ class Validator implements ValidatorInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function validate($postcode, $countryId)
     {

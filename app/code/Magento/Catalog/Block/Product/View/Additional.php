@@ -13,25 +13,21 @@ namespace Magento\Catalog\Block\Product\View;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Additional extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_list;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'product/view/additional.phtml';
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getChildHtmlList()
     {

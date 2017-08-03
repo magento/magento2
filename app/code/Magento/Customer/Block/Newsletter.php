@@ -13,20 +13,17 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Newsletter extends \Magento\Customer\Block\Account\Dashboard
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'form/newsletter.phtml';
 
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsSubscribed()
     {
@@ -37,7 +34,6 @@ class Newsletter extends \Magento\Customer\Block\Account\Dashboard
      * Return the save action Url.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAction()
     {

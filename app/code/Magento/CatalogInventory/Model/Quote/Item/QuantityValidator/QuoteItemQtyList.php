@@ -8,7 +8,6 @@ namespace Magento\CatalogInventory\Model\Quote\Item\QuantityValidator;
 /**
  * Class \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList
  *
- * @since 2.0.0
  */
 class QuoteItemQtyList
 {
@@ -17,7 +16,6 @@ class QuoteItemQtyList
      * data is valid if you check quote item qty and use singleton instance
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_checkedQuoteItems = [];
 
@@ -31,7 +29,6 @@ class QuoteItemQtyList
      * @param float $itemQty
      *
      * @return int
-     * @since 2.0.0
      */
     public function getQty($productId, $quoteItemId, $quoteId, $itemQty)
     {

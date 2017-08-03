@@ -13,7 +13,6 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Customer url model
- * @since 2.0.0
  */
 class Url
 {
@@ -34,31 +33,26 @@ class Url
 
     /**
      * @var UrlInterface
-     * @since 2.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var RequestInterface
-     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var Session
-     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var EncoderInterface
-     * @since 2.0.0
      */
     protected $urlEncoder;
 
@@ -82,7 +76,6 @@ class Url
      * @param EncoderInterface $urlEncoder
      * @param \Magento\Framework\Url\DecoderInterface|null $urlDecoder
      * @param \Magento\Framework\Url\HostChecker|null $hostChecker
-     * @since 2.0.0
      */
     public function __construct(
         Session $customerSession,
@@ -108,7 +101,6 @@ class Url
      * Retrieve customer login url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLoginUrl()
     {
@@ -119,7 +111,6 @@ class Url
      * Retrieve parameters of customer login url
      *
      * @return array
-     * @since 2.0.0
      */
     public function getLoginUrlParams()
     {
@@ -147,7 +138,6 @@ class Url
      * Retrieve customer login POST URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLoginPostUrl()
     {
@@ -165,7 +155,6 @@ class Url
      * Retrieve customer logout url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLogoutUrl()
     {
@@ -176,7 +165,6 @@ class Url
      * Retrieve customer dashboard url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDashboardUrl()
     {
@@ -187,7 +175,6 @@ class Url
      * Retrieve customer account page url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAccountUrl()
     {
@@ -198,7 +185,6 @@ class Url
      * Retrieve customer register form url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRegisterUrl()
     {
@@ -209,7 +195,6 @@ class Url
      * Retrieve customer register form post url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRegisterPostUrl()
     {
@@ -220,7 +205,6 @@ class Url
      * Retrieve customer account edit form url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getEditUrl()
     {
@@ -231,7 +215,6 @@ class Url
      * Retrieve customer edit POST URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getEditPostUrl()
     {
@@ -242,7 +225,6 @@ class Url
      * Retrieve url of forgot password page
      *
      * @return string
-     * @since 2.0.0
      */
     public function getForgotPasswordUrl()
     {
@@ -254,7 +236,6 @@ class Url
      *
      * @param string $email
      * @return string
-     * @since 2.0.0
      */
     public function getEmailConfirmationUrl($email = null)
     {

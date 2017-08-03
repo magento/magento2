@@ -7,7 +7,6 @@ namespace Magento\Catalog\Model\Indexer\Category\Product\Action;
 
 /**
  * Factory class for \Magento\Catalog\Model\Indexer\Category\Product\Action\Rows
- * @since 2.0.0
  */
 class RowsFactory
 {
@@ -15,7 +14,6 @@ class RowsFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -23,7 +21,6 @@ class RowsFactory
      * Instance name to create
      *
      * @var string
-     * @since 2.0.0
      */
     protected $instanceName;
 
@@ -32,7 +29,6 @@ class RowsFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -48,7 +44,6 @@ class RowsFactory
      * @param array $data
      * @throws \InvalidArgumentException
      * @return \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
-     * @since 2.0.0
      */
     public function create(array $data = [])
     {

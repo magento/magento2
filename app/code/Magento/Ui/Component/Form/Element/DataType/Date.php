@@ -12,7 +12,6 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
  * Class Date
- * @since 2.0.0
  */
 class Date extends AbstractDataType
 {
@@ -22,7 +21,6 @@ class Date extends AbstractDataType
      * Current locale
      *
      * @var string
-     * @since 2.0.0
      */
     protected $locale;
 
@@ -30,7 +28,6 @@ class Date extends AbstractDataType
      * Wrapped component
      *
      * @var UiComponentInterface
-     * @since 2.0.0
      */
     protected $wrappedComponent;
 
@@ -48,7 +45,6 @@ class Date extends AbstractDataType
      * @param ResolverInterface $localeResolver
      * @param array $components
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -66,7 +62,6 @@ class Date extends AbstractDataType
      * Prepare component configuration
      *
      * @return void
-     * @since 2.0.0
      */
     public function prepare()
     {
@@ -88,7 +83,6 @@ class Date extends AbstractDataType
      * Get locale
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLocale()
     {
@@ -99,7 +93,6 @@ class Date extends AbstractDataType
      * Get component name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getComponentName()
     {
@@ -115,7 +108,6 @@ class Date extends AbstractDataType
      * @param int $second
      * @param bool $setUtcTimeZone
      * @return \DateTime|null
-     * @since 2.0.0
      */
     public function convertDate($date, $hour = 0, $minute = 0, $second = 0, $setUtcTimeZone = true)
     {

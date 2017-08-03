@@ -12,7 +12,6 @@ use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 /**
  * Class \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver
  *
- * @since 2.0.0
  */
 class FlatScopeResolver implements IndexScopeResolverInterface
 {
@@ -20,13 +19,11 @@ class FlatScopeResolver implements IndexScopeResolverInterface
 
     /**
      * @var IndexScopeResolver
-     * @since 2.0.0
      */
     private $indexScopeResolver;
 
     /**
      * @param IndexScopeResolver $indexScopeResolver
-     * @since 2.0.0
      */
     public function __construct(IndexScopeResolver $indexScopeResolver)
     {
@@ -38,7 +35,6 @@ class FlatScopeResolver implements IndexScopeResolverInterface
      * @param Dimension[] $dimensions
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function resolve($index, array $dimensions)
     {

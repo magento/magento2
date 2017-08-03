@@ -10,19 +10,16 @@ namespace Magento\Captcha\Model;
 /**
  * Class \Magento\Captcha\Model\CaptchaFactory
  *
- * @since 2.0.0
  */
 class CaptchaFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -36,7 +33,6 @@ class CaptchaFactory
      * @param string $formId
      * @return \Magento\Captcha\Model\CaptchaInterface
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function create($captchaType, $formId)
     {

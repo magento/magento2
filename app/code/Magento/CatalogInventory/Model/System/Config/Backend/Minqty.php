@@ -8,7 +8,6 @@ namespace Magento\CatalogInventory\Model\System\Config\Backend;
 
 /**
  * Minimum product qty backend model
- * @since 2.0.0
  */
 class Minqty extends \Magento\Framework\App\Config\Value
 {
@@ -16,7 +15,6 @@ class Minqty extends \Magento\Framework\App\Config\Value
      * Validate minimum product qty value
      *
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {

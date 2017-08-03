@@ -9,7 +9,6 @@ use Magento\Downloadable\Api\Data\File\ContentInterface;
 
 /**
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class Content extends \Magento\Framework\Model\AbstractExtensibleModel implements ContentInterface
 {
@@ -19,7 +18,6 @@ class Content extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getFileData()
     {
@@ -29,7 +27,6 @@ class Content extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -42,7 +39,6 @@ class Content extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * @param string $fileData
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setFileData($fileData)
     {
@@ -55,7 +51,6 @@ class Content extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * @param string $name
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -66,7 +61,6 @@ class Content extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * {@inheritdoc}
      *
      * @return \Magento\Downloadable\Api\Data\File\ContentExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -78,7 +72,6 @@ class Content extends \Magento\Framework\Model\AbstractExtensibleModel implement
      *
      * @param \Magento\Downloadable\Api\Data\File\ContentExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Downloadable\Api\Data\File\ContentExtensionInterface $extensionAttributes

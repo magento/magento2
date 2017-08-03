@@ -13,20 +13,17 @@ use Magento\Framework\Encryption\Helper\Security;
 /**
  * Class \Magento\Backend\Controller\Adminhtml\Dashboard\Tunnel
  *
- * @since 2.0.0
  */
 class Tunnel extends \Magento\Backend\Controller\Adminhtml\Dashboard
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
-     * @since 2.0.0
      */
     protected $resultRawFactory;
 
     /**
      * @param Action\Context $context
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -42,7 +39,6 @@ class Tunnel extends \Magento\Backend\Controller\Adminhtml\Dashboard
      * This is done in order to include the image to a HTTPS-page regardless of web-service settings
      *
      * @return  \Magento\Framework\Controller\Result\Raw
-     * @since 2.0.0
      */
     public function execute()
     {

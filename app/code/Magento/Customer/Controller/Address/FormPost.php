@@ -25,25 +25,22 @@ use Magento\Framework\View\Result\PageFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class FormPost extends \Magento\Customer\Controller\Address
 {
     /**
      * @var RegionFactory
-     * @since 2.0.0
      */
     protected $regionFactory;
 
     /**
      * @var HelperData
-     * @since 2.0.0
      */
     protected $helperData;
 
     /**
      * @var Mapper
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $customerAddressMapper;
 
@@ -62,7 +59,6 @@ class FormPost extends \Magento\Customer\Controller\Address
      * @param RegionFactory $regionFactory
      * @param HelperData $helperData
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -100,7 +96,6 @@ class FormPost extends \Magento\Customer\Controller\Address
      * Extract address from request
      *
      * @return \Magento\Customer\Api\Data\AddressInterface
-     * @since 2.0.0
      */
     protected function _extractAddress()
     {
@@ -135,7 +130,6 @@ class FormPost extends \Magento\Customer\Controller\Address
      *
      * @return array
      * @throws \Exception
-     * @since 2.0.0
      */
     protected function getExistingAddressData()
     {
@@ -156,7 +150,6 @@ class FormPost extends \Magento\Customer\Controller\Address
      * @param array $attributeValues
      * @return void
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function updateRegionData(&$attributeValues)
     {
@@ -187,7 +180,6 @@ class FormPost extends \Magento\Customer\Controller\Address
      * Process address form save
      *
      * @return \Magento\Framework\Controller\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -233,8 +225,8 @@ class FormPost extends \Magento\Customer\Controller\Address
      *
      * @return Mapper
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 2.1.3
+     * @since 2.1.3
      */
     private function getCustomerAddressMapper()
     {

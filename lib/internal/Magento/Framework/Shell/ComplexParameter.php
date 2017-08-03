@@ -10,7 +10,6 @@ namespace Magento\Framework\Shell;
  * A parser for complex parameters in command-line arguments
  *
  * Transforms parameter formatted as a URL query string into an array
- * @since 2.0.0
  */
 class ComplexParameter
 {
@@ -23,7 +22,6 @@ class ComplexParameter
      * Argument name
      *
      * @var string
-     * @since 2.0.0
      */
     private $name;
 
@@ -31,7 +29,6 @@ class ComplexParameter
      * Regex pattern for searching the parameter among arguments
      *
      * @var string
-     * @since 2.0.0
      */
     private $pcre;
 
@@ -40,7 +37,6 @@ class ComplexParameter
      *
      * @param string $name
      * @param string $pattern
-     * @since 2.0.0
      */
     public function __construct($name, $pattern = self::DEFAULT_PATTERN)
     {
@@ -53,7 +49,6 @@ class ComplexParameter
      *
      * @param string[] $input
      * @return array
-     * @since 2.0.0
      */
     public function getFromArray($input)
     {
@@ -71,7 +66,6 @@ class ComplexParameter
      *
      * @param string $string
      * @return array
-     * @since 2.0.0
      */
     public function getFromString($string)
     {
@@ -88,7 +82,6 @@ class ComplexParameter
      * @param array $server
      * @param array $into
      * @return array
-     * @since 2.0.0
      */
     public function mergeFromArgv($server, array $into = [])
     {

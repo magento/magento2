@@ -11,13 +11,11 @@ use Magento\Sales\Model\Order\Address;
  * Paypal Express Onepage checkout block
  *
  * @api
- * @since 2.0.0
  */
 class Details extends \Magento\Checkout\Block\Cart\Totals
 {
     /**
      * @var Address
-     * @since 2.0.0
      */
     protected $_address;
 
@@ -25,7 +23,6 @@ class Details extends \Magento\Checkout\Block\Cart\Totals
      * Return review shipping address
      *
      * @return Address
-     * @since 2.0.0
      */
     public function getAddress()
     {
@@ -39,7 +36,6 @@ class Details extends \Magento\Checkout\Block\Cart\Totals
      * Return review quote totals
      *
      * @return array
-     * @since 2.0.0
      */
     public function getTotals()
     {

@@ -9,7 +9,6 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\
  * Bundle selection product grid
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -17,13 +16,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Bundle data
      *
      * @var \Magento\Bundle\Helper\Data
-     * @since 2.0.0
      */
     protected $_bundleData = null;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $_productFactory;
 
@@ -33,7 +30,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Bundle\Helper\Data $bundleData
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -49,7 +45,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -66,7 +61,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare grid filter buttons
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareFilterButtons()
     {
@@ -88,7 +82,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Initialize grid before rendering
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -100,7 +93,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Apply sorting and filtering to collection
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -138,7 +130,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Initialize grid columns
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -189,7 +180,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Retrieve grid reload url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getGridUrl()
     {
@@ -201,7 +191,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     protected function _getSelectedProducts()
     {
@@ -214,7 +203,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return array
-     * @since 2.0.0
      */
     protected function _getProducts()
     {
@@ -233,7 +221,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Retrieve array of allowed product types for bundle selection product
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllowedSelectionTypes()
     {

@@ -9,7 +9,6 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Interface ObserverInterface
- * @since 2.0.0
  */
 interface ObserverInterface
 {
@@ -18,7 +17,6 @@ interface ObserverInterface
      *
      * @param UiComponentInterface $component
      * @return void
-     * @since 2.0.0
      */
     public function update(UiComponentInterface $component);
 }

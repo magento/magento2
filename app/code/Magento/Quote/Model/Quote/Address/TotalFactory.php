@@ -12,7 +12,6 @@ namespace Magento\Quote\Model\Quote\Address;
 /**
  * Class \Magento\Quote\Model\Quote\Address\TotalFactory
  *
- * @since 2.0.0
  */
 class TotalFactory
 {
@@ -20,7 +19,6 @@ class TotalFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager = null;
 
@@ -28,7 +26,6 @@ class TotalFactory
      * Quote address factory constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objManager)
     {
@@ -41,7 +38,6 @@ class TotalFactory
      * @param string $instanceName
      * @param array $data
      * @return Total\AbstractTotal|Total
-     * @since 2.0.0
      */
     public function create($instanceName = Total::class, array $data = [])
     {

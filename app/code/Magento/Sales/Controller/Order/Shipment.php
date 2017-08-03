@@ -11,7 +11,6 @@ use Magento\Sales\Controller\OrderInterface;
 /**
  * Class \Magento\Sales\Controller\Order\Shipment
  *
- * @since 2.0.0
  */
 class Shipment extends \Magento\Sales\Controller\AbstractController\Shipment implements OrderInterface
 {

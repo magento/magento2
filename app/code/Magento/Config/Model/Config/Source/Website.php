@@ -7,25 +7,21 @@ namespace Magento\Config\Model\Config\Source;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Website implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_options;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
     {
@@ -34,7 +30,6 @@ class Website implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

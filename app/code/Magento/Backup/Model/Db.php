@@ -9,7 +9,6 @@ namespace Magento\Backup\Model;
  * Database backup model
  *
  * @api
- * @since 2.0.0
  */
 class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
 {
@@ -23,7 +22,6 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
      * Backup resource model
      *
      * @var \Magento\Backup\Model\ResourceModel\Db
-     * @since 2.0.0
      */
     protected $_resourceDb = null;
 
@@ -31,14 +29,12 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
      * Core resource model
      *
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.0.0
      */
     protected $_resource = null;
 
     /**
      * @param \Magento\Backup\Model\ResourceModel\Db $resourceDb
      * @param \Magento\Framework\App\ResourceConnection $resource
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backup\Model\ResourceModel\Db $resourceDb,
@@ -52,7 +48,6 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
      * List of tables which data should not be backed up
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_ignoreDataTablesList = ['importexport/importdata'];
 
@@ -60,7 +55,6 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
      * Retrieve resource model
      *
      * @return \Magento\Backup\Model\ResourceModel\Db
-     * @since 2.0.0
      */
     public function getResource()
     {
@@ -69,7 +63,6 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getTables()
     {
@@ -80,7 +73,6 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
      * @param string $tableName
      * @param bool $addDropIfExists
      * @return string
-     * @since 2.0.0
      */
     public function getTableCreateScript($tableName, $addDropIfExists = false)
     {
@@ -90,7 +82,6 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
     /**
      * @param string $tableName
      * @return string
-     * @since 2.0.0
      */
     public function getTableDataDump($tableName)
     {
@@ -99,7 +90,6 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getHeader()
     {
@@ -108,7 +98,6 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getFooter()
     {
@@ -117,7 +106,6 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function renderSql()
     {
@@ -139,7 +127,6 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
      *
      * @param \Magento\Framework\Backup\Db\BackupInterface $backup
      * @return $this
-     * @since 2.0.0
      */
     public function createBackup(\Magento\Framework\Backup\Db\BackupInterface $backup)
     {
@@ -198,7 +185,6 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
      * Get database backup size
      *
      * @return int
-     * @since 2.0.0
      */
     public function getDBBackupSize()
     {
@@ -218,7 +204,6 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
      * Returns the list of tables which data should not be backed up
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getIgnoreDataTablesList()
     {

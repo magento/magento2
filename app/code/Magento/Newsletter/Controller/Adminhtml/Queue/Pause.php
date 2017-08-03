@@ -9,7 +9,6 @@ namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 /**
  * Class \Magento\Newsletter\Controller\Adminhtml\Queue\Pause
  *
- * @since 2.0.0
  */
 class Pause extends \Magento\Newsletter\Controller\Adminhtml\Queue
 {
@@ -17,7 +16,6 @@ class Pause extends \Magento\Newsletter\Controller\Adminhtml\Queue
      * Pause Newsletter queue
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

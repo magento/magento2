@@ -7,7 +7,6 @@ namespace Magento\Checkout\Block\Cart\Item\Renderer\Actions;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Edit extends Generic
 {
@@ -15,7 +14,6 @@ class Edit extends Generic
      * Get item configure url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getConfigureUrl()
     {

@@ -11,7 +11,6 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 /**
  * Customer address region interface.
  * @api
- * @since 2.0.0
  */
 interface RegionInterface extends ExtensibleDataInterface
 {
@@ -27,7 +26,6 @@ interface RegionInterface extends ExtensibleDataInterface
      * Get region code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRegionCode();
 
@@ -36,7 +34,6 @@ interface RegionInterface extends ExtensibleDataInterface
      *
      * @param string $regionCode
      * @return $this
-     * @since 2.0.0
      */
     public function setRegionCode($regionCode);
 
@@ -44,7 +41,6 @@ interface RegionInterface extends ExtensibleDataInterface
      * Get region
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRegion();
 
@@ -53,7 +49,6 @@ interface RegionInterface extends ExtensibleDataInterface
      *
      * @param string $region
      * @return $this
-     * @since 2.0.0
      */
     public function setRegion($region);
 
@@ -61,7 +56,6 @@ interface RegionInterface extends ExtensibleDataInterface
      * Get region id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getRegionId();
 
@@ -70,7 +64,6 @@ interface RegionInterface extends ExtensibleDataInterface
      *
      * @param int $regionId
      * @return $this
-     * @since 2.0.0
      */
     public function setRegionId($regionId);
 
@@ -78,7 +71,6 @@ interface RegionInterface extends ExtensibleDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Customer\Api\Data\RegionExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -87,7 +79,6 @@ interface RegionInterface extends ExtensibleDataInterface
      *
      * @param \Magento\Customer\Api\Data\RegionExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Customer\Api\Data\RegionExtensionInterface $extensionAttributes);
 }

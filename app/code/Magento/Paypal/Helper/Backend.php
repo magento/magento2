@@ -9,25 +9,21 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Paypal Backend helper
- * @since 2.0.0
  */
 class Backend extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * @var \Magento\Directory\Helper\Data
-     * @since 2.0.0
      */
     protected $directoryHelper;
 
     /**
      * @var \Magento\Config\Model\Config
-     * @since 2.0.0
      */
     protected $backendConfig;
 
     /**
      * @var \Magento\Config\Model\Config\ScopeDefiner
-     * @since 2.0.0
      */
     protected $scopeDefiner;
 
@@ -36,7 +32,6 @@ class Backend extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Config\Model\Config $backendConfig
      * @param \Magento\Config\Model\Config\ScopeDefiner $scopeDefiner
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -54,7 +49,6 @@ class Backend extends \Magento\Framework\App\Helper\AbstractHelper
      * Get selected merchant country code in system configuration
      *
      * @return string
-     * @since 2.0.0
      */
     public function getConfigurationCountryCode()
     {

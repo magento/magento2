@@ -12,7 +12,6 @@ use Magento\Framework\View\Element\UiComponent\Config\FileCollectorInterface;
 
 /**
  * Class AggregatedFileCollector
- * @since 2.0.0
  */
 class AggregatedFileCollector implements FileCollectorInterface
 {
@@ -20,19 +19,16 @@ class AggregatedFileCollector implements FileCollectorInterface
      * Search pattern
      *
      * @var string
-     * @since 2.0.0
      */
     protected $searchPattern;
 
     /**
      * @var CollectorInterface
-     * @since 2.0.0
      */
     protected $collectorAggregated;
 
     /**
      * @var DesignInterface
-     * @since 2.0.0
      */
     protected $design;
 
@@ -49,7 +45,6 @@ class AggregatedFileCollector implements FileCollectorInterface
      * @param DesignInterface $design
      * @param ReadFactory $readFactory
      * @param string $searchPattern
-     * @since 2.0.0
      */
     public function __construct(
         CollectorInterface $collectorAggregated,
@@ -69,7 +64,6 @@ class AggregatedFileCollector implements FileCollectorInterface
      * @param string|null $searchPattern
      * @return array
      * @throws \Exception
-     * @since 2.0.0
      */
     public function collectFiles($searchPattern = null)
     {

@@ -15,25 +15,21 @@ use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
- * @since 2.0.0
  */
 class Fieldset extends \Magento\Backend\Block\Template implements RendererInterface
 {
     /**
      * @var AbstractElement
-     * @since 2.0.0
      */
     protected $_element;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Backend::widget/form/renderer/fieldset.phtml';
 
     /**
      * @return AbstractElement
-     * @since 2.0.0
      */
     public function getElement()
     {
@@ -43,7 +39,6 @@ class Fieldset extends \Magento\Backend\Block\Template implements RendererInterf
     /**
      * @param AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     public function render(AbstractElement $element)
     {

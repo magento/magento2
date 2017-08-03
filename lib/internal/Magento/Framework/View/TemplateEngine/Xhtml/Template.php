@@ -7,7 +7,6 @@ namespace Magento\Framework\View\TemplateEngine\Xhtml;
 
 /**
  * Class Template
- * @since 2.0.0
  */
 class Template
 {
@@ -17,20 +16,17 @@ class Template
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var \DOMElement
-     * @since 2.0.0
      */
     protected $templateNode;
 
     /**
      * @param \Psr\Log\LoggerInterface $logger
      * @param string $content
-     * @since 2.0.0
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -46,7 +42,6 @@ class Template
      * Get template root element
      *
      * @return \DOMElement
-     * @since 2.0.0
      */
     public function getDocumentElement()
     {
@@ -58,7 +53,6 @@ class Template
      *
      * @param string $content
      * @return void
-     * @since 2.0.0
      */
     public function append($content)
     {
@@ -71,7 +65,6 @@ class Template
      * Returns the string representation
      *
      * @return string
-     * @since 2.0.0
      */
     public function __toString()
     {

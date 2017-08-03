@@ -13,13 +13,11 @@ namespace Magento\Tax\Block\Adminhtml;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Rule extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

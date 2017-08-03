@@ -9,13 +9,11 @@ use Magento\Framework\Interception;
 
 /**
  * Provides plugin list configuration
- * @since 2.0.0
  */
 class PluginList extends Interception\PluginList\PluginList
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     private $interceptedClasses;
 
@@ -23,7 +21,6 @@ class PluginList extends Interception\PluginList\PluginList
      * Returns plugins config
      *
      * @return array
-     * @since 2.0.0
      */
     public function getPluginsConfig()
     {
@@ -37,7 +34,6 @@ class PluginList extends Interception\PluginList\PluginList
      *
      * @param array $areaCodes
      * @return void
-     * @since 2.0.0
      */
     public function setScopePriorityScheme($areaCodes)
     {
@@ -51,7 +47,6 @@ class PluginList extends Interception\PluginList\PluginList
      *
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function isCurrentScope($scopeCode)
     {
@@ -61,7 +56,6 @@ class PluginList extends Interception\PluginList\PluginList
     /**
      * @param array $interceptedClasses
      * @return void
-     * @since 2.0.0
      */
     public function setInterceptedClasses($interceptedClasses)
     {
@@ -72,7 +66,6 @@ class PluginList extends Interception\PluginList\PluginList
      * Returns class definitions
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getClassDefinitions()
     {

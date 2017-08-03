@@ -10,7 +10,6 @@ namespace Magento\Catalog\Model\Attribute;
 /**
  * Interface \Magento\Catalog\Model\Attribute\LockValidatorInterface
  *
- * @since 2.0.0
  */
 interface LockValidatorInterface
 {
@@ -22,7 +21,6 @@ interface LockValidatorInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @return void
-     * @since 2.0.0
      */
     public function validate(\Magento\Framework\Model\AbstractModel $object, $attributeSet = null);
 }

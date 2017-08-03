@@ -11,20 +11,17 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * Pricing data helper
  *
  * @api
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param PriceCurrencyInterface $priceCurrency
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -41,7 +38,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param   bool $format
      * @param   bool $includeContainer
      * @return  float|string
-     * @since 2.0.0
      */
     public function currency($value, $format = true, $includeContainer = true)
     {
@@ -58,7 +54,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param   bool $format
      * @param   bool $includeContainer
      * @return  float|string
-     * @since 2.0.0
      */
     public function currencyByStore($value, $store = null, $format = true, $includeContainer = true)
     {

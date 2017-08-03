@@ -15,7 +15,6 @@ use Magento\Framework\Stdlib\StringUtils;
 
 /**
  * Http request
- * @since 2.0.0
  */
 class Http extends Request implements RequestContentInterface, RequestSafetyInterface
 {
@@ -31,7 +30,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $route;
 
@@ -39,7 +37,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      * PATH_INFO
      *
      * @var string
-     * @since 2.0.0
      */
     protected $pathInfo = '';
 
@@ -47,19 +44,16 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      * ORIGINAL_PATH_INFO
      *
      * @var string
-     * @since 2.0.0
      */
     protected $originalPathInfo = '';
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $directFrontNames;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $controllerModule;
 
@@ -67,37 +61,31 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      * Request's original information before forward.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $beforeForwardInfo = [];
 
     /**
      * @var ConfigInterface
-     * @since 2.0.0
      */
     protected $routeConfig;
 
     /**
      * @var PathInfoProcessorInterface
-     * @since 2.0.0
      */
     protected $pathInfoProcessor;
 
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var bool|null
-     * @since 2.0.0
      */
     protected $isSafeMethod = null;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $safeRequestTypes = ['GET', 'HEAD', 'TRACE', 'OPTIONS'];
 
@@ -115,7 +103,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      * @param ObjectManagerInterface  $objectManager
      * @param \Zend\Uri\UriInterface|string|null $uri
      * @param array $directFrontNames
-     * @since 2.0.0
      */
     public function __construct(
         CookieReaderInterface $cookieReader,
@@ -139,7 +126,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      * directly from $_SERVER due to cross-platform differences.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getOriginalPathInfo()
     {
@@ -155,7 +141,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      *
      * @param string|null $pathInfo
      * @return $this
-     * @since 2.0.0
      */
     public function setPathInfo($pathInfo = null)
     {
@@ -192,7 +177,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      *
      * @param   string $code
      * @return  bool
-     * @since 2.0.0
      */
     public function isDirectAccessFrontendName($code)
     {
@@ -203,7 +187,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      * Get base path
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBasePath()
     {
@@ -220,7 +203,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      * Retrieve request front name
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getFrontName()
     {
@@ -233,7 +215,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      *
      * @param string $route
      * @return $this
-     * @since 2.0.0
      */
     public function setRouteName($route)
     {
@@ -249,7 +230,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      * Retrieve route name
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getRouteName()
     {
@@ -261,7 +241,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      *
      * @param string $module
      * @return $this
-     * @since 2.0.0
      */
     public function setControllerModule($module)
     {
@@ -273,7 +252,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      * Get module name of currently used controller
      *
      * @return  string
-     * @since 2.0.0
      */
     public function getControllerModule()
     {
@@ -285,7 +263,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      * before _forward was called first time.
      *
      * @return $this
-     * @since 2.0.0
      */
     public function initForward()
     {
@@ -308,7 +285,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      *
      * @param string $name
      * @return array|string|null
-     * @since 2.0.0
      */
     public function getBeforeForwardInfo($name = null)
     {
@@ -324,7 +300,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      * Check is Request from AJAX
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isAjax()
     {
@@ -343,7 +318,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      * @return string
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function getDistroBaseUrl()
     {
@@ -377,7 +351,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      *
      * @param array $server
      * @return string
-     * @since 2.0.0
      */
     public static function getDistroBaseUrlPath($server)
     {
@@ -399,7 +372,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      *
      * @param  string $url
      * @return string
-     * @since 2.0.0
      */
     public static function getUrlNoScript($url)
     {
@@ -419,7 +391,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      *
      * @param string $delimiter
      * @return string
-     * @since 2.0.0
      */
     public function getFullActionName($delimiter = '_')
     {
@@ -432,7 +403,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function __sleep()
     {
@@ -441,7 +411,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function isSafeMethod()
     {

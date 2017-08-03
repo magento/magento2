@@ -19,37 +19,31 @@ use Magento\Wishlist\Helper\Data as WishlistHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Fromcart extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * @var WishlistProviderInterface
-     * @since 2.0.0
      */
     protected $wishlistProvider;
 
     /**
      * @var WishlistHelper
-     * @since 2.0.0
      */
     protected $wishlistHelper;
 
     /**
      * @var CheckoutCart
-     * @since 2.0.0
      */
     protected $cart;
 
     /**
      * @var CartHelper
-     * @since 2.0.0
      */
     protected $cartHelper;
 
     /**
      * @var Escaper
-     * @since 2.0.0
      */
     protected $escaper;
 
@@ -67,7 +61,6 @@ class Fromcart extends \Magento\Wishlist\Controller\AbstractIndex
      * @param CartHelper $cartHelper
      * @param Escaper $escaper
      * @param Validator $formKeyValidator
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -93,7 +86,6 @@ class Fromcart extends \Magento\Wishlist\Controller\AbstractIndex
      * @return \Magento\Framework\Controller\Result\Redirect
      * @throws NotFoundException
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function execute()
     {

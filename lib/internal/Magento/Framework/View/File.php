@@ -10,7 +10,6 @@ use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * View file in the file system with context of its identity
- * @since 2.0.0
  */
 class File
 {
@@ -18,7 +17,6 @@ class File
      * File name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $filename;
 
@@ -26,7 +24,6 @@ class File
      * Module
      *
      * @var string
-     * @since 2.0.0
      */
     protected $module;
 
@@ -34,7 +31,6 @@ class File
      * Theme
      *
      * @var ThemeInterface
-     * @since 2.0.0
      */
     protected $theme;
 
@@ -42,7 +38,6 @@ class File
      * Base flag
      *
      * @var string
-     * @since 2.0.0
      */
     protected $isBase;
 
@@ -50,7 +45,6 @@ class File
      * Identifier
      *
      * @var string
-     * @since 2.0.0
      */
     protected $identifier;
 
@@ -61,7 +55,6 @@ class File
      * @param string $module
      * @param ThemeInterface $theme
      * @param bool $isBase
-     * @since 2.0.0
      */
     public function __construct($filename, $module, ThemeInterface $theme = null, $isBase = false)
     {
@@ -75,7 +68,6 @@ class File
      * Retrieve full filename
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFilename()
     {
@@ -86,7 +78,6 @@ class File
      * Retrieve name of a file without a directory path
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -97,7 +88,6 @@ class File
      * Retrieve fully-qualified name of a module a file belongs to
      *
      * @return string
-     * @since 2.0.0
      */
     public function getModule()
     {
@@ -108,7 +98,6 @@ class File
      * Retrieve instance of a theme a file belongs to
      *
      * @return ThemeInterface|null
-     * @since 2.0.0
      */
     public function getTheme()
     {
@@ -119,7 +108,6 @@ class File
      * Whether file is a base one
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isBase()
     {
@@ -130,7 +118,6 @@ class File
      * Calculate unique identifier for a view file
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFileIdentifier()
     {

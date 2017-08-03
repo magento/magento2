@@ -12,25 +12,21 @@ use Magento\Framework\App\ResourceConnection;
 /**
  * Class \Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser
  *
- * @since 2.0.0
  */
 class Eraser
 {
     /**
      * @var \Magento\Catalog\Helper\Product\Flat\Indexer
-     * @since 2.0.0
      */
     protected $productIndexerHelper;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected $connection;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -38,7 +34,6 @@ class Eraser
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -56,7 +51,6 @@ class Eraser
      * @param array $ids
      * @param int $storeId
      * @return void
-     * @since 2.0.0
      */
     public function removeDeletedProducts(array &$ids, $storeId)
     {
@@ -85,7 +79,6 @@ class Eraser
      * @param int|array $productId
      * @param null|int $storeId
      * @return void
-     * @since 2.0.0
      */
     public function deleteProductsFromStore($productId, $storeId = null)
     {

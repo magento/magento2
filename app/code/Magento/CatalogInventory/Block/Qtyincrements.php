@@ -13,7 +13,6 @@ use Magento\Framework\View\Element\Template;
  * Product qty increments block
  *
  * @api
- * @since 2.0.0
  */
 class Qtyincrements extends Template implements IdentityInterface
 {
@@ -21,7 +20,6 @@ class Qtyincrements extends Template implements IdentityInterface
      * Qty Increments cache
      *
      * @var float|false
-     * @since 2.0.0
      */
     protected $_qtyIncrements;
 
@@ -29,13 +27,11 @@ class Qtyincrements extends Template implements IdentityInterface
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
-     * @since 2.0.0
      */
     protected $stockRegistry;
 
@@ -44,7 +40,6 @@ class Qtyincrements extends Template implements IdentityInterface
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -61,7 +56,6 @@ class Qtyincrements extends Template implements IdentityInterface
      * Retrieve current product object
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -72,7 +66,6 @@ class Qtyincrements extends Template implements IdentityInterface
      * Retrieve current product name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getProductName()
     {
@@ -83,7 +76,6 @@ class Qtyincrements extends Template implements IdentityInterface
      * Retrieve product qty increments
      *
      * @return float|false
-     * @since 2.0.0
      */
     public function getProductQtyIncrements()
     {
@@ -104,7 +96,6 @@ class Qtyincrements extends Template implements IdentityInterface
      * Return identifiers for produced content
      *
      * @return array
-     * @since 2.0.0
      */
     public function getIdentities()
     {

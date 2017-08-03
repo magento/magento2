@@ -11,7 +11,6 @@ use Magento\Catalog\Model\Layer\Filter\DataProvider\CategoryFactory;
 
 /**
  * Layer category filter
- * @since 2.0.0
  */
 class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
 {
@@ -19,7 +18,6 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Active Category Id
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_categoryId;
 
@@ -27,7 +25,6 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Applied Category
      *
      * @var \Magento\Catalog\Model\Category
-     * @since 2.0.0
      */
     protected $_appliedCategory;
 
@@ -35,7 +32,6 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Core data
      *
      * @var \Magento\Framework\Escaper
-     * @since 2.0.0
      */
     protected $_escaper;
 
@@ -43,13 +39,11 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var CategoryDataProvider
-     * @since 2.0.0
      */
     private $dataProvider;
 
@@ -63,7 +57,6 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * @param \Magento\Framework\Escaper $escaper
      * @param CategoryFactory $categoryDataProviderFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
@@ -84,7 +77,6 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Get filter value for reset current filter state
      *
      * @return mixed|null
-     * @since 2.0.0
      */
     public function getResetValue()
     {
@@ -96,7 +88,6 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      *
      * @param   \Magento\Framework\App\RequestInterface $request
      * @return  $this
-     * @since 2.0.0
      */
     public function apply(\Magento\Framework\App\RequestInterface $request)
     {
@@ -120,7 +111,6 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Get filter name
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -131,7 +121,6 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Get data array for building category filter items
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getItemsData()
     {

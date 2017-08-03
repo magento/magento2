@@ -12,7 +12,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
 {
@@ -20,7 +19,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      * Order model
      *
      * @var \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     protected $_order;
 
@@ -28,7 +26,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      * Source model (invoice, shipment, creditmemo)
      *
      * @var \Magento\Framework\Model\AbstractModel
-     * @since 2.0.0
      */
     protected $_source;
 
@@ -36,7 +33,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      * Item object
      *
      * @var \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     protected $_item;
 
@@ -44,7 +40,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      * Pdf object
      *
      * @var \Magento\Sales\Model\Order\Pdf\AbstractPdf
-     * @since 2.0.0
      */
     protected $_pdf;
 
@@ -52,7 +47,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      * Pdf current page
      *
      * @var \Zend_Pdf_Page
-     * @since 2.0.0
      */
     protected $_pdfPage;
 
@@ -60,19 +54,16 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      * Tax data
      *
      * @var \Magento\Tax\Helper\Data
-     * @since 2.0.0
      */
     protected $_taxData;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
-     * @since 2.0.0
      */
     protected $_rootDirectory;
 
     /**
      * @var \Magento\Framework\Filter\FilterManager
-     * @since 2.0.0
      */
     protected $filterManager;
 
@@ -85,7 +76,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -108,7 +98,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      *
      * @param  \Magento\Sales\Model\Order $order
      * @return $this
-     * @since 2.0.0
      */
     public function setOrder(\Magento\Sales\Model\Order $order)
     {
@@ -121,7 +110,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      *
      * @param  \Magento\Framework\Model\AbstractModel $source
      * @return $this
-     * @since 2.0.0
      */
     public function setSource(\Magento\Framework\Model\AbstractModel $source)
     {
@@ -134,7 +122,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      *
      * @param  \Magento\Framework\DataObject $item
      * @return $this
-     * @since 2.0.0
      */
     public function setItem(\Magento\Framework\DataObject $item)
     {
@@ -147,7 +134,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      *
      * @param  \Magento\Sales\Model\Order\Pdf\AbstractPdf $pdf
      * @return $this
-     * @since 2.0.0
      */
     public function setPdf(\Magento\Sales\Model\Order\Pdf\AbstractPdf $pdf)
     {
@@ -160,7 +146,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      *
      * @param  \Zend_Pdf_Page $page
      * @return $this
-     * @since 2.0.0
      */
     public function setPage(\Zend_Pdf_Page $page)
     {
@@ -173,7 +158,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -188,7 +172,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\AbstractModel
-     * @since 2.0.0
      */
     public function getSource()
     {
@@ -203,7 +186,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getItem()
     {
@@ -218,7 +200,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Sales\Model\Order\Pdf\AbstractPdf
-     * @since 2.0.0
      */
     public function getPdf()
     {
@@ -233,7 +214,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Zend_Pdf_Page
-     * @since 2.0.0
      */
     public function getPage()
     {
@@ -247,7 +227,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      * Draw item line
      *
      * @return void
-     * @since 2.0.0
      */
     abstract public function draw();
 
@@ -256,7 +235,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      *
      * @param array|string $value
      * @return string
-     * @since 2.0.0
      */
     protected function _formatOptionValue($value)
     {
@@ -291,7 +269,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      * )
      *
      * @return array
-     * @since 2.0.0
      */
     public function getItemPricesForDisplay()
     {
@@ -332,7 +309,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      * Retrieve item options
      *
      * @return array
-     * @since 2.0.0
      */
     public function getItemOptions()
     {
@@ -357,7 +333,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      *
      * @param  int $size
      * @return \Zend_Pdf_Resource_Font
-     * @since 2.0.0
      */
     protected function _setFontRegular($size = 7)
     {
@@ -373,7 +348,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      *
      * @param  int $size
      * @return \Zend_Pdf_Resource_Font
-     * @since 2.0.0
      */
     protected function _setFontBold($size = 7)
     {
@@ -389,7 +363,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      *
      * @param  int $size
      * @return \Zend_Pdf_Resource_Font
-     * @since 2.0.0
      */
     protected function _setFontItalic($size = 7)
     {
@@ -405,7 +378,6 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      *
      * @param mixed $item
      * @return mixed
-     * @since 2.0.0
      */
     public function getSku($item)
     {

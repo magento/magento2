@@ -9,7 +9,6 @@ use Magento\Quote\Api\Data\CartItemInterface;
 
 /**
  * Interface CartItemProcessorInterface
- * @since 2.0.0
  */
 interface CartItemProcessorInterface
 {
@@ -18,7 +17,6 @@ interface CartItemProcessorInterface
      *
      * @param CartItemInterface $cartItem
      * @return \Magento\Framework\DataObject|null
-     * @since 2.0.0
      */
     public function convertToBuyRequest(CartItemInterface $cartItem);
 
@@ -27,7 +25,6 @@ interface CartItemProcessorInterface
      *
      * @param CartItemInterface $cartItem
      * @return CartItemInterface
-     * @since 2.0.0
      */
     public function processOptions(CartItemInterface $cartItem);
 }

@@ -38,7 +38,6 @@ use Magento\Store\Model\Website;
  *
  * @see setup/performance-toolkit/profiles/ce/small.xml
  * @SuppressWarnings(PHPMD)
- * @since 2.0.0
  */
 class StoresFixture extends Fixture
 {
@@ -50,7 +49,6 @@ class StoresFixture extends Fixture
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $priority = 10;
 
@@ -197,7 +195,6 @@ class StoresFixture extends Fixture
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD)
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -382,7 +379,6 @@ class StoresFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getActionTitle()
     {
@@ -391,7 +387,6 @@ class StoresFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function introduceParamLabels()
     {

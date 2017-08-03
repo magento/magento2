@@ -8,7 +8,6 @@ namespace Magento\Customer\Model\ResourceModel\Visitor;
 /**
  * Class \Magento\Customer\Model\ResourceModel\Visitor\Collection
  *
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -16,7 +15,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

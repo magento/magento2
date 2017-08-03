@@ -9,7 +9,6 @@ namespace Magento\Framework\Translate\Inline;
  * Inline Translation config interface
  *
  * @api
- * @since 2.0.0
  */
 interface ConfigInterface
 {
@@ -18,7 +17,6 @@ interface ConfigInterface
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $scope
      * @return bool
-     * @since 2.0.0
      */
     public function isActive($scope = null);
 
@@ -27,7 +25,6 @@ interface ConfigInterface
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $scope
      * @return bool
-     * @since 2.0.0
      */
     public function isDevAllowed($scope = null);
 }

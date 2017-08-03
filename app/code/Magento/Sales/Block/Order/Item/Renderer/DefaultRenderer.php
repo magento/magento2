@@ -16,7 +16,6 @@ use Magento\Sales\Model\Order\Item as OrderItem;
  * Order item render block
  *
  * @api
- * @since 2.0.0
  */
 class DefaultRenderer extends \Magento\Framework\View\Element\Template
 {
@@ -24,13 +23,11 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
      * Magento string lib
      *
      * @var \Magento\Framework\Stdlib\StringUtils
-     * @since 2.0.0
      */
     protected $string;
 
     /**
      * @var \Magento\Catalog\Model\Product\OptionFactory
-     * @since 2.0.0
      */
     protected $_productOptionFactory;
 
@@ -39,7 +36,6 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -55,7 +51,6 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
     /**
      * @param \Magento\Framework\DataObject $item
      * @return $this
-     * @since 2.0.0
      */
     public function setItem(\Magento\Framework\DataObject $item)
     {
@@ -65,7 +60,6 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
 
     /**
      * @return array|null
-     * @since 2.0.0
      */
     public function getItem()
     {
@@ -76,7 +70,6 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
      * Retrieve current order model instance
      *
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -85,7 +78,6 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
 
     /**
      * @return array|null
-     * @since 2.0.0
      */
     public function getOrderItem()
     {
@@ -98,7 +90,6 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getItemOptions()
     {
@@ -138,7 +129,6 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
      *
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function getFormatedOptionValue($optionValue)
     {
@@ -196,7 +186,6 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
      * Return sku of order item.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSku()
     {
@@ -207,7 +196,6 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
      * Return product additional information block
      *
      * @return \Magento\Framework\View\Element\AbstractBlock
-     * @since 2.0.0
      */
     public function getProductAdditionalInformationBlock()
     {
@@ -219,7 +207,6 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
      *
      * @param string $sku
      * @return string
-     * @since 2.0.0
      */
     public function prepareSku($sku)
     {
@@ -231,7 +218,6 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
      *
      * @param OrderItem|InvoiceItem|CreditmemoItem $item child item in case of bundle product
      * @return string
-     * @since 2.0.0
      */
     public function getItemPriceHtml($item = null)
     {
@@ -248,7 +234,6 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
      *
      * @param OrderItem|InvoiceItem|CreditmemoItem $item child item in case of bundle product
      * @return string
-     * @since 2.0.0
      */
     public function getItemRowTotalHtml($item = null)
     {
@@ -265,7 +250,6 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
      *
      * @param OrderItem|InvoiceItem|CreditmemoItem $item
      * @return mixed
-     * @since 2.0.0
      */
     public function getTotalAmount($item)
     {
@@ -283,7 +267,6 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
      *
      * @param OrderItem|InvoiceItem|CreditmemoItem $item child item in case of bundle product
      * @return string
-     * @since 2.0.0
      */
     public function getItemRowTotalAfterDiscountHtml($item = null)
     {

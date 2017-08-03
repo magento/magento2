@@ -11,7 +11,6 @@ use Symfony\Component\Finder\Tests\Iterator\DateRangeFilterIteratorTest;
 /**
  * Filesystem client
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * @since 2.0.0
  */
 class File extends AbstractIo
 {
@@ -19,7 +18,6 @@ class File extends AbstractIo
      * Save initial working directory
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_iwd;
 
@@ -27,7 +25,6 @@ class File extends AbstractIo
      * Use virtual current working directory for application integrity
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_cwd;
 
@@ -51,7 +48,6 @@ class File extends AbstractIo
      *
      * @var bool
      * @access protected
-     * @since 2.0.0
      */
     protected $_allowCreateFolders = false;
 
@@ -59,7 +55,6 @@ class File extends AbstractIo
      * Stream open file pointer
      *
      * @var resource
-     * @since 2.0.0
      */
     protected $_streamHandler;
 
@@ -67,7 +62,6 @@ class File extends AbstractIo
      * Stream mode filename
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_streamFileName;
 
@@ -75,7 +69,6 @@ class File extends AbstractIo
      * Stream mode chmod
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_streamChmod;
 
@@ -83,7 +76,6 @@ class File extends AbstractIo
      * Lock file
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_streamLocked = false;
 
@@ -91,7 +83,6 @@ class File extends AbstractIo
      * Destruct
      *
      * @return void
-     * @since 2.0.0
      */
     public function __destruct()
     {
@@ -105,7 +96,6 @@ class File extends AbstractIo
      *
      * @param bool $exclusive
      * @return bool
-     * @since 2.0.0
      */
     public function streamLock($exclusive = true)
     {
@@ -121,7 +111,6 @@ class File extends AbstractIo
      * Unlock file
      *
      * @return bool
-     * @since 2.0.0
      */
     public function streamUnlock()
     {
@@ -137,7 +126,6 @@ class File extends AbstractIo
      *
      * @param int $length
      * @return string|false
-     * @since 2.0.0
      */
     public function streamRead($length = 1024)
     {
@@ -156,7 +144,6 @@ class File extends AbstractIo
      * @param string $delimiter
      * @param string $enclosure
      * @return string|false
-     * @since 2.0.0
      */
     public function streamReadCsv($delimiter = ',', $enclosure = '"')
     {
@@ -171,7 +158,6 @@ class File extends AbstractIo
      *
      * @param string $str
      * @return int|false
-     * @since 2.0.0
      */
     public function streamWrite($str)
     {
@@ -188,7 +174,6 @@ class File extends AbstractIo
      * @param string $delimiter
      * @param string $enclosure
      * @return int|false The length of the written string or false
-     * @since 2.0.0
      */
     public function streamWriteCsv(array $row, $delimiter = ',', $enclosure = '"')
     {
@@ -217,7 +202,6 @@ class File extends AbstractIo
      * Set chmod on a file
      *
      * @return bool
-     * @since 2.0.0
      */
     public function streamClose()
     {
@@ -239,7 +223,6 @@ class File extends AbstractIo
      * @param string $part the part of statistic
      * @param mixed $default default value for part
      * @return array|bool
-     * @since 2.0.0
      */
     public function streamStat($part = null, $default = null)
     {
@@ -257,7 +240,6 @@ class File extends AbstractIo
      * Retrieve stream methods exception
      *
      * @return \Exception
-     * @since 2.0.0
      */
     public function getStreamException()
     {
@@ -272,7 +254,6 @@ class File extends AbstractIo
      *
      * @param array $args
      * @return true
-     * @since 2.0.0
      */
     public function open(array $args = [])
     {
@@ -295,7 +276,6 @@ class File extends AbstractIo
      * @param bool $flag
      * @access public
      * @return $this
-     * @since 2.0.0
      */
     public function setAllowCreateFolders($flag)
     {
@@ -307,7 +287,6 @@ class File extends AbstractIo
      * Close a connection
      *
      * @return true
-     * @since 2.0.0
      */
     public function close()
     {
@@ -321,7 +300,6 @@ class File extends AbstractIo
      * @param int $mode
      * @param bool $recursive
      * @return bool
-     * @since 2.0.0
      */
     public function mkdir($dir, $mode = 0777, $recursive = true)
     {
@@ -337,7 +315,6 @@ class File extends AbstractIo
      * @param string $dir
      * @param bool $recursive
      * @return bool
-     * @since 2.0.0
      */
     public function rmdir($dir, $recursive = false)
     {
@@ -352,7 +329,6 @@ class File extends AbstractIo
      * @param string $dir
      * @param bool $recursive
      * @return bool
-     * @since 2.0.0
      */
     public static function rmdirRecursive($dir, $recursive = true)
     {
@@ -378,7 +354,6 @@ class File extends AbstractIo
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected static function _recursiveCallback($dir, array $fileCallback, array $dirCallback = [])
     {
@@ -417,7 +392,6 @@ class File extends AbstractIo
      * Get current working directory
      *
      * @return string
-     * @since 2.0.0
      */
     public function pwd()
     {
@@ -431,7 +405,6 @@ class File extends AbstractIo
      * @return true
      * @throws \Exception
      * @SuppressWarnings(PHPMD.ShortMethodName)
-     * @since 2.0.0
      */
     public function cd($dir)
     {
@@ -453,7 +426,6 @@ class File extends AbstractIo
      * @param string $filename
      * @param string|resource $dest
      * @return bool|string
-     * @since 2.0.0
      */
     public function read($filename, $dest = null)
     {
@@ -476,7 +448,6 @@ class File extends AbstractIo
      * @param int $mode
      * @return int|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function write($filename, $src, $mode = null)
     {
@@ -519,7 +490,6 @@ class File extends AbstractIo
      * @param string $file
      * @param bool $onlyFile
      * @return bool
-     * @since 2.0.0
      */
     public function fileExists($file, $onlyFile = true)
     {
@@ -537,7 +507,6 @@ class File extends AbstractIo
      *
      * @param string $path
      * @return bool
-     * @since 2.0.0
      */
     public function isWriteable($path)
     {
@@ -552,7 +521,6 @@ class File extends AbstractIo
      *
      * @param string $filePath
      * @return bool|string
-     * @since 2.0.0
      */
     public function getDestinationFolder($filePath)
     {
@@ -568,7 +536,6 @@ class File extends AbstractIo
      *
      * @param string $path
      * @return bool
-     * @since 2.0.0
      */
     public function createDestinationDir($path)
     {
@@ -585,7 +552,6 @@ class File extends AbstractIo
      * @param int $mode
      * @return true
      * @throws \Exception
-     * @since 2.0.0
      */
     public function checkAndCreateFolder($folder, $mode = 0777)
     {
@@ -606,7 +572,6 @@ class File extends AbstractIo
      *
      * @param string $destinationFolder
      * @return bool
-     * @since 2.0.0
      */
     private function _createDestinationFolder($destinationFolder)
     {
@@ -619,7 +584,6 @@ class File extends AbstractIo
      * @param string $filename
      * @return bool
      * @SuppressWarnings(PHPMD.ShortMethodName)
-     * @since 2.0.0
      */
     public function rm($filename)
     {
@@ -636,7 +600,6 @@ class File extends AbstractIo
      * @param string $destination
      * @return bool
      * @SuppressWarnings(PHPMD.ShortMethodName)
-     * @since 2.0.0
      */
     public function mv($src, $destination)
     {
@@ -653,7 +616,6 @@ class File extends AbstractIo
      * @param string $destination
      * @return bool
      * @SuppressWarnings(PHPMD.ShortMethodName)
-     * @since 2.0.0
      */
     public function cp($src, $destination)
     {
@@ -670,7 +632,6 @@ class File extends AbstractIo
      * @param int $mode
      * @param bool $recursive
      * @return bool
-     * @since 2.0.0
      */
     public function chmod($filename, $mode, $recursive = false)
     {
@@ -691,7 +652,6 @@ class File extends AbstractIo
      * @param string $dir
      * @param int $mode
      * @return bool
-     * @since 2.0.0
      */
     public static function chmodRecursive($dir, $mode)
     {
@@ -713,7 +673,6 @@ class File extends AbstractIo
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ShortMethodName)
-     * @since 2.0.0
      */
     public function ls($grep = null)
     {
@@ -791,7 +750,6 @@ class File extends AbstractIo
      * Change directory to current working directory
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _cwd()
     {
@@ -804,7 +762,6 @@ class File extends AbstractIo
      * Change directory to initial directory
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _iwd()
     {
@@ -821,7 +778,6 @@ class File extends AbstractIo
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _parsePermissions($mode)
     {
@@ -877,7 +833,6 @@ class File extends AbstractIo
      *
      * @param string $filename
      * @return string
-     * @since 2.0.0
      */
     protected function _getFileOwner($filename)
     {
@@ -895,7 +850,6 @@ class File extends AbstractIo
      * Get directory separator
      *
      * @return string
-     * @since 2.0.0
      */
     public function dirsep()
     {
@@ -907,7 +861,6 @@ class File extends AbstractIo
      *
      * @param string $file
      * @return string
-     * @since 2.0.0
      */
     public function dirname($file)
     {
@@ -920,7 +873,6 @@ class File extends AbstractIo
      * @param string $path
      * @param int $flag
      * @return array
-     * @since 2.0.0
      */
     public function getDirectoriesList($path, $flag = GLOB_ONLYDIR)
     {
@@ -932,7 +884,6 @@ class File extends AbstractIo
      *
      * @param string $path
      * @return mixed
-     * @since 2.0.0
      */
     public function getPathInfo($path)
     {

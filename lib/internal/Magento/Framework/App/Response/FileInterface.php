@@ -10,7 +10,6 @@ namespace Magento\Framework\App\Response;
 /**
  * Interface \Magento\Framework\App\Response\FileInterface
  *
- * @since 2.0.0
  */
 interface FileInterface extends HttpInterface
 {
@@ -19,7 +18,6 @@ interface FileInterface extends HttpInterface
      *
      * @param string $path
      * @return void
-     * @since 2.0.0
      */
     public function setFilePath($path);
 }

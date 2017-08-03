@@ -11,7 +11,6 @@ namespace Magento\Payment\Model\Checks;
  * Use this class to register predefined list of specifications that should be added to any complex specification.
  *
  * @api
- * @since 2.0.0
  */
 class SpecificationFactory
 {
@@ -19,13 +18,11 @@ class SpecificationFactory
      * Composite Factory
      *
      * @var \Magento\Payment\Model\Checks\CompositeFactory
-     * @since 2.0.0
      */
     protected $compositeFactory;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $mapping;
 
@@ -34,7 +31,6 @@ class SpecificationFactory
      *
      * @param \Magento\Payment\Model\Checks\CompositeFactory $compositeFactory
      * @param array $mapping
-     * @since 2.0.0
      */
     public function __construct(\Magento\Payment\Model\Checks\CompositeFactory $compositeFactory, array $mapping)
     {
@@ -48,7 +44,6 @@ class SpecificationFactory
      * @param array $data
      * @return Composite
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function create($data)
     {

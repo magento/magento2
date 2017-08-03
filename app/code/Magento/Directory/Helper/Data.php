@@ -12,7 +12,6 @@ use Magento\Store\Model\ScopeInterface;
  * Directory data helper
  *
  * @api
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -54,7 +53,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Country collection
      *
      * @var \Magento\Directory\Model\ResourceModel\Country\Collection
-     * @since 2.0.0
      */
     protected $_countryCollection;
 
@@ -62,7 +60,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Region collection
      *
      * @var \Magento\Directory\Model\ResourceModel\Region\Collection
-     * @since 2.0.0
      */
     protected $_regionCollection;
 
@@ -70,7 +67,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Json representation of regions data
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_regionJson;
 
@@ -78,7 +74,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Currency cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_currencyCache = [];
 
@@ -86,37 +81,31 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * ISO2 country codes which have optional Zip/Postal pre-configured
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_optZipCountries = null;
 
     /**
      * @var \Magento\Framework\App\Cache\Type\Config
-     * @since 2.0.0
      */
     protected $_configCacheType;
 
     /**
      * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
-     * @since 2.0.0
      */
     protected $_regCollectionFactory;
 
     /**
      * @var \Magento\Framework\Json\Helper\Data
-     * @since 2.0.0
      */
     protected $jsonHelper;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Directory\Model\CurrencyFactory
-     * @since 2.0.0
      */
     protected $_currencyFactory;
 
@@ -128,7 +117,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -152,7 +140,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve region collection
      *
      * @return \Magento\Directory\Model\ResourceModel\Region\Collection
-     * @since 2.0.0
      */
     public function getRegionCollection()
     {
@@ -168,7 +155,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|int|string|\Magento\Store\Model\Store $store
      * @return \Magento\Directory\Model\ResourceModel\Country\Collection
-     * @since 2.0.0
      */
     public function getCountryCollection($store = null)
     {
@@ -182,7 +168,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve regions data json
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRegionJson()
     {
@@ -213,7 +198,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $to
      * @return float
      * @SuppressWarnings(PHPMD.ShortVariable)
-     * @since 2.0.0
      */
     public function currencyConvert($amount, $from, $to = null)
     {
@@ -232,7 +216,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param bool $asJson
      * @return array|string
-     * @since 2.0.0
      */
     public function getCountriesWithOptionalZip($asJson = false)
     {
@@ -256,7 +239,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $countryCode
      * @return boolean
-     * @since 2.0.0
      */
     public function isZipCodeOptional($countryCode)
     {
@@ -269,7 +251,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param boolean $asJson
      * @return array
-     * @since 2.0.0
      */
     public function getCountriesWithStatesRequired($asJson = false)
     {
@@ -290,7 +271,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Return, whether non-required state should be shown
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isShowNonRequiredState()
     {
@@ -305,7 +285,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $countryId
      * @return bool
-     * @since 2.0.0
      */
     public function isRegionRequired($countryId)
     {
@@ -320,7 +299,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve application base currency code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBaseCurrencyCode()
     {
@@ -332,7 +310,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Store\Model\Store|string|int $store
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultCountry($store = null)
     {
@@ -347,7 +324,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve regions data
      *
      * @return array
-     * @since 2.0.0
      */
     public function getRegionData()
     {
@@ -380,7 +356,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve list of codes of the most used countries
      *
      * @return array
-     * @since 2.0.0
      */
     public function getTopCountryCodes()
     {
@@ -395,7 +370,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve weight unit
      *
      * @return string
-     * @since 2.0.0
      */
     public function getWeightUnit()
     {

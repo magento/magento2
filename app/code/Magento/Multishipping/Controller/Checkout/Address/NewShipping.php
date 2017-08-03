@@ -9,7 +9,6 @@ namespace Magento\Multishipping\Controller\Checkout\Address;
 /**
  * Class \Magento\Multishipping\Controller\Checkout\Address\NewShipping
  *
- * @since 2.0.0
  */
 class NewShipping extends \Magento\Multishipping\Controller\Checkout\Address
 {
@@ -17,7 +16,6 @@ class NewShipping extends \Magento\Multishipping\Controller\Checkout\Address
      * Create New Shipping address Form
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

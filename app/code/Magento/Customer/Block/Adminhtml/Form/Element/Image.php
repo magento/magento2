@@ -14,7 +14,6 @@ namespace Magento\Customer\Block\Adminhtml\Form\Element;
 /**
  * Class \Magento\Customer\Block\Adminhtml\Form\Element\Image
  *
- * @since 2.0.0
  */
 class Image extends \Magento\Customer\Block\Adminhtml\Form\Element\File
 {
@@ -22,7 +21,6 @@ class Image extends \Magento\Customer\Block\Adminhtml\Form\Element\File
      * Return Delete CheckBox Label
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     protected function _getDeleteCheckboxLabel()
     {
@@ -33,7 +31,6 @@ class Image extends \Magento\Customer\Block\Adminhtml\Form\Element\File
      * Return Delete CheckBox SPAN Class name
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getDeleteCheckboxSpanClass()
     {
@@ -44,7 +41,6 @@ class Image extends \Magento\Customer\Block\Adminhtml\Form\Element\File
      * Return File preview link HTML
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getPreviewHtml()
     {
@@ -76,7 +72,6 @@ class Image extends \Magento\Customer\Block\Adminhtml\Form\Element\File
      * Return Image URL
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getPreviewUrl()
     {

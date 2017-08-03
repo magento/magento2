@@ -15,7 +15,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as A
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Layer extends \Magento\Framework\DataObject
 {
@@ -23,7 +22,6 @@ class Layer extends \Magento\Framework\DataObject
      * Product collections array
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_productCollections = [];
 
@@ -31,7 +29,6 @@ class Layer extends \Magento\Framework\DataObject
      * Key which can be used for load/save aggregation data
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_stateKey = null;
 
@@ -39,7 +36,6 @@ class Layer extends \Magento\Framework\DataObject
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $registry = null;
 
@@ -47,7 +43,6 @@ class Layer extends \Magento\Framework\DataObject
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -55,7 +50,6 @@ class Layer extends \Magento\Framework\DataObject
      * Catalog product
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product
-     * @since 2.0.0
      */
     protected $_catalogProduct;
 
@@ -63,7 +57,6 @@ class Layer extends \Magento\Framework\DataObject
      * Attribute collection factory
      *
      * @var AttributeCollectionFactory
-     * @since 2.0.0
      */
     protected $_attributeCollectionFactory;
 
@@ -71,31 +64,26 @@ class Layer extends \Magento\Framework\DataObject
      * Layer state factory
      *
      * @var \Magento\Catalog\Model\Layer\StateFactory
-     * @since 2.0.0
      */
     protected $_layerStateFactory;
 
     /**
      * @var \Magento\Catalog\Model\Layer\ItemCollectionProviderInterface
-     * @since 2.0.0
      */
     protected $collectionProvider;
 
     /**
      * @var \Magento\Catalog\Model\Layer\Category\StateKey
-     * @since 2.0.0
      */
     protected $stateKeyGenerator;
 
     /**
      * @var \Magento\Catalog\Model\Layer\Category\CollectionFilter
-     * @since 2.0.0
      */
     protected $collectionFilter;
 
     /**
      * @var CategoryRepositoryInterface
-     * @since 2.0.0
      */
     protected $categoryRepository;
 
@@ -108,7 +96,6 @@ class Layer extends \Magento\Framework\DataObject
      * @param \Magento\Framework\Registry $registry
      * @param CategoryRepositoryInterface $categoryRepository
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\ContextInterface $context,
@@ -136,7 +123,6 @@ class Layer extends \Magento\Framework\DataObject
      * Get layer state key
      *
      * @return string
-     * @since 2.0.0
      */
     public function getStateKey()
     {
@@ -150,7 +136,6 @@ class Layer extends \Magento\Framework\DataObject
      * Retrieve current layer product collection
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
-     * @since 2.0.0
      */
     public function getProductCollection()
     {
@@ -170,7 +155,6 @@ class Layer extends \Magento\Framework\DataObject
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return \Magento\Catalog\Model\Layer
-     * @since 2.0.0
      */
     public function prepareProductCollection($collection)
     {
@@ -186,7 +170,6 @@ class Layer extends \Magento\Framework\DataObject
      * about existing intexes
      *
      * @return \Magento\Catalog\Model\Layer
-     * @since 2.0.0
      */
     public function apply()
     {
@@ -206,7 +189,6 @@ class Layer extends \Magento\Framework\DataObject
      * If no category found in registry, the root will be taken
      *
      * @return \Magento\Catalog\Model\Category
-     * @since 2.0.0
      */
     public function getCurrentCategory()
     {
@@ -230,7 +212,6 @@ class Layer extends \Magento\Framework\DataObject
      * @param mixed $category
      * @return \Magento\Catalog\Model\Layer
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function setCurrentCategory($category)
     {
@@ -261,7 +242,6 @@ class Layer extends \Magento\Framework\DataObject
      * Retrieve current store model
      *
      * @return \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     public function getCurrentStore()
     {
@@ -272,7 +252,6 @@ class Layer extends \Magento\Framework\DataObject
      * Retrieve layer state object
      *
      * @return \Magento\Catalog\Model\Layer\State
-     * @since 2.0.0
      */
     public function getState()
     {

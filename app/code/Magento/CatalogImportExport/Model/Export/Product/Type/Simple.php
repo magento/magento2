@@ -9,7 +9,6 @@ namespace Magento\CatalogImportExport\Model\Export\Product\Type;
  * Export entity product type simple model
  *
  * @api
- * @since 2.0.0
  */
 class Simple extends \Magento\CatalogImportExport\Model\Export\Product\Type\AbstractType
 {
@@ -17,7 +16,6 @@ class Simple extends \Magento\CatalogImportExport\Model\Export\Product\Type\Abst
      * Overridden attributes parameters.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_attributeOverrides = [
         'has_options' => ['source_model' => \Magento\Eav\Model\Entity\Attribute\Source\Boolean::class],
@@ -30,7 +28,6 @@ class Simple extends \Magento\CatalogImportExport\Model\Export\Product\Type\Abst
      * Array of attributes codes which are disabled for export.
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_disabledAttrs = [
         'old_id',

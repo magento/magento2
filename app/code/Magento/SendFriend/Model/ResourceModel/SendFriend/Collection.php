@@ -11,7 +11,6 @@ namespace Magento\SendFriend\Model\ResourceModel\SendFriend;
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -19,7 +18,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Init resource collection
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

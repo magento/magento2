@@ -9,13 +9,11 @@ namespace Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee;
  * Catalog product WEEE tax backend attribute model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -23,7 +21,6 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -38,7 +35,6 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Defines main resource table and table identifier field
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -51,7 +47,6 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @return array
-     * @since 2.0.0
      */
     public function loadProductData($product, $attribute)
     {
@@ -85,7 +80,6 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @return $this
-     * @since 2.0.0
      */
     public function deleteProductData($product, $attribute)
     {
@@ -108,7 +102,6 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\Product $product
      * @param array $data
      * @return $this
-     * @since 2.0.0
      */
     public function insertProductData($product, $data)
     {

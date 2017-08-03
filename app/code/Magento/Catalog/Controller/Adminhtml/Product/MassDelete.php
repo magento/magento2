@@ -15,7 +15,6 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 /**
  * Class \Magento\Catalog\Controller\Adminhtml\Product\MassDelete
  *
- * @since 2.0.0
  */
 class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
 {
@@ -23,13 +22,11 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
      * Massactions filter
      *
      * @var Filter
-     * @since 2.0.0
      */
     protected $filter;
 
     /**
      * @var CollectionFactory
-     * @since 2.0.0
      */
     protected $collectionFactory;
 
@@ -38,7 +35,6 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param Builder $productBuilder
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -53,7 +49,6 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

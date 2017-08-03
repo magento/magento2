@@ -12,27 +12,23 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  * Backend image gallery item renderer
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Gallery extends \Magento\Backend\Block\Template implements
     \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * @var AbstractElement|null
-     * @since 2.0.0
      */
     protected $_element = null;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Backend::widget/form/element/gallery.phtml';
 
     /**
      * @param AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     public function render(AbstractElement $element)
     {
@@ -43,7 +39,6 @@ class Gallery extends \Magento\Backend\Block\Template implements
     /**
      * @param AbstractElement $element
      * @return $this
-     * @since 2.0.0
      */
     public function setElement(AbstractElement $element)
     {
@@ -53,7 +48,6 @@ class Gallery extends \Magento\Backend\Block\Template implements
 
     /**
      * @return AbstractElement|null
-     * @since 2.0.0
      */
     public function getElement()
     {
@@ -62,7 +56,6 @@ class Gallery extends \Magento\Backend\Block\Template implements
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getValues()
     {
@@ -71,7 +64,6 @@ class Gallery extends \Magento\Backend\Block\Template implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -91,7 +83,6 @@ class Gallery extends \Magento\Backend\Block\Template implements
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getAddButtonHtml()
     {
@@ -101,7 +92,6 @@ class Gallery extends \Magento\Backend\Block\Template implements
     /**
      * @param string $image
      * @return string|string[]
-     * @since 2.0.0
      */
     public function getDeleteButtonHtml($image)
     {

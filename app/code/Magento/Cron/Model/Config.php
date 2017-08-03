@@ -7,7 +7,6 @@ namespace Magento\Cron\Model;
 
 /**
  * Configuration entry point for client using
- * @since 2.0.0
  */
 class Config implements \Magento\Cron\Model\ConfigInterface
 {
@@ -15,7 +14,6 @@ class Config implements \Magento\Cron\Model\ConfigInterface
      * Cron config data
      *
      * @var \Magento\Cron\Model\Config\Data
-     * @since 2.0.0
      */
     protected $_configData;
 
@@ -23,7 +21,6 @@ class Config implements \Magento\Cron\Model\ConfigInterface
      * Initialize needed parameters
      *
      * @param \Magento\Cron\Model\Config\Data $configData
-     * @since 2.0.0
      */
     public function __construct(\Magento\Cron\Model\Config\Data $configData)
     {
@@ -34,7 +31,6 @@ class Config implements \Magento\Cron\Model\ConfigInterface
      * Return cron full cron jobs
      *
      * @return array
-     * @since 2.0.0
      */
     public function getJobs()
     {

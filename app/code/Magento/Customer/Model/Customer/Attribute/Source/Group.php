@@ -11,19 +11,16 @@ use Magento\Customer\Api\GroupManagementInterface;
  * Customer group attribute source
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table implements GroupSourceLoggedInOnlyInterface
 {
     /**
      * @var GroupManagementInterface
-     * @since 2.0.0
      */
     protected $_groupManagement;
 
     /**
      * @var \Magento\Framework\Convert\DataObject
-     * @since 2.0.0
      */
     protected $_converter;
 
@@ -32,7 +29,6 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table implements 
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
      * @param GroupManagementInterface $groupManagement
      * @param \Magento\Framework\Convert\DataObject $converter
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
@@ -47,7 +43,6 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table implements 
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getAllOptions()
     {

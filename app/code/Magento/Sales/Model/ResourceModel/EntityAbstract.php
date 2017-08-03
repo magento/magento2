@@ -16,7 +16,6 @@ use Magento\Sales\Model\EntityInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @since 2.0.0
  */
 abstract class EntityAbstract extends AbstractDb
 {
@@ -24,7 +23,6 @@ abstract class EntityAbstract extends AbstractDb
      * Event prefix
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_resource';
 
@@ -32,7 +30,6 @@ abstract class EntityAbstract extends AbstractDb
      * Event object
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'resource';
 
@@ -40,25 +37,21 @@ abstract class EntityAbstract extends AbstractDb
      * Use additional is object new check for this resource
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_useIsObjectNew = true;
 
     /**
      * @var \Magento\Eav\Model\Entity\TypeFactory
-     * @since 2.0.0
      */
     protected $_eavEntityTypeFactory;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Attribute
-     * @since 2.0.0
      */
     protected $attribute;
 
     /**
      * @var Manager
-     * @since 2.0.0
      */
     protected $sequenceManager;
 
@@ -69,7 +62,6 @@ abstract class EntityAbstract extends AbstractDb
      * @param Attribute $attribute
      * @param Manager $sequenceManager
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -94,7 +86,6 @@ abstract class EntityAbstract extends AbstractDb
      * @param string $attribute
      * @return $this
      * @throws \Exception
-     * @since 2.0.0
      */
     public function saveAttribute(\Magento\Framework\Model\AbstractModel $object, $attribute)
     {
@@ -108,7 +99,6 @@ abstract class EntityAbstract extends AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return array
-     * @since 2.0.0
      */
     protected function _prepareDataForSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -127,7 +117,6 @@ abstract class EntityAbstract extends AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -149,7 +138,6 @@ abstract class EntityAbstract extends AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -174,7 +162,6 @@ abstract class EntityAbstract extends AbstractDb
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     protected function updateObject(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -186,7 +173,6 @@ abstract class EntityAbstract extends AbstractDb
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     protected function saveNewObject(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -204,7 +190,6 @@ abstract class EntityAbstract extends AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
     {

@@ -7,7 +7,6 @@ namespace Magento\Tax\Block\Checkout;
 
 /**
  * Subtotal Total Row Renderer
- * @since 2.0.0
  */
 class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
 {
@@ -15,13 +14,11 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      * Template path
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'checkout/shipping.phtml';
 
     /**
      * @var \Magento\Tax\Model\Config
-     * @since 2.0.0
      */
     protected $_taxConfig;
 
@@ -33,7 +30,6 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param array $layoutProcessors
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -53,7 +49,6 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      * Check if we need display shipping include and exclude tax
      *
      * @return bool
-     * @since 2.0.0
      */
     public function displayBoth()
     {
@@ -64,7 +59,6 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      * Check if we need display shipping include tax
      *
      * @return bool
-     * @since 2.0.0
      */
     public function displayIncludeTax()
     {
@@ -75,7 +69,6 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      * Get shipping amount include tax
      *
      * @return float
-     * @since 2.0.0
      */
     public function getShippingIncludeTax()
     {
@@ -86,7 +79,6 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      * Get shipping amount exclude tax
      *
      * @return float
-     * @since 2.0.0
      */
     public function getShippingExcludeTax()
     {
@@ -97,7 +89,6 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      * Get label for shipping include tax
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getIncludeTaxLabel()
     {
@@ -111,7 +102,6 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      * Get label for shipping exclude tax
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getExcludeTaxLabel()
     {
@@ -125,7 +115,6 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      * Determine shipping visibility based on selected method.
      *
      * @return bool
-     * @since 2.0.0
      */
     public function displayShipping()
     {

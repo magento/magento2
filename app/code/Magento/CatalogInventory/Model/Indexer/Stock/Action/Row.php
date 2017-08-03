@@ -12,7 +12,6 @@ namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
  * Class Row reindex action
  *
  * @package Magento\CatalogInventory\Model\Indexer\Stock\Action
- * @since 2.0.0
  */
 class Row extends \Magento\CatalogInventory\Model\Indexer\Stock\AbstractAction
 {
@@ -23,7 +22,6 @@ class Row extends \Magento\CatalogInventory\Model\Indexer\Stock\AbstractAction
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute($id = null)
     {

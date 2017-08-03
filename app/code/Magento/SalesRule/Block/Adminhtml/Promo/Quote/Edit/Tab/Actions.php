@@ -10,7 +10,6 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Actions
  *
- * @since 2.0.0
  */
 class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Ui\Component\Layout\Tabs\TabInterface
@@ -19,20 +18,17 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Core registry
      *
      * @var \Magento\Backend\Block\Widget\Form\Renderer\Fieldset
-     * @since 2.0.0
      */
     protected $_rendererFieldset;
 
     /**
      * @var \Magento\Rule\Block\Actions
-     * @since 2.0.0
      */
     protected $_ruleActions;
 
     /**
      * @var \Magento\Config\Model\Config\Source\Yesno
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     protected $_sourceYesno;
 
@@ -59,7 +55,6 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset
      * @param array $data
      * @param \Magento\SalesRule\Model\RuleFactory|null $ruleFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -108,7 +103,6 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -117,7 +111,6 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -126,7 +119,6 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -135,7 +127,6 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -146,7 +137,6 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Prepare form before rendering HTML
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {

@@ -13,19 +13,16 @@ use Magento\Quote\Api\CartManagementInterface;
 
 /**
  * Replaces a "%cart_id%" value with the current authenticated customer's cart
- * @since 2.0.0
  */
 class ParamOverriderCartId implements ParamOverriderInterface
 {
     /**
      * @var UserContextInterface
-     * @since 2.0.0
      */
     private $userContext;
 
     /**
      * @var CartManagementInterface
-     * @since 2.0.0
      */
     private $cartManagement;
 
@@ -34,7 +31,6 @@ class ParamOverriderCartId implements ParamOverriderInterface
      *
      * @param UserContextInterface $userContext
      * @param CartManagementInterface $cartManagement
-     * @since 2.0.0
      */
     public function __construct(
         UserContextInterface $userContext,
@@ -46,7 +42,6 @@ class ParamOverriderCartId implements ParamOverriderInterface
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function getOverriddenValue()
     {

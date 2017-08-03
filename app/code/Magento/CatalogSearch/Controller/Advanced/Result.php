@@ -14,7 +14,6 @@ use Magento\Framework\UrlFactory;
 /**
  * Class \Magento\CatalogSearch\Controller\Advanced\Result
  *
- * @since 2.0.0
  */
 class Result extends \Magento\Framework\App\Action\Action
 {
@@ -22,7 +21,6 @@ class Result extends \Magento\Framework\App\Action\Action
      * Url factory
      *
      * @var UrlFactory
-     * @since 2.0.0
      */
     protected $_urlFactory;
 
@@ -30,7 +28,6 @@ class Result extends \Magento\Framework\App\Action\Action
      * Catalog search advanced
      *
      * @var ModelAdvanced
-     * @since 2.0.0
      */
     protected $_catalogSearchAdvanced;
 
@@ -40,7 +37,6 @@ class Result extends \Magento\Framework\App\Action\Action
      * @param Context $context
      * @param ModelAdvanced $catalogSearchAdvanced
      * @param UrlFactory $urlFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -54,7 +50,6 @@ class Result extends \Magento\Framework\App\Action\Action
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

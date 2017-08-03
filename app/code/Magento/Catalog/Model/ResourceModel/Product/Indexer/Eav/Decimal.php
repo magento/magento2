@@ -11,7 +11,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
  * Catalog Product Eav Decimal Attributes Indexer resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Decimal extends AbstractEav
 {
@@ -19,7 +18,6 @@ class Decimal extends AbstractEav
      * Initialize connection and define main index table
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -32,7 +30,6 @@ class Decimal extends AbstractEav
      * @param array $entityIds the entity ids limitation
      * @param int $attributeId the attribute id limitation
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareIndex($entityIds = null, $attributeId = null)
     {
@@ -134,7 +131,6 @@ class Decimal extends AbstractEav
      * Retrieve decimal indexable attributes
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getIndexableAttributes()
     {
@@ -165,7 +161,6 @@ class Decimal extends AbstractEav
      * @param string $table
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getIdxTable($table = null)
     {

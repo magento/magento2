@@ -7,7 +7,6 @@ namespace Magento\Framework\DB\Sequence;
 
 /**
  * Interface represents sequence
- * @since 2.0.0
  */
 interface SequenceInterface
 {
@@ -15,7 +14,6 @@ interface SequenceInterface
      * Retrieve current value
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCurrentValue();
 
@@ -23,7 +21,6 @@ interface SequenceInterface
      * Retrieve next value
      *
      * @return string
-     * @since 2.0.0
      */
     public function getNextValue();
 }

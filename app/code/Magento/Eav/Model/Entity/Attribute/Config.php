@@ -11,7 +11,6 @@ use Magento\Framework\Serialize\SerializerInterface;
  * Provides EAV attributes configuration
  *
  * @api
- * @since 2.0.0
  */
 class Config extends \Magento\Framework\Config\Data
 {
@@ -22,7 +21,6 @@ class Config extends \Magento\Framework\Config\Data
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Attribute\Config\Reader $reader,
@@ -38,7 +36,6 @@ class Config extends \Magento\Framework\Config\Data
      *
      * @param AbstractAttribute $attribute
      * @return array
-     * @since 2.0.0
      */
     public function getLockedFields(AbstractAttribute $attribute)
     {
@@ -62,7 +59,6 @@ class Config extends \Magento\Framework\Config\Data
      *
      * @param string $entityCode
      * @return array
-     * @since 2.0.0
      */
     public function getEntityAttributesLockedFields($entityCode)
     {

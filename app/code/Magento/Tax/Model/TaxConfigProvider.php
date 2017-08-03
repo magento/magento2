@@ -13,31 +13,26 @@ use Magento\Checkout\Model\Session as CheckoutSession;
 /**
  * Class \Magento\Tax\Model\TaxConfigProvider
  *
- * @since 2.0.0
  */
 class TaxConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var TaxHelper
-     * @since 2.0.0
      */
     protected $taxHelper;
 
     /**
      * @var Config
-     * @since 2.0.0
      */
     protected $taxConfig;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var CheckoutSession
-     * @since 2.0.0
      */
     protected $checkoutSession;
 
@@ -46,7 +41,6 @@ class TaxConfigProvider implements ConfigProviderInterface
      * @param Config $taxConfig
      * @param CheckoutSession $checkoutSession
      * @param ScopeConfigInterface $scopeConfig
-     * @since 2.0.0
      */
     public function __construct(
         TaxHelper $taxHelper,
@@ -62,7 +56,6 @@ class TaxConfigProvider implements ConfigProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -100,7 +93,6 @@ class TaxConfigProvider implements ConfigProviderInterface
      * Shipping mode: 'both', 'including', 'excluding'
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDisplayShippingMode()
     {
@@ -117,7 +109,6 @@ class TaxConfigProvider implements ConfigProviderInterface
      * Return flag whether to display shipping price excluding tax
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isDisplayShippingPriceExclTax()
     {
@@ -128,7 +119,6 @@ class TaxConfigProvider implements ConfigProviderInterface
      * Return flag whether to display shipping price including and excluding tax
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isDisplayShippingBothPrices()
     {
@@ -139,7 +129,6 @@ class TaxConfigProvider implements ConfigProviderInterface
      * Get review item price display mode
      *
      * @return string 'both', 'including', 'excluding'
-     * @since 2.0.0
      */
     public function getReviewItemPriceDisplayMode()
     {
@@ -156,7 +145,6 @@ class TaxConfigProvider implements ConfigProviderInterface
      * Get review item price display mode
      *
      * @return string 'both', 'including', 'excluding'
-     * @since 2.0.0
      */
     public function getReviewTotalsDisplayMode()
     {
@@ -173,7 +161,6 @@ class TaxConfigProvider implements ConfigProviderInterface
      * Show tax details in checkout totals section flag
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isFullTaxSummaryDisplayed()
     {
@@ -184,7 +171,6 @@ class TaxConfigProvider implements ConfigProviderInterface
      * Display tax in grand total section or not
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isTaxDisplayedInGrandTotal()
     {
@@ -195,7 +181,6 @@ class TaxConfigProvider implements ConfigProviderInterface
      * Reload totals(taxes) on billing address update
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function reloadOnBillingAddress()
     {

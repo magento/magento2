@@ -9,7 +9,6 @@ namespace Magento\Payment\Gateway\Config;
  * Interface ValueHandlerInterface
  * @package Magento\Payment\Gateway\Config
  * @api
- * @since 2.0.0
  */
 interface ValueHandlerInterface
 {
@@ -20,7 +19,6 @@ interface ValueHandlerInterface
      * @param int|null $storeId
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function handle(array $subject, $storeId = null);
 }

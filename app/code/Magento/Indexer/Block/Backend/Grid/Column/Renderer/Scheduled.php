@@ -8,7 +8,6 @@ namespace Magento\Indexer\Block\Backend\Grid\Column\Renderer;
 /**
  * Class \Magento\Indexer\Block\Backend\Grid\Column\Renderer\Scheduled
  *
- * @since 2.0.0
  */
 class Scheduled extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -17,7 +16,6 @@ class Scheduled extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstr
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

@@ -19,19 +19,16 @@ use Magento\Framework\Api\SortOrderBuilder;
 
 /**
  * Customer group collection backed by services
- * @since 2.0.0
  */
 class ServiceCollection extends AbstractServiceCollection
 {
     /**
      * @var GroupRepositoryInterface
-     * @since 2.0.0
      */
     protected $groupRepository;
 
     /**
      * @var SimpleDataObjectConverter
-     * @since 2.0.0
      */
     protected $simpleDataObjectConverter;
 
@@ -42,7 +39,6 @@ class ServiceCollection extends AbstractServiceCollection
      * @param SortOrderBuilder $sortOrderBuilder
      * @param GroupRepositoryInterface $groupRepository
      * @param SimpleDataObjectConverter $simpleDataObjectConverter
-     * @since 2.0.0
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -64,7 +60,6 @@ class ServiceCollection extends AbstractServiceCollection
      * @param bool $logQuery
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function loadData($printQuery = false, $logQuery = false)
     {

@@ -13,7 +13,6 @@ use Magento\Framework\App\ResponseInterface;
 /**
  * Class \Magento\Framework\App\Action\Redirect
  *
- * @since 2.0.0
  */
 class Redirect extends AbstractAction
 {
@@ -23,7 +22,6 @@ class Redirect extends AbstractAction
      * @param RequestInterface $request
      * @return ResponseInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function dispatch(RequestInterface $request)
     {
@@ -32,7 +30,6 @@ class Redirect extends AbstractAction
 
     /**
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

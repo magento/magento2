@@ -13,7 +13,6 @@ namespace Magento\Reports\Model\ResourceModel\Report\Product;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
 {
@@ -36,7 +35,6 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
      * Product resource instance
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product
-     * @since 2.0.0
      */
     protected $_productResource;
 
@@ -44,7 +42,6 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
      * Resource helper instance
      *
      * @var \Magento\Reports\Model\ResourceModel\Helper
-     * @since 2.0.0
      */
     protected $_resourceHelper;
 
@@ -60,7 +57,6 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Reports\Model\ResourceModel\Helper $resourceHelper
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -90,7 +86,6 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
      * Model initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -104,7 +99,6 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
      * @param null|mixed $to
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function aggregate($from = null, $to = null)
     {

@@ -17,7 +17,6 @@ use Magento\Framework\ObjectManager\InterceptableValidator;
 /**
  * Class \Magento\Setup\Module\Di\Code\Generator\InterceptionConfigurationBuilder
  *
- * @since 2.0.0
  */
 class InterceptionConfigurationBuilder
 {
@@ -25,37 +24,32 @@ class InterceptionConfigurationBuilder
      * Area code list: global, frontend, etc.
      *
      * @var array
-     * @since 2.0.0
      */
     private $areaCodesList = [];
 
     /**
      * @var InterceptionConfig
-     * @since 2.0.0
      */
     private $interceptionConfig;
 
     /**
      * @var PluginList
-     * @since 2.0.0
      */
     private $pluginList;
 
     /**
      * @var Type
-     * @since 2.0.0
      */
     private $typeReader;
 
     /**
      * @var Manager
-     * @since 2.0.0
      */
     private $cacheManager;
 
     /**
      * @var InterceptableValidator
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $interceptableValidator;
 
@@ -65,7 +59,6 @@ class InterceptionConfigurationBuilder
      * @param Type $typeReader
      * @param Manager $cacheManager
      * @param InterceptableValidator $interceptableValidator
-     * @since 2.0.0
      */
     public function __construct(
         InterceptionConfig $interceptionConfig,
@@ -86,7 +79,6 @@ class InterceptionConfigurationBuilder
      *
      * @param string $areaCode
      * @return void
-     * @since 2.0.0
      */
     public function addAreaCode($areaCode)
     {
@@ -100,7 +92,6 @@ class InterceptionConfigurationBuilder
      *
      * @param array $definedClasses
      * @return array
-     * @since 2.0.0
      */
     public function getInterceptionConfiguration($definedClasses)
     {
@@ -117,7 +108,6 @@ class InterceptionConfigurationBuilder
      *
      * @param array $definedClasses
      * @return array
-     * @since 2.0.0
      */
     private function getInterceptedClasses($definedClasses)
     {
@@ -138,7 +128,6 @@ class InterceptionConfigurationBuilder
      *
      * @param array $interceptedInstances
      * @return array
-     * @since 2.0.0
      */
     private function getPluginsList($interceptedInstances)
     {
@@ -164,7 +153,6 @@ class InterceptionConfigurationBuilder
      *
      * @param array $pluginInheritance
      * @return array
-     * @since 2.0.0
      */
     private function filterNullInheritance($pluginInheritance)
     {
@@ -192,7 +180,6 @@ class InterceptionConfigurationBuilder
      *
      * @param array $inheritedConfig
      * @return array
-     * @since 2.0.0
      */
     private function mergeAreaPlugins($inheritedConfig)
     {
@@ -212,7 +199,6 @@ class InterceptionConfigurationBuilder
      *
      * @param array $interceptionConfiguration
      * @return array
-     * @since 2.0.0
      */
     private function getInterceptedMethods($interceptionConfiguration)
     {

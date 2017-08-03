@@ -9,7 +9,6 @@ namespace Magento\Paypal\Controller\Express;
 /**
  * Class \Magento\Paypal\Controller\Express\Review
  *
- * @since 2.0.0
  */
 class Review extends \Magento\Paypal\Controller\Express\AbstractExpress\Review
 {
@@ -17,7 +16,6 @@ class Review extends \Magento\Paypal\Controller\Express\AbstractExpress\Review
      * Config mode type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_configType = \Magento\Paypal\Model\Config::class;
 
@@ -25,7 +23,6 @@ class Review extends \Magento\Paypal\Controller\Express\AbstractExpress\Review
      * Config method type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_configMethod = \Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS;
 
@@ -33,7 +30,6 @@ class Review extends \Magento\Paypal\Controller\Express\AbstractExpress\Review
      * Checkout mode type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_checkoutType = \Magento\Paypal\Model\Express\Checkout::class;
 }

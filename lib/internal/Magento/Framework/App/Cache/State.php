@@ -14,7 +14,6 @@ use Magento\Framework\Config\File\ConfigFilePool;
 /**
  * Class \Magento\Framework\App\Cache\State
  *
- * @since 2.0.0
  */
 class State implements StateInterface
 {
@@ -32,7 +31,6 @@ class State implements StateInterface
      * Deployment configuration
      *
      * @var DeploymentConfig
-     * @since 2.0.0
      */
     private $config;
 
@@ -40,7 +38,6 @@ class State implements StateInterface
      * Deployment configuration storage writer
      *
      * @var Writer
-     * @since 2.0.0
      */
     private $writer;
 
@@ -48,7 +45,6 @@ class State implements StateInterface
      * Associative array of cache type codes and their statuses (enabled/disabled)
      *
      * @var array
-     * @since 2.0.0
      */
     private $statuses;
 
@@ -56,7 +52,6 @@ class State implements StateInterface
      * Whether all cache types are forced to be disabled
      *
      * @var bool
-     * @since 2.0.0
      */
     private $banAll;
 
@@ -66,7 +61,6 @@ class State implements StateInterface
      * @param DeploymentConfig $config
      * @param Writer $writer
      * @param bool $banAll
-     * @since 2.0.0
      */
     public function __construct(DeploymentConfig $config, Writer $writer, $banAll = false)
     {
@@ -80,7 +74,6 @@ class State implements StateInterface
      *
      * @param string $cacheType
      * @return bool
-     * @since 2.0.0
      */
     public function isEnabled($cacheType)
     {
@@ -94,7 +87,6 @@ class State implements StateInterface
      * @param string $cacheType
      * @param bool $isEnabled
      * @return void
-     * @since 2.0.0
      */
     public function setEnabled($cacheType, $isEnabled)
     {
@@ -106,7 +98,6 @@ class State implements StateInterface
      * Save the current statuses (enabled/disabled) of cache types to the persistent storage
      *
      * @return void
-     * @since 2.0.0
      */
     public function persist()
     {
@@ -118,7 +109,6 @@ class State implements StateInterface
      * Load statuses (enabled/disabled) of cache types
      *
      * @return void
-     * @since 2.0.0
      */
     private function load()
     {

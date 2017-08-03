@@ -8,7 +8,6 @@ namespace Magento\Framework\Code\Reader;
 /**
  * Class \Magento\Framework\Code\Reader\SourceArgumentsReader
  *
- * @since 2.0.0
  */
 class SourceArgumentsReader
 {
@@ -43,7 +42,6 @@ class SourceArgumentsReader
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function getConstructorArgumentTypes(\ReflectionClass $class, $inherited = false)
     {
@@ -107,7 +105,6 @@ class SourceArgumentsReader
      * @return string
      * @deprecated 2.2.0
      * @see \Magento\Framework\Code\Reader\NamespaceResolver::resolveNamespace
-     * @since 2.0.0
      */
     protected function resolveNamespaces($argument, $availableNamespaces)
     {
@@ -120,7 +117,6 @@ class SourceArgumentsReader
      * @param string $argument
      * @param string $token
      * @return string
-     * @since 2.0.0
      */
     protected function removeToken($argument, $token)
     {
@@ -138,7 +134,6 @@ class SourceArgumentsReader
      * @return array
      * @deprecated 2.2.0
      * @see \Magento\Framework\Code\Reader\NamespaceResolver::getImportedNamespaces
-     * @since 2.0.0
      */
     protected function getImportedNamespaces(array $file)
     {

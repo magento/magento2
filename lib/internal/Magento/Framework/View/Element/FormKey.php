@@ -11,13 +11,11 @@ namespace Magento\Framework\View\Element;
 
 /**
  * @api
- * @since 2.0.0
  */
 class FormKey extends \Magento\Framework\View\Element\AbstractBlock
 {
     /**
      * @var \Magento\Framework\Data\Form\FormKey
-     * @since 2.0.0
      */
     protected $formKey;
 
@@ -25,7 +23,6 @@ class FormKey extends \Magento\Framework\View\Element\AbstractBlock
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Framework\Data\Form\FormKey $formKey
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
@@ -40,7 +37,6 @@ class FormKey extends \Magento\Framework\View\Element\AbstractBlock
      * Get form key
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFormKey()
     {
@@ -49,7 +45,6 @@ class FormKey extends \Magento\Framework\View\Element\AbstractBlock
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

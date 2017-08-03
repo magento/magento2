@@ -16,7 +16,6 @@ use Magento\Search\Model\QueryFactory;
 /**
  * Class \Magento\CatalogSearch\Controller\Result\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Framework\App\Action\Action
 {
@@ -24,19 +23,16 @@ class Index extends \Magento\Framework\App\Action\Action
      * Catalog session
      *
      * @var Session
-     * @since 2.0.0
      */
     protected $_catalogSession;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var QueryFactory
-     * @since 2.0.0
      */
     private $_queryFactory;
 
@@ -44,7 +40,6 @@ class Index extends \Magento\Framework\App\Action\Action
      * Catalog Layer Resolver
      *
      * @var Resolver
-     * @since 2.0.0
      */
     private $layerResolver;
 
@@ -54,7 +49,6 @@ class Index extends \Magento\Framework\App\Action\Action
      * @param StoreManagerInterface $storeManager
      * @param QueryFactory $queryFactory
      * @param Resolver $layerResolver
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -74,7 +68,6 @@ class Index extends \Magento\Framework\App\Action\Action
      * Display search result
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

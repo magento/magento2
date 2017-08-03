@@ -9,7 +9,6 @@ namespace Magento\Catalog\Model\ResourceModel\Product;
  * Catalog Product Relations Resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Relation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -17,7 +16,6 @@ class Relation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize resource model and define main table
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -30,7 +28,6 @@ class Relation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $parentId
      * @param array $childIds
      * @return $this
-     * @since 2.0.0
      */
     public function processRelations($parentId, $childIds)
     {
@@ -78,7 +75,6 @@ class Relation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int[] $childIds
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function addRelations($parentId, $childIds)
     {
@@ -99,7 +95,6 @@ class Relation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int[] $childIds
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function removeRelations($parentId, $childIds)
     {

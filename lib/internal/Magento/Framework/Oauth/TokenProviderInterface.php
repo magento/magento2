@@ -11,7 +11,6 @@ namespace Magento\Framework\Oauth;
  * provided to help clients manipulating tokens validate and acquire the associated token consumer.
  *
  * @api
- * @since 2.0.0
  */
 interface TokenProviderInterface
 {
@@ -21,7 +20,6 @@ interface TokenProviderInterface
      * @param ConsumerInterface $consumer The consumer.
      * @return bool True if the consumer is valid.
      * @throws \Magento\Framework\Oauth\Exception Validation errors.
-     * @since 2.0.0
      */
     public function validateConsumer($consumer);
 
@@ -38,7 +36,6 @@ interface TokenProviderInterface
      * @param ConsumerInterface $consumer
      * @return array The request token and secret.
      * @throws \Magento\Framework\Oauth\Exception Validation errors.
-     * @since 2.0.0
      */
     public function createRequestToken($consumer);
 
@@ -50,7 +47,6 @@ interface TokenProviderInterface
      * @param string $oauthVerifier The 'oauth_verifier' value.
      * @return string The request token secret (i.e. 'oauth_token_secret').
      * @throws \Magento\Framework\Oauth\Exception Validation errors.
-     * @since 2.0.0
      */
     public function validateRequestToken($requestToken, $consumer, $oauthVerifier);
 
@@ -67,7 +63,6 @@ interface TokenProviderInterface
      * @param ConsumerInterface $consumer The consumer given the 'oauth_consumer_key'.
      * @return array The access token and secret.
      * @throws \Magento\Framework\Oauth\Exception Validation errors.
-     * @since 2.0.0
      */
     public function getAccessToken($consumer);
 
@@ -78,7 +73,6 @@ interface TokenProviderInterface
      * @param ConsumerInterface $consumer The consumer given the 'oauth_consumer_key'.
      * @return string The access token secret.
      * @throws \Magento\Framework\Oauth\Exception Validation errors.
-     * @since 2.0.0
      */
     public function validateAccessTokenRequest($accessToken, $consumer);
 
@@ -88,7 +82,6 @@ interface TokenProviderInterface
      * @param string $accessToken The 'oauth_token' access token string.
      * @return int Consumer ID if the access token is valid.
      * @throws \Magento\Framework\Oauth\Exception Validation errors.
-     * @since 2.0.0
      */
     public function validateAccessToken($accessToken);
 
@@ -97,7 +90,6 @@ interface TokenProviderInterface
      *
      * @param string $oauthToken The token string.
      * @return bool True if the Oauth token passes basic validation.
-     * @since 2.0.0
      */
     public function validateOauthToken($oauthToken);
 
@@ -107,7 +99,6 @@ interface TokenProviderInterface
      * @param string $consumerKey The 'oauth_consumer_key' value.
      * @return ConsumerInterface
      * @throws \Magento\Framework\Oauth\Exception
-     * @since 2.0.0
      */
     public function getConsumerByKey($consumerKey);
 }

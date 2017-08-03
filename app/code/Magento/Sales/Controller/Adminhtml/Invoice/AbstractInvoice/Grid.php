@@ -9,7 +9,6 @@ namespace Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\Grid
  *
- * @since 2.0.0
  */
 abstract class Grid extends \Magento\Backend\App\Action
 {
@@ -22,14 +21,12 @@ abstract class Grid extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Framework\View\Result\LayoutFactory
-     * @since 2.0.0
      */
     protected $resultLayoutFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -43,7 +40,6 @@ abstract class Grid extends \Magento\Backend\App\Action
      * Order grid
      *
      * @return \Magento\Framework\View\Result\Layout
-     * @since 2.0.0
      */
     public function execute()
     {

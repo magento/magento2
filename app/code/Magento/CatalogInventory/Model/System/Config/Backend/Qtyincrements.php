@@ -9,7 +9,6 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Backend for qty increments
- * @since 2.0.0
  */
 class Qtyincrements extends \Magento\Framework\App\Config\Value
 {
@@ -18,7 +17,6 @@ class Qtyincrements extends \Magento\Framework\App\Config\Value
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function beforeSave()
     {

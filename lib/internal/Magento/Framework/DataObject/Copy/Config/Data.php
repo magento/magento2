@@ -7,7 +7,6 @@ namespace Magento\Framework\DataObject\Copy\Config;
 
 /**
  * Provides DataObject copier configuration
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\Config\Data
 {

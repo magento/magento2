@@ -10,7 +10,6 @@ namespace Magento\CatalogInventory\Block\Stockqty;
  * Product stock qty default block
  *
  * @api
- * @since 2.0.0
  */
 class DefaultStockqty extends AbstractStockqty implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -18,7 +17,6 @@ class DefaultStockqty extends AbstractStockqty implements \Magento\Framework\Dat
      * Render block HTML
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -32,7 +30,6 @@ class DefaultStockqty extends AbstractStockqty implements \Magento\Framework\Dat
      * Return identifiers for produced content
      *
      * @return array
-     * @since 2.0.0
      */
     public function getIdentities()
     {

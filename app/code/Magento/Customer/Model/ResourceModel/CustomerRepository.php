@@ -15,85 +15,71 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 /**
  * Customer repository.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInterface
 {
     /**
      * @var \Magento\Customer\Model\CustomerFactory
-     * @since 2.0.0
      */
     protected $customerFactory;
 
     /**
      * @var \Magento\Customer\Model\Data\CustomerSecureFactory
-     * @since 2.0.0
      */
     protected $customerSecureFactory;
 
     /**
      * @var \Magento\Customer\Model\CustomerRegistry
-     * @since 2.0.0
      */
     protected $customerRegistry;
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\AddressRepository
-     * @since 2.0.0
      */
     protected $addressRepository;
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\Customer
-     * @since 2.0.0
      */
     protected $customerResourceModel;
 
     /**
      * @var \Magento\Customer\Api\CustomerMetadataInterface
-     * @since 2.0.0
      */
     protected $customerMetadata;
 
     /**
      * @var \Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory
-     * @since 2.0.0
      */
     protected $searchResultsFactory;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
-     * @since 2.0.0
      */
     protected $extensibleDataObjectConverter;
 
     /**
      * @var DataObjectHelper
-     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
     /**
      * @var ImageProcessorInterface
-     * @since 2.0.0
      */
     protected $imageProcessor;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
-     * @since 2.0.0
      */
     protected $extensionAttributesJoinProcessor;
 
@@ -119,7 +105,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param CollectionProcessorInterface $collectionProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Model\CustomerFactory $customerFactory,
@@ -157,7 +142,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null)
     {
@@ -291,7 +275,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function get($email, $websiteId = null)
     {
@@ -301,7 +284,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getById($customerId)
     {
@@ -311,7 +293,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -352,7 +333,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function delete(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
@@ -361,7 +341,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function deleteById($customerId)
     {
@@ -379,7 +358,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      * @param \Magento\Customer\Model\ResourceModel\Customer\Collection $collection
      * @return void
      * @throws \Magento\Framework\Exception\InputException
-     * @since 2.0.0
      */
     protected function addFilterGroupToCollection(
         \Magento\Framework\Api\Search\FilterGroup $filterGroup,

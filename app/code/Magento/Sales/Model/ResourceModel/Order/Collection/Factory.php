@@ -8,19 +8,16 @@ namespace Magento\Sales\Model\ResourceModel\Order\Collection;
 /**
  * Class \Magento\Sales\Model\ResourceModel\Order\Collection\Factory
  *
- * @since 2.0.0
  */
 class Factory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -32,7 +29,6 @@ class Factory
      * @param array $data
      * @return AbstractCollection
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function create($className, array $data = [])
     {

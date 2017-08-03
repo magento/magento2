@@ -7,19 +7,16 @@ namespace Magento\Tax\Model\Config;
 
 /**
  * TaxClass Config
- * @since 2.0.0
  */
 class TaxClass extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Config\Model\ResourceModel\Config
-     * @since 2.0.0
      */
     protected $resourceConfig;
 
     /**
      * @var \Magento\Eav\Model\Entity\AttributeFactory
-     * @since 2.0.0
      */
     protected $attributeFactory;
 
@@ -33,7 +30,6 @@ class TaxClass extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -55,7 +51,6 @@ class TaxClass extends \Magento\Framework\App\Config\Value
      * Update the default product tax class
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {

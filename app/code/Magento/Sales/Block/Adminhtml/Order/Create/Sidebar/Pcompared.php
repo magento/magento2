@@ -12,7 +12,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
 {
@@ -20,7 +19,6 @@ class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abst
      * Product factory
      *
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $_productFactory;
 
@@ -28,7 +26,6 @@ class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abst
      * Event
      *
      * @var \Magento\Reports\Model\ResourceModel\Event
-     * @since 2.0.0
      */
     protected $_event;
 
@@ -41,7 +38,6 @@ class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abst
      * @param \Magento\Reports\Model\ResourceModel\Event $event
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -62,7 +58,6 @@ class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abst
      * Constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -75,7 +70,6 @@ class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abst
      * Get header text
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -86,7 +80,6 @@ class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abst
      * Retrieve item collection
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getItemCollection()
     {
@@ -137,7 +130,6 @@ class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abst
      * Retrieve availability removing items in block
      *
      * @return false
-     * @since 2.0.0
      */
     public function canRemoveItems()
     {
@@ -149,7 +141,6 @@ class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abst
      *
      * @param \Magento\Catalog\Model\Product $item
      * @return int
-     * @since 2.0.0
      */
     public function getIdentifierId($item)
     {
@@ -161,7 +152,6 @@ class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abst
      *
      * @param \Magento\Framework\DataObject $item
      * @return int
-     * @since 2.0.0
      */
     public function getProductId($item)
     {

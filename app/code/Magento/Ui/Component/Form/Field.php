@@ -14,7 +14,6 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 /**
  * Class Field
  * @api
- * @since 2.0.0
  */
 class Field extends AbstractComponent
 {
@@ -24,7 +23,6 @@ class Field extends AbstractComponent
      * Wrapped component
      *
      * @var UiComponentInterface
-     * @since 2.0.0
      */
     protected $wrappedComponent;
 
@@ -32,7 +30,6 @@ class Field extends AbstractComponent
      * UI component factory
      *
      * @var UiComponentFactory
-     * @since 2.0.0
      */
     protected $uiComponentFactory;
 
@@ -43,7 +40,6 @@ class Field extends AbstractComponent
      * @param UiComponentFactory $uiComponentFactory
      * @param UiComponentInterface[] $components
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -59,7 +55,6 @@ class Field extends AbstractComponent
      * Get component name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getComponentName()
     {
@@ -71,7 +66,6 @@ class Field extends AbstractComponent
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function prepare()
     {

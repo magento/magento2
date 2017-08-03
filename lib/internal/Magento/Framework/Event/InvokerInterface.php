@@ -10,7 +10,6 @@ namespace Magento\Framework\Event;
 /**
  * Interface \Magento\Framework\Event\InvokerInterface
  *
- * @since 2.0.0
  */
 interface InvokerInterface
 {
@@ -20,7 +19,6 @@ interface InvokerInterface
      * @param array $configuration
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
-     * @since 2.0.0
      */
     public function dispatch(array $configuration, \Magento\Framework\Event\Observer $observer);
 }

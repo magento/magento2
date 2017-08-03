@@ -10,7 +10,6 @@ namespace Magento\Bundle\Api\Data;
 /**
  * Interface LinkInterface
  * @api
- * @since 2.0.0
  */
 interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -21,7 +20,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get the identifier
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getId();
 
@@ -30,7 +28,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $id
      * @return $this
-     * @since 2.0.0
      */
     public function setId($id);
 
@@ -38,7 +35,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get linked product sku
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getSku();
 
@@ -47,7 +43,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $sku
      * @return $this
-     * @since 2.0.0
      */
     public function setSku($sku);
 
@@ -55,7 +50,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get option id
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getOptionId();
 
@@ -64,7 +58,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $optionId
      * @return $this
-     * @since 2.0.0
      */
     public function setOptionId($optionId);
 
@@ -72,7 +65,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get qty
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getQty();
 
@@ -81,7 +73,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $qty
      * @return $this
-     * @since 2.0.0
      */
     public function setQty($qty);
 
@@ -89,7 +80,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get position
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getPosition();
 
@@ -98,7 +88,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $position
      * @return $this
-     * @since 2.0.0
      */
     public function setPosition($position);
 
@@ -107,7 +96,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsDefault();
 
@@ -116,7 +104,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param bool $isDefault
      * @return $this
-     * @since 2.0.0
      */
     public function setIsDefault($isDefault);
 
@@ -124,7 +111,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get price
      *
      * @return float
-     * @since 2.0.0
      */
     public function getPrice();
 
@@ -133,7 +119,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $price
      * @return $this
-     * @since 2.0.0
      */
     public function setPrice($price);
 
@@ -141,7 +126,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get price type
      *
      * @return int
-     * @since 2.0.0
      */
     public function getPriceType();
 
@@ -150,7 +134,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $priceType
      * @return $this
-     * @since 2.0.0
      */
     public function setPriceType($priceType);
 
@@ -158,7 +141,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get whether quantity could be changed
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getCanChangeQuantity();
 
@@ -167,7 +149,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $canChangeQuantity
      * @return $this
-     * @since 2.0.0
      */
     public function setCanChangeQuantity($canChangeQuantity);
 
@@ -175,7 +156,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Bundle\Api\Data\LinkExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -184,7 +164,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\Bundle\Api\Data\LinkExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Bundle\Api\Data\LinkExtensionInterface $extensionAttributes);
 }

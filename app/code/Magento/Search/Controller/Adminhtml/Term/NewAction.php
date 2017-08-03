@@ -11,13 +11,11 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Search\Controller\Adminhtml\Term\NewAction
  *
- * @since 2.0.0
  */
 class NewAction extends TermController
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Forward
-     * @since 2.0.0
      */
     public function execute()
     {

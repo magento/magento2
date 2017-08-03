@@ -10,7 +10,6 @@ use Magento\Framework\Code\Generator\Io;
 
 /**
  * Code generator for data object extension interfaces.
- * @since 2.0.0
  */
 class ExtensionAttributesInterfaceGenerator extends \Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator
 {
@@ -27,7 +26,6 @@ class ExtensionAttributesInterfaceGenerator extends \Magento\Framework\Api\Code\
      * @param Io $ioObject
      * @param \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator
      * @param DefinedClasses $definedClasses
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Api\ExtensionAttribute\Config $config,
@@ -52,7 +50,6 @@ class ExtensionAttributesInterfaceGenerator extends \Magento\Framework\Api\Code\
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function getExtendedClass()
     {
@@ -61,7 +58,6 @@ class ExtensionAttributesInterfaceGenerator extends \Magento\Framework\Api\Code\
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function validateResultClassName()
     {

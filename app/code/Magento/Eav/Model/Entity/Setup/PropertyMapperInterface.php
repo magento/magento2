@@ -10,7 +10,6 @@ namespace Magento\Eav\Model\Entity\Setup;
 /**
  * Interface \Magento\Eav\Model\Entity\Setup\PropertyMapperInterface
  *
- * @since 2.0.0
  */
 interface PropertyMapperInterface
 {
@@ -20,7 +19,6 @@ interface PropertyMapperInterface
      * @param array $input
      * @param int $entityTypeId
      * @return array
-     * @since 2.0.0
      */
     public function map(array $input, $entityTypeId);
 }

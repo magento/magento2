@@ -17,32 +17,27 @@ use Magento\Quote\Model\Quote\Address\RateRequest;
  * Free shipping model
  *
  * @api
- * @since 2.0.0
  */
 class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     \Magento\Shipping\Model\Carrier\CarrierInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_code = 'freeshipping';
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_isFixed = true;
 
     /**
      * @var \Magento\Shipping\Model\Rate\ResultFactory
-     * @since 2.0.0
      */
     protected $_rateResultFactory;
 
     /**
      * @var \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory
-     * @since 2.0.0
      */
     protected $_rateMethodFactory;
 
@@ -53,7 +48,6 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
      * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -73,7 +67,6 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
      *
      * @param RateRequest $request
      * @return \Magento\Shipping\Model\Rate\Result|bool
-     * @since 2.0.0
      */
     public function collectRates(RateRequest $request)
     {
@@ -113,7 +106,6 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
      *
      * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return void
-     * @since 2.0.0
      */
     protected function _updateFreeMethodQuote($request)
     {
@@ -136,7 +128,6 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getAllowedMethods()
     {

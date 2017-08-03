@@ -12,43 +12,36 @@ use Magento\Framework\Exception\StateException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterface
 {
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group
-     * @since 2.0.0
      */
     protected $groupResource;
 
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\GroupFactory
-     * @since 2.0.0
      */
     protected $groupFactory;
 
     /**
      * @var \Magento\Eav\Api\AttributeSetRepositoryInterface
-     * @since 2.0.0
      */
     protected $setRepository;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory
-     * @since 2.0.0
      */
     protected $groupListFactory;
 
     /**
      * @var \Magento\Eav\Api\Data\AttributeGroupSearchResultsInterfaceFactory
-     * @since 2.0.0
      */
     protected $searchResultsFactory;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
-     * @since 2.0.0
      */
     protected $joinProcessor;
 
@@ -67,7 +60,6 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param CollectionProcessorInterface $collectionProcessor
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group $groupResource,
@@ -89,7 +81,6 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function save(\Magento\Eav\Api\Data\AttributeGroupInterface $group)
     {
@@ -124,7 +115,6 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -154,7 +144,6 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function get($groupId)
     {
@@ -169,7 +158,6 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function delete(\Magento\Eav\Api\Data\AttributeGroupInterface $group)
     {
@@ -189,7 +177,6 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function deleteById($groupId)
     {
@@ -202,7 +189,6 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return null|string
-     * @since 2.0.0
      */
     protected function retrieveAttributeSetIdFromSearchCriteria(
         \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria

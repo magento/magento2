@@ -12,7 +12,6 @@ namespace Magento\Framework\View\Helper;
 /**
  * Class \Magento\Framework\View\Helper\Js
  *
- * @since 2.0.0
  */
 class Js
 {
@@ -21,7 +20,6 @@ class Js
      *
      * @param   string $script
      * @return  string
-     * @since 2.0.0
      */
     public function getScript($script)
     {

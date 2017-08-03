@@ -11,7 +11,6 @@ namespace Magento\CatalogRule\Model\Rule\Condition;
 
 /**
  * @method string getAttribute() Returns attribute code
- * @since 2.0.0
  */
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
@@ -20,7 +19,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      *
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\Model\AbstractModel $model
      * @return bool
-     * @since 2.0.0
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
@@ -48,7 +46,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param \Magento\Framework\Model\AbstractModel $model
      * @param mixed $oldAttrValue
      * @return void
-     * @since 2.0.0
      */
     protected function _restoreOldAttrValue(\Magento\Framework\Model\AbstractModel $model, $oldAttrValue)
     {
@@ -65,7 +62,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      *
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\Model\AbstractModel $model
      * @return $this
-     * @since 2.0.0
      */
     protected function _setAttributeValue(\Magento\Framework\Model\AbstractModel $model)
     {
@@ -98,7 +94,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param mixed $value
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\Model\AbstractModel $model
      * @return mixed
-     * @since 2.0.0
      */
     protected function _prepareDatetimeValue($value, \Magento\Framework\Model\AbstractModel $model)
     {
@@ -116,7 +111,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param mixed $value
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\Model\AbstractModel $model
      * @return mixed
-     * @since 2.0.0
      */
     protected function _prepareMultiselectValue($value, \Magento\Framework\Model\AbstractModel $model)
     {

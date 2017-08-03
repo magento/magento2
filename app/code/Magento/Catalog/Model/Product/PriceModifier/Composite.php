@@ -15,26 +15,22 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Class \Magento\Catalog\Model\Product\PriceModifier\Composite
  *
- * @since 2.0.0
  */
 class Composite implements PriceModifierInterface
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $modifiers;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param array $modifiers
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager, array $modifiers = [])
     {
@@ -48,7 +44,6 @@ class Composite implements PriceModifierInterface
      * @param mixed $price
      * @param Product $product
      * @return mixed
-     * @since 2.0.0
      */
     public function modifyPrice($price, Product $product)
     {

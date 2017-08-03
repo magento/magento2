@@ -7,19 +7,16 @@ namespace Magento\Quote\Model\ResourceModel\Quote\Address\Attribute\Backend;
 
 /**
  * Quote address attribute backend region resource model
- * @since 2.0.0
  */
 class Region extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
      * @var \Magento\Directory\Model\RegionFactory
-     * @since 2.0.0
      */
     protected $_regionFactory;
 
     /**
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @since 2.0.0
      */
     public function __construct(\Magento\Directory\Model\RegionFactory $regionFactory)
     {
@@ -31,7 +28,6 @@ class Region extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave($object)
     {

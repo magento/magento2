@@ -14,7 +14,6 @@ use Magento\Sales\Model\Spi\InvoiceResourceInterface;
 
 /**
  * Flat sales order invoice resource
- * @since 2.0.0
  */
 class Invoice extends SalesResource implements InvoiceResourceInterface
 {
@@ -22,7 +21,6 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
      * Event prefix
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_invoice_resource';
 
@@ -30,7 +28,6 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
      * Model initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -42,7 +39,6 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {

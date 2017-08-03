@@ -10,7 +10,6 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Option\Value;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -18,7 +17,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -33,7 +31,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function getValues($storeId)
     {
@@ -47,7 +44,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function addTitlesToResult($storeId)
     {
@@ -114,7 +110,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function addTitleToResult($storeId)
     {
@@ -148,7 +143,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function addPriceToResult($storeId)
     {
@@ -196,7 +190,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $storeId
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getValuesByOption($optionIds, $storeId = null)
     {
@@ -212,7 +205,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param array|\Magento\Catalog\Model\Product\Option|int $option
      * @return $this
-     * @since 2.0.0
      */
     public function addOptionToFilter($option)
     {

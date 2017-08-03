@@ -7,7 +7,6 @@ namespace Magento\Ui\Component\Form\Element\DataType;
 
 /**
  * Class Password
- * @since 2.0.0
  */
 class Password extends AbstractDataType
 {
@@ -17,7 +16,6 @@ class Password extends AbstractDataType
      * Get component name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getComponentName()
     {

@@ -14,19 +14,16 @@ use Magento\Framework\View\Asset\Source;
  *
  * Each file will be resolved and its mtime will be checked.
  * Then combination of all mtimes will be compared to a special .dat file that contains mtimes from previous merging
- * @since 2.0.0
  */
 class Checksum implements \Magento\Framework\View\Asset\MergeStrategyInterface
 {
     /**
      * @var \Magento\Framework\View\Asset\MergeStrategyInterface
-     * @since 2.0.0
      */
     protected $strategy;
 
     /**
      * @var \Magento\Framework\Filesystem
-     * @since 2.0.0
      */
     protected $filesystem;
 
@@ -39,7 +36,6 @@ class Checksum implements \Magento\Framework\View\Asset\MergeStrategyInterface
     /**
      * @param \Magento\Framework\View\Asset\MergeStrategyInterface $strategy
      * @param \Magento\Framework\Filesystem $filesystem
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Asset\MergeStrategyInterface $strategy,
@@ -64,7 +60,6 @@ class Checksum implements \Magento\Framework\View\Asset\MergeStrategyInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function merge(array $assetsToMerge, \Magento\Framework\View\Asset\LocalInterface $resultAsset)
     {

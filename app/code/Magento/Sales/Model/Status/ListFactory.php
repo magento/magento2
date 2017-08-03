@@ -8,19 +8,16 @@ namespace Magento\Sales\Model\Status;
 /**
  * Class ListFactory
  * @internal
- * @since 2.0.0
  */
 class ListFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -32,7 +29,6 @@ class ListFactory
      *
      * @param array $arguments
      * @return \Magento\Sales\Model\Status\ListStatus
-     * @since 2.0.0
      */
     public function create(array $arguments = [])
     {

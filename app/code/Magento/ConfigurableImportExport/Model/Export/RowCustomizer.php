@@ -14,13 +14,11 @@ use Magento\ImportExport\Model\Import;
 /**
  * Class \Magento\ConfigurableImportExport\Model\Export\RowCustomizer
  *
- * @since 2.0.0
  */
 class RowCustomizer implements RowCustomizerInterface
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $configurableData = [];
 
@@ -30,7 +28,6 @@ class RowCustomizer implements RowCustomizerInterface
      * @param ProductCollection $collection
      * @param int[] $productIds
      * @return void
-     * @since 2.0.0
      */
     public function prepareData($collection, $productIds)
     {
@@ -75,7 +72,6 @@ class RowCustomizer implements RowCustomizerInterface
      *
      * @param array $columns
      * @return array
-     * @since 2.0.0
      */
     public function addHeaderColumns($columns)
     {
@@ -98,7 +94,6 @@ class RowCustomizer implements RowCustomizerInterface
      * @param array $dataRow
      * @param int $productId
      * @return array
-     * @since 2.0.0
      */
     public function addData($dataRow, $productId)
     {
@@ -114,7 +109,6 @@ class RowCustomizer implements RowCustomizerInterface
      * @param array $additionalRowsCount
      * @param int $productId
      * @return array
-     * @since 2.0.0
      */
     public function getAdditionalRowsCount($additionalRowsCount, $productId)
     {

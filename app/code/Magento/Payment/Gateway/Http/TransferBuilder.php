@@ -8,56 +8,47 @@ namespace Magento\Payment\Gateway\Http;
 /**
  * Class TransferBuilder
  * @api
- * @since 2.0.0
  */
 class TransferBuilder
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     private $clientConfig = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $headers = [];
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $method;
 
     /**
      * @var array|string
-     * @since 2.0.0
      */
     private $body = [];
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $uri = '';
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     private $encode = false;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $auth = [Transfer::AUTH_USERNAME => null, Transfer::AUTH_PASSWORD => null];
 
     /**
      * @param array $clientConfig
      * @return $this
-     * @since 2.0.0
      */
     public function setClientConfig(array $clientConfig)
     {
@@ -69,7 +60,6 @@ class TransferBuilder
     /**
      * @param array $headers
      * @return $this
-     * @since 2.0.0
      */
     public function setHeaders(array $headers)
     {
@@ -81,7 +71,6 @@ class TransferBuilder
     /**
      * @param array|string $body
      * @return $this
-     * @since 2.0.0
      */
     public function setBody($body)
     {
@@ -93,7 +82,6 @@ class TransferBuilder
     /**
      * @param string $username
      * @return $this
-     * @since 2.0.0
      */
     public function setAuthUsername($username)
     {
@@ -105,7 +93,6 @@ class TransferBuilder
     /**
      * @param string $password
      * @return $this
-     * @since 2.0.0
      */
     public function setAuthPassword($password)
     {
@@ -117,7 +104,6 @@ class TransferBuilder
     /**
      * @param string $method
      * @return $this
-     * @since 2.0.0
      */
     public function setMethod($method)
     {
@@ -129,7 +115,6 @@ class TransferBuilder
     /**
      * @param string $uri
      * @return $this
-     * @since 2.0.0
      */
     public function setUri($uri)
     {
@@ -141,7 +126,6 @@ class TransferBuilder
     /**
      * @param bool $encode
      * @return $this
-     * @since 2.0.0
      */
     public function shouldEncode($encode)
     {
@@ -152,7 +136,6 @@ class TransferBuilder
 
     /**
      * @return TransferInterface
-     * @since 2.0.0
      */
     public function build()
     {

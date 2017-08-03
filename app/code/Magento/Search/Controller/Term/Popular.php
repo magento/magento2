@@ -15,20 +15,17 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Search\Controller\Term\Popular
  *
- * @since 2.0.0
  */
 class Popular extends Action
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @since 2.0.0
      */
     public function __construct(Context $context, ScopeConfigInterface $scopeConfig)
     {
@@ -41,7 +38,6 @@ class Popular extends Action
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
-     * @since 2.0.0
      */
     public function dispatch(RequestInterface $request)
     {
@@ -58,7 +54,6 @@ class Popular extends Action
 
     /**
      * @return \Magento\Framework\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

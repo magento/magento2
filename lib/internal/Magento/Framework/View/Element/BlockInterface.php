@@ -11,7 +11,6 @@ namespace Magento\Framework\View\Element;
  * Used to present information to user
  *
  * @api
- * @since 2.0.0
  */
 interface BlockInterface
 {
@@ -19,7 +18,6 @@ interface BlockInterface
      * Produce and return block's html output
      *
      * @return string
-     * @since 2.0.0
      */
     public function toHtml();
 }

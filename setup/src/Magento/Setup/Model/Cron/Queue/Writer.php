@@ -10,13 +10,11 @@ use Magento\Framework\Filesystem;
 
 /**
  * Queue content writer
- * @since 2.0.0
  */
 class Writer extends Reader
 {
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     * @since 2.0.0
      */
     private $writer;
 
@@ -25,7 +23,6 @@ class Writer extends Reader
      *
      * @param Filesystem $filesystem
      * @param string|null $queueFileBasename
-     * @since 2.0.0
      */
     public function __construct(Filesystem $filesystem, $queueFileBasename = null)
     {
@@ -38,7 +35,6 @@ class Writer extends Reader
      *
      * @param string $data
      * @return void
-     * @since 2.0.0
      */
     public function write($data)
     {

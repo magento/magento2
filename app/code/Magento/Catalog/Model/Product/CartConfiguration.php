@@ -12,7 +12,6 @@ namespace Magento\Catalog\Model\Product;
 /**
  * Class \Magento\Catalog\Model\Product\CartConfiguration
  *
- * @since 2.0.0
  */
 class CartConfiguration
 {
@@ -22,7 +21,6 @@ class CartConfiguration
      * @param \Magento\Catalog\Model\Product $product
      * @param array $config
      * @return bool
-     * @since 2.0.0
      */
     public function isProductConfigured(\Magento\Catalog\Model\Product $product, $config)
     {

@@ -17,37 +17,31 @@ use Magento\Framework\View\Asset\Source;
  * Class FrontendCompilation
  *
  * @api
- * @since 2.0.0
  */
 class FrontendCompilation implements PreProcessorInterface
 {
     /**
      * @var AlternativeSourceInterface
-     * @since 2.0.0
      */
     private $alternativeSource;
 
     /**
      * @var AssetBuilder
-     * @since 2.0.0
      */
     private $assetBuilder;
 
     /**
      * @var LockerProcessInterface
-     * @since 2.0.0
      */
     private $lockerProcess;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $lockName;
 
     /**
      * @var Source
-     * @since 2.0.0
      */
     private $assetSource;
 
@@ -59,7 +53,6 @@ class FrontendCompilation implements PreProcessorInterface
      * @param AlternativeSourceInterface $alternativeSource
      * @param LockerProcessInterface $lockerProcess
      * @param string $lockName
-     * @since 2.0.0
      */
     public function __construct(
         Source $assetSource,
@@ -80,7 +73,6 @@ class FrontendCompilation implements PreProcessorInterface
      *
      * @param PreProcessor\Chain $chain
      * @return void
-     * @since 2.0.0
      */
     public function process(PreProcessor\Chain $chain)
     {
@@ -110,7 +102,6 @@ class FrontendCompilation implements PreProcessorInterface
      * @param string $module
      * @param FallbackContext $context
      * @return array
-     * @since 2.0.0
      */
     private function processContent($path, $content, $module, FallbackContext $context)
     {

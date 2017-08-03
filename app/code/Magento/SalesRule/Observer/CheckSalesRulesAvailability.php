@@ -8,26 +8,22 @@ namespace Magento\SalesRule\Observer;
 /**
  * Class \Magento\SalesRule\Observer\CheckSalesRulesAvailability
  *
- * @since 2.0.0
  */
 class CheckSalesRulesAvailability
 {
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory
-     * @since 2.0.0
      */
     protected $_collectionFactory;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
-     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @param \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $collectionFactory,
@@ -43,7 +39,6 @@ class CheckSalesRulesAvailability
      *
      * @param string $attributeCode
      * @return $this
-     * @since 2.0.0
      */
     public function checkSalesRulesAvailability($attributeCode)
     {
@@ -81,7 +76,6 @@ class CheckSalesRulesAvailability
      * @param \Magento\Rule\Model\Condition\Combine $combine
      * @param string $attributeCode
      * @return void
-     * @since 2.0.0
      */
     protected function _removeAttributeFromConditions($combine, $attributeCode)
     {

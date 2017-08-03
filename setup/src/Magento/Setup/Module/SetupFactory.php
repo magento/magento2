@@ -12,13 +12,11 @@ use Magento\Setup\Model\ObjectManagerProvider;
  * Factory class to create Setup
  *
  * @api
- * @since 2.0.0
  */
 class SetupFactory
 {
     /**
      * @var ObjectManagerProvider
-     * @since 2.0.0
      */
     private $objectManagerProvider;
 
@@ -26,7 +24,6 @@ class SetupFactory
      * Constructor
      *
      * @param ObjectManagerProvider $objectManagerProvider
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerProvider $objectManagerProvider)
     {
@@ -38,7 +35,6 @@ class SetupFactory
      *
      * @param ResourceConnection $appResource
      * @return Setup
-     * @since 2.0.0
      */
     public function create(ResourceConnection $appResource = null)
     {

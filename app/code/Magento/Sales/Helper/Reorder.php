@@ -10,7 +10,6 @@ namespace Magento\Sales\Helper;
 
 /**
  * Sales module base helper
- * @since 2.0.0
  */
 class Reorder extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -18,13 +17,11 @@ class Reorder extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var \Magento\Sales\Api\OrderRepositoryInterface
-     * @since 2.0.0
      */
     protected $orderRepository;
 
@@ -32,7 +29,6 @@ class Reorder extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -48,7 +44,6 @@ class Reorder extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isAllow()
     {
@@ -60,7 +55,6 @@ class Reorder extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Store\Model\Store|int|null $store
      * @return bool
-     * @since 2.0.0
      */
     public function isAllowed($store = null)
     {
@@ -75,7 +69,6 @@ class Reorder extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $orderId
      * @return bool
-     * @since 2.0.0
      */
     public function canReorder($orderId)
     {

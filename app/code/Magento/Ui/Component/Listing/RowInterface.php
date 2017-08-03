@@ -8,7 +8,6 @@ namespace Magento\Ui\Component\Listing;
 /**
  * Interface RowInterface
  * @api
- * @since 2.0.0
  */
 interface RowInterface
 {
@@ -18,7 +17,6 @@ interface RowInterface
      * @param array $dataRow
      * @param array $data
      * @return mixed
-     * @since 2.0.0
      */
     public function getData(array $dataRow, array $data = []);
 }

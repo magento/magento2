@@ -10,37 +10,31 @@ use \Magento\Framework\Exception\AlreadyExistsException;
 /**
  * Class \Magento\Catalog\Model\Product\AttributeSet\Build
  *
- * @since 2.0.0
  */
 class Build
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\SetFactory
-     * @since 2.0.0
      */
     protected $attributeSetFactory;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $name;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $entityTypeId;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $skeletonId;
 
     /**
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Attribute\SetFactory  $attributeSetFactory
@@ -51,7 +45,6 @@ class Build
     /**
      * @param int $entityTypeId
      * @return $this
-     * @since 2.0.0
      */
     public function setEntityTypeId($entityTypeId)
     {
@@ -62,7 +55,6 @@ class Build
     /**
      * @param int $skeletonId
      * @return $this
-     * @since 2.0.0
      */
     public function setSkeletonId($skeletonId)
     {
@@ -73,7 +65,6 @@ class Build
     /**
      * @param string $setName
      * @return $this
-     * @since 2.0.0
      */
     public function setName($setName)
     {
@@ -84,7 +75,6 @@ class Build
     /**
      * @return \Magento\Eav\Model\Entity\Attribute\Set
      * @throws AlreadyExistsException
-     * @since 2.0.0
      */
     public function getAttributeSet()
     {
@@ -106,7 +96,6 @@ class Build
     /**
      * @trows \InvalidArgumentException
      * @return void
-     * @since 2.0.0
      */
     protected function validateParameters()
     {

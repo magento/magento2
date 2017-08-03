@@ -10,7 +10,6 @@ use Magento\Catalog\Model\Layer\Filter\FilterInterface;
 /**
  * Class \Magento\Catalog\Model\Layer\Filter\DataProvider\Decimal
  *
- * @since 2.0.0
  */
 class Decimal
 {
@@ -18,37 +17,31 @@ class Decimal
 
     /**
      * @var int
-     * @since 2.0.0
      */
     private $max;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     private $min;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     private $range;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $rangeItemsCount = [];
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal
-     * @since 2.0.0
      */
     private $resource;
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal $resource
-     * @since 2.0.0
      */
     public function __construct(\Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal $resource)
     {
@@ -58,7 +51,6 @@ class Decimal
     /**
      * @param FilterInterface $filter
      * @return int
-     * @since 2.0.0
      */
     public function getRange(FilterInterface $filter)
     {
@@ -80,7 +72,6 @@ class Decimal
     /**
      * @param int $range
      * @return void
-     * @since 2.0.0
      */
     public function setRange($range)
     {
@@ -92,7 +83,6 @@ class Decimal
      *
      * @param FilterInterface $filter
      * @return float
-     * @since 2.0.0
      */
     public function getMaxValue(FilterInterface $filter)
     {
@@ -108,7 +98,6 @@ class Decimal
      *
      * @param FilterInterface $filter
      * @return float
-     * @since 2.0.0
      */
     public function getMinValue(FilterInterface $filter)
     {
@@ -125,7 +114,6 @@ class Decimal
      * @param int $range
      * @param FilterInterface $filter
      * @return mixed
-     * @since 2.0.0
      */
     public function getRangeItemCounts($range, FilterInterface $filter)
     {
@@ -141,7 +129,6 @@ class Decimal
 
     /**
      * @return \Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal
-     * @since 2.0.0
      */
     public function getResource()
     {
@@ -151,7 +138,6 @@ class Decimal
     /**
      * @param FilterInterface $filter
      * @return mixed
-     * @since 2.0.0
      */
     private function loadValues(FilterInterface $filter)
     {

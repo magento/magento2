@@ -9,13 +9,11 @@ namespace Magento\Reports\Block\Adminhtml\Product\Downloads;
  * Adminhtml product downloads report grid
  *
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * @var \Magento\Reports\Model\ResourceModel\Product\Downloads\CollectionFactory
-     * @since 2.0.0
      */
     protected $_downloadsFactory;
 
@@ -24,7 +22,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Reports\Model\ResourceModel\Product\Downloads\CollectionFactory $downloadsFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -38,7 +35,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -49,7 +45,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return \Magento\Backend\Block\Widget\Grid
-     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -84,7 +79,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return \Magento\Backend\Block\Widget\Grid\Extended
-     * @since 2.0.0
      */
     protected function _prepareColumns()
     {

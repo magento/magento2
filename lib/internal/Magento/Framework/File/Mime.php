@@ -9,7 +9,6 @@ namespace Magento\Framework\File;
 /**
  * Class \Magento\Framework\File\Mime
  *
- * @since 2.0.0
  */
 class Mime
 {
@@ -17,7 +16,6 @@ class Mime
      * Mime types
      *
      * @var array
-     * @since 2.0.0
      */
     protected $mimeTypes = [
         'txt'  => 'text/plain',
@@ -70,7 +68,6 @@ class Mime
      * @param string $file
      * @return string
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function getMimeType($file)
     {

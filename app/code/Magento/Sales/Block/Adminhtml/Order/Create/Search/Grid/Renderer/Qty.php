@@ -9,7 +9,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer;
  * Renderer for Qty field in sales create new order search grid
  *
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Qty extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Input
 {
@@ -17,7 +16,6 @@ class Qty extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Input
      * Type config
      *
      * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
-     * @since 2.0.0
      */
     protected $typeConfig;
 
@@ -25,7 +23,6 @@ class Qty extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Input
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $typeConfig
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -41,7 +38,6 @@ class Qty extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Input
      *
      * @param \Magento\Framework\DataObject $row
      * @return bool
-     * @since 2.0.0
      */
     protected function _isInactive($row)
     {
@@ -53,7 +49,6 @@ class Qty extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Input
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

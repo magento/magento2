@@ -14,13 +14,11 @@ namespace Magento\Framework\Archive;
 /**
  * Class \Magento\Framework\Archive\Zip
  *
- * @since 2.0.0
  */
 class Zip extends AbstractArchive implements ArchiveInterface
 {
     /**
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function __construct()
     {
@@ -39,7 +37,6 @@ class Zip extends AbstractArchive implements ArchiveInterface
      * @param string $destination
      *
      * @return string
-     * @since 2.0.0
      */
     public function pack($source, $destination)
     {
@@ -57,7 +54,6 @@ class Zip extends AbstractArchive implements ArchiveInterface
      * @param string $destination
      *
      * @return string
-     * @since 2.0.0
      */
     public function unpack($source, $destination)
     {

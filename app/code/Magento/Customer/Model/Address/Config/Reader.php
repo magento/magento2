@@ -10,7 +10,6 @@ namespace Magento\Customer\Model\Address\Config;
 /**
  * Class \Magento\Customer\Model\Address\Config\Reader
  *
- * @since 2.0.0
  */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
@@ -19,7 +18,6 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * @param Converter $converter
      * @param SchemaLocator $schemaLocator
      * @param \Magento\Framework\Config\ValidationStateInterface $validationState
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,

@@ -11,7 +11,6 @@ namespace Magento\Eav\Model\Entity\Attribute\Source;
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @since 2.0.0
  */
 abstract class AbstractSource implements
     \Magento\Eav\Model\Entity\Attribute\Source\SourceInterface,
@@ -21,7 +20,6 @@ abstract class AbstractSource implements
      * Reference to the attribute instance
      *
      * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
-     * @since 2.0.0
      */
     protected $_attribute;
 
@@ -29,7 +27,6 @@ abstract class AbstractSource implements
      * Options array
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_options = null;
 
@@ -39,7 +36,6 @@ abstract class AbstractSource implements
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @return \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setAttribute($attribute)
     {
@@ -52,7 +48,6 @@ abstract class AbstractSource implements
      *
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getAttribute()
     {
@@ -64,7 +59,6 @@ abstract class AbstractSource implements
      *
      * @param  string|int $value
      * @return string|bool
-     * @since 2.0.0
      */
     public function getOptionText($value)
     {
@@ -87,7 +81,6 @@ abstract class AbstractSource implements
     /**
      * @param string $value
      * @return null|string
-     * @since 2.0.0
      */
     public function getOptionId($value)
     {
@@ -107,7 +100,6 @@ abstract class AbstractSource implements
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function addValueSortToCollection($collection, $dir = \Magento\Framework\Data\Collection::SORT_ORDER_DESC)
     {
@@ -119,7 +111,6 @@ abstract class AbstractSource implements
      *
      * @codeCoverageIgnore
      * @return array
-     * @since 2.0.0
      */
     public function getFlatColumns()
     {
@@ -131,7 +122,6 @@ abstract class AbstractSource implements
      *
      * @return array
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getFlatIndexes()
     {
@@ -145,7 +135,6 @@ abstract class AbstractSource implements
      * @return \Magento\Framework\DB\Select|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getFlatUpdateSelect($store)
     {
@@ -158,7 +147,6 @@ abstract class AbstractSource implements
      * @param string|int $value
      * @return string|bool
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getIndexOptionText($value)
     {
@@ -170,7 +158,6 @@ abstract class AbstractSource implements
      *
      * @return array
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

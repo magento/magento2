@@ -9,13 +9,11 @@ use Magento\Authorizenet\Model\Directpost;
 
 /**
  * @api
- * @since 2.0.0
  */
 class FraudDetails extends \Magento\Backend\Block\Template
 {
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $registry;
 
@@ -23,7 +21,6 @@ class FraudDetails extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -36,7 +33,6 @@ class FraudDetails extends \Magento\Backend\Block\Template
 
     /**
      * @return \Magento\Sales\Model\Order\Payment
-     * @since 2.0.0
      */
     public function getPayment()
     {
@@ -46,7 +42,6 @@ class FraudDetails extends \Magento\Backend\Block\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

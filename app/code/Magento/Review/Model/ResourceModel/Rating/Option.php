@@ -9,7 +9,6 @@ namespace Magento\Review\Model\ResourceModel\Rating;
  * Rating option resource model
  *
  * @api
- * @since 2.0.0
  */
 class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -17,7 +16,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Review table
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_reviewTable;
 
@@ -25,7 +23,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Rating option table
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_ratingOptionTable;
 
@@ -33,7 +30,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Rating vote table
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_ratingVoteTable;
 
@@ -41,7 +37,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Aggregate table
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_aggregateTable;
 
@@ -49,7 +44,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Review store table
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_reviewStoreTable;
 
@@ -57,7 +51,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Rating store table
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_ratingStoreTable;
 
@@ -65,7 +58,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Option data
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_optionData;
 
@@ -73,19 +65,16 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Option id
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_optionId;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Review\Model\Rating\Option\VoteFactory
-     * @since 2.0.0
      */
     protected $_ratingOptionVoteF;
 
@@ -95,7 +84,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Review\Model\Rating\Option\VoteFactory $ratingOptionVoteF
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -114,7 +102,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Resource initialization. Define other tables name
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -133,7 +120,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Review\Model\Rating\Option $option
      * @return $this
-     * @since 2.0.0
      */
     public function addVote($option)
     {
@@ -178,7 +164,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Review\Model\Rating\Option $option
      * @return void
-     * @since 2.0.0
      */
     public function aggregate($option)
     {
@@ -192,7 +177,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $ratingId
      * @param int $entityPkValue
      * @return void
-     * @since 2.0.0
      */
     public function aggregateEntityByRatingId($ratingId, $entityPkValue)
     {
@@ -281,7 +265,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $optionId
      * @return array
-     * @since 2.0.0
      */
     public function loadDataById($optionId)
     {

@@ -12,7 +12,6 @@ namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element;
 /**
  * Class \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\File
  *
- * @since 2.0.0
  */
 class File extends \Magento\Framework\Data\Form\Element\File
 {
@@ -20,7 +19,6 @@ class File extends \Magento\Framework\Data\Form\Element\File
      * Additional html attributes
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_htmlAttributes = ['accept', 'multiple'];
 
@@ -28,7 +26,6 @@ class File extends \Magento\Framework\Data\Form\Element\File
      * Html attributes
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getHtmlAttributes()
     {

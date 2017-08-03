@@ -10,7 +10,6 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Class \Magento\Framework\View\Design\Fallback\Rule\ModularSwitchFactory
  *
- * @since 2.0.0
  */
 class ModularSwitchFactory
 {
@@ -18,7 +17,6 @@ class ModularSwitchFactory
      * Object manager
      *
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
@@ -26,7 +24,6 @@ class ModularSwitchFactory
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -38,7 +35,6 @@ class ModularSwitchFactory
      *
      * @param array $data
      * @return \Magento\Framework\View\Design\Fallback\Rule\Simple
-     * @since 2.0.0
      */
     public function create(array $data = [])
     {

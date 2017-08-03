@@ -12,7 +12,6 @@ use Zend\Mvc\View\Http\InjectTemplateListener as ZendInjectTemplateListener;
 /**
  * Class \Magento\Setup\Mvc\View\Http\InjectTemplateListener
  *
- * @since 2.0.0
  */
 class InjectTemplateListener extends ZendInjectTemplateListener
 {
@@ -21,7 +20,6 @@ class InjectTemplateListener extends ZendInjectTemplateListener
      *
      * @param  string $controller
      * @return string
-     * @since 2.0.0
      */
     protected function deriveModuleNamespace($controller)
     {
@@ -38,7 +36,6 @@ class InjectTemplateListener extends ZendInjectTemplateListener
     /**
      * @param string $namespace
      * @return string
-     * @since 2.0.0
      */
     protected function deriveControllerSubNamespace($namespace)
     {
@@ -63,7 +60,6 @@ class InjectTemplateListener extends ZendInjectTemplateListener
      *
      * @param  MvcEvent $e
      * @return void
-     * @since 2.0.0
      */
     public function injectTemplate(MvcEvent $e)
     {

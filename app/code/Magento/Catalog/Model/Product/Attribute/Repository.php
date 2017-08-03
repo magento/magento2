@@ -12,49 +12,41 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInterface
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Attribute
-     * @since 2.0.0
      */
     protected $attributeResource;
 
     /**
      * @var \Magento\Eav\Model\AttributeRepository
-     * @since 2.0.0
      */
     protected $eavAttributeRepository;
 
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $eavConfig;
 
     /**
      * @var \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory
-     * @since 2.0.0
      */
     protected $inputtypeValidatorFactory;
 
     /**
      * @var \Magento\Catalog\Helper\Product
-     * @since 2.0.0
      */
     protected $productHelper;
 
     /**
      * @var \Magento\Framework\Filter\FilterManager
-     * @since 2.0.0
      */
     protected $filterManager;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
@@ -66,7 +58,6 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource,
@@ -88,7 +79,6 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function get($attributeCode)
     {
@@ -100,7 +90,6 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -114,7 +103,6 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function save(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute)
     {
@@ -214,7 +202,6 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function delete(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute)
     {
@@ -224,7 +211,6 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function deleteById($attributeCode)
     {
@@ -237,7 +223,6 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getCustomAttributesMetadata($dataObjectClassName = null)
     {
@@ -249,7 +234,6 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      *
      * @param string $label
      * @return string
-     * @since 2.0.0
      */
     protected function generateCode($label)
     {
@@ -267,7 +251,6 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      * @param string $code
      * @return void
      * @throws \Magento\Framework\Exception\InputException
-     * @since 2.0.0
      */
     protected function validateCode($code)
     {
@@ -283,7 +266,6 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      * @param  string $frontendInput
      * @return void
      * @throws \Magento\Framework\Exception\InputException
-     * @since 2.0.0
      */
     protected function validateFrontendInput($frontendInput)
     {

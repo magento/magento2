@@ -11,13 +11,11 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Class \Magento\Catalog\Model\Indexer\Category\Flat\Action\Rows
  *
- * @since 2.0.0
  */
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
 {
     /**
      * @var CategoryRepositoryInterface
-     * @since 2.0.0
      */
     protected $categoryRepository;
 
@@ -26,7 +24,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param CategoryRepositoryInterface $categoryRepository
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -44,7 +41,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      * @param \Magento\Store\Model\Store $store
      * @param bool $useTempTable
      * @return string
-     * @since 2.0.0
      */
     protected function getTableNameByStore(\Magento\Store\Model\Store $store, $useTempTable)
     {
@@ -58,7 +54,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      * @param int[] $entityIds
      * @param bool $useTempTable
      * @return Rows
-     * @since 2.0.0
      */
     public function reindex(array $entityIds = [], $useTempTable = false)
     {
@@ -119,7 +114,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      * @param \Magento\Store\Model\Store $store
      * @param bool $useTempTable
      * @return void
-     * @since 2.0.0
      */
     protected function deleteNonStoreCategories(\Magento\Store\Model\Store $store, $useTempTable)
     {
@@ -154,7 +148,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      * @param int[] $ids
      * @param \Magento\Store\Model\Store $store
      * @return int[]
-     * @since 2.0.0
      */
     protected function filterIdsByStore(array $ids, $store)
     {

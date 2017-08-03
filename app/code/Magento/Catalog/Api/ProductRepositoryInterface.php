@@ -9,7 +9,6 @@ namespace Magento\Catalog\Api;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface ProductRepositoryInterface
 {
@@ -22,7 +21,6 @@ interface ProductRepositoryInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @since 2.0.0
      */
     public function save(\Magento\Catalog\Api\Data\ProductInterface $product, $saveOptions = false);
 
@@ -35,7 +33,6 @@ interface ProductRepositoryInterface
      * @param bool $forceReload
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @since 2.0.0
      */
     public function get($sku, $editMode = false, $storeId = null, $forceReload = false);
 
@@ -48,7 +45,6 @@ interface ProductRepositoryInterface
      * @param bool $forceReload
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @since 2.0.0
      */
     public function getById($productId, $editMode = false, $storeId = null, $forceReload = false);
 
@@ -58,7 +54,6 @@ interface ProductRepositoryInterface
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return bool Will returned True if deleted
      * @throws \Magento\Framework\Exception\StateException
-     * @since 2.0.0
      */
     public function delete(\Magento\Catalog\Api\Data\ProductInterface $product);
 
@@ -67,7 +62,6 @@ interface ProductRepositoryInterface
      * @return bool Will returned True if deleted
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
-     * @since 2.0.0
      */
     public function deleteById($sku);
 
@@ -76,7 +70,6 @@ interface ProductRepositoryInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Catalog\Api\Data\ProductSearchResultsInterface
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 }

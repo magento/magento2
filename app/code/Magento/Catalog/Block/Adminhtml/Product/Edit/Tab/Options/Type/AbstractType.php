@@ -14,19 +14,16 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type;
 /**
  * Class \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\AbstractType
  *
- * @since 2.0.0
  */
 class AbstractType extends \Magento\Backend\Block\Widget
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_name = 'abstract';
 
     /**
      * @var \Magento\Catalog\Model\Config\Source\Product\Options\Price
-     * @since 2.0.0
      */
     protected $_optionPrice;
 
@@ -34,7 +31,6 @@ class AbstractType extends \Magento\Backend\Block\Widget
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Catalog\Model\Config\Source\Product\Options\Price $optionPrice
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -47,7 +43,6 @@ class AbstractType extends \Magento\Backend\Block\Widget
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -81,7 +76,6 @@ class AbstractType extends \Magento\Backend\Block\Widget
      *
      * @param string $extraParams
      * @return string
-     * @since 2.0.0
      */
     public function getPriceTypeSelectHtml($extraParams = '')
     {

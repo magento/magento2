@@ -9,7 +9,6 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Provides export configuration
- * @since 2.0.0
  */
 class Config extends \Magento\Framework\Config\Data implements \Magento\ImportExport\Model\Export\ConfigInterface
 {
@@ -20,7 +19,6 @@ class Config extends \Magento\Framework\Config\Data implements \Magento\ImportEx
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\ImportExport\Model\Export\Config\Reader $reader,
@@ -35,7 +33,6 @@ class Config extends \Magento\Framework\Config\Data implements \Magento\ImportEx
      * Retrieve export entities configuration
      *
      * @return array
-     * @since 2.0.0
      */
     public function getEntities()
     {
@@ -47,7 +44,6 @@ class Config extends \Magento\Framework\Config\Data implements \Magento\ImportEx
      *
      * @param string $entity
      * @return array
-     * @since 2.0.0
      */
     public function getEntityTypes($entity)
     {
@@ -59,7 +55,6 @@ class Config extends \Magento\Framework\Config\Data implements \Magento\ImportEx
      * Retrieve export file formats configuration
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFileFormats()
     {

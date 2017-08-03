@@ -14,7 +14,6 @@ use Magento\Tax\Api\Data\TaxRuleInterface;
  *
  * @method \Magento\Tax\Model\ResourceModel\Calculation\Rule _getResource()
  * @method \Magento\Tax\Model\ResourceModel\Calculation\Rule getResource()
- * @since 2.0.0
  */
 class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements TaxRuleInterface
 {
@@ -32,31 +31,23 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     const KEY_CALCULATE_SUBTOTAL     = 'calculate_subtotal';
     /**#@-*/
 
-    /**
-     * Prefix of model events names
-     *
-     * @var string
-     * @since 2.0.0
-     */
+    /**#@-*/
     protected $_eventPrefix = 'tax_rule';
 
     /**
      * Tax Model Class
      *
      * @var \Magento\Tax\Model\ClassModel
-     * @since 2.0.0
      */
     protected $_taxClass;
 
     /**
      * @var \Magento\Tax\Model\Calculation
-     * @since 2.0.0
      */
     protected $_calculation;
 
     /**
      * @var \Magento\Tax\Model\Calculation\Rule\Validator
-     * @since 2.0.0
      */
     protected $validator;
 
@@ -64,7 +55,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * Name of object id field
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_idFieldName = 'tax_calculation_rule_id';
 
@@ -80,7 +70,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -114,7 +103,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * Re-declared for populate rate calculations
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -129,7 +117,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * Re-declared for dispatch tax_settings_change_after event
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterDelete()
     {
@@ -139,7 +126,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function saveCalculationData()
     {
@@ -165,7 +151,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * @return \Magento\Tax\Model\Calculation
-     * @since 2.0.0
      */
     public function getCalculationModel()
     {
@@ -174,7 +159,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getRates()
     {
@@ -183,7 +167,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getCustomerTaxClasses()
     {
@@ -192,7 +175,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getProductTaxClasses()
     {
@@ -207,7 +189,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * @param array $customerTaxClassIds
      * @param array $productTaxClassIds
      * @return array
-     * @since 2.0.0
      */
     public function fetchRuleCodes($rateId, $customerTaxClassIds, $productTaxClassIds)
     {
@@ -217,7 +198,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     /**
      * @codeCoverageIgnoreStart
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCode()
     {
@@ -226,7 +206,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getPosition()
     {
@@ -235,7 +214,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCalculateSubtotal()
     {
@@ -244,7 +222,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getPriority()
     {
@@ -255,7 +232,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCustomerTaxClassIds()
     {
@@ -269,7 +245,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getProductTaxClassIds()
     {
@@ -283,7 +258,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTaxRateIds()
     {
@@ -300,7 +274,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param array|null $values
      * @return array|null
-     * @since 2.0.0
      */
     protected function _getUniqueValues($values)
     {
@@ -312,7 +285,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _getValidationRulesBeforeSave()
     {
@@ -324,7 +296,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function setCode($code)
     {
@@ -336,7 +307,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param int $priority
      * @return $this
-     * @since 2.0.0
      */
     public function setPriority($priority)
     {
@@ -348,7 +318,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param int $position
      * @return $this
-     * @since 2.0.0
      */
     public function setPosition($position)
     {
@@ -360,7 +329,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param int[] $customerTaxClassIds
      * @return $this
-     * @since 2.0.0
      */
     public function setCustomerTaxClassIds(array $customerTaxClassIds = null)
     {
@@ -372,7 +340,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param int[] $productTaxClassIds
      * @return $this
-     * @since 2.0.0
      */
     public function setProductTaxClassIds(array $productTaxClassIds = null)
     {
@@ -384,7 +351,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param int[] $taxRateIds
      * @return $this
-     * @since 2.0.0
      */
     public function setTaxRateIds(array $taxRateIds = null)
     {
@@ -396,7 +362,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param bool $calculateSubtotal
      * @return $this
-     * @since 2.0.0
      */
     public function setCalculateSubtotal($calculateSubtotal)
     {
@@ -407,7 +372,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * {@inheritdoc}
      *
      * @return \Magento\Tax\Api\Data\TaxRuleExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -419,7 +383,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param \Magento\Tax\Api\Data\TaxRuleExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxRuleExtensionInterface $extensionAttributes)
     {

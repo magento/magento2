@@ -12,7 +12,6 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
  * HTML select element block with customer groups options
- * @since 2.0.0
  */
 class Customergroup extends \Magento\Framework\View\Element\Html\Select
 {
@@ -20,7 +19,6 @@ class Customergroup extends \Magento\Framework\View\Element\Html\Select
      * Customer groups cache
      *
      * @var array
-     * @since 2.0.0
      */
     private $_customerGroups;
 
@@ -28,25 +26,21 @@ class Customergroup extends \Magento\Framework\View\Element\Html\Select
      * Flag whether to add group all option or no
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_addGroupAllOption = true;
 
     /**
      * @var GroupManagementInterface
-     * @since 2.0.0
      */
     protected $groupManagement;
 
     /**
      * @var GroupRepositoryInterface
-     * @since 2.0.0
      */
     protected $groupRepository;
 
     /**
      * @var SearchCriteriaBuilder
-     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
@@ -58,7 +52,6 @@ class Customergroup extends \Magento\Framework\View\Element\Html\Select
      * @param GroupRepositoryInterface $groupRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
@@ -79,7 +72,6 @@ class Customergroup extends \Magento\Framework\View\Element\Html\Select
      *
      * @param int $groupId return name by customer group id
      * @return array|string
-     * @since 2.0.0
      */
     protected function _getCustomerGroups($groupId = null)
     {
@@ -100,7 +92,6 @@ class Customergroup extends \Magento\Framework\View\Element\Html\Select
     /**
      * @param string $value
      * @return $this
-     * @since 2.0.0
      */
     public function setInputName($value)
     {
@@ -111,7 +102,6 @@ class Customergroup extends \Magento\Framework\View\Element\Html\Select
      * Render block HTML
      *
      * @return string
-     * @since 2.0.0
      */
     public function _toHtml()
     {

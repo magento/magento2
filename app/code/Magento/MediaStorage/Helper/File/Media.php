@@ -9,19 +9,16 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class Media
- * @since 2.0.0
  */
 class Media extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.0.0
      */
     protected $_date;
 
     /**
      * @var \Magento\Framework\Filesystem
-     * @since 2.0.0
      */
     protected $filesystem;
 
@@ -31,7 +28,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\Filesystem $filesystem
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -56,7 +52,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $path
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function collectFileInfo($mediaDirectory, $path)
     {

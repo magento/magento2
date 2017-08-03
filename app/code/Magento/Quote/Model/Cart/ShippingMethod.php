@@ -11,7 +11,6 @@ use Magento\Quote\Api\Data\ShippingMethodInterface;
  * Quote shipping method data.
  *
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject implements
     ShippingMethodInterface
@@ -20,7 +19,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      * Returns the shipping carrier code.
      *
      * @return string Shipping carrier code.
-     * @since 2.0.0
      */
     public function getCarrierCode()
     {
@@ -32,7 +30,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      *
      * @param string $carrierCode
      * @return $this
-     * @since 2.0.0
      */
     public function setCarrierCode($carrierCode)
     {
@@ -43,7 +40,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      * Returns the shipping method code.
      *
      * @return string Shipping method code.
-     * @since 2.0.0
      */
     public function getMethodCode()
     {
@@ -55,7 +51,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      *
      * @param string $methodCode
      * @return $this
-     * @since 2.0.0
      */
     public function setMethodCode($methodCode)
     {
@@ -66,7 +61,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      * Returns the shipping carrier title.
      *
      * @return string|null Shipping carrier title. Otherwise, null.
-     * @since 2.0.0
      */
     public function getCarrierTitle()
     {
@@ -78,7 +72,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      *
      * @param string $carrierTitle
      * @return $this
-     * @since 2.0.0
      */
     public function setCarrierTitle($carrierTitle)
     {
@@ -89,7 +82,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      * Returns the shipping method title.
      *
      * @return string|null Shipping method title. Otherwise, null.
-     * @since 2.0.0
      */
     public function getMethodTitle()
     {
@@ -101,7 +93,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      *
      * @param string $methodTitle
      * @return $this
-     * @since 2.0.0
      */
     public function setMethodTitle($methodTitle)
     {
@@ -112,7 +103,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      * Returns the shipping amount in store currency.
      *
      * @return float Shipping amount in store currency.
-     * @since 2.0.0
      */
     public function getAmount()
     {
@@ -124,7 +114,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      *
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function setAmount($amount)
     {
@@ -135,7 +124,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      * Returns the shipping amount in base currency.
      *
      * @return float Shipping amount in base currency.
-     * @since 2.0.0
      */
     public function getBaseAmount()
     {
@@ -147,7 +135,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      *
      * @param float $baseAmount
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseAmount($baseAmount)
     {
@@ -159,7 +146,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getAvailable()
     {
@@ -171,7 +157,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      *
      * @param bool $available
      * @return $this
-     * @since 2.0.0
      */
     public function setAvailable($available)
     {
@@ -182,7 +167,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      * Returns the error message.
      *
      * @return string|null Shipping Error message.
-     * @since 2.0.0
      */
     public function getErrorMessage()
     {
@@ -194,7 +178,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      *
      * @param string|null $errorMessage
      * @return $this
-     * @since 2.0.0
      */
     public function setErrorMessage($errorMessage)
     {
@@ -205,7 +188,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      * {@inheritdoc}
      *
      * @return \Magento\Quote\Api\Data\ShippingMethodExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -217,7 +199,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      *
      * @param \Magento\Quote\Api\Data\ShippingMethodExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Quote\Api\Data\ShippingMethodExtensionInterface $extensionAttributes
@@ -229,7 +210,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      * {@inheritdoc}
      *
      * @return float
-     * @since 2.0.0
      */
     public function getPriceExclTax()
     {
@@ -241,7 +221,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      *
      * @param float $priceExclTax
      * @return $this
-     * @since 2.0.0
      */
     public function setPriceExclTax($priceExclTax)
     {
@@ -252,7 +231,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      * {@inheritdoc}
      *
      * @return float
-     * @since 2.0.0
      */
     public function getPriceInclTax()
     {
@@ -264,7 +242,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      *
      * @param float $priceInclTax
      * @return $this
-     * @since 2.0.0
      */
     public function setPriceInclTax($priceInclTax)
     {

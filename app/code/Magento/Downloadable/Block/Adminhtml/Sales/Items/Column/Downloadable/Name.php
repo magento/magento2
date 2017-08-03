@@ -16,25 +16,21 @@ use Magento\Store\Model\ScopeInterface;
  * Sales Order downloadable items name column renderer
  *
  * @api
- * @since 2.0.0
  */
 class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
 {
     /**
      * @var Purchased|null
-     * @since 2.0.0
      */
     protected $_purchased = null;
 
     /**
      * @var \Magento\Downloadable\Model\Link\PurchasedFactory
-     * @since 2.0.0
      */
     protected $_purchasedFactory;
 
     /**
      * @var \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory
-     * @since 2.0.0
      */
     protected $_itemsFactory;
 
@@ -47,7 +43,6 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
      * @param \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -66,7 +61,6 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
 
     /**
      * @return Purchased
-     * @since 2.0.0
      */
     public function getLinks()
     {
@@ -81,7 +75,6 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
 
     /**
      * @return null|string
-     * @since 2.0.0
      */
     public function getLinksTitle()
     {

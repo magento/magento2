@@ -9,7 +9,6 @@ namespace Magento\Eav\Api;
 /**
  * Interface AttributeRepositoryInterface
  * @api
- * @since 2.0.0
  */
 interface AttributeRepositoryInterface
 {
@@ -19,7 +18,6 @@ interface AttributeRepositoryInterface
      * @param string $entityTypeCode
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Eav\Api\Data\AttributeSearchResultsInterface
-     * @since 2.0.0
      */
     public function getList($entityTypeCode, \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -30,7 +28,6 @@ interface AttributeRepositoryInterface
      * @param string $attributeCode
      * @return \Magento\Eav\Api\Data\AttributeInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @since 2.0.0
      */
     public function get($entityTypeCode, $attributeCode);
 
@@ -40,7 +37,6 @@ interface AttributeRepositoryInterface
      * @param \Magento\Eav\Api\Data\AttributeInterface $attribute
      * @return string
      * @throws \Magento\Framework\Exception\StateException
-     * @since 2.0.0
      */
     public function save(\Magento\Eav\Api\Data\AttributeInterface $attribute);
 
@@ -50,7 +46,6 @@ interface AttributeRepositoryInterface
      * @param Data\AttributeInterface $attribute
      * @return bool True if the entity was deleted
      * @throws \Magento\Framework\Exception\StateException
-     * @since 2.0.0
      */
     public function delete(Data\AttributeInterface $attribute);
 
@@ -61,7 +56,6 @@ interface AttributeRepositoryInterface
      * @return bool True if the entity was deleted
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
-     * @since 2.0.0
      */
     public function deleteById($attributeId);
 }

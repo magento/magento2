@@ -22,7 +22,6 @@ use Magento\Framework\Model\AbstractModel;
  * @method \Magento\Catalog\Model\Product\Option\Value setOptionId(int $value)
  *
  * @SuppressWarnings(PHPMD.LongVariable)
- * @since 2.0.0
  */
 class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface
 {
@@ -42,21 +41,16 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     const KEY_OPTION_TYPE_ID = 'option_type_id';
     /**#@-*/
 
-    /**
-     * @var array
-     * @since 2.0.0
-     */
+    /**#@-*/
     protected $_values = [];
 
     /**
      * @var Product
-     * @since 2.0.0
      */
     protected $_product;
 
     /**
      * @var Option
-     * @since 2.0.0
      */
     protected $_option;
 
@@ -64,7 +58,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      * Value collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory
-     * @since 2.0.0
      */
     protected $_valueCollectionFactory;
 
@@ -75,7 +68,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -97,7 +89,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -108,7 +99,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      * @codeCoverageIgnoreStart
      * @param mixed $value
      * @return $this
-     * @since 2.0.0
      */
     public function addValue($value)
     {
@@ -118,7 +108,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getValues()
     {
@@ -128,7 +117,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     /**
      * @param array $values
      * @return $this
-     * @since 2.0.0
      */
     public function setValues($values)
     {
@@ -138,7 +126,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function unsetValues()
     {
@@ -149,7 +136,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     /**
      * @param Option $option
      * @return $this
-     * @since 2.0.0
      */
     public function setOption(Option $option)
     {
@@ -159,7 +145,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function unsetOption()
     {
@@ -171,7 +156,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      * Enter description here...
      *
      * @return Option
-     * @since 2.0.0
      */
     public function getOption()
     {
@@ -181,7 +165,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     /**
      * @param Product $product
      * @return $this
-     * @since 2.0.0
      */
     public function setProduct($product)
     {
@@ -193,7 +176,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
 
     /**
      * @return Product
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -205,7 +187,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function saveValues()
     {
@@ -239,7 +220,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      *
      * @param bool $flag
      * @return float|int
-     * @since 2.0.0
      */
     public function getPrice($flag = false)
     {
@@ -255,7 +235,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      * Return regular price.
      *
      * @return float|int
-     * @since 2.0.0
      */
     public function getRegularPrice()
     {
@@ -272,7 +251,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      *
      * @param Option $option
      * @return \Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection
-     * @since 2.0.0
      */
     public function getValuesCollection(Option $option)
     {
@@ -291,7 +269,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      * @param int $option_id
      * @param int $store_id
      * @return \Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection
-     * @since 2.0.0
      */
     public function getValuesByOption($optionIds, $option_id, $store_id)
     {
@@ -309,7 +286,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     /**
      * @param int $option_id
      * @return $this
-     * @since 2.0.0
      */
     public function deleteValue($option_id)
     {
@@ -320,7 +296,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     /**
      * @param int $option_type_id
      * @return $this
-     * @since 2.0.0
      */
     public function deleteValues($option_type_id)
     {
@@ -334,7 +309,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      * @param int $oldOptionId
      * @param int $newOptionId
      * @return $this
-     * @since 2.0.0
      */
     public function duplicate($oldOptionId, $newOptionId)
     {
@@ -347,7 +321,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      *
      * @return string
      * @codeCoverageIgnoreStart
-     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -358,7 +331,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      * Get sort order
      *
      * @return int
-     * @since 2.0.0
      */
     public function getSortOrder()
     {
@@ -369,7 +341,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      * Get price type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPriceType()
     {
@@ -380,7 +351,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      * Get Sku
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getSku()
     {
@@ -391,7 +361,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      * Get Sku
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getOptionTypeId()
     {
@@ -403,7 +372,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      *
      * @param string $title
      * @return $this
-     * @since 2.0.0
      */
     public function setTitle($title)
     {
@@ -415,7 +383,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      *
      * @param int $sortOrder
      * @return $this
-     * @since 2.0.0
      */
     public function setSortOrder($sortOrder)
     {
@@ -427,7 +394,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      *
      * @param float $price
      * @return $this
-     * @since 2.0.0
      */
     public function setPrice($price)
     {
@@ -439,7 +405,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      *
      * @param string $priceType
      * @return $this
-     * @since 2.0.0
      */
     public function setPriceType($priceType)
     {
@@ -451,7 +416,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      *
      * @param string $sku
      * @return $this
-     * @since 2.0.0
      */
     public function setSku($sku)
     {
@@ -463,7 +427,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      *
      * @param int $optionTypeId
      * @return int|null
-     * @since 2.0.0
      */
     public function setOptionTypeId($optionTypeId)
     {

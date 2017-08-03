@@ -12,7 +12,6 @@ use Magento\Payment\Model\Info;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Payment extends \Magento\Backend\Block\Template
 {
@@ -20,7 +19,6 @@ class Payment extends \Magento\Backend\Block\Template
      * Payment data
      *
      * @var \Magento\Payment\Helper\Data
-     * @since 2.0.0
      */
     protected $_paymentData = null;
 
@@ -28,7 +26,6 @@ class Payment extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -44,7 +41,6 @@ class Payment extends \Magento\Backend\Block\Template
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -60,7 +56,6 @@ class Payment extends \Magento\Backend\Block\Template
      *
      * @param Info $payment
      * @return $this
-     * @since 2.0.0
      */
     public function setPayment($payment)
     {
@@ -74,7 +69,6 @@ class Payment extends \Magento\Backend\Block\Template
      * Prepare html output
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

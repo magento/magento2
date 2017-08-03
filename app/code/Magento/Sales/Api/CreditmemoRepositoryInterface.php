@@ -12,7 +12,6 @@ namespace Magento\Sales\Api;
  * to refund all or part of the amount paid for any returned or undelivered items. The memo restores funds to the
  * customer account so that the customer can make future purchases.
  * @api
- * @since 2.0.0
  */
 interface CreditmemoRepositoryInterface
 {
@@ -25,7 +24,6 @@ interface CreditmemoRepositoryInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
      * @return \Magento\Sales\Api\Data\CreditmemoSearchResultInterface Credit memo search result interface.
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -34,7 +32,6 @@ interface CreditmemoRepositoryInterface
      *
      * @param int $id The credit memo ID.
      * @return \Magento\Sales\Api\Data\CreditmemoInterface Credit memo interface.
-     * @since 2.0.0
      */
     public function get($id);
 
@@ -42,7 +39,6 @@ interface CreditmemoRepositoryInterface
      * Create credit memo instance
      *
      * @return \Magento\Sales\Api\Data\CreditmemoInterface Credit memo interface.
-     * @since 2.0.0
      */
     public function create();
 
@@ -51,7 +47,6 @@ interface CreditmemoRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\CreditmemoInterface $entity The credit memo.
      * @return bool
-     * @since 2.0.0
      */
     public function delete(\Magento\Sales\Api\Data\CreditmemoInterface $entity);
 
@@ -60,7 +55,6 @@ interface CreditmemoRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\CreditmemoInterface $entity The credit memo.
      * @return \Magento\Sales\Api\Data\CreditmemoInterface Credit memo interface.
-     * @since 2.0.0
      */
     public function save(\Magento\Sales\Api\Data\CreditmemoInterface $entity);
 }

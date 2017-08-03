@@ -21,7 +21,6 @@ namespace Magento\Catalog\Model\Product;
 /**
  * Class \Magento\Catalog\Model\Product\Website
  *
- * @since 2.0.0
  */
 class Website extends \Magento\Framework\Model\AbstractModel
 {
@@ -29,7 +28,6 @@ class Website extends \Magento\Framework\Model\AbstractModel
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -40,7 +38,6 @@ class Website extends \Magento\Framework\Model\AbstractModel
      * Retrieve Resource instance wrapper
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Website
-     * @since 2.0.0
      */
     protected function _getResource()
     {
@@ -54,7 +51,6 @@ class Website extends \Magento\Framework\Model\AbstractModel
      * @param array $productIds
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function removeProducts($websiteIds, $productIds)
     {
@@ -75,7 +71,6 @@ class Website extends \Magento\Framework\Model\AbstractModel
      * @param array $productIds
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function addProducts($websiteIds, $productIds)
     {
@@ -95,7 +90,6 @@ class Website extends \Magento\Framework\Model\AbstractModel
      *
      * @param int|array $productIds
      * @return array
-     * @since 2.0.0
      */
     public function getWebsites($productIds)
     {

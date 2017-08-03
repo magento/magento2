@@ -12,13 +12,11 @@ use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Class ViewAction
- * @since 2.0.0
  */
 class ViewAction extends Column
 {
     /**
      * @var UrlInterface
-     * @since 2.0.0
      */
     protected $urlBuilder;
 
@@ -30,7 +28,6 @@ class ViewAction extends Column
      * @param UrlInterface $urlBuilder
      * @param array $components
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -48,7 +45,6 @@ class ViewAction extends Column
      *
      * @param array $dataSource
      * @return array
-     * @since 2.0.0
      */
     public function prepareDataSource(array $dataSource)
     {

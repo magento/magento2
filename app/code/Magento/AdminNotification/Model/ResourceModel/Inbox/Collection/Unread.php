@@ -13,7 +13,6 @@ namespace Magento\AdminNotification\Model\ResourceModel\Inbox\Collection;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Unread extends \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection
 {
@@ -21,7 +20,6 @@ class Unread extends \Magento\AdminNotification\Model\ResourceModel\Inbox\Collec
      * Init collection select
      *
      * @return \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread
-     * @since 2.0.0
      */
     protected function _initSelect()
     {

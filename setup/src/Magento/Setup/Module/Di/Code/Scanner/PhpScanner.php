@@ -13,19 +13,16 @@ use Magento\Setup\Module\Di\Compiler\Log\Log;
 /**
  * Class \Magento\Setup\Module\Di\Code\Scanner\PhpScanner
  *
- * @since 2.0.0
  */
 class PhpScanner implements ScannerInterface
 {
     /**
      * @var Log $log
-     * @since 2.0.0
      */
     protected $_log;
 
     /**
      * @param Log $log
-     * @since 2.0.0
      */
     public function __construct(Log $log)
     {
@@ -40,7 +37,6 @@ class PhpScanner implements ScannerInterface
      * @param string $methodName
      * @param string $entityType
      * @return string[]
-     * @since 2.0.0
      */
     protected function _findMissingClasses($file, $classReflection, $methodName, $entityType)
     {
@@ -81,7 +77,6 @@ class PhpScanner implements ScannerInterface
      * @param string $missingClassName
      * @param string $entityType
      * @return string
-     * @since 2.0.0
      */
     protected function getSourceClassName($missingClassName, $entityType)
     {
@@ -113,7 +108,6 @@ class PhpScanner implements ScannerInterface
      * @param \ReflectionClass $reflectionClass
      * @param string $file
      * @return string[]
-     * @since 2.0.0
      */
     protected function _fetchFactories($reflectionClass, $file)
     {
@@ -144,7 +138,6 @@ class PhpScanner implements ScannerInterface
      * @param \ReflectionClass $reflectionClass
      * @param string $file
      * @return string[]
-     * @since 2.0.0
      */
     protected function _fetchMissingExtensionAttributesClasses($reflectionClass, $file)
     {
@@ -174,7 +167,6 @@ class PhpScanner implements ScannerInterface
      *
      * @param array $files
      * @return array
-     * @since 2.0.0
      */
     public function collectEntities(array $files)
     {
@@ -198,7 +190,6 @@ class PhpScanner implements ScannerInterface
      * @param $count int
      * @param $tokens array
      * @return string
-     * @since 2.0.0
      */
     protected function _fetchNamespace($tokenIterator, $count, $tokens)
     {
@@ -219,7 +210,6 @@ class PhpScanner implements ScannerInterface
      * @param $count int
      * @param $tokens array
      * @return array
-     * @since 2.0.0
      */
     protected function _fetchClasses($namespace, $tokenIterator, $count, $tokens)
     {
@@ -237,7 +227,6 @@ class PhpScanner implements ScannerInterface
      *
      * @param string $file
      * @return array
-     * @since 2.0.0
      */
     protected function _getDeclaredClasses($file)
     {

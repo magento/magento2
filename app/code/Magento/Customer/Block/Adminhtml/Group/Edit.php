@@ -11,7 +11,6 @@ use Magento\Customer\Controller\RegistryConstants;
 
 /**
  * Customer group edit block
- * @since 2.0.0
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -19,19 +18,16 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $coreRegistry;
 
     /**
      * @var GroupRepositoryInterface
-     * @since 2.0.0
      */
     protected $groupRepository;
 
     /**
      * @var GroupManagementInterface
-     * @since 2.0.0
      */
     protected $groupManagement;
 
@@ -43,7 +39,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * @param GroupRepositoryInterface $groupRepository
      * @param GroupManagementInterface $groupManagement
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -62,7 +57,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Update Save and Delete buttons. Remove Delete button if group can't be deleted.
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -85,7 +79,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve the header text, either editing an existing group or creating a new one.
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -102,7 +95,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve CSS classes added to the header.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getHeaderCssClass()
     {

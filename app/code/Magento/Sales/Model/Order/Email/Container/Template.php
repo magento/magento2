@@ -8,31 +8,26 @@ namespace Magento\Sales\Model\Order\Email\Container;
 /**
  * Class \Magento\Sales\Model\Order\Email\Container\Template
  *
- * @since 2.0.0
  */
 class Template
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $vars;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $options;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $templateId;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $id;
 
@@ -41,7 +36,6 @@ class Template
      *
      * @param array $vars
      * @return void
-     * @since 2.0.0
      */
     public function setTemplateVars(array $vars)
     {
@@ -53,7 +47,6 @@ class Template
      *
      * @param array $options
      * @return void
-     * @since 2.0.0
      */
     public function setTemplateOptions(array $options)
     {
@@ -64,7 +57,6 @@ class Template
      * Get email template variables
      *
      * @return array
-     * @since 2.0.0
      */
     public function getTemplateVars()
     {
@@ -75,7 +67,6 @@ class Template
      * Get email template options
      *
      * @return array
-     * @since 2.0.0
      */
     public function getTemplateOptions()
     {
@@ -87,7 +78,6 @@ class Template
      *
      * @param int $id
      * @return void
-     * @since 2.0.0
      */
     public function setTemplateId($id)
     {
@@ -98,7 +88,6 @@ class Template
      * Get email template id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getTemplateId()
     {

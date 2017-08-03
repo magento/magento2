@@ -10,7 +10,6 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
@@ -18,19 +17,16 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Default values for option cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_optionsDefault = [];
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory
-     * @since 2.0.0
      */
     protected $_attrOptionCollectionFactory;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory
-     * @since 2.0.0
      */
     protected $_attrOptionFactory;
 
@@ -44,7 +40,6 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
@@ -60,7 +55,6 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * @param bool $withEmpty       Add empty option to array
      * @param bool $defaultValues
      * @return array
-     * @since 2.0.0
      */
     public function getAllOptions($withEmpty = true, $defaultValues = false)
     {
@@ -117,7 +111,6 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * @param string|array $ids
      * @param bool $withEmpty Add empty option to array
      * @return array
-     * @since 2.0.0
      */
     public function getSpecificOptions($ids, $withEmpty = true)
     {
@@ -137,7 +130,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     /**
      * @param array $options
      * @return array
-     * @since 2.1.0
+     * @since 2.0.9
      */
     private function addEmptyOption(array $options)
     {
@@ -150,7 +143,6 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @param string|integer $value
      * @return array|string|bool
-     * @since 2.0.0
      */
     public function getOptionText($value)
     {
@@ -187,7 +179,6 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * @param string $dir
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addValueSortToCollection($collection, $dir = \Magento\Framework\DB\Select::SQL_ASC)
     {
@@ -229,7 +220,6 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Retrieve Column(s) for Flat
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFlatColumns()
     {
@@ -266,7 +256,6 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Retrieve Indexes for Flat
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFlatIndexes()
     {
@@ -293,7 +282,6 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @param int $store
      * @return \Magento\Framework\DB\Select|null
-     * @since 2.0.0
      */
     public function getFlatUpdateSelect($store)
     {

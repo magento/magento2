@@ -12,32 +12,27 @@ use Magento\Eav\Model\Entity\Attribute;
 
 /**
  * @api
- * @since 2.0.0
  */
 class ProductFieldset implements \Magento\Framework\Indexer\FieldsetInterface
 {
     /**
      * @var Config
-     * @since 2.0.0
      */
     private $eavConfig;
 
     /**
      * @var CollectionFactory
-     * @since 2.0.0
      */
     private $collectionFactory;
 
     /**
      * @var Attribute[]
-     * @since 2.0.0
      */
     private $searchableAttributes;
     
     /**
      * @param Config $eavConfig
      * @param CollectionFactory $collectionFactory
-     * @since 2.0.0
      */
     public function __construct(
         Config $eavConfig,
@@ -49,7 +44,6 @@ class ProductFieldset implements \Magento\Framework\Indexer\FieldsetInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function addDynamicData(array $data)
     {
@@ -67,7 +61,6 @@ class ProductFieldset implements \Magento\Framework\Indexer\FieldsetInterface
      * Retrieve searchable attributes
      *
      * @return Attribute[]
-     * @since 2.0.0
      */
     private function getSearchableAttributes()
     {
@@ -99,7 +92,6 @@ class ProductFieldset implements \Magento\Framework\Indexer\FieldsetInterface
      * @param string $defaultSource
      * @param string $defaultHandler
      * @return array
-     * @since 2.0.0
      */
     private function convert(array $attributes, $defaultSource, $defaultHandler)
     {
@@ -121,7 +113,6 @@ class ProductFieldset implements \Magento\Framework\Indexer\FieldsetInterface
     /**
      * @param Attribute $attribute
      * @return string
-     * @since 2.0.0
      */
     private function getType(Attribute $attribute)
     {
@@ -143,7 +134,6 @@ class ProductFieldset implements \Magento\Framework\Indexer\FieldsetInterface
      * @param array $dataFields
      * @param array $searchableFields
      * @return array
-     * @since 2.0.0
      */
     private function merge(array $dataFields, array $searchableFields)
     {

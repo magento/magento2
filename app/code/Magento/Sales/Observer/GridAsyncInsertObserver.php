@@ -12,19 +12,16 @@ use Magento\Framework\Event\ObserverInterface;
  *
  * Performs handling of events related to indexing
  * of Order, Invoice, Shipment and Creditmemo grids.
- * @since 2.0.0
  */
 class GridAsyncInsertObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Sales\Model\GridAsyncInsert
-     * @since 2.0.0
      */
     protected $asyncInsert;
 
     /**
      * @param \Magento\Sales\Model\GridAsyncInsert $asyncInsert
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Model\GridAsyncInsert $asyncInsert
@@ -46,7 +43,6 @@ class GridAsyncInsertObserver implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

@@ -11,13 +11,11 @@ use Magento\Framework\Config\Dom\NodePathMatcher;
 
 /**
  * Parser of a DI argument node that returns its array representation with no data loss
- * @since 2.0.0
  */
 class ArgumentParser
 {
     /**
      * @var FlatConverter
-     * @since 2.0.0
      */
     private $converter;
 
@@ -26,7 +24,6 @@ class ArgumentParser
      *
      * @param \DOMNode $argumentNode
      * @return array|string
-     * @since 2.0.0
      */
     public function parse(\DOMNode $argumentNode)
     {
@@ -38,7 +35,6 @@ class ArgumentParser
      * Retrieve instance of XML converter, suitable for DI argument nodes
      *
      * @return FlatConverter
-     * @since 2.0.0
      */
     protected function getConverter()
     {

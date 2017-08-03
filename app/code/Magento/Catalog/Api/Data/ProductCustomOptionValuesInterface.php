@@ -8,7 +8,6 @@ namespace Magento\Catalog\Api\Data;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface ProductCustomOptionValuesInterface
 {
@@ -16,7 +15,6 @@ interface ProductCustomOptionValuesInterface
      * Get option title
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTitle();
 
@@ -25,7 +23,6 @@ interface ProductCustomOptionValuesInterface
      *
      * @param string $title
      * @return $this
-     * @since 2.0.0
      */
     public function setTitle($title);
 
@@ -33,7 +30,6 @@ interface ProductCustomOptionValuesInterface
      * Get sort order
      *
      * @return int
-     * @since 2.0.0
      */
     public function getSortOrder();
 
@@ -42,7 +38,6 @@ interface ProductCustomOptionValuesInterface
      *
      * @param int $sortOrder
      * @return $this
-     * @since 2.0.0
      */
     public function setSortOrder($sortOrder);
 
@@ -50,7 +45,6 @@ interface ProductCustomOptionValuesInterface
      * Get price
      *
      * @return float
-     * @since 2.0.0
      */
     public function getPrice();
 
@@ -59,7 +53,6 @@ interface ProductCustomOptionValuesInterface
      *
      * @param float $price
      * @return $this
-     * @since 2.0.0
      */
     public function setPrice($price);
 
@@ -67,7 +60,6 @@ interface ProductCustomOptionValuesInterface
      * Get price type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPriceType();
 
@@ -76,7 +68,6 @@ interface ProductCustomOptionValuesInterface
      *
      * @param string $priceType
      * @return $this
-     * @since 2.0.0
      */
     public function setPriceType($priceType);
 
@@ -84,7 +75,6 @@ interface ProductCustomOptionValuesInterface
      * Get Sku
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getSku();
 
@@ -93,7 +83,6 @@ interface ProductCustomOptionValuesInterface
      *
      * @param string $sku
      * @return $this
-     * @since 2.0.0
      */
     public function setSku($sku);
 
@@ -101,7 +90,6 @@ interface ProductCustomOptionValuesInterface
      * Get Option type id
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getOptionTypeId();
 
@@ -110,7 +98,6 @@ interface ProductCustomOptionValuesInterface
      *
      * @param int $optionTypeId
      * @return int|null
-     * @since 2.0.0
      */
     public function setOptionTypeId($optionTypeId);
 }

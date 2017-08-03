@@ -13,7 +13,6 @@ use Magento\Framework\Exception\FileSystemException;
  * Class Driver
  *
  * @api
- * @since 2.0.0
  */
 interface DriverInterface
 {
@@ -36,7 +35,6 @@ interface DriverInterface
      * @param string $path
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function isExists($path);
 
@@ -46,7 +44,6 @@ interface DriverInterface
      * @param string $path
      * @return array
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function stat($path);
 
@@ -56,7 +53,6 @@ interface DriverInterface
      * @param string $path
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function isReadable($path);
 
@@ -66,7 +62,6 @@ interface DriverInterface
      * @param string $path
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function isFile($path);
 
@@ -76,7 +71,6 @@ interface DriverInterface
      * @param string $path
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function isDirectory($path);
 
@@ -88,7 +82,6 @@ interface DriverInterface
      * @param resource|null $context
      * @return string
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function fileGetContents($path, $flag = null, $context = null);
 
@@ -98,7 +91,6 @@ interface DriverInterface
      * @param string $path
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function isWritable($path);
 
@@ -107,7 +99,6 @@ interface DriverInterface
      *
      * @param string $path
      * @return string
-     * @since 2.0.0
      */
     public function getParentDirectory($path);
 
@@ -118,7 +109,6 @@ interface DriverInterface
      * @param int $permissions
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function createDirectory($path, $permissions = 0777);
 
@@ -128,7 +118,6 @@ interface DriverInterface
      * @param string $path
      * @return array
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function readDirectory($path);
 
@@ -138,7 +127,6 @@ interface DriverInterface
      * @param string|null $path
      * @return array
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function readDirectoryRecursively($path = null);
 
@@ -149,7 +137,6 @@ interface DriverInterface
      * @param string $path
      * @return array
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function search($pattern, $path);
 
@@ -161,7 +148,6 @@ interface DriverInterface
      * @param DriverInterface|null $targetDriver
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function rename($oldPath, $newPath, DriverInterface $targetDriver = null);
 
@@ -173,7 +159,6 @@ interface DriverInterface
      * @param DriverInterface|null $targetDriver
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function copy($source, $destination, DriverInterface $targetDriver = null);
 
@@ -185,7 +170,6 @@ interface DriverInterface
      * @param DriverInterface|null $targetDriver
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function symlink($source, $destination, DriverInterface $targetDriver = null);
 
@@ -195,7 +179,6 @@ interface DriverInterface
      * @param string $path
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function deleteFile($path);
 
@@ -205,7 +188,6 @@ interface DriverInterface
      * @param string $path
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function deleteDirectory($path);
 
@@ -216,7 +198,6 @@ interface DriverInterface
      * @param int $permissions
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function changePermissions($path, $permissions);
 
@@ -228,7 +209,6 @@ interface DriverInterface
      * @param int $filePermissions
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function changePermissionsRecursively($path, $dirPermissions, $filePermissions);
 
@@ -239,7 +219,6 @@ interface DriverInterface
      * @param int|null $modificationTime
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function touch($path, $modificationTime = null);
 
@@ -251,7 +230,6 @@ interface DriverInterface
      * @param string|null $mode
      * @return int The number of bytes that were written.
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function filePutContents($path, $content, $mode = null);
 
@@ -262,7 +240,6 @@ interface DriverInterface
      * @param string $mode
      * @return resource
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function fileOpen($path, $mode);
 
@@ -274,7 +251,6 @@ interface DriverInterface
      * @param string $ending [optional]
      * @return string
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function fileReadLine($resource, $length, $ending = null);
 
@@ -285,7 +261,6 @@ interface DriverInterface
      * @param int $length
      * @return string
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function fileRead($resource, $length);
 
@@ -299,7 +274,6 @@ interface DriverInterface
      * @param string $escape [optional]
      * @return array|bool|null
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function fileGetCsv($resource, $length = 0, $delimiter = ',', $enclosure = '"', $escape = '\\');
 
@@ -309,7 +283,6 @@ interface DriverInterface
      * @param resource $resource
      * @return int
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function fileTell($resource);
 
@@ -321,7 +294,6 @@ interface DriverInterface
      * @param int $whence
      * @return int
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function fileSeek($resource, $offset, $whence = SEEK_SET);
 
@@ -330,7 +302,6 @@ interface DriverInterface
      *
      * @param resource $resource
      * @return boolean
-     * @since 2.0.0
      */
     public function endOfFile($resource);
 
@@ -340,7 +311,6 @@ interface DriverInterface
      * @param resource $resource
      * @return boolean
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function fileClose($resource);
 
@@ -351,7 +321,6 @@ interface DriverInterface
      * @param string $data
      * @return int
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function fileWrite($resource, $data);
 
@@ -364,7 +333,6 @@ interface DriverInterface
      * @param string $enclosure
      * @return int
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function filePutCsv($resource, array $data, $delimiter = ',', $enclosure = '"');
 
@@ -374,7 +342,6 @@ interface DriverInterface
      * @param resource $resource
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function fileFlush($resource);
 
@@ -385,7 +352,6 @@ interface DriverInterface
      * @param int $lockMode
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function fileLock($resource, $lockMode = LOCK_EX);
 
@@ -395,7 +361,6 @@ interface DriverInterface
      * @param resource $resource
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function fileUnlock($resource);
 
@@ -404,14 +369,12 @@ interface DriverInterface
      * @param string $path
      * @param string|null $scheme
      * @return mixed
-     * @since 2.0.0
      */
     public function getAbsolutePath($basePath, $path, $scheme = null);
 
     /**
      * @param string $path
      * @return mixed
-     * @since 2.0.0
      */
     public function getRealPath($path);
 
@@ -420,7 +383,6 @@ interface DriverInterface
      *
      * @param string $path
      * @return mixed
-     * @since 2.0.0
      */
     public function getRealPathSafety($path);
 
@@ -428,7 +390,6 @@ interface DriverInterface
      * @param string $basePath
      * @param null $path
      * @return mixed
-     * @since 2.0.0
      */
     public function getRelativePath($basePath, $path = null);
 }

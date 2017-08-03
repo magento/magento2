@@ -10,7 +10,6 @@ namespace Magento\Framework\App\Route\Config;
 /**
  * Class \Magento\Framework\App\Route\Config\Converter
  *
- * @since 2.0.0
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
@@ -19,7 +18,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMDocument $source
      * @return array
-     * @since 2.0.0
      */
     public function convert($source)
     {
@@ -65,7 +63,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param array $modulesList
      * @return array
-     * @since 2.0.0
      */
     protected function _sortModulesList($modulesList)
     {

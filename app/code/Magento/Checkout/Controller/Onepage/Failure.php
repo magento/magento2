@@ -9,13 +9,11 @@ namespace Magento\Checkout\Controller\Onepage;
 /**
  * Class \Magento\Checkout\Controller\Onepage\Failure
  *
- * @since 2.0.0
  */
 class Failure extends \Magento\Checkout\Controller\Onepage
 {
     /**
      * @return \Magento\Framework\View\Result\Page|\Magento\Framework\Controller\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -32,14 +32,12 @@ use Magento\Catalog\Model\Product\Exception as ProductException;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
- * @since 2.0.0
  */
 class Item extends AbstractModel implements ItemInterface
 {
     /**
      * Custom path to download attached file
      * @var string
-     * @since 2.0.0
      */
     protected $_customOptionDownloadUrl = 'wishlist/index/downloadCustomOption';
 
@@ -47,7 +45,6 @@ class Item extends AbstractModel implements ItemInterface
      * Prefix of model events names
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'wishlist_item';
 
@@ -57,7 +54,6 @@ class Item extends AbstractModel implements ItemInterface
      * In observe method you can use $observer->getEvent()->getItem() in this case
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'item';
 
@@ -65,7 +61,6 @@ class Item extends AbstractModel implements ItemInterface
      * Item options array
      *
      * @var Option[]
-     * @since 2.0.0
      */
     protected $_options = [];
 
@@ -73,7 +68,6 @@ class Item extends AbstractModel implements ItemInterface
      * Item options by code cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_optionsByCode = [];
 
@@ -81,7 +75,6 @@ class Item extends AbstractModel implements ItemInterface
      * Not Represent options
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_notRepresentOptions = ['info_buyRequest'];
 
@@ -89,49 +82,41 @@ class Item extends AbstractModel implements ItemInterface
      * Flag stating that options were successfully saved
      *
      * @var bool|null
-     * @since 2.0.0
      */
     protected $_flagOptionsSaved = null;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.0.0
      */
     protected $_date;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Url
-     * @since 2.0.0
      */
     protected $_catalogUrl;
 
     /**
      * @var OptionFactory
-     * @since 2.0.0
      */
     protected $_wishlistOptFactory;
 
     /**
      * @var CollectionFactory
-     * @since 2.0.0
      */
     protected $_wishlOptionCollectionFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
-     * @since 2.0.0
      */
     protected $productTypeConfig;
 
     /**
      * @var ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
@@ -158,7 +143,6 @@ class Item extends AbstractModel implements ItemInterface
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -191,7 +175,6 @@ class Item extends AbstractModel implements ItemInterface
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -203,7 +186,6 @@ class Item extends AbstractModel implements ItemInterface
      *
      * @param int $qty
      * @return $this
-     * @since 2.0.0
      */
     public function setQty($qty)
     {
@@ -215,7 +197,6 @@ class Item extends AbstractModel implements ItemInterface
      * Retrieve resource instance wrapper
      *
      * @return \Magento\Wishlist\Model\ResourceModel\Item
-     * @since 2.0.0
      */
     protected function _getResource()
     {
@@ -228,7 +209,6 @@ class Item extends AbstractModel implements ItemInterface
      * @param array $options1
      * @param array $options2
      * @return bool
-     * @since 2.0.0
      */
     protected function _compareOptions($options1, $options2)
     {
@@ -250,7 +230,6 @@ class Item extends AbstractModel implements ItemInterface
      * @param   Option $option
      * @return  $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _addOptionCode($option)
     {
@@ -269,7 +248,6 @@ class Item extends AbstractModel implements ItemInterface
      * Call save item options if model isn't need to save in DB
      *
      * @return boolean
-     * @since 2.0.0
      */
     protected function _hasModelChanged()
     {
@@ -284,7 +262,6 @@ class Item extends AbstractModel implements ItemInterface
      * Save item options
      *
      * @return $this
-     * @since 2.0.0
      */
     public function saveItemOptions()
     {
@@ -309,7 +286,6 @@ class Item extends AbstractModel implements ItemInterface
      *
      * @param bool $flag
      * @return void
-     * @since 2.0.0
      */
     public function setIsOptionsSaved($flag)
     {
@@ -320,7 +296,6 @@ class Item extends AbstractModel implements ItemInterface
      * Were options saved?
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isOptionsSaved()
     {
@@ -331,7 +306,6 @@ class Item extends AbstractModel implements ItemInterface
      * Save item options after item saved
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -344,7 +318,6 @@ class Item extends AbstractModel implements ItemInterface
      *
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function validate()
     {
@@ -362,7 +335,6 @@ class Item extends AbstractModel implements ItemInterface
      * Check required data
      *
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -391,7 +363,6 @@ class Item extends AbstractModel implements ItemInterface
      * @param int $productId
      * @param array $sharedStores
      * @return $this
-     * @since 2.0.0
      */
     public function loadByProductWishlist($wishlistId, $productId, $sharedStores)
     {
@@ -407,7 +378,6 @@ class Item extends AbstractModel implements ItemInterface
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -442,7 +412,6 @@ class Item extends AbstractModel implements ItemInterface
      * @param bool $delete  delete the item after successful add to cart
      * @return bool
      * @throws \Magento\Catalog\Model\Product\Exception
-     * @since 2.0.0
      */
     public function addToCart(\Magento\Checkout\Model\Cart $cart, $delete = false)
     {
@@ -493,7 +462,6 @@ class Item extends AbstractModel implements ItemInterface
      * If product has required options add special key to URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getProductUrl()
     {
@@ -512,7 +480,6 @@ class Item extends AbstractModel implements ItemInterface
      * product view page with keys and options for configured product
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getBuyRequest()
     {
@@ -533,7 +500,6 @@ class Item extends AbstractModel implements ItemInterface
      *
      * @param array|\Magento\Framework\DataObject $buyRequest
      * @return $this
-     * @since 2.0.0
      */
     public function mergeBuyRequest($buyRequest)
     {
@@ -564,7 +530,6 @@ class Item extends AbstractModel implements ItemInterface
      *
      * @param \Magento\Framework\DataObject $buyRequest
      * @return $this
-     * @since 2.0.0
      */
     public function setBuyRequest($buyRequest)
     {
@@ -581,7 +546,6 @@ class Item extends AbstractModel implements ItemInterface
      * @param   \Magento\Catalog\Model\Product $product
      * @param   \Magento\Framework\DataObject $buyRequest
      * @return  bool
-     * @since 2.0.0
      */
     public function isRepresent($product, $buyRequest)
     {
@@ -618,7 +582,6 @@ class Item extends AbstractModel implements ItemInterface
      *
      * @param   \Magento\Catalog\Model\Product $product
      * @return  bool
-     * @since 2.0.0
      */
     public function representProduct($product)
     {
@@ -647,7 +610,6 @@ class Item extends AbstractModel implements ItemInterface
      * @param array $options1
      * @param array $options2
      * @return bool
-     * @since 2.0.0
      */
     public function compareOptions($options1, $options2)
     {
@@ -668,7 +630,6 @@ class Item extends AbstractModel implements ItemInterface
      *
      * @param   array $options
      * @return  $this
-     * @since 2.0.0
      */
     public function setOptions($options)
     {
@@ -682,7 +643,6 @@ class Item extends AbstractModel implements ItemInterface
      * Get all item options
      *
      * @return Option[]
-     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -693,7 +653,6 @@ class Item extends AbstractModel implements ItemInterface
      * Get all item options as array with codes in array key
      *
      * @return array
-     * @since 2.0.0
      */
     public function getOptionsByCode()
     {
@@ -706,7 +665,6 @@ class Item extends AbstractModel implements ItemInterface
      * @param   Option|\Magento\Framework\DataObject|array $option
      * @return  $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function addOption($option)
     {
@@ -737,7 +695,6 @@ class Item extends AbstractModel implements ItemInterface
      *
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function removeOption($code)
     {
@@ -753,7 +710,6 @@ class Item extends AbstractModel implements ItemInterface
      *
      * @param   string $code
      * @return  Option|null
-     * @since 2.0.0
      */
     public function getOptionByCode($code)
     {
@@ -767,7 +723,6 @@ class Item extends AbstractModel implements ItemInterface
      * Returns whether Qty field is valid for this item
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canHaveQty()
     {
@@ -779,7 +734,6 @@ class Item extends AbstractModel implements ItemInterface
      * Get current custom option download url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCustomDownloadUrl()
     {
@@ -791,7 +745,6 @@ class Item extends AbstractModel implements ItemInterface
      *
      * @param string $url
      * @return void
-     * @since 2.0.0
      */
     public function setCustomDownloadUrl($url)
     {
@@ -805,7 +758,6 @@ class Item extends AbstractModel implements ItemInterface
      * We have to customize only controller url, so return it.
      *
      * @return null|\Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getFileDownloadParams()
     {
@@ -823,7 +775,6 @@ class Item extends AbstractModel implements ItemInterface
      * @param null|string|array $optionsFilter
      *
      * @return $this
-     * @since 2.0.0
      */
     public function loadWithOptions($id, $optionsFilter = null)
     {

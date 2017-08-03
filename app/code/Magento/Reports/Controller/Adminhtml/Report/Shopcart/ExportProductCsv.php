@@ -12,7 +12,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Shopcart\ExportProductCsv
  *
- * @since 2.0.0
  */
 class ExportProductCsv extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
 {
@@ -20,7 +19,6 @@ class ExportProductCsv extends \Magento\Reports\Controller\Adminhtml\Report\Shop
      * Export products report grid to CSV format
      *
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

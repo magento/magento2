@@ -9,25 +9,21 @@ namespace Magento\ConfigurableProduct\Model;
 /**
  * Class \Magento\ConfigurableProduct\Model\ProductVariationsBuilder
  *
- * @since 2.0.0
  */
 class ProductVariationsBuilder
 {
     /**
      * @var \Magento\Framework\Api\AttributeValueFactory
-     * @since 2.0.0
      */
     private $customAttributeFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $productFactory;
 
     /**
      * @var \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix
-     * @since 2.0.0
      */
     private $variationMatrix;
 
@@ -35,7 +31,6 @@ class ProductVariationsBuilder
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param Product\Type\VariationMatrix $variationMatrix
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ProductFactory $productFactory,
@@ -53,7 +48,6 @@ class ProductVariationsBuilder
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param array $attributes
      * @return \Magento\Catalog\Api\Data\ProductInterface[]
-     * @since 2.0.0
      */
     public function create(\Magento\Catalog\Api\Data\ProductInterface $product, $attributes)
     {

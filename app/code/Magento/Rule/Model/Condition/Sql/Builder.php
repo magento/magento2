@@ -12,19 +12,16 @@ use Magento\Rule\Model\Condition\Combine;
 
 /**
  * Class SQL Builder
- * @since 2.0.0
  */
 class Builder
 {
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected $_connection;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_conditionOperatorMap = [
         '=='    => ':field = ?',
@@ -41,13 +38,11 @@ class Builder
 
     /**
      * @var \Magento\Rule\Model\Condition\Sql\ExpressionFactory
-     * @since 2.0.0
      */
     protected $_expressionFactory;
 
     /**
      * @param ExpressionFactory $expressionFactory
-     * @since 2.0.0
      */
     public function __construct(ExpressionFactory $expressionFactory)
     {
@@ -59,7 +54,6 @@ class Builder
      *
      * @param Combine $combine
      * @return array
-     * @since 2.0.0
      */
     protected function _getCombineTablesToJoin(Combine $combine)
     {
@@ -73,7 +67,6 @@ class Builder
      * @param Combine $combine
      * @param array $tables
      * @return array
-     * @since 2.0.0
      */
     protected function _getChildCombineTablesToJoin(Combine $combine, $tables = [])
     {
@@ -98,7 +91,6 @@ class Builder
      * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
      * @param Combine $combine
      * @return $this
-     * @since 2.0.0
      */
     protected function _joinTablesToCollection(
         \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection,
@@ -120,7 +112,6 @@ class Builder
      * @param string $value
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _getMappedSqlCondition(AbstractCondition $condition, $value = '')
     {
@@ -150,7 +141,6 @@ class Builder
      * @param string $value
      * @return string
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _getMappedSqlCombination(Combine $combine, $value = '')
     {
@@ -179,7 +169,6 @@ class Builder
      * @param Combine $combine
      *
      * @return void
-     * @since 2.0.0
      */
     public function attachConditionToCollection(
         \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection,

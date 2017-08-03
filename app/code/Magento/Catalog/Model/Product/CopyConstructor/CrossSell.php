@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\Product\CopyConstructor;
 /**
  * Class \Magento\Catalog\Model\Product\CopyConstructor\CrossSell
  *
- * @since 2.0.0
  */
 class CrossSell implements \Magento\Catalog\Model\Product\CopyConstructorInterface
 {
@@ -18,7 +17,6 @@ class CrossSell implements \Magento\Catalog\Model\Product\CopyConstructorInterfa
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Catalog\Model\Product $duplicate
      * @return void
-     * @since 2.0.0
      */
     public function build(\Magento\Catalog\Model\Product $product, \Magento\Catalog\Model\Product $duplicate)
     {

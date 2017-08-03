@@ -11,7 +11,6 @@ use Magento\Framework\Setup\ModuleContextInterface;
  * Context of a module being installed/updated: version, user data, etc.
  *
  * @api
- * @since 2.0.0
  */
 class ModuleContext implements ModuleContextInterface
 {
@@ -19,7 +18,6 @@ class ModuleContext implements ModuleContextInterface
      * Current version of a module
      *
      * @var string
-     * @since 2.0.0
      */
     private $version;
 
@@ -27,7 +25,6 @@ class ModuleContext implements ModuleContextInterface
      * Init
      *
      * @param string $version Current version of a module
-     * @since 2.0.0
      */
     public function __construct($version)
     {
@@ -36,7 +33,6 @@ class ModuleContext implements ModuleContextInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getVersion()
     {

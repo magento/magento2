@@ -13,13 +13,11 @@ use Magento\Framework\Interception\DefinitionInterface;
 /**
  * Class \Magento\Framework\Interception\Definition\Runtime
  *
- * @since 2.0.0
  */
 class Runtime implements DefinitionInterface
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_typesByPrefixes = [
         'befor' => self::LISTENER_BEFORE,
@@ -31,7 +29,6 @@ class Runtime implements DefinitionInterface
      * Plugin method service prefix lengths
      *
      * @var array
-     * @since 2.0.0
      */
     protected $prefixLengths = [
         self::LISTENER_BEFORE => 6,
@@ -44,7 +41,6 @@ class Runtime implements DefinitionInterface
      *
      * @param string $type
      * @return string[]
-     * @since 2.0.0
      */
     public function getMethodList($type)
     {

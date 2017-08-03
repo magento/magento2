@@ -11,7 +11,6 @@ use Magento\Framework\View\Element\Template;
  * Class Serializer
  * @package Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Ajax
  * @deprecated 2.2.0
- * @since 2.0.0
  */
 class Serializer extends \Magento\Framework\View\Element\Template
 {
@@ -40,7 +39,6 @@ class Serializer extends \Magento\Framework\View\Element\Template
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function _construct()
     {
@@ -52,7 +50,6 @@ class Serializer extends \Magento\Framework\View\Element\Template
     /**
      * @return string
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     public function getProductsJSON()
     {

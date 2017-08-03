@@ -9,7 +9,6 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Shopcart;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Shopcart\Abandoned
  *
- * @since 2.0.0
  */
 class Abandoned extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
 {
@@ -17,7 +16,6 @@ class Abandoned extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
      * Abandoned carts action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

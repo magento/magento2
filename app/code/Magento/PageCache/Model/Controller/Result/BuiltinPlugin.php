@@ -18,31 +18,26 @@ use Magento\PageCache\Model\Cache\Type as CacheType;
  * Plugin for processing builtin cache
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class BuiltinPlugin
 {
     /**
      * @var Config
-     * @since 2.0.0
      */
     private $config;
 
     /**
      * @var Kernel
-     * @since 2.0.0
      */
     private $kernel;
 
     /**
      * @var AppState
-     * @since 2.0.0
      */
     private $state;
 
     /**
      * @var Registry
-     * @since 2.0.0
      */
     private $registry;
 
@@ -51,7 +46,6 @@ class BuiltinPlugin
      * @param Kernel $kernel
      * @param AppState $state
      * @param Registry $registry
-     * @since 2.0.0
      */
     public function __construct(Config $config, Kernel $kernel, AppState $state, Registry $registry)
     {

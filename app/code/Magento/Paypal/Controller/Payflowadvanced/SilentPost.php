@@ -9,7 +9,6 @@ namespace Magento\Paypal\Controller\Payflowadvanced;
 /**
  * Class \Magento\Paypal\Controller\Payflowadvanced\SilentPost
  *
- * @since 2.0.0
  */
 class SilentPost extends \Magento\Paypal\Controller\Payflow\SilentPost
 {

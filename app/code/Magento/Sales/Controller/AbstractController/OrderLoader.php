@@ -14,43 +14,36 @@ use Magento\Framework\Controller\Result\RedirectFactory;
 /**
  * Class \Magento\Sales\Controller\AbstractController\OrderLoader
  *
- * @since 2.0.0
  */
 class OrderLoader implements OrderLoaderInterface
 {
     /**
      * @var \Magento\Sales\Model\OrderFactory
-     * @since 2.0.0
      */
     protected $orderFactory;
 
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $registry;
 
     /**
      * @var OrderViewAuthorizationInterface
-     * @since 2.0.0
      */
     protected $orderAuthorization;
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $url;
 
     /**
      * @var ForwardFactory
-     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
     /**
      * @var RedirectFactory
-     * @since 2.0.0
      */
     protected $redirectFactory;
 
@@ -61,7 +54,6 @@ class OrderLoader implements OrderLoaderInterface
      * @param \Magento\Framework\UrlInterface $url
      * @param ForwardFactory $resultForwardFactory
      * @param RedirectFactory $redirectFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Model\OrderFactory $orderFactory,
@@ -82,7 +74,6 @@ class OrderLoader implements OrderLoaderInterface
     /**
      * @param RequestInterface $request
      * @return bool|\Magento\Framework\Controller\Result\Forward|\Magento\Framework\Controller\Result\Redirect
-     * @since 2.0.0
      */
     public function load(RequestInterface $request)
     {

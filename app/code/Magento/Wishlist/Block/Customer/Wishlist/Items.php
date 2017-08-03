@@ -10,7 +10,6 @@ namespace Magento\Wishlist\Block\Customer\Wishlist;
  * Wishlist block customer items
  *
  * @api
- * @since 2.0.0
  */
 class Items extends \Magento\Framework\View\Element\Template
 {
@@ -18,7 +17,6 @@ class Items extends \Magento\Framework\View\Element\Template
      * Retrieve table column object list
      *
      * @return \Magento\Wishlist\Block\Customer\Wishlist\Item\Column[]
-     * @since 2.0.0
      */
     public function getColumns()
     {

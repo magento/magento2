@@ -12,7 +12,6 @@ use Magento\Downloadable\Model\Link;
 /**
  * Class LinkPrice Model
  *
- * @since 2.0.0
  */
 class LinkPrice extends RegularPrice implements LinkPriceInterface
 {
@@ -24,7 +23,6 @@ class LinkPrice extends RegularPrice implements LinkPriceInterface
     /**
      * @param Link $link
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     public function getLinkAmount(Link $link)
     {

@@ -13,26 +13,22 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class \Magento\Catalog\Controller\Adminhtml\Product\NewAction
  *
- * @since 2.0.0
  */
 class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var Initialization\StockDataFilter
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     protected $stockFilter;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
-     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
@@ -42,7 +38,6 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param Initialization\StockDataFilter $stockFilter
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -61,7 +56,6 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
      * Create new product page
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

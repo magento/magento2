@@ -13,7 +13,6 @@ use Psr\Log\LoggerInterface as Logger;
 /**
  * Quote shipping address write service object.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressManagementInterface
 {
@@ -21,7 +20,6 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
      * Quote repository.
      *
      * @var \Magento\Quote\Api\CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
@@ -29,7 +27,6 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
      * Logger.
      *
      * @var Logger
-     * @since 2.0.0
      */
     protected $logger;
 
@@ -37,25 +34,21 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
      * Validator.
      *
      * @var QuoteAddressValidator
-     * @since 2.0.0
      */
     protected $addressValidator;
 
     /**
      * @var \Magento\Customer\Api\AddressRepositoryInterface
-     * @since 2.0.0
      */
     protected $addressRepository;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var Quote\TotalsCollector
-     * @since 2.0.0
      */
     protected $totalsCollector;
 
@@ -67,7 +60,6 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Quote\TotalsCollector $totalsCollector
      *
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
@@ -88,7 +80,6 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
     /**
      * {@inheritDoc}
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address)
     {
@@ -132,7 +123,6 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function get($cartId)
     {

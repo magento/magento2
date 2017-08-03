@@ -12,7 +12,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 /**
  * Class \Magento\Catalog\Model\Product\Copier
  *
- * @since 2.0.0
  */
 class Copier
 {
@@ -24,13 +23,11 @@ class Copier
 
     /**
      * @var CopyConstructorInterface
-     * @since 2.0.0
      */
     protected $copyConstructor;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $productFactory;
 
@@ -43,7 +40,6 @@ class Copier
     /**
      * @param CopyConstructorInterface $copyConstructor
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @since 2.0.0
      */
     public function __construct(
         CopyConstructorInterface $copyConstructor,
@@ -58,7 +54,6 @@ class Copier
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function copy(\Magento\Catalog\Model\Product $product)
     {

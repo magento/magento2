@@ -35,19 +35,16 @@ use Magento\Framework\Model\AbstractModel;
  * @method \Magento\Quote\Model\Quote\Address\Rate setMethodTitle(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Rate extends AbstractModel
 {
     /**
      * @var \Magento\Quote\Model\Quote\Address
-     * @since 2.0.0
      */
     protected $_address;
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -56,7 +53,6 @@ class Rate extends AbstractModel
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -70,7 +66,6 @@ class Rate extends AbstractModel
     /**
      * @param \Magento\Quote\Model\Quote\Address $address
      * @return $this
-     * @since 2.0.0
      */
     public function setAddress(\Magento\Quote\Model\Quote\Address $address)
     {
@@ -80,7 +75,6 @@ class Rate extends AbstractModel
 
     /**
      * @return \Magento\Quote\Model\Quote\Address
-     * @since 2.0.0
      */
     public function getAddress()
     {
@@ -90,7 +84,6 @@ class Rate extends AbstractModel
     /**
      * @param \Magento\Quote\Model\Quote\Address\RateResult\AbstractResult $rate
      * @return $this
-     * @since 2.0.0
      */
     public function importShippingRate(\Magento\Quote\Model\Quote\Address\RateResult\AbstractResult $rate)
     {

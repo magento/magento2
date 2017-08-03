@@ -10,26 +10,22 @@ use Magento\Framework\Api\Search\AggregationValueInterface;
 /**
  * Class \Magento\Framework\Search\Response\Aggregation\Value
  *
- * @since 2.0.0
  */
 class Value implements AggregationValueInterface
 {
     /**
      * @var string|array
-     * @since 2.0.0
      */
     private $value;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $metrics;
 
     /**
      * @param string|array $value
      * @param array $metrics
-     * @since 2.0.0
      */
     public function __construct($value, $metrics)
     {
@@ -39,7 +35,6 @@ class Value implements AggregationValueInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getValue()
     {
@@ -48,7 +43,6 @@ class Value implements AggregationValueInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getMetrics()
     {

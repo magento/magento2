@@ -15,7 +15,6 @@ use Magento\Framework\Registry;
  * Adminhtml catalog product downloadable items tab and form
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Downloadable extends Widget implements TabInterface
 {
@@ -23,19 +22,16 @@ class Downloadable extends Widget implements TabInterface
      * Reference to product objects that is being edited
      *
      * @var \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     protected $_product = null;
 
     /**
      * @var \Magento\Framework\DataObject|null
-     * @since 2.0.0
      */
     protected $_config = null;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'product/edit/downloadable.phtml';
 
@@ -43,7 +39,6 @@ class Downloadable extends Widget implements TabInterface
      * Accordion block id
      *
      * @var string
-     * @since 2.0.0
      */
     protected $blockId = 'downloadableInfo';
 
@@ -51,7 +46,6 @@ class Downloadable extends Widget implements TabInterface
      * Core registry
      *
      * @var Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -59,7 +53,6 @@ class Downloadable extends Widget implements TabInterface
      * @param Context $context
      * @param Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -74,7 +67,6 @@ class Downloadable extends Widget implements TabInterface
      * Get parent tab code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getParentTab()
     {
@@ -85,7 +77,6 @@ class Downloadable extends Widget implements TabInterface
      * Check is readonly block
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isReadonly()
     {
@@ -96,7 +87,6 @@ class Downloadable extends Widget implements TabInterface
      * Retrieve product
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -107,7 +97,6 @@ class Downloadable extends Widget implements TabInterface
      * Get tab label
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -118,7 +107,6 @@ class Downloadable extends Widget implements TabInterface
      * Get tab title
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -129,7 +117,6 @@ class Downloadable extends Widget implements TabInterface
      * Check if tab can be displayed
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -140,7 +127,6 @@ class Downloadable extends Widget implements TabInterface
      * Check if tab is hidden
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -149,7 +135,6 @@ class Downloadable extends Widget implements TabInterface
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getGroupCode()
     {
@@ -160,7 +145,6 @@ class Downloadable extends Widget implements TabInterface
      * Get downloadable tab content id
      *
      * @return string
-     * @since 2.0.0
      */
     public function getContentTabId()
     {
@@ -169,7 +153,6 @@ class Downloadable extends Widget implements TabInterface
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isDownloadable()
     {
@@ -178,7 +161,6 @@ class Downloadable extends Widget implements TabInterface
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {

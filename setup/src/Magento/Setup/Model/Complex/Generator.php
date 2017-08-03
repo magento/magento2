@@ -12,7 +12,6 @@ use Magento\ImportExport\Model\Import\AbstractSource;
  * Class Generator
  *
  *
- * @since 2.0.0
  */
 class Generator extends AbstractSource
 {
@@ -20,7 +19,6 @@ class Generator extends AbstractSource
      * Data row pattern
      *
      * @var Pattern
-     * @since 2.0.0
      */
     protected $_pattern;
 
@@ -28,7 +26,6 @@ class Generator extends AbstractSource
      * Entities limit
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_limit = 0;
 
@@ -36,7 +33,6 @@ class Generator extends AbstractSource
      * Entities Count
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_count = 0;
 
@@ -44,7 +40,6 @@ class Generator extends AbstractSource
      * Array of template variables (static values or callables)
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_variables = [];
 
@@ -52,7 +47,6 @@ class Generator extends AbstractSource
      * Current index
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_index = 1;
 
@@ -60,7 +54,6 @@ class Generator extends AbstractSource
      * Rows count in pattern
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_patternRowsCount = 0;
 
@@ -69,7 +62,6 @@ class Generator extends AbstractSource
      *
      * @param Pattern $rowPattern
      * @param int $count how many records to generate
-     * @since 2.0.0
      */
     public function __construct(Pattern $rowPattern, $count)
     {
@@ -86,7 +78,6 @@ class Generator extends AbstractSource
      * @param int $key
      *
      * @return float
-     * @since 2.0.0
      */
     public function getIndex($key)
     {
@@ -97,7 +88,6 @@ class Generator extends AbstractSource
      * Whether limit of generated elements is reached (according to "Iterator" interface)
      *
      * @return bool
-     * @since 2.0.0
      */
     public function valid()
     {
@@ -108,7 +98,6 @@ class Generator extends AbstractSource
      * Get next row in set
      *
      * @return array|bool
-     * @since 2.0.0
      */
     protected function _getNextRow()
     {
@@ -127,7 +116,6 @@ class Generator extends AbstractSource
      * Returns the row in associative array format: array(<col_name> => <value>, ...)
      *
      * @return array
-     * @since 2.0.0
      */
     public function current()
     {

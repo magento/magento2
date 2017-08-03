@@ -11,19 +11,16 @@ use Magento\Backend\App\Action;
 /**
  * Class \Magento\Cms\Controller\Adminhtml\Page\Widget\Chooser
  *
- * @since 2.0.0
  */
 class Chooser extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\View\LayoutFactory
-     * @since 2.0.0
      */
     protected $layoutFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
-     * @since 2.0.0
      */
     protected $resultRawFactory;
 
@@ -31,7 +28,6 @@ class Chooser extends \Magento\Backend\App\Action
      * @param Action\Context $context
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -47,7 +43,6 @@ class Chooser extends \Magento\Backend\App\Action
      * Chooser Source action
      *
      * @return \Magento\Framework\Controller\Result\Raw
-     * @since 2.0.0
      */
     public function execute()
     {

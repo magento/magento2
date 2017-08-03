@@ -9,7 +9,6 @@ namespace Magento\Framework\View\Element;
  * Class Text
  *
  * @api
- * @since 2.0.0
  */
 class Text extends \Magento\Framework\View\Element\AbstractBlock
 {
@@ -18,7 +17,6 @@ class Text extends \Magento\Framework\View\Element\AbstractBlock
      *
      * @param string $text
      * @return $this
-     * @since 2.0.0
      */
     public function setText($text)
     {
@@ -30,7 +28,6 @@ class Text extends \Magento\Framework\View\Element\AbstractBlock
      * Retrieve text data
      *
      * @return string
-     * @since 2.0.0
      */
     public function getText()
     {
@@ -43,7 +40,6 @@ class Text extends \Magento\Framework\View\Element\AbstractBlock
      * @param string $text
      * @param bool $before
      * @return void
-     * @since 2.0.0
      */
     public function addText($text, $before = false)
     {
@@ -58,7 +54,6 @@ class Text extends \Magento\Framework\View\Element\AbstractBlock
      * Render html output
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

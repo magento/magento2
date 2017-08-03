@@ -9,13 +9,11 @@ namespace Magento\Backend\Controller\Adminhtml\System;
 /**
  * Class \Magento\Backend\Controller\Adminhtml\System\SetStore
  *
- * @since 2.0.0
  */
 class SetStore extends \Magento\Backend\Controller\Adminhtml\System
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

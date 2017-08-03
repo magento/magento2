@@ -13,7 +13,6 @@ use Magento\Framework\Serialize\SerializerInterface;
 /**
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Config
 {
@@ -25,19 +24,13 @@ class Config
     const ATTRIBUTES_CODES_CACHE_ID = 'EAV_ENTITY_ATTRIBUTES_CODES';
     /**#@-*/
 
-    /**
-     * Entity types data
-     *
-     * @var array
-     * @since 2.0.0
-     */
+    /**#@-*/
     protected $_entityTypeData;
 
     /**
      * Attributes data
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_attributeData;
 
@@ -45,7 +38,6 @@ class Config
      * Attribute codes cache array
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_attributeCodes;
 
@@ -55,7 +47,6 @@ class Config
      * array ($objectId => $object)
      *
      * @var \Magento\Eav\Model\Entity\Type[]
-     * @since 2.0.0
      */
     protected $_objects;
 
@@ -80,7 +71,6 @@ class Config
      * )
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_references;
 
@@ -88,37 +78,31 @@ class Config
      * Cache flag
      *
      * @var bool|null
-     * @since 2.0.0
      */
     protected $_isCacheEnabled = null;
 
     /**
      * @var \Magento\Framework\App\CacheInterface
-     * @since 2.0.0
      */
     protected $_cache;
 
     /**
      * @var \Magento\Framework\App\Cache\StateInterface
-     * @since 2.0.0
      */
     protected $_cacheState;
 
     /**
      * @var \Magento\Eav\Model\Entity\TypeFactory
-     * @since 2.0.0
      */
     protected $_entityTypeFactory;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory
-     * @since 2.0.0
      */
     protected $entityTypeCollectionFactory;
 
     /**
      * @var \Magento\Framework\Validator\UniversalFactory
-     * @since 2.0.0
      */
     protected $_universalFactory;
 
@@ -150,7 +134,6 @@ class Config
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param SerializerInterface $serializer
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\CacheInterface $cache,
@@ -173,7 +156,6 @@ class Config
      *
      * @return \Magento\Framework\App\CacheInterface
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getCache()
     {
@@ -184,7 +166,6 @@ class Config
      * Reset object state
      *
      * @return $this
-     * @since 2.0.0
      */
     public function clear()
     {
@@ -209,7 +190,6 @@ class Config
      *
      * @param   mixed $id
      * @return  mixed
-     * @since 2.0.0
      */
     protected function _load($id)
     {
@@ -235,7 +215,6 @@ class Config
      * @param   mixed $id
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _save($obj, $id)
     {
@@ -263,7 +242,6 @@ class Config
      * @param   string $code
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _addEntityTypeReference($id, $code)
     {
@@ -276,7 +254,6 @@ class Config
      *
      * @param   int $id
      * @return  string
-     * @since 2.0.0
      */
     protected function _getEntityTypeReference($id)
     {
@@ -290,7 +267,6 @@ class Config
      * @param   string $code
      * @param   string $entityTypeCode
      * @return $this
-     * @since 2.0.0
      */
     protected function _addAttributeReference($id, $code, $entityTypeCode)
     {
@@ -304,7 +280,6 @@ class Config
      * @param   int $id
      * @param   string $entityTypeCode
      * @return  string|null
-     * @since 2.0.0
      */
     protected function _getAttributeReference($id, $entityTypeCode)
     {
@@ -320,7 +295,6 @@ class Config
      * @param   string $code
      * @return  string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _getEntityKey($code)
     {
@@ -334,7 +308,6 @@ class Config
      * @param   string $attributeCode
      * @return  string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _getAttributeKey($entityTypeCode, $attributeCode)
     {
@@ -347,7 +320,6 @@ class Config
      * Check EAV cache availability
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isCacheEnabled()
     {
@@ -361,7 +333,6 @@ class Config
      * Initialize all entity types data
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initEntityTypes()
     {
@@ -413,7 +384,6 @@ class Config
      * @param int|string|Type $code
      * @return Type
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getEntityType($code)
     {
@@ -455,7 +425,6 @@ class Config
      *
      * @param string $entityType
      * @return $this
-     * @since 2.0.0
      */
     protected function _initAttributes($entityType)
     {
@@ -524,7 +493,6 @@ class Config
      * @param   mixed $code
      * @return  AbstractAttribute
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getAttribute($entityType, $code)
     {
@@ -583,7 +551,6 @@ class Config
      * @param mixed $entityType
      * @param \Magento\Framework\DataObject $object
      * @return string[]
-     * @since 2.0.0
      */
     public function getEntityAttributeCodes($entityType, $object = null)
     {
@@ -664,7 +631,6 @@ class Config
      * @param string $entityType
      * @param array $attributeData
      * @return AbstractAttribute
-     * @since 2.0.0
      */
     protected function _createAttribute($entityType, $attributeData)
     {
@@ -705,7 +671,6 @@ class Config
      *
      * @param array $attributeData
      * @return bool
-     * @since 2.0.0
      */
     protected function _validateAttributeData($attributeData = null)
     {
@@ -728,7 +693,6 @@ class Config
      * @param string|Type $entityType
      * @param array $attributes
      * @return $this
-     * @since 2.0.0
      */
     public function importAttributesData($entityType, array $attributes)
     {

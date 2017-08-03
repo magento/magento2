@@ -12,7 +12,6 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
 {
@@ -20,7 +19,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Event prefix
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'catalog_category_collection';
 
@@ -28,7 +26,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Event object name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'category_collection';
 
@@ -36,7 +33,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Name of product table
      *
      * @var string
-     * @since 2.0.0
      */
     private $_productTable;
 
@@ -44,7 +40,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Store id, that we should count products on
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_productStoreId;
 
@@ -52,7 +47,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Name of product website table
      *
      * @var string
-     * @since 2.0.0
      */
     private $_productWebsiteTable;
 
@@ -60,7 +54,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Load with product count flag
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_loadWithProductCount = false;
 
@@ -68,7 +61,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Init collection and determine table names
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -80,7 +72,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param array $categoryIds
      * @return $this
-     * @since 2.0.0
      */
     public function addIdFilter($categoryIds)
     {
@@ -109,7 +100,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param boolean $flag
      * @return $this
-     * @since 2.0.0
      */
     public function setLoadProductCount($flag)
     {
@@ -121,7 +111,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Before collection load
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeLoad()
     {
@@ -133,7 +122,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * After collection load
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -147,7 +135,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param int $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function setProductStoreId($storeId)
     {
@@ -159,7 +146,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get id of the store that we should count products on
      *
      * @return int
-     * @since 2.0.0
      */
     public function getProductStoreId()
     {
@@ -175,7 +161,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
-     * @since 2.0.0
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -201,7 +186,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Load categories product count
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _loadProductCount()
     {
@@ -217,7 +201,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function loadProductCount($items, $countRegular = true, $countAnchor = true)
     {
@@ -309,7 +292,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param string $regexp
      * @return $this
-     * @since 2.0.0
      */
     public function addPathFilter($regexp)
     {
@@ -321,7 +303,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Joins url rewrite rules to collection
      *
      * @return $this
-     * @since 2.0.0
      */
     public function joinUrlRewrite()
     {
@@ -343,7 +324,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Add active category filter
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addIsActiveFilter()
     {
@@ -359,7 +339,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Add name attribute to result
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addNameToResult()
     {
@@ -371,7 +350,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Add url rewrite rules to collection
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addUrlRewriteToResult()
     {
@@ -384,7 +362,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param array|string $paths
      * @return $this
-     * @since 2.0.0
      */
     public function addPathsFilter($paths)
     {
@@ -407,7 +384,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param int|string $level
      * @return $this
-     * @since 2.0.0
      */
     public function addLevelFilter($level)
     {
@@ -419,7 +395,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Add root category filter
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addRootLevelFilter()
     {
@@ -433,7 +408,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param string $field
      * @return $this
-     * @since 2.0.0
      */
     public function addOrderField($field)
     {
@@ -445,7 +419,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Getter for _productWebsiteTable
      *
      * @return string
-     * @since 2.0.0
      */
     public function getProductWebsiteTable()
     {
@@ -459,7 +432,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Getter for _productTable
      *
      * @return string
-     * @since 2.0.0
      */
     public function getProductTable()
     {

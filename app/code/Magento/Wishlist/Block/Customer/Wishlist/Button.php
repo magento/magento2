@@ -13,7 +13,6 @@ namespace Magento\Wishlist\Block\Customer\Wishlist;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Button extends \Magento\Framework\View\Element\Template
 {
@@ -21,7 +20,6 @@ class Button extends \Magento\Framework\View\Element\Template
      * Wishlist config
      *
      * @var \Magento\Wishlist\Model\Config
-     * @since 2.0.0
      */
     protected $_wishlistConfig;
 
@@ -29,7 +27,6 @@ class Button extends \Magento\Framework\View\Element\Template
      * Wishlist data
      *
      * @var \Magento\Wishlist\Helper\Data
-     * @since 2.0.0
      */
     protected $_wishlistData = null;
 
@@ -38,7 +35,6 @@ class Button extends \Magento\Framework\View\Element\Template
      * @param \Magento\Wishlist\Helper\Data $wishlistData
      * @param \Magento\Wishlist\Model\Config $wishlistConfig
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -55,7 +51,6 @@ class Button extends \Magento\Framework\View\Element\Template
      * Retrieve current wishlist
      *
      * @return \Magento\Wishlist\Model\Wishlist
-     * @since 2.0.0
      */
     public function getWishlist()
     {
@@ -66,7 +61,6 @@ class Button extends \Magento\Framework\View\Element\Template
      * Retrieve wishlist config
      *
      * @return \Magento\Wishlist\Model\Config
-     * @since 2.0.0
      */
     public function getConfig()
     {

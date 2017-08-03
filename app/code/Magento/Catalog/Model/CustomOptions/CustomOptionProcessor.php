@@ -14,31 +14,26 @@ use Magento\Quote\Model\Quote\ProductOptionFactory;
 /**
  * Class \Magento\Catalog\Model\CustomOptions\CustomOptionProcessor
  *
- * @since 2.0.0
  */
 class CustomOptionProcessor implements CartItemProcessorInterface
 {
     /**
      * @var \Magento\Framework\DataObject\Factory
-     * @since 2.0.0
      */
     protected $objectFactory;
 
     /**
      * @var \Magento\Quote\Model\Quote\ProductOptionFactory
-     * @since 2.0.0
      */
     protected $productOptionFactory;
 
     /**
      * @var \Magento\Quote\Api\Data\ProductOptionExtensionFactory
-     * @since 2.0.0
      */
     protected $extensionFactory;
 
     /**
      * @var \Magento\Catalog\Model\CustomOptions\CustomOptionFactory
-     * @since 2.0.0
      */
     protected $customOptionFactory;
 
@@ -62,7 +57,6 @@ class CustomOptionProcessor implements CartItemProcessorInterface
      * @param ProductOptionExtensionFactory $extensionFactory
      * @param CustomOptionFactory $customOptionFactory
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\DataObject\Factory $objectFactory,
@@ -81,7 +75,6 @@ class CustomOptionProcessor implements CartItemProcessorInterface
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function convertToBuyRequest(CartItemInterface $cartItem)
     {
@@ -102,7 +95,6 @@ class CustomOptionProcessor implements CartItemProcessorInterface
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function processOptions(CartItemInterface $cartItem)
     {
@@ -130,7 +122,6 @@ class CustomOptionProcessor implements CartItemProcessorInterface
      *
      * @param CartItemInterface $cartItem
      * @return array
-     * @since 2.0.0
      */
     protected function getOptions(CartItemInterface $cartItem)
     {
@@ -147,7 +138,6 @@ class CustomOptionProcessor implements CartItemProcessorInterface
      *
      * @param array $options
      * @return null
-     * @since 2.0.0
      */
     protected function updateOptionsValues(array &$options)
     {

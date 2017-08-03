@@ -31,7 +31,6 @@ use Magento\Framework\Exception\CronException;
  * @method \Magento\Cron\Model\Schedule setCronExprArr(array $value)
  *
  * @api
- * @since 2.0.0
  */
 class Schedule extends \Magento\Framework\Model\AbstractModel
 {
@@ -51,7 +50,6 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -65,7 +63,6 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function _construct()
     {
@@ -76,7 +73,6 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      * @param string $expr
      * @return $this
      * @throws \Magento\Framework\Exception\CronException
-     * @since 2.0.0
      */
     public function setCronExpr($expr)
     {
@@ -95,7 +91,6 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      * Supports $this->setCronExpr('* 0-5,10-59/5 2-10,15-25 january-june/2 mon-fri')
      *
      * @return bool
-     * @since 2.0.0
      */
     public function trySchedule()
     {
@@ -124,7 +119,6 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      * @throws \Magento\Framework\Exception\CronException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function matchCronExpression($expr, $num)
     {
@@ -187,7 +181,6 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     /**
      * @param int|string $value
      * @return bool|int|string
-     * @since 2.0.0
      */
     public function getNumeric($value)
     {
@@ -235,7 +228,6 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      * Returns true if status was changed and false otherwise.
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function tryLockJob()
     {

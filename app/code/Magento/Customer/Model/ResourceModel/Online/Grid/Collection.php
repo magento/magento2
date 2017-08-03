@@ -17,7 +17,6 @@ use Psr\Log\LoggerInterface as Logger;
  * Flat customer online grid collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Collection extends SearchResult
 {
@@ -28,13 +27,11 @@ class Collection extends SearchResult
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.0.0
      */
     protected $date;
 
     /**
      * @var Visitor
-     * @since 2.0.0
      */
     protected $visitorModel;
 
@@ -47,7 +44,6 @@ class Collection extends SearchResult
      * @param string $resourceModel
      * @param Visitor $visitorModel
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @since 2.0.0
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -68,7 +64,6 @@ class Collection extends SearchResult
      * Init collection select
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initSelect()
     {
@@ -98,7 +93,6 @@ class Collection extends SearchResult
      * @param string|array $field
      * @param string|int|array|null $condition
      * @return \Magento\Cms\Model\ResourceModel\Block\Collection
-     * @since 2.0.0
      */
     public function addFieldToFilter($field, $condition = null)
     {
