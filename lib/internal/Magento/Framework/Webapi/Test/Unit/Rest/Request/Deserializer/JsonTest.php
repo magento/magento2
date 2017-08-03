@@ -21,6 +21,9 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_appStateMock;
 
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    private $serializerMock;
+
     protected function setUp()
     {
         /** Prepare mocks for SUT constructor. */
@@ -28,11 +31,20 @@ class JsonTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['decode'])
             ->getMock();
-        $this->_appStateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $this->_appStateMock = $this->getMock(
+            \Magento\Framework\App\State::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->getMock();
         /** Initialize SUT. */
         $this->_jsonDeserializer = new \Magento\Framework\Webapi\Rest\Request\Deserializer\Json(
             $this->decoderMock,
-            $this->_appStateMock
+            $this->_appStateMock,
+            $this->serializerMock
         );
         parent::setUp();
     }
@@ -60,13 +72,13 @@ class JsonTest extends \PHPUnit_Framework_TestCase
             'key2' => 'test2',
             'array' => ['test01' => 'some1', 'test02' => 'some2'],
         ];
-        $this->decoderMock->expects(
-            $this->once()
-        )->method(
-            'decode'
-        )->will(
-            $this->returnValue($expectedDecodedJson)
-        );
+        $this->serializerMock->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($serializedData) {
+                    return json_decode($serializedData, true);
+                }
+            );
         /** Initialize SUT. */
         $this->assertEquals(
             $expectedDecodedJson,
@@ -78,9 +90,10 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     public function testDeserializeInvalidEncodedBodyExceptionDeveloperModeOff()
     {
         /** Prepare mocks for SUT constructor. */
-        $this->decoderMock->expects($this->once())
-            ->method('decode')
-            ->will($this->throwException(new \Zend_Json_Exception));
+        $this->serializerMock
+            ->expects($this->once())
+            ->method('unserialize')
+            ->will($this->throwException(new \InvalidArgumentException));
         $this->_appStateMock->expects($this->once())
             ->method('getMode')
             ->will($this->returnValue('production'));
@@ -103,15 +116,14 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     public function testDeserializeInvalidEncodedBodyExceptionDeveloperModeOn()
     {
         /** Prepare mocks for SUT constructor. */
-        $this->decoderMock->expects(
-            $this->once()
-        )->method(
-            'decode'
-        )->will(
-            $this->throwException(
-                new \Zend_Json_Exception('Decoding error:' . PHP_EOL . 'Decoding failed: Syntax error')
-            )
-        );
+        $this->serializerMock
+            ->expects($this->once())
+            ->method('unserialize')
+            ->will(
+                $this->throwException(
+                    new \InvalidArgumentException('Unable to unserialize value.')
+                )
+            );
         $this->_appStateMock->expects($this->once())
             ->method('getMode')
             ->will($this->returnValue('developer'));

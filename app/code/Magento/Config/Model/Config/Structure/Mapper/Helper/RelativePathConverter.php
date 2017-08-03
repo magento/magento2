@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Model\Config\Structure\Mapper\Helper;
 
+/**
+ * @api
+ */
 class RelativePathConverter
 {
     /**

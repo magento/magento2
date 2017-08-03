@@ -109,7 +109,11 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         $absoluteImagePath = $this->mediaDirectory
             ->getAbsolutePath($this->getSwatchMediaPath() . '/' . $generationPath);
         if (!file_exists($absoluteImagePath)) {
-            $this->generateSwatchVariations($file);
+            try {
+                $this->generateSwatchVariations($file);
+            } catch (\Exception $e) {
+                return '';
+            }
         }
         return $this->getSwatchMediaUrl() . '/' . $generationPath;
     }

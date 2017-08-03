@@ -6,7 +6,7 @@
 namespace Magento\Ui\Component\Form\Element;
 
 /**
- * Class Select
+ * @api
  */
 class Select extends AbstractOptionsField
 {

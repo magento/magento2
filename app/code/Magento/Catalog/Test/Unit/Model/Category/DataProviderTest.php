@@ -317,4 +317,25 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expects, $result[$categoryId]['image']);
     }
+
+    public function testGetMetaWithoutParentInheritanceResolving()
+    {
+        $categoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->registry->expects($this->once())
+            ->method('registry')
+            ->with('category')
+            ->willReturn($categoryMock);
+        $attributeMock = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $categoryMock->expects($this->once())
+            ->method('getAttributes')
+            ->willReturn(['image' => $attributeMock]);
+        $categoryMock->expects($this->never())
+            ->method('getParentId');
+
+        $this->getModel()->getMeta();
+    }
 }

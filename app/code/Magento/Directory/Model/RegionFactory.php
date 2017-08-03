@@ -3,12 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * Region factory
- */
 namespace Magento\Directory\Model;
 
+/**
+ * @api
+ */
 class RegionFactory
 {
     /**
