@@ -19,7 +19,6 @@ use Magento\Store\Model\StoreManager;
  *
  * If config "assign_entities_to_all_websites" set to "0" then all categories will be
  * uniformly distributed per root categories, else all categories assigned to one root category
- * @since 2.0.0
  */
 class CategoriesFixture extends Fixture
 {
@@ -87,13 +86,11 @@ class CategoriesFixture extends Fixture
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $priority = 20;
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -255,7 +252,6 @@ class CategoriesFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getActionTitle()
     {
@@ -264,7 +260,6 @@ class CategoriesFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function introduceParamLabels()
     {

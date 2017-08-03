@@ -11,25 +11,21 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Registry for Customer Group models
- * @since 2.0.0
  */
 class GroupRegistry
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $registry = [];
 
     /**
      * @var GroupFactory
-     * @since 2.0.0
      */
     protected $groupFactory;
 
     /**
      * @param GroupFactory $groupFactory
-     * @since 2.0.0
      */
     public function __construct(GroupFactory $groupFactory)
     {
@@ -42,7 +38,6 @@ class GroupRegistry
      * @param int $groupId
      * @return Group
      * @throws NoSuchEntityException
-     * @since 2.0.0
      */
     public function retrieve($groupId)
     {
@@ -63,7 +58,6 @@ class GroupRegistry
      *
      * @param int $groupId
      * @return void
-     * @since 2.0.0
      */
     public function remove($groupId)
     {

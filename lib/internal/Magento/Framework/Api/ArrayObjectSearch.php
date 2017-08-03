@@ -8,7 +8,6 @@ namespace Magento\Framework\Api;
 
 /**
  * Class to provide possibility to search for any object's property value by the name and value of another property
- * @since 2.0.0
  */
 class ArrayObjectSearch
 {
@@ -44,7 +43,6 @@ class ArrayObjectSearch
      * @param string $keyName Name of the key property to search for
      * @param string $valueName Name of the value property name
      * @return null|mixed
-     * @since 2.0.0
      */
     public static function getArrayElementByName($data, $keyValue, $keyName = 'name', $valueName = 'value')
     {

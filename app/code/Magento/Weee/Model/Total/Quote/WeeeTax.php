@@ -12,7 +12,6 @@ use Magento\Tax\Model\Sales\Total\Quote\CommonTaxCollector;
 /**
  * Class \Magento\Weee\Model\Total\Quote\WeeeTax
  *
- * @since 2.0.0
  */
 class WeeeTax extends Weee
 {
@@ -25,7 +24,6 @@ class WeeeTax extends Weee
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function collect(
         \Magento\Quote\Model\Quote $quote,
@@ -182,7 +180,6 @@ class WeeeTax extends Weee
      *
      * @param array $weeeCodeToItemMap
      * @return array
-     * @since 2.0.0
      */
     protected function createItemToWeeeCodeMapping($weeeCodeToItemMap)
     {
@@ -209,7 +206,6 @@ class WeeeTax extends Weee
      * @param float $rowValueInclTax
      * @param float $baseRowValueInclTax
      * @return $this
-     * @since 2.0.0
      */
     protected function processTotalAmount(
         $total,
@@ -237,7 +233,6 @@ class WeeeTax extends Weee
      * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return array
-     * @since 2.0.0
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {

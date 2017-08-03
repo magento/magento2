@@ -15,25 +15,21 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Wishlist\Controller\Index\Allcart
  *
- * @since 2.0.0
  */
 class Allcart extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * @var WishlistProviderInterface
-     * @since 2.0.0
      */
     protected $wishlistProvider;
 
     /**
      * @var \Magento\Wishlist\Model\ItemCarrier
-     * @since 2.0.0
      */
     protected $itemCarrier;
 
     /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator
-     * @since 2.0.0
      */
     protected $formKeyValidator;
 
@@ -42,7 +38,6 @@ class Allcart extends \Magento\Wishlist\Controller\AbstractIndex
      * @param WishlistProviderInterface $wishlistProvider
      * @param Validator $formKeyValidator
      * @param ItemCarrier $itemCarrier
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -60,7 +55,6 @@ class Allcart extends \Magento\Wishlist\Controller\AbstractIndex
      * Add all items from wishlist to shopping cart
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

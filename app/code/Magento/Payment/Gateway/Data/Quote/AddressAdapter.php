@@ -10,19 +10,16 @@ use Magento\Quote\Api\Data\AddressInterface;
 
 /**
  * Class AddressAdapter
- * @since 2.0.0
  */
 class AddressAdapter implements AddressAdapterInterface
 {
     /**
      * @var AddressInterface
-     * @since 2.0.0
      */
     private $address;
 
     /**
      * @param AddressInterface $address
-     * @since 2.0.0
      */
     public function __construct(AddressInterface $address)
     {
@@ -33,7 +30,6 @@ class AddressAdapter implements AddressAdapterInterface
      * Get region name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRegionCode()
     {
@@ -44,7 +40,6 @@ class AddressAdapter implements AddressAdapterInterface
      * Get country id
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCountryId()
     {
@@ -55,7 +50,6 @@ class AddressAdapter implements AddressAdapterInterface
      * Get street line 1
      *
      * @return string
-     * @since 2.0.0
      */
     public function getStreetLine1()
     {
@@ -67,7 +61,6 @@ class AddressAdapter implements AddressAdapterInterface
      * Get street line 2
      *
      * @return string
-     * @since 2.0.0
      */
     public function getStreetLine2()
     {
@@ -79,7 +72,6 @@ class AddressAdapter implements AddressAdapterInterface
      * Get telephone number
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTelephone()
     {
@@ -90,7 +82,6 @@ class AddressAdapter implements AddressAdapterInterface
      * Get postcode
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPostcode()
     {
@@ -101,7 +92,6 @@ class AddressAdapter implements AddressAdapterInterface
      * Get city name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCity()
     {
@@ -112,7 +102,6 @@ class AddressAdapter implements AddressAdapterInterface
      * Get first name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFirstname()
     {
@@ -123,7 +112,6 @@ class AddressAdapter implements AddressAdapterInterface
      * Get last name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLastname()
     {
@@ -134,7 +122,6 @@ class AddressAdapter implements AddressAdapterInterface
      * Get middle name
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getMiddlename()
     {
@@ -145,7 +132,6 @@ class AddressAdapter implements AddressAdapterInterface
      * Get customer id
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getCustomerId()
     {
@@ -156,7 +142,6 @@ class AddressAdapter implements AddressAdapterInterface
      * Get billing/shipping email
      *
      * @return string
-     * @since 2.0.0
      */
     public function getEmail()
     {
@@ -167,7 +152,6 @@ class AddressAdapter implements AddressAdapterInterface
      * Returns name prefix
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPrefix()
     {
@@ -178,7 +162,6 @@ class AddressAdapter implements AddressAdapterInterface
      * Returns name suffix
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSuffix()
     {
@@ -189,7 +172,6 @@ class AddressAdapter implements AddressAdapterInterface
      * Get company
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCompany()
     {

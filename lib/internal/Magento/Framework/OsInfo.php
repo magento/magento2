@@ -7,7 +7,6 @@ namespace Magento\Framework;
 
 /**
  * Wrapper on PHP_OS constant
- * @since 2.0.0
  */
 class OsInfo
 {
@@ -15,13 +14,11 @@ class OsInfo
      * Operation system
      *
      * @var string
-     * @since 2.0.0
      */
     protected $os;
 
     /**
      * Initialize os
-     * @since 2.0.0
      */
     public function __construct()
     {
@@ -32,7 +29,6 @@ class OsInfo
      * Check id system is Windows
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isWindows()
     {

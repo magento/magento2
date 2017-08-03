@@ -13,7 +13,6 @@ namespace Magento\Framework\Data\Form\Filter;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface FilterInterface
 {
@@ -22,7 +21,6 @@ interface FilterInterface
      *
      * @param string $value
      * @return string
-     * @since 2.0.0
      */
     public function inputFilter($value);
 
@@ -31,7 +29,6 @@ interface FilterInterface
      *
      * @param string $value
      * @return string
-     * @since 2.0.0
      */
     public function outputFilter($value);
 }

@@ -10,13 +10,11 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Backup data collection
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Data\Collection\Filesystem
 {
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     * @since 2.0.0
      */
     protected $_varDirectory;
 
@@ -24,7 +22,6 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
      * Folder, where all backups are stored
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_path = 'backups';
 
@@ -32,7 +29,6 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
      * Backup data
      *
      * @var \Magento\Backup\Helper\Data
-     * @since 2.0.0
      */
     protected $_backupData = null;
 
@@ -40,7 +36,6 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
      * Backup model
      *
      * @var \Magento\Backup\Model\Backup
-     * @since 2.0.0
      */
     protected $_backup = null;
 
@@ -49,7 +44,6 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
      * @param \Magento\Backup\Helper\Data $backupData
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Backup\Model\Backup $backup
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -92,7 +86,6 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
      * Create .htaccess file and deny backups directory access from web
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _hideBackupsForApache()
     {
@@ -107,7 +100,6 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
      *
      * @param string $filename
      * @return array
-     * @since 2.0.0
      */
     protected function _generateRow($filename)
     {

@@ -8,7 +8,6 @@ namespace Magento\Catalog\Api\Data;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface ProductLinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -16,7 +15,6 @@ interface ProductLinkInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Get SKU
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSku();
 
@@ -25,7 +23,6 @@ interface ProductLinkInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $sku
      * @return $this
-     * @since 2.0.0
      */
     public function setSku($sku);
 
@@ -33,7 +30,6 @@ interface ProductLinkInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Get link type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLinkType();
 
@@ -42,7 +38,6 @@ interface ProductLinkInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $linkType
      * @return $this
-     * @since 2.0.0
      */
     public function setLinkType($linkType);
 
@@ -50,7 +45,6 @@ interface ProductLinkInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Get linked product sku
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLinkedProductSku();
 
@@ -59,7 +53,6 @@ interface ProductLinkInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $linkedProductSku
      * @return $this
-     * @since 2.0.0
      */
     public function setLinkedProductSku($linkedProductSku);
 
@@ -67,7 +60,6 @@ interface ProductLinkInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Get linked product type (simple, virtual, etc)
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLinkedProductType();
 
@@ -76,7 +68,6 @@ interface ProductLinkInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $linkedProductType
      * @return $this
-     * @since 2.0.0
      */
     public function setLinkedProductType($linkedProductType);
 
@@ -84,7 +75,6 @@ interface ProductLinkInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Get linked item position
      *
      * @return int
-     * @since 2.0.0
      */
     public function getPosition();
 
@@ -93,7 +83,6 @@ interface ProductLinkInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param int $position
      * @return $this
-     * @since 2.0.0
      */
     public function setPosition($position);
 
@@ -101,7 +90,6 @@ interface ProductLinkInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Catalog\Api\Data\ProductLinkExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -110,7 +98,6 @@ interface ProductLinkInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param \Magento\Catalog\Api\Data\ProductLinkExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductLinkExtensionInterface $extensionAttributes

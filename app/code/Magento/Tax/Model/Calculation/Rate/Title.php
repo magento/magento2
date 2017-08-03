@@ -20,7 +20,6 @@ use Magento\Tax\Api\Data\TaxRateTitleInterface;
 /**
  * Class \Magento\Tax\Model\Calculation\Rate\Title
  *
- * @since 2.0.0
  */
 class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements TaxRateTitleInterface
 {
@@ -34,7 +33,6 @@ class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements 
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -44,7 +42,6 @@ class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements 
     /**
      * @param int $rateId
      * @return $this
-     * @since 2.0.0
      */
     public function deleteByRateId($rateId)
     {
@@ -55,7 +52,6 @@ class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements 
     /**
      * @codeCoverageIgnoreStart
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -64,7 +60,6 @@ class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements 
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getValue()
     {
@@ -76,7 +71,6 @@ class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements 
      *
      * @param string $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreId($storeId)
     {
@@ -88,7 +82,6 @@ class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements 
      *
      * @param string $value
      * @return string
-     * @since 2.0.0
      */
     public function setValue($value)
     {
@@ -101,7 +94,6 @@ class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements 
      * {@inheritdoc}
      *
      * @return \Magento\Tax\Api\Data\TaxRateTitleExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -113,7 +105,6 @@ class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements 
      *
      * @param \Magento\Tax\Api\Data\TaxRateTitleExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxRateTitleExtensionInterface $extensionAttributes)
     {

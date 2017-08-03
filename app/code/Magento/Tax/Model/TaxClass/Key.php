@@ -10,7 +10,6 @@ use Magento\Tax\Api\Data\TaxClassKeyInterface;
 
 /**
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class Key extends AbstractExtensibleModel implements TaxClassKeyInterface
 {
@@ -23,7 +22,6 @@ class Key extends AbstractExtensibleModel implements TaxClassKeyInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -32,7 +30,6 @@ class Key extends AbstractExtensibleModel implements TaxClassKeyInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getValue()
     {
@@ -44,7 +41,6 @@ class Key extends AbstractExtensibleModel implements TaxClassKeyInterface
      *
      * @param string $type
      * @return $this
-     * @since 2.0.0
      */
     public function setType($type)
     {
@@ -56,7 +52,6 @@ class Key extends AbstractExtensibleModel implements TaxClassKeyInterface
      *
      * @param string $value
      * @return $this
-     * @since 2.0.0
      */
     public function setValue($value)
     {
@@ -67,7 +62,6 @@ class Key extends AbstractExtensibleModel implements TaxClassKeyInterface
      * {@inheritdoc}
      *
      * @return \Magento\Tax\Api\Data\TaxClassKeyExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -79,7 +73,6 @@ class Key extends AbstractExtensibleModel implements TaxClassKeyInterface
      *
      * @param \Magento\Tax\Api\Data\TaxClassKeyExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxClassKeyExtensionInterface $extensionAttributes)
     {

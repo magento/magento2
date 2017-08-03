@@ -10,7 +10,6 @@ use Magento\Framework\Config\ViewFactory;
 
 /**
  * Handles theme view.xml files
- * @since 2.0.0
  */
 class Config implements \Magento\Framework\View\ConfigInterface
 {
@@ -18,7 +17,6 @@ class Config implements \Magento\Framework\View\ConfigInterface
      * List of view configuration objects per theme
      *
      * @var array
-     * @since 2.0.0
      */
     protected $viewConfigs = [];
 
@@ -26,7 +24,6 @@ class Config implements \Magento\Framework\View\ConfigInterface
      * View service
      *
      * @var \Magento\Framework\View\Asset\Repository
-     * @since 2.0.0
      */
     protected $assetRepo;
 
@@ -34,7 +31,6 @@ class Config implements \Magento\Framework\View\ConfigInterface
      * File view factory
      *
      * @var \Magento\Framework\Config\ViewFactory
-     * @since 2.0.0
      */
     protected $viewConfigFactory;
 
@@ -43,7 +39,6 @@ class Config implements \Magento\Framework\View\ConfigInterface
      *
      * @param Asset\Repository $assetRepo
      * @param \Magento\Framework\Config\ViewFactory $viewConfigFactory
-     * @since 2.0.0
      */
     public function __construct(
         Repository $assetRepo,
@@ -58,7 +53,6 @@ class Config implements \Magento\Framework\View\ConfigInterface
      *
      * @param array $params
      * @return \Magento\Framework\Config\View
-     * @since 2.0.0
      */
     public function getViewConfig(array $params = [])
     {

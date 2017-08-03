@@ -10,7 +10,6 @@ namespace Magento\Framework\App\Response;
 /**
  * Interface \Magento\Framework\App\Response\RedirectInterface
  *
- * @since 2.0.0
  */
 interface RedirectInterface
 {
@@ -24,7 +23,6 @@ interface RedirectInterface
      * Identify referer url via all accepted methods (HTTP_REFERER, regular or base64-encoded request param)
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRefererUrl();
 
@@ -33,7 +31,6 @@ interface RedirectInterface
      *
      * @param   string $defaultUrl
      * @return  string
-     * @since 2.0.0
      */
     public function getRedirectUrl($defaultUrl = null);
 
@@ -42,7 +39,6 @@ interface RedirectInterface
      *
      * @param string $defaultUrl
      * @return  string
-     * @since 2.0.0
      */
     public function error($defaultUrl);
 
@@ -51,7 +47,6 @@ interface RedirectInterface
      *
      * @param string $defaultUrl
      * @return string
-     * @since 2.0.0
      */
     public function success($defaultUrl);
 
@@ -60,7 +55,6 @@ interface RedirectInterface
      *
      * @param array $arguments
      * @return array
-     * @since 2.0.0
      */
     public function updatePathParams(array $arguments);
 
@@ -71,7 +65,6 @@ interface RedirectInterface
      * @param string $path
      * @param array $arguments
      * @return void
-     * @since 2.0.0
      */
     public function redirect(\Magento\Framework\App\ResponseInterface $response, $path, $arguments = []);
 }

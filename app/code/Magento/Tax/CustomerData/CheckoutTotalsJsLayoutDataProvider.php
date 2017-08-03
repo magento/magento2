@@ -10,19 +10,16 @@ use Magento\Customer\CustomerData\JsLayoutDataProviderInterface;
 
 /**
  * Checkout totals js layout data provider
- * @since 2.0.0
  */
 class CheckoutTotalsJsLayoutDataProvider implements JsLayoutDataProviderInterface
 {
     /**
      * @var \Magento\Tax\Model\Config
-     * @since 2.0.0
      */
     protected $taxConfig;
 
     /**
      * @param \Magento\Tax\Model\Config $taxConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Tax\Model\Config $taxConfig
@@ -32,7 +29,6 @@ class CheckoutTotalsJsLayoutDataProvider implements JsLayoutDataProviderInterfac
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getData()
     {
@@ -61,7 +57,6 @@ class CheckoutTotalsJsLayoutDataProvider implements JsLayoutDataProviderInterfac
      * Get totals config
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getTotalsConfig()
     {

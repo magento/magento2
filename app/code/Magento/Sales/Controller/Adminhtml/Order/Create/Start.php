@@ -10,7 +10,6 @@ use Magento\Backend\App\Action;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Create\Start
  *
- * @since 2.0.0
  */
 class Start extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
@@ -18,7 +17,6 @@ class Start extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * Start order create action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

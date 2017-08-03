@@ -14,7 +14,6 @@ namespace Magento\Framework\Data\Form\Filter;
 /**
  * Class \Magento\Framework\Data\Form\Filter\Escapehtml
  *
- * @since 2.0.0
  */
 class Escapehtml implements \Magento\Framework\Data\Form\Filter\FilterInterface
 {
@@ -23,7 +22,6 @@ class Escapehtml implements \Magento\Framework\Data\Form\Filter\FilterInterface
      *
      * @param string $value
      * @return string
-     * @since 2.0.0
      */
     public function inputFilter($value)
     {
@@ -35,7 +33,6 @@ class Escapehtml implements \Magento\Framework\Data\Form\Filter\FilterInterface
      *
      * @param string $value
      * @return string
-     * @since 2.0.0
      */
     public function outputFilter($value)
     {

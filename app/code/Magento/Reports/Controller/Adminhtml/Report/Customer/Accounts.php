@@ -9,7 +9,6 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Customer;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Customer\Accounts
  *
- * @since 2.0.0
  */
 class Accounts extends \Magento\Reports\Controller\Adminhtml\Report\Customer
 {
@@ -17,7 +16,6 @@ class Accounts extends \Magento\Reports\Controller\Adminhtml\Report\Customer
      * New accounts action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -8,13 +8,11 @@ namespace Magento\Shipping\Model\Source;
 /**
  * Class \Magento\Shipping\Model\Source\HandlingAction
  *
- * @since 2.0.0
  */
 class HandlingAction implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

@@ -11,7 +11,6 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Link\Product;
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
@@ -19,7 +18,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Store product model
      *
      * @var \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     protected $_product;
 
@@ -27,7 +25,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Store product link model
      *
      * @var \Magento\Catalog\Model\Product\Link
-     * @since 2.0.0
      */
     protected $_linkModel;
 
@@ -35,7 +32,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Store link type id
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_linkTypeId;
 
@@ -43,7 +39,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Store strong mode flag that determine if needed for inner join or left join of linked products
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isStrongMode;
 
@@ -51,7 +46,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Store flag that determine if product filter was enabled
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_hasLinkFilter = false;
 
@@ -60,7 +54,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param \Magento\Catalog\Model\Product\Link $linkModel
      * @return $this
-     * @since 2.0.0
      */
     public function setLinkModel(\Magento\Catalog\Model\Product\Link $linkModel)
     {
@@ -75,7 +68,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Enable strong mode for inner join of linked products
      *
      * @return $this
-     * @since 2.0.0
      */
     public function setIsStrongMode()
     {
@@ -87,7 +79,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Retrieve collection link model
      *
      * @return \Magento\Catalog\Model\Product\Link
-     * @since 2.0.0
      */
     public function getLinkModel()
     {
@@ -99,7 +90,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
-     * @since 2.0.0
      */
     public function setProduct(\Magento\Catalog\Model\Product $product)
     {
@@ -115,7 +105,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Retrieve collection base product object
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -127,7 +116,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param array $products
      * @return $this
-     * @since 2.0.0
      */
     public function addExcludeProductFilter($products)
     {
@@ -146,7 +134,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param array|int|string $products
      * @return $this
-     * @since 2.0.0
      */
     public function addProductFilter($products)
     {
@@ -166,7 +153,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Add random sorting order
      *
      * @return $this
-     * @since 2.0.0
      */
     public function setRandomOrder()
     {
@@ -179,7 +165,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param string $groupBy
      * @return $this
-     * @since 2.0.0
      */
     public function setGroupBy($groupBy = 'e.entity_id')
     {
@@ -191,7 +176,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Join linked products when specified link model
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeLoad()
     {
@@ -206,7 +190,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Join linked products and their attributes
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _joinLinks()
     {
@@ -255,7 +238,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param string $dir sort type asc|desc
      * @return $this
-     * @since 2.0.0
      */
     public function setPositionOrder($dir = self::SORT_ORDER_ASC)
     {
@@ -270,7 +252,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param string $dir sort type asc|desc
      * @return $this
-     * @since 2.0.0
      */
     public function setAttributeSetIdOrder($dir = self::SORT_ORDER_ASC)
     {
@@ -288,7 +269,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Join attributes
      *
      * @return $this
-     * @since 2.0.0
      */
     public function joinAttributes()
     {
@@ -323,7 +303,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param string|array $attribute
      * @param string $dir
      * @return $this
-     * @since 2.0.0
      */
     public function setOrder($attribute, $dir = self::SORT_ORDER_ASC)
     {
@@ -340,7 +319,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param int $type
      * @return array
-     * @since 2.0.0
      */
     public function getLinkAttributes($type = null)
     {
@@ -353,7 +331,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param string $code
      * @param array $condition
      * @return $this
-     * @since 2.0.0
      */
     public function addLinkAttributeToFilter($code, $condition)
     {

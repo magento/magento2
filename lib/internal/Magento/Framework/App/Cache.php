@@ -13,19 +13,16 @@ namespace Magento\Framework\App;
 /**
  * Class \Magento\Framework\App\Cache
  *
- * @since 2.0.0
  */
 class Cache implements CacheInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_frontendIdentifier = \Magento\Framework\App\Cache\Frontend\Pool::DEFAULT_FRONTEND_ID;
 
     /**
      * @var \Magento\Framework\App\Cache\Frontend\Pool
-     * @since 2.0.0
      */
     protected $_frontendPool;
 
@@ -33,13 +30,11 @@ class Cache implements CacheInterface
      * Cache frontend API
      *
      * @var \Magento\Framework\Cache\FrontendInterface
-     * @since 2.0.0
      */
     protected $_frontend;
 
     /**
      * @param \Magento\Framework\App\Cache\Frontend\Pool $frontendPool
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\Cache\Frontend\Pool $frontendPool)
     {
@@ -51,7 +46,6 @@ class Cache implements CacheInterface
      * Get cache frontend API object
      *
      * @return \Magento\Framework\Cache\FrontendInterface
-     * @since 2.0.0
      */
     public function getFrontend()
     {
@@ -63,7 +57,6 @@ class Cache implements CacheInterface
      *
      * @param  string $identifier
      * @return string
-     * @since 2.0.0
      */
     public function load($identifier)
     {
@@ -78,7 +71,6 @@ class Cache implements CacheInterface
      * @param array $tags
      * @param int $lifeTime
      * @return bool
-     * @since 2.0.0
      */
     public function save($data, $identifier, $tags = [], $lifeTime = null)
     {
@@ -90,7 +82,6 @@ class Cache implements CacheInterface
      *
      * @param string $identifier
      * @return bool
-     * @since 2.0.0
      */
     public function remove($identifier)
     {
@@ -102,7 +93,6 @@ class Cache implements CacheInterface
      *
      * @param array $tags
      * @return bool
-     * @since 2.0.0
      */
     public function clean($tags = [])
     {

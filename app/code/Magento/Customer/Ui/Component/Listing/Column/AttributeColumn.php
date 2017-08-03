@@ -14,13 +14,11 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
 /**
  * Class \Magento\Customer\Ui\Component\Listing\Column\AttributeColumn
  *
- * @since 2.0.0
  */
 class AttributeColumn extends Column
 {
     /**
      * @var \Magento\Customer\Ui\Component\Listing\AttributeRepository
-     * @since 2.0.0
      */
     protected $attributeRepository;
 
@@ -30,7 +28,6 @@ class AttributeColumn extends Column
      * @param AttributeRepository $attributeRepository
      * @param array $components
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -48,7 +45,6 @@ class AttributeColumn extends Column
      *
      * @param array $dataSource
      * @return array
-     * @since 2.0.0
      */
     public function prepareDataSource(array $dataSource)
     {

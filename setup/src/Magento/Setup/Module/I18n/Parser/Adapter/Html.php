@@ -9,7 +9,6 @@ use Magento\Email\Model\Template\Filter;
 
 /**
  * Html parser adapter
- * @since 2.0.0
  */
 class Html extends AbstractAdapter
 {
@@ -22,7 +21,6 @@ class Html extends AbstractAdapter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _parse()
     {

@@ -12,20 +12,17 @@ use Magento\Framework\View\Result\PageFactory;
 /**
  * Class \Magento\Customer\Controller\Account\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
      * @var PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @param Context $context
      * @param PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -39,7 +36,6 @@ class Index extends \Magento\Customer\Controller\AbstractAccount
      * Default customer account page
      *
      * @return \Magento\Framework\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

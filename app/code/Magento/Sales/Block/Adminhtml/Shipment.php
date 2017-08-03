@@ -9,7 +9,6 @@ namespace Magento\Sales\Block\Adminhtml;
  * Adminhtml sales shipments block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Shipment extends \Magento\Backend\Block\Widget\Grid\Container
 {
@@ -17,7 +16,6 @@ class Shipment extends \Magento\Backend\Block\Widget\Grid\Container
      * Constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

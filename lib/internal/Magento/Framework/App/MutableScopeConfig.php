@@ -13,7 +13,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * @inheritdoc
- * @since 2.0.0
  */
 class MutableScopeConfig extends Config implements MutableScopeConfigInterface
 {
@@ -47,7 +46,6 @@ class MutableScopeConfig extends Config implements MutableScopeConfigInterface
      * @param string $scope
      * @param null|string $scopeCode
      * @return void
-     * @since 2.0.0
      */
     public function setValue(
         $path,

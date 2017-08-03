@@ -11,13 +11,11 @@ use Magento\Framework\Model\AbstractModel;
  * Backend model for shipping table rates CSV importing
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Tablerate extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\OfflineShipping\Model\ResourceModel\Carrier\TablerateFactory
-     * @since 2.0.0
      */
     protected $_tablerateFactory;
 
@@ -30,7 +28,6 @@ class Tablerate extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -48,7 +45,6 @@ class Tablerate extends \Magento\Framework\App\Config\Value
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {

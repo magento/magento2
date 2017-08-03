@@ -10,7 +10,6 @@ use Magento\Framework\Search\Request\QueryInterface;
 /**
  * Match Query
  * @api
- * @since 2.0.0
  */
 class Match implements QueryInterface
 {
@@ -18,7 +17,6 @@ class Match implements QueryInterface
      * Name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $name;
 
@@ -26,7 +24,6 @@ class Match implements QueryInterface
      * Value
      *
      * @var string
-     * @since 2.0.0
      */
     protected $value;
 
@@ -34,7 +31,6 @@ class Match implements QueryInterface
      * Boost
      *
      * @var int|null
-     * @since 2.0.0
      */
     protected $boost;
 
@@ -47,7 +43,6 @@ class Match implements QueryInterface
      * )
      *
      * @var array
-     * @since 2.0.0
      */
     protected $matches = [];
 
@@ -57,7 +52,6 @@ class Match implements QueryInterface
      * @param int|null $boost
      * @param array $matches
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct($name, $value, $boost, array $matches)
     {
@@ -69,7 +63,6 @@ class Match implements QueryInterface
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getValue()
     {
@@ -79,7 +72,6 @@ class Match implements QueryInterface
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -89,7 +81,6 @@ class Match implements QueryInterface
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -99,7 +90,6 @@ class Match implements QueryInterface
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getBoost()
     {
@@ -111,7 +101,6 @@ class Match implements QueryInterface
      *
      * @return array
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getMatches()
     {

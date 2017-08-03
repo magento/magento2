@@ -11,7 +11,6 @@ namespace Magento\Framework\App;
  * Evary application area has own front controller
  *
  * @api
- * @since 2.0.0
  */
 interface FrontControllerInterface
 {
@@ -20,7 +19,6 @@ interface FrontControllerInterface
      *
      * @param RequestInterface $request
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function dispatch(RequestInterface $request);
 }

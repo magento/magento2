@@ -12,19 +12,16 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\CatalogInventory\Observer\QuantityValidatorObserver
  *
- * @since 2.0.0
  */
 class QuantityValidatorObserver implements ObserverInterface
 {
     /**
      * @var \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator $quantityValidator
-     * @since 2.0.0
      */
     protected $quantityValidator;
 
     /**
      * @param \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator $quantityValidator
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator $quantityValidator
@@ -35,7 +32,6 @@ class QuantityValidatorObserver implements ObserverInterface
     /**
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

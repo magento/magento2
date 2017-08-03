@@ -10,7 +10,6 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Mass Unlock Controller
- * @since 2.0.0
  */
 class MassUnlock extends \Magento\User\Controller\Adminhtml\Locks
 {
@@ -18,7 +17,6 @@ class MassUnlock extends \Magento\User\Controller\Adminhtml\Locks
      * Unlock specified users
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

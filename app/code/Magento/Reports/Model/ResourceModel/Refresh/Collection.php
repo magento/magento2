@@ -13,19 +13,16 @@ namespace Magento\Reports\Model\ResourceModel\Refresh;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Data\Collection
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $_localeDate;
 
     /**
      * @var \Magento\Reports\Model\FlagFactory
-     * @since 2.0.0
      */
     protected $_reportsFlagFactory;
 
@@ -33,7 +30,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -50,7 +46,6 @@ class Collection extends \Magento\Framework\Data\Collection
      *
      * @param string $reportCode
      * @return string
-     * @since 2.0.0
      */
     protected function _getUpdatedAt($reportCode)
     {
@@ -65,7 +60,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * @param bool $logQuery
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function loadData($printQuery = false, $logQuery = false)
     {

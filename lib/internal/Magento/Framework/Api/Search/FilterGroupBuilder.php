@@ -12,20 +12,17 @@ use Magento\Framework\Api\ObjectFactory;
 
 /**
  * Builder for FilterGroup Data.
- * @since 2.0.0
  */
 class FilterGroupBuilder extends AbstractSimpleObjectBuilder
 {
     /**
      * @var FilterBuilder
-     * @since 2.0.0
      */
     protected $_filterBuilder;
 
     /**
      * @param ObjectFactory $objectFactory
      * @param FilterBuilder $filterBuilder
-     * @since 2.0.0
      */
     public function __construct(
         ObjectFactory $objectFactory,
@@ -42,7 +39,6 @@ class FilterGroupBuilder extends AbstractSimpleObjectBuilder
      *
      * @param \Magento\Framework\Api\Filter $filter
      * @return $this
-     * @since 2.0.0
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
@@ -55,7 +51,6 @@ class FilterGroupBuilder extends AbstractSimpleObjectBuilder
      *
      * @param \Magento\Framework\Api\Filter[] $filters
      * @return $this
-     * @since 2.0.0
      */
     public function setFilters(array $filters)
     {

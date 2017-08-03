@@ -11,20 +11,17 @@ use Magento\Framework\View\Element\BlockInterface;
  * Catalog category widgets controller for CMS WYSIWYG
  *
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 abstract class Widget extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\View\LayoutFactory
-     * @since 2.0.0
      */
     protected $layoutFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -36,7 +33,6 @@ abstract class Widget extends \Magento\Backend\App\Action
 
     /**
      * @return BlockInterface
-     * @since 2.0.0
      */
     protected function _getCategoryTreeBlock()
     {

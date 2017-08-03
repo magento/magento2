@@ -8,19 +8,16 @@ namespace Magento\Framework\App\Cache;
 /**
  * Class \Magento\Framework\App\Cache\InstanceFactory
  *
- * @since 2.0.0
  */
 class InstanceFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -33,7 +30,6 @@ class InstanceFactory
      * @param string $instanceName
      * @return \Magento\Framework\Cache\FrontendInterface
      * @throws \UnexpectedValueException
-     * @since 2.0.0
      */
     public function get($instanceName)
     {

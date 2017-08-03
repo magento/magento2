@@ -8,13 +8,11 @@ namespace Magento\Framework\View\PageLayout;
 
 /**
  * Page layouts configuration
- * @since 2.0.0
  */
 class Config extends \Magento\Framework\Config\AbstractXml
 {
     /**
      * @var \Magento\Framework\Config\Dom\UrnResolver
-     * @since 2.0.0
      */
     protected $urnResolver;
 
@@ -25,7 +23,6 @@ class Config extends \Magento\Framework\Config\AbstractXml
      * @param \Magento\Framework\Config\DomFactory $domFactory
      * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function __construct(
         $configFiles,
@@ -40,7 +37,6 @@ class Config extends \Magento\Framework\Config\AbstractXml
      * Get absolute path to the XML-schema file
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSchemaFile()
     {
@@ -51,7 +47,6 @@ class Config extends \Magento\Framework\Config\AbstractXml
      * Get page layout that contains declared in system
      *
      * @return string[][]
-     * @since 2.0.0
      */
     public function getPageLayouts()
     {
@@ -63,7 +58,6 @@ class Config extends \Magento\Framework\Config\AbstractXml
      *
      * @param string $pageLayout
      * @return bool
-     * @since 2.0.0
      */
     public function hasPageLayout($pageLayout)
     {
@@ -74,7 +68,6 @@ class Config extends \Magento\Framework\Config\AbstractXml
      * Retrieve page layout options
      *
      * @return array
-     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -84,7 +77,6 @@ class Config extends \Magento\Framework\Config\AbstractXml
     /**
      * @param bool $withEmpty
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray($withEmpty = false)
     {
@@ -107,7 +99,6 @@ class Config extends \Magento\Framework\Config\AbstractXml
      *
      * @param \DOMDocument $dom
      * @return array
-     * @since 2.0.0
      */
     protected function _extractData(\DOMDocument $dom)
     {
@@ -124,7 +115,6 @@ class Config extends \Magento\Framework\Config\AbstractXml
      * Get XML-contents, initial for merging
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getInitialXml()
     {
@@ -136,7 +126,6 @@ class Config extends \Magento\Framework\Config\AbstractXml
      * Get list of paths to identifiable nodes
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getIdAttributes()
     {

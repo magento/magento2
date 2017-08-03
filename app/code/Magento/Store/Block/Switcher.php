@@ -14,19 +14,16 @@ use Magento\Store\Model\Group;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Switcher extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_storeInUrl;
 
     /**
      * @var \Magento\Framework\Data\Helper\PostHelper
-     * @since 2.0.0
      */
     protected $_postDataHelper;
 
@@ -36,7 +33,6 @@ class Switcher extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -49,7 +45,6 @@ class Switcher extends \Magento\Framework\View\Element\Template
 
     /**
      * @return int|null|string
-     * @since 2.0.0
      */
     public function getCurrentWebsiteId()
     {
@@ -58,7 +53,6 @@ class Switcher extends \Magento\Framework\View\Element\Template
 
     /**
      * @return int|null|string
-     * @since 2.0.0
      */
     public function getCurrentGroupId()
     {
@@ -67,7 +61,6 @@ class Switcher extends \Magento\Framework\View\Element\Template
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getCurrentStoreId()
     {
@@ -76,7 +69,6 @@ class Switcher extends \Magento\Framework\View\Element\Template
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getRawGroups()
     {
@@ -94,7 +86,6 @@ class Switcher extends \Magento\Framework\View\Element\Template
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getRawStores()
     {
@@ -130,7 +121,6 @@ class Switcher extends \Magento\Framework\View\Element\Template
      * Retrieve list of store groups with default urls set
      *
      * @return Group[]
-     * @since 2.0.0
      */
     public function getGroups()
     {
@@ -167,7 +157,6 @@ class Switcher extends \Magento\Framework\View\Element\Template
 
     /**
      * @return \Magento\Store\Model\Store[]
-     * @since 2.0.0
      */
     public function getStores()
     {
@@ -187,7 +176,6 @@ class Switcher extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getCurrentStoreCode()
     {
@@ -196,7 +184,6 @@ class Switcher extends \Magento\Framework\View\Element\Template
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isStoreInUrl()
     {
@@ -210,7 +197,6 @@ class Switcher extends \Magento\Framework\View\Element\Template
      * Get store code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getStoreCode()
     {
@@ -221,7 +207,6 @@ class Switcher extends \Magento\Framework\View\Element\Template
      * Get store name
      *
      * @return null|string
-     * @since 2.0.0
      */
     public function getStoreName()
     {
@@ -234,7 +219,6 @@ class Switcher extends \Magento\Framework\View\Element\Template
      * @param \Magento\Store\Model\Store $store
      * @param array $data
      * @return string
-     * @since 2.0.0
      */
     public function getTargetStorePostData(\Magento\Store\Model\Store $store, $data = [])
     {

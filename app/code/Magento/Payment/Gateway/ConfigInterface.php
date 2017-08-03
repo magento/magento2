@@ -9,7 +9,6 @@ namespace Magento\Payment\Gateway;
  * Interface ConfigInterface
  * @package Magento\Payment\Gateway
  * @api
- * @since 2.0.0
  */
 interface ConfigInterface
 {
@@ -20,7 +19,6 @@ interface ConfigInterface
      * @param int|null $storeId
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getValue($field, $storeId = null);
 
@@ -29,7 +27,6 @@ interface ConfigInterface
      *
      * @param string $methodCode
      * @return void
-     * @since 2.0.0
      */
     public function setMethodCode($methodCode);
 
@@ -38,7 +35,6 @@ interface ConfigInterface
      *
      * @param string $pathPattern
      * @return void
-     * @since 2.0.0
      */
     public function setPathPattern($pathPattern);
 }

@@ -11,7 +11,6 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
  * Export entity product type abstract model
  *
  * @api
- * @since 2.0.0
  */
 abstract class AbstractType
 {
@@ -19,7 +18,6 @@ abstract class AbstractType
      * Overridden attributes parameters.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_attributeOverrides = [];
 
@@ -27,7 +25,6 @@ abstract class AbstractType
      * Array of attributes codes which are disabled for export.
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_disabledAttrs = [];
 
@@ -35,7 +32,6 @@ abstract class AbstractType
      * Attributes with index (not label) value.
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_indexValueAttributes = [];
 
@@ -43,7 +39,6 @@ abstract class AbstractType
      * Return disabled attributes codes.
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getDisabledAttrs()
     {
@@ -54,7 +49,6 @@ abstract class AbstractType
      * Get attribute codes with index (not label) value.
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getIndexValueAttributes()
     {
@@ -65,7 +59,6 @@ abstract class AbstractType
      * Additional check for model availability. If method returns FALSE - model is not suitable for data processing.
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isSuitable()
     {
@@ -77,7 +70,6 @@ abstract class AbstractType
      *
      * @param Attribute $attribute
      * @return bool
-     * @since 2.0.0
      */
     public function overrideAttribute(Attribute $attribute)
     {

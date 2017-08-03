@@ -11,7 +11,6 @@ use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 /**
  * Class \Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Term
  *
- * @since 2.0.0
  */
 class Term implements FilterInterface
 {
@@ -22,13 +21,11 @@ class Term implements FilterInterface
 
     /**
      * @var ConditionManager
-     * @since 2.0.0
      */
     private $conditionManager;
 
     /**
      * @param ConditionManager $conditionManager
-     * @since 2.0.0
      */
     public function __construct(
         ConditionManager $conditionManager
@@ -38,7 +35,6 @@ class Term implements FilterInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function buildFilter(
         RequestFilterInterface $filter,
@@ -57,7 +53,6 @@ class Term implements FilterInterface
      * @param string|array $value
      * @param bool $isNegation
      * @return string
-     * @since 2.0.0
      */
     private function getConditionOperator($value, $isNegation)
     {

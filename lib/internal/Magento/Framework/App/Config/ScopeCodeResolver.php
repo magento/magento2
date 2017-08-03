@@ -9,25 +9,25 @@ use Magento\Framework\App\ScopeResolverPool;
 
 /**
  * Class for resolving scope code
- * @since 2.2.0
+ * @since 2.1.3
  */
 class ScopeCodeResolver
 {
     /**
      * @var ScopeResolverPool
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $scopeResolverPool;
 
     /**
      * @var array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $resolvedScopeCodes = [];
 
     /**
      * @param ScopeResolverPool $scopeResolverPool
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(ScopeResolverPool $scopeResolverPool)
     {
@@ -40,7 +40,7 @@ class ScopeCodeResolver
      * @param string $scopeType
      * @param string $scopeCode
      * @return string
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function resolve($scopeType, $scopeCode)
     {

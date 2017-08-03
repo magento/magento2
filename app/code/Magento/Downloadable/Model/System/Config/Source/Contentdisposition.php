@@ -9,13 +9,11 @@ namespace Magento\Downloadable\Model\System\Config\Source;
  * Downloadable Content Disposition Source
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Contentdisposition implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

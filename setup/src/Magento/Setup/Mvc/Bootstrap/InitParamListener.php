@@ -29,7 +29,6 @@ use Zend\Stdlib\RequestInterface;
  * A listener that injects relevant Magento initialization parameters and initializes filesystem
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class InitParamListener implements ListenerAggregateInterface, FactoryInterface
 {
@@ -40,7 +39,6 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @var \Zend\Stdlib\CallbackHandler[]
-     * @since 2.0.0
      */
     private $listeners = [];
 
@@ -48,7 +46,6 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * List of controllers and their actions which should be skipped from auth check
      *
      * @var array
-     * @since 2.0.0
      */
     private $controllersToSkip = [
         \Magento\Setup\Controller\Session::class => ['index', 'unlogin'],
@@ -61,7 +58,6 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * The $priority argument is added to support latest versions of Zend Event Manager.
      * Starting from Zend Event Manager 3.0.0 release the ListenerAggregateInterface::attach()
      * supports the `priority` argument.
-     * @since 2.0.0
      */
     public function attach(EventManagerInterface $events, $priority = 1)
     {
@@ -76,7 +72,6 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function detach(EventManagerInterface $events)
     {
@@ -92,7 +87,6 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      *
      * @param MvcEvent $e
      * @return void
-     * @since 2.0.0
      */
     public function onBootstrap(MvcEvent $e)
     {
@@ -116,7 +110,6 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * @param \Zend\Mvc\MvcEvent $event
      * @return false|\Zend\Http\Response
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function authPreDispatch($event)
     {
@@ -180,7 +173,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @return string
-     * @since 2.1.0
+     * @since 2.0.6
      */
     private function getSetupCookiePath(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -197,7 +190,6 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
@@ -214,7 +206,6 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      *
      * @param Application $application
      * @return array
-     * @since 2.0.0
      */
     private function extractInitParameters(Application $application)
     {
@@ -239,7 +230,6 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      *
      * @param RequestInterface $request
      * @return array
-     * @since 2.0.0
      */
     private function extractFromCli(RequestInterface $request)
     {
@@ -262,7 +252,6 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * @param array $initParams
      * @return DirectoryList
      * @throws \LogicException
-     * @since 2.0.0
      */
     public function createDirectoryList($initParams)
     {
@@ -279,7 +268,6 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      *
      * @param DirectoryList $directoryList
      * @return Filesystem
-     * @since 2.0.0
      */
     public function createFilesystem(DirectoryList $directoryList)
     {

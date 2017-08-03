@@ -9,7 +9,6 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Interface GenericInterface
- * @since 2.0.0
  */
 interface GenericInterface extends OptionSourceInterface
 {

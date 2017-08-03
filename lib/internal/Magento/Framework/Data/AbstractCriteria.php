@@ -9,13 +9,11 @@ use Magento\Framework\DataObject;
 
 /**
  * Class AbstractCriteria
- * @since 2.0.0
  */
 abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterface
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $data = [
         self::PART_FIELDS => ['list' => []],
@@ -26,7 +24,6 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $mapperInterfaceName;
 
@@ -35,7 +32,6 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
      *
      * @throws \Exception
      * @return string
-     * @since 2.0.0
      */
     public function getMapperInterfaceName()
     {
@@ -56,7 +52,6 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
      * @param string|array $field
      * @param string|null $alias
      * @return void
-     * @since 2.0.0
      */
     public function addField($field, $alias = null)
     {
@@ -117,7 +112,6 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
      * @param string $type
      * @throws \Exception
      * @return void
-     * @since 2.0.0
      */
     public function addFilter($name, $field, $condition = null, $type = 'and')
     {
@@ -145,7 +139,6 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
      * @param string $direction
      * @param bool $unShift
      * @return void
-     * @since 2.0.0
      */
     public function addOrder($field, $direction = self::SORT_ORDER_DESC, $unShift = false)
     {
@@ -169,7 +162,6 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
      * @param int $offset
      * @param int $size
      * @return void
-     * @since 2.0.0
      */
     public function setLimit($offset, $size)
     {
@@ -182,7 +174,6 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
      * @param string|null $field
      * @param bool $isAlias Alias identifier
      * @return void
-     * @since 2.0.0
      */
     public function removeField($field, $isAlias = false)
     {
@@ -204,7 +195,6 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
      * Removes all fields from select
      *
      * @return void
-     * @since 2.0.0
      */
     public function removeAllFields()
     {
@@ -216,7 +206,6 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
      *
      * @param string $name
      * @return void
-     * @since 2.0.0
      */
     public function removeFilter($name)
     {
@@ -229,7 +218,6 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
      * Removes all filters
      *
      * @return void
-     * @since 2.0.0
      */
     public function removeAllFilters()
     {
@@ -240,7 +228,6 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
      * Get Criteria objects added to current Composite Criteria
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCriteriaList()
     {
@@ -251,7 +238,6 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
      * Get list of filters
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFilters()
     {
@@ -262,7 +248,6 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
      * Get ordering criteria
      *
      * @return array
-     * @since 2.0.0
      */
     public function getOrders()
     {
@@ -274,7 +259,6 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
      * (['offset', 'page'])
      *
      * @return array
-     * @since 2.0.0
      */
     public function getLimit()
     {
@@ -287,7 +271,6 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
      * @param string $name
      * @param mixed $default
      * @return mixed
-     * @since 2.0.0
      */
     public function getPart($name, $default = null)
     {
@@ -298,7 +281,6 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
      * Return all criteria parts as array
      *
      * @return array
-     * @since 2.0.0
      */
     public function toArray()
     {
@@ -309,7 +291,6 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
      * Reset criteria
      *
      * @return void
-     * @since 2.0.0
      */
     public function reset()
     {

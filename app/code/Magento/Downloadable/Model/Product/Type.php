@@ -13,7 +13,6 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Type extends \Magento\Catalog\Model\Product\Type\Virtual
 {
@@ -23,55 +22,46 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * Downloadable file
      *
      * @var \Magento\Downloadable\Helper\File
-     * @since 2.0.0
      */
     protected $_downloadableFile = null;
 
     /**
      * @var \Magento\Downloadable\Model\ResourceModel\SampleFactory
-     * @since 2.0.0
      */
     protected $_sampleResFactory;
 
     /**
      * @var \Magento\Downloadable\Model\ResourceModel\Link
-     * @since 2.0.0
      */
     protected $_linkResource;
 
     /**
      * @var \Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory
-     * @since 2.0.0
      */
     protected $_linksFactory;
 
     /**
      * @var \Magento\Downloadable\Model\ResourceModel\Sample\CollectionFactory
-     * @since 2.0.0
      */
     protected $_samplesFactory;
 
     /**
      * @var \Magento\Downloadable\Model\SampleFactory
-     * @since 2.0.0
      */
     protected $_sampleFactory;
 
     /**
      * @var \Magento\Downloadable\Model\LinkFactory
-     * @since 2.0.0
      */
     protected $_linkFactory;
 
     /**
      * @var TypeHandler\TypeHandlerInterface
-     * @since 2.0.0
      */
     private $typeHandler;
 
     /**
      * @var JoinProcessorInterface
-     * @since 2.0.0
      */
     private $extensionAttributesJoinProcessor;
 
@@ -97,7 +87,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Option $catalogProductOption,
@@ -146,7 +135,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Downloadable\Model\Link[]
-     * @since 2.0.0
      */
     public function getLinks($product)
     {
@@ -176,7 +164,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return boolean
-     * @since 2.0.0
      */
     public function hasLinks($product)
     {
@@ -192,7 +179,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return boolean
-     * @since 2.0.0
      */
     public function hasOptions($product)
     {
@@ -204,7 +190,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
-     * @since 2.0.0
      */
     public function hasRequiredOptions($product)
     {
@@ -217,7 +202,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param \Magento\Catalog\Model\Product $product
      * @return boolean
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getLinkSelectionRequired($product)
     {
@@ -229,7 +213,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Downloadable\Model\ResourceModel\Sample\Collection
-     * @since 2.0.0
      */
     public function getSamples($product)
     {
@@ -251,7 +234,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return boolean
-     * @since 2.0.0
      */
     public function hasSamples($product)
     {
@@ -264,7 +246,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function checkProductBuyState($product)
     {
@@ -296,7 +277,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
-     * @since 2.0.0
      */
     public function getOrderOptions($product)
     {
@@ -324,7 +304,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
-     * @since 2.0.0
      */
     public function getSearchableData($product)
     {
@@ -348,7 +327,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
-     * @since 2.0.0
      */
     public function isSalable($product)
     {
@@ -362,7 +340,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param  \Magento\Framework\DataObject $buyRequest
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function processBuyRequest($product, $buyRequest)
     {
@@ -379,7 +356,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
-     * @since 2.0.0
      */
     public function canConfigure($product)
     {
@@ -390,7 +366,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * Check that product of this type has weight
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasWeight()
     {
@@ -402,7 +377,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return void
-     * @since 2.0.0
      */
     public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product)
     {
@@ -439,7 +413,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @return \Magento\Framework\Phrase|array|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _prepareProduct(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
@@ -483,7 +456,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
 
     /**
      * @return \Magento\Downloadable\Model\Link
-     * @since 2.0.0
      */
     protected function _createLink()
     {
@@ -492,7 +464,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
 
     /**
      * @return \Magento\Downloadable\Model\Sample
-     * @since 2.0.0
      */
     protected function _createSample()
     {

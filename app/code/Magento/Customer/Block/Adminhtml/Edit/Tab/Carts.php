@@ -9,25 +9,21 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
  * Obtain all carts contents for specified client
  *
  * @api
- * @since 2.0.0
  */
 class Carts extends \Magento\Backend\Block\Template
 {
     /**
      * @var \Magento\Customer\Model\Config\Share
-     * @since 2.0.0
      */
     protected $_shareConfig;
 
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
-     * @since 2.0.0
      */
     protected $customerDataFactory;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
-     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
@@ -37,7 +33,6 @@ class Carts extends \Magento\Backend\Block\Template
      * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param array                                            $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -56,7 +51,6 @@ class Carts extends \Magento\Backend\Block\Template
      * Add shopping cart grid of each website
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -82,7 +76,6 @@ class Carts extends \Magento\Backend\Block\Template
      * Just get child blocks html
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -92,7 +85,6 @@ class Carts extends \Magento\Backend\Block\Template
 
     /**
      * @return \Magento\Customer\Api\Data\CustomerInterface
-     * @since 2.0.0
      */
     protected function _getCustomer()
     {

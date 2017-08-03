@@ -8,7 +8,6 @@ namespace Magento\Theme\Model\Url\Plugin;
 
 /**
  * Plugin that activates signing of static file URLs with corresponding deployment version
- * @since 2.0.0
  */
 class Signature
 {
@@ -24,20 +23,17 @@ class Signature
 
     /**
      * @var \Magento\Framework\View\Url\ConfigInterface
-     * @since 2.0.0
      */
     private $config;
 
     /**
      * @var \Magento\Framework\App\View\Deployment\Version
-     * @since 2.0.0
      */
     private $deploymentVersion;
 
     /**
      * @param \Magento\Framework\View\Url\ConfigInterface $config
      * @param \Magento\Framework\App\View\Deployment\Version $deploymentVersion
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Url\ConfigInterface $config,
@@ -76,7 +72,6 @@ class Signature
      * Whether signing of URLs is enabled or not
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function isUrlSignatureEnabled()
     {
@@ -87,7 +82,6 @@ class Signature
      * Render URL signature from the template
      *
      * @return string
-     * @since 2.0.0
      */
     protected function renderUrlSignature()
     {

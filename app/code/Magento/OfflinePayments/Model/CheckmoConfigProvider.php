@@ -12,32 +12,27 @@ use Magento\Payment\Helper\Data as PaymentHelper;
 /**
  * Class \Magento\OfflinePayments\Model\CheckmoConfigProvider
  *
- * @since 2.0.0
  */
 class CheckmoConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var string[]
-     * @since 2.0.0
      */
     protected $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
 
     /**
      * @var Checkmo
-     * @since 2.0.0
      */
     protected $method;
 
     /**
      * @var Escaper
-     * @since 2.0.0
      */
     protected $escaper;
 
     /**
      * @param PaymentHelper $paymentHelper
      * @param Escaper $escaper
-     * @since 2.0.0
      */
     public function __construct(
         PaymentHelper $paymentHelper,
@@ -49,7 +44,6 @@ class CheckmoConfigProvider implements ConfigProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -67,7 +61,6 @@ class CheckmoConfigProvider implements ConfigProviderInterface
      * Get mailing address from config
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getMailingAddress()
     {
@@ -78,7 +71,6 @@ class CheckmoConfigProvider implements ConfigProviderInterface
      * Get payable to from config
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getPayableTo()
     {

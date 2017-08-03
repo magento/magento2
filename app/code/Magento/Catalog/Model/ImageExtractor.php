@@ -11,7 +11,6 @@ use Magento\Catalog\Helper\Image;
 /**
  * Class \Magento\Catalog\Model\ImageExtractor
  *
- * @since 2.0.0
  */
 class ImageExtractor implements \Magento\Framework\View\Xsd\Media\TypeDataExtractorInterface
 {
@@ -21,7 +20,6 @@ class ImageExtractor implements \Magento\Framework\View\Xsd\Media\TypeDataExtrac
      * @param \DOMElement $mediaNode
      * @param string $mediaParentTag
      * @return array
-     * @since 2.0.0
      */
     public function process(\DOMElement $mediaNode, $mediaParentTag)
     {

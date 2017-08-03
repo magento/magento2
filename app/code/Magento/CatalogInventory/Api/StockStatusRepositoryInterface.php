@@ -8,7 +8,6 @@ namespace Magento\CatalogInventory\Api;
 /**
  * Interface StockStatusRepositoryInterface
  * @api
- * @since 2.0.0
  */
 interface StockStatusRepositoryInterface
 {
@@ -17,7 +16,6 @@ interface StockStatusRepositoryInterface
      *
      * @param \Magento\CatalogInventory\Api\Data\StockStatusInterface $stockStatus
      * @return \Magento\CatalogInventory\Api\Data\StockStatusInterface
-     * @since 2.0.0
      */
     public function save(\Magento\CatalogInventory\Api\Data\StockStatusInterface $stockStatus);
 
@@ -26,7 +24,6 @@ interface StockStatusRepositoryInterface
      *
      * @param string $stockStatusId
      * @return \Magento\CatalogInventory\Api\Data\StockStatusInterface
-     * @since 2.0.0
      */
     public function get($stockStatusId);
 
@@ -35,7 +32,6 @@ interface StockStatusRepositoryInterface
      *
      * @param \Magento\CatalogInventory\Api\StockStatusCriteriaInterface $searchCriteria
      * @return \Magento\CatalogInventory\Api\Data\StockStatusCollectionInterface
-     * @since 2.0.0
      */
     public function getList(StockStatusCriteriaInterface $searchCriteria);
 
@@ -44,7 +40,6 @@ interface StockStatusRepositoryInterface
      *
      * @param \Magento\CatalogInventory\Api\Data\StockStatusInterface $stockStatus
      * @return bool
-     * @since 2.0.0
      */
     public function delete(\Magento\CatalogInventory\Api\Data\StockStatusInterface $stockStatus);
 }

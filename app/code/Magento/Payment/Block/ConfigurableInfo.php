@@ -12,13 +12,11 @@ use Magento\Payment\Gateway\ConfigInterface;
 /**
  * Class ConfigurableInfo
  * @api
- * @since 2.0.0
  */
 class ConfigurableInfo extends \Magento\Payment\Block\Info
 {
     /**
      * @var ConfigInterface
-     * @since 2.0.0
      */
     private $config;
 
@@ -26,7 +24,6 @@ class ConfigurableInfo extends \Magento\Payment\Block\Info
      * @param Context $context
      * @param ConfigInterface $config
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -50,7 +47,6 @@ class ConfigurableInfo extends \Magento\Payment\Block\Info
      *
      * @param \Magento\Framework\DataObject|array|null $transport
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     protected function _prepareSpecificInformation($transport = null)
     {
@@ -84,7 +80,6 @@ class ConfigurableInfo extends \Magento\Payment\Block\Info
      * @param string $field
      * @param string $value
      * @return void
-     * @since 2.0.0
      */
     protected function setDataToTransfer(
         \Magento\Framework\DataObject $transport,
@@ -105,7 +100,6 @@ class ConfigurableInfo extends \Magento\Payment\Block\Info
      *
      * @param string $field
      * @return string | Phrase
-     * @since 2.0.0
      */
     protected function getLabel($field)
     {
@@ -119,7 +113,6 @@ class ConfigurableInfo extends \Magento\Payment\Block\Info
      * @param string $value
      * @return string | Phrase
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function getValueView($field, $value)
     {

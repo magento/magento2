@@ -12,7 +12,6 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class Indexer
- * @since 2.0.0
  */
 class Indexer
 {
@@ -29,20 +28,17 @@ class Indexer
 
     /**
      * @var \Magento\Catalog\Helper\Product\Flat\Indexer
-     * @since 2.0.0
      */
     protected $_productIndexerHelper;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected $_connection;
 
     /**
      * @param ResourceConnection $resource
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -61,7 +57,6 @@ class Indexer
      * @return \Magento\Catalog\Model\Indexer\Product\Flat
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function write($storeId, $productId, $valueFieldSuffix = '')
     {

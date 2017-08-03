@@ -11,19 +11,16 @@ use \Magento\Framework\Validator\AbstractValidator;
 /**
  * Class \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator
  *
- * @since 2.0.0
  */
 class Validator extends AbstractValidator implements RowValidatorInterface
 {
     /**
      * @var RowValidatorInterface[]|AbstractValidator[]
-     * @since 2.0.0
      */
     protected $validators = [];
 
     /**
      * @param RowValidatorInterface[] $validators
-     * @since 2.0.0
      */
     public function __construct($validators = [])
     {
@@ -35,7 +32,6 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      *
      * @param array $value
      * @return bool
-     * @since 2.0.0
      */
     public function isValid($value)
     {
@@ -53,7 +49,6 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     /**
      * @param \Magento\CatalogImportExport\Model\Import\Product $context
      * @return $this
-     * @since 2.0.0
      */
     public function init($context)
     {

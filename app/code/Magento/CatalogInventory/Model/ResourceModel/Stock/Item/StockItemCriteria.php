@@ -12,13 +12,11 @@ use Magento\Framework\Data\AbstractCriteria;
 
 /**
  * Class StockItemCriteria
- * @since 2.0.0
  */
 class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInventory\Api\StockItemCriteriaInterface
 {
     /**
      * @param string $mapper
-     * @since 2.0.0
      */
     public function __construct($mapper = '')
     {
@@ -28,7 +26,6 @@ class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInve
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function setStockStatus($storeId = null)
     {
@@ -38,7 +35,6 @@ class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInve
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function setStockFilter($stock)
     {
@@ -48,7 +44,6 @@ class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInve
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function setScopeFilter($scope)
     {
@@ -58,7 +53,6 @@ class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInve
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function setProductsFilter($products)
     {
@@ -68,7 +62,6 @@ class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInve
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function setManagedFilter($isStockManagedInConfig)
     {
@@ -78,7 +71,6 @@ class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInve
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function setQtyFilter($comparisonMethod, $qty)
     {
@@ -91,7 +83,6 @@ class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInve
      *
      * @param \Magento\CatalogInventory\Api\StockItemCriteriaInterface $criteria
      * @return bool
-     * @since 2.0.0
      */
     public function addCriteria(\Magento\CatalogInventory\Api\StockItemCriteriaInterface $criteria)
     {

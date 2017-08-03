@@ -9,7 +9,6 @@ namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 /**
  * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\Save
  *
- * @since 2.0.0
  */
 class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
@@ -19,7 +18,6 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

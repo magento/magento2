@@ -15,43 +15,36 @@ use Magento\Framework\View\Design\ThemeInterface;
 /**
  * Class \Magento\Theme\Model\CopyService
  *
- * @since 2.0.0
  */
 class CopyService
 {
     /**
      * @var \Magento\Framework\Filesystem\Directory\Write
-     * @since 2.0.0
      */
     protected $_directory;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\FileFactory
-     * @since 2.0.0
      */
     protected $_fileFactory;
 
     /**
      * @var \Magento\Widget\Model\Layout\Link
-     * @since 2.0.0
      */
     protected $_link;
 
     /**
      * @var \Magento\Widget\Model\Layout\UpdateFactory
-     * @since 2.0.0
      */
     protected $_updateFactory;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\Customization\Path
-     * @since 2.0.0
      */
     protected $_customizationPath;
 
@@ -62,7 +55,6 @@ class CopyService
      * @param \Magento\Widget\Model\Layout\UpdateFactory $updateFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\View\Design\Theme\Customization\Path $customization
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -86,7 +78,6 @@ class CopyService
      * @param ThemeInterface $source
      * @param ThemeInterface $target
      * @return void
-     * @since 2.0.0
      */
     public function copy(ThemeInterface $source, ThemeInterface $target)
     {
@@ -101,7 +92,6 @@ class CopyService
      * @param ThemeInterface $source
      * @param ThemeInterface $target
      * @return void
-     * @since 2.0.0
      */
     protected function _copyDatabaseCustomization(ThemeInterface $source, ThemeInterface $target)
     {
@@ -132,7 +122,6 @@ class CopyService
      * @param ThemeInterface $source
      * @param ThemeInterface $target
      * @return void
-     * @since 2.0.0
      */
     protected function _copyLayoutCustomization(ThemeInterface $source, ThemeInterface $target)
     {
@@ -167,7 +156,6 @@ class CopyService
      * @param ThemeInterface $source
      * @param ThemeInterface $target
      * @return void
-     * @since 2.0.0
      */
     protected function _copyFilesystemCustomization(ThemeInterface $source, ThemeInterface $target)
     {
@@ -192,7 +180,6 @@ class CopyService
      * @param string $sourceDir
      * @param string $targetDir
      * @return void
-     * @since 2.0.0
      */
     protected function _copyFilesRecursively($baseDir, $sourceDir, $targetDir)
     {
@@ -211,7 +198,6 @@ class CopyService
      *
      * @param string $targetDir
      * @return void
-     * @since 2.0.0
      */
     protected function _deleteFilesRecursively($targetDir)
     {

@@ -7,7 +7,6 @@ namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface DiscountInterface
 {
@@ -16,7 +15,6 @@ interface DiscountInterface
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param float $qty
      * @return \Magento\SalesRule\Model\Rule\Action\Discount\Data
-     * @since 2.0.0
      */
     public function calculate($rule, $item, $qty);
 
@@ -24,7 +22,6 @@ interface DiscountInterface
      * @param float $qty
      * @param \Magento\SalesRule\Model\Rule $rule
      * @return float
-     * @since 2.0.0
      */
     public function fixQuantity($qty, $rule);
 }

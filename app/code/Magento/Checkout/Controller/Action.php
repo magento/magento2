@@ -11,25 +11,21 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Controller for onepage checkouts
- * @since 2.0.0
  */
 abstract class Action extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var AccountManagementInterface
-     * @since 2.0.0
      */
     protected $accountManagement;
 
@@ -39,7 +35,6 @@ abstract class Action extends \Magento\Framework\App\Action\Action
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $accountManagement
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -61,7 +56,6 @@ abstract class Action extends \Magento\Framework\App\Action\Action
      * @param bool $redirect - stop dispatch and redirect?
      * @param bool $addErrors - add error messages?
      * @return bool|\Magento\Framework\Controller\Result\Redirect
-     * @since 2.0.0
      */
     protected function _preDispatchValidateCustomer($redirect = true, $addErrors = true)
     {

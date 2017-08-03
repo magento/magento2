@@ -12,7 +12,6 @@ namespace Magento\Paypal\Block\Adminhtml\System\Config\Payflowlink;
 /**
  * Class \Magento\Paypal\Block\Adminhtml\System\Config\Payflowlink\Info
  *
- * @since 2.0.0
  */
 class Info extends \Magento\Config\Block\System\Config\Form\Field
 {
@@ -20,7 +19,6 @@ class Info extends \Magento\Config\Block\System\Config\Form\Field
      * Template path
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'system/config/payflowlink/info.phtml';
 
@@ -29,7 +27,6 @@ class Info extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {

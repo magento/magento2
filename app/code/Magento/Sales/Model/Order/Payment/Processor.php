@@ -16,31 +16,26 @@ use Magento\Sales\Model\Order\Payment\Operations\RegisterCaptureNotificationOper
 
 /**
  * Class Processor using for process payment
- * @since 2.0.0
  */
 class Processor
 {
     /**
      * @var AuthorizeOperation
-     * @since 2.0.0
      */
     protected $authorizeOperation;
 
     /**
      * @var CaptureOperation
-     * @since 2.0.0
      */
     protected $captureOperation;
 
     /**
      * @var OrderOperation
-     * @since 2.0.0
      */
     protected $orderOperation;
 
     /**
      * @var RegisterCaptureNotificationOperation
-     * @since 2.0.0
      */
     protected $registerCaptureNotification;
 
@@ -51,7 +46,6 @@ class Processor
      * @param CaptureOperation $captureOperation
      * @param OrderOperation $orderOperation
      * @param RegisterCaptureNotificationOperation $registerCaptureNotification
-     * @since 2.0.0
      */
     public function __construct(
         AuthorizeOperation $authorizeOperation,
@@ -72,7 +66,6 @@ class Processor
      * @param bool $isOnline
      * @param float $amount
      * @return OrderPaymentInterface|Payment
-     * @since 2.0.0
      */
     public function authorize(OrderPaymentInterface $payment, $isOnline, $amount)
     {
@@ -86,7 +79,6 @@ class Processor
      * @param InvoiceInterface $invoice
      * @return OrderPaymentInterface|Payment
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function capture(OrderPaymentInterface $payment, $invoice)
     {
@@ -99,7 +91,6 @@ class Processor
      * @param OrderPaymentInterface $payment
      * @param float $amount
      * @return OrderPaymentInterface|Payment
-     * @since 2.0.0
      */
     public function order(OrderPaymentInterface $payment, $amount)
     {
@@ -113,7 +104,6 @@ class Processor
      * @param string|float $amount
      * @param bool|int $skipFraudDetection
      * @return OrderPaymentInterface
-     * @since 2.0.0
      */
     public function registerCaptureNotification(
         OrderPaymentInterface $payment,

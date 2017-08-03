@@ -7,7 +7,6 @@ namespace Magento\Search\Model;
 
 /**
  * @api
- * @since 2.0.0
  */
 class AdapterFactory
 {
@@ -15,7 +14,6 @@ class AdapterFactory
      * Scope configuration
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
@@ -23,7 +21,6 @@ class AdapterFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -31,13 +28,11 @@ class AdapterFactory
      * Config path
      *
      * @var string
-     * @since 2.0.0
      */
     protected $path;
 
     /**
      * Config Scope
-     * @since 2.0.0
      */
     protected $scope;
 
@@ -45,7 +40,6 @@ class AdapterFactory
      * Pool of existing adapters
      *
      * @var array
-     * @since 2.0.0
      */
     private $adapterPool;
 
@@ -55,7 +49,6 @@ class AdapterFactory
      * @param array $adapters
      * @param string $path
      * @param string $scopeType
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -76,7 +69,6 @@ class AdapterFactory
      *
      * @param array $data
      * @return \Magento\Framework\Search\AdapterInterface
-     * @since 2.0.0
      */
     public function create(array $data = [])
     {

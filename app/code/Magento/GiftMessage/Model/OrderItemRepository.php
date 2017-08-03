@@ -13,7 +13,6 @@ use Magento\Framework\Exception\State\InvalidTransitionException;
 
 /**
  * Order item gift message repository object.
- * @since 2.0.0
  */
 class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositoryInterface
 {
@@ -21,7 +20,6 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
      * Order factory.
      *
      * @var \Magento\Sales\Model\OrderFactory
-     * @since 2.0.0
      */
     protected $orderFactory;
 
@@ -37,7 +35,6 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
      * Store manager interface.
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -45,7 +42,6 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
      * Gift message save model.
      *
      * @var \Magento\GiftMessage\Model\Save
-     * @since 2.0.0
      */
     protected $giftMessageSaveModel;
 
@@ -53,7 +49,6 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
      * Message helper.
      *
      * @var \Magento\GiftMessage\Helper\Message
-     * @since 2.0.0
      */
     protected $helper;
 
@@ -61,7 +56,6 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
      * Message factory.
      *
      * @var \Magento\GiftMessage\Model\MessageFactory
-     * @since 2.0.0
      */
     protected $messageFactory;
 
@@ -71,7 +65,6 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
      * @param \Magento\GiftMessage\Model\Save $giftMessageSaveModel
      * @param \Magento\GiftMessage\Helper\Message $helper
      * @param MessageFactory $messageFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Model\OrderFactory $orderFactory,
@@ -89,7 +82,6 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function get($orderId, $orderItemId)
     {
@@ -114,7 +106,6 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function save($orderId, $orderItemId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage)
     {
@@ -157,7 +148,6 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
      * @param int $orderId
      * @param int $orderItemId
      * @return \Magento\Sales\Api\Data\OrderItemInterface|bool
-     * @since 2.0.0
      */
     protected function getItemById($orderId, $orderItemId)
     {

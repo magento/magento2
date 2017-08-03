@@ -9,13 +9,11 @@ namespace Magento\Framework\Session\Config\Validator;
 /**
  * Class \Magento\Framework\Session\Config\Validator\CookiePathValidator
  *
- * @since 2.0.0
  */
 class CookiePathValidator extends \Magento\Framework\Validator\AbstractValidator
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function isValid($value)
     {

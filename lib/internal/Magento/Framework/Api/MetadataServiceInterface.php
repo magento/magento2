@@ -10,7 +10,6 @@ namespace Magento\Framework\Api;
  * MetadataService returns custom attribute metadata for a given class or interface it implements
  *
  * @api
- * @since 2.0.0
  */
 interface MetadataServiceInterface
 {
@@ -19,7 +18,6 @@ interface MetadataServiceInterface
      *
      * @param string|null $dataObjectClassName Data object class name
      * @return \Magento\Framework\Api\MetadataObjectInterface[]
-     * @since 2.0.0
      */
     public function getCustomAttributesMetadata($dataObjectClassName = null);
 }

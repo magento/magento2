@@ -22,7 +22,6 @@ namespace Magento\Authorization\Model;
  * @method string getPermission()
  * @method \Magento\Authorization\Model\Rules setPermission(string $value)
  * @api
- * @since 2.0.0
  */
 class Rules extends \Magento\Framework\Model\AbstractModel
 {
@@ -34,7 +33,6 @@ class Rules extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Authorization\Model\ResourceModel\Rules $resource
      * @param \Magento\Authorization\Model\ResourceModel\Rules\Collection $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -50,7 +48,6 @@ class Rules extends \Magento\Framework\Model\AbstractModel
      * Class constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -59,7 +56,6 @@ class Rules extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function update()
     {
@@ -69,7 +65,6 @@ class Rules extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function saveRel()
     {

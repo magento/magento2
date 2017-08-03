@@ -14,13 +14,11 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type;
 /**
  * Class \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\Select
  *
- * @since 2.0.0
  */
 class Select extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\AbstractType
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'catalog/product/edit/options/type/select.phtml';
 
@@ -28,7 +26,6 @@ class Select extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\T
      * Class constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -40,7 +37,6 @@ class Select extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\T
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -69,7 +65,6 @@ class Select extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\T
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getAddButtonHtml()
     {
@@ -78,7 +73,6 @@ class Select extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\T
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getDeleteButtonHtml()
     {
@@ -90,7 +84,6 @@ class Select extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\T
      *
      * @param string $extraParams
      * @return string
-     * @since 2.0.0
      */
     public function getPriceTypeSelectHtml($extraParams = '')
     {

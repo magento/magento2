@@ -12,7 +12,6 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\PageCache\Observer\FlushAllCache
  *
- * @since 2.0.0
  */
 class FlushAllCache implements ObserverInterface
 {
@@ -20,7 +19,6 @@ class FlushAllCache implements ObserverInterface
      * @var \Magento\Framework\App\PageCache\Cache
      *
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     protected $_cache;
 
@@ -28,7 +26,6 @@ class FlushAllCache implements ObserverInterface
      * Application config object
      *
      * @var \Magento\PageCache\Model\Config
-     * @since 2.0.0
      */
     protected $_config;
 
@@ -41,7 +38,6 @@ class FlushAllCache implements ObserverInterface
     /**
      * @param \Magento\PageCache\Model\Config $config
      * @param \Magento\Framework\App\PageCache\Cache $cache
-     * @since 2.0.0
      */
     public function __construct(\Magento\PageCache\Model\Config $config, \Magento\Framework\App\PageCache\Cache $cache)
     {
@@ -54,7 +50,6 @@ class FlushAllCache implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

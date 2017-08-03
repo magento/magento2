@@ -23,7 +23,6 @@ use Magento\Tax\Api\TaxClassRepositoryInterface;
  * Tax Calculation Model
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Calculation extends \Magento\Framework\Model\AbstractModel
 {
@@ -66,7 +65,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * Identifier constant for unit based calculation
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_rates = [];
 
@@ -74,7 +72,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * Identifier constant for row based calculation
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_ctc = [];
 
@@ -82,7 +79,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * Identifier constant for total based calculation
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_ptc = [];
 
@@ -90,7 +86,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * Cache to hold the rates
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_rateCache = [];
 
@@ -98,7 +93,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * Store the rate calculation process
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_rateCalculationProcess = [];
 
@@ -106,13 +100,11 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * Hold the customer
      *
      * @var CustomerDataObject|bool
-     * @since 2.0.0
      */
     protected $_customer;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_defaultCustomerTaxClass;
 
@@ -120,31 +112,26 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Customer\Model\CustomerFactory
-     * @since 2.0.0
      */
     protected $_customerFactory;
 
     /**
      * @var \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory
-     * @since 2.0.0
      */
     protected $_classesFactory;
 
@@ -152,37 +139,31 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * Tax configuration object
      *
      * @var Config
-     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @var CustomerAccountManagement
-     * @since 2.0.0
      */
     protected $customerAccountManagement;
 
     /**
      * @var CustomerGroupManagement
-     * @since 2.0.0
      */
     protected $customerGroupManagement;
 
     /**
      * @var CustomerGroupRepository
-     * @since 2.0.0
      */
     protected $customerGroupRepository;
 
     /**
      * @var CustomerRepository
-     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
@@ -190,7 +171,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * Filter Builder
      *
      * @var FilterBuilder
-     * @since 2.0.0
      */
     protected $filterBuilder;
 
@@ -198,7 +178,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * Search Criteria Builder
      *
      * @var SearchCriteriaBuilder
-     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
@@ -206,7 +185,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * Tax Class Repository
      *
      * @var TaxClassRepositoryInterface
-     * @since 2.0.0
      */
     protected $taxClassRepository;
 
@@ -231,7 +209,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -273,7 +250,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -285,7 +261,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      *
      * @param null|Store|string|int $store
      * @return int
-     * @since 2.0.0
      */
     public function getDefaultCustomerTaxClass($store = null)
     {
@@ -302,7 +277,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      *
      * @param   int $ruleId
      * @return  $this
-     * @since 2.0.0
      */
     public function deleteByRuleId($ruleId)
     {
@@ -315,7 +289,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      *
      * @param   int $ruleId
      * @return  array
-     * @since 2.0.0
      */
     public function getRates($ruleId)
     {
@@ -330,7 +303,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      *
      * @param   int $ruleId
      * @return  array
-     * @since 2.0.0
      */
     public function getCustomerTaxClasses($ruleId)
     {
@@ -345,7 +317,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      *
      * @param   int $ruleId
      * @return  array
-     * @since 2.0.0
      */
     public function getProductTaxClasses($ruleId)
     {
@@ -359,7 +330,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * Aggregate tax calculation data to array
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _formCalculationProcess()
     {
@@ -382,7 +352,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      *
      * @param   \Magento\Framework\DataObject $request
      * @return  float
-     * @since 2.0.0
      */
     public function getRate($request)
     {
@@ -414,7 +383,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      *
      * @param   \Magento\Framework\DataObject $request
      * @return  string
-     * @since 2.0.0
      */
     protected function _getRequestCacheKey($request)
     {
@@ -441,7 +409,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\DataObject $request
      * @param null|string|bool|int|Store $store
      * @return float
-     * @since 2.0.0
      */
     public function getStoreRate($request, $store = null)
     {
@@ -454,7 +421,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      *
      * @param   null|string|bool|int|Store $store
      * @return  \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     protected function getRateOriginRequest($store = null)
     {
@@ -491,7 +457,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * @param null|int|string|Store $store
      * @param int $customerId
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getDefaultRateRequest($store = null, $customerId = null)
     {
@@ -508,7 +473,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      *
      * @param   null|int|string|Store $store
      * @return  bool
-     * @since 2.0.0
      */
     protected function _isCrossBorderTradeEnabled($store = null)
     {
@@ -534,7 +498,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function getRateRequest(
         $shippingAddress = null,
@@ -660,7 +623,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      *
      * @param   \Magento\Framework\DataObject $request
      * @return  array
-     * @since 2.0.0
      */
     public function getAppliedRates($request)
     {
@@ -680,7 +642,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      *
      * @param array $rates
      * @return array
-     * @since 2.0.0
      */
     public function reproduceProcess($rates)
     {
@@ -696,7 +657,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * @param   boolean $priceIncludeTax
      * @param   boolean $round
      * @return  float
-     * @since 2.0.0
      */
     public function calcTaxAmount($price, $taxRate, $priceIncludeTax = false, $round = true)
     {
@@ -720,7 +680,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      *
      * @param   float $price
      * @return  float
-     * @since 2.0.0
      */
     public function round($price)
     {
@@ -732,7 +691,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * @param array $shippingAddress
      * @param int $customerTaxClassId
      * @return array
-     * @since 2.0.0
      */
     public function getTaxRates($billingAddress, $shippingAddress, $customerTaxClassId)
     {

@@ -12,19 +12,16 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\GoogleAdwords\Observer\SetConversionValueObserver
  *
- * @since 2.0.0
  */
 class SetConversionValueObserver implements ObserverInterface
 {
     /**
      * @var \Magento\GoogleAdwords\Helper\Data
-     * @since 2.0.0
      */
     protected $_helper;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Collection
-     * @since 2.0.0
      */
     protected $_collection;
 
@@ -34,7 +31,6 @@ class SetConversionValueObserver implements ObserverInterface
      * @param \Magento\GoogleAdwords\Helper\Data $helper
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Model\ResourceModel\Order\Collection $collection
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\GoogleAdwords\Helper\Data $helper,
@@ -51,7 +47,6 @@ class SetConversionValueObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return \Magento\GoogleAdwords\Observer\SetConversionValueObserver
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

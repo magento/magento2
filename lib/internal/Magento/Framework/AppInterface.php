@@ -14,7 +14,6 @@ namespace Magento\Framework;
  * Implementations of this interface should implement application type specific initialization.
  *
  * @api
- * @since 2.0.0
  */
 interface AppInterface
 {
@@ -27,7 +26,6 @@ interface AppInterface
      * Launch application
      *
      * @return \Magento\Framework\App\ResponseInterface
-     * @since 2.0.0
      */
     public function launch();
 
@@ -41,7 +39,6 @@ interface AppInterface
      * @param App\Bootstrap $bootstrap
      * @param \Exception $exception
      * @return bool
-     * @since 2.0.0
      */
     public function catchException(App\Bootstrap $bootstrap, \Exception $exception);
 }

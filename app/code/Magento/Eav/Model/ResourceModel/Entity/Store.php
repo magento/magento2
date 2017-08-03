@@ -12,7 +12,6 @@ use Magento\Framework\DataObject;
  * Eav Entity store resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -21,7 +20,6 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -35,7 +33,6 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $entityTypeId
      * @param int $storeId
      * @return bool
-     * @since 2.0.0
      */
     public function loadByEntityStore(AbstractModel $object, $entityTypeId, $storeId)
     {

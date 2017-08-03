@@ -9,7 +9,6 @@ namespace Magento\Framework\View\Asset;
  * List of page assets that combines into groups ones having the same properties
  *
  * @api
- * @since 2.0.0
  */
 class GroupedCollection extends Collection
 {
@@ -22,19 +21,13 @@ class GroupedCollection extends Collection
 
     /**#@-*/
 
-    /**
-     * Property Factory
-     *
-     * @var \Magento\Framework\View\Asset\PropertyGroupFactory
-     * @since 2.0.0
-     */
+    /**#@-*/
     protected $propertyFactory;
 
     /**
      * Property Groups
      *
      * @var PropertyGroup[]
-     * @since 2.0.0
      */
     protected $groups = [];
 
@@ -42,7 +35,6 @@ class GroupedCollection extends Collection
      * Constructor
      *
      * @param PropertyGroupFactory $propertyFactory
-     * @since 2.0.0
      */
     public function __construct(PropertyGroupFactory $propertyFactory)
     {
@@ -56,7 +48,6 @@ class GroupedCollection extends Collection
      * @param AssetInterface $asset
      * @param array $properties
      * @return void
-     * @since 2.0.0
      */
     public function add($identifier, AssetInterface $asset, array $properties = [])
     {
@@ -70,7 +61,6 @@ class GroupedCollection extends Collection
      * @param AssetInterface $asset
      * @param string $key
      * @return void
-     * @since 2.0.0
      */
     public function insert($identifier, AssetInterface $asset, $key)
     {
@@ -83,7 +73,6 @@ class GroupedCollection extends Collection
      * @param AssetInterface $asset
      * @param array $properties
      * @return array
-     * @since 2.0.0
      */
     public function getFilteredProperties(AssetInterface $asset, $properties = [])
     {
@@ -99,7 +88,6 @@ class GroupedCollection extends Collection
      *
      * @param array $properties
      * @return PropertyGroup
-     * @since 2.0.0
      */
     private function getGroupFor(array $properties)
     {
@@ -120,7 +108,6 @@ class GroupedCollection extends Collection
      *
      * @param string $identifier
      * @return void
-     * @since 2.0.0
      */
     public function remove($identifier)
     {
@@ -138,7 +125,6 @@ class GroupedCollection extends Collection
      * Retrieve groups, containing assets that have the same properties
      *
      * @return PropertyGroup[]
-     * @since 2.0.0
      */
     public function getGroups()
     {
@@ -150,7 +136,6 @@ class GroupedCollection extends Collection
      *
      * @param string $contentType
      * @return bool|PropertyGroup
-     * @since 2.0.0
      */
     public function getGroupByContentType($contentType)
     {

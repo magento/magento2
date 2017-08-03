@@ -11,19 +11,16 @@ use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * Class Calculator
- * @since 2.0.0
  */
 class Calculator implements CalculatorInterface
 {
     /**
      * @var AmountFactory
-     * @since 2.0.0
      */
     protected $amountFactory;
 
     /**
      * @param AmountFactory $amountFactory
-     * @since 2.0.0
      */
     public function __construct(AmountFactory $amountFactory)
     {
@@ -40,7 +37,6 @@ class Calculator implements CalculatorInterface
      * @param null|array $context
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function getAmount($amount, SaleableInterface $saleableItem, $exclude = null, $context = [])
     {

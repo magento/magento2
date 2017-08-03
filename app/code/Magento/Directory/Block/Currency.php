@@ -13,25 +13,21 @@ use Magento\Framework\Locale\Bundle\CurrencyBundle as CurrencyBundle;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Currency extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Directory\Model\CurrencyFactory
-     * @since 2.0.0
      */
     protected $_currencyFactory;
 
     /**
      * @var \Magento\Framework\Data\Helper\PostHelper
-     * @since 2.0.0
      */
     protected $_postDataHelper;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $localeResolver;
 
@@ -41,7 +37,6 @@ class Currency extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -61,7 +56,6 @@ class Currency extends \Magento\Framework\View\Element\Template
      * Return 0 if only one currency
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCurrencyCount()
     {
@@ -74,7 +68,6 @@ class Currency extends \Magento\Framework\View\Element\Template
      * Return empty array if only one currency
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCurrencies()
     {
@@ -107,7 +100,6 @@ class Currency extends \Magento\Framework\View\Element\Template
      * Retrieve Currency Swith URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSwitchUrl()
     {
@@ -119,7 +111,6 @@ class Currency extends \Magento\Framework\View\Element\Template
      *
      * @param string $code
      * @return string
-     * @since 2.0.0
      */
     public function getSwitchCurrencyPostData($code)
     {
@@ -130,7 +121,6 @@ class Currency extends \Magento\Framework\View\Element\Template
      * Retrieve Current Currency code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCurrentCurrencyCode()
     {
@@ -144,7 +134,6 @@ class Currency extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getStoreCode()
     {

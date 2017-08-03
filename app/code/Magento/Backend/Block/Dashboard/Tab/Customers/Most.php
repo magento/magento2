@@ -10,13 +10,11 @@ namespace Magento\Backend\Block\Dashboard\Tab\Customers;
  *
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Most extends \Magento\Backend\Block\Dashboard\Grid
 {
     /**
      * @var \Magento\Reports\Model\ResourceModel\Order\CollectionFactory
-     * @since 2.0.0
      */
     protected $_collectionFactory;
 
@@ -25,7 +23,6 @@ class Most extends \Magento\Backend\Block\Dashboard\Grid
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -39,7 +36,6 @@ class Most extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -49,7 +45,6 @@ class Most extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -78,7 +73,6 @@ class Most extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -134,7 +128,6 @@ class Most extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getRowUrl($row)
     {

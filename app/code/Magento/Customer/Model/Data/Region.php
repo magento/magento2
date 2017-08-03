@@ -8,7 +8,6 @@ namespace Magento\Customer\Model\Data;
 /**
  * Data Model implementing Address Region interface
  *
- * @since 2.0.0
  */
 class Region extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\Customer\Api\Data\RegionInterface
@@ -17,7 +16,6 @@ class Region extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get region code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRegionCode()
     {
@@ -28,7 +26,6 @@ class Region extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get region
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRegion()
     {
@@ -39,7 +36,6 @@ class Region extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get region id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getRegionId()
     {
@@ -51,7 +47,6 @@ class Region extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $regionCode
      * @return $this
-     * @since 2.0.0
      */
     public function setRegionCode($regionCode)
     {
@@ -63,7 +58,6 @@ class Region extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $region
      * @return $this
-     * @since 2.0.0
      */
     public function setRegion($region)
     {
@@ -75,7 +69,6 @@ class Region extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param int $regionId
      * @return $this
-     * @since 2.0.0
      */
     public function setRegionId($regionId)
     {
@@ -86,7 +79,6 @@ class Region extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * {@inheritdoc}
      *
      * @return \Magento\Customer\Api\Data\RegionExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -98,7 +90,6 @@ class Region extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param \Magento\Customer\Api\Data\RegionExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Customer\Api\Data\RegionExtensionInterface $extensionAttributes)
     {

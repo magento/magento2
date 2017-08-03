@@ -9,7 +9,6 @@ namespace Magento\Sales\Model\ResourceModel\Order\Tax;
  * Order Tax Collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection
 {
@@ -17,7 +16,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractC
      * Model initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -29,7 +27,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractC
      *
      * @param \Magento\Sales\Model\Order $order
      * @return $this
-     * @since 2.0.0
      */
     public function loadByOrder($order)
     {

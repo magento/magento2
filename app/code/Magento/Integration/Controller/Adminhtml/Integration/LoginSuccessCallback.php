@@ -9,7 +9,6 @@ namespace Magento\Integration\Controller\Adminhtml\Integration;
 /**
  * Class \Magento\Integration\Controller\Adminhtml\Integration\LoginSuccessCallback
  *
- * @since 2.0.0
  */
 class LoginSuccessCallback extends \Magento\Integration\Controller\Adminhtml\Integration
 {
@@ -17,7 +16,6 @@ class LoginSuccessCallback extends \Magento\Integration\Controller\Adminhtml\Int
      * Close window after callback has succeeded
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

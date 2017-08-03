@@ -14,7 +14,6 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 /**
  * Class \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Template
  *
- * @since 2.0.0
  */
 class Template extends \Magento\Backend\Block\Widget
 {
@@ -22,7 +21,6 @@ class Template extends \Magento\Backend\Block\Widget
      * Prepare html output
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

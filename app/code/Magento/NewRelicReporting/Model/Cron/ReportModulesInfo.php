@@ -10,31 +10,26 @@ use Magento\NewRelicReporting\Model\Module\Collect;
 
 /**
  * Class ReportModulesInfo
- * @since 2.0.0
  */
 class ReportModulesInfo
 {
     /**
      * @var Config
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var Collect
-     * @since 2.0.0
      */
     protected $collect;
 
     /**
      * @var \Magento\NewRelicReporting\Model\SystemFactory
-     * @since 2.0.0
      */
     protected $systemFactory;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $jsonEncoder;
 
@@ -45,7 +40,6 @@ class ReportModulesInfo
      * @param Collect $collect
      * @param \Magento\NewRelicReporting\Model\SystemFactory $systemFactory
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @since 2.0.0
      */
     public function __construct(
         Config $config,
@@ -63,7 +57,6 @@ class ReportModulesInfo
      * Reports Modules and module changes to the database reporting_module_status table
      *
      * @return \Magento\NewRelicReporting\Model\Cron\ReportModulesInfo
-     * @since 2.0.0
      */
     public function report()
     {

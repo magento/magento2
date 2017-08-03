@@ -9,37 +9,31 @@ namespace Magento\Catalog\Model\Product\Option\Type\File;
 /**
  * Class \Magento\Catalog\Model\Product\Option\Type\File\ValidatorInfo
  *
- * @since 2.0.0
  */
 class ValidatorInfo extends Validator
 {
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
-     * @since 2.0.0
      */
     protected $coreFileStorageDatabase;
 
     /**
      * @var ValidateFactory
-     * @since 2.0.0
      */
     protected $validateFactory;
 
     /**
      * @var mixed
-     * @since 2.0.0
      */
     protected $useQuotePath;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $fileFullPath;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $fileRelativePath;
 
@@ -49,7 +43,6 @@ class ValidatorInfo extends Validator
      * @param \Magento\Framework\File\Size $fileSize
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param ValidateFactory $validateFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -66,7 +59,6 @@ class ValidatorInfo extends Validator
     /**
      * @param mixed $useQuotePath
      * @return $this
-     * @since 2.0.0
      */
     public function setUseQuotePath($useQuotePath)
     {
@@ -79,7 +71,6 @@ class ValidatorInfo extends Validator
      * @param \Magento\Catalog\Model\Product\Option $option
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function validate($optionValue, $option)
     {
@@ -124,7 +115,6 @@ class ValidatorInfo extends Validator
     /**
      * @param string $fileRelativePath
      * @return string
-     * @since 2.0.0
      */
     protected function buildSecretKey($fileRelativePath)
     {
@@ -134,7 +124,6 @@ class ValidatorInfo extends Validator
     /**
      * @param array $optionValue
      * @return void
-     * @since 2.0.0
      */
     protected function initFilePath($optionValue)
     {

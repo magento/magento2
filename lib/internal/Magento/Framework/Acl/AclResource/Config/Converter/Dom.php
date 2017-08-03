@@ -8,7 +8,6 @@ namespace Magento\Framework\Acl\AclResource\Config\Converter;
 /**
  * Class \Magento\Framework\Acl\AclResource\Config\Converter\Dom
  *
- * @since 2.0.0
  */
 class Dom implements \Magento\Framework\Config\ConverterInterface
 {
@@ -17,7 +16,6 @@ class Dom implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMDocument $source
      * @return array
-     * @since 2.0.0
      */
     public function convert($source)
     {
@@ -37,7 +35,6 @@ class Dom implements \Magento\Framework\Config\ConverterInterface
      * @return array
      * @throws \Exception
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _convertResourceNode(\DOMNode $resourceNode)
     {

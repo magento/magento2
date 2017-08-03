@@ -14,13 +14,11 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
-     * @since 2.0.0
      */
     protected $_productPriceIndexerProcessor;
 
@@ -28,13 +26,11 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
      * MassActions filter
      *
      * @var Filter
-     * @since 2.0.0
      */
     protected $filter;
 
     /**
      * @var CollectionFactory
-     * @since 2.0.0
      */
     protected $collectionFactory;
 
@@ -44,7 +40,6 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -66,7 +61,6 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param int $status
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function _validateMassStatus(array $productIds, $status)
     {
@@ -83,7 +77,6 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
      * Update product(s) status action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

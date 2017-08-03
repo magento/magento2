@@ -14,7 +14,6 @@ namespace Magento\Reports\Model\ResourceModel\Product\Index\Collection;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
@@ -22,13 +21,11 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
      * Customer id
      *
      * @var null|int
-     * @since 2.0.0
      */
     protected $_customerId = null;
 
     /**
      * @var \Magento\Customer\Model\Visitor
-     * @since 2.0.0
      */
     protected $_customerVisitor;
 
@@ -57,7 +54,6 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
      * @param mixed $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -111,7 +107,6 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
      * Retrieve Product Index table name
      *
      * @return string
-     * @since 2.0.0
      */
     abstract protected function _getTableName();
 
@@ -119,7 +114,6 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
      * Join index table
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _joinIdxTable()
     {
@@ -139,7 +133,6 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
      * Add Viewed Products Index to Collection
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addIndexFilter()
     {
@@ -155,7 +148,6 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
      *
      * @param array $ids
      * @return $this
-     * @since 2.0.0
      */
     public function addFilterByIds($ids)
     {
@@ -171,7 +163,6 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
      * Retrieve Where Condition to Index table
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getWhereCondition()
     {
@@ -194,7 +185,6 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
      *
      * @param int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setCustomerId($id)
     {
@@ -207,7 +197,6 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
      *
      * @param string $dir
      * @return $this
-     * @since 2.0.0
      */
     public function setAddedAtOrder($dir = self::SORT_ORDER_DESC)
     {
@@ -222,7 +211,6 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
      *
      * @param int|array $productIds
      * @return $this
-     * @since 2.0.0
      */
     public function excludeProductIds($productIds)
     {

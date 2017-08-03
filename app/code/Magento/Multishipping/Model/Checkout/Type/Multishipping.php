@@ -20,7 +20,6 @@ use Magento\Directory\Model\AllowedCountries;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @codingStandardsIgnoreFile
- * @since 2.0.0
  */
 class Multishipping extends \Magento\Framework\DataObject
 {
@@ -28,7 +27,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * Quote shipping addresses items cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_quoteShippingAddressesItems;
 
@@ -36,7 +34,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager = null;
 
@@ -44,31 +41,26 @@ class Multishipping extends \Magento\Framework\DataObject
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Framework\Session\Generic
-     * @since 2.0.0
      */
     protected $_session;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Quote\Model\Quote\AddressFactory
-     * @since 2.0.0
      */
     protected $_addressFactory;
 
     /**
      * @var \Magento\Payment\Model\Method\SpecificationInterface
-     * @since 2.0.0
      */
     protected $paymentSpecification;
 
@@ -76,91 +68,76 @@ class Multishipping extends \Magento\Framework\DataObject
      * Initialize dependencies.
      *
      * @var \Magento\Multishipping\Helper\Data
-     * @since 2.0.0
      */
     protected $helper;
 
     /**
      * @var \Magento\Checkout\Model\Session
-     * @since 2.0.0
      */
     protected $_checkoutSession;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
-     * @since 2.0.0
      */
     protected $_orderFactory;
 
     /**
      * @var AddressRepositoryInterface
-     * @since 2.0.0
      */
     protected $addressRepository;
 
     /**
      * @var OrderSender
-     * @since 2.0.0
      */
     protected $orderSender;
 
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
-     * @since 2.0.0
      */
     protected $filterBuilder;
 
     /**
      * @var \Magento\Quote\Model\Quote\Address\ToOrder
-     * @since 2.0.0
      */
     protected $quoteAddressToOrder;
 
     /**
      * @var \Magento\Quote\Model\Quote\Item\ToOrderItem
-     * @since 2.0.0
      */
     protected $quoteItemToOrderItem;
 
     /**
      * @var \Magento\Quote\Model\Quote\Payment\ToOrderPayment
-     * @since 2.0.0
      */
     protected $quotePaymentToOrderPayment;
 
     /**
      * @var \Magento\Quote\Model\Quote\Address\ToOrderAddress
-     * @since 2.0.0
      */
     protected $quoteAddressToOrderAddress;
 
     /**
      * @var \Magento\Quote\Model\Quote\TotalsCollector
-     * @since 2.0.0
      */
     protected $totalsCollector;
 
@@ -210,7 +187,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * @param \Magento\Quote\Api\Data\CartExtensionFactory|null $cartExtensionFactory
      * @param AllowedCountries|null $allowedCountryReader
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -273,7 +249,6 @@ class Multishipping extends \Magento\Framework\DataObject
      *
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _init()
     {
@@ -338,7 +313,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * Based on result array we can display each item separately
      *
      * @return array
-     * @since 2.0.0
      */
     public function getQuoteShippingAddressesItems()
     {
@@ -355,7 +329,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * @param int $addressId
      * @param int $itemId
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
-     * @since 2.0.0
      */
     public function removeAddressItem($addressId, $itemId)
     {
@@ -410,7 +383,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function setShippingItemsInformation($info)
     {
@@ -499,7 +471,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _addShippingItem($quoteItemId, $data)
     {
@@ -554,7 +525,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * @param int $addressId customer address id
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
-     * @since 2.0.0
      */
     public function updateQuoteCustomerShippingAddress($addressId)
     {
@@ -582,7 +552,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * @param int $addressId customer address id
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
-     * @since 2.0.0
      */
     public function setQuoteCustomerBillingAddress($addressId)
     {
@@ -610,7 +579,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * @param  array $methods
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function setShippingMethods($methods)
     {
@@ -638,7 +606,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * @param array $payment
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function setPaymentMethod($payment)
     {
@@ -669,7 +636,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * @param   \Magento\Quote\Model\Quote\Address $address
      * @return  \Magento\Sales\Model\Order
      * @throws  \Magento\Checkout\Exception
-     * @since 2.0.0
      */
     protected function _prepareOrder(\Magento\Quote\Model\Quote\Address $address)
     {
@@ -720,7 +686,6 @@ class Multishipping extends \Magento\Framework\DataObject
      *
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _validate()
     {
@@ -774,7 +739,6 @@ class Multishipping extends \Magento\Framework\DataObject
      *
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
      * @throws \Exception
-     * @since 2.0.0
      */
     public function createOrders()
     {
@@ -829,7 +793,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * Collect quote totals and save quote object
      *
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
-     * @since 2.0.0
      */
     public function save()
     {
@@ -842,7 +805,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * Specify BEGIN state in checkout session whot allow reinit multishipping checkout
      *
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
-     * @since 2.0.0
      */
     public function reset()
     {
@@ -854,7 +816,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * Check if quote amount is allowed for multishipping checkout
      *
      * @return bool
-     * @since 2.0.0
      */
     public function validateMinimumAmount()
     {
@@ -871,7 +832,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * Get notification message for case when multishipping checkout is not allowed
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMinimumAmountDescription()
     {
@@ -890,7 +850,6 @@ class Multishipping extends \Magento\Framework\DataObject
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getMinimumAmountError()
     {
@@ -912,7 +871,6 @@ class Multishipping extends \Magento\Framework\DataObject
      *
      * @param bool $asAssoc
      * @return array
-     * @since 2.0.0
      */
     public function getOrderIds($asAssoc = false)
     {
@@ -924,7 +882,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * Retrieve customer default billing address
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getCustomerDefaultBillingAddress()
     {
@@ -936,7 +893,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * Retrieve customer default shipping address
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getCustomerDefaultShippingAddress()
     {
@@ -950,7 +906,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * @param string $key
      * @param string|null $defaultAddressIdFromCustomer
      * @return int|null
-     * @since 2.0.0
      */
     private function getDefaultAddressByDataKey($key, $defaultAddressIdFromCustomer)
     {
@@ -981,7 +936,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * Retrieve checkout session model
      *
      * @return \Magento\Checkout\Model\Session
-     * @since 2.0.0
      */
     public function getCheckoutSession()
     {
@@ -997,7 +951,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * Retrieve quote model
      *
      * @return \Magento\Quote\Model\Quote
-     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -1008,7 +961,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * Retrieve quote items
      *
      * @return \Magento\Quote\Model\Quote\Item[]
-     * @since 2.0.0
      */
     public function getQuoteItems()
     {
@@ -1019,7 +971,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * Retrieve customer session model
      *
      * @return \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     public function getCustomerSession()
     {
@@ -1030,7 +981,6 @@ class Multishipping extends \Magento\Framework\DataObject
      * Retrieve customer object
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface
-     * @since 2.0.0
      */
     public function getCustomer()
     {
@@ -1042,7 +992,6 @@ class Multishipping extends \Magento\Framework\DataObject
      *
      * @param $addressId
      * @return bool
-     * @since 2.0.0
      */
     protected function isAddressIdApplicable($addressId)
     {

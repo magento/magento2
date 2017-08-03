@@ -12,7 +12,6 @@ use Magento\Catalog\Model\Product;
 /**
  * Class \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\Composite
  *
- * @since 2.0.0
  */
 class Composite implements HandlerInterface
 {
@@ -20,14 +19,12 @@ class Composite implements HandlerInterface
      * Array of handler interface objects
      *
      * @var HandlerInterface[]
-     * @since 2.0.0
      */
     protected $handlers;
 
     /**
      * @param HandlerFactory $factory
      * @param array $handlers
-     * @since 2.0.0
      */
     public function __construct(HandlerFactory $factory, array $handlers = [])
     {
@@ -41,7 +38,6 @@ class Composite implements HandlerInterface
      *
      * @param Product $product
      * @return void
-     * @since 2.0.0
      */
     public function handle(Product $product)
     {

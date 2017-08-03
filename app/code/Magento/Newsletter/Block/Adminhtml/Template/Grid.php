@@ -17,13 +17,11 @@ use Magento\Framework\App\TemplateTypesInterface;
 /**
  * Class \Magento\Newsletter\Block\Adminhtml\Template\Grid
  *
- * @since 2.0.0
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * @var \Magento\Newsletter\Model\ResourceModel\Template\Collection
-     * @since 2.0.0
      */
     protected $_templateCollection;
 
@@ -32,7 +30,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Newsletter\Model\ResourceModel\Template\Collection $templateCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -49,7 +46,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Apply sorting and filtering to collection
      *
      * @return WidgetGrid
-     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -62,7 +58,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare grid columns
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -167,7 +162,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
-     * @since 2.0.0
      */
     public function getRowUrl($row)
     {

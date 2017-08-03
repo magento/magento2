@@ -12,7 +12,6 @@ use Magento\Framework\DB\Ddl\Table;
  * Catalog Product visibility model and attribute source model
  *
  * @api
- * @since 2.0.0
  */
 class Visibility extends \Magento\Framework\DataObject implements OptionSourceInterface
 {
@@ -28,7 +27,6 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      * Reference to the attribute instance
      *
      * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute
-     * @since 2.0.0
      */
     protected $_attribute;
 
@@ -36,7 +34,6 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      * Eav entity attribute
      *
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute
-     * @since 2.0.0
      */
     protected $_eavEntityAttribute;
 
@@ -45,7 +42,6 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      *
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute $eavEntityAttribute
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute $eavEntityAttribute,
@@ -59,7 +55,6 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      * Retrieve visible in catalog ids array
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getVisibleInCatalogIds()
     {
@@ -70,7 +65,6 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      * Retrieve visible in search ids array
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getVisibleInSearchIds()
     {
@@ -81,7 +75,6 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      * Retrieve visible in site ids array
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getVisibleInSiteIds()
     {
@@ -92,7 +85,6 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      * Retrieve option array
      *
      * @return array
-     * @since 2.0.0
      */
     public static function getOptionArray()
     {
@@ -108,7 +100,6 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      * Retrieve all options
      *
      * @return array
-     * @since 2.0.0
      */
     public static function getAllOption()
     {
@@ -121,7 +112,6 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      * Retrieve all options
      *
      * @return array
-     * @since 2.0.0
      */
     public static function getAllOptions()
     {
@@ -137,7 +127,6 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      *
      * @param int $optionId
      * @return string
-     * @since 2.0.0
      */
     public static function getOptionText($optionId)
     {
@@ -149,7 +138,6 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      * Retrieve flat column definition
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFlatColumns()
     {
@@ -171,7 +159,6 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      * Retrieve Indexes for Flat
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFlatIndexes()
     {
@@ -183,7 +170,6 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      *
      * @param int $store
      * @return \Magento\Framework\DB\Select|null
-     * @since 2.0.0
      */
     public function getFlatUpdateSelect($store)
     {
@@ -195,7 +181,6 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      *
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return $this
-     * @since 2.0.0
      */
     public function setAttribute($attribute)
     {
@@ -207,7 +192,6 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      * Get attribute instance
      *
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
-     * @since 2.0.0
      */
     public function getAttribute()
     {
@@ -220,7 +204,6 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
      * @param string $dir direction
      * @return $this
-     * @since 2.0.0
      */
     public function addValueSortToCollection($collection, $dir = 'asc')
     {
@@ -268,7 +251,6 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

@@ -10,26 +10,22 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\Weee\Observer\SetWeeeRendererInFormObserver
  *
- * @since 2.0.0
  */
 class SetWeeeRendererInFormObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Weee\Model\Tax
-     * @since 2.0.0
      */
     protected $weeeTax;
 
     /**
      * @var \Magento\Framework\View\LayoutInterface
-     * @since 2.0.0
      */
     protected $layout;
 
     /**
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Weee\Model\Tax $weeeTax
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\LayoutInterface $layout,
@@ -44,7 +40,6 @@ class SetWeeeRendererInFormObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

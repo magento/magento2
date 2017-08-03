@@ -14,7 +14,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  * Interface InvoiceItemCreationInterface
  *
  * @api
- * @since 2.2.0
+ * @since 2.1.2
  */
 interface InvoiceItemCreationInterface extends LineItemInterface, ExtensibleDataInterface
 {
@@ -22,7 +22,7 @@ interface InvoiceItemCreationInterface extends LineItemInterface, ExtensibleData
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface|null
-     * @since 2.2.0
+     * @since 2.1.2
      */
     public function getExtensionAttributes();
 
@@ -31,7 +31,7 @@ interface InvoiceItemCreationInterface extends LineItemInterface, ExtensibleData
      *
      * @param \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.2.0
+     * @since 2.1.2
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface $extensionAttributes

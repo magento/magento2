@@ -8,7 +8,6 @@ namespace Magento\Integration\Model\ResourceModel;
 
 /**
  * Integration resource model
- * @since 2.0.0
  */
 class Integration extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -16,7 +15,6 @@ class Integration extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -28,7 +26,6 @@ class Integration extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $consumerId
      * @return array|boolean - Row data (array) or false if there is no corresponding row
-     * @since 2.0.0
      */
     public function selectActiveIntegrationByConsumerId($consumerId)
     {

@@ -7,7 +7,6 @@ namespace Magento\Authorizenet\Model\ResourceModel;
 
 /**
  * Resource Authorize.net debug model
- * @since 2.0.0
  */
 class Debug extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -15,7 +14,6 @@ class Debug extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

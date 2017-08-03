@@ -8,7 +8,6 @@ namespace Magento\Framework\Acl\AclResource;
 /**
  * Class \Magento\Framework\Acl\AclResource\TreeBuilder
  *
- * @since 2.0.0
  */
 class TreeBuilder
 {
@@ -17,7 +16,6 @@ class TreeBuilder
      *
      * @param array $resourceList
      * @return array
-     * @since 2.0.0
      */
     public function build(array $resourceList)
     {
@@ -40,7 +38,6 @@ class TreeBuilder
      * @param array $nodeA
      * @param array $nodeB
      * @return int
-     * @since 2.0.0
      */
     protected function _sortTree(array $nodeA, array $nodeB)
     {

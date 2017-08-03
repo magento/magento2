@@ -8,7 +8,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Edit;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Edit\Start
  *
- * @since 2.0.0
  */
 class Start extends \Magento\Sales\Controller\Adminhtml\Order\Create\Start
 {
@@ -23,7 +22,6 @@ class Start extends \Magento\Sales\Controller\Adminhtml\Order\Create\Start
      * Start edit order initialization
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -7,7 +7,6 @@ namespace Magento\Ui\Component\Layout\Tabs;
 
 /**
  * Interface TabInterface
- * @since 2.0.0
  */
 interface TabInterface
 {
@@ -15,7 +14,6 @@ interface TabInterface
      * Return Tab label
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTabLabel();
 
@@ -23,7 +21,6 @@ interface TabInterface
      * Return Tab title
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTabTitle();
 
@@ -31,7 +28,6 @@ interface TabInterface
      * Tab class getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTabClass();
 
@@ -39,7 +35,6 @@ interface TabInterface
      * Return URL link to Tab content
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTabUrl();
 
@@ -47,7 +42,6 @@ interface TabInterface
      * Tab should be loaded trough Ajax call
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isAjaxLoaded();
 
@@ -55,7 +49,6 @@ interface TabInterface
      * Can show tab in tabs
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function canShowTab();
 
@@ -63,7 +56,6 @@ interface TabInterface
      * Tab is hidden
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isHidden();
 
@@ -71,7 +63,6 @@ interface TabInterface
      * Retrieve Tab content
      *
      * @return string
-     * @since 2.0.0
      */
     public function toHtml();
 }

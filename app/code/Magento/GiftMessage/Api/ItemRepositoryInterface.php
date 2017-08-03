@@ -8,7 +8,6 @@ namespace Magento\GiftMessage\Api;
 /**
  * Interface ItemRepositoryInterface
  * @api
- * @since 2.0.0
  */
 interface ItemRepositoryInterface
 {
@@ -19,7 +18,6 @@ interface ItemRepositoryInterface
      * @param int $itemId The item ID.
      * @return \Magento\GiftMessage\Api\Data\MessageInterface Gift message.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified item does not exist in the cart.
-     * @since 2.0.0
      */
     public function get($cartId, $itemId);
 
@@ -35,7 +33,6 @@ interface ItemRepositoryInterface
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException You cannot add gift messages to
      * virtual products.
      * @throws \Magento\Framework\Exception\CouldNotSaveException The specified gift message could not be saved.
-     * @since 2.0.0
      */
     public function save($cartId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage, $itemId);
 }

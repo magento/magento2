@@ -11,7 +11,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\GroupPrice\Abs
  * Catalog product tier price backend attribute model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Tierprice extends AbstractGroupPrice
 {
@@ -19,7 +18,6 @@ class Tierprice extends AbstractGroupPrice
      * Initialize connection and define main table
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -31,7 +29,6 @@ class Tierprice extends AbstractGroupPrice
      *
      * @param array $columns
      * @return array
-     * @since 2.0.0
      */
     protected function _loadPriceDataColumns($columns)
     {
@@ -46,7 +43,6 @@ class Tierprice extends AbstractGroupPrice
      *
      * @param \Magento\Framework\DB\Select $select
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function _loadPriceDataSelect($select)
     {

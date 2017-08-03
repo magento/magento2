@@ -13,13 +13,11 @@ namespace Magento\Wishlist\Block\Share\Email;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Items extends \Magento\Wishlist\Block\AbstractBlock
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'email/items.phtml';
 
@@ -29,7 +27,6 @@ class Items extends \Magento\Wishlist\Block\AbstractBlock
      * @param \Magento\Catalog\Model\Product $product
      * @param array $additional
      * @return string
-     * @since 2.0.0
      */
     public function getProductUrl($product, $additional = [])
     {
@@ -43,7 +40,6 @@ class Items extends \Magento\Wishlist\Block\AbstractBlock
      * @param \Magento\Catalog\Model\Product $product
      * @param array $additional
      * @return string
-     * @since 2.0.0
      */
     public function getAddToCartUrl($product, $additional = [])
     {
@@ -57,7 +53,6 @@ class Items extends \Magento\Wishlist\Block\AbstractBlock
      *
      * @param \Magento\Wishlist\Model\Item $item
      * @return bool
-     * @since 2.0.0
      */
     public function hasDescription($item)
     {

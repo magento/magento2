@@ -10,7 +10,6 @@ namespace Magento\Eav\Model\Entity\Setup;
 /**
  * Class \Magento\Eav\Model\Entity\Setup\PropertyMapperAbstract
  *
- * @since 2.0.0
  */
 abstract class PropertyMapperAbstract implements PropertyMapperInterface
 {
@@ -21,7 +20,6 @@ abstract class PropertyMapperAbstract implements PropertyMapperInterface
      * @param string $key
      * @param string $default
      * @return string
-     * @since 2.0.0
      */
     protected function _getValue($array, $key, $default = null)
     {

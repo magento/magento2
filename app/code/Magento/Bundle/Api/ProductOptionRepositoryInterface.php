@@ -9,7 +9,6 @@ namespace Magento\Bundle\Api;
 /**
  * Interface ProductOptionRepositoryInterface
  * @api
- * @since 2.0.0
  */
 interface ProductOptionRepositoryInterface
 {
@@ -21,7 +20,6 @@ interface ProductOptionRepositoryInterface
      * @return \Magento\Bundle\Api\Data\OptionInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
-     * @since 2.0.0
      */
     public function get($sku, $optionId);
 
@@ -32,7 +30,6 @@ interface ProductOptionRepositoryInterface
      * @return \Magento\Bundle\Api\Data\OptionInterface[]
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
-     * @since 2.0.0
      */
     public function getList($sku);
 
@@ -43,7 +40,6 @@ interface ProductOptionRepositoryInterface
      * @return bool
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
-     * @since 2.0.0
      */
     public function delete(\Magento\Bundle\Api\Data\OptionInterface $option);
 
@@ -55,7 +51,6 @@ interface ProductOptionRepositoryInterface
      * @return bool
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
-     * @since 2.0.0
      */
     public function deleteById($sku, $optionId);
 
@@ -67,7 +62,6 @@ interface ProductOptionRepositoryInterface
      * @return int
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
-     * @since 2.0.0
      */
     public function save(
         \Magento\Catalog\Api\Data\ProductInterface $product,

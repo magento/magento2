@@ -11,7 +11,6 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\User\Controller\Adminhtml\User\Role\Editrolegrid
  *
- * @since 2.0.0
  */
 class Editrolegrid extends \Magento\User\Controller\Adminhtml\User\Role
 {
@@ -19,7 +18,6 @@ class Editrolegrid extends \Magento\User\Controller\Adminhtml\User\Role
      * Action for ajax request from assigned users grid
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

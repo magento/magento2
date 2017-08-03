@@ -8,7 +8,6 @@ namespace Magento\Captcha\Observer;
 /**
  * Class \Magento\Captcha\Observer\CaptchaStringResolver
  *
- * @since 2.0.0
  */
 class CaptchaStringResolver
 {
@@ -18,7 +17,6 @@ class CaptchaStringResolver
      * @param \Magento\Framework\App\RequestInterface $request
      * @param string $formId
      * @return string
-     * @since 2.0.0
      */
     public function resolve(\Magento\Framework\App\RequestInterface $request, $formId)
     {

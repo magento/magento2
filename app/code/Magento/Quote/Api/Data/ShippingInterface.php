@@ -9,7 +9,6 @@ namespace Magento\Quote\Api\Data;
 /**
  * Interface ShippingInterface
  * @api
- * @since 2.0.0
  */
 interface ShippingInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -17,7 +16,6 @@ interface ShippingInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * Get shipping Address
      *
      * @return \Magento\Quote\Api\Data\AddressInterface
-     * @since 2.0.0
      */
     public function getAddress();
 
@@ -26,7 +24,6 @@ interface ShippingInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      *
      * @param \Magento\Quote\Api\Data\AddressInterface $value
      * @return void
-     * @since 2.0.0
      */
     public function setAddress(\Magento\Quote\Api\Data\AddressInterface $value);
 
@@ -34,7 +31,6 @@ interface ShippingInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * Get shipping method
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMethod();
 
@@ -43,7 +39,6 @@ interface ShippingInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      *
      * @param string $value
      * @return void
-     * @since 2.0.0
      */
     public function setMethod($value);
 
@@ -51,7 +46,6 @@ interface ShippingInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Quote\Api\Data\ShippingExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -60,7 +54,6 @@ interface ShippingInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      *
      * @param \Magento\Quote\Api\Data\ShippingExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Quote\Api\Data\ShippingExtensionInterface $extensionAttributes);
 }

@@ -9,7 +9,6 @@ namespace Magento\ProductAlert\Model\ResourceModel;
  * Product alert for back in abstract resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -18,7 +17,6 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return array|false
-     * @since 2.0.0
      */
     protected function _getAlertRow(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -48,7 +46,6 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     public function loadByParam(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -67,7 +64,6 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      * @param int $websiteId
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function deleteCustomer(\Magento\Framework\Model\AbstractModel $object, $customerId, $websiteId = null)
     {

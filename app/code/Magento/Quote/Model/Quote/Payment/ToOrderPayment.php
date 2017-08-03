@@ -14,25 +14,21 @@ use Magento\Payment\Model\Method\Substitution;
 
 /**
  * Class ToOrderPayment
- * @since 2.0.0
  */
 class ToOrderPayment
 {
     /**
      * @var Copy
-     * @since 2.0.0
      */
     protected $objectCopyService;
 
     /**
      * @var OrderPaymentRepository
-     * @since 2.0.0
      */
     protected $orderPaymentRepository;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
-     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
@@ -40,7 +36,6 @@ class ToOrderPayment
      * @param OrderPaymentRepository $orderPaymentRepository
      * @param Copy $objectCopyService
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @since 2.0.0
      */
     public function __construct(
         OrderPaymentRepository $orderPaymentRepository,
@@ -56,7 +51,6 @@ class ToOrderPayment
      * @param Payment $object
      * @param array $data
      * @return OrderPaymentInterface
-     * @since 2.0.0
      */
     public function convert(Payment $object, $data = [])
     {

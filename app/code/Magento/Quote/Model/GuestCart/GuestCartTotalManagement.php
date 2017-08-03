@@ -10,26 +10,22 @@ use Magento\Quote\Api\GuestCartTotalManagementInterface;
 
 /**
  * @inheritDoc
- * @since 2.0.0
  */
 class GuestCartTotalManagement implements GuestCartTotalManagementInterface
 {
     /**
      * @var \Magento\Quote\Api\CartTotalManagementInterface
-     * @since 2.0.0
      */
     protected $cartTotalManagement;
 
     /**
      * @var QuoteIdMaskFactory
-     * @since 2.0.0
      */
     protected $quoteIdMaskFactory;
 
     /**
      * @param \Magento\Quote\Api\CartTotalManagementInterface $cartTotalManagement
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Quote\Api\CartTotalManagementInterface $cartTotalManagement,
@@ -41,7 +37,6 @@ class GuestCartTotalManagement implements GuestCartTotalManagementInterface
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function collectTotals(
         $cartId,

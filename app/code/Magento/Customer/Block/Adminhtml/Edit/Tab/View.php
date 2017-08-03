@@ -10,7 +10,6 @@ use Magento\Ui\Component\Layout\Tabs\TabInterface;
 
 /**
  * Customer account form block
- * @since 2.0.0
  */
 class View extends \Magento\Backend\Block\Template implements TabInterface
 {
@@ -18,7 +17,6 @@ class View extends \Magento\Backend\Block\Template implements TabInterface
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
@@ -26,7 +24,6 @@ class View extends \Magento\Backend\Block\Template implements TabInterface
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -39,7 +36,6 @@ class View extends \Magento\Backend\Block\Template implements TabInterface
 
     /**
      * @return string|null
-     * @since 2.0.0
      */
     public function getCustomerId()
     {
@@ -48,7 +44,6 @@ class View extends \Magento\Backend\Block\Template implements TabInterface
 
     /**
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -57,7 +52,6 @@ class View extends \Magento\Backend\Block\Template implements TabInterface
 
     /**
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -66,7 +60,6 @@ class View extends \Magento\Backend\Block\Template implements TabInterface
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -78,7 +71,6 @@ class View extends \Magento\Backend\Block\Template implements TabInterface
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -92,7 +84,6 @@ class View extends \Magento\Backend\Block\Template implements TabInterface
      * Tab class getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTabClass()
     {
@@ -103,7 +94,6 @@ class View extends \Magento\Backend\Block\Template implements TabInterface
      * Return URL link to Tab content
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTabUrl()
     {
@@ -114,7 +104,6 @@ class View extends \Magento\Backend\Block\Template implements TabInterface
      * Tab should be loaded trough Ajax call
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isAjaxLoaded()
     {

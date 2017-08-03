@@ -13,7 +13,6 @@ namespace Magento\Config\Model\Config\Backend\Admin;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Custompath extends \Magento\Framework\App\Config\Value
 {
@@ -21,7 +20,6 @@ class Custompath extends \Magento\Framework\App\Config\Value
      * Check whether redirect should be set
      *
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {

@@ -7,7 +7,6 @@ namespace Magento\Theme\Model\ResourceModel;
 
 /**
  * Theme resource model
- * @since 2.0.0
  */
 class Theme extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -15,7 +14,6 @@ class Theme extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

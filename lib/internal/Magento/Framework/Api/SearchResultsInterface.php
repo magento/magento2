@@ -10,7 +10,6 @@ namespace Magento\Framework\Api;
  * Search results interface.
  *
  * @api
- * @since 2.0.0
  */
 interface SearchResultsInterface
 {
@@ -18,7 +17,6 @@ interface SearchResultsInterface
      * Get items list.
      *
      * @return \Magento\Framework\Api\ExtensibleDataInterface[]
-     * @since 2.0.0
      */
     public function getItems();
 
@@ -27,7 +25,6 @@ interface SearchResultsInterface
      *
      * @param \Magento\Framework\Api\ExtensibleDataInterface[] $items
      * @return $this
-     * @since 2.0.0
      */
     public function setItems(array $items);
 
@@ -35,7 +32,6 @@ interface SearchResultsInterface
      * Get search criteria.
      *
      * @return \Magento\Framework\Api\SearchCriteriaInterface
-     * @since 2.0.0
      */
     public function getSearchCriteria();
 
@@ -44,7 +40,6 @@ interface SearchResultsInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return $this
-     * @since 2.0.0
      */
     public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -52,7 +47,6 @@ interface SearchResultsInterface
      * Get total count.
      *
      * @return int
-     * @since 2.0.0
      */
     public function getTotalCount();
 
@@ -61,7 +55,6 @@ interface SearchResultsInterface
      *
      * @param int $totalCount
      * @return $this
-     * @since 2.0.0
      */
     public function setTotalCount($totalCount);
 }

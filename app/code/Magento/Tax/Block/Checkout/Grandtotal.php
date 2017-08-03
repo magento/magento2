@@ -7,7 +7,6 @@ namespace Magento\Tax\Block\Checkout;
 
 /**
  * Subtotal Total Row Renderer
- * @since 2.0.0
  */
 class Grandtotal extends \Magento\Checkout\Block\Total\DefaultTotal
 {
@@ -15,13 +14,11 @@ class Grandtotal extends \Magento\Checkout\Block\Total\DefaultTotal
      * Path to template file
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'checkout/grandtotal.phtml';
 
     /**
      * @var \Magento\Tax\Model\Config
-     * @since 2.0.0
      */
     protected $_taxConfig;
 
@@ -33,7 +30,6 @@ class Grandtotal extends \Magento\Checkout\Block\Total\DefaultTotal
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param array $layoutProcessors
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -53,7 +49,6 @@ class Grandtotal extends \Magento\Checkout\Block\Total\DefaultTotal
      * Check if we have include tax amount between grandtotal incl/excl tax
      *
      * @return bool
-     * @since 2.0.0
      */
     public function includeTax()
     {
@@ -67,7 +62,6 @@ class Grandtotal extends \Magento\Checkout\Block\Total\DefaultTotal
      * Get grandtotal exclude tax
      *
      * @return float
-     * @since 2.0.0
      */
     public function getTotalExclTax()
     {

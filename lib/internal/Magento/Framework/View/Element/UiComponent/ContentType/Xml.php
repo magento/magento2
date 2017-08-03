@@ -12,25 +12,21 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Class Xml
- * @since 2.0.0
  */
 class Xml extends AbstractContentType
 {
     /**
      * @var FileSystem
-     * @since 2.0.0
      */
     protected $filesystem;
 
     /**
      * @var TemplateEnginePool
-     * @since 2.0.0
      */
     protected $templateEnginePool;
 
     /**
      * @var Generator
-     * @since 2.0.0
      */
     protected $generator;
 
@@ -40,7 +36,6 @@ class Xml extends AbstractContentType
      * @param FileSystem $filesystem
      * @param TemplateEnginePool $templateEnginePool
      * @param Generator $generator
-     * @since 2.0.0
      */
     public function __construct(
         FileSystem $filesystem,
@@ -58,7 +53,6 @@ class Xml extends AbstractContentType
      * @param string $template
      * @return string
      * @throws \Exception
-     * @since 2.0.0
      */
     public function render(UiComponentInterface $view, $template = '')
     {
@@ -80,7 +74,6 @@ class Xml extends AbstractContentType
     /**
      * @param UiComponentInterface $view
      * @return string
-     * @since 2.0.0
      */
     protected function getDataXml(UiComponentInterface $view)
     {
@@ -107,7 +100,6 @@ class Xml extends AbstractContentType
      *
      * @param \Magento\Framework\DataObject $object
      * @return string
-     * @since 2.0.0
      */
     protected function objectToXml(\Magento\Framework\DataObject $object)
     {

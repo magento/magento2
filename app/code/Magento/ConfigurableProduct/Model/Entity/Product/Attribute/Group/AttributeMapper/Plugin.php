@@ -13,32 +13,27 @@ use Magento\Framework\Registry;
 /**
  * Class \Magento\ConfigurableProduct\Model\Entity\Product\Attribute\Group\AttributeMapper\Plugin
  *
- * @since 2.0.0
  */
 class Plugin
 {
     /**
      * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\AttributeFactory
-     * @since 2.0.0
      */
     protected $attributeFactory;
 
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $registry;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $configurableAttributes;
 
     /**
      * @param AttributeFactory $attributeFactory
      * @param Registry $registry
-     * @since 2.0.0
      */
     public function __construct(AttributeFactory $attributeFactory, Registry $registry)
     {
@@ -55,7 +50,6 @@ class Plugin
      *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function aroundMap(
         \Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface $subject,

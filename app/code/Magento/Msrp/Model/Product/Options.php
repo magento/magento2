@@ -10,26 +10,22 @@ use Magento\Msrp\Model\Product\Attribute\Source\Type\Price as TypePrice;
 /**
  * Class \Magento\Msrp\Model\Product\Options
  *
- * @since 2.0.0
  */
 class Options
 {
     /**
      * @var \Magento\Msrp\Model\Config
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Msrp\Helper\Data
-     * @since 2.0.0
      */
     protected $msrpData;
 
     /**
      * @param \Magento\Msrp\Model\Config $config
      * @param \Magento\Msrp\Helper\Data $msrpData
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Msrp\Model\Config $config,
@@ -44,7 +40,6 @@ class Options
      * @param null $visibility
      * @return bool|null
      * @api
-     * @since 2.0.0
      */
     public function isEnabled($product, $visibility = null)
     {
@@ -66,7 +61,6 @@ class Options
     /**
      * @param \Magento\Catalog\Model\Product $product
      * @return array
-     * @since 2.0.0
      */
     protected function getVisibilities($product)
     {

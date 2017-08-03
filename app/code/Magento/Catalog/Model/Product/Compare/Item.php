@@ -19,7 +19,6 @@ use Magento\Catalog\Model\Product;
  * @method \Magento\Catalog\Model\Product\Compare\Item setProductId(int $value)
  * @method int getStoreId()
  * @method \Magento\Catalog\Model\Product\Compare\Item setStoreId(int $value)
- * @since 2.0.0
  */
 class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -32,7 +31,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      * Prefix of model events names
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'catalog_compare_item';
 
@@ -42,7 +40,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      * In observe method you can use $observer->getEvent()->getItem() in this case
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'item';
 
@@ -50,7 +47,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      * Catalog product compare
      *
      * @var \Magento\Catalog\Helper\Product\Compare
-     * @since 2.0.0
      */
     protected $_catalogProductCompare = null;
 
@@ -58,7 +54,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
@@ -66,7 +61,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      * Customer visitor
      *
      * @var \Magento\Customer\Model\Visitor
-     * @since 2.0.0
      */
     protected $_customerVisitor;
 
@@ -74,7 +68,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -88,7 +81,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -112,7 +104,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      * Initialize resourse model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -123,7 +114,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      * Retrieve Resource instance
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Compare\Item
-     * @since 2.0.0
      */
     protected function _getResource()
     {
@@ -134,7 +124,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      * Set current store before save
      *
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -151,7 +140,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      *
      * @param int $visitorId
      * @return $this
-     * @since 2.0.0
      */
     public function addVisitorId($visitorId)
     {
@@ -164,7 +152,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      *
      * @param Product|int $product
      * @return $this
-     * @since 2.0.0
      */
     public function loadByProduct($product)
     {
@@ -177,7 +164,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      *
      * @param Product|int $product
      * @return $this
-     * @since 2.0.0
      */
     public function addProductData($product)
     {
@@ -194,7 +180,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      * Retrieve data for save
      *
      * @return array
-     * @since 2.0.0
      */
     public function getDataForSave()
     {
@@ -210,7 +195,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      * Customer login bind process
      *
      * @return $this
-     * @since 2.0.0
      */
     public function bindCustomerLogin()
     {
@@ -226,7 +210,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function bindCustomerLogout(\Magento\Framework\Event\Observer $observer = null)
     {
@@ -240,7 +223,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      * Clean compare items
      *
      * @return $this
-     * @since 2.0.0
      */
     public function clean()
     {
@@ -252,7 +234,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      * Retrieve Customer Id if loggined
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCustomerId()
     {
@@ -267,7 +248,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      * Retrieve Visitor Id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getVisitorId()
     {
@@ -282,7 +262,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      * Get identities
      *
      * @return array
-     * @since 2.0.0
      */
     public function getIdentities()
     {

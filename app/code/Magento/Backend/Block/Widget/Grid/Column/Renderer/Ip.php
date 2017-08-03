@@ -10,7 +10,6 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
  *
  * @api
  * @deprecated 2.2.0 in favour of UI component implementation
- * @since 2.0.0
  */
 class Ip extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -19,7 +18,6 @@ class Ip extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRend
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

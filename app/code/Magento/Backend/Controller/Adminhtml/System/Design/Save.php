@@ -9,7 +9,6 @@ namespace Magento\Backend\Controller\Adminhtml\System\Design;
 /**
  * Class \Magento\Backend\Controller\Adminhtml\System\Design\Save
  *
- * @since 2.0.0
  */
 class Save extends \Magento\Backend\Controller\Adminhtml\System\Design
 {
@@ -18,7 +17,6 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Design
      *
      * @param array $data
      * @return array|null
-     * @since 2.0.0
      */
     protected function _filterPostData($data)
     {
@@ -33,7 +31,6 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Design
 
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

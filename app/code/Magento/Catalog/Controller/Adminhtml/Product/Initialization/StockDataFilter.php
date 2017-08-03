@@ -10,7 +10,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Class StockDataFilter
- * @since 2.0.0
  */
 class StockDataFilter
 {
@@ -21,20 +20,17 @@ class StockDataFilter
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var StockConfigurationInterface
-     * @since 2.0.0
      */
     protected $stockConfiguration;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param StockConfigurationInterface $stockConfiguration
-     * @since 2.0.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -50,7 +46,6 @@ class StockDataFilter
      * @param array $stockData
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function filter(array $stockData)
     {

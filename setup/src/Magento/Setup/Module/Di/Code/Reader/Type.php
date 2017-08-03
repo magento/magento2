@@ -10,7 +10,6 @@ namespace Magento\Setup\Module\Di\Code\Reader;
 /**
  * Class \Magento\Setup\Module\Di\Code\Reader\Type
  *
- * @since 2.0.0
  */
 class Type
 {
@@ -19,7 +18,6 @@ class Type
      *
      * @param string $type
      * @return bool
-     * @since 2.0.0
      */
     public function isConcrete($type)
     {

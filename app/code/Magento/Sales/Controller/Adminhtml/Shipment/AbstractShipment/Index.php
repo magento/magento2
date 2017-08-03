@@ -12,7 +12,6 @@ use Magento\Framework\View\Result\PageFactory;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\Index
  *
- * @since 2.0.0
  */
 abstract class Index extends \Magento\Backend\App\Action
 {
@@ -25,14 +24,12 @@ abstract class Index extends \Magento\Backend\App\Action
 
     /**
      * @var PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @param Context $context
      * @param PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -46,7 +43,6 @@ abstract class Index extends \Magento\Backend\App\Action
      * Shipments grid
      *
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

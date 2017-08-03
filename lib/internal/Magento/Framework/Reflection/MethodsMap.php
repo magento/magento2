@@ -14,7 +14,6 @@ use Magento\Framework\App\Cache\Type\Reflection as ReflectionCache;
 
 /**
  * Gathers method metadata information.
- * @since 2.0.0
  */
 class MethodsMap
 {
@@ -29,25 +28,21 @@ class MethodsMap
 
     /**
      * @var \Magento\Framework\Cache\FrontendInterface
-     * @since 2.0.0
      */
     private $cache;
 
     /**
      * @var TypeProcessor
-     * @since 2.0.0
      */
     private $typeProcessor;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $serviceInterfaceMethodsMap = [];
 
     /**
      * @var FieldNamer
-     * @since 2.0.0
      */
     private $fieldNamer;
 
@@ -62,7 +57,6 @@ class MethodsMap
      * @param TypeProcessor $typeProcessor
      * @param \Magento\Framework\Api\AttributeTypeResolverInterface $typeResolver
      * @param FieldNamer $fieldNamer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Cache\FrontendInterface $cache,
@@ -82,7 +76,6 @@ class MethodsMap
      * @param string $typeName
      * @param string $methodName
      * @return string
-     * @since 2.0.0
      */
     public function getMethodReturnType($typeName, $methodName)
     {
@@ -102,7 +95,6 @@ class MethodsMap
      *  'validatePassword' => 'boolean'
      * ]
      * </pre>
-     * @since 2.0.0
      */
     public function getMethodsMap($interfaceName)
     {
@@ -126,7 +118,6 @@ class MethodsMap
      * @param string $serviceClassName
      * @param string $serviceMethodName
      * @return array
-     * @since 2.0.0
      */
     public function getMethodParams($serviceClassName, $serviceMethodName)
     {
@@ -158,7 +149,6 @@ class MethodsMap
      *
      * @param string $interfaceName
      * @return array
-     * @since 2.0.0
      */
     private function getMethodMapViaReflection($interfaceName)
     {
@@ -188,7 +178,6 @@ class MethodsMap
      *
      * @param \ReflectionMethod $method
      * @return bool
-     * @since 2.0.0
      */
     private function isSuitableMethod($method)
     {
@@ -205,7 +194,6 @@ class MethodsMap
      * @param string $type
      * @param string $methodName
      * @return bool
-     * @since 2.0.0
      */
     public function isMethodValidForDataField($type, $methodName)
     {
@@ -230,7 +218,6 @@ class MethodsMap
      * @param string $type
      * @param string $methodName
      * @return bool
-     * @since 2.0.0
      */
     public function isMethodReturnValueRequired($type, $methodName)
     {

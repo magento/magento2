@@ -11,7 +11,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Dashboard Customer Info
  *
  * @api
- * @since 2.0.0
  */
 class Info extends \Magento\Framework\View\Element\Template
 {
@@ -19,25 +18,21 @@ class Info extends \Magento\Framework\View\Element\Template
      * Cached subscription object
      *
      * @var \Magento\Newsletter\Model\Subscriber
-     * @since 2.0.0
      */
     protected $_subscription;
 
     /**
      * @var \Magento\Newsletter\Model\SubscriberFactory
-     * @since 2.0.0
      */
     protected $_subscriberFactory;
 
     /**
      * @var \Magento\Customer\Helper\View
-     * @since 2.0.0
      */
     protected $_helperView;
 
     /**
      * @var \Magento\Customer\Helper\Session\CurrentCustomer
-     * @since 2.0.0
      */
     protected $currentCustomer;
 
@@ -49,7 +44,6 @@ class Info extends \Magento\Framework\View\Element\Template
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      * @param \Magento\Customer\Helper\View $helperView
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -68,7 +62,6 @@ class Info extends \Magento\Framework\View\Element\Template
      * Returns the Magento Customer Model for this block
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface|null
-     * @since 2.0.0
      */
     public function getCustomer()
     {
@@ -83,7 +76,6 @@ class Info extends \Magento\Framework\View\Element\Template
      * Get the full name of a customer
      *
      * @return string full name
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -92,7 +84,6 @@ class Info extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getChangePasswordUrl()
     {
@@ -103,7 +94,6 @@ class Info extends \Magento\Framework\View\Element\Template
      * Get Customer Subscription Object Information
      *
      * @return \Magento\Newsletter\Model\Subscriber
-     * @since 2.0.0
      */
     public function getSubscriptionObject()
     {
@@ -123,7 +113,6 @@ class Info extends \Magento\Framework\View\Element\Template
      * @return bool
      *
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsSubscribed()
     {
@@ -134,7 +123,6 @@ class Info extends \Magento\Framework\View\Element\Template
      * Newsletter module availability
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isNewsletterEnabled()
     {
@@ -145,7 +133,6 @@ class Info extends \Magento\Framework\View\Element\Template
 
     /**
      * @return \Magento\Newsletter\Model\Subscriber
-     * @since 2.0.0
      */
     protected function _createSubscriber()
     {
@@ -154,7 +141,6 @@ class Info extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

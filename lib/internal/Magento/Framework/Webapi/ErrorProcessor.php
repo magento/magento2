@@ -22,7 +22,6 @@ use Magento\Framework\Webapi\Exception as WebapiException;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class ErrorProcessor
 {
@@ -43,21 +42,16 @@ class ErrorProcessor
 
     /**#@-*/
 
-    /**
-     * @var \Magento\Framework\Json\Encoder
-     * @since 2.0.0
-     */
+    /**#@-*/
     protected $encoder;
 
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     protected $_appState;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $_logger;
 
@@ -65,13 +59,11 @@ class ErrorProcessor
      * Filesystem instance
      *
      * @var \Magento\Framework\Filesystem
-     * @since 2.0.0
      */
     protected $_filesystem;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\Write
-     * @since 2.0.0
      */
     protected $directoryWrite;
 
@@ -89,7 +81,6 @@ class ErrorProcessor
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param Json|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Json\Encoder $encoder,
@@ -115,7 +106,6 @@ class ErrorProcessor
      * @param \Exception $exception Exception to convert to a WebAPI exception
      *
      * @return WebapiException
-     * @since 2.0.0
      */
     public function maskException(\Exception $exception)
     {
@@ -184,7 +174,6 @@ class ErrorProcessor
      * @param int $httpCode
      * @return void
      * @SuppressWarnings(PHPMD.ExitExpression)
-     * @since 2.0.0
      */
     public function renderException(\Exception $exception, $httpCode = self::DEFAULT_ERROR_HTTP_CODE)
     {
@@ -208,7 +197,6 @@ class ErrorProcessor
      *
      * @param \Exception $exception
      * @return string $reportId
-     * @since 2.0.0
      */
     protected function _critical(\Exception $exception)
     {
@@ -227,7 +215,6 @@ class ErrorProcessor
      * @param string $trace
      * @param int $httpCode
      * @return void
-     * @since 2.0.0
      */
     public function renderErrorMessage(
         $errorMessage,
@@ -257,7 +244,6 @@ class ErrorProcessor
      * @param int $httpCode
      * @param string $format
      * @return array|string
-     * @since 2.0.0
      */
     protected function _formatError($errorMessage, $trace, $httpCode, $format)
     {
@@ -294,7 +280,6 @@ class ErrorProcessor
      * Declare web API-specific shutdown function.
      *
      * @return $this
-     * @since 2.0.0
      */
     public function registerShutdownFunction()
     {
@@ -306,7 +291,6 @@ class ErrorProcessor
      * Function to catch errors, that has not been caught by the user error dispatcher function.
      *
      * @return void
-     * @since 2.0.0
      */
     public function apiShutdownFunction()
     {
@@ -330,7 +314,6 @@ class ErrorProcessor
      *
      * @param string $reportData
      * @return string
-     * @since 2.0.0
      */
     protected function _saveFatalErrorReport($reportData)
     {

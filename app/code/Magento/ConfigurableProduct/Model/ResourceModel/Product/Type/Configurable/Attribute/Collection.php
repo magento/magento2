@@ -19,13 +19,12 @@ use Magento\Catalog\Api\Data\ProductInterface;
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
-     * @since 2.2.0
+     * @since 2.1.1
      */
     private $configurableResource;
 
@@ -33,7 +32,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Configurable attributes label table name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_labelTable;
 
@@ -41,7 +39,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Product instance
      *
      * @var \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     protected $_product;
 
@@ -49,7 +46,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Catalog data
      *
      * @var \Magento\Catalog\Helper\Data
-     * @since 2.0.0
      */
     protected $_catalogData = null;
 
@@ -57,7 +53,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Catalog product type configurable
      *
      * @var Configurable
-     * @since 2.0.0
      */
     protected $_productTypeConfigurable;
 
@@ -65,7 +60,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -87,7 +81,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param ConfigurableResource $configurableResource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -112,7 +105,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Initialize connection and define table names
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -128,7 +120,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
-     * @since 2.0.0
      */
     public function setProductFilter($product)
     {
@@ -141,7 +132,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Get product type
      *
      * @return Configurable
-     * @since 2.0.0
      */
     private function getProductType()
     {
@@ -153,7 +143,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $dir
      * @return $this
-     * @since 2.0.0
      */
     public function orderByPosition($dir = self::SORT_ORDER_ASC)
     {
@@ -165,7 +154,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Retrieve Store Id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -176,7 +164,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * After load collection process
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -197,7 +184,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add product attributes to collection items
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _addProductAttributes()
     {
@@ -215,8 +201,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add Associated Product Filters (From Product Type Instance)
      *
      * @return $this
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 2.1.1
      */
     public function _addAssociatedProductFilters()
     {
@@ -231,7 +216,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Load attribute labels
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _loadLabels()
     {
@@ -273,7 +257,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function loadOptions()
     {
@@ -312,7 +295,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Catalog\Model\Product[] $usedProducts
      * @param AbstractAttribute $productAttribute
      * @return array
-     * @since 2.0.0
      */
     protected function getIncludedOptions(array $usedProducts, AbstractAttribute $productAttribute)
     {
@@ -328,7 +310,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Retrieve product instance
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     private function getProduct()
     {
@@ -337,7 +318,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @inheritdoc
-     * @since 2.1.0
+     * @since 2.0.9
      */
     public function __sleep()
     {
@@ -356,7 +337,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @inheritdoc
-     * @since 2.1.0
+     * @since 2.0.9
      */
     public function __wakeup()
     {
@@ -387,9 +368,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Get Configurable Resource
      *
-     * @deprecated 2.2.0
+     * @deprecated 2.1.1
      * @return ConfigurableResource
-     * @since 2.2.0
+     * @since 2.1.1
      */
     private function getConfigurableResource()
     {

@@ -10,13 +10,11 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 /**
  * Class \Magento\CatalogImportExport\Model\Import\Product\Validator\TierPrice
  *
- * @since 2.0.0
  */
 class TierPrice extends AbstractPrice implements RowValidatorInterface
 {
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
-     * @since 2.0.0
      */
     protected $storeResolver;
 
@@ -24,7 +22,6 @@ class TierPrice extends AbstractPrice implements RowValidatorInterface
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
@@ -38,7 +35,6 @@ class TierPrice extends AbstractPrice implements RowValidatorInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function isValid($value)
     {

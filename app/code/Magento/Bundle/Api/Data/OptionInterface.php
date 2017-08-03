@@ -10,7 +10,6 @@ namespace Magento\Bundle\Api\Data;
 /**
  * Interface OptionInterface
  * @api
- * @since 2.0.0
  */
 interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -18,7 +17,6 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get option id
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getOptionId();
 
@@ -27,7 +25,6 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $optionId
      * @return $this
-     * @since 2.0.0
      */
     public function setOptionId($optionId);
 
@@ -35,7 +32,6 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get option title
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getTitle();
 
@@ -44,7 +40,6 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $title
      * @return $this
-     * @since 2.0.0
      */
     public function setTitle($title);
 
@@ -52,7 +47,6 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get is required option
      *
      * @return bool|null
-     * @since 2.0.0
      */
     public function getRequired();
 
@@ -61,7 +55,6 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param bool $required
      * @return $this
-     * @since 2.0.0
      */
     public function setRequired($required);
 
@@ -69,7 +62,6 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get input type
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getType();
 
@@ -78,7 +70,6 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $type
      * @return $this
-     * @since 2.0.0
      */
     public function setType($type);
 
@@ -86,7 +77,6 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get option position
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getPosition();
 
@@ -95,7 +85,6 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $position
      * @return $this
-     * @since 2.0.0
      */
     public function setPosition($position);
 
@@ -103,7 +92,6 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get product sku
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getSku();
 
@@ -112,7 +100,6 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $sku
      * @return $this
-     * @since 2.0.0
      */
     public function setSku($sku);
 
@@ -120,7 +107,6 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get product links
      *
      * @return \Magento\Bundle\Api\Data\LinkInterface[]|null
-     * @since 2.0.0
      */
     public function getProductLinks();
 
@@ -129,7 +115,6 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\Bundle\Api\Data\LinkInterface[] $productLinks
      * @return $this
-     * @since 2.0.0
      */
     public function setProductLinks(array $productLinks = null);
 
@@ -137,7 +122,6 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Bundle\Api\Data\OptionExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -146,7 +130,6 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\Bundle\Api\Data\OptionExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Bundle\Api\Data\OptionExtensionInterface $extensionAttributes);
 }

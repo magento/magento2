@@ -11,7 +11,6 @@ use Magento\Framework\Option\ArrayInterface;
 
 /**
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class OptionProvider implements ArrayInterface
 {
@@ -27,7 +26,6 @@ class OptionProvider implements ArrayInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

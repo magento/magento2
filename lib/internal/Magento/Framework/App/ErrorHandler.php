@@ -8,7 +8,6 @@ namespace Magento\Framework\App;
 
 /**
  * An error handler that converts runtime errors into exceptions
- * @since 2.0.0
  */
 class ErrorHandler
 {
@@ -16,7 +15,6 @@ class ErrorHandler
      * Error messages
      *
      * @var array
-     * @since 2.0.0
      */
     protected $errorPhrases = [
         E_ERROR => 'Error',
@@ -45,7 +43,6 @@ class ErrorHandler
      * @param int $errorLine
      * @return bool
      * @throws \Exception
-     * @since 2.0.0
      */
     public function handler($errorNo, $errorStr, $errorFile, $errorLine)
     {

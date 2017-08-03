@@ -12,14 +12,12 @@ namespace Magento\Directory\Block\Adminhtml\Frontend\Currency;
 /**
  * Class \Magento\Directory\Block\Adminhtml\Frontend\Currency\Base
  *
- * @since 2.0.0
  */
 class Base extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {

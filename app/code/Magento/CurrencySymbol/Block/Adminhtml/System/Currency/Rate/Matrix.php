@@ -14,19 +14,16 @@ namespace Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate;
 /**
  * Class \Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Matrix
  *
- * @since 2.0.0
  */
 class Matrix extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'system/currency/rate/matrix.phtml';
 
     /**
      * @var \Magento\Directory\Model\CurrencyFactory
-     * @since 2.0.0
      */
     protected $_dirCurrencyFactory;
 
@@ -34,7 +31,6 @@ class Matrix extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Directory\Model\CurrencyFactory $dirCurrencyFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -49,7 +45,6 @@ class Matrix extends \Magento\Backend\Block\Template
      * Prepare layout
      *
      * @return \Magento\Framework\View\Element\AbstractBlock
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -93,7 +88,6 @@ class Matrix extends \Magento\Backend\Block\Template
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getRatesFormAction()
     {
@@ -105,7 +99,6 @@ class Matrix extends \Magento\Backend\Block\Template
      *
      * @param array $array
      * @return array
-     * @since 2.0.0
      */
     protected function _prepareRates($array)
     {

@@ -13,14 +13,12 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Timezone extends \Magento\Framework\App\Config\Value
 {
     /**
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function beforeSave()
     {

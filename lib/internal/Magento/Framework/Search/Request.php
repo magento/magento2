@@ -14,25 +14,21 @@ use Magento\Framework\Search\Request\QueryInterface;
  *
  * @codeCoverageIgnore
  * @api
- * @since 2.0.0
  */
 class Request implements RequestInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $name;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $index;
 
     /**
      * @var RequestBucketInterface[]
-     * @since 2.0.0
      */
     protected $buckets;
 
@@ -40,25 +36,21 @@ class Request implements RequestInterface
      * Main query which represents the whole query hierarchy
      *
      * @var QueryInterface
-     * @since 2.0.0
      */
     protected $query;
 
     /**
      * @var int|null
-     * @since 2.0.0
      */
     protected $from;
 
     /**
      * @var int|null
-     * @since 2.0.0
      */
     protected $size;
 
     /**
      * @var Dimension[]
-     * @since 2.0.0
      */
     protected $dimensions;
 
@@ -70,7 +62,6 @@ class Request implements RequestInterface
      * @param int|null $size
      * @param Dimension[] $dimensions
      * @param RequestBucketInterface[] $buckets
-     * @since 2.0.0
      */
     public function __construct(
         $name,
@@ -92,7 +83,6 @@ class Request implements RequestInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -101,7 +91,6 @@ class Request implements RequestInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getIndex()
     {
@@ -110,7 +99,6 @@ class Request implements RequestInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getDimensions()
     {
@@ -119,7 +107,6 @@ class Request implements RequestInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAggregation()
     {
@@ -128,7 +115,6 @@ class Request implements RequestInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getQuery()
     {
@@ -137,7 +123,6 @@ class Request implements RequestInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getFrom()
     {
@@ -146,7 +131,6 @@ class Request implements RequestInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getSize()
     {

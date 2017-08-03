@@ -20,13 +20,13 @@ use Magento\Framework\View\Element\Template\Context;
 /**
  * Class \Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox
  *
- * @since 2.2.0
+ * @since 2.1.3
  */
 class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
 {
     /**
      * @var LowestPriceOptionsProviderInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $lowestPriceOptionsProvider;
 
@@ -41,7 +41,7 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
      * @param SalableResolverInterface|null $salableResolver
      * @param MinimalPriceCalculatorInterface|null $minimalPriceCalculator
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(
         Context $context,
@@ -71,7 +71,7 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
      * Define if the special price should be shown
      *
      * @return bool
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function hasSpecialPrice()
     {

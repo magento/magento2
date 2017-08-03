@@ -11,14 +11,14 @@ use Magento\Sales\Model\ValidatorInterface;
 
 /**
  * Class CanShip
- * @since 2.2.0
+ * @since 2.1.2
  */
 class CanShip implements ValidatorInterface
 {
     /**
      * @param OrderInterface $entity
      * @return array
-     * @since 2.2.0
+     * @since 2.1.2
      */
     public function validate($entity)
     {
@@ -35,7 +35,7 @@ class CanShip implements ValidatorInterface
     /**
      * @param OrderInterface $order
      * @return bool
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private function isStateReadyForShipment(OrderInterface $order)
     {
@@ -53,7 +53,7 @@ class CanShip implements ValidatorInterface
     /**
      * @param OrderInterface $order
      * @return bool
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private function canShip(OrderInterface $order)
     {

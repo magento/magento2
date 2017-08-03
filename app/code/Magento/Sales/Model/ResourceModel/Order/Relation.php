@@ -14,31 +14,26 @@ use Magento\Sales\Model\ResourceModel\Order\Status\History as OrderStatusHistory
 
 /**
  * Class Relation
- * @since 2.0.0
  */
 class Relation implements RelationInterface
 {
     /**
      * @var AddressHandler
-     * @since 2.0.0
      */
     protected $addressHandler;
 
     /**
      * @var OrderItemRepositoryInterface
-     * @since 2.0.0
      */
     protected $orderItemRepository;
 
     /**
      * @var OrderPaymentResource
-     * @since 2.0.0
      */
     protected $orderPaymentResource;
 
     /**
      * @var OrderStatusHistoryResource
-     * @since 2.0.0
      */
     protected $orderStatusHistoryResource;
 
@@ -47,7 +42,6 @@ class Relation implements RelationInterface
      * @param OrderItemRepositoryInterface $orderItemRepository
      * @param OrderPaymentResource $orderPaymentResource
      * @param OrderStatusHistoryResource $orderStatusHistoryResource
-     * @since 2.0.0
      */
     public function __construct(
         AddressHandler $addressHandler,
@@ -67,7 +61,6 @@ class Relation implements RelationInterface
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return void
      * @throws \Exception
-     * @since 2.0.0
      */
     public function processRelation(\Magento\Framework\Model\AbstractModel $object)
     {

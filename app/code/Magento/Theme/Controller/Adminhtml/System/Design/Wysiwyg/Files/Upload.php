@@ -9,7 +9,6 @@ namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 /**
  * Class \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\Upload
  *
- * @since 2.0.0
  */
 class Upload extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
 {
@@ -17,7 +16,6 @@ class Upload extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\F
      * Files upload action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

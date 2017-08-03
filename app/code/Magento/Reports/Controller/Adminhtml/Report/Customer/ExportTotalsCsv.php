@@ -13,7 +13,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Customer\ExportTotalsCsv
  *
- * @since 2.0.0
  */
 class ExportTotalsCsv extends \Magento\Reports\Controller\Adminhtml\Report\Customer
 {
@@ -21,7 +20,6 @@ class ExportTotalsCsv extends \Magento\Reports\Controller\Adminhtml\Report\Custo
      * Export customers biggest totals report to CSV format
      *
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

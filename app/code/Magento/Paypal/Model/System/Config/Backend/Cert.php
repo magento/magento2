@@ -12,25 +12,21 @@ use Magento\Framework\Filesystem\DirectoryList;
  * Backend model for saving certificate file in case of using certificate based authentication
  *
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
- * @since 2.0.0
  */
 class Cert extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Paypal\Model\CertFactory
-     * @since 2.0.0
      */
     protected $_certFactory;
 
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
-     * @since 2.0.0
      */
     protected $_encryptor;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
-     * @since 2.0.0
      */
     protected $_tmpDirectory;
 
@@ -45,7 +41,6 @@ class Cert extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -70,7 +65,6 @@ class Cert extends \Magento\Framework\App\Config\Value
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -106,7 +100,6 @@ class Cert extends \Magento\Framework\App\Config\Value
      * Process object after delete data
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterDelete()
     {

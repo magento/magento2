@@ -11,7 +11,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\ExportCouponsCsv
  *
- * @since 2.0.0
  */
 class ExportCouponsCsv extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
@@ -19,7 +18,6 @@ class ExportCouponsCsv extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quo
      * Export coupon codes as CSV file
      *
      * @return \Magento\Framework\App\ResponseInterface|null
-     * @since 2.0.0
      */
     public function execute()
     {

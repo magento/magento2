@@ -14,7 +14,6 @@ use Magento\Framework\Config\DataInterfaceFactory;
 
 /**
  * Class UiComponent
- * @since 2.0.0
  */
 class UiComponent implements ReaderInterface
 {
@@ -27,13 +26,11 @@ class UiComponent implements ReaderInterface
      * List of supported attributes
      *
      * @var array
-     * @since 2.0.0
      */
     protected $attributes = ['group', 'component', 'aclResource'];
 
     /**
      * @var Helper
-     * @since 2.0.0
      */
     protected $layoutHelper;
 
@@ -62,7 +59,6 @@ class UiComponent implements ReaderInterface
      * @param Condition $conditionReader
      * @param DataInterfaceFactory $uiConfigFactory
      * @param ReaderPool $readerPool
-     * @since 2.0.0
      */
     public function __construct(
         Helper $helper,
@@ -78,7 +74,6 @@ class UiComponent implements ReaderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getSupportedNodes()
     {
@@ -87,7 +82,6 @@ class UiComponent implements ReaderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function interpret(Context $readerContext, Element $currentElement)
     {
@@ -144,7 +138,6 @@ class UiComponent implements ReaderInterface
      *
      * @param Element $element
      * @return array
-     * @since 2.0.0
      */
     protected function getAttributes(Element $element)
     {

@@ -7,7 +7,6 @@ namespace Magento\Setup\Module\I18n;
 
 /**
  *  Abstract Factory
- * @since 2.0.0
  */
 class Factory
 {
@@ -17,7 +16,6 @@ class Factory
      * @param string $filename
      * @return \Magento\Setup\Module\I18n\Dictionary\WriterInterface
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function createDictionaryWriter($filename = null)
     {
@@ -39,7 +37,6 @@ class Factory
      *
      * @param string $locale
      * @return \Magento\Setup\Module\I18n\Locale
-     * @since 2.0.0
      */
     public function createLocale($locale)
     {
@@ -50,7 +47,6 @@ class Factory
      * Create dictionary
      *
      * @return \Magento\Setup\Module\I18n\Dictionary
-     * @since 2.0.0
      */
     public function createDictionary()
     {
@@ -62,7 +58,6 @@ class Factory
      *
      * @param array $data
      * @return \Magento\Setup\Module\I18n\Dictionary\Phrase
-     * @since 2.0.0
      */
     public function createPhrase(array $data)
     {

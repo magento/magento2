@@ -16,7 +16,6 @@ use Magento\SalesSequence\Model\Config as SequenceConfig;
  * Class InstallData
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class InstallData implements InstallDataInterface
 {
@@ -24,19 +23,16 @@ class InstallData implements InstallDataInterface
      * Sales setup factory
      *
      * @var SalesSetupFactory
-     * @since 2.0.0
      */
     private $salesSetupFactory;
 
     /**
      * @var Builder
-     * @since 2.0.0
      */
     private $sequenceBuilder;
 
     /**
      * @var SequenceConfig
-     * @since 2.0.0
      */
     private $sequenceConfig;
 
@@ -44,7 +40,6 @@ class InstallData implements InstallDataInterface
      * @param SalesSetupFactory $salesSetupFactory
      * @param Builder $sequenceBuilder
      * @param SequenceConfig $sequenceConfig
-     * @since 2.0.0
      */
     public function __construct(
         SalesSetupFactory $salesSetupFactory,
@@ -59,7 +54,6 @@ class InstallData implements InstallDataInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

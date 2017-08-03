@@ -10,7 +10,6 @@ use Magento\Framework\View\Element\Template;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Components extends Template
 {
@@ -18,7 +17,6 @@ class Components extends Template
      * Developer mode
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isDeveloperMode()
     {

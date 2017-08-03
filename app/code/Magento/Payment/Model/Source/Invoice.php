@@ -11,13 +11,11 @@ namespace Magento\Payment\Model\Source;
  * Inheritance of this class allowed as is a part of legacy implementation.
  *
  * @api
- * @since 2.0.0
  */
 class Invoice implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

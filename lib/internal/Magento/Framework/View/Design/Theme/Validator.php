@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Design\Theme;
 
 /**
  * Class Validator
- * @since 2.0.0
  */
 class Validator
 {
@@ -16,7 +15,6 @@ class Validator
      * array('dataKey' => array('validator_name' => [validators], ...), ...)
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_dataValidators = [];
 
@@ -25,13 +23,11 @@ class Validator
      * array('dataKey' => 'Error message')
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_errorMessages;
 
     /**
      * Initialize validators
-     * @since 2.0.0
      */
     public function __construct()
     {
@@ -43,7 +39,6 @@ class Validator
      * Set title validators
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _setTitleValidators()
     {
@@ -65,7 +60,6 @@ class Validator
      * Set theme type validators
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _setTypeValidators()
     {
@@ -103,7 +97,6 @@ class Validator
      * @param string $dataKey
      * @param array $validators
      * @return $this
-     * @since 2.0.0
      */
     public function addDataValidators($dataKey, $validators)
     {
@@ -121,7 +114,6 @@ class Validator
      *
      * @param string|null $dataKey
      * @return array
-     * @since 2.0.0
      */
     public function getErrorMessages($dataKey = null)
     {
@@ -136,7 +128,6 @@ class Validator
      *
      * @param array &$validators
      * @return $this
-     * @since 2.0.0
      */
     protected function _instantiateValidators(array &$validators)
     {
@@ -156,7 +147,6 @@ class Validator
      * @param string $dataKey
      * @param mixed $dataValue
      * @return bool
-     * @since 2.0.0
      */
     protected function _validateDataItem($validator, $dataKey, $dataValue)
     {
@@ -179,7 +169,6 @@ class Validator
      *
      * @param \Magento\Framework\DataObject $data
      * @return bool
-     * @since 2.0.0
      */
     public function validate(\Magento\Framework\DataObject $data)
     {

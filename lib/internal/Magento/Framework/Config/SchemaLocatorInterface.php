@@ -11,7 +11,6 @@ namespace Magento\Framework\Config;
  * Config schema locator interface.
  *
  * @api
- * @since 2.0.0
  */
 interface SchemaLocatorInterface
 {
@@ -19,7 +18,6 @@ interface SchemaLocatorInterface
      * Get path to merged config schema
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getSchema();
 
@@ -27,7 +25,6 @@ interface SchemaLocatorInterface
      * Get path to per file validation schema
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getPerFileSchema();
 }

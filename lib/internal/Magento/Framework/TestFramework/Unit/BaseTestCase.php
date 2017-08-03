@@ -16,7 +16,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Class \Magento\Framework\TestFramework\Unit\BaseTestCase
  *
- * @since 2.0.0
  */
 abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -24,13 +23,11 @@ abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
      * ObjectManager available since setUp()
      *
      * @var ObjectManager
-     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function setUp()
     {
@@ -42,7 +39,6 @@ abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
      *
      * @param string $className
      * @return \PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     protected function basicMock($className)
     {
@@ -57,7 +53,6 @@ abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
      * Providing true and false.
      *
      * @return array
-     * @since 2.0.0
      */
     public function booleanDataProvider()
     {

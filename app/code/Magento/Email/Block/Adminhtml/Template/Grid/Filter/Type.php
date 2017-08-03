@@ -9,7 +9,6 @@ namespace Magento\Email\Block\Adminhtml\Template\Grid\Filter;
  * Adminhtml system template grid type filter
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Type extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
@@ -17,7 +16,6 @@ class Type extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
      * Email template types
      *
      * @var array
-     * @since 2.0.0
      */
     protected static $_types = [
         null => null,
@@ -29,7 +27,6 @@ class Type extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
      * Get options
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getOptions()
     {
@@ -45,7 +42,6 @@ class Type extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
      * Get condition
      *
      * @return array|null
-     * @since 2.0.0
      */
     public function getCondition()
     {

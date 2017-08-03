@@ -9,7 +9,6 @@ use Magento\Framework\Phrase;
 
 /**
  * @api
- * @since 2.0.0
  */
 class AlreadyExistsException extends LocalizedException
 {

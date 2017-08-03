@@ -8,7 +8,6 @@ namespace Magento\CatalogInventory\Helper;
 
 /**
  * Catalog Inventory default helper
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {

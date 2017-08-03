@@ -9,7 +9,6 @@ namespace Magento\Tax\Api;
 /**
  * Tax calculation interface.
  * @api
- * @since 2.0.0
  */
 interface TaxCalculationInterface
 {
@@ -28,7 +27,6 @@ interface TaxCalculationInterface
      * @param null|int $storeId
      * @param bool $round
      * @return \Magento\Tax\Api\Data\TaxDetailsInterface
-     * @since 2.0.0
      */
     public function calculateTax(
         \Magento\Tax\Api\Data\QuoteDetailsInterface $quoteDetails,
@@ -43,7 +41,6 @@ interface TaxCalculationInterface
      * @param int $customerId
      * @param string $storeId
      * @return float
-     * @since 2.0.0
      */
     public function getDefaultCalculatedRate($productTaxClassID, $customerId = null, $storeId = null);
 
@@ -54,7 +51,6 @@ interface TaxCalculationInterface
      * @param int $customerId
      * @param string $storeId
      * @return float
-     * @since 2.0.0
      */
     public function getCalculatedRate($productTaxClassID, $customerId = null, $storeId = null);
 }

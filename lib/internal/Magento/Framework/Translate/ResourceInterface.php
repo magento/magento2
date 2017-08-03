@@ -9,7 +9,6 @@ namespace Magento\Framework\Translate;
  * Returns the translation resource data.
  *
  * @api
- * @since 2.0.0
  */
 interface ResourceInterface
 {
@@ -19,7 +18,6 @@ interface ResourceInterface
      * @param int $scope
      * @param string $locale
      * @return array
-     * @since 2.0.0
      */
     public function getTranslationArray($scope = null, $locale = null);
 }

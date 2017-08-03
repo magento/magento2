@@ -9,7 +9,6 @@ namespace Magento\User\Api\Data;
  * Admin user interface.
  *
  * @api
- * @since 2.0.0
  */
 interface UserInterface
 {
@@ -17,7 +16,6 @@ interface UserInterface
      * Get ID.
      *
      * @return int
-     * @since 2.0.0
      */
     public function getId();
 
@@ -26,7 +24,6 @@ interface UserInterface
      *
      * @param int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setId($id);
 
@@ -34,7 +31,6 @@ interface UserInterface
      * Get first name.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFirstName();
 
@@ -43,7 +39,6 @@ interface UserInterface
      *
      * @param string $firstName
      * @return $this
-     * @since 2.0.0
      */
     public function setFirstName($firstName);
 
@@ -51,7 +46,6 @@ interface UserInterface
      * Get last name.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLastName();
 
@@ -60,7 +54,6 @@ interface UserInterface
      *
      * @param string $lastName
      * @return $this
-     * @since 2.0.0
      */
     public function setLastName($lastName);
 
@@ -68,7 +61,6 @@ interface UserInterface
      * Get email.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getEmail();
 
@@ -77,7 +69,6 @@ interface UserInterface
      *
      * @param string $email
      * @return $this
-     * @since 2.0.0
      */
     public function setEmail($email);
 
@@ -85,7 +76,6 @@ interface UserInterface
      * Get user name.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUserName();
 
@@ -94,7 +84,6 @@ interface UserInterface
      *
      * @param string $userName
      * @return $this
-     * @since 2.0.0
      */
     public function setUserName($userName);
 
@@ -102,7 +91,6 @@ interface UserInterface
      * Get password or password hash.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPassword();
 
@@ -111,7 +99,6 @@ interface UserInterface
      *
      * @param string $password
      * @return $this
-     * @since 2.0.0
      */
     public function setPassword($password);
 
@@ -119,7 +106,6 @@ interface UserInterface
      * Get user record creation date.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCreated();
 
@@ -128,7 +114,6 @@ interface UserInterface
      *
      * @param string $created
      * @return $this
-     * @since 2.0.0
      */
     public function setCreated($created);
 
@@ -136,7 +121,6 @@ interface UserInterface
      * Get user record modification date.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getModified();
 
@@ -145,7 +129,6 @@ interface UserInterface
      *
      * @param string $modified
      * @return $this
-     * @since 2.0.0
      */
     public function setModified($modified);
 
@@ -153,7 +136,6 @@ interface UserInterface
      * Check if user is active.
      *
      * @return int
-     * @since 2.0.0
      */
     public function getIsActive();
 
@@ -162,7 +144,6 @@ interface UserInterface
      *
      * @param int $isActive
      * @return $this
-     * @since 2.0.0
      */
     public function setIsActive($isActive);
 
@@ -170,7 +151,6 @@ interface UserInterface
      * Get user interface locale.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getInterfaceLocale();
 
@@ -179,7 +159,6 @@ interface UserInterface
      *
      * @param string $interfaceLocale
      * @return $this
-     * @since 2.0.0
      */
     public function setInterfaceLocale($interfaceLocale);
 }

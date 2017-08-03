@@ -8,7 +8,6 @@ namespace Magento\AdminNotification\Block\System;
 /**
  * Class \Magento\AdminNotification\Block\System\Messages
  *
- * @since 2.0.0
  */
 class Messages extends \Magento\Backend\Block\Template
 {
@@ -16,13 +15,11 @@ class Messages extends \Magento\Backend\Block\Template
      * Message list
      *
      * @var \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized
-     * @since 2.0.0
      */
     protected $_messages;
 
     /**
      * @var \Magento\Framework\Json\Helper\Data
-     * @since 2.0.0
      */
     protected $jsonHelper;
 
@@ -31,7 +28,6 @@ class Messages extends \Magento\Backend\Block\Template
      * @param \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized $messages
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -48,7 +44,6 @@ class Messages extends \Magento\Backend\Block\Template
      * Prepare html output
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -62,7 +57,6 @@ class Messages extends \Magento\Backend\Block\Template
      * Retrieve message list
      *
      * @return \Magento\Framework\Notification\MessageInterface[]
-     * @since 2.0.0
      */
     public function getLastCritical()
     {
@@ -80,7 +74,6 @@ class Messages extends \Magento\Backend\Block\Template
      * Retrieve number of critical messages
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCriticalCount()
     {
@@ -93,7 +86,6 @@ class Messages extends \Magento\Backend\Block\Template
      * Retrieve number of major messages
      *
      * @return int
-     * @since 2.0.0
      */
     public function getMajorCount()
     {
@@ -106,7 +98,6 @@ class Messages extends \Magento\Backend\Block\Template
      * Check whether system messages are present
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasMessages()
     {
@@ -117,7 +108,6 @@ class Messages extends \Magento\Backend\Block\Template
      * Retrieve message list url
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getMessagesUrl()
     {
@@ -128,7 +118,6 @@ class Messages extends \Magento\Backend\Block\Template
      * Initialize system message dialog widget
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSystemMessageDialogJson()
     {

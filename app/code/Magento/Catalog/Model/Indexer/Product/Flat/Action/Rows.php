@@ -11,13 +11,11 @@ use Magento\Catalog\Model\Indexer\Product\Flat\TableBuilder;
 /**
  * Class Rows reindex action for mass actions
  *
- * @since 2.0.0
  */
 class Rows extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
 {
     /**
      * @var Eraser
-     * @since 2.0.0
      */
     protected $flatItemEraser;
 
@@ -29,7 +27,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
      * @param TableBuilder $tableBuilder
      * @param FlatTableBuilder $flatTableBuilder
      * @param Eraser $flatItemEraser
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -58,7 +55,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
      *
      * @return \Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function execute($ids)
     {

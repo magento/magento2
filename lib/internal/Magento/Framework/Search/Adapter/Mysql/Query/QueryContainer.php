@@ -12,7 +12,6 @@ use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 /**
  * Class \Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer
  *
- * @since 2.0.0
  */
 class QueryContainer
 {
@@ -20,19 +19,16 @@ class QueryContainer
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $queries = [];
 
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\Query\MatchContainerFactory
-     * @since 2.0.0
      */
     private $matchContainerFactory;
 
     /**
      * @param MatchContainerFactory $matchContainerFactory
-     * @since 2.0.0
      */
     public function __construct(MatchContainerFactory $matchContainerFactory)
     {
@@ -44,7 +40,6 @@ class QueryContainer
      * @param RequestQueryInterface $query
      * @param string $conditionType
      * @return Select
-     * @since 2.0.0
      */
     public function addMatchQuery(
         Select $select,
@@ -64,7 +59,6 @@ class QueryContainer
 
     /**
      * @return MatchContainer[]
-     * @since 2.0.0
      */
     public function getMatchQueries()
     {

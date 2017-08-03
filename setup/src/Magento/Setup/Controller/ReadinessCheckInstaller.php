@@ -11,7 +11,6 @@ use Zend\View\Model\ViewModel;
 /**
  * Class \Magento\Setup\Controller\ReadinessCheckInstaller
  *
- * @since 2.0.0
  */
 class ReadinessCheckInstaller extends AbstractActionController
 {
@@ -19,7 +18,6 @@ class ReadinessCheckInstaller extends AbstractActionController
 
     /**
      * @return array|ViewModel
-     * @since 2.0.0
      */
     public function indexAction()
     {
@@ -32,7 +30,6 @@ class ReadinessCheckInstaller extends AbstractActionController
 
     /**
      * @return array|ViewModel
-     * @since 2.0.0
      */
     public function progressAction()
     {

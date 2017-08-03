@@ -11,13 +11,11 @@ use Zend\View\Model\ViewModel;
 /**
  * Class \Magento\Setup\Controller\CreateAdminAccount
  *
- * @since 2.0.0
  */
 class CreateAdminAccount extends AbstractActionController
 {
     /**
      * @return ViewModel
-     * @since 2.0.0
      */
     public function indexAction()
     {

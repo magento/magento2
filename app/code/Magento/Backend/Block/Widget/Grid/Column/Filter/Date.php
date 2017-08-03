@@ -11,25 +11,21 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 /**
  * Date grid column filter
  * @api
- * @since 2.0.0
  */
 class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**
      * @var \Magento\Framework\Math\Random
-     * @since 2.0.0
      */
     protected $mathRandom;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $localeResolver;
 
     /**
      * @var DateTimeFormatterInterface
-     * @since 2.0.0
      */
     protected $dateTimeFormatter;
 
@@ -40,7 +36,6 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -58,7 +53,6 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getHtml()
     {
@@ -133,7 +127,6 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
     /**
      * @param string|null $index
      * @return string
-     * @since 2.0.0
      */
     public function getEscapedValue($index = null)
     {
@@ -150,7 +143,6 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
     /**
      * @param string|null $index
      * @return array|string|int|float|null
-     * @since 2.0.0
      */
     public function getValue($index = null)
     {
@@ -169,7 +161,6 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
 
     /**
      * @return array|string|int|float|null
-     * @since 2.0.0
      */
     public function getCondition()
     {
@@ -181,7 +172,6 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
     /**
      * @param array|string|int|float $value
      * @return $this
-     * @since 2.0.0
      */
     public function setValue($value)
     {
@@ -207,7 +197,6 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
      *
      * @param string $date
      * @return \DateTime|null
-     * @since 2.0.0
      */
     protected function _convertDate($date)
     {

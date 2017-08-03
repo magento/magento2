@@ -10,13 +10,11 @@ use Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker;
 
 /**
  * @api
- * @since 2.0.0
  */
 abstract class AbstractScopeConfig extends \Magento\Config\Controller\Adminhtml\System\AbstractConfig
 {
     /**
      * @var \Magento\Config\Model\Config
-     * @since 2.0.0
      */
     protected $_backendConfig;
 
@@ -25,7 +23,6 @@ abstract class AbstractScopeConfig extends \Magento\Config\Controller\Adminhtml\
      * @param \Magento\Config\Model\Config\Structure $configStructure
      * @param ConfigSectionChecker $sectionChecker
      * @param \Magento\Config\Model\Config $backendConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -42,7 +39,6 @@ abstract class AbstractScopeConfig extends \Magento\Config\Controller\Adminhtml\
      *
      * @param string $sectionId
      * @return bool
-     * @since 2.0.0
      */
     protected function isSectionAllowed($sectionId)
     {

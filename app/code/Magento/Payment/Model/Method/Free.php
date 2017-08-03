@@ -16,7 +16,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * Inheritance is allowed to modify it behavior.
  *
  * @api
- * @since 2.0.0
  */
 class Free extends \Magento\Payment\Model\Method\AbstractMethod
 {
@@ -35,7 +34,6 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
      * Payment Method features
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_canAuthorize = true;
 
@@ -43,13 +41,11 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
      * Payment code name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_code = self::PAYMENT_METHOD_FREE_CODE;
 
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
@@ -66,7 +62,6 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -101,7 +96,6 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @param \Magento\Quote\Api\Data\CartInterface|\Magento\Quote\Model\Quote|null $quote
      * @return bool
-     * @since 2.0.0
      */
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
@@ -117,7 +111,6 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @param \Magento\Quote\Model\Quote|null $quote
      * @return bool
-     * @since 2.0.0
      */
     public function isAvailableInConfig($quote = null)
     {
@@ -128,7 +121,6 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
      * Get config payment action, do nothing if status is pending
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getConfigPaymentAction()
     {

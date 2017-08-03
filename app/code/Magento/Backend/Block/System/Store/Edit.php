@@ -12,7 +12,6 @@ use Magento\Framework\Serialize\SerializerInterface;
  * @api
  *
  * Adminhtml store edit
- * @since 2.0.0
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -20,7 +19,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -35,7 +33,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      * @param SerializerInterface|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -52,7 +49,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Init class
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -115,7 +111,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Get Header text
      *
      * @return string
-     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -141,7 +136,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Build child form class form name based on value of store_type in registry
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _buildFormClassName()
     {

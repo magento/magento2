@@ -9,7 +9,6 @@ namespace Magento\Newsletter\Controller\Adminhtml\Subscriber;
 /**
  * Class \Magento\Newsletter\Controller\Adminhtml\Subscriber\Grid
  *
- * @since 2.0.0
  */
 class Grid extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
 {
@@ -17,7 +16,6 @@ class Grid extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
      * Managing newsletter grid
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -12,7 +12,6 @@ use Magento\Framework\Api\Data\ImageContentInterface;
  * Image Content data object
  *
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class ImageContent extends AbstractSimpleObject implements ImageContentInterface
 {
@@ -20,7 +19,6 @@ class ImageContent extends AbstractSimpleObject implements ImageContentInterface
      * {@inheritdoc}
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBase64EncodedData()
     {
@@ -31,7 +29,6 @@ class ImageContent extends AbstractSimpleObject implements ImageContentInterface
      * {@inheritdoc}
      *
      * @return string
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -42,7 +39,6 @@ class ImageContent extends AbstractSimpleObject implements ImageContentInterface
      * {@inheritdoc}
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -54,7 +50,6 @@ class ImageContent extends AbstractSimpleObject implements ImageContentInterface
      *
      * @param string $data
      * @return $this
-     * @since 2.0.0
      */
     public function setBase64EncodedData($data)
     {
@@ -66,7 +61,6 @@ class ImageContent extends AbstractSimpleObject implements ImageContentInterface
      *
      * @param string $mimeType
      * @return $this
-     * @since 2.0.0
      */
     public function setType($mimeType)
     {
@@ -78,7 +72,6 @@ class ImageContent extends AbstractSimpleObject implements ImageContentInterface
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setName($name)
     {

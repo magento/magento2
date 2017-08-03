@@ -10,7 +10,6 @@ use Magento\Payment\Model\Method\SpecificationInterface;
 
 /**
  * Specification Factory
- * @since 2.0.0
  */
 class Factory
 {
@@ -18,7 +17,6 @@ class Factory
      * Object Manager
      *
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -26,7 +24,6 @@ class Factory
      * Factory constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -39,7 +36,6 @@ class Factory
      * @param string $specificationClass
      * @return SpecificationInterface
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function create($specificationClass)
     {

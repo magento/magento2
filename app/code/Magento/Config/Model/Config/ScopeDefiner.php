@@ -11,7 +11,6 @@ use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 /**
  * System configuration scope
  * @api
- * @since 2.0.0
  */
 class ScopeDefiner
 {
@@ -19,13 +18,11 @@ class ScopeDefiner
      * Request object
      *
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @param \Magento\Framework\App\RequestInterface $request
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\RequestInterface $request)
     {
@@ -36,7 +33,6 @@ class ScopeDefiner
      * Retrieve current config scope
      *
      * @return string
-     * @since 2.0.0
      */
     public function getScope()
     {

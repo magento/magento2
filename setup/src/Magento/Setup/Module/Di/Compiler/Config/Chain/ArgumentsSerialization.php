@@ -16,7 +16,6 @@ use Magento\Framework\Serialize\Serializer\Json;
  *
  * @deprecated 2.2.0 Di arguments are now stored in raw php format and could be cached by OPcache,
  *             this class will be removed in the next backward incompatible release.
- * @since 2.0.0
  */
 class ArgumentsSerialization implements ModificationInterface
 {
@@ -44,7 +43,6 @@ class ArgumentsSerialization implements ModificationInterface
      *
      * @param array $config
      * @return array
-     * @since 2.0.0
      */
     public function modify(array $config)
     {

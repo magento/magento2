@@ -12,7 +12,6 @@ namespace Magento\Tax\Model\ResourceModel;
 /**
  * Class \Magento\Tax\Model\ResourceModel\Calculation
  *
- * @since 2.0.0
  */
 class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -25,7 +24,6 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Rates cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_ratesCache = [];
 
@@ -33,13 +31,11 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Tax data
      *
      * @var \Magento\Tax\Helper\Data
-     * @since 2.0.0
      */
     protected $_taxData;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -48,7 +44,6 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -65,7 +60,6 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -77,7 +71,6 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $ruleId
      * @return $this
-     * @since 2.0.0
      */
     public function deleteByRuleId($ruleId)
     {
@@ -94,7 +87,6 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param  string $field
      * @param  int $ruleId
      * @return array
-     * @since 2.0.0
      */
     public function getCalculationsById($field, $ruleId)
     {
@@ -109,7 +101,6 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\DataObject $request
      * @return array
-     * @since 2.0.0
      */
     public function getRateInfo($request)
     {
@@ -125,7 +116,6 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\DataObject $request
      * @return int
-     * @since 2.0.0
      */
     public function getRate($request)
     {
@@ -140,7 +130,6 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function getCalculationProcess($request, $rates = null)
     {
@@ -231,7 +220,6 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param float|int $percent
      * @param float|int $rate
      * @return float
-     * @since 2.0.0
      */
     protected function _collectPercent($percent, $rate)
     {
@@ -244,7 +232,6 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $postcode
      * @param string|null $exactPostcode
      * @return string[]
-     * @since 2.0.0
      */
     protected function _createSearchPostCodeTemplates($postcode, $exactPostcode = null)
     {
@@ -279,7 +266,6 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _getRates($request)
     {
@@ -434,7 +420,6 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param array $rates
      * @return int
-     * @since 2.0.0
      */
     protected function _calculateRate($rates)
     {
@@ -471,7 +456,6 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\DataObject $request
      * @return array
-     * @since 2.0.0
      */
     public function getRateIds($request)
     {

@@ -9,7 +9,6 @@ namespace Magento\Theme\Block\Adminhtml\System\Design;
  *  Container for theme grid
  *
  * @api
- * @since 2.0.0
  */
 class Theme extends \Magento\Backend\Block\Widget\Grid\Container
 {
@@ -17,7 +16,6 @@ class Theme extends \Magento\Backend\Block\Widget\Grid\Container
      * Initialize grid container and prepare controls
      *
      * @return void
-     * @since 2.0.0
      */
     public function _construct()
     {
@@ -35,7 +33,6 @@ class Theme extends \Magento\Backend\Block\Widget\Grid\Container
      * Prepare header for container
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {

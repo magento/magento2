@@ -12,7 +12,6 @@ use Magento\Integration\Controller\Adminhtml\Integration;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -20,13 +19,11 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_registry = null;
 
     /**
      * @var \Magento\Integration\Helper\Data
-     * @since 2.0.0
      */
     protected $_integrationHelper;
 
@@ -37,7 +34,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Integration\Helper\Data $integrationHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -54,7 +50,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Initialize Integration edit page
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -105,7 +100,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Get header text for edit page.
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -123,7 +117,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getFormActionUrl()
     {
@@ -134,7 +127,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Determine whether we create new integration or editing an existing one.
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _isNewIntegration()
     {

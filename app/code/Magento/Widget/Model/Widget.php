@@ -10,55 +10,46 @@ namespace Magento\Widget\Model;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
- * @since 2.0.0
  */
 class Widget
 {
     /**
      * @var \Magento\Widget\Model\Config\Data
-     * @since 2.0.0
      */
     protected $dataStorage;
 
     /**
      * @var \Magento\Framework\App\Cache\Type\Config
-     * @since 2.0.0
      */
     protected $configCacheType;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
-     * @since 2.0.0
      */
     protected $assetRepo;
 
     /**
      * @var \Magento\Framework\View\Asset\Source
-     * @since 2.0.0
      */
     protected $assetSource;
 
     /**
      * @var \Magento\Framework\View\FileSystem
-     * @since 2.0.0
      */
     protected $viewFileSystem;
 
     /**
      * @var \Magento\Framework\Escaper
-     * @since 2.0.0
      */
     protected $escaper;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $widgetsArray = [];
 
     /**
      * @var \Magento\Widget\Helper\Conditions
-     * @since 2.0.0
      */
     protected $conditionsHelper;
 
@@ -75,7 +66,6 @@ class Widget
      * @param \Magento\Framework\View\Asset\Source $assetSource
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Widget\Helper\Conditions $conditionsHelper
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Escaper $escaper,
@@ -113,7 +103,6 @@ class Widget
      *
      * @param string $type Widget type
      * @return null|array
-     * @since 2.0.0
      */
     public function getWidgetByClassType($type)
     {
@@ -138,7 +127,6 @@ class Widget
      * @return null|\Magento\Framework\Simplexml\Element
      *
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     public function getConfigAsXml($type)
     {
@@ -150,7 +138,6 @@ class Widget
      *
      * @param string $type Widget type
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getConfigAsObject($type)
     {
@@ -178,7 +165,6 @@ class Widget
      *
      * @param \Magento\Framework\DataObject $object
      * @return array
-     * @since 2.0.0
      */
     protected function prepareWidgetParameters(\Magento\Framework\DataObject $object)
     {
@@ -208,7 +194,6 @@ class Widget
      * @param string $key
      * @param int $sortOrder
      * @return array
-     * @since 2.0.0
      */
     protected function prepareDropDownValues(array $data, $key, $sortOrder)
     {
@@ -233,7 +218,6 @@ class Widget
      *
      * @param array $data
      * @return array
-     * @since 2.0.0
      */
     protected function prepareHelperBlock(array $data)
     {
@@ -256,7 +240,6 @@ class Widget
      *
      * @param array $filters Key-value array of filters for widget node properties
      * @return array
-     * @since 2.0.0
      */
     public function getWidgets($filters = [])
     {
@@ -287,7 +270,6 @@ class Widget
      *
      * @param array $filters Key-value array of filters for widget node properties
      * @return array
-     * @since 2.0.0
      */
     public function getWidgetsArray($filters = [])
     {
@@ -314,7 +296,6 @@ class Widget
      * @param array $params Pre-configured Widget Params
      * @param bool $asIs Return result as widget directive(true) or as placeholder image(false)
      * @return string Widget directive ready to parse
-     * @since 2.0.0
      */
     public function getWidgetDeclaration($type, $params = [], $asIs = true)
     {
@@ -379,7 +360,6 @@ class Widget
      *
      * @param string $type
      * @return string
-     * @since 2.0.0
      */
     public function getPlaceholderImageUrl($type)
     {
@@ -404,7 +384,6 @@ class Widget
      * Returns array(<type> => <url>)
      *
      * @return array
-     * @since 2.0.0
      */
     public function getPlaceholderImageUrls()
     {
@@ -427,7 +406,6 @@ class Widget
      *
      * @param array $inputArray
      * @return array
-     * @since 2.0.0
      */
     protected function getAsCanonicalArray($inputArray)
     {
@@ -448,7 +426,6 @@ class Widget
      *
      * @param string $string
      * @return string
-     * @since 2.0.0
      */
     protected function idEncode($string)
     {
@@ -461,7 +438,6 @@ class Widget
      * @param array $firstElement
      * @param array $secondElement
      * @return bool
-     * @since 2.0.0
      */
     protected function sortWidgets($firstElement, $secondElement)
     {
@@ -474,7 +450,6 @@ class Widget
      * @param \Magento\Framework\DataObject $firstElement
      * @param \Magento\Framework\DataObject $secondElement
      * @return int
-     * @since 2.0.0
      */
     protected function sortParameters($firstElement, $secondElement)
     {

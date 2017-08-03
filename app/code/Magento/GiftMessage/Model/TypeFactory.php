@@ -7,7 +7,6 @@ namespace Magento\GiftMessage\Model;
 
 /**
  * Factory class for Eav Entity Types
- * @since 2.0.0
  */
 class TypeFactory
 {
@@ -15,7 +14,6 @@ class TypeFactory
      * Allowed types of entities for using of gift messages
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_allowedEntityTypes = [
         'order' => \Magento\Sales\Model\Order::class,
@@ -31,13 +29,11 @@ class TypeFactory
      * Object manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -50,7 +46,6 @@ class TypeFactory
      * @param string $eavType
      * @return mixed
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function createType($eavType)
     {

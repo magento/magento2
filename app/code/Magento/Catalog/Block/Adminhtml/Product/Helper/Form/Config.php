@@ -14,7 +14,6 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 /**
  * Class \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config
  *
- * @since 2.0.0
  */
 class Config extends \Magento\Framework\Data\Form\Element\Select
 {
@@ -22,7 +21,6 @@ class Config extends \Magento\Framework\Data\Form\Element\Select
      * Retrieve element html
      *
      * @return string
-     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -52,7 +50,6 @@ class Config extends \Magento\Framework\Data\Form\Element\Select
      * Get config value data
      *
      * @return mixed
-     * @since 2.0.0
      */
     protected function _getValueFromConfig()
     {

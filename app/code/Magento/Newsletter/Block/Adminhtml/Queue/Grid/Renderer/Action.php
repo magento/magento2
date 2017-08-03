@@ -14,7 +14,6 @@ namespace Magento\Newsletter\Block\Adminhtml\Queue\Grid\Renderer;
 /**
  * Class \Magento\Newsletter\Block\Adminhtml\Queue\Grid\Renderer\Action
  *
- * @since 2.0.0
  */
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
 {
@@ -23,7 +22,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

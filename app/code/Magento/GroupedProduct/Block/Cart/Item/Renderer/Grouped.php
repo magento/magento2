@@ -13,7 +13,6 @@ use Magento\Framework\DataObject\IdentityInterface;
  * Shopping cart item render block
  *
  * @api
- * @since 2.0.0
  */
 class Grouped extends Renderer implements IdentityInterface
 {
@@ -26,7 +25,6 @@ class Grouped extends Renderer implements IdentityInterface
      * Get item grouped product
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function getGroupedProduct()
     {
@@ -39,7 +37,6 @@ class Grouped extends Renderer implements IdentityInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getProductForThumbnail()
     {
@@ -64,7 +61,6 @@ class Grouped extends Renderer implements IdentityInterface
      * Return identifiers for produced content
      *
      * @return array
-     * @since 2.0.0
      */
     public function getIdentities()
     {

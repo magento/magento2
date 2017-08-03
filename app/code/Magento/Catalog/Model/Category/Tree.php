@@ -9,31 +9,26 @@ use Magento\Framework\Data\Tree\Node;
 
 /**
  * Retrieve category data represented in tree structure
- * @since 2.0.0
  */
 class Tree
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category\Tree
-     * @since 2.0.0
      */
     protected $categoryTree;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category\Collection
-     * @since 2.0.0
      */
     protected $categoryCollection;
 
     /**
      * @var \Magento\Catalog\Api\Data\CategoryTreeInterfaceFactory
-     * @since 2.0.0
      */
     protected $treeFactory;
 
@@ -42,7 +37,6 @@ class Tree
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection
      * @param \Magento\Catalog\Api\Data\CategoryTreeInterfaceFactory $treeFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree,
@@ -59,7 +53,6 @@ class Tree
     /**
      * @param \Magento\Catalog\Model\Category|null $category
      * @return Node|null
-     * @since 2.0.0
      */
     public function getRootNode($category = null)
     {
@@ -80,7 +73,6 @@ class Tree
     /**
      * @param \Magento\Catalog\Model\Category $category
      * @return Node
-     * @since 2.0.0
      */
     protected function getNode(\Magento\Catalog\Model\Category $category)
     {
@@ -94,7 +86,6 @@ class Tree
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function prepareCollection()
     {
@@ -117,7 +108,6 @@ class Tree
      * @param int $depth
      * @param int $currentLevel
      * @return \Magento\Catalog\Api\Data\CategoryTreeInterface
-     * @since 2.0.0
      */
     public function getTree($node, $depth = null, $currentLevel = 0)
     {
@@ -141,7 +131,6 @@ class Tree
      * @param int $depth
      * @param int $currentLevel
      * @return \Magento\Catalog\Api\Data\CategoryTreeInterface[]|[]
-     * @since 2.0.0
      */
     protected function getChildren($node, $depth, $currentLevel)
     {

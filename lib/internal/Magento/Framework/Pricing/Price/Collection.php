@@ -12,43 +12,36 @@ use Magento\Framework\Pricing\SaleableInterface;
  * Class Collection
  *
  * @api
- * @since 2.0.0
  */
 class Collection implements \Iterator
 {
     /**
      * @var Pool
-     * @since 2.0.0
      */
     protected $pool;
 
     /**
      * @var \Magento\Framework\Pricing\SaleableInterface
-     * @since 2.0.0
      */
     protected $saleableItem;
 
     /**
      * @var \Magento\Framework\Pricing\Price\Factory
-     * @since 2.0.0
      */
     protected $priceFactory;
 
     /**
      * @var float
-     * @since 2.0.0
      */
     protected $quantity;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $contains;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $excludes;
 
@@ -56,7 +49,6 @@ class Collection implements \Iterator
      * Cached price models
      *
      * @var array
-     * @since 2.0.0
      */
     protected $priceModels;
 
@@ -67,7 +59,6 @@ class Collection implements \Iterator
      * @param Factory $priceFactory
      * @param Pool $pool
      * @param float $quantity
-     * @since 2.0.0
      */
     public function __construct(
         SaleableInterface $saleableItem,
@@ -86,7 +77,6 @@ class Collection implements \Iterator
      * Reset the Collection to the first element
      *
      * @return mixed|void
-     * @since 2.0.0
      */
     public function rewind()
     {
@@ -97,7 +87,6 @@ class Collection implements \Iterator
      * Return the current element
      *
      * @return \Magento\Framework\Pricing\Price\PriceInterface
-     * @since 2.0.0
      */
     public function current()
     {
@@ -108,7 +97,6 @@ class Collection implements \Iterator
      * Return the key of the current element
      *
      * @return string
-     * @since 2.0.0
      */
     public function key()
     {
@@ -119,7 +107,6 @@ class Collection implements \Iterator
      * Move forward to next element
      *
      * @return mixed|void
-     * @since 2.0.0
      */
     public function next()
     {
@@ -130,7 +117,6 @@ class Collection implements \Iterator
      * Checks if current position is valid
      *
      * @return bool
-     * @since 2.0.0
      */
     public function valid()
     {
@@ -142,7 +128,6 @@ class Collection implements \Iterator
      *
      * @param string $code
      * @return PriceInterface
-     * @since 2.0.0
      */
     public function get($code)
     {

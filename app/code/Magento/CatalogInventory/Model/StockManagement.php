@@ -15,43 +15,36 @@ use Magento\CatalogInventory\Model\ResourceModel\Stock as ResourceStock;
 
 /**
  * Class StockManagement
- * @since 2.0.0
  */
 class StockManagement implements StockManagementInterface
 {
     /**
      * @var StockRegistryProviderInterface
-     * @since 2.0.0
      */
     protected $stockRegistryProvider;
 
     /**
      * @var StockState
-     * @since 2.0.0
      */
     protected $stockState;
 
     /**
      * @var StockConfigurationInterface
-     * @since 2.0.0
      */
     protected $stockConfiguration;
 
     /**
      * @var ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var ResourceStock
-     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var QtyCounterInterface
-     * @since 2.0.0
      */
     private $qtyCounter;
 
@@ -62,7 +55,6 @@ class StockManagement implements StockManagementInterface
      * @param StockConfigurationInterface $stockConfiguration
      * @param ProductRepositoryInterface $productRepository
      * @param QtyCounterInterface $qtyCounter
-     * @since 2.0.0
      */
     public function __construct(
         ResourceStock $stockResource,
@@ -89,7 +81,6 @@ class StockManagement implements StockManagementInterface
      * @return StockItemInterface[]
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function registerProductsSale($items, $websiteId = null)
     {
@@ -138,7 +129,6 @@ class StockManagement implements StockManagementInterface
      * @param string[] $items
      * @param int $websiteId
      * @return bool
-     * @since 2.0.0
      */
     public function revertProductsSale($items, $websiteId = null)
     {
@@ -156,7 +146,6 @@ class StockManagement implements StockManagementInterface
      * @param float $qty
      * @param int $scopeId
      * @return bool
-     * @since 2.0.0
      */
     public function backItemQty($productId, $qty, $scopeId = null)
     {
@@ -184,7 +173,6 @@ class StockManagement implements StockManagementInterface
      *
      * @param int $productId
      * @return string
-     * @since 2.0.0
      */
     protected function getProductType($productId)
     {
@@ -193,7 +181,6 @@ class StockManagement implements StockManagementInterface
 
     /**
      * @return ResourceStock
-     * @since 2.0.0
      */
     protected function getResource()
     {
@@ -205,7 +192,6 @@ class StockManagement implements StockManagementInterface
      *
      * @param StockItemInterface $stockItem
      * @return bool
-     * @since 2.0.0
      */
     protected function canSubtractQty(StockItemInterface $stockItem)
     {

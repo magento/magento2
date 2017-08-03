@@ -12,31 +12,31 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class for retrieving configuration from initial config by store scope
- * @since 2.2.0
+ * @since 2.1.3
  */
 class Store implements SourceInterface
 {
     /**
      * @var Initial
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $initialConfig;
 
     /**
      * @var Website
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $websiteSource;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $storeManager;
 
     /**
      * @var Converter
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $converter;
 
@@ -45,7 +45,7 @@ class Store implements SourceInterface
      * @param Website $website
      * @param StoreManagerInterface $storeManager
      * @param Converter $converter
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(
         Initial $initialConfig,
@@ -64,7 +64,7 @@ class Store implements SourceInterface
      *
      * @param string|null $scopeCode
      * @return array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function get($scopeCode = null)
     {

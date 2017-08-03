@@ -11,13 +11,11 @@ use Zend\View\Model\ViewModel;
 
 /**
  * Controller of homepage of setup
- * @since 2.0.0
  */
 class Home extends AbstractActionController
 {
     /**
      * @return ViewModel|\Zend\Http\Response
-     * @since 2.0.0
      */
     public function indexAction()
     {

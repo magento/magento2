@@ -9,14 +9,12 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
  * Order transactions tab
  *
  * @api
- * @since 2.0.0
  */
 class Transactions extends \Magento\Framework\View\Element\Text\ListText implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * @var \Magento\Framework\AuthorizationInterface
-     * @since 2.0.0
      */
     protected $_authorization;
 
@@ -24,7 +22,6 @@ class Transactions extends \Magento\Framework\View\Element\Text\ListText impleme
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -33,7 +30,6 @@ class Transactions extends \Magento\Framework\View\Element\Text\ListText impleme
      * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
@@ -50,7 +46,6 @@ class Transactions extends \Magento\Framework\View\Element\Text\ListText impleme
      * Retrieve order model instance
      *
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -59,7 +54,6 @@ class Transactions extends \Magento\Framework\View\Element\Text\ListText impleme
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -68,7 +62,6 @@ class Transactions extends \Magento\Framework\View\Element\Text\ListText impleme
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -77,7 +70,6 @@ class Transactions extends \Magento\Framework\View\Element\Text\ListText impleme
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -86,7 +78,6 @@ class Transactions extends \Magento\Framework\View\Element\Text\ListText impleme
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function isHidden()
     {

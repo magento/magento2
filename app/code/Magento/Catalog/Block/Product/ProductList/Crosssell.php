@@ -12,7 +12,6 @@ namespace Magento\Catalog\Block\Product\ProductList;
 /**
  * Class \Magento\Catalog\Block\Product\ProductList\Crosssell
  *
- * @since 2.0.0
  */
 class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
 {
@@ -20,7 +19,6 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      * Crosssell item collection
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection
-     * @since 2.0.0
      */
     protected $_itemCollection;
 
@@ -28,7 +26,6 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      * Prepare crosssell items data
      *
      * @return \Magento\Catalog\Block\Product\ProductList\Crosssell
-     * @since 2.0.0
      */
     protected function _prepareData()
     {
@@ -53,7 +50,6 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      * Prepare items collection
      *
      * @return \Magento\Catalog\Block\Product\ProductList\Crosssell
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -65,7 +61,6 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      * Retrieve crosssell items collection
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection
-     * @since 2.0.0
      */
     public function getItems()
     {

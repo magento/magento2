@@ -18,7 +18,6 @@ use Magento\Store\Model\ScopeInterface;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -26,7 +25,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Locale model
      *
      * @var \Magento\Framework\Locale\ListsInterface
-     * @since 2.0.0
      */
     protected $_localeLists;
 
@@ -34,13 +32,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Directory\Model\ResourceModel\CountryFactory
-     * @since 2.0.0
      */
     protected $_countryFactory;
 
@@ -48,25 +44,22 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Array utils object
      *
      * @var \Magento\Framework\Stdlib\ArrayUtils
-     * @since 2.0.0
      */
     protected $_arrayUtils;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $_localeResolver;
 
     /**
      * @var \Magento\Directory\Helper\Data
-     * @since 2.0.0
      */
     protected $helperData;
 
     /**
      * @var AllowedCountries
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $allowedCountriesReader;
 
@@ -93,7 +86,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -124,7 +116,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Foreground countries
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_foregroundCountries = [];
 
@@ -151,7 +142,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Define main table
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -161,9 +151,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Return Allowed Countries reader
      *
-     * @deprecated 2.2.0
+     * @deprecated 2.1.3
      * @return \Magento\Directory\Model\AllowedCountries
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function getAllowedCountriesReader()
     {
@@ -179,7 +169,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param null|int|string|\Magento\Store\Model\Store $store
      * @return \Magento\Directory\Model\ResourceModel\Country\Collection
-     * @since 2.0.0
      */
     public function loadByStore($store = null)
     {
@@ -198,7 +187,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $countryId
      * @return \Magento\Directory\Model\ResourceModel\Country|null
-     * @since 2.0.0
      */
     public function getItemById($countryId)
     {
@@ -219,7 +207,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string|string[] $countryCode
      * @param string|string[] $iso
      * @return $this
-     * @since 2.0.0
      */
     public function addCountryCodeFilter($countryCode, $iso = ['iso3', 'iso2'])
     {
@@ -254,7 +241,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string|string[] $countryId
      * @return $this
-     * @since 2.0.0
      */
     public function addCountryIdFilter($countryId)
     {
@@ -273,7 +259,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string|boolean $emptyLabel
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray($emptyLabel = ' ')
     {
@@ -318,7 +303,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string|array $foregroundCountries
      * @return $this
-     * @since 2.0.0
      */
     public function setForegroundCountries($foregroundCountries)
     {

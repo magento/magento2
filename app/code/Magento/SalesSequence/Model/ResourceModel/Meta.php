@@ -16,7 +16,6 @@ use Magento\SalesSequence\Model\Profile as ModelProfile;
  * Class Meta represents metadata for sequence as sequence table and store id
  *
  * @api
- * @since 2.0.0
  */
 class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -24,19 +23,16 @@ class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Event prefix
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_sequence_meta';
 
     /**
      * @var ResourceProfile
-     * @since 2.0.0
      */
     protected $resourceProfile;
 
     /**
      * @var MetaFactory
-     * @since 2.0.0
      */
     protected $metaFactory;
 
@@ -45,7 +41,6 @@ class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param MetaFactory $metaFactory
      * @param ResourceProfile $resourceProfile
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         DatabaseContext $context,
@@ -62,7 +57,6 @@ class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Model initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -76,7 +70,6 @@ class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $storeId
      * @return \Magento\SalesSequence\Model\Meta
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function loadByEntityTypeAndStore($entityType, $storeId)
     {
@@ -102,7 +95,6 @@ class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -120,7 +112,6 @@ class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @return $this
      * @throws Exception
      * @throws NoSuchEntityException
-     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -140,7 +131,6 @@ class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {

@@ -10,7 +10,6 @@ use Magento\Sales\Model\Order;
 
 /**
  * Class State
- * @since 2.0.0
  */
 class State
 {
@@ -21,7 +20,6 @@ class State
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function check(Order $order)
     {

@@ -10,19 +10,16 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class Factory
- * @since 2.0.0
  */
 class Factory
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $className = \Magento\Ui\Component\Form\Fieldset::class;
 
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -30,7 +27,6 @@ class Factory
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -42,7 +38,6 @@ class Factory
      *
      * @param array $arguments
      * @return Fieldset
-     * @since 2.0.0
      */
     public function create(array $arguments = [])
     {

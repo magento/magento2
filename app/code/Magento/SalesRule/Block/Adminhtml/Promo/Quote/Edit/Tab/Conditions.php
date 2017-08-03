@@ -10,7 +10,6 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Conditions
  *
- * @since 2.0.0
  */
 class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Ui\Component\Layout\Tabs\TabInterface
@@ -19,13 +18,11 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Core registry
      *
      * @var \Magento\Backend\Block\Widget\Form\Renderer\Fieldset
-     * @since 2.0.0
      */
     protected $_rendererFieldset;
 
     /**
      * @var \Magento\Rule\Block\Conditions
-     * @since 2.0.0
      */
     protected $_conditions;
 
@@ -51,7 +48,6 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset
      * @param array $data
      * @param \Magento\SalesRule\Model\RuleFactory|null $ruleFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -99,7 +95,6 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -108,7 +103,6 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -117,7 +111,6 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -126,7 +119,6 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -137,7 +129,6 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Prepare form before rendering HTML
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {

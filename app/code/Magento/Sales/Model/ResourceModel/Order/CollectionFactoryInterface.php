@@ -8,7 +8,7 @@ namespace Magento\Sales\Model\ResourceModel\Order;
 
 /**
  * Class CollectionFactoryInterface
- * @since 2.2.0
+ * @since 2.1.1
  */
 interface CollectionFactoryInterface
 {
@@ -17,7 +17,7 @@ interface CollectionFactoryInterface
      *
      * @param int $customerId
      * @return \Magento\Sales\Model\ResourceModel\Order\Collection
-     * @since 2.2.0
+     * @since 2.1.1
      */
     public function create($customerId = null);
 }

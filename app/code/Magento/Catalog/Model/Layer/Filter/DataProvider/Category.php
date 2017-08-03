@@ -13,43 +13,36 @@ use Magento\Framework\Registry;
 /**
  * Class \Magento\Catalog\Model\Layer\Filter\DataProvider\Category
  *
- * @since 2.0.0
  */
 class Category
 {
     /**
      * @var Registry
-     * @since 2.0.0
      */
     private $coreRegistry;
 
     /**
      * @var CategoryModel
-     * @since 2.0.0
      */
     private $category;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     private $categoryId;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     private $isApplied = false;
 
     /**
      * @var Layer
-     * @since 2.0.0
      */
     private $layer;
 
     /**
      * @var CategoryModelFactory
-     * @since 2.0.0
      */
     private $categoryFactory;
 
@@ -58,7 +51,6 @@ class Category
      * @param CategoryModelFactory $categoryFactory
      * @param Layer $layer
      * @internal param $data
-     * @since 2.0.0
      */
     public function __construct(
         Registry $coreRegistry,
@@ -74,7 +66,6 @@ class Category
      * Validate category for using as filter
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function isValid()
     {
@@ -96,7 +87,6 @@ class Category
     /**
      * @param int $categoryId
      * @return $this
-     * @since 2.0.0
      */
     public function setCategoryId($categoryId)
     {
@@ -109,7 +99,6 @@ class Category
 
     /**
      * @return boolean
-     * @since 2.0.0
      */
     private function isApplied()
     {
@@ -120,7 +109,6 @@ class Category
      * Get selected category object
      *
      * @return CategoryModel
-     * @since 2.0.0
      */
     public function getCategory()
     {
@@ -153,7 +141,6 @@ class Category
      * Get filter value for reset current filter state
      *
      * @return mixed|null
-     * @since 2.0.0
      */
     public function getResetValue()
     {
@@ -176,7 +163,6 @@ class Category
 
     /**
      * @return Layer
-     * @since 2.0.0
      */
     private function getLayer()
     {

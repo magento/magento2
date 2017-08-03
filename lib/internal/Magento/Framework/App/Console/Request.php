@@ -10,19 +10,16 @@ namespace Magento\Framework\App\Console;
 /**
  * Class \Magento\Framework\App\Console\Request
  *
- * @since 2.0.0
  */
 class Request implements \Magento\Framework\App\RequestInterface
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $params;
 
     /**
      * @param array $parameters
-     * @since 2.0.0
      */
     public function __construct(array $parameters = [])
     {
@@ -39,7 +36,6 @@ class Request implements \Magento\Framework\App\RequestInterface
      * Retrieve module name
      *
      * @return void
-     * @since 2.0.0
      */
     public function getModuleName()
     {
@@ -52,7 +48,6 @@ class Request implements \Magento\Framework\App\RequestInterface
      * @param string $name
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function setModuleName($name)
     {
@@ -62,7 +57,6 @@ class Request implements \Magento\Framework\App\RequestInterface
      * Retrieve action name
      *
      * @return void
-     * @since 2.0.0
      */
     public function getActionName()
     {
@@ -75,7 +69,6 @@ class Request implements \Magento\Framework\App\RequestInterface
      * @param string $name
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function setActionName($name)
     {
@@ -87,7 +80,6 @@ class Request implements \Magento\Framework\App\RequestInterface
      * @param string $key
      * @param mixed $defaultValue
      * @return mixed
-     * @since 2.0.0
      */
     public function getParam($key, $defaultValue = null)
     {
@@ -101,7 +93,6 @@ class Request implements \Magento\Framework\App\RequestInterface
      * Retrieve all params as array
      *
      * @return array
-     * @since 2.0.0
      */
     public function getParams()
     {
@@ -113,7 +104,6 @@ class Request implements \Magento\Framework\App\RequestInterface
      *
      * @param array $data
      * @return $this
-     * @since 2.0.0
      */
     public function setParams(array $data)
     {
@@ -128,7 +118,6 @@ class Request implements \Magento\Framework\App\RequestInterface
      * @param null|string $default
      * @return null|string|void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getCookie($name, $default)
     {
@@ -138,7 +127,6 @@ class Request implements \Magento\Framework\App\RequestInterface
      * Stub to satisfy RequestInterface
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isSecure()
     {

@@ -28,7 +28,6 @@ use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection;
  * @SuppressWarnings(PHPMD.TooManyFields)
  *
  * @api
- * @since 2.0.0
  */
 class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -41,7 +40,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * Prefix of model events names
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'wishlist';
 
@@ -49,7 +47,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * Wishlist item collection
      *
      * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
-     * @since 2.0.0
      */
     protected $_itemCollection;
 
@@ -57,7 +54,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * Store filter for wishlist
      *
      * @var \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     protected $_store;
 
@@ -65,7 +61,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * Shared store ids (website stores)
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_storeIds;
 
@@ -73,7 +68,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * Wishlist data
      *
      * @var \Magento\Wishlist\Helper\Data
-     * @since 2.0.0
      */
     protected $_wishlistData;
 
@@ -81,61 +75,51 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * Catalog product
      *
      * @var \Magento\Catalog\Helper\Product
-     * @since 2.0.0
      */
     protected $_catalogProduct;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.0.0
      */
     protected $_date;
 
     /**
      * @var ItemFactory
-     * @since 2.0.0
      */
     protected $_wishlistItemFactory;
 
     /**
      * @var CollectionFactory
-     * @since 2.0.0
      */
     protected $_wishlistCollectionFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $_productFactory;
 
     /**
      * @var \Magento\Framework\Math\Random
-     * @since 2.0.0
      */
     protected $mathRandom;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_useCurrentWebsite;
 
     /**
      * @var ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
@@ -166,7 +150,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * @param array $data
      * @param Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -208,7 +191,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * @param int $customerId
      * @param bool $create Create wishlist if don't exists
      * @return $this
-     * @since 2.0.0
      */
     public function loadByCustomerId($customerId, $create = false)
     {
@@ -231,7 +213,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * Retrieve wishlist name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -246,7 +227,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * Set random sharing code
      *
      * @return $this
-     * @since 2.0.0
      */
     public function generateSharingCode()
     {
@@ -259,7 +239,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      *
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function loadByCode($code)
     {
@@ -275,7 +254,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * Retrieve sharing code (random string)
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getSharingRandomCode()
     {
@@ -286,7 +264,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * Set date of last update for wishlist
      *
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -299,7 +276,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * Save related items
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -319,7 +295,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * @param   bool $forciblySetQty
      *
      * @return  Item
-     * @since 2.0.0
      */
     protected function _addCatalogProduct(\Magento\Catalog\Model\Product $product, $qty = 1, $forciblySetQty = false)
     {
@@ -359,7 +334,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * Retrieve wishlist item collection
      *
      * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
-     * @since 2.0.0
      */
     public function getItemCollection()
     {
@@ -379,7 +353,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      *
      * @param int $itemId
      * @return false|Item
-     * @since 2.0.0
      */
     public function getItem($itemId)
     {
@@ -394,7 +367,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      *
      * @param   Item $item
      * @return  $this
-     * @since 2.0.0
      */
     public function addItem(Item $item)
     {
@@ -417,7 +389,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * @return Item|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function addNewItem($product, $buyRequest = null, $forciblySetQty = false)
     {
@@ -514,7 +485,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      *
      * @param int $customerId
      * @return $this
-     * @since 2.0.0
      */
     public function setCustomerId($customerId)
     {
@@ -525,7 +495,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * Retrieve customer id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCustomerId()
     {
@@ -536,7 +505,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * Retrieve data for save
      *
      * @return array
-     * @since 2.0.0
      */
     public function getDataForSave()
     {
@@ -551,7 +519,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * Retrieve shared store ids for current website or all stores if $current is false
      *
      * @return array
-     * @since 2.0.0
      */
     public function getSharedStoreIds()
     {
@@ -575,7 +542,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      *
      * @param array $storeIds
      * @return $this
-     * @since 2.0.0
      */
     public function setSharedStoreIds($storeIds)
     {
@@ -587,7 +553,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * Retrieve wishlist store object
      *
      * @return \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     public function getStore()
     {
@@ -602,7 +567,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      *
      * @param \Magento\Store\Model\Store $store
      * @return $this
-     * @since 2.0.0
      */
     public function setStore($store)
     {
@@ -614,7 +578,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * Retrieve wishlist items count
      *
      * @return int
-     * @since 2.0.0
      */
     public function getItemsCount()
     {
@@ -625,7 +588,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * Retrieve wishlist has salable item(s)
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isSalable()
     {
@@ -642,7 +604,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      *
      * @param int $customerId
      * @return bool
-     * @since 2.0.0
      */
     public function isOwner($customerId)
     {
@@ -672,7 +633,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * @see \Magento\Catalog\Helper\Product::addParamsToBuyRequest()
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function updateItem($itemId, $buyRequest, $params = null)
     {
@@ -738,7 +698,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * Return unique ID(s) for each object in system
      *
      * @return array
-     * @since 2.0.0
      */
     public function getIdentities()
     {

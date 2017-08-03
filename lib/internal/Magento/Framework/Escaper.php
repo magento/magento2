@@ -9,7 +9,6 @@ namespace Magento\Framework;
  * Magento escape methods
  *
  * @api
- * @since 2.0.0
  */
 class Escaper
 {
@@ -50,7 +49,6 @@ class Escaper
      * @param string|array $data
      * @param array|null $allowedTags
      * @return string|array
-     * @since 2.0.0
      */
     public function escapeHtml($data, $allowedTags = null)
     {
@@ -217,7 +215,6 @@ class Escaper
      *
      * @param string $string
      * @return string
-     * @since 2.0.0
      */
     public function escapeUrl($string)
     {
@@ -282,7 +279,6 @@ class Escaper
      * @param string $quote
      * @return string|array
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     public function escapeJsQuote($data, $quote = '\'')
     {
@@ -304,7 +300,6 @@ class Escaper
      * @param string $data
      * @return string
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     public function escapeXssInUrl($data)
     {
@@ -323,7 +318,6 @@ class Escaper
      * @param bool $addSlashes
      * @return string
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     public function escapeQuote($data, $addSlashes = false)
     {

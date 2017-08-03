@@ -11,7 +11,6 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Catalog\Controller\Product\Compare\Clear
  *
- * @since 2.0.0
  */
 class Clear extends \Magento\Catalog\Controller\Product\Compare
 {
@@ -19,7 +18,6 @@ class Clear extends \Magento\Catalog\Controller\Product\Compare
      * Remove all items from comparison list
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

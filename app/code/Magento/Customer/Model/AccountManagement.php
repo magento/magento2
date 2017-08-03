@@ -54,7 +54,6 @@ use Magento\Customer\Model\Customer\CredentialsValidator;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * @since 2.0.0
  */
 class AccountManagement implements AccountManagementInterface
 {
@@ -161,139 +160,116 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * @var CustomerFactory
-     * @since 2.0.0
      */
     private $customerFactory;
 
     /**
      * @var \Magento\Customer\Api\Data\ValidationResultsInterfaceFactory
-     * @since 2.0.0
      */
     private $validationResultsDataFactory;
 
     /**
      * @var ManagerInterface
-     * @since 2.0.0
      */
     private $eventManager;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     private $storeManager;
 
     /**
      * @var Random
-     * @since 2.0.0
      */
     private $mathRandom;
 
     /**
      * @var Validator
-     * @since 2.0.0
      */
     private $validator;
 
     /**
      * @var AddressRepositoryInterface
-     * @since 2.0.0
      */
     private $addressRepository;
 
     /**
      * @var CustomerMetadataInterface
-     * @since 2.0.0
      */
     private $customerMetadataService;
 
     /**
      * @var PsrLogger
-     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var Encryptor
-     * @since 2.0.0
      */
     private $encryptor;
 
     /**
      * @var CustomerRegistry
-     * @since 2.0.0
      */
     private $customerRegistry;
 
     /**
      * @var ConfigShare
-     * @since 2.0.0
      */
     private $configShare;
 
     /**
      * @var StringHelper
-     * @since 2.0.0
      */
     protected $stringHelper;
 
     /**
      * @var CustomerRepositoryInterface
-     * @since 2.0.0
      */
     private $customerRepository;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     private $scopeConfig;
 
     /**
      * @var TransportBuilder
-     * @since 2.0.0
      */
     private $transportBuilder;
 
     /**
      * @var DataObjectProcessor
-     * @since 2.0.0
      */
     protected $dataProcessor;
 
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $registry;
 
     /**
      * @var CustomerViewHelper
-     * @since 2.0.0
      */
     protected $customerViewHelper;
 
     /**
      * @var DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
     /**
      * @var ObjectFactory
-     * @since 2.0.0
      */
     protected $objectFactory;
 
     /**
      * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
-     * @since 2.0.0
      */
     protected $extensibleDataObjectConverter;
 
     /**
      * @var CustomerModel
-     * @since 2.0.0
      */
     protected $customerModel;
 
@@ -347,7 +323,6 @@ class AccountManagement implements AccountManagementInterface
      * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param CredentialsValidator|null $credentialsValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         CustomerFactory $customerFactory,
@@ -422,7 +397,6 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function resendConfirmation($email, $websiteId = null, $redirectUrl = '')
     {
@@ -446,7 +420,6 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function activate($email, $confirmationKey)
     {
@@ -456,7 +429,6 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function activateById($customerId, $confirmationKey)
     {
@@ -472,7 +444,6 @@ class AccountManagement implements AccountManagementInterface
      * @return \Magento\Customer\Api\Data\CustomerInterface
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException
      * @throws \Magento\Framework\Exception\State\InputMismatchException
-     * @since 2.0.0
      */
     private function activateCustomer($customer, $confirmationKey)
     {
@@ -493,7 +464,6 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function authenticate($username, $password)
     {
@@ -529,7 +499,6 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function validateResetPasswordLinkToken($customerId, $resetPasswordLinkToken)
     {
@@ -539,7 +508,6 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function initiatePasswordReset($email, $template, $websiteId = null)
     {
@@ -578,7 +546,6 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function resetPassword($email, $resetToken, $newPassword)
     {
@@ -601,7 +568,6 @@ class AccountManagement implements AccountManagementInterface
      * @param string $password
      * @return void
      * @throws InputException
-     * @since 2.0.0
      */
     protected function checkPasswordStrength($password)
     {
@@ -685,7 +651,6 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getConfirmationStatus($customerId)
     {
@@ -702,7 +667,6 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
@@ -725,7 +689,6 @@ class AccountManagement implements AccountManagementInterface
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function createAccountWithPasswordHash(CustomerInterface $customer, $hash, $redirectUrl = '')
     {
@@ -802,7 +765,6 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getDefaultBillingAddress($customerId)
     {
@@ -812,7 +774,6 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getDefaultShippingAddress($customerId)
     {
@@ -826,7 +787,6 @@ class AccountManagement implements AccountManagementInterface
      * @param CustomerInterface $customer
      * @param string $redirectUrl
      * @return void
-     * @since 2.0.0
      */
     protected function sendEmailConfirmation(CustomerInterface $customer, $redirectUrl)
     {
@@ -847,7 +807,6 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function changePassword($email, $currentPassword, $newPassword)
     {
@@ -861,7 +820,6 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function changePasswordById($customerId, $currentPassword, $newPassword)
     {
@@ -883,7 +841,6 @@ class AccountManagement implements AccountManagementInterface
      * @throws InputException
      * @throws InvalidEmailOrPasswordException
      * @throws UserLockedException
-     * @since 2.0.0
      */
     private function changePasswordForCustomer($customer, $currentPassword, $newPassword)
     {
@@ -908,7 +865,6 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param string $password
      * @return string
-     * @since 2.0.0
      */
     protected function createPasswordHash($password)
     {
@@ -929,7 +885,6 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function validate(CustomerInterface $customer)
     {
@@ -957,7 +912,6 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function isEmailAvailable($customerEmail, $websiteId = null)
     {
@@ -974,7 +928,6 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function isCustomerInStore($customerWebsiteId, $storeId)
     {
@@ -1000,7 +953,6 @@ class AccountManagement implements AccountManagementInterface
      * @throws \Magento\Framework\Exception\State\ExpiredException If token is expired
      * @throws \Magento\Framework\Exception\InputException If token or customer id is invalid
      * @throws \Magento\Framework\Exception\NoSuchEntityException If customer doesn't exist
-     * @since 2.0.0
      */
     private function validateResetPasswordToken($customerId, $resetPasswordLinkToken)
     {
@@ -1035,7 +987,6 @@ class AccountManagement implements AccountManagementInterface
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException If group is not found
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function isReadonly($customerId)
     {
@@ -1054,7 +1005,6 @@ class AccountManagement implements AccountManagementInterface
      * @return $this
      * @throws LocalizedException
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     protected function sendNewAccountEmail(
         $customer,
@@ -1094,7 +1044,6 @@ class AccountManagement implements AccountManagementInterface
      * @param CustomerInterface $customer
      * @return $this
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     protected function sendPasswordResetNotificationEmail($customer)
     {
@@ -1108,7 +1057,6 @@ class AccountManagement implements AccountManagementInterface
      * @param int|string|null $defaultStoreId
      * @return int
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     protected function getWebsiteStoreId($customer, $defaultStoreId = null)
     {
@@ -1123,7 +1071,6 @@ class AccountManagement implements AccountManagementInterface
     /**
      * @return array
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     protected function getTemplateTypes()
     {
@@ -1156,7 +1103,6 @@ class AccountManagement implements AccountManagementInterface
      * @param string $email
      * @return $this
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     protected function sendEmailTemplate(
         $customer,
@@ -1188,7 +1134,6 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return bool
-     * @since 2.0.0
      */
     protected function isConfirmationRequired($customer)
     {
@@ -1208,7 +1153,6 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return bool
-     * @since 2.0.0
      */
     protected function canSkipConfirmation($customer)
     {
@@ -1233,7 +1177,6 @@ class AccountManagement implements AccountManagementInterface
      * @param string $rpToken
      * @param string $rpTokenCreatedAt
      * @return bool
-     * @since 2.0.0
      */
     public function isResetPasswordLinkTokenExpired($rpToken, $rpTokenCreatedAt)
     {
@@ -1266,7 +1209,6 @@ class AccountManagement implements AccountManagementInterface
      * @param string $passwordLinkToken
      * @return bool
      * @throws InputException
-     * @since 2.0.0
      */
     public function changeResetPasswordLinkToken($customer, $passwordLinkToken)
     {
@@ -1293,7 +1235,6 @@ class AccountManagement implements AccountManagementInterface
      * @param CustomerInterface $customer
      * @return $this
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     public function sendPasswordReminderEmail($customer)
     {
@@ -1321,7 +1262,6 @@ class AccountManagement implements AccountManagementInterface
      * @param CustomerInterface $customer
      * @return $this
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     public function sendPasswordResetConfirmationEmail($customer)
     {
@@ -1349,7 +1289,6 @@ class AccountManagement implements AccountManagementInterface
      * @param CustomerInterface $customer
      * @param int $addressId
      * @return AddressInterface|null
-     * @since 2.0.0
      */
     protected function getAddressById(CustomerInterface $customer, $addressId)
     {
@@ -1367,7 +1306,6 @@ class AccountManagement implements AccountManagementInterface
      * @param CustomerInterface $customer
      * @return Data\CustomerSecure
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     protected function getFullCustomerObject($customer)
     {
@@ -1386,7 +1324,6 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param string $password
      * @return string
-     * @since 2.0.0
      */
     public function getPasswordHash($password)
     {

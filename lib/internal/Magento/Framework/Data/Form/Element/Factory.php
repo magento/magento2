@@ -14,13 +14,11 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Class \Magento\Framework\Data\Form\Element\Factory
  *
- * @since 2.0.0
  */
 class Factory
 {
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -28,7 +26,6 @@ class Factory
      * Standard library element types
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_standardTypes = [
         'button',
@@ -63,7 +60,6 @@ class Factory
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -77,7 +73,6 @@ class Factory
      * @param array $config
      * @return AbstractElement
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function create($elementType, array $config = [])
     {

@@ -12,19 +12,16 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
  * Cart Repository class for guest carts.
- * @since 2.0.0
  */
 class GuestCartRepository implements GuestCartRepositoryInterface
 {
     /**
      * @var QuoteIdMaskFactory
-     * @since 2.0.0
      */
     protected $quoteIdMaskFactory;
 
     /**
      * @var CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
@@ -33,7 +30,6 @@ class GuestCartRepository implements GuestCartRepositoryInterface
      *
      * @param CartRepositoryInterface $quoteRepository
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
-     * @since 2.0.0
      */
     public function __construct(
         CartRepositoryInterface $quoteRepository,
@@ -45,7 +41,6 @@ class GuestCartRepository implements GuestCartRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function get($cartId)
     {

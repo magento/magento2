@@ -13,20 +13,17 @@ use Magento\Framework\ObjectManager\TMapFactory;
  * Class ValidatorPool
  * @package Magento\Payment\Gateway\Validator
  * @api
- * @since 2.0.0
  */
 class ValidatorPool implements \Magento\Payment\Gateway\Validator\ValidatorPoolInterface
 {
     /**
      * @var ValidatorInterface[] | TMap
-     * @since 2.0.0
      */
     private $validators;
 
     /**
      * @param TMapFactory $tmapFactory
      * @param array $validators
-     * @since 2.0.0
      */
     public function __construct(
         TMapFactory $tmapFactory,
@@ -46,7 +43,6 @@ class ValidatorPool implements \Magento\Payment\Gateway\Validator\ValidatorPoolI
      * @param string $code
      * @return ValidatorInterface
      * @throws NotFoundException
-     * @since 2.0.0
      */
     public function get($code)
     {

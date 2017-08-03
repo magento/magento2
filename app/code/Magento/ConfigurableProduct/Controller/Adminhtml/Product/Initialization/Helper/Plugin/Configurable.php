@@ -19,19 +19,16 @@ use Magento\Framework\App\RequestInterface;
  * Class Configurable
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Configurable
 {
     /**
      * @var VariationHandler
-     * @since 2.0.0
      */
     private $variationHandler;
 
     /**
      * @var RequestInterface
-     * @since 2.0.0
      */
     private $request;
 
@@ -65,7 +62,6 @@ class Configurable
      * @param VariationHandler $variationHandler
      * @param RequestInterface $request
      * @param Factory $optionsFactory
-     * @since 2.0.0
      */
     public function __construct(
         VariationHandler $variationHandler,
@@ -86,7 +82,6 @@ class Configurable
      * @throws \InvalidArgumentException
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterInitialize(Helper $subject, ProductInterface $product)
     {

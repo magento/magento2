@@ -9,7 +9,6 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Factory class for Template Engine
- * @since 2.0.0
  */
 class TemplateEngineFactory
 {
@@ -17,7 +16,6 @@ class TemplateEngineFactory
      * Object manager
      *
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -25,7 +23,6 @@ class TemplateEngineFactory
      * Engines
      *
      * @var array
-     * @since 2.0.0
      */
     protected $engines;
 
@@ -34,7 +31,6 @@ class TemplateEngineFactory
      *
      * @param ObjectManagerInterface $objectManager
      * @param array $engines Format: array('<name>' => 'TemplateEngine\Class', ...)
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager, array $engines)
     {
@@ -49,7 +45,6 @@ class TemplateEngineFactory
      * @return TemplateEngineInterface
      * @throws \UnexpectedValueException If template engine doesn't implement the necessary interface
      * @throws \InvalidArgumentException If template engine doesn't exist
-     * @since 2.0.0
      */
     public function create($name)
     {

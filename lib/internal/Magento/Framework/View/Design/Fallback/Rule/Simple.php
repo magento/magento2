@@ -11,7 +11,6 @@ use Magento\Framework\Module\Dir\Reader;
 
 /**
  * Class with simple substitution parameters to values
- * @since 2.0.0
  */
 class Simple implements RuleInterface
 {
@@ -19,7 +18,6 @@ class Simple implements RuleInterface
      * Optional params for rule
      *
      * @var array
-     * @since 2.0.0
      */
     protected $optionalParams;
 
@@ -27,7 +25,6 @@ class Simple implements RuleInterface
      * Pattern for a simple rule
      *
      * @var string
-     * @since 2.0.0
      */
     protected $pattern;
 
@@ -36,7 +33,6 @@ class Simple implements RuleInterface
      *
      * @param string $pattern
      * @param array $optionalParams
-     * @since 2.0.0
      */
     public function __construct(
         $pattern,
@@ -52,7 +48,6 @@ class Simple implements RuleInterface
      * @param array $params array of parameters
      * @return array folders to perform a search
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function getPatternDirs(array $params)
     {

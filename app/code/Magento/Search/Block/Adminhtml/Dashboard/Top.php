@@ -9,31 +9,26 @@ namespace Magento\Search\Block\Adminhtml\Dashboard;
  *  Dashboard last search keywords block
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Top extends \Magento\Backend\Block\Dashboard\Grid
 {
     /**
      * @var \Magento\Search\Model\ResourceModel\Query\Collection
-     * @since 2.0.0
      */
     protected $_collection;
 
     /**
      * @var \Magento\Search\Model\ResourceModel\Query\CollectionFactory
-     * @since 2.0.0
      */
     protected $_queriesFactory;
 
     /**
      * @var \Magento\Framework\Module\Manager
-     * @since 2.0.0
      */
     protected $_moduleManager;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Backend::dashboard/grid.phtml';
 
@@ -43,7 +38,6 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Search\Model\ResourceModel\Query\CollectionFactory $queriesFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -59,7 +53,6 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -69,7 +62,6 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -94,7 +86,6 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -128,7 +119,6 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getRowUrl($row)
     {

@@ -9,7 +9,6 @@ namespace Magento\Eav\Model\ResourceModel\Entity\Attribute\Option;
  * Entity attribute option collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -17,19 +16,16 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Option value table
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_optionValueTable;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.0.0
      */
     protected $_coreResource;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -43,7 +39,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -64,7 +59,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -81,7 +75,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $setId
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setAttributeFilter($setId)
     {
@@ -94,7 +87,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $storeId
      * @param bool $useDefaultValue
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreFilter($storeId = null, $useDefaultValue = true)
     {
@@ -143,7 +135,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int|array $optionId
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setIdFilter($optionId)
     {
@@ -155,7 +146,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $valueKey
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray($valueKey = 'value')
     {
@@ -168,7 +158,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $dir direction
      * @param bool $sortAlpha sort alphabetically by values in admin
      * @return $this
-     * @since 2.0.0
      */
     public function setPositionOrder($dir = self::SORT_ORDER_ASC, $sortAlpha = false)
     {

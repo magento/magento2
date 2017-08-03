@@ -12,7 +12,6 @@ use Magento\Framework\View\Result\PageFactory;
 /**
  * Class \Magento\Sales\Controller\Guest\PrintAction
  *
- * @since 2.0.0
  */
 class PrintAction extends \Magento\Sales\Controller\AbstractController\PrintAction
 {
@@ -20,7 +19,6 @@ class PrintAction extends \Magento\Sales\Controller\AbstractController\PrintActi
      * @param Context $context
      * @param OrderLoader $orderLoader
      * @param PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,

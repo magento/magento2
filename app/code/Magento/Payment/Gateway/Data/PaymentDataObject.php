@@ -10,26 +10,22 @@ use Magento\Payment\Model\InfoInterface;
 /**
  * Class \Magento\Payment\Gateway\Data\PaymentDataObject
  *
- * @since 2.0.0
  */
 class PaymentDataObject implements PaymentDataObjectInterface
 {
     /**
      * @var OrderAdapterInterface
-     * @since 2.0.0
      */
     private $order;
 
     /**
      * @var InfoInterface
-     * @since 2.0.0
      */
     private $payment;
 
     /**
      * @param OrderAdapterInterface $order
      * @param InfoInterface $payment
-     * @since 2.0.0
      */
     public function __construct(
         OrderAdapterInterface $order,
@@ -43,7 +39,6 @@ class PaymentDataObject implements PaymentDataObjectInterface
      * Returns order
      *
      * @return OrderAdapterInterface
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -54,7 +49,6 @@ class PaymentDataObject implements PaymentDataObjectInterface
      * Returns payment
      *
      * @return InfoInterface
-     * @since 2.0.0
      */
     public function getPayment()
     {

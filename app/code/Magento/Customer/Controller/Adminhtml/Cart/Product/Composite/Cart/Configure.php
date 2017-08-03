@@ -9,7 +9,6 @@ namespace Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart;
 /**
  * Class \Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart\Configure
  *
- * @since 2.0.0
  */
 class Configure extends \Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart
 {
@@ -17,7 +16,6 @@ class Configure extends \Magento\Customer\Controller\Adminhtml\Cart\Product\Comp
      * Ajax handler to response configuration fieldset of composite product in customer's cart
      *
      * @return \Magento\Framework\View\Result\Layout
-     * @since 2.0.0
      */
     public function execute()
     {

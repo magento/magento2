@@ -9,7 +9,6 @@ use Magento\Setup\Module\Dependency\ParserInterface;
 
 /**
  * Config xml parser
- * @since 2.0.0
  */
 class Xml implements ParserInterface
 {
@@ -17,7 +16,6 @@ class Xml implements ParserInterface
      * Template method. Main algorithm
      *
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function parse(array $options)
     {
@@ -37,7 +35,6 @@ class Xml implements ParserInterface
      * @param array $options
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     protected function checkOptions($options)
     {
@@ -56,7 +53,6 @@ class Xml implements ParserInterface
      *
      * @param \SimpleXMLElement $config
      * @return string
-     * @since 2.0.0
      */
     protected function extractModuleName($config)
     {
@@ -68,7 +64,6 @@ class Xml implements ParserInterface
      *
      * @param string $file
      * @return \SimpleXMLElement
-     * @since 2.0.0
      */
     protected function getModuleConfig($file)
     {
@@ -80,7 +75,6 @@ class Xml implements ParserInterface
      *
      * @param string $name
      * @return string
-     * @since 2.0.0
      */
     protected function prepareModuleName($name)
     {

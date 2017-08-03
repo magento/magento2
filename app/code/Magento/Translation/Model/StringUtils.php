@@ -21,13 +21,11 @@ namespace Magento\Translation\Model;
 /**
  * Class \Magento\Translation\Model\StringUtils
  *
- * @since 2.0.0
  */
 class StringUtils extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -37,7 +35,6 @@ class StringUtils extends \Magento\Framework\Model\AbstractModel
     /**
      * @param string $string
      * @return $this
-     * @since 2.0.0
      */
     public function setString($string)
     {
@@ -49,7 +46,6 @@ class StringUtils extends \Magento\Framework\Model\AbstractModel
      * Retrieve string
      *
      * @return string
-     * @since 2.0.0
      */
     public function getString()
     {

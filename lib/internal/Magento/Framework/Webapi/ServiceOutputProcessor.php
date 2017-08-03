@@ -15,26 +15,22 @@ use Magento\Framework\Webapi\ServicePayloadConverterInterface;
  * Data object converter
  *
  * @api
- * @since 2.0.0
  */
 class ServiceOutputProcessor implements ServicePayloadConverterInterface
 {
     /**
      * @var DataObjectProcessor
-     * @since 2.0.0
      */
     protected $dataObjectProcessor;
 
     /**
      * @var MethodsMap
-     * @since 2.0.0
      */
     protected $methodsMapProcessor;
 
     /**
      * @param DataObjectProcessor $dataObjectProcessor
      * @param MethodsMap $methodsMapProcessor
-     * @since 2.0.0
      */
     public function __construct(
         DataObjectProcessor $dataObjectProcessor,
@@ -57,7 +53,6 @@ class ServiceOutputProcessor implements ServicePayloadConverterInterface
      * @param string $serviceClassName
      * @param string $serviceMethodName
      * @return array|int|string|bool|float Scalar or array of scalars
-     * @since 2.0.0
      */
     public function process($data, $serviceClassName, $serviceMethodName)
     {
@@ -71,7 +66,6 @@ class ServiceOutputProcessor implements ServicePayloadConverterInterface
      *
      * @param array $dataObjectArray
      * @return array
-     * @since 2.0.0
      */
     protected function processDataObject($dataObjectArray)
     {
@@ -95,7 +89,6 @@ class ServiceOutputProcessor implements ServicePayloadConverterInterface
      * @param array $data
      * @param string $type
      * @return array|object
-     * @since 2.0.0
      */
     public function convertValue($data, $type)
     {

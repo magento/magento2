@@ -12,19 +12,16 @@ use Magento\Framework\Event\Observer as EventObserver;
 
 /**
  * PayPal module observer
- * @since 2.0.0
  */
 class AddPaypalShortcutsObserver implements ObserverInterface
 {
     /**
      * @var Factory
-     * @since 2.0.0
      */
     protected $shortcutFactory;
 
     /**
      * @var PaypalConfig
-     * @since 2.0.0
      */
     protected $paypalConfig;
 
@@ -33,7 +30,6 @@ class AddPaypalShortcutsObserver implements ObserverInterface
      *
      * @param Factory $shortcutFactory
      * @param PaypalConfig $paypalConfig
-     * @since 2.0.0
      */
     public function __construct(
         Factory $shortcutFactory,
@@ -48,7 +44,6 @@ class AddPaypalShortcutsObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

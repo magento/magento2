@@ -11,7 +11,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Download sample file controller
- * @since 2.0.0
  */
 class Download extends ImportController
 {
@@ -19,25 +18,21 @@ class Download extends ImportController
 
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
-     * @since 2.0.0
      */
     protected $resultRawFactory;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadFactory
-     * @since 2.0.0
      */
     protected $readFactory;
 
     /**
      * @var \Magento\Framework\Component\ComponentRegistrar
-     * @since 2.0.0
      */
     protected $componentRegistrar;
 
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
-     * @since 2.0.0
      */
     protected $fileFactory;
 
@@ -49,7 +44,6 @@ class Download extends ImportController
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
      * @param ComponentRegistrar $componentRegistrar
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -71,7 +65,6 @@ class Download extends ImportController
      * Download sample file action
      *
      * @return \Magento\Framework\Controller\Result\Raw
-     * @since 2.0.0
      */
     public function execute()
     {

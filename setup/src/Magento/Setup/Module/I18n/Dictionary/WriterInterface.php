@@ -7,7 +7,6 @@ namespace Magento\Setup\Module\I18n\Dictionary;
 
 /**
  * Writer interface
- * @since 2.0.0
  */
 interface WriterInterface
 {
@@ -16,7 +15,6 @@ interface WriterInterface
      *
      * @param Phrase $phrase
      * @return void
-     * @since 2.0.0
      */
     public function write(Phrase $phrase);
 }

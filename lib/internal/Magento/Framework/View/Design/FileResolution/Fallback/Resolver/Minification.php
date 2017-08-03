@@ -11,32 +11,27 @@ use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Resolver for minified asset, when minified is requested but not found
- * @since 2.0.0
  */
 class Minification implements ResolverInterface
 {
     /**
      * @var ResolverInterface
-     * @since 2.0.0
      */
     protected $fallback;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $extensions;
 
     /**
      * @var AssetMinification
-     * @since 2.0.0
      */
     private $minification;
 
     /**
      * @param ResolverInterface $fallback
      * @param AssetMinification $minification
-     * @since 2.0.0
      */
     public function __construct(ResolverInterface $fallback, AssetMinification $minification)
     {
@@ -54,7 +49,6 @@ class Minification implements ResolverInterface
      * @param string|null $locale
      * @param string|null $module
      * @return string|false
-     * @since 2.0.0
      */
     public function resolve($type, $file, $area = null, ThemeInterface $theme = null, $locale = null, $module = null)
     {

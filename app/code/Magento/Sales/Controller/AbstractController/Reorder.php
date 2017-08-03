@@ -12,19 +12,16 @@ use Magento\Framework\Registry;
 /**
  * Class \Magento\Sales\Controller\AbstractController\Reorder
  *
- * @since 2.0.0
  */
 abstract class Reorder extends Action\Action
 {
     /**
      * @var \Magento\Sales\Controller\AbstractController\OrderLoaderInterface
-     * @since 2.0.0
      */
     protected $orderLoader;
 
     /**
      * @var Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
@@ -32,7 +29,6 @@ abstract class Reorder extends Action\Action
      * @param Action\Context $context
      * @param OrderLoaderInterface $orderLoader
      * @param Registry $registry
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -48,7 +44,6 @@ abstract class Reorder extends Action\Action
      * Action for reorder
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

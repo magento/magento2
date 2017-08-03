@@ -11,7 +11,7 @@ use Magento\Framework\DataObject;
 
 /**
  * Class which hold all translation sources and merge them
- * @since 2.2.0
+ * @since 2.1.3
  */
 class Translation implements ConfigTypeInterface
 {
@@ -19,20 +19,20 @@ class Translation implements ConfigTypeInterface
 
     /**
      * @var DataObject[]
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $data;
 
     /**
      * @var ConfigSourceInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $source;
 
     /**
      * Translation constructor.
      * @param ConfigSourceInterface $source
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(
         ConfigSourceInterface $source
@@ -42,7 +42,7 @@ class Translation implements ConfigTypeInterface
 
     /**
      * @inheritDoc
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function get($path = '')
     {
@@ -57,7 +57,7 @@ class Translation implements ConfigTypeInterface
      * Clean cache
      *
      * @return void
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function clean()
     {

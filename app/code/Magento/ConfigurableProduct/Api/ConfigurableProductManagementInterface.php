@@ -9,7 +9,6 @@ namespace Magento\ConfigurableProduct\Api;
 /**
  * Interface ConfigurableProductManagementInterface
  * @api
- * @since 2.0.0
  */
 interface ConfigurableProductManagementInterface
 {
@@ -19,7 +18,6 @@ interface ConfigurableProductManagementInterface
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param \Magento\ConfigurableProduct\Api\Data\OptionInterface[] $options
      * @return \Magento\Catalog\Api\Data\ProductInterface[]
-     * @since 2.0.0
      */
     public function generateVariation(\Magento\Catalog\Api\Data\ProductInterface $product, $options);
 
@@ -28,7 +26,6 @@ interface ConfigurableProductManagementInterface
      *
      * @param int|null $status
      * @return int
-     * @since 2.0.0
      */
     public function getCount($status = null);
 }

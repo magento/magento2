@@ -17,31 +17,26 @@ use Magento\Backend\Block\Widget\Grid\Column;
 /**
  * Class \Magento\CatalogRule\Block\Adminhtml\Promo\Widget\Chooser\Sku
  *
- * @since 2.0.0
  */
 class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * @var \Magento\Catalog\Model\Product\Type
-     * @since 2.0.0
      */
     protected $_catalogType;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     * @since 2.0.0
      */
     protected $_cpCollection;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
-     * @since 2.0.0
      */
     protected $_cpCollectionInstance;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory
-     * @since 2.0.0
      */
     protected $_eavAttSetCollection;
 
@@ -52,7 +47,6 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $cpCollection
      * @param \Magento\Catalog\Model\Product\Type $catalogType
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -70,7 +64,6 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -96,7 +89,6 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @param Column $column
      * @return $this
-     * @since 2.0.0
      */
     protected function _addColumnFilterToCollection($column)
     {
@@ -121,7 +113,6 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare Catalog Product Collection for attribute SKU in Promo Conditions SKU chooser
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -142,7 +133,6 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
      * Get catalog product resource collection instance
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
-     * @since 2.0.0
      */
     protected function _getCpCollectionInstance()
     {
@@ -156,7 +146,6 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
      * Define Cooser Grid Columns and filters
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -218,7 +207,6 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getGridUrl()
     {
@@ -230,7 +218,6 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     protected function _getSelectedProducts()
     {

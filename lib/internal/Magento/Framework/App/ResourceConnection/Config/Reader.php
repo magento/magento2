@@ -10,7 +10,6 @@ namespace Magento\Framework\App\ResourceConnection\Config;
 /**
  * Class \Magento\Framework\App\ResourceConnection\Config\Reader
  *
- * @since 2.0.0
  */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
@@ -18,7 +17,6 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * List of id attributes for merge
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_idAttributes = ['/config/resource' => 'name'];
 
@@ -31,7 +29,6 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,
@@ -60,7 +57,6 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      *
      * @param string $scope
      * @return array
-     * @since 2.0.0
      */
     public function read($scope = null)
     {

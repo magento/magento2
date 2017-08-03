@@ -10,37 +10,31 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\Captcha\Observer\CheckForgotpasswordObserver
  *
- * @since 2.0.0
  */
 class CheckForgotpasswordObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Captcha\Helper\Data
-     * @since 2.0.0
      */
     protected $_helper;
 
     /**
      * @var \Magento\Framework\App\ActionFlag
-     * @since 2.0.0
      */
     protected $_actionFlag;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
-     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var \Magento\Framework\App\Response\RedirectInterface
-     * @since 2.0.0
      */
     protected $redirect;
 
     /**
      * @var CaptchaStringResolver
-     * @since 2.0.0
      */
     protected $captchaStringResolver;
 
@@ -50,7 +44,6 @@ class CheckForgotpasswordObserver implements ObserverInterface
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\App\Response\RedirectInterface $redirect
      * @param CaptchaStringResolver $captchaStringResolver
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Captcha\Helper\Data $helper,
@@ -71,7 +64,6 @@ class CheckForgotpasswordObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

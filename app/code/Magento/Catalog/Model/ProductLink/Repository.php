@@ -17,7 +17,6 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 {
@@ -47,31 +46,26 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var CollectionProvider
-     * @since 2.0.0
      */
     protected $entityCollectionProvider;
 
     /**
      * @var LinksInitializer
-     * @since 2.0.0
      */
     protected $linkInitializer;
 
     /**
      * @var Management
-     * @since 2.0.0
      */
     protected $linkManagement;
 
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
-     * @since 2.0.0
      */
     protected $dataObjectProcessor;
 
@@ -98,7 +92,6 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
      * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory|null $productLinkFactory
      * @param \Magento\Catalog\Api\Data\ProductLinkExtensionFactory|null $productLinkExtensionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -122,7 +115,6 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function save(\Magento\Catalog\Api\Data\ProductLinkInterface $entity)
     {
@@ -201,7 +193,6 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function delete(\Magento\Catalog\Api\Data\ProductLinkInterface $entity)
     {
@@ -235,7 +226,6 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function deleteById($sku, $type, $linkedProductSku)
     {

@@ -10,7 +10,6 @@ use Magento\Catalog\Model\Product\Action as ProductAction;
 
 /**
  * Plugin for Magento\Catalog\Model\Product\Action
- * @since 2.0.0
  */
 class Action extends AbstractIndexerPlugin
 {

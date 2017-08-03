@@ -8,7 +8,6 @@ namespace Magento\User\Block\Role\Tab;
 /**
  * Class \Magento\User\Block\Role\Tab\Users
  *
- * @since 2.0.0
  */
 class Users extends \Magento\Backend\Block\Widget\Tabs
 {
@@ -16,7 +15,6 @@ class Users extends \Magento\Backend\Block\Widget\Tabs
      * User model factory
      *
      * @var \Magento\User\Model\ResourceModel\User\CollectionFactory
-     * @since 2.0.0
      */
     protected $_userCollectionFactory;
 
@@ -26,7 +24,6 @@ class Users extends \Magento\Backend\Block\Widget\Tabs
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\User\Model\ResourceModel\User\CollectionFactory $userCollectionFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -44,7 +41,6 @@ class Users extends \Magento\Backend\Block\Widget\Tabs
      * Class constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -58,7 +54,6 @@ class Users extends \Magento\Backend\Block\Widget\Tabs
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -71,7 +66,6 @@ class Users extends \Magento\Backend\Block\Widget\Tabs
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getGridHtml()
     {

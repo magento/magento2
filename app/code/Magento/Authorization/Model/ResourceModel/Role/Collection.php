@@ -11,7 +11,6 @@ use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
  * Admin role collection
  *
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -19,7 +18,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -32,7 +30,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $userId
      * @param string $userType
      * @return $this
-     * @since 2.0.0
      */
     public function setUserFilter($userId, $userType)
     {
@@ -45,7 +42,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Set roles filter
      *
      * @return $this
-     * @since 2.0.0
      */
     public function setRolesFilter()
     {
@@ -57,7 +53,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Convert to option array
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

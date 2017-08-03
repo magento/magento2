@@ -12,7 +12,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Sales\ExportShippingExcel
  *
- * @since 2.0.0
  */
 class ExportShippingExcel extends \Magento\Reports\Controller\Adminhtml\Report\Sales
 {
@@ -20,7 +19,6 @@ class ExportShippingExcel extends \Magento\Reports\Controller\Adminhtml\Report\S
      * Export shipping report grid to Excel XML format
      *
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -14,7 +14,6 @@ use Magento\ImportExport\Model\Import\AbstractSource;
 /**
  * Class \Magento\Setup\Model\Generator
  *
- * @since 2.0.0
  */
 class Generator extends AbstractSource
 {
@@ -22,7 +21,6 @@ class Generator extends AbstractSource
      * Data row pattern
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_pattern = [];
 
@@ -30,13 +28,11 @@ class Generator extends AbstractSource
      * Which columns are determined as dynamic
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_dynamicColumns = [];
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_limit = 0;
 
@@ -45,7 +41,6 @@ class Generator extends AbstractSource
      *
      * @param array $rowPattern
      * @param int $limit how many records to generate
-     * @since 2.0.0
      */
     public function __construct(array $rowPattern, $limit)
     {
@@ -63,7 +58,6 @@ class Generator extends AbstractSource
      * Whether limit of generated elements is reached (according to "Iterator" interface)
      *
      * @return bool
-     * @since 2.0.0
      */
     public function valid()
     {
@@ -76,7 +70,6 @@ class Generator extends AbstractSource
      * Return array or false on error
      *
      * @return array|false
-     * @since 2.0.0
      */
     protected function _getNextRow()
     {

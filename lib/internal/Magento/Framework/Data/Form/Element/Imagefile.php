@@ -14,7 +14,6 @@ namespace Magento\Framework\Data\Form\Element;
 /**
  * Class \Magento\Framework\Data\Form\Element\Imagefile
  *
- * @since 2.0.0
  */
 class Imagefile extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
@@ -23,7 +22,6 @@ class Imagefile extends \Magento\Framework\Data\Form\Element\AbstractElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,

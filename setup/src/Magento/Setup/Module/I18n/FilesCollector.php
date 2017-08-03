@@ -7,7 +7,6 @@ namespace Magento\Setup\Module\I18n;
 
 /**
  *  Files collector
- * @since 2.0.0
  */
 class FilesCollector
 {
@@ -17,7 +16,6 @@ class FilesCollector
      * @param array $paths
      * @param bool $fileMask
      * @return array
-     * @since 2.0.0
      */
     public function getFiles(array $paths, $fileMask = false)
     {
@@ -38,7 +36,6 @@ class FilesCollector
      * @param bool $fileMask
      * @return \RecursiveIteratorIterator|\RegexIterator
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     protected function _getIterator($path, $fileMask = false)
     {

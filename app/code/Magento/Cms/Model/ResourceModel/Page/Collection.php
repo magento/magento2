@@ -10,13 +10,11 @@ use \Magento\Cms\Model\ResourceModel\AbstractCollection;
 
 /**
  * CMS page collection
- * @since 2.0.0
  */
 class Collection extends AbstractCollection
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_idFieldName = 'page_id';
 
@@ -24,7 +22,6 @@ class Collection extends AbstractCollection
      * Load data for preview flag
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_previewFlag;
 
@@ -32,7 +29,6 @@ class Collection extends AbstractCollection
      * Define resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -46,7 +42,6 @@ class Collection extends AbstractCollection
      * and pairs identifier|page_id - title for non-unique after first
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionIdArray()
     {
@@ -75,7 +70,6 @@ class Collection extends AbstractCollection
      *
      * @param bool $flag
      * @return $this
-     * @since 2.0.0
      */
     public function setFirstStoreFlag($flag = false)
     {
@@ -89,7 +83,6 @@ class Collection extends AbstractCollection
      * @param int|array|\Magento\Store\Model\Store $store
      * @param bool $withAdmin
      * @return $this
-     * @since 2.0.0
      */
     public function addStoreFilter($store, $withAdmin = true)
     {
@@ -103,7 +96,6 @@ class Collection extends AbstractCollection
      * Perform operations after collection load
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -118,7 +110,6 @@ class Collection extends AbstractCollection
      * Perform operations before rendering filters
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _renderFiltersBefore()
     {

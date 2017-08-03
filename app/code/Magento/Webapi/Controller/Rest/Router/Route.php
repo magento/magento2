@@ -13,55 +13,46 @@ use Magento\Framework\App\RouterInterface;
 /**
  * Class \Magento\Webapi\Controller\Rest\Router\Route
  *
- * @since 2.0.0
  */
 class Route implements RouterInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $serviceClass;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $serviceMethod;
 
     /**
      * @var boolean
-     * @since 2.0.0
      */
     protected $secure;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $aclResources = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $parameters = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $variables = [];
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $route;
 
     /**
      * @param string $route
-     * @since 2.0.0
      */
     public function __construct($route = '')
     {
@@ -72,7 +63,6 @@ class Route implements RouterInterface
      * Split route by parts and variables
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getRouteParts()
     {
@@ -93,7 +83,6 @@ class Route implements RouterInterface
      *
      * @param string $value
      * @return bool
-     * @since 2.0.0
      */
     protected function isVariable($value)
     {
@@ -109,7 +98,6 @@ class Route implements RouterInterface
      *
      * @param string $path
      * @return array
-     * @since 2.0.0
      */
     protected function getPathParts($path)
     {
@@ -121,7 +109,6 @@ class Route implements RouterInterface
      *
      * @param Request $request
      * @return array|bool
-     * @since 2.0.0
      */
     public function match(Request $request)
     {
@@ -154,7 +141,6 @@ class Route implements RouterInterface
      *
      * @param string $serviceClass
      * @return $this
-     * @since 2.0.0
      */
     public function setServiceClass($serviceClass)
     {
@@ -166,7 +152,6 @@ class Route implements RouterInterface
      * Get service class.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getServiceClass()
     {
@@ -178,7 +163,6 @@ class Route implements RouterInterface
      *
      * @param string $serviceMethod
      * @return $this
-     * @since 2.0.0
      */
     public function setServiceMethod($serviceMethod)
     {
@@ -190,7 +174,6 @@ class Route implements RouterInterface
      * Get service method name.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getServiceMethod()
     {
@@ -202,7 +185,6 @@ class Route implements RouterInterface
      *
      * @param boolean $secure
      * @return $this
-     * @since 2.0.0
      */
     public function setSecure($secure)
     {
@@ -214,7 +196,6 @@ class Route implements RouterInterface
      * Returns true if the route is secure
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isSecure()
     {
@@ -226,7 +207,6 @@ class Route implements RouterInterface
      *
      * @param array $aclResources
      * @return $this
-     * @since 2.0.0
      */
     public function setAclResources($aclResources)
     {
@@ -238,7 +218,6 @@ class Route implements RouterInterface
      * Get ACL resources list.
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAclResources()
     {
@@ -250,7 +229,6 @@ class Route implements RouterInterface
      *
      * @param array $parameters
      * @return $this
-     * @since 2.0.0
      */
     public function setParameters($parameters)
     {
@@ -262,7 +240,6 @@ class Route implements RouterInterface
      * Get parameters list.
      *
      * @return array
-     * @since 2.0.0
      */
     public function getParameters()
     {

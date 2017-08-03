@@ -10,26 +10,22 @@ use Magento\Framework\Phrase;
 /**
  * Class \Magento\Payment\Gateway\Validator\Result
  *
- * @since 2.0.0
  */
 class Result implements ResultInterface
 {
     /**
      * @var bool
-     * @since 2.0.0
      */
     private $isValid;
 
     /**
      * @var Phrase[]
-     * @since 2.0.0
      */
     private $failsDescription;
 
     /**
      * @param bool $isValid
      * @param array $failsDescription
-     * @since 2.0.0
      */
     public function __construct(
         $isValid,
@@ -43,7 +39,6 @@ class Result implements ResultInterface
      * Returns validation result
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isValid()
     {
@@ -54,7 +49,6 @@ class Result implements ResultInterface
      * Returns list of fails description
      *
      * @return Phrase[]
-     * @since 2.0.0
      */
     public function getFailsDescription()
     {

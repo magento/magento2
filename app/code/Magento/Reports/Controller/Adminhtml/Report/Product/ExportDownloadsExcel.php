@@ -11,7 +11,6 @@ use Magento\Framework\App\ResponseInterface;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Product\ExportDownloadsExcel
  *
- * @since 2.0.0
  */
 class ExportDownloadsExcel extends \Magento\Reports\Controller\Adminhtml\Report\Product
 {
@@ -26,7 +25,6 @@ class ExportDownloadsExcel extends \Magento\Reports\Controller\Adminhtml\Report\
      * Export products downloads report to XLS format
      *
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

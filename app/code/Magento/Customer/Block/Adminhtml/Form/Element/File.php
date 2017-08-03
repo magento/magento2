@@ -9,13 +9,11 @@ namespace Magento\Customer\Block\Adminhtml\Form\Element;
  * Customer Widget Form File Element Block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class File extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**
      * @var \Magento\Framework\View\Asset\Repository
-     * @since 2.0.0
      */
     protected $_assetRepo;
 
@@ -23,13 +21,11 @@ class File extends \Magento\Framework\Data\Form\Element\AbstractElement
      * Adminhtml data
      *
      * @var \Magento\Backend\Helper\Data
-     * @since 2.0.0
      */
     protected $_adminhtmlData = null;
 
     /**
      * @var \Magento\Framework\Url\EncoderInterface
-     * @since 2.0.0
      */
     protected $urlEncoder;
 
@@ -41,7 +37,6 @@ class File extends \Magento\Framework\Data\Form\Element\AbstractElement
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
@@ -63,7 +58,6 @@ class File extends \Magento\Framework\Data\Form\Element\AbstractElement
      * Return Form Element HTML
      *
      * @return string
-     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -89,7 +83,6 @@ class File extends \Magento\Framework\Data\Form\Element\AbstractElement
      * Return Delete File CheckBox HTML
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getDeleteCheckboxHtml()
     {
@@ -121,7 +114,6 @@ class File extends \Magento\Framework\Data\Form\Element\AbstractElement
      * Return Delete CheckBox SPAN Class name
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getDeleteCheckboxSpanClass()
     {
@@ -132,7 +124,6 @@ class File extends \Magento\Framework\Data\Form\Element\AbstractElement
      * Return Delete CheckBox Label
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     protected function _getDeleteCheckboxLabel()
     {
@@ -143,7 +134,6 @@ class File extends \Magento\Framework\Data\Form\Element\AbstractElement
      * Return File preview link HTML
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getPreviewHtml()
     {
@@ -168,7 +158,6 @@ class File extends \Magento\Framework\Data\Form\Element\AbstractElement
      * Return Hidden element with current value
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getHiddenInput()
     {
@@ -187,7 +176,6 @@ class File extends \Magento\Framework\Data\Form\Element\AbstractElement
      * Return Preview/Download URL
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getPreviewUrl()
     {
@@ -204,7 +192,6 @@ class File extends \Magento\Framework\Data\Form\Element\AbstractElement
      * @param array $attributes
      * @param bool $closed
      * @return string
-     * @since 2.0.0
      */
     protected function _drawElementHtml($element, array $attributes, $closed = true)
     {
@@ -221,7 +208,6 @@ class File extends \Magento\Framework\Data\Form\Element\AbstractElement
      *
      * @param int|null $index
      * @return string|false
-     * @since 2.0.0
      */
     public function getEscapedValue($index = null)
     {

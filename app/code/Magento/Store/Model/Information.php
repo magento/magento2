@@ -15,7 +15,6 @@ use Magento\Store\Model\Address\Renderer;
  * Store information class used to retrieve and format store information as set in store config
  *
  * @api
- * @since 2.0.0
  */
 class Information
 {
@@ -43,21 +42,16 @@ class Information
     const XML_PATH_STORE_INFO_VAT_NUMBER = 'general/store_information/merchant_vat_number';
     /**#@-*/
 
-    /**
-     * @var Renderer
-     * @since 2.0.0
-     */
+    /**#@-*/
     protected $renderer;
 
     /**
      * @var CountryFactory
-     * @since 2.0.0
      */
     protected $countryFactory;
 
     /**
      * @var RegionFactory
-     * @since 2.0.0
      */
     protected $regionFactory;
 
@@ -65,7 +59,6 @@ class Information
      * @param Renderer $renderer
      * @param RegionFactory $regionFactory
      * @param CountryFactory $countryFactory
-     * @since 2.0.0
      */
     public function __construct(
         Renderer $renderer,
@@ -82,7 +75,6 @@ class Information
      *
      * @param Store $store
      * @return DataObject
-     * @since 2.0.0
      */
     public function getStoreInformationObject(Store $store)
     {
@@ -115,7 +107,6 @@ class Information
      *
      * @param Store $store
      * @return string
-     * @since 2.0.0
      */
     public function getFormattedAddress(Store $store)
     {

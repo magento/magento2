@@ -9,7 +9,6 @@ namespace Magento\Framework\App;
  * Magento application product metadata
  *
  * @api
- * @since 2.0.0
  */
 interface ProductMetadataInterface
 {
@@ -17,7 +16,6 @@ interface ProductMetadataInterface
      * Get Product version
      *
      * @return string
-     * @since 2.0.0
      */
     public function getVersion();
 
@@ -25,7 +23,6 @@ interface ProductMetadataInterface
      * Get Product edition
      *
      * @return string
-     * @since 2.0.0
      */
     public function getEdition();
 
@@ -33,7 +30,6 @@ interface ProductMetadataInterface
      * Get Product name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName();
 }

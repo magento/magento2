@@ -9,7 +9,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Edit;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Edit\ConfigureProductToAdd
  *
- * @since 2.0.0
  */
 class ConfigureProductToAdd extends \Magento\Sales\Controller\Adminhtml\Order\Create\ConfigureProductToAdd
 {

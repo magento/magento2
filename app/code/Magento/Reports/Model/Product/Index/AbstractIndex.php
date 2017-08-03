@@ -8,7 +8,6 @@ namespace Magento\Reports\Model\Product\Index;
 /**
  * Reports Product Index Abstract Model
  * @api
- * @since 2.0.0
  */
 abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
 {
@@ -16,43 +15,36 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
      * Cache key name for Count of product index
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_countCacheKey;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Customer\Model\Visitor
-     * @since 2.0.0
      */
     protected $_customerVisitor;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Framework\Session\Generic
-     * @since 2.0.0
      */
     protected $_reportSession;
 
     /**
      * @var \Magento\Catalog\Model\Product\Visibility
-     * @since 2.0.0
      */
     protected $_productVisibility;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
@@ -69,7 +61,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -97,7 +88,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
      * Prepare customer/visitor, store data before save
      *
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -125,7 +115,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
      * if don't exists return current visitor id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getVisitorId()
     {
@@ -141,7 +130,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
      * if customer don't logged in return null
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCustomerId()
     {
@@ -157,7 +145,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
      * default return current store id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -171,7 +158,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
      * Retrieve resource instance wrapper
      *
      * @return \Magento\Reports\Model\ResourceModel\Product\Index\AbstractIndex
-     * @since 2.0.0
      */
     protected function _getResource()
     {
@@ -182,7 +168,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
      * On customer loggin merge visitor/customer index
      *
      * @return $this
-     * @since 2.0.0
      */
     public function updateCustomerFromVisitor()
     {
@@ -194,7 +179,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
      * Purge visitor data by customer (logout)
      *
      * @return $this
-     * @since 2.0.0
      */
     public function purgeVisitorByCustomer()
     {
@@ -206,7 +190,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
      * Retrieve Reports Session instance
      *
      * @return \Magento\Framework\Session\Generic
-     * @since 2.0.0
      */
     protected function _getSession()
     {
@@ -217,7 +200,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
      * Calculate count of product index items cache
      *
      * @return $this
-     * @since 2.0.0
      */
     public function calculate()
     {
@@ -236,7 +218,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
      * Retrieve Exclude Product Ids List for Collection
      *
      * @return array
-     * @since 2.0.0
      */
     public function getExcludeProductIds()
     {
@@ -247,7 +228,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
      * Retrieve count of product index items
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCount()
     {
@@ -266,7 +246,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
      * Clean index (visitors)
      *
      * @return $this
-     * @since 2.0.0
      */
     public function clean()
     {
@@ -278,7 +257,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
      * Add product ids to current visitor/customer log
      * @param string[] $productIds
      * @return $this
-     * @since 2.0.0
      */
     public function registerIds($productIds)
     {

@@ -11,13 +11,11 @@ use Magento\Framework\Webapi\Rest\Request\ParamOverriderInterface;
 
 /**
  * Replaces a "%customer_id%" value with the real customer id
- * @since 2.0.0
  */
 class ParamOverriderCustomerId implements ParamOverriderInterface
 {
     /**
      * @var UserContextInterface
-     * @since 2.0.0
      */
     private $userContext;
 
@@ -25,7 +23,6 @@ class ParamOverriderCustomerId implements ParamOverriderInterface
      * Constructs an object to override the customer ID parameter on a request.
      *
      * @param UserContextInterface $userContext
-     * @since 2.0.0
      */
     public function __construct(UserContextInterface $userContext)
     {
@@ -34,7 +31,6 @@ class ParamOverriderCustomerId implements ParamOverriderInterface
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function getOverriddenValue()
     {

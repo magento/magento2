@@ -7,13 +7,11 @@ namespace Magento\Backend\Block;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Denied extends \Magento\Backend\Block\Template
 {
     /**
      * @var \Magento\Backend\Model\Auth\Session
-     * @since 2.0.0
      */
     protected $_authSession;
 
@@ -21,7 +19,6 @@ class Denied extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -34,7 +31,6 @@ class Denied extends \Magento\Backend\Block\Template
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function hasAvailableResources()
     {

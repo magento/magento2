@@ -8,19 +8,16 @@ namespace Magento\Framework\Encryption;
 
 /**
  * @api
- * @since 2.0.0
  */
 class UrlCoder
 {
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $_url;
 
     /**
      * @param \Magento\Framework\UrlInterface $url
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\UrlInterface $url)
     {
@@ -32,7 +29,6 @@ class UrlCoder
      *
      * @param    string $url
      * @return   string
-     * @since 2.0.0
      */
     public function encode($url)
     {
@@ -44,7 +40,6 @@ class UrlCoder
      *
      * @param    string $url
      * @return   string
-     * @since 2.0.0
      */
     public function decode($url)
     {

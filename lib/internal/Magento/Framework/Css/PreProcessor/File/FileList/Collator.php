@@ -9,7 +9,6 @@ use Magento\Framework\View\File\FileList\CollateInterface;
 
 /**
  * File list collator
- * @since 2.0.0
  */
 class Collator implements CollateInterface
 {
@@ -19,7 +18,6 @@ class Collator implements CollateInterface
      * @param \Magento\Framework\View\File[] $files
      * @param \Magento\Framework\View\File[] $filesOrigin
      * @return \Magento\Framework\View\File[]
-     * @since 2.0.0
      */
     public function collate($files, $filesOrigin)
     {

@@ -11,7 +11,6 @@ namespace Magento\Framework\DB;
 /**
  * Class \Magento\Framework\DB\Helper
  *
- * @since 2.0.0
  */
 class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
 {
@@ -21,7 +20,6 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
      * @param \Magento\Framework\DB\Select $select
      * @param bool $autoReset
      * @return array
-     * @since 2.0.0
      */
     protected function _prepareOrder(\Magento\Framework\DB\Select $select, $autoReset = false)
     {
@@ -60,7 +58,6 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
      * @param string $field
      * @param bool   $reverse OPTIONAL
      * @return string
-     * @since 2.0.0
      */
     protected function _truncateAliasName($field, $reverse = false)
     {
@@ -83,7 +80,6 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
      * @param \Magento\Framework\DB\Select $select
      * @param bool $autoReset
      * @return array
-     * @since 2.0.0
      */
     protected function _prepareGroup(\Magento\Framework\DB\Select $select, $autoReset = false)
     {
@@ -111,7 +107,6 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
      * @param bool $autoReset
      * @return array
      * @throws \Zend_Db_Exception
-     * @since 2.0.0
      */
     protected function _prepareHaving(\Magento\Framework\DB\Select $select, $autoReset = false)
     {
@@ -158,7 +153,6 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
      * @param int $limitOffset
      * @param array $columnList
      * @return string
-     * @since 2.0.0
      */
     protected function _assembleLimit($query, $limitCount, $limitOffset, $columnList = [])
     {
@@ -194,7 +188,6 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
      * @throws \Zend_Db_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function prepareColumnsList(\Magento\Framework\DB\Select $select, $groupByCondition = null)
     {
@@ -248,7 +241,6 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
      * @param string $fieldsDelimiter
      * @param string $additionalWhere
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     public function addGroupConcatColumn(
         $select,
@@ -280,7 +272,6 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
      * @param  string|\Zend_Db_Expr $startDate
      * @param  string|\Zend_Db_Expr $endDate
      * @return \Zend_Db_Expr
-     * @since 2.0.0
      */
     public function getDateDiff($startDate, $endDate)
     {
@@ -298,7 +289,6 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
      * @return \Zend_Db_Expr
      *
      * @see escapeLikeValue()
-     * @since 2.0.0
      */
     public function addLikeEscape($value, $options = [])
     {

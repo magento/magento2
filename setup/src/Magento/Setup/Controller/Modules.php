@@ -14,7 +14,6 @@ use Zend\Json\Json;
 /**
  * Class \Magento\Setup\Controller\Modules
  *
- * @since 2.0.0
  */
 class Modules extends AbstractActionController
 {
@@ -22,20 +21,17 @@ class Modules extends AbstractActionController
      * Object manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var ModuleStatus
-     * @since 2.0.0
      */
     protected $allModules;
 
     /**
      * @param ModuleStatus $allModules
      * @param ObjectManagerProvider $objectManagerProvider
-     * @since 2.0.0
      */
     public function __construct(ModuleStatus $allModules, ObjectManagerProvider $objectManagerProvider)
     {
@@ -47,7 +43,6 @@ class Modules extends AbstractActionController
      * Returns list of Modules
      *
      * @return JsonModel
-     * @since 2.0.0
      */
     public function indexAction()
     {
@@ -73,7 +68,6 @@ class Modules extends AbstractActionController
      * Result of checking Modules Validity
      *
      * @return JsonModel
-     * @since 2.0.0
      */
     public function allModulesValidAction()
     {
@@ -92,7 +86,6 @@ class Modules extends AbstractActionController
      * @param array $toBeEnabledModules
      * @param bool $prettyFormat
      * @return JsonModel
-     * @since 2.0.0
      */
     private function checkGraph(array $toBeEnabledModules, $prettyFormat = false)
     {
@@ -112,7 +105,6 @@ class Modules extends AbstractActionController
      * Check Module Dependencies
      *
      * @return JsonModel
-     * @since 2.0.0
      */
     public function validateAction()
     {
@@ -141,7 +133,6 @@ class Modules extends AbstractActionController
      * @param bool $isEnable
      * @param string[] $constraints
      * @return string
-     * @since 2.0.0
      */
     private function getConstraintsFailureMessage($isEnable, array $constraints)
     {

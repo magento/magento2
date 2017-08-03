@@ -11,19 +11,16 @@ use Zend_Validate_Exception;
 /**
  * Class \Magento\Quote\Model\Quote\Address\Validator
  *
- * @since 2.0.0
  */
 class Validator extends \Magento\Framework\Validator\AbstractValidator
 {
     /**
      * @var \Magento\Directory\Model\CountryFactory
-     * @since 2.0.0
      */
     protected $countryFactory;
 
     /**
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Directory\Model\CountryFactory $countryFactory
@@ -41,7 +38,6 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
      * @param  \Magento\Quote\Model\Quote\Address $value
      * @return boolean
      * @throws Zend_Validate_Exception If validation of $value is impossible
-     * @since 2.0.0
      */
     public function isValid($value)
     {

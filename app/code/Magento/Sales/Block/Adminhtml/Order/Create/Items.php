@@ -12,7 +12,6 @@ use Magento\Quote\Model\Quote\Item;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
@@ -20,7 +19,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Contains button descriptions to be shown at the top of accordion
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_buttons = [];
 
@@ -28,7 +26,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Define block ID
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -40,7 +37,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Accordion header text
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -51,7 +47,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Returns all visible items
      *
      * @return Item[]
-     * @since 2.0.0
      */
     public function getItems()
     {
@@ -63,7 +58,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param array $args
      * @return void
-     * @since 2.0.0
      */
     public function addButton($args)
     {
@@ -74,7 +68,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Render buttons and return HTML code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getButtonsHtml()
     {
@@ -96,7 +89,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Return HTML code of the block
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

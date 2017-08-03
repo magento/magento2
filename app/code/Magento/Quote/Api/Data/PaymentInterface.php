@@ -8,7 +8,6 @@ namespace Magento\Quote\Api\Data;
 /**
  * Interface PaymentInterface
  * @api
- * @since 2.0.0
  */
 interface PaymentInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -27,7 +26,6 @@ interface PaymentInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Get purchase order number
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getPoNumber();
 
@@ -36,7 +34,6 @@ interface PaymentInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param string $poNumber
      * @return $this
-     * @since 2.0.0
      */
     public function setPoNumber($poNumber);
 
@@ -44,7 +41,6 @@ interface PaymentInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Get payment method code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMethod();
 
@@ -53,7 +49,6 @@ interface PaymentInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param string $method
      * @return $this
-     * @since 2.0.0
      */
     public function setMethod($method);
 
@@ -61,7 +56,6 @@ interface PaymentInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Get payment additional details
      *
      * @return string[]|null
-     * @since 2.0.0
      */
     public function getAdditionalData();
 
@@ -70,7 +64,6 @@ interface PaymentInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param string $additionalData
      * @return $this
-     * @since 2.0.0
      */
     public function setAdditionalData($additionalData);
 
@@ -78,7 +71,6 @@ interface PaymentInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Quote\Api\Data\PaymentExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -87,7 +79,6 @@ interface PaymentInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param \Magento\Quote\Api\Data\PaymentExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Quote\Api\Data\PaymentExtensionInterface $extensionAttributes);
 }

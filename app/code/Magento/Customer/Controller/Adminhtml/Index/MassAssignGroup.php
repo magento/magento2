@@ -14,13 +14,11 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class MassAssignGroup
- * @since 2.0.0
  */
 class MassAssignGroup extends AbstractMassAction
 {
     /**
      * @var CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerRepository;
 
@@ -29,7 +27,6 @@ class MassAssignGroup extends AbstractMassAction
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
      * @param CustomerRepositoryInterface $customerRepository
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -46,7 +43,6 @@ class MassAssignGroup extends AbstractMassAction
      *
      * @param AbstractCollection $collection
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     protected function massAction(AbstractCollection $collection)
     {

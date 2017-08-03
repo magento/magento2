@@ -46,7 +46,6 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  * @method \Magento\Catalog\Model\Entity\Attribute setIsUsedForPromoRules(int $value)
  * @method \Magento\Eav\Api\Data\AttributeExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute
 {
@@ -54,7 +53,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * Event Prefix
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'catalog_entity_attribute';
 
@@ -62,7 +60,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * Event Object
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'attribute';
 
@@ -70,7 +67,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
 
     /**
      * @var LockValidatorInterface
-     * @since 2.0.0
      */
     protected $attrLockValidator;
 
@@ -96,7 +92,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -149,7 +144,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      *
      * @return \Magento\Framework\Model\AbstractModel
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -167,7 +161,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * Processing object after save data
      *
      * @return \Magento\Framework\Model\AbstractModel
-     * @since 2.0.0
      */
     public function afterSave()
     {

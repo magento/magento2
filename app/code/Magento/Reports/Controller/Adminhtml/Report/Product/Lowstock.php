@@ -9,7 +9,6 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Product\Lowstock
  *
- * @since 2.0.0
  */
 class Lowstock extends \Magento\Reports\Controller\Adminhtml\Report\Product
 {
@@ -24,7 +23,6 @@ class Lowstock extends \Magento\Reports\Controller\Adminhtml\Report\Product
      * Low stock action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

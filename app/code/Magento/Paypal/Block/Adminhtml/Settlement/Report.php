@@ -10,7 +10,6 @@ namespace Magento\Paypal\Block\Adminhtml\Settlement;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Report extends \Magento\Backend\Block\Widget\Grid\Container
 {
@@ -18,7 +17,6 @@ class Report extends \Magento\Backend\Block\Widget\Grid\Container
      * Prepare grid container, add additional buttons
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

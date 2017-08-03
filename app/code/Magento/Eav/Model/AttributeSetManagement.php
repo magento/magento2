@@ -14,19 +14,16 @@ use Magento\Framework\Exception\InputException;
 /**
  * Class \Magento\Eav\Model\AttributeSetManagement
  *
- * @since 2.0.0
  */
 class AttributeSetManagement implements AttributeSetManagementInterface
 {
     /**
      * @var EavConfig
-     * @since 2.0.0
      */
     private $eavConfig;
 
     /**
      * @var AttributeSetRepositoryInterface
-     * @since 2.0.0
      */
     private $repository;
 
@@ -34,7 +31,6 @@ class AttributeSetManagement implements AttributeSetManagementInterface
      * @param Config $eavConfig
      * @param AttributeSetRepositoryInterface $repository
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         EavConfig $eavConfig,
@@ -46,7 +42,6 @@ class AttributeSetManagement implements AttributeSetManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function create($entityTypeCode, AttributeSetInterface $attributeSet, $skeletonId)
     {

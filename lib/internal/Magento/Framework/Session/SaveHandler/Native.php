@@ -7,7 +7,6 @@ namespace Magento\Framework\Session\SaveHandler;
 
 /**
  * Php native session save handler
- * @since 2.0.0
  */
 class Native extends \SessionHandler
 {

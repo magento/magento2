@@ -9,13 +9,11 @@ namespace Magento\Backend\Controller\Adminhtml\System\Design;
 /**
  * Class \Magento\Backend\Controller\Adminhtml\System\Design\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Backend\Controller\Adminhtml\System\Design
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

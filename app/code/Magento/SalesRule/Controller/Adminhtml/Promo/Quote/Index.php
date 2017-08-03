@@ -9,7 +9,6 @@ namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 /**
  * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
@@ -17,7 +16,6 @@ class Index extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
      * Index action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

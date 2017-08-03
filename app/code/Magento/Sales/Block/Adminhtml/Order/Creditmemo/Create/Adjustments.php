@@ -9,7 +9,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Adjustments extends \Magento\Backend\Block\Template
 {
@@ -17,7 +16,6 @@ class Adjustments extends \Magento\Backend\Block\Template
      * Source object
      *
      * @var \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     protected $_source;
 
@@ -25,13 +23,11 @@ class Adjustments extends \Magento\Backend\Block\Template
      * Tax config
      *
      * @var \Magento\Tax\Model\Config
-     * @since 2.0.0
      */
     protected $_taxConfig;
 
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
@@ -40,7 +36,6 @@ class Adjustments extends \Magento\Backend\Block\Template
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -57,7 +52,6 @@ class Adjustments extends \Magento\Backend\Block\Template
      * Initialize creditmemo agjustment totals
      *
      * @return $this
-     * @since 2.0.0
      */
     public function initTotals()
     {
@@ -75,7 +69,6 @@ class Adjustments extends \Magento\Backend\Block\Template
      * Get source object
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getSource()
     {
@@ -86,7 +79,6 @@ class Adjustments extends \Magento\Backend\Block\Template
      * Get credit memo shipping amount depend on configuration settings
      *
      * @return float
-     * @since 2.0.0
      */
     public function getShippingAmount()
     {
@@ -103,7 +95,6 @@ class Adjustments extends \Magento\Backend\Block\Template
      * Get label for shipping total based on configuration settings
      *
      * @return string
-     * @since 2.0.0
      */
     public function getShippingLabel()
     {

@@ -8,7 +8,6 @@ namespace Magento\Sales\Block\Adminhtml\System\Config\Form\Fieldset\Order;
 /**
  * Class \Magento\Sales\Block\Adminhtml\System\Config\Form\Fieldset\Order\Statuses
  *
- * @since 2.0.0
  */
 class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
 {
@@ -16,7 +15,6 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
      * Dummy element
      *
      * @var \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     protected $_dummyElement;
 
@@ -24,13 +22,11 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
      * Field renderer
      *
      * @var \Magento\Config\Block\System\Config\Form\Field
-     * @since 2.0.0
      */
     protected $_fieldRenderer;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_values;
 
@@ -38,7 +34,6 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
      * Order status collection
      *
      * @var \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory
-     * @since 2.0.0
      */
     protected $_orderStatusCollection;
 
@@ -48,7 +43,6 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
      * @param \Magento\Framework\View\Helper\Js $jsHelper
      * @param \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory $orderStatusCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -66,7 +60,6 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -84,7 +77,6 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
      * Get dummy element
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     protected function _getDummyElement()
     {
@@ -98,7 +90,6 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
      * Get field renderer
      *
      * @return \Magento\Config\Block\System\Config\Form\Field
-     * @since 2.0.0
      */
     protected function _getFieldRenderer()
     {
@@ -118,7 +109,6 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
      * @param string $status
      * @return string
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _getFieldHtml($fieldset, $id, $status)
     {

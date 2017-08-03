@@ -9,7 +9,6 @@ namespace Magento\Framework\Url;
  * Resolves query parameters in a URL.
  *
  * @api
- * @since 2.0.0
  */
 interface QueryParamsResolverInterface
 {
@@ -18,7 +17,6 @@ interface QueryParamsResolverInterface
      *
      * @param bool $escape "&" escape flag
      * @return string
-     * @since 2.0.0
      */
     public function getQuery($escape = false);
 
@@ -27,7 +25,6 @@ interface QueryParamsResolverInterface
      *
      * @param mixed $data
      * @return \Magento\Framework\Url\QueryParamsResolverInterface
-     * @since 2.0.0
      */
     public function setQuery($data);
 
@@ -37,7 +34,6 @@ interface QueryParamsResolverInterface
      * @param string $key
      * @param mixed $data
      * @return \Magento\Framework\Url\QueryParamsResolverInterface
-     * @since 2.0.0
      */
     public function setQueryParam($key, $data);
 
@@ -45,7 +41,6 @@ interface QueryParamsResolverInterface
      * Return Query Params
      *
      * @return array
-     * @since 2.0.0
      */
     public function getQueryParams();
 
@@ -54,7 +49,6 @@ interface QueryParamsResolverInterface
      *
      * @param array $data
      * @return \Magento\Framework\Url\QueryParamsResolverInterface
-     * @since 2.0.0
      */
     public function setQueryParams(array $data);
 
@@ -63,7 +57,6 @@ interface QueryParamsResolverInterface
      *
      * @param array $data
      * @return \Magento\Framework\Url\QueryParamsResolverInterface
-     * @since 2.0.0
      */
     public function addQueryParams(array $data);
 
@@ -72,7 +65,6 @@ interface QueryParamsResolverInterface
      *
      * @param null|string|array $key
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function unsetData($key = null);
 }

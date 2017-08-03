@@ -8,7 +8,6 @@ namespace Magento\Framework\Config;
 /**
  * Magento configuration DOM factory
  * @api
- * @since 2.0.0
  */
 class DomFactory
 {
@@ -18,7 +17,6 @@ class DomFactory
      * Object manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -26,7 +24,6 @@ class DomFactory
      * Constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManger
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManger
@@ -39,7 +36,6 @@ class DomFactory
      *
      * @param array $arguments
      * @return \Magento\Framework\Config\Dom
-     * @since 2.0.0
      */
     public function createDom(array $arguments = [])
     {

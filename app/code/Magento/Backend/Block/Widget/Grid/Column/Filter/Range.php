@@ -13,13 +13,11 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Range extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getHtml()
     {
@@ -59,7 +57,6 @@ class Range extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     /**
      * @param string|null $index
      * @return mixed
-     * @since 2.0.0
      */
     public function getValue($index = null)
     {
@@ -75,7 +72,6 @@ class Range extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCondition()
     {

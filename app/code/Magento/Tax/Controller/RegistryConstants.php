@@ -8,7 +8,6 @@ namespace Magento\Tax\Controller;
 /**
  * Declarations of core registry keys used by the Tax module
  *
- * @since 2.0.0
  */
 class RegistryConstants
 {

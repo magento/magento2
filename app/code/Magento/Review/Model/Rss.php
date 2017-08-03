@@ -8,13 +8,11 @@ namespace Magento\Review\Model;
 /**
  * Class Rss
  * @package Magento\Catalog\Model\Rss\Product
- * @since 2.0.0
  */
 class Rss extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @var \Magento\Review\Model\ReviewFactory
-     * @since 2.0.0
      */
     protected $reviewFactory;
 
@@ -22,14 +20,12 @@ class Rss extends \Magento\Framework\Model\AbstractModel
      * Application Event Dispatcher
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param ReviewFactory $reviewFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -41,7 +37,6 @@ class Rss extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return $this|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
-     * @since 2.0.0
      */
     public function getProductCollection()
     {

@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Asset\PreProcessor;
 
 /**
  * Interface FilenameResolverInterface
- * @since 2.0.0
  */
 interface FilenameResolverInterface
 {
@@ -16,7 +15,6 @@ interface FilenameResolverInterface
      *
      * @param string $path
      * @return string
-     * @since 2.0.0
      */
     public function resolve($path);
 }

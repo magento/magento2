@@ -8,13 +8,11 @@ namespace Magento\Downloadable\Model\Sales\Order\Pdf\Items;
 /**
  * Order Creditmemo Downloadable Pdf Items renderer
  * @api
- * @since 2.0.0
  */
 class Creditmemo extends \Magento\Downloadable\Model\Sales\Order\Pdf\Items\AbstractItems
 {
     /**
      * @var \Magento\Framework\Stdlib\StringUtils
-     * @since 2.0.0
      */
     protected $string;
 
@@ -32,7 +30,6 @@ class Creditmemo extends \Magento\Downloadable\Model\Sales\Order\Pdf\Items\Abstr
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -68,7 +65,6 @@ class Creditmemo extends \Magento\Downloadable\Model\Sales\Order\Pdf\Items\Abstr
      * Draw item line
      *
      * @return void
-     * @since 2.0.0
      */
     public function draw()
     {

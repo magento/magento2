@@ -10,19 +10,19 @@ use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 /**
  * Class \Magento\Quote\Model\Product\Plugin\RemoveQuoteItems
  *
- * @since 2.2.0
+ * @since 2.1.3
  */
 class RemoveQuoteItems
 {
     /**
      * @var \Magento\Quote\Model\Product\QuoteItemsCleanerInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $quoteItemsCleaner;
 
     /**
      * @param \Magento\Quote\Model\Product\QuoteItemsCleanerInterface $quoteItemsCleaner
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(\Magento\Quote\Model\Product\QuoteItemsCleanerInterface $quoteItemsCleaner)
     {

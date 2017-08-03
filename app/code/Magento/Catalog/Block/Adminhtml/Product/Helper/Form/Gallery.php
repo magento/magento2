@@ -21,7 +21,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 /**
  * Class \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery
  *
- * @since 2.0.0
  */
 class Gallery extends \Magento\Framework\View\Element\AbstractBlock
 {
@@ -87,7 +86,6 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      * @param Registry $registry
      * @param \Magento\Framework\Data\Form $form
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
@@ -104,7 +102,6 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -127,7 +124,6 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      * Prepares content block
      *
      * @return string
-     * @since 2.0.0
      */
     public function getContentHtml()
     {
@@ -181,7 +177,6 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      *
      * @param Attribute $attribute
      * @return bool
-     * @since 2.0.0
      */
     public function canDisplayUseDefault($attribute)
     {
@@ -197,7 +192,6 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      *
      * @param Attribute $attribute
      * @return bool
-     * @since 2.0.0
      */
     public function usedDefault($attribute)
     {
@@ -224,7 +218,6 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      *
      * @param Attribute $attribute
      * @return string
-     * @since 2.0.0
      */
     public function getScopeLabel($attribute)
     {
@@ -247,7 +240,6 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      * Retrieve data object related with form
      *
      * @return ProductInterface|Product
-     * @since 2.0.0
      */
     public function getDataObject()
     {
@@ -260,7 +252,6 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      *
      * @param Attribute $attribute
      * @return string
-     * @since 2.0.0
      */
     public function getAttributeFieldName($attribute)
     {
@@ -273,7 +264,6 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function toHtml()
     {
@@ -284,7 +274,6 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      * Default sore ID getter
      *
      * @return integer
-     * @since 2.0.0
      */
     protected function _getDefaultStoreId()
     {

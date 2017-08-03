@@ -8,7 +8,6 @@ namespace Magento\Setup\Module\Di\Code\Scanner;
 /**
  * Class \Magento\Setup\Module\Di\Code\Scanner\DirectoryScanner
  *
- * @since 2.0.0
  */
 class DirectoryScanner
 {
@@ -19,7 +18,6 @@ class DirectoryScanner
      * @param array $patterns
      * @param string[] $excludePatterns
      * @return array
-     * @since 2.0.0
      */
     public function scan($dir, array $patterns = [], array $excludePatterns = [])
     {

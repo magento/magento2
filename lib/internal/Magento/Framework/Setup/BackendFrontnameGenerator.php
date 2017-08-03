@@ -8,7 +8,6 @@ namespace Magento\Framework\Setup;
 
 /**
  * Class to generate random backend URI
- * @since 2.0.0
  */
 class BackendFrontnameGenerator
 {
@@ -26,7 +25,6 @@ class BackendFrontnameGenerator
      * Generate Backend name
      *
      * @return string
-     * @since 2.0.0
      */
     public static function generate()
     {

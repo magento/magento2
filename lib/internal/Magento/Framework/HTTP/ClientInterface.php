@@ -10,7 +10,6 @@ namespace Magento\Framework\HTTP;
  * Interface for HTTP clients
  *
  * @api
- * @since 2.0.0
  */
 interface ClientInterface
 {
@@ -19,7 +18,6 @@ interface ClientInterface
      *
      * @param int $value value in seconds
      * @return void
-     * @since 2.0.0
      */
     public function setTimeout($value);
 
@@ -28,7 +26,6 @@ interface ClientInterface
      *
      * @param array $headers an array of header names as keys and header values as values
      * @return void
-     * @since 2.0.0
      */
     public function setHeaders($headers);
 
@@ -38,7 +35,6 @@ interface ClientInterface
      * @param string $name name of the HTTP header
      * @param string $value value of the HTTP header
      * @return void
-     * @since 2.0.0
      */
     public function addHeader($name, $value);
 
@@ -47,7 +43,6 @@ interface ClientInterface
      *
      * @param string $name name of the HTTP header
      * @return void
-     * @since 2.0.0
      */
     public function removeHeader($name);
 
@@ -57,7 +52,6 @@ interface ClientInterface
      * @param string $login user identity/name
      * @param string $pass user password
      * @return void
-     * @since 2.0.0
      */
     public function setCredentials($login, $pass);
 
@@ -67,7 +61,6 @@ interface ClientInterface
      * @param string $name name of the cookie
      * @param string $value value of the cookie
      * @return void
-     * @since 2.0.0
      */
     public function addCookie($name, $value);
 
@@ -76,7 +69,6 @@ interface ClientInterface
      *
      * @param string $name name of the cookie
      * @return void
-     * @since 2.0.0
      */
     public function removeCookie($name);
 
@@ -85,7 +77,6 @@ interface ClientInterface
      *
      * @param array $cookies an array of cookies with cookie names as keys and cookie values as value
      * @return void
-     * @since 2.0.0
      */
     public function setCookies($cookies);
 
@@ -93,7 +84,6 @@ interface ClientInterface
      * Remove cookies from request
      *
      * @return void
-     * @since 2.0.0
      */
     public function removeCookies();
 
@@ -102,7 +92,6 @@ interface ClientInterface
      *
      * @param string $uri full uri
      * @return array
-     * @since 2.0.0
      */
     public function get($uri);
 
@@ -112,7 +101,6 @@ interface ClientInterface
      * @param string $uri full uri
      * @param array $params POST fields array
      * @return void
-     * @since 2.0.0
      */
     public function post($uri, $params);
 
@@ -120,7 +108,6 @@ interface ClientInterface
      * Get response headers
      *
      * @return array
-     * @since 2.0.0
      */
     public function getHeaders();
 
@@ -128,7 +115,6 @@ interface ClientInterface
      * Get response body
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBody();
 
@@ -136,7 +122,6 @@ interface ClientInterface
      * Get response status code
      *
      * @return int
-     * @since 2.0.0
      */
     public function getStatus();
 
@@ -144,7 +129,6 @@ interface ClientInterface
      * Get response cookies (k=>v)
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCookies();
 
@@ -154,7 +138,6 @@ interface ClientInterface
      * @param string $key
      * @param string $value
      * @return void
-     * @since 2.0.0
      */
     public function setOption($key, $value);
 
@@ -163,7 +146,6 @@ interface ClientInterface
      *
      * @param array $arr
      * @return void
-     * @since 2.0.0
      */
     public function setOptions($arr);
 }

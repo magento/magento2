@@ -7,7 +7,6 @@ namespace Magento\Backend\Block\Cache;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Additional extends \Magento\Backend\Block\Template
 {
@@ -15,7 +14,6 @@ class Additional extends \Magento\Backend\Block\Template
      * Check if application is in production mode
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isInProductionMode()
     {
@@ -24,7 +22,6 @@ class Additional extends \Magento\Backend\Block\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getCleanImagesUrl()
     {
@@ -33,7 +30,6 @@ class Additional extends \Magento\Backend\Block\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getCleanMediaUrl()
     {
@@ -42,7 +38,6 @@ class Additional extends \Magento\Backend\Block\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getCleanStaticFilesUrl()
     {

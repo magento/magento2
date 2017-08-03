@@ -8,19 +8,16 @@ namespace Magento\Cron\Model\Backend\Config\Structure;
 /**
  * Class \Magento\Cron\Model\Backend\Config\Structure\Converter
  *
- * @since 2.0.0
  */
 class Converter
 {
     /**
      * @var \Magento\Cron\Model\Groups\Config\Data
-     * @since 2.0.0
      */
     protected $groupsConfig;
 
     /**
      * @param \Magento\Cron\Model\Groups\Config\Data $groupsConfig
-     * @since 2.0.0
      */
     public function __construct(\Magento\Cron\Model\Groups\Config\Data $groupsConfig)
     {
@@ -36,7 +33,6 @@ class Converter
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function afterConvert(\Magento\Config\Model\Config\Structure\Converter $subject, array $result)
     {

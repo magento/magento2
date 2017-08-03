@@ -12,7 +12,6 @@ use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 /**
  * Class \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute\CreateOptions
  *
- * @since 2.0.0
  */
 class CreateOptions extends Action
 {
@@ -25,13 +24,11 @@ class CreateOptions extends Action
 
     /**
      * @var \Magento\Framework\Json\Helper\Data
-     * @since 2.0.0
      */
     protected $jsonHelper;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
-     * @since 2.0.0
      */
     protected $attributeFactory;
 
@@ -39,7 +36,6 @@ class CreateOptions extends Action
      * @param Action\Context $context
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param AttributeFactory $attributeFactory
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -55,7 +51,6 @@ class CreateOptions extends Action
      * Search for attributes by part of attribute's label in admin store
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -70,7 +65,6 @@ class CreateOptions extends Action
      *   when full set of operations for attribute options during
      *   product creation will be implemented: edit labels, remove, reorder.
      * Currently only addition of options to end and removal of just added option is supported.
-     * @since 2.0.0
      */
     protected function saveAttributeOptions()
     {

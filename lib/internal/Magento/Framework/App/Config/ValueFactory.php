@@ -7,7 +7,6 @@ namespace Magento\Framework\App\Config;
 
 /**
  * Factory class
- * @since 2.0.0
  */
 class ValueFactory
 {
@@ -15,7 +14,6 @@ class ValueFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager = null;
 
@@ -23,7 +21,6 @@ class ValueFactory
      * Instance name to create
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_instanceName = null;
 
@@ -32,7 +29,6 @@ class ValueFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -48,7 +44,6 @@ class ValueFactory
      * @param array $data
      * @return \Magento\Framework\App\Config\ValueInterface
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function create(array $data = [])
     {

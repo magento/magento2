@@ -12,7 +12,6 @@ use Magento\Framework\Escaper;
  * Form editor element
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Editor extends Textarea
 {
@@ -30,7 +29,6 @@ class Editor extends Textarea
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -54,7 +52,6 @@ class Editor extends Textarea
 
     /**
      * @return array
-     * @since 2.0.0
      */
     protected function getButtonTranslations()
     {
@@ -86,7 +83,6 @@ class Editor extends Textarea
     /**
      * @return string
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -225,7 +221,6 @@ class Editor extends Textarea
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getTheme()
     {
@@ -240,7 +235,6 @@ class Editor extends Textarea
      * Return Editor top Buttons HTML
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getButtonsHtml()
     {
@@ -261,7 +255,6 @@ class Editor extends Textarea
      *
      * @param bool $visible
      * @return string
-     * @since 2.0.0
      */
     protected function _getToggleButtonHtml($visible = true)
     {
@@ -283,7 +276,6 @@ class Editor extends Textarea
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _getPluginButtonsHtml($visible = true)
     {
@@ -344,7 +336,6 @@ class Editor extends Textarea
      *
      * @param array $options
      * @return array
-     * @since 2.0.0
      */
     protected function _prepareButtonOptions($options)
     {
@@ -362,7 +353,6 @@ class Editor extends Textarea
      *
      * @param array $pluginOptions
      * @return boolean
-     * @since 2.0.0
      */
     protected function _checkPluginButtonOptions($pluginOptions)
     {
@@ -378,7 +368,6 @@ class Editor extends Textarea
      *
      * @param array $options
      * @return array
-     * @since 2.0.0
      */
     protected function _prepareOptions($options)
     {
@@ -403,7 +392,6 @@ class Editor extends Textarea
      * @param array $data Button params
      * @return string
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _getButtonHtml($data)
     {
@@ -425,7 +413,6 @@ class Editor extends Textarea
      *
      * @param string $html HTML code to wrap
      * @return string
-     * @since 2.0.0
      */
     protected function _wrapIntoContainer($html)
     {
@@ -447,7 +434,6 @@ class Editor extends Textarea
      *
      * @param string $key Config var key
      * @return mixed
-     * @since 2.0.0
      */
     public function getConfig($key = null)
     {
@@ -466,7 +452,6 @@ class Editor extends Textarea
      *
      * @param string $string String to be translated
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function translate($string)
     {
@@ -477,7 +462,6 @@ class Editor extends Textarea
      * Check whether Wysiwyg is enabled or not
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isEnabled()
     {
@@ -492,7 +476,6 @@ class Editor extends Textarea
      * Check whether Wysiwyg is loaded on demand or not
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isHidden()
     {

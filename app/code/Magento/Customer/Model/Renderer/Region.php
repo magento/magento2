@@ -11,7 +11,6 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  * Region field renderer
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Region implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
@@ -24,7 +23,6 @@ class Region implements \Magento\Framework\Data\Form\Element\Renderer\RendererIn
      * )
      *
      * @var array
-     * @since 2.0.0
      */
     protected static $_regionCollections;
 
@@ -32,13 +30,11 @@ class Region implements \Magento\Framework\Data\Form\Element\Renderer\RendererIn
      * Adminhtml data
      *
      * @var \Magento\Framework\Escaper
-     * @since 2.0.0
      */
     protected $_escaper = null;
 
     /**
      * @var \Magento\Directory\Model\CountryFactory
-     * @since 2.0.0
      */
     protected $_countryFactory;
 
@@ -46,7 +42,6 @@ class Region implements \Magento\Framework\Data\Form\Element\Renderer\RendererIn
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\Escaper $escaper
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Directory\Model\CountryFactory $countryFactory,
@@ -63,7 +58,6 @@ class Region implements \Magento\Framework\Data\Form\Element\Renderer\RendererIn
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function render(AbstractElement $element)
     {

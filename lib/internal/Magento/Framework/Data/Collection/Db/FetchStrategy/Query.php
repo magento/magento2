@@ -14,13 +14,11 @@ use Magento\Framework\DB\Select;
 /**
  * Class \Magento\Framework\Data\Collection\Db\FetchStrategy\Query
  *
- * @since 2.0.0
  */
 class Query implements \Magento\Framework\Data\Collection\Db\FetchStrategyInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function fetchAll(Select $select, array $bindParams = [])
     {

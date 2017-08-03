@@ -10,7 +10,6 @@ use Magento\Framework\Exception\InputException;
 
 /**
  * Validator Helper for user credentials
- * @since 2.0.0
  */
 class CredentialsValidator
 {
@@ -21,7 +20,6 @@ class CredentialsValidator
      * @param string $password
      * @throws InputException
      * @return void
-     * @since 2.0.0
      */
     public function validate($username, $password)
     {

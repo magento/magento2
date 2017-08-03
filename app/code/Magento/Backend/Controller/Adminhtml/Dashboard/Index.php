@@ -9,20 +9,17 @@ namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 /**
  * Class \Magento\Backend\Controller\Adminhtml\Dashboard\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Backend\Controller\Adminhtml\Dashboard
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -34,7 +31,6 @@ class Index extends \Magento\Backend\Controller\Adminhtml\Dashboard
 
     /**
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

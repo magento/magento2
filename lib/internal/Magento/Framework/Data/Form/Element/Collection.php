@@ -12,7 +12,6 @@ use Magento\Framework\Data\Form\AbstractForm;
  * Form element collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Collection implements \ArrayAccess, \IteratorAggregate
 {
@@ -20,7 +19,6 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      * Elements storage
      *
      * @var array
-     * @since 2.0.0
      */
     private $_elements;
 
@@ -28,7 +26,6 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      * Elements container
      *
      * @var AbstractForm
-     * @since 2.0.0
      */
     private $_container;
 
@@ -36,7 +33,6 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      * Class constructor
      *
      * @param AbstractForm $container
-     * @since 2.0.0
      */
     public function __construct(AbstractForm $container)
     {
@@ -48,7 +44,6 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      * Implementation of \IteratorAggregate::getIterator()
      *
      * @return \ArrayIterator
-     * @since 2.0.0
      */
     public function getIterator()
     {
@@ -61,7 +56,6 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      * @param mixed $key
      * @param mixed $value
      * @return void
-     * @since 2.0.0
      */
     public function offsetSet($key, $value)
     {
@@ -73,7 +67,6 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      *
      * @param mixed $key
      * @return AbstractElement
-     * @since 2.0.0
      */
     public function offsetGet($key)
     {
@@ -85,7 +78,6 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      *
      * @param mixed $key
      * @return void
-     * @since 2.0.0
      */
     public function offsetUnset($key)
     {
@@ -97,7 +89,6 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      *
      * @param mixed $key
      * @return boolean
-     * @since 2.0.0
      */
     public function offsetExists($key)
     {
@@ -111,7 +102,6 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      * @param AbstractElement $element
      * @param bool|string $after
      * @return AbstractElement
-     * @since 2.0.0
      */
     public function add(AbstractElement $element, $after = false)
     {
@@ -147,7 +137,6 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      *
      * @param mixed $callback
      * @return $this
-     * @since 2.0.0
      */
     public function usort($callback)
     {
@@ -160,7 +149,6 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      *
      * @param mixed $elementId
      * @return $this
-     * @since 2.0.0
      */
     public function remove($elementId)
     {
@@ -178,7 +166,6 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      * Count elements in collection
      *
      * @return int
-     * @since 2.0.0
      */
     public function count()
     {
@@ -190,7 +177,6 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      *
      * @param mixed $elementId
      * @return AbstractElement
-     * @since 2.0.0
      */
     public function searchById($elementId)
     {

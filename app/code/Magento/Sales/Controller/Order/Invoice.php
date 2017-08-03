@@ -11,7 +11,6 @@ use Magento\Sales\Controller\OrderInterface;
 /**
  * Class \Magento\Sales\Controller\Order\Invoice
  *
- * @since 2.0.0
  */
 class Invoice extends \Magento\Sales\Controller\AbstractController\Invoice implements OrderInterface
 {

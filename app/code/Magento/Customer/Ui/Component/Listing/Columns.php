@@ -15,31 +15,26 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 /**
  * Class \Magento\Customer\Ui\Component\Listing\Columns
  *
- * @since 2.0.0
  */
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $columnSortOrder;
 
     /**
      * @var \Magento\Customer\Ui\Component\Listing\AttributeRepository
-     * @since 2.0.0
      */
     protected $attributeRepository;
 
     /**
      * @var \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater
-     * @since 2.0.0
      */
     protected $inlineEditUpdater;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $filterMap = [
         'default' => 'text',
@@ -56,7 +51,6 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
      * @param InlineEditUpdater $inlineEditor
      * @param array $components
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -74,7 +68,6 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
 
     /**
      * @return int
-     * @since 2.0.0
      */
     protected function getDefaultSortOrder()
     {
@@ -92,7 +85,6 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
      * Update actions column sort order
      *
      * @return void
-     * @since 2.0.0
      */
     protected function updateActionColumnSortOrder()
     {
@@ -107,7 +99,6 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function prepare()
     {
@@ -129,7 +120,6 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
      * @param array $attributeData
      * @param string $columnName
      * @return void
-     * @since 2.0.0
      */
     public function addColumn(array $attributeData, $columnName)
     {
@@ -146,7 +136,6 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
      * @param array $attributeData
      * @param string $newAttributeCode
      * @return void
-     * @since 2.0.0
      */
     public function updateColumn(array $attributeData, $newAttributeCode)
     {
@@ -195,7 +184,6 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
      * @param UiComponentInterface $component
      * @param array $attributeData
      * @return void
-     * @since 2.0.0
      */
     public function addOptions(UiComponentInterface $component, array $attributeData)
     {
@@ -213,7 +201,6 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
      *
      * @param string $frontendInput
      * @return string
-     * @since 2.0.0
      */
     protected function getFilterType($frontendInput)
     {

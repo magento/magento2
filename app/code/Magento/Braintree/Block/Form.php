@@ -18,14 +18,12 @@ use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
  * Class Form
- * @since 2.0.0
  */
 class Form extends Cc
 {
 
     /**
      * @var Quote
-     * @since 2.0.0
      */
     protected $sessionQuote;
 
@@ -54,7 +52,6 @@ class Form extends Cc
      * @param GatewayConfig $gatewayConfig
      * @param CcType $ccType
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -73,7 +70,6 @@ class Form extends Cc
     /**
      * Get list of available card types of order billing address country
      * @return array
-     * @since 2.0.0
      */
     public function getCcAvailableTypes()
     {
@@ -85,7 +81,6 @@ class Form extends Cc
     /**
      * Check if cvv validation is available
      * @return boolean
-     * @since 2.0.0
      */
     public function useCvv()
     {

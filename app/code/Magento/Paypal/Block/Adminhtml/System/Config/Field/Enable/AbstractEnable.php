@@ -9,7 +9,6 @@ use Magento\Config\Block\System\Config\Form\Field;
 
 /**
  * Class AbstractEnable
- * @since 2.0.0
  */
 abstract class AbstractEnable extends Field
 {
@@ -26,7 +25,6 @@ abstract class AbstractEnable extends Field
      * @param string|null $arg4
      * @param string|null $arg5
      * @return string
-     * @since 2.0.0
      */
     public function getUiId($arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null)
     {
@@ -39,7 +37,6 @@ abstract class AbstractEnable extends Field
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -51,7 +48,6 @@ abstract class AbstractEnable extends Field
      * Getting the name of a UI attribute
      *
      * @return string
-     * @since 2.0.0
      */
     abstract protected function getDataAttributeName();
 }

@@ -14,37 +14,31 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
  * Msrp data helper
- * @since 2.0.0
  */
 class Data extends AbstractHelper
 {
     /**
      * @var StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Msrp\Model\Product\Options
-     * @since 2.0.0
      */
     protected $productOptions;
 
     /**
      * @var \Magento\Msrp\Model\Config
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
@@ -56,7 +50,6 @@ class Data extends AbstractHelper
      * @param \Magento\Msrp\Model\Config $config
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param ProductRepositoryInterface $productRepository
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -85,7 +78,6 @@ class Data extends AbstractHelper
      * @return bool
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function canApplyMsrp($product, $visibility = null)
     {
@@ -119,7 +111,6 @@ class Data extends AbstractHelper
      *
      * @param Product $product
      * @return string
-     * @since 2.0.0
      */
     public function getMsrpPriceMessage($product)
     {
@@ -137,7 +128,6 @@ class Data extends AbstractHelper
      *
      * @param int|Product $product
      * @return bool
-     * @since 2.0.0
      */
     public function isShowPriceOnGesture($product)
     {
@@ -147,7 +137,6 @@ class Data extends AbstractHelper
     /**
      * @param int|Product $product
      * @return bool
-     * @since 2.0.0
      */
     public function isShowBeforeOrderConfirm($product)
     {
@@ -157,7 +146,6 @@ class Data extends AbstractHelper
     /**
      * @param int|Product $product
      * @return bool|float
-     * @since 2.0.0
      */
     public function isMinimalPriceLessMsrp($product)
     {

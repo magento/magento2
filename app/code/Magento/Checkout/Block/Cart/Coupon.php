@@ -7,7 +7,6 @@ namespace Magento\Checkout\Block\Cart;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Coupon extends \Magento\Checkout\Block\Cart\AbstractCart
 {
@@ -17,7 +16,6 @@ class Coupon extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -32,7 +30,6 @@ class Coupon extends \Magento\Checkout\Block\Cart\AbstractCart
     /**
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getCouponCode()
     {

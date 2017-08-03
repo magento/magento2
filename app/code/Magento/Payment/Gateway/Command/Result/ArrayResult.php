@@ -11,19 +11,16 @@ use Magento\Payment\Gateway\Command\ResultInterface;
  * Container for array that should be returned as command result.
  *
  * @api
- * @since 2.0.0
  */
 class ArrayResult implements ResultInterface
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     private $array;
 
     /**
      * @param array $array
-     * @since 2.0.0
      */
     public function __construct(array $array = [])
     {
@@ -34,7 +31,6 @@ class ArrayResult implements ResultInterface
      * Returns result interpretation
      *
      * @return array
-     * @since 2.0.0
      */
     public function get()
     {

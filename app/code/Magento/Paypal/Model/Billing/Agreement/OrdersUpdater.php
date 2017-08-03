@@ -7,19 +7,16 @@ namespace Magento\Paypal\Model\Billing\Agreement;
 
 /**
  * Orders grid massaction items updater
- * @since 2.0.0
  */
 class OrdersUpdater implements \Magento\Framework\View\Layout\Argument\UpdaterInterface
 {
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_registryManager;
 
     /**
      * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement
-     * @since 2.0.0
      */
     protected $_agreementResource;
 
@@ -28,7 +25,6 @@ class OrdersUpdater implements \Magento\Framework\View\Layout\Argument\UpdaterIn
      * @param \Magento\Paypal\Model\ResourceModel\Billing\Agreement $agreementResource
      * @param array $data
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Registry $coreRegistry,
@@ -49,7 +45,6 @@ class OrdersUpdater implements \Magento\Framework\View\Layout\Argument\UpdaterIn
      * @param mixed $argument
      * @return mixed
      * @throws \DomainException
-     * @since 2.0.0
      */
     public function update($argument)
     {

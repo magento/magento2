@@ -10,19 +10,16 @@ namespace Magento\Framework\Validator;
 /**
  * Class \Magento\Framework\Validator\StringLength
  *
- * @since 2.0.0
  */
 class StringLength extends \Zend_Validate_StringLength implements \Magento\Framework\Validator\ValidatorInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_encoding = 'UTF-8';
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setEncoding($encoding = null)
     {

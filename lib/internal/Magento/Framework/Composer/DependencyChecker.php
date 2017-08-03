@@ -12,19 +12,16 @@ use Symfony\Component\Console\Output\BufferedOutput;
 
 /**
  * A class to check if there are any dependency to package(s) that exists in the codebase, regardless of package type
- * @since 2.0.0
  */
 class DependencyChecker
 {
     /**
      * @var Application
-     * @since 2.0.0
      */
     private $composerApp;
 
     /**
      * @var DirectoryList
-     * @since 2.0.0
      */
     private $directoryList;
 
@@ -33,7 +30,6 @@ class DependencyChecker
      *
      * @param Application $composerApp
      * @param DirectoryList $directoryList
-     * @since 2.0.0
      */
     public function __construct(Application $composerApp, DirectoryList $directoryList)
     {
@@ -50,7 +46,6 @@ class DependencyChecker
      * @param string[] $packages
      * @param bool $excludeSelf
      * @return string[]
-     * @since 2.0.0
      */
     public function checkDependencies(array $packages, $excludeSelf = false)
     {
@@ -79,7 +74,6 @@ class DependencyChecker
      *
      * @param string $output
      * @return string[]
-     * @since 2.0.0
      */
     private function parseComposerOutput($output)
     {

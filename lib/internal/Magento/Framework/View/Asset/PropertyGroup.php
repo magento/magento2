@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Asset;
 
 /**
  * Association of arbitrary properties with a list of page assets
- * @since 2.0.0
  */
 class PropertyGroup extends Collection
 {
@@ -15,7 +14,6 @@ class PropertyGroup extends Collection
      * Properties
      *
      * @var array
-     * @since 2.0.0
      */
     protected $properties = [];
 
@@ -23,7 +21,6 @@ class PropertyGroup extends Collection
      * Constructor
      *
      * @param array $properties
-     * @since 2.0.0
      */
     public function __construct(array $properties)
     {
@@ -34,7 +31,6 @@ class PropertyGroup extends Collection
      * Retrieve values of all properties
      *
      * @return array
-     * @since 2.0.0
      */
     public function getProperties()
     {
@@ -46,7 +42,6 @@ class PropertyGroup extends Collection
      *
      * @param string $name
      * @return mixed
-     * @since 2.0.0
      */
     public function getProperty($name)
     {

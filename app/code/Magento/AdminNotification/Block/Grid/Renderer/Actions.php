@@ -11,13 +11,11 @@ namespace Magento\AdminNotification\Block\Grid\Renderer;
 /**
  * Class \Magento\AdminNotification\Block\Grid\Renderer\Actions
  *
- * @since 2.0.0
  */
 class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var \Magento\Framework\Url\Helper\Data
-     * @since 2.0.0
      */
     protected $_urlHelper;
 
@@ -25,7 +23,6 @@ class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -41,7 +38,6 @@ class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
      *
      * @param   \Magento\Framework\DataObject $row
      * @return  string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

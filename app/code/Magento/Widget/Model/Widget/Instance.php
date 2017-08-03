@@ -23,7 +23,6 @@ use Magento\Framework\App\ObjectManager;
  * @method int getThemeId()
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Instance extends \Magento\Framework\Model\AbstractModel
 {
@@ -47,19 +46,16 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_layoutHandles = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_specificEntitiesLayoutHandles = [];
 
     /**
      * @var \Magento\Framework\Simplexml\Element
-     * @since 2.0.0
      */
     protected $_widgetConfigXml = null;
 
@@ -67,61 +63,51 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * Prefix of model events names
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'widget_widget_instance';
 
     /**
      * @var \Magento\Framework\View\FileSystem
-     * @since 2.0.0
      */
     protected $_viewFileSystem;
 
     /**
      * @var \Magento\Widget\Model\Widget
-     * @since 2.0.0
      */
     protected $_widgetModel;
 
     /**
      * @var \Magento\Widget\Model\NamespaceResolver
-     * @since 2.0.0
      */
     protected $_namespaceResolver;
 
     /**
      * @var \Magento\Framework\App\Cache\TypeListInterface
-     * @since 2.0.0
      */
     protected $_cacheTypeList;
 
     /**
      * @var string[]
-     * @since 2.0.0
      */
     protected $_relatedCacheTypes;
 
     /**
      * @var \Magento\Framework\Escaper
-     * @since 2.0.0
      */
     protected $_escaper;
 
     /**
      * @var \Magento\Framework\Math\Random
-     * @since 2.0.0
      */
     protected $mathRandom;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
-     * @since 2.0.0
      */
     protected $_directory;
 
     /**
      * @var \Magento\Widget\Helper\Conditions
-     * @since 2.0.0
      */
     protected $conditionsHelper;
 
@@ -152,7 +138,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * @param array $data
      * @param Json $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -192,7 +177,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * Internal Constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -222,7 +206,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -294,7 +277,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * Validate widget instance data
      *
      * @return \Magento\Framework\Phrase|bool
-     * @since 2.0.0
      */
     public function validate()
     {
@@ -308,7 +290,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * Check if widget instance has required data (other data depends on it)
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isCompleteToCreate()
     {
@@ -319,7 +300,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * Return widget instance code.  If not set, derive value from type (namespace\class).
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCode()
     {
@@ -338,7 +318,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function setCode($code)
     {
@@ -352,7 +331,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $type
      * @return $this
-     * @since 2.0.0
      */
     public function setType($type)
     {
@@ -365,7 +343,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * Prepare widget type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -377,7 +354,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * If not set return default
      *
      * @return string
-     * @since 2.0.0
      */
     public function getArea()
     {
@@ -393,7 +369,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * Explode to array if string setted
      *
      * @return array
-     * @since 2.0.0
      */
     public function getStoreIds()
     {
@@ -408,7 +383,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * Unserialize if serialized string setted
      *
      * @return array
-     * @since 2.0.0
      */
     public function getWidgetParameters()
     {
@@ -425,7 +399,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $value
      * @return array
-     * @since 2.0.0
      */
     public function getWidgetsOptionArray($value = 'code')
     {
@@ -444,7 +417,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * @param string $value
      * @param string $requestedParam
      * @return string|null
-     * @since 2.0.0
      */
     public function getWidgetReference($matchParam, $value, $requestedParam)
     {
@@ -464,7 +436,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      *
      * @return array|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function getWidgetConfigAsArray()
     {
@@ -510,7 +481,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * Retrieve widget available templates
      *
      * @return array
-     * @since 2.0.0
      */
     public function getWidgetTemplates()
     {
@@ -534,7 +504,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * Get list of containers that widget is limited to be in
      *
      * @return array
-     * @since 2.0.0
      */
     public function getWidgetSupportedContainers()
     {
@@ -556,7 +525,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $containerName
      * @return array
-     * @since 2.0.0
      */
     public function getWidgetSupportedTemplatesByContainer($containerName)
     {
@@ -594,7 +562,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function generateLayoutUpdateXml($container, $templatePath = '')
     {
@@ -649,7 +616,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * Invalidate related cache types
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _invalidateCache()
     {
@@ -663,7 +629,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * Invalidate related cache if instance contain layout updates
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -677,7 +642,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * Invalidate related cache if instance contain layout updates
      *
      * @return $this
-     * @since 2.0.0
      */
     public function beforeDelete()
     {
