@@ -163,7 +163,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $params = ['themeId' => 'ThemeID'];
 
-        $themeMock = $this->getMock('Magento\Framework\View\Design\ThemeInterface');
+        $themeMock = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class);
 
         $this->themeProvider
             ->expects($this->any())
@@ -188,7 +188,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $params = ['theme' => 'ThemePath'];
 
-        $themeMock = $this->getMock('Magento\Framework\View\Design\ThemeInterface');
+        $themeMock = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class);
 
         $this->themeProvider
             ->expects($this->never())
@@ -229,7 +229,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getConfigurationDesignTheme')
             ->willReturn('ThemeID');
 
-        $themeMock = $this->getMock('Magento\Framework\View\Design\ThemeInterface');
+        $themeMock = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class);
 
         $this->themeProvider
             ->expects($this->any())
@@ -255,7 +255,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $params = ['area' => 'frontend'];
 
-        $themeMock = $this->getMock('Magento\Framework\View\Design\ThemeInterface');
+        $themeMock = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class);
 
         $this->designMock
             ->expects($this->any())
