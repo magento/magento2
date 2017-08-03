@@ -3,13 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\MessageQueue\Test\Unit\Config\Reader\Env\Converter;
 
 use Magento\Framework\MessageQueue\Config\Reader\Env\Converter\Publisher as EnvPublisherConverter;
 use Magento\Framework\MessageQueue\Config\Reader\Env as ReaderEnv;
 
-class PublisherTest extends \PHPUnit_Framework_TestCase
+class PublisherTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var EnvPublisherConverter
