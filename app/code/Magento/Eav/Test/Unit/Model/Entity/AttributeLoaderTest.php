@@ -84,7 +84,8 @@ class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
 
     public function testLoadAllAttributesAttributeCodesPresentInDefaultAttributes()
     {
-        $attributeMock = $this->createPartialMock(\Magento\Eav\Model\Attribute::class,
+        $attributeMock = $this->createPartialMock(
+            \Magento\Eav\Model\Attribute::class,
             [
                 'setAttributeCode',
                 'setBackendType',
