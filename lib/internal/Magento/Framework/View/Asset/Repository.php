@@ -137,23 +137,12 @@ class Repository
         // Set themeModel
         $area = $params['area'];
         if (!empty($params['themeId'])) {
-            $themeId = $params['themeId'];
-            $params['themeModel'] = $this->getThemeProvider()->getThemeById($themeId);
-            if (!$params['themeModel'] || $params['themeModel']->getArea() != $area) {
-                throw new \UnexpectedValueException("Could not find theme '$themeId' for area '$area'");
-            }
+            $params['themeModel'] = $this->getThemeById($params['themeId'], $area);
         } elseif (isset($params['theme'])) {
-            $themePath = $params['theme'];
-            $params['themeModel'] = $this->getThemeProvider()->getThemeByFullPath($area . '/' . $themePath);
-            if (!$params['themeModel']) {
-                throw new \UnexpectedValueException("Could not find theme '$themePath' for area '$area'");
-            }
+            $params['themeModel'] = $this->getThemeByPath($params['theme'], $area);
         } elseif (empty($params['themeModel']) && $area !== $this->getDefaultParameter('area')) {
             $themeId = $this->design->getConfigurationDesignTheme($area);
-            $params['themeModel'] = $this->getThemeProvider()->getThemeById($themeId);
-            if (!$params['themeModel'] || $params['themeModel']->getArea() != $area) {
-                throw new \UnexpectedValueException("Could not find theme '$themeId' for area '$area'");
-            }
+            $params['themeModel'] = $this->getThemeById($themeId, $area);
         }
 
         if (empty($params['themeModel'])) {
@@ -170,6 +159,36 @@ class Repository
             $params['locale'] = $this->getDefaultParameter('locale');
         }
         return $this;
+    }
+
+    /**
+     * @param string $themePath
+     * @param string $area
+     * @return \Magento\Framework\View\Design\ThemeInterface
+     * @throws \UnexpectedValueException
+     */
+    private function getThemeByPath($themePath, $area)
+    {
+        $themeModel = $this->getThemeProvider()->getThemeByFullPath($area . '/' . $themePath);
+        if (!$themeModel) {
+            throw new \UnexpectedValueException("Could not find theme '$themePath' for area '$area'");
+        }
+        return $themeModel;
+    }
+
+    /**
+     * @param string $themeId
+     * @param string $area
+     * @return \Magento\Framework\View\Design\ThemeInterface
+     * @throws \UnexpectedValueException
+     */
+    private function getThemeById($themeId, $area)
+    {
+        $themeModel = $this->getThemeProvider()->getThemeById($themeId);
+        if (!$themeModel || $themeModel->getArea() != $area) {
+            throw new \UnexpectedValueException("Could not find theme '$themeId' for area '$area'");
+        }
+        return $themeModel;
     }
 
     /**
