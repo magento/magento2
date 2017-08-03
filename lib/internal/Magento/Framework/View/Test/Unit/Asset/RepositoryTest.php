@@ -157,36 +157,130 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $params
-     * @param array $result
      * @return void
-     * @dataProvider updateDesignParamsDataProvider
      */
-    public function testUpdateDesignParams($params, $result)
+    public function testUpdateDesignParamsByThemeId()
     {
+        $params = ['themeId' => 'ThemeID'];
+
+        $themeMock = $this->getMock('Magento\Framework\View\Design\ThemeInterface');
+
         $this->themeProvider
             ->expects($this->any())
-            ->method('getThemeByFullPath')
-            ->willReturn('ThemeID');
+            ->method('getThemeById')
+            ->willReturn($themeMock);
+        $this->themeProvider
+            ->expects($this->never())
+            ->method('getThemeByFullPath');
 
         $this->repository->updateDesignParams($params);
-        $this->assertEquals($result, $params);
+        $this->assertEquals(
+            ['area' => '', 'themeId' => 'ThemeID', 'themeModel' => $themeMock, 'module' => '', 'locale' => ''],
+            $params
+        );
+        $this->assertSame($themeMock, $params['themeModel']);
     }
 
     /**
-     * @return array
+     * @return void
      */
-    public function updateDesignParamsDataProvider()
+    public function testUpdateDesignParamsByThemePath()
     {
-        return [
-            [
-                ['area' => 'AREA'],
-                ['area' => 'AREA', 'themeModel' => '', 'module' => '', 'locale' => '']],
-            [
-                ['themeId' => 'ThemeID'],
-                ['area' => '', 'themeId' => 'ThemeID', 'themeModel' => 'ThemeID', 'module' => '', 'locale' => '']
-            ]
-        ];
+        $params = ['theme' => 'ThemePath'];
+
+        $themeMock = $this->getMock('Magento\Framework\View\Design\ThemeInterface');
+
+        $this->themeProvider
+            ->expects($this->never())
+            ->method('getThemeById')
+            ->willReturn($themeMock);
+        $this->themeProvider
+            ->expects($this->any())
+            ->method('getThemeByFullPath')
+            ->willReturn($themeMock);
+
+        $this->repository->updateDesignParams($params);
+        $this->assertEquals(
+            ['area' => '', 'theme' => 'ThemePath', 'themeModel' => $themeMock, 'module' => '', 'locale' => ''],
+            $params
+        );
+        $this->assertSame($themeMock, $params['themeModel']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testUpdateDesignParamsCrossArea()
+    {
+        $params = ['area' => 'frontend'];
+
+        $this->designMock
+            ->expects($this->any())
+            ->method('getDesignParams')
+            ->willReturn(
+                [
+                    'themeModel' => '',
+                    'area' => 'adminhtml',
+                    'locale' => ''
+                ]
+            );
+        $this->designMock
+            ->expects($this->any())
+            ->method('getConfigurationDesignTheme')
+            ->willReturn('ThemeID');
+
+        $themeMock = $this->getMock('Magento\Framework\View\Design\ThemeInterface');
+
+        $this->themeProvider
+            ->expects($this->any())
+            ->method('getThemeById')
+            ->with('ThemeID')
+            ->willReturn($themeMock);
+        $this->themeProvider
+            ->expects($this->never())
+            ->method('getThemeByFullPath');
+
+        $this->repository->updateDesignParams($params);
+        $this->assertEquals(
+            ['area' => 'frontend', 'themeModel' => $themeMock, 'module' => '', 'locale' => ''],
+            $params
+        );
+        $this->assertSame($themeMock, $params['themeModel']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testUpdateDesignParamsSameArea()
+    {
+        $params = ['area' => 'frontend'];
+
+        $themeMock = $this->getMock('Magento\Framework\View\Design\ThemeInterface');
+
+        $this->designMock
+            ->expects($this->any())
+            ->method('getDesignParams')
+            ->willReturn(
+                [
+                    'themeModel' => $themeMock,
+                    'area' => 'frontend',
+                    'locale' => ''
+                ]
+            );
+
+        $this->themeProvider
+            ->expects($this->never())
+            ->method('getThemeById');
+        $this->themeProvider
+            ->expects($this->never())
+            ->method('getThemeByFullPath');
+
+        $this->repository->updateDesignParams($params);
+        $this->assertEquals(
+            ['area' => 'frontend', 'themeModel' => $themeMock, 'module' => '', 'locale' => ''],
+            $params
+        );
+        $this->assertSame($themeMock, $params['themeModel']);
     }
 
     /**
