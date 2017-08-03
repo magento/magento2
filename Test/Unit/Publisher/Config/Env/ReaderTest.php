@@ -8,7 +8,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Publisher\Config\Env;
 
 use Magento\Framework\MessageQueue\Publisher\Config\Env\Reader;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
