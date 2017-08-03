@@ -12,7 +12,6 @@ use Magento\Authorization\Model\UserContextInterface;
 /**
  * Class to manage integrations installed from config file
  *
- * @since 2.0.0
  */
 class ConfigBasedIntegrationManager
 {
@@ -42,7 +41,6 @@ class ConfigBasedIntegrationManager
      * @param \Magento\Integration\Api\IntegrationServiceInterface $integrationService
      * @param AclRetriever $aclRetriever
      * @param Config $integrationConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Integration\Api\IntegrationServiceInterface $integrationService,
@@ -60,7 +58,6 @@ class ConfigBasedIntegrationManager
      * @param array $integrationNames
      * @return array
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     public function processIntegrationConfig(array $integrationNames)
     {

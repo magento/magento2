@@ -14,31 +14,26 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Theme Observer model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class ApplyThemeCustomizationObserver implements ObserverInterface
 {
     /**
      * @var Theme
-     * @since 2.0.0
      */
     private $currentTheme;
 
     /**
      * @var \Magento\Framework\View\Asset\GroupedCollection
-     * @since 2.0.0
      */
     private $pageAssets;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
-     * @since 2.0.0
      */
     protected $assetRepo;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
@@ -47,7 +42,6 @@ class ApplyThemeCustomizationObserver implements ObserverInterface
      * @param \Magento\Framework\View\Asset\GroupedCollection $assets
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Psr\Log\LoggerInterface $logger
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\DesignInterface $design,
@@ -67,7 +61,6 @@ class ApplyThemeCustomizationObserver implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

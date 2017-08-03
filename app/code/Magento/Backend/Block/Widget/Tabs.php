@@ -10,7 +10,6 @@ use Magento\Backend\Block\Widget\Tab\TabInterface;
 /**
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @since 2.0.0
  */
 class Tabs extends \Magento\Backend\Block\Widget
 {
@@ -18,7 +17,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      * Tabs structure
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_tabs = [];
 
@@ -26,7 +24,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      * Active tab key
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_activeTab = null;
 
@@ -34,25 +31,21 @@ class Tabs extends \Magento\Backend\Block\Widget
      * Destination HTML element id
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_destElementId = 'content';
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Backend::widget/tabs.phtml';
 
     /**
      * @var \Magento\Backend\Model\Auth\Session
-     * @since 2.0.0
      */
     protected $_authSession;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     private $_jsonEncoder;
 
@@ -61,7 +54,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -78,7 +70,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      * Retrieve destination html element id
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDestElementId()
     {
@@ -90,7 +81,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      *
      * @param string $elementId
      * @return $this
-     * @since 2.0.0
      */
     public function setDestElementId($elementId)
     {
@@ -105,7 +95,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      * @param   array|\Magento\Framework\DataObject $tab
      * @param   string $afterTabId
      * @return  void
-     * @since 2.0.0
      */
     public function addTabAfter($tabId, $tab, $afterTabId)
     {
@@ -121,7 +110,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      * @return  $this
      * @throws  \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function addTab($tabId, $tab)
     {
@@ -172,7 +160,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      * @param string $tabId
      * @return void
      * @throws \Exception
-     * @since 2.0.0
      */
     protected function _addTabByName($tab, $tabId)
     {
@@ -191,7 +178,6 @@ class Tabs extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getActiveTabId()
     {
@@ -204,7 +190,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      *
      * @param string $tabId
      * @return $this
-     * @since 2.0.0
      */
     public function setActiveTab($tabId)
     {
@@ -231,7 +216,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      *
      * @param string $tabId
      * @return $this
-     * @since 2.0.0
      */
     protected function _setActiveTab($tabId)
     {
@@ -247,7 +231,6 @@ class Tabs extends \Magento\Backend\Block\Widget
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -280,7 +263,6 @@ class Tabs extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getJsObjectName()
     {
@@ -289,7 +271,6 @@ class Tabs extends \Magento\Backend\Block\Widget
 
     /**
      * @return string[]
-     * @since 2.0.0
      */
     public function getTabsIds()
     {
@@ -304,7 +285,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      * @param \Magento\Framework\DataObject|TabInterface $tab
      * @param bool $withPrefix
      * @return string
-     * @since 2.0.0
      */
     public function getTabId($tab, $withPrefix = true)
     {
@@ -317,7 +297,6 @@ class Tabs extends \Magento\Backend\Block\Widget
     /**
      * @param \Magento\Framework\DataObject|TabInterface $tab
      * @return bool
-     * @since 2.0.0
      */
     public function canShowTab($tab)
     {
@@ -331,7 +310,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      * @param \Magento\Framework\DataObject|TabInterface $tab
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getTabIsHidden($tab)
     {
@@ -344,7 +322,6 @@ class Tabs extends \Magento\Backend\Block\Widget
     /**
      * @param \Magento\Framework\DataObject|TabInterface $tab
      * @return string
-     * @since 2.0.0
      */
     public function getTabUrl($tab)
     {
@@ -363,7 +340,6 @@ class Tabs extends \Magento\Backend\Block\Widget
     /**
      * @param \Magento\Framework\DataObject|TabInterface $tab
      * @return string
-     * @since 2.0.0
      */
     public function getTabTitle($tab)
     {
@@ -376,7 +352,6 @@ class Tabs extends \Magento\Backend\Block\Widget
     /**
      * @param \Magento\Framework\DataObject|TabInterface $tab
      * @return string
-     * @since 2.0.0
      */
     public function getTabClass($tab)
     {
@@ -392,7 +367,6 @@ class Tabs extends \Magento\Backend\Block\Widget
     /**
      * @param \Magento\Framework\DataObject|TabInterface $tab
      * @return string
-     * @since 2.0.0
      */
     public function getTabLabel($tab)
     {
@@ -405,7 +379,6 @@ class Tabs extends \Magento\Backend\Block\Widget
     /**
      * @param \Magento\Framework\DataObject|TabInterface $tab
      * @return string
-     * @since 2.0.0
      */
     public function getTabContent($tab)
     {
@@ -426,7 +399,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      * @param string $tabTwoId
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function bindShadowTabs($tabOneId, $tabTwoId)
     {
@@ -460,7 +432,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      *
      * @param bool $asJson
      * @return array|string
-     * @since 2.0.0
      */
     public function getAllShadowTabs($asJson = true)
     {
@@ -486,7 +457,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      * @param string $key
      * @param mixed $value
      * @return $this
-     * @since 2.0.0
      */
     public function setTabData($tab, $key, $value)
     {
@@ -505,7 +475,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      *
      * @param string $tabId
      * @return $this
-     * @since 2.0.0
      */
     public function removeTab($tabId)
     {

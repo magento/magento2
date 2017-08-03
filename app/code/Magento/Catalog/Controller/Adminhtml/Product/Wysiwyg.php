@@ -9,19 +9,16 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 /**
  * Class \Magento\Catalog\Controller\Adminhtml\Product\Wysiwyg
  *
- * @since 2.0.0
  */
 class Wysiwyg extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
-     * @since 2.0.0
      */
     protected $resultRawFactory;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
-     * @since 2.0.0
      */
     protected $layoutFactory;
 
@@ -30,7 +27,6 @@ class Wysiwyg extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -47,7 +43,6 @@ class Wysiwyg extends \Magento\Catalog\Controller\Adminhtml\Product
      * WYSIWYG editor action for ajax request
      *
      * @return \Magento\Framework\Controller\Result\Raw
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -9,14 +9,12 @@ namespace Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
 /**
  * Class \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement\Edit
  *
- * @since 2.0.0
  */
 class Edit extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
 {
     /**
      * @return void
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

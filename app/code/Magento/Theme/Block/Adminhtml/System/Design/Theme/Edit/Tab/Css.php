@@ -16,7 +16,6 @@ use Magento\Theme\Helper\Storage;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab
 {
@@ -24,7 +23,6 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
      * Uploader service
      *
      * @var \Magento\Theme\Model\Uploader\Service
-     * @since 2.0.0
      */
     protected $_uploaderService;
 
@@ -32,13 +30,11 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
      * Theme custom css file
      *
      * @var \Magento\Theme\Model\Theme\File
-     * @since 2.0.0
      */
     protected $_customCssFile;
 
     /**
      * @var \Magento\Framework\Encryption\UrlCoder
-     * @since 2.0.0
      */
     protected $urlCoder;
 
@@ -50,7 +46,6 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
      * @param \Magento\Theme\Model\Uploader\Service $uploaderService
      * @param \Magento\Framework\Encryption\UrlCoder $urlCoder
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -70,7 +65,6 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
      * Create a form element with necessary controls
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -103,7 +97,6 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
      * Set theme css fieldset
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _addThemeCssFieldset()
     {
@@ -143,7 +136,6 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
      *
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _addCustomCssFieldset()
     {
@@ -254,7 +246,6 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
      * Get note string for css file to Upload
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getUploadCssFileNote()
     {
@@ -276,7 +267,6 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
      * Set additional form field type for theme preview image
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getAdditionalElementTypes()
     {
@@ -289,7 +279,6 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
      * Return Tab label
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -302,7 +291,6 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
      * @param string $fileId
      * @param int $themeId
      * @return string
-     * @since 2.0.0
      */
     public function getDownloadUrl($fileId, $themeId)
     {

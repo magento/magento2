@@ -9,7 +9,6 @@ namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 /**
  * Class \Magento\AdminNotification\Controller\Adminhtml\Notification\Remove
  *
- * @since 2.0.0
  */
 class Remove extends \Magento\AdminNotification\Controller\Adminhtml\Notification
 {
@@ -23,7 +22,6 @@ class Remove extends \Magento\AdminNotification\Controller\Adminhtml\Notificatio
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

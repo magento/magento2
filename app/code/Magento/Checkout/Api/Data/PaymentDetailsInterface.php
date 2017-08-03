@@ -8,7 +8,6 @@ namespace Magento\Checkout\Api\Data;
 /**
  * Interface PaymentDetailsInterface
  * @api
- * @since 2.0.0
  */
 interface PaymentDetailsInterface
 {
@@ -23,27 +22,23 @@ interface PaymentDetailsInterface
 
     /**
      * @return \Magento\Quote\Api\Data\PaymentMethodInterface[]
-     * @since 2.0.0
      */
     public function getPaymentMethods();
 
     /**
      * @param \Magento\Quote\Api\Data\PaymentMethodInterface[] $paymentMethods
      * @return $this
-     * @since 2.0.0
      */
     public function setPaymentMethods($paymentMethods);
 
     /**
      * @return \Magento\Quote\Api\Data\TotalsInterface
-     * @since 2.0.0
      */
     public function getTotals();
 
     /**
      * @param \Magento\Quote\Api\Data\TotalsInterface $totals
      * @return $this
-     * @since 2.0.0
      */
     public function setTotals($totals);
 
@@ -51,7 +46,6 @@ interface PaymentDetailsInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Checkout\Api\Data\PaymentDetailsExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -60,7 +54,6 @@ interface PaymentDetailsInterface
      *
      * @param \Magento\Checkout\Api\Data\PaymentDetailsExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Checkout\Api\Data\PaymentDetailsExtensionInterface $extensionAttributes

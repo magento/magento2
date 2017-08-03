@@ -12,13 +12,11 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 /**
  * Class \Magento\Backend\Block\Widget\Grid\Column\Filter\Theme
  *
- * @since 2.0.0
  */
 class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**
      * @var \Magento\Framework\View\Design\Theme\LabelFactory
-     * @since 2.0.0
      */
     protected $_labelFactory;
 
@@ -27,7 +25,6 @@ class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * @param \Magento\Framework\DB\Helper $resourceHelper
      * @param \Magento\Framework\View\Design\Theme\LabelFactory $labelFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -43,7 +40,6 @@ class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * Retrieve filter HTML
      *
      * @return string
-     * @since 2.0.0
      */
     public function getHtml()
     {
@@ -66,7 +62,6 @@ class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * Or load if options was not set.
      *
      * @return array
-     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -84,7 +79,6 @@ class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      *
      * @param array $options
      * @return string
-     * @since 2.0.0
      */
     protected function _drawOptions($options)
     {
@@ -116,7 +110,6 @@ class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * Retrieve filter condition for collection
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getCondition()
     {

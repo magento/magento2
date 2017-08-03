@@ -18,7 +18,6 @@ use Magento\Quote\Model\Quote\Item;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\Model\Cart\CartInterface
 {
@@ -31,7 +30,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Quote session object
      *
      * @var \Magento\Backend\Model\Session\Quote
-     * @since 2.0.0
      */
     protected $_session;
 
@@ -39,7 +37,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Quote customer wishlist model object
      *
      * @var \Magento\Wishlist\Model\Wishlist
-     * @since 2.0.0
      */
     protected $_wishlist;
 
@@ -47,7 +44,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Sales Quote instance
      *
      * @var \Magento\Quote\Model\Quote
-     * @since 2.0.0
      */
     protected $_cart;
 
@@ -55,7 +51,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Catalog Compare List instance
      *
      * @var \Magento\Catalog\Model\Product\Compare\ListCompare
-     * @since 2.0.0
      */
     protected $_compareList;
 
@@ -63,7 +58,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Re-collect quote flag
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_needCollect;
 
@@ -71,7 +65,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Re-collect cart flag
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_needCollectCart = false;
 
@@ -79,7 +72,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Collect (import) data and validate it flag
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_isValidate = false;
 
@@ -87,7 +79,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Array of validate errors
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_errors = [];
 
@@ -95,7 +86,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Quote associated with the model
      *
      * @var \Magento\Quote\Model\Quote
-     * @since 2.0.0
      */
     protected $_quote;
 
@@ -103,13 +93,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $_logger;
 
@@ -117,109 +105,91 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager = null;
 
     /**
      * @var \Magento\Sales\Model\Config
-     * @since 2.0.0
      */
     protected $_salesConfig;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var \Magento\Framework\DataObject\Copy
-     * @since 2.0.0
      */
     protected $_objectCopyService;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
-     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var Product\Quote\Initializer
-     * @since 2.0.0
      */
     protected $quoteInitializer;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Customer\Api\AddressRepositoryInterface
-     * @since 2.0.0
      */
     protected $addressRepository;
 
     /**
      * @var \Magento\Customer\Api\Data\AddressInterfaceFactory
-     * @since 2.0.0
      */
     protected $addressFactory;
 
     /**
      * @var \Magento\Customer\Model\Metadata\FormFactory
-     * @since 2.0.0
      */
     protected $_metadataFormFactory;
 
     /**
      * @var \Magento\Customer\Api\GroupRepositoryInterface
-     * @since 2.0.0
      */
     protected $groupRepository;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
-     * @since 2.0.0
      */
     protected $stockRegistry;
 
     /**
      * @var \Magento\Sales\Model\AdminOrder\EmailSender
-     * @since 2.0.0
      */
     protected $emailSender;
 
     /**
      * @var \Magento\Quote\Model\Quote\Item\Updater
-     * @since 2.0.0
      */
     protected $quoteItemUpdater;
 
     /**
      * @var \Magento\Framework\DataObject\Factory
-     * @since 2.0.0
      */
     protected $objectFactory;
 
     /**
      * @var \Magento\Customer\Api\AccountManagementInterface
-     * @since 2.0.0
      */
     protected $accountManagement;
 
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
-     * @since 2.0.0
      */
     protected $customerFactory;
 
@@ -227,37 +197,31 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Constructor
      *
      * @var \Magento\Customer\Model\Customer\Mapper
-     * @since 2.0.0
      */
     protected $customerMapper;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
     /**
      * @var \Magento\Quote\Api\CartManagementInterface
-     * @since 2.0.0
      */
     protected $quoteManagement;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
-     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
     /**
      * @var \Magento\Sales\Api\OrderManagementInterface
-     * @since 2.0.0
      */
     protected $orderManagement;
 
     /**
      * @var \Magento\Quote\Model\QuoteFactory
-     * @since 2.0.0
      */
     protected $quoteFactory;
 
@@ -300,7 +264,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -370,7 +333,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param boolean $flag
      * @return $this
-     * @since 2.0.0
      */
     public function setIsValidate($flag)
     {
@@ -383,7 +345,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @return boolean
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsValidate()
     {
@@ -395,7 +356,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param int|\Magento\Quote\Model\Quote\Item $item
      * @return \Magento\Quote\Model\Quote\Item|false
-     * @since 2.0.0
      */
     protected function _getQuoteItem($item)
     {
@@ -412,7 +372,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Initialize data for price rules
      *
      * @return $this
-     * @since 2.0.0
      */
     public function initRuleData()
     {
@@ -435,7 +394,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param   bool $flag
      * @return $this
-     * @since 2.0.0
      */
     public function setRecollect($flag)
     {
@@ -448,7 +406,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Set recollect totals flag for quote
      *
      * @return $this
-     * @since 2.0.0
      */
     public function recollectCart()
     {
@@ -465,7 +422,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Quote saving
      *
      * @return $this
-     * @since 2.0.0
      */
     public function saveQuote()
     {
@@ -485,7 +441,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Retrieve session model object of quote
      *
      * @return \Magento\Backend\Model\Session\Quote
-     * @since 2.0.0
      */
     public function getSession()
     {
@@ -496,7 +451,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Retrieve quote object model
      *
      * @return \Magento\Quote\Model\Quote
-     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -512,7 +466,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param \Magento\Quote\Model\Quote $quote
      * @return $this
-     * @since 2.0.0
      */
     public function setQuote(\Magento\Quote\Model\Quote $quote)
     {
@@ -528,7 +481,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function initFromOrder(\Magento\Sales\Model\Order $order)
     {
@@ -621,7 +573,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param \Magento\Sales\Model\Order $order
      * @return void
-     * @since 2.0.0
      */
     protected function _initBillingAddressFromOrder(\Magento\Sales\Model\Order $order)
     {
@@ -639,7 +590,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param \Magento\Sales\Model\Order $order
      * @return void
-     * @since 2.0.0
      */
     protected function _initShippingAddressFromOrder(\Magento\Sales\Model\Order $order)
     {
@@ -663,7 +613,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param \Magento\Sales\Model\Order\Item $orderItem
      * @param int $qty
      * @return \Magento\Quote\Model\Quote\Item|string|$this
-     * @since 2.0.0
      */
     public function initFromOrderItem(\Magento\Sales\Model\Order\Item $orderItem, $qty = null)
     {
@@ -717,7 +666,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param bool $cacheReload pass cached wishlist object and get new one
      * @return \Magento\Wishlist\Model\Wishlist|false Return false if customer ID is not specified
-     * @since 2.0.0
      */
     public function getCustomerWishlist($cacheReload = false)
     {
@@ -745,7 +693,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Retrieve customer cart quote object model
      *
      * @return \Magento\Quote\Model\Quote
-     * @since 2.0.0
      */
     public function getCustomerCart()
     {
@@ -774,7 +721,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Retrieve customer compare list model object
      *
      * @return \Magento\Catalog\Model\Product\Compare\ListCompare
-     * @since 2.0.0
      */
     public function getCustomerCompareList()
     {
@@ -796,7 +742,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Retrieve current customer group ID.
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCustomerGroupId()
     {
@@ -818,7 +763,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function moveQuoteItem($item, $moveTo, $qty)
     {
@@ -952,7 +896,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function applySidebarData($data)
     {
@@ -1014,7 +957,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param int $itemId
      * @param string $from
      * @return $this
-     * @since 2.0.0
      */
     public function removeItem($itemId, $from)
     {
@@ -1050,7 +992,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param int $item
      * @return $this
-     * @since 2.0.0
      */
     public function removeQuoteItem($item)
     {
@@ -1069,7 +1010,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param array|float|int|\Magento\Framework\DataObject $config
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function addProduct($product, $config = 1)
     {
@@ -1112,7 +1052,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param array $products
      * @return $this
-     * @since 2.0.0
      */
     public function addProducts(array $products)
     {
@@ -1136,7 +1075,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param array $items
      * @return $this
      * @throws \Exception|\Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function updateQuoteItems($items)
     {
@@ -1181,7 +1119,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     protected function _parseOptions(\Magento\Quote\Model\Quote\Item $item, $additionalOptions)
     {
@@ -1248,7 +1185,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @return $this
      *
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     protected function _assignOptionsToItem(\Magento\Quote\Model\Quote\Item $item, $options)
     {
@@ -1306,7 +1242,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param \Magento\Quote\Model\Quote\Item $item
      * @return array
-     * @since 2.0.0
      */
     protected function _prepareOptionsForRequest($item)
     {
@@ -1339,7 +1274,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param float|int $price
      * @return float|int
-     * @since 2.0.0
      */
     protected function _parseCustomPrice($price)
     {
@@ -1353,7 +1287,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Retrieve oreder quote shipping address
      *
      * @return \Magento\Quote\Model\Quote\Address
-     * @since 2.0.0
      */
     public function getShippingAddress()
     {
@@ -1365,7 +1298,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return CustomerForm
-     * @since 2.0.0
      */
     protected function _createCustomerForm(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
@@ -1387,7 +1319,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param \Magento\Quote\Model\Quote\Address $address
      * @param array $data
      * @return $this
-     * @since 2.0.0
      */
     protected function _setQuoteAddress(\Magento\Quote\Model\Quote\Address $address, array $data)
     {
@@ -1447,7 +1378,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param \Magento\Quote\Model\Quote\Address|array $address
      * @return $this
-     * @since 2.0.0
      */
     public function setShippingAddress($address)
     {
@@ -1485,7 +1415,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param bool $flag If true - don't save in address book and actually copy data across billing and shipping
      *                   addresses
      * @return $this
-     * @since 2.0.0
      */
     public function setShippingAsBilling($flag)
     {
@@ -1506,7 +1435,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Retrieve quote billing address
      *
      * @return \Magento\Quote\Model\Quote\Address
-     * @since 2.0.0
      */
     public function getBillingAddress()
     {
@@ -1518,7 +1446,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param array $address
      * @return $this
-     * @since 2.0.0
      */
     public function setBillingAddress($address)
     {
@@ -1557,7 +1484,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param string $method
      * @return $this
-     * @since 2.0.0
      */
     public function setShippingMethod($method)
     {
@@ -1571,7 +1497,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Empty shipping method and clear shipping rates
      *
      * @return $this
-     * @since 2.0.0
      */
     public function resetShippingMethod()
     {
@@ -1585,7 +1510,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Collect shipping data for quote shipping address
      *
      * @return $this
-     * @since 2.0.0
      */
     public function collectShippingRates()
     {
@@ -1599,7 +1523,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Calculate totals
      *
      * @return void
-     * @since 2.0.0
      */
     public function collectRates()
     {
@@ -1611,7 +1534,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param string $method
      * @return $this
-     * @since 2.0.0
      */
     public function setPaymentMethod($method)
     {
@@ -1624,7 +1546,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param array $data
      * @return $this
-     * @since 2.0.0
      */
     public function setPaymentData($data)
     {
@@ -1641,7 +1562,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function applyCoupon($code)
     {
@@ -1662,7 +1582,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param array $accountData
      * @return $this
-     * @since 2.0.0
      */
     public function setAccountData($accountData)
     {
@@ -1707,7 +1626,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @return  $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function importPostData($data)
     {
@@ -1758,7 +1676,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param \Magento\Store\Model\Store $store
      * @return bool
-     * @since 2.0.0
      */
     protected function _customerIsInStore($store)
     {
@@ -1774,7 +1691,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return \Magento\Customer\Api\Data\CustomerInterface
-     * @since 2.0.0
      */
     protected function _validateCustomerData(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
@@ -1814,7 +1730,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function _prepareCustomer()
     {
@@ -1882,7 +1797,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @return void
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _prepareCustomerAddress($customer, $quoteCustomerAddress)
     {
@@ -1937,7 +1851,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Prepare item otions
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareQuoteItems()
     {
@@ -1961,7 +1874,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Create new order
      *
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     public function createOrder()
     {
@@ -2011,7 +1923,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _validate()
     {
@@ -2070,7 +1981,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Retrieve or generate new customer email.
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getNewCustomerEmail()
     {

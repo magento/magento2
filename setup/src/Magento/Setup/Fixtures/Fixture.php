@@ -10,25 +10,21 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @since 2.0.0
  */
 abstract class Fixture
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $priority;
 
     /**
      * @var FixtureModel
-     * @since 2.0.0
      */
     protected $fixtureModel;
 
     /**
      * @param FixtureModel $fixtureModel
-     * @since 2.0.0
      */
     public function __construct(FixtureModel $fixtureModel)
     {
@@ -39,7 +35,6 @@ abstract class Fixture
      * Execute fixture
      *
      * @return void
-     * @since 2.0.0
      */
     abstract public function execute();
 
@@ -47,7 +42,6 @@ abstract class Fixture
      * Get fixture action description
      *
      * @return string
-     * @since 2.0.0
      */
     abstract public function getActionTitle();
 
@@ -76,7 +70,6 @@ abstract class Fixture
      * Introduce parameters labels
      *
      * @return array
-     * @since 2.0.0
      */
     abstract public function introduceParamLabels();
 
@@ -84,7 +77,6 @@ abstract class Fixture
      * Get fixture priority
      *
      * @return int
-     * @since 2.0.0
      */
     public function getPriority()
     {

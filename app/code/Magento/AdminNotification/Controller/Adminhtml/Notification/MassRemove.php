@@ -9,7 +9,6 @@ namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 /**
  * Class \Magento\AdminNotification\Controller\Adminhtml\Notification\MassRemove
  *
- * @since 2.0.0
  */
 class MassRemove extends \Magento\AdminNotification\Controller\Adminhtml\Notification
 {
@@ -23,7 +22,6 @@ class MassRemove extends \Magento\AdminNotification\Controller\Adminhtml\Notific
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

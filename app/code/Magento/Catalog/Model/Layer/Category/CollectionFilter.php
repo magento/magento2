@@ -12,7 +12,6 @@ use Magento\Catalog\Model\Layer\CollectionFilterInterface;
 /**
  * Class \Magento\Catalog\Model\Layer\Category\CollectionFilter
  *
- * @since 2.0.0
  */
 class CollectionFilter implements CollectionFilterInterface
 {
@@ -20,7 +19,6 @@ class CollectionFilter implements CollectionFilterInterface
      * Catalog product visibility
      *
      * @var \Magento\Catalog\Model\Product\Visibility
-     * @since 2.0.0
      */
     protected $productVisibility;
 
@@ -28,7 +26,6 @@ class CollectionFilter implements CollectionFilterInterface
      * Catalog config
      *
      * @var \Magento\Catalog\Model\Config
-     * @since 2.0.0
      */
     protected $catalogConfig;
 
@@ -37,7 +34,6 @@ class CollectionFilter implements CollectionFilterInterface
      *
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
@@ -53,7 +49,6 @@ class CollectionFilter implements CollectionFilterInterface
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @param \Magento\Catalog\Model\Category $category
      * @return void
-     * @since 2.0.0
      */
     public function filter(
         $collection,

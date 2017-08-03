@@ -14,7 +14,6 @@ use Magento\Framework\Setup\LoggerInterface;
  * Web UI Logger
  *
  * @package Magento\Setup\Model
- * @since 2.0.0
  */
 class WebLogger implements LoggerInterface
 {
@@ -22,7 +21,6 @@ class WebLogger implements LoggerInterface
      * Log File
      *
      * @var string
-     * @since 2.0.0
      */
     protected $logFile = 'install.log';
 
@@ -30,7 +28,6 @@ class WebLogger implements LoggerInterface
      * Currently open file resource
      *
      * @var Filesystem
-     * @since 2.0.0
      */
     protected $filesystem;
 
@@ -38,7 +35,6 @@ class WebLogger implements LoggerInterface
      * Currently open file resource
      *
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     * @since 2.0.0
      */
     protected $directory;
 
@@ -46,7 +42,6 @@ class WebLogger implements LoggerInterface
      * Indicator of whether inline output is started
      *
      * @var bool
-     * @since 2.0.0
      */
     private $isInline = false;
 
@@ -54,7 +49,6 @@ class WebLogger implements LoggerInterface
      * Constructor
      * @param Filesystem $filesystem
      * @param string $logFile
-     * @since 2.0.0
      */
     public function __construct(Filesystem $filesystem, $logFile = null)
     {
@@ -66,7 +60,6 @@ class WebLogger implements LoggerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function logSuccess($message)
     {
@@ -76,7 +69,6 @@ class WebLogger implements LoggerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function logError(\Exception $e)
     {
@@ -86,7 +78,6 @@ class WebLogger implements LoggerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function log($message)
     {
@@ -96,7 +87,6 @@ class WebLogger implements LoggerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function logInline($message)
     {
@@ -106,7 +96,6 @@ class WebLogger implements LoggerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function logMeta($message)
     {
@@ -119,7 +108,6 @@ class WebLogger implements LoggerInterface
      *
      * @param string $message
      * @return void
-     * @since 2.0.0
      */
     private function writeToFile($message)
     {
@@ -130,7 +118,6 @@ class WebLogger implements LoggerInterface
      * Gets contents of the log
      *
      * @return array
-     * @since 2.0.0
      */
     public function get()
     {
@@ -142,7 +129,6 @@ class WebLogger implements LoggerInterface
      * Clears contents of the log
      *
      * @return void
-     * @since 2.0.0
      */
     public function clear()
     {
@@ -155,7 +141,6 @@ class WebLogger implements LoggerInterface
      * Checks existence of install.log file
      *
      * @return bool
-     * @since 2.0.0
      */
     public function logfileExists()
     {
@@ -166,7 +151,6 @@ class WebLogger implements LoggerInterface
      * Terminates line if the inline logging is started
      *
      * @return void
-     * @since 2.0.0
      */
     private function terminateLine()
     {

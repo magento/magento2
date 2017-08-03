@@ -12,14 +12,12 @@ namespace Magento\Config\Model\Config\Backend;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Encrypted extends \Magento\Framework\App\Config\Value implements
     \Magento\Framework\App\Config\Data\ProcessorInterface
 {
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
-     * @since 2.0.0
      */
     protected $_encryptor;
 
@@ -32,7 +30,6 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -52,7 +49,6 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements
      * Magic method called during class serialization
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function __sleep()
     {
@@ -64,7 +60,6 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements
      * Magic method called during class un-serialization
      *
      * @return void
-     * @since 2.0.0
      */
     public function __wakeup()
     {
@@ -78,7 +73,6 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements
      * Decrypt value after loading
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -92,7 +86,6 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements
      * Encrypt value before saving
      *
      * @return void
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -113,7 +106,6 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements
      *
      * @param string $value
      * @return string
-     * @since 2.0.0
      */
     public function processValue($value)
     {

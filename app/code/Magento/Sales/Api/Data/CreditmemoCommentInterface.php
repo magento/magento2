@@ -13,7 +13,6 @@ namespace Magento\Sales\Api\Data;
  * customer account so that the customer can make future purchases. A credit memo usually includes comments that detail
  * why the credit memo amount was credited to the customer.
  * @api
- * @since 2.0.0
  */
 interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -49,7 +48,6 @@ interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDa
      * Gets the credit memo comment.
      *
      * @return string Comment.
-     * @since 2.0.0
      */
     public function getComment();
 
@@ -57,7 +55,6 @@ interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDa
      * Gets the credit memo created-at timestamp.
      *
      * @return string|null Created-at timestamp.
-     * @since 2.0.0
      */
     public function getCreatedAt();
 
@@ -66,7 +63,6 @@ interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDa
      *
      * @param string $createdAt timestamp
      * @return $this
-     * @since 2.0.0
      */
     public function setCreatedAt($createdAt);
 
@@ -74,7 +70,6 @@ interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDa
      * Gets the credit memo ID.
      *
      * @return int|null Credit memo ID.
-     * @since 2.0.0
      */
     public function getEntityId();
 
@@ -83,7 +78,6 @@ interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDa
      *
      * @param int $entityId
      * @return $this
-     * @since 2.0.0
      */
     public function setEntityId($entityId);
 
@@ -91,7 +85,6 @@ interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDa
      * Gets the is-customer-notified flag value for the credit memo.
      *
      * @return int Is-customer-notified flag value.
-     * @since 2.0.0
      */
     public function getIsCustomerNotified();
 
@@ -99,7 +92,6 @@ interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDa
      * Gets the is-visible-on-storefront flag value for the credit memo.
      *
      * @return int Is-visible-on-storefront flag value.
-     * @since 2.0.0
      */
     public function getIsVisibleOnFront();
 
@@ -107,7 +99,6 @@ interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDa
      * Gets the parent ID for the credit memo.
      *
      * @return int Parent ID.
-     * @since 2.0.0
      */
     public function getParentId();
 
@@ -116,7 +107,6 @@ interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDa
      *
      * @param int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setParentId($id);
 
@@ -125,7 +115,6 @@ interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDa
      *
      * @param int $isCustomerNotified
      * @return $this
-     * @since 2.0.0
      */
     public function setIsCustomerNotified($isCustomerNotified);
 
@@ -134,7 +123,6 @@ interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDa
      *
      * @param int $isVisibleOnFront
      * @return $this
-     * @since 2.0.0
      */
     public function setIsVisibleOnFront($isVisibleOnFront);
 
@@ -143,7 +131,6 @@ interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDa
      *
      * @param string $comment
      * @return $this
-     * @since 2.0.0
      */
     public function setComment($comment);
 
@@ -151,7 +138,6 @@ interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDa
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\CreditmemoCommentExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -160,7 +146,6 @@ interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDa
      *
      * @param \Magento\Sales\Api\Data\CreditmemoCommentExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\CreditmemoCommentExtensionInterface $extensionAttributes

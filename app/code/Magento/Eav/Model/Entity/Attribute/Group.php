@@ -19,14 +19,12 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method \Magento\Eav\Model\Entity\Attribute\Group setAttributeGroupCode(string $value)
  * @method string getTabGroupCode()
  * @method \Magento\Eav\Model\Entity\Attribute\Group setTabGroupCode(string $value)
- * @since 2.0.0
  */
 class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Eav\Api\Data\AttributeGroupInterface
 {
     /**
      * @var \Magento\Framework\Filter\Translit
-     * @since 2.0.0
      */
     private $translitFilter;
 
@@ -39,7 +37,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -68,7 +65,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -80,7 +76,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @return bool
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function itemExists()
     {
@@ -92,7 +87,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function deleteGroups()
     {
@@ -103,7 +97,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Processing object before save data
      *
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -131,7 +124,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * {@inheritdoc}
      * @codeCoverageIgnoreStart
-     * @since 2.0.0
      */
     public function getAttributeGroupId()
     {
@@ -140,7 +132,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAttributeGroupName()
     {
@@ -149,7 +140,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAttributeSetId()
     {
@@ -158,7 +148,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setAttributeGroupId($attributeGroupId)
     {
@@ -167,7 +156,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setAttributeGroupName($attributeGroupName)
     {
@@ -176,7 +164,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setAttributeSetId($attributeSetId)
     {
@@ -187,7 +174,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * {@inheritdoc}
      *
      * @return \Magento\Eav\Api\Data\AttributeGroupExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -199,7 +185,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param \Magento\Eav\Api\Data\AttributeGroupExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Eav\Api\Data\AttributeGroupExtensionInterface $extensionAttributes

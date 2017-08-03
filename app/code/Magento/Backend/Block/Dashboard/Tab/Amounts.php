@@ -14,7 +14,6 @@ namespace Magento\Backend\Block\Dashboard\Tab;
 /**
  * Class \Magento\Backend\Block\Dashboard\Tab\Amounts
  *
- * @since 2.0.0
  */
 class Amounts extends \Magento\Backend\Block\Dashboard\Graph
 {
@@ -24,7 +23,6 @@ class Amounts extends \Magento\Backend\Block\Dashboard\Graph
      * @param \Magento\Backend\Helper\Dashboard\Data $dashboardData
      * @param \Magento\Backend\Helper\Dashboard\Order $dataHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -41,7 +39,6 @@ class Amounts extends \Magento\Backend\Block\Dashboard\Graph
      * Initialize object
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -53,7 +50,6 @@ class Amounts extends \Magento\Backend\Block\Dashboard\Graph
      * Prepare chart data
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareData()
     {

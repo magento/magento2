@@ -17,7 +17,6 @@ use Magento\Tax\Helper\Data;
  *  Website Payments Pro Hosted Solution request model to get token.
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Request extends DataObject
 {
@@ -75,7 +74,6 @@ class Request extends DataObject
      * Locale Resolver
      *
      * @var \Magento\Framework\Locale\Resolver
-     * @since 2.0.0
      */
     protected $localeResolver;
 
@@ -84,7 +82,6 @@ class Request extends DataObject
      * @param \Magento\Customer\Helper\Address $customerAddress
      * @param \Magento\Tax\Helper\Data $taxData
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Resolver $localeResolver,
@@ -102,7 +99,6 @@ class Request extends DataObject
      * Build and return request array from object data
      *
      * @return array
-     * @since 2.0.0
      */
     public function getRequestData()
     {
@@ -130,7 +126,6 @@ class Request extends DataObject
      *
      * @param \Magento\Paypal\Model\Hostedpro $paymentMethod
      * @return $this
-     * @since 2.0.0
      */
     public function setPaymentMethod($paymentMethod)
     {
@@ -146,7 +141,6 @@ class Request extends DataObject
      *
      * @param \Magento\Sales\Model\Order $order
      * @return $this
-     * @since 2.0.0
      */
     public function setOrder(Order $order)
     {
@@ -163,7 +157,6 @@ class Request extends DataObject
      * @access public
      * @param \Magento\Sales\Model\Order $order
      * @return $this
-     * @since 2.0.0
      */
     public function setAmount(Order $order)
     {
@@ -192,7 +185,6 @@ class Request extends DataObject
      * Get payment amount data with excluded tax
      * @param \Magento\Sales\Model\Order $order
      * @return array
-     * @since 2.0.0
      */
     private function getNonTaxableAmount(Order $order)
     {
@@ -212,7 +204,6 @@ class Request extends DataObject
      * Get order amount data with included tax
      * @param \Magento\Sales\Model\Order $order
      * @return array
-     * @since 2.0.0
      */
     private function getTaxableAmount(Order $order)
     {

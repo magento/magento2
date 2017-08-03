@@ -12,25 +12,21 @@ use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
 
 /**
  * Interface StockState
- * @since 2.0.0
  */
 class StockState implements StockStateInterface
 {
     /**
      * @var StockStateProviderInterface
-     * @since 2.0.0
      */
     protected $stockStateProvider;
 
     /**
      * @var StockRegistryProviderInterface
-     * @since 2.0.0
      */
     protected $stockRegistryProvider;
 
     /**
      * @var StockConfigurationInterface
-     * @since 2.0.0
      */
     protected $stockConfiguration;
 
@@ -38,7 +34,6 @@ class StockState implements StockStateInterface
      * @param StockStateProviderInterface $stockStateProvider
      * @param StockRegistryProviderInterface $stockRegistryProvider
      * @param StockConfigurationInterface $stockConfiguration
-     * @since 2.0.0
      */
     public function __construct(
         StockStateProviderInterface $stockStateProvider,
@@ -54,7 +49,6 @@ class StockState implements StockStateInterface
      * @param int $productId
      * @param int $scopeId
      * @return bool
-     * @since 2.0.0
      */
     public function verifyStock($productId, $scopeId = null)
     {
@@ -69,7 +63,6 @@ class StockState implements StockStateInterface
      * @param int $productId
      * @param int $scopeId
      * @return bool
-     * @since 2.0.0
      */
     public function verifyNotification($productId, $scopeId = null)
     {
@@ -88,7 +81,6 @@ class StockState implements StockStateInterface
      * @param int $scopeId
      * @exception \Magento\Framework\Exception\LocalizedException
      * @return bool
-     * @since 2.0.0
      */
     public function checkQty($productId, $qty, $scopeId = null)
     {
@@ -107,7 +99,6 @@ class StockState implements StockStateInterface
      * @param float $qty
      * @param int $scopeId
      * @return float
-     * @since 2.0.0
      */
     public function suggestQty($productId, $qty, $scopeId = null)
     {
@@ -124,7 +115,6 @@ class StockState implements StockStateInterface
      * @param int $productId
      * @param int $scopeId
      * @return float
-     * @since 2.0.0
      */
     public function getStockQty($productId, $scopeId = null)
     {
@@ -140,7 +130,6 @@ class StockState implements StockStateInterface
      * @param float $qty
      * @param int $websiteId
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function checkQtyIncrements($productId, $qty, $websiteId = null)
     {
@@ -158,7 +147,6 @@ class StockState implements StockStateInterface
      * @param float $origQty
      * @param int $scopeId
      * @return int
-     * @since 2.0.0
      */
     public function checkQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $scopeId = null)
     {

@@ -15,7 +15,6 @@ use Magento\Payment\Model\Method\Logger;
 /**
  * Class TransactionService
  * @package Magento\Authorizenet\Model
- * @since 2.0.0
  */
 class TransactionService
 {
@@ -32,25 +31,21 @@ class TransactionService
      * Stored information about transaction
      *
      * @var array
-     * @since 2.0.0
      */
     protected $transactionDetails = [];
 
     /**
      * @var \Magento\Framework\Xml\Security
-     * @since 2.0.0
      */
     protected $xmlSecurityHelper;
 
     /**
      * @var \Magento\Payment\Model\Method\Logger
-     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var \Magento\Framework\HTTP\ZendClientFactory
-     * @since 2.0.0
      */
     protected $httpClientFactory;
 
@@ -58,7 +53,6 @@ class TransactionService
      * Fields that should be replaced in debug with '***'
      *
      * @var array
-     * @since 2.0.0
      */
     protected $debugReplacePrivateDataKeys = ['merchantAuthentication', 'x_login'];
 
@@ -66,7 +60,6 @@ class TransactionService
      * @param Security $xmlSecurityHelper
      * @param Logger $logger
      * @param ZendClientFactory $httpClientFactory
-     * @since 2.0.0
      */
     public function __construct(
         Security $xmlSecurityHelper,
@@ -84,7 +77,6 @@ class TransactionService
      * @param string $transactionId
      * @return \Magento\Framework\Simplexml\Element
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getTransactionDetails(Authorizenet $context, $transactionId)
     {
@@ -100,7 +92,6 @@ class TransactionService
      * @param string $transactionId
      * @return \Magento\Framework\Simplexml\Element
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function loadTransactionDetails(Authorizenet $context, $transactionId)
     {
@@ -154,7 +145,6 @@ class TransactionService
      * @param string $transactionKey
      * @param string $transactionId
      * @return string
-     * @since 2.0.0
      */
     private function getRequestBody($login, $transactionKey, $transactionId)
     {
@@ -178,7 +168,6 @@ class TransactionService
      *
      * @param string $xml
      * @return string
-     * @since 2.0.0
      */
     private function removePrivateDataFromXml($xml)
     {

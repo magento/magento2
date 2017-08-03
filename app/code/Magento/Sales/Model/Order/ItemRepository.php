@@ -23,49 +23,41 @@ use Magento\Sales\Model\ResourceModel\Metadata;
 /**
  * Repository class for @see OrderItemInterface
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class ItemRepository implements OrderItemRepositoryInterface
 {
     /**
      * @var DataObjectFactory
-     * @since 2.0.0
      */
     protected $objectFactory;
 
     /**
      * @var Metadata
-     * @since 2.0.0
      */
     protected $metadata;
 
     /**
      * @var OrderItemSearchResultInterfaceFactory
-     * @since 2.0.0
      */
     protected $searchResultFactory;
 
     /**
      * @var ProductOptionFactory
-     * @since 2.0.0
      */
     protected $productOptionFactory;
 
     /**
      * @var ProductOptionExtensionFactory
-     * @since 2.0.0
      */
     protected $extensionFactory;
 
     /**
      * @var ProductOptionProcessorInterface[]
-     * @since 2.0.0
      */
     protected $processorPool;
 
     /**
      * @var OrderItemInterface[]
-     * @since 2.0.0
      */
     protected $registry = [];
 
@@ -84,7 +76,6 @@ class ItemRepository implements OrderItemRepositoryInterface
      * @param ProductOptionExtensionFactory $extensionFactory
      * @param array $processorPool
      * @param CollectionProcessorInterface|null $collectionProcessor
-     * @since 2.0.0
      */
     public function __construct(
         DataObjectFactory $objectFactory,
@@ -111,7 +102,6 @@ class ItemRepository implements OrderItemRepositoryInterface
      * @return OrderItemInterface
      * @throws InputException
      * @throws NoSuchEntityException
-     * @since 2.0.0
      */
     public function get($id)
     {
@@ -136,7 +126,6 @@ class ItemRepository implements OrderItemRepositoryInterface
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @return OrderItemInterface[]
-     * @since 2.0.0
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -157,7 +146,6 @@ class ItemRepository implements OrderItemRepositoryInterface
      *
      * @param OrderItemInterface $entity
      * @return bool
-     * @since 2.0.0
      */
     public function delete(OrderItemInterface $entity)
     {
@@ -171,7 +159,6 @@ class ItemRepository implements OrderItemRepositoryInterface
      *
      * @param int $id
      * @return bool
-     * @since 2.0.0
      */
     public function deleteById($id)
     {
@@ -184,7 +171,6 @@ class ItemRepository implements OrderItemRepositoryInterface
      *
      * @param OrderItemInterface $entity
      * @return OrderItemInterface
-     * @since 2.0.0
      */
     public function save(OrderItemInterface $entity)
     {
@@ -203,7 +189,6 @@ class ItemRepository implements OrderItemRepositoryInterface
      *
      * @param OrderItemInterface $orderItem
      * @return $this
-     * @since 2.0.0
      */
     protected function addProductOption(OrderItemInterface $orderItem)
     {
@@ -236,7 +221,6 @@ class ItemRepository implements OrderItemRepositoryInterface
      * @param OrderItemInterface $orderItem
      * @param array $data
      * @return $this
-     * @since 2.0.0
      */
     protected function setProductOption(OrderItemInterface $orderItem, array $data)
     {
@@ -262,7 +246,6 @@ class ItemRepository implements OrderItemRepositoryInterface
      *
      * @param OrderItemInterface $entity
      * @return DataObject
-     * @since 2.0.0
      */
     protected function getBuyRequest(OrderItemInterface $entity)
     {

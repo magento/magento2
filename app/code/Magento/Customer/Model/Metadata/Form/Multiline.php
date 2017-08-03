@@ -10,13 +10,11 @@ namespace Magento\Customer\Model\Metadata\Form;
 /**
  * Class \Magento\Customer\Model\Metadata\Form\Multiline
  *
- * @since 2.0.0
  */
 class Multiline extends Text
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function extractValue(\Magento\Framework\App\RequestInterface $request)
     {
@@ -32,7 +30,6 @@ class Multiline extends Text
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function validateValue($value)
     {
@@ -78,7 +75,6 @@ class Multiline extends Text
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function compactValue($value)
     {
@@ -90,7 +86,6 @@ class Multiline extends Text
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function restoreValue($value)
     {
@@ -99,7 +94,6 @@ class Multiline extends Text
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function outputValue($format = \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_TEXT)
     {

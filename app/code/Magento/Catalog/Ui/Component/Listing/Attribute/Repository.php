@@ -7,13 +7,11 @@ namespace Magento\Catalog\Ui\Component\Listing\Attribute;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Repository extends AbstractRepository
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function buildSearchCriteria()
     {

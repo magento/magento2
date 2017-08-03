@@ -15,25 +15,21 @@ use Magento\Wishlist\Controller\WishlistProviderInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class UpdateItemOptions extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * @var WishlistProviderInterface
-     * @since 2.0.0
      */
     protected $wishlistProvider;
 
     /**
      * @var Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
@@ -49,7 +45,6 @@ class UpdateItemOptions extends \Magento\Wishlist\Controller\AbstractIndex
      * @param WishlistProviderInterface $wishlistProvider
      * @param ProductRepositoryInterface $productRepository
      * @param Validator $formKeyValidator
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -69,7 +64,6 @@ class UpdateItemOptions extends \Magento\Wishlist\Controller\AbstractIndex
      * Action to accept new configuration for a wishlist item
      *
      * @return \Magento\Framework\Controller\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

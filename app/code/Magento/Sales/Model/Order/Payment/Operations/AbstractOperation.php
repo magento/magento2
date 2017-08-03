@@ -15,31 +15,26 @@ use Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface;
 
 /**
  * Class AbstractOperation
- * @since 2.0.0
  */
 abstract class AbstractOperation
 {
     /**
      * @var CommandInterface
-     * @since 2.0.0
      */
     protected $stateCommand;
 
     /**
      * @var BuilderInterface
-     * @since 2.0.0
      */
     protected $transactionBuilder;
 
     /**
      * @var ManagerInterface
-     * @since 2.0.0
      */
     protected $transactionManager;
 
     /**
      * @var EventManagerInterface
-     * @since 2.0.0
      */
     protected $eventManager;
 
@@ -48,7 +43,6 @@ abstract class AbstractOperation
      * @param BuilderInterface $transactionBuilder
      * @param ManagerInterface $transactionManager
      * @param EventManagerInterface $eventManager
-     * @since 2.0.0
      */
     public function __construct(
         CommandInterface $stateCommand,
@@ -68,7 +62,6 @@ abstract class AbstractOperation
      *
      * @param OrderPaymentInterface $payment
      * @return Invoice
-     * @since 2.0.0
      */
     protected function invoice(OrderPaymentInterface $payment)
     {
@@ -91,7 +84,6 @@ abstract class AbstractOperation
      * @param OrderPaymentInterface $payment
      * @param array $data
      * @return void
-     * @since 2.0.0
      */
     protected function updateTotals(OrderPaymentInterface $payment, $data)
     {
@@ -109,7 +101,6 @@ abstract class AbstractOperation
      * @param OrderInterface $order
      * @param string $transactionId
      * @return false|Invoice
-     * @since 2.0.0
      */
     protected function getInvoiceForTransactionId(OrderInterface $order, $transactionId)
     {

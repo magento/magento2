@@ -9,7 +9,6 @@ namespace Magento\Sales\Model\ResourceModel\Order\Status;
  * Flat sales order status history collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection
 {
@@ -17,7 +16,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractC
      * Internal constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -28,7 +26,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractC
      * Get collection data as options array
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {
@@ -39,7 +36,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractC
      * Get collection data as options hash
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionHash()
     {
@@ -50,7 +46,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractC
      * Join order states table
      *
      * @return $this
-     * @since 2.0.0
      */
     public function joinStates()
     {
@@ -71,7 +66,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractC
      *
      * @param string $state
      * @return $this
-     * @since 2.0.0
      */
     public function addStateFilter($state)
     {
@@ -85,7 +79,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractC
      *
      * @param string $dir
      * @return $this
-     * @since 2.0.0
      */
     public function orderByLabel($dir = 'ASC')
     {

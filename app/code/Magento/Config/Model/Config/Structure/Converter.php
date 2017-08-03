@@ -7,13 +7,11 @@ namespace Magento\Config\Model\Config\Structure;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * @var \Magento\Config\Model\Config\Structure\Mapper\Factory
-     * @since 2.0.0
      */
     protected $_mapperFactory;
 
@@ -21,7 +19,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * Mapper type list
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_mapperList = [
         \Magento\Config\Model\Config\Structure\Mapper\Factory::MAPPER_EXTENDS,
@@ -38,7 +35,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * E.G. first element makes all 'tab' nodes be renamed to 'tabs' in system node.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_nameMap = [
         'system' => ['tab' => 'tabs', 'section' => 'sections'],
@@ -49,7 +45,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
     /**
      * @param \Magento\Config\Model\Config\Structure\Mapper\Factory $mapperFactory
-     * @since 2.0.0
      */
     public function __construct(\Magento\Config\Model\Config\Structure\Mapper\Factory $mapperFactory)
     {
@@ -61,7 +56,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMNode $source
      * @return array
-     * @since 2.0.0
      */
     public function convert($source)
     {
@@ -83,7 +77,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @return array|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _convertDOMDocument(\DOMNode $root)
     {
@@ -164,7 +157,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param array $result
      * @param string $childName
      * @return array
-     * @since 2.0.0
      */
     protected function _addProcessedNode($convertedChild, $result, $childName)
     {
@@ -181,7 +173,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMNode $root
      * @return array
-     * @since 2.0.0
      */
     protected function _processAttributes(\DOMNode $root)
     {

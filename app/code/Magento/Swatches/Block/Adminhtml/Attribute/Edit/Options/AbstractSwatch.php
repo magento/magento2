@@ -9,13 +9,11 @@ use \Magento\Swatches\Model\Swatch as SwatchModel;
 
 /**
  * Backend swatch abstract block
- * @since 2.0.0
  */
 abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Options
 {
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
-     * @since 2.0.0
      */
     protected $mediaConfig;
 
@@ -23,7 +21,6 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
      * Helper to move image from tmp to catalog
      *
      * @var \Magento\Swatches\Helper\Media
-     * @since 2.0.0
      */
     protected $swatchHelper;
 
@@ -35,7 +32,6 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
      * @param string $inputType
      * @param array $defaultValues
      * @return array
-     * @since 2.0.0
      */
     protected function _prepareUserDefinedAttributeOptionValues($option, $inputType, $defaultValues)
     {
@@ -64,7 +60,6 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param \Magento\Swatches\Helper\Media $swatchHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -89,7 +84,6 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
      * @param integer $storeId
      * @param integer $optionId
      * @return array
-     * @since 2.0.0
      */
     protected function createStoreValues($storeId, $optionId)
     {
@@ -107,7 +101,6 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
      *
      * @param int $storeId
      * @return array
-     * @since 2.0.0
      */
     public function getStoreOptionValues($storeId)
     {

@@ -10,7 +10,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Comments;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class View extends \Magento\Backend\Block\Template
 {
@@ -18,13 +17,11 @@ class View extends \Magento\Backend\Block\Template
      * Sales data
      *
      * @var \Magento\Sales\Helper\Data
-     * @since 2.0.0
      */
     protected $_salesData = null;
 
     /**
      * @var \Magento\Sales\Helper\Admin
-     * @since 2.0.0
      */
     private $adminHelper;
 
@@ -33,7 +30,6 @@ class View extends \Magento\Backend\Block\Template
      * @param \Magento\Sales\Helper\Data $salesData
      * @param \Magento\Sales\Helper\Admin $adminHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -51,7 +47,6 @@ class View extends \Magento\Backend\Block\Template
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -68,7 +63,6 @@ class View extends \Magento\Backend\Block\Template
      * Preparing global layout
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -84,7 +78,6 @@ class View extends \Magento\Backend\Block\Template
      * Get submit url
      *
      * @return string|true
-     * @since 2.0.0
      */
     public function getSubmitUrl()
     {
@@ -93,7 +86,6 @@ class View extends \Magento\Backend\Block\Template
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function canSendCommentEmail()
     {
@@ -120,7 +112,6 @@ class View extends \Magento\Backend\Block\Template
      * @param array|string $data
      * @param null|array $allowedTags
      * @return string
-     * @since 2.0.0
      */
     public function escapeHtml($data, $allowedTags = null)
     {

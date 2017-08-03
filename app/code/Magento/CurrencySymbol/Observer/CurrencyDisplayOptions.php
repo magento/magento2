@@ -11,19 +11,16 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\CurrencySymbol\Observer\CurrencyDisplayOptions
  *
- * @since 2.0.0
  */
 class CurrencyDisplayOptions implements ObserverInterface
 {
     /**
      * @var \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory
-     * @since 2.0.0
      */
     protected $symbolFactory;
 
     /**
      * @param \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory $symbolFactory
-     * @since 2.0.0
      */
     public function __construct(\Magento\CurrencySymbol\Model\System\CurrencysymbolFactory $symbolFactory)
     {
@@ -35,7 +32,6 @@ class CurrencyDisplayOptions implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
@@ -51,7 +47,6 @@ class CurrencyDisplayOptions implements ObserverInterface
      *
      * @param string $baseCode
      * @return array
-     * @since 2.0.0
      */
     protected function getCurrencyOptions($baseCode)
     {

@@ -12,31 +12,26 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * Class Interceptions
  *
  * @package Magento\Setup\Module\Di\Code\Reader\Decorator
- * @since 2.0.0
  */
 class Interceptions implements \Magento\Setup\Module\Di\Code\Reader\ClassesScannerInterface
 {
     /**
      * @var \Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator
-     * @since 2.0.0
      */
     private $classReader;
 
     /**
      * @var \Magento\Setup\Module\Di\Code\Reader\ClassesScanner
-     * @since 2.0.0
      */
     private $classesScanner;
 
     /**
      * @var \Magento\Setup\Module\Di\Compiler\Log\Log
-     * @since 2.0.0
      */
     private $log;
 
     /**
      * @var \Magento\Framework\Code\Validator
-     * @since 2.0.0
      */
     private $validator;
 
@@ -46,7 +41,6 @@ class Interceptions implements \Magento\Setup\Module\Di\Code\Reader\ClassesScann
      * @param \Magento\Framework\Code\Validator $validator
      * @param \Magento\Framework\Code\Validator\ConstructorIntegrity $constructorIntegrityValidator
      * @param Log $log
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Setup\Module\Di\Code\Reader\ClassesScanner $classesScanner,
@@ -69,7 +63,6 @@ class Interceptions implements \Magento\Setup\Module\Di\Code\Reader\ClassesScann
      * @param string $path path to dir with files
      *
      * @return array
-     * @since 2.0.0
      */
     public function getList($path)
     {

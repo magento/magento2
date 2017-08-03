@@ -15,31 +15,26 @@ use Magento\Framework\App\Action\Context;
 /**
  * Class \Magento\Customer\Controller\Account\Edit
  *
- * @since 2.0.0
  */
 class Edit extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
-     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
     /**
      * @var Session
-     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -49,7 +44,6 @@ class Edit extends \Magento\Customer\Controller\AbstractAccount
      * @param PageFactory $resultPageFactory
      * @param CustomerRepositoryInterface $customerRepository
      * @param DataObjectHelper $dataObjectHelper
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -69,7 +63,6 @@ class Edit extends \Magento\Customer\Controller\AbstractAccount
      * Forgot customer account information page
      *
      * @return \Magento\Framework\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

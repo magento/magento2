@@ -9,7 +9,6 @@ use Magento\Framework\DataObject;
 
 /**
  * Interface TextInterface
- * @since 2.0.0
  */
 interface TextInterface
 {
@@ -19,7 +18,6 @@ interface TextInterface
      * @param \DOMText $node
      * @param DataObject $processedObject
      * @return void
-     * @since 2.0.0
      */
     public function compile(\DOMText $node, DataObject $processedObject);
 }

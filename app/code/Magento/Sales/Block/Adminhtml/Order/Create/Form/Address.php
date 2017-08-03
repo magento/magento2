@@ -13,7 +13,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 /**
  * Order create address form
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm
 {
@@ -21,7 +20,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * Customer form factory
      *
      * @var \Magento\Customer\Model\Metadata\FormFactory
-     * @since 2.0.0
      */
     protected $_customerFormFactory;
 
@@ -29,7 +27,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * Json encoder
      *
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
@@ -37,7 +34,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * Directory helper
      *
      * @var \Magento\Directory\Helper\Data
-     * @since 2.0.0
      */
     protected $directoryHelper;
 
@@ -45,7 +41,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * Customer options
      *
      * @var \Magento\Customer\Model\Options
-     * @since 2.0.0
      */
     protected $options;
 
@@ -53,7 +48,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * Address service
      *
      * @var \Magento\Customer\Api\AddressRepositoryInterface
-     * @since 2.0.0
      */
     protected $addressService;
 
@@ -61,7 +55,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * Address helper
      *
      * @var \Magento\Customer\Helper\Address
-     * @since 2.0.0
      */
     protected $_addressHelper;
 
@@ -69,7 +62,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * Search criteria builder
      *
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
@@ -77,25 +69,23 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * Filter builder
      *
      * @var \Magento\Framework\Api\FilterBuilder
-     * @since 2.0.0
      */
     protected $filterBuilder;
 
     /**
      * @var \Magento\Customer\Model\Address\Mapper
-     * @since 2.0.0
      */
     protected $addressMapper;
 
     /**
      * @var \Magento\Directory\Model\ResourceModel\Country\Collection
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $countriesCollection;
 
     /**
      * @var \Magento\Backend\Model\Session\Quote
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $backendQuoteSession;
 
@@ -120,7 +110,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -165,7 +154,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      *
      * @param string $path
      * @return string|null
-     * @since 2.0.0
      */
     public function getConfig($path)
     {
@@ -176,7 +164,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * Retrieve current customer address DATA collection.
      *
      * @return \Magento\Customer\Api\Data\AddressInterface[]
-     * @since 2.0.0
      */
     public function getAddressCollection()
     {
@@ -198,7 +185,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * Return Customer Address Collection as JSON
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAddressCollectionJson()
     {
@@ -230,7 +216,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -311,7 +296,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
     /**
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $countryElement
      * @return void
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function processCountryOptions(\Magento\Framework\Data\Form\Element\AbstractElement $countryElement)
     {
@@ -325,9 +310,9 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
 
     /**
      * Retrieve Directiry Countries collection
-     * @deprecated 2.2.0
+     * @deprecated 2.1.3
      * @return \Magento\Directory\Model\ResourceModel\Country\Collection
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function getCountriesCollection()
     {
@@ -341,9 +326,9 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
 
     /**
      * Retrieve Backend Quote Session
-     * @deprecated 2.2.0
+     * @deprecated 2.1.3
      * @return Quote
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function getBackendQuoteSession()
     {
@@ -359,7 +344,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      *
      * @param AbstractElement $element
      * @return $this
-     * @since 2.0.0
      */
     protected function _addAdditionalFormElementData(AbstractElement $element)
     {
@@ -373,7 +357,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * Return customer address id
      *
      * @return false
-     * @since 2.0.0
      */
     public function getAddressId()
     {
@@ -385,7 +368,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      *
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return string
-     * @since 2.0.0
      */
     public function getAddressAsString(\Magento\Customer\Api\Data\AddressInterface $address)
     {

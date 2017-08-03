@@ -11,13 +11,11 @@ use Magento\Bundle\Api\Data\LinkInterface;
  * Extended Attributes Source Model
  *
  * @api
- * @since 2.0.0
  */
 class Type implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

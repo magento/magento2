@@ -11,7 +11,6 @@ use Magento\Framework\Search\Response\Aggregation\Value;
 
 /**
  * Facet Bucket
- * @since 2.0.0
  */
 class Bucket implements BucketInterface
 {
@@ -19,7 +18,6 @@ class Bucket implements BucketInterface
      * Field name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $name;
 
@@ -27,14 +25,12 @@ class Bucket implements BucketInterface
      * Field values
      *
      * @var mixed
-     * @since 2.0.0
      */
     protected $values;
 
     /**
      * @param string $name
      * @param \Magento\Framework\Api\Search\AggregationValueInterface[] $values
-     * @since 2.0.0
      */
     public function __construct($name, $values)
     {
@@ -44,7 +40,6 @@ class Bucket implements BucketInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -53,7 +48,6 @@ class Bucket implements BucketInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getValues()
     {

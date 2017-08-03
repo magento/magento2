@@ -11,7 +11,6 @@ namespace Magento\Downloadable\Model\Sales\Order\Pdf\Items;
 /**
  * Order Downloadable Pdf Items renderer
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
 {
@@ -19,7 +18,6 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      * Downloadable links purchased model
      *
      * @var \Magento\Downloadable\Model\Link\Purchased
-     * @since 2.0.0
      */
     protected $_purchasedLinks = null;
 
@@ -27,19 +25,16 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Downloadable\Model\Link\PurchasedFactory
-     * @since 2.0.0
      */
     protected $_purchasedFactory;
 
     /**
      * @var \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory
-     * @since 2.0.0
      */
     protected $_itemsFactory;
 
@@ -56,7 +51,6 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -90,7 +84,6 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      * Return Purchased link for order item
      *
      * @return \Magento\Downloadable\Model\Link\Purchased
-     * @since 2.0.0
      */
     public function getLinks()
     {
@@ -108,7 +101,6 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      * Return Links Section Title for order item
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLinksTitle()
     {

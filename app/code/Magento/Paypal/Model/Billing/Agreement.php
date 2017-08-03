@@ -31,7 +31,6 @@ use Magento\Sales\Model\Order\Payment;
  * @method \Magento\Paypal\Model\Billing\Agreement setAgreementLabel(string $value)
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
 {
@@ -43,19 +42,16 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      * Related agreement orders
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_relatedOrders = [];
 
     /**
      * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory
-     * @since 2.0.0
      */
     protected $_billingAgreementFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTimeFactory
-     * @since 2.0.0
      */
     protected $_dateFactory;
 
@@ -68,7 +64,6 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -89,7 +84,6 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      * Init model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -100,7 +94,6 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      * Set created_at parameter
      *
      * @return \Magento\Framework\Model\AbstractModel
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -117,7 +110,6 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      * Save agreement order relations
      *
      * @return \Magento\Framework\Model\AbstractModel
-     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -131,7 +123,6 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      * Retrieve billing agreement status label
      *
      * @return \Magento\Framework\Phrase|string
-     * @since 2.0.0
      */
     public function getStatusLabel()
     {
@@ -149,7 +140,6 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      * Initialize token
      *
      * @return string
-     * @since 2.0.0
      */
     public function initToken()
     {
@@ -164,7 +154,6 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      * Data from response is inside this object
      *
      * @return $this
-     * @since 2.0.0
      */
     public function verifyToken()
     {
@@ -178,7 +167,6 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      * Create billing agreement
      *
      * @return $this
-     * @since 2.0.0
      */
     public function place()
     {
@@ -201,7 +189,6 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      * Cancel billing agreement
      *
      * @return $this
-     * @since 2.0.0
      */
     public function cancel()
     {
@@ -214,7 +201,6 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      * Check whether can cancel billing agreement
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canCancel()
     {
@@ -225,7 +211,6 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      * Retrieve billing agreement statuses array
      *
      * @return array
-     * @since 2.0.0
      */
     public function getStatusesArray()
     {
@@ -239,7 +224,6 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      * Validate data
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isValid()
     {
@@ -262,7 +246,6 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      *
      * @param Payment $payment
      * @return $this
-     * @since 2.0.0
      */
     public function importOrderPayment(Payment $payment)
     {
@@ -287,7 +270,6 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      *
      * @param int $customerId
      * @return \Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection
-     * @since 2.0.0
      */
     public function getAvailableCustomerBillingAgreements($customerId)
     {
@@ -303,7 +285,6 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      *
      * @param int $customerId
      * @return bool
-     * @since 2.0.0
      */
     public function needToCreateForCustomer($customerId)
     {
@@ -315,7 +296,6 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      *
      * @param int|\Magento\Sales\Model\Order $orderId
      * @return $this
-     * @since 2.0.0
      */
     public function addOrderRelation($orderId)
     {
@@ -327,7 +307,6 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      * Save related orders
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _saveOrderRelations()
     {

@@ -16,7 +16,6 @@ use Magento\Sales\Setup\SalesSetupFactory;
 
 /**
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class InstallData implements InstallDataInterface
 {
@@ -24,7 +23,6 @@ class InstallData implements InstallDataInterface
      * Sales setup factory
      *
      * @var SalesSetupFactory
-     * @since 2.0.0
      */
     private $salesSetupFactory;
 
@@ -32,7 +30,6 @@ class InstallData implements InstallDataInterface
      * Quote setup factory
      *
      * @var QuoteSetupFactory
-     * @since 2.0.0
      */
     private $quoteSetupFactory;
 
@@ -41,7 +38,6 @@ class InstallData implements InstallDataInterface
      *
      * @param SalesSetupFactory $salesSetupFactory
      * @param QuoteSetupFactory $quoteSetupFactory
-     * @since 2.0.0
      */
     public function __construct(
         SalesSetupFactory $salesSetupFactory,
@@ -53,7 +49,6 @@ class InstallData implements InstallDataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

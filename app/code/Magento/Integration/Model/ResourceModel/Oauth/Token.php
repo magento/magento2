@@ -9,13 +9,11 @@ use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * OAuth token resource model
- * @since 2.0.0
  */
 class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime
-     * @since 2.0.0
      */
     protected $_dateTime;
 
@@ -23,7 +21,6 @@ class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Date
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.0.0
      */
     protected $date;
 
@@ -32,7 +29,6 @@ class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -49,7 +45,6 @@ class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -62,7 +57,6 @@ class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Integration\Model\Oauth\Token $exceptToken Token just created to exclude from delete
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return int The number of affected rows
-     * @since 2.0.0
      */
     public function cleanOldAuthorizedTokensExcept(\Magento\Integration\Model\Oauth\Token $exceptToken)
     {
@@ -92,7 +86,6 @@ class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $minutes
      * @return int
-     * @since 2.0.0
      */
     public function deleteOldEntries($minutes)
     {
@@ -144,7 +137,6 @@ class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $consumerId - The consumer id
      * @param string $type - The token type (e.g. 'verifier')
      * @return array|boolean - Row data (array) or false if there is no corresponding row
-     * @since 2.0.0
      */
     public function selectTokenByType($consumerId, $type)
     {
@@ -162,7 +154,6 @@ class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $consumerId
      * @param int $userType
      * @return array|boolean - Row data (array) or false if there is no corresponding row
-     * @since 2.0.0
      */
     public function selectTokenByConsumerIdAndUserType($consumerId, $userType)
     {
@@ -179,7 +170,6 @@ class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $adminId
      * @return array|boolean - Row data (array) or false if there is no corresponding row
-     * @since 2.0.0
      */
     public function selectTokenByAdminId($adminId)
     {
@@ -196,7 +186,6 @@ class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $customerId
      * @return array|boolean - Row data (array) or false if there is no corresponding row
-     * @since 2.0.0
      */
     public function selectTokenByCustomerId($customerId)
     {

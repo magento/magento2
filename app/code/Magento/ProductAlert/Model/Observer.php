@@ -10,7 +10,6 @@ namespace Magento\ProductAlert\Model;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Observer
 {
@@ -45,7 +44,6 @@ class Observer
      * Website collection array
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_websites;
 
@@ -53,7 +51,6 @@ class Observer
      * Warning (exception) errors array
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_errors = [];
 
@@ -61,7 +58,6 @@ class Observer
      * Catalog data
      *
      * @var \Magento\Catalog\Helper\Data
-     * @since 2.0.0
      */
     protected $_catalogData = null;
 
@@ -69,61 +65,51 @@ class Observer
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\ProductAlert\Model\ResourceModel\Price\CollectionFactory
-     * @since 2.0.0
      */
     protected $_priceColFactory;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTimeFactory
-     * @since 2.0.0
      */
     protected $_dateFactory;
 
     /**
      * @var \Magento\ProductAlert\Model\ResourceModel\Stock\CollectionFactory
-     * @since 2.0.0
      */
     protected $_stockColFactory;
 
     /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder
-     * @since 2.0.0
      */
     protected $_transportBuilder;
 
     /**
      * @var \Magento\ProductAlert\Model\EmailFactory
-     * @since 2.0.0
      */
     protected $_emailFactory;
 
     /**
      * @var \Magento\Framework\Translate\Inline\StateInterface
-     * @since 2.0.0
      */
     protected $inlineTranslation;
 
@@ -140,7 +126,6 @@ class Observer
      * @param \Magento\ProductAlert\Model\EmailFactory $emailFactory
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Helper\Data $catalogData,
@@ -173,7 +158,6 @@ class Observer
      *
      * @return array
      * @throws \Exception
-     * @since 2.0.0
      */
     protected function _getWebsites()
     {
@@ -196,7 +180,6 @@ class Observer
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _processPrice(\Magento\ProductAlert\Model\Email $email)
     {
@@ -286,7 +269,6 @@ class Observer
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _processStock(\Magento\ProductAlert\Model\Email $email)
     {
@@ -375,7 +357,6 @@ class Observer
      * Send email to administrator if error
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _sendErrorEmail()
     {
@@ -426,7 +407,6 @@ class Observer
      * Run process send product alerts
      *
      * @return $this
-     * @since 2.0.0
      */
     public function process()
     {

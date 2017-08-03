@@ -11,7 +11,6 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 /**
  * Class \Magento\Quote\Model\AddressAdditionalDataProcessor
  *
- * @since 2.0.0
  */
 class AddressAdditionalDataProcessor
 {
@@ -21,7 +20,6 @@ class AddressAdditionalDataProcessor
      * @param AddressAdditionalDataInterface $additionalData
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function process(AddressAdditionalDataInterface $additionalData)
     {

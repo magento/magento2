@@ -13,7 +13,6 @@ namespace Magento\Email\Block\Adminhtml;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Template extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\ContainerInterface
 {
@@ -21,19 +20,16 @@ class Template extends \Magento\Backend\Block\Template implements \Magento\Backe
      * Template list
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'template/list.phtml';
 
     /**
      * @var \Magento\Backend\Block\Widget\Button\ButtonList
-     * @since 2.0.0
      */
     protected $buttonList;
 
     /**
      * @var \Magento\Backend\Block\Widget\Button\ToolbarInterface
-     * @since 2.0.0
      */
     protected $toolbar;
 
@@ -42,7 +38,6 @@ class Template extends \Magento\Backend\Block\Template implements \Magento\Backe
      * @param \Magento\Backend\Block\Widget\Button\ButtonList $buttonList
      * @param \Magento\Backend\Block\Widget\Button\ToolbarInterface $toolbar
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -57,7 +52,6 @@ class Template extends \Magento\Backend\Block\Template implements \Magento\Backe
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function updateButton($buttonId, $key, $data)
     {
@@ -69,7 +63,6 @@ class Template extends \Magento\Backend\Block\Template implements \Magento\Backe
      * Create add button and grid blocks
      *
      * @return \Magento\Framework\View\Element\AbstractBlock
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -89,7 +82,6 @@ class Template extends \Magento\Backend\Block\Template implements \Magento\Backe
      * Get URL for create new email template
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCreateUrl()
     {
@@ -98,7 +90,6 @@ class Template extends \Magento\Backend\Block\Template implements \Magento\Backe
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
     {
@@ -110,7 +101,6 @@ class Template extends \Magento\Backend\Block\Template implements \Magento\Backe
      * Get transactional emails page header text
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -119,7 +109,6 @@ class Template extends \Magento\Backend\Block\Template implements \Magento\Backe
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function removeButton($buttonId)
     {
@@ -131,7 +120,6 @@ class Template extends \Magento\Backend\Block\Template implements \Magento\Backe
      * Get Add New Template button html
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getAddButtonHtml()
     {
@@ -147,7 +135,6 @@ class Template extends \Magento\Backend\Block\Template implements \Magento\Backe
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function canRender(\Magento\Backend\Block\Widget\Button\Item $item)
     {

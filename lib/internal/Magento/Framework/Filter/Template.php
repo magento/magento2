@@ -11,7 +11,6 @@ namespace Magento\Framework\Filter;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Template implements \Zend_Filter_Interface
 {
@@ -31,19 +30,13 @@ class Template implements \Zend_Filter_Interface
 
     /**#@-*/
 
-    /**
-     * Callbacks that will be applied after filtering
-     *
-     * @var array
-     * @since 2.0.0
-     */
+    /**#@-*/
     private $afterFilterCallbacks = [];
 
     /**
      * Assigned template variables
      *
      * @var array
-     * @since 2.0.0
      */
     protected $templateVars = [];
 
@@ -51,20 +44,17 @@ class Template implements \Zend_Filter_Interface
      * Template processor
      *
      * @var callable|null
-     * @since 2.0.0
      */
     protected $templateProcessor = null;
 
     /**
      * @var \Magento\Framework\Stdlib\StringUtils
-     * @since 2.0.0
      */
     protected $string;
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param array $variables
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Stdlib\StringUtils $string, $variables = [])
     {
@@ -77,7 +67,6 @@ class Template implements \Zend_Filter_Interface
      *
      * @param array $variables
      * @return \Magento\Framework\Filter\Template
-     * @since 2.0.0
      */
     public function setVariables(array $variables)
     {
@@ -92,7 +81,6 @@ class Template implements \Zend_Filter_Interface
      *
      * @param callable $callback it must return string
      * @return $this
-     * @since 2.0.0
      */
     public function setTemplateProcessor(callable $callback)
     {
@@ -104,7 +92,6 @@ class Template implements \Zend_Filter_Interface
      * Sets the processor for template directive.
      *
      * @return callable|null
-     * @since 2.0.0
      */
     public function getTemplateProcessor()
     {
@@ -118,7 +105,6 @@ class Template implements \Zend_Filter_Interface
      * @return string
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function filter($value)
     {
@@ -168,7 +154,6 @@ class Template implements \Zend_Filter_Interface
      *
      * @param string $value
      * @return string
-     * @since 2.0.0
      */
     protected function afterFilter($value)
     {
@@ -187,7 +172,6 @@ class Template implements \Zend_Filter_Interface
      *
      * @param callable $afterFilterCallback
      * @return $this
-     * @since 2.0.0
      */
     public function addAfterFilterCallback(callable $afterFilterCallback)
     {
@@ -204,7 +188,6 @@ class Template implements \Zend_Filter_Interface
      * Resets the after filter callbacks
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function resetAfterFilterCallbacks()
     {
@@ -215,7 +198,6 @@ class Template implements \Zend_Filter_Interface
     /**
      * @param string[] $construction
      * @return string
-     * @since 2.0.0
      */
     public function varDirective($construction)
     {
@@ -240,7 +222,6 @@ class Template implements \Zend_Filter_Interface
      *
      * @param string[] $construction
      * @return mixed
-     * @since 2.0.0
      */
     public function templateDirective($construction)
     {
@@ -262,7 +243,6 @@ class Template implements \Zend_Filter_Interface
     /**
      * @param string[] $construction
      * @return string
-     * @since 2.0.0
      */
     public function dependDirective($construction)
     {
@@ -281,7 +261,6 @@ class Template implements \Zend_Filter_Interface
     /**
      * @param string[] $construction
      * @return string
-     * @since 2.0.0
      */
     public function ifDirective($construction)
     {
@@ -304,7 +283,6 @@ class Template implements \Zend_Filter_Interface
      *
      * @param string $value raw parameters
      * @return array
-     * @since 2.0.0
      */
     protected function getParameters($value)
     {
@@ -326,7 +304,6 @@ class Template implements \Zend_Filter_Interface
      * @param string $default default value
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function getVariable($value, $default = '{no_value_defined}')
     {
@@ -381,7 +358,6 @@ class Template implements \Zend_Filter_Interface
      *
      * @param array $stack
      * @return array
-     * @since 2.0.0
      */
     protected function getStackArgs($stack)
     {

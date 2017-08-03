@@ -11,7 +11,6 @@ use Magento\Framework\Search\Dynamic\IntervalInterface;
 /**
  * Class \Magento\Framework\Search\Adapter\Mysql\Aggregation\Interval
  *
- * @since 2.0.0
  */
 class Interval implements IntervalInterface
 {
@@ -22,13 +21,11 @@ class Interval implements IntervalInterface
 
     /**
      * @var Select
-     * @since 2.0.0
      */
     private $select;
 
     /**
      * @param Select $select
-     * @since 2.0.0
      */
     public function __construct(Select $select)
     {
@@ -39,7 +36,6 @@ class Interval implements IntervalInterface
      * Get value field
      *
      * @return string
-     * @since 2.0.0
      */
     private function getValueFiled()
     {
@@ -51,7 +47,6 @@ class Interval implements IntervalInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function load($limit, $offset = null, $lower = null, $upper = null)
     {
@@ -75,7 +70,6 @@ class Interval implements IntervalInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function loadPrevious($data, $index, $lower = null)
     {
@@ -98,7 +92,6 @@ class Interval implements IntervalInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function loadNext($data, $rightIndex, $upper = null)
     {
@@ -137,7 +130,6 @@ class Interval implements IntervalInterface
     /**
      * @param array $prices
      * @return array
-     * @since 2.0.0
      */
     private function arrayValuesToFloat($prices)
     {

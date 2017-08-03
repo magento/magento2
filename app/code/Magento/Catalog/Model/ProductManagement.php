@@ -12,19 +12,16 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 /**
  * Class \Magento\Catalog\Model\ProductManagement
  *
- * @since 2.0.0
  */
 class ProductManagement implements ProductManagementInterface
 {
     /**
      * @var CollectionFactory
-     * @since 2.0.0
      */
     protected $productsFactory;
 
     /**
      * @param CollectionFactory $productsFactory
-     * @since 2.0.0
      */
     public function __construct(CollectionFactory $productsFactory)
     {
@@ -33,7 +30,6 @@ class ProductManagement implements ProductManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCount($status = null)
     {

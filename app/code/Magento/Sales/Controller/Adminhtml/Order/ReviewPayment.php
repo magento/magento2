@@ -10,7 +10,6 @@ use Magento\Backend\App\Action;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\ReviewPayment
  *
- * @since 2.0.0
  */
 class ReviewPayment extends \Magento\Sales\Controller\Adminhtml\Order
 {
@@ -27,7 +26,6 @@ class ReviewPayment extends \Magento\Sales\Controller\Adminhtml\Order
      * Either denies or approves a payment that is in "review" state
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -13,7 +13,6 @@ namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Composite\Fieldse
 
 /**
  * @api
- * @since 2.0.0
  */
 class Downloadable extends \Magento\Downloadable\Block\Catalog\Product\Links
 {

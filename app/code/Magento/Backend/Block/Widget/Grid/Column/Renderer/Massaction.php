@@ -10,13 +10,11 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
  *
  * @api
  * @deprecated 2.2.0 in favour of UI component implementation
- * @since 2.0.0
  */
 class Massaction extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Checkbox
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_defaultWidth = 20;
 
@@ -24,7 +22,6 @@ class Massaction extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Chec
      * Render header of the row
      *
      * @return string
-     * @since 2.0.0
      */
     public function renderHeader()
     {
@@ -35,7 +32,6 @@ class Massaction extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Chec
      * Render HTML properties
      *
      * @return string
-     * @since 2.0.0
      */
     public function renderProperty()
     {
@@ -50,7 +46,6 @@ class Massaction extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Chec
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {
@@ -66,7 +61,6 @@ class Massaction extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Chec
      * @param string $value
      * @param bool   $checked
      * @return string
-     * @since 2.0.0
      */
     protected function _getCheckboxHtml($value, $checked)
     {

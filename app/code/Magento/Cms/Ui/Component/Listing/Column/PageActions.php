@@ -15,7 +15,6 @@ use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Class PageActions
- * @since 2.0.0
  */
 class PageActions extends Column
 {
@@ -25,19 +24,16 @@ class PageActions extends Column
 
     /**
      * @var \Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action\UrlBuilder
-     * @since 2.0.0
      */
     protected $actionUrlBuilder;
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $editUrl;
 
@@ -55,7 +51,6 @@ class PageActions extends Column
      * @param array $components
      * @param array $data
      * @param string $editUrl
-     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -77,7 +72,6 @@ class PageActions extends Column
      *
      * @param array $dataSource
      * @return array
-     * @since 2.0.0
      */
     public function prepareDataSource(array $dataSource)
     {

@@ -9,7 +9,6 @@ namespace Magento\User\Controller\Adminhtml\Auth;
 /**
  * Class \Magento\User\Controller\Adminhtml\Auth\ResetPassword
  *
- * @since 2.0.0
  */
 class ResetPassword extends \Magento\User\Controller\Adminhtml\Auth
 {
@@ -19,7 +18,6 @@ class ResetPassword extends \Magento\User\Controller\Adminhtml\Auth
      * User is redirected on this action when he clicks on the corresponding link in password reset confirmation email
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

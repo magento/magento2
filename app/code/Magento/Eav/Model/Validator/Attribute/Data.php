@@ -16,43 +16,36 @@ use Magento\Eav\Model\Attribute;
 /**
  * Class \Magento\Eav\Model\Validator\Attribute\Data
  *
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\Validator\AbstractValidator
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_attributes = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_attributesWhiteList = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_attributesBlackList = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_data = [];
 
     /**
      * @var \Magento\Eav\Model\AttributeDataFactory
-     * @since 2.0.0
      */
     protected $_attrDataFactory;
 
     /**
      * @param \Magento\Eav\Model\AttributeDataFactory $attrDataFactory
-     * @since 2.0.0
      */
     public function __construct(\Magento\Eav\Model\AttributeDataFactory $attrDataFactory)
     {
@@ -64,7 +57,6 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
      *
      * @param Attribute[] $attributes
      * @return $this
-     * @since 2.0.0
      */
     public function setAttributes(array $attributes)
     {
@@ -79,7 +71,6 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
      *
      * @param array $attributesCodes
      * @return $this
-     * @since 2.0.0
      */
     public function setAttributesWhiteList(array $attributesCodes)
     {
@@ -94,7 +85,6 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
      *
      * @param array $attributesCodes
      * @return $this
-     * @since 2.0.0
      */
     public function setAttributesBlackList(array $attributesCodes)
     {
@@ -107,7 +97,6 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
      *
      * @param array $data
      * @return $this
-     * @since 2.0.0
      */
     public function setData(array $data)
     {
@@ -120,7 +109,6 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
      *
      * @param \Magento\Framework\Model\AbstractModel $entity
      * @return bool
-     * @since 2.0.0
      */
     public function isValid($entity)
     {
@@ -160,7 +148,6 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
      *
      * @param \Magento\Framework\Model\AbstractModel $entity
      * @return array
-     * @since 2.0.0
      */
     protected function _getAttributes($entity)
     {
@@ -209,7 +196,6 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
      * @param string $code
      * @param array $messages
      * @return void
-     * @since 2.0.0
      */
     protected function _addErrorMessages($code, array $messages)
     {

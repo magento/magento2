@@ -9,19 +9,16 @@ namespace Magento\Customer\Model\Customer\Attribute\Backend;
  * Store attribute backend
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Store extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
     {
@@ -33,7 +30,6 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave($object)
     {

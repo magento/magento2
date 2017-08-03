@@ -11,7 +11,6 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\Payment\Observer\SalesOrderBeforeSaveObserver
  *
- * @since 2.0.0
  */
 class SalesOrderBeforeSaveObserver implements ObserverInterface
 {
@@ -20,7 +19,6 @@ class SalesOrderBeforeSaveObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

@@ -10,7 +10,6 @@ use Magento\Framework\Module\Dir\Reader as DirReader;
 
 /**
  * Class FileResolver
- * @since 2.0.0
  */
 class FileResolver implements FileResolverInterface
 {
@@ -18,7 +17,6 @@ class FileResolver implements FileResolverInterface
      * Module configuration file reader
      *
      * @var DirReader
-     * @since 2.0.0
      */
     protected $moduleReader;
 
@@ -26,7 +24,6 @@ class FileResolver implements FileResolverInterface
      * Constructor
      *
      * @param DirReader $moduleReader
-     * @since 2.0.0
      */
     public function __construct(DirReader $moduleReader)
     {
@@ -40,7 +37,6 @@ class FileResolver implements FileResolverInterface
      * @param string $scope
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function get($filename, $scope)
     {

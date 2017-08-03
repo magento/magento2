@@ -12,7 +12,6 @@ use Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
  * Payment transactions collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Collection extends AbstractCollection implements TransactionSearchResultInterface
 {
@@ -20,7 +19,6 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      * Order ID filter
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_orderId = null;
 
@@ -28,7 +26,6 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      * Columns of order info that should be selected
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_addOrderInformation = [];
 
@@ -36,7 +33,6 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      * Columns of payment info that should be selected
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_addPaymentInformation = [];
 
@@ -44,7 +40,6 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      * Order Store ids
      *
      * @var int[]
-     * @since 2.0.0
      */
     protected $_storeIds = [];
 
@@ -52,7 +47,6 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      * Payment ID filter
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_paymentId = null;
 
@@ -60,7 +54,6 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      * Parent ID filter
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_parentId = null;
 
@@ -68,7 +61,6 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      * Filter by transaction type
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_txnTypes = null;
 
@@ -76,7 +68,6 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      * Order field for setOrderFilter
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_orderField = 'order_id';
 
@@ -84,7 +75,6 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      * Initialize collection items factory class
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -101,7 +91,6 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      *
      * @param string[] $keys
      * @return $this
-     * @since 2.0.0
      */
     public function addOrderInformation(array $keys)
     {
@@ -114,7 +103,6 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      *
      * @param array $keys
      * @return $this
-     * @since 2.0.0
      */
     public function addPaymentInformation(array $keys)
     {
@@ -127,7 +115,6 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      *
      * @param int $orderId
      * @return $this
-     * @since 2.0.0
      */
     public function addOrderIdFilter($orderId)
     {
@@ -141,7 +128,6 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      *
      * @param \Magento\Sales\Model\Order\Payment|int $payment
      * @return $this
-     * @since 2.0.0
      */
     public function addPaymentIdFilter($payment)
     {
@@ -158,7 +144,6 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      *
      * @param int $parentId
      * @return $this
-     * @since 2.0.0
      */
     public function addParentIdFilter($parentId)
     {
@@ -171,7 +156,6 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      *
      * @param string[]|string $txnType
      * @return $this
-     * @since 2.0.0
      */
     public function addTxnTypeFilter($txnType)
     {
@@ -187,7 +171,6 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      *
      * @param int|int[] $storeIds
      * @return $this
-     * @since 2.0.0
      */
     public function addStoreFilter($storeIds)
     {
@@ -200,7 +183,6 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      * Render additional filters and joins
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _renderFiltersBefore()
     {
@@ -240,7 +222,6 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      * Unserialize additional_information in each item
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterLoad()
     {

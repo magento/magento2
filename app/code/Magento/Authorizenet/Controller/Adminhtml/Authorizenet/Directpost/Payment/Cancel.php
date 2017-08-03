@@ -9,7 +9,6 @@ namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Paym
 /**
  * Class \Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment\Cancel
  *
- * @since 2.0.0
  */
 class Cancel extends \Magento\Sales\Controller\Adminhtml\Order\Create\Cancel
 {

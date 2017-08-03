@@ -11,7 +11,6 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Paypal\Controller\Express\AbstractExpress\Cancel
  *
- * @since 2.0.0
  */
 class Cancel extends \Magento\Paypal\Controller\Express\AbstractExpress
 {
@@ -19,7 +18,6 @@ class Cancel extends \Magento\Paypal\Controller\Express\AbstractExpress
      * Cancel Express Checkout
      *
      * @return \Magento\Framework\Controller\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

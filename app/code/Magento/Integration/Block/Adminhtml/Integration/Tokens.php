@@ -12,7 +12,6 @@ use Magento\Integration\Controller\Adminhtml\Integration as IntegrationControlle
  *
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Tokens extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -29,7 +28,6 @@ class Tokens extends \Magento\Backend\Block\Widget\Form\Generic
      * Set form id prefix, declare fields for integration consumer modal
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -59,7 +57,6 @@ class Tokens extends \Magento\Backend\Block\Widget\Form\Generic
      * Return a list of form fields with oAuth credentials.
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFormFields()
     {

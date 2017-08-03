@@ -7,7 +7,6 @@ namespace Magento\Framework\App\Cache;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface TypeListInterface
 {
@@ -15,7 +14,6 @@ interface TypeListInterface
      * Get information about all declared cache types
      *
      * @return array
-     * @since 2.0.0
      */
     public function getTypes();
 
@@ -23,7 +21,6 @@ interface TypeListInterface
      * Get label information of available cache types
      *
      * @return array
-     * @since 2.0.0
      */
     public function getTypeLabels();
 
@@ -31,7 +28,6 @@ interface TypeListInterface
      * Get array of all invalidated cache types
      *
      * @return array
-     * @since 2.0.0
      */
     public function getInvalidated();
 
@@ -40,7 +36,6 @@ interface TypeListInterface
      *
      * @param string|array $typeCode
      * @return void
-     * @since 2.0.0
      */
     public function invalidate($typeCode);
 
@@ -49,7 +44,6 @@ interface TypeListInterface
      *
      * @param string $typeCode
      * @return void
-     * @since 2.0.0
      */
     public function cleanType($typeCode);
 }

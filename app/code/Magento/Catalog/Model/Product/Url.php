@@ -12,7 +12,6 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * Product Url model
  *
  * @api
- * @since 2.0.0
  */
 class Url extends \Magento\Framework\DataObject
 {
@@ -20,13 +19,11 @@ class Url extends \Magento\Framework\DataObject
      * URL instance
      *
      * @var \Magento\Framework\UrlFactory
-     * @since 2.0.0
      */
     protected $urlFactory;
 
     /**
      * @var \Magento\Framework\Filter\FilterManager
-     * @since 2.0.0
      */
     protected $filter;
 
@@ -34,19 +31,16 @@ class Url extends \Magento\Framework\DataObject
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Framework\Session\SidResolverInterface
-     * @since 2.0.0
      */
     protected $sidResolver;
 
     /**
      * @var \Magento\UrlRewrite\Model\UrlFinderInterface
-     * @since 2.0.0
      */
     protected $urlFinder;
 
@@ -57,7 +51,6 @@ class Url extends \Magento\Framework\DataObject
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param UrlFinderInterface $urlFinder
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\UrlFactory $urlFactory,
@@ -79,7 +72,6 @@ class Url extends \Magento\Framework\DataObject
      * Retrieve URL Instance
      *
      * @return \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     private function getUrlInstance()
     {
@@ -92,7 +84,6 @@ class Url extends \Magento\Framework\DataObject
      * @param \Magento\Catalog\Model\Product $product
      * @param array $params the URL route params
      * @return string
-     * @since 2.0.0
      */
     public function getUrlInStore(\Magento\Catalog\Model\Product $product, $params = [])
     {
@@ -106,7 +97,6 @@ class Url extends \Magento\Framework\DataObject
      * @param  \Magento\Catalog\Model\Product $product
      * @param  bool $useSid forced SID mode
      * @return string
-     * @since 2.0.0
      */
     public function getProductUrl($product, $useSid = null)
     {
@@ -127,7 +117,6 @@ class Url extends \Magento\Framework\DataObject
      *
      * @param string $str
      * @return string
-     * @since 2.0.0
      */
     public function formatUrlKey($str)
     {
@@ -142,7 +131,6 @@ class Url extends \Magento\Framework\DataObject
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function getUrl(\Magento\Catalog\Model\Product $product, $params = [])
     {

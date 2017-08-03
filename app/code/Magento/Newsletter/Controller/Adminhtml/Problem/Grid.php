@@ -9,7 +9,6 @@ namespace Magento\Newsletter\Controller\Adminhtml\Problem;
 /**
  * Class \Magento\Newsletter\Controller\Adminhtml\Problem\Grid
  *
- * @since 2.0.0
  */
 class Grid extends \Magento\Newsletter\Controller\Adminhtml\Problem
 {
@@ -17,7 +16,6 @@ class Grid extends \Magento\Newsletter\Controller\Adminhtml\Problem
      * Newsletter problems grid
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -9,7 +9,6 @@ namespace Magento\Framework\Indexer\Table;
 /**
  * Interface \Magento\Framework\Indexer\Table\StrategyInterface
  *
- * @since 2.0.0
  */
 interface StrategyInterface
 {
@@ -22,7 +21,6 @@ interface StrategyInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getUseIdxTable();
 
@@ -32,7 +30,6 @@ interface StrategyInterface
      * @param bool $value
      *
      * @return $this
-     * @since 2.0.0
      */
     public function setUseIdxTable($value = false);
 
@@ -42,7 +39,6 @@ interface StrategyInterface
      * @param string $tablePrefix
      *
      * @return string
-     * @since 2.0.0
      */
     public function prepareTableName($tablePrefix);
 
@@ -52,7 +48,6 @@ interface StrategyInterface
      * @param string $tablePrefix
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTableName($tablePrefix);
 }

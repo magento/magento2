@@ -9,7 +9,6 @@ use Magento\Framework\View\Asset\File;
 
 /**
  * Interface ContentProcessorInterface
- * @since 2.0.0
  */
 interface ContentProcessorInterface
 {
@@ -23,7 +22,6 @@ interface ContentProcessorInterface
      *
      * @param File $asset
      * @return string
-     * @since 2.0.0
      */
     public function processContent(File $asset);
 }

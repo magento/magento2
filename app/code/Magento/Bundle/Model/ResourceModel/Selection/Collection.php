@@ -17,7 +17,6 @@ use Magento\Framework\App\ObjectManager;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
@@ -25,7 +24,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Selection table name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_selectionTable;
 
@@ -53,7 +51,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Initialize collection
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -66,7 +63,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Set store id for each collection item when collection was loaded
      *
      * @return $this
-     * @since 2.0.0
      */
     public function _afterLoad()
     {
@@ -83,7 +79,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Initialize collection select
      *
      * @return $this|void
-     * @since 2.0.0
      */
     protected function _initSelect()
     {
@@ -100,7 +95,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param int $websiteId
      * @return $this
-     * @since 2.0.0
      */
     public function joinPrices($websiteId)
     {
@@ -136,7 +130,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param array $optionIds
      * @return $this
-     * @since 2.0.0
      */
     public function setOptionIdsFilter($optionIds)
     {
@@ -151,7 +144,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param array $selectionIds
      * @return $this
-     * @since 2.0.0
      */
     public function setSelectionIdsFilter($selectionIds)
     {
@@ -165,7 +157,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Set position order
      *
      * @return $this
-     * @since 2.0.0
      */
     public function setPositionOrder()
     {

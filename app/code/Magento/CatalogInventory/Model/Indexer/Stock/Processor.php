@@ -11,7 +11,6 @@ namespace Magento\CatalogInventory\Model\Indexer\Stock;
 /**
  * Class \Magento\CatalogInventory\Model\Indexer\Stock\Processor
  *
- * @since 2.0.0
  */
 class Processor extends \Magento\Framework\Indexer\AbstractProcessor
 {

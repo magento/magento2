@@ -13,7 +13,6 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Registry for \Magento\Customer\Model\Customer
- * @since 2.0.0
  */
 class CustomerRegistry
 {
@@ -21,37 +20,31 @@ class CustomerRegistry
 
     /**
      * @var CustomerFactory
-     * @since 2.0.0
      */
     private $customerFactory;
 
     /**
      * @var CustomerSecureFactory
-     * @since 2.0.0
      */
     private $customerSecureFactory;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $customerRegistryById = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $customerRegistryByEmail = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $customerSecureRegistryById = [];
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     private $storeManager;
 
@@ -61,7 +54,6 @@ class CustomerRegistry
      * @param CustomerFactory $customerFactory
      * @param CustomerSecureFactory $customerSecureFactory
      * @param StoreManagerInterface $storeManager
-     * @since 2.0.0
      */
     public function __construct(
         CustomerFactory $customerFactory,
@@ -79,7 +71,6 @@ class CustomerRegistry
      * @param string $customerId
      * @return Customer
      * @throws NoSuchEntityException
-     * @since 2.0.0
      */
     public function retrieve($customerId)
     {
@@ -106,7 +97,6 @@ class CustomerRegistry
      * @param string|null $websiteId Optional website ID, if not set, will use the current websiteId
      * @return Customer
      * @throws NoSuchEntityException
-     * @since 2.0.0
      */
     public function retrieveByEmail($customerEmail, $websiteId = null)
     {
@@ -152,7 +142,6 @@ class CustomerRegistry
      * @param int $customerId
      * @return CustomerSecure
      * @throws NoSuchEntityException
-     * @since 2.0.0
      */
     public function retrieveSecureData($customerId)
     {
@@ -180,7 +169,6 @@ class CustomerRegistry
      *
      * @param int $customerId
      * @return void
-     * @since 2.0.0
      */
     public function remove($customerId)
     {
@@ -200,7 +188,6 @@ class CustomerRegistry
      * @param string $customerEmail Customers email address
      * @param string|null $websiteId Optional website ID, if not set, will use the current websiteId
      * @return void
-     * @since 2.0.0
      */
     public function removeByEmail($customerEmail, $websiteId = null)
     {
@@ -223,7 +210,6 @@ class CustomerRegistry
      * @param string $customerEmail
      * @param string $websiteId
      * @return string
-     * @since 2.0.0
      */
     protected function getEmailKey($customerEmail, $websiteId)
     {
@@ -235,7 +221,6 @@ class CustomerRegistry
      *
      * @param Customer $customer
      * @return $this
-     * @since 2.0.0
      */
     public function push(Customer $customer)
     {

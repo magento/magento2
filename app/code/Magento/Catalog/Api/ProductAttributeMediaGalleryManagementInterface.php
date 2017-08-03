@@ -11,7 +11,6 @@ namespace Magento\Catalog\Api;
  * @todo implement this interface as a \Magento\Catalog\Model\Product\Attribute\Media\GalleryManagement.
  * Move logic from service there.
  * @api
- * @since 2.0.0
  */
 interface ProductAttributeMediaGalleryManagementInterface
 {
@@ -24,7 +23,6 @@ interface ProductAttributeMediaGalleryManagementInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
-     * @since 2.0.0
      */
     public function create(
         $sku,
@@ -39,7 +37,6 @@ interface ProductAttributeMediaGalleryManagementInterface
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
-     * @since 2.0.0
      */
     public function update(
         $sku,
@@ -54,7 +51,6 @@ interface ProductAttributeMediaGalleryManagementInterface
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
-     * @since 2.0.0
      */
     public function remove($sku, $entryId);
 
@@ -65,7 +61,6 @@ interface ProductAttributeMediaGalleryManagementInterface
      * @param int $entryId
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface
-     * @since 2.0.0
      */
     public function get($sku, $entryId);
 
@@ -74,7 +69,6 @@ interface ProductAttributeMediaGalleryManagementInterface
      *
      * @param string $sku
      * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[]
-     * @since 2.0.0
      */
     public function getList($sku);
 }

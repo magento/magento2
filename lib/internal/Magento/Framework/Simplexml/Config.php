@@ -9,7 +9,6 @@ namespace Magento\Framework\Simplexml;
  * Base class for simplexml based configurations
  *
  * @api
- * @since 2.0.0
  */
 class Config
 {
@@ -17,7 +16,6 @@ class Config
      * Configuration xml
      *
      * @var Element
-     * @since 2.0.0
      */
     protected $_xml = null;
 
@@ -25,7 +23,6 @@ class Config
      * Class name of simplexml elements for this configuration
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_elementClass = \Magento\Framework\Simplexml\Element::class;
 
@@ -33,7 +30,6 @@ class Config
      * Xpath describing nodes in configuration that need to be extended
      *
      * @example <allResources extends="/config/modules//resource"/>
-     * @since 2.0.0
      */
     protected $_xpathExtends = "//*[@extends]";
 
@@ -44,7 +40,6 @@ class Config
      *
      * @see \Magento\Framework\Simplexml\Config::setXml
      * @param Element|string $sourceData
-     * @since 2.0.0
      */
     public function __construct($sourceData = null)
     {
@@ -67,7 +62,6 @@ class Config
      *
      * @param Element $node
      * @return $this
-     * @since 2.0.0
      */
     public function setXml(Element $node)
     {
@@ -81,7 +75,6 @@ class Config
      * @see \Magento\Framework\Simplexml\Element::descend
      * @param string $path
      * @return Element|bool
-     * @since 2.0.0
      */
     public function getNode($path = null)
     {
@@ -99,7 +92,6 @@ class Config
      *
      * @param string $xpath
      * @return Element[]|bool
-     * @since 2.0.0
      */
     public function getXpath($xpath)
     {
@@ -119,7 +111,6 @@ class Config
      * Return Xml of node as string
      *
      * @return string
-     * @since 2.0.0
      */
     public function getXmlString()
     {
@@ -131,7 +122,6 @@ class Config
      *
      * @param string $filePath
      * @return boolean
-     * @since 2.0.0
      */
     public function loadFile($filePath)
     {
@@ -150,7 +140,6 @@ class Config
      *
      * @param string $string
      * @return boolean
-     * @since 2.0.0
      */
     public function loadString($string)
     {
@@ -169,7 +158,6 @@ class Config
      *
      * @param \DOMNode $dom
      * @return bool
-     * @since 2.0.0
      */
     public function loadDom(\DOMNode $dom)
     {
@@ -189,7 +177,6 @@ class Config
      * @param string $value
      * @param boolean $overwrite
      * @return $this
-     * @since 2.0.0
      */
     public function setNode($path, $value, $overwrite = true)
     {
@@ -201,7 +188,6 @@ class Config
      * Process configuration xml
      *
      * @return $this
-     * @since 2.0.0
      */
     public function applyExtends()
     {
@@ -225,7 +211,6 @@ class Config
      *
      * @param string $text
      * @return string
-     * @since 2.0.0
      */
     public function processFileData($text)
     {
@@ -238,7 +223,6 @@ class Config
      * @param Config $config
      * @param boolean $overwrite
      * @return $this
-     * @since 2.0.0
      */
     public function extend(Config $config, $overwrite = true)
     {
@@ -253,7 +237,6 @@ class Config
      * https://bugs.php.net/bug.php?id=62468
      *
      * @return void
-     * @since 2.0.0
      */
     public function __destruct()
     {
@@ -264,7 +247,6 @@ class Config
      * Getter for xml element
      *
      * @return Element
-     * @since 2.0.0
      */
     protected function getXml()
     {

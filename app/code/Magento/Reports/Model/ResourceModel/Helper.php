@@ -14,14 +14,12 @@ namespace Magento\Reports\Model\ResourceModel;
 /**
  * Class \Magento\Reports\Model\ResourceModel\Helper
  *
- * @since 2.0.0
  */
 class Helper extends \Magento\Framework\DB\Helper implements \Magento\Reports\Model\ResourceModel\HelperInterface
 {
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param string $modulePrefix
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\ResourceConnection $resource, $modulePrefix = 'reports')
     {
@@ -36,7 +34,6 @@ class Helper extends \Magento\Framework\DB\Helper implements \Magento\Reports\Mo
      * @param mixed $matchFields
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return string
-     * @since 2.0.0
      */
     public function mergeVisitorProductIndex($mainTable, $data, $matchFields)
     {
@@ -46,7 +43,6 @@ class Helper extends \Magento\Framework\DB\Helper implements \Magento\Reports\Mo
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function updateReportRatingPos($connection, $type, $column, $mainTable, $aggregationTable)
     {

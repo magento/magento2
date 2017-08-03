@@ -10,25 +10,21 @@ namespace Magento\Backend\Model\Locale;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @api
- * @since 2.0.0
  */
 class Manager
 {
     /**
      * @var \Magento\Backend\Model\Session
-     * @since 2.0.0
      */
     protected $_session;
 
     /**
      * @var \Magento\Backend\Model\Auth\Session
-     * @since 2.0.0
      */
     protected $_authSession;
 
     /**
      * @var \Magento\Framework\TranslateInterface
-     * @since 2.0.0
      */
     protected $_translator;
 
@@ -45,7 +41,6 @@ class Manager
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\TranslateInterface $translator
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Model\Session $session,
@@ -64,7 +59,6 @@ class Manager
      *
      * @param string $localeCode
      * @return $this
-     * @since 2.0.0
      */
     public function switchBackendInterfaceLocale($localeCode)
     {
@@ -92,7 +86,6 @@ class Manager
      * Get user interface locale stored in session data
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUserInterfaceLocale()
     {

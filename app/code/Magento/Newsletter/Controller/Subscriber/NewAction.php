@@ -15,13 +15,11 @@ use Magento\Newsletter\Model\SubscriberFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class NewAction extends \Magento\Newsletter\Controller\Subscriber
 {
     /**
      * @var CustomerAccountManagement
-     * @since 2.0.0
      */
     protected $customerAccountManagement;
 
@@ -34,7 +32,6 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
      * @param StoreManagerInterface $storeManager
      * @param CustomerUrl $customerUrl
      * @param CustomerAccountManagement $customerAccountManagement
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -60,7 +57,6 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
      * @param string $email
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
-     * @since 2.0.0
      */
     protected function validateEmailAvailable($email)
     {
@@ -79,7 +75,6 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
-     * @since 2.0.0
      */
     protected function validateGuestSubscription()
     {
@@ -105,7 +100,6 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
      * @param string $email
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
-     * @since 2.0.0
      */
     protected function validateEmailFormat($email)
     {
@@ -119,7 +113,6 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

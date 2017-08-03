@@ -13,7 +13,6 @@ namespace Magento\Config\Model\Config\Source\Reports;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Scope implements \Magento\Framework\Option\ArrayInterface
 {
@@ -21,7 +20,6 @@ class Scope implements \Magento\Framework\Option\ArrayInterface
      * Scope filter
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

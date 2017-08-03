@@ -7,25 +7,21 @@ namespace Magento\Framework\Indexer;
 
 /**
  * @api Retrieve indexer by id, for example when indexer need to be invalidated
- * @since 2.0.0
  */
 class IndexerRegistry
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var IndexerInterface[]
-     * @since 2.0.0
      */
     protected $indexers = [];
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -37,7 +33,6 @@ class IndexerRegistry
      *
      * @param string $indexerId
      * @return IndexerInterface
-     * @since 2.0.0
      */
     public function get($indexerId)
     {

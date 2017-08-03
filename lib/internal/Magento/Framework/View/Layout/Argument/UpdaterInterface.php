@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Layout\Argument;
 
 /**
  * Interface of value modification with no value loss
- * @since 2.0.0
  */
 interface UpdaterInterface
 {
@@ -16,7 +15,6 @@ interface UpdaterInterface
      *
      * @param mixed $value
      * @return mixed
-     * @since 2.0.0
      */
     public function update($value);
 }

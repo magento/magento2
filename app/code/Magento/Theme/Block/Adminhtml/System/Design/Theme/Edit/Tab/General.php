@@ -13,7 +13,6 @@ use Magento\Theme\Model\Theme\Collection;
  * Theme form, general tab
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab
 {
@@ -21,13 +20,11 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
      * Whether theme is editable
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isThemeEditable = false;
 
     /**
      * @var \Magento\Framework\File\Size
-     * @since 2.0.0
      */
     protected $_fileSize;
 
@@ -40,7 +37,6 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\File\Size $fileSize
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -58,7 +54,6 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
      * Create a form element with necessary controls
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -96,7 +91,6 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
      * @param ThemeInterface $theme
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _addThemeFieldset($form, $formData, ThemeInterface $theme)
     {
@@ -214,7 +208,6 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
      *
      * @param string $text
      * @return string
-     * @since 2.0.0
      */
     protected function _filterFieldNote($text)
     {
@@ -225,7 +218,6 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
      * Field is not marked as required if theme is not editable
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _isFieldAttrRequired()
     {
@@ -236,7 +228,6 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
      * Text field replaced to label if theme is not editable
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getFieldTextType()
     {
@@ -247,7 +238,6 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
      * Set additional form field type for theme preview image
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getAdditionalElementTypes()
     {
@@ -259,7 +249,6 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
      * Prepare label for tab
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -270,7 +259,6 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
      * Returns status flag about this tab can be shown or not
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -281,7 +269,6 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
      * Get theme default values
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getDefaults()
     {
@@ -296,7 +283,6 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
      *
      * @param array $themesCollections
      * @return array
-     * @since 2.0.0
      */
     protected function _getDefaultsInherited($themesCollections)
     {
@@ -318,7 +304,6 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
      * Get note string for theme's preview image
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     protected function _getPreviewImageNote()
     {

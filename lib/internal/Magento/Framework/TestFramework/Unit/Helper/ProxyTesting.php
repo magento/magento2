@@ -12,7 +12,6 @@ namespace Magento\Framework\TestFramework\Unit\Helper;
 /**
  * Class \Magento\Framework\TestFramework\Unit\Helper\ProxyTesting
  *
- * @since 2.0.0
  */
 class ProxyTesting
 {
@@ -28,7 +27,6 @@ class ProxyTesting
      * @param null $expectedMethod Expected method, to be invoked in the proxied method
      * @param null $expectedParams Expected parameters, to be passed to the proxied method
      * @return mixed
-     * @since 2.0.0
      */
     public function invokeWithExpectations(
         $object,

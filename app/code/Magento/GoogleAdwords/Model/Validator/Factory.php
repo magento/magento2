@@ -14,19 +14,16 @@ use Magento\Framework\Validator\UniversalFactory;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Factory
 {
     /**
      * @var UniversalFactory
-     * @since 2.0.0
      */
     protected $_validatorBuilderFactory;
 
     /**
      * @param UniversalFactory $validatorBuilderFactory
-     * @since 2.0.0
      */
     public function __construct(UniversalFactory $validatorBuilderFactory)
     {
@@ -38,7 +35,6 @@ class Factory
      *
      * @param string $currentColor
      * @return \Magento\Framework\Validator
-     * @since 2.0.0
      */
     public function createColorValidator($currentColor)
     {
@@ -78,7 +74,6 @@ class Factory
      *
      * @param int|string $currentId
      * @return \Magento\Framework\Validator
-     * @since 2.0.0
      */
     public function createConversionIdValidator($currentId)
     {

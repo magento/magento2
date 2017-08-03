@@ -14,7 +14,6 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -34,19 +33,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Name of config file
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_configFileName = 'persistent.xml';
 
     /**
      * @var \Magento\Framework\Escaper
-     * @since 2.0.0
      */
     protected $_escaper;
 
     /**
      * @var \Magento\Framework\Module\Dir\Reader
-     * @since 2.0.0
      */
     protected $_modulesReader;
 
@@ -54,7 +50,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Module\Dir\Reader $modulesReader
      * @param \Magento\Framework\Escaper $escaper
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -74,7 +69,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param int|string|\Magento\Store\Model\Store $store
      * @return bool
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function isEnabled($store = null)
     {
@@ -91,7 +85,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param int|string|\Magento\Store\Model\Store $store
      * @return bool
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function isRememberMeEnabled($store = null)
     {
@@ -108,7 +101,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param int|string|\Magento\Store\Model\Store $store
      * @return bool
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function isRememberMeCheckedDefault($store = null)
     {
@@ -125,7 +117,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param int|string|\Magento\Store\Model\Store $store
      * @return bool
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function isShoppingCartPersist($store = null)
     {
@@ -141,7 +132,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int|string|\Magento\Store\Model\Store $store
      * @return int
-     * @since 2.0.0
      */
     public function getLifeTime($store = null)
     {
@@ -161,7 +151,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getClearOnLogout()
     {
@@ -176,7 +165,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getUnsetCookieUrl()
     {
@@ -187,7 +175,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve path for config file
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPersistentConfigFilePath()
     {
@@ -202,7 +189,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function canProcess($observer)
     {

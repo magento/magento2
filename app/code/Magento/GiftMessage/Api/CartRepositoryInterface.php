@@ -8,7 +8,6 @@ namespace Magento\GiftMessage\Api;
 /**
  * Interface CartRepositoryInterface
  * @api
- * @since 2.0.0
  */
 interface CartRepositoryInterface
 {
@@ -17,7 +16,6 @@ interface CartRepositoryInterface
      *
      * @param int $cartId The shopping cart ID.
      * @return \Magento\GiftMessage\Api\Data\MessageInterface Gift message.
-     * @since 2.0.0
      */
     public function get($cartId);
 
@@ -32,7 +30,6 @@ interface CartRepositoryInterface
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException You cannot add gift messages to
      * virtual products.
      * @throws \Magento\Framework\Exception\CouldNotSaveException The specified gift message could not be saved.
-     * @since 2.0.0
      */
     public function save($cartId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage);
 }

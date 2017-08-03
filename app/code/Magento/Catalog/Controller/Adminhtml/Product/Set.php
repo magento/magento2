@@ -9,7 +9,6 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
  * Adminhtml entity sets controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 abstract class Set extends \Magento\Backend\App\Action
 {
@@ -24,14 +23,12 @@ abstract class Set extends \Magento\Backend\App\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @since 2.0.0
      */
     public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
     {
@@ -43,7 +40,6 @@ abstract class Set extends \Magento\Backend\App\Action
      * Define in register catalog_product entity type code as entityType
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _setTypeId()
     {

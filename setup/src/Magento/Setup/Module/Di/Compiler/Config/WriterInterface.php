@@ -10,7 +10,6 @@ namespace Magento\Setup\Module\Di\Compiler\Config;
 /**
  * Interface \Magento\Setup\Module\Di\Compiler\Config\WriterInterface
  *
- * @since 2.0.0
  */
 interface WriterInterface
 {
@@ -20,7 +19,6 @@ interface WriterInterface
      * @param string $key
      * @param array $config
      * @return void
-     * @since 2.0.0
      */
     public function write($key, array $config);
 }

@@ -10,19 +10,16 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Page unique identifier
- * @since 2.0.0
  */
 class Identifier
 {
     /**
      * @var \Magento\Framework\App\Request\Http
-     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var \Magento\Framework\App\Http\Context
-     * @since 2.0.0
      */
     protected $context;
 
@@ -36,7 +33,6 @@ class Identifier
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Framework\App\Http\Context $context
      * @param Json|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
@@ -52,7 +48,6 @@ class Identifier
      * Return unique page identifier
      *
      * @return string
-     * @since 2.0.0
      */
     public function getValue()
     {

@@ -10,7 +10,6 @@ namespace Magento\Framework\View\Layout\PageType;
 /**
  * Class \Magento\Framework\View\Layout\PageType\Config
  *
- * @since 2.0.0
  */
 class Config
 {
@@ -18,7 +17,6 @@ class Config
      * Available page types
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_pageTypes = null;
 
@@ -26,7 +24,6 @@ class Config
      * Data storage
      *
      * @var  \Magento\Framework\Config\DataInterface
-     * @since 2.0.0
      */
     protected $_dataStorage;
 
@@ -34,7 +31,6 @@ class Config
      * Constructor
      *
      * @param \Magento\Framework\Config\DataInterface $dataStorage
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Config\DataInterface $dataStorage)
     {
@@ -45,7 +41,6 @@ class Config
      * Initialize page types list
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initPageTypes()
     {
@@ -63,7 +58,6 @@ class Config
      * Retrieve available page types
      *
      * @return \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     public function getPageTypes()
     {

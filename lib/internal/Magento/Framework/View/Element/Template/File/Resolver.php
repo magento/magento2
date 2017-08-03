@@ -11,7 +11,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Class Resolver
  * @package Magento\Framework\View\Element\Template\File
- * @since 2.0.0
  */
 class Resolver
 {
@@ -19,7 +18,6 @@ class Resolver
      * Template files map
      *
      * @var []
-     * @since 2.0.0
      */
     protected $_templateFilesMap = [];
 
@@ -27,7 +25,6 @@ class Resolver
      * View filesystem
      *
      * @var \Magento\Framework\View\FileSystem
-     * @since 2.0.0
      */
     protected $_viewFileSystem;
 
@@ -42,7 +39,6 @@ class Resolver
      *
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param Json $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\FileSystem $viewFileSystem,
@@ -58,7 +54,6 @@ class Resolver
      * @param string $template
      * @param [] $params
      * @return string|bool
-     * @since 2.0.0
      */
     public function getTemplateFileName($template, $params = [])
     {

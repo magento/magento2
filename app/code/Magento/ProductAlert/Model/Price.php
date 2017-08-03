@@ -32,13 +32,11 @@ use Magento\ProductAlert\Model\ResourceModel\Price\Customer\Collection;
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @api
- * @since 2.0.0
  */
 class Price extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @var \Magento\ProductAlert\Model\ResourceModel\Price\Customer\CollectionFactory
-     * @since 2.0.0
      */
     protected $_customerColFactory;
 
@@ -49,7 +47,6 @@ class Price extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -65,7 +62,6 @@ class Price extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -74,7 +70,6 @@ class Price extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return Collection
-     * @since 2.0.0
      */
     public function getCustomerCollection()
     {
@@ -83,7 +78,6 @@ class Price extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function loadByParam()
     {
@@ -97,7 +91,6 @@ class Price extends \Magento\Framework\Model\AbstractModel
      * @param int $customerId
      * @param int $websiteId
      * @return $this
-     * @since 2.0.0
      */
     public function deleteCustomer($customerId, $websiteId = 0)
     {

@@ -13,19 +13,16 @@ use Magento\Ui\Controller\Adminhtml\AbstractAction;
 
 /**
  * Class Delete action
- * @since 2.0.0
  */
 class Delete extends AbstractAction
 {
     /**
      * @var BookmarkRepositoryInterface
-     * @since 2.0.0
      */
     protected $bookmarkRepository;
 
     /**
      * @var BookmarkManagementInterface
-     * @since 2.0.0
      */
     private $bookmarkManagement;
 
@@ -34,7 +31,6 @@ class Delete extends AbstractAction
      * @param UiComponentFactory $factory
      * @param BookmarkRepositoryInterface $bookmarkRepository
      * @param BookmarkManagementInterface $bookmarkManagement
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -51,7 +47,6 @@ class Delete extends AbstractAction
      * Action for AJAX request
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

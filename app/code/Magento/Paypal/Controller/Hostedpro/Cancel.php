@@ -12,20 +12,17 @@ use Magento\Paypal\Helper\Checkout;
 /**
  * Class \Magento\Paypal\Controller\Hostedpro\Cancel
  *
- * @since 2.0.0
  */
 class Cancel extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var Checkout
-     * @since 2.0.0
      */
     private $checkoutHelper;
 
     /**
      * @param Context $context
      * @param Checkout $checkoutHelper
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -39,7 +36,6 @@ class Cancel extends \Magento\Framework\App\Action\Action
      * Customer canceled payment on gateway side.
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

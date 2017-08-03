@@ -12,13 +12,11 @@ use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 /**
  * Class \Magento\Framework\Interception\ObjectManager\Config\Compiled
  *
- * @since 2.0.0
  */
 class Compiled extends \Magento\Framework\ObjectManager\Config\Compiled implements ConfigInterface
 {
     /**
      * @var \Magento\Framework\Interception\ConfigInterface
-     * @since 2.0.0
      */
     protected $interceptionConfig;
 
@@ -27,7 +25,6 @@ class Compiled extends \Magento\Framework\ObjectManager\Config\Compiled implemen
      *
      * @param \Magento\Framework\Interception\ConfigInterface $interceptionConfig
      * @return void
-     * @since 2.0.0
      */
     public function setInterceptionConfig(\Magento\Framework\Interception\ConfigInterface $interceptionConfig)
     {
@@ -39,7 +36,6 @@ class Compiled extends \Magento\Framework\ObjectManager\Config\Compiled implemen
      *
      * @param string $instanceName
      * @return string
-     * @since 2.0.0
      */
     public function getOriginalInstanceType($instanceName)
     {

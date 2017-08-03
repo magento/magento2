@@ -13,26 +13,22 @@ use Magento\Framework\App\Cache\TypeListInterface;
 /**
  * Class \Magento\Catalog\Plugin\Model\ResourceModel\Attribute\Save
  *
- * @since 2.0.0
  */
 class Save
 {
     /**
      * @var Config
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var TypeListInterface
-     * @since 2.0.0
      */
     protected $typeList;
 
     /**
      * @param Config $config
      * @param TypeListInterface $typeList
-     * @since 2.0.0
      */
     public function __construct(Config $config, TypeListInterface $typeList)
     {

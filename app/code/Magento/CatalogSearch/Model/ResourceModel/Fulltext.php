@@ -13,7 +13,6 @@ use Magento\Framework\EntityManager\MetadataPool;
  * CatalogSearch Fulltext Index resource model
  *
  * @api
- * @since 2.0.0
  */
 class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -21,7 +20,6 @@ class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager;
 
@@ -38,7 +36,6 @@ class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param string $connectionName
      * @param MetadataPool $metadataPool
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -55,7 +52,6 @@ class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Init resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -66,7 +62,6 @@ class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Reset search results
      *
      * @return $this
-     * @since 2.0.0
      */
     public function resetSearchResults()
     {

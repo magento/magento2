@@ -10,19 +10,16 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\Sales\Observer\Backend\CatalogPriceRule
  *
- * @since 2.0.0
  */
 class CatalogPriceRule implements ObserverInterface
 {
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote
-     * @since 2.0.0
      */
     protected $_quote;
 
     /**
      * @param \Magento\Quote\Model\ResourceModel\Quote $quote
-     * @since 2.0.0
      */
     public function __construct(\Magento\Quote\Model\ResourceModel\Quote $quote)
     {
@@ -35,7 +32,6 @@ class CatalogPriceRule implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

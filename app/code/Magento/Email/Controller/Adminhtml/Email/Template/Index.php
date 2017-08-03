@@ -9,7 +9,6 @@ namespace Magento\Email\Controller\Adminhtml\Email\Template;
 /**
  * Class \Magento\Email\Controller\Adminhtml\Email\Template\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Email\Controller\Adminhtml\Email\Template
 {
@@ -17,7 +16,6 @@ class Index extends \Magento\Email\Controller\Adminhtml\Email\Template
      * Index action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

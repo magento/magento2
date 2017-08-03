@@ -15,7 +15,6 @@ use Magento\Framework\ObjectManager\TMapFactory;
  * Inheritance from this class is not recommended (declare virtual type or implement ValueHandlerPoolInterface instead).
  *
  * @api
- * @since 2.0.0
  */
 class ValueHandlerPool implements \Magento\Payment\Gateway\Config\ValueHandlerPoolInterface
 {
@@ -26,14 +25,12 @@ class ValueHandlerPool implements \Magento\Payment\Gateway\Config\ValueHandlerPo
 
     /**
      * @var ValueHandlerInterface[] | TMap
-     * @since 2.0.0
      */
     private $handlers;
 
     /**
      * @param TMapFactory $tmapFactory
      * @param array $handlers
-     * @since 2.0.0
      */
     public function __construct(
         TMapFactory $tmapFactory,
@@ -56,7 +53,6 @@ class ValueHandlerPool implements \Magento\Payment\Gateway\Config\ValueHandlerPo
      *
      * @param string $field
      * @return ValueHandlerInterface
-     * @since 2.0.0
      */
     public function get($field)
     {

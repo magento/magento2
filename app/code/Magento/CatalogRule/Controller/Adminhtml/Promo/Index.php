@@ -9,7 +9,6 @@ namespace Magento\CatalogRule\Controller\Adminhtml\Promo;
 /**
  * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Backend\App\Action
 {
@@ -22,7 +21,6 @@ class Index extends \Magento\Backend\App\Action
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

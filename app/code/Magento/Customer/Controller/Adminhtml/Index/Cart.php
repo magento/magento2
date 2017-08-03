@@ -17,7 +17,6 @@ use Magento\Framework\Api\DataObjectHelper;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @deprecated 2.2.0
- * @since 2.0.0
  */
 class Cart extends \Magento\Customer\Controller\Adminhtml\Index
 {
@@ -121,7 +120,6 @@ class Cart extends \Magento\Customer\Controller\Adminhtml\Index
      * Handle and then get cart grid contents
      *
      * @return \Magento\Framework\View\Result\Layout
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -10,7 +10,6 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class Full reindex action
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
 {
@@ -100,7 +99,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function execute($ids = null)
     {

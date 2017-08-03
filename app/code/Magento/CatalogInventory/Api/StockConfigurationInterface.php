@@ -8,7 +8,6 @@ namespace Magento\CatalogInventory\Api;
 /**
  * Interface StockConfigurationInterface
  * @api
- * @since 2.0.0
  */
 interface StockConfigurationInterface
 {
@@ -16,14 +15,12 @@ interface StockConfigurationInterface
      * Retrieve Default Scope ID
      *
      * @return int
-     * @since 2.0.0
      */
     public function getDefaultScopeId();
 
     /**
      * @param int $filter
      * @return int[]
-     * @since 2.0.0
      */
     public function getIsQtyTypeIds($filter = null);
 
@@ -32,7 +29,6 @@ interface StockConfigurationInterface
      *
      * @param int $productTypeId
      * @return bool
-     * @since 2.0.0
      */
     public function isQty($productTypeId);
 
@@ -41,14 +37,12 @@ interface StockConfigurationInterface
      *
      * @param int $storeId
      * @return bool
-     * @since 2.0.0
      */
     public function canSubtractQty($storeId = null);
 
     /**
      * @param int $storeId
      * @return float
-     * @since 2.0.0
      */
     public function getMinQty($storeId = null);
 
@@ -56,21 +50,18 @@ interface StockConfigurationInterface
      * @param int $storeId
      * @param int $customerGroupId
      * @return float
-     * @since 2.0.0
      */
     public function getMinSaleQty($storeId = null, $customerGroupId = null);
 
     /**
      * @param int $storeId
      * @return float
-     * @since 2.0.0
      */
     public function getMaxSaleQty($storeId = null);
 
     /**
      * @param int $storeId
      * @return float
-     * @since 2.0.0
      */
     public function getNotifyStockQty($storeId = null);
 
@@ -80,14 +71,12 @@ interface StockConfigurationInterface
      * @param int $storeId
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getEnableQtyIncrements($storeId = null);
 
     /**
      * @param int $storeId
      * @return int
-     * @since 2.0.0
      */
     public function getQtyIncrements($store = null);
 
@@ -96,7 +85,6 @@ interface StockConfigurationInterface
      *
      * @param int $storeId
      * @return int
-     * @since 2.0.0
      */
     public function getBackorders($storeId = null);
 
@@ -105,7 +93,6 @@ interface StockConfigurationInterface
      *
      * @param int $storeId
      * @return int
-     * @since 2.0.0
      */
     public function getManageStock($storeId = null);
 
@@ -115,7 +102,6 @@ interface StockConfigurationInterface
      * @param int $storeId
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getCanBackInStock($storeId = null);
 
@@ -124,7 +110,6 @@ interface StockConfigurationInterface
      *
      * @param int $storeId
      * @return bool
-     * @since 2.0.0
      */
     public function isShowOutOfStock($storeId = null);
 
@@ -133,7 +118,6 @@ interface StockConfigurationInterface
      *
      * @param int $storeId
      * @return bool
-     * @since 2.0.0
      */
     public function isAutoReturnEnabled($storeId = null);
 
@@ -143,7 +127,6 @@ interface StockConfigurationInterface
      *
      * @param int $storeId
      * @return bool
-     * @since 2.0.0
      */
     public function isDisplayProductStockStatus($storeId = null);
 
@@ -151,7 +134,6 @@ interface StockConfigurationInterface
      * @param string $field
      * @param int $storeId
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultConfigValue($field, $storeId = null);
 
@@ -159,7 +141,6 @@ interface StockConfigurationInterface
      * Retrieve inventory item options (used in config)
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getConfigItemOptions();
 }

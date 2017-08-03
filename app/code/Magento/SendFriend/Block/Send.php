@@ -12,7 +12,6 @@ use Magento\Customer\Model\Context;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Send extends \Magento\Framework\View\Element\Template
 {
@@ -20,7 +19,6 @@ class Send extends \Magento\Framework\View\Element\Template
      * SendFriend data
      *
      * @var \Magento\SendFriend\Helper\Data
-     * @since 2.0.0
      */
     protected $_sendfriendData = null;
 
@@ -28,31 +26,26 @@ class Send extends \Magento\Framework\View\Element\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Framework\App\Http\Context
-     * @since 2.0.0
      */
     protected $httpContext;
 
     /**
      * @var \Magento\Customer\Helper\View
-     * @since 2.0.0
      */
     protected $_customerViewHelper;
 
     /**
      * @var \Magento\SendFriend\Model\SendFriend
-     * @since 2.0.0
      */
     protected $sendfriend;
 
@@ -65,7 +58,6 @@ class Send extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\SendFriend\Model\SendFriend $sendfriend
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -91,7 +83,6 @@ class Send extends \Magento\Framework\View\Element\Template
      * Retrieve username for form field
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUserName()
     {
@@ -116,7 +107,6 @@ class Send extends \Magento\Framework\View\Element\Template
      * Retrieve sender email address
      *
      * @return string
-     * @since 2.0.0
      */
     public function getEmail()
     {
@@ -139,7 +129,6 @@ class Send extends \Magento\Framework\View\Element\Template
      * Retrieve Message text
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMessage()
     {
@@ -150,7 +139,6 @@ class Send extends \Magento\Framework\View\Element\Template
      * Retrieve Form data or empty \Magento\Framework\DataObject
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getFormData()
     {
@@ -168,7 +156,6 @@ class Send extends \Magento\Framework\View\Element\Template
      *
      * @param array $data
      * @return $this
-     * @since 2.0.0
      */
     public function setFormData($data)
     {
@@ -183,7 +170,6 @@ class Send extends \Magento\Framework\View\Element\Template
      * Retrieve Current Product Id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getProductId()
     {
@@ -194,7 +180,6 @@ class Send extends \Magento\Framework\View\Element\Template
      * Retrieve current category id for product
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCategoryId()
     {
@@ -205,7 +190,6 @@ class Send extends \Magento\Framework\View\Element\Template
      * Retrieve Max Recipients
      *
      * @return int
-     * @since 2.0.0
      */
     public function getMaxRecipients()
     {
@@ -216,7 +200,6 @@ class Send extends \Magento\Framework\View\Element\Template
      * Retrieve Send URL for Form Action
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSendUrl()
     {
@@ -233,7 +216,6 @@ class Send extends \Magento\Framework\View\Element\Template
      * Check if user is allowed to send
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function canSend()
     {

@@ -10,7 +10,6 @@ use Magento\Backend\App\Action;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\View
  *
- * @since 2.0.0
  */
 class View extends \Magento\Sales\Controller\Adminhtml\Order
 {
@@ -25,7 +24,6 @@ class View extends \Magento\Sales\Controller\Adminhtml\Order
      * View order detail
      *
      * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

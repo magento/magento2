@@ -9,7 +9,6 @@ namespace Magento\Paypal\Block\Adminhtml\System\Config;
 /**
  * Class \Magento\Paypal\Block\Adminhtml\System\Config\BmlApiWizard
  *
- * @since 2.0.0
  */
 class BmlApiWizard extends ApiWizard
 {
@@ -23,7 +22,6 @@ class BmlApiWizard extends ApiWizard
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {

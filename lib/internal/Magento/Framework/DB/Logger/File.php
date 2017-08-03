@@ -11,13 +11,11 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
  * Logging to file
- * @since 2.0.0
  */
 class File extends LoggerAbstract
 {
     /**
      * @var WriteInterface
-     * @since 2.0.0
      */
     private $dir;
 
@@ -25,7 +23,6 @@ class File extends LoggerAbstract
      * Path to SQL debug data log
      *
      * @var string
-     * @since 2.0.0
      */
     protected $debugFile;
 
@@ -35,7 +32,6 @@ class File extends LoggerAbstract
      * @param bool $logAllQueries
      * @param float $logQueryTime
      * @param bool $logCallStack
-     * @since 2.0.0
      */
     public function __construct(
         Filesystem $filesystem,
@@ -51,7 +47,6 @@ class File extends LoggerAbstract
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function log($str)
     {
@@ -66,7 +61,6 @@ class File extends LoggerAbstract
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function logStats($type, $sql, $bind = [], $result = null)
     {
@@ -78,7 +72,6 @@ class File extends LoggerAbstract
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function critical(\Exception $e)
     {

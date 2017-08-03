@@ -8,19 +8,16 @@ namespace Magento\Checkout\Model;
 /**
  * Class \Magento\Checkout\Model\GuestTotalsInformationManagement
  *
- * @since 2.0.0
  */
 class GuestTotalsInformationManagement implements \Magento\Checkout\Api\GuestTotalsInformationManagementInterface
 {
     /**
      * @var \Magento\Quote\Model\QuoteIdMaskFactory
-     * @since 2.0.0
      */
     protected $quoteIdMaskFactory;
 
     /**
      * @var \Magento\Checkout\Api\TotalsInformationManagementInterface
-     * @since 2.0.0
      */
     protected $totalsInformationManagement;
 
@@ -28,7 +25,6 @@ class GuestTotalsInformationManagement implements \Magento\Checkout\Api\GuestTot
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      * @param \Magento\Checkout\Api\TotalsInformationManagementInterface $totalsInformationManagement
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
@@ -40,7 +36,6 @@ class GuestTotalsInformationManagement implements \Magento\Checkout\Api\GuestTot
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function calculate(
         $cartId,

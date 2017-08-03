@@ -18,37 +18,31 @@ use Magento\Framework\Exception\CouldNotSaveException;
 /**
  * Class StockStatusRepository
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class StockStatusRepository implements StockStatusRepositoryInterface
 {
     /**
      * @var StockStatusResource
-     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var StatusFactory
-     * @since 2.0.0
      */
     protected $stockStatusFactory;
 
     /**
      * @var StockStatusCollectionInterfaceFactory
-     * @since 2.0.0
      */
     protected $stockStatusCollectionFactory;
 
     /**
      * @var QueryBuilderFactory
-     * @since 2.0.0
      */
     protected $queryBuilderFactory;
 
     /**
      * @var MapperFactory
-     * @since 2.0.0
      */
     protected $mapperFactory;
 
@@ -64,7 +58,6 @@ class StockStatusRepository implements StockStatusRepositoryInterface
      * @param StockStatusCollectionInterfaceFactory $collectionFactory
      * @param QueryBuilderFactory $queryBuilderFactory
      * @param MapperFactory $mapperFactory
-     * @since 2.0.0
      */
     public function __construct(
         StockStatusResource $resource,
@@ -84,7 +77,6 @@ class StockStatusRepository implements StockStatusRepositoryInterface
      * @param StockStatusInterface $stockStatus
      * @return StockStatusInterface
      * @throws CouldNotSaveException
-     * @since 2.0.0
      */
     public function save(StockStatusInterface $stockStatus)
     {
@@ -99,7 +91,6 @@ class StockStatusRepository implements StockStatusRepositoryInterface
     /**
      * @param string $stockStatusId
      * @return StockStatusInterface|Status
-     * @since 2.0.0
      */
     public function get($stockStatusId)
     {
@@ -111,7 +102,6 @@ class StockStatusRepository implements StockStatusRepositoryInterface
     /**
      * @param \Magento\CatalogInventory\Api\StockStatusCriteriaInterface $criteria
      * @return \Magento\CatalogInventory\Api\Data\StockStatusCollectionInterface
-     * @since 2.0.0
      */
     public function getList(\Magento\CatalogInventory\Api\StockStatusCriteriaInterface $criteria)
     {
@@ -127,7 +117,6 @@ class StockStatusRepository implements StockStatusRepositoryInterface
      * @param StockStatusInterface $stockStatus
      * @return bool|true
      * @throws CouldNotDeleteException
-     * @since 2.0.0
      */
     public function delete(StockStatusInterface $stockStatus)
     {
@@ -147,7 +136,6 @@ class StockStatusRepository implements StockStatusRepositoryInterface
      * @param int $id
      * @return bool
      * @throws CouldNotDeleteException
-     * @since 2.0.0
      */
     public function deleteById($id)
     {

@@ -16,13 +16,11 @@ use Magento\Store\Model\Website;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Websites extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * @return Website[]
-     * @since 2.0.0
      */
     public function getWebsiteCollection()
     {
@@ -32,7 +30,6 @@ class Websites extends \Magento\Backend\Block\Widget implements \Magento\Backend
     /**
      * @param Website $website
      * @return Group[]
-     * @since 2.0.0
      */
     public function getGroupCollection(Website $website)
     {
@@ -42,7 +39,6 @@ class Websites extends \Magento\Backend\Block\Widget implements \Magento\Backend
     /**
      * @param Group $group
      * @return array
-     * @since 2.0.0
      */
     public function getStoreCollection(Group $group)
     {
@@ -53,7 +49,6 @@ class Websites extends \Magento\Backend\Block\Widget implements \Magento\Backend
      * Tab settings
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -62,7 +57,6 @@ class Websites extends \Magento\Backend\Block\Widget implements \Magento\Backend
 
     /**
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -71,7 +65,6 @@ class Websites extends \Magento\Backend\Block\Widget implements \Magento\Backend
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -80,7 +73,6 @@ class Websites extends \Magento\Backend\Block\Widget implements \Magento\Backend
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isHidden()
     {

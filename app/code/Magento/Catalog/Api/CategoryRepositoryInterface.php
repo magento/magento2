@@ -9,7 +9,6 @@ namespace Magento\Catalog\Api;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface CategoryRepositoryInterface
 {
@@ -19,7 +18,6 @@ interface CategoryRepositoryInterface
      * @param \Magento\Catalog\Api\Data\CategoryInterface $category
      * @return \Magento\Catalog\Api\Data\CategoryInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @since 2.0.0
      */
     public function save(\Magento\Catalog\Api\Data\CategoryInterface $category);
 
@@ -30,7 +28,6 @@ interface CategoryRepositoryInterface
      * @param int $storeId
      * @return \Magento\Catalog\Api\Data\CategoryInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @since 2.0.0
      */
     public function get($categoryId, $storeId = null);
 
@@ -42,7 +39,6 @@ interface CategoryRepositoryInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @since 2.0.0
      */
     public function delete(\Magento\Catalog\Api\Data\CategoryInterface $category);
 
@@ -54,7 +50,6 @@ interface CategoryRepositoryInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @since 2.0.0
      */
     public function deleteByIdentifier($categoryId);
 }

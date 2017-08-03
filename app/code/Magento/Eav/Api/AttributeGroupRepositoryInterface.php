@@ -9,7 +9,6 @@ namespace Magento\Eav\Api;
 /**
  * Interface AttributeGroupRepositoryInterface
  * @api
- * @since 2.0.0
  */
 interface AttributeGroupRepositoryInterface
 {
@@ -20,7 +19,6 @@ interface AttributeGroupRepositoryInterface
      * @return \Magento\Eav\Api\Data\AttributeGroupInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
-     * @since 2.0.0
      */
     public function save(\Magento\Eav\Api\Data\AttributeGroupInterface $group);
 
@@ -30,7 +28,6 @@ interface AttributeGroupRepositoryInterface
      * @param int $groupId
      * @return \Magento\Eav\Api\Data\AttributeGroupInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @since 2.0.0
      */
     public function get($groupId);
 
@@ -40,7 +37,6 @@ interface AttributeGroupRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Eav\Api\Data\AttributeGroupSearchResultsInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -51,7 +47,6 @@ interface AttributeGroupRepositoryInterface
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
-     * @since 2.0.0
      */
     public function deleteById($groupId);
 
@@ -62,7 +57,6 @@ interface AttributeGroupRepositoryInterface
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
-     * @since 2.0.0
      */
     public function delete(\Magento\Eav\Api\Data\AttributeGroupInterface $group);
 }

@@ -8,7 +8,6 @@ namespace Magento\CheckoutAgreements\Model;
 /**
  * Class \Magento\CheckoutAgreements\Model\AgreementModeOptions
  *
- * @since 2.0.0
  */
 class AgreementModeOptions
 {
@@ -20,7 +19,6 @@ class AgreementModeOptions
      * Return list of agreement mode options array.
      *
      * @return array
-     * @since 2.0.0
      */
     public function getOptionsArray()
     {

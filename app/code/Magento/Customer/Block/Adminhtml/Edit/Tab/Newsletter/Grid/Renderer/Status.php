@@ -7,13 +7,11 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid\Renderer;
 
 /**
  * Adminhtml newsletter queue grid block status item renderer
- * @since 2.0.0
  */
 class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected static $_statuses;
 
@@ -21,7 +19,6 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      * Constructor for Grid Renderer Status
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -38,7 +35,6 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     /**
      * @param \Magento\Framework\DataObject $row
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {
@@ -48,7 +44,6 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     /**
      * @param string $status
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public static function getStatus($status)
     {

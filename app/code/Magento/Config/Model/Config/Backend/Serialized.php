@@ -10,7 +10,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Serialized extends \Magento\Framework\App\Config\Value
 {
@@ -49,7 +48,6 @@ class Serialized extends \Magento\Framework\App\Config\Value
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -61,7 +59,6 @@ class Serialized extends \Magento\Framework\App\Config\Value
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {

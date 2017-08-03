@@ -13,13 +13,11 @@ use Magento\Setup\Module\Di\Compiler\Config\WriterInterface;
 /**
  * Class \Magento\Setup\Module\Di\Compiler\Config\Writer\Filesystem
  *
- * @since 2.0.0
  */
 class Filesystem implements WriterInterface
 {
     /**
      * @var DirectoryList
-     * @since 2.0.0
      */
     private $directoryList;
 
@@ -27,7 +25,6 @@ class Filesystem implements WriterInterface
      * Constructor
      *
      * @param DirectoryList $directoryList
-     * @since 2.0.0
      */
     public function __construct(DirectoryList $directoryList)
     {
@@ -40,7 +37,6 @@ class Filesystem implements WriterInterface
      * @param string $key
      * @param array $config
      * @return void
-     * @since 2.0.0
      */
     public function write($key, array $config)
     {
@@ -56,7 +52,6 @@ class Filesystem implements WriterInterface
      * Initializes writer
      *
      * @return void
-     * @since 2.0.0
      */
     private function initialize()
     {

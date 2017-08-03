@@ -9,7 +9,6 @@ namespace Magento\SalesRule\Api\Data;
  * Interface ConditionInterface
  *
  * @api
- * @since 2.0.0
  */
 interface ConditionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -20,14 +19,12 @@ interface ConditionInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Get condition type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getConditionType();
 
     /**
      * @param string $conditionType
      * @return $this
-     * @since 2.0.0
      */
     public function setConditionType($conditionType);
 
@@ -35,7 +32,6 @@ interface ConditionInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Return list of conditions
      *
      * @return \Magento\SalesRule\Api\Data\ConditionInterface[]|null
-     * @since 2.0.0
      */
     public function getConditions();
 
@@ -44,7 +40,6 @@ interface ConditionInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param \Magento\SalesRule\Api\Data\ConditionInterface[]|null $conditions
      * @return $this
-     * @since 2.0.0
      */
     public function setConditions(array $conditions = null);
 
@@ -52,7 +47,6 @@ interface ConditionInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Return the aggregator type
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getAggregatorType();
 
@@ -61,7 +55,6 @@ interface ConditionInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param string $aggregatorType
      * @return $this
-     * @since 2.0.0
      */
     public function setAggregatorType($aggregatorType);
 
@@ -69,7 +62,6 @@ interface ConditionInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Return the operator of the condition
      *
      * @return string
-     * @since 2.0.0
      */
     public function getOperator();
 
@@ -78,7 +70,6 @@ interface ConditionInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param string $operator
      * @return $this
-     * @since 2.0.0
      */
     public function setOperator($operator);
 
@@ -86,7 +77,6 @@ interface ConditionInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Return the attribute name of the condition
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getAttributeName();
 
@@ -95,7 +85,6 @@ interface ConditionInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param string $attributeName
      * @return $this
-     * @since 2.0.0
      */
     public function setAttributeName($attributeName);
 
@@ -103,7 +92,6 @@ interface ConditionInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Return the value of the condition
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getValue();
 
@@ -112,7 +100,6 @@ interface ConditionInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param mixed $value
      * @return $this
-     * @since 2.0.0
      */
     public function setValue($value);
 
@@ -120,7 +107,6 @@ interface ConditionInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\SalesRule\Api\Data\ConditionExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -129,7 +115,6 @@ interface ConditionInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param \Magento\SalesRule\Api\Data\ConditionExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\SalesRule\Api\Data\ConditionExtensionInterface $extensionAttributes

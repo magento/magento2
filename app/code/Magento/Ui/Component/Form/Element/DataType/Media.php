@@ -7,7 +7,6 @@ namespace Magento\Ui\Component\Form\Element\DataType;
 
 /**
  * Class Media
- * @since 2.0.0
  */
 class Media extends AbstractDataType
 {
@@ -17,7 +16,6 @@ class Media extends AbstractDataType
      * Get component name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getComponentName()
     {
@@ -28,7 +26,7 @@ class Media extends AbstractDataType
      * Prepare component configuration
      *
      * @return void
-     * @since 2.1.0
+     * @since 2.0.11
      */
     public function prepare()
     {

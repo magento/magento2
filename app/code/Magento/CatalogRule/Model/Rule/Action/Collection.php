@@ -7,7 +7,6 @@ namespace Magento\CatalogRule\Model\Rule\Action;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Rule\Model\Action\Collection
 {
@@ -16,7 +15,6 @@ class Collection extends \Magento\Rule\Model\Action\Collection
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Rule\Model\ActionFactory $actionFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Asset\Repository $assetRepo,
@@ -30,7 +28,6 @@ class Collection extends \Magento\Rule\Model\Action\Collection
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getNewChildSelectOptions()
     {

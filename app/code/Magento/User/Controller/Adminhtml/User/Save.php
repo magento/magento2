@@ -11,7 +11,6 @@ use Magento\Security\Model\SecurityCookie;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Save extends \Magento\User\Controller\Adminhtml\User
 {
@@ -41,7 +40,6 @@ class Save extends \Magento\User\Controller\Adminhtml\User
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -118,7 +116,6 @@ class Save extends \Magento\User\Controller\Adminhtml\User
      * @param \Magento\User\Model\User $model
      * @param array $data
      * @return void
-     * @since 2.0.0
      */
     protected function redirectToEdit(\Magento\User\Model\User $model, array $data)
     {

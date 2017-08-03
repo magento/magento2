@@ -9,25 +9,21 @@ namespace Magento\GoogleOptimizer\Helper;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Code
 {
     /**
      * @var \Magento\GoogleOptimizer\Model\Code
-     * @since 2.0.0
      */
     protected $_codeModel;
 
     /**
      * @var \Magento\Framework\Model\AbstractModel
-     * @since 2.0.0
      */
     protected $_entity;
 
     /**
      * @param \Magento\GoogleOptimizer\Model\Code $code
-     * @since 2.0.0
      */
     public function __construct(\Magento\GoogleOptimizer\Model\Code $code)
     {
@@ -39,7 +35,6 @@ class Code
      *
      * @param \Magento\Framework\Model\AbstractModel $entity
      * @return \Magento\GoogleOptimizer\Model\Code
-     * @since 2.0.0
      */
     public function getCodeObjectByEntity(\Magento\Framework\Model\AbstractModel $entity)
     {
@@ -60,7 +55,6 @@ class Code
      *
      * @return string
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     protected function _getEntityType()
     {
@@ -77,7 +71,6 @@ class Code
      * Get Entity Type string
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getTypeString()
     {
@@ -101,7 +94,6 @@ class Code
      *
      * @return $this
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     protected function _checkEntityIsEmpty()
     {

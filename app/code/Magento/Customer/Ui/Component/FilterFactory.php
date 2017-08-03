@@ -10,19 +10,16 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
 /**
  * Class \Magento\Customer\Ui\Component\FilterFactory
  *
- * @since 2.0.0
  */
 class FilterFactory
 {
     /**
      * @var \Magento\Framework\View\Element\UiComponentFactory
-     * @since 2.0.0
      */
     protected $componentFactory;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $filterMap = [
         'default' => 'filterInput',
@@ -34,7 +31,6 @@ class FilterFactory
 
     /**
      * @param \Magento\Framework\View\Element\UiComponentFactory $componentFactory
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\View\Element\UiComponentFactory $componentFactory)
     {
@@ -45,7 +41,6 @@ class FilterFactory
      * @param array $attributeData
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @return \Magento\Ui\Component\Listing\Columns\ColumnInterface
-     * @since 2.0.0
      */
     public function create(array $attributeData, $context)
     {
@@ -74,7 +69,6 @@ class FilterFactory
     /**
      * @param string $frontendInput
      * @return string
-     * @since 2.0.0
      */
     protected function getFilterType($frontendInput)
     {

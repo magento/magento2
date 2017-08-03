@@ -9,7 +9,6 @@ namespace Magento\Backend\Block\System\Store;
  * Store / store view / website delete form container
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Delete extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -17,7 +16,6 @@ class Delete extends \Magento\Backend\Block\Widget\Form\Container
      * Class constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -52,7 +50,6 @@ class Delete extends \Magento\Backend\Block\Widget\Form\Container
      * Get edit form container header text
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -68,7 +65,6 @@ class Delete extends \Magento\Backend\Block\Widget\Form\Container
      *
      * @param string $title
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreTypeTitle($title)
     {
@@ -81,7 +77,6 @@ class Delete extends \Magento\Backend\Block\Widget\Form\Container
      *
      * @param string $url
      * @return $this
-     * @since 2.0.0
      */
     public function setBackUrl($url)
     {

@@ -14,7 +14,6 @@ use \Magento\Store\Model\ScopeInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -25,20 +24,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_activeForCmsFlag;
 
     /**
      * @var \Magento\GoogleAnalytics\Helper\Data
-     * @since 2.0.0
      */
     protected $_analyticsHelper;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\GoogleAnalytics\Helper\Data $analyticsHelper
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -53,7 +49,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $store
      * @return bool
-     * @since 2.0.0
      */
     public function isGoogleExperimentEnabled($store = null)
     {
@@ -65,7 +60,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $store
      * @return bool
-     * @since 2.0.0
      */
     public function isGoogleExperimentActive($store = null)
     {

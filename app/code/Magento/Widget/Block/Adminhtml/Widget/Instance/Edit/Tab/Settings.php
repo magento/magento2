@@ -13,7 +13,6 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
@@ -22,13 +21,11 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\LabelFactory
-     * @since 2.0.0
      */
     protected $_themeLabelFactory;
 
@@ -38,7 +35,6 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\View\Design\Theme\LabelFactory $themeLabelFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -53,7 +49,6 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -65,7 +60,6 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Prepare label for tab
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -76,7 +70,6 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Prepare title for tab
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -87,7 +80,6 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Returns status flag about this tab can be showen or not
      *
      * @return true
-     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -98,7 +90,6 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Returns status flag about this tab hidden or not
      *
      * @return true
-     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -109,7 +100,6 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Getter
      *
      * @return \Magento\Widget\Model\Widget\Instance
-     * @since 2.0.0
      */
     public function getWidgetInstance()
     {
@@ -120,7 +110,6 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Prepare form before rendering HTML
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -179,7 +168,6 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Return url for continue button
      *
      * @return string
-     * @since 2.0.0
      */
     public function getContinueUrl()
     {
@@ -198,7 +186,6 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Retrieve array (widget_type => widget_name) of available widgets
      *
      * @return array
-     * @since 2.0.0
      */
     public function getTypesOptionsArray()
     {
@@ -213,7 +200,6 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param array $a
      * @param array $b
      * @return boolean
-     * @since 2.0.0
      */
     protected function _sortWidgets($a, $b)
     {

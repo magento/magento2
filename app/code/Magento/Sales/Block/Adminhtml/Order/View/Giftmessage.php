@@ -10,7 +10,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\View;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Giftmessage extends \Magento\Backend\Block\Widget
 {
@@ -18,7 +17,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      * Entity for editing of gift message
      *
      * @var \Magento\Eav\Model\Entity\AbstractEntity
-     * @since 2.0.0
      */
     protected $_entity;
 
@@ -26,7 +24,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -34,7 +31,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      * Message factory
      *
      * @var \Magento\GiftMessage\Model\MessageFactory
-     * @since 2.0.0
      */
     protected $_messageFactory;
 
@@ -42,7 +38,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      * Message helper
      *
      * @var \Magento\GiftMessage\Helper\Message
-     * @since 2.0.0
      */
     protected $_messageHelper;
 
@@ -52,7 +47,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\GiftMessage\Helper\Message $messageHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -71,7 +65,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      * Retrieve order model instance
      *
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -82,7 +75,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      * Giftmessage object
      *
      * @var \Magento\GiftMessage\Model\Message
-     * @since 2.0.0
      */
     protected $_giftMessage;
 
@@ -90,7 +82,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      * Before rendering html, but after trying to load cache
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -104,7 +95,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      * Prepares layout of block
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -121,7 +111,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      * Retrieve save button html
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSaveButtonHtml()
     {
@@ -139,7 +128,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      *
      * @param \Magento\Framework\DataObject $entity
      * @return $this
-     * @since 2.0.0
      */
     public function setEntity(\Magento\Framework\DataObject $entity)
     {
@@ -151,7 +139,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      * Retrieve entity for form
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getEntity()
     {
@@ -166,7 +153,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      * Retrieve default value for giftmessage sender
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultSender()
     {
@@ -185,7 +171,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      * Retrieve default value for giftmessage recipient
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultRecipient()
     {
@@ -215,7 +200,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      *
      * @param string $name
      * @return string
-     * @since 2.0.0
      */
     public function getFieldName($name)
     {
@@ -227,7 +211,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      *
      * @param string $id
      * @return string
-     * @since 2.0.0
      */
     public function getFieldId($id)
     {
@@ -238,7 +221,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      * Retrieve field html id prefix
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFieldIdPrefix()
     {
@@ -249,7 +231,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      * Initialize gift message for entity
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initMessage()
     {
@@ -270,7 +251,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      * Retrieve gift message for entity
      *
      * @return \Magento\GiftMessage\Model\Message
-     * @since 2.0.0
      */
     public function getMessage()
     {
@@ -285,7 +265,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      * Get save url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSaveUrl()
     {
@@ -299,7 +278,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      * Retrieve block html id
      *
      * @return string
-     * @since 2.0.0
      */
     public function getHtmlId()
     {
@@ -310,7 +288,6 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      * Indicates that block can display giftmessages form
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canDisplayGiftmessage()
     {

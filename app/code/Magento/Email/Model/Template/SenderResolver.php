@@ -8,7 +8,6 @@ namespace Magento\Email\Model\Template;
 /**
  * Class \Magento\Email\Model\Template\SenderResolver
  *
- * @since 2.0.0
  */
 class SenderResolver implements \Magento\Framework\Mail\Template\SenderResolverInterface
 {
@@ -16,13 +15,11 @@ class SenderResolver implements \Magento\Framework\Mail\Template\SenderResolverI
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
     {
@@ -31,7 +28,6 @@ class SenderResolver implements \Magento\Framework\Mail\Template\SenderResolverI
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function resolve($sender, $scopeId = null)
     {

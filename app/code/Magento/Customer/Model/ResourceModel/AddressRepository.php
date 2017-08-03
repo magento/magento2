@@ -17,7 +17,6 @@ use Magento\Framework\Exception\InputException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterface
 {
@@ -25,49 +24,41 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * Directory data
      *
      * @var \Magento\Directory\Helper\Data
-     * @since 2.0.0
      */
     protected $directoryData;
 
     /**
      * @var \Magento\Customer\Model\AddressFactory
-     * @since 2.0.0
      */
     protected $addressFactory;
 
     /**
      * @var \Magento\Customer\Model\AddressRegistry
-     * @since 2.0.0
      */
     protected $addressRegistry;
 
     /**
      * @var \Magento\Customer\Model\CustomerRegistry
-     * @since 2.0.0
      */
     protected $customerRegistry;
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\Address
-     * @since 2.0.0
      */
     protected $addressResourceModel;
 
     /**
      * @var \Magento\Customer\Api\Data\AddressSearchResultsInterfaceFactory
-     * @since 2.0.0
      */
     protected $addressSearchResultsFactory;
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\Address\CollectionFactory
-     * @since 2.0.0
      */
     protected $addressCollectionFactory;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
-     * @since 2.0.0
      */
     protected $extensionAttributesJoinProcessor;
 
@@ -87,7 +78,6 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * @param \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressCollectionFactory
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param CollectionProcessorInterface $collectionProcessor
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Model\AddressFactory $addressFactory,
@@ -117,7 +107,6 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return \Magento\Customer\Api\Data\AddressInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function save(\Magento\Customer\Api\Data\AddressInterface $address)
     {
@@ -173,7 +162,6 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * @param int $addressId
      * @return \Magento\Customer\Api\Data\AddressInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getById($addressId)
     {
@@ -187,7 +175,6 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * @param SearchCriteriaInterface $searchCriteria
      * @return \Magento\Customer\Api\Data\AddressSearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -223,7 +210,6 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * @param Collection $collection
      * @return void
      * @throws \Magento\Framework\Exception\InputException
-     * @since 2.0.0
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
     {
@@ -245,7 +231,6 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function delete(\Magento\Customer\Api\Data\AddressInterface $address)
     {
@@ -265,7 +250,6 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function deleteById($addressId)
     {

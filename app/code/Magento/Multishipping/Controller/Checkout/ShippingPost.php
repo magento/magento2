@@ -11,13 +11,11 @@ use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 /**
  * Class \Magento\Multishipping\Controller\Checkout\ShippingPost
  *
- * @since 2.0.0
  */
 class ShippingPost extends \Magento\Multishipping\Controller\Checkout
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

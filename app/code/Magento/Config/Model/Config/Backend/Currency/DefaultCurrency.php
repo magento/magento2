@@ -12,7 +12,6 @@ namespace Magento\Config\Model\Config\Backend\Currency;
 
 /**
  * @api
- * @since 2.0.0
  */
 class DefaultCurrency extends AbstractCurrency
 {
@@ -22,7 +21,6 @@ class DefaultCurrency extends AbstractCurrency
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function afterSave()
     {

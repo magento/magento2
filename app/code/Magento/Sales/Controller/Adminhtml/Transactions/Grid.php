@@ -12,7 +12,6 @@ use Magento\Framework\View\Result\Layout;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Transactions\Grid
  *
- * @since 2.0.0
  */
 class Grid extends \Magento\Sales\Controller\Adminhtml\Transactions
 {
@@ -20,7 +19,6 @@ class Grid extends \Magento\Sales\Controller\Adminhtml\Transactions
      * Ajax grid action
      *
      * @return Layout
-     * @since 2.0.0
      */
     public function execute()
     {

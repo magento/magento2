@@ -15,7 +15,6 @@ use Magento\Payment\Gateway\CommandInterface;
  * or in case if command invoked by Magento has no sense for payment method.
  *
  * @api
- * @since 2.0.0
  */
 class NullCommand implements CommandInterface
 {
@@ -26,7 +25,6 @@ class NullCommand implements CommandInterface
      *
      * @return null|Command\ResultInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function execute(array $commandSubject)
     {

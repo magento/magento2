@@ -14,7 +14,6 @@ use Magento\Framework\DB\Select;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
 {
@@ -22,7 +21,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * Is live
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isLive = false;
 
@@ -30,7 +28,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * Sales amount expression
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_salesAmountExpression;
 
@@ -38,7 +35,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -46,7 +42,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * Store manager instance
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -54,7 +49,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * Locale date instance
      *
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $_localeDate;
 
@@ -62,7 +56,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * Order config instance
      *
      * @var \Magento\Sales\Model\Order\Config
-     * @since 2.0.0
      */
     protected $_orderConfig;
 
@@ -70,7 +63,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * Reports order factory
      *
      * @var \Magento\Sales\Model\ResourceModel\Report\OrderFactory
-     * @since 2.0.0
      */
     protected $_reportOrderFactory;
 
@@ -92,7 +84,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -132,7 +123,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * @param string $range
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function checkIsLive($range)
     {
@@ -148,7 +138,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      *
      * @return bool
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function isLive()
     {
@@ -163,7 +152,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * @param mixed $customEnd
      * @param int $isFilter
      * @return $this
-     * @since 2.0.0
      */
     public function prepareSummary($range, $customStart, $customEnd, $isFilter = 0)
     {
@@ -181,7 +169,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * Get sales amount expression
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getSalesAmountExpression()
     {
@@ -222,7 +209,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * @param mixed $customEnd
      * @param int $isFilter
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareSummaryLive($range, $customStart, $customEnd, $isFilter = 0)
     {
@@ -284,7 +270,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * @param string|null $customStart
      * @param string|null $customEnd
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareSummaryAggregated($range, $customStart, $customEnd)
     {
@@ -329,7 +314,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      *
      * @param string $range
      * @return \Zend_Db_Expr
-     * @since 2.0.0
      */
     protected function _getRangeExpression($range)
     {
@@ -363,7 +347,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * @param string $range
      * @param string $attribute
      * @return string
-     * @since 2.0.0
      */
     protected function _getRangeExpressionForAttribute($range, $attribute)
     {
@@ -379,7 +362,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * @param string|null $from
      * @param string|null $to
      * @return string
-     * @since 2.0.0
      */
     protected function _getTZRangeOffsetExpression($range, $attribute, $from = null, $to = null)
     {
@@ -399,7 +381,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * @param string $tzTo
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function _getTZRangeExpressionForAttribute($range, $attribute, $tzFrom = '+00:00', $tzTo = null)
     {
@@ -427,7 +408,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * @param bool $returnObjects
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function getDateRange($range, $customStart, $customEnd, $returnObjects = false)
     {
@@ -498,7 +478,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * Add item count expression
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addItemCountExpr()
     {
@@ -511,7 +490,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      *
      * @param int $isFilter
      * @return $this
-     * @since 2.0.0
      */
     public function calculateTotals($isFilter = 0)
     {
@@ -529,7 +507,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      *
      * @param int $isFilter
      * @return $this
-     * @since 2.0.0
      */
     protected function _calculateTotalsLive($isFilter = 0)
     {
@@ -582,7 +559,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * @param int $isFilter
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function _calculateTotalsAggregated($isFilter = 0)
     {
@@ -614,7 +590,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      *
      * @param int $isFilter
      * @return $this
-     * @since 2.0.0
      */
     public function calculateSales($isFilter = 0)
     {
@@ -677,7 +652,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * @param string $fromDate
      * @param string $toDate
      * @return $this
-     * @since 2.0.0
      */
     public function setDateRange($fromDate, $toDate)
     {
@@ -703,7 +677,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      *
      * @param int[] $storeIds
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreIds($storeIds)
     {
@@ -754,7 +727,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * Add group By customer attribute
      *
      * @return $this
-     * @since 2.0.0
      */
     public function groupByCustomer()
     {
@@ -767,7 +739,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      *
      * @param string $alias
      * @return $this
-     * @since 2.0.0
      */
     public function joinCustomerName($alias = 'name')
     {
@@ -781,7 +752,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * Add Order count field to select
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addOrdersCount()
     {
@@ -796,7 +766,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      *
      * @param bool $convertCurrency
      * @return $this
-     * @since 2.0.0
      */
     public function addRevenueToSelect($convertCurrency = false)
     {
@@ -816,7 +785,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      *
      * @param int $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function addSumAvgTotals($storeId = 0)
     {
@@ -847,7 +815,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * @param string $baseSubtotalCanceled
      * @param string $baseDiscountCanceled
      * @return string
-     * @since 2.0.0
      */
     protected function getTotalsExpression(
         $storeId,
@@ -867,7 +834,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      *
      * @param string $dir
      * @return $this
-     * @since 2.0.0
      */
     public function orderByTotalAmount($dir = self::SORT_ORDER_DESC)
     {
@@ -880,7 +846,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      *
      * @param string $dir
      * @return $this
-     * @since 2.0.0
      */
     public function orderByOrdersCount($dir = self::SORT_ORDER_DESC)
     {
@@ -893,7 +858,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      *
      * @param string $dir
      * @return $this
-     * @since 2.0.0
      */
     public function orderByCustomerRegistration($dir = self::SORT_ORDER_DESC)
     {
@@ -906,7 +870,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      *
      * @param string $dir
      * @return $this
-     * @since 2.0.0
      */
     public function orderByCreatedAt($dir = self::SORT_ORDER_DESC)
     {
@@ -918,7 +881,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * Get select count sql
      *
      * @return Select
-     * @since 2.0.0
      */
     public function getSelectCountSql()
     {
@@ -939,7 +901,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      *
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _initInitialFieldsToSelect()
     {
@@ -952,7 +913,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      *
      * @param string $period
      * @return $this
-     * @since 2.0.0
      */
     public function addCreateAtPeriodFilter($period)
     {

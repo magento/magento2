@@ -11,25 +11,21 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class \Magento\Theme\Model\Theme\ThemeUninstaller
  *
- * @since 2.0.0
  */
 class ThemeUninstaller
 {
     /**
      * @var ThemePackageInfo
-     * @since 2.0.0
      */
     private $themePackageInfo;
 
     /**
      * @var Remove
-     * @since 2.0.0
      */
     private $remove;
 
     /**
      * @var ThemeProvider
-     * @since 2.0.0
      */
     private $themeProvider;
 
@@ -39,7 +35,6 @@ class ThemeUninstaller
      * @param ThemePackageInfo $themePackageInfo
      * @param Remove $remove
      * @param ThemeProvider $themeProvider
-     * @since 2.0.0
      */
     public function __construct(ThemePackageInfo $themePackageInfo, Remove $remove, ThemeProvider $themeProvider)
     {
@@ -54,7 +49,6 @@ class ThemeUninstaller
      * @param OutputInterface $output
      * @param array $themePaths
      * @return void
-     * @since 2.0.0
      */
     public function uninstallRegistry(OutputInterface $output, array $themePaths)
     {
@@ -70,7 +64,6 @@ class ThemeUninstaller
      * @param OutputInterface $output
      * @param array $themePaths
      * @return void
-     * @since 2.0.0
      */
     public function uninstallCode(OutputInterface $output, array $themePaths)
     {

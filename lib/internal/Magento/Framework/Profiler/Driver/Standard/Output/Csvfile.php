@@ -13,7 +13,6 @@ use Magento\Framework\Profiler\Driver\Standard\Stat;
 /**
  * Class \Magento\Framework\Profiler\Driver\Standard\Output\Csvfile
  *
- * @since 2.0.0
  */
 class Csvfile extends AbstractOutput
 {
@@ -22,19 +21,16 @@ class Csvfile extends AbstractOutput
     /**
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_filePath;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_delimiter;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_enclosure;
 
@@ -42,7 +38,6 @@ class Csvfile extends AbstractOutput
      * Constructor
      *
      * @param array|null $config
-     * @since 2.0.0
      */
     public function __construct(array $config = null)
     {
@@ -57,7 +52,6 @@ class Csvfile extends AbstractOutput
      *
      * @param array|null $config
      * @return string
-     * @since 2.0.0
      */
     protected function _parseFilePath(array $config = null)
     {
@@ -74,7 +68,6 @@ class Csvfile extends AbstractOutput
      * @param Stat $stat
      * @return void
      * @throws \RuntimeException if output file cannot be opened
-     * @since 2.0.0
      */
     public function display(Stat $stat)
     {
@@ -101,7 +94,6 @@ class Csvfile extends AbstractOutput
      * @param resource $fileHandle
      * @param Stat $stat
      * @return void
-     * @since 2.0.0
      */
     protected function _writeFileContent($fileHandle, Stat $stat)
     {

@@ -12,13 +12,11 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
  * Adminhtml catalog super product configurable tab
- * @since 2.0.0
  */
 class Config extends Widget implements TabInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'catalog/product/edit/super/config.phtml';
 
@@ -26,7 +24,6 @@ class Config extends Widget implements TabInterface
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
@@ -41,7 +38,6 @@ class Config extends Widget implements TabInterface
      * @param \Magento\Framework\Registry $coreRegistry
      * @param Configurable $configurableType
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -58,7 +54,6 @@ class Config extends Widget implements TabInterface
      * Initialize block
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -74,7 +69,6 @@ class Config extends Widget implements TabInterface
      * Retrieve Tab class (for loading)
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTabClass()
     {
@@ -85,7 +79,6 @@ class Config extends Widget implements TabInterface
      * Retrieve currently edited product object
      *
      * @return Product
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -96,7 +89,6 @@ class Config extends Widget implements TabInterface
      * Retrieve Tab label
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -107,7 +99,6 @@ class Config extends Widget implements TabInterface
      * Retrieve Tab title
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -118,7 +109,6 @@ class Config extends Widget implements TabInterface
      * Can show tab flag
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -129,7 +119,6 @@ class Config extends Widget implements TabInterface
      * Check is a hidden tab
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -140,7 +129,6 @@ class Config extends Widget implements TabInterface
      * Get parent tab code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getParentTab()
     {
@@ -159,7 +147,6 @@ class Config extends Widget implements TabInterface
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {

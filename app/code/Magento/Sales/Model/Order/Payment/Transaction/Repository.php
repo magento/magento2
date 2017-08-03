@@ -26,7 +26,6 @@ use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction as TransactionRe
 /**
  * Repository class for \Magento\Sales\Model\Order\Payment\Transaction
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Repository implements TransactionRepositoryInterface
 {
@@ -34,37 +33,31 @@ class Repository implements TransactionRepositoryInterface
      * Collection Result Factory
      *
      * @var SearchResultFactory
-     * @since 2.0.0
      */
     private $searchResultFactory = null;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
-     * @since 2.0.0
      */
     private $filterBuilder;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     * @since 2.0.0
      */
     private $searchCriteriaBuilder;
 
     /**
      * @var Metadata
-     * @since 2.0.0
      */
     private $metaData;
 
     /**
      * @var SortOrderBuilder
-     * @since 2.0.0
      */
     private $sortOrderBuilder;
 
     /**
      * @var EntityStorage
-     * @since 2.0.0
      */
     private $entityStorage;
 
@@ -83,7 +76,6 @@ class Repository implements TransactionRepositoryInterface
      * @param Metadata $metaData
      * @param EntityStorageFactory $entityStorageFactory
      * @param CollectionProcessorInterface|null $collectionProcessor
-     * @since 2.0.0
      */
     public function __construct(
         SearchResultFactory $searchResultFactory,
@@ -105,7 +97,6 @@ class Repository implements TransactionRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function get($id)
     {
@@ -129,7 +120,6 @@ class Repository implements TransactionRepositoryInterface
      * @return bool|\Magento\Framework\Model\AbstractModel|mixed
      * @throws \Magento\Framework\Exception\InputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getByTransactionType($transactionType, $paymentId, $orderId)
     {
@@ -177,7 +167,6 @@ class Repository implements TransactionRepositoryInterface
      * @param int $orderId
      * @return bool|\Magento\Framework\Api\ExtensibleDataInterface|\Magento\Framework\Model\AbstractModel
      * @throws \Magento\Framework\Exception\InputException
-     * @since 2.0.0
      */
     public function getByTransactionId($transactionId, $paymentId, $orderId)
     {
@@ -203,7 +192,6 @@ class Repository implements TransactionRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -218,7 +206,6 @@ class Repository implements TransactionRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function delete(\Magento\Sales\Api\Data\TransactionInterface $entity)
     {
@@ -229,7 +216,6 @@ class Repository implements TransactionRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function save(\Magento\Sales\Api\Data\TransactionInterface $entity)
     {
@@ -242,7 +228,6 @@ class Repository implements TransactionRepositoryInterface
      * Creates new Transaction instance.
      *
      * @return \Magento\Sales\Api\Data\TransactionInterface Transaction interface.
-     * @since 2.0.0
      */
     public function create()
     {

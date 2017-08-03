@@ -13,7 +13,6 @@ namespace Magento\Config\Model\Config\Backend\Email;
 
 /**
  * @deprecated 2.2.0
- * @since 2.0.0
  */
 class Logo extends \Magento\Config\Model\Config\Backend\Image
 {
@@ -26,7 +25,6 @@ class Logo extends \Magento\Config\Model\Config\Backend\Image
      * Upload max file size in kilobytes
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_maxFileSize = 2048;
 
@@ -34,7 +32,6 @@ class Logo extends \Magento\Config\Model\Config\Backend\Image
      * Return path to directory for upload file
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getUploadDir()
     {
@@ -45,7 +42,6 @@ class Logo extends \Magento\Config\Model\Config\Backend\Image
      * Makes a decision about whether to add info about the scope
      *
      * @return boolean
-     * @since 2.0.0
      */
     protected function _addWhetherScopeInfo()
     {
@@ -73,7 +69,6 @@ class Logo extends \Magento\Config\Model\Config\Backend\Image
      * Save changes and delete file if "delete" option passed
      *
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {

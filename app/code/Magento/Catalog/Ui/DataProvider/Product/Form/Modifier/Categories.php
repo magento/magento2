@@ -45,7 +45,7 @@ class Categories extends AbstractModifier
 
     /**
      * @var array
-     * @deprecated 2.2.0
+     * @deprecated 2.1.3
      * @since 2.1.0
      */
     protected $categoriesTrees = [];
@@ -70,7 +70,7 @@ class Categories extends AbstractModifier
 
     /**
      * @var CacheInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $cacheManager;
 
@@ -109,8 +109,8 @@ class Categories extends AbstractModifier
      * Retrieve cache interface
      *
      * @return CacheInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 2.1.3
+     * @since 2.1.3
      */
     private function getCacheManager()
     {

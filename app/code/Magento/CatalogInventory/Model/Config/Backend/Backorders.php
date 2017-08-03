@@ -14,7 +14,6 @@ namespace Magento\CatalogInventory\Model\Config\Backend;
 /**
  * Class \Magento\CatalogInventory\Model\Config\Backend\Backorders
  *
- * @since 2.0.0
  */
 class Backorders extends AbstractValue
 {
@@ -22,7 +21,6 @@ class Backorders extends AbstractValue
      * After change Catalog Inventory Backorders value process
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {

@@ -14,26 +14,22 @@ use Magento\Framework\Phrase;
 
 /**
  * Validation of DB up to date state
- * @since 2.0.0
  */
 class DbStatusValidator
 {
     /**
      * @var FrontendCacheInterface
-     * @since 2.0.0
      */
     private $cache;
 
     /**
      * @var DbVersionInfo
-     * @since 2.0.0
      */
     private $dbVersionInfo;
 
     /**
      * @param FrontendCacheInterface $cache
      * @param DbVersionInfo $dbVersionInfo
-     * @since 2.0.0
      */
     public function __construct(FrontendCacheInterface $cache, DbVersionInfo $dbVersionInfo)
     {
@@ -74,7 +70,6 @@ class DbStatusValidator
      *
      * @param array $errorsData array of error data from getOutOfDateDbErrors
      * @return array Messages that can be used to log the error
-     * @since 2.0.0
      */
     private function formatErrors($errorsData)
     {

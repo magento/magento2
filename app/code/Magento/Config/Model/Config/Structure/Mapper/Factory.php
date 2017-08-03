@@ -11,7 +11,6 @@ namespace Magento\Config\Model\Config\Structure\Mapper;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Factory
 {
@@ -29,13 +28,11 @@ class Factory
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_typeMap = [
         self::MAPPER_SORTING => \Magento\Config\Model\Config\Structure\Mapper\Sorting::class,
@@ -49,7 +46,6 @@ class Factory
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -62,7 +58,6 @@ class Factory
      * @param string $type
      * @return \Magento\Config\Model\Config\Structure\MapperInterface
      * @throws \Exception
-     * @since 2.0.0
      */
     public function create($type)
     {
@@ -85,7 +80,6 @@ class Factory
      * @param string $type
      * @return string
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     protected function _getMapperClassNameByType($type)
     {

@@ -15,7 +15,6 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class TransportBuilder
 {
@@ -23,7 +22,6 @@ class TransportBuilder
      * Template Identifier
      *
      * @var string
-     * @since 2.0.0
      */
     protected $templateIdentifier;
 
@@ -31,7 +29,6 @@ class TransportBuilder
      * Template Model
      *
      * @var string
-     * @since 2.0.0
      */
     protected $templateModel;
 
@@ -39,7 +36,6 @@ class TransportBuilder
      * Template Variables
      *
      * @var array
-     * @since 2.0.0
      */
     protected $templateVars;
 
@@ -47,7 +43,6 @@ class TransportBuilder
      * Template Options
      *
      * @var array
-     * @since 2.0.0
      */
     protected $templateOptions;
 
@@ -55,7 +50,6 @@ class TransportBuilder
      * Mail Transport
      *
      * @var \Magento\Framework\Mail\TransportInterface
-     * @since 2.0.0
      */
     protected $transport;
 
@@ -63,7 +57,6 @@ class TransportBuilder
      * Template Factory
      *
      * @var FactoryInterface
-     * @since 2.0.0
      */
     protected $templateFactory;
 
@@ -71,7 +64,6 @@ class TransportBuilder
      * Object Manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -79,7 +71,6 @@ class TransportBuilder
      * Message
      *
      * @var \Magento\Framework\Mail\Message
-     * @since 2.0.0
      */
     protected $message;
 
@@ -87,13 +78,11 @@ class TransportBuilder
      * Sender resolver
      *
      * @var \Magento\Framework\Mail\Template\SenderResolverInterface
-     * @since 2.0.0
      */
     protected $_senderResolver;
 
     /**
      * @var \Magento\Framework\Mail\TransportInterfaceFactory
-     * @since 2.0.0
      */
     protected $mailTransportFactory;
 
@@ -103,7 +92,6 @@ class TransportBuilder
      * @param SenderResolverInterface $senderResolver
      * @param ObjectManagerInterface $objectManager
      * @param TransportInterfaceFactory $mailTransportFactory
-     * @since 2.0.0
      */
     public function __construct(
         FactoryInterface $templateFactory,
@@ -125,7 +113,6 @@ class TransportBuilder
      * @param array|string $address
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function addCc($address, $name = '')
     {
@@ -139,7 +126,6 @@ class TransportBuilder
      * @param array|string $address
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function addTo($address, $name = '')
     {
@@ -152,7 +138,6 @@ class TransportBuilder
      *
      * @param array|string $address
      * @return $this
-     * @since 2.0.0
      */
     public function addBcc($address)
     {
@@ -166,7 +151,6 @@ class TransportBuilder
      * @param string $email
      * @param string|null $name
      * @return $this
-     * @since 2.0.0
      */
     public function setReplyTo($email, $name = null)
     {
@@ -179,7 +163,6 @@ class TransportBuilder
      *
      * @param string|array $from
      * @return $this
-     * @since 2.0.0
      */
     public function setFrom($from)
     {
@@ -193,7 +176,6 @@ class TransportBuilder
      *
      * @param string $templateIdentifier
      * @return $this
-     * @since 2.0.0
      */
     public function setTemplateIdentifier($templateIdentifier)
     {
@@ -206,7 +188,6 @@ class TransportBuilder
      *
      * @param string $templateModel
      * @return $this
-     * @since 2.0.0
      */
     public function setTemplateModel($templateModel)
     {
@@ -219,7 +200,6 @@ class TransportBuilder
      *
      * @param array $templateVars
      * @return $this
-     * @since 2.0.0
      */
     public function setTemplateVars($templateVars)
     {
@@ -232,7 +212,6 @@ class TransportBuilder
      *
      * @param array $templateOptions
      * @return $this
-     * @since 2.0.0
      */
     public function setTemplateOptions($templateOptions)
     {
@@ -244,7 +223,6 @@ class TransportBuilder
      * Get mail transport
      *
      * @return \Magento\Framework\Mail\TransportInterface
-     * @since 2.0.0
      */
     public function getTransport()
     {
@@ -259,7 +237,6 @@ class TransportBuilder
      * Reset object state
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function reset()
     {
@@ -274,7 +251,6 @@ class TransportBuilder
      * Get template
      *
      * @return \Magento\Framework\Mail\TemplateInterface
-     * @since 2.0.0
      */
     protected function getTemplate()
     {
@@ -287,7 +263,6 @@ class TransportBuilder
      * Prepare message
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function prepareMessage()
     {

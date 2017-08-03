@@ -10,7 +10,6 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Cached attribute metadata service
- * @since 2.0.0
  */
 class CachedMetadata implements MetadataInterface
 {
@@ -18,7 +17,7 @@ class CachedMetadata implements MetadataInterface
 
     /**
      * @var string
-     * @since 2.1.0
+     * @since 2.0.9
      */
     protected $entityType = 'none';
 
@@ -30,7 +29,6 @@ class CachedMetadata implements MetadataInterface
 
     /**
      * @var MetadataInterface
-     * @since 2.0.0
      */
     protected $metadata;
 
@@ -39,7 +37,6 @@ class CachedMetadata implements MetadataInterface
      *
      * @param MetadataInterface $metadata
      * @param AttributeMetadataCache|null $attributeMetadataCache
-     * @since 2.0.0
      */
     public function __construct(
         MetadataInterface $metadata,
@@ -52,7 +49,6 @@ class CachedMetadata implements MetadataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAttributes($formCode)
     {
@@ -67,7 +63,6 @@ class CachedMetadata implements MetadataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAttributeMetadata($attributeCode)
     {
@@ -82,7 +77,6 @@ class CachedMetadata implements MetadataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAllAttributesMetadata()
     {
@@ -97,7 +91,6 @@ class CachedMetadata implements MetadataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCustomAttributesMetadata($dataObjectClassName = null)
     {

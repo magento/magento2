@@ -9,7 +9,6 @@ namespace Magento\Customer\Api;
 /**
  * Interface for managing customer groups.
  * @api
- * @since 2.0.0
  */
 interface GroupManagementInterface
 {
@@ -20,7 +19,6 @@ interface GroupManagementInterface
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException If group is not found
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function isReadonly($id);
 
@@ -31,7 +29,6 @@ interface GroupManagementInterface
      * @return \Magento\Customer\Api\Data\GroupInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getDefaultGroup($storeId = null);
 
@@ -41,7 +38,6 @@ interface GroupManagementInterface
      * @return \Magento\Customer\Api\Data\GroupInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getNotLoggedInGroup();
 
@@ -50,7 +46,6 @@ interface GroupManagementInterface
      *
      * @return \Magento\Customer\Api\Data\GroupInterface[]
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getLoggedInGroups();
 
@@ -59,7 +54,6 @@ interface GroupManagementInterface
      *
      * @return \Magento\Customer\Api\Data\GroupInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getAllCustomersGroup();
 }

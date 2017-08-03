@@ -11,7 +11,6 @@ namespace Magento\Framework\Notification;
  *
  * Class MessageList
  * @api
- * @since 2.0.0
  */
 class MessageList
 {
@@ -19,7 +18,6 @@ class MessageList
      * List of configured message classes
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_messageClasses;
 
@@ -27,14 +25,12 @@ class MessageList
      * List of messages
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_messages;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $messages
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $messages = [])
     {
@@ -48,7 +44,6 @@ class MessageList
      * @return void
      * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException
-     * @since 2.0.0
      */
     protected function _loadMessages()
     {
@@ -73,7 +68,6 @@ class MessageList
      *
      * @param string $identity
      * @return null|\Magento\Framework\Notification\MessageInterface
-     * @since 2.0.0
      */
     public function getMessageByIdentity($identity)
     {
@@ -85,7 +79,6 @@ class MessageList
      * Retrieve list of all messages
      *
      * @return \Magento\Framework\Notification\MessageInterface[]
-     * @since 2.0.0
      */
     public function asArray()
     {

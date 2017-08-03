@@ -10,7 +10,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Sidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
@@ -18,7 +17,6 @@ class Sidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Preparing global layout
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -50,7 +48,6 @@ class Sidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param \Magento\Framework\DataObject $child
      * @return true
-     * @since 2.0.0
      */
     public function canDisplay($child)
     {

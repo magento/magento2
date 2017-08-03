@@ -8,25 +8,21 @@ namespace Magento\Catalog\Model\Rss\Product;
 /**
  * Class NewProducts
  * @package Magento\Catalog\Model\Rss\Product
- * @since 2.0.0
  */
 class NewProducts
 {
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $productFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product\Visibility
-     * @since 2.0.0
      */
     protected $visibility;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $localeDate;
 
@@ -34,7 +30,6 @@ class NewProducts
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Product\Visibility $visibility
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ProductFactory $productFactory,
@@ -49,7 +44,6 @@ class NewProducts
     /**
      * @param int $storeId
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
-     * @since 2.0.0
      */
     public function getProductsCollection($storeId)
     {

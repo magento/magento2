@@ -15,7 +15,6 @@ use Magento\TestFramework\Inspection\Exception;
 /**
  * Class \Magento\Cms\Controller\Adminhtml\Block\Save
  *
- * @since 2.0.0
  */
 class Save extends \Magento\Cms\Controller\Adminhtml\Block
 {
@@ -45,7 +44,6 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

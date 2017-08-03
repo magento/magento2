@@ -17,31 +17,26 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 /**
  * Class \Magento\CatalogUrlRewrite\Observer\ProductToWebsiteChangeObserver
  *
- * @since 2.0.0
  */
 class ProductToWebsiteChangeObserver implements ObserverInterface
 {
     /**
      * @var ProductUrlRewriteGenerator
-     * @since 2.0.0
      */
     protected $productUrlRewriteGenerator;
 
     /**
      * @var UrlPersistInterface
-     * @since 2.0.0
      */
     protected $urlPersist;
 
     /**
      * @var ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var RequestInterface
-     * @since 2.0.0
      */
     protected $request;
 
@@ -50,7 +45,6 @@ class ProductToWebsiteChangeObserver implements ObserverInterface
      * @param UrlPersistInterface $urlPersist
      * @param ProductRepositoryInterface $productRepository
      * @param RequestInterface $request
-     * @since 2.0.0
      */
     public function __construct(
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
@@ -69,7 +63,6 @@ class ProductToWebsiteChangeObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

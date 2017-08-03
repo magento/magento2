@@ -10,7 +10,6 @@ namespace Magento\GroupedProduct\Model\Product\Type\Grouped;
 /**
  * Class \Magento\GroupedProduct\Model\Product\Type\Grouped\Price
  *
- * @since 2.0.0
  */
 class Price extends \Magento\Catalog\Model\Product\Type\Price
 {
@@ -20,7 +19,6 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param   float $qty
      * @param   \Magento\Catalog\Model\Product $product
      * @return  float
-     * @since 2.0.0
      */
     public function getFinalPrice($qty, $product)
     {

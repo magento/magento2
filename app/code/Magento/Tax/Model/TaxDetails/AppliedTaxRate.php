@@ -10,7 +10,6 @@ use Magento\Tax\Api\Data\AppliedTaxRateInterface;
 
 /**
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateInterface
 {
@@ -24,7 +23,6 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCode()
     {
@@ -33,7 +31,6 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -42,7 +39,6 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getPercent()
     {
@@ -54,7 +50,6 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
      *
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function setCode($code)
     {
@@ -66,7 +61,6 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
      *
      * @param string $title
      * @return $this
-     * @since 2.0.0
      */
     public function setTitle($title)
     {
@@ -78,7 +72,6 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
      *
      * @param float $percent
      * @return $this
-     * @since 2.0.0
      */
     public function setPercent($percent)
     {
@@ -89,7 +82,6 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
      * {@inheritdoc}
      *
      * @return \Magento\Tax\Api\Data\AppliedTaxRateExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -101,7 +93,6 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
      *
      * @param \Magento\Tax\Api\Data\AppliedTaxRateExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Tax\Api\Data\AppliedTaxRateExtensionInterface $extensionAttributes)
     {

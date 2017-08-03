@@ -10,7 +10,6 @@ use Magento\Framework\View;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Page extends View\Result\Page
 {
@@ -19,7 +18,6 @@ class Page extends View\Result\Page
      *
      * @param string $itemId current active menu item
      * @return $this
-     * @since 2.0.0
      */
     public function setActiveMenu($itemId)
     {
@@ -41,7 +39,6 @@ class Page extends View\Result\Page
      * @param string $title
      * @param string|null $link
      * @return $this
-     * @since 2.0.0
      */
     public function addBreadcrumb($label, $title, $link = null)
     {
@@ -58,7 +55,6 @@ class Page extends View\Result\Page
      *
      * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @return $this
-     * @since 2.0.0
      */
     public function addContent(View\Element\AbstractBlock $block)
     {
@@ -70,7 +66,6 @@ class Page extends View\Result\Page
      *
      * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @return $this
-     * @since 2.0.0
      */
     public function addLeft(View\Element\AbstractBlock $block)
     {
@@ -82,7 +77,6 @@ class Page extends View\Result\Page
      *
      * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @return $this
-     * @since 2.0.0
      */
     public function addJs(View\Element\AbstractBlock $block)
     {
@@ -97,7 +91,6 @@ class Page extends View\Result\Page
      * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @param string $containerName
      * @return $this
-     * @since 2.0.0
      */
     protected function moveBlockToContainer(View\Element\AbstractBlock $block, $containerName)
     {

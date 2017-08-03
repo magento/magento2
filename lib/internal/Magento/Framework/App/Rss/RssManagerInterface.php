@@ -8,7 +8,6 @@ namespace Magento\Framework\App\Rss;
 /**
  * Interface RssManagerInterface
  * @package Magento\Framework\App\Rss
- * @since 2.0.0
  */
 interface RssManagerInterface
 {
@@ -16,7 +15,6 @@ interface RssManagerInterface
      * Get Data Provider by type
      * @param string $type
      * @return DataProviderInterface
-     * @since 2.0.0
      */
     public function getProvider($type);
 
@@ -24,7 +22,6 @@ interface RssManagerInterface
      * Get all registered providers
      *
      * @return array
-     * @since 2.0.0
      */
     public function getProviders();
 }

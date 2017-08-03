@@ -7,7 +7,6 @@ namespace Magento\Theme\Model\ResourceModel\Theme\File;
 
 /**
  * Theme files collection
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection implements
     \Magento\Framework\View\Design\Theme\File\CollectionInterface
@@ -16,7 +15,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Collection initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -32,7 +30,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $field
      * @param string $direction
      * @return $this
-     * @since 2.0.0
      */
     public function setOrder($field, $direction = self::SORT_ORDER_DESC)
     {
@@ -44,7 +41,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $direction
      * @return $this
-     * @since 2.0.0
      */
     public function setDefaultOrder($direction = self::SORT_ORDER_ASC)
     {
@@ -56,7 +52,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @return $this
-     * @since 2.0.0
      */
     public function addThemeFilter(\Magento\Framework\View\Design\ThemeInterface $theme)
     {

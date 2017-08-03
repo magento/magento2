@@ -9,7 +9,6 @@ namespace Magento\Backend\Controller\Adminhtml\Auth;
 /**
  * Class \Magento\Backend\Controller\Adminhtml\Auth\Logout
  *
- * @since 2.0.0
  */
 class Logout extends \Magento\Backend\Controller\Adminhtml\Auth
 {
@@ -17,7 +16,6 @@ class Logout extends \Magento\Backend\Controller\Adminhtml\Auth
      * Administrator logout action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

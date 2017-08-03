@@ -16,7 +16,6 @@ use Magento\Framework\Pricing\PriceInfoInterface;
  * Should be the base for creating any Price type class
  *
  * @api
- * @since 2.0.0
  */
 abstract class AbstractPrice implements PriceInterface
 {
@@ -27,49 +26,41 @@ abstract class AbstractPrice implements PriceInterface
 
     /**
      * @var AmountInterface[]
-     * @since 2.0.0
      */
     protected $amount;
 
     /**
      * @var \Magento\Framework\Pricing\Adjustment\Calculator
-     * @since 2.0.0
      */
     protected $calculator;
 
     /**
      * @var SaleableInterface
-     * @since 2.0.0
      */
     protected $product;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $priceType;
 
     /**
      * @var float
-     * @since 2.0.0
      */
     protected $quantity;
 
     /**
      * @var PriceInfoInterface
-     * @since 2.0.0
      */
     protected $priceInfo;
 
     /**
      * @var bool|float
-     * @since 2.0.0
      */
     protected $value;
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
@@ -78,7 +69,6 @@ abstract class AbstractPrice implements PriceInterface
      * @param float $quantity
      * @param CalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @since 2.0.0
      */
     public function __construct(
         SaleableInterface $saleableItem,
@@ -97,7 +87,6 @@ abstract class AbstractPrice implements PriceInterface
      * Get price value in display currency
      *
      * @return float|bool
-     * @since 2.0.0
      */
     abstract public function getValue();
 
@@ -105,7 +94,6 @@ abstract class AbstractPrice implements PriceInterface
      * Get Price Amount object
      *
      * @return AmountInterface
-     * @since 2.0.0
      */
     public function getAmount()
     {
@@ -120,7 +108,6 @@ abstract class AbstractPrice implements PriceInterface
      * @param null|bool|string|array $exclude
      * @param null|array $context
      * @return AmountInterface|bool|float
-     * @since 2.0.0
      */
     public function getCustomAmount($amount = null, $exclude = null, $context = [])
     {
@@ -136,7 +123,6 @@ abstract class AbstractPrice implements PriceInterface
      * Get price type code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPriceCode()
     {
@@ -145,7 +131,6 @@ abstract class AbstractPrice implements PriceInterface
 
     /**
      * @return SaleableInterface
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -154,7 +139,6 @@ abstract class AbstractPrice implements PriceInterface
 
     /**
      * @return float
-     * @since 2.0.0
      */
     public function getQuantity()
     {

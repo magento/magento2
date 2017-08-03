@@ -12,7 +12,6 @@ use Magento\Framework\View\Asset\RepositoryMap;
 
 /**
  * Provider of RequireJs config information
- * @since 2.0.0
  */
 class Config
 {
@@ -87,37 +86,31 @@ config;
 
     /**
      * @var \Magento\Framework\RequireJs\Config\File\Collector\Aggregated
-     * @since 2.0.0
      */
     private $fileSource;
 
     /**
      * @var \Magento\Framework\View\DesignInterface
-     * @since 2.0.0
      */
     private $design;
 
     /**
      * @var \Magento\Framework\Filesystem\File\ReadFactory
-     * @since 2.0.0
      */
     private $readFactory;
 
     /**
      * @var \Magento\Framework\View\Asset\ContextInterface
-     * @since 2.0.0
      */
     private $staticContext;
 
     /**
      * @var \Magento\Framework\Code\Minifier\AdapterInterface
-     * @since 2.0.0
      */
     private $minifyAdapter;
 
     /**
      * @var Minification
-     * @since 2.0.0
      */
     private $minification;
 
@@ -135,7 +128,6 @@ config;
      * @param \Magento\Framework\Code\Minifier\AdapterInterface $minifyAdapter
      * @param Minification $minification
      * @param RepositoryMap $repositoryMap
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\RequireJs\Config\File\Collector\Aggregated $fileSource,
@@ -159,7 +151,6 @@ config;
      * Get aggregated distributed configuration
      *
      * @return string
-     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -193,7 +184,6 @@ config;
      * Get path to config file relative to directory, where all config files with different context are located
      *
      * @return string
-     * @since 2.0.0
      */
     public function getConfigFileRelativePath()
     {
@@ -204,7 +194,6 @@ config;
      * Get path to config file relative to directory, where all config files with different context are located
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMixinsFileRelativePath()
     {
@@ -225,7 +214,6 @@ config;
      * Get path to config file relative to directory, where all config files with different context are located
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRequireJsFileRelativePath()
     {
@@ -236,7 +224,6 @@ config;
      * Get base RequireJs configuration necessary for working with Magento application
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBaseConfig()
     {
@@ -252,7 +239,6 @@ config;
      * Get path to '.min' files resolver relative to config files directory
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMinResolverRelativePath()
     {
@@ -296,7 +282,6 @@ config;
 
     /**
      * @return string
-     * @since 2.0.0
      */
     protected function getConfigFileName()
     {
@@ -305,7 +290,6 @@ config;
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getMinResolverCode()
     {

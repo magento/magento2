@@ -11,31 +11,26 @@ use Magento\Framework\Filesystem;
 /**
  * Class \Magento\Framework\Setup\SampleData\State
  *
- * @since 2.0.0
  */
 class State implements StateInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $fileName = '.sample-data-state.flag';
 
     /**
      * @var string|null
-     * @since 2.0.0
      */
     protected $filePath;
 
     /**
      * @var Filesystem
-     * @since 2.0.0
      */
     protected $filesystem;
 
     /**
      * @param Filesystem $filesystem
-     * @since 2.0.0
      */
     public function __construct(Filesystem $filesystem)
     {
@@ -44,7 +39,6 @@ class State implements StateInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function hasError()
     {
@@ -61,7 +55,6 @@ class State implements StateInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function setError()
     {
@@ -72,7 +65,6 @@ class State implements StateInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function isInstalled()
     {
@@ -93,7 +85,6 @@ class State implements StateInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function setInstalled()
     {
@@ -104,7 +95,6 @@ class State implements StateInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function clearState()
     {
@@ -115,7 +105,6 @@ class State implements StateInterface
 
     /**
      * @return \Magento\Framework\Filesystem\File\WriteInterface
-     * @since 2.0.0
      */
     protected function getStream()
     {
@@ -128,7 +117,6 @@ class State implements StateInterface
     /**
      * @param string $mode
      * @return bool|\Magento\Framework\Filesystem\File\WriteInterface
-     * @since 2.0.0
      */
     protected function openStream($mode = 'w')
     {
@@ -145,7 +133,6 @@ class State implements StateInterface
      * @param string $data
      * @throws \Exception
      * @return void
-     * @since 2.0.0
      */
     protected function writeStream($data)
     {
@@ -165,7 +152,6 @@ class State implements StateInterface
      *
      * @param \Magento\Framework\Filesystem\File\WriteInterface $stream
      * @return void
-     * @since 2.0.0
      */
     protected function closeStream($stream)
     {

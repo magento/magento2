@@ -12,7 +12,7 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Pr
 /**
  * Class \Magento\CatalogRuleConfigurable\Plugin\ConfigurableProduct\Model\ResourceModel\AddCatalogRulePrice
  *
- * @since 2.2.0
+ * @since 2.1.1
  */
 class AddCatalogRulePrice
 {
@@ -24,7 +24,7 @@ class AddCatalogRulePrice
 
     /**
      * @param \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessorFactory $catalogRuleCollectionFactory
-     * @since 2.2.0
+     * @since 2.1.1
      */
     public function __construct(
         \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessorFactory $catalogRuleCollectionFactory
@@ -37,7 +37,7 @@ class AddCatalogRulePrice
      * @param bool $printQuery
      * @param bool $logQuery
      * @return array
-     * @since 2.2.0
+     * @since 2.1.1
      */
     public function beforeLoad(Collection $productCollection, $printQuery = false, $logQuery = false)
     {

@@ -8,19 +8,16 @@ namespace Magento\Directory\Model\Country\Postcode;
 /**
  * Class \Magento\Directory\Model\Country\Postcode\Config
  *
- * @since 2.0.0
  */
 class Config implements ConfigInterface
 {
     /**
      * @var Config\Data
-     * @since 2.0.0
      */
     protected $dataStorage;
 
     /**
      * @param Config\Data $dataStorage
-     * @since 2.0.0
      */
     public function __construct(\Magento\Directory\Model\Country\Postcode\Config\Data $dataStorage)
     {
@@ -29,7 +26,6 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getPostCodes()
     {

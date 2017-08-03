@@ -14,7 +14,6 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit;
 /**
  * Class \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Form
  *
- * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -22,7 +21,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepare form before rendering HTML
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {

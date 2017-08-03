@@ -9,13 +9,11 @@ namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images;
  * Wysiwyg Images content block
  *
  * @api
- * @since 2.0.0
  */
 class Content extends \Magento\Backend\Block\Widget\Container
 {
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
@@ -23,7 +21,6 @@ class Content extends \Magento\Backend\Block\Widget\Container
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -38,7 +35,6 @@ class Content extends \Magento\Backend\Block\Widget\Container
      * Block construction
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -83,7 +79,6 @@ class Content extends \Magento\Backend\Block\Widget\Container
      * Files action source URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getContentsUrl()
     {
@@ -94,7 +89,6 @@ class Content extends \Magento\Backend\Block\Widget\Container
      * Javascript setup object for filebrowser instance
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFilebrowserSetupObject()
     {
@@ -123,7 +117,6 @@ class Content extends \Magento\Backend\Block\Widget\Container
      * New directory action target URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getNewfolderUrl()
     {
@@ -134,7 +127,6 @@ class Content extends \Magento\Backend\Block\Widget\Container
      * Delete directory action target URL
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getDeletefolderUrl()
     {
@@ -145,7 +137,6 @@ class Content extends \Magento\Backend\Block\Widget\Container
      * Description goes here...
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDeleteFilesUrl()
     {
@@ -156,7 +147,6 @@ class Content extends \Magento\Backend\Block\Widget\Container
      * New directory action target URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getOnInsertUrl()
     {
@@ -167,7 +157,6 @@ class Content extends \Magento\Backend\Block\Widget\Container
      * Target element ID getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTargetElementId()
     {

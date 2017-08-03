@@ -12,7 +12,6 @@ use Magento\Framework\Exception\LocalizedException;
  * DataProvider for js translation
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class DataProvider implements DataProviderInterface
 {
@@ -20,7 +19,6 @@ class DataProvider implements DataProviderInterface
      * Application state
      *
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     protected $appState;
 
@@ -28,7 +26,6 @@ class DataProvider implements DataProviderInterface
      * Js translation configuration
      *
      * @var Config
-     * @since 2.0.0
      */
     protected $config;
 
@@ -36,7 +33,6 @@ class DataProvider implements DataProviderInterface
      * Files utility
      *
      * @var \Magento\Framework\App\Utility\Files
-     * @since 2.0.0
      */
     protected $filesUtility;
 
@@ -44,7 +40,6 @@ class DataProvider implements DataProviderInterface
      * Filesystem
      *
      * @var \Magento\Framework\Filesystem\File\ReadFactory
-     * @since 2.0.0
      */
     protected $fileReadFactory;
 
@@ -52,7 +47,6 @@ class DataProvider implements DataProviderInterface
      * Basic translate renderer
      *
      * @var \Magento\Framework\Phrase\Renderer\Translate
-     * @since 2.0.0
      */
     protected $translate;
 
@@ -65,7 +59,6 @@ class DataProvider implements DataProviderInterface
      * @param \Magento\Framework\Component\DirSearch $dirSearch
      * @param \Magento\Framework\View\Design\Theme\ThemePackageList $themePackageList
      * @param \Magento\Framework\App\Utility\Files|null $filesUtility
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\State $appState,
@@ -96,7 +89,6 @@ class DataProvider implements DataProviderInterface
      * @return array
      * @throws \Exception
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getData($themePath)
     {
@@ -137,7 +129,6 @@ class DataProvider implements DataProviderInterface
      * @param string $content
      * @return string[]
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function getPhrases($content)
     {

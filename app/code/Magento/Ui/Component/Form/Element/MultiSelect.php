@@ -7,7 +7,6 @@ namespace Magento\Ui\Component\Form\Element;
 
 /**
  * @api
- * @since 2.0.0
  */
 class MultiSelect extends AbstractOptionsField
 {
@@ -17,7 +16,6 @@ class MultiSelect extends AbstractOptionsField
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function prepare()
     {

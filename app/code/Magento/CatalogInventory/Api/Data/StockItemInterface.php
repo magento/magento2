@@ -10,7 +10,6 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 /**
  * Interface StockItem
  * @api
- * @since 2.0.0
  */
 interface StockItemInterface extends ExtensibleDataInterface
 {
@@ -57,27 +56,23 @@ interface StockItemInterface extends ExtensibleDataInterface
 
     /**
      * @return int|null
-     * @since 2.0.0
      */
     public function getItemId();
 
     /**
      * @param int $itemId
      * @return $this
-     * @since 2.0.0
      */
     public function setItemId($itemId);
 
     /**
      * @return int|null
-     * @since 2.0.0
      */
     public function getProductId();
 
     /**
      * @param int $productId
      * @return $this
-     * @since 2.0.0
      */
     public function setProductId($productId);
 
@@ -85,7 +80,6 @@ interface StockItemInterface extends ExtensibleDataInterface
      * Retrieve stock identifier
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getStockId();
 
@@ -94,20 +88,17 @@ interface StockItemInterface extends ExtensibleDataInterface
      *
      * @param int $stockId
      * @return $this
-     * @since 2.0.0
      */
     public function setStockId($stockId);
 
     /**
      * @return float
-     * @since 2.0.0
      */
     public function getQty();
 
     /**
      * @param float $qty
      * @return $this
-     * @since 2.0.0
      */
     public function setQty($qty);
 
@@ -115,7 +106,6 @@ interface StockItemInterface extends ExtensibleDataInterface
      * Retrieve Stock Availability
      *
      * @return bool|int
-     * @since 2.0.0
      */
     public function getIsInStock();
 
@@ -124,42 +114,36 @@ interface StockItemInterface extends ExtensibleDataInterface
      *
      * @param bool|int $isInStock
      * @return $this
-     * @since 2.0.0
      */
     public function setIsInStock($isInStock);
 
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsQtyDecimal();
 
     /**
      * @param bool $isQtyDecimal
      * @return $this
-     * @since 2.0.0
      */
     public function setIsQtyDecimal($isQtyDecimal);
 
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getShowDefaultNotificationMessage();
 
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getUseConfigMinQty();
 
     /**
      * @param bool $useConfigMinQty
      * @return $this
-     * @since 2.0.0
      */
     public function setUseConfigMinQty($useConfigMinQty);
 
@@ -167,7 +151,6 @@ interface StockItemInterface extends ExtensibleDataInterface
      * Retrieve minimal quantity available for item status in stock
      *
      * @return float
-     * @since 2.0.0
      */
     public function getMinQty();
 
@@ -176,20 +159,17 @@ interface StockItemInterface extends ExtensibleDataInterface
      *
      * @param float $minQty
      * @return $this
-     * @since 2.0.0
      */
     public function setMinQty($minQty);
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getUseConfigMinSaleQty();
 
     /**
      * @param int $useConfigMinSaleQty
      * @return $this
-     * @since 2.0.0
      */
     public function setUseConfigMinSaleQty($useConfigMinSaleQty);
 
@@ -197,7 +177,6 @@ interface StockItemInterface extends ExtensibleDataInterface
      * Retrieve Minimum Qty Allowed in Shopping Cart or NULL when there is no limitation
      *
      * @return float
-     * @since 2.0.0
      */
     public function getMinSaleQty();
 
@@ -206,21 +185,18 @@ interface StockItemInterface extends ExtensibleDataInterface
      *
      * @param float $minSaleQty
      * @return $this
-     * @since 2.0.0
      */
     public function setMinSaleQty($minSaleQty);
 
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getUseConfigMaxSaleQty();
 
     /**
      * @param bool $useConfigMaxSaleQty
      * @return $this
-     * @since 2.0.0
      */
     public function setUseConfigMaxSaleQty($useConfigMaxSaleQty);
 
@@ -228,7 +204,6 @@ interface StockItemInterface extends ExtensibleDataInterface
      * Retrieve Maximum Qty Allowed in Shopping Cart data wrapper
      *
      * @return float
-     * @since 2.0.0
      */
     public function getMaxSaleQty();
 
@@ -237,21 +212,18 @@ interface StockItemInterface extends ExtensibleDataInterface
      *
      * @param float $maxSaleQty
      * @return $this
-     * @since 2.0.0
      */
     public function setMaxSaleQty($maxSaleQty);
 
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getUseConfigBackorders();
 
     /**
      * @param bool $useConfigBackorders
      * @return $this
-     * @since 2.0.0
      */
     public function setUseConfigBackorders($useConfigBackorders);
 
@@ -259,7 +231,6 @@ interface StockItemInterface extends ExtensibleDataInterface
      * Retrieve backorders status
      *
      * @return int
-     * @since 2.0.0
      */
     public function getBackorders();
 
@@ -268,21 +239,18 @@ interface StockItemInterface extends ExtensibleDataInterface
      *
      * @param int $backOrders
      * @return $this
-     * @since 2.0.0
      */
     public function setBackorders($backOrders);
 
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getUseConfigNotifyStockQty();
 
     /**
      * @param bool $useConfigNotifyStockQty
      * @return $this
-     * @since 2.0.0
      */
     public function setUseConfigNotifyStockQty($useConfigNotifyStockQty);
 
@@ -290,7 +258,6 @@ interface StockItemInterface extends ExtensibleDataInterface
      * Retrieve Notify for Quantity Below data wrapper
      *
      * @return float
-     * @since 2.0.0
      */
     public function getNotifyStockQty();
 
@@ -299,21 +266,18 @@ interface StockItemInterface extends ExtensibleDataInterface
      *
      * @param float $notifyStockQty
      * @return $this
-     * @since 2.0.0
      */
     public function setNotifyStockQty($notifyStockQty);
 
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getUseConfigQtyIncrements();
 
     /**
      * @param bool $useConfigQtyIncrements
      * @return $this
-     * @since 2.0.0
      */
     public function setUseConfigQtyIncrements($useConfigQtyIncrements);
 
@@ -321,7 +285,6 @@ interface StockItemInterface extends ExtensibleDataInterface
      * Retrieve Quantity Increments data wrapper
      *
      * @return float|false
-     * @since 2.0.0
      */
     public function getQtyIncrements();
 
@@ -330,21 +293,18 @@ interface StockItemInterface extends ExtensibleDataInterface
      *
      * @param float $qtyIncrements
      * @return $this
-     * @since 2.0.0
      */
     public function setQtyIncrements($qtyIncrements);
 
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getUseConfigEnableQtyInc();
 
     /**
      * @param bool $useConfigEnableQtyInc
      * @return $this
-     * @since 2.0.0
      */
     public function setUseConfigEnableQtyInc($useConfigEnableQtyInc);
 
@@ -353,7 +313,6 @@ interface StockItemInterface extends ExtensibleDataInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getEnableQtyIncrements();
 
@@ -362,21 +321,18 @@ interface StockItemInterface extends ExtensibleDataInterface
      *
      * @param bool $enableQtyIncrements
      * @return $this
-     * @since 2.0.0
      */
     public function setEnableQtyIncrements($enableQtyIncrements);
 
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getUseConfigManageStock();
 
     /**
      * @param bool $useConfigManageStock
      * @return $this
-     * @since 2.0.0
      */
     public function setUseConfigManageStock($useConfigManageStock);
 
@@ -385,54 +341,46 @@ interface StockItemInterface extends ExtensibleDataInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getManageStock();
 
     /**
      * @param bool $manageStock
      * @return $this
-     * @since 2.0.0
      */
     public function setManageStock($manageStock);
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getLowStockDate();
 
     /**
      * @param string $lowStockDate
      * @return $this
-     * @since 2.0.0
      */
     public function setLowStockDate($lowStockDate);
 
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsDecimalDivided();
 
     /**
      * @param bool $isDecimalDivided
      * @return $this
-     * @since 2.0.0
      */
     public function setIsDecimalDivided($isDecimalDivided);
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getStockStatusChangedAuto();
 
     /**
      * @param int $stockStatusChangedAuto
      * @return $this
-     * @since 2.0.0
      */
     public function setStockStatusChangedAuto($stockStatusChangedAuto);
 
@@ -440,7 +388,6 @@ interface StockItemInterface extends ExtensibleDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -449,7 +396,6 @@ interface StockItemInterface extends ExtensibleDataInterface
      *
      * @param \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface $extensionAttributes

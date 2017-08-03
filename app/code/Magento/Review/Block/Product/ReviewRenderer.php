@@ -13,7 +13,6 @@ use Magento\Catalog\Model\Product;
 /**
  * Class \Magento\Review\Block\Product\ReviewRenderer
  *
- * @since 2.0.0
  */
 class ReviewRenderer extends \Magento\Framework\View\Element\Template implements ReviewRendererInterface
 {
@@ -21,7 +20,6 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
      * Array of available template name
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_availableTemplates = [
         self::FULL_VIEW => 'helper/summary.phtml',
@@ -32,7 +30,6 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
      * Review model factory
      *
      * @var \Magento\Review\Model\ReviewFactory
-     * @since 2.0.0
      */
     protected $_reviewFactory;
 
@@ -40,7 +37,6 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -59,7 +55,6 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
      * @param bool $displayIfNoReviews
      *
      * @return string
-     * @since 2.0.0
      */
     public function getReviewsSummaryHtml(
         \Magento\Catalog\Model\Product $product,
@@ -89,7 +84,6 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
      * Get ratings summary
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRatingSummary()
     {
@@ -100,7 +94,6 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
      * Get count of reviews
      *
      * @return int
-     * @since 2.0.0
      */
     public function getReviewsCount()
     {
@@ -112,7 +105,6 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
      *
      * @param bool $useDirectLink allows to use direct link for product reviews page
      * @return string
-     * @since 2.0.0
      */
     public function getReviewsUrl($useDirectLink = false)
     {

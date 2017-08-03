@@ -7,7 +7,6 @@ namespace Magento\Setup\Module\I18n\Parser\Adapter\Php;
 
 /**
  * Tokenizer
- * @since 2.0.0
  */
 class Tokenizer
 {
@@ -15,7 +14,6 @@ class Tokenizer
      * Tokens
      *
      * @var array
-     * @since 2.0.0
      */
     private $_tokens = [];
 
@@ -23,7 +21,6 @@ class Tokenizer
      * Tokens count
      *
      * @var int
-     * @since 2.0.0
      */
     private $_tokensCount;
 
@@ -31,7 +28,6 @@ class Tokenizer
      * Open brackets
      *
      * @var int
-     * @since 2.0.0
      */
     private $_openBrackets;
 
@@ -39,7 +35,6 @@ class Tokenizer
      * Close brackets
      *
      * @var int
-     * @since 2.0.0
      */
     private $_closeBrackets;
 
@@ -48,7 +43,6 @@ class Tokenizer
      *
      * @param string $filePath
      * @return void
-     * @since 2.0.0
      */
     public function parse($filePath)
     {
@@ -62,7 +56,6 @@ class Tokenizer
      * @param string $className
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function isMatchingClass($className)
     {
@@ -98,7 +91,6 @@ class Tokenizer
      * Get arguments tokens of function
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFunctionArgumentsTokens()
     {
@@ -138,7 +130,6 @@ class Tokenizer
      * Whenever inner argument closed
      *
      * @return bool
-     * @since 2.0.0
      */
     private function _isInnerArgumentClosed()
     {
@@ -149,7 +140,6 @@ class Tokenizer
      * Skip invoke the inner argument of function
      *
      * @return void
-     * @since 2.0.0
      */
     private function _skipInnerArgumentInvoke()
     {
@@ -169,7 +159,6 @@ class Tokenizer
      * Get current token
      *
      * @return \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Token
-     * @since 2.0.0
      */
     public function getCurrentToken()
     {
@@ -180,7 +169,6 @@ class Tokenizer
      * Get next token
      *
      * @return bool|\Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Token
-     * @since 2.0.0
      */
     public function getNextToken()
     {
@@ -191,7 +179,6 @@ class Tokenizer
      * Get next token skipping all whitespaces
      *
      * @return \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Token|false
-     * @since 2.0.0
      */
     public function getNextRealToken()
     {
@@ -205,7 +192,6 @@ class Tokenizer
      * Check if it is end of loop
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isEndOfLoop()
     {
@@ -217,7 +203,6 @@ class Tokenizer
      *
      * @param array|string $tokenData
      * @return \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Token
-     * @since 2.0.0
      */
     private function _createToken($tokenData)
     {

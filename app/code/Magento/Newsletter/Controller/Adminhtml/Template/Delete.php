@@ -9,7 +9,6 @@ namespace Magento\Newsletter\Controller\Adminhtml\Template;
 /**
  * Class \Magento\Newsletter\Controller\Adminhtml\Template\Delete
  *
- * @since 2.0.0
  */
 class Delete extends \Magento\Newsletter\Controller\Adminhtml\Template
 {
@@ -17,7 +16,6 @@ class Delete extends \Magento\Newsletter\Controller\Adminhtml\Template
      * Delete newsletter Template
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -37,13 +37,11 @@ use Magento\Setup\Model\FixtureGenerator\CustomerGenerator;
  * </customer-config>
  *
  * @see setup/performance-toolkit/profiles/ce/small.xml
- * @since 2.0.0
  */
 class CustomersFixture extends Fixture
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $priority = 70;
 
@@ -95,7 +93,6 @@ class CustomersFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -129,7 +126,6 @@ class CustomersFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getActionTitle()
     {
@@ -138,7 +134,6 @@ class CustomersFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function introduceParamLabels()
     {

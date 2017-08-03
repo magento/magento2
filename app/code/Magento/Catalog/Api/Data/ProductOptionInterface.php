@@ -10,7 +10,6 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 /**
  * Product option interface
  * @api
- * @since 2.0.0
  */
 interface ProductOptionInterface extends ExtensibleDataInterface
 {
@@ -18,7 +17,6 @@ interface ProductOptionInterface extends ExtensibleDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Catalog\Api\Data\ProductOptionExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -27,7 +25,6 @@ interface ProductOptionInterface extends ExtensibleDataInterface
      *
      * @param \Magento\Catalog\Api\Data\ProductOptionExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductOptionExtensionInterface $extensionAttributes

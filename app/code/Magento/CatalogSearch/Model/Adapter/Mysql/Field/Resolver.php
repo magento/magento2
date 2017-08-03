@@ -13,26 +13,22 @@ use Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface;
 /**
  * Class \Magento\CatalogSearch\Model\Adapter\Mysql\Field\Resolver
  *
- * @since 2.0.0
  */
 class Resolver implements ResolverInterface
 {
     /**
      * @var AttributeCollection
-     * @since 2.0.0
      */
     private $attributeCollection;
 
     /**
      * @var FieldFactory
-     * @since 2.0.0
      */
     private $fieldFactory;
 
     /**
      * @param AttributeCollection $attributeCollection
      * @param FieldFactory $fieldFactory
-     * @since 2.0.0
      */
     public function __construct(
         AttributeCollection $attributeCollection,
@@ -44,7 +40,6 @@ class Resolver implements ResolverInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function resolve(array $fields)
     {

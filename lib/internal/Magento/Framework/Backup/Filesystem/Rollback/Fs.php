@@ -11,7 +11,6 @@ use Magento\Framework\App\ObjectManager;
  * Rollback worker for rolling back via local filesystem
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Fs extends AbstractRollback
 {
@@ -28,7 +27,6 @@ class Fs extends AbstractRollback
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @see AbstractRollback::run()
-     * @since 2.0.0
      */
     public function run()
     {

@@ -7,7 +7,6 @@ namespace Magento\Framework\App\Cache\Type;
 
 /**
  * System / Cache Management / Cache type "Reflection Data"
- * @since 2.0.0
  */
 class Reflection extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 {
@@ -23,7 +22,6 @@ class Reflection extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 
     /**
      * @param \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool)
     {

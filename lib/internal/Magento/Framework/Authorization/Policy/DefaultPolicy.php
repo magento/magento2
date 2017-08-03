@@ -12,7 +12,6 @@ namespace Magento\Framework\Authorization\Policy;
 /**
  * Class \Magento\Framework\Authorization\Policy\DefaultPolicy
  *
- * @since 2.0.0
  */
 class DefaultPolicy implements \Magento\Framework\Authorization\PolicyInterface
 {
@@ -23,7 +22,6 @@ class DefaultPolicy implements \Magento\Framework\Authorization\PolicyInterface
      * @param string $resourceId
      * @param string $privilege
      * @return true
-     * @since 2.0.0
      */
     public function isAllowed($roleId, $resourceId, $privilege = null)
     {

@@ -12,7 +12,6 @@ use Magento\Quote\Model\Quote;
  * Checks possibility of payment method to be used in admin area
  *
  * @api
- * @since 2.0.0
  */
 class CanUseInternal implements SpecificationInterface
 {
@@ -23,7 +22,6 @@ class CanUseInternal implements SpecificationInterface
      * @param MethodInterface $paymentMethod
      * @param \Magento\Quote\Model\Quote $quote
      * @return bool
-     * @since 2.0.0
      */
     public function isApplicable(MethodInterface $paymentMethod, Quote $quote)
     {

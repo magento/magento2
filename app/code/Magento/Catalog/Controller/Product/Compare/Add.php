@@ -11,7 +11,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Class \Magento\Catalog\Controller\Product\Compare\Add
  *
- * @since 2.0.0
  */
 class Add extends \Magento\Catalog\Controller\Product\Compare
 {
@@ -19,7 +18,6 @@ class Add extends \Magento\Catalog\Controller\Product\Compare
      * Add item to compare list
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

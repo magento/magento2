@@ -10,7 +10,6 @@ namespace Magento\Config\Model\ResourceModel\Config\Data;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -18,7 +17,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Define resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -35,7 +33,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $scopeId
      * @param string $section
      * @return $this
-     * @since 2.0.0
      */
     public function addScopeFilter($scope, $scopeId, $section)
     {
@@ -50,7 +47,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $section
      * @return $this
-     * @since 2.0.0
      */
     public function addPathFilter($section)
     {
@@ -63,7 +59,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int|string $value
      * @return $this
-     * @since 2.0.0
      */
     public function addValueFilter($value)
     {

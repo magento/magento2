@@ -10,7 +10,6 @@ namespace Magento\Backend\App;
 /**
  * Backend config accessor
  * @api
- * @since 2.0.0
  */
 interface ConfigInterface
 {
@@ -22,19 +21,17 @@ interface ConfigInterface
      * @param string $path
      * @return mixed
      * @api
-     * @since 2.0.0
      */
     public function getValue($path);
 
     /**
      * Set config value
      *
-     * @deprecated 2.2.0
+     * @deprecated 2.1.3
      * @param string $path
      * @param mixed $value
      * @return void
      * @api
-     * @since 2.0.0
      */
     public function setValue($path, $value);
 
@@ -46,7 +43,6 @@ interface ConfigInterface
      * @param string $path
      * @return bool
      * @api
-     * @since 2.0.0
      */
     public function isSetFlag($path);
 }

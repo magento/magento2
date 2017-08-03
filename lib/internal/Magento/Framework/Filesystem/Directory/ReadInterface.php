@@ -8,7 +8,6 @@ namespace Magento\Framework\Filesystem\Directory;
 /**
  * Interface \Magento\Framework\Filesystem\Directory\ReadInterface
  *
- * @since 2.0.0
  */
 interface ReadInterface
 {
@@ -17,7 +16,6 @@ interface ReadInterface
      *
      * @param string $path [optional]
      * @return string
-     * @since 2.0.0
      */
     public function getAbsolutePath($path = null);
 
@@ -26,7 +24,6 @@ interface ReadInterface
      *
      * @param string $path
      * @return string
-     * @since 2.0.0
      */
     public function getRelativePath($path = null);
 
@@ -35,7 +32,6 @@ interface ReadInterface
      *
      * @param string $path [optional]
      * @return array
-     * @since 2.0.0
      */
     public function read($path = null);
 
@@ -45,7 +41,6 @@ interface ReadInterface
      * @param string $pattern
      * @param string $path [optional]
      * @return array
-     * @since 2.0.0
      */
     public function search($pattern, $path = null);
 
@@ -54,7 +49,6 @@ interface ReadInterface
      *
      * @param string $path [optional]
      * @return bool
-     * @since 2.0.0
      */
     public function isExist($path = null);
 
@@ -63,7 +57,6 @@ interface ReadInterface
      *
      * @param string $path
      * @return array
-     * @since 2.0.0
      */
     public function stat($path);
 
@@ -72,7 +65,6 @@ interface ReadInterface
      *
      * @param string $path [optional]
      * @return bool
-     * @since 2.0.0
      */
     public function isReadable($path = null);
 
@@ -81,7 +73,6 @@ interface ReadInterface
      *
      * @param string $path
      * @return bool
-     * @since 2.0.0
      */
     public function isFile($path);
 
@@ -90,7 +81,6 @@ interface ReadInterface
      *
      * @param string $path [optional]
      * @return bool
-     * @since 2.0.0
      */
     public function isDirectory($path = null);
 
@@ -99,7 +89,6 @@ interface ReadInterface
      *
      * @param string $path
      * @return \Magento\Framework\Filesystem\File\ReadInterface
-     * @since 2.0.0
      */
     public function openFile($path);
 
@@ -111,7 +100,6 @@ interface ReadInterface
      * @param resource|null $context
      * @return string
      * @throws \Magento\Framework\Exception\FileSystemException
-     * @since 2.0.0
      */
     public function readFile($path, $flag = null, $context = null);
 }

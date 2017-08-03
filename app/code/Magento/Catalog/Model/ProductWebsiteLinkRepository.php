@@ -13,19 +13,16 @@ use Magento\Catalog\Api\Data\ProductWebsiteLinkInterface;
 /**
  * Class \Magento\Catalog\Model\ProductWebsiteLinkRepository
  *
- * @since 2.0.0
  */
 class ProductWebsiteLinkRepository implements \Magento\Catalog\Api\ProductWebsiteLinkRepositoryInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
@@ -35,7 +32,6 @@ class ProductWebsiteLinkRepository implements \Magento\Catalog\Api\ProductWebsit
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function save(ProductWebsiteLinkInterface $productWebsiteLink)
     {
@@ -61,7 +57,6 @@ class ProductWebsiteLinkRepository implements \Magento\Catalog\Api\ProductWebsit
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function delete(ProductWebsiteLinkInterface $productLink)
     {
@@ -70,7 +65,6 @@ class ProductWebsiteLinkRepository implements \Magento\Catalog\Api\ProductWebsit
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function deleteById($sku, $websiteId)
     {

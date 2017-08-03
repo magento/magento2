@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Asset\PreProcessor\Helper;
 
 /**
  * Interface SortInterface
- * @since 2.0.0
  */
 interface SortInterface
 {
@@ -19,7 +18,6 @@ interface SortInterface
      * ]
      * @param array $array
      * @return array
-     * @since 2.0.0
      */
     public function sort(array $array);
 }

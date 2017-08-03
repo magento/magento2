@@ -14,7 +14,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Compare extends \Magento\Framework\Url\Helper\Data
 {
@@ -22,7 +21,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      * Product Compare Items Collection
      *
      * @var Collection
-     * @since 2.0.0
      */
     protected $_itemCollection;
 
@@ -30,7 +28,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      * Product Comapare Items Collection has items flag
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_hasItems;
 
@@ -38,7 +35,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      * Allow used Flat catalog product for product compare items collection
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_allowUsedFlat = true;
 
@@ -46,7 +42,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      * Customer id
      *
      * @var null|int
-     * @since 2.0.0
      */
     protected $_customerId = null;
 
@@ -54,7 +49,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      * Catalog session
      *
      * @var \Magento\Catalog\Model\Session
-     * @since 2.0.0
      */
     protected $_catalogSession;
 
@@ -62,7 +56,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
@@ -70,7 +63,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      * Customer visitor
      *
      * @var \Magento\Customer\Model\Visitor
-     * @since 2.0.0
      */
     protected $_customerVisitor;
 
@@ -78,7 +70,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      * Catalog product visibility
      *
      * @var \Magento\Catalog\Model\Product\Visibility
-     * @since 2.0.0
      */
     protected $_catalogProductVisibility;
 
@@ -86,31 +77,26 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      * Product compare item collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory
-     * @since 2.0.0
      */
     protected $_itemCollectionFactory;
 
     /**
      * @var \Magento\Framework\Data\Form\FormKey
-     * @since 2.0.0
      */
     protected $_formKey;
 
     /**
      * @var \Magento\Wishlist\Helper\Data
-     * @since 2.0.0
      */
     protected $_wishlistHelper;
 
     /**
      * @var \Magento\Framework\Data\Helper\PostHelper
-     * @since 2.0.0
      */
     protected $postHelper;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     private $_storeManager;
 
@@ -126,7 +112,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      * @param \Magento\Wishlist\Helper\Data $wishlistHelper
      * @param \Magento\Framework\Data\Helper\PostHelper $postHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -156,7 +141,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      * Retrieve compare list url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getListUrl()
     {
@@ -178,7 +162,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      *
      * @param Product $product
      * @return string
-     * @since 2.0.0
      */
     public function getPostDataParams($product)
     {
@@ -189,7 +172,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      * Retrieve url for adding product to compare list
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAddUrl()
     {
@@ -201,7 +183,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      *
      * @param Product $product
      * @return string
-     * @since 2.0.0
      */
     public function getAddToWishlistParams($product)
     {
@@ -219,7 +200,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      *
      * @param Product $product
      * @return string
-     * @since 2.0.0
      */
     public function getAddToCartUrl($product)
     {
@@ -237,7 +217,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      * Retrieve remove item from compare list url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRemoveUrl()
     {
@@ -249,7 +228,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      *
      * @param Product $product
      * @return string
-     * @since 2.0.0
      */
     public function getPostDataRemove($product)
     {
@@ -266,7 +244,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      * Retrieve clear compare list url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getClearListUrl()
     {
@@ -277,7 +254,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      * Get parameters to clear compare list
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPostDataClearList()
     {
@@ -293,7 +269,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      * Retrieve compare list items collection
      *
      * @return Collection
-     * @since 2.0.0
      */
     public function getItemCollection()
     {
@@ -330,7 +305,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      *
      * @param bool $logout
      * @return $this
-     * @since 2.0.0
      */
     public function calculate($logout = false)
     {
@@ -359,7 +333,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      * Retrieve count of items in compare list
      *
      * @return int
-     * @since 2.0.0
      */
     public function getItemCount()
     {
@@ -374,7 +347,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      * Check has items
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasItems()
     {
@@ -386,7 +358,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      *
      * @param bool $flag
      * @return $this
-     * @since 2.0.0
      */
     public function setAllowUsedFlat($flag)
     {
@@ -399,7 +370,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getAllowUsedFlat()
     {
@@ -411,7 +381,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      *
      * @param int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setCustomerId($id)
     {

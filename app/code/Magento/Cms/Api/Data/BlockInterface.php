@@ -8,7 +8,6 @@ namespace Magento\Cms\Api\Data;
 /**
  * CMS block interface.
  * @api
- * @since 2.0.0
  */
 interface BlockInterface
 {
@@ -28,7 +27,6 @@ interface BlockInterface
      * Get ID
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getId();
 
@@ -36,7 +34,6 @@ interface BlockInterface
      * Get identifier
      *
      * @return string
-     * @since 2.0.0
      */
     public function getIdentifier();
 
@@ -44,7 +41,6 @@ interface BlockInterface
      * Get title
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getTitle();
 
@@ -52,7 +48,6 @@ interface BlockInterface
      * Get content
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getContent();
 
@@ -60,7 +55,6 @@ interface BlockInterface
      * Get creation time
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getCreationTime();
 
@@ -68,7 +62,6 @@ interface BlockInterface
      * Get update time
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getUpdateTime();
 
@@ -76,7 +69,6 @@ interface BlockInterface
      * Is active
      *
      * @return bool|null
-     * @since 2.0.0
      */
     public function isActive();
 
@@ -85,7 +77,6 @@ interface BlockInterface
      *
      * @param int $id
      * @return BlockInterface
-     * @since 2.0.0
      */
     public function setId($id);
 
@@ -94,7 +85,6 @@ interface BlockInterface
      *
      * @param string $identifier
      * @return BlockInterface
-     * @since 2.0.0
      */
     public function setIdentifier($identifier);
 
@@ -103,7 +93,6 @@ interface BlockInterface
      *
      * @param string $title
      * @return BlockInterface
-     * @since 2.0.0
      */
     public function setTitle($title);
 
@@ -112,7 +101,6 @@ interface BlockInterface
      *
      * @param string $content
      * @return BlockInterface
-     * @since 2.0.0
      */
     public function setContent($content);
 
@@ -121,7 +109,6 @@ interface BlockInterface
      *
      * @param string $creationTime
      * @return BlockInterface
-     * @since 2.0.0
      */
     public function setCreationTime($creationTime);
 
@@ -130,7 +117,6 @@ interface BlockInterface
      *
      * @param string $updateTime
      * @return BlockInterface
-     * @since 2.0.0
      */
     public function setUpdateTime($updateTime);
 
@@ -139,7 +125,6 @@ interface BlockInterface
      *
      * @param bool|int $isActive
      * @return BlockInterface
-     * @since 2.0.0
      */
     public function setIsActive($isActive);
 }

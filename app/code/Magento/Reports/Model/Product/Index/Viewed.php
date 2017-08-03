@@ -20,7 +20,6 @@ namespace Magento\Reports\Model\Product\Index;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
- * @since 2.0.0
  */
 class Viewed extends \Magento\Reports\Model\Product\Index\AbstractIndex
 {
@@ -28,7 +27,6 @@ class Viewed extends \Magento\Reports\Model\Product\Index\AbstractIndex
      * Cache key name for Count of product index
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_countCacheKey = 'product_index_viewed_count';
 
@@ -36,7 +34,6 @@ class Viewed extends \Magento\Reports\Model\Product\Index\AbstractIndex
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -47,7 +44,6 @@ class Viewed extends \Magento\Reports\Model\Product\Index\AbstractIndex
      * Retrieve Exclude Product Ids List for Collection
      *
      * @return array
-     * @since 2.0.0
      */
     public function getExcludeProductIds()
     {

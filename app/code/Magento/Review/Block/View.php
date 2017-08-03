@@ -10,7 +10,6 @@ namespace Magento\Review\Block;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class View extends \Magento\Catalog\Block\Product\AbstractProduct
 {
@@ -18,7 +17,6 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * View template name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'view.phtml';
 
@@ -26,7 +24,6 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Rating option model
      *
      * @var \Magento\Review\Model\Rating\Option\VoteFactory
-     * @since 2.0.0
      */
     protected $_voteFactory;
 
@@ -34,7 +31,6 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Rating model factory
      *
      * @var \Magento\Review\Model\RatingFactory
-     * @since 2.0.0
      */
     protected $_ratingFactory;
 
@@ -42,7 +38,6 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Review model
      *
      * @var \Magento\Review\Model\ReviewFactory
-     * @since 2.0.0
      */
     protected $_reviewFactory;
 
@@ -52,7 +47,6 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -75,7 +69,6 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Retrieve current product model from registry
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function getProductData()
     {
@@ -86,7 +79,6 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Retrieve current review model from registry
      *
      * @return \Magento\Review\Model\Review
-     * @since 2.0.0
      */
     public function getReviewData()
     {
@@ -97,7 +89,6 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Prepare link to review list for current product
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -108,7 +99,6 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Retrieve collection of ratings
      *
      * @return \Magento\Review\Model\ResourceModel\Rating\Option\Vote\Collection
-     * @since 2.0.0
      */
     public function getRating()
     {
@@ -129,7 +119,6 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Retrieve rating summary for current product
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRatingSummary()
     {
@@ -145,7 +134,6 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Retrieve total review count for current product
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTotalReviews()
     {
@@ -166,7 +154,6 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @param string $date
      * @return string
-     * @since 2.0.0
      */
     public function dateFormat($date)
     {
@@ -180,7 +167,6 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param bool $templateType
      * @param bool $displayIfNoReviews
      * @return string
-     * @since 2.0.0
      */
     public function getReviewsSummaryHtml(
         \Magento\Catalog\Model\Product $product,

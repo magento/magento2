@@ -15,25 +15,21 @@ use Magento\Framework\DataObject\Factory as DataObjectFactory;
 /**
  * Class \Magento\Downloadable\Model\ProductOptionProcessor
  *
- * @since 2.0.0
  */
 class ProductOptionProcessor implements ProductOptionProcessorInterface
 {
     /**
      * @var DataObjectFactory
-     * @since 2.0.0
      */
     protected $objectFactory;
 
     /**
      * @var DataObjectHelper
-     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
     /**
      * @var DownloadableOptionFactory
-     * @since 2.0.0
      */
     protected $downloadableOptionFactory;
 
@@ -41,7 +37,6 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
      * @param DataObjectFactory $objectFactory
      * @param DataObjectHelper $dataObjectHelper
      * @param DownloadableOptionFactory $downloadableOptionFactory
-     * @since 2.0.0
      */
     public function __construct(
         DataObjectFactory $objectFactory,
@@ -55,7 +50,6 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function convertToBuyRequest(ProductOptionInterface $productOption)
     {
@@ -75,7 +69,6 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
      *
      * @param ProductOptionInterface $productOption
      * @return array
-     * @since 2.0.0
      */
     protected function getDownloadableLinks(ProductOptionInterface $productOption)
     {
@@ -92,7 +85,6 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function convertToProductOption(DataObject $request)
     {

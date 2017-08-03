@@ -13,26 +13,22 @@ use Magento\Framework\Url\Validator as UrlValidator;
 /**
  * Class \Magento\Downloadable\Model\Sample\ContentValidator
  *
- * @since 2.0.0
  */
 class ContentValidator
 {
     /**
      * @var UrlValidator
-     * @since 2.0.0
      */
     protected $urlValidator;
 
     /**
      * @var FileContentValidator
-     * @since 2.0.0
      */
     protected $fileContentValidator;
 
     /**
      * @param FileContentValidator $fileContentValidator
      * @param UrlValidator $urlValidator
-     * @since 2.0.0
      */
     public function __construct(
         FileContentValidator $fileContentValidator,
@@ -49,7 +45,6 @@ class ContentValidator
      * @param bool $validateSampleContent
      * @return bool
      * @throws InputException
-     * @since 2.0.0
      */
     public function isValid(SampleInterface $sample, $validateSampleContent = true)
     {
@@ -69,7 +64,6 @@ class ContentValidator
      * @param SampleInterface $sample
      * @throws InputException
      * @return void
-     * @since 2.0.0
      */
     protected function validateSampleResource(SampleInterface $sample)
     {

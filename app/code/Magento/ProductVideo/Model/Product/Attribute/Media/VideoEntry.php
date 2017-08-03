@@ -11,7 +11,6 @@ use Magento\Framework\Api\Data\VideoContentInterface;
 
 /**
  * VideoEntry class
- * @since 2.0.0
  */
 class VideoEntry extends AbstractExtensibleModel implements VideoContentInterface
 {
@@ -19,7 +18,6 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      * Retrieve MIME type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMediaType()
     {
@@ -31,7 +29,6 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      *
      * @param string $mimeType
      * @return $this
-     * @since 2.0.0
      */
     public function setMediaType($mimeType)
     {
@@ -42,7 +39,6 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      * Get provider YouTube|Vimeo
      *
      * @return string
-     * @since 2.0.0
      */
     public function getVideoProvider()
     {
@@ -54,7 +50,6 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      *
      * @param string $data
      * @return $this
-     * @since 2.0.0
      */
     public function setVideoProvider($data)
     {
@@ -65,7 +60,6 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      * Get video URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getVideoUrl()
     {
@@ -77,7 +71,6 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      *
      * @param string $data
      * @return $this
-     * @since 2.0.0
      */
     public function setVideoUrl($data)
     {
@@ -88,7 +81,6 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      * Get Title
      *
      * @return string
-     * @since 2.0.0
      */
     public function getVideoTitle()
     {
@@ -100,7 +92,6 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      *
      * @param string $data
      * @return $this
-     * @since 2.0.0
      */
     public function setVideoTitle($data)
     {
@@ -111,7 +102,6 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      * Get video Description
      *
      * @return string
-     * @since 2.0.0
      */
     public function getVideoDescription()
     {
@@ -123,7 +113,6 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      *
      * @param string $data
      * @return $this
-     * @since 2.0.0
      */
     public function setVideoDescription($data)
     {
@@ -134,7 +123,6 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      * Get Metadata
      *
      * @return string
-     * @since 2.0.0
      */
     public function getVideoMetadata()
     {
@@ -146,7 +134,6 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      *
      * @param string $data
      * @return $this
-     * @since 2.0.0
      */
     public function setVideoMetadata($data)
     {
@@ -157,7 +144,6 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      * Get extension attributes
      *
      * @return \Magento\Framework\Api\ExtensionAttributesInterface
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -169,7 +155,6 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      *
      * @param \Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes)
     {

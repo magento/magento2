@@ -12,7 +12,6 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Customer log observer.
- * @since 2.0.0
  */
 class LogLastLoginAtObserver implements ObserverInterface
 {
@@ -20,13 +19,11 @@ class LogLastLoginAtObserver implements ObserverInterface
      * Logger of customer's log data.
      *
      * @var Logger
-     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @param Logger $logger
-     * @since 2.0.0
      */
     public function __construct(Logger $logger)
     {
@@ -38,7 +35,6 @@ class LogLastLoginAtObserver implements ObserverInterface
      *
      * @param Observer $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

@@ -10,19 +10,16 @@ use Magento\Customer\CustomerData\SectionSourceInterface;
 
 /**
  * Review section
- * @since 2.0.0
  */
 class Review implements SectionSourceInterface
 {
     /**
      * @var \Magento\Framework\Session\Generic
-     * @since 2.0.0
      */
     protected $reviewSession;
 
     /**
      * @param \Magento\Framework\Session\Generic $reviewSession
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Session\Generic $reviewSession)
     {
@@ -31,7 +28,6 @@ class Review implements SectionSourceInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getSectionData()
     {

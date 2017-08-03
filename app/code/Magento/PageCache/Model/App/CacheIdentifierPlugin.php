@@ -9,7 +9,6 @@ namespace Magento\PageCache\Model\App;
 /**
  * Class CachePlugin
  * Should add design exceptions o identifier for built-in cache
- * @since 2.0.0
  */
 class CacheIdentifierPlugin
 {
@@ -19,7 +18,6 @@ class CacheIdentifierPlugin
      * @param \Magento\Framework\View\DesignExceptions $designExceptions
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\PageCache\Model\Config $config
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\DesignExceptions $designExceptions,
@@ -38,7 +36,6 @@ class CacheIdentifierPlugin
      * @param string $result
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterGetValue(\Magento\Framework\App\PageCache\Identifier $identifier, $result)
     {

@@ -10,7 +10,6 @@ namespace Magento\Framework\Acl\Loader;
 /**
  * Class \Magento\Framework\Acl\Loader\DefaultLoader
  *
- * @since 2.0.0
  */
 class DefaultLoader implements \Magento\Framework\Acl\LoaderInterface
 {
@@ -19,7 +18,6 @@ class DefaultLoader implements \Magento\Framework\Acl\LoaderInterface
      *
      * @param \Magento\Framework\Acl $acl
      * @return void
-     * @since 2.0.0
      */
     public function populateAcl(\Magento\Framework\Acl $acl)
     {

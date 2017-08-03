@@ -11,13 +11,11 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Search\Controller\Adminhtml\Term\MassDelete
  *
- * @since 2.0.0
  */
 class MassDelete extends TermController
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

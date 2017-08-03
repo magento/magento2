@@ -16,13 +16,11 @@ use Magento\Swatches\Model\Swatch;
 
 /**
  * Generate attributes default attribute set
- * @since 2.0.0
  */
 class EavVariationsFixture extends Fixture
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $priority = 40;
 
@@ -86,7 +84,6 @@ class EavVariationsFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -103,7 +100,6 @@ class EavVariationsFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getActionTitle()
     {
@@ -112,7 +108,6 @@ class EavVariationsFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function introduceParamLabels()
     {

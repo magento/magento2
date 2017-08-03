@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Design\Theme;
 
 /**
  * Theme File Factory
- * @since 2.0.0
  */
 class FileFactory
 {
@@ -15,7 +14,6 @@ class FileFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -23,7 +21,6 @@ class FileFactory
      * Object manager
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -35,7 +32,6 @@ class FileFactory
      *
      * @param array $data
      * @return \Magento\Framework\View\Design\Theme\FileInterface
-     * @since 2.0.0
      */
     public function create(array $data = [])
     {

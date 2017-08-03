@@ -9,7 +9,6 @@ namespace Magento\Paypal\Controller\Adminhtml\Paypal\Reports;
 /**
  * Class \Magento\Paypal\Controller\Adminhtml\Paypal\Reports\Details
  *
- * @since 2.0.0
  */
 class Details extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
 {
@@ -24,7 +23,6 @@ class Details extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
      * View transaction details action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

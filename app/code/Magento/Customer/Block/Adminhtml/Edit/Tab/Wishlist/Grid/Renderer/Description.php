@@ -7,7 +7,6 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab\Wishlist\Grid\Renderer;
 
 /**
  * Adminhtml customers wishlist grid item renderer for item visibility
- * @since 2.0.0
  */
 class Description extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -16,7 +15,6 @@ class Description extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abs
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

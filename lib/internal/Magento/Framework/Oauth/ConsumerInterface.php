@@ -9,7 +9,6 @@ namespace Magento\Framework\Oauth;
  * Oauth consumer interface.
  *
  * @api
- * @since 2.0.0
  */
 interface ConsumerInterface
 {
@@ -18,7 +17,6 @@ interface ConsumerInterface
      *
      * @return bool True if the consumer data is valid.
      * @throws \Exception
-     * @since 2.0.0
      */
     public function validate();
 
@@ -26,7 +24,6 @@ interface ConsumerInterface
      * Get the consumer Id.
      *
      * @return int
-     * @since 2.0.0
      */
     public function getId();
 
@@ -34,7 +31,6 @@ interface ConsumerInterface
      * Get consumer key.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getKey();
 
@@ -42,7 +38,6 @@ interface ConsumerInterface
      * Get consumer secret.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSecret();
 
@@ -50,7 +45,6 @@ interface ConsumerInterface
      * Get consumer callback Url.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCallbackUrl();
 
@@ -58,7 +52,6 @@ interface ConsumerInterface
      * Get when the consumer was created.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCreatedAt();
 
@@ -66,7 +59,6 @@ interface ConsumerInterface
      * Check if the consumer key has not expired for Oauth token exchange usage
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isValidForTokenExchange();
 }

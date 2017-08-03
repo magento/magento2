@@ -8,7 +8,6 @@ namespace Magento\SalesRule\Api\Data;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface RuleSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
@@ -16,7 +15,6 @@ interface RuleSearchResultInterface extends \Magento\Framework\Api\SearchResults
      * Get rules.
      *
      * @return \Magento\SalesRule\Api\Data\RuleInterface[]
-     * @since 2.0.0
      */
     public function getItems();
 
@@ -25,7 +23,6 @@ interface RuleSearchResultInterface extends \Magento\Framework\Api\SearchResults
      *
      * @param \Magento\SalesRule\Api\Data\RuleInterface[] $items
      * @return $this
-     * @since 2.0.0
      */
     public function setItems(array $items = null);
 }

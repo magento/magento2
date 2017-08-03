@@ -12,25 +12,25 @@ use Magento\Framework\App\Request\Http as Request;
 /**
  * Class \Magento\Framework\Session\SaveHandler\Redis\Logger
  *
- * @since 2.1.0
+ * @since 2.0.6
  */
 class Logger implements \Cm\RedisSession\Handler\LoggerInterface
 {
     /**
      * @var LoggerInterface
-     * @since 2.1.0
+     * @since 2.0.6
      */
     private $logger;
 
     /**
      * @var int
-     * @since 2.1.0
+     * @since 2.0.6
      */
     private $logLevel;
 
     /**
      * @var Request
-     * @since 2.1.0
+     * @since 2.0.6
      */
     private $request;
 
@@ -40,7 +40,7 @@ class Logger implements \Cm\RedisSession\Handler\LoggerInterface
      * @param ConfigInterface $config
      * @param LoggerInterface $logger
      * @param Request $request
-     * @since 2.1.0
+     * @since 2.0.6
      */
     public function __construct(ConfigInterface $config, LoggerInterface $logger, Request $request)
     {
@@ -51,7 +51,7 @@ class Logger implements \Cm\RedisSession\Handler\LoggerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 2.0.6
      */
     public function setLogLevel($level)
     {
@@ -60,7 +60,7 @@ class Logger implements \Cm\RedisSession\Handler\LoggerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 2.0.6
      */
     public function log($message, $level)
     {
@@ -96,7 +96,7 @@ class Logger implements \Cm\RedisSession\Handler\LoggerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 2.0.6
      */
     public function logException(\Exception $e)
     {

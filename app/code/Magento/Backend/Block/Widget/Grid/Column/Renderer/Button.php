@@ -8,7 +8,6 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 /**
  * @api
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
- * @since 2.0.0
  */
 class Button extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -17,7 +16,6 @@ class Button extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

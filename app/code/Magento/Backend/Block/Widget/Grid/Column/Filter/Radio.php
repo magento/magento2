@@ -9,13 +9,11 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
  * Checkbox grid column filter
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Radio extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
     /**
      * @return array
-     * @since 2.0.0
      */
     protected function _getOptions()
     {
@@ -28,7 +26,6 @@ class Radio extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCondition()
     {

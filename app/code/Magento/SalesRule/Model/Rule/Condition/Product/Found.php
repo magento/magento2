@@ -8,7 +8,6 @@ namespace Magento\SalesRule\Model\Rule\Condition\Product;
 /**
  * Class \Magento\SalesRule\Model\Rule\Condition\Product\Found
  *
- * @since 2.0.0
  */
 class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
 {
@@ -16,7 +15,6 @@ class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
      * @param \Magento\Rule\Model\Condition\Context $context
      * @param \Magento\SalesRule\Model\Rule\Condition\Product $ruleConditionProduct
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,
@@ -31,7 +29,6 @@ class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
      * Load value options
      *
      * @return $this
-     * @since 2.0.0
      */
     public function loadValueOptions()
     {
@@ -43,7 +40,6 @@ class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
      * Return as html
      *
      * @return string
-     * @since 2.0.0
      */
     public function asHtml()
     {
@@ -64,7 +60,6 @@ class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
      * @param \Magento\Framework\Model\AbstractModel $model
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {

@@ -16,7 +16,6 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  * @method \Magento\Eav\Model\Entity\Attribute setOption($value)
  * @method \Magento\Eav\Api\Data\AttributeExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute implements
     \Magento\Framework\DataObject\IdentityInterface
@@ -35,7 +34,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * Prefix of model events names
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'eav_entity_attribute';
 
@@ -45,37 +43,31 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * In observe method you can use $observer->getEvent()->getAttribute() in this case
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'attribute';
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_cacheTag = self::CACHE_TAG;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $_localeDate;
 
     /**
      * @var \Magento\Catalog\Model\Product\ReservedAttributeList
-     * @since 2.0.0
      */
     protected $reservedAttributeList;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $_localeResolver;
 
     /**
      * @var DateTimeFormatterInterface
-     * @since 2.0.0
      */
     protected $dateTimeFormatter;
 
@@ -101,7 +93,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -151,7 +142,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * Retrieve default attribute backend model by attribute code
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getDefaultBackendModel()
     {
@@ -179,7 +169,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * Retrieve default attribute source model
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getDefaultSourceModel()
     {
@@ -194,7 +183,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      *
      * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function deleteEntity()
     {
@@ -205,7 +193,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * Load entity_attribute_id into $this by $this->attribute_set_id
      *
      * @return $this
-     * @since 2.0.0
      */
     public function loadEntityAttributeIdBySet()
     {
@@ -231,7 +218,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -309,7 +295,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * Save additional data
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -319,7 +304,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
     /**
      * @return $this
-     * @since 2.1.0
+     * @since 2.0.9
      */
     public function afterDelete()
     {
@@ -332,7 +317,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @param string $type frontend_input field value
      * @return string backend_type field value
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function getBackendTypeByInput($type)
     {
@@ -377,7 +361,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @param string $type frontend_input field name
      * @return string default_value field value
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function getDefaultValueByInput($type)
     {
@@ -423,7 +406,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @param string $type
      * @return array
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getAttributeCodesByFrontendType($type)
     {
@@ -434,7 +416,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * Return array of labels of stores
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getStoreLabels()
     {
@@ -450,7 +431,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      *
      * @param int|null $storeId
      * @return string
-     * @since 2.0.0
      */
     public function getStoreLabel($storeId = null)
     {
@@ -471,7 +451,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      *
      * @param int $setId
      * @return float
-     * @since 2.0.0
      */
     public function getSortWeight($setId)
     {
@@ -489,7 +468,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      *
      * @return array
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getIdentities()
     {
@@ -498,7 +476,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
     /**
      * @inheritdoc
-     * @since 2.1.0
+     * @since 2.0.9
      */
     public function __sleep()
     {
@@ -511,7 +489,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
     /**
      * @inheritdoc
-     * @since 2.1.0
+     * @since 2.0.9
      */
     public function __wakeup()
     {

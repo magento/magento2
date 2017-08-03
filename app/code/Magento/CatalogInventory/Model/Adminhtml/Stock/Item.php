@@ -19,13 +19,11 @@ use Magento\Catalog\Model\Product;
  * @method \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Item extends \Magento\CatalogInventory\Model\Stock\Item implements IdentityInterface
 {
     /**
      * @var GroupManagementInterface
-     * @since 2.0.0
      */
     protected $groupManagement;
 
@@ -44,7 +42,6 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item implements Identit
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -83,7 +80,6 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item implements Identit
      * Getter for customer group id, return default group if not set
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCustomerGroupId()
     {
@@ -97,7 +93,6 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item implements Identit
      * Check if qty check can be skipped. Skip checking in adminhtml area
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _isQtyCheckApplicable()
     {
@@ -108,7 +103,6 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item implements Identit
      * Check if notification message should be added despite of backorders notification flag
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _hasDefaultNotificationMessage()
     {
@@ -117,7 +111,6 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item implements Identit
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function hasAdminArea()
     {
@@ -127,7 +120,6 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item implements Identit
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getShowDefaultNotificationMessage()
     {
@@ -136,7 +128,6 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item implements Identit
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function getIdentities()
     {

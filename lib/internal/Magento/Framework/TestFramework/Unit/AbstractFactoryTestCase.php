@@ -1,55 +1,45 @@
 <?php
 /**
- * Framework for unit tests containing helper methods
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- *
- * Number of fields is necessary because of the number of fields used by multiple layers
- * of parent classes.
- *
  */
 namespace Magento\Framework\TestFramework\Unit;
 
 /**
- * @since 2.0.0
+ * Framework for unit tests containing helper methods
+ *
+ * Number of fields is necessary because of the number of fields used by multiple layers
+ * of parent classes.
  */
 abstract class AbstractFactoryTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $factoryClassName;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $instanceClassName;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     protected $objectManagerMock;
 
     /**
      * @var object
-     * @since 2.0.0
      */
     protected $factory;
 
     /**
-     * Setup function
      * @return void
-     * @since 2.0.0
      */
     protected function setUp()
     {
@@ -64,9 +54,7 @@ abstract class AbstractFactoryTestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test create
      * @return void
-     * @since 2.0.0
      */
     public function testCreate()
     {

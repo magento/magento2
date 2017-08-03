@@ -13,7 +13,6 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * Frontend model for DHL shipping methods for documentation
- * @since 2.0.0
  */
 class Unitofmeasure extends Field
 {
@@ -21,13 +20,11 @@ class Unitofmeasure extends Field
      * Carrier helper
      *
      * @var Helper\Carrier
-     * @since 2.0.0
      */
     protected $carrierHelper;
 
     /**
      * @var Model\Carrier
-     * @since 2.0.0
      */
     protected $carrierDhl;
 
@@ -36,7 +33,6 @@ class Unitofmeasure extends Field
      * @param Model\Carrier $carrierDhl
      * @param Helper\Carrier $carrierHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -53,7 +49,6 @@ class Unitofmeasure extends Field
      * Define params and variables
      *
      * @return void
-     * @since 2.0.0
      */
     public function _construct()
     {
@@ -99,7 +94,6 @@ class Unitofmeasure extends Field
      *
      * @param AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     protected function _getElementHtml(AbstractElement $element)
     {

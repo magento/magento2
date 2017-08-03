@@ -9,7 +9,6 @@ namespace Magento\Tax\Api\Data;
 /**
  * Interface for tax class search results.
  * @api
- * @since 2.0.0
  */
 interface TaxClassSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
@@ -17,7 +16,6 @@ interface TaxClassSearchResultsInterface extends \Magento\Framework\Api\SearchRe
      * Get items
      *
      * @return \Magento\Tax\Api\Data\TaxClassInterface[]
-     * @since 2.0.0
      */
     public function getItems();
 
@@ -26,7 +24,6 @@ interface TaxClassSearchResultsInterface extends \Magento\Framework\Api\SearchRe
      *
      * @param \Magento\Tax\Api\Data\TaxClassInterface[] $items
      * @return $this
-     * @since 2.0.0
      */
     public function setItems(array $items);
 }

@@ -7,49 +7,41 @@ namespace Magento\Rss\Controller;
 
 /**
  * Class Feed
- * @since 2.0.0
  */
 abstract class Feed extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var \Magento\Customer\Api\AccountManagementInterface
-     * @since 2.0.0
      */
     protected $customerAccountManagement;
 
     /**
      * @var \Magento\Framework\HTTP\Authentication
-     * @since 2.0.0
      */
     protected $httpAuthentication;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var \Magento\Rss\Model\RssManager
-     * @since 2.0.0
      */
     protected $rssManager;
 
     /**
      * @var \Magento\Rss\Model\RssFactory
-     * @since 2.0.0
      */
     protected $rssFactory;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
@@ -62,7 +54,6 @@ abstract class Feed extends \Magento\Framework\App\Action\Action
      * @param \Magento\Customer\Api\AccountManagementInterface $customerAccountManagement
      * @param \Magento\Framework\HTTP\Authentication $httpAuthentication
      * @param \Psr\Log\LoggerInterface $logger
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -86,7 +77,6 @@ abstract class Feed extends \Magento\Framework\App\Action\Action
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     protected function auth()
     {

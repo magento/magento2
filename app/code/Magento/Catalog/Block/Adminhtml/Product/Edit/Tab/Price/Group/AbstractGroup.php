@@ -14,7 +14,6 @@ use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
  * Adminhtml group price item abstract renderer
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class AbstractGroup extends Widget implements RendererInterface
 {
@@ -22,7 +21,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * Form element instance
      *
      * @var \Magento\Framework\Data\Form\Element\AbstractElement
-     * @since 2.0.0
      */
     protected $_element;
 
@@ -30,7 +28,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * Customer groups cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_customerGroups;
 
@@ -38,7 +35,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * Websites cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_websites;
 
@@ -46,7 +42,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * Catalog data
      *
      * @var \Magento\Framework\Module\Manager
-     * @since 2.0.0
      */
     protected $moduleManager;
 
@@ -54,37 +49,31 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Directory\Helper\Data
-     * @since 2.0.0
      */
     protected $_directoryHelper;
 
     /**
      * @var GroupRepositoryInterface
-     * @since 2.0.0
      */
     protected $_groupRepository;
 
     /**
      * @var GroupManagementInterface
-     * @since 2.0.0
      */
     protected $_groupManagement;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     * @since 2.0.0
      */
     protected $_searchCriteriaBuilder;
 
     /**
      * @var \Magento\Framework\Locale\CurrencyInterface
-     * @since 2.0.0
      */
     protected $_localeCurrency;
 
@@ -98,7 +87,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -125,7 +113,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * Retrieve current product instance
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -137,7 +124,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -150,7 +136,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Group\AbstractGroup
-     * @since 2.0.0
      */
     public function setElement(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -162,7 +147,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * Retrieve form element instance
      *
      * @return \Magento\Framework\Data\Form\Element\AbstractElement
-     * @since 2.0.0
      */
     public function getElement()
     {
@@ -173,7 +157,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * Prepare group price values
      *
      * @return array
-     * @since 2.0.0
      */
     public function getValues()
     {
@@ -202,7 +185,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      *
      * @param array $data
      * @return array
-     * @since 2.0.0
      */
     protected function _sortValues($data)
     {
@@ -214,7 +196,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      *
      * @param int|null $groupId  return name by customer group id
      * @return array|string
-     * @since 2.0.0
      */
     public function getCustomerGroups($groupId = null)
     {
@@ -241,7 +222,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * Retrieve list of initial customer groups
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getInitialCustomerGroups()
     {
@@ -252,7 +232,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * Retrieve number of websites
      *
      * @return int
-     * @since 2.0.0
      */
     public function getWebsiteCount()
     {
@@ -263,7 +242,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * Show website column and switcher for group price table
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isMultiWebsites()
     {
@@ -274,7 +252,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * Retrieve allowed for edit websites
      *
      * @return array
-     * @since 2.0.0
      */
     public function getWebsites()
     {
@@ -316,7 +293,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * Retrieve default value for customer group
      *
      * @return int
-     * @since 2.0.0
      */
     public function getDefaultCustomerGroup()
     {
@@ -327,7 +303,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * Retrieve default value for website
      *
      * @return int
-     * @since 2.0.0
      */
     public function getDefaultWebsite()
     {
@@ -341,7 +316,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * Retrieve 'add group price item' button HTML
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAddButtonHtml()
     {
@@ -353,7 +327,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      *
      * @param string $default
      * @return string
-     * @since 2.0.0
      */
     public function getPriceColumnHeader($default)
     {
@@ -369,7 +342,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      *
      * @param string $default
      * @return string
-     * @since 2.0.0
      */
     public function getPriceValidation($default)
     {
@@ -384,7 +356,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * Retrieve Group Price entity attribute
      *
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
-     * @since 2.0.0
      */
     public function getAttribute()
     {
@@ -395,7 +366,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * Check group price attribute scope is global
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isScopeGlobal()
     {
@@ -406,7 +376,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * Show group prices grid website column
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isShowWebsiteColumn()
     {
@@ -420,7 +389,6 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * Check is allow change website value for combination
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isAllowChangeWebsite()
     {

@@ -8,7 +8,6 @@ namespace Magento\Rule\Block;
 /**
  * Class \Magento\Rule\Block\Rule
  *
- * @since 2.0.0
  */
 class Rule extends \Magento\Framework\View\Element\AbstractBlock
 {

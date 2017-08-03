@@ -9,7 +9,6 @@ namespace Magento\Backend\Block\Widget\Button;
 /**
  * Interface \Magento\Backend\Block\Widget\Button\ToolbarInterface
  *
- * @since 2.0.0
  */
 interface ToolbarInterface
 {
@@ -20,7 +19,6 @@ interface ToolbarInterface
      * @param \Magento\Backend\Block\Widget\Button\ButtonList $buttonList
      * @return void
      * @api
-     * @since 2.0.0
      */
     public function pushButtons(
         \Magento\Framework\View\Element\AbstractBlock $context,

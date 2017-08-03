@@ -12,7 +12,6 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons;
  * Coupon codes grid
  *
  * @api
- * @since 2.0.0
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -20,13 +19,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory
-     * @since 2.0.0
      */
     protected $_salesRuleCoupon;
 
@@ -36,7 +33,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory $salesRuleCoupon
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -54,7 +50,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -67,7 +62,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare collection for grid
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -87,7 +81,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Define grid columns
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -131,7 +124,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Configure grid mass actions
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareMassaction()
     {
@@ -157,7 +149,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Get grid url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getGridUrl()
     {

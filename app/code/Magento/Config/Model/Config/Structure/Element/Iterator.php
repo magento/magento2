@@ -7,7 +7,6 @@ namespace Magento\Config\Model\Config\Structure\Element;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Iterator implements \Iterator
 {
@@ -15,7 +14,6 @@ class Iterator implements \Iterator
      * List of element data
      *
      * @var \Magento\Config\Model\Config\Structure\ElementInterface[]
-     * @since 2.0.0
      */
     protected $_elements;
 
@@ -23,7 +21,6 @@ class Iterator implements \Iterator
      * Config structure element flyweight
      *
      * @var \Magento\Config\Model\Config\Structure\AbstractElement
-     * @since 2.0.0
      */
     protected $_flyweight;
 
@@ -31,7 +28,6 @@ class Iterator implements \Iterator
      * Configuration scope
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_scope;
 
@@ -39,13 +35,11 @@ class Iterator implements \Iterator
      * Last element id
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_lastId;
 
     /**
      * @param \Magento\Config\Model\Config\Structure\AbstractElement $element
-     * @since 2.0.0
      */
     public function __construct(\Magento\Config\Model\Config\Structure\AbstractElement $element)
     {
@@ -58,7 +52,6 @@ class Iterator implements \Iterator
      * @param array $elements
      * @param string $scope
      * @return void
-     * @since 2.0.0
      */
     public function setElements(array $elements, $scope)
     {
@@ -74,7 +67,6 @@ class Iterator implements \Iterator
      * Return the current element
      *
      * @return \Magento\Config\Model\Config\Structure\ElementInterface
-     * @since 2.0.0
      */
     public function current()
     {
@@ -85,7 +77,6 @@ class Iterator implements \Iterator
      * Move forward to next element
      *
      * @return void Any returned value is ignored.
-     * @since 2.0.0
      */
     public function next()
     {
@@ -103,7 +94,6 @@ class Iterator implements \Iterator
      *
      * @param array $element
      * @return void
-     * @since 2.0.0
      */
     protected function _initFlyweight(array $element)
     {
@@ -114,7 +104,6 @@ class Iterator implements \Iterator
      * Return the key of the current element
      *
      * @return void
-     * @since 2.0.0
      */
     public function key()
     {
@@ -126,7 +115,6 @@ class Iterator implements \Iterator
      *
      * @return bool The return value will be casted to boolean and then evaluated.
      * Returns true on success or false on failure.
-     * @since 2.0.0
      */
     public function valid()
     {
@@ -137,7 +125,6 @@ class Iterator implements \Iterator
      * Rewind the \Iterator to the first element
      *
      * @return void Any returned value is ignored.
-     * @since 2.0.0
      */
     public function rewind()
     {
@@ -155,7 +142,6 @@ class Iterator implements \Iterator
      *
      * @param \Magento\Config\Model\Config\Structure\ElementInterface $element
      * @return bool
-     * @since 2.0.0
      */
     public function isLast(\Magento\Config\Model\Config\Structure\ElementInterface $element)
     {

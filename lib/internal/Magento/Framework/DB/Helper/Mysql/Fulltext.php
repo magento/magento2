@@ -10,7 +10,6 @@ use Magento\Framework\App\ResourceConnection;
 /**
  * Class \Magento\Framework\DB\Helper\Mysql\Fulltext
  *
- * @since 2.0.0
  */
 class Fulltext
 {
@@ -46,13 +45,11 @@ class Fulltext
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     private $connection;
 
     /**
      * @param ResourceConnection $resource
-     * @since 2.0.0
      */
     public function __construct(ResourceConnection $resource)
     {
@@ -66,7 +63,6 @@ class Fulltext
      * @param string $expression Expression which add to AGAINST ()
      * @param string $mode
      * @return string
-     * @since 2.0.0
      */
     public function getMatchQuery($columns, $expression, $mode = self::FULLTEXT_MODE_NATURAL)
     {
@@ -90,7 +86,6 @@ class Fulltext
      * @param bool $isCondition true=AND, false=OR
      * @param string $mode
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     public function match($select, $columns, $expression, $isCondition = true, $mode = self::FULLTEXT_MODE_NATURAL)
     {

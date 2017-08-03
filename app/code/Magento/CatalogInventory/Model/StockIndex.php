@@ -18,31 +18,26 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 /**
  * Class StockIndex
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class StockIndex implements StockIndexInterface
 {
     /**
      * @var StockRegistryProviderInterface
-     * @since 2.0.0
      */
     protected $stockRegistryProvider;
 
     /**
      * @var ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Status
-     * @since 2.0.0
      */
     protected $stockStatusResource;
 
     /**
      * @var ProductType
-     * @since 2.0.0
      */
     protected $productType;
 
@@ -50,7 +45,6 @@ class StockIndex implements StockIndexInterface
      * Retrieve website models
      *
      * @var array
-     * @since 2.0.0
      */
     protected $websites;
 
@@ -58,7 +52,6 @@ class StockIndex implements StockIndexInterface
      * Product Type Instances cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected $productTypes = [];
 
@@ -67,7 +60,6 @@ class StockIndex implements StockIndexInterface
      * @param ProductRepositoryInterface $productRepository
      * @param ProductWebsite $productWebsite
      * @param ProductType $productType
-     * @since 2.0.0
      */
     public function __construct(
         StockRegistryProviderInterface $stockRegistryProvider,
@@ -89,7 +81,6 @@ class StockIndex implements StockIndexInterface
      * @deprecated 2.1.0
      * @return true
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function rebuild($productId = null, $scopeId = null)
     {
@@ -120,7 +111,6 @@ class StockIndex implements StockIndexInterface
      * @param int $websiteId
      * @deprecated 2.1.0
      * @return void
-     * @since 2.0.0
      */
     public function updateProductStockStatus($productId, $websiteId)
     {
@@ -145,7 +135,6 @@ class StockIndex implements StockIndexInterface
      * @param int $status
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function processChildren(
         $productId,
@@ -209,7 +198,6 @@ class StockIndex implements StockIndexInterface
      *
      * @param int|null $websiteId
      * @return array
-     * @since 2.0.0
      */
     protected function getWebsitesWithDefaultStores($websiteId = null)
     {
@@ -231,7 +219,6 @@ class StockIndex implements StockIndexInterface
      * @param int $productId
      * @param int $websiteId
      * @return $this
-     * @since 2.0.0
      */
     protected function processParents($productId, $websiteId)
     {
@@ -262,7 +249,6 @@ class StockIndex implements StockIndexInterface
      * as key - type code, value - instance model
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getProductTypeInstances()
     {
@@ -278,7 +264,6 @@ class StockIndex implements StockIndexInterface
 
     /**
      * @return \Magento\CatalogInventory\Model\ResourceModel\Stock\Status
-     * @since 2.0.0
      */
     protected function getStockStatusResource()
     {

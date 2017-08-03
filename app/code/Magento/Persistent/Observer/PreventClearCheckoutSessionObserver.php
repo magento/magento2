@@ -11,7 +11,6 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\Persistent\Observer\PreventClearCheckoutSessionObserver
  *
- * @since 2.0.0
  */
 class PreventClearCheckoutSessionObserver implements ObserverInterface
 {
@@ -19,7 +18,6 @@ class PreventClearCheckoutSessionObserver implements ObserverInterface
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
@@ -27,7 +25,6 @@ class PreventClearCheckoutSessionObserver implements ObserverInterface
      * Persistent session
      *
      * @var \Magento\Persistent\Helper\Session
-     * @since 2.0.0
      */
     protected $_persistentSession = null;
 
@@ -35,7 +32,6 @@ class PreventClearCheckoutSessionObserver implements ObserverInterface
      * Persistent data
      *
      * @var \Magento\Persistent\Helper\Data
-     * @since 2.0.0
      */
     protected $_persistentData = null;
 
@@ -43,7 +39,6 @@ class PreventClearCheckoutSessionObserver implements ObserverInterface
      * @param \Magento\Persistent\Helper\Session $persistentSession
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Customer\Model\Session $customerSession
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
@@ -60,7 +55,6 @@ class PreventClearCheckoutSessionObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

@@ -16,7 +16,6 @@ use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
  * Class AlternativeSource
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class AlternativeSource implements AlternativeSourceInterface
 {
@@ -27,49 +26,41 @@ class AlternativeSource implements AlternativeSourceInterface
 
     /**
      * @var Helper\SortInterface
-     * @since 2.0.0
      */
     private $sorter;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $alternatives;
 
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $alternativesSorted;
 
     /**
      * @var LockerProcessInterface
-     * @since 2.0.0
      */
     private $lockerProcess;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $lockName;
 
     /**
      * @var AssetBuilder
-     * @since 2.0.0
      */
     private $assetBuilder;
 
     /**
      * @var FilenameResolverInterface
-     * @since 2.0.0
      */
     private $filenameResolver;
 
@@ -83,7 +74,6 @@ class AlternativeSource implements AlternativeSourceInterface
      * @param AssetBuilder $assetBuilder
      * @param string $lockName
      * @param array $alternatives
-     * @since 2.0.0
      */
     public function __construct(
         FilenameResolverInterface $filenameResolver,
@@ -106,7 +96,6 @@ class AlternativeSource implements AlternativeSourceInterface
     /**
      * @inheritdoc
      * @throws \UnexpectedValueException
-     * @since 2.0.0
      */
     public function process(Chain $chain)
     {
@@ -138,7 +127,6 @@ class AlternativeSource implements AlternativeSourceInterface
      * @param FallbackContext $context
      * @return string
      * @throws \UnexpectedValueException
-     * @since 2.0.0
      */
     private function processContent($path, $content, $module, FallbackContext $context)
     {
@@ -176,7 +164,6 @@ class AlternativeSource implements AlternativeSourceInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function getAlternativesExtensionsNames()
     {

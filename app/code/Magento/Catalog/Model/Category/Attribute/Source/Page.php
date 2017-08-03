@@ -11,7 +11,6 @@ use Magento\Cms\Model\ResourceModel\Block\CollectionFactory;
  * Catalog category landing page attribute source
  *
  * @SuppressWarnings(PHPMD.LongVariable)
- * @since 2.0.0
  */
 class Page extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
@@ -19,7 +18,6 @@ class Page extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Block collection factory
      *
      * @var CollectionFactory
-     * @since 2.0.0
      */
     protected $_blockCollectionFactory;
 
@@ -27,7 +25,6 @@ class Page extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Construct
      *
      * @param CollectionFactory $blockCollectionFactory
-     * @since 2.0.0
      */
     public function __construct(CollectionFactory $blockCollectionFactory)
     {
@@ -36,7 +33,6 @@ class Page extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAllOptions()
     {

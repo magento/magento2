@@ -11,13 +11,11 @@ use Magento\Setup\Module\Dependency\ServiceLocator;
 
 /**
  * Command for showing number of dependencies between modules
- * @since 2.0.0
  */
 class DependenciesShowModulesCommand extends AbstractDependenciesCommand
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -30,7 +28,6 @@ class DependenciesShowModulesCommand extends AbstractDependenciesCommand
      * Return default output filename for modules dependencies report
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getDefaultOutputFilename()
     {
@@ -42,7 +39,6 @@ class DependenciesShowModulesCommand extends AbstractDependenciesCommand
      *
      * @param string $outputPath
      * @return void
-     * @since 2.0.0
      */
     protected function buildReport($outputPath)
     {

@@ -13,13 +13,11 @@ use Magento\Customer\Model\Context;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Buttons extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'order/info/buttons.phtml';
 
@@ -27,13 +25,11 @@ class Buttons extends \Magento\Framework\View\Element\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Framework\App\Http\Context
-     * @since 2.0.0
      */
     protected $httpContext;
 
@@ -42,7 +38,6 @@ class Buttons extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -60,7 +55,6 @@ class Buttons extends \Magento\Framework\View\Element\Template
      * Retrieve current order model instance
      *
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -72,7 +66,6 @@ class Buttons extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Sales\Model\Order $order
      * @return string
-     * @since 2.0.0
      */
     public function getPrintUrl($order)
     {
@@ -87,7 +80,6 @@ class Buttons extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Sales\Model\Order $order
      * @return string
-     * @since 2.0.0
      */
     public function getReorderUrl($order)
     {

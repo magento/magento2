@@ -10,7 +10,6 @@ use Magento\Framework\Serialize\SerializerInterface;
 /**
  * Provides configuration
  * @api
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\Config\Data\Scoped
 {
@@ -22,7 +21,6 @@ class Data extends \Magento\Framework\Config\Data\Scoped
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string $cacheId
      * @param SerializerInterface|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         Reader $reader,
@@ -39,7 +37,6 @@ class Data extends \Magento\Framework\Config\Data\Scoped
      *
      * @param array $config
      * @return void
-     * @since 2.0.0
      */
     public function merge(array $config)
     {

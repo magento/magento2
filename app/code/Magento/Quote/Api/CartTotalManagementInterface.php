@@ -8,7 +8,6 @@ namespace Magento\Quote\Api;
 /**
  * Bundled API to collect totals for cart based on shipping/payment methods and additional data.
  * @api
- * @since 2.0.0
  */
 interface CartTotalManagementInterface
 {
@@ -21,7 +20,6 @@ interface CartTotalManagementInterface
      * @param string $shippingMethodCode The shipping method code.
      * @param \Magento\Quote\Api\Data\TotalsAdditionalDataInterface $additionalData Additional data to collect totals.
      * @return \Magento\Quote\Api\Data\TotalsInterface Quote totals data.
-     * @since 2.0.0
      */
     public function collectTotals(
         $cartId,

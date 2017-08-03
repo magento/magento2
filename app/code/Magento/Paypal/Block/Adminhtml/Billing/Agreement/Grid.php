@@ -8,25 +8,21 @@ namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement;
 /**
  * Adminhtml billing agreements grid
  * @api
- * @since 2.0.0
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * @var \Magento\Paypal\Helper\Data
-     * @since 2.0.0
      */
     protected $_helper = null;
 
     /**
      * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory
-     * @since 2.0.0
      */
     protected $_agreementFactory;
 
     /**
      * @var \Magento\Paypal\Model\Billing\Agreement
-     * @since 2.0.0
      */
     protected $_agreementModel;
 
@@ -37,7 +33,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory $agreementFactory
      * @param \Magento\Paypal\Model\Billing\Agreement $agreementModel
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -57,7 +52,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Set grid params
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -73,7 +67,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Retrieve grid url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getGridUrl()
     {
@@ -85,7 +78,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param object $item
      * @return string
-     * @since 2.0.0
      */
     public function getRowUrl($item)
     {
@@ -96,7 +88,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare collection for grid
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -111,7 +102,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _prepareColumns()
     {

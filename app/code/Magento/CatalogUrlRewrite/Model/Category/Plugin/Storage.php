@@ -14,13 +14,11 @@ use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product;
 /**
  * Class \Magento\CatalogUrlRewrite\Model\Category\Plugin\Storage
  *
- * @since 2.0.0
  */
 class Storage
 {
     /**
      * @var \Magento\UrlRewrite\Model\UrlFinderInterface
-     * @since 2.0.0
      */
     private $urlFinder;
 
@@ -33,7 +31,6 @@ class Storage
     /**
      * @param UrlFinderInterface $urlFinder
      * @param Product $productResource
-     * @since 2.0.0
      */
     public function __construct(
         UrlFinderInterface $urlFinder,
@@ -73,7 +70,6 @@ class Storage
      * @param array $data
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function beforeDeleteByData(StorageInterface $object, array $data)
     {
@@ -83,7 +79,6 @@ class Storage
     /**
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urls
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
-     * @since 2.0.0
      */
     protected function filterUrls(array $urls)
     {
@@ -109,7 +104,6 @@ class Storage
     /**
      * @param UrlRewrite $url
      * @return bool
-     * @since 2.0.0
      */
     protected function isCorrectUrl(UrlRewrite $url)
     {

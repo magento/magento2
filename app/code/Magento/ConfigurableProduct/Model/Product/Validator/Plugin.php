@@ -14,25 +14,21 @@ use Magento\Framework\DataObject;
 
 /**
  * Configurable product validation
- * @since 2.0.0
  */
 class Plugin
 {
     /**
      * @var \Magento\Framework\Event\Manager
-     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $productFactory;
 
     /**
      * @var Data
-     * @since 2.0.0
      */
     protected $jsonHelper;
 
@@ -40,7 +36,6 @@ class Plugin
      * @param Manager $eventManager
      * @param ProductFactory $productFactory
      * @param Data $jsonHelper
-     * @since 2.0.0
      */
     public function __construct(
         Manager $eventManager,
@@ -116,7 +111,6 @@ class Plugin
      * @param array $products
      * @param RequestInterface $request
      * @return array
-     * @since 2.0.0
      */
     protected function _validateProductVariations(Product $parentProduct, array $products, RequestInterface $request)
     {
@@ -161,7 +155,6 @@ class Plugin
     /**
      * @param Product $product
      * @return array
-     * @since 2.0.0
      */
     protected function getRequiredDataFromProduct(Product $product)
     {

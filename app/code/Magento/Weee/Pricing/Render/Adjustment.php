@@ -13,7 +13,6 @@ use Magento\Weee\Model\Tax;
 
 /**
  * Weee Price Adjustment that handles Weee specific amount and its display
- * @since 2.0.0
  */
 class Adjustment extends AbstractAdjustment
 {
@@ -21,13 +20,11 @@ class Adjustment extends AbstractAdjustment
      * Weee helper
      *
      * @var \Magento\Weee\Helper\Data
-     * @since 2.0.0
      */
     protected $weeeHelper;
 
     /**
      * @var float
-     * @since 2.0.0
      */
     protected $finalAmount;
 
@@ -38,7 +35,6 @@ class Adjustment extends AbstractAdjustment
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Weee\Helper\Data $weeeHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Template\Context $context,
@@ -52,7 +48,6 @@ class Adjustment extends AbstractAdjustment
 
     /**
      * @return null
-     * @since 2.0.0
      */
     protected function apply()
     {
@@ -72,7 +67,6 @@ class Adjustment extends AbstractAdjustment
 
     /**
      * @return float
-     * @since 2.0.0
      */
     public function getRawFinalAmount()
     {
@@ -83,7 +77,6 @@ class Adjustment extends AbstractAdjustment
      * Obtain adjustment code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAdjustmentCode()
     {
@@ -92,7 +85,6 @@ class Adjustment extends AbstractAdjustment
 
     /**
      * @return float
-     * @since 2.0.0
      */
     public function getFinalAmount()
     {
@@ -103,7 +95,6 @@ class Adjustment extends AbstractAdjustment
      * Get weee amount
      *
      * @return float
-     * @since 2.0.0
      */
     protected function getWeeeAmount()
     {
@@ -115,7 +106,6 @@ class Adjustment extends AbstractAdjustment
      * Define if adjustment should be shown with including tax, description
      *
      * @return bool
-     * @since 2.0.0
      */
     public function showInclDescr()
     {
@@ -126,7 +116,6 @@ class Adjustment extends AbstractAdjustment
      * Define if adjustment should be shown with including tax, excluding tax, description
      *
      * @return bool
-     * @since 2.0.0
      */
     public function showExclDescrIncl()
     {
@@ -137,7 +126,6 @@ class Adjustment extends AbstractAdjustment
      * Obtain Weee tax attributes
      *
      * @return array|\Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     public function getWeeeTaxAttributes()
     {
@@ -149,7 +137,6 @@ class Adjustment extends AbstractAdjustment
      *
      * @param \Magento\Framework\DataObject $attribute
      * @return string
-     * @since 2.0.0
      */
     public function renderWeeeTaxAttributeName(\Magento\Framework\DataObject $attribute)
     {
@@ -161,7 +148,6 @@ class Adjustment extends AbstractAdjustment
      *
      * @param \Magento\Framework\DataObject $attribute
      * @return string
-     * @since 2.0.0
      */
     public function renderWeeeTaxAttribute(\Magento\Framework\DataObject $attribute)
     {
@@ -173,7 +159,6 @@ class Adjustment extends AbstractAdjustment
      *
      * @param \Magento\Framework\DataObject $attribute
      * @return string
-     * @since 2.0.0
      */
     public function renderWeeeTaxAttributeWithTax(\Magento\Framework\DataObject $attribute)
     {
@@ -187,7 +172,6 @@ class Adjustment extends AbstractAdjustment
      *
      * @param \Magento\Framework\DataObject $attribute
      * @return string
-     * @since 2.0.0
      */
     public function renderWeeeTaxAttributeWithoutTax(\Magento\Framework\DataObject $attribute)
     {
@@ -201,7 +185,6 @@ class Adjustment extends AbstractAdjustment
      * @param int|int[]|null $compareTo
      * @param \Magento\Store\Model\Store|null $store
      * @return bool|int
-     * @since 2.0.0
      */
     protected function typeOfDisplay($compareTo = null, $store = null)
     {
@@ -212,7 +195,6 @@ class Adjustment extends AbstractAdjustment
      * Get Weee attributes for display
      *
      * @return \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     protected function getWeeeAttributesForDisplay()
     {
@@ -224,7 +206,6 @@ class Adjustment extends AbstractAdjustment
      * Returns whether Weee should be displayed
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function isWeeeShown()
     {
@@ -236,7 +217,6 @@ class Adjustment extends AbstractAdjustment
      * Returns whether tax should be shown (according to Price Display Settings)
      *
      * @return int
-     * @since 2.0.0
      */
     public function getTaxDisplayConfig()
     {
@@ -248,7 +228,6 @@ class Adjustment extends AbstractAdjustment
      * Returns whether price includes tax
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isPriceIncludesTax()
     {

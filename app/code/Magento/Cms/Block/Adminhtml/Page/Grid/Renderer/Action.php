@@ -8,13 +8,11 @@ namespace Magento\Cms\Block\Adminhtml\Page\Grid\Renderer;
 /**
  * Class \Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action
  *
- * @since 2.0.0
  */
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var Action\UrlBuilder
-     * @since 2.0.0
      */
     protected $actionUrlBuilder;
 
@@ -22,7 +20,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      * @param \Magento\Backend\Block\Context $context
      * @param Action\UrlBuilder $actionUrlBuilder
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -38,7 +35,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

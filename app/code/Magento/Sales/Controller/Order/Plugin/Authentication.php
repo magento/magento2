@@ -11,26 +11,22 @@ use Magento\Framework\App\RequestInterface;
 /**
  * Class \Magento\Sales\Controller\Order\Plugin\Authentication
  *
- * @since 2.0.0
  */
 class Authentication
 {
     /**
      * @var \Magento\Customer\Model\Url
-     * @since 2.0.0
      */
     protected $customerUrl;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Magento\Customer\Model\Session $customerSession
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Model\Url $customerUrl,
@@ -47,7 +43,6 @@ class Authentication
      * @param RequestInterface $request
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function beforeDispatch(\Magento\Framework\App\ActionInterface $subject, RequestInterface $request)
     {

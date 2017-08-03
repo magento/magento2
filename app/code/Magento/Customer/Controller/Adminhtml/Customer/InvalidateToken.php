@@ -24,13 +24,11 @@ use Magento\Framework\Api\DataObjectHelper;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @since 2.0.0
  */
 class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**
      * @var CustomerTokenServiceInterface
-     * @since 2.0.0
      */
     protected $tokenService;
 
@@ -63,7 +61,6 @@ class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index
      * @param CustomerTokenServiceInterface $tokenService
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -127,7 +124,6 @@ class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index
      * Reset customer's tokens handler
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

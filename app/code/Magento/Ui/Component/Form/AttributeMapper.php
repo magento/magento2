@@ -7,7 +7,6 @@ namespace Magento\Ui\Component\Form;
 
 /**
  * @api
- * @since 2.0.0
  */
 class AttributeMapper
 {
@@ -15,7 +14,6 @@ class AttributeMapper
      * Form element mapping
      *
      * @var array
-     * @since 2.0.0
      */
     private $formElementMap = [
         'text' => 'input',
@@ -26,7 +24,6 @@ class AttributeMapper
     /**
      * EAV attribute properties to fetch from meta storage
      * @var array
-     * @since 2.0.0
      */
     private $metaPropertiesMap = [
         'dataType' => 'getFrontendInput',
@@ -41,7 +38,6 @@ class AttributeMapper
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $validationRules = [
         'input_validation' => [
@@ -56,7 +52,6 @@ class AttributeMapper
      * @param \Magento\Eav\Api\Data\AttributeInterface $attribute
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function map($attribute)
     {

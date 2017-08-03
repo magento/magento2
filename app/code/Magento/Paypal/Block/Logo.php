@@ -11,19 +11,16 @@ namespace Magento\Paypal\Block;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Logo extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Paypal\Model\Config
-     * @since 2.0.0
      */
     protected $_paypalConfig;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $_localeResolver;
 
@@ -32,7 +29,6 @@ class Logo extends \Magento\Framework\View\Element\Template
      * @param \Magento\Paypal\Model\Config $paypalConfig
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -49,7 +45,6 @@ class Logo extends \Magento\Framework\View\Element\Template
      * Return URL for Paypal Landing page
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAboutPaypalPageUrl()
     {
@@ -60,7 +55,6 @@ class Logo extends \Magento\Framework\View\Element\Template
      * Getter for paypal config
      *
      * @return \Magento\Paypal\Model\Config
-     * @since 2.0.0
      */
     protected function _getConfig()
     {
@@ -71,7 +65,6 @@ class Logo extends \Magento\Framework\View\Element\Template
      * Disable block output if logo turned off
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

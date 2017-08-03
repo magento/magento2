@@ -11,26 +11,22 @@ use Magento\Framework\Exception\InputException;
 /**
  * Class \Magento\Bundle\Model\OptionManagement
  *
- * @since 2.0.0
  */
 class OptionManagement implements \Magento\Bundle\Api\ProductOptionManagementInterface
 {
     /**
      * @var \Magento\Bundle\Api\ProductOptionRepositoryInterface
-     * @since 2.0.0
      */
     protected $optionRepository;
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @param \Magento\Bundle\Api\ProductOptionRepositoryInterface $optionRepository
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Bundle\Api\ProductOptionRepositoryInterface $optionRepository,
@@ -42,7 +38,6 @@ class OptionManagement implements \Magento\Bundle\Api\ProductOptionManagementInt
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function save(\Magento\Bundle\Api\Data\OptionInterface $option)
     {

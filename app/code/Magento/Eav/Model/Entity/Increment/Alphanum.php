@@ -18,7 +18,6 @@ namespace Magento\Eav\Model\Entity\Increment;
 /**
  * Class \Magento\Eav\Model\Entity\Increment\Alphanum
  *
- * @since 2.0.0
  */
 class Alphanum extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
 {
@@ -27,7 +26,6 @@ class Alphanum extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getAllowedChars()
     {
@@ -39,7 +37,6 @@ class Alphanum extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getNextId()
     {

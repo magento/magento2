@@ -15,7 +15,6 @@ use \Magento\Framework\Setup\BackendFrontnameGenerator;
 /**
  * Deployment configuration options needed for Backend module
  *
- * @since 2.0.0
  */
 class ConfigOptionsList implements ConfigOptionsListInterface
 {
@@ -31,7 +30,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -48,7 +46,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function createConfig(array $options, DeploymentConfig $deploymentConfig)
     {
@@ -67,7 +64,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function validate(array $options, DeploymentConfig $deploymentConfig)
     {

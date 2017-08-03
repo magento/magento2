@@ -19,114 +19,95 @@ class Adminhtml extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     protected $_designMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     protected $_sessionMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     protected $_sidResolver;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     protected $_translatorMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     protected $_layoutMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     protected $_requestMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     protected $_messagesMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     protected $_urlMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     protected $_eventManagerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     protected $_controllerMock;
 
     /**
      * @var \Magento\Backend\Block\Template\Context
-     * @since 2.0.0
      */
     protected $_context;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     protected $_loggerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     protected $_filesystemMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     protected $_cacheMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     protected $_scopeConfigMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManager
-     * @since 2.0.0
      */
     protected $_storeManagerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Math\Random
-     * @since 2.0.0
      */
     protected $_mathMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Data\Form\FormKey
-     * @since 2.0.0
      */
     protected $_formKey;
 
     /**
-     * @since 2.0.0
      */
     protected function setUp()
     {
@@ -204,7 +185,6 @@ class Adminhtml extends \PHPUnit\Framework\TestCase
      *
      * @param string $className
      * @return \PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     protected function _makeMock($className)
     {
@@ -220,7 +200,6 @@ class Adminhtml extends \PHPUnit\Framework\TestCase
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount|null        $expects
      *
      * @return \PHPUnit_Framework_MockObject_Builder_InvocationMocker
-     * @since 2.0.0
      */
     protected function _setStub(
         \PHPUnit_Framework_MockObject_MockObject $object,
@@ -239,7 +218,6 @@ class Adminhtml extends \PHPUnit\Framework\TestCase
      *
      * @param array $args
      * @return mixed
-     * @since 2.0.0
      */
     public function translateCallback($args)
     {

@@ -10,7 +10,6 @@ use Magento\Webapi\Model\Soap\Wsdl\ComplexTypeStrategy;
 
 /**
  * Magento-specific WSDL builder.
- * @since 2.0.0
  */
 class Wsdl extends \Zend\Soap\Wsdl
 {
@@ -21,7 +20,6 @@ class Wsdl extends \Zend\Soap\Wsdl
      * @param string $name
      * @param string|\Zend\Uri\Uri $uri
      * @param ComplexTypeStrategy $strategy
-     * @since 2.0.0
      */
     public function __construct($name, $uri, ComplexTypeStrategy $strategy)
     {
@@ -37,7 +35,6 @@ class Wsdl extends \Zend\Soap\Wsdl
      * @param string|bool $output Output Message
      * @param string|bool|array $fault Message name OR array('message' => ..., 'name' => ...)
      * @return object The new operation's XML_Tree_Node
-     * @since 2.0.0
      */
     public function addPortOperation($portType, $name, $input = false, $output = false, $fault = false)
     {

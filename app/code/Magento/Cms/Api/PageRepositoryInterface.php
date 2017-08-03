@@ -10,7 +10,6 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 /**
  * CMS page CRUD interface.
  * @api
- * @since 2.0.0
  */
 interface PageRepositoryInterface
 {
@@ -20,7 +19,6 @@ interface PageRepositoryInterface
      * @param \Magento\Cms\Api\Data\PageInterface $page
      * @return \Magento\Cms\Api\Data\PageInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function save(\Magento\Cms\Api\Data\PageInterface $page);
 
@@ -30,7 +28,6 @@ interface PageRepositoryInterface
      * @param int $pageId
      * @return \Magento\Cms\Api\Data\PageInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getById($pageId);
 
@@ -40,7 +37,6 @@ interface PageRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Cms\Api\Data\PageSearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -50,7 +46,6 @@ interface PageRepositoryInterface
      * @param \Magento\Cms\Api\Data\PageInterface $page
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function delete(\Magento\Cms\Api\Data\PageInterface $page);
 
@@ -61,7 +56,6 @@ interface PageRepositoryInterface
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function deleteById($pageId);
 }

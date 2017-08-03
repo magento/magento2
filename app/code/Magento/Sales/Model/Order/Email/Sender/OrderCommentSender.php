@@ -14,13 +14,11 @@ use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Class OrderCommentSender
- * @since 2.0.0
  */
 class OrderCommentSender extends NotifySender
 {
     /**
      * @var Renderer
-     * @since 2.0.0
      */
     protected $addressRenderer;
 
@@ -28,7 +26,6 @@ class OrderCommentSender extends NotifySender
      * Application Event Dispatcher
      *
      * @var ManagerInterface
-     * @since 2.0.0
      */
     protected $eventManager;
 
@@ -39,7 +36,6 @@ class OrderCommentSender extends NotifySender
      * @param \Psr\Log\LoggerInterface $logger
      * @param Renderer $addressRenderer
      * @param ManagerInterface $eventManager
-     * @since 2.0.0
      */
     public function __construct(
         Template $templateContainer,
@@ -61,7 +57,6 @@ class OrderCommentSender extends NotifySender
      * @param bool $notify
      * @param string $comment
      * @return bool
-     * @since 2.0.0
      */
     public function send(Order $order, $notify = true, $comment = '')
     {

@@ -8,19 +8,16 @@ namespace Magento\Tax\Model\System\Config\Source;
 /**
  * Class \Magento\Tax\Model\System\Config\Source\Apply
  *
- * @since 2.0.0
  */
 class Apply implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_options;
 
     /**
      * Initialize the options array
-     * @since 2.0.0
      */
     public function __construct()
     {
@@ -32,7 +29,6 @@ class Apply implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

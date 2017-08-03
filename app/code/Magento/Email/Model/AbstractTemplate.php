@@ -21,7 +21,6 @@ use Magento\Store\Model\Store;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @api
- * @since 2.0.0
  */
 abstract class AbstractTemplate extends AbstractModel implements TemplateTypesInterface
 {
@@ -59,7 +58,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Configuration of design package for template
      *
      * @var DataObject
-     * @since 2.0.0
      */
     private $designConfig;
 
@@ -67,7 +65,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Whether template is child of another template
      *
      * @var bool
-     * @since 2.0.0
      */
     private $isChildTemplate = false;
 
@@ -75,7 +72,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Email template filter
      *
      * @var \Magento\Email\Model\Template\Filter
-     * @since 2.0.0
      */
     private $templateFilter;
 
@@ -83,7 +79,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Configuration of emulated design package.
      *
      * @var DataObject|boolean
-     * @since 2.0.0
      */
     private $emulatedDesignConfig = false;
 
@@ -91,7 +86,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Package area
      *
      * @var string
-     * @since 2.0.0
      */
     private $area;
 
@@ -99,7 +93,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Store id
      *
      * @var int
-     * @since 2.0.0
      */
     private $store;
 
@@ -109,13 +102,11 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Important as there are multiple entry points for the applyDesignConfig method.
      *
      * @var bool
-     * @since 2.0.0
      */
     private $hasDesignBeenApplied = false;
 
     /**
      * @var \Magento\Email\Model\TemplateFactory
-     * @since 2.0.0
      */
     protected $templateFactory = null;
 
@@ -123,19 +114,16 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Design package instance
      *
      * @var \Magento\Framework\View\DesignInterface
-     * @since 2.0.0
      */
     protected $design = null;
 
     /**
      * @var \Magento\Store\Model\App\Emulation
-     * @since 2.0.0
      */
     protected $appEmulation;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -143,13 +131,11 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Asset service
      *
      * @var \Magento\Framework\View\Asset\Repository
-     * @since 2.0.0
      */
     protected $assetRepo;
 
     /**
      * @var \Magento\Framework\Filesystem
-     * @since 2.0.0
      */
     protected $filesystem;
 
@@ -157,25 +143,21 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Scope config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\Email\Model\Template\Config
-     * @since 2.0.0
      */
     protected $emailConfig;
 
     /**
      * @var \Magento\Framework\Filter\FilterManager
-     * @since 2.0.0
      */
     protected $filterManager;
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     private $urlModel;
 
@@ -195,7 +177,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -233,7 +214,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param string $configPath
      * @param array $variables
      * @return string
-     * @since 2.0.0
      */
     public function getTemplateContent($configPath, array $variables)
     {
@@ -263,7 +243,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Return a new instance of the template object. Used by the template directive.
      *
      * @return \Magento\Email\Model\AbstractTemplate
-     * @since 2.0.0
      */
     protected function getTemplateInstance()
     {
@@ -275,7 +254,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      *
      * @param string $configPath
      * @return \Magento\Email\Model\AbstractTemplate
-     * @since 2.0.0
      */
     public function loadByConfigPath($configPath)
     {
@@ -295,7 +273,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      *
      * @param string $templateId
      * @return $this
-     * @since 2.0.0
      */
     public function loadDefault($templateId)
     {
@@ -345,7 +322,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param array $variables
      * @return string
      * @throws \Magento\Framework\Exception\MailException
-     * @since 2.0.0
      */
     public function getProcessedTemplate(array $variables = [])
     {
@@ -389,7 +365,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Get default email logo image
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultEmailLogo()
     {
@@ -405,7 +380,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      *
      * @param  Store|int|string $store
      * @return string
-     * @since 2.0.0
      */
     protected function getLogoUrl($store)
     {
@@ -432,7 +406,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      *
      * @param  Store|int|string $store
      * @return string
-     * @since 2.0.0
      */
     protected function getLogoAlt($store)
     {
@@ -457,7 +430,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function addEmailVariables($variables, $storeId)
     {
@@ -519,7 +491,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Can be called multiple times without issue.
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function applyDesignConfig()
     {
@@ -545,7 +516,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Revert design settings to previous
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function cancelDesignConfig()
     {
@@ -560,7 +530,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param string $templateId
      * @return $this
      * @throws \Magento\Framework\Exception\MailException
-     * @since 2.0.0
      */
     public function setForcedArea($templateId)
     {
@@ -579,7 +548,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param string $templateId
      * @param string $theme
      * @return $this
-     * @since 2.0.0
      */
     public function setForcedTheme($templateId, $theme)
     {
@@ -592,7 +560,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Returns the design params for the template being processed
      *
      * @return array
-     * @since 2.0.0
      */
     public function getDesignParams()
     {
@@ -610,7 +577,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Get design configuration data
      *
      * @return DataObject
-     * @since 2.0.0
      */
     public function getDesignConfig()
     {
@@ -634,7 +600,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param array $config
      * @return $this
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function setDesignConfig(array $config)
     {
@@ -649,7 +614,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Check whether template is child of another template
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isChildTemplate()
     {
@@ -661,7 +625,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      *
      * @param bool $isChildTemplate
      * @return $this
-     * @since 2.0.0
      */
     public function setIsChildTemplate($isChildTemplate)
     {
@@ -674,7 +637,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      *
      * @param \Magento\Email\Model\Template\Filter $filter
      * @return $this
-     * @since 2.0.0
      */
     public function setTemplateFilter(Template\Filter $filter)
     {
@@ -686,7 +648,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Get filter object for template processing
      *
      * @return \Magento\Email\Model\Template\Filter
-     * @since 2.0.0
      */
     public function getTemplateFilter()
     {
@@ -706,7 +667,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param null|bool|int|string $storeId
      * @param string $area
      * @return void
-     * @since 2.0.0
      */
     public function emulateDesign($storeId, $area = self::DEFAULT_DESIGN_AREA)
     {
@@ -728,7 +688,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Revert to last design config, used before emulation
      *
      * @return void
-     * @since 2.0.0
      */
     public function revertDesign()
     {
@@ -743,7 +702,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Return true if template type eq text
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isPlain()
     {
@@ -754,7 +712,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Getter for filter factory that is specific to the type of template being processed
      *
      * @return mixed
-     * @since 2.0.0
      */
     abstract protected function getFilterFactory();
 
@@ -762,7 +719,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Getter for template type
      *
      * @return int|string
-     * @since 2.0.0
      */
     abstract public function getType();
 
@@ -773,7 +729,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param string $route
      * @param array $params
      * @return string
-     * @since 2.0.0
      */
     public function getUrl(Store $store, $route = '', $params = [])
     {

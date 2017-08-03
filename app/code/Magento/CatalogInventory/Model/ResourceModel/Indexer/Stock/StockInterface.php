@@ -8,7 +8,6 @@ namespace Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock;
 /**
  * CatalogInventory Stock Indexer Interface
  * @api
- * @since 2.0.0
  */
 interface StockInterface
 {
@@ -16,7 +15,6 @@ interface StockInterface
      * Reindex all stock status data
      *
      * @return $this
-     * @since 2.0.0
      */
     public function reindexAll();
 
@@ -25,7 +23,6 @@ interface StockInterface
      *
      * @param int|array $entityIds
      * @return $this
-     * @since 2.0.0
      */
     public function reindexEntity($entityIds);
 
@@ -34,7 +31,6 @@ interface StockInterface
      *
      * @param string $typeId
      * @return $this
-     * @since 2.0.0
      */
     public function setTypeId($typeId);
 
@@ -43,7 +39,6 @@ interface StockInterface
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getTypeId();
 }

@@ -13,13 +13,11 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class BackendTemplate extends Template
 {
     /**
      * @var \Magento\Config\Model\Config\Structure
-     * @since 2.0.0
      */
     private $structure;
 
@@ -42,7 +40,6 @@ class BackendTemplate extends Template
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -86,7 +83,6 @@ class BackendTemplate extends Template
      * Collect all system config paths where current template is currently used
      *
      * @return array
-     * @since 2.0.0
      */
     public function getSystemConfigPathsWhereCurrentlyUsed()
     {

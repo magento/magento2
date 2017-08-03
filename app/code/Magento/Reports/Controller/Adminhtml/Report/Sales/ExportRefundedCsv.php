@@ -12,7 +12,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Sales\ExportRefundedCsv
  *
- * @since 2.0.0
  */
 class ExportRefundedCsv extends \Magento\Reports\Controller\Adminhtml\Report\Sales
 {
@@ -20,7 +19,6 @@ class ExportRefundedCsv extends \Magento\Reports\Controller\Adminhtml\Report\Sal
      * Export refunded report grid to CSV format
      *
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

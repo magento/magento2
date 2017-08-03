@@ -17,13 +17,11 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class Country.
  * @package Magento\Customer\Model\ResourceModel\Address\Attribute\Source
- * @since 2.0.0
  */
 class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
     /**
      * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
-     * @since 2.0.0
      */
     protected $_countriesFactory;
 
@@ -37,7 +35,6 @@ class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countriesFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
@@ -52,7 +49,6 @@ class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
      * Retrieve all options
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllOptions()
     {
@@ -66,7 +62,6 @@ class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 
     /**
      * @return \Magento\Directory\Model\ResourceModel\Country\Collection
-     * @since 2.0.0
      */
     protected function _createCountriesCollection()
     {

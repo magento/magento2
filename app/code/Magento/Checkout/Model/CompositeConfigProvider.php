@@ -10,20 +10,17 @@ namespace Magento\Checkout\Model;
  *
  * @see \Magento\Checkout\Model\ConfigProviderInterface
  * @api
- * @since 2.0.0
  */
 class CompositeConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var ConfigProviderInterface[]
-     * @since 2.0.0
      */
     private $configProviders;
 
     /**
      * @param ConfigProviderInterface[] $configProviders
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         array $configProviders
@@ -33,7 +30,6 @@ class CompositeConfigProvider implements ConfigProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getConfig()
     {

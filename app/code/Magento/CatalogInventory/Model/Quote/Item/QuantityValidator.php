@@ -19,31 +19,26 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @api
- * @since 2.0.0
  */
 class QuantityValidator
 {
     /**
      * @var QuantityValidator\Initializer\Option
-     * @since 2.0.0
      */
     protected $optionInitializer;
 
     /**
      * @var QuantityValidator\Initializer\StockItem
-     * @since 2.0.0
      */
     protected $stockItemInitializer;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
-     * @since 2.0.0
      */
     protected $stockRegistry;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockStateInterface
-     * @since 2.0.0
      */
     protected $stockState;
 
@@ -53,7 +48,6 @@ class QuantityValidator
      * @param StockRegistryInterface $stockRegistry
      * @param StockStateInterface $stockState
      * @return void
-     * @since 2.0.0
      */
     public function __construct(
         Option $optionInitializer,
@@ -102,7 +96,6 @@ class QuantityValidator
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function validate(Observer $observer)
     {
@@ -229,7 +222,6 @@ class QuantityValidator
      * @param \Magento\Quote\Model\Quote\Item $item
      * @param int $code
      * @return void
-     * @since 2.0.0
      */
     protected function _removeErrorsFromQuoteAndItem($item, $code)
     {

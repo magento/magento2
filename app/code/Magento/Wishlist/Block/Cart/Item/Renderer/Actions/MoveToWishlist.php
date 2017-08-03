@@ -11,13 +11,11 @@ use Magento\Wishlist\Helper\Data;
 
 /**
  * @api
- * @since 2.0.0
  */
 class MoveToWishlist extends Generic
 {
     /**
      * @var Data
-     * @since 2.0.0
      */
     protected $wishlistHelper;
 
@@ -25,7 +23,6 @@ class MoveToWishlist extends Generic
      * @param Template\Context $context
      * @param Data $wishlistHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Template\Context $context,
@@ -40,7 +37,6 @@ class MoveToWishlist extends Generic
      * Check whether "add to wishlist" button is allowed in cart
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isAllowInCart()
     {
@@ -51,7 +47,6 @@ class MoveToWishlist extends Generic
      * Get JSON POST params for moving from cart
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMoveFromCartParams()
     {

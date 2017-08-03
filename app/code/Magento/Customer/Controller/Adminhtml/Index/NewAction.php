@@ -8,7 +8,6 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 /**
  * Class \Magento\Customer\Controller\Adminhtml\Index\NewAction
  *
- * @since 2.0.0
  */
 class NewAction extends \Magento\Customer\Controller\Adminhtml\Index
 {
@@ -16,7 +15,6 @@ class NewAction extends \Magento\Customer\Controller\Adminhtml\Index
      * Create new customer action
      *
      * @return \Magento\Backend\Model\View\Result\Forward
-     * @since 2.0.0
      */
     public function execute()
     {

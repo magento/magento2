@@ -13,7 +13,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Customer\ExportOrdersExcel
  *
- * @since 2.0.0
  */
 class ExportOrdersExcel extends \Magento\Reports\Controller\Adminhtml\Report\Customer
 {
@@ -21,7 +20,6 @@ class ExportOrdersExcel extends \Magento\Reports\Controller\Adminhtml\Report\Cus
      * Export customers most ordered report to Excel XML format
      *
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -18,7 +18,6 @@ use Magento\Customer\Model\Url as CustomerUrl;
 /**
  * Class \Magento\Newsletter\Controller\Subscriber
  *
- * @since 2.0.0
  */
 abstract class Subscriber extends \Magento\Framework\App\Action\Action
 {
@@ -26,7 +25,6 @@ abstract class Subscriber extends \Magento\Framework\App\Action\Action
      * Customer session
      *
      * @var Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
@@ -34,19 +32,16 @@ abstract class Subscriber extends \Magento\Framework\App\Action\Action
      * Subscriber factory
      *
      * @var SubscriberFactory
-     * @since 2.0.0
      */
     protected $_subscriberFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var CustomerUrl
-     * @since 2.0.0
      */
     protected $_customerUrl;
 
@@ -56,7 +51,6 @@ abstract class Subscriber extends \Magento\Framework\App\Action\Action
      * @param Session $customerSession
      * @param StoreManagerInterface $storeManager
      * @param CustomerUrl $customerUrl
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,

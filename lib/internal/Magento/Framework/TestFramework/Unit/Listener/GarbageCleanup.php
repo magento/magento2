@@ -11,7 +11,6 @@ use PHPUnit\Framework\Warning;
 /**
  * Listener of PHPUnit built-in events that enforces cleanup of cyclic object references
  *
- * @since 2.0.0
  */
 class GarbageCleanup implements \PHPUnit\Framework\TestListener
 {
@@ -19,7 +18,6 @@ class GarbageCleanup implements \PHPUnit\Framework\TestListener
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function addError(\PHPUnit\Framework\Test $test, \Exception $e, $time)
     {
@@ -29,7 +27,6 @@ class GarbageCleanup implements \PHPUnit\Framework\TestListener
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function addFailure(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\AssertionFailedError $e, $time)
     {
@@ -39,7 +36,6 @@ class GarbageCleanup implements \PHPUnit\Framework\TestListener
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function addIncompleteTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
     {
@@ -49,7 +45,6 @@ class GarbageCleanup implements \PHPUnit\Framework\TestListener
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function addRiskyTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
     {
@@ -59,7 +54,6 @@ class GarbageCleanup implements \PHPUnit\Framework\TestListener
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function addSkippedTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
     {
@@ -68,7 +62,6 @@ class GarbageCleanup implements \PHPUnit\Framework\TestListener
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function startTestSuite(\PHPUnit\Framework\TestSuite $suite)
     {
@@ -77,7 +70,6 @@ class GarbageCleanup implements \PHPUnit\Framework\TestListener
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function endTestSuite(\PHPUnit\Framework\TestSuite $suite)
     {
@@ -87,7 +79,6 @@ class GarbageCleanup implements \PHPUnit\Framework\TestListener
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function startTest(\PHPUnit\Framework\Test $test)
     {
@@ -105,7 +96,6 @@ class GarbageCleanup implements \PHPUnit\Framework\TestListener
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function addWarning(Test $test, Warning $e, $time)
     {

@@ -9,7 +9,6 @@ namespace Magento\PageCache\Model\Cache;
 /**
  * System / Cache Management / Cache type "Full Page Cache"
  *
- * @since 2.0.0
  */
 class Type extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 {
@@ -25,14 +24,12 @@ class Type extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     private $eventManager;
 
     /**
      * @param \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool,
@@ -48,7 +45,6 @@ class Type extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
      * @param string $mode
      * @param array $tags
      * @return bool
-     * @since 2.0.0
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
     {

@@ -15,7 +15,6 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 
 /**
  * Data upgrade script
- * @since 2.0.0
  */
 class UpgradeData implements UpgradeDataInterface
 {
@@ -23,13 +22,11 @@ class UpgradeData implements UpgradeDataInterface
      * Sales setup factory
      *
      * @var SalesSetupFactory
-     * @since 2.0.0
      */
     private $salesSetupFactory;
 
     /**
      * @var Config
-     * @since 2.0.0
      */
     private $eavConfig;
 
@@ -45,7 +42,6 @@ class UpgradeData implements UpgradeDataInterface
      * @param SalesSetupFactory $salesSetupFactory
      * @param Config $eavConfig
      * @param AggregatedFieldDataConverter $aggregatedFieldConverter
-     * @since 2.0.0
      */
     public function __construct(
         SalesSetupFactory $salesSetupFactory,
@@ -59,7 +55,6 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

@@ -24,7 +24,6 @@ use Magento\Framework\DataObject\IdentityInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
- * @since 2.0.0
  */
 class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, IdentityInterface
 {
@@ -32,7 +31,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * Prefix of model events names
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'catalogrule_rule';
 
@@ -42,7 +40,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * In observe method you can use $observer->getEvent()->getRule() in this case
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'rule';
 
@@ -50,7 +47,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * Store matched product Ids
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_productIds;
 
@@ -58,7 +54,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * Limitation for products collection
      *
      * @var int|array|null
-     * @since 2.0.0
      */
     protected $_productsFilter = null;
 
@@ -66,7 +61,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * Store current date at "Y-m-d H:i:s" format
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_now;
 
@@ -74,7 +68,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * Cached data of prices calculated by price rules
      *
      * @var array
-     * @since 2.0.0
      */
     protected static $_priceRulesData = [];
 
@@ -82,73 +75,61 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * Catalog rule data
      *
      * @var \Magento\CatalogRule\Helper\Data
-     * @since 2.0.0
      */
     protected $_catalogRuleData;
 
     /**
      * @var \Magento\Framework\App\Cache\TypeListInterface
-     * @since 2.0.0
      */
     protected $_cacheTypesList;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_relatedCacheTypes;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
     /**
      * @var \Magento\Framework\Model\ResourceModel\Iterator
-     * @since 2.0.0
      */
     protected $_resourceIterator;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\CatalogRule\Model\Rule\Condition\CombineFactory
-     * @since 2.0.0
      */
     protected $_combineFactory;
 
     /**
      * @var \Magento\CatalogRule\Model\Rule\Action\CollectionFactory
-     * @since 2.0.0
      */
     protected $_actionCollectionFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $_productFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     * @since 2.0.0
      */
     protected $_productCollectionFactory;
 
     /**
      * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
-     * @since 2.0.0
      */
     protected $_ruleProductProcessor;
 
@@ -185,7 +166,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -242,7 +222,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * Init resource model and id field
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -255,7 +234,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * Getter for rule conditions collection
      *
      * @return \Magento\Rule\Model\Condition\Combine
-     * @since 2.0.0
      */
     public function getConditionsInstance()
     {
@@ -266,7 +244,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * Getter for rule actions collection
      *
      * @return \Magento\CatalogRule\Model\Rule\Action\Collection
-     * @since 2.0.0
      */
     public function getActionsInstance()
     {
@@ -277,7 +254,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * Get catalog rule customer group Ids
      *
      * @return array|null
-     * @since 2.0.0
      */
     public function getCustomerGroupIds()
     {
@@ -292,7 +268,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * Retrieve current date for current rule
      *
      * @return string
-     * @since 2.0.0
      */
     public function getNow()
     {
@@ -308,7 +283,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * @param string $now
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setNow($now)
     {
@@ -319,7 +293,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * Get array of product ids which are matched by rule
      *
      * @return array
-     * @since 2.0.0
      */
     public function getMatchingProductIds()
     {
@@ -355,7 +328,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      *
      * @param array $args
      * @return void
-     * @since 2.0.0
      */
     public function callbackValidateProduct($args)
     {
@@ -376,7 +348,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * Prepare website map
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getWebsitesMap()
     {
@@ -394,7 +365,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function validateData(\Magento\Framework\DataObject $dataObject)
     {
@@ -417,7 +387,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * @param string|int|float $discount
      *
      * @return array Validation errors
-     * @since 2.0.0
      */
     protected function validateDiscount($action, $discount)
     {
@@ -448,7 +417,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * @param float $price
      * @return float|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function calcProductPriceRule(Product $product, $price)
     {
@@ -502,7 +470,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * @param array $customerGroupId
      * @param int $productId
      * @return array
-     * @since 2.0.0
      */
     protected function _getRulesFromProduct($dateTs, $websiteId, $customerGroupId, $productId)
     {
@@ -515,7 +482,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * @param  int|array $productIds
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setProductsFilter($productIds)
     {
@@ -527,7 +493,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      *
      * @return array|int|null
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getProductsFilter()
     {
@@ -538,7 +503,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * Invalidate related cache types
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _invalidateCache()
     {
@@ -552,7 +516,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * {@inheritdoc}
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -582,7 +545,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * {@inheritdoc}
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterDelete()
     {
@@ -594,7 +556,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * Check if rule behavior changed
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isRuleBehaviorChanged()
     {
@@ -615,7 +576,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * @param array $array2
      *
      * @return array
-     * @since 2.0.0
      */
     protected function dataDiff($array1, $array2)
     {
@@ -868,7 +828,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * @inheritDoc
-     * @since 2.2.0
+     * @since 2.1.1
      */
     public function getIdentities()
     {

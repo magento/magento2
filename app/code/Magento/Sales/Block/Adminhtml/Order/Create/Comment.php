@@ -10,7 +10,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Comment extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
@@ -18,7 +17,6 @@ class Comment extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Data Form object
      *
      * @var \Magento\Framework\Data\Form
-     * @since 2.0.0
      */
     protected $_form;
 
@@ -26,7 +24,6 @@ class Comment extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get header css class
      *
      * @return string
-     * @since 2.0.0
      */
     public function getHeaderCssClass()
     {
@@ -37,7 +34,6 @@ class Comment extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get header text
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -48,7 +44,6 @@ class Comment extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get comment note
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCommentNote()
     {

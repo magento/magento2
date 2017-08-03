@@ -9,7 +9,6 @@ namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 /**
  * Class \Magento\Widget\Controller\Adminhtml\Widget\Instance\Blocks
  *
- * @since 2.0.0
  */
 class Blocks extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
 {
@@ -17,7 +16,6 @@ class Blocks extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
      * Render page containers
      *
      * @return void
-     * @since 2.0.0
      */
     public function renderPageContainers()
     {
@@ -45,7 +43,6 @@ class Blocks extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
      * Blocks Action (Ajax request)
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

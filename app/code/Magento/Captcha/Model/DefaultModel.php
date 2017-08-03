@@ -9,7 +9,6 @@ namespace Magento\Captcha\Model;
  * Implementation of \Zend\Captcha\Image
  *
  * @api
- * @since 2.0.0
  */
 class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model\CaptchaInterface
 {
@@ -82,7 +81,6 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * @param ResourceModel\LogFactory $resLogFactory
      * @param string $formId
      * @throws \Zend\Captcha\Exception\ExtensionNotLoadedException
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Session\SessionManagerInterface $session,
@@ -113,7 +111,6 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Get Block Name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBlockName()
     {
@@ -125,7 +122,6 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      *
      * @param null|string $login
      * @return bool
-     * @since 2.0.0
      */
     public function isRequired($login = null)
     {
@@ -149,7 +145,6 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Check if CAPTCHA has to be shown to logged in user on this form
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isShownToLoggedInUser()
     {
@@ -239,7 +234,6 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Whether to respect case while checking the answer
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isCaseSensitive()
     {
@@ -250,7 +244,6 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Get font to use when generating captcha
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFont()
     {
@@ -271,7 +264,6 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * After this time isCorrect() is going to return FALSE even if word was guessed correctly
      *
      * @return int
-     * @since 2.0.0
      */
     public function getExpiration()
     {
@@ -289,7 +281,6 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Get timeout for session token
      *
      * @return int
-     * @since 2.0.0
      */
     public function getTimeout()
     {
@@ -300,7 +291,6 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Get captcha image directory
      *
      * @return string
-     * @since 2.0.0
      */
     public function getImgDir()
     {
@@ -311,7 +301,6 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Get captcha image base URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getImgUrl()
     {
@@ -323,7 +312,6 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      *
      * @param string $word
      * @return bool
-     * @since 2.0.0
      */
     public function isCorrect($word)
     {
@@ -345,7 +333,6 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Return full URL to captcha image
      *
      * @return string
-     * @since 2.0.0
      */
     public function getImgSrc()
     {
@@ -357,7 +344,6 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      *
      * @param string $login
      * @return $this
-     * @since 2.0.0
      */
     public function logAttempt($login)
     {
@@ -502,7 +488,6 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Get captcha word
      *
      * @return string
-     * @since 2.0.0
      */
     public function getWord()
     {

@@ -7,7 +7,6 @@ namespace Magento\Setup\Module\I18n\Pack\Writer\File;
 
 /**
  * Pack writer csv
- * @since 2.0.0
  */
 class Csv extends AbstractFile
 {
@@ -18,7 +17,6 @@ class Csv extends AbstractFile
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function _writeFile($file, $phrases)
     {
@@ -42,7 +40,6 @@ class Csv extends AbstractFile
      * @param string $file
      * @param array $phrases
      * @return array
-     * @since 2.0.0
      */
     protected function _mergeDictionaries($file, $phrases)
     {
@@ -64,7 +61,6 @@ class Csv extends AbstractFile
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _getFileExtension()
     {

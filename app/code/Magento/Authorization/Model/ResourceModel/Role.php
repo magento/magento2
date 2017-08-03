@@ -9,7 +9,6 @@ use Magento\Authorization\Model\Acl\Role\User as RoleUser;
 
 /**
  * Admin role resource model
- * @since 2.0.0
  */
 class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -17,7 +16,6 @@ class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Rule table
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_ruleTable;
 
@@ -25,7 +23,6 @@ class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Cache
      *
      * @var \Magento\Framework\Cache\FrontendInterface
-     * @since 2.0.0
      */
     protected $_cache;
 
@@ -33,7 +30,6 @@ class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -48,7 +44,6 @@ class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -61,7 +56,6 @@ class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $role
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $role)
     {
@@ -105,7 +99,6 @@ class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\AbstractModel $role
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $role)
     {
@@ -118,7 +111,6 @@ class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $role
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $role)
     {
@@ -136,7 +128,6 @@ class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Authorization\Model\Role $role
      * @return array
-     * @since 2.0.0
      */
     public function getRoleUsers(\Magento\Authorization\Model\Role $role)
     {

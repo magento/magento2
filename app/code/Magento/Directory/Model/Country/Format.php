@@ -18,13 +18,11 @@ namespace Magento\Directory\Model\Country;
  * @method \Magento\Directory\Model\Country\Format setFormat(string $value)
  *
  * @api
- * @since 2.0.0
  */
 class Format extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

@@ -8,7 +8,6 @@ namespace Magento\Indexer\Block\Backend\Grid\Column\Renderer;
 /**
  * Class \Magento\Indexer\Block\Backend\Grid\Column\Renderer\Status
  *
- * @since 2.0.0
  */
 class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -17,7 +16,6 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

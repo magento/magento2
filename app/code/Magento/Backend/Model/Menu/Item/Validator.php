@@ -7,7 +7,6 @@ namespace Magento\Backend\Model\Menu\Item;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Validator
 {
@@ -15,7 +14,6 @@ class Validator
      * The list of required params
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_required = ['id', 'title', 'resource'];
 
@@ -23,7 +21,6 @@ class Validator
      * List of created item ids
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_ids = [];
 
@@ -31,13 +28,11 @@ class Validator
      * The list of primitive validators
      *
      * @var \Zend_Validate[]
-     * @since 2.0.0
      */
     protected $_validators = [];
 
     /**
      * Constructor
-     * @since 2.0.0
      */
     public function __construct()
     {
@@ -76,7 +71,6 @@ class Validator
      * @return void
      * @throws \InvalidArgumentException
      * @throws \BadMethodCallException
-     * @since 2.0.0
      */
     public function validate($data)
     {
@@ -116,7 +110,6 @@ class Validator
      * @param mixed $value
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function validateParam($param, $value)
     {

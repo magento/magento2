@@ -11,7 +11,6 @@ use Magento\Framework\App\State;
 /**
  * Class \Magento\Framework\View\Layout\ScheduledStructure\Helper
  *
- * @since 2.0.0
  */
 class Helper
 {
@@ -25,30 +24,22 @@ class Helper
     const SCHEDULED_STRUCTURE_INDEX_IS_AFTER = 4;
     /**#@-*/
 
-    /**
-     * Anonymous block counter
-     *
-     * @var int
-     * @since 2.0.0
-     */
+    /**#@-*/
     protected $counter = 0;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var State
-     * @since 2.0.0
      */
     protected $state;
 
     /**
      * @param \Psr\Log\LoggerInterface $logger
      * @param State $state
-     * @since 2.0.0
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -63,7 +54,6 @@ class Helper
      *
      * @param string $class
      * @return string
-     * @since 2.0.0
      */
     protected function _generateAnonymousName($class)
     {
@@ -81,7 +71,6 @@ class Helper
      * @param \Magento\Framework\View\Layout\Element $parentNode
      * @return string
      * @see scheduleElement() where the scheduledStructure is used
-     * @since 2.0.0
      */
     public function scheduleStructure(
         Layout\ScheduledStructure $scheduledStructure,
@@ -135,7 +124,6 @@ class Helper
      * @param string $name
      * @param string $path
      * @return void
-     * @since 2.0.0
      */
     protected function _overrideElementWorkaround(Layout\ScheduledStructure $scheduledStructure, $name, $path)
     {
@@ -155,7 +143,6 @@ class Helper
      *
      * @param \Magento\Framework\View\Layout\Element $node
      * @return array
-     * @since 2.0.0
      */
     protected function _beforeAfterToSibling($node)
     {
@@ -182,7 +169,6 @@ class Helper
      * @return void
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function scheduleElement(
         Layout\ScheduledStructure $scheduledStructure,
@@ -246,7 +232,6 @@ class Helper
      * @param string $type
      * @param string $class
      * @return string
-     * @since 2.0.0
      */
     protected function _createStructuralElement(Layout\Data\Structure $structure, $name, $type, $class)
     {

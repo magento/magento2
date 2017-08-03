@@ -9,7 +9,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Invoice\View;
  * Adminhtml sales item renderer
  *
  * @api
- * @since 2.0.0
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
@@ -17,7 +16,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve invoice order
      *
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -28,7 +26,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve source
      *
      * @return \Magento\Sales\Model\Order\Invoice
-     * @since 2.0.0
      */
     public function getSource()
     {
@@ -39,7 +36,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve invoice model instance
      *
      * @return \Magento\Sales\Model\Order\Invoice
-     * @since 2.0.0
      */
     public function getInvoice()
     {
@@ -50,7 +46,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve order url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getOrderUrl()
     {
@@ -62,7 +57,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      *
      * @param float $price
      * @return string
-     * @since 2.0.0
      */
     public function formatPrice($price)
     {

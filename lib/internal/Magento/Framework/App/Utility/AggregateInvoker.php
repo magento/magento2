@@ -13,7 +13,6 @@ class AggregateInvoker
 {
     /**
      * @var \PHPUnit\Framework\TestCase
-     * @since 2.0.0
      */
     protected $_testCase;
 
@@ -23,14 +22,12 @@ class AggregateInvoker
      * Only data sets for failed assertions are gathered otherwise.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_options = ['verbose' => false];
 
     /**
      * @param \PHPUnit\Framework\TestCase $testCase
      * @param array $options
-     * @since 2.0.0
      */
     public function __construct($testCase, array $options = [])
     {
@@ -45,7 +42,6 @@ class AggregateInvoker
      * @param callable $callback
      * @param array[] $dataSource
      * @return void
-     * @since 2.0.0
      */
     public function __invoke(callable $callback, array $dataSource)
     {
@@ -79,7 +75,6 @@ class AggregateInvoker
      * @param string $dataSetName
      * @param mixed $dataSet
      * @return string
-     * @since 2.0.0
      */
     protected function prepareMessage(\Exception $exception, $dataSetName, $dataSet)
     {
@@ -104,7 +99,6 @@ class AggregateInvoker
      * @param array $results
      * @param int $passed
      * @return void
-     * @since 2.0.0
      */
     protected function processResults(array $results, $passed)
     {

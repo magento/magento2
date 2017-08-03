@@ -14,13 +14,11 @@ use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Class \Magento\Wishlist\Controller\Index\DownloadCustomOption
  *
- * @since 2.0.0
  */
 class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
-     * @since 2.0.0
      */
     protected $_fileResponseFactory;
 
@@ -36,7 +34,6 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex
      * @param Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileResponseFactory
      * @param Json|null $json
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -54,7 +51,6 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex
      * @return \Magento\Framework\Controller\Result\Forward
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExitExpression)
-     * @since 2.0.0
      */
     public function execute()
     {

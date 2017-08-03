@@ -9,7 +9,6 @@ namespace Magento\Developer\Helper;
  * Developer config data helper
  *
  * @api
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -23,7 +22,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string|null $storeId
      * @return bool
-     * @since 2.0.0
      */
     public function isDevAllowed($storeId = null)
     {

@@ -9,13 +9,11 @@ namespace Magento\Bundle\Controller\Adminhtml\Bundle\Selection;
 /**
  * Class \Magento\Bundle\Controller\Adminhtml\Bundle\Selection\Search
  *
- * @since 2.0.0
  */
 class Search extends \Magento\Backend\App\Action
 {
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function execute()
     {

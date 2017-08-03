@@ -12,7 +12,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Shopcart\ExportProductExcel
  *
- * @since 2.0.0
  */
 class ExportProductExcel extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
 {
@@ -20,7 +19,6 @@ class ExportProductExcel extends \Magento\Reports\Controller\Adminhtml\Report\Sh
      * Export products report to Excel XML format
      *
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

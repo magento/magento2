@@ -11,7 +11,6 @@ namespace Magento\Config\Model\Config\Structure\Mapper;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Path extends \Magento\Config\Model\Config\Structure\AbstractMapper
 {
@@ -20,7 +19,6 @@ class Path extends \Magento\Config\Model\Config\Structure\AbstractMapper
      *
      * @param array $data
      * @return array
-     * @since 2.0.0
      */
     public function map(array $data)
     {
@@ -42,7 +40,6 @@ class Path extends \Magento\Config\Model\Config\Structure\AbstractMapper
      * @param array $elementConfig
      * @param array $parentConfig
      * @return array
-     * @since 2.0.0
      */
     protected function _processConfig(array $elementConfig, array $parentConfig)
     {

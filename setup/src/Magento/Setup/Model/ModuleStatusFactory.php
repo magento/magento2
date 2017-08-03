@@ -10,13 +10,11 @@ use Magento\Framework\Module\Status;
 
 /**
  * Class ModuleStatusFactory creates instance of Status
- * @since 2.0.0
  */
 class ModuleStatusFactory
 {
     /**
      * @var ObjectManagerProvider
-     * @since 2.0.0
      */
     private $objectManagerProvider;
 
@@ -24,7 +22,6 @@ class ModuleStatusFactory
      * Constructor
      *
      * @param ObjectManagerProvider $objectManagerProvider
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerProvider $objectManagerProvider)
     {
@@ -35,7 +32,6 @@ class ModuleStatusFactory
      * Creates Status object
      *
      * @return Status
-     * @since 2.0.0
      */
     public function create()
     {

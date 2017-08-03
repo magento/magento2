@@ -13,7 +13,6 @@ namespace Magento\Wishlist\Block\Customer;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Sharing extends \Magento\Framework\View\Element\Template
 {
@@ -21,7 +20,6 @@ class Sharing extends \Magento\Framework\View\Element\Template
      * Entered Data cache
      *
      * @var array|null
-     * @since 2.0.0
      */
     protected $_enteredData = null;
 
@@ -29,13 +27,11 @@ class Sharing extends \Magento\Framework\View\Element\Template
      * Wishlist configuration
      *
      * @var \Magento\Wishlist\Model\Config
-     * @since 2.0.0
      */
     protected $_wishlistConfig;
 
     /**
      * @var \Magento\Framework\Session\Generic
-     * @since 2.0.0
      */
     protected $_wishlistSession;
 
@@ -44,7 +40,6 @@ class Sharing extends \Magento\Framework\View\Element\Template
      * @param \Magento\Wishlist\Model\Config $wishlistConfig
      * @param \Magento\Framework\Session\Generic $wishlistSession
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -61,7 +56,6 @@ class Sharing extends \Magento\Framework\View\Element\Template
      * Prepare Global Layout
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -72,7 +66,6 @@ class Sharing extends \Magento\Framework\View\Element\Template
      * Retrieve Send Form Action URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSendUrl()
     {
@@ -84,7 +77,6 @@ class Sharing extends \Magento\Framework\View\Element\Template
      *
      * @param string $key
      * @return string|null
-     * @since 2.0.0
      */
     public function getEnteredData($key)
     {
@@ -103,7 +95,6 @@ class Sharing extends \Magento\Framework\View\Element\Template
      * Retrieve back button url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -114,7 +105,6 @@ class Sharing extends \Magento\Framework\View\Element\Template
      * Retrieve number of emails allowed for sharing
      *
      * @return int
-     * @since 2.0.0
      */
     public function getEmailSharingLimit()
     {
@@ -125,7 +115,6 @@ class Sharing extends \Magento\Framework\View\Element\Template
      * Retrieve maximum email length allowed for sharing
      *
      * @return int
-     * @since 2.0.0
      */
     public function getTextSharingLimit()
     {

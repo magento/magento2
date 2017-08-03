@@ -9,7 +9,6 @@ use Magento\Setup\Module\Dependency\Report\Data\ConfigInterface;
 
 /**
  *  Writer Interface
- * @since 2.0.0
  */
 interface WriterInterface
 {
@@ -19,7 +18,6 @@ interface WriterInterface
      * @param array $options
      * @param \Magento\Setup\Module\Dependency\Report\Data\ConfigInterface $config
      * @return void
-     * @since 2.0.0
      */
     public function write(array $options, ConfigInterface $config);
 }

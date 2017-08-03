@@ -7,7 +7,6 @@ namespace Magento\Framework\Locale;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface ListsInterface extends OptionInterface
 {
@@ -15,7 +14,6 @@ interface ListsInterface extends OptionInterface
      * Retrieve timezone option list
      *
      * @return array
-     * @since 2.0.0
      */
     public function getOptionTimezones();
 
@@ -26,7 +24,6 @@ interface ListsInterface extends OptionInterface
      * @param bool $ucFirstCode
      *
      * @return array
-     * @since 2.0.0
      */
     public function getOptionWeekdays($preserveCodes = false, $ucFirstCode = false);
 
@@ -34,7 +31,6 @@ interface ListsInterface extends OptionInterface
      * Retrieve country option list
      *
      * @return array
-     * @since 2.0.0
      */
     public function getOptionCountries();
 
@@ -42,7 +38,6 @@ interface ListsInterface extends OptionInterface
      * Retrieve currency option list
      *
      * @return array
-     * @since 2.0.0
      */
     public function getOptionCurrencies();
 
@@ -50,7 +45,6 @@ interface ListsInterface extends OptionInterface
      * Retrieve all currency option list
      *
      * @return array
-     * @since 2.0.0
      */
     public function getOptionAllCurrencies();
 
@@ -60,7 +54,6 @@ interface ListsInterface extends OptionInterface
      * @param  string $value  Name to get detailed information about
      * @param  string $locale Optional locale string
      * @return string
-     * @since 2.0.0
      */
     public function getCountryTranslation($value, $locale = null);
 }

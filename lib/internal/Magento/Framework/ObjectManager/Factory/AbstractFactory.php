@@ -10,7 +10,6 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Class \Magento\Framework\ObjectManager\Factory\AbstractFactory
  *
- * @since 2.0.0
  */
 abstract class AbstractFactory implements \Magento\Framework\ObjectManager\FactoryInterface
 {
@@ -18,7 +17,6 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      * Object manager
      *
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -26,7 +24,6 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      * Object manager config
      *
      * @var \Magento\Framework\ObjectManager\ConfigInterface
-     * @since 2.0.0
      */
     protected $config;
 
@@ -34,7 +31,6 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      * Definition list
      *
      * @var \Magento\Framework\ObjectManager\DefinitionInterface
-     * @since 2.0.0
      */
     protected $definitions;
 
@@ -42,7 +38,6 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      * Global arguments
      *
      * @var array
-     * @since 2.0.0
      */
     protected $globalArguments;
 
@@ -59,7 +54,6 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      * @param ObjectManagerInterface $objectManager
      * @param \Magento\Framework\ObjectManager\DefinitionInterface $definitions
      * @param array $globalArguments
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManager\ConfigInterface $config,
@@ -79,7 +73,6 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      * @param ObjectManagerInterface $objectManager
      *
      * @return void
-     * @since 2.0.0
      */
     public function setObjectManager(ObjectManagerInterface $objectManager)
     {
@@ -92,7 +85,6 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      * @param array $arguments
      *
      * @return void
-     * @since 2.0.0
      */
     public function setArguments($arguments)
     {
@@ -119,7 +111,6 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      *
      * @return object
      *
-     * @since 2.0.0
      */
     protected function createObject($type, $args)
     {
@@ -138,7 +129,6 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      * @return void
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function resolveArgument(&$argument, $paramType, $paramDefault, $paramName, $requestedType)
     {
@@ -180,7 +170,6 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      * @param array $array
      *
      * @return void
-     * @since 2.0.0
      */
     protected function parseArray(&$array)
     {

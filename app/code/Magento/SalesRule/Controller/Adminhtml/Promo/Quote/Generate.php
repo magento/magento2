@@ -12,7 +12,6 @@ use Magento\SalesRule\Model\CouponGenerator;
 /**
  * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\Generate
  *
- * @since 2.0.0
  */
 class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
@@ -47,7 +46,6 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
      * Generate Coupons action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

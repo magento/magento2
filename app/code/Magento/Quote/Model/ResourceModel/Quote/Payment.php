@@ -9,7 +9,6 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;
 
 /**
  * Quote payment resource model
- * @since 2.0.0
  */
 class Payment extends AbstractDb
 {
@@ -17,7 +16,6 @@ class Payment extends AbstractDb
      * Serializeable field: additional_information
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_serializableFields = ['additional_information' => [null, []]];
 
@@ -25,7 +23,6 @@ class Payment extends AbstractDb
      * Main table and field initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

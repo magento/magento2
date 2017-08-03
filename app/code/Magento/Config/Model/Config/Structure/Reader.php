@@ -15,7 +15,6 @@ use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
 /**
  * Class Reader
  * @api
- * @since 2.0.0
  */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
@@ -23,7 +22,6 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * List of identifier attributes for merging
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_idAttributes = [
         '/config/system/tab' => 'id',
@@ -36,7 +34,6 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
 
     /**
      * @var CompilerInterface
-     * @since 2.0.0
      */
     protected $compiler;
 
@@ -52,7 +49,6 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,
@@ -84,7 +80,6 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * @param array $fileList
      * @return array
      * @throws LocalizedException
-     * @since 2.0.0
      */
     protected function _readFiles($fileList)
     {
@@ -129,7 +124,6 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      *
      * @param string $content
      * @return string
-     * @since 2.0.0
      */
     protected function processingDocument($content)
     {

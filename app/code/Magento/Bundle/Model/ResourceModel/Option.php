@@ -12,13 +12,11 @@ use Magento\Framework\EntityManager\EntityManager;
 
 /**
  * Bundle Option Resource Model
- * @since 2.0.0
  */
 class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Bundle\Model\Option\Validator
-     * @since 2.0.0
      */
     private $validator;
 
@@ -39,7 +37,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Bundle\Model\Option\Validator $validator
      * @param string $connectionName
      * @param EntityManager|null $entityManager
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -58,7 +55,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize connection and define resource
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -83,7 +79,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -124,7 +119,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -148,7 +142,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $productId
      * @param int $storeId
      * @return array
-     * @since 2.0.0
      */
     public function getSearchableData($productId, $storeId)
     {
@@ -193,7 +186,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getValidationRulesBeforeSave()
     {

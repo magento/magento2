@@ -10,7 +10,6 @@ namespace Magento\Framework\App;
  * System cache model interface
  *
  * @api
- * @since 2.0.0
  */
 interface CacheInterface
 {
@@ -18,7 +17,6 @@ interface CacheInterface
      * Get cache frontend API object
      *
      * @return \Magento\Framework\Cache\FrontendInterface
-     * @since 2.0.0
      */
     public function getFrontend();
 
@@ -27,7 +25,6 @@ interface CacheInterface
      *
      * @param  string $identifier
      * @return string
-     * @since 2.0.0
      */
     public function load($identifier);
 
@@ -39,7 +36,6 @@ interface CacheInterface
      * @param array $tags
      * @param int $lifeTime
      * @return bool
-     * @since 2.0.0
      */
     public function save($data, $identifier, $tags = [], $lifeTime = null);
 
@@ -48,7 +44,6 @@ interface CacheInterface
      *
      * @param string $identifier
      * @return bool
-     * @since 2.0.0
      */
     public function remove($identifier);
 
@@ -57,7 +52,6 @@ interface CacheInterface
      *
      * @param array $tags
      * @return bool
-     * @since 2.0.0
      */
     public function clean($tags = []);
 }

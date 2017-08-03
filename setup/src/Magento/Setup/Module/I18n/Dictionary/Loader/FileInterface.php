@@ -7,7 +7,6 @@ namespace Magento\Setup\Module\I18n\Dictionary\Loader;
 
 /**
  * Dictionary loader interface
- * @since 2.0.0
  */
 interface FileInterface
 {
@@ -17,7 +16,6 @@ interface FileInterface
      * @param string $file
      * @return \Magento\Setup\Module\I18n\Dictionary
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function load($file);
 }

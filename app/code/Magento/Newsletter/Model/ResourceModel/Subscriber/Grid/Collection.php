@@ -10,7 +10,6 @@ namespace Magento\Newsletter\Model\ResourceModel\Subscriber\Grid;
 /**
  * Class \Magento\Newsletter\Model\ResourceModel\Subscriber\Grid\Collection
  *
- * @since 2.0.0
  */
 class Collection extends \Magento\Newsletter\Model\ResourceModel\Subscriber\Collection
 {
@@ -18,7 +17,6 @@ class Collection extends \Magento\Newsletter\Model\ResourceModel\Subscriber\Coll
      * Sets flag for customer info loading on load
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initSelect()
     {

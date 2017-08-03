@@ -12,7 +12,6 @@ use Magento\Framework\Pricing\Amount\AmountInterface;
  * Catalog price interface
  *
  * @api
- * @since 2.0.0
  */
 interface PriceInterface
 {
@@ -20,7 +19,6 @@ interface PriceInterface
      * Get price type code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPriceCode();
 
@@ -28,7 +26,6 @@ interface PriceInterface
      * Get price value
      *
      * @return float
-     * @since 2.0.0
      */
     public function getValue();
 
@@ -36,7 +33,6 @@ interface PriceInterface
      * Get Price Amount object
      *
      * @return AmountInterface
-     * @since 2.0.0
      */
     public function getAmount();
 
@@ -48,7 +44,6 @@ interface PriceInterface
      * @param null|bool|string|array $exclude
      * @param null|array $context
      * @return AmountInterface
-     * @since 2.0.0
      */
     public function getCustomAmount($amount = null, $exclude = null, $context = []);
 }

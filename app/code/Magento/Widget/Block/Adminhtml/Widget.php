@@ -11,13 +11,11 @@ namespace Magento\Widget\Block\Adminhtml;
  * WYSIWYG widget plugin main block
  *
  * @api
- * @since 2.0.0
  */
 class Widget extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

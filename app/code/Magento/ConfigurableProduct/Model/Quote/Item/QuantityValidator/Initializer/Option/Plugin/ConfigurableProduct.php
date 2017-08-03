@@ -10,7 +10,6 @@ namespace Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initial
 /**
  * Class \Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin\ConfigurableProduct
  *
- * @since 2.0.0
  */
 class ConfigurableProduct
 {

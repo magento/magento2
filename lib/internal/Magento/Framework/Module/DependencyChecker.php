@@ -9,7 +9,6 @@ use Magento\Framework\Data\Graph;
 
 /**
  * Checks for dependencies between modules
- * @since 2.0.0
  */
 class DependencyChecker
 {
@@ -17,7 +16,6 @@ class DependencyChecker
      * Enabled module list from configuration
      *
      * @var array
-     * @since 2.0.0
      */
     private $enabledModuleList;
 
@@ -25,7 +23,6 @@ class DependencyChecker
      * The full module list information from filesystem
      *
      * @var array
-     * @since 2.0.0
      */
     private $fullModuleList;
 
@@ -33,13 +30,11 @@ class DependencyChecker
      * Graph
      *
      * @var Graph
-     * @since 2.0.0
      */
     private $graph;
 
     /**
      * @var PackageInfo
-     * @since 2.0.0
      */
     protected $packageInfo;
 
@@ -49,7 +44,6 @@ class DependencyChecker
      * @param ModuleList $list
      * @param ModuleList\Loader $loader
      * @param PackageInfoFactory $packageInfoFactory
-     * @since 2.0.0
      */
     public function __construct(ModuleList $list, ModuleList\Loader $loader, PackageInfoFactory $packageInfoFactory)
     {
@@ -64,7 +58,6 @@ class DependencyChecker
      * @param string[] $toBeDisabledModules
      * @param string[] $currentlyEnabledModules
      * @return array
-     * @since 2.0.0
      */
     public function checkDependenciesWhenDisableModules($toBeDisabledModules, $currentlyEnabledModules = null)
     {
@@ -80,7 +73,6 @@ class DependencyChecker
      * @param string[] $toBeEnabledModules
      * @param string[] $currentlyEnabledModules
      * @return array
-     * @since 2.0.0
      */
     public function checkDependenciesWhenEnableModules($toBeEnabledModules, $currentlyEnabledModules = null)
     {
@@ -97,7 +89,6 @@ class DependencyChecker
      * @param string[] $moduleNames list of modules to be enabled/disabled
      * @param string[] $enabledModules list of enabled modules assuming enable/disable succeeds
      * @return array
-     * @since 2.0.0
      */
     private function checkDependencyGraph($isEnable, $moduleNames, $enabledModules)
     {
@@ -129,7 +120,6 @@ class DependencyChecker
      * Create the dependency graph
      *
      * @return Graph
-     * @since 2.0.0
      */
     private function createGraph()
     {

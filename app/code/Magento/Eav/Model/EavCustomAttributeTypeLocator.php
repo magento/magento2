@@ -15,25 +15,21 @@ use Magento\Framework\Reflection\TypeProcessor;
 
 /**
  * Class to locate types for Eav custom attributes
- * @since 2.0.0
  */
 class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterface
 {
     /**
      * @var AttributeRepositoryInterface
-     * @since 2.0.0
      */
     private $attributeRepository;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $serviceEntityTypeMap;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $serviceBackendModelDataInterfaceMap;
 
@@ -73,7 +69,6 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
      *                             ]
      * ]
      * </pre>
-     * @since 2.0.0
      */
     public function __construct(
         AttributeRepositoryInterface $attributeRepository,
@@ -88,7 +83,6 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getType($attributeCode, $serviceClass)
     {
@@ -114,7 +108,6 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAllServiceDataInterfaces()
     {

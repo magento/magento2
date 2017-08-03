@@ -9,7 +9,6 @@ namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 /**
  * Class \Magento\AdminNotification\Controller\Adminhtml\Notification\MassMarkAsRead
  *
- * @since 2.0.0
  */
 class MassMarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Notification
 {
@@ -23,7 +22,6 @@ class MassMarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Not
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

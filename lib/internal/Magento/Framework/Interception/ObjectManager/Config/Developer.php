@@ -15,13 +15,12 @@ use Magento\Framework\ObjectManager\InterceptableValidator;
 /**
  * Class \Magento\Framework\Interception\ObjectManager\Config\Developer
  *
- * @since 2.0.0
  */
 class Developer extends \Magento\Framework\ObjectManager\Config\Config implements ConfigInterface
 {
     /**
      * @var InterceptableValidator
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $interceptableValidator;
 
@@ -29,7 +28,7 @@ class Developer extends \Magento\Framework\ObjectManager\Config\Config implement
      * @param RelationsInterface $relations
      * @param DefinitionInterface $definitions
      * @param InterceptableValidator $interceptableValidator
-     * @since 2.1.0
+     * @since 2.0.1
      */
     public function __construct(
         RelationsInterface $relations = null,
@@ -42,7 +41,6 @@ class Developer extends \Magento\Framework\ObjectManager\Config\Config implement
 
     /**
      * @var \Magento\Framework\Interception\ConfigInterface
-     * @since 2.0.0
      */
     protected $interceptionConfig;
 
@@ -51,7 +49,6 @@ class Developer extends \Magento\Framework\ObjectManager\Config\Config implement
      *
      * @param \Magento\Framework\Interception\ConfigInterface $interceptionConfig
      * @return void
-     * @since 2.0.0
      */
     public function setInterceptionConfig(\Magento\Framework\Interception\ConfigInterface $interceptionConfig)
     {
@@ -63,7 +60,6 @@ class Developer extends \Magento\Framework\ObjectManager\Config\Config implement
      *
      * @param string $instanceName
      * @return string
-     * @since 2.0.0
      */
     public function getInstanceType($instanceName)
     {
@@ -81,7 +77,6 @@ class Developer extends \Magento\Framework\ObjectManager\Config\Config implement
      *
      * @param string $instanceName
      * @return string
-     * @since 2.0.0
      */
     public function getOriginalInstanceType($instanceName)
     {

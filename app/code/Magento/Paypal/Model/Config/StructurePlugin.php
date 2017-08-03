@@ -15,7 +15,6 @@ use Magento\Paypal\Model\Config\Structure\PaymentSectionModifier;
 
 /**
  * Plugin for \Magento\Config\Model\Config\Structure
- * @since 2.0.0
  */
 class StructurePlugin
 {
@@ -38,7 +37,7 @@ class StructurePlugin
 
     /**
      * @var PaymentSectionModifier
-     * @since 2.2.0
+     * @since 2.1.4
      */
     private $paymentSectionModifier;
 
@@ -64,7 +63,6 @@ class StructurePlugin
      * @param ScopeDefiner $scopeDefiner
      * @param BackendHelper $backendHelper
      * @param PaymentSectionModifier|null $paymentSectionModifier
-     * @since 2.0.0
      */
     public function __construct(
         ScopeDefiner $scopeDefiner,
@@ -82,7 +80,6 @@ class StructurePlugin
      *
      * @param bool $addOther
      * @return string[]
-     * @since 2.0.0
      */
     public static function getPaypalConfigCountries($addOther = false)
     {
@@ -104,7 +101,6 @@ class StructurePlugin
      * @return ElementInterface|null
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function aroundGetElementByPathParts(Structure $subject, \Closure $proceed, array $pathParts)
     {
@@ -143,7 +139,7 @@ class StructurePlugin
      *
      * @param Section $result
      * @return void
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function restructurePayments(Section $result)
     {

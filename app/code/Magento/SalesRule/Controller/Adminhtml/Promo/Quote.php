@@ -8,7 +8,6 @@ namespace Magento\SalesRule\Controller\Adminhtml\Promo;
 /**
  * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
  *
- * @since 2.0.0
  */
 abstract class Quote extends \Magento\Backend\App\Action
 {
@@ -23,19 +22,16 @@ abstract class Quote extends \Magento\Backend\App\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
-     * @since 2.0.0
      */
     protected $_fileFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
-     * @since 2.0.0
      */
     protected $_dateFilter;
 
@@ -44,7 +40,6 @@ abstract class Quote extends \Magento\Backend\App\Action
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -62,7 +57,6 @@ abstract class Quote extends \Magento\Backend\App\Action
      * Initiate rule
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _initRule()
     {
@@ -85,7 +79,6 @@ abstract class Quote extends \Magento\Backend\App\Action
      * Initiate action
      *
      * @return this
-     * @since 2.0.0
      */
     protected function _initAction()
     {

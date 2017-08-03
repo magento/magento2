@@ -9,13 +9,11 @@ use Magento\Framework\Data\Collection;
 
 /**
  * Class AddFieldToCollection
- * @since 2.0.0
  */
 class AddFieldToCollection implements AddFieldToCollectionInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function addField(Collection $collection, $field, $alias = null)
     {

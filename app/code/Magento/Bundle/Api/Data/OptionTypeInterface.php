@@ -9,7 +9,6 @@ namespace Magento\Bundle\Api\Data;
 /**
  * Interface OptionTypeInterface
  * @api
- * @since 2.0.0
  */
 interface OptionTypeInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -17,7 +16,6 @@ interface OptionTypeInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Get type label
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLabel();
 
@@ -26,7 +24,6 @@ interface OptionTypeInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param string $label
      * @return $this
-     * @since 2.0.0
      */
     public function setLabel($label);
 
@@ -34,7 +31,6 @@ interface OptionTypeInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Get type code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCode();
 
@@ -43,7 +39,6 @@ interface OptionTypeInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function setCode($code);
 
@@ -51,7 +46,6 @@ interface OptionTypeInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Bundle\Api\Data\OptionTypeExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -60,7 +54,6 @@ interface OptionTypeInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param \Magento\Bundle\Api\Data\OptionTypeExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Bundle\Api\Data\OptionTypeExtensionInterface $extensionAttributes);
 }

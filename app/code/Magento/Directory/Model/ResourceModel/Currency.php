@@ -10,7 +10,6 @@ namespace Magento\Directory\Model\ResourceModel;
  * Currency Resource Model
  *
  * @api
- * @since 2.0.0
  */
 class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -18,7 +17,6 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Currency rate table
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_currencyRateTable;
 
@@ -26,7 +24,6 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Currency rate cache array
      *
      * @var array
-     * @since 2.0.0
      */
     protected static $_rateCache;
 
@@ -34,7 +31,6 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main and currency rate tables
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -48,7 +44,6 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Directory\Model\Currency|string $currencyFrom
      * @param \Magento\Directory\Model\Currency|string $currencyTo
      * @return float
-     * @since 2.0.0
      */
     public function getRate($currencyFrom, $currencyTo)
     {
@@ -88,7 +83,6 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Directory\Model\Currency|string $currencyFrom
      * @param \Magento\Directory\Model\Currency|string $currencyTo
      * @return float
-     * @since 2.0.0
      */
     public function getAnyRate($currencyFrom, $currencyTo)
     {
@@ -140,7 +134,6 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $rates
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function saveRates($rates)
     {
@@ -171,7 +164,6 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $path
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getConfigCurrencies($model, $path)
     {
@@ -194,7 +186,6 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string|array $currency
      * @param array $toCurrencies
      * @return array
-     * @since 2.0.0
      */
     public function getCurrencyRates($currency, $toCurrencies = null)
     {
@@ -216,7 +207,6 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $code
      * @param array $toCurrencies
      * @return array
-     * @since 2.0.0
      */
     protected function _getRatesByCode($code, $toCurrencies = null)
     {

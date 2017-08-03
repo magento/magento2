@@ -12,19 +12,16 @@ use Magento\Catalog\Model\Layer\FilterableAttributeListInterface;
 /**
  * Class \Magento\Catalog\Model\Layer\Category\FilterableAttributeList
  *
- * @since 2.0.0
  */
 class FilterableAttributeList implements FilterableAttributeListInterface
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
-     * @since 2.0.0
      */
     protected $collectionFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -33,7 +30,6 @@ class FilterableAttributeList implements FilterableAttributeListInterface
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory,
@@ -47,7 +43,6 @@ class FilterableAttributeList implements FilterableAttributeListInterface
      * Retrieve list of filterable attributes
      *
      * @return array|\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
-     * @since 2.0.0
      */
     public function getList()
     {
@@ -67,7 +62,6 @@ class FilterableAttributeList implements FilterableAttributeListInterface
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection $collection
      * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
-     * @since 2.0.0
      */
     protected function _prepareAttributeCollection($collection)
     {

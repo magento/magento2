@@ -16,7 +16,6 @@ use Magento\Framework\Filesystem\DriverPool;
  * @method string getTime()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Backup extends \Magento\Framework\DataObject implements \Magento\Framework\Backup\Db\BackupInterface
 {
@@ -29,7 +28,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      * Type of backup file
      *
      * @var string
-     * @since 2.0.0
      */
     private $_type = 'db';
 
@@ -37,19 +35,16 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      * Gz file pointer
      *
      * @var \Magento\Framework\Filesystem\File\WriteInterface
-     * @since 2.0.0
      */
     protected $_stream = null;
 
     /**
      * @var \Magento\Framework\Filesystem
-     * @since 2.0.0
      */
     protected $_filesystem;
 
     /**
      * @var \Magento\Backup\Helper\Data
-     * @since 2.0.0
      */
     protected $_helper;
 
@@ -57,7 +52,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      * Locale model
      *
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $_localeResolver;
 
@@ -65,19 +59,16 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      * Backend auth session
      *
      * @var \Magento\Backend\Model\Auth\Session
-     * @since 2.0.0
      */
     protected $_backendAuthSession;
 
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
-     * @since 2.0.0
      */
     protected $_encryptor;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     * @since 2.0.0
      */
     protected $varDirectory;
 
@@ -88,7 +79,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Filesystem $filesystem
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backup\Helper\Data $helper,
@@ -113,7 +103,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      *
      * @param int $time
      * @return $this
-     * @since 2.0.0
      */
     public function setTime($time)
     {
@@ -126,7 +115,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      *
      * @param string $path
      * @return $this
-     * @since 2.0.0
      */
     public function setPath($path)
     {
@@ -139,7 +127,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -153,7 +140,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      * @param string $fileName
      * @param string $filePath
      * @return $this
-     * @since 2.0.0
      */
     public function load($fileName, $filePath)
     {
@@ -179,7 +165,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      * Checks backup file exists.
      *
      * @return bool
-     * @since 2.0.0
      */
     public function exists()
     {
@@ -190,7 +175,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      * Return file name of backup file
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFileName()
     {
@@ -211,7 +195,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      *
      * @param string $value
      * @return $this
-     * @since 2.0.0
      */
     public function setType($value = 'db')
     {
@@ -230,7 +213,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      * Returns type of backup file
      *
      * @return string
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -243,7 +225,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      * @param string &$content
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function setFile(&$content)
     {
@@ -262,7 +243,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function &getFile()
     {
@@ -278,7 +258,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function deleteFile()
     {
@@ -297,7 +276,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      * @return $this
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Backup\Exception\NotEnoughPermissions
-     * @since 2.0.0
      */
     public function open($write = false)
     {
@@ -337,7 +315,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      *
      * @return \Magento\Framework\Filesystem\File\WriteInterface
      * @throws \Magento\Framework\Exception\InputException
-     * @since 2.0.0
      */
     protected function _getStream()
     {
@@ -352,7 +329,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      *
      * @param int $length
      * @return string
-     * @since 2.0.0
      */
     public function read($length)
     {
@@ -363,7 +339,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      * Check end of file.
      *
      * @return bool
-     * @since 2.0.0
      */
     public function eof()
     {
@@ -376,7 +351,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      * @param string $string
      * @return $this
      * @throws \Magento\Framework\Exception\InputException
-     * @since 2.0.0
      */
     public function write($string)
     {
@@ -395,7 +369,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      * Close open backup file
      *
      * @return $this
-     * @since 2.0.0
      */
     public function close()
     {
@@ -409,7 +382,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      * Print output
      *
      * @return string
-     * @since 2.0.0
      */
     public function output()
     {
@@ -426,7 +398,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
 
     /**
      * @return int|mixed
-     * @since 2.0.0
      */
     public function getSize()
     {
@@ -447,7 +418,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      *
      * @param string $password
      * @return bool
-     * @since 2.0.0
      */
     public function validateUserPassword($password)
     {
@@ -459,7 +429,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      * Get file path.
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getFilePath()
     {

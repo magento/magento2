@@ -40,7 +40,6 @@ use Magento\Store\Model\ScopeInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Customer extends \Magento\Framework\Model\AbstractModel
 {
@@ -84,7 +83,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Model event prefix
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'customer';
 
@@ -92,7 +90,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Name of the event object
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'customer';
 
@@ -100,7 +97,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * List of errors
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_errors = [];
 
@@ -108,7 +104,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Assoc array of customer attributes
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_attributes;
 
@@ -116,7 +111,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Customer addresses collection
      *
      * @var \Magento\Customer\Model\ResourceModel\Address\Collection
-     * @since 2.0.0
      */
     protected $_addressesCollection;
 
@@ -124,7 +118,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Is model deletable
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_isDeleteable = true;
 
@@ -132,103 +125,86 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Is model readonly
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_isReadonly = false;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var Share
-     * @since 2.0.0
      */
     protected $_configShare;
 
     /**
      * @var AddressFactory
-     * @since 2.0.0
      */
     protected $_addressFactory;
 
     /**
      * @var CollectionFactory
-     * @since 2.0.0
      */
     protected $_addressesFactory;
 
     /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder
-     * @since 2.0.0
      */
     protected $_transportBuilder;
 
     /**
      * @var GroupRepositoryInterface
-     * @since 2.0.0
      */
     protected $_groupRepository;
 
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
-     * @since 2.0.0
      */
     protected $_encryptor;
 
     /**
      * @var \Magento\Framework\Math\Random
-     * @since 2.0.0
      */
     protected $mathRandom;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
     /**
      * @var CustomerInterfaceFactory
-     * @since 2.0.0
      */
     protected $customerDataFactory;
 
     /**
      * @var DataObjectProcessor
-     * @since 2.0.0
      */
     protected $dataObjectProcessor;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
-     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
     /**
      * @var \Magento\Customer\Api\CustomerMetadataInterface
-     * @since 2.0.0
      */
     protected $metadataService;
 
     /**
      * @var \Magento\Framework\Indexer\IndexerRegistry
-     * @since 2.0.0
      */
     protected $indexerRegistry;
 
@@ -255,7 +231,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -307,7 +282,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Initialize customer model
      *
      * @return void
-     * @since 2.0.0
      */
     public function _construct()
     {
@@ -318,7 +292,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve customer model with customer data
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface
-     * @since 2.0.0
      */
     public function getDataModel()
     {
@@ -344,7 +317,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return $this
-     * @since 2.0.0
      */
     public function updateData($customer)
     {
@@ -386,7 +358,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve customer sharing configuration model
      *
      * @return Share
-     * @since 2.0.0
      */
     public function getSharingConfig()
     {
@@ -401,7 +372,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      * Use \Magento\Customer\Api\AccountManagementInterface::authenticate
-     * @since 2.0.0
      */
     public function authenticate($login, $password)
     {
@@ -429,7 +399,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param   string $customerEmail
      * @return  $this
-     * @since 2.0.0
      */
     public function loadByEmail($customerEmail)
     {
@@ -442,7 +411,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param   string $newPassword
      * @return  $this
-     * @since 2.0.0
      */
     public function changePassword($newPassword)
     {
@@ -454,7 +422,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Get full customer name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -479,7 +446,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param   Address $address
      * @return  $this
-     * @since 2.0.0
      */
     public function addAddress(Address $address)
     {
@@ -492,7 +458,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param   int $addressId
      * @return  Address
-     * @since 2.0.0
      */
     public function getAddressById($addressId)
     {
@@ -504,7 +469,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $addressId
      * @return Address
-     * @since 2.0.0
      */
     public function getAddressItemById($addressId)
     {
@@ -515,7 +479,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve not loaded address collection
      *
      * @return \Magento\Customer\Model\ResourceModel\Address\Collection
-     * @since 2.0.0
      */
     public function getAddressCollection()
     {
@@ -526,7 +489,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Customer addresses collection
      *
      * @return \Magento\Customer\Model\ResourceModel\Address\Collection
-     * @since 2.0.0
      */
     public function getAddressesCollection()
     {
@@ -548,7 +510,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve customer address array
      *
      * @return \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     public function getAddresses()
     {
@@ -559,7 +520,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve all customer attributes
      *
      * @return Attribute[]
-     * @since 2.0.0
      */
     public function getAttributes()
     {
@@ -574,7 +534,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param   string $attributeCode
      * @return  \Magento\Customer\Model\ResourceModel\Attribute | null
-     * @since 2.0.0
      */
     public function getAttribute($attributeCode)
     {
@@ -590,7 +549,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $password
      * @return $this
-     * @since 2.0.0
      */
     public function setPassword($password)
     {
@@ -605,7 +563,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * @param string $password
      * @param bool|int|string $salt
      * @return string
-     * @since 2.0.0
      */
     public function hashPassword($password, $salt = true)
     {
@@ -617,7 +574,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $password
      * @return boolean
-     * @since 2.0.0
      */
     public function validatePassword($password)
     {
@@ -633,7 +589,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param   string $password
      * @return  string
-     * @since 2.0.0
      */
     public function encryptPassword($password)
     {
@@ -645,7 +600,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param   string $password
      * @return  string
-     * @since 2.0.0
      */
     public function decryptPassword($password)
     {
@@ -657,7 +611,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param   string $attributeCode address type attribute code
      * @return  Address|false
-     * @since 2.0.0
      */
     public function getPrimaryAddress($attributeCode)
     {
@@ -670,7 +623,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Get customer default billing address
      *
      * @return Address
-     * @since 2.0.0
      */
     public function getPrimaryBillingAddress()
     {
@@ -681,7 +633,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Get customer default billing address
      *
      * @return Address
-     * @since 2.0.0
      */
     public function getDefaultBillingAddress()
     {
@@ -692,7 +643,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Get default customer shipping address
      *
      * @return Address
-     * @since 2.0.0
      */
     public function getPrimaryShippingAddress()
     {
@@ -703,7 +653,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Get default customer shipping address
      *
      * @return Address
-     * @since 2.0.0
      */
     public function getDefaultShippingAddress()
     {
@@ -714,7 +663,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve ids of default addresses
      *
      * @return array
-     * @since 2.0.0
      */
     public function getPrimaryAddressIds()
     {
@@ -732,7 +680,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve all customer default addresses
      *
      * @return Address[]
-     * @since 2.0.0
      */
     public function getPrimaryAddresses()
     {
@@ -759,7 +706,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve not default addresses
      *
      * @return Address[]
-     * @since 2.0.0
      */
     public function getAdditionalAddresses()
     {
@@ -778,7 +724,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param Address $address
      * @return boolean
-     * @since 2.0.0
      */
     public function isAddressPrimary(Address $address)
     {
@@ -796,7 +741,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * @param string $storeId
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function sendNewAccountEmail($type = 'registered', $backUrl = '', $storeId = '0')
     {
@@ -826,7 +770,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check if accounts confirmation is required in config
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isConfirmationRequired()
     {
@@ -847,7 +790,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Generate random confirmation key
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRandomConfirmationKey()
     {
@@ -858,7 +800,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Send email with new customer password
      *
      * @return $this
-     * @since 2.0.0
      */
     public function sendPasswordReminderEmail()
     {
@@ -880,7 +821,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * @param array $templateParams
      * @param int|null $storeId
      * @return $this
-     * @since 2.0.0
      */
     protected function _sendEmailTemplate($template, $sender, $templateParams = [], $storeId = null)
     {
@@ -906,7 +846,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Send email with reset password confirmation link
      *
      * @return $this
-     * @since 2.0.0
      */
     public function sendPasswordResetConfirmationEmail()
     {
@@ -929,7 +868,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve customer group identifier
      *
      * @return int
-     * @since 2.0.0
      */
     public function getGroupId()
     {
@@ -949,7 +887,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve customer tax class identifier
      *
      * @return int
-     * @since 2.0.0
      */
     public function getTaxClassId()
     {
@@ -964,7 +901,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve store where customer was created
      *
      * @return \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     public function getStore()
     {
@@ -975,7 +911,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve shared store ids
      *
      * @return array
-     * @since 2.0.0
      */
     public function getSharedStoreIds()
     {
@@ -999,7 +934,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve shared website ids
      *
      * @return int[]
-     * @since 2.0.0
      */
     public function getSharedWebsiteIds()
     {
@@ -1023,7 +957,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Magento\Store\Model\Store $store
      * @return $this
-     * @since 2.0.0
      */
     public function setStore(\Magento\Store\Model\Store $store)
     {
@@ -1037,7 +970,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @deprecated 2.1.0
      * @return bool
-     * @since 2.0.0
      */
     public function validate()
     {
@@ -1048,7 +980,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Unset subscription
      *
      * @return $this
-     * @since 2.0.0
      */
     public function unsetSubscription()
     {
@@ -1062,7 +993,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Clean all addresses
      *
      * @return void
-     * @since 2.0.0
      */
     public function cleanAllAddresses()
     {
@@ -1074,7 +1004,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param mixed $error
      * @return $this
-     * @since 2.0.0
      */
     public function addError($error)
     {
@@ -1086,7 +1015,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve errors
      *
      * @return array
-     * @since 2.0.0
      */
     public function getErrors()
     {
@@ -1097,7 +1025,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Reset errors array
      *
      * @return $this
-     * @since 2.0.0
      */
     public function resetErrors()
     {
@@ -1109,7 +1036,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Prepare customer for delete
      *
      * @return $this
-     * @since 2.0.0
      */
     public function beforeDelete()
     {
@@ -1121,7 +1047,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Processing object after save data
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -1136,7 +1061,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Init indexing process after customer delete
      *
      * @return \Magento\Framework\Model\AbstractModel
-     * @since 2.0.0
      */
     public function afterDeleteCommit()
     {
@@ -1148,7 +1072,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Init indexing process after customer save
      *
      * @return void
-     * @since 2.0.0
      */
     public function reindex()
     {
@@ -1161,7 +1084,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Get customer created at date timestamp
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getCreatedAtTimestamp()
     {
@@ -1176,7 +1098,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Reset all model data
      *
      * @return $this
-     * @since 2.0.0
      */
     public function reset()
     {
@@ -1191,7 +1112,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Checks model is deletable
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isDeleteable()
     {
@@ -1203,7 +1123,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param boolean $value
      * @return $this
-     * @since 2.0.0
      */
     public function setIsDeleteable($value)
     {
@@ -1215,7 +1134,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Checks model is readonly
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isReadonly()
     {
@@ -1227,7 +1145,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param boolean $value
      * @return $this
-     * @since 2.0.0
      */
     public function setIsReadonly($value)
     {
@@ -1239,7 +1156,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check whether confirmation may be skipped when registering using certain email address
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function canSkipConfirmation()
     {
@@ -1262,7 +1178,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Clone current object
      *
      * @return void
-     * @since 2.0.0
      */
     public function __clone()
     {
@@ -1279,7 +1194,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Return Entity Type instance
      *
      * @return \Magento\Eav\Model\Entity\Type
-     * @since 2.0.0
      */
     public function getEntityType()
     {
@@ -1292,7 +1206,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * @param int|string|null $defaultStoreId
      *
      * @return int
-     * @since 2.0.0
      */
     protected function _getWebsiteStoreId($defaultStoreId = null)
     {
@@ -1312,7 +1225,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * @param string $passwordLinkToken
      * @return $this
      * @throws \Magento\Framework\Exception\AuthenticationException
-     * @since 2.0.0
      */
     public function changeResetPasswordLinkToken($passwordLinkToken)
     {
@@ -1329,7 +1241,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check if current reset password link token is expired
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isResetPasswordLinkTokenExpired()
     {
@@ -1360,7 +1271,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve customer reset password link expiration period in days
      *
      * @return int
-     * @since 2.0.0
      */
     public function getResetPasswordLinkExpirationPeriod()
     {
@@ -1372,7 +1282,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return Address
-     * @since 2.0.0
      */
     protected function _createAddressInstance()
     {
@@ -1381,7 +1290,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return \Magento\Customer\Model\ResourceModel\Address\Collection
-     * @since 2.0.0
      */
     protected function _createAddressCollection()
     {
@@ -1390,7 +1298,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return array
-     * @since 2.0.0
      */
     protected function getTemplateTypes()
     {

@@ -29,7 +29,6 @@ use Magento\Setup\Model\SearchTermDescriptionGeneratorFactory;
  *
  * @see setup/performance-toolkit/profiles/ce/small.xml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class SimpleProductsFixture extends Fixture
 {
@@ -40,7 +39,6 @@ class SimpleProductsFixture extends Fixture
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $priority = 31;
 
@@ -147,7 +145,6 @@ class SimpleProductsFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getActionTitle()
     {
@@ -156,7 +153,6 @@ class SimpleProductsFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function introduceParamLabels()
     {
@@ -168,7 +164,6 @@ class SimpleProductsFixture extends Fixture
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD)
-     * @since 2.0.0
      */
     public function execute()
     {

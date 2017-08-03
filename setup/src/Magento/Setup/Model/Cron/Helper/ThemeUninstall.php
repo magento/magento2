@@ -11,19 +11,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Helper class for JobComponentUninstall to uninstall a theme component
- * @since 2.0.0
  */
 class ThemeUninstall
 {
     /**
      * @var ThemeUninstaller
-     * @since 2.0.0
      */
     private $themeUninstaller;
 
     /**
      * @var ThemePackageInfo
-     * @since 2.0.0
      */
     private $themePackageInfo;
 
@@ -32,7 +29,6 @@ class ThemeUninstall
      *
      * @param ThemeUninstaller $themeUninstaller
      * @param ThemePackageInfo $themePackageInfo
-     * @since 2.0.0
      */
     public function __construct(ThemeUninstaller $themeUninstaller, ThemePackageInfo $themePackageInfo)
     {
@@ -46,7 +42,6 @@ class ThemeUninstall
      * @param OutputInterface $output
      * @param string $componentName
      * @return void
-     * @since 2.0.0
      */
     public function uninstall(OutputInterface $output, $componentName)
     {

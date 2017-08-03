@@ -12,7 +12,6 @@ use Magento\GoogleOptimizer\Model\Code as ModelCode;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Form extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -23,7 +22,6 @@ class Form extends \Magento\Framework\App\Helper\AbstractHelper
      * @param ModelCode|null $experimentCodeModel
      * @param string $formName
      * @return void
-     * @since 2.0.0
      */
     public function addGoogleoptimizerFields(DataForm $form, ModelCode $experimentCodeModel = null, $formName = '')
     {

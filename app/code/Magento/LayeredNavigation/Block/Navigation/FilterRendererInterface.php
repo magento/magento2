@@ -10,7 +10,6 @@ use Magento\Catalog\Model\Layer\Filter\FilterInterface;
 /**
  * Interface FilterRendererInterface
  * @api
- * @since 2.0.0
  */
 interface FilterRendererInterface
 {
@@ -19,7 +18,6 @@ interface FilterRendererInterface
      *
      * @param FilterInterface $filter
      * @return string
-     * @since 2.0.0
      */
     public function render(FilterInterface $filter);
 }

@@ -10,25 +10,21 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Deployment version of static files
- * @since 2.0.0
  */
 class Version
 {
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     private $appState;
 
     /**
      * @var \Magento\Framework\App\View\Deployment\Version\StorageInterface
-     * @since 2.0.0
      */
     private $versionStorage;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $cachedValue;
 
@@ -41,7 +37,6 @@ class Version
     /**
      * @param \Magento\Framework\App\State $appState
      * @param Version\StorageInterface $versionStorage
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\State $appState,
@@ -55,7 +50,6 @@ class Version
      * Retrieve deployment version of static files
      *
      * @return string
-     * @since 2.0.0
      */
     public function getValue()
     {
@@ -70,7 +64,6 @@ class Version
      *
      * @param string $appMode
      * @return string
-     * @since 2.0.0
      */
     protected function readValue($appMode)
     {

@@ -10,7 +10,6 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\Config\Observer\Config\Backend\Admin\AfterCustomUrlChangedObserver
  *
- * @since 2.0.0
  */
 class AfterCustomUrlChangedObserver implements ObserverInterface
 {
@@ -18,7 +17,6 @@ class AfterCustomUrlChangedObserver implements ObserverInterface
      * Backend data
      *
      * @var \Magento\Backend\Helper\Data
-     * @since 2.0.0
      */
     protected $_backendData;
 
@@ -26,19 +24,16 @@ class AfterCustomUrlChangedObserver implements ObserverInterface
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\Backend\Model\Auth\Session
-     * @since 2.0.0
      */
     protected $_authSession;
 
     /**
      * @var \Magento\Framework\App\ResponseInterface
-     * @since 2.0.0
      */
     protected $_response;
 
@@ -47,7 +42,6 @@ class AfterCustomUrlChangedObserver implements ObserverInterface
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\App\ResponseInterface $response
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Helper\Data $backendData,
@@ -68,7 +62,6 @@ class AfterCustomUrlChangedObserver implements ObserverInterface
      * @return void
      * @SuppressWarnings(PHPMD.ExitExpression)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

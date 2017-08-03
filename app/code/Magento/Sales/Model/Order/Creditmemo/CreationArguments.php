@@ -9,37 +9,37 @@ use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
 
 /**
  * Class CreationArguments
- * @since 2.2.0
+ * @since 2.1.3
  */
 class CreationArguments implements CreditmemoCreationArgumentsInterface
 {
     /**
      * @var float|null
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $shippingAmount;
 
     /**
      * @var float|null
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $adjustmentPositive;
 
     /**
      * @var float|null
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $adjustmentNegative;
 
     /**
      * @var \Magento\Sales\Api\Data\CreditmemoCreationArgumentsExtensionInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $extensionAttributes;
 
     /**
      * @inheritdoc
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function getShippingAmount()
     {
@@ -48,7 +48,7 @@ class CreationArguments implements CreditmemoCreationArgumentsInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function getAdjustmentPositive()
     {
@@ -57,7 +57,7 @@ class CreationArguments implements CreditmemoCreationArgumentsInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function getAdjustmentNegative()
     {
@@ -66,7 +66,7 @@ class CreationArguments implements CreditmemoCreationArgumentsInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function setShippingAmount($amount)
     {
@@ -76,7 +76,7 @@ class CreationArguments implements CreditmemoCreationArgumentsInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function setAdjustmentPositive($amount)
     {
@@ -86,7 +86,7 @@ class CreationArguments implements CreditmemoCreationArgumentsInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function setAdjustmentNegative($amount)
     {
@@ -96,7 +96,7 @@ class CreationArguments implements CreditmemoCreationArgumentsInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function getExtensionAttributes()
     {
@@ -105,7 +105,7 @@ class CreationArguments implements CreditmemoCreationArgumentsInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\CreditmemoCreationArgumentsExtensionInterface $extensionAttributes

@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\Product;
 
 /**
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Catalog\Api\Data\ProductTierPriceInterface
@@ -17,7 +16,6 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      * Retrieve tier qty
      *
      * @return float
-     * @since 2.0.0
      */
     public function getQty()
     {
@@ -28,7 +26,6 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      * Retrieve price value
      *
      * @return float
-     * @since 2.0.0
      */
     public function getValue()
     {
@@ -40,7 +37,6 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      *
      * @param float $qty
      * @return $this
-     * @since 2.0.0
      */
     public function setQty($qty)
     {
@@ -52,7 +48,6 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      *
      * @param float $value
      * @return $this
-     * @since 2.0.0
      */
     public function setValue($value)
     {
@@ -63,7 +58,6 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      * Retrieve customer group id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCustomerGroupId()
     {
@@ -75,7 +69,6 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      *
      * @param int $customerGroupId
      * @return $this
-     * @since 2.0.0
      */
     public function setCustomerGroupId($customerGroupId)
     {
@@ -84,7 +77,6 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -93,7 +85,6 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductTierPriceExtensionInterface $extensionAttributes

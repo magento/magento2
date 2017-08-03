@@ -9,37 +9,31 @@ namespace Magento\Framework\View;
  * Model that finds file paths by their fileId
  *
  * @api
- * @since 2.0.0
  */
 class FileSystem
 {
     /**
      * @var \Magento\Framework\View\Design\FileResolution\Fallback\File
-     * @since 2.0.0
      */
     protected $_fileResolution;
 
     /**
      * @var \Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile
-     * @since 2.0.0
      */
     protected $_templateFileResolution;
 
     /**
      * @var \Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile
-     * @since 2.0.0
      */
     protected $_localeFileResolution;
 
     /**
      * @var \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile
-     * @since 2.0.0
      */
     protected $_staticFileResolution;
 
     /**
      * @var \Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile
-     * @since 2.0.0
      */
     protected $_emailTemplateFileResolution;
 
@@ -47,7 +41,6 @@ class FileSystem
      * View service
      *
      * @var \Magento\Framework\View\Asset\Repository
-     * @since 2.0.0
      */
     protected $_assetRepo;
 
@@ -60,7 +53,6 @@ class FileSystem
      * @param \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile $fallbackStaticFile
      * @param \Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile $fallbackEmailTemplateFile
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Design\FileResolution\Fallback\File $fallbackFile,
@@ -84,7 +76,6 @@ class FileSystem
      * @param string $fileId
      * @param array $params
      * @return string
-     * @since 2.0.0
      */
     public function getFilename($fileId, array $params = [])
     {
@@ -106,7 +97,6 @@ class FileSystem
      * @param string $file
      * @param array $params
      * @return string
-     * @since 2.0.0
      */
     public function getLocaleFileName($file, array $params = [])
     {
@@ -121,7 +111,6 @@ class FileSystem
      * @param string $fileId
      * @param array $params
      * @return string|bool
-     * @since 2.0.0
      */
     public function getTemplateFileName($fileId, array $params = [])
     {
@@ -142,7 +131,6 @@ class FileSystem
      * @param string $fileId
      * @param array $params
      * @return string
-     * @since 2.0.0
      */
     public function getStaticFileName($fileId, array $params = [])
     {
@@ -164,7 +152,6 @@ class FileSystem
      * @param array $params
      * @param string $module
      * @return string|bool
-     * @since 2.0.0
      */
     public function getEmailTemplateFileName($fileId, array $params, $module)
     {
@@ -180,7 +167,6 @@ class FileSystem
      *
      * @param string $path
      * @return string
-     * @since 2.0.0
      */
     public static function normalizePath($path)
     {
@@ -218,7 +204,6 @@ class FileSystem
      * @param string $relatedPath
      * @param string $path
      * @return string
-     * @since 2.0.0
      */
     public static function offsetPath($relatedPath, $path)
     {
@@ -240,7 +225,6 @@ class FileSystem
      * @param string $relativeTo
      * @param string $path
      * @return string
-     * @since 2.0.0
      */
     public static function getRelatedPath($relativeTo, $path)
     {
@@ -253,7 +237,6 @@ class FileSystem
      * @param string $pathOne
      * @param string $pathTwo
      * @return array
-     * @since 2.0.0
      */
     private static function ltrimSamePart($pathOne, $pathTwo)
     {

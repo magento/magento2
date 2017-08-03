@@ -14,25 +14,21 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\CatalogSearch\Model\Indexer\Fulltext\Store
  *
- * @since 2.0.0
  */
 class Store implements ObserverInterface
 {
     /**
      * @var DimensionFactory
-     * @since 2.0.0
      */
     private $dimensionFactory;
 
     /**
      * @var IndexerHandlerFactory
-     * @since 2.0.0
      */
     private $indexerHandlerFactory;
 
     /**
      * @var ConfigInterface
-     * @since 2.0.0
      */
     private $indexerConfig;
 
@@ -40,7 +36,6 @@ class Store implements ObserverInterface
      * @param DimensionFactory $dimensionFactory
      * @param ConfigInterface $indexerConfig
      * @param IndexerHandlerFactory $indexerHandlerFactory
-     * @since 2.0.0
      */
     public function __construct(
         DimensionFactory $dimensionFactory,
@@ -55,7 +50,6 @@ class Store implements ObserverInterface
     /**
      * @param \Magento\Store\Model\Store $store
      * @return void
-     * @since 2.0.0
      */
     private function clearIndex(\Magento\Store\Model\Store $store)
     {
@@ -71,7 +65,6 @@ class Store implements ObserverInterface
     /**
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

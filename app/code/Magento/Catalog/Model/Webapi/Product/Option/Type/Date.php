@@ -9,13 +9,11 @@ use Magento\Framework\Stdlib\DateTime;
 
 /**
  * Catalog product option date validator
- * @since 2.0.0
  */
 class Date extends \Magento\Catalog\Model\Product\Option\Type\Date
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function validateUserValue($values)
     {
@@ -28,7 +26,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\Date
     /**
      * @param array $values
      * @return array mixed
-     * @since 2.0.0
      */
     protected function formatValues($values)
     {
@@ -51,7 +48,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\Date
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function useCalendar()
     {

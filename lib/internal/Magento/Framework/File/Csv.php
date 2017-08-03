@@ -12,31 +12,26 @@ use Magento\Framework\Filesystem\Driver\File;
  * Csv parse
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Csv
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_lineLength = 0;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_delimiter = ',';
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_enclosure = '"';
 
     /**
      * @var File
-     * @since 2.0.0
      */
     protected $file;
 
@@ -44,7 +39,6 @@ class Csv
      * Constructor
      *
      * @param File $file File Driver used for writing CSV
-     * @since 2.0.0
      */
     public function __construct(File $file)
     {
@@ -56,7 +50,6 @@ class Csv
      *
      * @param   int $length
      * @return  \Magento\Framework\File\Csv
-     * @since 2.0.0
      */
     public function setLineLength($length)
     {
@@ -69,7 +62,6 @@ class Csv
      *
      * @param   string $delimiter
      * @return  \Magento\Framework\File\Csv
-     * @since 2.0.0
      */
     public function setDelimiter($delimiter)
     {
@@ -82,7 +74,6 @@ class Csv
      *
      * @param   string $enclosure
      * @return  \Magento\Framework\File\Csv
-     * @since 2.0.0
      */
     public function setEnclosure($enclosure)
     {
@@ -96,7 +87,6 @@ class Csv
      * @param   string $file
      * @return  array
      * @throws \Exception
-     * @since 2.0.0
      */
     public function getData($file)
     {
@@ -120,7 +110,6 @@ class Csv
      * @param   int $keyIndex
      * @param   int $valueIndex
      * @return  array
-     * @since 2.0.0
      */
     public function getDataPairs($file, $keyIndex = 0, $valueIndex = 1)
     {
@@ -140,7 +129,6 @@ class Csv
      * @param   string $file
      * @param   array $data
      * @return  $this
-     * @since 2.0.0
      */
     public function saveData($file, $data)
     {

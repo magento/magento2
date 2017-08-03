@@ -15,14 +15,12 @@ use Magento\Framework\DB\Ddl\Table;
 
 /**
  * Upgrade the Catalog module DB scheme
- * @since 2.0.0
  */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -335,7 +333,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      *
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.0.0
      */
     protected function createValueToEntityTable(SchemaSetupInterface $setup)
     {
@@ -399,7 +396,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      *
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.0.0
      */
     protected function addForeignKeys(SchemaSetupInterface $setup)
     {
@@ -438,7 +434,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
     /**
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.0.0
      */
     private function addSupportVideoMediaAttributes(SchemaSetupInterface $setup)
     {
@@ -533,7 +528,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * Remove Group Price
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.0.0
      */
     private function removeGroupPrice(SchemaSetupInterface $setup)
     {

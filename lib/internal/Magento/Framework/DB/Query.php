@@ -9,7 +9,6 @@ use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class Query
- * @since 2.0.0
  */
 class Query implements QueryInterface
 {
@@ -17,13 +16,11 @@ class Query implements QueryInterface
      * Select object
      *
      * @var \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected $select;
 
     /**
      * @var \Magento\Framework\Api\CriteriaInterface
-     * @since 2.0.0
      */
     protected $criteria;
 
@@ -31,7 +28,6 @@ class Query implements QueryInterface
      * Resource instance
      *
      * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @since 2.0.0
      */
     protected $resource;
 
@@ -39,37 +35,31 @@ class Query implements QueryInterface
      * Database's statement for fetch item one by one
      *
      * @var \Zend_Db_Statement_Pdo
-     * @since 2.0.0
      */
     protected $fetchStmt = null;
 
     /**
      * @var Logger
-     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface
-     * @since 2.0.0
      */
     private $fetchStrategy;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $bindParams = [];
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $totalRecords;
 
     /**
      * @var mixed
-     * @since 2.0.0
      */
     protected $data;
 
@@ -77,7 +67,6 @@ class Query implements QueryInterface
      * Query Select Parts to be skipped when prepare query for count
      *
      * @var array
-     * @since 2.0.0
      */
     protected $countSqlSkipParts = [
         \Magento\Framework\DB\Select::ORDER => true,
@@ -91,7 +80,6 @@ class Query implements QueryInterface
      * @param \Magento\Framework\Api\CriteriaInterface $criteria
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\DB\Select $select,
@@ -109,7 +97,6 @@ class Query implements QueryInterface
      * Retrieve source Criteria object
      *
      * @return \Magento\Framework\Api\CriteriaInterface
-     * @since 2.0.0
      */
     public function getCriteria()
     {
@@ -120,7 +107,6 @@ class Query implements QueryInterface
      * Retrieve all ids for query
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllIds()
     {
@@ -139,7 +125,6 @@ class Query implements QueryInterface
      * @param string $name
      * @param mixed $value
      * @return void
-     * @since 2.0.0
      */
     public function addBindParam($name, $value)
     {
@@ -150,7 +135,6 @@ class Query implements QueryInterface
      * Get collection size
      *
      * @return int
-     * @since 2.0.0
      */
     public function getSize()
     {
@@ -166,7 +150,6 @@ class Query implements QueryInterface
      *
      * @param bool $stringMode
      * @return string || Select
-     * @since 2.0.0
      */
     public function getSelectSql($stringMode = false)
     {
@@ -180,7 +163,6 @@ class Query implements QueryInterface
      * Reset Statement object
      *
      * @return void
-     * @since 2.0.0
      */
     public function reset()
     {
@@ -192,7 +174,6 @@ class Query implements QueryInterface
      * Fetch all statement
      *
      * @return array
-     * @since 2.0.0
      */
     public function fetchAll()
     {
@@ -207,7 +188,6 @@ class Query implements QueryInterface
      * Fetch statement
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function fetchItem()
     {
@@ -225,7 +205,6 @@ class Query implements QueryInterface
      * Get Identity Field Name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getIdFieldName()
     {
@@ -236,7 +215,6 @@ class Query implements QueryInterface
      * Retrieve connection object
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function getConnection()
     {
@@ -247,7 +225,6 @@ class Query implements QueryInterface
      * Get resource instance
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @since 2.0.0
      */
     public function getResource()
     {
@@ -260,7 +237,6 @@ class Query implements QueryInterface
      * @param string $name
      * @param bool $toSkip
      * @return void
-     * @since 2.0.0
      */
     public function addCountSqlSkipPart($name, $toSkip = true)
     {
@@ -271,7 +247,6 @@ class Query implements QueryInterface
      * Get SQL for get record count
      *
      * @return Select
-     * @since 2.0.0
      */
     protected function getSelectCountSql()
     {
@@ -290,7 +265,6 @@ class Query implements QueryInterface
      * Returned count SQL skip parts
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getCountSqlSkipParts()
     {
@@ -301,7 +275,6 @@ class Query implements QueryInterface
      * Get \Magento\Framework\DB\Select object instance
      *
      * @return Select
-     * @since 2.0.0
      */
     protected function getSelect()
     {

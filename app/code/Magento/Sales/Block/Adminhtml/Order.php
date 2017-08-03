@@ -9,7 +9,6 @@ namespace Magento\Sales\Block\Adminhtml;
  * Adminhtml sales orders block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Order extends \Magento\Backend\Block\Widget\Grid\Container
 {
@@ -17,7 +16,6 @@ class Order extends \Magento\Backend\Block\Widget\Grid\Container
      * Constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -35,7 +33,6 @@ class Order extends \Magento\Backend\Block\Widget\Grid\Container
      * Retrieve url for order creation
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCreateUrl()
     {

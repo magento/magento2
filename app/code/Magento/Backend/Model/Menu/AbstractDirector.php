@@ -7,20 +7,17 @@ namespace Magento\Backend\Model\Menu;
 
 /**
  * @api
- * @since 2.0.0
  */
 abstract class AbstractDirector
 {
     /**
      * Factory model
      * @var \Magento\Backend\Model\Menu\Builder\CommandFactory
-     * @since 2.0.0
      */
     protected $_commandFactory;
 
     /**
      * @param \Magento\Backend\Model\Menu\Builder\CommandFactory $factory
-     * @since 2.0.0
      */
     public function __construct(\Magento\Backend\Model\Menu\Builder\CommandFactory $factory)
     {
@@ -34,7 +31,6 @@ abstract class AbstractDirector
      * @param \Magento\Backend\Model\Menu\Builder $builder
      * @param \Psr\Log\LoggerInterface $logger
      * @return void
-     * @since 2.0.0
      */
     abstract public function direct(
         array $config,

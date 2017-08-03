@@ -10,7 +10,6 @@ use Magento\Store\Model\Store;
 /**
  * Class \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
  *
- * @since 2.0.0
  */
 class ProductUrlPathGenerator
 {
@@ -20,31 +19,26 @@ class ProductUrlPathGenerator
      * Cache for product rewrite suffix
      *
      * @var array
-     * @since 2.0.0
      */
     protected $productUrlSuffix = [];
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
-     * @since 2.0.0
      */
     protected $categoryUrlPathGenerator;
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
@@ -53,7 +47,6 @@ class ProductUrlPathGenerator
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -74,7 +67,6 @@ class ProductUrlPathGenerator
      * @param \Magento\Catalog\Model\Category $category
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUrlPath($product, $category = null)
     {
@@ -94,7 +86,6 @@ class ProductUrlPathGenerator
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return string
-     * @since 2.0.0
      */
     protected function prepareProductDefaultUrlKey(\Magento\Catalog\Model\Product $product)
     {
@@ -110,7 +101,6 @@ class ProductUrlPathGenerator
      * @param int $storeId
      * @param \Magento\Catalog\Model\Category $category
      * @return string
-     * @since 2.0.0
      */
     public function getUrlPathWithSuffix($product, $storeId, $category = null)
     {
@@ -123,7 +113,6 @@ class ProductUrlPathGenerator
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Catalog\Model\Category|null $category
      * @return string
-     * @since 2.0.0
      */
     public function getCanonicalUrlPath($product, $category = null)
     {
@@ -136,7 +125,6 @@ class ProductUrlPathGenerator
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return string
-     * @since 2.0.0
      */
     public function getUrlKey($product)
     {
@@ -148,7 +136,6 @@ class ProductUrlPathGenerator
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return string
-     * @since 2.0.0
      */
     protected function prepareProductUrlKey(\Magento\Catalog\Model\Product $product)
     {
@@ -161,7 +148,6 @@ class ProductUrlPathGenerator
      *
      * @param int $storeId
      * @return string
-     * @since 2.0.0
      */
     protected function getProductUrlSuffix($storeId = null)
     {

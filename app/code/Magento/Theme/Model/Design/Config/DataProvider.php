@@ -46,19 +46,19 @@ class DataProvider extends AbstractDataProvider
 
     /**
      * @var SettingChecker
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $settingChecker;
 
     /**
      * @var RequestInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $request;
 
     /**
      * @var ScopeCodeResolver
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $scopeCodeResolver;
 
@@ -114,7 +114,7 @@ class DataProvider extends AbstractDataProvider
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function getMeta()
     {
@@ -200,9 +200,9 @@ class DataProvider extends AbstractDataProvider
     }
 
     /**
-     * @deprecated 2.2.0
+     * @deprecated 2.1.3
      * @return ScopeCodeResolver
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function getScopeCodeResolver()
     {
@@ -213,9 +213,9 @@ class DataProvider extends AbstractDataProvider
     }
 
     /**
-     * @deprecated 2.2.0
+     * @deprecated 2.1.3
      * @return SettingChecker
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function getSettingChecker()
     {
@@ -226,9 +226,9 @@ class DataProvider extends AbstractDataProvider
     }
 
     /**
-     * @deprecated 2.2.0
+     * @deprecated 2.1.3
      * @return RequestInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function getRequest()
     {

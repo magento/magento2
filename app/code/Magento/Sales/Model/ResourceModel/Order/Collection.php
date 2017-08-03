@@ -13,13 +13,11 @@ use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Collection extends AbstractCollection implements OrderSearchResultInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_idFieldName = 'entity_id';
 
@@ -27,7 +25,6 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
      * Event prefix
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_collection';
 
@@ -35,13 +32,11 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
      * Event object
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'order_collection';
 
     /**
      * @var \Magento\Framework\DB\Helper
-     * @since 2.0.0
      */
     protected $_coreResourceHelper;
 
@@ -54,7 +49,6 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
      * @param \Magento\Framework\DB\Helper $coreResourceHelper
      * @param string|null $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -82,7 +76,6 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
      * Model initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -103,7 +96,6 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
      * Add items count expr to collection select, backward capability with eav structure
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addItemCountExpr()
     {
@@ -120,7 +112,6 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
      * Minimize usual count select
      *
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     public function getSelectCountSql()
     {
@@ -136,7 +127,6 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
      * @param int $limit
      * @param int $offset
      * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
-     * @since 2.0.0
      */
     protected function _getAllIdsSelect($limit = null, $offset = null)
     {
@@ -150,7 +140,6 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
      * Create correlation map
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _addAddressFields()
     {
@@ -213,7 +202,6 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
      * Add addresses information to select
      *
      * @return \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection
-     * @since 2.0.0
      */
     public function addAddressFields()
     {
@@ -228,7 +216,6 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
      * @return $this
      *
      * @see self::_getConditionSql for $condition
-     * @since 2.0.0
      */
     public function addFieldToSearchFilter($field, $condition = null)
     {
@@ -243,7 +230,6 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
      * @param array $attributes
      * @param array|int|string|null $condition
      * @return $this
-     * @since 2.0.0
      */
     public function addAttributeToSearchFilter($attributes, $condition = null)
     {
@@ -265,7 +251,6 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
      *
      * @param int|int[] $agreements
      * @return $this
-     * @since 2.0.0
      */
     public function addBillingAgreementsFilter($agreements)
     {

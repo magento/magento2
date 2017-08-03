@@ -10,7 +10,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Totals;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Tax extends \Magento\Tax\Block\Sales\Order\Tax
 {
@@ -18,7 +17,6 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
      * Tax helper
      *
      * @var \Magento\Tax\Helper\Data
-     * @since 2.0.0
      */
     protected $_taxHelper;
 
@@ -26,7 +24,6 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
      * Tax calculation
      *
      * @var \Magento\Tax\Model\Calculation
-     * @since 2.0.0
      */
     protected $_taxCalculation;
 
@@ -34,7 +31,6 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
      * Tax factory
      *
      * @var \Magento\Tax\Model\Sales\Order\TaxFactory
-     * @since 2.0.0
      */
     protected $_taxOrderFactory;
 
@@ -42,7 +38,6 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
      * Sales admin helper
      *
      * @var \Magento\Sales\Helper\Admin
-     * @since 2.0.0
      */
     protected $_salesAdminHelper;
 
@@ -54,7 +49,6 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
      * @param \Magento\Tax\Model\Sales\Order\TaxFactory $taxOrderFactory
      * @param \Magento\Sales\Helper\Admin $salesAdminHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -76,7 +70,6 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
      * Get full information about taxes applied to order
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFullTaxInfo()
     {
@@ -107,7 +100,6 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
      * @param string $amount
      * @param string $baseAmount
      * @return string
-     * @since 2.0.0
      */
     public function displayAmount($amount, $baseAmount)
     {
@@ -118,7 +110,6 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
      * Get store object for process configuration settings
      *
      * @return \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     public function getStore()
     {

@@ -8,7 +8,6 @@ namespace Magento\Sales\Model;
 /**
  * Interface ConfigInterface
  * @api
- * @since 2.0.0
  */
 interface ConfigInterface
 {
@@ -19,7 +18,6 @@ interface ConfigInterface
      * @param string $group
      * @param string $code
      * @return array
-     * @since 2.0.0
      */
     public function getTotalsRenderer($section, $group, $code);
 
@@ -30,7 +28,6 @@ interface ConfigInterface
      * @param string $section
      * @param string $group
      * @return array
-     * @since 2.0.0
      */
     public function getGroupTotals($section, $group);
 
@@ -38,7 +35,6 @@ interface ConfigInterface
      * Get available product types
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAvailableProductTypes();
 }

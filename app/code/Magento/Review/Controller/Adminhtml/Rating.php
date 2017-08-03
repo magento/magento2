@@ -11,7 +11,6 @@ use Magento\Framework\Registry;
 
 /**
  * Admin ratings controller
- * @since 2.0.0
  */
 abstract class Rating extends Action
 {
@@ -26,14 +25,12 @@ abstract class Rating extends Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $coreRegistry = null;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -45,7 +42,6 @@ abstract class Rating extends Action
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function initEnityId()
     {

@@ -13,7 +13,6 @@ use Magento\Framework\Config\Composer\PackageFactory;
 
 /**
  * Sample Data dependency
- * @since 2.0.0
  */
 class Dependency
 {
@@ -24,25 +23,21 @@ class Dependency
 
     /**
      * @var ComposerInformation
-     * @since 2.0.0
      */
     protected $composerInformation;
 
     /**
      * @var Filesystem
-     * @since 2.0.0
      */
     private $filesystem;
 
     /**
      * @var PackageFactory
-     * @since 2.0.0
      */
     private $packageFactory;
 
     /**
      * @var ComponentRegistrar
-     * @since 2.0.0
      */
     private $componentRegistrar;
 
@@ -51,7 +46,6 @@ class Dependency
      * @param Filesystem $filesystem
      * @param PackageFactory $packageFactory
      * @param ComponentRegistrar $componentRegistrar
-     * @since 2.0.0
      */
     public function __construct(
         ComposerInformation $composerInformation,
@@ -69,7 +63,6 @@ class Dependency
      * Retrieve list of sample data packages from suggests
      *
      * @return array
-     * @since 2.0.0
      */
     public function getSampleDataPackages()
     {
@@ -88,7 +81,6 @@ class Dependency
      * Retrieve suggested sample data packages from modules composer.json
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getSuggestsFromModules()
     {
@@ -115,7 +107,6 @@ class Dependency
      *
      * @param string $file
      * @return Package
-     * @since 2.0.0
      */
     protected function getModuleComposerPackage($file)
     {

@@ -14,7 +14,6 @@ namespace Magento\User\Model\System\Config\Source;
 /**
  * Class \Magento\User\Model\System\Config\Source\Password
  *
- * @since 2.0.0
  */
 class Password extends \Magento\Framework\DataObject implements \Magento\Framework\Option\ArrayInterface
 {
@@ -22,7 +21,6 @@ class Password extends \Magento\Framework\DataObject implements \Magento\Framewo
      * Get options for select
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

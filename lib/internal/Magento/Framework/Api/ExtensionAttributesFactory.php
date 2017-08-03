@@ -8,7 +8,6 @@ namespace Magento\Framework\Api;
 
 /**
  * Factory class for instantiation of extension attributes objects.
- * @since 2.0.0
  */
 class ExtensionAttributesFactory
 {
@@ -18,7 +17,6 @@ class ExtensionAttributesFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -26,7 +24,6 @@ class ExtensionAttributesFactory
      * Map is used for performance optimization.
      *
      * @var array
-     * @since 2.0.0
      */
     private $classInterfaceMap = [];
 
@@ -34,7 +31,6 @@ class ExtensionAttributesFactory
      * Factory constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -47,7 +43,6 @@ class ExtensionAttributesFactory
      * @param string $extensibleClassName
      * @param array $data
      * @return object
-     * @since 2.0.0
      */
     public function create($extensibleClassName, $data = [])
     {
@@ -87,7 +82,6 @@ class ExtensionAttributesFactory
      *
      * @param string $extensibleClassName
      * @return string
-     * @since 2.0.0
      */
     public function getExtensibleInterfaceName($extensibleClassName)
     {

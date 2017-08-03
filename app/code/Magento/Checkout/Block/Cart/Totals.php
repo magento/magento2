@@ -10,37 +10,31 @@ use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_totalRenderers;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_defaultRenderer = \Magento\Checkout\Block\Total\DefaultTotal::class;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_totals = null;
 
     /**
      * @var \Magento\Sales\Model\Config
-     * @since 2.0.0
      */
     protected $_salesConfig;
 
     /**
      * @var LayoutProcessorInterface[]
-     * @since 2.0.0
      */
     protected $layoutProcessors;
 
@@ -52,7 +46,6 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param array $layoutProcessors
      * @param array $data
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -70,7 +63,6 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getJsLayout()
     {
@@ -82,7 +74,6 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getTotals()
     {
@@ -96,7 +87,6 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param array $value
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setTotals($value)
     {
@@ -107,7 +97,6 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     /**
      * @param string $code
      * @return BlockInterface
-     * @since 2.0.0
      */
     protected function _getTotalRenderer($code)
     {
@@ -135,7 +124,6 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param int|null $area
      * @param int $colspan
      * @return string
-     * @since 2.0.0
      */
     public function renderTotal($total, $area = null, $colspan = 1)
     {
@@ -160,7 +148,6 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param   null|string $area
      * @param   int $colspan
      * @return  string
-     * @since 2.0.0
      */
     public function renderTotals($area = null, $colspan = 1)
     {
@@ -178,7 +165,6 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
      * Check if we have display grand total in base currency
      *
      * @return bool
-     * @since 2.0.0
      */
     public function needDisplayBaseGrandtotal()
     {
@@ -193,7 +179,6 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
      * Get formated in base currency base grand total value
      *
      * @return string
-     * @since 2.0.0
      */
     public function displayBaseGrandtotal()
     {
@@ -209,7 +194,6 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
      * Get active or custom quote
      *
      * @return \Magento\Quote\Model\Quote
-     * @since 2.0.0
      */
     public function getQuote()
     {

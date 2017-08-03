@@ -10,7 +10,6 @@ namespace Magento\Theme\Block\Html\Header;
  * Logo page header block
  *
  * @api
- * @since 2.0.0
  */
 class Logo extends \Magento\Framework\View\Element\Template
 {
@@ -18,13 +17,11 @@ class Logo extends \Magento\Framework\View\Element\Template
      * Current template name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'html/header/logo.phtml';
 
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
-     * @since 2.0.0
      */
     protected $_fileStorageHelper;
 
@@ -32,7 +29,6 @@ class Logo extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -47,7 +43,6 @@ class Logo extends \Magento\Framework\View\Element\Template
      * Check if current url is url for home page
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isHomePage()
     {
@@ -60,7 +55,6 @@ class Logo extends \Magento\Framework\View\Element\Template
      * Get logo image URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLogoSrc()
     {
@@ -74,7 +68,6 @@ class Logo extends \Magento\Framework\View\Element\Template
      * Retrieve logo text
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLogoAlt()
     {
@@ -91,7 +84,6 @@ class Logo extends \Magento\Framework\View\Element\Template
      * Retrieve logo width
      *
      * @return int
-     * @since 2.0.0
      */
     public function getLogoWidth()
     {
@@ -108,7 +100,6 @@ class Logo extends \Magento\Framework\View\Element\Template
      * Retrieve logo height
      *
      * @return int
-     * @since 2.0.0
      */
     public function getLogoHeight()
     {
@@ -125,7 +116,6 @@ class Logo extends \Magento\Framework\View\Element\Template
      * Retrieve logo image URL
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getLogoUrl()
     {
@@ -153,7 +143,6 @@ class Logo extends \Magento\Framework\View\Element\Template
      *
      * @param string $filename relative path
      * @return bool
-     * @since 2.0.0
      */
     protected function _isFile($filename)
     {

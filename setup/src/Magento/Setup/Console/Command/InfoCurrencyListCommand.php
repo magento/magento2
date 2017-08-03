@@ -13,7 +13,6 @@ use Magento\Framework\Setup\Lists;
 
 /**
  * Command prints list of available currencies
- * @since 2.0.0
  */
 class InfoCurrencyListCommand extends Command
 {
@@ -21,13 +20,11 @@ class InfoCurrencyListCommand extends Command
      * List model provides lists of available options for currency, language locales, timezones
      *
      * @var Lists
-     * @since 2.0.0
      */
     private $lists;
 
     /**
      * @param Lists $lists
-     * @since 2.0.0
      */
     public function __construct(Lists $lists)
     {
@@ -37,7 +34,6 @@ class InfoCurrencyListCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -49,7 +45,6 @@ class InfoCurrencyListCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

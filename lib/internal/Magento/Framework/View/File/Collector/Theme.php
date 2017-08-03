@@ -15,7 +15,6 @@ use Magento\Framework\View\File\Factory as FileFactory;
 
 /**
  * Source of view files introduced by a theme
- * @since 2.0.0
  */
 class Theme implements CollectorInterface
 {
@@ -26,7 +25,6 @@ class Theme implements CollectorInterface
      * @param ReadFactory $readDirFactory
      * @param ComponentRegistrarInterface $componentRegistrar
      * @param string $subDir
-     * @since 2.0.0
      */
     public function __construct(
         FileFactory $fileFactory,
@@ -47,7 +45,6 @@ class Theme implements CollectorInterface
      * @param string $filePath
      * @return \Magento\Framework\View\File[]
      * @throws \UnexpectedValueException
-     * @since 2.0.0
      */
     public function getFiles(ThemeInterface $theme, $filePath)
     {

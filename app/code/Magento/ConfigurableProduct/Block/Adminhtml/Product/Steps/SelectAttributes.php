@@ -9,7 +9,6 @@ namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps;
  * Adminhtml block for fieldset of configurable product
  *
  * @api
- * @since 2.0.0
  */
 class SelectAttributes extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
 {
@@ -17,14 +16,12 @@ class SelectAttributes extends \Magento\Ui\Block\Component\StepsWizard\StepAbstr
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $coreRegistry = null;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -39,7 +36,6 @@ class SelectAttributes extends \Magento\Ui\Block\Component\StepsWizard\StepAbstr
      *
      * @param string $dataProvider
      * @return string
-     * @since 2.0.0
      */
     public function getAddNewAttributeButton($dataProvider = '')
     {
@@ -80,7 +76,6 @@ class SelectAttributes extends \Magento\Ui\Block\Component\StepsWizard\StepAbstr
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCaption()
     {

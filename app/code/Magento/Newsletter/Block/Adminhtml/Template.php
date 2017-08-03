@@ -14,19 +14,16 @@ namespace Magento\Newsletter\Block\Adminhtml;
 /**
  * Class \Magento\Newsletter\Block\Adminhtml\Template
  *
- * @since 2.0.0
  */
 class Template extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'template/list.phtml';
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -54,7 +51,6 @@ class Template extends \Magento\Backend\Block\Template
      * Get the url for create
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCreateUrl()
     {
@@ -65,7 +61,6 @@ class Template extends \Magento\Backend\Block\Template
      * Get header text
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {

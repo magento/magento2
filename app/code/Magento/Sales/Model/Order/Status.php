@@ -12,13 +12,11 @@ use Magento\Framework\Exception\LocalizedException;
  *
  * @method string getStatus()
  * @method string getLabel()
- * @since 2.0.0
  */
 class Status extends \Magento\Sales\Model\AbstractModel
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -31,7 +29,6 @@ class Status extends \Magento\Sales\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -57,7 +54,6 @@ class Status extends \Magento\Sales\Model\AbstractModel
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -72,7 +68,6 @@ class Status extends \Magento\Sales\Model\AbstractModel
      * @param bool $visibleOnFront
      * @return $this
      * @throws \Exception
-     * @since 2.0.0
      */
     public function assignState($state, $isDefault = false, $visibleOnFront = false)
     {
@@ -93,7 +88,6 @@ class Status extends \Magento\Sales\Model\AbstractModel
      * @param string $state
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function validateBeforeUnassign($state)
     {
@@ -111,7 +105,6 @@ class Status extends \Magento\Sales\Model\AbstractModel
      * @param string $state
      * @return $this
      * @throws \Exception
-     * @since 2.0.0
      */
     public function unassignState($state)
     {
@@ -131,7 +124,6 @@ class Status extends \Magento\Sales\Model\AbstractModel
      * Getter for status labels per store
      *
      * @return array
-     * @since 2.0.0
      */
     public function getStoreLabels()
     {
@@ -148,7 +140,6 @@ class Status extends \Magento\Sales\Model\AbstractModel
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return \Magento\Framework\Phrase|string
-     * @since 2.0.0
      */
     public function getStoreLabel($store = null)
     {
@@ -166,7 +157,6 @@ class Status extends \Magento\Sales\Model\AbstractModel
      *
      * @param string $state
      * @return $this
-     * @since 2.0.0
      */
     public function loadDefaultByState($state)
     {

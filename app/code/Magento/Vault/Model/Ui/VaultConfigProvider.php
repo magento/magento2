@@ -41,7 +41,7 @@ class VaultConfigProvider implements ConfigProviderInterface
 
     /**
      * @var PaymentMethodListInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $vaultPaymentList;
 
@@ -86,8 +86,8 @@ class VaultConfigProvider implements ConfigProviderInterface
     /**
      * Get vault payment list instance
      * @return PaymentMethodListInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 2.1.3
+     * @since 2.1.3
      */
     private function getVaultPaymentList()
     {

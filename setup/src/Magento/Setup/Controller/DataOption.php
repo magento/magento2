@@ -14,13 +14,11 @@ use Zend\View\Model\ViewModel;
 
 /**
  * Controller of data option selection
- * @since 2.0.0
  */
 class DataOption extends AbstractActionController
 {
     /**
      * @var UninstallCollector
-     * @since 2.0.0
      */
     private $uninstallCollector;
 
@@ -28,7 +26,6 @@ class DataOption extends AbstractActionController
      * Constructor
      *
      * @param UninstallCollector $uninstallCollector
-     * @since 2.0.0
      */
     public function __construct(UninstallCollector $uninstallCollector)
     {
@@ -39,7 +36,6 @@ class DataOption extends AbstractActionController
      * Shows data option page
      *
      * @return ViewModel|\Zend\Http\Response
-     * @since 2.0.0
      */
     public function indexAction()
     {
@@ -53,7 +49,6 @@ class DataOption extends AbstractActionController
      * Checks if module has uninstall class
      *
      * @return JsonModel
-     * @since 2.0.0
      */
     public function hasUninstallAction()
     {

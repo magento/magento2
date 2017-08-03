@@ -12,13 +12,11 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * Extensible Cart Totals
  *
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class TotalSegment extends AbstractExtensibleModel implements TotalSegmentInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCode()
     {
@@ -27,7 +25,6 @@ class TotalSegment extends AbstractExtensibleModel implements TotalSegmentInterf
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setCode($code)
     {
@@ -36,7 +33,6 @@ class TotalSegment extends AbstractExtensibleModel implements TotalSegmentInterf
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getValue()
     {
@@ -45,7 +41,6 @@ class TotalSegment extends AbstractExtensibleModel implements TotalSegmentInterf
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setValue($value)
     {
@@ -54,7 +49,6 @@ class TotalSegment extends AbstractExtensibleModel implements TotalSegmentInterf
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -63,7 +57,6 @@ class TotalSegment extends AbstractExtensibleModel implements TotalSegmentInterf
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setTitle($title = null)
     {
@@ -72,7 +65,6 @@ class TotalSegment extends AbstractExtensibleModel implements TotalSegmentInterf
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getArea()
     {
@@ -81,7 +73,6 @@ class TotalSegment extends AbstractExtensibleModel implements TotalSegmentInterf
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setArea($area = null)
     {
@@ -90,7 +81,6 @@ class TotalSegment extends AbstractExtensibleModel implements TotalSegmentInterf
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -99,7 +89,6 @@ class TotalSegment extends AbstractExtensibleModel implements TotalSegmentInterf
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Quote\Api\Data\TotalSegmentExtensionInterface $extensionAttributes

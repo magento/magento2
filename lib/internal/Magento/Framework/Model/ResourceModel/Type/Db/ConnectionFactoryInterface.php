@@ -10,7 +10,6 @@ namespace Magento\Framework\Model\ResourceModel\Type\Db;
 /**
  * Interface \Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface
  *
- * @since 2.0.0
  */
 interface ConnectionFactoryInterface
 {
@@ -20,7 +19,6 @@ interface ConnectionFactoryInterface
      * @param array $connectionConfig
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function create(array $connectionConfig);
 }

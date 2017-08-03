@@ -29,7 +29,6 @@ namespace Magento\Bundle\Model;
  * @method int getSelectionCanChangeQty()
  * @method \Magento\Bundle\Model\Selection setSelectionCanChangeQty(int $value)
  * @api
- * @since 2.0.0
  */
 class Selection extends \Magento\Framework\Model\AbstractModel
 {
@@ -37,7 +36,6 @@ class Selection extends \Magento\Framework\Model\AbstractModel
      * Catalog data
      *
      * @var \Magento\Catalog\Helper\Data
-     * @since 2.0.0
      */
     protected $_catalogData;
 
@@ -48,7 +46,6 @@ class Selection extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Bundle\Model\ResourceModel\Selection $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -66,7 +63,6 @@ class Selection extends \Magento\Framework\Model\AbstractModel
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -78,7 +74,6 @@ class Selection extends \Magento\Framework\Model\AbstractModel
      * Processing object before save data
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {

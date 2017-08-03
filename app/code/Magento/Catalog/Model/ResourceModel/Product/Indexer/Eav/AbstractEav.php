@@ -13,7 +13,6 @@ use Magento\Framework\App\ObjectManager;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer
 {
@@ -21,7 +20,6 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager = null;
 
@@ -33,7 +31,6 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param null $connectionName
      * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -51,7 +48,6 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      *
      * @return $this
      * @throws \Exception
-     * @since 2.0.0
      */
     public function reindexAll()
     {
@@ -78,7 +74,6 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      * @param int|array $processIds
      * @return $this
      * @throws \Exception
-     * @since 2.0.0
      */
     public function reindexEntities($processIds)
     {
@@ -98,7 +93,6 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      * @param int $attributeId
      * @param bool $isIndexable
      * @return $this
-     * @since 2.0.0
      */
     public function reindexAttribute($attributeId, $isIndexable = true)
     {
@@ -123,7 +117,6 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      * @param array $entityIds      the entity ids limitation
      * @param int $attributeId      the attribute id limitation
      * @return $this
-     * @since 2.0.0
      */
     abstract protected function _prepareIndex($entityIds = null, $attributeId = null);
 
@@ -131,7 +124,6 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      * Remove Not Visible products from temporary data index
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _removeNotVisibleEntityFromIndex()
     {
@@ -166,7 +158,6 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      *
      * @param array $parentIds the parent entity ids limitation
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function _prepareRelationIndexSelect($parentIds = null)
     {
@@ -225,7 +216,6 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      *
      * @param array $parentIds the parent entity ids limitation
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareRelationIndex($parentIds = null)
     {
@@ -248,7 +238,6 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      * the catalog/eav_attribute table must have alias is ca
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getIndexableAttributesCondition()
     {
@@ -269,7 +258,6 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      * @param int $attributeId
      * @return $this
      * @throws \Exception
-     * @since 2.0.0
      */
     protected function _removeAttributeIndexData($attributeId)
     {
@@ -292,7 +280,6 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      * @param int $attributeId
      * @return $this
      * @throws \Exception
-     * @since 2.0.0
      */
     protected function _synchronizeAttributeIndexData($attributeId)
     {

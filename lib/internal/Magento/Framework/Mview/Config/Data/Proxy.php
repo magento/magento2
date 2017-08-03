@@ -7,7 +7,6 @@ namespace Magento\Framework\Mview\Config\Data;
 
 /**
  * Proxy class for \Magento\Framework\Mview\Config\Data
- * @since 2.0.0
  */
 class Proxy extends \Magento\Framework\Mview\Config\Data implements
     \Magento\Framework\ObjectManager\NoninterceptableInterface
@@ -16,7 +15,6 @@ class Proxy extends \Magento\Framework\Mview\Config\Data implements
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -24,7 +22,6 @@ class Proxy extends \Magento\Framework\Mview\Config\Data implements
      * Proxied instance name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $instanceName;
 
@@ -32,7 +29,6 @@ class Proxy extends \Magento\Framework\Mview\Config\Data implements
      * Proxied instance
      *
      * @var \Magento\Framework\Mview\Config\Data
-     * @since 2.0.0
      */
     protected $subject;
 
@@ -40,7 +36,6 @@ class Proxy extends \Magento\Framework\Mview\Config\Data implements
      * Instance shareability flag
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $isShared = null;
 
@@ -48,7 +43,6 @@ class Proxy extends \Magento\Framework\Mview\Config\Data implements
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
      * @param bool $shared
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -62,7 +56,6 @@ class Proxy extends \Magento\Framework\Mview\Config\Data implements
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function __sleep()
     {
@@ -73,7 +66,6 @@ class Proxy extends \Magento\Framework\Mview\Config\Data implements
      * Retrieve ObjectManager from global scope
      *
      * @return void
-     * @since 2.0.0
      */
     public function __wakeup()
     {
@@ -84,7 +76,6 @@ class Proxy extends \Magento\Framework\Mview\Config\Data implements
      * Clone proxied instance
      *
      * @return void
-     * @since 2.0.0
      */
     public function __clone()
     {
@@ -95,7 +86,6 @@ class Proxy extends \Magento\Framework\Mview\Config\Data implements
      * Get proxied instance
      *
      * @return \Magento\Framework\Mview\Config\Data
-     * @since 2.0.0
      */
     protected function _getSubject()
     {
@@ -111,7 +101,6 @@ class Proxy extends \Magento\Framework\Mview\Config\Data implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function merge(array $config)
     {
@@ -120,7 +109,6 @@ class Proxy extends \Magento\Framework\Mview\Config\Data implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function get($path = null, $default = null)
     {

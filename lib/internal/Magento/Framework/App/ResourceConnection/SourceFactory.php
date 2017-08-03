@@ -8,19 +8,16 @@ namespace Magento\Framework\App\ResourceConnection;
 /**
  * Class \Magento\Framework\App\ResourceConnection\SourceFactory
  *
- * @since 2.0.0
  */
 class SourceFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -33,7 +30,6 @@ class SourceFactory
      * @param string $className
      * @throws \InvalidArgumentException
      * @return SourceProviderInterface
-     * @since 2.0.0
      */
     public function create($className)
     {

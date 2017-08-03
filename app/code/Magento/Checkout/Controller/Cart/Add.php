@@ -12,13 +12,11 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Add extends \Magento\Checkout\Controller\Cart
 {
     /**
      * @var ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
@@ -31,7 +29,6 @@ class Add extends \Magento\Checkout\Controller\Cart
      * @param CustomerCart $cart
      * @param ProductRepositoryInterface $productRepository
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -57,7 +54,6 @@ class Add extends \Magento\Checkout\Controller\Cart
      * Initialize product instance from request data
      *
      * @return \Magento\Catalog\Model\Product|false
-     * @since 2.0.0
      */
     protected function _initProduct()
     {
@@ -80,7 +76,6 @@ class Add extends \Magento\Checkout\Controller\Cart
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -170,7 +165,6 @@ class Add extends \Magento\Checkout\Controller\Cart
      * @param string $backUrl
      * @param \Magento\Catalog\Model\Product $product
      * @return $this|\Magento\Framework\Controller\Result\Redirect
-     * @since 2.0.0
      */
     protected function goBack($backUrl = null, $product = null)
     {

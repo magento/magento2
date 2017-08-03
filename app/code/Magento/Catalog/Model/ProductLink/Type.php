@@ -10,7 +10,6 @@ use Magento\Catalog\Api\Data\ProductLinkTypeInterface;
 
 /**
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class Type extends \Magento\Framework\Api\AbstractExtensibleObject implements ProductLinkTypeInterface
 {
@@ -23,7 +22,6 @@ class Type extends \Magento\Framework\Api\AbstractExtensibleObject implements Pr
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCode()
     {
@@ -32,7 +30,6 @@ class Type extends \Magento\Framework\Api\AbstractExtensibleObject implements Pr
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -44,7 +41,6 @@ class Type extends \Magento\Framework\Api\AbstractExtensibleObject implements Pr
      *
      * @param int $code
      * @return $this
-     * @since 2.0.0
      */
     public function setCode($code)
     {
@@ -56,7 +52,6 @@ class Type extends \Magento\Framework\Api\AbstractExtensibleObject implements Pr
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -67,7 +62,6 @@ class Type extends \Magento\Framework\Api\AbstractExtensibleObject implements Pr
      * {@inheritdoc}
      *
      * @return \Magento\Catalog\Api\Data\ProductLinkTypeExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -79,7 +73,6 @@ class Type extends \Magento\Framework\Api\AbstractExtensibleObject implements Pr
      *
      * @param \Magento\Catalog\Api\Data\ProductLinkTypeExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductLinkTypeExtensionInterface $extensionAttributes

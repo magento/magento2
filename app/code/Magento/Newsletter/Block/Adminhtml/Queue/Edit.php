@@ -12,13 +12,11 @@ use Magento\Newsletter\Model\Queue as ModelQueue;
  * Newsletter queue edit block
  *
  * @api
- * @since 2.0.0
  */
 class Edit extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'queue/edit.phtml';
 
@@ -26,7 +24,6 @@ class Edit extends \Magento\Backend\Block\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -34,7 +31,6 @@ class Edit extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -47,7 +43,6 @@ class Edit extends \Magento\Backend\Block\Template
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -62,7 +57,6 @@ class Edit extends \Magento\Backend\Block\Template
      * Retrieve current Newsletter Queue Object
      *
      * @return ModelQueue
-     * @since 2.0.0
      */
     public function getQueue()
     {
@@ -73,7 +67,6 @@ class Edit extends \Magento\Backend\Block\Template
      * Before rendering html, but after trying to load cache
      *
      * @return AbstractBlock
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -88,7 +81,6 @@ class Edit extends \Magento\Backend\Block\Template
      * Get the url for save
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSaveUrl()
     {
@@ -104,7 +96,6 @@ class Edit extends \Magento\Backend\Block\Template
      * Prepare for the layout
      *
      * @return AbstractBlock
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -169,7 +160,6 @@ class Edit extends \Magento\Backend\Block\Template
      * Return preview action url for form
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPreviewUrl()
     {
@@ -185,7 +175,6 @@ class Edit extends \Magento\Backend\Block\Template
      * Retrieve Preview Button HTML
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPreviewButtonHtml()
     {
@@ -196,7 +185,6 @@ class Edit extends \Magento\Backend\Block\Template
      * Retrieve Save Button HTML
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSaveButtonHtml()
     {
@@ -207,7 +195,6 @@ class Edit extends \Magento\Backend\Block\Template
      * Retrieve Reset Button HTML
      *
      * @return string
-     * @since 2.0.0
      */
     public function getResetButtonHtml()
     {
@@ -218,7 +205,6 @@ class Edit extends \Magento\Backend\Block\Template
      * Retrieve Back Button HTML
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBackButtonHtml()
     {
@@ -229,7 +215,6 @@ class Edit extends \Magento\Backend\Block\Template
      * Retrieve Resume Button HTML
      *
      * @return string
-     * @since 2.0.0
      */
     public function getResumeButtonHtml()
     {
@@ -241,7 +226,6 @@ class Edit extends \Magento\Backend\Block\Template
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsPreview()
     {
@@ -255,7 +239,6 @@ class Edit extends \Magento\Backend\Block\Template
      * Getter for single store mode check
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function isSingleStoreMode()
     {
@@ -267,7 +250,6 @@ class Edit extends \Magento\Backend\Block\Template
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     protected function getStoreId()
     {
@@ -279,7 +261,6 @@ class Edit extends \Magento\Backend\Block\Template
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsTextType()
     {
@@ -291,7 +272,6 @@ class Edit extends \Magento\Backend\Block\Template
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getCanResume()
     {
@@ -303,7 +283,6 @@ class Edit extends \Magento\Backend\Block\Template
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getHeaderText()
     {

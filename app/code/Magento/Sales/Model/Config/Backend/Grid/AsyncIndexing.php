@@ -8,7 +8,6 @@ namespace Magento\Sales\Model\Config\Backend\Grid;
 /**
  * Backend model for global configuration value
  * 'dev/grid/async_indexing'.
- * @since 2.0.0
  */
 class AsyncIndexing extends \Magento\Framework\App\Config\Value
 {
@@ -22,7 +21,6 @@ class AsyncIndexing extends \Magento\Framework\App\Config\Value
      * - config_data_dev_grid_async_indexing_disabled
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {

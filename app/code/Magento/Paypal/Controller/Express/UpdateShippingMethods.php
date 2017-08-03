@@ -9,7 +9,6 @@ namespace Magento\Paypal\Controller\Express;
 /**
  * Class \Magento\Paypal\Controller\Express\UpdateShippingMethods
  *
- * @since 2.0.0
  */
 class UpdateShippingMethods extends \Magento\Paypal\Controller\Express\AbstractExpress\UpdateShippingMethods
 {
@@ -17,7 +16,6 @@ class UpdateShippingMethods extends \Magento\Paypal\Controller\Express\AbstractE
      * Config mode type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_configType = \Magento\Paypal\Model\Config::class;
 
@@ -25,7 +23,6 @@ class UpdateShippingMethods extends \Magento\Paypal\Controller\Express\AbstractE
      * Config method type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_configMethod = \Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS;
 
@@ -33,7 +30,6 @@ class UpdateShippingMethods extends \Magento\Paypal\Controller\Express\AbstractE
      * Checkout mode type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_checkoutType = \Magento\Paypal\Model\Express\Checkout::class;
 }

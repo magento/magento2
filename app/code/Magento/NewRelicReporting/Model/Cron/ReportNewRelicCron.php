@@ -13,44 +13,37 @@ use Magento\NewRelicReporting\Model\Apm\DeploymentsFactory;
 
 /**
  * Class ReportNewRelicCron
- * @since 2.0.0
  */
 class ReportNewRelicCron
 {
     /**
      * @var Config
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var Collect
-     * @since 2.0.0
      */
     protected $collect;
 
     /**
      * @var Counter
-     * @since 2.0.0
      */
     protected $counter;
 
     /**
      * @var CronEventFactory
-     * @since 2.0.0
      */
     protected $cronEventFactory;
 
     /**
      * @var DeploymentsFactory
-     * @since 2.0.0
      */
     protected $deploymentsFactory;
 
     /**
      * Parameters to be sent to Insights
      * @var array
-     * @since 2.0.0
      */
     protected $customParameters = [];
 
@@ -62,7 +55,6 @@ class ReportNewRelicCron
      * @param Counter $counter
      * @param CronEventFactory $cronEventFactory
      * @param DeploymentsFactory $deploymentsFactory
-     * @since 2.0.0
      */
     public function __construct(
         Config $config,
@@ -83,7 +75,6 @@ class ReportNewRelicCron
      *
      * @param array $data
      * @return void
-     * @since 2.0.0
      */
     public function addCustomParameters(array $data)
     {
@@ -96,7 +87,6 @@ class ReportNewRelicCron
      *  Reports current total module counts to Insights
      *
      * @return void
-     * @since 2.0.0
      */
     protected function reportModules()
     {
@@ -139,7 +129,6 @@ class ReportNewRelicCron
      * @param array $changesArray
      * @param string $deploymentText
      * @return void
-     * @since 2.0.0
      */
     protected function setModuleChangeStatusDeployment(array $changesArray, $deploymentText = '')
     {
@@ -159,7 +148,6 @@ class ReportNewRelicCron
      *
      * @return void
      * @throws \Exception
-     * @since 2.0.0
      */
     protected function reportCounts()
     {
@@ -183,7 +171,6 @@ class ReportNewRelicCron
      * Reports info to New Relic by Cron
      *
      * @return \Magento\NewRelicReporting\Model\Cron\ReportCounts
-     * @since 2.0.0
      */
     public function report()
     {

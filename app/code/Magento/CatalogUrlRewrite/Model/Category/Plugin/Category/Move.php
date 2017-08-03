@@ -12,13 +12,11 @@ use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 /**
  * Class \Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Move
  *
- * @since 2.0.0
  */
 class Move
 {
     /**
      * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
-     * @since 2.0.0
      */
     protected $categoryUrlPathGenerator;
 
@@ -31,7 +29,6 @@ class Move
     /**
      * @param CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param ChildrenCategoriesProvider $childrenCategoriesProvider
-     * @since 2.0.0
      */
     public function __construct(
         CategoryUrlPathGenerator $categoryUrlPathGenerator,
@@ -70,7 +67,6 @@ class Move
     /**
      * @param Category $category
      * @return void
-     * @since 2.0.0
      */
     protected function updateUrlPathForChildren($category)
     {

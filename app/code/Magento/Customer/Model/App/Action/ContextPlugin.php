@@ -15,26 +15,22 @@ use Magento\Framework\App\Http\Context as HttpContext;
 
 /**
  * Class ContextPlugin
- * @since 2.0.0
  */
 class ContextPlugin
 {
     /**
      * @var Session
-     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var HttpContext
-     * @since 2.0.0
      */
     protected $httpContext;
 
     /**
      * @param Session $customerSession
      * @param HttpContext $httpContext
-     * @since 2.0.0
      */
     public function __construct(Session $customerSession, HttpContext $httpContext)
     {

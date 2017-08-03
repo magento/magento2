@@ -10,7 +10,6 @@ use Magento\Tax\Api\Data\TaxDetailsItemInterface;
 
 /**
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInterface
 {
@@ -34,7 +33,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCode()
     {
@@ -43,7 +41,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -52,7 +49,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTaxPercent()
     {
@@ -61,7 +57,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getPrice()
     {
@@ -70,7 +65,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getPriceInclTax()
     {
@@ -79,7 +73,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getRowTotal()
     {
@@ -88,7 +81,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getRowTotalInclTax()
     {
@@ -97,7 +89,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getRowTax()
     {
@@ -106,7 +97,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTaxableAmount()
     {
@@ -115,7 +105,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getDiscountAmount()
     {
@@ -124,7 +113,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getDiscountTaxCompensationAmount()
     {
@@ -133,7 +121,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAppliedTaxes()
     {
@@ -142,7 +129,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAssociatedItemCode()
     {
@@ -154,7 +140,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
      *
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function setCode($code)
     {
@@ -166,7 +151,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
      *
      * @param string $type
      * @return $this
-     * @since 2.0.0
      */
     public function setType($type)
     {
@@ -178,7 +162,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
      *
      * @param float $taxPercent
      * @return $this
-     * @since 2.0.0
      */
     public function setTaxPercent($taxPercent)
     {
@@ -190,7 +173,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
      *
      * @param float $price
      * @return $this
-     * @since 2.0.0
      */
     public function setPrice($price)
     {
@@ -202,7 +184,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
      *
      * @param float $priceInclTax
      * @return $this
-     * @since 2.0.0
      */
     public function setPriceInclTax($priceInclTax)
     {
@@ -214,7 +195,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
      *
      * @param float $rowTotal
      * @return $this
-     * @since 2.0.0
      */
     public function setRowTotal($rowTotal)
     {
@@ -226,7 +206,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
      *
      * @param float $rowTotalInclTax
      * @return $this
-     * @since 2.0.0
      */
     public function setRowTotalInclTax($rowTotalInclTax)
     {
@@ -238,7 +217,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
      *
      * @param float $rowTax
      * @return $this
-     * @since 2.0.0
      */
     public function setRowTax($rowTax)
     {
@@ -250,7 +228,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
      *
      * @param float $taxableAmount
      * @return $this
-     * @since 2.0.0
      */
     public function setTaxableAmount($taxableAmount)
     {
@@ -262,7 +239,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
      *
      * @param float $discountAmount
      * @return $this
-     * @since 2.0.0
      */
     public function setDiscountAmount($discountAmount)
     {
@@ -274,7 +250,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
      *
      * @param float $discountTaxCompensationAmount
      * @return $this
-     * @since 2.0.0
      */
     public function setDiscountTaxCompensationAmount($discountTaxCompensationAmount)
     {
@@ -289,7 +264,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
      *
      * @param \Magento\Tax\Api\Data\AppliedTaxInterface[] $appliedTaxes
      * @return $this
-     * @since 2.0.0
      */
     public function setAppliedTaxes(array $appliedTaxes = null)
     {
@@ -301,7 +275,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
      *
      * @param int $associatedItemCode
      * @return $this
-     * @since 2.0.0
      */
     public function setAssociatedItemCode($associatedItemCode)
     {
@@ -312,7 +285,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
      * {@inheritdoc}
      *
      * @return \Magento\Tax\Api\Data\TaxDetailsItemExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -324,7 +296,6 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
      *
      * @param \Magento\Tax\Api\Data\TaxDetailsItemExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxDetailsItemExtensionInterface $extensionAttributes)
     {

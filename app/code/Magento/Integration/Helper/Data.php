@@ -10,7 +10,6 @@ use Magento\Integration\Model\Integration as IntegrationModel;
 /**
  * Class \Magento\Integration\Helper\Data
  *
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -19,7 +18,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param array $resources
      * @return array
-     * @since 2.0.0
      */
     public function mapResources(array $resources)
     {
@@ -43,7 +41,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param array $integrationData
      * @return bool true if integration is created using Config file
-     * @since 2.0.0
      */
     public function isConfigType($integrationData)
     {

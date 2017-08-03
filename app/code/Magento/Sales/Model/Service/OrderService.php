@@ -11,49 +11,41 @@ use Magento\Sales\Api\OrderManagementInterface;
  * Class OrderService
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class OrderService implements OrderManagementInterface
 {
     /**
      * @var \Magento\Sales\Api\OrderRepositoryInterface
-     * @since 2.0.0
      */
     protected $orderRepository;
 
     /**
      * @var \Magento\Sales\Api\OrderStatusHistoryRepositoryInterface
-     * @since 2.0.0
      */
     protected $historyRepository;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     * @since 2.0.0
      */
     protected $criteriaBuilder;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
-     * @since 2.0.0
      */
     protected $filterBuilder;
 
     /**
      * @var \Magento\Sales\Model\OrderNotifier
-     * @since 2.0.0
      */
     protected $notifier;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @var \Magento\Sales\Model\Order\Email\Sender\OrderCommentSender
-     * @since 2.0.0
      */
     protected $orderCommentSender;
 
@@ -67,7 +59,6 @@ class OrderService implements OrderManagementInterface
      * @param \Magento\Sales\Model\OrderNotifier $notifier
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\Order\Email\Sender\OrderCommentSender $orderCommentSender
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
@@ -92,7 +83,6 @@ class OrderService implements OrderManagementInterface
      *
      * @param int $id
      * @return bool
-     * @since 2.0.0
      */
     public function cancel($id)
     {
@@ -110,7 +100,6 @@ class OrderService implements OrderManagementInterface
      *
      * @param int $id
      * @return \Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface
-     * @since 2.0.0
      */
     public function getCommentsList($id)
     {
@@ -127,7 +116,6 @@ class OrderService implements OrderManagementInterface
      * @param int $id
      * @param \Magento\Sales\Api\Data\OrderStatusHistoryInterface $statusHistory
      * @return bool
-     * @since 2.0.0
      */
     public function addComment($id, \Magento\Sales\Api\Data\OrderStatusHistoryInterface $statusHistory)
     {
@@ -145,7 +133,6 @@ class OrderService implements OrderManagementInterface
      *
      * @param int $id
      * @return bool
-     * @since 2.0.0
      */
     public function notify($id)
     {
@@ -158,7 +145,6 @@ class OrderService implements OrderManagementInterface
      *
      * @param int $id
      * @return string
-     * @since 2.0.0
      */
     public function getStatus($id)
     {
@@ -170,7 +156,6 @@ class OrderService implements OrderManagementInterface
      *
      * @param int $id
      * @return bool
-     * @since 2.0.0
      */
     public function hold($id)
     {
@@ -184,7 +169,6 @@ class OrderService implements OrderManagementInterface
      *
      * @param int $id
      * @return bool
-     * @since 2.0.0
      */
     public function unHold($id)
     {
@@ -197,7 +181,6 @@ class OrderService implements OrderManagementInterface
      * @param \Magento\Sales\Api\Data\OrderInterface $order
      * @return \Magento\Sales\Api\Data\OrderInterface
      * @throws \Exception
-     * @since 2.0.0
      */
     public function place(\Magento\Sales\Api\Data\OrderInterface $order)
     {
@@ -229,7 +212,6 @@ class OrderService implements OrderManagementInterface
      * @param bool $shouldProtectState
      * @return \Magento\Sales\Model\Service\OrderService
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function setState(
         \Magento\Sales\Api\Data\OrderInterface $order,

@@ -13,43 +13,36 @@ use Magento\Framework\Exception\StateException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterface
 {
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $eavConfig;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute
-     * @since 2.0.0
      */
     protected $eavResource;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory
-     * @since 2.0.0
      */
     protected $attributeCollectionFactory;
 
     /**
      * @var \Magento\Eav\Api\Data\AttributeSearchResultsInterfaceFactory
-     * @since 2.0.0
      */
     protected $searchResultsFactory;
 
     /**
      * @var Entity\AttributeFactory
-     * @since 2.0.0
      */
     protected $attributeFactory;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
-     * @since 2.0.0
      */
     protected $joinProcessor;
 
@@ -68,7 +61,6 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param CollectionProcessorInterface $collectionProcessor
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\Config $eavConfig,
@@ -90,7 +82,6 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function save(\Magento\Eav\Api\Data\AttributeInterface $attribute)
     {
@@ -104,7 +95,6 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getList($entityTypeCode, \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -158,7 +148,6 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function get($entityTypeCode, $attributeCode)
     {
@@ -174,7 +163,6 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function delete(\Magento\Eav\Api\Data\AttributeInterface $attribute)
     {
@@ -188,7 +176,6 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function deleteById($attributeId)
     {

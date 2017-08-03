@@ -11,19 +11,16 @@ use Magento\Sales\Model\ResourceModel\Attribute;
 
 /**
  * Class Address
- * @since 2.0.0
  */
 class Address
 {
     /**
      * @var Attribute
-     * @since 2.0.0
      */
     protected $attribute;
 
     /**
      * @param Attribute $attribute
-     * @since 2.0.0
      */
     public function __construct(
         Attribute $attribute
@@ -36,7 +33,6 @@ class Address
      *
      * @param Order $order
      * @return $this
-     * @since 2.0.0
      */
     public function removeEmptyAddresses(Order $order)
     {
@@ -56,7 +52,6 @@ class Address
      * @param Order $order
      * @return $this
      * @throws \Exception
-     * @since 2.0.0
      */
     public function process(Order $order)
     {

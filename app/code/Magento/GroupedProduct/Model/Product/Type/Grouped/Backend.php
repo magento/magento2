@@ -7,7 +7,6 @@ namespace Magento\GroupedProduct\Model\Product\Type\Grouped;
 
 /**
  * Grouped product type implementation for backend
- * @since 2.0.0
  */
 class Backend extends \Magento\GroupedProduct\Model\Product\Type\Grouped
 {
@@ -16,7 +15,6 @@ class Backend extends \Magento\GroupedProduct\Model\Product\Type\Grouped
      *
      * @param  \Magento\Catalog\Model\Product $product
      * @return \Magento\GroupedProduct\Model\Product\Type\Grouped
-     * @since 2.0.0
      */
     public function setSaleableStatus($product)
     {

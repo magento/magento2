@@ -18,7 +18,6 @@ use Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory;
 /**
  * Class Pdfcreditmemos
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
@@ -31,19 +30,16 @@ class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractM
 
     /**
      * @var FileFactory
-     * @since 2.0.0
      */
     protected $fileFactory;
 
     /**
      * @var Creditmemo
-     * @since 2.0.0
      */
     protected $pdfCreditmemo;
 
     /**
      * @var DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
@@ -54,7 +50,6 @@ class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractM
      * @param DateTime $dateTime
      * @param FileFactory $fileFactory
      * @param CollectionFactory $collectionFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -76,7 +71,6 @@ class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractM
      * @return ResponseInterface
      * @throws \Exception
      * @throws \Zend_Pdf_Exception
-     * @since 2.0.0
      */
     public function massAction(AbstractCollection $collection)
     {

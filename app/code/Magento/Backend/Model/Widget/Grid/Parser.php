@@ -7,7 +7,6 @@ namespace Magento\Backend\Model\Widget\Grid;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Parser
 {
@@ -15,7 +14,6 @@ class Parser
      * List of allowed operations
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_operations = ['-', '+', '/', '*'];
 
@@ -24,7 +22,6 @@ class Parser
      *
      * @param string $expression
      * @return array
-     * @since 2.0.0
      */
     public function parseExpression($expression)
     {
@@ -50,7 +47,6 @@ class Parser
      *
      * @param string $operation
      * @return bool
-     * @since 2.0.0
      */
     public function isOperation($operation)
     {

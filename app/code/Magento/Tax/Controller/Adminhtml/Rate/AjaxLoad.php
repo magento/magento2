@@ -12,7 +12,6 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad
  *
- * @since 2.0.0
  */
 class AjaxLoad extends \Magento\Tax\Controller\Adminhtml\Rate
 {
@@ -20,7 +19,6 @@ class AjaxLoad extends \Magento\Tax\Controller\Adminhtml\Rate
      * Json needed for the Ajax Edit Form
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

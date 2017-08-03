@@ -12,13 +12,11 @@ use Magento\Framework\Exception\FileSystemException;
 /**
  * Class \Magento\Setup\Module\Di\Code\Reader\ClassesScanner
  *
- * @since 2.0.0
  */
 class ClassesScanner implements ClassesScannerInterface
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $excludePatterns = [];
 
@@ -37,7 +35,6 @@ class ClassesScanner implements ClassesScannerInterface
     /**
      * @param array $excludePatterns
      * @param string $generationDirectory
-     * @since 2.0.0
      */
     public function __construct(array $excludePatterns = [], DirectoryList $directoryList = null)
     {
@@ -53,7 +50,6 @@ class ClassesScanner implements ClassesScannerInterface
      *
      * @param array $excludePatterns
      * @return void
-     * @since 2.0.0
      */
     public function addExcludePatterns(array $excludePatterns)
     {
@@ -67,7 +63,6 @@ class ClassesScanner implements ClassesScannerInterface
      * @return array
      * @throws FileSystemException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function getList($path)
     {
@@ -146,7 +141,6 @@ class ClassesScanner implements ClassesScannerInterface
      * @param string $fileItemPath
      * @param string $patterns
      * @return bool
-     * @since 2.0.0
      */
     private function isExclude($fileItemPath, $patterns)
     {

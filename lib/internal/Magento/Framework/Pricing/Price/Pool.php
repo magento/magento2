@@ -10,20 +10,17 @@ namespace Magento\Framework\Pricing\Price;
  * Class Pool
  *
  * @api
- * @since 2.0.0
  */
 class Pool implements \Iterator, \ArrayAccess
 {
     /**
      * @var \Magento\Framework\Pricing\Price\PriceInterface[]
-     * @since 2.0.0
      */
     protected $prices;
 
     /**
      * @param array $prices
      * @param \Iterator $target
-     * @since 2.0.0
      */
     public function __construct(
         array $prices,
@@ -41,7 +38,6 @@ class Pool implements \Iterator, \ArrayAccess
      * Reset the Collection to the first element
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function rewind()
     {
@@ -52,7 +48,6 @@ class Pool implements \Iterator, \ArrayAccess
      * Return the current element
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function current()
     {
@@ -63,7 +58,6 @@ class Pool implements \Iterator, \ArrayAccess
      * Return the key of the current element
      *
      * @return string
-     * @since 2.0.0
      */
     public function key()
     {
@@ -74,7 +68,6 @@ class Pool implements \Iterator, \ArrayAccess
      * Move forward to next element
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function next()
     {
@@ -85,7 +78,6 @@ class Pool implements \Iterator, \ArrayAccess
      * Checks if current position is valid
      *
      * @return bool
-     * @since 2.0.0
      */
     public function valid()
     {
@@ -97,7 +89,6 @@ class Pool implements \Iterator, \ArrayAccess
      *
      * @param string $code
      * @return string
-     * @since 2.0.0
      */
     public function get($code)
     {
@@ -110,7 +101,6 @@ class Pool implements \Iterator, \ArrayAccess
      * @param string $offset
      * @param string $value
      * @return void
-     * @since 2.0.0
      */
     public function offsetSet($offset, $value)
     {
@@ -126,7 +116,6 @@ class Pool implements \Iterator, \ArrayAccess
      *
      * @param string $offset
      * @return bool
-     * @since 2.0.0
      */
     public function offsetExists($offset)
     {
@@ -138,7 +127,6 @@ class Pool implements \Iterator, \ArrayAccess
      *
      * @param string $offset
      * @return void
-     * @since 2.0.0
      */
     public function offsetUnset($offset)
     {
@@ -150,7 +138,6 @@ class Pool implements \Iterator, \ArrayAccess
      *
      * @param string $offset
      * @return string
-     * @since 2.0.0
      */
     public function offsetGet($offset)
     {
