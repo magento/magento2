@@ -13,7 +13,7 @@ use Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder;
 /**
  * {@inheritdoc}
  *
- * @deprecated
+ * @deprecated 2.2.0
  */
 class Exchange extends \Magento\Framework\Amqp\Exchange
 {
@@ -47,7 +47,8 @@ class Exchange extends \Magento\Framework\Amqp\Exchange
      *
      * @return PublisherConfig
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getPublisherConfig()
     {
@@ -59,7 +60,8 @@ class Exchange extends \Magento\Framework\Amqp\Exchange
      *
      * @return ResponseQueueNameBuilder
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getResponseQueueNameBuilder()
     {
