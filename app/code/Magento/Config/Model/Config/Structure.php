@@ -5,6 +5,8 @@
  */
 namespace Magento\Config\Model\Config;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * System configuration structure.
  *
@@ -195,7 +197,8 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     /**
      * Retrieve first available section in config structure
      *
-     * @return \Magento\Config\Model\Config\Structure\ElementInterface
+     * @return Structure\ElementInterface
+     * @throws LocalizedException
      */
     public function getFirstSection()
     {
@@ -204,6 +207,10 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
         /** @var $tab \Magento\Config\Model\Config\Structure\Element\Tab */
         $tab = $tabs->current();
         $tab->getChildren()->rewind();
+        if (!$tab->getChildren()->current()->isVisible()) {
+            throw new LocalizedException(__('Visible section not found.'));
+        }
+
         return $tab->getChildren()->current();
     }
 
@@ -351,7 +358,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      * 'section/group/field' => [
      *      'section_id/group_id/field_two_id'
      * ]
-     *```
+     * ```
      *
      * @return array An array of config path to config structure path map
      */

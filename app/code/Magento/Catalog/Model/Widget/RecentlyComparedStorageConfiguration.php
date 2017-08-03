@@ -32,7 +32,7 @@ class RecentlyComparedStorageConfiguration implements FrontendStorageConfigurati
 
     /**
      * Parse lifetime of recently compared products in widget
-     * 
+     *
      * @inheritdoc
      */
     public function get()

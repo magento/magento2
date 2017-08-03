@@ -112,8 +112,8 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     private function getExpectedJsonConfig()
     {
         return [
-            0 =>
-                ['prices' =>
+            0 => [
+                'prices' =>
                     ['oldPrice' =>
                         ['amount' => 10, 'adjustments' => []],
                         'basePrice' => ['amount' => 10],
@@ -121,9 +121,9 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
                     ],
                     'type' => 'fixed',
                     'name' => 'drop_down option 1',
-                ],
-            1 =>
-                ['prices' =>
+            ],
+            1 => [
+                'prices' =>
                     ['oldPrice' =>
                         ['amount' => 40, 'adjustments' => []],
                         'basePrice' => ['amount' => 40],
@@ -131,7 +131,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
                     ],
                     'type' => 'percent',
                     'name' => 'drop_down option 2',
-                ],
+            ],
         ];
     }
 }

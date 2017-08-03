@@ -185,8 +185,7 @@ class PackagePool
                     continue;
                 }
                 foreach ($inheritedThemes as $inheritedTheme) {
-                    if (
-                        $package->getTheme() === $inheritedTheme->getThemePath()
+                    if ($package->getTheme() === $inheritedTheme->getThemePath()
                         && $package->getArea() === $inheritedTheme->getArea()
                     ) {
                         $this->ensurePackage([
