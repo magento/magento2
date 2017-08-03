@@ -9,17 +9,24 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Config;
 
+/**
+ * Class \Magento\Elasticsearch\Model\Adapter\FieldMapper\FieldMapperResolver
+ *
+ * @since 2.1.0
+ */
 class FieldMapperResolver implements FieldMapperInterface
 {
     /**
      * Object Manager instance
      *
      * @var ObjectManagerInterface
+     * @since 2.1.0
      */
     private $objectManager;
 
     /**
      * @var string[]
+     * @since 2.1.0
      */
     private $fieldMappers;
 
@@ -27,12 +34,14 @@ class FieldMapperResolver implements FieldMapperInterface
      * Field Mapper instance
      *
      * @var FieldMapperInterface
+     * @since 2.1.0
      */
     private $fieldMapperEntity;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param string[] $fieldMappers
+     * @since 2.1.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -44,6 +53,7 @@ class FieldMapperResolver implements FieldMapperInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getFieldName($attributeCode, $context = [])
     {
@@ -53,6 +63,7 @@ class FieldMapperResolver implements FieldMapperInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getAllAttributesTypes($context = [])
     {
@@ -66,6 +77,7 @@ class FieldMapperResolver implements FieldMapperInterface
      * @param string $entityType
      * @return FieldMapperInterface
      * @throws \Exception
+     * @since 2.1.0
      */
     private function getEntity($entityType)
     {

@@ -12,6 +12,7 @@ use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 /**
  * Elasticsearch config model
  * @api
+ * @since 2.1.0
  */
 class Config implements ClientOptionsInterface
 {
@@ -37,6 +38,7 @@ class Config implements ClientOptionsInterface
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.1.0
      */
     protected $scopeConfig;
 
@@ -44,6 +46,7 @@ class Config implements ClientOptionsInterface
      * Constructor
      *
      * @param ScopeConfigInterface $scopeConfig
+     * @since 2.1.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig
@@ -53,6 +56,7 @@ class Config implements ClientOptionsInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function prepareClientOptions($options = [])
     {
@@ -75,6 +79,7 @@ class Config implements ClientOptionsInterface
      * @param string $field
      * @param int $storeId
      * @return string|int
+     * @since 2.1.0
      */
     public function getElasticsearchConfigData($field, $storeId = null)
     {
@@ -87,6 +92,7 @@ class Config implements ClientOptionsInterface
      * @param string $field
      * @param int|null $storeId
      * @return string|int
+     * @since 2.1.0
      */
     public function getSearchConfigData($field, $storeId = null)
     {
@@ -98,6 +104,7 @@ class Config implements ClientOptionsInterface
      * Return true if third party search engine is used
      *
      * @return bool
+     * @since 2.1.0
      */
     public function isElasticsearchEnabled()
     {
@@ -108,6 +115,7 @@ class Config implements ClientOptionsInterface
      * Get Elasticsearch index prefix
      *
      * @return string
+     * @since 2.1.0
      */
     public function getIndexPrefix()
     {
@@ -118,6 +126,7 @@ class Config implements ClientOptionsInterface
      * get Elasticsearch entity type
      *
      * @return string
+     * @since 2.1.0
      */
     public function getEntityType()
     {

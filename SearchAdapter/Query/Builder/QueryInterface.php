@@ -9,6 +9,7 @@ use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 
 /**
  * @api
+ * @since 2.1.0
  */
 interface QueryInterface
 {
@@ -17,6 +18,7 @@ interface QueryInterface
      * @param RequestQueryInterface $requestQuery
      * @param string $conditionType
      * @return array
+     * @since 2.1.0
      */
     public function build(
         array $selectQuery,

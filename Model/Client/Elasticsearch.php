@@ -10,6 +10,7 @@ use Magento\AdvancedSearch\Model\Client\ClientInterface;
 
 /**
  * Elasticsearch client
+ * @since 2.1.0
  */
 class Elasticsearch implements ClientInterface
 {
@@ -17,16 +18,19 @@ class Elasticsearch implements ClientInterface
      * Elasticsearch Client instance
      *
      * @var \Elasticsearch\Client
+     * @since 2.1.0
      */
     protected $client;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $clientOptions;
 
     /**
      * @var bool
+     * @since 2.1.0
      */
     protected $pingResult;
 
@@ -36,6 +40,7 @@ class Elasticsearch implements ClientInterface
      * @param array $options
      * @param \Elasticsearch\Client|null $elasticsearchClient
      * @throws LocalizedException
+     * @since 2.1.0
      */
     public function __construct(
         $options = [],
@@ -60,6 +65,7 @@ class Elasticsearch implements ClientInterface
      * Ping the Elasticsearch client
      *
      * @return bool
+     * @since 2.1.0
      */
     public function ping()
     {
@@ -73,6 +79,7 @@ class Elasticsearch implements ClientInterface
      * Validate connection params
      *
      * @return bool
+     * @since 2.1.0
      */
     public function testConnection()
     {
@@ -82,6 +89,7 @@ class Elasticsearch implements ClientInterface
     /**
      * @param array $options
      * @return array
+     * @since 2.1.0
      */
     private function buildConfig($options = [])
     {
@@ -106,6 +114,7 @@ class Elasticsearch implements ClientInterface
      *
      * @param array $query
      * @return void
+     * @since 2.1.0
      */
     public function bulkQuery($query)
     {
@@ -118,6 +127,7 @@ class Elasticsearch implements ClientInterface
      * @param string $index
      * @param array $settings
      * @return void
+     * @since 2.1.0
      */
     public function createIndex($index, $settings)
     {
@@ -132,6 +142,7 @@ class Elasticsearch implements ClientInterface
      *
      * @param string $index
      * @return void
+     * @since 2.1.0
      */
     public function deleteIndex($index)
     {
@@ -143,6 +154,7 @@ class Elasticsearch implements ClientInterface
      *
      * @param string $index
      * @return bool
+     * @since 2.1.0
      */
     public function isEmptyIndex($index)
     {
@@ -160,6 +172,7 @@ class Elasticsearch implements ClientInterface
      * @param string $newIndex
      * @param string $oldIndex
      * @return void
+     * @since 2.1.0
      */
     public function updateAlias($alias, $newIndex, $oldIndex = '')
     {
@@ -179,6 +192,7 @@ class Elasticsearch implements ClientInterface
      *
      * @param string $index
      * @return bool
+     * @since 2.1.0
      */
     public function indexExists($index)
     {
@@ -190,6 +204,7 @@ class Elasticsearch implements ClientInterface
      * @param string $index
      *
      * @return bool
+     * @since 2.1.0
      */
     public function existsAlias($alias, $index = '')
     {
@@ -204,6 +219,7 @@ class Elasticsearch implements ClientInterface
      * @param string $alias
      *
      * @return array
+     * @since 2.1.0
      */
     public function getAlias($alias)
     {
@@ -217,6 +233,7 @@ class Elasticsearch implements ClientInterface
      * @param string $index
      * @param string $entityType
      * @return void
+     * @since 2.1.0
      */
     public function addFieldsMapping(array $fields, $index, $entityType)
     {
@@ -275,6 +292,7 @@ class Elasticsearch implements ClientInterface
      * @param string $index
      * @param string $entityType
      * @return void
+     * @since 2.1.0
      */
     public function deleteMapping($index, $entityType)
     {
@@ -289,6 +307,7 @@ class Elasticsearch implements ClientInterface
      *
      * @param array $query
      * @return array
+     * @since 2.1.0
      */
     public function query($query)
     {
@@ -300,6 +319,7 @@ class Elasticsearch implements ClientInterface
      *
      * @param array $query
      * @return array
+     * @since 2.1.0
      */
     public function suggest($query)
     {

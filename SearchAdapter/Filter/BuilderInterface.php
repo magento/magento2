@@ -9,6 +9,7 @@ use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 
 /**
  * @api
+ * @since 2.1.0
  */
 interface BuilderInterface
 {
@@ -22,6 +23,7 @@ interface BuilderInterface
      * @param RequestFilterInterface $filter
      * @param string $conditionType
      * @return string
+     * @since 2.1.0
      */
     public function build(RequestFilterInterface $filter, $conditionType);
 }

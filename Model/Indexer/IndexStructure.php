@@ -9,21 +9,29 @@ use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Elasticsearch\Model\Adapter\Elasticsearch as ElasticsearchAdapter;
 use Magento\Framework\App\ScopeResolverInterface;
 
+/**
+ * Class \Magento\Elasticsearch\Model\Indexer\IndexStructure
+ *
+ * @since 2.1.0
+ */
 class IndexStructure implements IndexStructureInterface
 {
     /**
      * @var ElasticsearchAdapter
+     * @since 2.1.0
      */
     private $adapter;
 
     /**
      * @var ScopeResolverInterface
+     * @since 2.1.0
      */
     private $scopeResolver;
 
     /**
      * @param ElasticsearchAdapter $adapter
      * @param ScopeResolverInterface $scopeResolver
+     * @since 2.1.0
      */
     public function __construct(
         ElasticsearchAdapter $adapter,
@@ -35,6 +43,7 @@ class IndexStructure implements IndexStructureInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function delete(
         $indexerId,
@@ -48,6 +57,7 @@ class IndexStructure implements IndexStructureInterface
     /**
      * {@inheritdoc}
      *
+     * @since 2.1.0
      */
     public function create(
         $indexerId,

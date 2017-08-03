@@ -15,26 +15,31 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext;
 /**
  * Index name resolver
  * @api
+ * @since 2.1.0
  */
 class IndexNameResolver
 {
     /**
      * @var ConnectionManager
+     * @since 2.1.0
      */
     protected $connectionManager;
 
     /**
      * @var Config
+     * @since 2.1.0
      */
     protected $clientConfig;
 
     /**
      * @var ElasticsearchClient
+     * @since 2.1.0
      */
     protected $client;
 
     /**
      * @var LoggerInterface
+     * @since 2.1.0
      */
     protected $logger;
 
@@ -46,6 +51,7 @@ class IndexNameResolver
      * @param LoggerInterface $logger
      * @param array $options
      * @throws LocalizedException
+     * @since 2.1.0
      */
     public function __construct(
         ConnectionManager $connectionManager,
@@ -71,6 +77,7 @@ class IndexNameResolver
      * Get index namespace from config
      *
      * @return string
+     * @since 2.1.0
      */
     protected function getIndexNamespace()
     {
@@ -84,6 +91,7 @@ class IndexNameResolver
      * @param string $mappedIndexerId
      *
      * @return string
+     * @since 2.1.0
      */
     public function getIndexNameForAlias($storeId, $mappedIndexerId)
     {
@@ -97,6 +105,7 @@ class IndexNameResolver
      * @param string $mappedIndexerId
      * @param array $preparedIndex
      * @return string
+     * @since 2.1.0
      */
     public function getIndexName($storeId, $mappedIndexerId, array $preparedIndex)
     {
@@ -117,6 +126,7 @@ class IndexNameResolver
      * @param int $storeId
      * @param string $mappedIndexerId
      * @return string
+     * @since 2.1.0
      */
     public function getIndexPattern($storeId, $mappedIndexerId)
     {
@@ -129,6 +139,7 @@ class IndexNameResolver
      * @param int $storeId
      * @param string $mappedIndexerId
      * @return string
+     * @since 2.1.0
      */
     public function getIndexFromAlias($storeId, $mappedIndexerId)
     {
@@ -153,6 +164,7 @@ class IndexNameResolver
      *
      * @param string $indexerId
      * @return string
+     * @since 2.1.0
      */
     public function getIndexMapping($indexerId)
     {
