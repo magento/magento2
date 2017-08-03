@@ -8,6 +8,7 @@ namespace Magento\AsynchronousOperations\Model\ResourceModel\Bulk;
 /**
  * Class Collection
  * @codeCoverageIgnore
+ * @since 2.2.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -15,6 +16,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Define collection item type and corresponding table
      *
      * @return void
+     * @since 2.2.0
      */
     protected function _construct()
     {

@@ -10,6 +10,7 @@ use Magento\Framework\App\ResourceConnection;
 
 /**
  * CheckIfExists operation for list of bulk operations.
+ * @since 2.2.0
  */
 class CheckIfExists implements CheckIfExistsInterface
 {
@@ -20,6 +21,7 @@ class CheckIfExists implements CheckIfExistsInterface
      * @param array $arguments
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function execute($entity, $arguments = [])
     {

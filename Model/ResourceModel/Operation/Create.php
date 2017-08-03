@@ -12,21 +12,25 @@ use Magento\Framework\Phrase;
 
 /**
  * Create operation for list of bulk operations.
+ * @since 2.2.0
  */
 class Create implements \Magento\Framework\EntityManager\Operation\CreateInterface
 {
     /**
      * @var MetadataPool
+     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var TypeResolver
+     * @since 2.2.0
      */
     private $typeResolver;
 
     /**
      * @var ResourceConnection
+     * @since 2.2.0
      */
     private $resourceConnection;
 
@@ -34,6 +38,7 @@ class Create implements \Magento\Framework\EntityManager\Operation\CreateInterfa
      * @param MetadataPool $metadataPool
      * @param TypeResolver $typeResolver
      * @param ResourceConnection $resourceConnection
+     * @since 2.2.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -54,6 +59,7 @@ class Create implements \Magento\Framework\EntityManager\Operation\CreateInterfa
      * @throws \Exception
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function execute($entity, $arguments = [])
     {

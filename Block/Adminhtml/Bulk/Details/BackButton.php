@@ -10,6 +10,7 @@ use Magento\Framework\UrlInterface;
 
 /**
  * Back button configuration provider
+ * @since 2.2.0
  */
 class BackButton implements ButtonProviderInterface
 {
@@ -17,11 +18,13 @@ class BackButton implements ButtonProviderInterface
      * URL builder
      *
      * @var UrlInterface
+     * @since 2.2.0
      */
     private $urlBuilder;
 
     /**
      * @param UrlInterface $urlBuilder
+     * @since 2.2.0
      */
     public function __construct(
         UrlInterface $urlBuilder
@@ -33,6 +36,7 @@ class BackButton implements ButtonProviderInterface
      * Retrieve button data
      *
      * @return array button configuration
+     * @since 2.2.0
      */
     public function getButtonData()
     {

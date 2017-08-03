@@ -7,41 +7,49 @@ namespace Magento\AsynchronousOperations\Model\ResourceModel\System\Message\Coll
 
 /**
  * Class Plugin to add bulks related notification messages to Synchronized Collection
+ * @since 2.2.0
  */
 class Plugin
 {
     /**
      * @var \Magento\AdminNotification\Model\System\MessageFactory
+     * @since 2.2.0
      */
     private $messageFactory;
 
     /**
      * @var \Magento\Framework\Bulk\BulkStatusInterface
+     * @since 2.2.0
      */
     private $bulkStatus;
 
     /**
      * @var \Magento\Authorization\Model\UserContextInterface
+     * @since 2.2.0
      */
     private $userContext;
 
     /**
      * @var \Magento\AsynchronousOperations\Model\Operation\Details
+     * @since 2.2.0
      */
     private $operationDetails;
 
     /**
      * @var \Magento\AsynchronousOperations\Model\BulkNotificationManagement
+     * @since 2.2.0
      */
     private $bulkNotificationManagement;
 
     /**
      * @var \Magento\Framework\AuthorizationInterface
+     * @since 2.2.0
      */
     private $authorization;
 
     /**
      * @var \Magento\AsynchronousOperations\Model\StatusMapper
+     * @since 2.2.0
      */
     private $statusMapper;
 
@@ -55,6 +63,7 @@ class Plugin
      * @param \Magento\AsynchronousOperations\Model\Operation\Details $operationDetails
      * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param \Magento\AsynchronousOperations\Model\StatusMapper $statusMapper
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\AdminNotification\Model\System\MessageFactory $messageFactory,
@@ -81,6 +90,7 @@ class Plugin
      * @param array $result
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterToArray(
         \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized $collection,
@@ -131,6 +141,7 @@ class Plugin
      *
      * @param array $operationDetails
      * @return \Magento\Framework\Phrase|string
+     * @since 2.2.0
      */
     private function getText($operationDetails)
     {
@@ -159,6 +170,7 @@ class Plugin
      *
      * @param array $acknowledgedBulks
      * @return array
+     * @since 2.2.0
      */
     private function getAcknowledgedBulksUuid($acknowledgedBulks)
     {

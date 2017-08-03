@@ -8,21 +8,25 @@ namespace Magento\AsynchronousOperations\Ui\Component\Operation;
 
 /**
  * Class DataProvider
+ * @since 2.2.0
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
     /**
      * @var \Magento\AsynchronousOperations\Model\ResourceModel\Bulk\Collection
+     * @since 2.2.0
      */
     protected $collection;
 
     /**
      * @var \Magento\AsynchronousOperations\Model\Operation\Details
+     * @since 2.2.0
      */
     private $operationDetails;
 
     /**
      * @var \Magento\Framework\App\RequestInterface $request,
+     * @since 2.2.0
      */
     private $request;
 
@@ -36,6 +40,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param \Magento\Framework\App\RequestInterface $request
      * @param array $meta
      * @param array $data
+     * @since 2.2.0
      */
     public function __construct(
         $name,
@@ -59,6 +64,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param array $operationDetails structure is implied as getOperationDetails() result
      * @return string
+     * @since 2.2.0
      */
     private function getSummaryReport($operationDetails)
     {
@@ -82,6 +88,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Bulk summary with operation statistics
      *
      * @return array
+     * @since 2.2.0
      */
     public function getData()
     {
@@ -105,6 +112,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param array $meta
      * @return array
+     * @since 2.2.0
      */
     public function prepareMeta($meta)
     {
