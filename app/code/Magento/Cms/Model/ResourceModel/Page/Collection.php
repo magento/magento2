@@ -51,7 +51,7 @@ class Collection extends AbstractCollection
             $identifier = $item->getData('identifier');
 
             $data['value'] = $identifier;
-            $data['label'] = $item->getData('title');
+            $data['label'] = $item->getData('title') . ' (' . $item->getData('store_code') . ')';
 
             if (in_array($identifier, $existingIdentifiers)) {
                 $data['value'] .= '|' . $item->getData('page_id');
@@ -61,6 +61,10 @@ class Collection extends AbstractCollection
 
             $res[] = $data;
         }
+
+        usort($res, function ($optionA, $optionB) {
+            return strcmp($optionA['label'], $optionB['label']);
+        });
 
         return $res;
     }
