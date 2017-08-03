@@ -230,6 +230,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn('ThemeID');
 
         $themeMock = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class);
+        $themeMock->expects($this->any())
+            ->method('getArea')
+            ->willReturn('frontend');
 
         $this->themeProvider
             ->expects($this->any())
@@ -246,6 +249,47 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             $params
         );
         $this->assertSame($themeMock, $params['themeModel']);
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Could not find theme 'ThemeID' for area 'frontend'
+     * @return void
+     */
+    public function testUpdateDesignParamsCrossAreaWithoutSuitableTheme()
+    {
+        $params = ['area' => 'frontend'];
+
+        $this->designMock
+            ->expects($this->any())
+            ->method('getDesignParams')
+            ->willReturn(
+                [
+                    'themeModel' => '',
+                    'area' => 'adminhtml',
+                    'locale' => ''
+                ]
+            );
+        $this->designMock
+            ->expects($this->any())
+            ->method('getConfigurationDesignTheme')
+            ->willReturn('ThemeID');
+
+        $themeMock = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class);
+        $themeMock->expects($this->any())
+            ->method('getArea')
+            ->willReturn('adminhtml');
+
+        $this->themeProvider
+            ->expects($this->any())
+            ->method('getThemeById')
+            ->with('ThemeID')
+            ->willReturn($themeMock);
+        $this->themeProvider
+            ->expects($this->never())
+            ->method('getThemeByFullPath');
+
+        $this->repository->updateDesignParams($params);
     }
 
     /**
