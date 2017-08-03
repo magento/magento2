@@ -169,8 +169,8 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                     $response,
                     [__('The value of Admin must be unique. (%1)', implode(', ', $duplicates))]
                 );
+                $response->setError(true);
             }
-            $response->setError(true);
         }
         return $this;
     }
