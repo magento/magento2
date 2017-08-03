@@ -43,6 +43,7 @@ class Queue implements QueueInterface
 
     /**
      * @var LoggerInterface $logger
+     * @since 2.1.0
      */
     private $logger;
 
@@ -140,6 +141,7 @@ class Queue implements QueueInterface
 
     /**
      * {@inheritDoc}
+     * @since 2.1.0
      */
     public function push(EnvelopeInterface $envelope)
     {
