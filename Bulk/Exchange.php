@@ -12,26 +12,31 @@ use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
 
 /**
  * Used to send messages in bulk in AMQP queue.
+ * @since 2.2.0
  */
 class Exchange implements ExchangeInterface
 {
     /**
      * @var \Magento\Framework\Amqp\Config
+     * @since 2.2.0
      */
     private $amqpConfig;
 
     /**
      * @var CommunicationConfigInterface
+     * @since 2.2.0
      */
     private $communicationConfig;
 
     /**
      * @var PublisherConfig
+     * @since 2.2.0
      */
     private $publisherConfig;
 
     /**
      * @var \Magento\Framework\Amqp\Exchange
+     * @since 2.2.0
      */
     private $exchange;
 
@@ -42,6 +47,7 @@ class Exchange implements ExchangeInterface
      * @param PublisherConfig $publisherConfig
      * @param CommunicationConfigInterface $communicationConfig
      * @param \Magento\Framework\Amqp\Exchange $exchange
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Amqp\Config $amqpConfig,
@@ -57,6 +63,7 @@ class Exchange implements ExchangeInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function enqueue($topic, array $envelopes)
     {

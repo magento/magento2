@@ -14,6 +14,7 @@ use PhpAmqpLib\Connection\AMQPSSLConnection;
  * Reads the Amqp config in the deployed environment configuration
  *
  * @api
+ * @since 2.2.0
  */
 class Config
 {
@@ -39,16 +40,19 @@ class Config
      * Deployment configuration
      *
      * @var DeploymentConfig
+     * @since 2.2.0
      */
     private $deploymentConfig;
 
     /**
      * @var AMQPStreamConnection
+     * @since 2.2.0
      */
     private $connection;
 
     /**
      * @var AMQPChannel
+     * @since 2.2.0
      */
     private $channel;
 
@@ -56,6 +60,7 @@ class Config
      * Associative array of Amqp configuration
      *
      * @var array
+     * @since 2.2.0
      */
     private $data;
 
@@ -63,6 +68,7 @@ class Config
      * AMQP connection name.
      *
      * @var string
+     * @since 2.2.0
      */
     private $connectionName;
 
@@ -87,6 +93,7 @@ class Config
      *
      * @param DeploymentConfig $config
      * @param string $connectionName
+     * @since 2.2.0
      */
     public function __construct(DeploymentConfig $config, $connectionName = 'amqp')
     {
@@ -98,6 +105,7 @@ class Config
      * Destructor
      *
      * @return void
+     * @since 2.2.0
      */
     public function __destruct()
     {
@@ -110,6 +118,7 @@ class Config
      * @param string $key
      * @return string
      * @throws \LogicException
+     * @since 2.2.0
      */
     public function getValue($key)
     {
@@ -122,6 +131,7 @@ class Config
      *
      * @return AMQPChannel
      * @throws \LogicException
+     * @since 2.2.0
      */
     public function getChannel()
     {
@@ -139,6 +149,7 @@ class Config
      *
      * @return void
      * @throws \LogicException
+     * @since 2.2.0
      */
     private function load()
     {
@@ -161,6 +172,7 @@ class Config
      * Close Amqp connection and Channel
      *
      * @return void
+     * @since 2.2.0
      */
     private function closeConnection()
     {
@@ -177,6 +189,7 @@ class Config
 
     /**
      * @return AMQPStreamConnection
+     * @since 2.2.0
      */
     private function createUnsecureConnection()
     {
@@ -195,6 +208,7 @@ class Config
      * Note: when you are passing empty array of SSL options PHP-AMQPLIB will actually create unsecure connection.
      *
      * @return AMQPSSLConnection
+     * @since 2.2.0
      */
     private function createSecureConnection()
     {

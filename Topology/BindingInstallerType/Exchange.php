@@ -12,6 +12,7 @@ use Magento\Framework\Amqp\Topology\ArgumentProcessor;
 
 /**
  * {@inheritdoc}
+ * @since 2.2.0
  */
 class Exchange implements BindingInstallerInterface
 {
@@ -19,6 +20,7 @@ class Exchange implements BindingInstallerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function install(AMQPChannel $channel, BindingInterface $binding, $exchangeName)
     {

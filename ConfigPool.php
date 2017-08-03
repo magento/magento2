@@ -7,16 +7,19 @@ namespace Magento\Framework\Amqp;
 
 /**
  * AMQP connections pool.
+ * @since 2.2.0
  */
 class ConfigPool
 {
     /**
      * @var ConfigFactory
+     * @since 2.2.0
      */
     private $configFactory;
 
     /**
      * @var Config[]
+     * @since 2.2.0
      */
     private $pool = [];
 
@@ -24,6 +27,7 @@ class ConfigPool
      * Initialize dependencies.
      *
      * @param ConfigFactory $configFactory
+     * @since 2.2.0
      */
     public function __construct(ConfigFactory $configFactory)
     {
@@ -35,6 +39,7 @@ class ConfigPool
      *
      * @param string $connectionName
      * @return Config
+     * @since 2.2.0
      */
     public function get($connectionName)
     {

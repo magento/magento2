@@ -9,6 +9,7 @@ use Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItemInterface;
 
 /**
  * Exchange installer.
+ * @since 2.2.0
  */
 class ExchangeInstaller
 {
@@ -16,6 +17,7 @@ class ExchangeInstaller
 
     /**
      * @var BindingInstallerInterface
+     * @since 2.2.0
      */
     private $bindingInstaller;
 
@@ -23,6 +25,7 @@ class ExchangeInstaller
      * Initialize dependencies.
      *
      * @param BindingInstallerInterface $bindingInstaller
+     * @since 2.2.0
      */
     public function __construct(BindingInstallerInterface $bindingInstaller)
     {
@@ -35,6 +38,7 @@ class ExchangeInstaller
      * @param \PhpAmqpLib\Channel\AMQPChannel $channel
      * @param ExchangeConfigItemInterface $exchange
      * @return void
+     * @since 2.2.0
      */
     public function install(\PhpAmqpLib\Channel\AMQPChannel $channel, ExchangeConfigItemInterface $exchange)
     {
