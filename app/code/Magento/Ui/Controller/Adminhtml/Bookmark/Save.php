@@ -70,6 +70,8 @@ class Save extends AbstractAction
      * @param BookmarkInterfaceFactory $bookmarkFactory
      * @param UserContextInterface $userContext
      * @param DecoderInterface $jsonDecoder
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         Context $context,
