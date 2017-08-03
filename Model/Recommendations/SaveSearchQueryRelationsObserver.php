@@ -9,6 +9,10 @@ use Magento\AdvancedSearch\Model\ResourceModel\RecommendationsFactory;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\AdvancedSearch\Model\Recommendations\SaveSearchQueryRelationsObserver
+ *
+ */
 class SaveSearchQueryRelationsObserver implements ObserverInterface
 {
 
