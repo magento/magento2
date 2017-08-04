@@ -32,12 +32,7 @@
             <button name="save" class="Magento\Inventory\Ui\Component\Control\Source\SaveSplitButton"/>
         </buttons>
     </settings>
-    <dataSource name="inventory_source_form_data_source">
-        <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
-            </item>
-        </argument>
+    <dataSource name="inventory_source_form_data_source" component="Magento_Ui/js/form/provider">
         <settings>
             <submitUrl path="*/*/save"/>
         </settings>
