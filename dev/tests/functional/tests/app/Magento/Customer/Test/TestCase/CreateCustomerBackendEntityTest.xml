@@ -60,7 +60,7 @@
             <data name="customer/data/group_id/dataset" xsi:type="string">Retailer</data>
             <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
-            <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.ccc</data>
+            <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@-example.com</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInvalidEmail" />
         </variation>
         <variation name="CreateCustomerBackendEntityTestVariation5" summary="General customer from Poland">

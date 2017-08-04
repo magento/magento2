@@ -2305,6 +2305,56 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
         <intProp name="Assertion.test_type">2</intProp>
       </ResponseAssertion>
       <hashTree/>
+      <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
+        <stringProp name="XPathExtractor.default"/>
+        <stringProp name="XPathExtractor.refname">product_id</stringProp>
+        <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
+        <boolProp name="XPathExtractor.validate">false</boolProp>
+        <boolProp name="XPathExtractor.tolerant">true</boolProp>
+        <boolProp name="XPathExtractor.namespace">false</boolProp>
+      </XPathExtractor>
+      <hashTree/>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+         <stringProp name="89649215">^\d+$</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">1</intProp>
+        <stringProp name="Assertion.scope">variable</stringProp>
+        <stringProp name="Scope.variable">product_id</stringProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Review Simple Product 1 View${__property(activeAdminThread)}(${testLabel})" enabled="true">
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
+      <stringProp name="HTTPSampler.method">GET</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="49586">200</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">2</intProp>
+      </ResponseAssertion>
+      <hashTree/>
     </hashTree>
   
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
@@ -2339,6 +2389,56 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
           <stringProp name="-1787050162">&lt;span&gt;In stock&lt;/span&gt;</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">2</intProp>
+      </ResponseAssertion>
+      <hashTree/>
+      <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
+        <stringProp name="XPathExtractor.default"/>
+        <stringProp name="XPathExtractor.refname">product_id</stringProp>
+        <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
+        <boolProp name="XPathExtractor.validate">false</boolProp>
+        <boolProp name="XPathExtractor.tolerant">true</boolProp>
+        <boolProp name="XPathExtractor.namespace">false</boolProp>
+      </XPathExtractor>
+      <hashTree/>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+         <stringProp name="89649215">^\d+$</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">1</intProp>
+        <stringProp name="Assertion.scope">variable</stringProp>
+        <stringProp name="Scope.variable">product_id</stringProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Review Simple Product 2 View${__property(activeAdminThread)}(${testLabel})" enabled="true">
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
+      <stringProp name="HTTPSampler.method">GET</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="49586">200</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
         <intProp name="Assertion.test_type">2</intProp>
       </ResponseAssertion>
@@ -2679,6 +2779,56 @@ vars.put("loadType", "Guest");</stringProp>
         <intProp name="Assertion.test_type">2</intProp>
       </ResponseAssertion>
       <hashTree/>
+      <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
+        <stringProp name="XPathExtractor.default"/>
+        <stringProp name="XPathExtractor.refname">product_id</stringProp>
+        <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
+        <boolProp name="XPathExtractor.validate">false</boolProp>
+        <boolProp name="XPathExtractor.tolerant">true</boolProp>
+        <boolProp name="XPathExtractor.namespace">false</boolProp>
+      </XPathExtractor>
+      <hashTree/>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+         <stringProp name="89649215">^\d+$</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">1</intProp>
+        <stringProp name="Assertion.scope">variable</stringProp>
+        <stringProp name="Scope.variable">product_id</stringProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Review Simple Product 1 View${__property(activeAdminThread)}(${testLabel})" enabled="true">
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
+      <stringProp name="HTTPSampler.method">GET</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="49586">200</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">2</intProp>
+      </ResponseAssertion>
+      <hashTree/>
     </hashTree>
   
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
@@ -2861,6 +3011,56 @@ vars.put("loadType", "Guest");</stringProp>
           <stringProp name="-1787050162">&lt;span&gt;In stock&lt;/span&gt;</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">2</intProp>
+      </ResponseAssertion>
+      <hashTree/>
+      <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
+        <stringProp name="XPathExtractor.default"/>
+        <stringProp name="XPathExtractor.refname">product_id</stringProp>
+        <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
+        <boolProp name="XPathExtractor.validate">false</boolProp>
+        <boolProp name="XPathExtractor.tolerant">true</boolProp>
+        <boolProp name="XPathExtractor.namespace">false</boolProp>
+      </XPathExtractor>
+      <hashTree/>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+         <stringProp name="89649215">^\d+$</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">1</intProp>
+        <stringProp name="Assertion.scope">variable</stringProp>
+        <stringProp name="Scope.variable">product_id</stringProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Review Simple Product 2 View${__property(activeAdminThread)}(${testLabel})" enabled="true">
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
+      <stringProp name="HTTPSampler.method">GET</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="49586">200</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
         <intProp name="Assertion.test_type">2</intProp>
       </ResponseAssertion>
@@ -3508,6 +3708,56 @@ vars.put("loadType", "Guest");</stringProp>
         <intProp name="Assertion.test_type">2</intProp>
       </ResponseAssertion>
       <hashTree/>
+      <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
+        <stringProp name="XPathExtractor.default"/>
+        <stringProp name="XPathExtractor.refname">product_id</stringProp>
+        <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
+        <boolProp name="XPathExtractor.validate">false</boolProp>
+        <boolProp name="XPathExtractor.tolerant">true</boolProp>
+        <boolProp name="XPathExtractor.namespace">false</boolProp>
+      </XPathExtractor>
+      <hashTree/>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+         <stringProp name="89649215">^\d+$</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">1</intProp>
+        <stringProp name="Assertion.scope">variable</stringProp>
+        <stringProp name="Scope.variable">product_id</stringProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Review Simple Product 1 View${__property(activeAdminThread)}(${testLabel})" enabled="true">
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
+      <stringProp name="HTTPSampler.method">GET</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="49586">200</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">2</intProp>
+      </ResponseAssertion>
+      <hashTree/>
     </hashTree>
   
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
@@ -3690,6 +3940,56 @@ vars.put("loadType", "Guest");</stringProp>
           <stringProp name="-1787050162">&lt;span&gt;In stock&lt;/span&gt;</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">2</intProp>
+      </ResponseAssertion>
+      <hashTree/>
+      <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
+        <stringProp name="XPathExtractor.default"/>
+        <stringProp name="XPathExtractor.refname">product_id</stringProp>
+        <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
+        <boolProp name="XPathExtractor.validate">false</boolProp>
+        <boolProp name="XPathExtractor.tolerant">true</boolProp>
+        <boolProp name="XPathExtractor.namespace">false</boolProp>
+      </XPathExtractor>
+      <hashTree/>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+         <stringProp name="89649215">^\d+$</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">1</intProp>
+        <stringProp name="Assertion.scope">variable</stringProp>
+        <stringProp name="Scope.variable">product_id</stringProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Review Simple Product 2 View${__property(activeAdminThread)}(${testLabel})" enabled="true">
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
+      <stringProp name="HTTPSampler.method">GET</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="49586">200</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
         <intProp name="Assertion.test_type">2</intProp>
       </ResponseAssertion>
@@ -4879,6 +5179,56 @@ vars.put("loadType", "Customer");</stringProp>
         <intProp name="Assertion.test_type">2</intProp>
       </ResponseAssertion>
       <hashTree/>
+      <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
+        <stringProp name="XPathExtractor.default"/>
+        <stringProp name="XPathExtractor.refname">product_id</stringProp>
+        <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
+        <boolProp name="XPathExtractor.validate">false</boolProp>
+        <boolProp name="XPathExtractor.tolerant">true</boolProp>
+        <boolProp name="XPathExtractor.namespace">false</boolProp>
+      </XPathExtractor>
+      <hashTree/>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+         <stringProp name="89649215">^\d+$</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">1</intProp>
+        <stringProp name="Assertion.scope">variable</stringProp>
+        <stringProp name="Scope.variable">product_id</stringProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Review Simple Product 1 View${__property(activeAdminThread)}(${testLabel})" enabled="true">
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
+      <stringProp name="HTTPSampler.method">GET</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="49586">200</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">2</intProp>
+      </ResponseAssertion>
+      <hashTree/>
     </hashTree>
   
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
@@ -5061,6 +5411,56 @@ vars.put("loadType", "Customer");</stringProp>
           <stringProp name="-1787050162">&lt;span&gt;In stock&lt;/span&gt;</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">2</intProp>
+      </ResponseAssertion>
+      <hashTree/>
+      <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
+        <stringProp name="XPathExtractor.default"/>
+        <stringProp name="XPathExtractor.refname">product_id</stringProp>
+        <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
+        <boolProp name="XPathExtractor.validate">false</boolProp>
+        <boolProp name="XPathExtractor.tolerant">true</boolProp>
+        <boolProp name="XPathExtractor.namespace">false</boolProp>
+      </XPathExtractor>
+      <hashTree/>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+         <stringProp name="89649215">^\d+$</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">1</intProp>
+        <stringProp name="Assertion.scope">variable</stringProp>
+        <stringProp name="Scope.variable">product_id</stringProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Review Simple Product 2 View${__property(activeAdminThread)}(${testLabel})" enabled="true">
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
+      <stringProp name="HTTPSampler.method">GET</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="49586">200</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
         <intProp name="Assertion.test_type">2</intProp>
       </ResponseAssertion>

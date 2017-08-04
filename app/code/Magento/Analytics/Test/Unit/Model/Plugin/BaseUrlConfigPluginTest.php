@@ -5,12 +5,13 @@
  */
 namespace Magento\Analytics\Test\Unit\Model\Plugin;
 
+use Magento\Analytics\Model\Config\Backend\Baseurl\SubscriptionUpdateHandler;
 use Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin;
 use Magento\Analytics\Model\SubscriptionStatusProvider;
-use Magento\Config\Model\Config\Backend\Baseurl;
-use Magento\Framework\FlagManager;
-use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\Value;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
 /**
@@ -19,24 +20,14 @@ use Magento\Store\Model\Store;
 class BaseUrlConfigPluginTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var FlagManager | \PHPUnit_Framework_MockObject_MockObject
+     * @var SubscriptionUpdateHandler | \PHPUnit_Framework_MockObject_MockObject
      */
-    private $flagManagerMock;
+    private $subscriptionUpdateHandlerMock;
 
     /**
-     * @var BaseUrl | \PHPUnit_Framework_MockObject_MockObject
+     * @var Value | \PHPUnit_Framework_MockObject_MockObject
      */
     private $configValueMock;
-
-    /**
-     * @var SubscriptionStatusProvider | \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $subscriptionStatusProvider;
-
-    /**
-     * @var WriterInterface | \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $configWriterMock;
 
     /**
      * @var ObjectManagerHelper
@@ -53,70 +44,42 @@ class BaseUrlConfigPluginTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
+        $this->subscriptionUpdateHandlerMock = $this->getMockBuilder(SubscriptionUpdateHandler::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configValueMock = $this->getMockBuilder(Baseurl::class)
+        $this->configValueMock = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
+            ->setMethods(['isValueChanged', 'getPath', 'getScope', 'getOldValue'])
             ->getMock();
-        $this->subscriptionStatusProvider = $this->getMockBuilder(SubscriptionStatusProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configWriterMock = $this->getMockBuilder(WriterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->plugin = $this->objectManagerHelper->getObject(
             BaseUrlConfigPlugin::class,
             [
-                'flagManager' => $this->flagManagerMock,
-                'subscriptionStatusProvider' => $this->subscriptionStatusProvider,
-                'configWriter' => $this->configWriterMock
+                'subscriptionUpdateHandler' => $this->subscriptionUpdateHandlerMock,
             ]
         );
     }
 
     /**
-     * @param array $testData
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $saveConfigInvokeMatcher
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $oldValueInvokeMatcher
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $saveFlagInvokeMatcher
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $configValueGetPathMatcher
-     *
+     * @param array $configValueData
      * @return void
-     * @dataProvider pluginDataProvider
+     * @dataProvider afterSavePluginIsNotApplicableDataProvider
      */
-    public function testPluginForAfterSave(
-        array $testData,
-        \PHPUnit_Framework_MockObject_Matcher_InvokedCount $saveConfigInvokeMatcher,
-        \PHPUnit_Framework_MockObject_Matcher_InvokedCount $oldValueInvokeMatcher,
-        \PHPUnit_Framework_MockObject_Matcher_InvokedCount $saveFlagInvokeMatcher,
-        \PHPUnit_Framework_MockObject_Matcher_InvokedCount $configValueGetPathMatcher
+    public function testAfterSavePluginIsNotApplicable(
+        array $configValueData
     ) {
-        $this->configValueMock->expects($this->once())
+        $this->configValueMock
             ->method('isValueChanged')
-            ->willReturn($testData['isValueChanged']);
-
-        $this->configValueMock->expects($configValueGetPathMatcher)
-            ->method('getData')
-            ->with('path')
-            ->willReturn($testData['path']);
-        $this->subscriptionStatusProvider->expects($this->any())->method('getStatus')
-            ->willReturn($testData['subscriptionStatus']);
-
-        $oldUrl = 'mage.dev';
-        $this->configValueMock->expects($oldValueInvokeMatcher)
-            ->method('getOldValue')
-            ->willReturn($oldUrl);
-        $this->flagManagerMock->expects($saveFlagInvokeMatcher)
-            ->method('saveFlag')
-            ->with(BaseUrlConfigPlugin::OLD_BASE_URL_FLAG_CODE, $oldUrl);
-
-        $this->configWriterMock->expects($saveConfigInvokeMatcher)->method('save')
-            ->with(
-                BaseUrlConfigPlugin::UPDATE_CRON_STRING_PATH,
-                '0 * * * *'
-            );
+            ->willReturn($configValueData['isValueChanged']);
+        $this->configValueMock
+            ->method('getPath')
+            ->willReturn($configValueData['path']);
+        $this->configValueMock
+            ->method('getScope')
+            ->willReturn($configValueData['scope']);
+        $this->subscriptionUpdateHandlerMock
+            ->expects($this->never())
+            ->method('processUrlUpdate');
 
         $this->assertEquals(
             $this->configValueMock,
@@ -127,64 +90,58 @@ class BaseUrlConfigPluginTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function pluginDataProvider()
+    public function afterSavePluginIsNotApplicableDataProvider()
     {
         return [
-            'setup_subscription_update_cron_job' => [
-                'testData' => [
-                    'isValueChanged' => true,
-                    'subscriptionStatus' => SubscriptionStatusProvider::ENABLED,
-                    'path' => Store::XML_PATH_SECURE_BASE_URL
-                ],
-                'saveConfigInvokeMatcher' => $this->once(),
-                'oldValueInvokeMatcher' => $this->once(),
-                'saveFlagInvokeMatcher' => $this->once(),
-                'configValueGetPathMatcher' => $this->once(),
-            ],
-            'base_url_not_changed' => [
-                'testData' => [
+            'Value has not been changed' => [
+                'Config Value Data' => [
                     'isValueChanged' => false,
-                    'subscriptionStatus' => SubscriptionStatusProvider::ENABLED,
-                    'path' => Store::XML_PATH_SECURE_BASE_URL
+                    'path' => Store::XML_PATH_SECURE_BASE_URL,
+                    'scope' => ScopeConfigInterface::SCOPE_TYPE_DEFAULT
                 ],
-                'saveConfigInvokeMatcher' => $this->never(),
-                'oldValueInvokeMatcher' => $this->never(),
-                'saveFlagInvokeMatcher' => $this->never(),
-                'configValueGetPathMatcher' => $this->never(),
             ],
-            'analytics_disabled' => [
-                'testData' => [
+            'Unsecure URL has been changed' => [
+                'Config Value Data' => [
                     'isValueChanged' => true,
-                    'subscriptionStatus' => SubscriptionStatusProvider::DISABLED,
-                    'path' => Store::XML_PATH_SECURE_BASE_URL
+                    'path' => Store::XML_PATH_UNSECURE_BASE_URL,
+                    'scope' => ScopeConfigInterface::SCOPE_TYPE_DEFAULT
                 ],
-                'saveConfigInvokeMatcher' => $this->never(),
-                'oldValueInvokeMatcher' => $this->never(),
-                'saveFlagInvokeMatcher' => $this->never(),
-                'configValueGetPathMatcher' => $this->once(),
             ],
-            'analytics_pending' => [
-                'testData' => [
+            'Secure URL has been changed not in the Default scope' => [
+                'Config Value Data' => [
                     'isValueChanged' => true,
-                    'subscriptionStatus' => SubscriptionStatusProvider::PENDING,
-                    'path' => Store::XML_PATH_SECURE_BASE_URL
+                    'path' => Store::XML_PATH_SECURE_BASE_URL,
+                    'scope' => ScopeInterface::SCOPE_STORES
                 ],
-                'saveConfigInvokeMatcher' => $this->never(),
-                'oldValueInvokeMatcher' => $this->never(),
-                'saveFlagInvokeMatcher' => $this->never(),
-                'configValueGetPathMatcher' => $this->once(),
             ],
-            'unsecure_url_changed' => [
-                'testData' => [
-                    'isValueChanged' => true,
-                    'subscriptionStatus' => SubscriptionStatusProvider::PENDING,
-                    'path' => Store::XML_PATH_UNSECURE_BASE_URL
-                ],
-                'saveConfigInvokeMatcher' => $this->never(),
-                'oldValueInvokeMatcher' => $this->never(),
-                'saveFlagInvokeMatcher' => $this->never(),
-                'configValueGetPathMatcher' => $this->once(),
-            ]
         ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testAfterSavePluginIsApplicable()
+    {
+        $this->configValueMock
+            ->method('isValueChanged')
+            ->willReturn(true);
+        $this->configValueMock
+            ->method('getPath')
+            ->willReturn(Store::XML_PATH_SECURE_BASE_URL);
+        $this->configValueMock
+            ->method('getScope')
+            ->willReturn(ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
+        $this->configValueMock
+            ->method('getOldValue')
+            ->willReturn('http://store.com');
+        $this->subscriptionUpdateHandlerMock
+            ->expects($this->once())
+            ->method('processUrlUpdate')
+            ->with('http://store.com');
+
+        $this->assertEquals(
+            $this->configValueMock,
+            $this->plugin->afterAfterSave($this->configValueMock, $this->configValueMock)
+        );
     }
 }

@@ -1,26 +1,26 @@
 {
-  "name": "magento/module-robots",
-  "description": "N/A",
-  "require": {
-    "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
-    "magento/framework": "100.2.*",
-    "magento/module-store": "100.2.*"
-  },
-  "suggest": {
-    "magento/module-theme": "100.2.*"
-  },
-  "type": "magento2-module",
-  "version": "100.2.0-dev",
-  "license": [
-    "OSL-3.0",
-    "AFL-3.0"
-  ],
-  "autoload": {
-    "files": [
-      "registration.php"
+    "name": "magento/module-robots",
+    "description": "N/A",
+    "require": {
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+        "magento/framework": "100.3.*",
+        "magento/module-store": "100.3.*"
+    },
+    "suggest": {
+        "magento/module-theme": "100.3.*"
+    },
+    "type": "magento2-module",
+    "version": "100.3.0-dev",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
     ],
-    "psr-4": {
-      "Magento\\Robots\\": ""
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\Robots\\": ""
+        }
     }
-  }
 }
