@@ -142,7 +142,7 @@ class Repository
             $params['themeModel'] = $this->getThemeByPath($params['theme'], $area);
         } elseif (empty($params['themeModel']) && $area !== $this->getDefaultParameter('area')) {
             $themeId = $this->design->getConfigurationDesignTheme($area);
-            $params['themeModel'] = $this->getThemeById($themeId, $area);
+            $params['themeModel'] = $this->getTheme($themeId, $area);
         }
 
         if (empty($params['themeModel'])) {
@@ -159,6 +159,22 @@ class Repository
             $params['locale'] = $this->getDefaultParameter('locale');
         }
         return $this;
+    }
+
+    /**
+     * Get theme either by id or path based on whether the passed $theme is a numeric value or not
+     *
+     * @param string|int $theme
+     * @param $area
+     * @return \Magento\Framework\View\Design\ThemeInterface
+     */
+    private function getTheme($theme, $area)
+    {
+        if (is_numeric($theme)) {
+            return $this->getThemeById($theme, $area);
+        }
+
+        return $this->getThemeByPath($theme, $area);
     }
 
     /**

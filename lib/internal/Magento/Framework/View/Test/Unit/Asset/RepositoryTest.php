@@ -161,7 +161,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateDesignParamsByThemeId()
     {
-        $params = ['themeId' => 'ThemeID'];
+        $params = ['themeId' => '1'];
 
         $themeMock = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class);
 
@@ -175,7 +175,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->repository->updateDesignParams($params);
         $this->assertEquals(
-            ['area' => '', 'themeId' => 'ThemeID', 'themeModel' => $themeMock, 'module' => '', 'locale' => ''],
+            ['area' => '', 'themeId' => '1', 'themeModel' => $themeMock, 'module' => '', 'locale' => ''],
             $params
         );
         $this->assertSame($themeMock, $params['themeModel']);
@@ -210,7 +210,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testUpdateDesignParamsCrossArea()
+    public function testUpdateDesignParamsCrossAreaThemeId()
     {
         $params = ['area' => 'frontend'];
 
@@ -227,7 +227,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->designMock
             ->expects($this->any())
             ->method('getConfigurationDesignTheme')
-            ->willReturn('ThemeID');
+            ->willReturn('1');
 
         $themeMock = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class);
         $themeMock->expects($this->any())
@@ -237,7 +237,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->themeProvider
             ->expects($this->any())
             ->method('getThemeById')
-            ->with('ThemeID')
+            ->with('1')
             ->willReturn($themeMock);
         $this->themeProvider
             ->expects($this->never())
@@ -252,8 +252,52 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testUpdateDesignParamsCrossAreaThemePath()
+    {
+        $params = ['area' => 'frontend'];
+
+        $this->designMock
+            ->expects($this->any())
+            ->method('getDesignParams')
+            ->willReturn(
+                [
+                    'themeModel' => '',
+                    'area' => 'adminhtml',
+                    'locale' => ''
+                ]
+            );
+        $this->designMock
+            ->expects($this->any())
+            ->method('getConfigurationDesignTheme')
+            ->willReturn('Magento/luma');
+
+        $themeMock = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class);
+        $themeMock->expects($this->any())
+            ->method('getArea')
+            ->willReturn('frontend');
+
+        $this->themeProvider
+            ->expects($this->never())
+            ->method('getThemeById');
+        $this->themeProvider
+            ->expects($this->any())
+            ->method('getThemeByFullPath')
+            ->with('frontend/Magento/luma')
+            ->willReturn($themeMock);
+
+        $this->repository->updateDesignParams($params);
+        $this->assertEquals(
+            ['area' => 'frontend', 'themeModel' => $themeMock, 'module' => '', 'locale' => ''],
+            $params
+        );
+        $this->assertSame($themeMock, $params['themeModel']);
+    }
+
+    /**
      * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Could not find theme 'ThemeID' for area 'frontend'
+     * @expectedExceptionMessage Could not find theme '1' for area 'frontend'
      * @return void
      */
     public function testUpdateDesignParamsCrossAreaWithoutSuitableTheme()
@@ -273,7 +317,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->designMock
             ->expects($this->any())
             ->method('getConfigurationDesignTheme')
-            ->willReturn('ThemeID');
+            ->willReturn('1');
 
         $themeMock = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class);
         $themeMock->expects($this->any())
@@ -283,7 +327,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->themeProvider
             ->expects($this->any())
             ->method('getThemeById')
-            ->with('ThemeID')
+            ->with('1')
             ->willReturn($themeMock);
         $this->themeProvider
             ->expects($this->never())
