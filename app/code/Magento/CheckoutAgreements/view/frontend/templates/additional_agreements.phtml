@@ -40,7 +40,7 @@ $agreementJson = json_encode($agreementMappedArray);
                 "components": {
                     "checkout-agreements-component-scope": {
                         "component": "Magento_CheckoutAgreements/js/view/checkout-agreements",
-                        "agreements": <?php /* @noEscape */ echo $agreementJson; ?>,
+                        "agreements": <?= /* @noEscape */ $agreementJson ?>,
                         "isVisible": true
                     }
                 }

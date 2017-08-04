@@ -15,7 +15,7 @@ Next,Next
 "Delete Review","Delete Review"
 "Are you sure you want to do this?","Are you sure you want to do this?"
 "Edit Review '%1'","Edit Review '%1'"
-"<a href=""%1"" onclick=""this.target=\'blank\'"">%2 %3</a> <a href=""mailto:%4"">(%4)</a>","<a href=""%1"" onclick=""this.target=\'blank\'"">%2 %3</a> <a href=""mailto:%4"">(%4)</a>"
+"<a href=""%1"" onclick=""this.target='blank'"">%2 %3</a> <a href=""mailto:%4"">(%4)</a>","<a href=""%1"" onclick=""this.target='blank'"">%2 %3</a> <a href=""mailto:%4"">(%4)</a>"
 Administrator,Administrator
 Guest,Guest
 Author,Author
@@ -69,7 +69,7 @@ Reviews,Reviews
 "Something went wrong  deleting this review.","Something went wrong  deleting this review."
 "Customer Reviews","Customer Reviews"
 "Edit Review","Edit Review"
-"We can\'t retrieve the product ID.","We can\'t retrieve the product ID."
+"We can't retrieve the product ID.","We can't retrieve the product ID."
 "Please select review(s).","Please select review(s)."
 "A total of %1 record(s) have been deleted.","A total of %1 record(s) have been deleted."
 "Something went wrong while deleting these records.","Something went wrong while deleting these records."
@@ -82,8 +82,9 @@ Reviews,Reviews
 Ratings,Ratings
 "You saved the rating.","You saved the rating."
 "My Product Reviews","My Product Reviews"
+"Cannot initialize product","Cannot initialize product"
 "You submitted your review for moderation.","You submitted your review for moderation."
-"We can\'t post your review right now.","We can\'t post your review right now."
+"We can't post your review right now.","We can't post your review right now."
 "Storage key was not set","Storage key was not set"
 Approved,Approved
 Pending,Pending
@@ -92,7 +93,7 @@ Pending,Pending
 "Please enter a nickname.","Please enter a nickname."
 "Please enter a review.","Please enter a review."
 "Rating isn't Available","Rating isn't Available"
-"Please specify a rating title for a store, or we\'ll just use the default value.","Please specify a rating title for a store, or we\'ll just use the default value."
+"Please specify a rating title for a store, or we'll just use the default value.","Please specify a rating title for a store, or we'll just use the default value."
 "Assigned Options","Assigned Options"
 "Option Title:","Option Title:"
 "Product Name","Product Name"

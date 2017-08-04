@@ -11,6 +11,9 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Event\Type;
 
+/**
+ * @api
+ */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**

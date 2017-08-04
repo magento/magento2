@@ -41,7 +41,7 @@ class AnchorUrlRewriteGenerator
     }
 
     /**
-     * Generate list based on categories
+     * Generate product rewrites for anchor categories
      *
      * @param int $storeId
      * @param Product $product

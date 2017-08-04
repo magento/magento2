@@ -177,6 +177,20 @@ define([
         },
 
         /**
+         * Returns target of action if it's been set.
+         *
+         * @param {Object} action - Action object.
+         * @returns {String}
+         */
+        getTarget: function (action) {
+            if (action.target) {
+                return action.target;
+            }
+
+            return '_self';
+        },
+
+        /**
          * Checks if specified action requires a handler function.
          *
          * @param {String} actionIndex - Actions' identifier.

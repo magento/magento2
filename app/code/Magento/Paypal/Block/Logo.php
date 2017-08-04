@@ -63,7 +63,7 @@ class Logo extends \Magento\Framework\View\Element\Template
 
     /**
      * Disable block output if logo turned off
-     *M
+     *
      * @return string
      */
     protected function _toHtml()

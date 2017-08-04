@@ -77,7 +77,7 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
         if ($backUrl || $backUrl = $this->getBackUrl($this->_redirect->getRefererUrl())) {
             $resultRedirect->setUrl($backUrl);
         }
-        
+
         return $resultRedirect;
     }
 
