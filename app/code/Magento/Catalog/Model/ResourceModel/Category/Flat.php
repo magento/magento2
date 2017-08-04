@@ -13,7 +13,6 @@ use Magento\Framework\App\ObjectManager;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
 {
@@ -21,7 +20,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * Store id
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_storeId;
 
@@ -29,7 +27,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * Loaded
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_loaded = false;
 
@@ -37,7 +34,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * Nodes
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_nodes = [];
 
@@ -45,7 +41,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * Inactive categories ids
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_inactiveCategoryIds;
 
@@ -53,7 +48,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager;
 
@@ -61,7 +55,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * Catalog config
      *
      * @var \Magento\Catalog\Model\Config
-     * @since 2.0.0
      */
     protected $_catalogConfig;
 
@@ -69,7 +62,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -77,8 +69,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * Category collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
-     * @deprecated 2.1.0
-     * @since 2.0.0
+     * @deprecated 2.0.12
      */
     protected $_categoryCollectionFactory;
 
@@ -86,13 +77,12 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * Category factory
      *
      * @var \Magento\Catalog\Model\CategoryFactory
-     * @since 2.0.0
      */
     protected $_categoryFactory;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category\Flat\CollectionFactory
-     * @since 2.1.0
+     * @since 2.0.12
      */
     private $categoryFlatCollectionFactory;
 
@@ -108,7 +98,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param string $connectionName
      * @param \Magento\Catalog\Model\ResourceModel\Category\Flat\CollectionFactory|null $categoryFlatCollectionFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -135,7 +124,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * Resource initializations
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -147,7 +135,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      *
      * @param integer $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreId($storeId)
     {
@@ -159,7 +146,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * Return store id
      *
      * @return integer
-     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -173,7 +159,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * Get main table name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMainTable()
     {
@@ -185,7 +170,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      *
      * @param integer $storeId
      * @return string
-     * @since 2.0.0
      */
     public function getMainStoreTable($storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID)
     {
@@ -208,7 +192,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      *
      * @param array $ids
      * @return $this
-     * @since 2.0.0
      */
     public function addInactiveCategoryIds($ids)
     {
@@ -223,7 +206,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * Retrieve inactive categories ids
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initInactiveCategoryIds()
     {
@@ -236,7 +218,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * Retrieve inactive categories ids
      *
      * @return array
-     * @since 2.0.0
      */
     public function getInactiveCategoryIds()
     {
@@ -255,7 +236,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * @param integer $storeId
      * @param bool $skipMenuFilter
      * @return array
-     * @since 2.0.0
      */
     protected function _loadNodes($parentNode = null, $recursionLevel = 0, $storeId = 0, $skipMenuFilter = false)
     {
@@ -338,7 +318,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * @param string $path
      * @param \Magento\Framework\DataObject $parent
      * @return void
-     * @since 2.0.0
      */
     public function addChildNodes($children, $path, $parent)
     {
@@ -375,7 +354,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * @param integer $recursionLevel
      * @param integer $storeId
      * @return array
-     * @since 2.0.0
      */
     public function getNodes($parentId, $recursionLevel = 0, $storeId = 0)
     {
@@ -420,7 +398,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * @param boolean $asCollection
      * @param boolean $toLoad
      * @return array|\Magento\Framework\Data\Collection
-     * @since 2.0.0
      */
     public function getCategories($parent, $recursionLevel = 0, $sorted = false, $asCollection = false, $toLoad = true)
     {
@@ -457,7 +434,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * @param integer $nodeId
      * @param array $nodes
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getNodeById($nodeId, $nodes = null)
     {
@@ -482,7 +458,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      *
      * @param mixed $attribute
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
-     * @since 2.0.0
      */
     public function getAttribute($attribute)
     {
@@ -495,7 +470,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * @param \Magento\Catalog\Model\Category $category
      * @param bool $isActiveFlag
      * @return integer
-     * @since 2.0.0
      */
     public function getChildrenAmount($category, $isActiveFlag = true)
     {
@@ -518,7 +492,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return integer
-     * @since 2.0.0
      */
     public function getProductCount($category)
     {
@@ -540,7 +513,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * @param \Magento\Catalog\Model\Category $category
      * @param bool $isActive
      * @return \Magento\Catalog\Model\Category[]
-     * @since 2.0.0
      */
     public function getParentCategories($category, $isActive = true)
     {
@@ -576,7 +548,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return \Magento\Catalog\Model\Category
-     * @since 2.0.0
      */
     public function getParentDesignCategory($category)
     {
@@ -607,7 +578,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return \Magento\Catalog\Model\Category[]
-     * @since 2.0.0
      */
     public function getChildrenCategories($category)
     {
@@ -620,7 +590,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return boolean
-     * @since 2.0.0
      */
     public function isInRootCategoryList($category)
     {
@@ -635,7 +604,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * @param bool $recursive
      * @param bool $isActive
      * @return array
-     * @since 2.0.0
      */
     public function getChildren($category, $recursive = true, $isActive = true)
     {
@@ -665,7 +633,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return array
-     * @since 2.0.0
      */
     public function getAllChildren($category)
     {
@@ -681,7 +648,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      *
      * @param int $id
      * @return bool
-     * @since 2.0.0
      */
     public function checkId($id)
     {
@@ -701,7 +667,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * @param array $filterIds
      * @param int $storeId
      * @return array
-     * @since 2.0.0
      */
     public function getAnchorsAbove(array $filterIds, $storeId = 0)
     {
@@ -724,7 +689,6 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return array
-     * @since 2.0.0
      */
     public function getProductsPosition($category)
     {

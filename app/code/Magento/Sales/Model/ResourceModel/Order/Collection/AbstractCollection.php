@@ -9,7 +9,6 @@ namespace Magento\Sales\Model\ResourceModel\Order\Collection;
  * Flat sales order collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 abstract class AbstractCollection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection
 {
@@ -17,7 +16,6 @@ abstract class AbstractCollection extends \Magento\Sales\Model\ResourceModel\Col
      * Order object
      *
      * @var \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     protected $_salesOrder = null;
 
@@ -25,7 +23,6 @@ abstract class AbstractCollection extends \Magento\Sales\Model\ResourceModel\Col
      * Order field for setOrderFilter
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_orderField = 'parent_id';
 
@@ -34,7 +31,6 @@ abstract class AbstractCollection extends \Magento\Sales\Model\ResourceModel\Col
      *
      * @param \Magento\Sales\Model\Order $order
      * @return $this
-     * @since 2.0.0
      */
     public function setSalesOrder($order)
     {
@@ -53,7 +49,6 @@ abstract class AbstractCollection extends \Magento\Sales\Model\ResourceModel\Col
      * Retrieve sales order as parent collection object
      *
      * @return \Magento\Sales\Model\Order|null
-     * @since 2.0.0
      */
     public function getSalesOrder()
     {
@@ -65,7 +60,6 @@ abstract class AbstractCollection extends \Magento\Sales\Model\ResourceModel\Col
      *
      * @param int|\Magento\Sales\Model\Order|array $order
      * @return $this
-     * @since 2.0.0
      */
     public function setOrderFilter($order)
     {

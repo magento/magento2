@@ -11,44 +11,37 @@ use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPaymentInformationManagementInterface
 {
 
     /**
      * @var \Magento\Quote\Api\GuestBillingAddressManagementInterface
-     * @since 2.0.0
      */
     protected $billingAddressManagement;
 
     /**
      * @var \Magento\Quote\Api\GuestPaymentMethodManagementInterface
-     * @since 2.0.0
      */
     protected $paymentMethodManagement;
 
     /**
      * @var \Magento\Quote\Api\GuestCartManagementInterface
-     * @since 2.0.0
      */
     protected $cartManagement;
 
     /**
      * @var \Magento\Checkout\Api\PaymentInformationManagementInterface
-     * @since 2.0.0
      */
     protected $paymentInformationManagement;
 
     /**
      * @var \Magento\Quote\Model\QuoteIdMaskFactory
-     * @since 2.0.0
      */
     protected $quoteIdMaskFactory;
 
     /**
      * @var CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $cartRepository;
 
@@ -66,7 +59,6 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      * @param CartRepositoryInterface $cartRepository
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Quote\Api\GuestBillingAddressManagementInterface $billingAddressManagement,
@@ -86,7 +78,6 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function savePaymentInformationAndPlaceOrder(
         $cartId,
@@ -114,7 +105,6 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function savePaymentInformation(
         $cartId,
@@ -136,7 +126,6 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function getPaymentInformation($cartId)
     {

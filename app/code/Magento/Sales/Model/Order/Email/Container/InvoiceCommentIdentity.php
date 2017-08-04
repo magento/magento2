@@ -8,7 +8,6 @@ namespace Magento\Sales\Model\Order\Email\Container;
 /**
  * Class \Magento\Sales\Model\Order\Email\Container\InvoiceCommentIdentity
  *
- * @since 2.0.0
  */
 class InvoiceCommentIdentity extends Container implements IdentityInterface
 {
@@ -21,7 +20,6 @@ class InvoiceCommentIdentity extends Container implements IdentityInterface
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isEnabled()
     {
@@ -34,7 +32,6 @@ class InvoiceCommentIdentity extends Container implements IdentityInterface
 
     /**
      * @return array|bool
-     * @since 2.0.0
      */
     public function getEmailCopyTo()
     {
@@ -47,7 +44,6 @@ class InvoiceCommentIdentity extends Container implements IdentityInterface
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getCopyMethod()
     {
@@ -56,7 +52,6 @@ class InvoiceCommentIdentity extends Container implements IdentityInterface
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getGuestTemplateId()
     {
@@ -65,7 +60,6 @@ class InvoiceCommentIdentity extends Container implements IdentityInterface
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getTemplateId()
     {
@@ -74,7 +68,6 @@ class InvoiceCommentIdentity extends Container implements IdentityInterface
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getEmailIdentity()
     {

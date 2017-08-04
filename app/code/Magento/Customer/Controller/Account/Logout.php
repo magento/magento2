@@ -15,13 +15,11 @@ use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 /**
  * Class \Magento\Customer\Controller\Account\Logout
  *
- * @since 2.0.0
  */
 class Logout extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
      * @var Session
-     * @since 2.0.0
      */
     protected $session;
 
@@ -40,7 +38,6 @@ class Logout extends \Magento\Customer\Controller\AbstractAccount
     /**
      * @param Context $context
      * @param Session $customerSession
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -84,7 +81,6 @@ class Logout extends \Magento\Customer\Controller\AbstractAccount
      * Customer logout action
      *
      * @return \Magento\Framework\Controller\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

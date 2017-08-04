@@ -13,19 +13,16 @@ use Magento\Ui\Component\MassAction\Filter;
 
 /**
  * Class ConvertToCsv
- * @since 2.0.0
  */
 class ConvertToCsv
 {
     /**
      * @var WriteInterface
-     * @since 2.0.0
      */
     protected $directory;
 
     /**
      * @var MetadataProvider
-     * @since 2.0.0
      */
     protected $metadataProvider;
 
@@ -40,7 +37,6 @@ class ConvertToCsv
      * @param Filter $filter
      * @param MetadataProvider $metadataProvider
      * @param int $pageSize
-     * @since 2.0.0
      */
     public function __construct(
         Filesystem $filesystem,
@@ -59,7 +55,6 @@ class ConvertToCsv
      *
      * @return array
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function getCsvFile()
     {

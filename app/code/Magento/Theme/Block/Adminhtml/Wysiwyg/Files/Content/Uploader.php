@@ -10,7 +10,6 @@ namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Uploader extends \Magento\Backend\Block\Media\Uploader
 {
@@ -18,13 +17,11 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
      * Path to uploader template
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'browser/content/uploader.phtml';
 
     /**
      * @var \Magento\Theme\Helper\Storage
-     * @since 2.0.0
      */
     protected $_storageHelper;
 
@@ -33,7 +30,6 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
      * @param \Magento\Framework\File\Size $fileSize
      * @param \Magento\Theme\Helper\Storage $storageHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -49,7 +45,6 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
      * Prepare layout
      *
      * @return \Magento\Backend\Block\Media\Uploader
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -61,7 +56,6 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
      * Return storage helper
      *
      * @return \Magento\Theme\Helper\Storage
-     * @since 2.0.0
      */
     public function getHelperStorage()
     {

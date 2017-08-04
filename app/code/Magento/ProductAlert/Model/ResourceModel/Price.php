@@ -12,13 +12,11 @@ namespace Magento\ProductAlert\Model\ResourceModel;
  * Product alert for changed price resource model
  *
  * @api
- * @since 2.0.0
  */
 class Price extends \Magento\ProductAlert\Model\ResourceModel\AbstractResource
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTimeFactory
-     * @since 2.0.0
      */
     protected $_dateFactory;
 
@@ -26,7 +24,6 @@ class Price extends \Magento\ProductAlert\Model\ResourceModel\AbstractResource
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -41,7 +38,6 @@ class Price extends \Magento\ProductAlert\Model\ResourceModel\AbstractResource
      * Initialize connection
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -53,7 +49,6 @@ class Price extends \Magento\ProductAlert\Model\ResourceModel\AbstractResource
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {

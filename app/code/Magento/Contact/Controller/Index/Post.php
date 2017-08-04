@@ -19,7 +19,6 @@ use Psr\Log\LoggerInterface;
 /**
  * Class \Magento\Contact\Controller\Index\Post
  *
- * @since 2.0.0
  */
 class Post extends \Magento\Contact\Controller\Index
 {
@@ -73,7 +72,6 @@ class Post extends \Magento\Contact\Controller\Index
      * Post user question
      *
      * @return Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

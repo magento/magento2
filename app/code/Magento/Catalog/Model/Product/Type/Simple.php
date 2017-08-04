@@ -7,7 +7,6 @@ namespace Magento\Catalog\Model\Product\Type;
 
 /**
  * Simple product type implementation
- * @since 2.0.0
  */
 class Simple extends \Magento\Catalog\Model\Product\Type\AbstractType
 {
@@ -16,7 +15,6 @@ class Simple extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return void
-     * @since 2.0.0
      */
     public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product)
     {

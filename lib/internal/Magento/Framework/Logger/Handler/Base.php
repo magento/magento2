@@ -14,25 +14,21 @@ use Monolog\Logger;
 /**
  * Class \Magento\Framework\Logger\Handler\Base
  *
- * @since 2.0.0
  */
 class Base extends StreamHandler
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $fileName;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $loggerType = Logger::DEBUG;
 
     /**
      * @var DriverInterface
-     * @since 2.0.0
      */
     protected $filesystem;
 
@@ -40,7 +36,6 @@ class Base extends StreamHandler
      * @param DriverInterface $filesystem
      * @param string $filePath
      * @param string $fileName
-     * @since 2.0.0
      */
     public function __construct(
         DriverInterface $filesystem,
@@ -86,7 +81,6 @@ class Base extends StreamHandler
      * @param $record array
      *
      * @return void
-     * @since 2.0.0
      */
     public function write(array $record)
     {

@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\Indexer\Category\Product\Action;
 /**
  * Class \Magento\Catalog\Model\Indexer\Category\Product\Action\Rows
  *
- * @since 2.0.0
  */
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
 {
@@ -16,7 +15,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Limitation by categories
      *
      * @var int[]
-     * @since 2.0.0
      */
     protected $limitationByCategories;
 
@@ -26,7 +24,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * @param int[] $entityIds
      * @param bool $useTempTable
      * @return $this
-     * @since 2.0.0
      */
     public function execute(array $entityIds = [], $useTempTable = false)
     {
@@ -44,7 +41,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Return array of all category root IDs + tree root ID
      *
      * @return int[]
-     * @since 2.0.0
      */
     protected function getRootCategoryIds()
     {
@@ -61,7 +57,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Remove index entries before reindexation
      *
      * @return void
-     * @since 2.0.0
      */
     protected function removeEntries()
     {
@@ -74,7 +69,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      *
      * @param \Magento\Store\Model\Store $store
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function getNonAnchorCategoriesSelect(\Magento\Store\Model\Store $store)
     {
@@ -87,7 +81,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      *
      * @param \Magento\Store\Model\Store $store
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function getAnchorCategoriesSelect(\Magento\Store\Model\Store $store)
     {
@@ -99,7 +92,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Check whether select ranging is needed
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function isRangingNeeded()
     {
@@ -110,7 +102,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Check whether indexation of root category is needed
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function isIndexRootCategoryNeeded()
     {

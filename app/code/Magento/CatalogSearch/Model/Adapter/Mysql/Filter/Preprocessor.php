@@ -25,43 +25,36 @@ use Magento\CatalogSearch\Model\Search\FilterMapper\VisibilityFilter;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Preprocessor implements PreprocessorInterface
 {
     /**
      * @var ConditionManager
-     * @since 2.0.0
      */
     private $conditionManager;
 
     /**
      * @var ScopeResolverInterface
-     * @since 2.0.0
      */
     private $scopeResolver;
 
     /**
      * @var Config
-     * @since 2.0.0
      */
     private $config;
 
     /**
      * @var Resource
-     * @since 2.0.0
      */
     private $resource;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $attributePrefix;
 
     /**
      * @var AdapterInterface
-     * @since 2.0.0
      */
     private $connection;
 
@@ -102,7 +95,6 @@ class Preprocessor implements PreprocessorInterface
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function __construct(
         ConditionManager $conditionManager,
@@ -139,7 +131,6 @@ class Preprocessor implements PreprocessorInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function process(FilterInterface $filter, $isNegation, $query)
     {
@@ -151,7 +142,6 @@ class Preprocessor implements PreprocessorInterface
      * @param bool $isNegation
      * @param string $query
      * @return string
-     * @since 2.0.0
      */
     private function processQueryWithField(FilterInterface $filter, $isNegation, $query)
     {
@@ -229,7 +219,6 @@ class Preprocessor implements PreprocessorInterface
      * @param string $query
      * @param Attribute $attribute
      * @return string
-     * @since 2.0.0
      */
     private function processRangeNumeric(FilterInterface $filter, $query, $attribute)
     {
@@ -262,7 +251,6 @@ class Preprocessor implements PreprocessorInterface
      * @param FilterInterface $filter
      * @param bool $isNegation
      * @return string
-     * @since 2.0.0
      */
     private function processTermSelect(FilterInterface $filter, $isNegation)
     {

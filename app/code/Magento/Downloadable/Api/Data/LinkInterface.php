@@ -8,46 +8,39 @@ namespace Magento\Downloadable\Api\Data;
 /**
  * @codeCoverageIgnore
  * @api
- * @since 2.0.0
  */
 interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * @return int|null Sample(or link) id
-     * @since 2.0.0
      */
     public function getId();
 
     /**
      * @param int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setId($id);
 
     /**
      * @return string|null
-     * @since 2.0.0
      */
     public function getTitle();
 
     /**
      * @param string $title
      * @return $this
-     * @since 2.0.0
      */
     public function setTitle($title);
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getSortOrder();
 
     /**
      * @param int $sortOrder
      * @return $this
-     * @since 2.0.0
      */
     public function setSortOrder($sortOrder);
 
@@ -58,14 +51,12 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * 2 -- Use config default value
      *
      * @return int
-     * @since 2.0.0
      */
     public function getIsShareable();
 
     /**
      * @param int $isShareable
      * @return $this
-     * @since 2.0.0
      */
     public function setIsShareable($isShareable);
 
@@ -73,7 +64,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Link price
      *
      * @return float
-     * @since 2.0.0
      */
     public function getPrice();
 
@@ -82,7 +72,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $price
      * @return $this
-     * @since 2.0.0
      */
     public function setPrice($price);
 
@@ -91,7 +80,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Null for unlimited downloads
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getNumberOfDownloads();
 
@@ -101,20 +89,17 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $numberOfDownloads
      * @return $this
-     * @since 2.0.0
      */
     public function setNumberOfDownloads($numberOfDownloads);
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getLinkType();
 
     /**
      * @param string $linkType
      * @return $this
-     * @since 2.0.0
      */
     public function setLinkType($linkType);
 
@@ -122,7 +107,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Return file path or null when type is 'url'
      *
      * @return string|null relative file path
-     * @since 2.0.0
      */
     public function getLinkFile();
 
@@ -131,7 +115,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $linkFile
      * @return $this
-     * @since 2.0.0
      */
     public function setLinkFile($linkFile);
 
@@ -139,7 +122,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Return file content
      *
      * @return \Magento\Downloadable\Api\Data\File\ContentInterface|null
-     * @since 2.0.0
      */
     public function getLinkFileContent();
 
@@ -148,7 +130,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\Downloadable\Api\Data\File\ContentInterface $linkFileContent
      * @return $this
-     * @since 2.0.0
      */
     public function setLinkFileContent(\Magento\Downloadable\Api\Data\File\ContentInterface $linkFileContent = null);
 
@@ -156,7 +137,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Return link url or null when type is 'file'
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getLinkUrl();
 
@@ -165,20 +145,17 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $linkUrl
      * @return $this
-     * @since 2.0.0
      */
     public function setLinkUrl($linkUrl);
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getSampleType();
 
     /**
      * @param string $sampleType
      * @return $this
-     * @since 2.0.0
      */
     public function setSampleType($sampleType);
 
@@ -186,7 +163,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Return file path or null when type is 'url'
      *
      * @return string|null relative file path
-     * @since 2.0.0
      */
     public function getSampleFile();
 
@@ -195,7 +171,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $sampleFile
      * @return $this
-     * @since 2.0.0
      */
     public function setSampleFile($sampleFile);
 
@@ -203,7 +178,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Return sample file content when type is 'file'
      *
      * @return \Magento\Downloadable\Api\Data\File\ContentInterface|null relative file path
-     * @since 2.0.0
      */
     public function getSampleFileContent();
 
@@ -212,7 +186,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\Downloadable\Api\Data\File\ContentInterface $sampleFileContent
      * @return $this
-     * @since 2.0.0
      */
     public function setSampleFileContent(
         \Magento\Downloadable\Api\Data\File\ContentInterface $sampleFileContent = null
@@ -222,7 +195,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Return URL or NULL when type is 'file'
      *
      * @return string|null file URL
-     * @since 2.0.0
      */
     public function getSampleUrl();
 
@@ -231,7 +203,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $sampleUrl
      * @return $this
-     * @since 2.0.0
      */
     public function setSampleUrl($sampleUrl);
 
@@ -239,7 +210,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Downloadable\Api\Data\LinkExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -248,7 +218,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\Downloadable\Api\Data\LinkExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Downloadable\Api\Data\LinkExtensionInterface $extensionAttributes);
 }

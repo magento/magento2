@@ -10,7 +10,6 @@ use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * Price factory
- * @since 2.0.0
  */
 class Factory
 {
@@ -18,7 +17,6 @@ class Factory
      * Object Manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -26,7 +24,6 @@ class Factory
      * Construct
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -42,7 +39,6 @@ class Factory
      * @param array $arguments
      * @throws \InvalidArgumentException
      * @return \Magento\Framework\Pricing\Price\PriceInterface
-     * @since 2.0.0
      */
     public function create(SaleableInterface $saleableItem, $className, $quantity, array $arguments = [])
     {

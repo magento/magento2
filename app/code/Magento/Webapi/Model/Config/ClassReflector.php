@@ -9,13 +9,11 @@ use Zend\Code\Reflection\MethodReflection;
 
 /**
  * Class reflector.
- * @since 2.0.0
  */
 class ClassReflector
 {
     /**
      * @var \Magento\Framework\Reflection\TypeProcessor
-     * @since 2.0.0
      */
     protected $_typeProcessor;
 
@@ -23,7 +21,6 @@ class ClassReflector
      * Construct reflector.
      *
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Reflection\TypeProcessor $typeProcessor)
     {
@@ -63,7 +60,6 @@ class ClassReflector
      *     ),
      *     ...
      * )</pre>
-     * @since 2.0.0
      */
     public function reflectClassMethods($className, $methods)
     {
@@ -85,7 +81,6 @@ class ClassReflector
      * @param \Zend\Code\Reflection\MethodReflection $method
      * @return array
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function extractMethodData(\Zend\Code\Reflection\MethodReflection $method)
     {
@@ -123,7 +118,6 @@ class ClassReflector
      *
      * @param \Zend\Code\Reflection\MethodReflection $method
      * @return string
-     * @since 2.0.0
      */
     protected function extractMethodDescription(\Zend\Code\Reflection\MethodReflection $method)
     {
@@ -147,7 +141,6 @@ class ClassReflector
      *
      * @param string $className
      * @return string
-     * @since 2.0.0
      */
     public function extractClassDescription($className)
     {

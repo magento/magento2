@@ -10,25 +10,21 @@ namespace Magento\Customer\Block\Form;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Login extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     private $_username = -1;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Customer\Model\Url
-     * @since 2.0.0
      */
     protected $_customerUrl;
 
@@ -37,7 +33,6 @@ class Login extends \Magento\Framework\View\Element\Template
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -53,7 +48,6 @@ class Login extends \Magento\Framework\View\Element\Template
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -65,7 +59,6 @@ class Login extends \Magento\Framework\View\Element\Template
      * Retrieve form posting url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPostActionUrl()
     {
@@ -76,7 +69,6 @@ class Login extends \Magento\Framework\View\Element\Template
      * Retrieve password forgotten url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getForgotPasswordUrl()
     {
@@ -87,7 +79,6 @@ class Login extends \Magento\Framework\View\Element\Template
      * Retrieve username for form field
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUsername()
     {
@@ -101,7 +92,6 @@ class Login extends \Magento\Framework\View\Element\Template
      * Check if autocomplete is disabled on storefront
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isAutocompleteDisabled()
     {

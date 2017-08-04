@@ -11,7 +11,6 @@ namespace Magento\Sales\Api\Data;
  * An invoice is a record of the receipt of payment for an order. An invoice can include comments that detail the
  * invoice history.
  * @api
- * @since 2.0.0
  */
 interface InvoiceCommentSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
@@ -19,7 +18,6 @@ interface InvoiceCommentSearchResultInterface extends \Magento\Framework\Api\Sea
      * Gets collection items.
      *
      * @return \Magento\Sales\Api\Data\InvoiceCommentInterface[] Array of collection items.
-     * @since 2.0.0
      */
     public function getItems();
 
@@ -28,7 +26,6 @@ interface InvoiceCommentSearchResultInterface extends \Magento\Framework\Api\Sea
      *
      * @param \Magento\Sales\Api\Data\InvoiceCommentInterface[] $items
      * @return $this
-     * @since 2.0.0
      */
     public function setItems(array $items);
 }

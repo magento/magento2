@@ -10,7 +10,6 @@ namespace Magento\Customer\Model\Session;
 /**
  * Class \Magento\Customer\Model\Session\Storage
  *
- * @since 2.0.0
  */
 class Storage extends \Magento\Framework\Session\Storage
 {
@@ -19,7 +18,6 @@ class Storage extends \Magento\Framework\Session\Storage
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param string $namespace
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Model\Config\Share $configShare,

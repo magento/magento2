@@ -9,7 +9,6 @@ use Magento\Shipping\Helper\Carrier;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
 {
@@ -17,25 +16,21 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
      * Carrier helper
      *
      * @var \Magento\Shipping\Helper\Carrier
-     * @since 2.0.0
      */
     protected $_carrierHelper;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\View\LayoutInterface
-     * @since 2.0.0
      */
     protected $_layout;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $_localeResolver;
 
@@ -57,7 +52,6 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Payment\Helper\Data $paymentData,
@@ -101,7 +95,6 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
      *
      * @param  null $shipment
      * @return \Zend_Pdf
-     * @since 2.0.0
      */
     public function getPdf($shipment = null)
     {
@@ -136,7 +129,6 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
      *
      * @param  \Zend_Pdf_Page $page
      * @return \Magento\Shipping\Model\Order\Pdf\Packaging
-     * @since 2.0.0
      */
     protected function _drawHeaderBlock(\Zend_Pdf_Page $page)
     {
@@ -160,7 +152,6 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     protected function _drawPackageBlock(\Zend_Pdf_Page $page)
     {

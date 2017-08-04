@@ -14,19 +14,16 @@ namespace Magento\Framework\Validator;
 /**
  * Class \Magento\Framework\Validator\UniversalFactory
  *
- * @since 2.0.0
  */
 class UniversalFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -37,7 +34,6 @@ class UniversalFactory
      * @param string $className
      * @param array $arguments
      * @return \Magento\Framework\Validator\Builder
-     * @since 2.0.0
      */
     public function create($className, array $arguments = [])
     {

@@ -10,26 +10,22 @@ namespace Magento\Framework\Mail\Template;
 /**
  * Class \Magento\Framework\Mail\Template\Factory
  *
- * @since 2.0.0
  */
 class Factory implements \Magento\Framework\Mail\Template\FactoryInterface
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager = null;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $instanceName = null;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -41,7 +37,6 @@ class Factory implements \Magento\Framework\Mail\Template\FactoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function get($identifier, $namespace = null)
     {

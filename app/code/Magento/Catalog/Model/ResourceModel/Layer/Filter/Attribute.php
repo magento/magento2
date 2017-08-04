@@ -11,7 +11,6 @@ namespace Magento\Catalog\Model\ResourceModel\Layer\Filter;
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -19,7 +18,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize connection and define main table name
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -33,7 +31,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $value
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
-     * @since 2.0.0
      */
     public function applyFilterToCollection(\Magento\Catalog\Model\Layer\Filter\FilterInterface $filter, $value)
     {
@@ -63,7 +60,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\Layer\Filter\FilterInterface $filter
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return array
-     * @since 2.0.0
      */
     public function getCount(\Magento\Catalog\Model\Layer\Filter\FilterInterface $filter)
     {

@@ -13,7 +13,6 @@ use Magento\Framework\View\Design\ThemeInterface;
  * Theme Image model class
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Image
 {
@@ -31,7 +30,6 @@ class Image
      * Media directory
      *
      * @var WriteInterface
-     * @since 2.0.0
      */
     protected $mediaDirectory;
 
@@ -39,7 +37,6 @@ class Image
      * Root directory
      *
      * @var WriteInterface
-     * @since 2.0.0
      */
     protected $rootDirectory;
 
@@ -47,7 +44,6 @@ class Image
      * Image factory
      *
      * @var \Magento\Framework\Image\Factory
-     * @since 2.0.0
      */
     protected $imageFactory;
 
@@ -55,7 +51,6 @@ class Image
      * Image uploader
      *
      * @var Image\Uploader
-     * @since 2.0.0
      */
     protected $uploader;
 
@@ -63,7 +58,6 @@ class Image
      * Theme image path
      *
      * @var Image\PathInterface
-     * @since 2.0.0
      */
     protected $themeImagePath;
 
@@ -71,7 +65,6 @@ class Image
      * Logger
      *
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
@@ -79,7 +72,6 @@ class Image
      * Theme
      *
      * @var ThemeInterface
-     * @since 2.0.0
      */
     protected $theme;
 
@@ -87,7 +79,6 @@ class Image
      * Width and height of preview image
      *
      * @var array
-     * @since 2.0.0
      */
     protected $imageParams;
 
@@ -102,7 +93,6 @@ class Image
      * @param array $imageParams
      * @param ThemeInterface $theme
      * @codingStandardsIgnoreStart
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -130,7 +120,6 @@ class Image
      *
      * @param string $imagePath
      * @return $this
-     * @since 2.0.0
      */
     public function createPreviewImage($imagePath)
     {
@@ -154,7 +143,6 @@ class Image
      *
      * @param ThemeInterface $theme
      * @return bool
-     * @since 2.0.0
      */
     public function createPreviewImageCopy(ThemeInterface $theme)
     {
@@ -181,7 +169,6 @@ class Image
      * Delete preview image
      *
      * @return bool
-     * @since 2.0.0
      */
     public function removePreviewImage()
     {
@@ -199,7 +186,6 @@ class Image
      *
      * @param string $scope the request key for file
      * @return $this
-     * @since 2.0.0
      */
     public function uploadPreviewImage($scope)
     {
@@ -219,7 +205,6 @@ class Image
      * Get path to preview image
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPreviewImagePath()
     {
@@ -230,7 +215,6 @@ class Image
      * Get url of theme preview image
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPreviewImageUrl()
     {

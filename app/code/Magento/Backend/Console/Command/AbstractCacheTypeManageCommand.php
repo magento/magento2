@@ -13,20 +13,17 @@ use Magento\Framework\App\Cache\Manager;
 
 /**
  * @api
- * @since 2.0.0
  */
 abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
 {
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @param Manager $cacheManager
      * @param EventManagerInterface $eventManager
-     * @since 2.0.0
      */
     public function __construct(
         Manager $cacheManager,
@@ -41,7 +38,6 @@ abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
      *
      * @param array $cacheTypes
      * @return void
-     * @since 2.0.0
      */
     abstract protected function performAction(array $cacheTypes);
 
@@ -49,7 +45,6 @@ abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
      * Get display message
      *
      * @return string
-     * @since 2.0.0
      */
     abstract protected function getDisplayMessage();
 
@@ -59,7 +54,6 @@ abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return void
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

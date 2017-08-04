@@ -18,7 +18,6 @@ use Magento\Framework\Indexer\StateInterface;
  * @method int getParentId() getParentId()
  * @method \Magento\Customer\Model\Address setParentId() setParentId(int $parentId)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Address extends \Magento\Customer\Model\Address\AbstractAddress
 {
@@ -26,37 +25,32 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Customer entity
      *
      * @var Customer
-     * @since 2.0.0
      */
     protected $_customer;
 
     /**
      * @var CustomerFactory
-     * @since 2.0.0
      */
     protected $_customerFactory;
 
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
-     * @since 2.0.0
      */
     protected $dataProcessor;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
-     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
     /**
      * @var \Magento\Framework\Indexer\IndexerRegistry
-     * @since 2.0.0
      */
     protected $indexerRegistry;
 
     /**
      * @var \Magento\Customer\Model\Address\CustomAttributeListInterface
-     * @since 2.1.0
+     * @since 2.0.5
      */
     private $attributeList;
 
@@ -82,7 +76,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -130,7 +123,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -143,7 +135,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @param AddressInterface $address
      * @return $this
      * Use Api/RepositoryInterface for the operations in the Data Interfaces. Don't rely on Address Model
-     * @since 2.0.0
      */
     public function updateData(AddressInterface $address)
     {
@@ -178,7 +169,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getDataModel($defaultBillingAddressId = null, $defaultShippingAddressId = null)
     {
@@ -197,7 +187,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Retrieve address customer identifier
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCustomerId()
     {
@@ -209,7 +198,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      *
      * @param int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setCustomerId($id)
     {
@@ -222,7 +210,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Retrieve address customer
      *
      * @return Customer|false
-     * @since 2.0.0
      */
     public function getCustomer()
     {
@@ -240,7 +227,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      *
      * @param Customer $customer
      * @return $this
-     * @since 2.0.0
      */
     public function setCustomer(Customer $customer)
     {
@@ -253,7 +239,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Retrieve address entity attributes
      *
      * @return Attribute[]
-     * @since 2.0.0
      */
     public function getAttributes()
     {
@@ -269,7 +254,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Get attributes created by default
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getDefaultAttributeCodes()
     {
@@ -278,7 +262,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function __clone()
     {
@@ -289,7 +272,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Return Entity Type instance
      *
      * @return \Magento\Eav\Model\Entity\Type
-     * @since 2.0.0
      */
     public function getEntityType()
     {
@@ -300,7 +282,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Return Region ID
      *
      * @return int
-     * @since 2.0.0
      */
     public function getRegionId()
     {
@@ -312,7 +293,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      *
      * @param int $regionId
      * @return $this
-     * @since 2.0.0
      */
     public function setRegionId($regionId)
     {
@@ -322,7 +302,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
 
     /**
      * @return Customer
-     * @since 2.0.0
      */
     protected function _createCustomer()
     {
@@ -333,7 +312,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Return Entity Type ID
      *
      * @return int
-     * @since 2.0.0
      */
     public function getEntityTypeId()
     {
@@ -344,7 +322,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Processing object after save data
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -359,7 +336,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Init indexing process after customer delete
      *
      * @return \Magento\Framework\Model\AbstractModel
-     * @since 2.0.0
      */
     public function afterDeleteCommit()
     {
@@ -371,7 +347,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Init indexing process after customer save
      *
      * @return void
-     * @since 2.0.0
      */
     public function reindex()
     {
@@ -382,7 +357,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 2.0.5
      */
     protected function getCustomAttributesCodes()
     {
@@ -392,8 +367,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * Get new AttributeList dependency for application code.
      * @return \Magento\Customer\Model\Address\CustomAttributeListInterface
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 2.0.5
+     * @since 2.0.5
      */
     private function getAttributeList()
     {

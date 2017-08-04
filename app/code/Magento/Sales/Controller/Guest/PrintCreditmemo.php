@@ -13,19 +13,16 @@ use Magento\Sales\Api\CreditmemoRepositoryInterface;
 /**
  * Class \Magento\Sales\Controller\Guest\PrintCreditmemo
  *
- * @since 2.0.0
  */
 class PrintCreditmemo extends \Magento\Sales\Controller\AbstractController\PrintCreditmemo
 {
     /**
      * @var OrderLoader
-     * @since 2.0.0
      */
     protected $orderLoader;
 
     /**
      * @var CreditmemoRepositoryInterface;
-     * @since 2.0.0
      */
     protected $creditmemoRepository;
 
@@ -36,7 +33,6 @@ class PrintCreditmemo extends \Magento\Sales\Controller\AbstractController\Print
      * @param PageFactory $resultPageFactory
      * @param CreditmemoRepositoryInterface $creditmemoRepository
      * @param OrderLoader $orderLoader
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -59,7 +55,6 @@ class PrintCreditmemo extends \Magento\Sales\Controller\AbstractController\Print
 
     /**
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -15,7 +15,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -23,7 +22,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * True when subscribers info joined
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_subscribersInfoJoinedFlag = false;
 
@@ -31,7 +29,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * True when grouped
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_problemGrouped = false;
 
@@ -39,13 +36,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Customer collection factory
      *
      * @var \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory
-     * @since 2.0.0
      */
     protected $_customerCollectionFactory;
 
     /**
      * @var CustomerRepository
-     * @since 2.0.0
      */
     protected $customerRepository;
 
@@ -53,7 +48,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Customer View Helper
      *
      * @var \Magento\Customer\Helper\View
-     * @since 2.0.0
      */
     protected $_customerView;
 
@@ -61,7 +55,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * checks if customer data is loaded
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_loadCustomersDataFlag = false;
 
@@ -74,7 +67,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Customer\Helper\View $customerView
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -95,7 +87,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Define resource model and model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -107,7 +98,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param bool $flag
      * @return $this
-     * @since 2.0.0
      */
     protected function _setIsLoaded($flag = true)
     {
@@ -121,7 +111,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Adds subscribers info
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addSubscriberInfo()
     {
@@ -140,7 +129,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Adds queue info
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addQueueInfo()
     {
@@ -160,7 +148,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Loads customers info to collection
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _addCustomersData()
     {
@@ -193,7 +180,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
-     * @since 2.0.0
      */
     public function load($printQuery = false, $logQuery = false)
     {

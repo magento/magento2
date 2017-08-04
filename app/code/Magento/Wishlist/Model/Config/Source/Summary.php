@@ -8,13 +8,11 @@ namespace Magento\Wishlist\Model\Config\Source;
 /**
  * Class \Magento\Wishlist\Model\Config\Source\Summary
  *
- * @since 2.0.0
  */
 class Summary implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

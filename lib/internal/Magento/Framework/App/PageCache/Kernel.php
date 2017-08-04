@@ -7,7 +7,6 @@ namespace Magento\Framework\App\PageCache;
 
 /**
  * Builtin cache processor
- * @since 2.0.0
  */
 class Kernel
 {
@@ -15,19 +14,16 @@ class Kernel
      * @var \Magento\PageCache\Model\Cache\Type
      *
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     protected $cache;
 
     /**
      * @var Identifier
-     * @since 2.0.0
      */
     protected $identifier;
 
     /**
      * @var \Magento\Framework\App\Request\Http
-     * @since 2.0.0
      */
     protected $request;
 
@@ -69,7 +65,6 @@ class Kernel
      * @param \Magento\Framework\App\Http\ContextFactory|null $contextFactory
      * @param \Magento\Framework\App\Response\HttpFactory|null $httpFactory
      * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\PageCache\Cache $cache,
@@ -118,7 +113,6 @@ class Kernel
      * Load response from cache
      *
      * @return \Magento\Framework\App\Response\Http|false
-     * @since 2.0.0
      */
     public function load()
     {
@@ -142,7 +136,6 @@ class Kernel
      *
      * @param \Magento\Framework\App\Response\Http $response
      * @return void
-     * @since 2.0.0
      */
     public function process(\Magento\Framework\App\Response\Http $response)
     {

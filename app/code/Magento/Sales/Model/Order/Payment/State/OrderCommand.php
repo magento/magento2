@@ -14,7 +14,6 @@ use Magento\Sales\Model\Order\StatusResolver;
 /**
  * Class \Magento\Sales\Model\Order\Payment\State\OrderCommand
  *
- * @since 2.0.0
  */
 class OrderCommand implements CommandInterface
 {
@@ -39,7 +38,6 @@ class OrderCommand implements CommandInterface
      * @param string|float $amount
      * @param OrderInterface $order
      * @return string
-     * @since 2.0.0
      */
     public function execute(OrderPaymentInterface $payment, $amount, OrderInterface $order)
     {
@@ -75,7 +73,6 @@ class OrderCommand implements CommandInterface
      * @param string $status
      * @param string $state
      * @return void
-     * @since 2.0.0
      */
     protected function setOrderStateAndStatus(Order $order, $status, $state)
     {

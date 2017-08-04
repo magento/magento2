@@ -16,32 +16,27 @@ use Magento\Ui\Component\MassAction\Filter;
  * Class AbstractMassStatus
  * @deprecated 2.2.0
  * Never extend from this action. Implement mass-action logic in the "execute" method of your controller.
- * @since 2.0.0
  */
 abstract class AbstractMassAction extends \Magento\Backend\App\Action
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $redirectUrl = '*/*/';
 
     /**
      * @var \Magento\Ui\Component\MassAction\Filter
-     * @since 2.0.0
      */
     protected $filter;
 
     /**
      * @var object
-     * @since 2.0.0
      */
     protected $collectionFactory;
 
     /**
      * @param Context $context
      * @param Filter $filter
-     * @since 2.0.0
      */
     public function __construct(Context $context, Filter $filter)
     {
@@ -54,7 +49,6 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @throws \Magento\Framework\Exception\LocalizedException|\Exception
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -74,7 +68,6 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
      * TODO: Technical dept referrer url should be implement as a part of Action configuration in in appropriate way
      *
      * @return null|string
-     * @since 2.0.0
      */
     protected function getComponentRefererUrl()
     {
@@ -86,7 +79,6 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
      *
      * @param AbstractCollection $collection
      * @return ResponseInterface|ResultInterface
-     * @since 2.0.0
      */
     abstract protected function massAction(AbstractCollection $collection);
 }

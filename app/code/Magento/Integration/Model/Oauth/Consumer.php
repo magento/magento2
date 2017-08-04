@@ -26,31 +26,27 @@ use Magento\Framework\Oauth\ConsumerInterface;
  * @method Consumer setUpdatedAt() setUpdatedAt(string $date)
  * @method string getRejectedCallbackUrl()
  * @method Consumer setRejectedCallbackUrl() setRejectedCallbackUrl(string $rejectedCallbackUrl)
- * @since 2.0.0
  */
 class Consumer extends \Magento\Framework\Model\AbstractModel implements ConsumerInterface
 {
     /**
      * @var \Magento\Framework\Url\Validator
-     * @since 2.0.0
      */
     protected $urlValidator;
 
     /**
      * @var \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength
-     * @since 2.0.0
      */
     protected $keyLengthValidator;
 
     /**
      * @var  \Magento\Integration\Helper\Oauth\Data
-     * @since 2.0.0
      */
     protected $dataHelper;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.1.0
+     * @since 2.0.6
      */
     private $_dateHelper;
 
@@ -63,7 +59,6 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -85,7 +80,6 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -98,8 +92,8 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
      *
      * @return \Magento\Framework\Stdlib\DateTime\DateTime
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 2.0.6
+     * @since 2.0.6
      */
     private function getDateHelper()
     {
@@ -114,7 +108,6 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
      * BeforeSave actions
      *
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -125,7 +118,6 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function validate()
     {
@@ -164,7 +156,6 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
      *
      * @param string $key
      * @return $this
-     * @since 2.0.0
      */
     public function loadByKey($key)
     {
@@ -173,7 +164,6 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getKey()
     {
@@ -182,7 +172,6 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getSecret()
     {
@@ -191,7 +180,6 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCallbackUrl()
     {
@@ -200,7 +188,6 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCreatedAt()
     {
@@ -209,7 +196,6 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function isValidForTokenExchange()
     {

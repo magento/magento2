@@ -8,7 +8,6 @@ namespace Magento\Framework\Api;
 
 /**
  * Custom Attribute Data object
- * @since 2.0.0
  */
 class AttributeValue extends AbstractSimpleObject implements AttributeInterface
 {
@@ -16,7 +15,6 @@ class AttributeValue extends AbstractSimpleObject implements AttributeInterface
      * Get attribute code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAttributeCode()
     {
@@ -27,7 +25,6 @@ class AttributeValue extends AbstractSimpleObject implements AttributeInterface
      * Get attribute value
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getValue()
     {
@@ -39,7 +36,6 @@ class AttributeValue extends AbstractSimpleObject implements AttributeInterface
      *
      * @param string $attributeCode
      * @return $this
-     * @since 2.0.0
      */
     public function setAttributeCode($attributeCode)
     {
@@ -52,7 +48,6 @@ class AttributeValue extends AbstractSimpleObject implements AttributeInterface
      *
      * @param mixed $value
      * @return $this
-     * @since 2.0.0
      */
     public function setValue($value)
     {

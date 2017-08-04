@@ -11,61 +11,51 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Cart extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * @var \Magento\Wishlist\Controller\WishlistProviderInterface
-     * @since 2.0.0
      */
     protected $wishlistProvider;
 
     /**
      * @var \Magento\Wishlist\Model\LocaleQuantityProcessor
-     * @since 2.0.0
      */
     protected $quantityProcessor;
 
     /**
      * @var \Magento\Wishlist\Model\ItemFactory
-     * @since 2.0.0
      */
     protected $itemFactory;
 
     /**
      * @var \Magento\Checkout\Model\Cart
-     * @since 2.0.0
      */
     protected $cart;
 
     /**
      * @var \Magento\Checkout\Helper\Cart
-     * @since 2.0.0
      */
     protected $cartHelper;
 
     /**
      * @var \Magento\Wishlist\Model\Item\OptionFactory
-     * @since 2.0.0
      */
     private $optionFactory;
 
     /**
      * @var \Magento\Catalog\Helper\Product
-     * @since 2.0.0
      */
     protected $productHelper;
 
     /**
      * @var \Magento\Framework\Escaper
-     * @since 2.0.0
      */
     protected $escaper;
 
     /**
      * @var \Magento\Wishlist\Helper\Data
-     * @since 2.0.0
      */
     protected $helper;
 
@@ -88,7 +78,6 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
      * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -126,7 +115,6 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function execute()
     {

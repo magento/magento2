@@ -9,7 +9,6 @@ namespace Magento\Sales\Model\Order\Email\Container;
 /**
  * Class \Magento\Sales\Model\Order\Email\Container\ShipmentIdentity
  *
- * @since 2.0.0
  */
 class ShipmentIdentity extends Container implements IdentityInterface
 {
@@ -27,7 +26,6 @@ class ShipmentIdentity extends Container implements IdentityInterface
      * Is email enabled
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isEnabled()
     {
@@ -42,7 +40,6 @@ class ShipmentIdentity extends Container implements IdentityInterface
      * Return list of copy_to emails
      *
      * @return array|bool
-     * @since 2.0.0
      */
     public function getEmailCopyTo()
     {
@@ -57,7 +54,6 @@ class ShipmentIdentity extends Container implements IdentityInterface
      * Return email copy method
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getCopyMethod()
     {
@@ -68,7 +64,6 @@ class ShipmentIdentity extends Container implements IdentityInterface
      * Return guest template id
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getGuestTemplateId()
     {
@@ -79,7 +74,6 @@ class ShipmentIdentity extends Container implements IdentityInterface
      * Return template id
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getTemplateId()
     {
@@ -90,7 +84,6 @@ class ShipmentIdentity extends Container implements IdentityInterface
      * Return email identity
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getEmailIdentity()
     {

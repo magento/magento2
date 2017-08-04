@@ -15,19 +15,16 @@ use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 
 /**
  * Class MassUnsubscribe
- * @since 2.0.0
  */
 class MassUnsubscribe extends AbstractMassAction
 {
     /**
      * @var CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var SubscriberFactory
-     * @since 2.0.0
      */
     protected $subscriberFactory;
 
@@ -37,7 +34,6 @@ class MassUnsubscribe extends AbstractMassAction
      * @param CollectionFactory $collectionFactory
      * @param CustomerRepositoryInterface $customerRepository
      * @param SubscriberFactory $subscriberFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -56,7 +52,6 @@ class MassUnsubscribe extends AbstractMassAction
      *
      * @param AbstractCollection $collection
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     protected function massAction(AbstractCollection $collection)
     {

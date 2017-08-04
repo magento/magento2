@@ -10,7 +10,6 @@ use Magento\Framework\View\Asset;
 
 /**
  * The actual merging service
- * @since 2.0.0
  */
 class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
 {
@@ -23,22 +22,17 @@ class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
 
     /**#@-*/
 
-    /**
-     * @var \Magento\Framework\Filesystem
-     * @since 2.0.0
-     */
+    /**#@-*/
     private $filesystem;
 
     /**
      * @var \Magento\Framework\View\Url\CssResolver
-     * @since 2.0.0
      */
     private $cssUrlResolver;
 
     /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Url\CssResolver $cssUrlResolver
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -50,7 +44,6 @@ class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function merge(array $assetsToMerge, Asset\LocalInterface $resultAsset)
     {
@@ -69,7 +62,6 @@ class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
      * @param \Magento\Framework\View\Asset\LocalInterface $resultAsset
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     private function composeMergedContent(array $assetsToMerge, Asset\LocalInterface $resultAsset)
     {
@@ -90,7 +82,6 @@ class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
      * @param Asset\LocalInterface $result
      * @param string $content
      * @return string
-     * @since 2.0.0
      */
     private function preProcessBeforeMerging(Asset\LocalInterface $item, Asset\LocalInterface $result, $content)
     {
@@ -108,7 +99,6 @@ class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
      * @param Asset\LocalInterface $result
      * @param string $content
      * @return string
-     * @since 2.0.0
      */
     private function preProcessMergeResult(Asset\LocalInterface $result, $content)
     {
@@ -123,7 +113,6 @@ class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
      *
      * @param string $contentType
      * @return string
-     * @since 2.0.0
      */
     protected function _getFilesContentDelimiter($contentType)
     {

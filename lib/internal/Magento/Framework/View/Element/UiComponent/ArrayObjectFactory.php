@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Element\UiComponent;
 
 /**
  * Class ArrayObjectFactory
- * @since 2.0.0
  */
 class ArrayObjectFactory
 {
@@ -16,7 +15,6 @@ class ArrayObjectFactory
      *
      * @param array $data
      * @return \ArrayObject
-     * @since 2.0.0
      */
     public function create(array $data = [])
     {

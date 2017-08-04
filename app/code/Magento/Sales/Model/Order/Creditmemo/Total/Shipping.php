@@ -9,13 +9,11 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Order creditmemo shipping total calculation model
- * @since 2.0.0
  */
 class Shipping extends AbstractTotal
 {
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
@@ -30,7 +28,6 @@ class Shipping extends AbstractTotal
     /**
      * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         PriceCurrencyInterface $priceCurrency,
@@ -44,7 +41,6 @@ class Shipping extends AbstractTotal
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function collect(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {

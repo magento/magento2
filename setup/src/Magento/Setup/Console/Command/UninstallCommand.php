@@ -15,19 +15,16 @@ use Magento\Framework\Setup\ConsoleLogger;
 /**
  * Class \Magento\Setup\Console\Command\UninstallCommand
  *
- * @since 2.0.0
  */
 class UninstallCommand extends AbstractSetupCommand
 {
     /**
      * @var InstallerFactory
-     * @since 2.0.0
      */
     private $installerFactory;
 
     /**
      * @param InstallerFactory $installerFactory
-     * @since 2.0.0
      */
     public function __construct(InstallerFactory $installerFactory)
     {
@@ -37,7 +34,6 @@ class UninstallCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -48,7 +44,6 @@ class UninstallCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

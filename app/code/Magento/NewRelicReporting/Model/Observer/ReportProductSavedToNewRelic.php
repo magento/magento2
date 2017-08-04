@@ -12,26 +12,22 @@ use Magento\NewRelicReporting\Model\NewRelicWrapper;
 
 /**
  * Class ReportProductSavedToNewRelic
- * @since 2.0.0
  */
 class ReportProductSavedToNewRelic implements ObserverInterface
 {
     /**
      * @var Config
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var NewRelicWrapper
-     * @since 2.0.0
      */
     protected $newRelicWrapper;
 
     /**
      * @param Config $config
      * @param NewRelicWrapper $newRelicWrapper
-     * @since 2.0.0
      */
     public function __construct(
         Config $config,
@@ -46,7 +42,6 @@ class ReportProductSavedToNewRelic implements ObserverInterface
      *
      * @param Observer $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

@@ -12,7 +12,6 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\TaxImportExport\Controller\Adminhtml\Rate\ExportCsv
  *
- * @since 2.0.0
  */
 class ExportCsv extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
 {
@@ -20,7 +19,6 @@ class ExportCsv extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
      * Export rates grid to CSV format
      *
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

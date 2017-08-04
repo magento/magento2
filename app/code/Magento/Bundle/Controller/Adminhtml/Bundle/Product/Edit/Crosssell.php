@@ -9,7 +9,6 @@ namespace Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit;
 /**
  * Class \Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit\Crosssell
  *
- * @since 2.0.0
  */
 class Crosssell extends \Magento\Catalog\Controller\Adminhtml\Product\Crosssell
 {

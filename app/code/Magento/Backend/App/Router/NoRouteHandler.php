@@ -9,26 +9,22 @@ namespace Magento\Backend\App\Router;
 
 /**
  * @api
- * @since 2.0.0
  */
 class NoRouteHandler implements \Magento\Framework\App\Router\NoRouteHandlerInterface
 {
     /**
      * @var \Magento\Backend\Helper\Data
-     * @since 2.0.0
      */
     protected $helper;
 
     /**
      * @var \Magento\Framework\App\Route\ConfigInterface
-     * @since 2.0.0
      */
     protected $routeConfig;
 
     /**
      * @param \Magento\Backend\Helper\Data $helper
      * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Helper\Data $helper,
@@ -43,7 +39,6 @@ class NoRouteHandler implements \Magento\Framework\App\Router\NoRouteHandlerInte
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return bool
-     * @since 2.0.0
      */
     public function process(\Magento\Framework\App\RequestInterface $request)
     {

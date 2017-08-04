@@ -10,7 +10,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Context data for requests
- * @since 2.0.0
  */
 class Context
 {
@@ -23,13 +22,11 @@ class Context
      * Data storage
      *
      * @var array
-     * @since 2.0.0
      */
     protected $data = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $default = [];
 
@@ -59,7 +56,6 @@ class Context
      * @param mixed $value
      * @param mixed $default
      * @return \Magento\Framework\App\Http\Context
-     * @since 2.0.0
      */
     public function setValue($name, $value, $default)
     {
@@ -75,7 +71,6 @@ class Context
      *
      * @param string $name
      * @return null
-     * @since 2.0.0
      */
     public function unsValue($name)
     {
@@ -88,7 +83,6 @@ class Context
      *
      * @param string $name
      * @return mixed|null
-     * @since 2.0.0
      */
     public function getValue($name)
     {
@@ -101,7 +95,6 @@ class Context
      * Return all data
      *
      * @return array
-     * @since 2.0.0
      */
     public function getData()
     {
@@ -118,7 +111,6 @@ class Context
      * Return vary string to be used as a part of page cache identifier
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getVaryString()
     {

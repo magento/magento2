@@ -12,7 +12,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  *
  * @author Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Subtotal extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals
 {
@@ -20,7 +19,6 @@ class Subtotal extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      * Template
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'order/create/totals/subtotal.phtml';
 
@@ -28,7 +26,6 @@ class Subtotal extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      * Tax config
      *
      * @var \Magento\Tax\Model\Config
-     * @since 2.0.0
      */
     protected $_taxConfig;
 
@@ -41,7 +38,6 @@ class Subtotal extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -61,7 +57,6 @@ class Subtotal extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      * Check if we need display both sobtotals
      *
      * @return bool
-     * @since 2.0.0
      */
     public function displayBoth()
     {

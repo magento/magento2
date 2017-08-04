@@ -11,7 +11,6 @@ namespace Magento\Config\Model\Config\Backend\Log;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Cron extends \Magento\Framework\App\Config\Value
 {
@@ -21,13 +20,11 @@ class Cron extends \Magento\Framework\App\Config\Value
 
     /**
      * @var \Magento\Framework\App\Config\ValueFactory
-     * @since 2.0.0
      */
     protected $_configValueFactory;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_runModelPath = '';
 
@@ -41,7 +38,6 @@ class Cron extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param string $runModelPath
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -64,7 +60,6 @@ class Cron extends \Magento\Framework\App\Config\Value
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function afterSave()
     {

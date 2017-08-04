@@ -12,25 +12,21 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
  * Data helper for dashboard
  *
  * @api
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * @var \Magento\Framework\Data\Collection\AbstractDb
-     * @since 2.0.0
      */
     protected $_stores;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_installDate;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     private $_storeManager;
 
@@ -38,7 +34,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param DeploymentConfig $deploymentConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -56,7 +51,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve stores configured in system.
      *
      * @return \Magento\Framework\Data\Collection\AbstractDb
-     * @since 2.0.0
      */
     public function getStores()
     {
@@ -70,7 +64,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve number of loaded stores
      *
      * @return int
-     * @since 2.0.0
      */
     public function countStores()
     {
@@ -81,7 +74,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Prepare array with periods for dashboard graphs
      *
      * @return array
-     * @since 2.0.0
      */
     public function getDatePeriods()
     {
@@ -100,7 +92,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $data
      * @return string
-     * @since 2.0.0
      */
     public function getChartDataHash($data)
     {

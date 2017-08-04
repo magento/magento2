@@ -9,7 +9,6 @@ namespace Magento\Paypal\Controller\Express\AbstractExpress;
 /**
  * Class \Magento\Paypal\Controller\Express\AbstractExpress\SaveShippingMethod
  *
- * @since 2.0.0
  */
 class SaveShippingMethod extends \Magento\Paypal\Controller\Express\AbstractExpress
 {
@@ -17,7 +16,6 @@ class SaveShippingMethod extends \Magento\Paypal\Controller\Express\AbstractExpr
      * Update shipping method (combined action for ajax and regular request)
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -12,19 +12,16 @@ namespace Magento\Email\Block\Adminhtml\Template\Edit;
 /**
  * Class \Magento\Email\Block\Adminhtml\Template\Edit\Form
  *
- * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\Email\Model\Source\Variables
-     * @since 2.0.0
      */
     protected $_variables;
 
     /**
      * @var \Magento\Variable\Model\VariableFactory
-     * @since 2.0.0
      */
     protected $_variableFactory;
 
@@ -43,7 +40,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -66,7 +62,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Add files to use dialog windows
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -81,7 +76,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -182,7 +176,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Return current email template model
      *
      * @return \Magento\Email\Model\Template
-     * @since 2.0.0
      */
     public function getEmailTemplate()
     {
@@ -193,7 +186,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Retrieve variables to insert into email
      *
      * @return array
-     * @since 2.0.0
      */
     public function getVariables()
     {

@@ -14,7 +14,6 @@ use Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage as 
 
 /**
  * @api
- * @since 2.0.0
  */
 class QuoteValidator
 {
@@ -58,7 +57,6 @@ class QuoteValidator
      * @param QuoteEntity $quote
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function validateQuoteAmount(QuoteEntity $quote, $amount)
     {
@@ -75,7 +73,6 @@ class QuoteValidator
      * @param Quote $quote
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function validateBeforeSubmit(QuoteEntity $quote)
     {

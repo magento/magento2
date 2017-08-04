@@ -10,7 +10,6 @@ use Magento\Framework\View\Layout\Argument\Parser;
 
 /**
  * Class Converter
- * @since 2.0.0
  */
 class Converter implements ConverterInterface
 {
@@ -36,7 +35,6 @@ class Converter implements ConverterInterface
 
     /**
      * @var Parser
-     * @since 2.0.0
      */
     protected $argumentParser;
 
@@ -44,7 +42,6 @@ class Converter implements ConverterInterface
      * Constructor
      *
      * @param Parser $argumentParser
-     * @since 2.0.0
      */
     public function __construct(Parser $argumentParser)
     {
@@ -59,7 +56,6 @@ class Converter implements ConverterInterface
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function toArray(\DOMNode $node)
     {
@@ -115,7 +111,6 @@ class Converter implements ConverterInterface
      *
      * @param \DOMDocument|null $source
      * @return array
-     * @since 2.0.0
      */
     public function convert($source)
     {

@@ -13,25 +13,21 @@ use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 /**
  * Class \Magento\Weee\Model\WeeeConfigProvider
  *
- * @since 2.0.0
  */
 class WeeeConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var \Magento\Weee\Helper\Data
-     * @since 2.0.0
      */
     protected $weeeHelper;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var Config
-     * @since 2.0.0
      */
     protected $weeeConfig;
 
@@ -39,7 +35,6 @@ class WeeeConfigProvider implements ConfigProviderInterface
      * @param WeeeHelper $weeeHelper
      * @param StoreManagerInterface $storeManager
      * @param Config $weeeConfig
-     * @since 2.0.0
      */
     public function __construct(
         WeeeHelper $weeeHelper,
@@ -53,7 +48,6 @@ class WeeeConfigProvider implements ConfigProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -68,7 +62,6 @@ class WeeeConfigProvider implements ConfigProviderInterface
 
     /**
      * @return int
-     * @since 2.0.0
      */
     private function getStoreId()
     {
@@ -79,7 +72,6 @@ class WeeeConfigProvider implements ConfigProviderInterface
      * Whether to display weee details together with price
      *
      * @return bool
-     * @since 2.0.0
      */
     public function iDisplayPriceWithWeeeDetails()
     {
@@ -102,7 +94,6 @@ class WeeeConfigProvider implements ConfigProviderInterface
      * Whether to display final price that include Weee amounts
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isDisplayFinalPrice()
     {
@@ -123,7 +114,6 @@ class WeeeConfigProvider implements ConfigProviderInterface
      * Check if fixed taxes are used in system
      *
      * @return  bool
-     * @since 2.0.0
      */
     public function isWeeeEnabled()
     {
@@ -134,7 +124,6 @@ class WeeeConfigProvider implements ConfigProviderInterface
      * Return the flag whether to include weee in the price
      *
      * @return bool|int
-     * @since 2.0.0
      */
     public function getIncludeWeeeFlag()
     {
@@ -150,7 +139,6 @@ class WeeeConfigProvider implements ConfigProviderInterface
      * Display FPT row in subtotal or not
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isIncludedInSubtotal()
     {

@@ -7,7 +7,6 @@ namespace Magento\Sales\Model\ResourceModel\Order\Tax;
 
 /**
  * Sales order tax resource model
- * @since 2.0.0
  */
 class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -15,7 +14,6 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -27,7 +25,6 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $orderId
      * @return array
-     * @since 2.0.0
      */
     public function getTaxItemsByOrderId($orderId)
     {

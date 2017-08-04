@@ -20,67 +20,67 @@ use Psr\Log\LoggerInterface;
 /**
  * Class ShipOrder
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.2.0
+ * @since 2.1.2
  */
 class ShipOrder implements ShipOrderInterface
 {
     /**
      * @var ResourceConnection
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private $resourceConnection;
 
     /**
      * @var OrderRepositoryInterface
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private $orderRepository;
 
     /**
      * @var ShipmentDocumentFactory
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private $shipmentDocumentFactory;
 
     /**
      * @var OrderStateResolverInterface
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private $orderStateResolver;
 
     /**
      * @var OrderConfig
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private $config;
 
     /**
      * @var ShipmentRepositoryInterface
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private $shipmentRepository;
 
     /**
      * @var ShipOrderValidator
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $shipOrderValidator;
 
     /**
      * @var NotifierInterface
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private $notifierInterface;
 
     /**
      * @var LoggerInterface
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private $logger;
 
     /**
      * @var OrderRegistrarInterface
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private $orderRegistrar;
 
@@ -96,7 +96,7 @@ class ShipOrder implements ShipOrderInterface
      * @param OrderRegistrarInterface $orderRegistrar
      * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.2.0
+     * @since 2.1.2
      */
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -137,7 +137,7 @@ class ShipOrder implements ShipOrderInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \DomainException
-     * @since 2.2.0
+     * @since 2.1.2
      */
     public function execute(
         $orderId,

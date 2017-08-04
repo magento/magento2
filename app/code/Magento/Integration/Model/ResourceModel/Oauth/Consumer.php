@@ -8,14 +8,12 @@ namespace Magento\Integration\Model\ResourceModel\Oauth;
 /**
  * Class \Magento\Integration\Model\ResourceModel\Oauth\Consumer
  *
- * @since 2.0.0
  */
 class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -28,7 +26,6 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -40,7 +37,6 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     public function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -53,11 +49,10 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Compute time in seconds since consumer was created.
      *
-     * @deprecated 2.1.0
+     * @deprecated 2.0.6
      *
      * @param int $consumerId - The consumer id
      * @return int - time lapsed in seconds
-     * @since 2.0.0
      */
     public function getTimeInSecondsSinceCreation($consumerId)
     {

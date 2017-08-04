@@ -15,19 +15,19 @@ use Magento\Sales\Model\ValidatorInterface;
 
 /**
  * Class CreationQuantityValidator
- * @since 2.2.0
+ * @since 2.1.3
  */
 class CreationQuantityValidator implements ValidatorInterface
 {
     /**
      * @var OrderItemRepositoryInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $orderItemRepository;
 
     /**
      * @var OrderInterfaceFactory
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $context;
 
@@ -35,7 +35,7 @@ class CreationQuantityValidator implements ValidatorInterface
      * ItemCreationQuantityValidator constructor.
      * @param OrderItemRepositoryInterface $orderItemRepository
      * @param mixed $context
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(OrderItemRepositoryInterface $orderItemRepository, $context = null)
     {
@@ -45,7 +45,7 @@ class CreationQuantityValidator implements ValidatorInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function validate($entity)
     {
@@ -69,7 +69,7 @@ class CreationQuantityValidator implements ValidatorInterface
      * @param Item $orderItem
      * @param int $qty
      * @return bool
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function isQtyAvailable(Item $orderItem, $qty)
     {
@@ -79,7 +79,7 @@ class CreationQuantityValidator implements ValidatorInterface
     /**
      * @param OrderItemInterface $orderItem
      * @return bool
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function isItemPartOfContextOrder(OrderItemInterface $orderItem)
     {

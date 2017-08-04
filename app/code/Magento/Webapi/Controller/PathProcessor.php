@@ -11,7 +11,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Class \Magento\Webapi\Controller\PathProcessor
  *
- * @since 2.0.0
  */
 class PathProcessor
 {
@@ -20,13 +19,11 @@ class PathProcessor
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     private $storeManager;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
     {
@@ -38,7 +35,6 @@ class PathProcessor
      *
      * @param string $pathInfo
      * @return array
-     * @since 2.0.0
      */
     private function stripPathBeforeStorecode($pathInfo)
     {
@@ -54,7 +50,6 @@ class PathProcessor
      * @param string $pathInfo
      * @return string
      * @throws NoSuchEntityException
-     * @since 2.0.0
      */
     public function process($pathInfo)
     {

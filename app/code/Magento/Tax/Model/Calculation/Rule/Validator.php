@@ -15,19 +15,16 @@ use Zend_Validate_Exception;
 /**
  * Class \Magento\Tax\Model\Calculation\Rule\Validator
  *
- * @since 2.0.0
  */
 class Validator extends \Magento\Framework\Validator\AbstractValidator
 {
     /**
      * @var ClassModelRegistry
-     * @since 2.0.0
      */
     protected $classModelRegistry;
 
     /**
      * @param ClassModelRegistry $classModelRegistry
-     * @since 2.0.0
      */
     public function __construct(ClassModelRegistry $classModelRegistry)
     {
@@ -43,7 +40,6 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function isValid($value)
     {
@@ -157,7 +153,6 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
      * @param string $message
      * @param array $params
      * @return void
-     * @since 2.0.0
      */
     protected function addErrorMessage(&$messages, $message, $params)
     {

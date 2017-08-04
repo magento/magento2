@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Design\Theme\Customization\File;
 
 /**
  * Theme JS file service class
- * @since 2.0.0
  */
 class Js extends \Magento\Framework\View\Design\Theme\Customization\AbstractFile
 {
@@ -24,7 +23,6 @@ class Js extends \Magento\Framework\View\Design\Theme\Customization\AbstractFile
      * Get type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -35,7 +33,6 @@ class Js extends \Magento\Framework\View\Design\Theme\Customization\AbstractFile
      * Get content type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getContentType()
     {

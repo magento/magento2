@@ -13,26 +13,22 @@ use Magento\Framework\Module\ModuleListInterface;
 /**
  * Class \Magento\Framework\Module\Dir\ReverseResolver
  *
- * @since 2.0.0
  */
 class ReverseResolver
 {
     /**
      * @var ModuleListInterface
-     * @since 2.0.0
      */
     protected $_moduleList;
 
     /**
      * @var Dir
-     * @since 2.0.0
      */
     protected $_moduleDirs;
 
     /**
      * @param ModuleListInterface $moduleList
      * @param Dir $moduleDirs
-     * @since 2.0.0
      */
     public function __construct(ModuleListInterface $moduleList, Dir $moduleDirs)
     {
@@ -45,7 +41,6 @@ class ReverseResolver
      *
      * @param string $path Full path to file or directory
      * @return string|null
-     * @since 2.0.0
      */
     public function getModuleName($path)
     {

@@ -10,7 +10,7 @@ use Zend\Stdlib\Exception\RuntimeException as ZendRuntimeException;
 
 /**
  * Wrapper for Zend\Stdlib\Glob
- * @since 2.1.0
+ * @since 2.0.8
  */
 class Glob extends ZendGlob
 {
@@ -21,7 +21,7 @@ class Glob extends ZendGlob
      * @param  int $flags
      * @param  bool $forceFallback
      * @return array
-     * @since 2.1.0
+     * @since 2.0.8
      */
     public static function glob($pattern, $flags = 0, $forceFallback = false)
     {

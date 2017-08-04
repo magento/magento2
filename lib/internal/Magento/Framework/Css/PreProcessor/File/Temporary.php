@@ -12,26 +12,22 @@ use Magento\Framework\Css\PreProcessor\Config;
 /**
  * Class \Magento\Framework\Css\PreProcessor\File\Temporary
  *
- * @since 2.0.0
  */
 class Temporary
 {
     /**
      * @var Config
-     * @since 2.0.0
      */
     private $config;
 
     /**
      * @var Filesystem\Directory\WriteInterface
-     * @since 2.0.0
      */
     private $tmpDirectory;
 
     /**
      * @param Filesystem $filesystem
      * @param Config $config
-     * @since 2.0.0
      */
     public function __construct(
         Filesystem $filesystem,
@@ -47,7 +43,6 @@ class Temporary
      * @param string $relativePath
      * @param string $contents
      * @return string
-     * @since 2.0.0
      */
     public function createFile($relativePath, $contents)
     {

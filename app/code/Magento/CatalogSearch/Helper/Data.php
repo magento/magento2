@@ -9,7 +9,6 @@ namespace Magento\CatalogSearch\Helper;
  * Catalog search helper
  *
  * @api
- * @since 2.0.0
  */
 class Data extends \Magento\Search\Helper\Data
 {
@@ -17,7 +16,6 @@ class Data extends \Magento\Search\Helper\Data
      * Retrieve advanced search URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAdvancedSearchUrl()
     {

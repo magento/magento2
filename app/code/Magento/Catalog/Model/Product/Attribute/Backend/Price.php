@@ -14,7 +14,6 @@ use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
  * @api
  *
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -22,7 +21,6 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Catalog helper
      *
      * @var \Magento\Catalog\Helper\Data
-     * @since 2.0.0
      */
     protected $_helper;
 
@@ -30,7 +28,6 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -38,7 +35,6 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Currency factory
      *
      * @var \Magento\Directory\Model\CurrencyFactory
-     * @since 2.0.0
      */
     protected $_currencyFactory;
 
@@ -46,13 +42,11 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Core config model
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @var \Magento\Framework\Locale\FormatInterface
-     * @since 2.0.0
      */
     protected $localeFormat;
 
@@ -69,7 +63,6 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param ScopeOverriddenValue|null $scopeOverriddenValue
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
@@ -94,7 +87,6 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return $this
-     * @since 2.0.0
      */
     public function setAttribute($attribute)
     {
@@ -108,7 +100,6 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return $this
-     * @since 2.0.0
      */
     public function setScope($attribute)
     {
@@ -131,7 +122,6 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param \Magento\Catalog\Model\Product $object
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave($object)
     {
@@ -176,7 +166,6 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param \Magento\Catalog\Model\Product $object
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
-     * @since 2.0.0
      */
     public function validate($object)
     {
@@ -199,7 +188,6 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param mixed $value
      * @return bool
-     * @since 2.0.0
      */
     protected function isPositiveOrZero($value)
     {

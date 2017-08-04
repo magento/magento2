@@ -7,7 +7,6 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -15,43 +14,36 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Catalog\Model\Product\LinkFactory
-     * @since 2.0.0
      */
     protected $_linkFactory;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory]
-     * @since 2.0.0
      */
     protected $_setsFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $_productFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product\Type
-     * @since 2.0.0
      */
     protected $_type;
 
     /**
      * @var \Magento\Catalog\Model\Product\Attribute\Source\Status
-     * @since 2.0.0
      */
     protected $_status;
 
     /**
      * @var \Magento\Catalog\Model\Product\Visibility
-     * @since 2.0.0
      */
     protected $_visibility;
 
@@ -68,7 +60,6 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -96,7 +87,6 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
      * Set grid params
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -116,7 +106,6 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
      * Retirve currently edited product model
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -128,7 +117,6 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param object $column
      * @return $this
-     * @since 2.0.0
      */
     protected function _addColumnFilterToCollection($column)
     {
@@ -155,7 +143,6 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
      * Checks when this block is readonly
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isReadonly()
     {
@@ -166,7 +153,6 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare collection
      *
      * @return \Magento\Backend\Block\Widget\Grid\Extended
-     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -193,7 +179,6 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -332,7 +317,6 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
      * Rerieve grid URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getGridUrl()
     {
@@ -350,7 +334,6 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
      * Retrieve selected upsell products
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getSelectedProducts()
     {
@@ -365,7 +348,6 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
      * Retrieve upsell products
      *
      * @return array
-     * @since 2.0.0
      */
     public function getSelectedUpsellProducts()
     {
@@ -382,7 +364,6 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $collection
      * @param \Magento\Backend\Block\Widget\Grid\Column\Extended $column
      * @return $this
-     * @since 2.0.0
      */
     public function filterProductPosition($collection, $column)
     {

@@ -22,19 +22,16 @@ use Magento\Framework\Registry;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Front extends Generic
 {
     /**
      * @var Yesno
-     * @since 2.0.0
      */
     protected $_yesNo;
 
     /**
      * @var PropertyLocker
-     * @since 2.0.0
      */
     private $propertyLocker;
 
@@ -45,7 +42,6 @@ class Front extends Generic
      * @param Yesno $yesNo
      * @param PropertyLocker $propertyLocker
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -64,7 +60,6 @@ class Front extends Generic
      * {@inheritdoc}
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {

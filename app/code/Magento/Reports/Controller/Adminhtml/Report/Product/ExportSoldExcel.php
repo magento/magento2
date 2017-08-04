@@ -13,7 +13,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Product\ExportSoldExcel
  *
- * @since 2.0.0
  */
 class ExportSoldExcel extends \Magento\Reports\Controller\Adminhtml\Report\Product
 {
@@ -28,7 +27,6 @@ class ExportSoldExcel extends \Magento\Reports\Controller\Adminhtml\Report\Produ
      * Export Sold Products report to XML format action
      *
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

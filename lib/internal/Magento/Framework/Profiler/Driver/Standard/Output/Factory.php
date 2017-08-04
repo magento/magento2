@@ -12,7 +12,6 @@ use Magento\Framework\Profiler\Driver\Standard\OutputInterface;
 /**
  * Class \Magento\Framework\Profiler\Driver\Standard\Output\Factory
  *
- * @since 2.0.0
  */
 class Factory
 {
@@ -20,7 +19,6 @@ class Factory
      * Default output type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_defaultOutputType;
 
@@ -28,7 +26,6 @@ class Factory
      * Default output class prefix
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_defaultOutputPrefix;
 
@@ -37,7 +34,6 @@ class Factory
      *
      * @param string $defaultOutputPrefix
      * @param string $defaultOutputType
-     * @since 2.0.0
      */
     public function __construct(
         $defaultOutputPrefix = 'Magento\Framework\Profiler\Driver\Standard\Output\\',
@@ -53,7 +49,6 @@ class Factory
      * @param array $config
      * @return OutputInterface
      * @throws \InvalidArgumentException If driver cannot be created
-     * @since 2.0.0
      */
     public function create(array $config)
     {

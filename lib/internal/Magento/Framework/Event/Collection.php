@@ -16,7 +16,6 @@ use Magento\Framework\Event;
 /**
  * Class \Magento\Framework\Event\Collection
  *
- * @since 2.0.0
  */
 class Collection
 {
@@ -24,7 +23,6 @@ class Collection
      * Array of events in the collection
      *
      * @var array
-     * @since 2.0.0
      */
     protected $events;
 
@@ -34,7 +32,6 @@ class Collection
      * For example regex observers will watch all events that
      *
      * @var Observer\Collection
-     * @since 2.0.0
      */
     protected $globalObservers;
 
@@ -43,7 +40,6 @@ class Collection
      *
      * @param array $events
      * @param Observer\Collection $observerCollection
-     * @since 2.0.0
      */
     public function __construct(array $events = [], Observer\Collection $observerCollection = null)
     {
@@ -55,7 +51,6 @@ class Collection
      * Returns all registered events in collection
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllEvents()
     {
@@ -66,7 +61,6 @@ class Collection
      * Returns all registered global observers for the collection of events
      *
      * @return Observer\Collection
-     * @since 2.0.0
      */
     public function getGlobalObservers()
     {
@@ -80,7 +74,6 @@ class Collection
      *
      * @param string $eventName
      * @return Event
-     * @since 2.0.0
      */
     public function getEventByName($eventName)
     {
@@ -95,7 +88,6 @@ class Collection
      *
      * @param Event $event
      * @return $this
-     * @since 2.0.0
      */
     public function addEvent(Event $event)
     {
@@ -111,7 +103,6 @@ class Collection
      *
      * @param Observer $observer
      * @return $this
-     * @since 2.0.0
      */
     public function addObserver(Observer $observer)
     {
@@ -132,7 +123,6 @@ class Collection
      * @param string $eventName
      * @param array $data
      * @return $this
-     * @since 2.0.0
      */
     public function dispatch($eventName, array $data = [])
     {

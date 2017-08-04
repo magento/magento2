@@ -12,7 +12,6 @@ use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * Tax pricing adjustment model
- * @since 2.0.0
  */
 class Adjustment implements AdjustmentInterface
 {
@@ -23,7 +22,6 @@ class Adjustment implements AdjustmentInterface
 
     /**
      * @var TaxHelper
-     * @since 2.0.0
      */
     protected $taxHelper;
 
@@ -31,13 +29,11 @@ class Adjustment implements AdjustmentInterface
      * \Magento\Catalog\Helper\Data
      *
      * @var CatalogHelper
-     * @since 2.0.0
      */
     protected $catalogHelper;
 
     /**
      * @var int|null
-     * @since 2.0.0
      */
     protected $sortOrder;
 
@@ -45,7 +41,6 @@ class Adjustment implements AdjustmentInterface
      * @param TaxHelper $taxHelper
      * @param \Magento\Catalog\Helper\Data $catalogHelper
      * @param int|null $sortOrder
-     * @since 2.0.0
      */
     public function __construct(TaxHelper $taxHelper, \Magento\Catalog\Helper\Data $catalogHelper, $sortOrder = null)
     {
@@ -58,7 +53,6 @@ class Adjustment implements AdjustmentInterface
      * Get adjustment code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAdjustmentCode()
     {
@@ -69,7 +63,6 @@ class Adjustment implements AdjustmentInterface
      * Define if adjustment is included in base price
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isIncludedInBasePrice()
     {
@@ -80,7 +73,6 @@ class Adjustment implements AdjustmentInterface
      * Define if adjustment is included in display price
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isIncludedInDisplayPrice()
     {
@@ -94,7 +86,6 @@ class Adjustment implements AdjustmentInterface
      * @param SaleableInterface $saleableItem
      * @param null|array $context
      * @return float
-     * @since 2.0.0
      */
     public function extractAdjustment($amount, SaleableInterface $saleableItem, $context = [])
     {
@@ -124,7 +115,6 @@ class Adjustment implements AdjustmentInterface
      * @param SaleableInterface $saleableItem
      * @param null|array $context
      * @return float
-     * @since 2.0.0
      */
     public function applyAdjustment($amount, SaleableInterface $saleableItem, $context = [])
     {
@@ -146,7 +136,6 @@ class Adjustment implements AdjustmentInterface
      *
      * @param string $adjustmentCode
      * @return bool
-     * @since 2.0.0
      */
     public function isExcludedWith($adjustmentCode)
     {
@@ -157,7 +146,6 @@ class Adjustment implements AdjustmentInterface
      * Return sort order position
      *
      * @return int
-     * @since 2.0.0
      */
     public function getSortOrder()
     {

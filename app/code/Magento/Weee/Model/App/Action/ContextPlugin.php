@@ -9,61 +9,51 @@ namespace Magento\Weee\Model\App\Action;
 /**
  * Class ContextPlugin
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class ContextPlugin
 {
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var \Magento\Framework\App\Http\Context
-     * @since 2.0.0
      */
     protected $httpContext;
 
     /**
      * @var \Magento\Tax\Helper\Data
-     * @since 2.0.0
      */
     protected $taxHelper;
 
     /**
      * @var \Magento\Weee\Helper\Data
-     * @since 2.0.0
      */
     protected $weeeHelper;
 
     /**
      * @var \Magento\Framework\Module\Manager
-     * @since 2.0.0
      */
     protected $moduleManager;
 
     /**
      * @var \Magento\Weee\Model\Tax
-     * @since 2.0.0
      */
     protected $weeeTax;
 
     /**
      * @var \Magento\PageCache\Model\Config
-     * @since 2.0.0
      */
     protected $cacheConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
@@ -77,7 +67,6 @@ class ContextPlugin
      * @param \Magento\PageCache\Model\Config $cacheConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
@@ -173,7 +162,6 @@ class ContextPlugin
     /**
      * @param string $basedOn
      * @return array
-     * @since 2.0.0
      */
     protected function getWeeeTaxRegion($basedOn)
     {

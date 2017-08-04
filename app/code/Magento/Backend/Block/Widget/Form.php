@@ -11,7 +11,6 @@ namespace Magento\Backend\Block\Widget;
  * @api
  * @deprecated 2.2.0 in favour of UI component implementation
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget
 {
@@ -19,20 +18,17 @@ class Form extends \Magento\Backend\Block\Widget
      * Form Object
      *
      * @var \Magento\Framework\Data\Form
-     * @since 2.0.0
      */
     protected $_form;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Backend::widget/form.phtml';
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(\Magento\Backend\Block\Template\Context $context, array $data = [])
     {
@@ -43,7 +39,6 @@ class Form extends \Magento\Backend\Block\Widget
      * Class constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -59,7 +54,6 @@ class Form extends \Magento\Backend\Block\Widget
      * You can redefine this method in child classes for changing layout
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -89,7 +83,6 @@ class Form extends \Magento\Backend\Block\Widget
      * Get form object
      *
      * @return \Magento\Framework\Data\Form
-     * @since 2.0.0
      */
     public function getForm()
     {
@@ -100,7 +93,6 @@ class Form extends \Magento\Backend\Block\Widget
      * Get form HTML
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFormHtml()
     {
@@ -115,7 +107,6 @@ class Form extends \Magento\Backend\Block\Widget
      *
      * @param \Magento\Framework\Data\Form $form
      * @return $this
-     * @since 2.0.0
      */
     public function setForm(\Magento\Framework\Data\Form $form)
     {
@@ -136,7 +127,6 @@ class Form extends \Magento\Backend\Block\Widget
      * Prepare form before rendering HTML
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -147,7 +137,6 @@ class Form extends \Magento\Backend\Block\Widget
      * This method is called before rendering HTML
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -161,7 +150,6 @@ class Form extends \Magento\Backend\Block\Widget
      * Method will be called after prepareForm and can be used for field values initialization
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initFormValues()
     {
@@ -175,7 +163,6 @@ class Form extends \Magento\Backend\Block\Widget
      * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
      * @param array $exclude attributes that should be skipped
      * @return void
-     * @since 2.0.0
      */
     protected function _setFieldset($attributes, $fieldset, $exclude = [])
     {
@@ -223,7 +210,6 @@ class Form extends \Magento\Backend\Block\Widget
      *
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
      * @return bool
-     * @since 2.0.0
      */
     protected function _isAttributeVisible(\Magento\Eav\Model\Entity\Attribute $attribute)
     {
@@ -237,7 +223,6 @@ class Form extends \Magento\Backend\Block\Widget
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
      * @return void
-     * @since 2.0.0
      */
     protected function _applyTypeSpecificConfig($inputType, $element, \Magento\Eav\Model\Entity\Attribute $attribute)
     {
@@ -265,7 +250,6 @@ class Form extends \Magento\Backend\Block\Widget
      *
      * @param \Magento\Framework\Data\Form\AbstractForm $baseElement
      * @return void
-     * @since 2.0.0
      */
     protected function _addElementTypes(\Magento\Framework\Data\Form\AbstractForm $baseElement)
     {
@@ -279,7 +263,6 @@ class Form extends \Magento\Backend\Block\Widget
      * Retrieve predefined additional element types
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getAdditionalElementTypes()
     {
@@ -292,7 +275,6 @@ class Form extends \Magento\Backend\Block\Widget
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function _getAdditionalElementHtml($element)
     {

@@ -11,13 +11,11 @@ use Zend\View\Model\ViewModel;
 /**
  * Class \Magento\Setup\Controller\AddDatabase
  *
- * @since 2.0.0
  */
 class AddDatabase extends AbstractActionController
 {
     /**
      * @return array|ViewModel
-     * @since 2.0.0
      */
     public function indexAction()
     {

@@ -11,13 +11,11 @@ use Magento\Framework\Search\Request\FilterInterface;
 /**
  * Term Filter
  * @api
- * @since 2.0.0
  */
 class Term extends AbstractKeyValuePair implements FilterInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $field;
 
@@ -26,7 +24,6 @@ class Term extends AbstractKeyValuePair implements FilterInterface
      * @param string|array $value
      * @param string $field
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct($name, $value, $field)
     {
@@ -36,7 +33,6 @@ class Term extends AbstractKeyValuePair implements FilterInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -48,7 +44,6 @@ class Term extends AbstractKeyValuePair implements FilterInterface
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getField()
     {

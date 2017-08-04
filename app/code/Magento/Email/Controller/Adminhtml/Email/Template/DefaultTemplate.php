@@ -9,13 +9,11 @@ namespace Magento\Email\Controller\Adminhtml\Email\Template;
 /**
  * Class \Magento\Email\Controller\Adminhtml\Email\Template\DefaultTemplate
  *
- * @since 2.0.0
  */
 class DefaultTemplate extends \Magento\Email\Controller\Adminhtml\Email\Template
 {
     /**
      * @var \Magento\Email\Model\Template\Config
-     * @since 2.0.0
      */
     private $emailConfig;
 
@@ -31,7 +29,6 @@ class DefaultTemplate extends \Magento\Email\Controller\Adminhtml\Email\Template
      * @param \Magento\Email\Model\Template\Config $emailConfig
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -50,7 +47,6 @@ class DefaultTemplate extends \Magento\Email\Controller\Adminhtml\Email\Template
      *
      * @return void
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     public function execute()
     {

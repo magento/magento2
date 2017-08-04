@@ -14,7 +14,6 @@ use Magento\Framework\View\EntitySpecificHandlesList;
 /**
  * Class \Magento\PageCache\Observer\ProcessLayoutRenderElement
  *
- * @since 2.0.0
  */
 class ProcessLayoutRenderElement implements ObserverInterface
 {
@@ -22,7 +21,6 @@ class ProcessLayoutRenderElement implements ObserverInterface
      * Application config object
      *
      * @var \Magento\PageCache\Model\Config
-     * @since 2.0.0
      */
     private $_config;
 
@@ -30,7 +28,6 @@ class ProcessLayoutRenderElement implements ObserverInterface
      * Is varnish enabled flag
      *
      * @var bool
-     * @since 2.0.0
      */
     private $isVarnishEnabled;
 
@@ -38,7 +35,6 @@ class ProcessLayoutRenderElement implements ObserverInterface
      * Is full page cache enabled flag
      *
      * @var bool
-     * @since 2.0.0
      */
     private $isFullPageCacheEnabled;
 
@@ -67,7 +63,6 @@ class ProcessLayoutRenderElement implements ObserverInterface
      * @param EntitySpecificHandlesList $entitySpecificHandlesList
      * @param Json $jsonSerializer
      * @param Base64Json $base64jsonSerializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\PageCache\Model\Config $config,
@@ -90,7 +85,6 @@ class ProcessLayoutRenderElement implements ObserverInterface
      * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @param \Magento\Framework\View\Layout $layout
      * @return string
-     * @since 2.0.0
      */
     private function _wrapEsi(
         \Magento\Framework\View\Element\AbstractBlock $block,
@@ -116,7 +110,6 @@ class ProcessLayoutRenderElement implements ObserverInterface
      * Is full page cache enabled
      *
      * @return bool
-     * @since 2.0.0
      */
     private function isFullPageCacheEnabled()
     {
@@ -130,7 +123,6 @@ class ProcessLayoutRenderElement implements ObserverInterface
      * Is varnish cache engine enabled
      *
      * @return bool
-     * @since 2.0.0
      */
     private function isVarnishEnabled()
     {
@@ -146,7 +138,6 @@ class ProcessLayoutRenderElement implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

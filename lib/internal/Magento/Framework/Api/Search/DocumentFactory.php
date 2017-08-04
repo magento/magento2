@@ -8,7 +8,6 @@ namespace Magento\Framework\Api\Search;
 /**
  * Class \Magento\Framework\Api\Search\DocumentFactory
  *
- * @since 2.0.0
  */
 class DocumentFactory
 {
@@ -16,7 +15,6 @@ class DocumentFactory
      * Object manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -24,14 +22,12 @@ class DocumentFactory
      * Instance name to create
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_instanceName = null;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -46,7 +42,6 @@ class DocumentFactory
      *
      * @param array $data
      * @return DocumentInterface
-     * @since 2.0.0
      */
     public function create(array $data = [])
     {

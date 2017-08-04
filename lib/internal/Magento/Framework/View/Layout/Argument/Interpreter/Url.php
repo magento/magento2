@@ -10,26 +10,22 @@ use Magento\Framework\UrlInterface;
 
 /**
  * Interpreter that builds URL by input path and optional parameters
- * @since 2.0.0
  */
 class Url implements InterpreterInterface
 {
     /**
      * @var UrlInterface
-     * @since 2.0.0
      */
     private $urlResolver;
 
     /**
      * @var NamedParams
-     * @since 2.0.0
      */
     private $paramsInterpreter;
 
     /**
      * @param UrlInterface $urlResolver
      * @param NamedParams $paramsInterpreter
-     * @since 2.0.0
      */
     public function __construct(UrlInterface $urlResolver, NamedParams $paramsInterpreter)
     {
@@ -41,7 +37,6 @@ class Url implements InterpreterInterface
      * {@inheritdoc}
      * @return string
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function evaluate(array $data)
     {

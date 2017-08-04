@@ -10,44 +10,37 @@ use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
 
 /**
  * Amount base model
- * @since 2.0.0
  */
 class Base implements AmountInterface
 {
     /**
      * @var float
-     * @since 2.0.0
      */
     protected $amount;
 
     /**
      * @var float
-     * @since 2.0.0
      */
     protected $baseAmount;
 
     /**
      * @var float
-     * @since 2.0.0
      */
     protected $totalAdjustmentAmount;
 
     /**
      * @var float[]
-     * @since 2.0.0
      */
     protected $adjustmentAmounts = [];
 
     /**
      * @var AdjustmentInterface[]
-     * @since 2.0.0
      */
     protected $adjustments = [];
 
     /**
      * @param float $amount
      * @param array $adjustmentAmounts
-     * @since 2.0.0
      */
     public function __construct(
         $amount,
@@ -62,7 +55,6 @@ class Base implements AmountInterface
      *
      * @param null|string|array $exclude
      * @return float
-     * @since 2.0.0
      */
     public function getValue($exclude = null)
     {
@@ -86,7 +78,6 @@ class Base implements AmountInterface
      * Return full amount value in string format
      *
      * @return string
-     * @since 2.0.0
      */
     public function __toString()
     {
@@ -97,7 +88,6 @@ class Base implements AmountInterface
      * Return base amount part value
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseAmount()
     {
@@ -112,7 +102,6 @@ class Base implements AmountInterface
      *
      * @param string $adjustmentCode
      * @return bool|float
-     * @since 2.0.0
      */
     public function getAdjustmentAmount($adjustmentCode)
     {
@@ -125,7 +114,6 @@ class Base implements AmountInterface
      * Return sum amount of all applied adjustments
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getTotalAdjustmentAmount()
     {
@@ -139,7 +127,6 @@ class Base implements AmountInterface
      * Return all applied adjustments as array
      *
      * @return float[]
-     * @since 2.0.0
      */
     public function getAdjustmentAmounts()
     {
@@ -151,7 +138,6 @@ class Base implements AmountInterface
      *
      * @param string $adjustmentCode
      * @return bool
-     * @since 2.0.0
      */
     public function hasAdjustment($adjustmentCode)
     {
@@ -162,7 +148,6 @@ class Base implements AmountInterface
      * Calculate base amount
      *
      * @return void
-     * @since 2.0.0
      */
     protected function calculateAmounts()
     {

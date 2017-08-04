@@ -18,7 +18,6 @@ use Psr\Log\LoggerInterface as Logger;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class AbstractDb extends \Magento\Framework\Data\Collection
 {
@@ -26,7 +25,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * DB connection
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected $_conn;
 
@@ -34,7 +32,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Select object
      *
      * @var \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected $_select;
 
@@ -44,7 +41,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Can be used by collections with items without defined
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_idFieldName;
 
@@ -52,7 +48,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * List of bound variables for select
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_bindParams = [];
 
@@ -61,7 +56,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Used for getData method
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_data = null;
 
@@ -69,7 +63,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Fields map for correlation names & real selected fields
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_map = null;
 
@@ -77,7 +70,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Database's statement for fetch item one by one
      *
      * @var \Zend_Db_Statement_Pdo
-     * @since 2.0.0
      */
     protected $_fetchStmt = null;
 
@@ -85,19 +77,16 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Whether orders are rendered
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isOrdersRendered = false;
 
     /**
      * @var Logger
-     * @since 2.0.0
      */
     protected $_logger;
 
     /**
      * @var FetchStrategyInterface
-     * @since 2.0.0
      */
     private $_fetchStrategy;
 
@@ -105,7 +94,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Join processor is set only if extension attributes were joined before the collection was loaded.
      *
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface|null
-     * @since 2.0.0
      */
     protected $extensionAttributesJoinProcessor;
 
@@ -114,7 +102,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param Logger $logger
      * @param FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     * @since 2.0.0
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
@@ -134,7 +121,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Get resource instance.
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @since 2.0.0
      */
     abstract public function getResource();
 
@@ -144,7 +130,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param string $name
      * @param mixed $value
      * @return $this
-     * @since 2.0.0
      */
     public function addBindParam($name, $value)
     {
@@ -157,7 +142,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param string $fieldName
      * @return $this
-     * @since 2.0.0
      */
     protected function _setIdFieldName($fieldName)
     {
@@ -169,7 +153,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Id field name getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getIdFieldName()
     {
@@ -181,7 +164,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param \Magento\Framework\DataObject $item
      * @return mixed
-     * @since 2.0.0
      */
     protected function _getItemId(\Magento\Framework\DataObject $item)
     {
@@ -197,7 +179,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $conn
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function setConnection(\Magento\Framework\DB\Adapter\AdapterInterface $conn)
     {
@@ -211,7 +192,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Get \Magento\Framework\DB\Select instance
      *
      * @return Select
-     * @since 2.0.0
      */
     public function getSelect()
     {
@@ -222,7 +202,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Retrieve connection object
      *
      * @return AdapterInterface
-     * @since 2.0.0
      */
     public function getConnection()
     {
@@ -233,7 +212,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Get collection size
      *
      * @return int
-     * @since 2.0.0
      */
     public function getSize()
     {
@@ -248,7 +226,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Get SQL for get record count
      *
      * @return Select
-     * @since 2.0.0
      */
     public function getSelectCountSql()
     {
@@ -276,7 +253,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param   bool $stringMode
      * @return  string|\Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     public function getSelectSql($stringMode = false)
     {
@@ -292,7 +268,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param   string $field
      * @param   string $direction
      * @return  $this
-     * @since 2.0.0
      */
     public function setOrder($field, $direction = self::SORT_ORDER_DESC)
     {
@@ -305,7 +280,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param string $field
      * @param string $direction
      * @return $this
-     * @since 2.0.0
      */
     public function addOrder($field, $direction = self::SORT_ORDER_DESC)
     {
@@ -318,7 +292,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param string $field
      * @param string $direction
      * @return $this
-     * @since 2.0.0
      */
     public function unshiftOrder($field, $direction = self::SORT_ORDER_DESC)
     {
@@ -332,7 +305,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param string $direction
      * @param bool $unshift
      * @return $this
-     * @since 2.0.0
      */
     private function _setOrder($field, $direction, $unshift = false)
     {
@@ -358,7 +330,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Render sql select conditions
      *
      * @return  $this
-     * @since 2.0.0
      */
     protected function _renderFilters()
     {
@@ -394,7 +365,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Hook for operations before rendering filters
      * @return void
-     * @since 2.0.0
      */
     protected function _renderFiltersBefore()
     {
@@ -408,7 +378,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param string|array $field
      * @param null|string|array $condition
      * @return $this
-     * @since 2.0.0
      */
     public function addFieldToFilter($field, $condition = null)
     {
@@ -434,7 +403,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param   string|array $field
      * @param   null|string|array $condition
      * @return  string
-     * @since 2.0.0
      */
     protected function _translateCondition($field, $condition)
     {
@@ -447,7 +415,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param   string $field
      * @return  string
-     * @since 2.0.0
      */
     protected function _getMappedField($field)
     {
@@ -466,7 +433,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Retrieve mapper data
      *
      * @return array|bool|null
-     * @since 2.0.0
      */
     protected function _getMapper()
     {
@@ -507,7 +473,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param string $fieldName
      * @param integer|string|array $condition
      * @return string
-     * @since 2.0.0
      */
     protected function _getConditionSql($fieldName, $condition)
     {
@@ -519,7 +484,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param string $fieldName
      * @return string
-     * @since 2.0.0
      */
     protected function _getConditionFieldName($fieldName)
     {
@@ -530,7 +494,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Render sql select orders
      *
      * @return  $this
-     * @since 2.0.0
      */
     protected function _renderOrders()
     {
@@ -548,7 +511,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Render sql select limit
      *
      * @return  $this
-     * @since 2.0.0
      */
     protected function _renderLimit()
     {
@@ -564,7 +526,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param   bool $flag
      * @return  $this
-     * @since 2.0.0
      */
     public function distinct($flag)
     {
@@ -576,7 +537,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Before load action
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeLoad()
     {
@@ -589,7 +549,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param   bool $printQuery
      * @param   bool $logQuery
      * @return  $this
-     * @since 2.0.0
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -606,7 +565,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param   bool $printQuery
      * @param   bool $logQuery
      * @return  $this
-     * @since 2.0.0
      */
     public function loadWithFilter($printQuery = false, $logQuery = false)
     {
@@ -636,7 +594,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param \Magento\Framework\DataObject $item
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     protected function beforeAddLoadedItem(\Magento\Framework\DataObject $item)
     {
@@ -648,7 +605,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * and moves the internal data pointer ahead
      *
      * @return  \Magento\Framework\Model\AbstractModel|bool
-     * @since 2.0.0
      */
     public function fetchItem()
     {
@@ -677,7 +633,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param string $labelField
      * @param array $additional
      * @return array
-     * @since 2.0.0
      */
     protected function _toOptionArray($valueField = null, $labelField = 'name', $additional = [])
     {
@@ -693,7 +648,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param   string $valueField
      * @param   string $labelField
      * @return  array
-     * @since 2.0.0
      */
     protected function _toOptionHash($valueField = null, $labelField = 'name')
     {
@@ -707,7 +661,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Get all data array for collection
      *
      * @return array
-     * @since 2.0.0
      */
     public function getData()
     {
@@ -724,7 +677,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Process loaded collection data
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterLoadData()
     {
@@ -735,7 +687,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Reset loaded for collection data array
      *
      * @return $this
-     * @since 2.0.0
      */
     public function resetData()
     {
@@ -747,7 +698,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Process loaded collection
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -760,7 +710,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
-     * @since 2.0.0
      */
     public function loadData($printQuery = false, $logQuery = false)
     {
@@ -774,7 +723,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param   bool $logQuery
      * @param   string $sql
      * @return  $this
-     * @since 2.0.0
      */
     public function printLogQuery($printQuery = false, $logQuery = false, $sql = null)
     {
@@ -793,7 +741,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param string $sql
      * @return void
-     * @since 2.0.0
      */
     protected function _logQuery($sql)
     {
@@ -804,7 +751,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Reset collection
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _reset()
     {
@@ -822,7 +768,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param Select $select
      * @return array
-     * @since 2.0.0
      */
     protected function _fetchAll(Select $select)
     {
@@ -845,7 +790,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param string $alias
      * @param string $group default 'fields'
      * @return $this
-     * @since 2.0.0
      */
     public function addFilterToMap($filter, $alias, $group = 'fields')
     {
@@ -863,7 +807,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Clone $this->_select during cloning collection, otherwise both collections will share the same $this->_select
      *
      * @return void
-     * @since 2.0.0
      */
     public function __clone()
     {
@@ -876,7 +819,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Init select
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _initSelect()
     {
@@ -889,7 +831,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param JoinDataInterface $join
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @return $this
-     * @since 2.0.0
      */
     public function joinExtensionAttribute(
         JoinDataInterface $join,
@@ -921,7 +862,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Get collection item object class name.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getItemObjectClass()
     {
@@ -933,7 +873,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @return string
      * @throws \LogicException
-     * @since 2.0.0
      */
     private function getMainTableAlias()
     {
@@ -947,7 +886,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
 
     /**
      * @inheritdoc
-     * @since 2.1.0
+     * @since 2.0.9
      */
     public function __sleep()
     {
@@ -959,7 +898,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
 
     /**
      * @inheritdoc
-     * @since 2.1.0
+     * @since 2.0.9
      */
     public function __wakeup()
     {

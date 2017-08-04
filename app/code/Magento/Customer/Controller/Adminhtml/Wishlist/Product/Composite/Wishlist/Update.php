@@ -11,7 +11,6 @@ use Exception;
 /**
  * Class \Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite\Wishlist\Update
  *
- * @since 2.0.0
  */
 class Update extends \Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite\Wishlist
 {
@@ -19,7 +18,6 @@ class Update extends \Magento\Customer\Controller\Adminhtml\Wishlist\Product\Com
      * IFrame handler for submitted configuration for wishlist item.
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

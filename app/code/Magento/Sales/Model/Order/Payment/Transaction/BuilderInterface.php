@@ -14,7 +14,6 @@ use Magento\Sales\Api\Data\TransactionInterface;
  * Interface BuilderInterface
  * Create transaction,
  * prepare its insertion into hierarchy and add its information to payment and comments
- * @since 2.0.0
  */
 interface BuilderInterface
 {
@@ -23,7 +22,6 @@ interface BuilderInterface
      *
      * @param OrderPaymentInterface $payment
      * @return $this
-     * @since 2.0.0
      */
     public function setPayment(OrderPaymentInterface $payment);
 
@@ -32,7 +30,6 @@ interface BuilderInterface
      *
      * @param OrderInterface $order
      * @return $this
-     * @since 2.0.0
      */
     public function setOrder(OrderInterface $order);
 
@@ -44,7 +41,6 @@ interface BuilderInterface
      *
      * @param \Magento\Sales\Model\AbstractModel $document
      * @return $this
-     * @since 2.0.0
      */
     public function setSalesDocument(\Magento\Sales\Model\AbstractModel $document);
 
@@ -54,7 +50,6 @@ interface BuilderInterface
      *
      * @param bool $failSafe
      * @return $this
-     * @since 2.0.0
      */
     public function setFailSafe($failSafe);
 
@@ -63,7 +58,6 @@ interface BuilderInterface
      *
      * @param string $message
      * @return $this
-     * @since 2.0.0
      */
     public function setMessage($message);
 
@@ -73,7 +67,6 @@ interface BuilderInterface
      *
      * @param string|null $transactionId
      * @return $this
-     * @since 2.0.0
      */
     public function setTransactionId($transactionId);
 
@@ -82,7 +75,6 @@ interface BuilderInterface
      *
      * @param array $value
      * @return $this
-     * @since 2.0.0
      */
     public function setAdditionalInformation(array $value);
 
@@ -92,7 +84,6 @@ interface BuilderInterface
      * @param string $key
      * @param string $value
      * @return $this
-     * @since 2.0.0
      */
     public function addAdditionalInformation($key, $value);
 
@@ -100,7 +91,6 @@ interface BuilderInterface
      * Resets state
      *
      * @return $this
-     * @since 2.0.0
      */
     public function reset();
 
@@ -110,7 +100,6 @@ interface BuilderInterface
      *
      * @param string $type
      * @return TransactionInterface
-     * @since 2.0.0
      */
     public function build($type);
 }

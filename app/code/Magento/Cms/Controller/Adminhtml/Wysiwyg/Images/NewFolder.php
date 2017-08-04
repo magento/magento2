@@ -9,13 +9,11 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 /**
  * Class \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\NewFolder
  *
- * @since 2.0.0
  */
 class NewFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
@@ -23,7 +21,6 @@ class NewFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -38,7 +35,6 @@ class NewFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      * New folder action
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -14,7 +14,6 @@ use Magento\Sales\Model\Order;
 /**
  * Website Payments Pro Hosted Solution payment gateway model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Hostedpro extends Direct
 {
@@ -37,19 +36,16 @@ class Hostedpro extends Direct
      * Payment method code
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_code = Config::METHOD_HOSTEDPRO;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_formBlockType = \Magento\Paypal\Block\Hosted\Pro\Form::class;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_infoBlockType = \Magento\Paypal\Block\Hosted\Pro\Info::class;
 
@@ -57,7 +53,6 @@ class Hostedpro extends Direct
      * Availability option
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_canUseInternal = false;
 
@@ -65,7 +60,6 @@ class Hostedpro extends Direct
      * Availability option
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_canSaveCc = false;
 
@@ -73,7 +67,6 @@ class Hostedpro extends Direct
      * Availability option
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isInitializeNeeded = true;
 
@@ -103,7 +96,6 @@ class Hostedpro extends Direct
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -152,7 +144,6 @@ class Hostedpro extends Direct
      * We do not have to check the availability of card types.
      *
      * @return true
-     * @since 2.0.0
      */
     public function getAllowedCcTypes()
     {
@@ -164,7 +155,6 @@ class Hostedpro extends Direct
      * use default country if it not specified in General settings
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMerchantCountry()
     {
@@ -175,7 +165,6 @@ class Hostedpro extends Direct
      * Do not validate payment form using server methods
      *
      * @return true
-     * @since 2.0.0
      */
     public function validate()
     {
@@ -188,7 +177,6 @@ class Hostedpro extends Direct
      * @param string $paymentAction
      * @param \Magento\Framework\DataObject $stateObject
      * @return void
-     * @since 2.0.0
      */
     public function initialize($paymentAction, $stateObject)
     {
@@ -288,7 +276,6 @@ class Hostedpro extends Direct
      *
      * @param int|null $storeId
      * @return string
-     * @since 2.0.0
      */
     public function getReturnUrl($storeId = null)
     {
@@ -300,7 +287,6 @@ class Hostedpro extends Direct
      *
      * @param int|null $storeId
      * @return string
-     * @since 2.0.0
      */
     public function getNotifyUrl($storeId = null)
     {
@@ -312,7 +298,6 @@ class Hostedpro extends Direct
      *
      * @param int|null $storeId
      * @return string
-     * @since 2.0.0
      */
     public function getCancelUrl($storeId = null)
     {

@@ -14,7 +14,6 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\GroupPri
 /**
  * Class \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice
  *
- * @since 2.0.0
  */
 abstract class AbstractGroupPrice extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -24,7 +23,6 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\ResourceModel
      * @param int $productId
      * @param int $websiteId
      * @return array
-     * @since 2.0.0
      */
     public function loadPriceData($productId, $websiteId = null)
     {
@@ -83,7 +81,6 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\ResourceModel
      *
      * @param array $columns
      * @return array
-     * @since 2.0.0
      */
     protected function _loadPriceDataColumns($columns)
     {
@@ -95,7 +92,6 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\ResourceModel
      *
      * @param \Magento\Framework\DB\Select $select
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function _loadPriceDataSelect($select)
     {
@@ -109,7 +105,6 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\ResourceModel
      * @param int $websiteId
      * @param int $priceId
      * @return int The number of affected rows
-     * @since 2.0.0
      */
     public function deletePriceData($productId, $websiteId = null, $priceId = null)
     {
@@ -135,7 +130,6 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\ResourceModel
      *
      * @param \Magento\Framework\DataObject $priceObject
      * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice
-     * @since 2.0.0
      */
     public function savePriceData(\Magento\Framework\DataObject $priceObject)
     {

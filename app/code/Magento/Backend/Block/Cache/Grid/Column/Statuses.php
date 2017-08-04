@@ -9,13 +9,11 @@ namespace Magento\Backend\Block\Cache\Grid\Column;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Statuses extends \Magento\Backend\Block\Widget\Grid\Column
 {
     /**
      * @var \Magento\Framework\App\Cache\TypeListInterface
-     * @since 2.0.0
      */
     protected $_cacheTypeList;
 
@@ -23,7 +21,6 @@ class Statuses extends \Magento\Backend\Block\Widget\Grid\Column
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -38,7 +35,6 @@ class Statuses extends \Magento\Backend\Block\Widget\Grid\Column
      * Add to column decorated status
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFrameCallback()
     {
@@ -54,7 +50,6 @@ class Statuses extends \Magento\Backend\Block\Widget\Grid\Column
      * @param bool $isExport
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function decorateStatus($value, $row, $column, $isExport)
     {

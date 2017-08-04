@@ -12,13 +12,11 @@ use Magento\Framework\App\RequestInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class Onepage extends Action
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_sectionUpdateFunctions = [
         'payment-method' => '_getPaymentMethodsHtml',
@@ -28,7 +26,6 @@ abstract class Onepage extends Action
 
     /**
      * @var \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     protected $_order;
 
@@ -36,61 +33,51 @@ abstract class Onepage extends Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Framework\Translate\InlineInterface
-     * @since 2.0.0
      */
     protected $_translateInline;
 
     /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator
-     * @since 2.0.0
      */
     protected $_formKeyValidator;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
-     * @since 2.0.0
      */
     protected $layoutFactory;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @var \Magento\Framework\View\Result\LayoutFactory
-     * @since 2.0.0
      */
     protected $resultLayoutFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
-     * @since 2.0.0
      */
     protected $resultRawFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
@@ -112,7 +99,6 @@ abstract class Onepage extends Action
      *
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -154,7 +140,6 @@ abstract class Onepage extends Action
      * @param RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
      * @throws \Magento\Framework\Exception\NotFoundException
-     * @since 2.0.0
      */
     public function dispatch(RequestInterface $request)
     {
@@ -178,7 +163,6 @@ abstract class Onepage extends Action
 
     /**
      * @return \Magento\Framework\Controller\Result\Raw
-     * @since 2.0.0
      */
     protected function _ajaxRedirectResponse()
     {
@@ -192,7 +176,6 @@ abstract class Onepage extends Action
      * Validate ajax request and redirect on failure
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _expireAjax()
     {
@@ -216,7 +199,6 @@ abstract class Onepage extends Action
      *
      * @param string $handle
      * @return string
-     * @since 2.0.0
      */
     protected function _getHtmlByHandle($handle)
     {
@@ -234,7 +216,6 @@ abstract class Onepage extends Action
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _getShippingMethodsHtml()
     {
@@ -246,7 +227,6 @@ abstract class Onepage extends Action
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _getPaymentMethodsHtml()
     {
@@ -258,7 +238,6 @@ abstract class Onepage extends Action
      *
      * @param string $checkoutStep
      * @return mixed
-     * @since 2.0.0
      */
     protected function getProgressHtml($checkoutStep = '')
     {
@@ -276,7 +255,6 @@ abstract class Onepage extends Action
      *
      * @return \Magento\Checkout\Model\Type\Onepage
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getOnepage()
     {
@@ -287,7 +265,6 @@ abstract class Onepage extends Action
      * Check can page show for unregistered users
      *
      * @return boolean
-     * @since 2.0.0
      */
     protected function _canShowForUnregisteredUsers()
     {

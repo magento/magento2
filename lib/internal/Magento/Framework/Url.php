@@ -62,7 +62,6 @@ use Magento\Framework\Url\HostChecker;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
- * @since 2.0.0
  */
 class Url extends \Magento\Framework\DataObject implements \Magento\Framework\UrlInterface
 {
@@ -70,7 +69,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Configuration data cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected static $_configDataCache;
 
@@ -78,7 +76,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Reserved Route parameter keys
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_reservedRouteParams = [
         '_scope',
@@ -98,7 +95,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_scopeType;
 
@@ -106,7 +102,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Request instance
      *
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $_request;
 
@@ -114,7 +109,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Use Session ID for generate URL
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_useSession;
 
@@ -122,19 +116,16 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Url security info list
      *
      * @var \Magento\Framework\Url\SecurityInfoInterface
-     * @since 2.0.0
      */
     protected $_urlSecurityInfo;
 
     /**
      * @var \Magento\Framework\Session\Generic
-     * @since 2.0.0
      */
     protected $_session;
 
     /**
      * @var \Magento\Framework\Session\SidResolverInterface
-     * @since 2.0.0
      */
     protected $_sidResolver;
 
@@ -142,31 +133,26 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Constructor
      *
      * @var \Magento\Framework\App\Route\ConfigInterface
-     * @since 2.0.0
      */
     protected $_routeConfig;
 
     /**
      * @var \Magento\Framework\Url\RouteParamsResolverInterface
-     * @since 2.0.0
      */
     private $_routeParamsResolver;
 
     /**
      * @var \Magento\Framework\Url\RouteParamsResolverFactory
-     * @since 2.0.0
      */
     private $_routeParamsResolverFactory;
 
     /**
      * @var \Magento\Framework\Url\ScopeResolverInterface
-     * @since 2.0.0
      */
     protected $_scopeResolver;
 
     /**
      * @var \Magento\Framework\Url\QueryParamsResolverInterface
-     * @since 2.0.0
      */
     protected $_queryParamsResolver;
 
@@ -174,13 +160,11 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Cache urls requested by getUrl method
      *
      * @var array
-     * @since 2.0.0
      */
     private $cacheUrl = [];
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -230,7 +214,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param HostChecker|null $hostChecker
      * @param Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Route\ConfigInterface $routeConfig,
@@ -270,7 +253,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param   string $url
      * @return  \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected function _parseUrl($url)
     {
@@ -299,7 +281,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param bool $useSession
      * @return \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     public function setUseSession($useSession)
     {
@@ -312,7 +293,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getUseSession()
     {
@@ -328,7 +308,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param string $key
      * @param string|null $prefix
      * @return string
-     * @since 2.0.0
      */
     public function getConfigData($key, $prefix = null)
     {
@@ -351,7 +330,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param string $path
      * @return string
-     * @since 2.0.0
      */
     protected function _getConfigCacheId($path)
     {
@@ -363,7 +341,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param string $path
      * @return null|string
-     * @since 2.0.0
      */
     protected function _getConfig($path)
     {
@@ -379,7 +356,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     public function setRequest(\Magento\Framework\App\RequestInterface $request)
     {
@@ -391,7 +367,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Zend request object
      *
      * @return \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected function _getRequest()
     {
@@ -402,7 +377,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Retrieve URL type
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getType()
     {
@@ -416,7 +390,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Retrieve is secure mode URL
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _isSecure()
     {
@@ -452,7 +425,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param mixed $params
      * @return \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     public function setScope($params)
     {
@@ -465,7 +437,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Get current scope for the url instance
      *
      * @return \Magento\Framework\Url\ScopeInterface
-     * @since 2.0.0
      */
     protected function _getScope()
     {
@@ -480,7 +451,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param array $params
      * @return string
-     * @since 2.0.0
      */
     public function getBaseUrl($params = [])
     {
@@ -526,7 +496,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param string $data
      * @return \Magento\Framework\UrlInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _setRoutePath($data)
     {
@@ -578,7 +547,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Retrieve action path
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getActionPath()
     {
@@ -609,7 +577,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param array $routeParams
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _getRoutePath($routeParams = [])
     {
@@ -638,7 +605,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param string $data
      * @return \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected function _setRouteName($data)
     {
@@ -657,7 +623,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Retrieve route front name
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getRouteFrontName()
     {
@@ -676,7 +641,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param mixed $default
      * @return string|null
-     * @since 2.0.0
      */
     protected function _getRouteName($default = null)
     {
@@ -690,7 +654,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param string $data
      * @return \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected function _setControllerName($data)
     {
@@ -707,7 +670,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param mixed $default
      * @return string|null
-     * @since 2.0.0
      */
     protected function _getControllerName($default = null)
     {
@@ -720,7 +682,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param string $data
      * @return \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected function _setActionName($data)
     {
@@ -738,7 +699,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param mixed $default
      * @return string|null
-     * @since 2.0.0
      */
     protected function _getActionName($default = null)
     {
@@ -751,7 +711,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param array $data
      * @param boolean $unsetOldParams
      * @return \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected function _setRouteParams(array $data, $unsetOldParams = true)
     {
@@ -763,7 +722,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Retrieve route params
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getRouteParams()
     {
@@ -776,7 +734,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param string $routePath
      * @param array $routeParams
      * @return string
-     * @since 2.0.0
      */
     public function getRouteUrl($routePath = null, $routeParams = null)
     {
@@ -805,7 +762,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Add session param
      *
      * @return \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     public function addSessionParam()
     {
@@ -821,7 +777,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param mixed $data
      * @return \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected function _setQuery($data)
     {
@@ -833,7 +788,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param bool $escape "&" escape flag
      * @return string
-     * @since 2.0.0
      */
     protected function _getQuery($escape = false)
     {
@@ -845,7 +799,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param array $data
      * @return \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     public function addQueryParams(array $data)
     {
@@ -859,7 +812,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param string $key
      * @param mixed $data
      * @return \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     public function setQueryParam($key, $data)
     {
@@ -871,7 +823,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Retrieve URL fragment
      *
      * @return string|null
-     * @since 2.0.0
      */
     protected function _getFragment()
     {
@@ -886,7 +837,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @return  string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function getUrl($routePath = null, $routeParams = null)
     {
@@ -940,7 +890,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @return  string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     private function createUrl($routePath = null, array $routeParams = null)
     {
@@ -1025,7 +974,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param string $url
      *
      * @return \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected function _prepareSessionUrl($url)
     {
@@ -1046,7 +994,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param string $url
      * @return string
-     * @since 2.0.0
      */
     public function getRebuiltUrl($url)
     {
@@ -1080,7 +1027,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param string $value
      * @return string
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     public function escape($value)
     {
@@ -1097,7 +1043,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param string $url
      * @param array $params
      * @return string
-     * @since 2.0.0
      */
     public function getDirectUrl($url, $params = [])
     {
@@ -1110,7 +1055,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param string $html
      * @return string
-     * @since 2.0.0
      */
     public function sessionUrlVar($html)
     {
@@ -1145,7 +1089,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param bool $secure
      * @return bool
-     * @since 2.0.0
      */
     public function useSessionIdForUrl($secure = false)
     {
@@ -1170,7 +1113,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Check if users originated URL is one of the domain URLs assigned to scopes
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isOwnOriginUrl()
     {
@@ -1183,7 +1125,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param string $url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRedirectUrl($url)
     {
@@ -1200,7 +1141,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Retrieve current url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCurrentUrl()
     {
@@ -1225,7 +1165,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Get Route Params Resolver
      *
      * @return Url\RouteParamsResolverInterface
-     * @since 2.0.0
      */
     protected function getRouteParamsResolver()
     {

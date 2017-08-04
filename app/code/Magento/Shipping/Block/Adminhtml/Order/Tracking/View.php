@@ -9,13 +9,11 @@ namespace Magento\Shipping\Block\Adminhtml\Order\Tracking;
  * Shipment tracking control form
  *
  * @api
- * @since 2.0.0
  */
 class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
 {
     /**
      * @var \Magento\Shipping\Model\CarrierFactory
-     * @since 2.0.0
      */
     protected $_carrierFactory;
 
@@ -25,7 +23,6 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -42,7 +39,6 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
      * Prepares layout of block
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -58,7 +54,6 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
      * Retrieve save url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSubmitUrl()
     {
@@ -69,7 +64,6 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
      * Retrieve save button html
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSaveButtonHtml()
     {
@@ -81,7 +75,6 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
      *
      * @param \Magento\Sales\Model\Order\Shipment\Track $track
      * @return string
-     * @since 2.0.0
      */
     public function getRemoveUrl($track)
     {
@@ -94,7 +87,6 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
     /**
      * @param string $code
      * @return \Magento\Framework\Phrase|string|bool
-     * @since 2.0.0
      */
     public function getCarrierTitle($code)
     {

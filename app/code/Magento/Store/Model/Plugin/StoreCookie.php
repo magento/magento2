@@ -17,25 +17,21 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Class StoreCookie
- * @since 2.0.0
  */
 class StoreCookie
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var StoreCookieManagerInterface
-     * @since 2.0.0
      */
     protected $storeCookieManager;
 
     /**
      * @var StoreRepositoryInterface
-     * @since 2.0.0
      */
     protected $storeRepository;
 
@@ -50,7 +46,6 @@ class StoreCookie
      * @param StoreCookieManagerInterface $storeCookieManager
      * @param StoreRepositoryInterface $storeRepository
      * @param StoreResolverInterface $storeResolver
-     * @since 2.0.0
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -71,7 +66,7 @@ class StoreCookie
      * @param \Magento\Framework\App\RequestInterface $request
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
+     * @since 2.0.1
      */
     public function beforeDispatch(
         \Magento\Framework\App\FrontController $subject,

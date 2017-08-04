@@ -9,19 +9,16 @@ namespace Magento\Quote\Model\Quote\Address;
  * @method string getCode()
  *
  * @api
- * @since 2.0.0
  */
 class Total extends \Magento\Framework\DataObject
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $totalAmounts = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $baseTotalAmounts = [];
 
@@ -55,7 +52,6 @@ class Total extends \Magento\Framework\DataObject
      * @param string $code
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function setTotalAmount($code, $amount)
     {
@@ -74,7 +70,6 @@ class Total extends \Magento\Framework\DataObject
      * @param string $code
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseTotalAmount($code, $amount)
     {
@@ -93,7 +88,6 @@ class Total extends \Magento\Framework\DataObject
      * @param string $code
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function addTotalAmount($code, $amount)
     {
@@ -109,7 +103,6 @@ class Total extends \Magento\Framework\DataObject
      * @param string $code
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function addBaseTotalAmount($code, $amount)
     {
@@ -124,7 +117,6 @@ class Total extends \Magento\Framework\DataObject
      *
      * @param   string $code
      * @return  float|int
-     * @since 2.0.0
      */
     public function getTotalAmount($code)
     {
@@ -140,7 +132,6 @@ class Total extends \Magento\Framework\DataObject
      *
      * @param   string $code
      * @return  float|int
-     * @since 2.0.0
      */
     public function getBaseTotalAmount($code)
     {
@@ -157,7 +148,6 @@ class Total extends \Magento\Framework\DataObject
      * Get all total amount values
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllTotalAmounts()
     {
@@ -168,7 +158,6 @@ class Total extends \Magento\Framework\DataObject
      * Get all total amount values in base currency
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllBaseTotalAmounts()
     {

@@ -8,7 +8,6 @@ namespace Magento\Framework\Composer;
 /**
  * Class \Magento\Framework\Composer\MagentoComponent
  *
- * @since 2.0.0
  */
 class MagentoComponent
 {
@@ -19,7 +18,6 @@ class MagentoComponent
      * @return string[] ['type' => '<type>', 'area' => '<area>', 'name' => '<name>']
      *             Ex.: ['type' => 'module', 'name' => 'catalog']
      *                  ['type' => 'theme', 'area' => 'frontend', 'name' => 'blank']
-     * @since 2.0.0
      */
     public static function matchMagentoComponent($key)
     {

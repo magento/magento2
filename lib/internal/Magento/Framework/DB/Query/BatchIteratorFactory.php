@@ -7,7 +7,7 @@ namespace Magento\Framework\DB\Query;
 
 /**
  * Factory class for @see \Magento\Framework\DB\Query\BatchIterator
- * @since 2.2.0
+ * @since 2.1.3
  */
 class BatchIteratorFactory
 {
@@ -15,7 +15,7 @@ class BatchIteratorFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $objectManager = null;
 
@@ -23,7 +23,7 @@ class BatchIteratorFactory
      * Instance name to create
      *
      * @var string
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $instanceName = null;
 
@@ -32,7 +32,7 @@ class BatchIteratorFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -47,7 +47,7 @@ class BatchIteratorFactory
      *
      * @param array $data
      * @return \Magento\Framework\DB\Query\BatchIteratorInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function create(array $data = [])
     {

@@ -9,7 +9,6 @@ namespace Magento\Store\Model\Data;
  * Class StoreConfig
  *
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\Store\Api\Data\StoreConfigInterface
@@ -35,7 +34,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * Get store id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getId()
     {
@@ -47,7 +45,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      *
      * @param int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setId($id)
     {
@@ -58,7 +55,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * Get store code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCode()
     {
@@ -70,7 +66,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      *
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function setCode($code)
     {
@@ -81,7 +76,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * Get website id of the store
      *
      * @return int
-     * @since 2.0.0
      */
     public function getWebsiteId()
     {
@@ -93,7 +87,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      *
      * @param int $websiteId
      * @return $this
-     * @since 2.0.0
      */
     public function setWebsiteId($websiteId)
     {
@@ -104,7 +97,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * Get store locale
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLocale()
     {
@@ -116,7 +108,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      *
      * @param string $locale
      * @return $this
-     * @since 2.0.0
      */
     public function setLocale($locale)
     {
@@ -127,7 +118,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * Get base currency code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBaseCurrencyCode()
     {
@@ -139,7 +129,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      *
      * @param string $baseCurrencyCode
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseCurrencyCode($baseCurrencyCode)
     {
@@ -150,7 +139,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * Get default display currency code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultDisplayCurrencyCode()
     {
@@ -162,7 +150,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      *
      * @param string $defaultDisplayCurrencyCode
      * @return $this
-     * @since 2.0.0
      */
     public function setDefaultDisplayCurrencyCode($defaultDisplayCurrencyCode)
     {
@@ -173,7 +160,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * Return the unit of weight
      *
      * @return string
-     * @since 2.0.0
      */
     public function getWeightUnit()
     {
@@ -185,7 +171,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      *
      * @param string $weightUnit
      * @return $this
-     * @since 2.0.0
      */
     public function setWeightUnit($weightUnit)
     {
@@ -196,7 +181,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * Get base URL for the store
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBaseUrl()
     {
@@ -208,7 +192,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      *
      * @param string $baseUrl
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseUrl($baseUrl)
     {
@@ -219,7 +202,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * Get base link URL for the store
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBaseLinkUrl()
     {
@@ -231,7 +213,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      *
      * @param string $baseLinkUrl
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseLinkUrl($baseLinkUrl)
     {
@@ -242,7 +223,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * Get timezone of the store
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTimezone()
     {
@@ -254,7 +234,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      *
      * @param string $timezone
      * @return $this
-     * @since 2.0.0
      */
     public function setTimezone($timezone)
     {
@@ -265,7 +244,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * Get base static URL for the store
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBaseStaticUrl()
     {
@@ -277,7 +255,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      *
      * @param string $baseStaticUrl
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseStaticUrl($baseStaticUrl)
     {
@@ -288,7 +265,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * Get base media URL for the store
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBaseMediaUrl()
     {
@@ -300,7 +276,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      *
      * @param string $baseMediaUrl
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseMediaUrl($baseMediaUrl)
     {
@@ -311,7 +286,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * Get secure base URL for the store
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSecureBaseUrl()
     {
@@ -323,7 +297,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      *
      * @param string $secureBaseUrl
      * @return $this
-     * @since 2.0.0
      */
     public function setSecureBaseUrl($secureBaseUrl)
     {
@@ -334,7 +307,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * Get secure base link URL for the store
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSecureBaseLinkUrl()
     {
@@ -346,7 +318,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      *
      * @param string $secureBaseLinkUrl
      * @return $this
-     * @since 2.0.0
      */
     public function setSecureBaseLinkUrl($secureBaseLinkUrl)
     {
@@ -357,7 +328,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * Get secure base static URL for the store
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSecureBaseStaticUrl()
     {
@@ -369,7 +339,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      *
      * @param string $secureBaseStaticUrl
      * @return $this
-     * @since 2.0.0
      */
     public function setSecureBaseStaticUrl($secureBaseStaticUrl)
     {
@@ -380,7 +349,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * Get secure base media URL for the store
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSecureBaseMediaUrl()
     {
@@ -392,7 +360,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      *
      * @param string $secureBaseMediaUrl
      * @return $this
-     * @since 2.0.0
      */
     public function setSecureBaseMediaUrl($secureBaseMediaUrl)
     {
@@ -403,7 +370,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * {@inheritdoc}
      *
      * @return \Magento\Store\Api\Data\StoreConfigExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -415,7 +381,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
      *
      * @param \Magento\Store\Api\Data\StoreConfigExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Store\Api\Data\StoreConfigExtensionInterface $extensionAttributes

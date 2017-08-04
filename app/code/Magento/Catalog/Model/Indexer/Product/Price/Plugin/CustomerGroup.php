@@ -10,7 +10,6 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 /**
  * Class \Magento\Catalog\Model\Indexer\Product\Price\Plugin\CustomerGroup
  *
- * @since 2.0.0
  */
 class CustomerGroup extends AbstractPlugin
 {
@@ -21,7 +20,6 @@ class CustomerGroup extends AbstractPlugin
      * @param string                   $result
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterSave(GroupRepositoryInterface $subject, $result)
     {
@@ -36,7 +34,6 @@ class CustomerGroup extends AbstractPlugin
      * @param string                   $result
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterDelete(GroupRepositoryInterface $subject, $result)
     {
@@ -51,7 +48,6 @@ class CustomerGroup extends AbstractPlugin
      * @param string                   $result
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterDeleteById(GroupRepositoryInterface $subject, $result)
     {

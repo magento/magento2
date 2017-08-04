@@ -10,7 +10,6 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 /**
  * CMS block CRUD interface.
  * @api
- * @since 2.0.0
  */
 interface BlockRepositoryInterface
 {
@@ -20,7 +19,6 @@ interface BlockRepositoryInterface
      * @param \Magento\Cms\Api\Data\BlockInterface $block
      * @return \Magento\Cms\Api\Data\BlockInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function save(Data\BlockInterface $block);
 
@@ -30,7 +28,6 @@ interface BlockRepositoryInterface
      * @param int $blockId
      * @return \Magento\Cms\Api\Data\BlockInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getById($blockId);
 
@@ -40,7 +37,6 @@ interface BlockRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Cms\Api\Data\BlockSearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -50,7 +46,6 @@ interface BlockRepositoryInterface
      * @param \Magento\Cms\Api\Data\BlockInterface $block
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function delete(Data\BlockInterface $block);
 
@@ -61,7 +56,6 @@ interface BlockRepositoryInterface
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function deleteById($blockId);
 }

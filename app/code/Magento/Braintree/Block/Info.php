@@ -10,7 +10,6 @@ use Magento\Payment\Block\ConfigurableInfo;
 
 /**
  * Class Info
- * @since 2.0.0
  */
 class Info extends ConfigurableInfo
 {

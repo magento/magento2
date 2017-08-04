@@ -10,7 +10,6 @@ namespace Magento\GroupedProduct\Model\Order\Pdf\Items\Invoice;
 /**
  * Class \Magento\GroupedProduct\Model\Order\Pdf\Items\Invoice\Grouped
  *
- * @since 2.0.0
  */
 class Grouped extends \Magento\Sales\Model\Order\Pdf\Items\Invoice\DefaultInvoice
 {
@@ -18,7 +17,6 @@ class Grouped extends \Magento\Sales\Model\Order\Pdf\Items\Invoice\DefaultInvoic
      * Draw process
      *
      * @return void
-     * @since 2.0.0
      */
     public function draw()
     {

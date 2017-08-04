@@ -11,7 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.1.0
+ * @since 2.0.1
  */
 class DataProvider
 {
@@ -19,7 +19,7 @@ class DataProvider
      * Searchable attributes cache
      *
      * @var \Magento\Eav\Model\Entity\Attribute[]
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $searchableAttributes;
 
@@ -27,7 +27,7 @@ class DataProvider
      * Index values separator
      *
      * @var string
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $separator = ' | ';
 
@@ -35,7 +35,7 @@ class DataProvider
      * Product Type Instances cache
      *
      * @var array
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $productTypes = [];
 
@@ -43,13 +43,13 @@ class DataProvider
      * Product Emulators cache
      *
      * @var array
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $productEmulators = [];
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $productAttributeCollectionFactory;
 
@@ -57,7 +57,7 @@ class DataProvider
      * Eav config
      *
      * @var \Magento\Eav\Model\Config
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $eavConfig;
 
@@ -65,7 +65,7 @@ class DataProvider
      * Catalog product type
      *
      * @var \Magento\Catalog\Model\Product\Type
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $catalogProductType;
 
@@ -73,7 +73,7 @@ class DataProvider
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $eventManager;
 
@@ -81,25 +81,25 @@ class DataProvider
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $storeManager;
 
     /**
      * @var \Magento\CatalogSearch\Model\ResourceModel\Engine
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $engine;
 
     /**
      * @var Resource
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $resource;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $connection;
 
@@ -124,7 +124,7 @@ class DataProvider
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     * @since 2.1.0
+     * @since 2.0.1
      */
     public function __construct(
         ResourceConnection $resource,
@@ -152,7 +152,7 @@ class DataProvider
      *
      * @param string|string[] $table
      * @return string
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private function getTable($table)
     {
@@ -168,7 +168,7 @@ class DataProvider
      * @param int $lastProductId
      * @param int $limit
      * @return array
-     * @since 2.1.0
+     * @since 2.0.1
      */
     public function getSearchableProducts(
         $storeId,
@@ -206,7 +206,7 @@ class DataProvider
      *
      * @param string $backendType
      * @return \Magento\Eav\Model\Entity\Attribute[]
-     * @since 2.1.0
+     * @since 2.0.1
      */
     public function getSearchableAttributes($backendType = null)
     {
@@ -253,7 +253,7 @@ class DataProvider
      *
      * @param int|string $attribute
      * @return \Magento\Eav\Model\Entity\Attribute
-     * @since 2.1.0
+     * @since 2.0.1
      */
     public function getSearchableAttribute($attribute)
     {
@@ -279,7 +279,7 @@ class DataProvider
      * @param string $field
      * @param string $backendType
      * @return \Zend_Db_Expr
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private function unifyField($field, $backendType = 'varchar')
     {
@@ -298,7 +298,7 @@ class DataProvider
      * @param array $productIds
      * @param array $attributeTypes
      * @return array
-     * @since 2.1.0
+     * @since 2.0.1
      */
     public function getProductAttributes($storeId, array $productIds, array $attributeTypes)
     {
@@ -360,7 +360,7 @@ class DataProvider
      *
      * @param string $typeId
      * @return \Magento\Catalog\Model\Product\Type\AbstractType
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private function getProductTypeInstance($typeId)
     {
@@ -378,7 +378,7 @@ class DataProvider
      * @param int $productId Product Entity Id
      * @param string $typeId Super Product Link Type
      * @return array|null
-     * @since 2.1.0
+     * @since 2.0.1
      */
     public function getProductChildIds($productId, $typeId)
     {
@@ -414,7 +414,7 @@ class DataProvider
      *
      * @param string $typeId
      * @return \Magento\Framework\DataObject
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private function getProductEmulator($typeId)
     {
@@ -434,7 +434,7 @@ class DataProvider
      * @param int $storeId
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.1.0
+     * @since 2.0.1
      */
     public function prepareProductIndex($indexData, $productData, $storeId)
     {
@@ -498,7 +498,7 @@ class DataProvider
      * @param mixed $valueId
      * @param int $storeId
      * @return string
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private function getAttributeValue($attributeId, $valueId, $storeId)
     {

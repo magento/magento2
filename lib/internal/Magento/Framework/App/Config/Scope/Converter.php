@@ -10,7 +10,6 @@ namespace Magento\Framework\App\Config\Scope;
 /**
  * Class \Magento\Framework\App\Config\Scope\Converter
  *
- * @since 2.0.0
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
@@ -19,7 +18,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param array $source
      * @return array
-     * @since 2.0.0
      */
     public function convert($source)
     {
@@ -37,7 +35,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param string $path
      * @param string $value
      * @return void
-     * @since 2.0.0
      */
     protected function _setArrayValue(array &$container, $path, $value)
     {

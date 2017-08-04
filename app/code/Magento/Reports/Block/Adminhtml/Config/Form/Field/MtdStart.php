@@ -11,14 +11,12 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  * Dashboard Month-To-Date Day starts Field Renderer
  *
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class MtdStart extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * @param AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     protected function _getElementHtml(AbstractElement $element)
     {

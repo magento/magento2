@@ -13,7 +13,6 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 /**
  * Class Version
  *
- * @since 2.0.0
  */
 class FormKey
 {
@@ -26,19 +25,16 @@ class FormKey
      * CookieManager
      *
      * @var CookieManagerInterface
-     * @since 2.0.0
      */
     private $cookieManager;
 
     /**
      * @var CookieMetadataFactory
-     * @since 2.0.0
      */
     private $cookieMetadataFactory;
 
     /**
      * @var SessionManagerInterface
-     * @since 2.0.0
      */
     private $sessionManager;
 
@@ -46,7 +42,6 @@ class FormKey
      * @param CookieManagerInterface $cookieManager
      * @param CookieMetadataFactory $cookieMetadataFactory
      * @param SessionManagerInterface $sessionManager
-     * @since 2.0.0
      */
     public function __construct(
         CookieManagerInterface $cookieManager,
@@ -62,7 +57,6 @@ class FormKey
      * Get form key cookie
      *
      * @return string
-     * @since 2.0.0
      */
     public function get()
     {
@@ -73,7 +67,6 @@ class FormKey
      * @param string $value
      * @param PublicCookieMetadata $metadata
      * @return void
-     * @since 2.0.0
      */
     public function set($value, PublicCookieMetadata $metadata)
     {
@@ -86,7 +79,6 @@ class FormKey
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function delete()
     {

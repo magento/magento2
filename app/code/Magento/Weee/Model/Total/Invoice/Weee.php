@@ -12,7 +12,6 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class \Magento\Weee\Model\Total\Invoice\Weee
  *
- * @since 2.0.0
  */
 class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
 {
@@ -20,7 +19,6 @@ class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
      * Weee data
      *
      * @var WeeeHelper
-     * @since 2.0.0
      */
     protected $_weeeData = null;
 
@@ -41,7 +39,6 @@ class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
      * @param WeeeHelper $weeeData
      * @param array $data
      * @param Json|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         WeeeHelper $weeeData,
@@ -61,7 +58,6 @@ class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function collect(\Magento\Sales\Model\Order\Invoice $invoice)
     {

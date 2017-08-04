@@ -9,7 +9,6 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset;
  * Adminhtml block for fieldset of product custom options
  *
  * @api
- * @since 2.0.0
  */
 class Qty extends \Magento\Framework\View\Element\Template
 {
@@ -17,7 +16,6 @@ class Qty extends \Magento\Framework\View\Element\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -25,7 +23,6 @@ class Qty extends \Magento\Framework\View\Element\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -40,7 +37,6 @@ class Qty extends \Magento\Framework\View\Element\Template
      * Constructor for our block with options
      *
      * @return void
-     * @since 2.0.0
      */
     public function _construct()
     {
@@ -52,7 +48,6 @@ class Qty extends \Magento\Framework\View\Element\Template
      * Retrieve product
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -68,7 +63,6 @@ class Qty extends \Magento\Framework\View\Element\Template
      * Return selected qty
      *
      * @return int
-     * @since 2.0.0
      */
     public function getQtyValue()
     {

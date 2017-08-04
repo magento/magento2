@@ -11,13 +11,11 @@ use Magento\Integration\Api\AdminTokenServiceInterface;
 
 /**
  * Class InvalidateToken - used to invalidate/revoke all authentication tokens for a specific user.
- * @since 2.0.0
  */
 class InvalidateToken extends \Magento\User\Controller\Adminhtml\User
 {
     /**
      * @var AdminTokenServiceInterface
-     * @since 2.0.0
      */
     protected $tokenService;
 
@@ -28,7 +26,6 @@ class InvalidateToken extends \Magento\User\Controller\Adminhtml\User
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\User\Model\UserFactory $userFactory
      * @param AdminTokenServiceInterface $tokenService
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -42,7 +39,6 @@ class InvalidateToken extends \Magento\User\Controller\Adminhtml\User
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -9,13 +9,11 @@ use Magento\Payment\Model\Source\Cctype as PaymentCctype;
 
 /**
  * Authorize.net Payment CC Types Source Model
- * @since 2.0.0
  */
 class Cctype extends PaymentCctype
 {
     /**
      * @return string[]
-     * @since 2.0.0
      */
     public function getAllowedTypes()
     {

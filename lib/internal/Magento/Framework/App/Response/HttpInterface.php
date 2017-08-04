@@ -9,7 +9,6 @@ namespace Magento\Framework\App\Response;
  * HTTP response interface
  *
  * @api
- * @since 2.0.0
  */
 interface HttpInterface extends \Magento\Framework\App\ResponseInterface
 {
@@ -18,7 +17,6 @@ interface HttpInterface extends \Magento\Framework\App\ResponseInterface
      *
      * @param int $code
      * @return void
-     * @since 2.0.0
      */
     public function setHttpResponseCode($code);
 

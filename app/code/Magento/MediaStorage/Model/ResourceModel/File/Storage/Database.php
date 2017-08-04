@@ -9,13 +9,11 @@ namespace Magento\MediaStorage\Model\ResourceModel\File\Storage;
  * Class Database
  *
  * @api
- * @since 2.0.0
  */
 class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\AbstractStorage
 {
     /**
      * @var \Magento\Framework\DB\Helper
-     * @since 2.0.0
      */
     protected $_resourceHelper;
 
@@ -23,7 +21,6 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\DB\Helper $resourceHelper
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -38,7 +35,6 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      * Define table name and id field for resource
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -49,7 +45,6 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      * Create database scheme for storing files
      *
      * @return $this
-     * @since 2.0.0
      */
     public function createDatabaseScheme()
     {
@@ -130,7 +125,6 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      *
      * @param  array $row Table row with 'content' key in it
      * @return array
-     * @since 2.0.0
      */
     protected function _decodeFileContent($row)
     {
@@ -143,7 +137,6 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      *
      * @param  array $rows Array of table rows (files), each containing 'content' key
      * @return array
-     * @since 2.0.0
      */
     protected function _decodeAllFilesContent($rows)
     {
@@ -160,7 +153,6 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      * @param  string $filename
      * @param  string $path
      * @return $this
-     * @since 2.0.0
      */
     public function loadByFilename(\Magento\MediaStorage\Model\File\Storage\Database $object, $filename, $path)
     {
@@ -189,7 +181,6 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      * Clear files in storage
      *
      * @return $this
-     * @since 2.0.0
      */
     public function clearFiles()
     {
@@ -205,7 +196,6 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      * @param  int $offset
      * @param  int $count
      * @return array
-     * @since 2.0.0
      */
     public function getFiles($offset = 0, $count = 100)
     {
@@ -230,7 +220,6 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      *
      * @param  array $file
      * @return $this
-     * @since 2.0.0
      */
     public function saveFile($file)
     {
@@ -259,7 +248,6 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      * @param  string $newFilename
      * @param  string $newPath
      * @return $this
-     * @since 2.0.0
      */
     public function renameFile($oldFilename, $oldPath, $newFilename, $newPath)
     {
@@ -282,7 +270,6 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      * @param  string $newFilename
      * @param  string $newPath
      * @return $this
-     * @since 2.0.0
      */
     public function copyFile($oldFilename, $oldPath, $newFilename, $newPath)
     {
@@ -320,7 +307,6 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      * @param string $filename
      * @param string $path
      * @return bool
-     * @since 2.0.0
      */
     public function fileExists($filename, $path)
     {
@@ -346,7 +332,6 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      *
      * @param string $folderName
      * @return void
-     * @since 2.0.0
      */
     public function deleteFolder($folderName = '')
     {
@@ -368,7 +353,6 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      * @param string $filename
      * @param string $directory
      * @return void
-     * @since 2.0.0
      */
     public function deleteFile($filename, $directory)
     {
@@ -385,7 +369,6 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      *
      * @param string $directory
      * @return array
-     * @since 2.0.0
      */
     public function getDirectoryFiles($directory)
     {

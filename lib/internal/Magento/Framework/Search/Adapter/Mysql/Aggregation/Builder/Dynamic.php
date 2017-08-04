@@ -15,26 +15,22 @@ use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 /**
  * Class \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Dynamic
  *
- * @since 2.0.0
  */
 class Dynamic implements BucketInterface
 {
     /**
      * @var Repository
-     * @since 2.0.0
      */
     private $algorithmRepository;
 
     /**
      * @var EntityStorageFactory
-     * @since 2.0.0
      */
     private $entityStorageFactory;
 
     /**
      * @param Repository $algorithmRepository
      * @param EntityStorageFactory $entityStorageFactory
-     * @since 2.0.0
      */
     public function __construct(
         Repository $algorithmRepository,
@@ -46,7 +42,6 @@ class Dynamic implements BucketInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function build(
         DataProviderInterface $dataProvider,
@@ -68,7 +63,6 @@ class Dynamic implements BucketInterface
      *
      * @param array $data
      * @return array
-     * @since 2.0.0
      */
     private function prepareData($data)
     {

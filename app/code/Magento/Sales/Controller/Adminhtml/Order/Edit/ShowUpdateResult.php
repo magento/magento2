@@ -9,7 +9,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Edit;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Edit\ShowUpdateResult
  *
- * @since 2.0.0
  */
 class ShowUpdateResult extends \Magento\Sales\Controller\Adminhtml\Order\Create\ShowUpdateResult
 {

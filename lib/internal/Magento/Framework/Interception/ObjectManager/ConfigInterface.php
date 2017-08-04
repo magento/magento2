@@ -8,7 +8,6 @@ namespace Magento\Framework\Interception\ObjectManager;
 /**
  * Interface \Magento\Framework\Interception\ObjectManager\ConfigInterface
  *
- * @since 2.0.0
  */
 interface ConfigInterface extends \Magento\Framework\ObjectManager\ConfigInterface
 {
@@ -17,7 +16,6 @@ interface ConfigInterface extends \Magento\Framework\ObjectManager\ConfigInterfa
      *
      * @param \Magento\Framework\Interception\ConfigInterface $interceptionConfig
      * @return void
-     * @since 2.0.0
      */
     public function setInterceptionConfig(\Magento\Framework\Interception\ConfigInterface $interceptionConfig);
 
@@ -26,7 +24,6 @@ interface ConfigInterface extends \Magento\Framework\ObjectManager\ConfigInterfa
      *
      * @param string $instanceName
      * @return string
-     * @since 2.0.0
      */
     public function getOriginalInstanceType($instanceName);
 }

@@ -12,20 +12,17 @@ use Magento\Framework\Api\SearchCriteriaInterface as BaseSearchCriteriaInterface
  *
  * @api
  * @package Magento\Framework\Api\Search
- * @since 2.0.0
  */
 interface SearchCriteriaInterface extends BaseSearchCriteriaInterface
 {
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getRequestName();
 
     /**
      * @param string $requestName
      * @return $this
-     * @since 2.0.0
      */
     public function setRequestName($requestName);
 }

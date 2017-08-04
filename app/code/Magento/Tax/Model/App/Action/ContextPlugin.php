@@ -8,31 +8,26 @@ namespace Magento\Tax\Model\App\Action;
 
 /**
  * Class ContextPlugin
- * @since 2.0.0
  */
 class ContextPlugin
 {
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var \Magento\Framework\App\Http\Context
-     * @since 2.0.0
      */
     protected $httpContext;
 
     /**
      * @var \Magento\Tax\Helper\Data
-     * @since 2.0.0
      */
     protected $taxHelper;
 
     /**
      * @var \Magento\Tax\Model\Calculation\Proxy
-     * @since 2.0.0
      */
     protected $taxCalculation;
 
@@ -40,7 +35,6 @@ class ContextPlugin
      * Module manager
      *
      * @var \Magento\Framework\Module\Manager
-     * @since 2.0.0
      */
     private $moduleManager;
 
@@ -48,7 +42,6 @@ class ContextPlugin
      * Cache config
      *
      * @var \Magento\PageCache\Model\Config
-     * @since 2.0.0
      */
     private $cacheConfig;
 
@@ -59,7 +52,6 @@ class ContextPlugin
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\PageCache\Model\Config $cacheConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,

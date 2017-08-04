@@ -11,26 +11,22 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\SalesRule\Observer\AddSalesRuleNameToOrderObserver
  *
- * @since 2.0.0
  */
 class AddSalesRuleNameToOrderObserver implements ObserverInterface
 {
     /**
      * @var \Magento\SalesRule\Model\RuleFactory
-     * @since 2.0.0
      */
     protected $_ruleFactory;
 
     /**
      * @var \Magento\SalesRule\Model\Coupon
-     * @since 2.0.0
      */
     protected $_coupon;
 
     /**
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param \Magento\SalesRule\Model\Coupon $coupon
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,
@@ -45,7 +41,6 @@ class AddSalesRuleNameToOrderObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return $this
-     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

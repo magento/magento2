@@ -9,7 +9,6 @@ use Magento\Ui\Component\AbstractComponent;
 
 /**
  * Class Tab
- * @since 2.0.0
  */
 class Tab extends AbstractComponent implements TabInterface
 {
@@ -19,7 +18,6 @@ class Tab extends AbstractComponent implements TabInterface
      * Get component name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getComponentName()
     {
@@ -30,7 +28,6 @@ class Tab extends AbstractComponent implements TabInterface
      * Return Tab label
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -41,7 +38,6 @@ class Tab extends AbstractComponent implements TabInterface
      * Return Tab title
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -52,7 +48,6 @@ class Tab extends AbstractComponent implements TabInterface
      * Tab class getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTabClass()
     {
@@ -63,7 +58,6 @@ class Tab extends AbstractComponent implements TabInterface
      * Return URL link to Tab content
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTabUrl()
     {
@@ -74,7 +68,6 @@ class Tab extends AbstractComponent implements TabInterface
      * Tab should be loaded trough Ajax call
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isAjaxLoaded()
     {
@@ -85,7 +78,6 @@ class Tab extends AbstractComponent implements TabInterface
      * Can show tab in tabs
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -96,7 +88,6 @@ class Tab extends AbstractComponent implements TabInterface
      * Tab is hidden
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isHidden()
     {

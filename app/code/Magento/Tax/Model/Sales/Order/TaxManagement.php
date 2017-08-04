@@ -16,37 +16,31 @@ use Magento\Sales\Model\Order\Tax\Item;
 /**
  * Class \Magento\Tax\Model\Sales\Order\TaxManagement
  *
- * @since 2.0.0
  */
 class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory
-     * @since 2.0.0
      */
     protected $orderItemTaxFactory;
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
-     * @since 2.0.0
      */
     protected $orderFactory;
 
     /**
      * @var \Magento\Tax\Api\Data\OrderTaxDetailsInterfaceFactory
-     * @since 2.0.0
      */
     protected $orderTaxDetailsDataObjectFactory;
 
     /**
      * @var \Magento\Tax\Api\Data\OrderTaxDetailsItemInterfaceFactory
-     * @since 2.0.0
      */
     protected $itemDataObjectFactory;
 
     /**
      * @var TaxDetailsDataObjectFactory
-     * @since 2.0.0
      */
     protected $appliedTaxDataObjectFactory;
 
@@ -56,7 +50,6 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsInterfaceFactory $orderTaxDetailsDataObjectFactory
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemInterfaceFactory $itemDataObjectFactory
      * @param TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Model\OrderFactory $orderFactory,
@@ -79,7 +72,6 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
      * @param array $itemAppliedTax
      * @param AppliedTax $existingAppliedTax
      * @return AppliedTax
-     * @since 2.0.0
      */
     protected function convertToAppliedTaxDataObject(
         TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory,
@@ -107,7 +99,6 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
      * @param TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface[] $items
      * @return AppliedTax[]
-     * @since 2.0.0
      */
     protected function aggregateAppliedTaxes(TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory, $items)
     {
@@ -144,7 +135,6 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getOrderTaxDetails($orderId)
     {

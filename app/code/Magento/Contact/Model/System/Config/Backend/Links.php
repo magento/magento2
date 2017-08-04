@@ -9,7 +9,6 @@ use Magento\Config\Model\Config\Backend\Cache;
 
 /**
  * Cache cleaner backend model
- * @since 2.0.0
  */
 class Links extends Cache implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -17,7 +16,6 @@ class Links extends Cache implements \Magento\Framework\DataObject\IdentityInter
      * Cache tags to clean
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_cacheTags = [\Magento\Store\Model\Store::CACHE_TAG, \Magento\Cms\Model\Block::CACHE_TAG];
 
@@ -25,7 +23,6 @@ class Links extends Cache implements \Magento\Framework\DataObject\IdentityInter
      * Get identities
      *
      * @return array
-     * @since 2.0.0
      */
     public function getIdentities()
     {

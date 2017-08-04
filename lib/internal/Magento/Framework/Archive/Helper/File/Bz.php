@@ -12,14 +12,12 @@ namespace Magento\Framework\Archive\Helper\File;
 /**
  * Class \Magento\Framework\Archive\Helper\File\Bz
  *
- * @since 2.0.0
  */
 class Bz extends \Magento\Framework\Archive\Helper\File
 {
     /**
      * {@inheritdoc}
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     protected function _open($mode)
     {
@@ -37,7 +35,6 @@ class Bz extends \Magento\Framework\Archive\Helper\File
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _write($data)
     {
@@ -52,7 +49,6 @@ class Bz extends \Magento\Framework\Archive\Helper\File
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _read($length)
     {
@@ -69,7 +65,6 @@ class Bz extends \Magento\Framework\Archive\Helper\File
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _close()
     {

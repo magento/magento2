@@ -15,7 +15,6 @@ use Magento\Framework\App\ObjectManager;
  * Any class using this trait is required to implement \Magento\Framework\Interception\InterceptorInterface
  *
  * @see \Magento\Framework\Interception\InterceptorInterface
- * @since 2.0.0
  */
 trait Interceptor
 {
@@ -23,7 +22,6 @@ trait Interceptor
      * List of plugins
      *
      * @var PluginListInterface
-     * @since 2.0.0
      */
     private $pluginList;
 
@@ -31,7 +29,6 @@ trait Interceptor
      * Subject type name
      *
      * @var string
-     * @since 2.0.0
      */
     private $subjectType;
 
@@ -39,7 +36,6 @@ trait Interceptor
      * Initialize the Interceptor
      *
      * @return void
-     * @since 2.0.0
      */
     public function ___init()
     {
@@ -56,7 +52,6 @@ trait Interceptor
      * @param string $method
      * @param array $arguments
      * @return mixed
-     * @since 2.0.0
      */
     public function ___callParent($method, array $arguments)
     {
@@ -67,7 +62,6 @@ trait Interceptor
      * Calls parent class sleep if defined, otherwise provides own implementation
      *
      * @return array
-     * @since 2.0.0
      */
     public function __sleep()
     {
@@ -84,7 +78,6 @@ trait Interceptor
      * Causes Interceptor to be initialized
      *
      * @return void
-     * @since 2.0.0
      */
     public function __wakeup()
     {
@@ -101,7 +94,6 @@ trait Interceptor
      * @param array $arguments
      * @param array $pluginInfo
      * @return mixed|null
-     * @since 2.0.0
      */
     protected function ___callPlugins($method, array $arguments, array $pluginInfo)
     {

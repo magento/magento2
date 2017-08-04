@@ -14,7 +14,6 @@ namespace Magento\Widget\Block;
 /**
  * Interface \Magento\Widget\Block\BlockInterface
  *
- * @since 2.0.0
  */
 interface BlockInterface
 {
@@ -24,7 +23,6 @@ interface BlockInterface
      *
      * @param array $arr
      * @return $this
-     * @since 2.0.0
      */
     public function addData(array $arr);
 
@@ -38,7 +36,6 @@ interface BlockInterface
      * @param string|array $key
      * @param mixed $value
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function setData($key, $value = null);
 }

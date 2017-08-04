@@ -10,7 +10,6 @@ use Magento\Framework\Cache\InvalidateLogger;
 /**
  * Class \Magento\CacheInvalidate\Model\PurgeCache
  *
- * @since 2.0.0
  */
 class PurgeCache
 {
@@ -18,19 +17,16 @@ class PurgeCache
 
     /**
      * @var \Magento\PageCache\Model\Cache\Server
-     * @since 2.0.0
      */
     protected $cacheServer;
 
     /**
      * @var \Magento\CacheInvalidate\Model\SocketFactory
-     * @since 2.0.0
      */
     protected $socketAdapterFactory;
 
     /**
      * @var InvalidateLogger
-     * @since 2.0.0
      */
     private $logger;
 
@@ -40,7 +36,6 @@ class PurgeCache
      * @param \Magento\PageCache\Model\Cache\Server $cacheServer
      * @param \Magento\CacheInvalidate\Model\SocketFactory $socketAdapterFactory
      * @param InvalidateLogger $logger
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\PageCache\Model\Cache\Server $cacheServer,
@@ -58,7 +53,6 @@ class PurgeCache
      *
      * @param string $tagsPattern
      * @return bool Return true if successful; otherwise return false
-     * @since 2.0.0
      */
     public function sendPurgeRequest($tagsPattern)
     {

@@ -11,19 +11,16 @@ use Magento\Framework\App\ResourceConnection;
  * Order Rss Resource Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class OrderStatus
 {
     /**
      * @var Resource
-     * @since 2.0.0
      */
     protected $_resource;
 
     /**
      * @param ResourceConnection $resource
-     * @since 2.0.0
      */
     public function __construct(ResourceConnection $resource)
     {
@@ -35,7 +32,6 @@ class OrderStatus
      *
      * @param int $orderId
      * @return array
-     * @since 2.0.0
      */
     public function getAllCommentCollection($orderId)
     {

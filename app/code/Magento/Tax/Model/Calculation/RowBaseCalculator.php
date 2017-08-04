@@ -8,13 +8,11 @@ namespace Magento\Tax\Model\Calculation;
 /**
  * Class \Magento\Tax\Model\Calculation\RowBaseCalculator
  *
- * @since 2.0.0
  */
 class RowBaseCalculator extends AbstractAggregateCalculator
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function roundAmount(
         $amount,

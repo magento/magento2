@@ -7,7 +7,6 @@ namespace Magento\Config\Model\Config\Structure;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface ElementInterface
 {
@@ -17,7 +16,6 @@ interface ElementInterface
      * @param array $data
      * @param string $scope
      * @return void
-     * @since 2.0.0
      */
     public function setData(array $data, $scope);
 
@@ -25,7 +23,6 @@ interface ElementInterface
      * Retrieve element configuration
      *
      * @return array
-     * @since 2.0.0
      */
     public function getData();
 
@@ -33,7 +30,6 @@ interface ElementInterface
      * Retrieve element id
      *
      * @return string
-     * @since 2.0.0
      */
     public function getId();
 
@@ -41,7 +37,6 @@ interface ElementInterface
      * Retrieve element label
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLabel();
 
@@ -49,7 +44,6 @@ interface ElementInterface
      * Check whether element is visible
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isVisible();
 
@@ -58,7 +52,6 @@ interface ElementInterface
      *
      * @param string $key
      * @return mixed
-     * @since 2.0.0
      */
     public function getAttribute($key);
 }

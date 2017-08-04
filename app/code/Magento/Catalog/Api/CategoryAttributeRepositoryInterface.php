@@ -9,7 +9,6 @@ namespace Magento\Catalog\Api;
 /**
  * Interface RepositoryInterface must be implemented in new model
  * @api
- * @since 2.0.0
  */
 interface CategoryAttributeRepositoryInterface extends \Magento\Framework\Api\MetadataServiceInterface
 {
@@ -18,7 +17,6 @@ interface CategoryAttributeRepositoryInterface extends \Magento\Framework\Api\Me
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Catalog\Api\Data\CategoryAttributeSearchResultsInterface
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -27,7 +25,6 @@ interface CategoryAttributeRepositoryInterface extends \Magento\Framework\Api\Me
      *
      * @param string $attributeCode
      * @return \Magento\Catalog\Api\Data\CategoryAttributeInterface
-     * @since 2.0.0
      */
     public function get($attributeCode);
 }

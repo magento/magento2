@@ -12,7 +12,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Merge and hold scopes data from different sources
- * @since 2.2.0
+ * @since 2.1.3
  */
 class Scopes implements ConfigTypeInterface
 {
@@ -20,13 +20,13 @@ class Scopes implements ConfigTypeInterface
 
     /**
      * @var ConfigSourceInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $source;
 
     /**
      * @var DataObject[]
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $data;
 
@@ -52,7 +52,7 @@ class Scopes implements ConfigTypeInterface
 
     /**
      * @param ConfigSourceInterface $source
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(
         ConfigSourceInterface $source
@@ -62,7 +62,7 @@ class Scopes implements ConfigTypeInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function get($path = '')
     {
@@ -118,7 +118,7 @@ class Scopes implements ConfigTypeInterface
      * Clean cache
      *
      * @return void
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function clean()
     {

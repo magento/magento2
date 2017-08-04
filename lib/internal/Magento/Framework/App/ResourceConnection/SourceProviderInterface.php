@@ -7,7 +7,6 @@ namespace Magento\Framework\App\ResourceConnection;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface SourceProviderInterface extends \Traversable
 {
@@ -16,7 +15,6 @@ interface SourceProviderInterface extends \Traversable
      * validated by db adapter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMainTable();
 
@@ -25,7 +23,6 @@ interface SourceProviderInterface extends \Traversable
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return string
-     * @since 2.0.0
      */
     public function getIdFieldName();
 
@@ -33,7 +30,6 @@ interface SourceProviderInterface extends \Traversable
      * @param string $fieldName
      * @param null|string $alias
      * @return $this
-     * @since 2.0.0
      */
     public function addFieldToSelect($fieldName, $alias = null);
 
@@ -41,7 +37,6 @@ interface SourceProviderInterface extends \Traversable
      * Get \Magento\Framework\DB\Select instance and applies fields to select if needed
      *
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     public function getSelect();
 
@@ -51,7 +46,6 @@ interface SourceProviderInterface extends \Traversable
      * @param mixed $attribute
      * @param mixed $condition
      * @return $this|\Magento\Framework\Data\Collection\AbstractDb
-     * @since 2.0.0
      */
     public function addFieldToFilter($attribute, $condition = null);
 }

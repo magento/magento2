@@ -9,7 +9,6 @@ namespace Magento\Framework\Backup;
  * Class to work with archives
  *
  * @api
- * @since 2.0.0
  */
 abstract class AbstractBackup implements BackupInterface
 {
@@ -17,7 +16,6 @@ abstract class AbstractBackup implements BackupInterface
      * Backup name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_name;
 
@@ -25,7 +23,6 @@ abstract class AbstractBackup implements BackupInterface
      * Backup creation date
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_time;
 
@@ -33,7 +30,6 @@ abstract class AbstractBackup implements BackupInterface
      * Backup file extension
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_backupExtension;
 
@@ -41,7 +37,6 @@ abstract class AbstractBackup implements BackupInterface
      * Resource model
      *
      * @var object
-     * @since 2.0.0
      */
     protected $_resourceModel;
 
@@ -49,7 +44,6 @@ abstract class AbstractBackup implements BackupInterface
      * Magento's root directory
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_rootDir;
 
@@ -57,7 +51,6 @@ abstract class AbstractBackup implements BackupInterface
      * Path to directory where backups stored
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_backupsDir;
 
@@ -65,7 +58,6 @@ abstract class AbstractBackup implements BackupInterface
      * Is last operation completed successfully
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_lastOperationSucceed = false;
 
@@ -73,7 +65,6 @@ abstract class AbstractBackup implements BackupInterface
      * Last failed operation error message
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_lastErrorMessage;
 
@@ -82,7 +73,6 @@ abstract class AbstractBackup implements BackupInterface
      *
      * @param string $backupExtension
      * @return $this
-     * @since 2.0.0
      */
     public function setBackupExtension($backupExtension)
     {
@@ -94,7 +84,6 @@ abstract class AbstractBackup implements BackupInterface
      * Get Backup Extension
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBackupExtension()
     {
@@ -106,7 +95,6 @@ abstract class AbstractBackup implements BackupInterface
      *
      * @param object $resourceModel
      * @return $this
-     * @since 2.0.0
      */
     public function setResourceModel($resourceModel)
     {
@@ -118,7 +106,6 @@ abstract class AbstractBackup implements BackupInterface
      * Get Resource Model
      *
      * @return object
-     * @since 2.0.0
      */
     public function getResourceModel()
     {
@@ -130,7 +117,6 @@ abstract class AbstractBackup implements BackupInterface
      *
      * @param int $time
      * @return $this
-     * @since 2.0.0
      */
     public function setTime($time)
     {
@@ -142,7 +128,6 @@ abstract class AbstractBackup implements BackupInterface
      * Get Time
      *
      * @return int
-     * @since 2.0.0
      */
     public function getTime()
     {
@@ -155,7 +140,6 @@ abstract class AbstractBackup implements BackupInterface
      * @param string $rootDir
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
-     * @since 2.0.0
      */
     public function setRootDir($rootDir)
     {
@@ -172,7 +156,6 @@ abstract class AbstractBackup implements BackupInterface
     /**
      * Get Magento's root directory
      * @return string
-     * @since 2.0.0
      */
     public function getRootDir()
     {
@@ -184,7 +167,6 @@ abstract class AbstractBackup implements BackupInterface
      *
      * @param string $backupsDir
      * @return $this
-     * @since 2.0.0
      */
     public function setBackupsDir($backupsDir)
     {
@@ -196,7 +178,6 @@ abstract class AbstractBackup implements BackupInterface
      * Get path to directory where backups stored
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBackupsDir()
     {
@@ -207,7 +188,6 @@ abstract class AbstractBackup implements BackupInterface
      * Get path to backup
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBackupPath()
     {
@@ -218,7 +198,6 @@ abstract class AbstractBackup implements BackupInterface
      * Get backup file name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBackupFilename()
     {
@@ -240,7 +219,6 @@ abstract class AbstractBackup implements BackupInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsSuccess()
     {
@@ -251,7 +229,6 @@ abstract class AbstractBackup implements BackupInterface
      * Get last error message
      *
      * @return string
-     * @since 2.0.0
      */
     public function getErrorMessage()
     {
@@ -263,7 +240,6 @@ abstract class AbstractBackup implements BackupInterface
      *
      * @param string $errorMessage
      * @return void
-     * @since 2.0.0
      */
     public function setErrorMessage($errorMessage)
     {
@@ -276,7 +252,6 @@ abstract class AbstractBackup implements BackupInterface
      * @param string $name
      * @param bool $applyFilter
      * @return $this
-     * @since 2.0.0
      */
     public function setName($name, $applyFilter = true)
     {
@@ -291,7 +266,6 @@ abstract class AbstractBackup implements BackupInterface
      * Get backup name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -302,7 +276,6 @@ abstract class AbstractBackup implements BackupInterface
      * Get backup display name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDisplayName()
     {
@@ -314,7 +287,6 @@ abstract class AbstractBackup implements BackupInterface
      *
      * @param string $name
      * @return string
-     * @since 2.0.0
      */
     protected function _filterName($name)
     {

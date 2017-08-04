@@ -10,7 +10,6 @@ use Magento\Backend\App\Action;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\Cancel
  *
- * @since 2.0.0
  */
 class Cancel extends \Magento\Backend\App\Action
 {
@@ -23,14 +22,12 @@ class Cancel extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
-     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
     /**
      * @param Action\Context $context
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -44,7 +41,6 @@ class Cancel extends \Magento\Backend\App\Action
      * Cancel creditmemo action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Backend\Model\View\Result\Forward
-     * @since 2.0.0
      */
     public function execute()
     {

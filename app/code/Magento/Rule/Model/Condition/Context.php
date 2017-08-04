@@ -18,37 +18,31 @@ namespace Magento\Rule\Model\Condition;
  *
  * @api
  * @deprecated 2.2.0
- * @since 2.0.0
  */
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
     /**
      * @var \Magento\Framework\View\Asset\Repository
-     * @since 2.0.0
      */
     protected $_assetRepo;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $_localeDate;
 
     /**
      * @var \Magento\Framework\View\LayoutInterface
-     * @since 2.0.0
      */
     protected $_layout;
 
     /**
      * @var \Magento\Rule\Model\ConditionFactory
-     * @since 2.0.0
      */
     protected $_conditionFactory;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $_logger;
 
@@ -58,7 +52,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Rule\Model\ConditionFactory $conditionFactory
      * @param \Psr\Log\LoggerInterface $logger
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Asset\Repository $assetRepo,
@@ -76,7 +69,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\View\Asset\Repository
-     * @since 2.0.0
      */
     public function getAssetRepository()
     {
@@ -85,7 +77,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     public function getLocaleDate()
     {
@@ -94,7 +85,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\View\LayoutInterface
-     * @since 2.0.0
      */
     public function getLayout()
     {
@@ -103,7 +93,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Rule\Model\ConditionFactory
-     * @since 2.0.0
      */
     public function getConditionFactory()
     {
@@ -112,7 +101,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     public function getLogger()
     {

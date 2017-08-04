@@ -12,7 +12,6 @@ namespace Magento\Catalog\Model\Attribute\Backend;
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
 {
@@ -20,7 +19,6 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
      * Date model
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.0.0
      */
     protected $_date;
 
@@ -29,7 +27,6 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
      *
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -44,7 +41,6 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
      *
      * @param \Magento\Framework\DataObject $object
      * @return string|bool
-     * @since 2.0.0
      */
     protected function _getValueForSave($object)
     {
@@ -60,7 +56,6 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave($object)
     {
@@ -81,7 +76,6 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
      * @param \Magento\Framework\DataObject $object
      * @throws \Magento\Eav\Model\Entity\Attribute\Exception
      * @return bool
-     * @since 2.0.0
      */
     public function validate($object)
     {

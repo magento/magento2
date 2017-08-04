@@ -9,7 +9,6 @@ namespace Magento\Catalog\Model\Layer;
 /**
  * Class \Magento\Catalog\Model\Layer\FilterList
  *
- * @since 2.0.0
  */
 class FilterList
 {
@@ -22,19 +21,16 @@ class FilterList
      * Filter factory
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var FilterableAttributeListInterface
-     * @since 2.0.0
      */
     protected $filterableAttributes;
 
     /**
      * @var string[]
-     * @since 2.0.0
      */
     protected $filterTypes = [
         self::CATEGORY_FILTER  => \Magento\Catalog\Model\Layer\Filter\Category::class,
@@ -45,7 +41,6 @@ class FilterList
 
     /**
      * @var \Magento\Catalog\Model\Layer\Filter\AbstractFilter[]
-     * @since 2.0.0
      */
     protected $filters = [];
 
@@ -53,7 +48,6 @@ class FilterList
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param FilterableAttributeListInterface $filterableAttributes
      * @param array $filters
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -72,7 +66,6 @@ class FilterList
      *
      * @param \Magento\Catalog\Model\Layer $layer
      * @return array|Filter\AbstractFilter[]
-     * @since 2.0.0
      */
     public function getFilters(\Magento\Catalog\Model\Layer $layer)
     {
@@ -93,7 +86,6 @@ class FilterList
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @param \Magento\Catalog\Model\Layer $layer
      * @return \Magento\Catalog\Model\Layer\Filter\AbstractFilter
-     * @since 2.0.0
      */
     protected function createAttributeFilter(
         \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
@@ -113,7 +105,6 @@ class FilterList
      *
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return string
-     * @since 2.0.0
      */
     protected function getAttributeFilterClass(\Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute)
     {

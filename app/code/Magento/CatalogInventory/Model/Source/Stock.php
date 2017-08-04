@@ -10,7 +10,6 @@ use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 /**
  * CatalogInventory Stock source model
  * @api
- * @since 2.0.0
  */
 class Stock extends AbstractSource
 {
@@ -18,7 +17,6 @@ class Stock extends AbstractSource
      * Retrieve option array
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllOptions()
     {

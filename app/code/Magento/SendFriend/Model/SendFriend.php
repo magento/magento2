@@ -21,7 +21,6 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
- * @since 2.0.0
  */
 class SendFriend extends \Magento\Framework\Model\AbstractModel
 {
@@ -29,7 +28,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * Recipient Names
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_names = [];
 
@@ -37,7 +35,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * Recipient Emails
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_emails = [];
 
@@ -45,7 +42,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * Sender data array
      *
      * @var \Magento\Framework\DataObject|array
-     * @since 2.0.0
      */
     protected $_sender = [];
 
@@ -53,7 +49,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * Product Instance
      *
      * @var \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     protected $_product;
 
@@ -61,7 +56,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * Count of sent in last period
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_sentCount;
 
@@ -69,7 +63,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * Last values for Cookie
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_lastCookieValue = [];
 
@@ -77,7 +70,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * SendFriend data
      *
      * @var \Magento\SendFriend\Helper\Data
-     * @since 2.0.0
      */
     protected $_sendfriendData = null;
 
@@ -85,43 +77,36 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * Catalog image
      *
      * @var \Magento\Catalog\Helper\Image
-     * @since 2.0.0
      */
     protected $_catalogImage = null;
 
     /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder
-     * @since 2.0.0
      */
     protected $_transportBuilder;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\Escaper
-     * @since 2.0.0
      */
     protected $_escaper;
 
     /**
      * @var \Magento\Framework\Translate\Inline\StateInterface
-     * @since 2.0.0
      */
     protected $inlineTranslation;
 
     /**
      * @var \Magento\Framework\Stdlib\CookieManagerInterface
-     * @since 2.0.0
      */
     protected $cookieManager;
 
     /**
      * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress
-     * @since 2.0.0
      */
     protected $remoteAddress;
 
@@ -140,7 +125,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -172,7 +156,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -182,7 +165,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
     /**
      * @return $this
      * @throws CoreException
-     * @since 2.0.0
      */
     public function send()
     {
@@ -244,7 +226,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * @return bool|string[]
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function validate()
     {
@@ -295,7 +276,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * @param array $recipients
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function setRecipients($recipients)
     {
@@ -338,7 +318,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * Retrieve Recipients object
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getRecipients()
     {
@@ -355,7 +334,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
-     * @since 2.0.0
      */
     public function setProduct($product)
     {
@@ -367,7 +345,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -383,7 +360,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      *
      * @param array $sender
      * @return $this
-     * @since 2.0.0
      */
     public function setSender($sender)
     {
@@ -399,7 +375,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getSender()
     {
@@ -416,7 +391,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * Get max allowed uses of "Send to Friend" function per hour
      *
      * @return integer
-     * @since 2.0.0
      */
     public function getMaxSendsToFriend()
     {
@@ -427,7 +401,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * Get max allowed recipients for "Send to a Friend" function
      *
      * @return integer
-     * @since 2.0.0
      */
     public function getMaxRecipients()
     {
@@ -438,7 +411,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * Check if user is allowed to email product to a friend
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function canEmailToFriend()
     {
@@ -449,7 +421,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * Check if user is exceed limit
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isExceedLimit()
     {
@@ -461,7 +432,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      *
      * @param bool $useCache - flag, is allow to use value of attribute of model if it is processed last time
      * @return int
-     * @since 2.0.0
      */
     public function getSentCount($useCache = true)
     {
@@ -483,7 +453,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * Increase count of sent
      *
      * @return int
-     * @since 2.0.0
      */
     protected function _incrementSentCount()
     {
@@ -502,7 +471,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      *
      * @param bool $increment - flag, increase count before return value
      * @return int
-     * @since 2.0.0
      */
     protected function _sentCountByCookies($increment = false)
     {
@@ -541,7 +509,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      *
      * @param bool $increment - flag, increase count before return value
      * @return int
-     * @since 2.0.0
      */
     protected function _sentCountByIp($increment = false)
     {

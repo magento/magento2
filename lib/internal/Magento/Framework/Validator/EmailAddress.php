@@ -12,7 +12,6 @@ use Zend_Config;
 /**
  * Class \Magento\Framework\Validator\EmailAddress
  *
- * @since 2.0.0
  */
 class EmailAddress extends \Zend_Validate_EmailAddress implements \Magento\Framework\Validator\ValidatorInterface
 {

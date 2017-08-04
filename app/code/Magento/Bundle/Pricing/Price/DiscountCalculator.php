@@ -10,7 +10,6 @@ use Magento\Catalog\Model\Product;
 
 /**
  * Class DiscountCalculator
- * @since 2.0.0
  */
 class DiscountCalculator
 {
@@ -20,7 +19,6 @@ class DiscountCalculator
      * @param Product $product
      * @param float|null $value
      * @return float|null
-     * @since 2.0.0
      */
     public function calculateDiscount(Product $product, $value = null)
     {

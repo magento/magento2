@@ -20,7 +20,6 @@ use Magento\Framework\App\ObjectManager;
  * @package Magento\Catalog\Model\ResourceModel
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -28,7 +27,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Stores configuration array
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_stores;
 
@@ -36,7 +34,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Category attribute properties cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_categoryAttributes = [];
 
@@ -44,7 +41,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Product attribute properties cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_productAttributes = [];
 
@@ -52,7 +48,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Limit products for select
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_productLimit = 250;
 
@@ -60,13 +55,11 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Cache of root category children ids
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_rootChildrenIds = [];
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $_logger;
 
@@ -74,7 +67,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Catalog category
      *
      * @var \Magento\Catalog\Model\Category
-     * @since 2.0.0
      */
     protected $_catalogCategory;
 
@@ -82,7 +74,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Catalog product
      *
      * @var \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     protected $_catalogProduct;
 
@@ -90,7 +81,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Eav config
      *
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $_eavConfig;
 
@@ -98,13 +88,11 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var Product
-     * @since 2.0.0
      */
     protected $productResource;
 
@@ -123,7 +111,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\Category $catalogCategory
      * @param \Psr\Log\LoggerInterface $logger
      * @param null $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -146,7 +133,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Load core Url rewrite model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -158,7 +144,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $storeId
      * @return \Magento\Store\Model\Store|\Magento\Store\Model\Store[]
-     * @since 2.0.0
      */
     public function getStores($storeId = null)
     {
@@ -178,7 +163,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int|array $categoryIds
      * @param int $storeId
      * @return array
-     * @since 2.0.0
      */
     protected function _getCategoryAttribute($attributeCode, $categoryIds, $storeId)
     {
@@ -283,7 +267,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int|array $productIds
      * @param string $storeId
      * @return array
-     * @since 2.0.0
      */
     public function _getProductAttribute($attributeCode, $productIds, $storeId)
     {
@@ -361,7 +344,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\DataObject $category
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareCategoryParentId(\Magento\Framework\DataObject $category)
     {
@@ -379,7 +361,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Store\Model\Store[] $stores
      * @return \Magento\Store\Model\Store[]
-     * @since 2.0.0
      */
     protected function _prepareStoreRootCategories($stores)
     {
@@ -414,7 +395,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _getCategories($categoryIds, $storeId = null, $path = null)
     {
@@ -514,7 +494,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $categoryId
      * @param int $storeId
      * @return \Magento\Framework\DataObject|false
-     * @since 2.0.0
      */
     public function getCategory($categoryId, $storeId)
     {
@@ -535,7 +514,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int|array $categoryIds
      * @param int $storeId
      * @return array|false
-     * @since 2.0.0
      */
     public function getCategories($categoryIds, $storeId)
     {
@@ -554,7 +532,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $entityId
      * @param int &$lastEntityId
      * @return array
-     * @since 2.0.0
      */
     protected function _getProducts($productIds, $storeId, $entityId, &$lastEntityId)
     {
@@ -633,7 +610,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $productId
      * @param int $storeId
      * @return \Magento\Framework\DataObject|false
-     * @since 2.0.0
      */
     public function getProduct($productId, $storeId)
     {
@@ -651,7 +627,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $storeId
      * @param int &$lastEntityId
      * @return array
-     * @since 2.0.0
      */
     public function getProductsByStore($storeId, &$lastEntityId)
     {
@@ -671,7 +646,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param array $products
      * @return array
-     * @since 2.0.0
      */
     public function getRewriteByProductStore(array $products)
     {

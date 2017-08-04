@@ -16,7 +16,6 @@ use Magento\Framework\Escaper;
 /**
  * Class \Magento\Framework\Data\Form\Element\Text
  *
- * @since 2.0.0
  */
 class Text extends AbstractElement
 {
@@ -25,7 +24,6 @@ class Text extends AbstractElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -42,7 +40,6 @@ class Text extends AbstractElement
      * Get the HTML
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getHtml()
     {
@@ -54,7 +51,6 @@ class Text extends AbstractElement
      * Get the attributes
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getHtmlAttributes()
     {

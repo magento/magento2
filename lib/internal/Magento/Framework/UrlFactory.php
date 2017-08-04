@@ -9,26 +9,22 @@ namespace Magento\Framework;
 /**
  * Class \Magento\Framework\UrlFactory
  *
- * @since 2.0.0
  */
 class UrlFactory
 {
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager = null;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_instanceName = null;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param string $instanceName
-     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -43,7 +39,6 @@ class UrlFactory
      *
      * @param array $data
      * @return UrlInterface
-     * @since 2.0.0
      */
     public function create(array $data = [])
     {

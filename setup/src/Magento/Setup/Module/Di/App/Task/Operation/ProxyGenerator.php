@@ -12,25 +12,22 @@ use Magento\Setup\Module\Di\Code\Scanner;
 /**
  * Class \Magento\Setup\Module\Di\App\Task\Operation\ProxyGenerator
  *
- * @since 2.0.0
  */
 class ProxyGenerator implements OperationInterface
 {
     /**
      * @var Scanner\XmlScanner
-     * @since 2.0.0
      */
     private $proxyScanner;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $data;
 
     /**
      * @var Scanner\ConfigurationScanner
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $configurationScanner;
 
@@ -38,7 +35,6 @@ class ProxyGenerator implements OperationInterface
      * @param Scanner\XmlScanner $proxyScanner
      * @param Scanner\ConfigurationScanner $configurationScanner
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Scanner\XmlScanner $proxyScanner,
@@ -54,7 +50,6 @@ class ProxyGenerator implements OperationInterface
      * Processes operation task
      *
      * @return void
-     * @since 2.0.0
      */
     public function doOperation()
     {
@@ -69,7 +64,6 @@ class ProxyGenerator implements OperationInterface
      * Returns operation name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName()
     {

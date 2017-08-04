@@ -9,19 +9,16 @@ namespace Magento\Backend\Block\System\Cache;
  * Cache management edit page
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Edit extends \Magento\Backend\Block\Widget
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Backend::system/cache/edit.phtml';
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -32,7 +29,6 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -52,7 +48,6 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getSaveButtonHtml()
     {
@@ -61,7 +56,6 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getSaveUrl()
     {
@@ -70,7 +64,6 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function initForm()
     {
@@ -85,7 +78,6 @@ class Edit extends \Magento\Backend\Block\Widget
      * Retrieve Catalog Tools Data
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCatalogData()
     {

@@ -16,7 +16,6 @@ use Magento\Store\Model\Store;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEntity
 {
@@ -24,7 +23,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      * Attribute code to its values. Only attributes with options and only default store values used
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_attributeValues = [];
 
@@ -32,7 +30,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      * Entity type id.
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_entityTypeId;
 
@@ -40,13 +37,11 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      * Attributes with index (not label) value
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_indexValueAttributes = [];
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $_localeDate;
 
@@ -58,7 +53,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -83,7 +77,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      * Initialize attribute option values
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initAttributeValues()
     {
@@ -99,7 +92,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      *
      * @param AbstractCollection $collection
      * @return AbstractCollection
-     * @since 2.0.0
      */
     protected function _prepareEntityCollection(AbstractCollection $collection)
     {
@@ -114,7 +106,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      * @param AbstractCollection $collection
      * @return AbstractCollection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function filterEntityCollection(AbstractCollection $collection)
     {
@@ -188,7 +179,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      *
      * @param AbstractCollection $collection
      * @return AbstractCollection
-     * @since 2.0.0
      */
     protected function _addAttributesToCollection(AbstractCollection $collection)
     {
@@ -202,7 +192,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      *
      * @param AbstractAttribute $attribute
      * @return array
-     * @since 2.0.0
      */
     public function getAttributeOptions(AbstractAttribute $attribute)
     {
@@ -236,7 +225,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      * Entity type ID getter
      *
      * @return int
-     * @since 2.0.0
      */
     public function getEntityTypeId()
     {
@@ -249,7 +237,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      * @param \Magento\Framework\Model\AbstractModel $item export entity
      * @param array $row data row
      * @return array
-     * @since 2.0.0
      */
     protected function _addAttributeValuesToRow(\Magento\Framework\Model\AbstractModel $item, array $row = [])
     {

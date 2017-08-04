@@ -14,13 +14,11 @@ namespace Magento\Catalog\Block\Adminhtml\Category\Widget;
 /**
  * Class \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser
  *
- * @since 2.0.0
  */
 class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_selectedCategories = [];
 
@@ -29,13 +27,11 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
      * Defines tree template and init tree params
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'catalog/category/widget/tree.phtml';
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -49,7 +45,6 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
      *
      * @param array $selectedCategories
      * @return $this
-     * @since 2.0.0
      */
     public function setSelectedCategories($selectedCategories)
     {
@@ -61,7 +56,6 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
      * Getter
      *
      * @return array
-     * @since 2.0.0
      */
     public function getSelectedCategories()
     {
@@ -73,7 +67,6 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element Form Element
      * @return \Magento\Framework\Data\Form\Element\AbstractElement
-     * @since 2.0.0
      */
     public function prepareElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -117,7 +110,6 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
      * Category Tree node onClick listener js function
      *
      * @return string
-     * @since 2.0.0
      */
     public function getNodeClickListener()
     {
@@ -157,7 +149,6 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
      * @param \Magento\Framework\Data\Tree\Node|array $node
      * @param int $level
      * @return string
-     * @since 2.0.0
      */
     protected function _getNodeJson($node, $level = 0)
     {
@@ -174,7 +165,6 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
      * Adds some extra params to categories collection
      *
      * @return \Magento\Catalog\Model\ResourceModel\Category\Collection
-     * @since 2.0.0
      */
     public function getCategoryCollection()
     {
@@ -187,7 +177,6 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
      * @param bool|null $expanded
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getLoadTreeUrl($expanded = null)
     {

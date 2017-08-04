@@ -17,25 +17,21 @@ use Magento\Store\Model\ScopeInterface;
  * Downlaodable Sales Order Email items renderer
  *
  * @api
- * @since 2.0.0
  */
 class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
 {
     /**
      * @var Purchased
-     * @since 2.0.0
      */
     protected $_purchased;
 
     /**
      * @var \Magento\Downloadable\Model\Link\PurchasedFactory
-     * @since 2.0.0
      */
     protected $_purchasedFactory;
 
     /**
      * @var \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory
-     * @since 2.0.0
      */
     protected $_itemsFactory;
 
@@ -51,7 +47,6 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
      * @param \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory
      * @param \Magento\Framework\Url $frontendUrlBuilder
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -70,7 +65,6 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
      * Enter description here...
      *
      * @return Purchased
-     * @since 2.0.0
      */
     public function getLinks()
     {
@@ -89,7 +83,6 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
 
     /**
      * @return null|string
-     * @since 2.0.0
      */
     public function getLinksTitle()
     {
@@ -102,7 +95,6 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
     /**
      * @param Item $item
      * @return string
-     * @since 2.0.0
      */
     public function getPurchasedLinkUrl($item)
     {

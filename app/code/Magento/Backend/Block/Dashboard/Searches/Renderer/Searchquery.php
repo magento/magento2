@@ -8,7 +8,6 @@ namespace Magento\Backend\Block\Dashboard\Searches\Renderer;
 /**
  * Dashboard search query column renderer
  * @api
- * @since 2.0.0
  */
 class Searchquery extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -16,7 +15,6 @@ class Searchquery extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abs
      * String helper
      *
      * @var \Magento\Framework\Stdlib\StringUtils
-     * @since 2.0.0
      */
     protected $stringHelper;
 
@@ -24,7 +22,6 @@ class Searchquery extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abs
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\Stdlib\StringUtils $stringHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -40,7 +37,6 @@ class Searchquery extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abs
      *
      * @param   \Magento\Framework\DataObject $row
      * @return  string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

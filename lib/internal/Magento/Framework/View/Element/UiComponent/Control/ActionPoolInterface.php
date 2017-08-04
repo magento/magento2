@@ -10,7 +10,6 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Interface ActionPoolInterface
- * @since 2.0.0
  */
 interface ActionPoolInterface
 {
@@ -21,7 +20,6 @@ interface ActionPoolInterface
      * @param array $data
      * @param UiComponentInterface $context
      * @return void
-     * @since 2.0.0
      */
     public function add($key, array $data, UiComponentInterface $context);
 
@@ -30,7 +28,6 @@ interface ActionPoolInterface
      *
      * @param string $key
      * @return void
-     * @since 2.0.0
      */
     public function remove($key);
 
@@ -40,7 +37,6 @@ interface ActionPoolInterface
      * @param string $key
      * @param array $data
      * @return void
-     * @since 2.0.0
      */
     public function update($key, array $data);
 
@@ -48,7 +44,6 @@ interface ActionPoolInterface
      * Get toolbar block
      *
      * @return bool|BlockInterface
-     * @since 2.0.0
      */
     public function getToolbar();
 

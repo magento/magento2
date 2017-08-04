@@ -9,7 +9,6 @@ namespace Magento\Framework\Config;
 /**
  * Deployment configuration options constant storage
  * @api
- * @since 2.0.0
  */
 class ConfigOptionsListConstants
 {

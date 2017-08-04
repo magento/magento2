@@ -50,7 +50,7 @@ class PaymentVaultAttributesLoad
      * @param OrderPaymentInterface $payment
      * @param OrderPaymentExtensionInterface|null $paymentExtension
      * @return OrderPaymentExtensionInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function afterGetExtensionAttributes(
         OrderPaymentInterface $payment,

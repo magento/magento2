@@ -8,43 +8,36 @@ namespace Magento\CatalogUrlRewrite\Observer;
 /**
  * Class \Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler
  *
- * @since 2.0.0
  */
 class UrlRewriteHandler
 {
     /**
      * @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider
-     * @since 2.0.0
      */
     protected $childrenCategoriesProvider;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator
-     * @since 2.0.0
      */
     protected $categoryUrlRewriteGenerator;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator
-     * @since 2.0.0
      */
     protected $productUrlRewriteGenerator;
 
     /**
      * @var \Magento\UrlRewrite\Model\UrlPersistInterface
-     * @since 2.0.0
      */
     protected $urlPersist;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $isSkippedProduct;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     * @since 2.0.0
      */
     protected $productCollectionFactory;
 
@@ -75,7 +68,6 @@ class UrlRewriteHandler
      * @param \Magento\CatalogUrlRewrite\Model\CategoryProductUrlPathGenerator $categoryBasedProductRewriteGenerator
      * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider $childrenCategoriesProvider,
@@ -112,7 +104,6 @@ class UrlRewriteHandler
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return array
-     * @since 2.0.0
      */
     public function generateProductUrlRewrites(\Magento\Catalog\Model\Category $category)
     {
@@ -166,7 +157,6 @@ class UrlRewriteHandler
      * @param bool $saveRewriteHistory
      * @param int|null $rootCategoryId
      * @return array
-     * @since 2.0.0
      */
     private function getCategoryProductsUrlRewrites(
         \Magento\Catalog\Model\Category $category,
@@ -206,7 +196,6 @@ class UrlRewriteHandler
     /**
      * @param \Magento\Catalog\Model\Category $category
      * @return void
-     * @since 2.0.0
      */
     public function deleteCategoryRewritesForChildren(\Magento\Catalog\Model\Category $category)
     {

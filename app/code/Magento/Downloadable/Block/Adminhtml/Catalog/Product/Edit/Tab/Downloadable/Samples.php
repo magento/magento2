@@ -9,7 +9,6 @@ namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Download
  * Adminhtml catalog product downloadable items tab links section
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Samples extends \Magento\Backend\Block\Widget
 {
@@ -17,13 +16,11 @@ class Samples extends \Magento\Backend\Block\Widget
      * Block config data
      *
      * @var \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'product/edit/downloadable/samples.phtml';
 
@@ -31,7 +28,6 @@ class Samples extends \Magento\Backend\Block\Widget
      * Downloadable file
      *
      * @var \Magento\Downloadable\Helper\File
-     * @since 2.0.0
      */
     protected $_downloadableFile = null;
 
@@ -39,7 +35,6 @@ class Samples extends \Magento\Backend\Block\Widget
      * Core file storage database
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
-     * @since 2.0.0
      */
     protected $_coreFileStorageDb = null;
 
@@ -47,25 +42,21 @@ class Samples extends \Magento\Backend\Block\Widget
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\Downloadable\Model\Sample
-     * @since 2.0.0
      */
     protected $_sampleModel;
 
     /**
      * @var \Magento\Backend\Model\UrlFactory
-     * @since 2.0.0
      */
     protected $_urlFactory;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
@@ -78,7 +69,6 @@ class Samples extends \Magento\Backend\Block\Widget
      * @param \Magento\Downloadable\Model\Sample $sampleModel
      * @param \Magento\Backend\Model\UrlFactory $urlFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -104,7 +94,6 @@ class Samples extends \Magento\Backend\Block\Widget
      * Get model of the product that is being edited
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -115,7 +104,6 @@ class Samples extends \Magento\Backend\Block\Widget
      * Check block is readonly
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isReadonly()
     {
@@ -126,7 +114,6 @@ class Samples extends \Magento\Backend\Block\Widget
      * Retrieve Add Button HTML
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAddButtonHtml()
     {
@@ -147,7 +134,6 @@ class Samples extends \Magento\Backend\Block\Widget
      * Retrieve samples array
      *
      * @return array
-     * @since 2.0.0
      */
     public function getSampleData()
     {
@@ -204,7 +190,6 @@ class Samples extends \Magento\Backend\Block\Widget
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getUsedDefault()
     {
@@ -215,7 +200,6 @@ class Samples extends \Magento\Backend\Block\Widget
      * Retrieve Default samples title
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSamplesTitle()
     {
@@ -231,7 +215,6 @@ class Samples extends \Magento\Backend\Block\Widget
      * Prepare layout
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -251,7 +234,6 @@ class Samples extends \Magento\Backend\Block\Widget
      * Retrieve Upload button HTML
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUploadButtonHtml()
     {
@@ -262,7 +244,6 @@ class Samples extends \Magento\Backend\Block\Widget
      * Retrieve config json
      *
      * @return string
-     * @since 2.0.0
      */
     public function getConfigJson()
     {
@@ -284,7 +265,6 @@ class Samples extends \Magento\Backend\Block\Widget
      * Retrieve config object
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -299,7 +279,6 @@ class Samples extends \Magento\Backend\Block\Widget
      * Get is single store mode
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isSingleStoreMode()
     {

@@ -9,7 +9,6 @@ namespace Magento\Sales\Controller\Adminhtml\Invoice;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Invoice\PrintAction
  *
- * @since 2.0.0
  */
 class PrintAction extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\PrintAction
 {

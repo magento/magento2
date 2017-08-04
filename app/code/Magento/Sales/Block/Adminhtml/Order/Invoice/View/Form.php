@@ -10,7 +10,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Invoice\View;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 {
@@ -18,7 +17,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Retrieve invoice order
      *
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -29,7 +27,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Retrieve source
      *
      * @return \Magento\Sales\Model\Order\Invoice
-     * @since 2.0.0
      */
     public function getSource()
     {
@@ -40,7 +37,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Retrieve invoice model instance
      *
      * @return \Magento\Sales\Model\Order\Invoice
-     * @since 2.0.0
      */
     public function getInvoice()
     {
@@ -51,7 +47,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Retrieve order url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getOrderUrl()
     {
@@ -63,7 +58,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      *
      * @param float $price
      * @return string
-     * @since 2.0.0
      */
     public function formatPrice($price)
     {

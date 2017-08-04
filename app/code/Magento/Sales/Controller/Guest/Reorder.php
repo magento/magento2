@@ -9,7 +9,6 @@ namespace Magento\Sales\Controller\Guest;
 /**
  * Class \Magento\Sales\Controller\Guest\Reorder
  *
- * @since 2.0.0
  */
 class Reorder extends \Magento\Sales\Controller\AbstractController\Reorder
 {
@@ -17,7 +16,6 @@ class Reorder extends \Magento\Sales\Controller\AbstractController\Reorder
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Sales\Controller\Guest\OrderLoader $orderLoader
      * @param \Magento\Framework\Registry $registry
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,

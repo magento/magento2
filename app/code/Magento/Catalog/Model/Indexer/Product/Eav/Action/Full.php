@@ -9,7 +9,6 @@ use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 
 /**
  * Class Full reindex action
- * @since 2.0.0
  */
 class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
 {
@@ -76,7 +75,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function execute($ids = null)
     {

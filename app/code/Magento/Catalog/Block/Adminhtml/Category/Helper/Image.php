@@ -14,13 +14,11 @@ namespace Magento\Catalog\Block\Adminhtml\Category\Helper;
 /**
  * Class \Magento\Catalog\Block\Adminhtml\Category\Helper\Image
  *
- * @since 2.0.0
  */
 class Image extends \Magento\Framework\Data\Form\Element\Image
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -31,7 +29,6 @@ class Image extends \Magento\Framework\Data\Form\Element\Image
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
@@ -47,7 +44,6 @@ class Image extends \Magento\Framework\Data\Form\Element\Image
 
     /**
      * @return bool|string
-     * @since 2.0.0
      */
     protected function _getUrl()
     {

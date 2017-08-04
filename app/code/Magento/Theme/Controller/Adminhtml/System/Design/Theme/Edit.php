@@ -9,7 +9,6 @@ namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 /**
  * Class Edit
  * @deprecated 2.2.0
- * @since 2.0.0
  */
 class Edit extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {
@@ -17,7 +16,6 @@ class Edit extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
      * Edit theme
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

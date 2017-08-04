@@ -9,20 +9,17 @@ namespace Magento\Store\Model\ResourceModel;
  * Store Resource Model
  *
  * @api
- * @since 2.0.0
  */
 class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\App\Cache\Type\Config
-     * @since 2.0.0
      */
     protected $configCache;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -36,7 +33,6 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table and primary key
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -50,7 +46,6 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param bool $countAdmin
      * @return int
-     * @since 2.0.0
      */
     public function countAll($countAdmin = false)
     {
@@ -66,7 +61,6 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize unique fields
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initUniqueFields()
     {
@@ -79,7 +73,6 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -95,7 +88,6 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $model
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $model)
     {
@@ -115,7 +107,6 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $groupId
      * @param int $storeId
      * @return $this
-     * @since 2.0.0
      */
     protected function _updateGroupDefaultStore($groupId, $storeId)
     {
@@ -144,7 +135,6 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $model
      * @return $this
-     * @since 2.0.0
      */
     protected function _changeGroup(\Magento\Framework\Model\AbstractModel $model)
     {
@@ -171,7 +161,7 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Read information about all stores
      *
      * @return array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function readAllStores()
     {
@@ -189,7 +179,6 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param mixed $value
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function _getLoadSelect($field, $value, $object)
     {

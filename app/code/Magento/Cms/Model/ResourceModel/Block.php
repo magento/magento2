@@ -19,7 +19,6 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * CMS block model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Block extends AbstractDb
 {
@@ -27,7 +26,6 @@ class Block extends AbstractDb
      * Store manager
      *
      * @var StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -49,7 +47,6 @@ class Block extends AbstractDb
      * @param EntityManager $entityManager
      * @param MetadataPool $metadataPool
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -68,7 +65,6 @@ class Block extends AbstractDb
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -90,7 +86,6 @@ class Block extends AbstractDb
      * @param AbstractModel $object
      * @return $this
      * @throws LocalizedException
-     * @since 2.0.0
      */
     protected function _beforeSave(AbstractModel $object)
     {
@@ -138,7 +133,6 @@ class Block extends AbstractDb
      * @param mixed $value
      * @param string $field field to load by (defaults to model id)
      * @return $this
-     * @since 2.0.0
      */
     public function load(AbstractModel $object, $value, $field = null)
     {
@@ -156,7 +150,6 @@ class Block extends AbstractDb
      * @param mixed $value
      * @param \Magento\Cms\Model\Block|AbstractModel $object
      * @return Select
-     * @since 2.0.0
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -188,7 +181,6 @@ class Block extends AbstractDb
      * @param AbstractModel $object
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsUniqueBlockToStores(AbstractModel $object)
     {
@@ -227,7 +219,6 @@ class Block extends AbstractDb
      *
      * @param int $id
      * @return array
-     * @since 2.0.0
      */
     public function lookupStoreIds($id)
     {

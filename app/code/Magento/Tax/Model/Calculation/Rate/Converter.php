@@ -12,25 +12,21 @@ use Magento\Framework\Locale\FormatInterface;
  * Tax Rate Model converter.
  *
  * Converts a Tax Rate Model to a Data Object or vice versa.
- * @since 2.0.0
  */
 class Converter
 {
     /**
      * @var \Magento\Tax\Api\Data\TaxRateInterfaceFactory
-     * @since 2.0.0
      */
     protected $taxRateDataObjectFactory;
 
     /**
      * @var \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory
-     * @since 2.0.0
      */
     protected $taxRateTitleDataObjectFactory;
 
     /**
      * @var FormatInterface|null
-     * @since 2.2.0
      */
     private $format;
 
@@ -38,7 +34,6 @@ class Converter
      * @param \Magento\Tax\Api\Data\TaxRateInterfaceFactory $taxRateDataObjectFactory
      * @param \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory
      * @param FormatInterface|null $format
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Tax\Api\Data\TaxRateInterfaceFactory $taxRateDataObjectFactory,
@@ -55,7 +50,6 @@ class Converter
      *
      * @param \Magento\Tax\Api\Data\TaxRateInterface $taxRate
      * @return array
-     * @since 2.0.0
      */
     public function createTitleArrayFromServiceObject(\Magento\Tax\Api\Data\TaxRateInterface $taxRate)
     {
@@ -77,7 +71,6 @@ class Converter
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function createArrayFromServiceObject(
         \Magento\Tax\Api\Data\TaxRateInterface $taxRate,
@@ -133,7 +126,6 @@ class Converter
      *
      * @param array $formData
      * @return \Magento\Tax\Api\Data\TaxRateInterface
-     * @since 2.0.0
      */
     public function populateTaxRateData($formData)
     {
@@ -166,7 +158,6 @@ class Converter
      * @param array $formData the form to get data from
      * @param string $fieldName the key
      * @return null|string
-     * @since 2.0.0
      */
     protected function extractFormData($formData, $fieldName)
     {

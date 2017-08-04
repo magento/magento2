@@ -8,14 +8,12 @@ namespace Magento\Sitemap\Model\Config\Backend;
 /**
  * Class \Magento\Sitemap\Model\Config\Backend\Priority
  *
- * @since 2.0.0
  */
 class Priority extends \Magento\Framework\App\Config\Value
 {
     /**
      * @return $this
      * @throws \Exception
-     * @since 2.0.0
      */
     public function beforeSave()
     {

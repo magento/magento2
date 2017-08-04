@@ -11,7 +11,6 @@ namespace Magento\Backend\App;
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class AbstractAction extends \Magento\Framework\App\Action\Action
 {
@@ -34,7 +33,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      * Array of actions which can be processed without secret key validation
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_publicActions = [];
 
@@ -42,61 +40,51 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      * Namespace for session.
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_sessionNamespace = self::SESSION_NAMESPACE;
 
     /**
      * @var \Magento\Backend\Helper\Data
-     * @since 2.0.0
      */
     protected $_helper;
 
     /**
      * @var \Magento\Backend\Model\Session
-     * @since 2.0.0
      */
     protected $_session;
 
     /**
      * @var \Magento\Framework\AuthorizationInterface
-     * @since 2.0.0
      */
     protected $_authorization;
 
     /**
      * @var \Magento\Backend\Model\Auth
-     * @since 2.0.0
      */
     protected $_auth;
 
     /**
      * @var \Magento\Backend\Model\UrlInterface
-     * @since 2.0.0
      */
     protected $_backendUrl;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $_localeResolver;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_canUseBaseUrl;
 
     /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator
-     * @since 2.0.0
      */
     protected $_formKeyValidator;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @since 2.0.0
      */
     public function __construct(Action\Context $context)
     {
@@ -113,7 +101,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     protected function _isAllowed()
     {
@@ -124,7 +111,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      * Retrieve adminhtml session model object
      *
      * @return \Magento\Backend\Model\Session
-     * @since 2.0.0
      */
     protected function _getSession()
     {
@@ -133,7 +119,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
 
     /**
      * @return \Magento\Framework\Message\ManagerInterface
-     * @since 2.0.0
      */
     protected function getMessageManager()
     {
@@ -145,7 +130,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      *
      * @param string $itemId current active menu item
      * @return $this
-     * @since 2.0.0
      */
     protected function _setActiveMenu($itemId)
     {
@@ -165,7 +149,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      * @param string $title
      * @param string|null $link
      * @return $this
-     * @since 2.0.0
      */
     protected function _addBreadcrumb($label, $title, $link = null)
     {
@@ -176,7 +159,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     /**
      * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @return $this
-     * @since 2.0.0
      */
     protected function _addContent(\Magento\Framework\View\Element\AbstractBlock $block)
     {
@@ -186,7 +168,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     /**
      * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @return $this
-     * @since 2.0.0
      */
     protected function _addLeft(\Magento\Framework\View\Element\AbstractBlock $block)
     {
@@ -196,7 +177,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     /**
      * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @return $this
-     * @since 2.0.0
      */
     protected function _addJs(\Magento\Framework\View\Element\AbstractBlock $block)
     {
@@ -211,7 +191,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @param string $containerName
      * @return $this
-     * @since 2.0.0
      */
     private function _moveBlockToContainer(\Magento\Framework\View\Element\AbstractBlock $block, $containerName)
     {
@@ -222,7 +201,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
-     * @since 2.0.0
      */
     public function dispatch(\Magento\Framework\App\RequestInterface $request)
     {
@@ -254,7 +232,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      * Check whether url is checked
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _isUrlChecked()
     {
@@ -268,7 +245,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      * Check url keys. If non valid - redirect
      *
      * @return bool
-     * @since 2.0.0
      */
     public function _processUrlKeys()
     {
@@ -308,7 +284,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      * process force locale set through url params
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _processLocaleSettings()
     {
@@ -331,7 +306,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      * @param   string $path
      * @param   array $arguments
      * @return \Magento\Framework\App\ResponseInterface
-     * @since 2.0.0
      */
     protected function _redirect($path, $arguments = [])
     {
@@ -349,7 +323,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      * @param string|null $module
      * @param array|null $params
      * @return void
-     * @since 2.0.0
      */
     protected function _forward($action, $controller = null, $module = null, array $params = null)
     {
@@ -363,7 +336,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      * @param   string $route
      * @param   array $params
      * @return  string
-     * @since 2.0.0
      */
     public function getUrl($route = '', $params = [])
     {
@@ -374,7 +346,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      * Validate Secret Key
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _validateSecretKey()
     {

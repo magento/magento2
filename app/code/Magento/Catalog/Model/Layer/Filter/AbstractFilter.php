@@ -9,7 +9,6 @@ namespace Magento\Catalog\Model\Layer\Filter;
  * Layer category filter abstract model
  *
  * @api
- * @since 2.0.0
  */
 abstract class AbstractFilter extends \Magento\Framework\DataObject implements FilterInterface
 {
@@ -19,7 +18,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * Request variable name with filter value
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_requestVar;
 
@@ -27,7 +25,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * Array of filter items
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_items;
 
@@ -35,7 +32,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * Catalog layer
      *
      * @var \Magento\Catalog\Model\Layer
-     * @since 2.0.0
      */
     protected $_catalogLayer;
 
@@ -43,7 +39,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -51,7 +46,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * Filter item factory
      *
      * @var \Magento\Catalog\Model\Layer\Filter\ItemFactory
-     * @since 2.0.0
      */
     protected $_filterItemFactory;
 
@@ -59,7 +53,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * Item Data Builder
      *
      * @var \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder
-     * @since 2.0.0
      */
     protected $itemDataBuilder;
 
@@ -72,7 +65,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
@@ -96,7 +88,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      *
      * @param   string $varName
      * @return  \Magento\Catalog\Model\Layer\Filter\AbstractFilter
-     * @since 2.0.0
      */
     public function setRequestVar($varName)
     {
@@ -108,7 +99,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * Get request variable name which is used for apply filter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRequestVar()
     {
@@ -119,7 +109,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * Get filter value for reset current filter state
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getResetValue()
     {
@@ -130,7 +119,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * Retrieve filter value for Clear All Items filter state
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getCleanValue()
     {
@@ -143,7 +131,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * @param \Magento\Framework\App\RequestInterface $request
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function apply(\Magento\Framework\App\RequestInterface $request)
     {
@@ -154,7 +141,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * Get fiter items count
      *
      * @return int
-     * @since 2.0.0
      */
     public function getItemsCount()
     {
@@ -165,7 +151,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * Get all filter items
      *
      * @return array
-     * @since 2.0.0
      */
     public function getItems()
     {
@@ -180,7 +165,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      *
      * @param array $items
      * @return $this
-     * @since 2.0.0
      */
     public function setItems(array $items)
     {
@@ -201,7 +185,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * )
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getItemsData()
     {
@@ -212,7 +195,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * Initialize filter items
      *
      * @return  \Magento\Catalog\Model\Layer\Filter\AbstractFilter
-     * @since 2.0.0
      */
     protected function _initItems()
     {
@@ -229,7 +211,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * Retrieve layer object
      *
      * @return \Magento\Catalog\Model\Layer
-     * @since 2.0.0
      */
     public function getLayer()
     {
@@ -248,7 +229,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * @param   mixed $value
      * @param   int $count
      * @return  \Magento\Catalog\Model\Layer\Filter\Item
-     * @since 2.0.0
      */
     protected function _createItem($label, $value, $count = 0)
     {
@@ -263,7 +243,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * Get all product ids from from collection with applied filters
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getFilterEntityIds()
     {
@@ -274,7 +253,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * Get product collection select object with applied filters
      *
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function _getBaseCollectionSql()
     {
@@ -286,7 +264,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      *
      * @param   \Magento\Eav\Model\Entity\Attribute $attribute
      * @return  \Magento\Catalog\Model\Layer\Filter\AbstractFilter
-     * @since 2.0.0
      */
     public function setAttributeModel($attribute)
     {
@@ -300,7 +277,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      *
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getAttributeModel()
     {
@@ -316,7 +292,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -327,7 +302,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * Retrieve current store id scope
      *
      * @return int
-     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -343,7 +317,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      *
      * @param int $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreId($storeId)
     {
@@ -354,7 +327,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * Retrieve Website ID scope
      *
      * @return int
-     * @since 2.0.0
      */
     public function getWebsiteId()
     {
@@ -370,7 +342,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      *
      * @param int $websiteId
      * @return $this
-     * @since 2.0.0
      */
     public function setWebsiteId($websiteId)
     {
@@ -381,7 +352,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * Clear current element link text, for example 'Clear Price'
      *
      * @return false|string
-     * @since 2.0.0
      */
     public function getClearLinkText()
     {
@@ -394,7 +364,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * @param   int $optionId
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return  string|bool
-     * @since 2.0.0
      */
     protected function getOptionText($optionId)
     {
@@ -406,7 +375,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      *
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return int
-     * @since 2.0.0
      */
     protected function getAttributeIsFilterable($attribute)
     {
@@ -419,7 +387,6 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      * @param int $optionCount Count of search results with this option
      * @param int $totalSize Current search results count
      * @return bool
-     * @since 2.0.0
      */
     protected function isOptionReducesResults($optionCount, $totalSize)
     {

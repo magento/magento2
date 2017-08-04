@@ -10,7 +10,6 @@ namespace Magento\Framework\Profiler\Driver\Standard;
 /**
  * Interface \Magento\Framework\Profiler\Driver\Standard\OutputInterface
  *
- * @since 2.0.0
  */
 interface OutputInterface
 {
@@ -19,7 +18,6 @@ interface OutputInterface
      *
      * @param Stat $stat
      * @return void
-     * @since 2.0.0
      */
     public function display(Stat $stat);
 }

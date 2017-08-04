@@ -12,7 +12,6 @@ use Magento\Payment\Model\Method\Logger;
  * NVP API wrappers model
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
 {
@@ -60,19 +59,13 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
 
     /**#@-*/
 
-    /**
-     * Capture type (make authorization close or remain open)
-     *
-     * @var string
-     * @since 2.0.0
-     */
+    /**#@-*/
     protected $_captureTypeComplete = 'Y';
 
     /**
      * Capture type (make authorization close or remain open)
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_captureTypeNotcomplete = 'N';
 
@@ -80,7 +73,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Global public interface map
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_globalMap = [
         // each call
@@ -150,7 +142,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Fields that should be replaced in debug with '***'
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_debugReplacePrivateDataKeys = ['ACCT', 'EXPDATE', 'CVV2', 'PARTNER', 'USER', 'VENDOR', 'PWD'];
 
@@ -158,7 +149,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * DoDirectPayment request map
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_doDirectPaymentRequest = [
         'ACCT',
@@ -186,7 +176,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * DoDirectPayment response map
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_doDirectPaymentResponse = [
         'PNREF',
@@ -202,7 +191,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * DoCapture request map
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_doCaptureRequest = ['ORIGID', 'CAPTURECOMPLETE', 'AMT', 'TENDER', 'NOTE', 'INVNUM'];
 
@@ -210,7 +198,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * DoCapture response map
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_doCaptureResponse = ['PNREF', 'PPREF'];
 
@@ -218,7 +205,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * DoVoid request map
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_doVoidRequest = ['ORIGID', 'NOTE', 'TENDER'];
 
@@ -226,7 +212,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Request map for each API call
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_eachCallRequest = ['PARTNER', 'USER', 'VENDOR', 'PWD', 'BUTTONSOURCE'];
 
@@ -234,7 +219,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * RefundTransaction request map
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_refundTransactionRequest = ['ORIGID', 'TENDER'];
 
@@ -242,7 +226,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * RefundTransaction response map
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_refundTransactionResponse = ['PNREF', 'PPREF'];
 
@@ -250,7 +233,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * SetExpressCheckout request map
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_setExpressCheckoutRequest = [
         'TENDER',
@@ -272,7 +254,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * SetExpressCheckout response map
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_setExpressCheckoutResponse = ['REPMSG', 'TOKEN'];
 
@@ -280,7 +261,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * GetExpressCheckoutDetails request/response map
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_getExpressCheckoutDetailsRequest = ['TENDER', 'TOKEN'];
 
@@ -288,7 +268,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * DoExpressCheckoutPayment request map
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_doExpressCheckoutPaymentRequest = [
         'TENDER',
@@ -305,7 +284,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * DoExpressCheckoutPayment response map
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_doExpressCheckoutPaymentResponse = [
         'PNREF',
@@ -323,7 +301,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * GetTransactionDetailsRequest
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_getTransactionDetailsRequest = ['ORIGID', 'TENDER'];
 
@@ -331,7 +308,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * GetTransactionDetailsResponse
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_getTransactionDetailsResponse = [
         'PAYERID',
@@ -348,7 +324,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Map for shipping address import/export (extends billing address mapper)
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_shippingAddressMap = [
         'SHIPTOCOUNTRY' => 'country_id',
@@ -364,7 +339,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Map for billing address import/export
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_billingAddressMap = [
         'BUSINESS' => 'company',
@@ -388,7 +362,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Map for billing address to do request to Payflow
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_billingAddressMapRequest = ['country_id' => 'COUNTRY'];
 
@@ -396,7 +369,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Line items export mapping settings
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_lineItemTotalExportMap = [Cart::AMOUNT_TAX => 'TAXAMT', Cart::AMOUNT_SHIPPING => 'FREIGHTAMT'];
 
@@ -404,7 +376,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Line items export request totals format
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_lineItemsExportRequestTotalsFormat = [
         'amount' => 'PAYMENTREQUEST_%d_ITEMAMT',
@@ -416,7 +387,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Line items export items format
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_lineItemExportItemsFormat = [
         'name' => 'L_NAME%d',
@@ -428,7 +398,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Payment information response specifically to be collected after some requests
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_paymentInformationResponse = [
         'PAYERID',
@@ -445,7 +414,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Required fields in the response
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_requiredResponseParams = [
         self::DO_DIRECT_PAYMENT => ['RESULT', 'PNREF', 'PPREF'],
@@ -453,13 +421,11 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
 
     /**
      * @var \Magento\Framework\Math\Random
-     * @since 2.0.0
      */
     protected $mathRandom;
 
     /**
      * @var NvpFactory
-     * @since 2.0.0
      */
     protected $nvpFactory;
 
@@ -477,7 +443,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * @param NvpFactory $nvpFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddress,
@@ -513,7 +478,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * API endpoint getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getApiEndpoint()
     {
@@ -527,7 +491,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Return Payflow partner based on config data
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPartner()
     {
@@ -538,7 +501,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Return Payflow user based on config data
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUser()
     {
@@ -549,7 +511,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Return Payflow password based on config data
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPassword()
     {
@@ -560,7 +521,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Return Payflow vendor based on config data
      *
      * @return string
-     * @since 2.0.0
      */
     public function getVendor()
     {
@@ -571,7 +531,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Return Payflow tender based on config data
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTender()
     {
@@ -585,7 +544,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Override transaction id getting to process payflow accounts not assigned to paypal side
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPaypalTransactionId()
     {
@@ -601,7 +559,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * @param string $methodName
      * @param array $request
      * @return array
-     * @since 2.0.0
      */
     protected function _addMethodToRequest($methodName, $request)
     {
@@ -617,7 +574,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      *
      * @param string $methodName
      * @return string|null
-     * @since 2.0.0
      */
     protected function _getPayflowActionName($methodName)
     {
@@ -637,7 +593,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      *
      * @param string| $methodName
      * @return string
-     * @since 2.0.0
      */
     protected function _mapPaypalMethodName($methodName)
     {
@@ -662,7 +617,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      *
      * @param array $response
      * @return bool success flag
-     * @since 2.0.0
      */
     protected function _isCallSuccessful($response)
     {
@@ -683,7 +637,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * @param array $response
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _handleCallErrors($response)
     {
@@ -702,7 +655,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      *
      * @param array $request
      * @return string
-     * @since 2.0.0
      */
     protected function _buildQuery($request)
     {
@@ -717,7 +669,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Generate Request ID
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getRequestId()
     {
@@ -728,7 +679,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * GetTransactionDetails method does not exists in Payflow
      *
      * @return void
-     * @since 2.0.0
      */
     public function callGetTransactionDetails()
     {
@@ -741,7 +691,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * @param array $collectedWarnings
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function _importFraudFiltersResult(array $from, array $collectedWarnings)
     {
@@ -758,7 +707,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * @param string $methodName Current method name
      * @return string[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function _prepareEachCallRequest($methodName)
     {
@@ -771,7 +719,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      *
      * @param array $requestFields Standard set of values
      * @return array
-     * @since 2.0.0
      */
     protected function _prepareExpressCheckoutCallRequest(&$requestFields)
     {
@@ -784,7 +731,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      *
      * @param  array $response
      * @return array
-     * @since 2.0.0
      */
     protected function _postProcessResponse($response)
     {
@@ -812,7 +758,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * @param array $request
      * @param int $i
      * @return null|true
-     * @since 2.0.0
      */
     protected function _exportLineItems(array &$request, $i = 0)
     {
@@ -841,7 +786,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
     /**
      * Set specific data when negative line item case
      * @return void
-     * @since 2.0.0
      */
     protected function _setSpecificForNegativeLineItems()
     {

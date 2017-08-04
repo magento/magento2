@@ -13,7 +13,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Email to a Friend Product Controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class Product extends \Magento\Framework\App\Action\Action
 {
@@ -21,25 +20,21 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator
-     * @since 2.0.0
      */
     protected $_formKeyValidator;
 
     /**
      * @var \Magento\SendFriend\Model\SendFriend
-     * @since 2.0.0
      */
     protected $sendFriend;
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
@@ -49,7 +44,6 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\SendFriend\Model\SendFriend $sendFriend
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -72,7 +66,6 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      * @param RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
      * @throws \Magento\Framework\Exception\NotFoundException
-     * @since 2.0.0
      */
     public function dispatch(RequestInterface $request)
     {
@@ -100,7 +93,6 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      * Initialize Product Instance
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     protected function _initProduct()
     {

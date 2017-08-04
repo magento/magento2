@@ -9,7 +9,6 @@ namespace Magento\NewRelicReporting\Model\ResourceModel\Counts;
 /**
  * Class \Magento\NewRelicReporting\Model\ResourceModel\Counts\Collection
  *
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -17,7 +16,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Initialize counts resource collection
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

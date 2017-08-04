@@ -13,7 +13,6 @@ namespace Magento\Reports\Model\ResourceModel\Wishlist\Product;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
 {
@@ -21,7 +20,6 @@ class Collection extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     public function _construct()
     {
@@ -32,7 +30,6 @@ class Collection extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
      * Add wishlist count
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addWishlistCount()
     {
@@ -55,7 +52,6 @@ class Collection extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
      * Add customer count to result
      *
      * @return $this
-     * @since 2.0.0
      */
     public function getCustomerCount()
     {
@@ -74,7 +70,6 @@ class Collection extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
      * Get select count sql
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSelectCountSql()
     {
@@ -95,7 +90,6 @@ class Collection extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
      * @param string $attribute
      * @param string $dir
      * @return $this
-     * @since 2.0.0
      */
     public function setOrder($attribute, $dir = self::SORT_ORDER_DESC)
     {

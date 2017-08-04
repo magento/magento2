@@ -10,19 +10,16 @@ use Magento\Framework\Event\Observer as EventObserver;
 
 /**
  * PayPal module observer
- * @since 2.0.0
  */
 class AddBillingAgreementToSessionObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Paypal\Model\Billing\AgreementFactory
-     * @since 2.0.0
      */
     protected $agreementFactory;
 
     /**
      * @var \Magento\Checkout\Model\Session
-     * @since 2.0.0
      */
     protected $checkoutSession;
 
@@ -31,7 +28,6 @@ class AddBillingAgreementToSessionObserver implements ObserverInterface
      *
      * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory,
@@ -44,7 +40,6 @@ class AddBillingAgreementToSessionObserver implements ObserverInterface
     /**
      * @param EventObserver $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

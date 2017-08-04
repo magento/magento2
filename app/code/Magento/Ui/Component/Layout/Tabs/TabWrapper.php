@@ -9,25 +9,21 @@ use Magento\Framework\View\Element\Text\ListText;
 
 /**
  * Class TabWrapper
- * @since 2.0.0
  */
 class TabWrapper extends ListText implements TabInterface
 {
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $canShowTab = true;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $isHidden = false;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $isAjaxLoaded = false;
 
@@ -35,7 +31,6 @@ class TabWrapper extends ListText implements TabInterface
      * Return Tab label
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -46,7 +41,6 @@ class TabWrapper extends ListText implements TabInterface
      * Return Tab title
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -57,7 +51,6 @@ class TabWrapper extends ListText implements TabInterface
      * Tab class getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTabClass()
     {
@@ -68,7 +61,6 @@ class TabWrapper extends ListText implements TabInterface
      * Return URL link to Tab content
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTabUrl()
     {
@@ -79,7 +71,6 @@ class TabWrapper extends ListText implements TabInterface
      * Tab should be loaded trough Ajax call
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isAjaxLoaded()
     {
@@ -91,7 +82,6 @@ class TabWrapper extends ListText implements TabInterface
      * Can show tab in tabs
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -103,7 +93,6 @@ class TabWrapper extends ListText implements TabInterface
      * Tab is hidden
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isHidden()
     {

@@ -14,7 +14,6 @@ namespace Magento\Backend\Controller\Adminhtml;
 /**
  * Class \Magento\Backend\Controller\Adminhtml\Dashboard
  *
- * @since 2.0.0
  */
 abstract class Dashboard extends \Magento\Backend\App\Action
 {

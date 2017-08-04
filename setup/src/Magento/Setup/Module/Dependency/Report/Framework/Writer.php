@@ -9,7 +9,6 @@ use Magento\Setup\Module\Dependency\Report\Writer\Csv\AbstractWriter;
 
 /**
  * Csv file writer for framework dependencies report
- * @since 2.0.0
  */
 class Writer extends AbstractWriter
 {
@@ -18,7 +17,6 @@ class Writer extends AbstractWriter
      *
      * @param \Magento\Setup\Module\Dependency\Report\Framework\Data\Config $config
      * @return array
-     * @since 2.0.0
      */
     protected function prepareData($config)
     {

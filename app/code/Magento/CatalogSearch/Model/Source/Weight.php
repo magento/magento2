@@ -8,7 +8,6 @@ namespace Magento\CatalogSearch\Model\Source;
 /**
  * Attribute weight options
  * @api
- * @since 2.0.0
  */
 class Weight implements \Magento\Framework\Data\OptionSourceInterface
 {
@@ -24,7 +23,6 @@ class Weight implements \Magento\Framework\Data\OptionSourceInterface
      * Retrieve search weights as options array
      *
      * @return array
-     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -39,7 +37,6 @@ class Weight implements \Magento\Framework\Data\OptionSourceInterface
      * Retrieve search weights array
      *
      * @return int[]
-     * @since 2.0.0
      */
     public function getValues()
     {

@@ -8,7 +8,6 @@ namespace Magento\CatalogInventory\Api;
 /**
  * Interface StockCriteriaInterface
  * @api
- * @since 2.0.0
  */
 interface StockCriteriaInterface extends \Magento\Framework\Api\CriteriaInterface
 {
@@ -17,7 +16,6 @@ interface StockCriteriaInterface extends \Magento\Framework\Api\CriteriaInterfac
      *
      * @param \Magento\CatalogInventory\Api\StockCriteriaInterface $criteria
      * @return bool
-     * @since 2.0.0
      */
     public function addCriteria(\Magento\CatalogInventory\Api\StockCriteriaInterface $criteria);
 
@@ -26,7 +24,6 @@ interface StockCriteriaInterface extends \Magento\Framework\Api\CriteriaInterfac
      *
      * @param int $scope
      * @return bool
-     * @since 2.0.0
      */
     public function setScopeFilter($scope);
 }

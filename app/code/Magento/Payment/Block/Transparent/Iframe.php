@@ -9,7 +9,6 @@ namespace Magento\Payment\Block\Transparent;
  * Iframe block for register specific params in layout
  *
  * @api
- * @since 2.0.0
  */
 class Iframe extends \Magento\Framework\View\Element\Template
 {
@@ -19,7 +18,6 @@ class Iframe extends \Magento\Framework\View\Element\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $coreRegistry;
 
@@ -29,7 +27,6 @@ class Iframe extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -44,7 +41,6 @@ class Iframe extends \Magento\Framework\View\Element\Template
      * Preparing layout
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {

@@ -9,7 +9,6 @@ namespace Magento\Backend\Controller\Adminhtml\System\Store;
 /**
  * Class \Magento\Backend\Controller\Adminhtml\System\Store\EditStore
  *
- * @since 2.0.0
  */
 class EditStore extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
@@ -17,7 +16,6 @@ class EditStore extends \Magento\Backend\Controller\Adminhtml\System\Store
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

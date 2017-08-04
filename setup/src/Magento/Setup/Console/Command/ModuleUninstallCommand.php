@@ -27,7 +27,6 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
- * @since 2.0.0
  */
 class ModuleUninstallCommand extends AbstractModuleCommand
 {
@@ -43,7 +42,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * Maintenance mode
      *
      * @var MaintenanceMode
-     * @since 2.0.0
      */
     private $maintenanceMode;
 
@@ -51,7 +49,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * Deployment Configuration
      *
      * @var DeploymentConfig
-     * @since 2.0.0
      */
     private $deploymentConfig;
 
@@ -59,7 +56,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * Full module list
      *
      * @var FullModuleList
-     * @since 2.0.0
      */
     private $fullModuleList;
 
@@ -67,7 +63,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * Module package info
      *
      * @var PackageInfo
-     * @since 2.0.0
      */
     private $packageInfo;
 
@@ -75,7 +70,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * Uninstall classes collector
      *
      * @var UninstallCollector
-     * @since 2.0.0
      */
     private $collector;
 
@@ -83,7 +77,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * Composer general dependency checker
      *
      * @var DependencyChecker
-     * @since 2.0.0
      */
     private $dependencyChecker;
 
@@ -91,7 +84,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * Root composer.json information
      *
      * @var ComposerInformation
-     * @since 2.0.0
      */
     private $composer;
 
@@ -99,7 +91,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * BackupRollback factory
      *
      * @var BackupRollbackFactory
-     * @since 2.0.0
      */
     private $backupRollbackFactory;
 
@@ -107,7 +98,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * Module Uninstaller
      *
      * @var ModuleUninstaller
-     * @since 2.0.0
      */
     private $moduleUninstaller;
 
@@ -115,7 +105,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * Module Registry uninstaller
      *
      * @var ModuleRegistryUninstaller
-     * @since 2.0.0
      */
     private $moduleRegistryUninstaller;
 
@@ -130,7 +119,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * @param UninstallCollector $collector
      * @param ModuleUninstaller $moduleUninstaller
      * @param ModuleRegistryUninstaller $moduleRegistryUninstaller
-     * @since 2.0.0
      */
     public function __construct(
         ComposerInformation $composer,
@@ -157,7 +145,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -195,7 +182,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function isModuleRequired()
     {
@@ -205,7 +191,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -285,7 +270,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return void
-     * @since 2.0.0
      */
     private function takeBackup(InputInterface $input, OutputInterface $output)
     {
@@ -312,7 +296,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * @param OutputInterface $output
      * @param bool $dbBackupOption
      * @return void
-     * @since 2.0.0
      */
     private function removeData(array $modules, OutputInterface $output, $dbBackupOption)
     {
@@ -329,7 +312,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      *
      * @param string[] $modules
      * @return string[]
-     * @since 2.0.0
      */
     protected function validate(array $modules)
     {
@@ -362,7 +344,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      *
      * @param string[] $modules
      * @return string[]
-     * @since 2.0.0
      */
     private function checkDependencies(array $modules)
     {
@@ -386,7 +367,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * Sets area code to start a session for database backup and rollback
      *
      * @return void
-     * @since 2.0.0
      */
     private function setAreaCode()
     {

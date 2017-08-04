@@ -9,7 +9,6 @@ namespace Magento\GoogleOptimizer\Model\ResourceModel;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Code extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -17,7 +16,6 @@ class Code extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -32,7 +30,6 @@ class Code extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $entityType
      * @param int $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function loadByEntityType($object, $entityId, $entityType, $storeId)
     {

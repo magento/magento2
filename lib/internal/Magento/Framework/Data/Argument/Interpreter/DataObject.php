@@ -12,19 +12,16 @@ use Magento\Framework\Stdlib\BooleanUtils;
 /**
  * Class \Magento\Framework\Data\Argument\Interpreter\DataObject
  *
- * @since 2.0.0
  */
 class DataObject implements InterpreterInterface
 {
     /**
      * @var \Magento\Framework\Stdlib\BooleanUtils
-     * @since 2.0.0
      */
     protected $booleanUtils;
 
     /**
      * @param BooleanUtils $booleanUtils
-     * @since 2.0.0
      */
     public function __construct(BooleanUtils $booleanUtils)
     {
@@ -38,7 +35,6 @@ class DataObject implements InterpreterInterface
      * @return mixed
      * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException
-     * @since 2.0.0
      */
     public function evaluate(array $data)
     {

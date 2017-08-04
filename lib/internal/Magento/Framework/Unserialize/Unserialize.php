@@ -11,7 +11,6 @@ use Magento\Framework\Serialize\Serializer\Serialize;
 
 /**
  * @deprecated 2.2.0
- * @since 2.0.0
  */
 class Unserialize
 {
@@ -35,7 +34,6 @@ class Unserialize
     /**
      * @param string $string
      * @return bool|mixed
-     * @since 2.0.0
      */
     public function unserialize($string)
     {

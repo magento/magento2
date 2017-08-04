@@ -13,25 +13,21 @@ namespace Magento\Framework\App;
  * Please use plugins to prevent action dispatching instead.
  *
  * @api
- * @since 2.0.0
  */
 class ActionFlag
 {
     /**
      * @var RequestInterface
-     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_flags = [];
 
     /**
      * @param RequestInterface $request
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\RequestInterface $request)
     {
@@ -45,7 +41,6 @@ class ActionFlag
      * @param   string $flag
      * @param   string $value
      * @return void
-     * @since 2.0.0
      */
     public function set($action, $flag, $value)
     {
@@ -63,7 +58,6 @@ class ActionFlag
      * @return  bool
      *
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function get($action, $flag = '')
     {
@@ -85,7 +79,6 @@ class ActionFlag
      * Get controller key
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getControllerKey()
     {

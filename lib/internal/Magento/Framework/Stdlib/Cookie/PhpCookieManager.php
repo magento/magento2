@@ -21,7 +21,6 @@ use Psr\Log\LoggerInterface;
  * stores the cookie.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class PhpCookieManager implements CookieManagerInterface
 {
@@ -42,15 +41,11 @@ class PhpCookieManager implements CookieManagerInterface
     const KEY_EXPIRE_TIME = 'expiry';
     /**#@-*/
 
-    /**
-     * @var CookieScopeInterface
-     * @since 2.0.0
-     */
+    /**#@-*/
     private $scope;
 
     /**
      * @var CookieReaderInterface
-     * @since 2.0.0
      */
     private $reader;
 
@@ -75,7 +70,6 @@ class PhpCookieManager implements CookieManagerInterface
      * @param CookieReaderInterface $reader
      * @param LoggerInterface $logger
      * @param HttpHeader $httpHeader
-     * @since 2.0.0
      */
     public function __construct(
         CookieScopeInterface $scope,
@@ -102,7 +96,6 @@ class PhpCookieManager implements CookieManagerInterface
      * there is still no guarantee that the browser received and accepted the cookie.
      * @throws CookieSizeLimitReachedException Thrown when the cookie is too big to store any additional data.
      * @throws InputException If the cookie name is empty or contains invalid characters.
-     * @since 2.0.0
      */
     public function setSensitiveCookie($name, $value, SensitiveCookieMetadata $metadata = null)
     {
@@ -123,7 +116,6 @@ class PhpCookieManager implements CookieManagerInterface
      * @throws FailureToSendException If cookie couldn't be sent to the browser.
      * @throws CookieSizeLimitReachedException Thrown when the cookie is too big to store any additional data.
      * @throws InputException If the cookie name is empty or contains invalid characters.
-     * @since 2.0.0
      */
     public function setPublicCookie($name, $value, PublicCookieMetadata $metadata = null)
     {
@@ -141,7 +133,6 @@ class PhpCookieManager implements CookieManagerInterface
      * @throws FailureToSendException If cookie couldn't be sent to the browser.
      * @throws CookieSizeLimitReachedException Thrown when the cookie is too big to store any additional data.
      * @throws InputException If the cookie name is empty or contains invalid characters.
-     * @since 2.0.0
      */
     protected function setCookie($name, $value, array $metadataArray)
     {
@@ -180,7 +171,6 @@ class PhpCookieManager implements CookieManagerInterface
      * @param string $name
      * @param string $value
      * @return int
-     * @since 2.0.0
      */
     private function sizeOfCookie($name, $value)
     {
@@ -197,7 +187,6 @@ class PhpCookieManager implements CookieManagerInterface
      * @return void if it is possible to send the cookie
      * @throws CookieSizeLimitReachedException Thrown when the cookie is too big to store any additional data.
      * @throws InputException If the cookie name is empty or contains invalid characters.
-     * @since 2.0.0
      */
     private function checkAbilityToSendCookie($name, $value)
     {
@@ -242,7 +231,6 @@ class PhpCookieManager implements CookieManagerInterface
      *
      * @param array $metadataArray
      * @return int in seconds since the Unix epoch.
-     * @since 2.0.0
      */
     private function computeExpirationTime(array $metadataArray)
     {
@@ -269,7 +257,6 @@ class PhpCookieManager implements CookieManagerInterface
      * @param array $metadataArray
      * @param string|boolean|int|null $defaultValue
      * @return string|boolean|int|null
-     * @since 2.0.0
      */
     private function extractValue($parameter, array $metadataArray, $defaultValue)
     {
@@ -286,7 +273,6 @@ class PhpCookieManager implements CookieManagerInterface
      * @param string $name
      * @param string|null $default The default value to return if no value could be found for the given $name.
      * @return string|null
-     * @since 2.0.0
      */
     public function getCookie($name, $default = null)
     {
@@ -303,7 +289,6 @@ class PhpCookieManager implements CookieManagerInterface
      *     If this exception isn't thrown, there is still no guarantee that the browser
      *     received and accepted the request to delete this cookie.
      * @throws InputException If the cookie name is empty or contains invalid characters.
-     * @since 2.0.0
      */
     public function deleteCookie($name, CookieMetadata $metadata = null)
     {

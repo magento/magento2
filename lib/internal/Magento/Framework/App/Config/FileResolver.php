@@ -12,7 +12,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\Framework\App\Config\FileResolver
  *
- * @since 2.0.0
  */
 class FileResolver implements \Magento\Framework\Config\FileResolverInterface
 {
@@ -20,7 +19,6 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
      * Module configuration file reader
      *
      * @var \Magento\Framework\Module\Dir\Reader
-     * @since 2.0.0
      */
     protected $_moduleReader;
 
@@ -28,7 +26,6 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
      * File iterator factory
      *
      * @var \Magento\Framework\Config\FileIteratorFactory
-     * @since 2.0.0
      */
     protected $iteratorFactory;
 
@@ -36,7 +33,6 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
      * Filesystem
      *
      * @var \Magento\Framework\Filesystem
-     * @since 2.0.0
      */
     protected $filesystem;
 
@@ -44,7 +40,6 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Config\FileIteratorFactory $iteratorFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Module\Dir\Reader $moduleReader,
@@ -58,7 +53,6 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function get($filename, $scope)
     {

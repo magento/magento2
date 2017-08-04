@@ -13,25 +13,21 @@ use Magento\Sales\Model\ResourceModel\Order\Shipment\Track as ShipmentTrackResou
 
 /**
  * Class Relation
- * @since 2.0.0
  */
 class Relation implements RelationInterface
 {
     /**
      * @var ShipmentItemResource
-     * @since 2.0.0
      */
     protected $shipmentItemResource;
 
     /**
      * @var ShipmentTrackResource
-     * @since 2.0.0
      */
     protected $shipmentTrackResource;
 
     /**
      * @var ShipmentCommentResource
-     * @since 2.0.0
      */
     protected $shipmentCommentResource;
 
@@ -39,7 +35,6 @@ class Relation implements RelationInterface
      * @param Item $shipmentItemResource
      * @param Track $shipmentTrackResource
      * @param Comment $shipmentCommentResource
-     * @since 2.0.0
      */
     public function __construct(
         ShipmentItemResource $shipmentItemResource,
@@ -57,7 +52,6 @@ class Relation implements RelationInterface
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return void
      * @throws \Exception
-     * @since 2.0.0
      */
     public function processRelation(\Magento\Framework\Model\AbstractModel $object)
     {

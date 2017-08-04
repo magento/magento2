@@ -15,32 +15,27 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Service to fetch customer related custom attributes
- * @since 2.0.0
  */
 class CustomerMetadata implements CustomerMetadataInterface
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     private $customerDataObjectMethods;
 
     /**
      * @var AttributeMetadataConverter
-     * @since 2.0.0
      */
     private $attributeMetadataConverter;
 
     /**
      * @var AttributeMetadataDataProvider
-     * @since 2.0.0
      */
     private $attributeMetadataDataProvider;
 
     /**
      * @param AttributeMetadataConverter $attributeMetadataConverter
      * @param AttributeMetadataDataProvider $attributeMetadataDataProvider
-     * @since 2.0.0
      */
     public function __construct(
         AttributeMetadataConverter $attributeMetadataConverter,
@@ -52,7 +47,6 @@ class CustomerMetadata implements CustomerMetadataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAttributes($formCode)
     {
@@ -74,7 +68,6 @@ class CustomerMetadata implements CustomerMetadataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAttributeMetadata($attributeCode)
     {
@@ -100,7 +93,6 @@ class CustomerMetadata implements CustomerMetadataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAllAttributesMetadata()
     {
@@ -125,7 +117,6 @@ class CustomerMetadata implements CustomerMetadataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCustomAttributesMetadata($dataObjectClassName = self::DATA_INTERFACE_NAME)
     {

@@ -16,7 +16,6 @@ use Magento\Customer\Model\Indexer\Attribute\Filter;
 /**
  * Class \Magento\Customer\Ui\Component\Listing\AttributeRepository
  *
- * @since 2.0.0
  */
 class AttributeRepository
 {
@@ -24,37 +23,31 @@ class AttributeRepository
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $attributes;
 
     /**
      * @var \Magento\Customer\Api\CustomerMetadataInterface
-     * @since 2.0.0
      */
     protected $customerMetadata;
 
     /**
      * @var \Magento\Customer\Api\AddressMetadataInterface
-     * @since 2.0.0
      */
     protected $addressMetadata;
 
     /**
      * @var \Magento\Customer\Api\CustomerMetadataManagementInterface
-     * @since 2.0.0
      */
     protected $customerMetadataManagement;
 
     /**
      * @var \Magento\Customer\Api\AddressMetadataManagementInterface
-     * @since 2.0.0
      */
     protected $addressMetadataManagement;
 
     /**
      * @var \Magento\Customer\Model\Indexer\Attribute\Filter
-     * @since 2.0.0
      */
     protected $attributeFilter;
 
@@ -64,7 +57,6 @@ class AttributeRepository
      * @param CustomerMetadataInterface $customerMetadata
      * @param AddressMetadataInterface $addressMetadata
      * @param Filter $attributeFiltering
-     * @since 2.0.0
      */
     public function __construct(
         CustomerMetadataManagementInterface $customerMetadataManagement,
@@ -82,7 +74,6 @@ class AttributeRepository
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getList()
     {
@@ -110,7 +101,6 @@ class AttributeRepository
      * @param string $entityTypeCode
      * @param MetadataManagementInterface $management
      * @return array
-     * @since 2.0.0
      */
     protected function getListForEntity(array $metadata, $entityTypeCode, MetadataManagementInterface $management)
     {
@@ -145,7 +135,6 @@ class AttributeRepository
      *
      * @param array $options
      * @return array
-     * @since 2.0.0
      */
     protected function getOptionArray(array $options)
     {
@@ -159,7 +148,6 @@ class AttributeRepository
     /**
      * @param string $code
      * @return []
-     * @since 2.0.0
      */
     public function getMetadataByCode($code)
     {

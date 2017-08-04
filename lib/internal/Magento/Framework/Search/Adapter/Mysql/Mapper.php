@@ -24,61 +24,51 @@ use Magento\Framework\Search\RequestInterface;
  * Mapper class. Maps library request to specific adapter dependent query
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Mapper
 {
     /**
      * @var ScoreBuilder
-     * @since 2.0.0
      */
     private $scoreBuilderFactory;
 
     /**
      * @var Filter\Builder
-     * @since 2.0.0
      */
     private $filterBuilder;
 
     /**
      * @var ConditionManager
-     * @since 2.0.0
      */
     private $conditionManager;
 
     /**
      * @var IndexBuilderInterface[]
-     * @since 2.0.0
      */
     private $indexProviders;
 
     /**
      * @var Resource
-     * @since 2.0.0
      */
     private $resource;
 
     /**
      * @var EntityMetadata
-     * @since 2.0.0
      */
     private $entityMetadata;
 
     /**
      * @var QueryContainerFactory
-     * @since 2.0.0
      */
     private $queryContainerFactory;
 
     /**
      * @var Query\Builder\Match
-     * @since 2.0.0
      */
     private $matchBuilder;
 
     /**
      * @var TemporaryStorage
-     * @since 2.0.0
      */
     private $temporaryStorage;
 
@@ -107,7 +97,6 @@ class Mapper
      * @param string $relevanceCalculationMethod
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         ScoreBuilderFactory $scoreBuilderFactory,
@@ -145,7 +134,6 @@ class Mapper
      * @throws \LogicException
      * @throws \Zend_Db_Exception
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function buildQuery(RequestInterface $request)
     {
@@ -193,7 +181,6 @@ class Mapper
      * @param Select $select
      * @param ScoreBuilder $scoreBuilder
      * @return Select
-     * @since 2.0.0
      */
     private function createAroundSelect(Select $select, ScoreBuilder $scoreBuilder)
     {
@@ -218,7 +205,6 @@ class Mapper
      * @param QueryContainer $queryContainer
      * @return Select
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     protected function processQuery(
         ScoreBuilder $scoreBuilder,
@@ -258,7 +244,6 @@ class Mapper
      * @param Select $select
      * @param QueryContainer $queryContainer
      * @return Select
-     * @since 2.0.0
      */
     private function processBoolQuery(
         ScoreBuilder $scoreBuilder,
@@ -306,7 +291,6 @@ class Mapper
      * @param string $conditionType
      * @param QueryContainer $queryContainer
      * @return Select
-     * @since 2.0.0
      */
     private function processBoolQueryCondition(
         ScoreBuilder $scoreBuilder,
@@ -330,7 +314,6 @@ class Mapper
      * @param string $conditionType
      * @param QueryContainer $queryContainer
      * @return Select
-     * @since 2.0.0
      */
     private function processFilterQuery(
         ScoreBuilder $scoreBuilder,
@@ -370,7 +353,6 @@ class Mapper
      * @param IndexBuilderInterface $indexBuilder
      * @return Select
      * @throws \Zend_Db_Exception
-     * @since 2.0.0
      */
     private function addDerivedQueries(
         RequestInterface $request,
@@ -401,7 +383,6 @@ class Mapper
 
     /**
      * @return false|\Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     private function getConnection()
     {
@@ -414,7 +395,6 @@ class Mapper
      * @param IndexBuilderInterface $indexBuilder
      * @param MatchContainer[] $matchQueries
      * @return Select
-     * @since 2.0.0
      */
     private function addMatchQueries(
         RequestInterface $request,
@@ -451,7 +431,6 @@ class Mapper
      * @param ScoreBuilder $scoreBuilder
      * @return Select
      * @throws \Zend_Db_Exception
-     * @since 2.0.0
      */
     private function joinPreviousResultToSelect(Select $query, Table $previousResultTable, ScoreBuilder $scoreBuilder)
     {

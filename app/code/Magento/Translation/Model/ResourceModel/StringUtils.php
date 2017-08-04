@@ -8,25 +8,21 @@ namespace Magento\Translation\Model\ResourceModel;
 /**
  * Class \Magento\Translation\Model\ResourceModel\StringUtils
  *
- * @since 2.0.0
  */
 class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $_localeResolver;
 
     /**
      * @var \Magento\Framework\App\ScopeResolverInterface
-     * @since 2.0.0
      */
     protected $scopeResolver;
 
     /**
      * @var null|string
-     * @since 2.0.0
      */
     protected $scope;
 
@@ -36,7 +32,6 @@ class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param string $connectionName
      * @param string|null $scope
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -55,7 +50,6 @@ class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -69,7 +63,6 @@ class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param String $value
      * @param String $field
      * @return array|$this
-     * @since 2.0.0
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
     {
@@ -95,7 +88,6 @@ class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param String $value
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -109,7 +101,6 @@ class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     public function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -130,7 +121,6 @@ class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -151,7 +141,6 @@ class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -192,7 +181,6 @@ class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $locale
      * @param int|null $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function deleteTranslate($string, $locale = null, $storeId = null)
     {
@@ -221,7 +209,6 @@ class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param String $locale
      * @param int|null $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function saveTranslate($string, $translate, $locale = null, $storeId = null)
     {
@@ -287,7 +274,6 @@ class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Retrieve current store identifier
      *
      * @return int
-     * @since 2.0.0
      */
     protected function getStoreId()
     {

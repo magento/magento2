@@ -16,7 +16,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @deprecated 2.1.0
- * @since 2.0.0
  */
 class Cart extends DataObject implements CartInterface
 {
@@ -24,7 +23,6 @@ class Cart extends DataObject implements CartInterface
      * Shopping cart items summary quantity(s)
      *
      * @var int|null
-     * @since 2.0.0
      */
     protected $_summaryQty;
 
@@ -32,7 +30,6 @@ class Cart extends DataObject implements CartInterface
      * List of product ids in shopping cart
      *
      * @var int[]|null
-     * @since 2.0.0
      */
     protected $_productIds;
 
@@ -40,7 +37,6 @@ class Cart extends DataObject implements CartInterface
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager;
 
@@ -48,67 +44,57 @@ class Cart extends DataObject implements CartInterface
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Checkout\Model\ResourceModel\Cart
-     * @since 2.0.0
      */
     protected $_resourceCart;
 
     /**
      * @var Session
-     * @since 2.0.0
      */
     protected $_checkoutSession;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
-     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
-     * @since 2.0.0
      */
     protected $stockRegistry;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockStateInterface
-     * @since 2.0.0
      */
     protected $stockState;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
     /**
      * @var ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var \Magento\Checkout\Model\Cart\RequestInfoFilterInterface
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private $requestInfoFilter;
 
@@ -127,7 +113,6 @@ class Cart extends DataObject implements CartInterface
      * @param array $data
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -162,7 +147,6 @@ class Cart extends DataObject implements CartInterface
      *
      * @return \Magento\Checkout\Model\ResourceModel\Cart
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _getResource()
     {
@@ -174,7 +158,6 @@ class Cart extends DataObject implements CartInterface
      *
      * @return Session
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getCheckoutSession()
     {
@@ -186,7 +169,6 @@ class Cart extends DataObject implements CartInterface
      *
      * @return \Magento\Customer\Model\Session
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getCustomerSession()
     {
@@ -197,7 +179,6 @@ class Cart extends DataObject implements CartInterface
      * List of shopping cart items
      *
      * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection|array
-     * @since 2.0.0
      */
     public function getItems()
     {
@@ -211,7 +192,6 @@ class Cart extends DataObject implements CartInterface
      * Retrieve array of cart product ids
      *
      * @return array
-     * @since 2.0.0
      */
     public function getQuoteProductIds()
     {
@@ -230,7 +210,6 @@ class Cart extends DataObject implements CartInterface
      * Get quote object associated with cart. By default it is current customer session quote
      *
      * @return \Magento\Quote\Model\Quote
-     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -246,7 +225,6 @@ class Cart extends DataObject implements CartInterface
      * @param \Magento\Quote\Model\Quote $quote
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setQuote(\Magento\Quote\Model\Quote $quote)
     {
@@ -258,7 +236,6 @@ class Cart extends DataObject implements CartInterface
      * Reinitialize cart quote state
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function reinitializeState()
     {
@@ -280,7 +257,6 @@ class Cart extends DataObject implements CartInterface
      * @param \Magento\Sales\Model\Order\Item $orderItem
      * @param true|null $qtyFlag if is null set product qty like in order
      * @return $this
-     * @since 2.0.0
      */
     public function addOrderItem($orderItem, $qtyFlag = null)
     {
@@ -315,7 +291,6 @@ class Cart extends DataObject implements CartInterface
      * @param   Product|int|string $productInfo
      * @return  Product
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _getProduct($productInfo)
     {
@@ -348,7 +323,6 @@ class Cart extends DataObject implements CartInterface
      * @param   \Magento\Framework\DataObject|int|array $requestInfo
      * @return  \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _getProductRequest($requestInfo)
     {
@@ -376,7 +350,6 @@ class Cart extends DataObject implements CartInterface
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function addProduct($productInfo, $requestInfo = null)
     {
@@ -438,7 +411,6 @@ class Cart extends DataObject implements CartInterface
      *
      * @param  int[] $productIds
      * @return $this
-     * @since 2.0.0
      */
     public function addProductsByIds($productIds)
     {
@@ -482,7 +454,6 @@ class Cart extends DataObject implements CartInterface
      *
      * @param   array $data
      * @return  array
-     * @since 2.0.0
      */
     public function suggestItemsQty($data)
     {
@@ -523,7 +494,6 @@ class Cart extends DataObject implements CartInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function updateItems($data)
     {
@@ -583,7 +553,6 @@ class Cart extends DataObject implements CartInterface
      * @param  int $itemId
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function removeItem($itemId)
     {
@@ -595,7 +564,6 @@ class Cart extends DataObject implements CartInterface
      * Save cart
      *
      * @return $this
-     * @since 2.0.0
      */
     public function save()
     {
@@ -619,7 +587,6 @@ class Cart extends DataObject implements CartInterface
      *
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function saveQuote()
     {
@@ -631,7 +598,6 @@ class Cart extends DataObject implements CartInterface
      *
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function truncate()
     {
@@ -641,7 +607,6 @@ class Cart extends DataObject implements CartInterface
 
     /**
      * @return int[]
-     * @since 2.0.0
      */
     public function getProductIds()
     {
@@ -661,7 +626,6 @@ class Cart extends DataObject implements CartInterface
      * Get shopping cart items summary (includes config settings)
      *
      * @return int|float
-     * @since 2.0.0
      */
     public function getSummaryQty()
     {
@@ -690,7 +654,6 @@ class Cart extends DataObject implements CartInterface
      *
      * @return int
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getItemsCount()
     {
@@ -702,7 +665,6 @@ class Cart extends DataObject implements CartInterface
      *
      * @return int|float
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getItemsQty()
     {
@@ -722,7 +684,6 @@ class Cart extends DataObject implements CartInterface
      *
      * @see \Magento\Quote\Model\Quote::updateItem()
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function updateItem($itemId, $requestInfo = null, $updatingParams = null)
     {
@@ -775,9 +736,9 @@ class Cart extends DataObject implements CartInterface
     /**
      * Getter for RequestInfoFilter
      *
-     * @deprecated 2.2.0
+     * @deprecated 2.1.2
      * @return \Magento\Checkout\Model\Cart\RequestInfoFilterInterface
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private function getRequestInfoFilter()
     {

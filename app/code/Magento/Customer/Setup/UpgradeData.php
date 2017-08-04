@@ -23,7 +23,6 @@ use Magento\Framework\DB\DataConverter\SerializedToJson;
 /**
  * @codeCoverageIgnore
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class UpgradeData implements UpgradeDataInterface
 {
@@ -31,31 +30,28 @@ class UpgradeData implements UpgradeDataInterface
      * Customer setup factory
      *
      * @var CustomerSetupFactory
-     * @since 2.0.0
      */
     protected $customerSetupFactory;
 
     /**
      * @var AllowedCountries
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $allowedCountriesReader;
 
     /**
      * @var IndexerRegistry
-     * @since 2.0.0
      */
     protected $indexerRegistry;
 
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $eavConfig;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $storeManager;
 
@@ -70,7 +66,6 @@ class UpgradeData implements UpgradeDataInterface
      * @param IndexerRegistry $indexerRegistry
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param FieldDataConverterFactory|null $fieldDataConverterFactory
-     * @since 2.0.0
      */
     public function __construct(
         CustomerSetupFactory $customerSetupFactory,
@@ -91,7 +86,6 @@ class UpgradeData implements UpgradeDataInterface
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -177,9 +171,9 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * Retrieve Store Manager
      *
-     * @deprecated 2.2.0
+     * @deprecated 2.1.3
      * @return StoreManagerInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function getStoreManager()
     {
@@ -193,9 +187,9 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * Retrieve Allowed Countries Reader
      *
-     * @deprecated 2.2.0
+     * @deprecated 2.1.3
      * @return AllowedCountries
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function getAllowedCountriesReader()
     {
@@ -213,7 +207,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param array $newCountries
      * @param string $identifier
      * @return array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function mergeAllowedCountries(array $countries, array $newCountries, $identifier)
     {
@@ -233,7 +227,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param string $scope
      * @param int $scopeCode
      * @return array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function getAllowedCountries($scope, $scopeCode)
     {
@@ -246,7 +240,7 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param SetupInterface $setup
      * @return void
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function migrateStoresAllowedCountriesToWebsite(SetupInterface $setup)
     {
@@ -299,7 +293,6 @@ class UpgradeData implements UpgradeDataInterface
      * @param array $entityAttributes
      * @param CustomerSetup $customerSetup
      * @return void
-     * @since 2.0.0
      */
     protected function upgradeAttributes(array $entityAttributes, CustomerSetup $customerSetup)
     {
@@ -317,7 +310,6 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @param ModuleDataSetupInterface $setup
      * @return void
-     * @since 2.0.0
      */
     private function upgradeHash($setup)
     {

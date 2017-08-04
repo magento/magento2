@@ -9,7 +9,6 @@ namespace Magento\Framework\ObjectManager\Config\Reader;
 
 /**
  * Factory class for \Magento\Framework\ObjectManager\Config\Reader\Dom
- * @since 2.0.0
  */
 class DomFactory
 {
@@ -17,7 +16,6 @@ class DomFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager = null;
 
@@ -25,7 +23,6 @@ class DomFactory
      * Instance name to create
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_instanceName = null;
 
@@ -34,7 +31,6 @@ class DomFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -49,7 +45,6 @@ class DomFactory
      *
      * @param array $data
      * @return \Magento\Framework\ObjectManager\Config\Reader\Dom
-     * @since 2.0.0
      */
     public function create(array $data = [])
     {

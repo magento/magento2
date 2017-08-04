@@ -11,7 +11,6 @@ use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 abstract class AbstractCacheManageCommand extends AbstractCacheCommand
 {
@@ -22,7 +21,6 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -39,7 +37,6 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
      *
      * @param InputInterface $input
      * @return array
-     * @since 2.0.0
      */
     protected function getRequestedTypes(InputInterface $input)
     {

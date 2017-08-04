@@ -17,37 +17,31 @@ use Magento\Setup\Module\Di\Definition\Collection as DefinitionsCollection;
  * Class Reader
  * @package Magento\Setup\Module\Di\Compiler\Config
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Reader
 {
     /**
      * @var ConfigInterface
-     * @since 2.0.0
      */
     private $diContainerConfig;
 
     /**
      * @var App\ObjectManager\ConfigLoader
-     * @since 2.0.0
      */
     private $configLoader;
 
     /**
      * @var ArgumentsResolverFactory
-     * @since 2.0.0
      */
     private $argumentsResolverFactory;
 
     /**
      * @var ClassReaderDecorator
-     * @since 2.0.0
      */
     private $classReaderDecorator;
 
     /**
      * @var Type
-     * @since 2.0.0
      */
     private $typeReader;
 
@@ -57,7 +51,6 @@ class Reader
      * @param ArgumentsResolverFactory $argumentsResolverFactory
      * @param ClassReaderDecorator $classReaderDecorator
      * @param Type $typeReader
-     * @since 2.0.0
      */
     public function __construct(
         ConfigInterface $diContainerConfig,
@@ -80,7 +73,6 @@ class Reader
      * @param string $areaCode
      *
      * @return array
-     * @since 2.0.0
      */
     public function generateCachePerScope(
         DefinitionsCollection $definitionsCollection,
@@ -116,7 +108,6 @@ class Reader
      * @param ConfigInterface $config
      * @return array|mixed
      * @throws \ReflectionException
-     * @since 2.0.0
      */
     private function getConfigForScope(DefinitionsCollection $definitionsCollection, ConfigInterface $config)
     {
@@ -157,7 +148,6 @@ class Reader
      * @param DefinitionsCollection $definitionsCollection
      *
      * @return void
-     * @since 2.0.0
      */
     private function fillThirdPartyInterfaces(ConfigInterface $config, DefinitionsCollection $definitionsCollection)
     {

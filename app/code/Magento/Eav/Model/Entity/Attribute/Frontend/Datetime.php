@@ -10,13 +10,11 @@ namespace Magento\Eav\Model\Entity\Attribute\Frontend;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Datetime extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $_localeDate;
 
@@ -24,7 +22,6 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFron
      * @param \Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory $attrBooleanFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory $attrBooleanFactory,
@@ -39,7 +36,6 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFron
      *
      * @param \Magento\Framework\DataObject $object
      * @return mixed
-     * @since 2.0.0
      */
     public function getValue(\Magento\Framework\DataObject $object)
     {

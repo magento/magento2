@@ -11,7 +11,6 @@ namespace Magento\Framework\Session;
  * Session Manager Interface
  *
  * @api
- * @since 2.0.0
  */
 interface SessionManagerInterface
 {
@@ -24,7 +23,6 @@ interface SessionManagerInterface
      * Start session
      *
      * @return SessionManagerInterface
-     * @since 2.0.0
      */
     public function start();
 
@@ -32,7 +30,6 @@ interface SessionManagerInterface
      * Session write close
      *
      * @return void
-     * @since 2.0.0
      */
     public function writeClose();
 
@@ -40,7 +37,6 @@ interface SessionManagerInterface
      * Does a session exist
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isSessionExists();
 
@@ -48,7 +44,6 @@ interface SessionManagerInterface
      * Retrieve session Id
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSessionId();
 
@@ -56,7 +51,6 @@ interface SessionManagerInterface
      * Retrieve session name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName();
 
@@ -65,7 +59,6 @@ interface SessionManagerInterface
      *
      * @param string $name
      * @return SessionManagerInterface
-     * @since 2.0.0
      */
     public function setName($name);
 
@@ -74,7 +67,6 @@ interface SessionManagerInterface
      *
      * @param  array $options
      * @return void
-     * @since 2.0.0
      */
     public function destroy(array $options = null);
 
@@ -82,7 +74,6 @@ interface SessionManagerInterface
      * Unset session data
      *
      * @return $this
-     * @since 2.0.0
      */
     public function clearStorage();
 
@@ -90,7 +81,6 @@ interface SessionManagerInterface
      * Retrieve Cookie domain
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCookieDomain();
 
@@ -98,7 +88,6 @@ interface SessionManagerInterface
      * Retrieve cookie path
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCookiePath();
 
@@ -106,7 +95,6 @@ interface SessionManagerInterface
      * Retrieve cookie lifetime
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCookieLifetime();
 
@@ -115,7 +103,6 @@ interface SessionManagerInterface
      *
      * @param string|null $sessionId
      * @return SessionManagerInterface
-     * @since 2.0.0
      */
     public function setSessionId($sessionId);
 
@@ -123,7 +110,6 @@ interface SessionManagerInterface
      * Renew session id and update session cookie
      *
      * @return SessionManagerInterface
-     * @since 2.0.0
      */
     public function regenerateId();
 
@@ -133,7 +119,6 @@ interface SessionManagerInterface
      * Sends a session cookie with no value, and with an expiry in the past.
      *
      * @return void
-     * @since 2.0.0
      */
     public function expireSessionCookie();
 
@@ -142,7 +127,6 @@ interface SessionManagerInterface
      *
      * @param string $urlHost
      * @return string
-     * @since 2.0.0
      */
     public function getSessionIdForHost($urlHost);
 
@@ -151,7 +135,6 @@ interface SessionManagerInterface
      *
      * @param string $host
      * @return bool
-     * @since 2.0.0
      */
     public function isValidForHost($host);
 
@@ -160,7 +143,6 @@ interface SessionManagerInterface
      *
      * @param string $path
      * @return bool
-     * @since 2.0.0
      */
     public function isValidForPath($path);
 }

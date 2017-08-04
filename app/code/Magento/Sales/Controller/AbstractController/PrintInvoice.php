@@ -12,25 +12,21 @@ use Magento\Framework\View\Result\PageFactory;
 /**
  * Class \Magento\Sales\Controller\AbstractController\PrintInvoice
  *
- * @since 2.0.0
  */
 abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var OrderViewAuthorizationInterface
-     * @since 2.0.0
      */
     protected $orderAuthorization;
 
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -39,7 +35,6 @@ abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
      * @param OrderViewAuthorizationInterface $orderAuthorization
      * @param \Magento\Framework\Registry $registry
      * @param PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -57,7 +52,6 @@ abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
      * Print Invoice Action
      *
      * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

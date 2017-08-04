@@ -19,37 +19,37 @@ use Magento\Sales\Model\ValidatorResultMerger;
 
 /**
  * Class RefundInvoice
- * @since 2.2.0
+ * @since 2.1.3
  */
 class RefundInvoice implements RefundInvoiceInterface
 {
     /**
      * @var OrderValidatorInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $orderValidator;
 
     /**
      * @var CreditmemoValidatorInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $creditmemoValidator;
 
     /**
      * @var ItemCreationValidatorInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $itemCreationValidator;
 
     /**
      * @var InvoiceValidatorInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $invoiceValidator;
 
     /**
      * @var ValidatorResultMerger
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $validatorResultMerger;
 
@@ -60,7 +60,7 @@ class RefundInvoice implements RefundInvoiceInterface
      * @param ItemCreationValidatorInterface $itemCreationValidator
      * @param InvoiceValidatorInterface $invoiceValidator
      * @param ValidatorResultMerger $validatorResultMerger
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(
         OrderValidatorInterface $orderValidator,
@@ -78,7 +78,7 @@ class RefundInvoice implements RefundInvoiceInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function validate(
         InvoiceInterface $invoice,

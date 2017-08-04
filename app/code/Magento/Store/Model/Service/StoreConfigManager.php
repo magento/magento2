@@ -8,19 +8,16 @@ namespace Magento\Store\Model\Service;
 /**
  * Class \Magento\Store\Model\Service\StoreConfigManager
  *
- * @since 2.0.0
  */
 class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterface
 {
     /**
      * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory
-     * @since 2.0.0
      */
     protected $storeCollectionFactory;
 
     /**
      * @var \Magento\Store\Model\Data\StoreConfigFactory
-     * @since 2.0.0
      */
     protected $storeConfigFactory;
 
@@ -28,7 +25,6 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
@@ -36,7 +32,6 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
      * Map the setters to config path
      *
      * @var array
-     * @since 2.0.0
      */
     protected $configPaths = [
         'setLocale' => 'general/locale/code',
@@ -50,7 +45,6 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
      * @param \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeCollectionFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\Data\StoreConfigFactory $storeConfigFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeCollectionFactory,
@@ -65,7 +59,6 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
     /**
      * @param string[] $storeCodes list of stores by store codes, will return all if storeCodes is not set
      * @return \Magento\Store\Api\Data\StoreConfigInterface[]
-     * @since 2.0.0
      */
     public function getStoreConfigs(array $storeCodes = null)
     {
@@ -84,7 +77,6 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
     /**
      * @param \Magento\Store\Model\Store $store
      * @return \Magento\Store\Api\Data\StoreConfigInterface
-     * @since 2.0.0
      */
     protected function getStoreConfig($store)
     {

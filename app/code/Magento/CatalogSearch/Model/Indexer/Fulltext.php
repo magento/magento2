@@ -17,7 +17,6 @@ use Magento\Store\Model\StoreManagerInterface;
  * Provide functionality for Fulltext Search indexing.
  *
  * @api
- * @since 2.0.0
  */
 class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
@@ -28,43 +27,36 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
 
     /**
      * @var array index structure
-     * @since 2.0.0
      */
     protected $data;
 
     /**
      * @var IndexerHandlerFactory
-     * @since 2.0.0
      */
     private $indexerHandlerFactory;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.0.0
      */
     private $storeManager;
 
     /**
      * @var \Magento\Framework\Search\Request\DimensionFactory
-     * @since 2.0.0
      */
     private $dimensionFactory;
 
     /**
      * @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full
-     * @since 2.0.0
      */
     private $fullAction;
 
     /**
      * @var FulltextResource
-     * @since 2.0.0
      */
     private $fulltextResource;
 
     /**
      * @var \Magento\Framework\Search\Request\Config
-     * @since 2.0.0
      */
     private $searchRequestConfig;
 
@@ -90,7 +82,6 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
      * @param array $data
      * @param IndexSwitcherInterface $indexSwitcher
      * @param Scope\State $indexScopeState
-     * @since 2.0.0
      */
     public function __construct(
         FullFactory $fullActionFactory,
@@ -125,7 +116,6 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
      *
      * @param int[] $ids
      * @return void
-     * @since 2.0.0
      */
     public function execute($ids)
     {
@@ -146,7 +136,6 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
      * Execute full indexation
      *
      * @return void
-     * @since 2.0.0
      */
     public function executeFull()
     {
@@ -174,7 +163,6 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
      *
      * @param int[] $ids
      * @return void
-     * @since 2.0.0
      */
     public function executeList(array $ids)
     {
@@ -186,7 +174,6 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
      *
      * @param int $id
      * @return void
-     * @since 2.0.0
      */
     public function executeRow($id)
     {

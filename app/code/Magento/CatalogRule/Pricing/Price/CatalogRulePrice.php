@@ -19,7 +19,6 @@ use Magento\Store\Model\StoreManager;
 
 /**
  * Class CatalogRulePrice
- * @since 2.0.0
  */
 class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterface
 {
@@ -30,32 +29,28 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $dateTime;
 
     /**
      * @var \Magento\Store\Model\StoreManager
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var \Magento\CatalogRule\Model\ResourceModel\RuleFactory
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 2.1.1
      */
     protected $resourceRuleFactory;
 
     /**
      * @var \Magento\CatalogRule\Model\ResourceModel\Rule
-     * @since 2.2.0
+     * @since 2.1.1
      */
     private $ruleResource;
 
@@ -68,7 +63,6 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
      * @param StoreManager $storeManager
      * @param Session $customerSession
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @since 2.0.0
      */
     public function __construct(
         Product $saleableItem,
@@ -91,7 +85,6 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
      * Returns catalog rule value
      *
      * @return float|boolean
-     * @since 2.0.0
      */
     public function getValue()
     {
@@ -118,8 +111,8 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
 
     /**
      * @return Rule
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 2.1.1
+     * @since 2.1.1
      */
     private function getRuleResource()
     {

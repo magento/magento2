@@ -14,7 +14,6 @@ use Magento\Security\Model\SecurityCookie;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
 {
@@ -69,7 +68,6 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      * Role form submit action to save or create new role
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -176,7 +174,6 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      * @param int $userId
      * @param int $roleId
      * @return bool
-     * @since 2.0.0
      */
     protected function _addUserToRole($userId, $roleId)
     {
@@ -198,7 +195,6 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      * @param int $roleId
      * @return bool
      * @throws \Exception
-     * @since 2.0.0
      */
     protected function _deleteUserFromRole($userId, $roleId)
     {

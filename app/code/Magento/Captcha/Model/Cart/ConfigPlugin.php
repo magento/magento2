@@ -8,19 +8,16 @@ namespace Magento\Captcha\Model\Cart;
 /**
  * Class \Magento\Captcha\Model\Cart\ConfigPlugin
  *
- * @since 2.0.0
  */
 class ConfigPlugin
 {
     /**
      * @var \Magento\Captcha\Model\Checkout\ConfigProvider
-     * @since 2.0.0
      */
     protected $configProvider;
 
     /**
      * @param \Magento\Captcha\Model\Checkout\ConfigProvider $configProvider
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Captcha\Model\Checkout\ConfigProvider $configProvider
@@ -34,7 +31,6 @@ class ConfigPlugin
      * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterGetConfig(\Magento\Checkout\Block\Cart\Sidebar $subject, array $result)
     {

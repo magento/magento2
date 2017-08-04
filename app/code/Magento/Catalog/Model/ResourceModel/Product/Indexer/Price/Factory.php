@@ -12,7 +12,6 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 /**
  * Class \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory
  *
- * @since 2.0.0
  */
 class Factory
 {
@@ -20,7 +19,6 @@ class Factory
      * Object Manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -28,7 +26,6 @@ class Factory
      * Construct
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -42,7 +39,6 @@ class Factory
      * @param array $data
      * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function create($className, array $data = [])
     {

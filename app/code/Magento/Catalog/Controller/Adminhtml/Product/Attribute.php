@@ -15,7 +15,6 @@ use Magento\Framework\View\Result\PageFactory;
 /**
  * Class \Magento\Catalog\Controller\Adminhtml\Product\Attribute
  *
- * @since 2.0.0
  */
 abstract class Attribute extends \Magento\Backend\App\Action
 {
@@ -28,13 +27,11 @@ abstract class Attribute extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Framework\Cache\FrontendInterface
-     * @since 2.0.0
      */
     protected $_attributeLabelCache;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_entityTypeId;
 
@@ -42,13 +39,11 @@ abstract class Attribute extends \Magento\Backend\App\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -59,7 +54,6 @@ abstract class Attribute extends \Magento\Backend\App\Action
      * @param \Magento\Framework\Cache\FrontendInterface $attributeLabelCache
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -78,7 +72,6 @@ abstract class Attribute extends \Magento\Backend\App\Action
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
-     * @since 2.0.0
      */
     public function dispatch(\Magento\Framework\App\RequestInterface $request)
     {
@@ -93,7 +86,6 @@ abstract class Attribute extends \Magento\Backend\App\Action
     /**
      * @param \Magento\Framework\Phrase|null $title
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.0.0
      */
     protected function createActionPage($title = null)
     {
@@ -124,7 +116,6 @@ abstract class Attribute extends \Magento\Backend\App\Action
      *
      * @param string $label
      * @return string
-     * @since 2.0.0
      */
     protected function generateCode($label)
     {

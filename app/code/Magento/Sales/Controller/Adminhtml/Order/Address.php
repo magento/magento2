@@ -9,7 +9,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Address
  *
- * @since 2.0.0
  */
 class Address extends \Magento\Sales\Controller\Adminhtml\Order
 {
@@ -24,7 +23,6 @@ class Address extends \Magento\Sales\Controller\Adminhtml\Order
      * Edit order address form
      *
      * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

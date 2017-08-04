@@ -12,7 +12,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\Newsletter\Controller\Adminhtml\Subscriber\ExportCsv
  *
- * @since 2.0.0
  */
 class ExportCsv extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
 {
@@ -20,7 +19,6 @@ class ExportCsv extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
      * Export subscribers grid to CSV format
      *
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

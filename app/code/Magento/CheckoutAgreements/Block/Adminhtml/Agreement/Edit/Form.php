@@ -8,19 +8,16 @@ namespace Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit;
 /**
  * Class \Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit\Form
  *
- * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\Store\Model\System\Store
-     * @since 2.0.0
      */
     protected $_systemStore;
 
     /**
      * @var \Magento\CheckoutAgreements\Model\AgreementModeOptions
-     * @since 2.0.0
      */
     protected $agreementModeOptions;
 
@@ -32,7 +29,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\CheckoutAgreements\Model\AgreementModeOptions $agreementModeOptions
      * @param array $data
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -51,7 +47,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Init class
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -64,7 +59,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {

@@ -13,19 +13,16 @@ use Magento\Catalog\Model\Product;
 
 /**
  * Class Validation. Call validate method for configurable product instead simple product
- * @since 2.0.0
  */
 class Validation
 {
     /**
      * @var Configurable
-     * @since 2.0.0
      */
     private $configurable;
 
     /**
      * @param Configurable $configurableType
-     * @since 2.0.0
      */
     public function __construct(Configurable $configurableType)
     {

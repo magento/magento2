@@ -27,67 +27,56 @@ use Psr\Log\LoggerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api Use this class as a base for virtual types declaration
- * @since 2.0.0
  */
 class Adapter implements MethodInterface
 {
     /**
      * @var ValueHandlerPoolInterface
-     * @since 2.0.0
      */
     private $valueHandlerPool;
 
     /**
      * @var ValidatorPoolInterface
-     * @since 2.0.0
      */
     private $validatorPool;
 
     /**
      * @var CommandPoolInterface
-     * @since 2.0.0
      */
     private $commandPool;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     private $storeId;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $formBlockType;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $infoBlockType;
 
     /**
      * @var InfoInterface
-     * @since 2.0.0
      */
     private $infoInstance;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $code;
 
     /**
      * @var ManagerInterface
-     * @since 2.0.0
      */
     private $eventManager;
 
     /**
      * @var PaymentDataObjectFactory
-     * @since 2.0.0
      */
     private $paymentDataObjectFactory;
 
@@ -117,7 +106,6 @@ class Adapter implements MethodInterface
      * @param CommandManagerInterface|null $commandExecutor
      * @param LoggerInterface|null $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         ManagerInterface $eventManager,
@@ -148,7 +136,6 @@ class Adapter implements MethodInterface
      *
      * @return ValidatorPoolInterface
      * @throws \DomainException
-     * @since 2.0.0
      */
     public function getValidatorPool()
     {
@@ -160,7 +147,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function canOrder()
     {
@@ -169,7 +155,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function canAuthorize()
     {
@@ -178,7 +163,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function canCapture()
     {
@@ -187,7 +171,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function canCapturePartial()
     {
@@ -196,7 +179,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function canCaptureOnce()
     {
@@ -205,7 +187,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function canRefund()
     {
@@ -214,7 +195,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function canRefundPartialPerInvoice()
     {
@@ -223,7 +203,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function canVoid()
     {
@@ -232,7 +211,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function canUseInternal()
     {
@@ -241,7 +219,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function canUseCheckout()
     {
@@ -250,7 +227,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function canEdit()
     {
@@ -259,7 +235,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function canFetchTransactionInfo()
     {
@@ -268,7 +243,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function canReviewPayment()
     {
@@ -277,7 +251,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function isGateway()
     {
@@ -286,7 +259,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function isOffline()
     {
@@ -295,7 +267,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function isInitializeNeeded()
     {
@@ -304,7 +275,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function isAvailable(CartInterface $quote = null)
     {
@@ -345,7 +315,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function isActive($storeId = null)
     {
@@ -354,7 +323,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function canUseForCountry($country)
     {
@@ -370,7 +338,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function canUseForCurrency($currencyCode)
     {
@@ -389,7 +356,6 @@ class Adapter implements MethodInterface
      *
      * @param string $commandCode
      * @return bool
-     * @since 2.0.0
      */
     private function canPerformCommand($commandCode)
     {
@@ -402,7 +368,6 @@ class Adapter implements MethodInterface
      * @param string $field
      * @param null $storeId
      * @return mixed
-     * @since 2.0.0
      */
     private function getConfiguredValue($field, $storeId = null)
     {
@@ -420,7 +385,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function getConfigData($field, $storeId = null)
     {
@@ -429,7 +393,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function validate()
     {
@@ -454,7 +417,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function fetchTransactionInfo(InfoInterface $payment, $transactionId)
     {
@@ -466,7 +428,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function order(InfoInterface $payment, $amount)
     {
@@ -480,7 +441,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function authorize(InfoInterface $payment, $amount)
     {
@@ -494,7 +454,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function capture(InfoInterface $payment, $amount)
     {
@@ -508,7 +467,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function refund(InfoInterface $payment, $amount)
     {
@@ -522,7 +480,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function cancel(InfoInterface $payment)
     {
@@ -533,7 +490,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function void(InfoInterface $payment)
     {
@@ -544,7 +500,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function acceptPayment(InfoInterface $payment)
     {
@@ -555,7 +510,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function denyPayment(InfoInterface $payment)
     {
@@ -566,7 +520,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     private function executeCommand($commandCode, array $arguments = [])
     {
@@ -596,7 +549,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function getCode()
     {
@@ -605,7 +557,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -614,7 +565,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function setStore($storeId)
     {
@@ -623,7 +573,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function getStore()
     {
@@ -632,7 +581,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function getFormBlockType()
     {
@@ -641,7 +589,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function getInfoBlockType()
     {
@@ -650,7 +597,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function getInfoInstance()
     {
@@ -659,7 +605,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function setInfoInstance(InfoInterface $info)
     {
@@ -670,7 +615,6 @@ class Adapter implements MethodInterface
      * @inheritdoc
      * @param DataObject $data
      * @return $this
-     * @since 2.0.0
      */
     public function assignData(\Magento\Framework\DataObject $data)
     {
@@ -698,7 +642,6 @@ class Adapter implements MethodInterface
     /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function initialize($paymentAction, $stateObject)
     {
@@ -715,7 +658,6 @@ class Adapter implements MethodInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function getConfigPaymentAction()
     {

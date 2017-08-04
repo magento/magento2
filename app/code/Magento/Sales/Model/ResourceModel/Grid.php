@@ -12,37 +12,31 @@ use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface;
 
 /**
  * Class Grid
- * @since 2.0.0
  */
 class Grid extends AbstractGrid
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $gridTableName;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $mainTableName;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $orderIdField;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $joins;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $columns;
 
@@ -61,7 +55,6 @@ class Grid extends AbstractGrid
      * @param array $columns
      * @param string $connectionName
      * @param NotSyncedDataProviderInterface $notSyncedDataProvider
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -91,7 +84,6 @@ class Grid extends AbstractGrid
      * @param int|string $value
      * @param null|string $field
      * @return \Zend_Db_Statement_Interface
-     * @since 2.0.0
      */
     public function refresh($value, $field = null)
     {
@@ -114,7 +106,6 @@ class Grid extends AbstractGrid
      * Only orders created/updated since the last method call will be added.
      *
      * @return \Zend_Db_Statement_Interface
-     * @since 2.0.0
      */
     public function refreshBySchedule()
     {
@@ -137,7 +128,6 @@ class Grid extends AbstractGrid
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getOrderIdField()
     {
@@ -148,7 +138,6 @@ class Grid extends AbstractGrid
      * Returns select object
      *
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function getGridOriginSelect()
     {

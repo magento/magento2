@@ -12,19 +12,16 @@ use Magento\Quote\Model\Quote\Address\Rate;
 /**
  * Class Price
  * @deprecated 2.1.0
- * @since 2.0.0
  */
 class Price extends AbstractCart
 {
     /**
      * @var Rate
-     * @since 2.0.0
      */
     protected $shippingRate;
 
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
@@ -34,7 +31,6 @@ class Price extends AbstractCart
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -52,7 +48,6 @@ class Price extends AbstractCart
      *
      * @param Rate $shippingRate
      * @return $this
-     * @since 2.0.0
      */
     public function setShippingRate(Rate $shippingRate)
     {
@@ -64,7 +59,6 @@ class Price extends AbstractCart
      * Return shipping rate
      *
      * @return Rate
-     * @since 2.0.0
      */
     public function getShippingRate()
     {
@@ -75,7 +69,6 @@ class Price extends AbstractCart
      * Get Shipping Price
      *
      * @return float
-     * @since 2.0.0
      */
     public function getShippingPrice()
     {

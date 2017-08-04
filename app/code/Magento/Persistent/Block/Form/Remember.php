@@ -10,7 +10,6 @@ namespace Magento\Persistent\Block\Form;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Remember extends \Magento\Framework\View\Element\Template
 {
@@ -18,13 +17,11 @@ class Remember extends \Magento\Framework\View\Element\Template
      * Persistent data
      *
      * @var \Magento\Persistent\Helper\Data
-     * @since 2.0.0
      */
     protected $_persistentData = null;
 
     /**
      * @var \Magento\Framework\Math\Random
-     * @since 2.0.0
      */
     protected $mathRandom;
 
@@ -33,7 +30,6 @@ class Remember extends \Magento\Framework\View\Element\Template
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -50,7 +46,6 @@ class Remember extends \Magento\Framework\View\Element\Template
      * Prevent rendering if Persistent disabled
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -62,7 +57,6 @@ class Remember extends \Magento\Framework\View\Element\Template
      * Is "Remember Me" checked
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isRememberMeChecked()
     {
@@ -78,7 +72,6 @@ class Remember extends \Magento\Framework\View\Element\Template
      * @param string|null $chars
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getRandomString($length, $chars = null)
     {

@@ -16,26 +16,22 @@ use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class IndexStructure implements IndexStructureInterface
 {
     /**
      * @var Resource
-     * @since 2.0.0
      */
     private $resource;
 
     /**
      * @var IndexScopeResolver
-     * @since 2.0.0
      */
     private $indexScopeResolver;
 
     /**
      * @param ResourceConnection $resource
      * @param IndexScopeResolverInterface $indexScopeResolver
-     * @since 2.0.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -49,7 +45,6 @@ class IndexStructure implements IndexStructureInterface
      * @param string $index
      * @param Dimension[] $dimensions
      * @return void
-     * @since 2.0.0
      */
     public function delete($index, array $dimensions = [])
     {
@@ -65,7 +60,6 @@ class IndexStructure implements IndexStructureInterface
      * @param array $dimensions
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
-     * @since 2.0.0
      */
     public function create($index, array $fields, array $dimensions = [])
     {
@@ -76,7 +70,6 @@ class IndexStructure implements IndexStructureInterface
      * @param string $tableName
      * @throws \Zend_Db_Exception
      * @return void
-     * @since 2.0.0
      */
     protected function createFulltextIndex($tableName)
     {

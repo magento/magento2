@@ -13,13 +13,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for checking maintenance mode status
- * @since 2.0.0
  */
 class MaintenanceStatusCommand extends AbstractSetupCommand
 {
     /**
      * @var MaintenanceMode $maintenanceMode
-     * @since 2.0.0
      */
     private $maintenanceMode;
 
@@ -27,7 +25,6 @@ class MaintenanceStatusCommand extends AbstractSetupCommand
      * Constructor
      *
      * @param MaintenanceMode $maintenanceMode
-     * @since 2.0.0
      */
     public function __construct(MaintenanceMode $maintenanceMode)
     {
@@ -39,7 +36,6 @@ class MaintenanceStatusCommand extends AbstractSetupCommand
      * Initialization of the command
      *
      * @return void
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -50,7 +46,6 @@ class MaintenanceStatusCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

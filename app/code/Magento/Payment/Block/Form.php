@@ -11,7 +11,6 @@ use Magento\Payment\Model\MethodInterface;
  * Payment method form base block
  *
  * @api
- * @since 2.0.0
  */
 class Form extends \Magento\Framework\View\Element\Template
 {
@@ -20,7 +19,6 @@ class Form extends \Magento\Framework\View\Element\Template
      *
      * @return MethodInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getMethod()
     {
@@ -39,7 +37,6 @@ class Form extends \Magento\Framework\View\Element\Template
      *
      * @param MethodInterface $method
      * @return $this
-     * @since 2.0.0
      */
     public function setMethod(MethodInterface $method)
     {
@@ -51,7 +48,6 @@ class Form extends \Magento\Framework\View\Element\Template
      * Retrieve payment method code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMethodCode()
     {
@@ -63,7 +59,6 @@ class Form extends \Magento\Framework\View\Element\Template
      *
      * @param   string $field
      * @return  mixed
-     * @since 2.0.0
      */
     public function getInfoData($field)
     {

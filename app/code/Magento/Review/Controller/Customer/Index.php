@@ -11,7 +11,6 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Review\Controller\Customer\Index
  *
- * @since 2.0.0
  */
 class Index extends CustomerController
 {
@@ -19,7 +18,6 @@ class Index extends CustomerController
      * Render my product reviews
      *
      * @return \Magento\Framework\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

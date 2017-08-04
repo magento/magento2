@@ -8,7 +8,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Creditmemos
  *
- * @since 2.0.0
  */
 class Creditmemos extends \Magento\Sales\Controller\Adminhtml\Order
 {
@@ -23,7 +22,6 @@ class Creditmemos extends \Magento\Sales\Controller\Adminhtml\Order
      * Generate credit memos grid for ajax request
      *
      * @return \Magento\Framework\View\Result\Layout
-     * @since 2.0.0
      */
     public function execute()
     {

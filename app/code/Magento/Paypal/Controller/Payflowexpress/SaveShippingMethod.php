@@ -9,7 +9,6 @@ namespace Magento\Paypal\Controller\Payflowexpress;
 /**
  * Class \Magento\Paypal\Controller\Payflowexpress\SaveShippingMethod
  *
- * @since 2.0.0
  */
 class SaveShippingMethod extends \Magento\Paypal\Controller\Express\AbstractExpress\SaveShippingMethod
 {
@@ -17,7 +16,6 @@ class SaveShippingMethod extends \Magento\Paypal\Controller\Express\AbstractExpr
      * Config mode type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_configType = \Magento\Paypal\Model\Config::class;
 
@@ -25,7 +23,6 @@ class SaveShippingMethod extends \Magento\Paypal\Controller\Express\AbstractExpr
      * Config method type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_configMethod = \Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS;
 
@@ -33,7 +30,6 @@ class SaveShippingMethod extends \Magento\Paypal\Controller\Express\AbstractExpr
      * Checkout mode type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_checkoutType = \Magento\Paypal\Model\PayflowExpress\Checkout::class;
 }

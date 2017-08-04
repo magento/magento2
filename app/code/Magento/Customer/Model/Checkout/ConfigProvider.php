@@ -16,25 +16,21 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Class \Magento\Customer\Model\Checkout\ConfigProvider
  *
- * @since 2.0.0
  */
 class ConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var UrlInterface
-     * @since 2.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
@@ -42,7 +38,6 @@ class ConfigProvider implements ConfigProviderInterface
      * @param UrlInterface $urlBuilder
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
-     * @since 2.0.0
      */
     public function __construct(
         UrlInterface $urlBuilder,
@@ -56,7 +51,6 @@ class ConfigProvider implements ConfigProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -72,7 +66,6 @@ class ConfigProvider implements ConfigProviderInterface
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function isAutocompleteEnabled()
     {
@@ -86,7 +79,6 @@ class ConfigProvider implements ConfigProviderInterface
      * Returns URL to login controller action
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getLoginUrl()
     {
@@ -97,7 +89,6 @@ class ConfigProvider implements ConfigProviderInterface
      * Whether redirect to login page is required
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function isRedirectRequired()
     {

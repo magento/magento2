@@ -35,7 +35,7 @@ interface TokenRendererInterface
     /**
      * Get payment token
      * @return PaymentTokenInterface|null
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function getToken();
 }

@@ -14,7 +14,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  * Abstract class provides sorting routing to sort total information based on configuration settings.
  *
  * @api
- * @since 2.0.0
  */
 abstract class AbstractTotalsProcessor
 {
@@ -22,14 +21,12 @@ abstract class AbstractTotalsProcessor
      * Core store config
      *
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig
@@ -40,7 +37,6 @@ abstract class AbstractTotalsProcessor
     /**
      * @param array $totals
      * @return array
-     * @since 2.0.0
      */
     public function sortTotals($totals)
     {

@@ -10,7 +10,6 @@ namespace Magento\Customer\CustomerData;
  * Js layout data provider pool
  *
  * @api
- * @since 2.0.0
  */
 class JsLayoutDataProviderPool implements JsLayoutDataProviderPoolInterface
 {
@@ -18,7 +17,6 @@ class JsLayoutDataProviderPool implements JsLayoutDataProviderPoolInterface
      * Js layout data providers
      *
      * @var JsLayoutDataProviderInterface[]
-     * @since 2.0.0
      */
     protected $jsLayoutDataProviders;
 
@@ -26,7 +24,6 @@ class JsLayoutDataProviderPool implements JsLayoutDataProviderPoolInterface
      * Construct
      *
      * @param JsLayoutDataProviderInterface[] $jsLayoutDataProviders
-     * @since 2.0.0
      */
     public function __construct(
         array $jsLayoutDataProviders = []
@@ -36,7 +33,6 @@ class JsLayoutDataProviderPool implements JsLayoutDataProviderPoolInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getData()
     {

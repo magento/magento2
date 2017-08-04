@@ -11,7 +11,6 @@ namespace Magento\Backend\Block\System\Store\Edit;
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 abstract class AbstractForm extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -19,7 +18,6 @@ abstract class AbstractForm extends \Magento\Backend\Block\Widget\Form\Generic
      * Class constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -31,7 +29,6 @@ abstract class AbstractForm extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepare form data
      *
      * @return \Magento\Backend\Block\Widget\Form
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -73,7 +70,6 @@ abstract class AbstractForm extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Data\Form $form
      * @return void
      * @abstract
-     * @since 2.0.0
      */
     abstract protected function _prepareStoreFieldset(\Magento\Framework\Data\Form $form);
 }

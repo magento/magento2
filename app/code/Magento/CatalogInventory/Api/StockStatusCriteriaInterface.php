@@ -8,7 +8,6 @@ namespace Magento\CatalogInventory\Api;
 /**
  * Interface StockStatusCriteriaInterface
  * @api
- * @since 2.0.0
  */
 interface StockStatusCriteriaInterface extends \Magento\Framework\Api\CriteriaInterface
 {
@@ -17,7 +16,6 @@ interface StockStatusCriteriaInterface extends \Magento\Framework\Api\CriteriaIn
      *
      * @param \Magento\CatalogInventory\Api\StockStatusCriteriaInterface $criteria
      * @return bool
-     * @since 2.0.0
      */
     public function addCriteria(\Magento\CatalogInventory\Api\StockStatusCriteriaInterface $criteria);
 
@@ -26,7 +24,6 @@ interface StockStatusCriteriaInterface extends \Magento\Framework\Api\CriteriaIn
      *
      * @param int $scope
      * @return bool
-     * @since 2.0.0
      */
     public function setScopeFilter($scope);
 
@@ -35,7 +32,6 @@ interface StockStatusCriteriaInterface extends \Magento\Framework\Api\CriteriaIn
      *
      * @param int $products
      * @return bool
-     * @since 2.0.0
      */
     public function setProductsFilter($products);
 
@@ -44,7 +40,6 @@ interface StockStatusCriteriaInterface extends \Magento\Framework\Api\CriteriaIn
      *
      * @param float $qty
      * @return bool
-     * @since 2.0.0
      */
     public function setQtyFilter($qty);
 }

@@ -16,7 +16,6 @@ use Magento\Framework\Filesystem;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class File extends AbstractData
 {
@@ -24,7 +23,6 @@ class File extends AbstractData
      * Validator for check not protected extensions
      *
      * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension
-     * @since 2.0.0
      */
     protected $_validatorNotProtectedExtensions;
 
@@ -32,38 +30,34 @@ class File extends AbstractData
      * Core data
      *
      * @var \Magento\Framework\Url\EncoderInterface
-     * @since 2.0.0
      */
     protected $urlEncoder;
 
     /**
      * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension
-     * @since 2.0.0
      */
     protected $_fileValidator;
 
     /**
      * @var Filesystem
-     * @since 2.0.0
      */
     protected $_fileSystem;
 
     /**
      * @var UploaderFactory
-     * @since 2.0.0
      */
     private $uploaderFactory;
 
     /**
      * @var FileProcessor
-     * @since 2.2.0
+     * @since 2.1.3
      */
     protected $fileProcessor;
 
     /**
      * @var FileProcessorFactory
      * @deprecated 2.2.0
-     * @since 2.2.0
+     * @since 2.1.3
      */
     protected $fileProcessorFactory;
 
@@ -83,7 +77,6 @@ class File extends AbstractData
      * @param UploaderFactory $uploaderFactory
      * @param \Magento\Customer\Model\FileProcessorFactory|null $fileProcessorFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -112,7 +105,6 @@ class File extends AbstractData
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function extractValue(\Magento\Framework\App\RequestInterface $request)
     {
@@ -175,7 +167,6 @@ class File extends AbstractData
      *
      * @param array $value
      * @return string[]
-     * @since 2.0.0
      */
     protected function _validateByRules($value)
     {
@@ -226,7 +217,6 @@ class File extends AbstractData
      *
      * @param string $filename
      * @return bool
-     * @since 2.0.0
      */
     protected function _isUploadedFile($filename)
     {
@@ -247,7 +237,6 @@ class File extends AbstractData
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function validateValue($value)
     {
@@ -289,7 +278,6 @@ class File extends AbstractData
      * {@inheritdoc}
      *
      * @return ImageContentInterface|array|string|null
-     * @since 2.0.0
      */
     public function compactValue($value)
     {
@@ -320,7 +308,7 @@ class File extends AbstractData
      *
      * @param array $value
      * @return string|null
-     * @since 2.2.0
+     * @since 2.1.3
      */
     protected function processUiComponentValue(array $value)
     {
@@ -333,7 +321,7 @@ class File extends AbstractData
      *
      * @param string $value
      * @return bool|int|string
-     * @since 2.2.0
+     * @since 2.1.3
      */
     protected function processInputFieldValue($value)
     {
@@ -375,7 +363,6 @@ class File extends AbstractData
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function restoreValue($value)
     {
@@ -384,7 +371,6 @@ class File extends AbstractData
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function outputValue($format = \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_TEXT)
     {
@@ -404,8 +390,8 @@ class File extends AbstractData
      * Get file processor
      *
      * @return FileProcessor
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 2.1.3
+     * @since 2.1.3
      */
     protected function getFileProcessor()
     {

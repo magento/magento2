@@ -9,7 +9,6 @@ namespace Magento\Framework\Config\Composer;
 /**
  * A model that represents composer package
  * @api
- * @since 2.0.0
  */
 class Package
 {
@@ -17,7 +16,6 @@ class Package
      * Contents of composer.json
      *
      * @var \StdClass
-     * @since 2.0.0
      */
     protected $json;
 
@@ -25,7 +23,6 @@ class Package
      * Constructor
      *
      * @param \StdClass $json
-     * @since 2.0.0
      */
     public function __construct(\stdClass $json)
     {
@@ -38,7 +35,6 @@ class Package
      * @param bool $formatted
      * @param string|null $format
      * @return string|\StdClass
-     * @since 2.0.0
      */
     public function getJson($formatted = true, $format = null)
     {
@@ -65,7 +61,6 @@ class Package
      * @param string $filter pattern to filter out the properties
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function get($propertyPath, $filter = null)
     {
@@ -87,7 +82,6 @@ class Package
      * @param array $chain
      * @param int $index
      * @return mixed
-     * @since 2.0.0
      */
     private function traverseGet(\StdClass $json, array $chain, $index = 0)
     {

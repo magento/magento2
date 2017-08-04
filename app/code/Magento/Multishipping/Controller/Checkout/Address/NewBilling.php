@@ -9,13 +9,11 @@ namespace Magento\Multishipping\Controller\Checkout\Address;
 /**
  * Class \Magento\Multishipping\Controller\Checkout\Address\NewBilling
  *
- * @since 2.0.0
  */
 class NewBilling extends \Magento\Multishipping\Controller\Checkout\Address
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

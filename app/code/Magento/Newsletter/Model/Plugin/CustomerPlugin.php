@@ -12,7 +12,6 @@ use Magento\Newsletter\Model\SubscriberFactory;
 /**
  * Class \Magento\Newsletter\Model\Plugin\CustomerPlugin
  *
- * @since 2.0.0
  */
 class CustomerPlugin
 {
@@ -20,7 +19,6 @@ class CustomerPlugin
      * Factory used for manipulating newsletter subscriptions
      *
      * @var SubscriberFactory
-     * @since 2.0.0
      */
     private $subscriberFactory;
 
@@ -28,7 +26,6 @@ class CustomerPlugin
      * Initialize dependencies.
      *
      * @param SubscriberFactory $subscriberFactory
-     * @since 2.0.0
      */
     public function __construct(SubscriberFactory $subscriberFactory)
     {
@@ -45,7 +42,6 @@ class CustomerPlugin
      * @param CustomerInterface $customer
      * @return CustomerInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterSave(CustomerRepository $subject, CustomerInterface $result, CustomerInterface $customer)
     {
@@ -67,7 +63,6 @@ class CustomerPlugin
      * @param callable $deleteCustomerById Function we are wrapping around
      * @param int $customerId Input to the function
      * @return bool
-     * @since 2.0.0
      */
     public function aroundDeleteById(
         CustomerRepository $subject,

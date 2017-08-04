@@ -7,7 +7,6 @@ namespace Magento\Integration\Model\Oauth\Consumer\Validator;
 
 /**
  * Validate OAuth keys
- * @since 2.0.0
  */
 class KeyLength extends \Zend_Validate_StringLength
 {
@@ -15,13 +14,11 @@ class KeyLength extends \Zend_Validate_StringLength
      * Default key name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_name = 'Key';
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_messageTemplates = [
         self::INVALID   => "Invalid type given for %name%. String expected",
@@ -33,7 +30,6 @@ class KeyLength extends \Zend_Validate_StringLength
      * Additional variables available for validation failure messages
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_messageVariables = ['min' => '_min', 'max' => '_max', 'name' => '_name'];
 
@@ -44,7 +40,6 @@ class KeyLength extends \Zend_Validate_StringLength
      * New option name added to allow adding key name in validation error messages
      *
      * @param  integer|array|\Zend_Config $options
-     * @since 2.0.0
      */
     public function __construct($options = [])
     {
@@ -71,7 +66,6 @@ class KeyLength extends \Zend_Validate_StringLength
      *
      * @param int|null $length
      * @return $this
-     * @since 2.0.0
      */
     public function setLength($length)
     {
@@ -84,7 +78,6 @@ class KeyLength extends \Zend_Validate_StringLength
      * Set length
      *
      * @return int
-     * @since 2.0.0
      */
     public function getLength()
     {
@@ -100,7 +93,6 @@ class KeyLength extends \Zend_Validate_StringLength
      * @param  string $value
      * @return boolean
      * @throws \Exception
-     * @since 2.0.0
      */
     public function isValid($value)
     {
@@ -116,7 +108,6 @@ class KeyLength extends \Zend_Validate_StringLength
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -128,7 +119,6 @@ class KeyLength extends \Zend_Validate_StringLength
      * Get key name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName()
     {

@@ -9,7 +9,6 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Provides search request configuration
- * @since 2.0.0
  */
 class Config extends \Magento\Framework\Config\Data
 {
@@ -25,7 +24,6 @@ class Config extends \Magento\Framework\Config\Data
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Search\Request\Config\FilesystemReader $reader,

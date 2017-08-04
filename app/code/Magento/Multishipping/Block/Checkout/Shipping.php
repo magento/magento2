@@ -13,25 +13,21 @@ use Magento\Quote\Model\Quote\Address;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Shipping extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**
      * @var \Magento\Framework\Filter\DataObject\GridFactory
-     * @since 2.0.0
      */
     protected $_filterGridFactory;
 
     /**
      * @var \Magento\Tax\Helper\Data
-     * @since 2.0.0
      */
     protected $_taxHelper;
 
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
@@ -42,7 +38,6 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -64,7 +59,6 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
      * Get multishipping checkout model
      *
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
-     * @since 2.0.0
      */
     public function getCheckout()
     {
@@ -73,7 +67,6 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -85,7 +78,6 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return Address[]
-     * @since 2.0.0
      */
     public function getAddresses()
     {
@@ -94,7 +86,6 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getAddressCount()
     {
@@ -109,7 +100,6 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * @param Address $address
      * @return \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     public function getAddressItems($address)
     {
@@ -129,7 +119,6 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * @param Address $address
      * @return mixed
-     * @since 2.0.0
      */
     public function getAddressShippingMethod($address)
     {
@@ -139,7 +128,6 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * @param Address $address
      * @return mixed
-     * @since 2.0.0
      */
     public function getShippingRates($address)
     {
@@ -150,7 +138,6 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * @param string $carrierCode
      * @return string
-     * @since 2.0.0
      */
     public function getCarrierName($carrierCode)
     {
@@ -167,7 +154,6 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * @param Address $address
      * @return string
-     * @since 2.0.0
      */
     public function getAddressEditUrl($address)
     {
@@ -176,7 +162,6 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getItemsEditUrl()
     {
@@ -185,7 +170,6 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getPostActionUrl()
     {
@@ -194,7 +178,6 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -206,7 +189,6 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
      * @param float $price
      * @param bool $flag
      * @return float
-     * @since 2.0.0
      */
     public function getShippingPrice($address, $price, $flag)
     {
@@ -225,7 +207,6 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
      * @return string
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getItemsBoxTextAfter(\Magento\Framework\DataObject $addressEntity)
     {

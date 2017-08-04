@@ -14,7 +14,6 @@ use Magento\Framework\Option\ArrayInterface;
  * TODO: Refactor use of \Magento\Framework\Option\ArrayInterface in library.
  *
  * @api
- * @since 2.0.0
  */
 class Collection implements \IteratorAggregate, \Countable, ArrayInterface, CollectionDataSourceInterface
 {
@@ -26,7 +25,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Collection items
      *
      * @var \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     protected $_items = [];
 
@@ -34,7 +32,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Item object class name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_itemObjectClass = \Magento\Framework\DataObject::class;
 
@@ -42,7 +39,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Order configuration
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_orders = [];
 
@@ -50,7 +46,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Filters configuration
      *
      * @var \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     protected $_filters = [];
 
@@ -58,7 +53,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Filter rendered flag
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isFiltersRendered = false;
 
@@ -66,7 +60,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Current page number for items pager
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_curPage = 1;
 
@@ -76,7 +69,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * if page size is false, then we works with all items
      *
      * @var int|false
-     * @since 2.0.0
      */
     protected $_pageSize = false;
 
@@ -84,7 +76,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Total items number
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_totalRecords;
 
@@ -92,7 +83,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Loading state flag
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isCollectionLoaded;
 
@@ -100,19 +90,16 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Additional collection flags
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_flags = [];
 
     /**
      * @var EntityFactoryInterface
-     * @since 2.0.0
      */
     protected $_entityFactory;
 
     /**
      * @param EntityFactoryInterface $entityFactory
-     * @since 2.0.0
      */
     public function __construct(EntityFactoryInterface $entityFactory)
     {
@@ -126,7 +113,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @param string $value
      * @param string $type and|or|string
      * @return $this
-     * @since 2.0.0
      */
     public function addFilter($field, $value, $type = 'and')
     {
@@ -179,7 +165,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @throws \Magento\Framework\Exception\LocalizedException if some error in the input could be detected.
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function addFieldToFilter($field, $condition)
     {
@@ -197,7 +182,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @param string|string[] $field
      * @return \Magento\Framework\DataObject|\Magento\Framework\DataObject[]|void
-     * @since 2.0.0
      */
     public function getFilter($field)
     {
@@ -228,7 +212,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Retrieve collection loading status
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isLoaded()
     {
@@ -240,7 +223,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @param bool $flag
      * @return $this
-     * @since 2.0.0
      */
     protected function _setIsLoaded($flag = true)
     {
@@ -253,7 +235,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @param  int $displacement
      * @return int
-     * @since 2.0.0
      */
     public function getCurPage($displacement = 0)
     {
@@ -270,7 +251,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Retrieve collection last page number
      *
      * @return int
-     * @since 2.0.0
      */
     public function getLastPageNumber()
     {
@@ -288,7 +268,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Retrieve collection page size
      *
      * @return int
-     * @since 2.0.0
      */
     public function getPageSize()
     {
@@ -299,7 +278,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Retrieve collection all items count
      *
      * @return int
-     * @since 2.0.0
      */
     public function getSize()
     {
@@ -314,7 +292,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Retrieve collection first item
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getFirstItem()
     {
@@ -332,7 +309,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Retrieve collection last item
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getLastItem()
     {
@@ -349,7 +325,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Retrieve collection items
      *
      * @return \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     public function getItems()
     {
@@ -362,7 +337,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @param   string $colName
      * @return  array
-     * @since 2.0.0
      */
     public function getColumnValues($colName)
     {
@@ -381,7 +355,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @param   string $column
      * @param   mixed $value
      * @return  array
-     * @since 2.0.0
      */
     public function getItemsByColumnValue($column, $value)
     {
@@ -402,7 +375,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @param   string $column
      * @param   mixed $value
      * @return  \Magento\Framework\DataObject || null
-     * @since 2.0.0
      */
     public function getItemByColumnValue($column, $value)
     {
@@ -422,7 +394,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @param   \Magento\Framework\DataObject $item
      * @return $this
      * @throws \Exception
-     * @since 2.0.0
      */
     public function addItem(\Magento\Framework\DataObject $item)
     {
@@ -446,7 +417,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @param \Magento\Framework\DataObject $item
      * @return $this
-     * @since 2.0.0
      */
     protected function _addItem($item)
     {
@@ -459,7 +429,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @param \Magento\Framework\DataObject $item
      * @return mixed
-     * @since 2.0.0
      */
     protected function _getItemId(\Magento\Framework\DataObject $item)
     {
@@ -470,7 +439,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Retrieve ids of all items
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllIds()
     {
@@ -486,7 +454,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @param   mixed $key
      * @return $this
-     * @since 2.0.0
      */
     public function removeItemByKey($key)
     {
@@ -500,7 +467,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Remove all items from collection
      *
      * @return $this
-     * @since 2.0.0
      */
     public function removeAllItems()
     {
@@ -512,7 +478,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Clear collection
      *
      * @return $this
-     * @since 2.0.0
      */
     public function clear()
     {
@@ -530,7 +495,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @param string $callback
      * @param array $args
      * @return array
-     * @since 2.0.0
      */
     public function walk($callback, array $args = [])
     {
@@ -555,7 +519,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @param string|array|\Closure $objMethod
      * @param array $args
      * @return void
-     * @since 2.0.0
      */
     public function each($objMethod, $args = [])
     {
@@ -580,7 +543,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @param   mixed $key
      * @param   mixed $value
      * @return $this
-     * @since 2.0.0
      */
     public function setDataToAll($key, $value = null)
     {
@@ -601,7 +563,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @param   int $page
      * @return $this
-     * @since 2.0.0
      */
     public function setCurPage($page)
     {
@@ -614,7 +575,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @param   int $size
      * @return $this
-     * @since 2.0.0
      */
     public function setPageSize($size)
     {
@@ -628,7 +588,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @param   string $field
      * @param   string $direction
      * @return $this
-     * @since 2.0.0
      */
     public function setOrder($field, $direction = self::SORT_ORDER_DESC)
     {
@@ -642,7 +601,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @param  string $className
      * @return $this
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function setItemObjectClass($className)
     {
@@ -657,7 +615,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Retrieve collection empty item
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getNewEmptyItem()
     {
@@ -668,7 +625,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Render sql select conditions
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _renderFilters()
     {
@@ -679,7 +635,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Render sql select orders
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _renderOrders()
     {
@@ -690,7 +645,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Render sql select limit
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _renderLimit()
     {
@@ -703,7 +657,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @param bool $flag
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function distinct($flag)
     {
@@ -717,7 +670,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @param bool $logQuery
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function loadData($printQuery = false, $logQuery = false)
     {
@@ -730,7 +682,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
-     * @since 2.0.0
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -743,7 +694,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
-     * @since 2.0.0
      */
     public function loadWithFilter($printQuery = false, $logQuery = false)
     {
@@ -754,7 +704,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Convert collection to XML
      *
      * @return string
-     * @since 2.0.0
      */
     public function toXml()
     {
@@ -778,7 +727,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @param array $arrRequiredFields
      * @return array
-     * @since 2.0.0
      */
     public function toArray($arrRequiredFields = [])
     {
@@ -807,7 +755,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @param string $labelField
      * @param array $additional
      * @return array
-     * @since 2.0.0
      */
     protected function _toOptionArray($valueField = 'id', $labelField = 'name', $additional = [])
     {
@@ -826,7 +773,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {
@@ -835,7 +781,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function toOptionHash()
     {
@@ -851,7 +796,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @param   string $valueField
      * @param   string $labelField
      * @return  array
-     * @since 2.0.0
      */
     protected function _toOptionHash($valueField = 'id', $labelField = 'name')
     {
@@ -867,7 +811,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @param   mixed $idValue
      * @return  \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getItemById($idValue)
     {
@@ -882,7 +825,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Implementation of \IteratorAggregate::getIterator()
      *
      * @return \ArrayIterator
-     * @since 2.0.0
      */
     public function getIterator()
     {
@@ -894,7 +836,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Retrieve count of collection loaded items
      *
      * @return int
-     * @since 2.0.0
      */
     public function count()
     {
@@ -907,7 +848,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @param string $flag
      * @return bool|null
-     * @since 2.0.0
      */
     public function getFlag($flag)
     {
@@ -920,7 +860,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @param string $flag
      * @param bool|null $value
      * @return $this
-     * @since 2.0.0
      */
     public function setFlag($flag, $value = null)
     {
@@ -933,7 +872,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @param string $flag
      * @return bool
-     * @since 2.0.0
      */
     public function hasFlag($flag)
     {
@@ -942,7 +880,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
 
     /**
      * @return string[]
-     * @since 2.1.0
+     * @since 2.0.9
      */
     public function __sleep()
     {
@@ -960,7 +898,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Init not serializable fields
      *
      * @return void
-     * @since 2.1.0
+     * @since 2.0.9
      */
     public function __wakeup()
     {

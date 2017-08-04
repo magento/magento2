@@ -9,7 +9,6 @@ namespace Magento\Reports\Block\Product\Widget;
  * Reports Recently Viewed Products Widget
  * @deprecated 2.2.0 Since new frontend base widgets are provided
  * @see \Magento\Catalog\Block\Widget\RecentlyViewed
- * @since 2.0.0
  */
 class Viewed extends \Magento\Reports\Block\Product\Viewed implements \Magento\Widget\Block\BlockInterface
 {
@@ -17,7 +16,6 @@ class Viewed extends \Magento\Reports\Block\Product\Viewed implements \Magento\W
      * Internal constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

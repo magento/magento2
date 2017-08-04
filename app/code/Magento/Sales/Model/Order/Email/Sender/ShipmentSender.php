@@ -19,19 +19,16 @@ use Magento\Framework\Event\ManagerInterface;
  * Class ShipmentSender
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class ShipmentSender extends Sender
 {
     /**
      * @var PaymentHelper
-     * @since 2.0.0
      */
     protected $paymentHelper;
 
     /**
      * @var ShipmentResource
-     * @since 2.0.0
      */
     protected $shipmentResource;
 
@@ -39,13 +36,11 @@ class ShipmentSender extends Sender
      * Global configuration storage.
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $globalConfig;
 
     /**
      * @var Renderer
-     * @since 2.0.0
      */
     protected $addressRenderer;
 
@@ -53,7 +48,6 @@ class ShipmentSender extends Sender
      * Application Event Dispatcher
      *
      * @var ManagerInterface
-     * @since 2.0.0
      */
     protected $eventManager;
 
@@ -67,7 +61,6 @@ class ShipmentSender extends Sender
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
      * @param Renderer $addressRenderer
      * @param ManagerInterface $eventManager
-     * @since 2.0.0
      */
     public function __construct(
         Template $templateContainer,
@@ -102,7 +95,6 @@ class ShipmentSender extends Sender
      * @param Shipment $shipment
      * @param bool $forceSyncMode
      * @return bool
-     * @since 2.0.0
      */
     public function send(Shipment $shipment, $forceSyncMode = false)
     {
@@ -149,7 +141,6 @@ class ShipmentSender extends Sender
      *
      * @param Order $order
      * @return string
-     * @since 2.0.0
      */
     protected function getPaymentHtml(Order $order)
     {

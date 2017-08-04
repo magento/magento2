@@ -32,7 +32,6 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
- * @since 2.0.0
  */
 class AbstractAddress extends AbstractExtensibleModel implements AddressModelInterface
 {
@@ -47,7 +46,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Prefix of model events
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'customer_address';
 
@@ -55,7 +53,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Name of event object
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'customer_address';
 
@@ -63,7 +60,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Directory country models
      *
      * @var \Magento\Directory\Model\Country[]
-     * @since 2.0.0
      */
     protected static $_countryModels = [];
 
@@ -71,7 +67,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Directory region models
      *
      * @var \Magento\Directory\Model\Region[]
-     * @since 2.0.0
      */
     protected static $_regionModels = [];
 
@@ -79,55 +74,46 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Directory data
      *
      * @var \Magento\Directory\Helper\Data
-     * @since 2.0.0
      */
     protected $_directoryData = null;
 
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $_eavConfig;
 
     /**
      * @var Config
-     * @since 2.0.0
      */
     protected $_addressConfig;
 
     /**
      * @var \Magento\Directory\Model\RegionFactory
-     * @since 2.0.0
      */
     protected $_regionFactory;
 
     /**
      * @var \Magento\Directory\Model\CountryFactory
-     * @since 2.0.0
      */
     protected $_countryFactory;
 
     /**
      * @var AddressMetadataInterface
-     * @since 2.0.0
      */
     protected $metadataService;
 
     /**
      * @var AddressInterfaceFactory
-     * @since 2.0.0
      */
     protected $addressDataFactory;
 
     /**
      * @var RegionInterfaceFactory
-     * @since 2.0.0
      */
     protected $regionDataFactory;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
-     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
@@ -149,7 +135,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -194,7 +179,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Get full customer name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -218,7 +202,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Retrieve street field of an address
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getStreet()
     {
@@ -233,7 +216,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      *
      * @param int $number
      * @return string
-     * @since 2.0.0
      */
     public function getStreetLine($number)
     {
@@ -245,7 +227,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Retrieve text of street lines, concatenated using LF symbol
      *
      * @return string
-     * @since 2.0.0
      */
     public function getStreetFull()
     {
@@ -258,7 +239,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      *
      * @param string|string[] $street
      * @return $this
-     * @since 2.0.0
      */
     public function setStreetFull($street)
     {
@@ -270,7 +250,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      *
      * @param string|string[] $street
      * @return $this
-     * @since 2.0.0
      */
     public function setStreet($street)
     {
@@ -284,7 +263,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * @param array|string $key
      * @param null $value
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function setData($key, $value = null)
     {
@@ -300,7 +278,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Check that address can have multiline attribute by this code (as street or some custom attribute)
      * @param string $code
      * @return bool
-     * @since 2.0.0
      */
     protected function isAddressMultilineAttribute($code)
     {
@@ -312,7 +289,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      *
      * @param array $data
      * @return array
-     * @since 2.0.0
      */
     protected function _implodeArrayField(array $data)
     {
@@ -329,7 +305,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      *
      * @param string[]|string $value
      * @return string
-     * @since 2.0.0
      */
     protected function _implodeArrayValues($value)
     {
@@ -353,7 +328,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * To be used in controllers for views data
      *
      * @return $this
-     * @since 2.0.0
      */
     public function explodeStreetAddress()
     {
@@ -368,7 +342,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Retrieve region name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRegion()
     {
@@ -395,7 +368,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Return 2 letter state code if available, otherwise full region name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRegionCode()
     {
@@ -418,7 +390,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getRegionId()
     {
@@ -441,7 +412,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getCountry()
     {
@@ -453,7 +423,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Retrieve country model
      *
      * @return \Magento\Directory\Model\Country
-     * @since 2.0.0
      */
     public function getCountryModel()
     {
@@ -471,7 +440,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      *
      * @param int|null $regionId
      * @return \Magento\Directory\Model\Region
-     * @since 2.0.0
      */
     public function getRegionModel($regionId = null)
     {
@@ -499,7 +467,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      *
      * @param string $type
      * @return string|null
-     * @since 2.0.0
      */
     public function format($type)
     {
@@ -514,7 +481,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Retrieve address config object
      *
      * @return Config
-     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -523,7 +489,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -541,7 +506,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Use Api/Data/AddressInterface as a result of service operations. Don't rely on the model to provide
      * the instance of Api/Data/AddressInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function getDataModel($defaultBillingAddressId = null, $defaultShippingAddressId = null)
     {
@@ -600,7 +564,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * @return bool|array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function validate()
     {
@@ -673,7 +636,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
     /**
      * @return \Magento\Directory\Model\Region
-     * @since 2.0.0
      */
     protected function _createRegionInstance()
     {
@@ -682,7 +644,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
     /**
      * @return \Magento\Directory\Model\Country
-     * @since 2.0.0
      */
     protected function _createCountryInstance()
     {

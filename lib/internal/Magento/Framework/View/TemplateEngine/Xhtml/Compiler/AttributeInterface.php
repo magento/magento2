@@ -9,7 +9,6 @@ use Magento\Framework\DataObject;
 
 /**
  * Interface AttributeInterface
- * @since 2.0.0
  */
 interface AttributeInterface
 {
@@ -19,7 +18,6 @@ interface AttributeInterface
      * @param \DOMAttr $node
      * @param DataObject $processedObject
      * @return void
-     * @since 2.0.0
      */
     public function compile(\DOMAttr $node, DataObject $processedObject);
 }

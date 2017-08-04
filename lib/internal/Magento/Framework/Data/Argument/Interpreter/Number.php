@@ -9,7 +9,6 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 
 /**
  * Interpreter of numeric data, such as integer, float, or numeric string
- * @since 2.0.0
  */
 class Number implements InterpreterInterface
 {
@@ -17,7 +16,6 @@ class Number implements InterpreterInterface
      * {@inheritdoc}
      * @return string|int|float
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function evaluate(array $data)
     {

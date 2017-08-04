@@ -9,7 +9,6 @@ namespace Magento\Paypal\Controller\Hostedpro;
 /**
  * Class \Magento\Paypal\Controller\Hostedpro\ReturnAction
  *
- * @since 2.0.0
  */
 class ReturnAction extends \Magento\Framework\App\Action\Action
 {
@@ -17,7 +16,6 @@ class ReturnAction extends \Magento\Framework\App\Action\Action
      * When a customer return to website from gateway.
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

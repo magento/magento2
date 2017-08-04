@@ -12,13 +12,11 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Date extends Column
 {
     /**
      * @var TimezoneInterface
-     * @since 2.0.0
      */
     protected $timezone;
 
@@ -35,7 +33,6 @@ class Date extends Column
      * @param BooleanUtils $booleanUtils
      * @param array $components
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -52,7 +49,6 @@ class Date extends Column
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function prepareDataSource(array $dataSource)
     {

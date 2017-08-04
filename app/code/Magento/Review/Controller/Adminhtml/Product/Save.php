@@ -12,14 +12,12 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Class \Magento\Review\Controller\Adminhtml\Product\Save
  *
- * @since 2.0.0
  */
 class Save extends ProductController
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -11,7 +11,6 @@ use Magento\Catalog\Model\Indexer\Product\Flat\Processor as ProductFlatIndexerPr
 
 /**
  * Plugin for Magento\Indexer\Model\Config\Data
- * @since 2.0.0
  */
 class IndexerConfigData
 {
@@ -23,7 +22,6 @@ class IndexerConfigData
 
     /**
      * @param ProductFlatIndexerState $state
-     * @since 2.0.0
      */
     public function __construct(ProductFlatIndexerState $state)
     {

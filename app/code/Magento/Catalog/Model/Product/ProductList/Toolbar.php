@@ -9,7 +9,6 @@ namespace Magento\Catalog\Model\Product\ProductList;
  * Class Toolbar
  *
  * @api
- * @since 2.0.0
  */
 class Toolbar
 {
@@ -42,13 +41,11 @@ class Toolbar
      * Request
      *
      * @var \Magento\Framework\App\Request\Http
-     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @param \Magento\Framework\App\Request\Http $request
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request
@@ -60,7 +57,6 @@ class Toolbar
      * Get sort order
      *
      * @return string|bool
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -71,7 +67,6 @@ class Toolbar
      * Get sort direction
      *
      * @return string|bool
-     * @since 2.0.0
      */
     public function getDirection()
     {
@@ -82,7 +77,6 @@ class Toolbar
      * Get sort mode
      *
      * @return string|bool
-     * @since 2.0.0
      */
     public function getMode()
     {
@@ -93,7 +87,6 @@ class Toolbar
      * Get products per page limit
      *
      * @return string|bool
-     * @since 2.0.0
      */
     public function getLimit()
     {
@@ -104,7 +97,6 @@ class Toolbar
      * Return current page from request
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCurrentPage()
     {

@@ -11,7 +11,6 @@ use Magento\Framework\Phrase;
 
 /**
  * @api
- * @since 2.0.0
  */
 class NoSuchEntityException extends LocalizedException
 {
@@ -29,7 +28,6 @@ class NoSuchEntityException extends LocalizedException
      * @param \Magento\Framework\Phrase $phrase
      * @param \Exception $cause
      * @param int $code
-     * @since 2.0.0
      */
     public function __construct(Phrase $phrase = null, \Exception $cause = null, $code = 0)
     {
@@ -45,7 +43,6 @@ class NoSuchEntityException extends LocalizedException
      * @param string $fieldName
      * @param string|int $fieldValue
      * @return \Magento\Framework\Exception\NoSuchEntityException
-     * @since 2.0.0
      */
     public static function singleField($fieldName, $fieldValue)
     {
@@ -68,7 +65,6 @@ class NoSuchEntityException extends LocalizedException
      * @param string $secondFieldName
      * @param string|int $secondFieldValue
      * @return \Magento\Framework\Exception\NoSuchEntityException
-     * @since 2.0.0
      */
     public static function doubleField($fieldName, $fieldValue, $secondFieldName, $secondFieldValue)
     {

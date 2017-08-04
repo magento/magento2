@@ -12,7 +12,6 @@ namespace Magento\Framework\App;
  * @api
  * @deprecated 2.2.0 since 2.2.0
  * @see \Magento\Framework\View\Result\Layout
- * @since 2.0.0
  */
 interface ViewInterface
 {
@@ -20,7 +19,6 @@ interface ViewInterface
      * Load layout updates
      *
      * @return ViewInterface
-     * @since 2.0.0
      */
     public function loadLayoutUpdates();
 
@@ -29,7 +27,6 @@ interface ViewInterface
      *
      * @param   string $output
      * @return  ViewInterface
-     * @since 2.0.0
      */
     public function renderLayout($output = '');
 
@@ -37,7 +34,6 @@ interface ViewInterface
      * Retrieve the default layout handle name for the current action
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultLayoutHandle();
 
@@ -50,7 +46,6 @@ interface ViewInterface
      * @param   bool $addActionHandles
      * @return  ViewInterface
      * @throws  \RuntimeException
-     * @since 2.0.0
      */
     public function loadLayout($handles = null, $generateBlocks = true, $generateXml = true, $addActionHandles = true);
 
@@ -58,7 +53,6 @@ interface ViewInterface
      * Generate layout xml
      *
      * @return ViewInterface
-     * @since 2.0.0
      */
     public function generateLayoutXml();
 
@@ -68,7 +62,6 @@ interface ViewInterface
      * @param array $parameters page parameters
      * @param string $defaultHandle
      * @return bool
-     * @since 2.0.0
      */
     public function addPageLayoutHandles(array $parameters = [], $defaultHandle = null);
 
@@ -76,7 +69,6 @@ interface ViewInterface
      * Generate layout blocks
      *
      * @return ViewInterface
-     * @since 2.0.0
      */
     public function generateLayoutBlocks();
 
@@ -84,7 +76,6 @@ interface ViewInterface
      * Retrieve current page object
      *
      * @return \Magento\Framework\View\Result\Page
-     * @since 2.0.0
      */
     public function getPage();
 
@@ -92,7 +83,6 @@ interface ViewInterface
      * Retrieve current layout object
      *
      * @return \Magento\Framework\View\LayoutInterface
-     * @since 2.0.0
      */
     public function getLayout();
 
@@ -100,7 +90,6 @@ interface ViewInterface
      * Add layout handle by full controller action name
      *
      * @return ViewInterface
-     * @since 2.0.0
      */
     public function addActionLayoutHandles();
 
@@ -109,7 +98,6 @@ interface ViewInterface
      *
      * @param bool $value
      * @return void
-     * @since 2.0.0
      */
     public function setIsLayoutLoaded($value);
 
@@ -117,7 +105,6 @@ interface ViewInterface
      * Returns is layout loaded
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isLayoutLoaded();
 }

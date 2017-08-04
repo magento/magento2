@@ -9,7 +9,6 @@ namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 /**
  * Class \Magento\Backend\Controller\Adminhtml\Dashboard\RefreshStatistics
  *
- * @since 2.0.0
  */
 class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Statistics
 {
@@ -18,7 +17,6 @@ class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Sta
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param array $reportTypes
      * @param \Psr\Log\LoggerInterface $logger
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -32,7 +30,6 @@ class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Sta
 
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

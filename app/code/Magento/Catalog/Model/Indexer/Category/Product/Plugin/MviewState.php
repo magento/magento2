@@ -13,19 +13,16 @@ namespace Magento\Catalog\Model\Indexer\Category\Product\Plugin;
 /**
  * Class \Magento\Catalog\Model\Indexer\Category\Product\Plugin\MviewState
  *
- * @since 2.0.0
  */
 class MviewState
 {
     /**
      * @var \Magento\Framework\Mview\View\StateInterface
-     * @since 2.0.0
      */
     protected $state;
 
     /**
      * @var \Magento\Framework\Mview\View\ChangelogInterface
-     * @since 2.0.0
      */
     protected $changelog;
 
@@ -33,7 +30,6 @@ class MviewState
      * Related indexers IDs
      *
      * @var int[]
-     * @since 2.0.0
      */
     protected $viewIds = [
         \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID,
@@ -43,7 +39,6 @@ class MviewState
     /**
      * @param \Magento\Framework\Mview\View\StateInterface $state
      * @param \Magento\Framework\Mview\View\ChangelogInterface $changelog
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Mview\View\StateInterface $state,
@@ -58,7 +53,6 @@ class MviewState
      *
      * @param \Magento\Framework\Mview\View\StateInterface $state
      * @return \Magento\Framework\Mview\View\StateInterface
-     * @since 2.0.0
      */
     public function afterSetStatus(\Magento\Framework\Mview\View\StateInterface $state)
     {

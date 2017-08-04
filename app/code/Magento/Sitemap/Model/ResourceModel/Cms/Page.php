@@ -17,7 +17,6 @@ use Magento\Framework\EntityManager\EntityManager;
  * Sitemap cms page collection model
  *
  * @api
- * @since 2.0.0
  */
 class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -55,7 +54,6 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Init resource model (catalog/category)
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -76,7 +74,6 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $storeId
      * @return array
-     * @since 2.0.0
      */
     public function getCollection($storeId)
     {
@@ -115,7 +112,6 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param array $data
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     protected function _prepareObject(array $data)
     {

@@ -17,7 +17,6 @@ use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Media implements AppInterface
 {
@@ -25,7 +24,6 @@ class Media implements AppInterface
      * Authorization function
      *
      * @var \Closure
-     * @since 2.0.0
      */
     private $isAllowed;
 
@@ -33,7 +31,6 @@ class Media implements AppInterface
      * Media directory path
      *
      * @var string
-     * @since 2.0.0
      */
     private $mediaDirectoryPath;
 
@@ -41,7 +38,6 @@ class Media implements AppInterface
      * Configuration cache file path
      *
      * @var string
-     * @since 2.0.0
      */
     private $configCacheFile;
 
@@ -49,31 +45,26 @@ class Media implements AppInterface
      * Requested file name relative to working directory
      *
      * @var string
-     * @since 2.0.0
      */
     private $relativeFileName;
 
     /**
      * @var Response
-     * @since 2.0.0
      */
     private $response;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     * @since 2.0.0
      */
     private $directory;
 
     /**
      * @var ConfigFactory
-     * @since 2.0.0
      */
     private $configFactory;
 
     /**
      * @var SynchronizationFactory
-     * @since 2.0.0
      */
     private $syncFactory;
 
@@ -86,7 +77,6 @@ class Media implements AppInterface
      * @param string $configCacheFile
      * @param string $relativeFileName
      * @param Filesystem $filesystem
-     * @since 2.0.0
      */
     public function __construct(
         ConfigFactory $configFactory,
@@ -116,7 +106,6 @@ class Media implements AppInterface
      *
      * @return Response
      * @throws \LogicException
-     * @since 2.0.0
      */
     public function launch()
     {
@@ -147,7 +136,6 @@ class Media implements AppInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function catchException(App\Bootstrap $bootstrap, \Exception $exception)
     {

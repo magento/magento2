@@ -12,7 +12,6 @@ use Magento\Framework\Exception\LocalizedException;
  * Variation Handler
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class VariationHandler
 {
@@ -24,38 +23,33 @@ class VariationHandler
 
     /**
      * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
-     * @since 2.0.0
      */
     protected $configurableProduct;
 
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\SetFactory
-     * @since 2.0.0
      */
     protected $attributeSetFactory;
 
     /**
      * @var \Magento\Eav\Model\EntityFactory
-     * @since 2.0.0
      */
     protected $entityFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $productFactory;
 
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $attributes;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     protected $stockConfiguration;
 
@@ -66,7 +60,6 @@ class VariationHandler
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param \Magento\Catalog\Model\Product\Gallery\Processor $mediaGalleryProcessor
-     * @since 2.0.0
      */
     public function __construct(
         Type\Configurable $configurableProduct,
@@ -91,7 +84,6 @@ class VariationHandler
      * @param array $productsData
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function generateSimpleProducts($parentProduct, $productsData)
     {
@@ -125,7 +117,6 @@ class VariationHandler
      * @deprecated 2.1.0 since 2.1.0
      * @param \Magento\Catalog\Model\Product $product
      * @return void
-     * @since 2.0.0
      */
     protected function prepareAttributeSetToBeBaseForNewVariations(\Magento\Catalog\Model\Product $product)
     {
@@ -171,7 +162,6 @@ class VariationHandler
      * @SuppressWarnings(PHPMD.NPathComplexity)
      *
      * @return void
-     * @since 2.0.0
      */
     protected function fillSimpleProductData(
         \Magento\Catalog\Model\Product $product,
@@ -232,7 +222,6 @@ class VariationHandler
      *
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function duplicateImagesForVariations($productsData)
     {
@@ -274,7 +263,6 @@ class VariationHandler
      * @param array $productData
      *
      * @return array
-     * @since 2.0.0
      */
     public function processMediaGallery($product, $productData)
     {

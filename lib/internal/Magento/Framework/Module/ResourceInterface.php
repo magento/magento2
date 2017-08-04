@@ -7,7 +7,6 @@ namespace Magento\Framework\Module;
 
 /**
  * Resource Model Interface
- * @since 2.0.0
  */
 interface ResourceInterface
 {
@@ -16,7 +15,6 @@ interface ResourceInterface
      *
      * @param string $moduleName
      * @return false|string
-     * @since 2.0.0
      */
     public function getDbVersion($moduleName);
 
@@ -25,7 +23,6 @@ interface ResourceInterface
      *
      * @param string $moduleName
      * @return string|false
-     * @since 2.0.0
      */
     public function getDataVersion($moduleName);
 
@@ -35,7 +32,6 @@ interface ResourceInterface
      * @param string $moduleName
      * @param string $version
      * @return int
-     * @since 2.0.0
      */
     public function setDbVersion($moduleName, $version);
 
@@ -45,7 +41,6 @@ interface ResourceInterface
      * @param string $moduleName
      * @param string $version
      * @return void
-     * @since 2.0.0
      */
     public function setDataVersion($moduleName, $version);
 }

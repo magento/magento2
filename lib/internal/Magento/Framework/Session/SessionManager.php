@@ -12,7 +12,6 @@ use Magento\Framework\Session\Config\ConfigInterface;
 /**
  * Session Manager
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class SessionManager implements SessionManagerInterface
 {
@@ -24,7 +23,6 @@ class SessionManager implements SessionManagerInterface
      * - clear_storage: whether or not to empty the storage object of any stored values
      *
      * @var array
-     * @since 2.0.0
      */
     protected $defaultDestroyOptions = ['send_expire_cookie' => true, 'clear_storage' => true];
 
@@ -32,7 +30,6 @@ class SessionManager implements SessionManagerInterface
      * URL host cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected static $urlHostCache = [];
 
@@ -40,7 +37,6 @@ class SessionManager implements SessionManagerInterface
      * Validator
      *
      * @var \Magento\Framework\Session\ValidatorInterface
-     * @since 2.0.0
      */
     protected $validator;
 
@@ -48,7 +44,6 @@ class SessionManager implements SessionManagerInterface
      * Request
      *
      * @var \Magento\Framework\App\Request\Http
-     * @since 2.0.0
      */
     protected $request;
 
@@ -56,7 +51,6 @@ class SessionManager implements SessionManagerInterface
      * SID resolver
      *
      * @var \Magento\Framework\Session\SidResolverInterface
-     * @since 2.0.0
      */
     protected $sidResolver;
 
@@ -64,7 +58,6 @@ class SessionManager implements SessionManagerInterface
      * Session config
      *
      * @var \Magento\Framework\Session\Config\ConfigInterface
-     * @since 2.0.0
      */
     protected $sessionConfig;
 
@@ -72,7 +65,6 @@ class SessionManager implements SessionManagerInterface
      * Save handler
      *
      * @var \Magento\Framework\Session\SaveHandlerInterface
-     * @since 2.0.0
      */
     protected $saveHandler;
 
@@ -80,7 +72,6 @@ class SessionManager implements SessionManagerInterface
      * Storage
      *
      * @var \Magento\Framework\Session\StorageInterface
-     * @since 2.0.0
      */
     protected $storage;
 
@@ -88,19 +79,16 @@ class SessionManager implements SessionManagerInterface
      * Cookie Manager
      *
      * @var \Magento\Framework\Stdlib\CookieManagerInterface
-     * @since 2.0.0
      */
     protected $cookieManager;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
-     * @since 2.0.0
      */
     protected $cookieMetadataFactory;
 
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     private $appState;
 
@@ -115,7 +103,6 @@ class SessionManager implements SessionManagerInterface
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\App\State $appState
      * @throws \Magento\Framework\Exception\SessionException
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
@@ -146,7 +133,6 @@ class SessionManager implements SessionManagerInterface
     /**
      * This method needs to support sessions with APC enabled
      * @return void
-     * @since 2.0.0
      */
     public function writeClose()
     {
@@ -160,7 +146,6 @@ class SessionManager implements SessionManagerInterface
      * @param array $args
      * @return mixed
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function __call($method, $args)
     {
@@ -178,7 +163,6 @@ class SessionManager implements SessionManagerInterface
      *
      * @throws \Magento\Framework\Exception\SessionException
      * @return $this
-     * @since 2.0.0
      */
     public function start()
     {
@@ -252,7 +236,6 @@ class SessionManager implements SessionManagerInterface
      * Register save handler
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function registerSaveHandler()
     {
@@ -270,7 +253,6 @@ class SessionManager implements SessionManagerInterface
      * Does a session exist
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isSessionExists()
     {
@@ -286,7 +268,6 @@ class SessionManager implements SessionManagerInterface
      * @param string $key
      * @param bool $clear
      * @return mixed
-     * @since 2.0.0
      */
     public function getData($key = '', $clear = false)
     {
@@ -301,7 +282,6 @@ class SessionManager implements SessionManagerInterface
      * Retrieve session Id
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSessionId()
     {
@@ -312,7 +292,6 @@ class SessionManager implements SessionManagerInterface
      * Retrieve session name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -324,7 +303,6 @@ class SessionManager implements SessionManagerInterface
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -337,7 +315,6 @@ class SessionManager implements SessionManagerInterface
      *
      * @param  array $options
      * @return void
-     * @since 2.0.0
      */
     public function destroy(array $options = null)
     {
@@ -366,7 +343,6 @@ class SessionManager implements SessionManagerInterface
      * Unset all session data
      *
      * @return $this
-     * @since 2.0.0
      */
     public function clearStorage()
     {
@@ -378,7 +354,6 @@ class SessionManager implements SessionManagerInterface
      * Retrieve Cookie domain
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCookieDomain()
     {
@@ -389,7 +364,6 @@ class SessionManager implements SessionManagerInterface
      * Retrieve cookie path
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCookiePath()
     {
@@ -400,7 +374,6 @@ class SessionManager implements SessionManagerInterface
      * Retrieve cookie lifetime
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCookieLifetime()
     {
@@ -412,7 +385,6 @@ class SessionManager implements SessionManagerInterface
      *
      * @param   string|null $sessionId
      * @return  $this
-     * @since 2.0.0
      */
     public function setSessionId($sessionId)
     {
@@ -429,7 +401,6 @@ class SessionManager implements SessionManagerInterface
      * @param string $urlHost can be host or url
      * @return string {session_id_key}={session_id_encrypted}
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function getSessionIdForHost($urlHost)
     {
@@ -459,7 +430,6 @@ class SessionManager implements SessionManagerInterface
      *
      * @param string $host
      * @return bool
-     * @since 2.0.0
      */
     public function isValidForHost($host)
     {
@@ -473,7 +443,6 @@ class SessionManager implements SessionManagerInterface
      *
      * @param string $path
      * @return bool
-     * @since 2.0.0
      */
     public function isValidForPath($path)
     {
@@ -490,7 +459,6 @@ class SessionManager implements SessionManagerInterface
      * Register request host name as used with session
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _addHost()
     {
@@ -509,7 +477,6 @@ class SessionManager implements SessionManagerInterface
      * Get all host names where session was used
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getHosts()
     {
@@ -520,7 +487,6 @@ class SessionManager implements SessionManagerInterface
      * Clean all host names that were registered with session
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _cleanHosts()
     {
@@ -532,7 +498,6 @@ class SessionManager implements SessionManagerInterface
      * Renew session id and update session cookie
      *
      * @return $this
-     * @since 2.0.0
      */
     public function regenerateId()
     {
@@ -556,7 +521,6 @@ class SessionManager implements SessionManagerInterface
      * Expire the session cookie for sub domains
      *
      * @return void
-     * @since 2.0.0
      */
     protected function clearSubDomainSessionCookie()
     {
@@ -579,7 +543,6 @@ class SessionManager implements SessionManagerInterface
      * Sends a session cookie with no value, and with an expiry in the past.
      *
      * @return void
-     * @since 2.0.0
      */
     public function expireSessionCookie()
     {
@@ -600,7 +563,6 @@ class SessionManager implements SessionManagerInterface
      * Performs ini_set for all of the config options so they can be read by session_start
      *
      * @return void
-     * @since 2.0.0
      */
     private function initIniOptions()
     {

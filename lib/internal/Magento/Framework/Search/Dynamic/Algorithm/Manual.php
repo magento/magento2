@@ -13,26 +13,22 @@ use Magento\Framework\Search\Request\BucketInterface;
 /**
  * Class \Magento\Framework\Search\Dynamic\Algorithm\Manual
  *
- * @since 2.0.0
  */
 class Manual implements AlgorithmInterface
 {
     /**
      * @var DataProviderInterface
-     * @since 2.0.0
      */
     private $dataProvider;
 
     /**
      * @var OptionsInterface
-     * @since 2.0.0
      */
     private $options;
 
     /**
      * @param DataProviderInterface $dataProvider
      * @param OptionsInterface $options
-     * @since 2.0.0
      */
     public function __construct(DataProviderInterface $dataProvider, OptionsInterface $options)
     {
@@ -42,7 +38,6 @@ class Manual implements AlgorithmInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getItems(
         BucketInterface $bucket,
@@ -65,7 +60,6 @@ class Manual implements AlgorithmInterface
      * @param array $items
      * @param int $maxIntervalsNumber
      * @return array
-     * @since 2.0.0
      */
     private function processRange($items, $maxIntervalsNumber)
     {

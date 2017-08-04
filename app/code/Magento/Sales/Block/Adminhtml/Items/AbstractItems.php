@@ -12,7 +12,6 @@ use Magento\Sales\Model\Order\Creditmemo\Item;
  * Abstract items renderer
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class AbstractItems extends \Magento\Backend\Block\Template
 {
@@ -28,7 +27,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * renderer => the block object
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_columnRenders = [];
 
@@ -36,7 +34,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * Flag - if it is set method canEditQty will return value of it
      *
      * @var bool|null
-     * @since 2.0.0
      */
     protected $_canEditQty;
 
@@ -44,19 +41,16 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
-     * @since 2.0.0
      */
     protected $stockRegistry;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
-     * @since 2.0.0
      */
     protected $stockConfiguration;
 
@@ -66,7 +60,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -86,7 +79,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      *
      * @param array $blocks
      * @return $this
-     * @since 2.0.0
      */
     public function setColumnRenders(array $blocks)
     {
@@ -106,7 +98,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * @param string $type
      * @return \Magento\Framework\View\Element\AbstractBlock
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     public function getItemRenderer($type)
     {
@@ -126,7 +117,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * @param string $column
      * @param string $compositePart
      * @return \Magento\Framework\View\Element\AbstractBlock
-     * @since 2.0.0
      */
     public function getColumnRenderer($column, $compositePart = '')
     {
@@ -145,7 +135,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      *
      * @param \Magento\Framework\DataObject $item
      * @return string
-     * @since 2.0.0
      */
     public function getItemHtml(\Magento\Framework\DataObject $item)
     {
@@ -163,7 +152,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      *
      * @param \Magento\Framework\DataObject $item
      * @return string
-     * @since 2.0.0
      */
     public function getItemExtraInfoHtml(\Magento\Framework\DataObject $item)
     {
@@ -181,7 +169,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * @param string $column the column key
      * @param string $field the custom item field
      * @return string
-     * @since 2.0.0
      */
     public function getColumnHtml(\Magento\Framework\DataObject $item, $column, $field = null)
     {
@@ -205,7 +192,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * Get credit memo
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getCreditmemo()
     {
@@ -221,7 +207,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return Order
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -251,7 +236,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * Retrieve price data object
      *
      * @return Order
-     * @since 2.0.0
      */
     public function getPriceDataObject()
     {
@@ -269,7 +253,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * @param bool $strong
      * @param string $separator
      * @return string
-     * @since 2.0.0
      */
     public function displayPriceAttribute($code, $strong = false, $separator = '<br />')
     {
@@ -299,7 +282,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * @param bool $strong
      * @param string $separator
      * @return string
-     * @since 2.0.0
      */
     public function displayPrices($basePrice, $price, $strong = false, $separator = '<br />')
     {
@@ -315,7 +297,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * @param bool $strong
      * @param string $separator
      * @return string
-     * @since 2.0.0
      */
     public function displayRoundedPrices($basePrice, $price, $precision = 2, $strong = false, $separator = '<br />')
     {
@@ -338,7 +319,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      *
      * @param \Magento\Framework\DataObject $item
      * @return string
-     * @since 2.0.0
      */
     public function displayTaxCalculation(\Magento\Framework\DataObject $item)
     {
@@ -361,7 +341,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      *
      * @param \Magento\Framework\DataObject $item
      * @return string
-     * @since 2.0.0
      */
     public function displayTaxPercent(\Magento\Framework\DataObject $item)
     {
@@ -380,7 +359,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * Check shipment availability for current invoice
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canCreateShipment()
     {
@@ -399,7 +377,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * @return $this
      * @see self::_canEditQty
      * @see self::canEditQty
-     * @since 2.0.0
      */
     public function setCanEditQty($value)
     {
@@ -411,7 +388,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * Check availability to edit quantity of item
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canEditQty()
     {
@@ -441,7 +417,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * Check capture availability
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canCapture()
     {
@@ -456,7 +431,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      *
      * @param float $price
      * @return string
-     * @since 2.0.0
      */
     public function formatPrice($price)
     {
@@ -467,7 +441,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * Retrieve source
      *
      * @return \Magento\Sales\Model\Order\Invoice
-     * @since 2.0.0
      */
     public function getSource()
     {
@@ -478,7 +451,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * Retrieve invoice model instance
      *
      * @return \Magento\Sales\Model\Order\Invoice
-     * @since 2.0.0
      */
     public function getInvoice()
     {
@@ -488,7 +460,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * @param \Magento\Store\Model\Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function canReturnToStock($store = null)
     {
@@ -500,7 +471,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      *
      * @param Item $item
      * @return bool
-     * @since 2.0.0
      */
     public function canReturnItemToStock($item = null)
     {
@@ -523,7 +493,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      *
      * @param Item $item
      * @return bool
-     * @since 2.0.0
      */
     public function canParentReturnToStock($item = null)
     {
@@ -542,7 +511,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      *
      * @param Order|null $order
      * @return bool
-     * @since 2.0.0
      */
     public function canShipPartially($order = null)
     {
@@ -561,7 +529,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      *
      * @param Order|null $order
      * @return bool
-     * @since 2.0.0
      */
     public function canShipPartiallyItem($order = null)
     {
@@ -579,7 +546,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * Check is shipment is regular
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isShipmentRegular()
     {

@@ -10,7 +10,6 @@ namespace Magento\Framework\App\Router;
 /**
  * Interface \Magento\Framework\App\Router\NoRouteHandlerInterface
  *
- * @since 2.0.0
  */
 interface NoRouteHandlerInterface
 {
@@ -19,7 +18,6 @@ interface NoRouteHandlerInterface
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return bool
-     * @since 2.0.0
      */
     public function process(\Magento\Framework\App\RequestInterface $request);
 }

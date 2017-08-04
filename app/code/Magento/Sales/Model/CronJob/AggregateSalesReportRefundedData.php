@@ -10,25 +10,21 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Class AggregateSalesReportRefundedData
- * @since 2.0.0
  */
 class AggregateSalesReportRefundedData
 {
     /**
      * @var ResolverInterface
-     * @since 2.0.0
      */
     protected $localeResolver;
 
     /**
      * @var TimezoneInterface
-     * @since 2.0.0
      */
     protected $localeDate;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Report\RefundedFactory
-     * @since 2.0.0
      */
     protected $refundedFactory;
 
@@ -36,7 +32,6 @@ class AggregateSalesReportRefundedData
      * @param ResolverInterface $localeResolver
      * @param TimezoneInterface $timezone
      * @param \Magento\Sales\Model\ResourceModel\Report\RefundedFactory $refundedFactory
-     * @since 2.0.0
      */
     public function __construct(
         ResolverInterface $localeResolver,
@@ -52,7 +47,6 @@ class AggregateSalesReportRefundedData
      * Refresh sales refunded report statistics for last day
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -10,13 +10,11 @@ namespace Magento\User\Block;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class User extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * @var \Magento\User\Model\ResourceModel\User
-     * @since 2.0.0
      */
     protected $_resourceModel;
 
@@ -24,7 +22,6 @@ class User extends \Magento\Backend\Block\Widget\Grid\Container
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\User\Model\ResourceModel\User $resourceModel
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -39,7 +36,6 @@ class User extends \Magento\Backend\Block\Widget\Grid\Container
      * Class constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

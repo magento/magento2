@@ -26,7 +26,6 @@ use Magento\CatalogSearch\Model\Search\FilterMapper\FilterMapper;
 /**
  * Build base Query for Index
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class IndexBuilder implements IndexBuilderInterface
 {
@@ -68,7 +67,6 @@ class IndexBuilder implements IndexBuilderInterface
      * @param FilterMapper|null $filterMapper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -104,7 +102,6 @@ class IndexBuilder implements IndexBuilderInterface
      * @throws \DomainException
      * @throws \InvalidArgumentException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function build(RequestInterface $request)
     {

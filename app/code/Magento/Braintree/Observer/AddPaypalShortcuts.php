@@ -11,7 +11,6 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Class AddPaypalShortcuts
- * @since 2.0.0
  */
 class AddPaypalShortcuts implements ObserverInterface
 {
@@ -25,7 +24,6 @@ class AddPaypalShortcuts implements ObserverInterface
      *
      * @param Observer $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

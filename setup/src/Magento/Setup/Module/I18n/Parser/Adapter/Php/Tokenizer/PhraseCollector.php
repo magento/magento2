@@ -9,13 +9,11 @@ use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer;
 
 /**
  * PhraseCollector
- * @since 2.0.0
  */
 class PhraseCollector
 {
     /**
      * @var \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer
-     * @since 2.0.0
      */
     protected $_tokenizer;
 
@@ -23,7 +21,6 @@ class PhraseCollector
      * Phrases
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_phrases = [];
 
@@ -31,7 +28,6 @@ class PhraseCollector
      * Processed file
      *
      * @var \SplFileInfo
-     * @since 2.0.0
      */
     protected $_file;
 
@@ -39,13 +35,11 @@ class PhraseCollector
      * Are the Phrase objects are parsed as well
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $includeObjects = false;
 
     /**
      * The class name of the phrase object
-     * @since 2.0.0
      */
     protected $className = 'Phrase';
 
@@ -55,7 +49,6 @@ class PhraseCollector
      * @param Tokenizer $tokenizer
      * @param bool $includeObjects
      * @param String $className
-     * @since 2.0.0
      */
     public function __construct(Tokenizer $tokenizer, $includeObjects = false, $className = 'Phrase')
     {
@@ -68,7 +61,6 @@ class PhraseCollector
      * Get phrases for given file
      *
      * @return array
-     * @since 2.0.0
      */
     public function getPhrases()
     {
@@ -80,7 +72,6 @@ class PhraseCollector
      *
      * @param string $file
      * @return void
-     * @since 2.0.0
      */
     public function parse($file)
     {
@@ -96,7 +87,6 @@ class PhraseCollector
      * Extract phrases from given tokens. e.g.: __('phrase', ...)
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _extractPhrases()
     {
@@ -110,7 +100,6 @@ class PhraseCollector
     /**
      * @param Token $firstToken
      * @return bool
-     * @since 2.0.0
      */
     protected function extractMethodPhrase(Token $firstToken)
     {
@@ -131,7 +120,6 @@ class PhraseCollector
     /**
      * @param Token $firstToken
      * @return bool
-     * @since 2.0.0
      */
     protected function extractObjectPhrase(Token $firstToken)
     {
@@ -151,7 +139,6 @@ class PhraseCollector
      *
      * @param array $phraseTokens
      * @return string|null
-     * @since 2.0.0
      */
     protected function _collectPhrase($phraseTokens)
     {
@@ -178,7 +165,6 @@ class PhraseCollector
      * @param \SplFileInfo $file
      * @param int $line
      * @return void
-     * @since 2.0.0
      */
     protected function _addPhrase($phrase, $argumentsAmount, $file, $line)
     {
@@ -193,7 +179,6 @@ class PhraseCollector
     /**
      * @param bool $includeObjects
      * @return $this
-     * @since 2.0.0
      */
     public function setIncludeObjects($includeObjects = true)
     {

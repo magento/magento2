@@ -12,7 +12,6 @@ namespace Magento\Catalog\Model\Product\Media;
 /**
  * Interface \Magento\Catalog\Model\Product\Media\ConfigInterface
  *
- * @since 2.0.0
  */
 interface ConfigInterface
 {
@@ -20,7 +19,6 @@ interface ConfigInterface
      * Retrieve base url for media files
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBaseMediaUrl();
 
@@ -28,7 +26,6 @@ interface ConfigInterface
      * Retrieve base path for media files
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBaseMediaPath();
 
@@ -37,7 +34,6 @@ interface ConfigInterface
      *
      * @param string $file
      * @return string
-     * @since 2.0.0
      */
     public function getMediaUrl($file);
 
@@ -46,7 +42,6 @@ interface ConfigInterface
      *
      * @param string $file
      * @return string
-     * @since 2.0.0
      */
     public function getMediaPath($file);
 }

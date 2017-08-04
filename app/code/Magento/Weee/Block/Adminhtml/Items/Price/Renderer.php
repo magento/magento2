@@ -15,13 +15,11 @@ use Magento\Weee\Block\Item\Price\Renderer as ItemPriceRenderer;
  * Sales Order items price column renderer
  *
  * @api
- * @since 2.0.0
  */
 class Renderer extends \Magento\Tax\Block\Adminhtml\Items\Price\Renderer
 {
     /**
      * @var \Magento\Weee\Block\Item\Price\Renderer
-     * @since 2.0.0
      */
     protected $itemPriceRenderer;
 
@@ -31,7 +29,6 @@ class Renderer extends \Magento\Tax\Block\Adminhtml\Items\Price\Renderer
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param ItemPriceRenderer $itemPriceRenderer
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -53,7 +50,6 @@ class Renderer extends \Magento\Tax\Block\Adminhtml\Items\Price\Renderer
      * Whether to display weee details together with price
      *
      * @return bool
-     * @since 2.0.0
      */
     public function displayPriceWithWeeeDetails()
     {
@@ -64,7 +60,6 @@ class Renderer extends \Magento\Tax\Block\Adminhtml\Items\Price\Renderer
      * Whether to display final price that include Weee amounts
      *
      * @return bool
-     * @since 2.0.0
      */
     public function displayFinalPrice()
     {
@@ -75,7 +70,6 @@ class Renderer extends \Magento\Tax\Block\Adminhtml\Items\Price\Renderer
      * Return HTML for unit price excl tax
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUnitPriceExclTaxHtml()
     {
@@ -88,7 +82,6 @@ class Renderer extends \Magento\Tax\Block\Adminhtml\Items\Price\Renderer
      * Return HTML for row price excl tax
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRowPriceExclTaxHtml()
     {
@@ -101,7 +94,6 @@ class Renderer extends \Magento\Tax\Block\Adminhtml\Items\Price\Renderer
      * Return HTML for unit price incl tax
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUnitPriceInclTaxHtml()
     {
@@ -114,7 +106,6 @@ class Renderer extends \Magento\Tax\Block\Adminhtml\Items\Price\Renderer
      * Return HTML for row price incl tax
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRowPriceInclTaxHtml()
     {
@@ -127,7 +118,6 @@ class Renderer extends \Magento\Tax\Block\Adminhtml\Items\Price\Renderer
      * Return HTML for final unit price excl tax
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFinalUnitPriceExclTaxHtml()
     {
@@ -140,7 +130,6 @@ class Renderer extends \Magento\Tax\Block\Adminhtml\Items\Price\Renderer
      * Return HTML for final row price excl tax
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFinalRowPriceExclTaxHtml()
     {
@@ -153,7 +142,6 @@ class Renderer extends \Magento\Tax\Block\Adminhtml\Items\Price\Renderer
      * Return HTML for final unit price incl tax
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFinalUnitPriceInclTaxHtml()
     {
@@ -166,7 +154,6 @@ class Renderer extends \Magento\Tax\Block\Adminhtml\Items\Price\Renderer
      * Return HTML for final row price incl tax
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFinalRowPriceInclTaxHtml()
     {
@@ -180,7 +167,6 @@ class Renderer extends \Magento\Tax\Block\Adminhtml\Items\Price\Renderer
      *
      * @param Item|QuoteItem|InvoiceItem|CreditmemoItem $item
      * @return mixed
-     * @since 2.0.0
      */
     public function getTotalAmount($item)
     {
@@ -192,7 +178,6 @@ class Renderer extends \Magento\Tax\Block\Adminhtml\Items\Price\Renderer
      *
      * @param Item|QuoteItem|InvoiceItem|CreditmemoItem $item
      * @return mixed
-     * @since 2.0.0
      */
     public function getBaseTotalAmount($item)
     {

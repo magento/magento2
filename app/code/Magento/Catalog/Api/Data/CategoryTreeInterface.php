@@ -9,20 +9,17 @@ namespace Magento\Catalog\Api\Data;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface CategoryTreeInterface
 {
     /**
      * @return int|null
-     * @since 2.0.0
      */
     public function getId();
 
     /**
      * @param int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setId($id);
 
@@ -30,7 +27,6 @@ interface CategoryTreeInterface
      * Get parent category ID
      *
      * @return int
-     * @since 2.0.0
      */
     public function getParentId();
 
@@ -39,7 +35,6 @@ interface CategoryTreeInterface
      *
      * @param int $parentId
      * @return $this
-     * @since 2.0.0
      */
     public function setParentId($parentId);
 
@@ -47,7 +42,6 @@ interface CategoryTreeInterface
      * Get category name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName();
 
@@ -56,7 +50,6 @@ interface CategoryTreeInterface
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setName($name);
 
@@ -65,7 +58,6 @@ interface CategoryTreeInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsActive();
 
@@ -74,7 +66,6 @@ interface CategoryTreeInterface
      *
      * @param bool $isActive
      * @return $this
-     * @since 2.0.0
      */
     public function setIsActive($isActive);
 
@@ -82,7 +73,6 @@ interface CategoryTreeInterface
      * Get category position
      *
      * @return int
-     * @since 2.0.0
      */
     public function getPosition();
 
@@ -91,7 +81,6 @@ interface CategoryTreeInterface
      *
      * @param int $position
      * @return $this
-     * @since 2.0.0
      */
     public function setPosition($position);
 
@@ -99,7 +88,6 @@ interface CategoryTreeInterface
      * Get category level
      *
      * @return int
-     * @since 2.0.0
      */
     public function getLevel();
 
@@ -108,7 +96,6 @@ interface CategoryTreeInterface
      *
      * @param int $level
      * @return $this
-     * @since 2.0.0
      */
     public function setLevel($level);
 
@@ -116,7 +103,6 @@ interface CategoryTreeInterface
      * Get product count
      *
      * @return int
-     * @since 2.0.0
      */
     public function getProductCount();
 
@@ -125,20 +111,17 @@ interface CategoryTreeInterface
      *
      * @param int $productCount
      * @return $this
-     * @since 2.0.0
      */
     public function setProductCount($productCount);
 
     /**
      * @return \Magento\Catalog\Api\Data\CategoryTreeInterface[]
-     * @since 2.0.0
      */
     public function getChildrenData();
 
     /**
      * @param \Magento\Catalog\Api\Data\CategoryTreeInterface[] $childrenData
      * @return $this
-     * @since 2.0.0
      */
     public function setChildrenData(array $childrenData = null);
 }

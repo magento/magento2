@@ -11,7 +11,6 @@ use Magento\Framework\View\Element\Html\Select;
 
 /**
  * Class Countries
- * @since 2.0.0
  */
 class Countries extends Select
 {
@@ -27,7 +26,6 @@ class Countries extends Select
      * @param Context $context
      * @param Country $countryHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(Context $context, Country $countryHelper, array $data = [])
     {
@@ -39,7 +37,6 @@ class Countries extends Select
      * Render block HTML
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -54,7 +51,6 @@ class Countries extends Select
      *
      * @param string $value
      * @return $this
-     * @since 2.0.0
      */
     public function setInputName($value)
     {

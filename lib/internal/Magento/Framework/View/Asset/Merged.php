@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Asset;
 
 /**
  * \Iterator that aggregates one or more assets and provides a single public file with equivalent behavior
- * @since 2.0.0
  */
 class Merged implements \Iterator
 {
@@ -18,37 +17,31 @@ class Merged implements \Iterator
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var MergeStrategyInterface
-     * @since 2.0.0
      */
     protected $mergeStrategy;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
-     * @since 2.0.0
      */
     private $assetRepo;
 
     /**
      * @var MergeableInterface[]
-     * @since 2.0.0
      */
     protected $assets;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $contentType;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $isInitialized = false;
 
@@ -58,7 +51,6 @@ class Merged implements \Iterator
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param MergeableInterface[] $assets
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -95,7 +87,6 @@ class Merged implements \Iterator
      * Attempt to merge assets, falling back to original non-merged ones, if merging fails
      *
      * @return void
-     * @since 2.0.0
      */
     protected function initialize()
     {
@@ -116,7 +107,6 @@ class Merged implements \Iterator
      *
      * @param array $assets
      * @return MergeableInterface
-     * @since 2.0.0
      */
     private function createMergedAsset(array $assets)
     {
@@ -134,7 +124,6 @@ class Merged implements \Iterator
      * {@inheritdoc}
      *
      * @return AssetInterface
-     * @since 2.0.0
      */
     public function current()
     {
@@ -144,7 +133,6 @@ class Merged implements \Iterator
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function key()
     {
@@ -154,7 +142,6 @@ class Merged implements \Iterator
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function next()
     {
@@ -164,7 +151,6 @@ class Merged implements \Iterator
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function rewind()
     {
@@ -174,7 +160,6 @@ class Merged implements \Iterator
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function valid()
     {
@@ -186,7 +171,6 @@ class Merged implements \Iterator
      * Returns directory for storing merged files relative to STATIC_VIEW
      *
      * @return string
-     * @since 2.0.0
      */
     public static function getRelativeDir()
     {

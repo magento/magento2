@@ -7,7 +7,6 @@ namespace Magento\Eav\Model\Entity\Increment;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface IncrementInterface
 {
@@ -15,7 +14,6 @@ interface IncrementInterface
      * Get next id
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getNextId();
 }

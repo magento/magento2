@@ -12,31 +12,26 @@ use Magento\Framework\Search\RequestInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Builder
 {
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var Config
-     * @since 2.0.0
      */
     private $config;
 
     /**
      * @var Binder
-     * @since 2.0.0
      */
     private $binder;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $data = [
         'dimensions' => [],
@@ -45,7 +40,6 @@ class Builder
 
     /**
      * @var Cleaner
-     * @since 2.0.0
      */
     private $cleaner;
 
@@ -56,7 +50,6 @@ class Builder
      * @param Config $config
      * @param Binder $binder
      * @param Cleaner $cleaner
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager, Config $config, Binder $binder, Cleaner $cleaner)
     {
@@ -71,7 +64,6 @@ class Builder
      *
      * @param string $requestName
      * @return $this
-     * @since 2.0.0
      */
     public function setRequestName($requestName)
     {
@@ -84,7 +76,6 @@ class Builder
      *
      * @param int $size
      * @return $this
-     * @since 2.0.0
      */
     public function setSize($size)
     {
@@ -97,7 +88,6 @@ class Builder
      *
      * @param int $from
      * @return $this
-     * @since 2.0.0
      */
     public function setFrom($from)
     {
@@ -111,7 +101,6 @@ class Builder
      * @param string $name
      * @param string $value
      * @return $this
-     * @since 2.0.0
      */
     public function bindDimension($name, $value)
     {
@@ -125,7 +114,6 @@ class Builder
      * @param string $placeholder
      * @param mixed $value
      * @return $this
-     * @since 2.0.0
      */
     public function bind($placeholder, $value)
     {
@@ -137,7 +125,6 @@ class Builder
      * Create request object
      *
      * @return RequestInterface
-     * @since 2.0.0
      */
     public function create()
     {
@@ -163,7 +150,6 @@ class Builder
      * Clear data
      *
      * @return void
-     * @since 2.0.0
      */
     private function clear()
     {
@@ -178,7 +164,6 @@ class Builder
      *
      * @param array $data
      * @return RequestInterface
-     * @since 2.0.0
      */
     private function convert($data)
     {
@@ -210,7 +195,6 @@ class Builder
     /**
      * @param array $dimensionsData
      * @return array
-     * @since 2.0.0
      */
     private function buildDimensions(array $dimensionsData)
     {

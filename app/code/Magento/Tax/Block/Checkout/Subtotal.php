@@ -7,7 +7,6 @@ namespace Magento\Tax\Block\Checkout;
 
 /**
  * Subtotal Total Row Renderer
- * @since 2.0.0
  */
 class Subtotal extends \Magento\Checkout\Block\Total\DefaultTotal
 {
@@ -15,13 +14,11 @@ class Subtotal extends \Magento\Checkout\Block\Total\DefaultTotal
      * Template path
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'checkout/subtotal.phtml';
 
     /**
      * @var \Magento\Tax\Model\Config
-     * @since 2.0.0
      */
     protected $_taxConfig;
 
@@ -33,7 +30,6 @@ class Subtotal extends \Magento\Checkout\Block\Total\DefaultTotal
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param array $layoutProcessors
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -51,7 +47,6 @@ class Subtotal extends \Magento\Checkout\Block\Total\DefaultTotal
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function displayBoth()
     {

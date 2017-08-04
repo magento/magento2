@@ -9,7 +9,6 @@ namespace Magento\Paypal\Block;
  * HSS iframe block
  *
  * @api
- * @since 2.0.0
  */
 class Iframe extends \Magento\Payment\Block\Form
 {
@@ -17,7 +16,6 @@ class Iframe extends \Magento\Payment\Block\Form
      * Whether the block should be eventually rendered
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_shouldRender = false;
 
@@ -25,7 +23,6 @@ class Iframe extends \Magento\Payment\Block\Form
      * Order object
      *
      * @var \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     protected $_order;
 
@@ -33,7 +30,6 @@ class Iframe extends \Magento\Payment\Block\Form
      * Payment method code
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_paymentMethodCode;
 
@@ -41,43 +37,36 @@ class Iframe extends \Magento\Payment\Block\Form
      * Current iframe block instance
      *
      * @var \Magento\Payment\Block\Form
-     * @since 2.0.0
      */
     protected $_block;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'hss/js.phtml';
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
-     * @since 2.0.0
      */
     protected $_orderFactory;
 
     /**
      * @var \Magento\Checkout\Model\Session
-     * @since 2.0.0
      */
     protected $_checkoutSession;
 
     /**
      * @var \Magento\Paypal\Helper\Hss
-     * @since 2.0.0
      */
     protected $_hssHelper;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadFactory
-     * @since 2.0.0
      */
     protected $readFactory;
 
     /**
      * @var \Magento\Framework\Module\Dir\Reader
-     * @since 2.0.0
      */
     protected $reader;
 
@@ -89,7 +78,6 @@ class Iframe extends \Magento\Payment\Block\Form
      * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
      * @param \Magento\Framework\Module\Dir\Reader $reader
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -113,7 +101,6 @@ class Iframe extends \Magento\Payment\Block\Form
      * Internal constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -138,7 +125,6 @@ class Iframe extends \Magento\Payment\Block\Form
      *
      * @return \Magento\Payment\Block\Form
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _getBlock()
     {
@@ -162,7 +148,6 @@ class Iframe extends \Magento\Payment\Block\Form
      * Get order object
      *
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     protected function _getOrder()
     {
@@ -177,7 +162,6 @@ class Iframe extends \Magento\Payment\Block\Form
      * Get frontend checkout session object
      *
      * @return \Magento\Checkout\Model\Session
-     * @since 2.0.0
      */
     protected function _getCheckout()
     {
@@ -188,7 +172,6 @@ class Iframe extends \Magento\Payment\Block\Form
      * Before rendering html, check if is block rendering needed
      *
      * @return \Magento\Framework\View\Element\AbstractBlock
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -210,7 +193,6 @@ class Iframe extends \Magento\Payment\Block\Form
      * Render the block if needed
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -228,7 +210,6 @@ class Iframe extends \Magento\Payment\Block\Form
      * Check whether block is rendering after save payment
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _isAfterPaymentSave()
     {
@@ -248,7 +229,6 @@ class Iframe extends \Magento\Payment\Block\Form
      * Get iframe action URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFrameActionUrl()
     {
@@ -259,7 +239,6 @@ class Iframe extends \Magento\Payment\Block\Form
      * Get secure token
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSecureToken()
     {
@@ -270,7 +249,6 @@ class Iframe extends \Magento\Payment\Block\Form
      * Get secure token ID
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSecureTokenId()
     {
@@ -281,7 +259,6 @@ class Iframe extends \Magento\Payment\Block\Form
      * Get payflow transaction URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTransactionUrl()
     {
@@ -292,7 +269,6 @@ class Iframe extends \Magento\Payment\Block\Form
      * Check sandbox mode
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isTestMode()
     {

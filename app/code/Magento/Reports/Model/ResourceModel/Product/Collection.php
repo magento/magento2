@@ -14,7 +14,6 @@ namespace Magento\Reports\Model\ResourceModel\Product;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
@@ -24,7 +23,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Product entity identifier
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_productEntityId;
 
@@ -32,7 +30,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Product entity table name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_productEntityTableName;
 
@@ -40,7 +37,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Product entity attribute set identifier
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_productEntityAttributeSetId;
 
@@ -48,25 +44,21 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Select count
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_selectCountSqlType = 0;
 
     /**
      * @var \Magento\Reports\Model\Event\TypeFactory
-     * @since 2.0.0
      */
     protected $_eventTypeFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product\Type
-     * @since 2.0.0
      */
     protected $_productType;
 
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote\Collection
-     * @since 2.0.0
      */
     protected $quoteResource;
 
@@ -98,7 +90,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param mixed $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -162,7 +153,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param int $type
      * @return $this
-     * @since 2.0.0
      */
     public function setSelectCountSqlType($type)
     {
@@ -176,7 +166,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param string $entityId
      * @return $this
-     * @since 2.0.0
      */
     public function setProductEntityId($entityId)
     {
@@ -189,7 +178,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @codeCoverageIgnore
      *
      * @return int
-     * @since 2.0.0
      */
     public function getProductEntityId()
     {
@@ -202,7 +190,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param string $value
      * @return $this
-     * @since 2.0.0
      */
     public function setProductEntityTableName($value)
     {
@@ -215,7 +202,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @codeCoverageIgnore
      *
      * @return string
-     * @since 2.0.0
      */
     public function getProductEntityTableName()
     {
@@ -227,7 +213,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @codeCoverageIgnore
      *
      * @return int
-     * @since 2.0.0
      */
     public function getProductAttributeSetId()
     {
@@ -240,7 +225,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param int $value
      * @return $this
-     * @since 2.0.0
      */
     public function setProductAttributeSetId($value)
     {
@@ -252,7 +236,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Join fields
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _joinFields()
     {
@@ -267,7 +250,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Get select count sql
      *
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     public function getSelectCountSql()
     {
@@ -302,7 +284,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param string $attribute
      * @param string $dir
      * @return $this
-     * @since 2.0.0
      */
     public function setOrder($attribute, $dir = self::SORT_ORDER_DESC)
     {
@@ -321,7 +302,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param string $from
      * @param string $to
      * @return $this
-     * @since 2.0.0
      */
     public function addViewsCount($from = '', $to = '')
     {
@@ -370,7 +350,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param string $from
      * @param string $to
      * @return string Formatted sql string
-     * @since 2.0.0
      */
     protected function _prepareBetweenSql($fieldName, $from, $to)
     {
@@ -388,7 +367,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param array $storeIds
      * @param array $websiteIds
      * @return $this
-     * @since 2.0.0
      */
     public function addStoreRestrictions($storeIds, $websiteIds)
     {

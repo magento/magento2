@@ -10,13 +10,11 @@ use Magento\Checkout\Model\Layout\AbstractTotalsProcessor;
 /**
  * Class \Magento\Checkout\Block\Checkout\TotalsProcessor
  *
- * @since 2.0.0
  */
 class TotalsProcessor extends AbstractTotalsProcessor implements LayoutProcessorInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function process($jsLayout)
     {

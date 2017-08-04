@@ -17,7 +17,6 @@ use Magento\Search\Model\QueryFactory;
 /**
  * Search helper
  * @api
- * @since 2.0.0
  */
 class Data extends AbstractHelper
 {
@@ -25,7 +24,6 @@ class Data extends AbstractHelper
      * Note messages
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_messages = [];
 
@@ -33,7 +31,6 @@ class Data extends AbstractHelper
      * Magento string lib
      *
      * @var String
-     * @since 2.0.0
      */
     protected $string;
 
@@ -64,7 +61,6 @@ class Data extends AbstractHelper
      * @param StringUtils $string
      * @param Escaper $escaper
      * @param StoreManagerInterface $storeManager
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -83,7 +79,6 @@ class Data extends AbstractHelper
      * Is a minimum query length
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isMinQueryLength()
     {
@@ -96,7 +91,6 @@ class Data extends AbstractHelper
      * Retrieve HTML escaped search query
      *
      * @return string
-     * @since 2.0.0
      */
     public function getEscapedQueryText()
     {
@@ -111,7 +105,6 @@ class Data extends AbstractHelper
      *
      * @param   string $query
      * @return  string
-     * @since 2.0.0
      */
     public function getResultUrl($query = null)
     {
@@ -125,7 +118,6 @@ class Data extends AbstractHelper
      * Retrieve suggest url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSuggestUrl()
     {
@@ -139,7 +131,6 @@ class Data extends AbstractHelper
      * Retrieve search term url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSearchTermUrl()
     {
@@ -151,7 +142,6 @@ class Data extends AbstractHelper
      *
      * @param mixed $store
      * @return int|string
-     * @since 2.0.0
      */
     public function getMinQueryLength($store = null)
     {
@@ -167,7 +157,6 @@ class Data extends AbstractHelper
      *
      * @param mixed $store
      * @return int|string
-     * @since 2.0.0
      */
     public function getMaxQueryLength($store = null)
     {
@@ -183,7 +172,6 @@ class Data extends AbstractHelper
      *
      * @param string $message
      * @return $this
-     * @since 2.0.0
      */
     public function addNoteMessage($message)
     {
@@ -196,7 +184,6 @@ class Data extends AbstractHelper
      *
      * @param array $messages
      * @return $this
-     * @since 2.0.0
      */
     public function setNoteMessages(array $messages)
     {
@@ -208,7 +195,6 @@ class Data extends AbstractHelper
      * Retrieve Current Note messages
      *
      * @return array
-     * @since 2.0.0
      */
     public function getNoteMessages()
     {
@@ -221,7 +207,6 @@ class Data extends AbstractHelper
      * @param mixed $store
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function checkNotes($store = null)
     {
@@ -239,7 +224,6 @@ class Data extends AbstractHelper
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getQueryParamName()
     {

@@ -9,7 +9,6 @@ namespace Magento\Framework\View\Asset\PreProcessor;
  * Interface ChainFactoryInterface
  *
  * @api
- * @since 2.0.0
  */
 interface ChainFactoryInterface
 {
@@ -18,7 +17,6 @@ interface ChainFactoryInterface
      *
      * @param array $arguments
      * @return Chain
-     * @since 2.0.0
      */
     public function create(array $arguments = []);
 }

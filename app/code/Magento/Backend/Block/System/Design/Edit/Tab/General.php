@@ -9,19 +9,16 @@ namespace Magento\Backend\Block\System\Design\Edit\Tab;
 /**
  * Class \Magento\Backend\Block\System\Design\Edit\Tab\General
  *
- * @since 2.0.0
  */
 class General extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\Framework\View\Design\Theme\LabelFactory
-     * @since 2.0.0
      */
     protected $_labelFactory;
 
     /**
      * @var \Magento\Store\Model\System\Store
-     * @since 2.0.0
      */
     protected $_systemStore;
 
@@ -32,7 +29,6 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\View\Design\Theme\LabelFactory $labelFactory
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -51,7 +47,6 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic
      * Initialise form fields
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {

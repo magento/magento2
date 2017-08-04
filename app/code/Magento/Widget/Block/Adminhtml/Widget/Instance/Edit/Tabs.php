@@ -13,7 +13,6 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
@@ -21,7 +20,6 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      * Internal constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

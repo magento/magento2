@@ -16,19 +16,16 @@ use Magento\Weee\Helper\Data;
 /**
  * Class \Magento\Weee\Observer\AfterAddressSave
  *
- * @since 2.0.0
  */
 class AfterAddressSave implements ObserverInterface
 {
     /**
      * @var Session
-     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var Data
-     * @since 2.0.0
      */
     protected $weeeHelper;
 
@@ -36,7 +33,6 @@ class AfterAddressSave implements ObserverInterface
      * Module manager
      *
      * @var Manager
-     * @since 2.0.0
      */
     private $moduleManager;
 
@@ -44,7 +40,6 @@ class AfterAddressSave implements ObserverInterface
      * Cache config
      *
      * @var Config
-     * @since 2.0.0
      */
     private $cacheConfig;
 
@@ -53,7 +48,6 @@ class AfterAddressSave implements ObserverInterface
      * @param Data $weeeHelper
      * @param Manager $moduleManager
      * @param Config $cacheConfig
-     * @since 2.0.0
      */
     public function __construct(
         Session $customerSession,
@@ -71,7 +65,6 @@ class AfterAddressSave implements ObserverInterface
      * @param Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

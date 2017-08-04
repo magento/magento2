@@ -9,7 +9,6 @@ namespace Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype;
  * Validator for check input type value
  *
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Validator extends \Zend_Validate_InArray
 {
@@ -17,14 +16,12 @@ class Validator extends \Zend_Validate_InArray
      * Eav data
      *
      * @var \Magento\Eav\Helper\Data
-     * @since 2.0.0
      */
     protected $_eavData = null;
 
     /**
      * @param \Magento\Eav\Helper\Data $eavData
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(\Magento\Eav\Helper\Data $eavData)
     {
@@ -44,7 +41,6 @@ class Validator extends \Zend_Validate_InArray
      * Initialize message templates with translating
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initMessageTemplates()
     {
@@ -61,7 +57,6 @@ class Validator extends \Zend_Validate_InArray
      *
      * @param string $type
      * @return $this
-     * @since 2.0.0
      */
     public function addInputType($type)
     {

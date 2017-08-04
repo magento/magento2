@@ -9,7 +9,6 @@ use Magento\Backend\App\AbstractAction;
 
 /**
  * Controller which handles authentication of backend app and redirects back to set cookie with backend app path
- * @since 2.0.0
  */
 class Redirect extends AbstractAction
 {
@@ -17,20 +16,17 @@ class Redirect extends AbstractAction
      * Array of actions which can be processed without secret key validation
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_publicActions = ['redirect'];
 
     /**
      * @var \Magento\Backend\App\BackendAppList|null
-     * @since 2.0.0
      */
     private $backendAppList;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Backend\App\BackendAppList $backendAppList
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -42,7 +38,6 @@ class Redirect extends AbstractAction
 
     /**
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -56,7 +51,6 @@ class Redirect extends AbstractAction
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     protected function _isAllowed()
     {

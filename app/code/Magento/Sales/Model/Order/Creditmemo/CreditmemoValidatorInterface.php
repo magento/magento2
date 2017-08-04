@@ -12,7 +12,7 @@ use Magento\Sales\Model\ValidatorResultInterface;
 
 /**
  * Interface CreditmemoValidatorInterface
- * @since 2.2.0
+ * @since 2.1.3
  */
 interface CreditmemoValidatorInterface
 {
@@ -21,7 +21,7 @@ interface CreditmemoValidatorInterface
      * @param ValidatorInterface[] $validators
      * @return ValidatorResultInterface
      * @throws DocumentValidationException
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function validate(CreditmemoInterface $entity, array $validators);
 }

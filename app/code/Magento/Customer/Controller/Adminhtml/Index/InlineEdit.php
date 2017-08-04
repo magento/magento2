@@ -14,7 +14,6 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class InlineEdit extends \Magento\Backend\App\Action
 {
@@ -27,37 +26,31 @@ class InlineEdit extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterface
-     * @since 2.0.0
      */
     private $customer;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var \Magento\Customer\Model\Customer\Mapper
-     * @since 2.0.0
      */
     protected $customerMapper;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
-     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
@@ -74,7 +67,6 @@ class InlineEdit extends \Magento\Backend\App\Action
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Psr\Log\LoggerInterface $logger
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -112,7 +104,6 @@ class InlineEdit extends \Magento\Backend\App\Action
 
     /**
      * @return \Magento\Framework\Controller\Result\Json
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -152,7 +143,6 @@ class InlineEdit extends \Magento\Backend\App\Action
      * @param array $data
      * @param null $isCustomerData
      * @return array
-     * @since 2.0.0
      */
     protected function getData(array $data, $isCustomerData = null)
     {
@@ -178,7 +168,6 @@ class InlineEdit extends \Magento\Backend\App\Action
      *
      * @param array $data
      * @return void
-     * @since 2.0.0
      */
     protected function updateCustomer(array $data)
     {
@@ -199,7 +188,6 @@ class InlineEdit extends \Magento\Backend\App\Action
      *
      * @param array $data
      * @return void
-     * @since 2.0.0
      */
     protected function updateDefaultBilling(array $data)
     {
@@ -222,7 +210,6 @@ class InlineEdit extends \Magento\Backend\App\Action
      *
      * @param CustomerInterface $customer
      * @return void
-     * @since 2.0.0
      */
     protected function saveCustomer(CustomerInterface $customer)
     {
@@ -245,7 +232,6 @@ class InlineEdit extends \Magento\Backend\App\Action
      *
      * @param array $data
      * @return array
-     * @since 2.0.0
      */
     protected function processAddressData(array $data)
     {
@@ -261,7 +247,6 @@ class InlineEdit extends \Magento\Backend\App\Action
      * Get array with errors
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getErrorMessages()
     {
@@ -276,7 +261,6 @@ class InlineEdit extends \Magento\Backend\App\Action
      * Check if errors exists
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function isErrorExists()
     {
@@ -288,7 +272,6 @@ class InlineEdit extends \Magento\Backend\App\Action
      *
      * @param CustomerInterface $customer
      * @return $this
-     * @since 2.0.0
      */
     protected function setCustomer(CustomerInterface $customer)
     {
@@ -300,7 +283,6 @@ class InlineEdit extends \Magento\Backend\App\Action
      * Receive customer
      *
      * @return CustomerInterface
-     * @since 2.0.0
      */
     protected function getCustomer()
     {
@@ -312,7 +294,6 @@ class InlineEdit extends \Magento\Backend\App\Action
      *
      * @param string $errorText
      * @return string
-     * @since 2.0.0
      */
     protected function getErrorWithCustomerId($errorText)
     {

@@ -9,7 +9,6 @@ namespace Magento\SalesRule\Model\ResourceModel\Rule\Customer;
  * SalesRule Model Resource Rule Customer_Collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -17,7 +16,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Collection constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

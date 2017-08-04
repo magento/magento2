@@ -11,7 +11,6 @@ namespace Magento\Framework\Oauth;
  * A method for generating a current timestamp is also provided by this interface.
  *
  * @api
- * @since 2.0.0
  */
 interface NonceGeneratorInterface
 {
@@ -20,7 +19,6 @@ interface NonceGeneratorInterface
      *
      * @param ConsumerInterface $consumer
      * @return string The generated nonce value.
-     * @since 2.0.0
      */
     public function generateNonce(ConsumerInterface $consumer = null);
 
@@ -28,7 +26,6 @@ interface NonceGeneratorInterface
      * Generate a current timestamp.
      *
      * @return int The time as an int
-     * @since 2.0.0
      */
     public function generateTimestamp();
 
@@ -42,7 +39,6 @@ interface NonceGeneratorInterface
      * @param int $timestamp The 'oauth_timestamp' value.
      * @return void
      * @throws \Magento\Framework\Oauth\Exception Exceptions are thrown for validation errors.
-     * @since 2.0.0
      */
     public function validateNonce(ConsumerInterface $consumer, $nonce, $timestamp);
 }

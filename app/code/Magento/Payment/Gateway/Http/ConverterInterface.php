@@ -9,7 +9,6 @@ namespace Magento\Payment\Gateway\Http;
  * Interface ConverterInterface
  * @package Magento\Payment\Gateway\Http
  * @api
- * @since 2.0.0
  */
 interface ConverterInterface
 {
@@ -19,7 +18,6 @@ interface ConverterInterface
      * @param mixed $response
      * @return array
      * @throws \Magento\Payment\Gateway\Http\ConverterException
-     * @since 2.0.0
      */
     public function convert($response);
 }

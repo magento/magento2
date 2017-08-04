@@ -9,7 +9,6 @@ namespace Magento\Reports\Block\Product\Widget;
  * Reports Recently Compared Products Widget
  * @deprecated 2.2.0 Since new frontend base widgets are provided
  * @see \Magento\Catalog\Block\Widget\RecentlyCompared
- * @since 2.0.0
  */
 class Compared extends \Magento\Reports\Block\Product\Compared implements \Magento\Widget\Block\BlockInterface
 {
@@ -17,7 +16,6 @@ class Compared extends \Magento\Reports\Block\Product\Compared implements \Magen
      * Internal constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

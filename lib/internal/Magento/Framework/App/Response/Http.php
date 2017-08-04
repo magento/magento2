@@ -17,7 +17,6 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 /**
  * Class \Magento\Framework\App\Response\Http
  *
- * @since 2.0.0
  */
 class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
 {
@@ -32,31 +31,26 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
 
     /**
      * @var \Magento\Framework\App\Request\Http
-     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var \Magento\Framework\Stdlib\CookieManagerInterface
-     * @since 2.0.0
      */
     protected $cookieManager;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
-     * @since 2.0.0
      */
     protected $cookieMetadataFactory;
 
     /**
      * @var \Magento\Framework\App\Http\Context
-     * @since 2.0.0
      */
     protected $context;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
@@ -66,7 +60,6 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      * @param CookieMetadataFactory $cookieMetadataFactory
      * @param Context $context
      * @param DateTime $dateTime
-     * @since 2.0.0
      */
     public function __construct(
         HttpRequest $request,
@@ -87,7 +80,6 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      *
      * @param string $value
      * @return void
-     * @since 2.0.0
      */
     public function setXFrameOptions($value)
     {
@@ -98,7 +90,6 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      * Send Vary cookie
      *
      * @return void
-     * @since 2.0.0
      */
     public function sendVary()
     {
@@ -119,7 +110,6 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      * @param int $ttl
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function setPublicHeaders($ttl)
     {
@@ -137,7 +127,6 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      * @param int $ttl
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function setPrivateHeaders($ttl)
     {
@@ -154,7 +143,6 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      *
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setNoCacheHeaders()
     {
@@ -169,7 +157,6 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      * @param string $content String in JSON format
      * @return \Magento\Framework\App\Response\Http
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function representJson($content)
     {
@@ -180,7 +167,6 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     /**
      * @return string[]
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __sleep()
     {
@@ -192,7 +178,6 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      *
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __wakeup()
     {
@@ -210,7 +195,6 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      * @param string $time
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function getExpirationHeader($time)
     {

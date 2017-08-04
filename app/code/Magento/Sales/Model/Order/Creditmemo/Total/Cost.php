@@ -8,7 +8,6 @@ namespace Magento\Sales\Model\Order\Creditmemo\Total;
 /**
  * Class \Magento\Sales\Model\Order\Creditmemo\Total\Cost
  *
- * @since 2.0.0
  */
 class Cost extends AbstractTotal
 {
@@ -17,7 +16,6 @@ class Cost extends AbstractTotal
      *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return $this
-     * @since 2.0.0
      */
     public function collect(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {

@@ -12,7 +12,6 @@ use Magento\GroupedProduct\Model\Product\Type\Grouped as TypeGrouped;
 
 /**
  * Class Grouped
- * @since 2.0.0
  */
 class Grouped
 {
@@ -68,7 +67,6 @@ class Grouped
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function beforeInitializeLinks(
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $subject,

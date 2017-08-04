@@ -8,27 +8,23 @@ namespace Magento\Framework\Cache\Backend\Decorator;
 
 /**
  * Abstract decorator class for \Zend_Cache_Backend class and its descendants
- * @since 2.0.0
  */
 abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {
     /**
      * Concrete Cache Backend class that is being decorated
      * @var \Zend_Cache_Backend
-     * @since 2.0.0
      */
     protected $_backend;
 
     /**
      * Array of specific options. Made in separate array to distinguish from parent options
      * @var array
-     * @since 2.0.0
      */
     protected $_decoratorOptions = [];
 
     /**
      * @param array $options
-     * @since 2.0.0
      */
     public function __construct(array $options = [])
     {
@@ -56,7 +52,6 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
      *
      * @param array $directives assoc of directives
      * @return void
-     * @since 2.0.0
      */
     public function setDirectives($directives)
     {
@@ -71,7 +66,6 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
      * @param  string  $cacheId                     Cache id
      * @param  boolean $noTestCacheValidity If set to true, the cache validity won't be tested
      * @return string|false cached datas
-     * @since 2.0.0
      */
     public function load($cacheId, $noTestCacheValidity = false)
     {
@@ -83,7 +77,6 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
      *
      * @param  string $cacheId cache id
      * @return mixed|false (a cache is not available) or "last modified" timestamp (int) of the available cache record
-     * @since 2.0.0
      */
     public function test($cacheId)
     {
@@ -104,7 +97,6 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
      * @param  int $priority            integer between 0 (very low priority) and 10 (maximum priority) used by
      *                                  some particular backends
      * @return bool true if no problem
-     * @since 2.0.0
      */
     public function save($data, $cacheId, $tags = [], $specificLifetime = false, $priority = 8)
     {
@@ -116,7 +108,6 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
      *
      * @param string $cacheId Cache id
      * @return bool true if no problem
-     * @since 2.0.0
      */
     public function remove($cacheId)
     {
@@ -139,7 +130,6 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
      * @param  string $mode Clean mode
      * @param  string[] $tags Array of tags
      * @return bool true if no problem
-     * @since 2.0.0
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = [])
     {
@@ -150,7 +140,6 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
      * Return an array of stored cache ids
      *
      * @return string[] array of stored cache ids (string)
-     * @since 2.0.0
      */
     public function getIds()
     {
@@ -161,7 +150,6 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
      * Return an array of stored tags
      *
      * @return string[] array of stored tags (string)
-     * @since 2.0.0
      */
     public function getTags()
     {
@@ -175,7 +163,6 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
      *
      * @param string[] $tags array of tags
      * @return string[] array of matching cache ids (string)
-     * @since 2.0.0
      */
     public function getIdsMatchingTags($tags = [])
     {
@@ -189,7 +176,6 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
      *
      * @param string[] $tags array of tags
      * @return string[] array of not matching cache ids (string)
-     * @since 2.0.0
      */
     public function getIdsNotMatchingTags($tags = [])
     {
@@ -203,7 +189,6 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
      *
      * @param string[] $tags array of tags
      * @return string[] array of any matching cache ids (string)
-     * @since 2.0.0
      */
     public function getIdsMatchingAnyTags($tags = [])
     {
@@ -214,7 +199,6 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
      * Return the filling percentage of the backend storage
      *
      * @return int integer between 0 and 100
-     * @since 2.0.0
      */
     public function getFillingPercentage()
     {
@@ -231,7 +215,6 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
      *
      * @param string $cacheId cache id
      * @return array|bool array of metadatas (false if the cache id is not found)
-     * @since 2.0.0
      */
     public function getMetadatas($cacheId)
     {
@@ -244,7 +227,6 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
      * @param string $cacheId cache id
      * @param int $extraLifetime
      * @return boolean true if ok
-     * @since 2.0.0
      */
     public function touch($cacheId, $extraLifetime)
     {
@@ -264,7 +246,6 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
      * - get_list (is it possible to get the list of cache ids and the complete list of tags)
      *
      * @return array associative of with capabilities
-     * @since 2.0.0
      */
     public function getCapabilities()
     {
@@ -278,7 +259,6 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
      * @param  mixed  $value
      * @throws \Zend_Cache_Exception
      * @return void
-     * @since 2.0.0
      */
     public function setOption($name, $value)
     {
@@ -293,7 +273,6 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
      *
      * @param  int $specificLifetime
      * @return int Cache life time
-     * @since 2.0.0
      */
     public function getLifetime($specificLifetime)
     {
@@ -307,7 +286,6 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
      *
      * @return string
      * @throws \Zend_Cache_Exception if unable to determine directory
-     * @since 2.0.0
      */
     public function getTmpDir()
     {

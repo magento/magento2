@@ -9,7 +9,7 @@ use Magento\Framework\App\Cache\Tag\StrategyInterface;
 
 /**
  * Creates strategies using configuration
- * @since 2.2.0
+ * @since 2.1.3
  */
 class Factory
 {
@@ -17,7 +17,7 @@ class Factory
      * Default strategy for objects which implement Identity interface
      *
      * @var StrategyInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $identifierStrategy;
 
@@ -25,7 +25,7 @@ class Factory
      * Strategy for objects which don't implement Identity interface
      *
      * @var StrategyInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $dummyStrategy;
 
@@ -33,7 +33,7 @@ class Factory
      * Strategies map
      *
      * @var array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $customStrategies = [];
 
@@ -43,7 +43,7 @@ class Factory
      * @param Identifier $identifierStrategy
      * @param Dummy $dummyStrategy
      * @param array $customStrategies
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(
         \Magento\Framework\App\Cache\Tag\Strategy\Identifier $identifierStrategy,
@@ -61,7 +61,7 @@ class Factory
      * @param object $object
      * @throws \InvalidArgumentException
      * @return \Magento\Framework\App\Cache\Tag\StrategyInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function getStrategy($object)
     {

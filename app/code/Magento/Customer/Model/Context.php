@@ -8,7 +8,6 @@ namespace Magento\Customer\Model;
 /**
  * Class \Magento\Customer\Model\Context
  *
- * @since 2.0.0
  */
 class Context
 {

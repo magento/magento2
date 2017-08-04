@@ -9,19 +9,16 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 
 /**
  * Layer decimal filter
- * @since 2.0.0
  */
 class Decimal extends AbstractFilter
 {
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     * @since 2.0.0
      */
     private $priceCurrency;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal
-     * @since 2.0.0
      */
     private $resource;
 
@@ -33,7 +30,6 @@ class Decimal extends AbstractFilter
      * @param \Magento\Catalog\Model\ResourceModel\Layer\Filter\DecimalFactory $filterDecimalFactory
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
@@ -61,7 +57,6 @@ class Decimal extends AbstractFilter
      * @param \Magento\Framework\App\RequestInterface $request
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function apply(\Magento\Framework\App\RequestInterface $request)
     {
@@ -95,7 +90,6 @@ class Decimal extends AbstractFilter
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _getItemsData()
     {
@@ -143,7 +137,6 @@ class Decimal extends AbstractFilter
      * @param float|string $fromPrice
      * @param float|string $toPrice
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     protected function renderRangeLabel($fromPrice, $toPrice)
     {

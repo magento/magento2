@@ -12,7 +12,6 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Message manager model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Manager implements ManagerInterface
 {
@@ -23,43 +22,36 @@ class Manager implements ManagerInterface
 
     /**
      * @var Session
-     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var Factory
-     * @since 2.0.0
      */
     protected $messageFactory;
 
     /**
      * @var CollectionFactory
-     * @since 2.0.0
      */
     protected $messagesFactory;
 
     /**
      * @var Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @var LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $defaultGroup;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $hasMessages = false;
 
@@ -77,7 +69,6 @@ class Manager implements ManagerInterface
      * @param LoggerInterface $logger
      * @param string $defaultGroup
      * @param ExceptionMessageFactoryInterface|null exceptionMessageFactory
-     * @since 2.0.0
      */
     public function __construct(
         Session $session,
@@ -100,7 +91,6 @@ class Manager implements ManagerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getDefaultGroup()
     {
@@ -112,7 +102,6 @@ class Manager implements ManagerInterface
      *
      * @param string|null $group
      * @return string
-     * @since 2.0.0
      */
     protected function prepareGroup($group)
     {
@@ -125,7 +114,6 @@ class Manager implements ManagerInterface
      * @param string|null $group
      * @param bool $clear
      * @return Collection
-     * @since 2.0.0
      */
     public function getMessages($clear = false, $group = null)
     {
@@ -149,7 +137,6 @@ class Manager implements ManagerInterface
      * @param MessageInterface $message
      * @param string|null $group
      * @return $this
-     * @since 2.0.0
      */
     public function addMessage(MessageInterface $message, $group = null)
     {
@@ -165,7 +152,6 @@ class Manager implements ManagerInterface
      * @param MessageInterface[] $messages
      * @param string|null $group
      * @return $this
-     * @since 2.0.0
      */
     public function addMessages(array $messages, $group = null)
     {
@@ -183,7 +169,6 @@ class Manager implements ManagerInterface
      * @param string $message
      * @param string|null $group
      * @return $this
-     * @since 2.0.0
      */
     public function addError($message, $group = null)
     {
@@ -197,7 +182,6 @@ class Manager implements ManagerInterface
      * @param string $message
      * @param string|null $group
      * @return $this
-     * @since 2.0.0
      */
     public function addWarning($message, $group = null)
     {
@@ -211,7 +195,6 @@ class Manager implements ManagerInterface
      * @param string $message
      * @param string|null $group
      * @return $this
-     * @since 2.0.0
      */
     public function addNotice($message, $group = null)
     {
@@ -225,7 +208,6 @@ class Manager implements ManagerInterface
      * @param string $message
      * @param string|null $group
      * @return $this
-     * @since 2.0.0
      */
     public function addSuccess($message, $group = null)
     {
@@ -239,7 +221,6 @@ class Manager implements ManagerInterface
      * @param MessageInterface[] $messages
      * @param string|null $group
      * @return $this
-     * @since 2.0.0
      */
     public function addUniqueMessages(array $messages, $group = null)
     {
@@ -261,7 +242,6 @@ class Manager implements ManagerInterface
      * @param string $alternativeText
      * @param string $group
      * @return $this
-     * @since 2.0.0
      */
     public function addException(\Exception $exception, $alternativeText = null, $group = null)
     {
@@ -287,7 +267,6 @@ class Manager implements ManagerInterface
      * Returns false if there are any messages for customer, true - in other case
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasMessages()
     {
@@ -301,7 +280,6 @@ class Manager implements ManagerInterface
      * @param string $alternativeText
      * @param string $group
      * @return $this
-     * @since 2.0.0
      */
     public function addExceptionMessage(\Exception $exception, $alternativeText = null, $group = null)
     {
@@ -329,7 +307,6 @@ class Manager implements ManagerInterface
      * @param string $message
      * @param string|null $group
      * @return ManagerInterface
-     * @since 2.0.0
      */
     public function addErrorMessage($message, $group = null)
     {
@@ -347,7 +324,6 @@ class Manager implements ManagerInterface
      * @param string $message
      * @param string|null $group
      * @return ManagerInterface
-     * @since 2.0.0
      */
     public function addWarningMessage($message, $group = null)
     {
@@ -365,7 +341,6 @@ class Manager implements ManagerInterface
      * @param string $message
      * @param string|null $group
      * @return ManagerInterface
-     * @since 2.0.0
      */
     public function addNoticeMessage($message, $group = null)
     {
@@ -383,7 +358,6 @@ class Manager implements ManagerInterface
      * @param string $message
      * @param string|null $group
      * @return ManagerInterface
-     * @since 2.0.0
      */
     public function addSuccessMessage($message, $group = null)
     {
@@ -403,7 +377,6 @@ class Manager implements ManagerInterface
      * @param string|null $group
      * @return ManagerInterface
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function addComplexErrorMessage($identifier, array $data = [], $group = null)
     {
@@ -425,7 +398,6 @@ class Manager implements ManagerInterface
      * @param string|null $group
      * @return ManagerInterface
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function addComplexWarningMessage($identifier, array $data = [], $group = null)
     {
@@ -447,7 +419,6 @@ class Manager implements ManagerInterface
      * @param string|null $group
      * @return ManagerInterface
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function addComplexNoticeMessage($identifier, array $data = [], $group = null)
     {
@@ -469,7 +440,6 @@ class Manager implements ManagerInterface
      * @param string|null $group
      * @return ManagerInterface
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function addComplexSuccessMessage($identifier, array $data = [], $group = null)
     {
@@ -490,7 +460,6 @@ class Manager implements ManagerInterface
      * @param string|null $identifier
      * @return MessageInterface
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function createMessage($type, $identifier = null)
     {
@@ -508,7 +477,6 @@ class Manager implements ManagerInterface
      * @param mixed $identifier
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     private function assertNotEmptyIdentifier($identifier)
     {

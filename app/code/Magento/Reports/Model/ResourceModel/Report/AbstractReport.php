@@ -10,7 +10,6 @@ namespace Magento\Reports\Model\ResourceModel\Report;
  * Abstract report aggregate resource model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -18,7 +17,6 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      * Flag object
      *
      * @var \Magento\Reports\Model\Flag
-     * @since 2.0.0
      */
     protected $_flag = null;
 
@@ -26,7 +24,6 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      * Logger instance
      *
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $_logger;
 
@@ -34,7 +31,6 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      * Locale date instance
      *
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $_localeDate;
 
@@ -42,13 +38,11 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      * Reports flag factory
      *
      * @var \Magento\Reports\Model\FlagFactory
-     * @since 2.0.0
      */
     protected $_reportsFlagFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
@@ -62,7 +56,6 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param null $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -85,7 +78,6 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      * Retrieve flag object
      *
      * @return \Magento\Reports\Model\Flag
-     * @since 2.0.0
      */
     protected function _getFlag()
     {
@@ -101,7 +93,6 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      * @param string $code
      * @param mixed $value
      * @return $this
-     * @since 2.0.0
      */
     protected function _setFlagData($code, $value = null)
     {
@@ -124,7 +115,6 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      *
      * @param string $code
      * @return mixed
-     * @since 2.0.0
      */
     protected function _getFlagData($code)
     {
@@ -138,7 +128,6 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      *
      * @param string $table
      * @return $this
-     * @since 2.0.0
      */
     protected function _truncateTable($table)
     {
@@ -162,7 +151,6 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      * @param bool $doNotUseTruncate
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return $this
-     * @since 2.0.0
      */
     protected function _clearTableByDateRange(
         $table,
@@ -205,7 +193,6 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      * @param [][] $additionalWhere
      * @param string $alias
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function _getTableDateRangeSelect(
         $table,
@@ -257,7 +244,6 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      * @param string $periodColumn
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return array|bool|string
-     * @since 2.0.0
      */
     protected function _makeConditionFromDateRangeSelect($select, $periodColumn, $connection = null)
     {
@@ -316,7 +302,6 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      * @param string $relatedAlias
      * @return \Magento\Framework\DB\Select
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     protected function _getTableDateRangeRelatedSelect(
         $table,
@@ -386,7 +371,6 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      * @param null|int|string|\Magento\Store\Model\Store $store
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return string
-     * @since 2.0.0
      */
     public function getStoreTZOffsetQuery(
         $table,
@@ -450,7 +434,6 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      * @param mixed $to
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _getTZOffsetTransitions($timezone, $from = null, $to = null)
     {

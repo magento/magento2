@@ -14,7 +14,6 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Quote billing address write service object.
  *
- * @since 2.0.0
  */
 class BillingAddressManagement implements BillingAddressManagementInterface
 {
@@ -22,7 +21,6 @@ class BillingAddressManagement implements BillingAddressManagementInterface
      * Validator.
      *
      * @var QuoteAddressValidator
-     * @since 2.0.0
      */
     protected $addressValidator;
 
@@ -30,7 +28,6 @@ class BillingAddressManagement implements BillingAddressManagementInterface
      * Logger.
      *
      * @var Logger
-     * @since 2.0.0
      */
     protected $logger;
 
@@ -38,13 +35,11 @@ class BillingAddressManagement implements BillingAddressManagementInterface
      * Quote repository.
      *
      * @var \Magento\Quote\Api\CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
     /**
      * @var \Magento\Customer\Api\AddressRepositoryInterface
-     * @since 2.0.0
      */
     protected $addressRepository;
 
@@ -61,7 +56,6 @@ class BillingAddressManagement implements BillingAddressManagementInterface
      * @param QuoteAddressValidator $addressValidator Address validator.
      * @param Logger $logger Logger.
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
@@ -78,7 +72,6 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     /**
      * {@inheritDoc}
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address, $useForShipping = false)
     {
@@ -99,7 +92,6 @@ class BillingAddressManagement implements BillingAddressManagementInterface
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function get($cartId)
     {

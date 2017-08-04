@@ -17,25 +17,21 @@ use Magento\Framework\View\Asset\Repository;
 
 /**
  * Decorator for publishing of related assets
- * @since 2.0.0
  */
 class PublicationDecorator extends RelatedGenerator
 {
     /**
      * @var Publisher
-     * @since 2.0.0
      */
     private $assetPublisher;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     private $scopeConfig;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     private $hasRelatedPublishing;
 
@@ -53,7 +49,6 @@ class PublicationDecorator extends RelatedGenerator
      * @param Publisher $assetPublisher
      * @param ScopeConfigInterface $scopeConfig
      * @param bool $hasRelatedPublishing
-     * @since 2.0.0
      */
     public function __construct(
         Repository $assetRepository,
@@ -70,7 +65,6 @@ class PublicationDecorator extends RelatedGenerator
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     protected function generateRelatedFile($relatedFileId, LocalInterface $asset)
     {

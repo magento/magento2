@@ -9,7 +9,6 @@ namespace Magento\Directory\Api\Data;
  * Currency Information interface.
  *
  * @api
- * @since 2.0.0
  */
 interface CurrencyInformationInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -17,7 +16,6 @@ interface CurrencyInformationInterface extends \Magento\Framework\Api\Extensible
      * Get the base currency code for the store.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBaseCurrencyCode();
 
@@ -26,7 +24,6 @@ interface CurrencyInformationInterface extends \Magento\Framework\Api\Extensible
      *
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseCurrencyCode($code);
 
@@ -34,7 +31,6 @@ interface CurrencyInformationInterface extends \Magento\Framework\Api\Extensible
      * Get the currency symbol of the base currency for the store.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBaseCurrencySymbol();
 
@@ -43,7 +39,6 @@ interface CurrencyInformationInterface extends \Magento\Framework\Api\Extensible
      *
      * @param string $symbol
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseCurrencySymbol($symbol);
 
@@ -51,7 +46,6 @@ interface CurrencyInformationInterface extends \Magento\Framework\Api\Extensible
      * Get the default display currency code for the store.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultDisplayCurrencyCode();
 
@@ -60,7 +54,6 @@ interface CurrencyInformationInterface extends \Magento\Framework\Api\Extensible
      *
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function setDefaultDisplayCurrencyCode($code);
 
@@ -68,7 +61,6 @@ interface CurrencyInformationInterface extends \Magento\Framework\Api\Extensible
      * Get the currency symbol of the default display currency for the store.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultDisplayCurrencySymbol();
 
@@ -77,7 +69,6 @@ interface CurrencyInformationInterface extends \Magento\Framework\Api\Extensible
      *
      * @param string $symbol
      * @return $this
-     * @since 2.0.0
      */
     public function setDefaultDisplayCurrencySymbol($symbol);
 
@@ -85,7 +76,6 @@ interface CurrencyInformationInterface extends \Magento\Framework\Api\Extensible
      * Get the list of allowed currency codes for the store.
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getAvailableCurrencyCodes();
 
@@ -94,7 +84,6 @@ interface CurrencyInformationInterface extends \Magento\Framework\Api\Extensible
      *
      * @param string[] $codes
      * @return $this
-     * @since 2.0.0
      */
     public function setAvailableCurrencyCodes(array $codes = null);
 
@@ -102,7 +91,6 @@ interface CurrencyInformationInterface extends \Magento\Framework\Api\Extensible
      * Get the list of exchange rate information for the store.
      *
      * @return \Magento\Directory\Api\Data\ExchangeRateInterface[]
-     * @since 2.0.0
      */
     public function getExchangeRates();
 
@@ -111,7 +99,6 @@ interface CurrencyInformationInterface extends \Magento\Framework\Api\Extensible
      *
      * @param \Magento\Directory\Api\Data\ExchangeRateInterface[] $exchangeRates
      * @return $this
-     * @since 2.0.0
      */
     public function setExchangeRates(array $exchangeRates = null);
 
@@ -119,7 +106,6 @@ interface CurrencyInformationInterface extends \Magento\Framework\Api\Extensible
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Directory\Api\Data\CurrencyInformationExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -128,7 +114,6 @@ interface CurrencyInformationInterface extends \Magento\Framework\Api\Extensible
      *
      * @param \Magento\Directory\Api\Data\CurrencyInformationExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Directory\Api\Data\CurrencyInformationExtensionInterface $extensionAttributes

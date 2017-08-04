@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Layout;
 
 /**
  * Factory class for Processor
- * @since 2.0.0
  */
 class ProcessorFactory
 {
@@ -15,7 +14,6 @@ class ProcessorFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -23,7 +21,6 @@ class ProcessorFactory
      * Instance name to create
      *
      * @var string
-     * @since 2.0.0
      */
     protected $instanceName;
 
@@ -32,7 +29,6 @@ class ProcessorFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -47,7 +43,6 @@ class ProcessorFactory
      *
      * @param array $data
      * @return ProcessorInterface
-     * @since 2.0.0
      */
     public function create(array $data = [])
     {

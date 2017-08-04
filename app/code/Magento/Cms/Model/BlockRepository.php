@@ -20,55 +20,46 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class BlockRepository
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class BlockRepository implements BlockRepositoryInterface
 {
     /**
      * @var ResourceBlock
-     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var BlockFactory
-     * @since 2.0.0
      */
     protected $blockFactory;
 
     /**
      * @var BlockCollectionFactory
-     * @since 2.0.0
      */
     protected $blockCollectionFactory;
 
     /**
      * @var Data\BlockSearchResultsInterfaceFactory
-     * @since 2.0.0
      */
     protected $searchResultsFactory;
 
     /**
      * @var DataObjectHelper
-     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
     /**
      * @var DataObjectProcessor
-     * @since 2.0.0
      */
     protected $dataObjectProcessor;
 
     /**
      * @var \Magento\Cms\Api\Data\BlockInterfaceFactory
-     * @since 2.0.0
      */
     protected $dataBlockFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     private $storeManager;
 
@@ -88,7 +79,6 @@ class BlockRepository implements BlockRepositoryInterface
      * @param DataObjectProcessor $dataObjectProcessor
      * @param StoreManagerInterface $storeManager
      * @param CollectionProcessorInterface $collectionProcessor
-     * @since 2.0.0
      */
     public function __construct(
         ResourceBlock $resource,
@@ -118,7 +108,6 @@ class BlockRepository implements BlockRepositoryInterface
      * @param \Magento\Cms\Api\Data\BlockInterface $block
      * @return Block
      * @throws CouldNotSaveException
-     * @since 2.0.0
      */
     public function save(Data\BlockInterface $block)
     {
@@ -140,7 +129,6 @@ class BlockRepository implements BlockRepositoryInterface
      * @param string $blockId
      * @return Block
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @since 2.0.0
      */
     public function getById($blockId)
     {
@@ -159,7 +147,6 @@ class BlockRepository implements BlockRepositoryInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @param \Magento\Framework\Api\SearchCriteriaInterface $criteria
      * @return \Magento\Cms\Api\Data\BlockSearchResultsInterface
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria)
     {
@@ -182,7 +169,6 @@ class BlockRepository implements BlockRepositoryInterface
      * @param \Magento\Cms\Api\Data\BlockInterface $block
      * @return bool
      * @throws CouldNotDeleteException
-     * @since 2.0.0
      */
     public function delete(Data\BlockInterface $block)
     {
@@ -201,7 +187,6 @@ class BlockRepository implements BlockRepositoryInterface
      * @return bool
      * @throws CouldNotDeleteException
      * @throws NoSuchEntityException
-     * @since 2.0.0
      */
     public function deleteById($blockId)
     {

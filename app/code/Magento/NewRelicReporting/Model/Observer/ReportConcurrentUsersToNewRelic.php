@@ -12,37 +12,31 @@ use Magento\NewRelicReporting\Model\NewRelicWrapper;
 
 /**
  * Class ReportConcurrentUsersToNewRelic
- * @since 2.0.0
  */
 class ReportConcurrentUsersToNewRelic implements ObserverInterface
 {
     /**
      * @var Config
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var NewRelicWrapper
-     * @since 2.0.0
      */
     protected $newRelicWrapper;
 
@@ -52,7 +46,6 @@ class ReportConcurrentUsersToNewRelic implements ObserverInterface
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param NewRelicWrapper $newRelicWrapper
-     * @since 2.0.0
      */
     public function __construct(
         Config $config,
@@ -74,7 +67,6 @@ class ReportConcurrentUsersToNewRelic implements ObserverInterface
      * @param Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

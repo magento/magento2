@@ -14,7 +14,6 @@ use Magento\Paypal\Model\Payflowpro;
 
 /**
  * Class FraudHandler
- * @since 2.0.0
  */
 class FraudHandler implements HandlerInterface
 {
@@ -30,7 +29,6 @@ class FraudHandler implements HandlerInterface
 
     /**
      * @var Info
-     * @since 2.0.0
      */
     private $paypalInfoManager;
 
@@ -38,7 +36,6 @@ class FraudHandler implements HandlerInterface
      * The security scanner XML document
      *
      * @var Security
-     * @since 2.0.0
      */
     private $xmlSecurity;
 
@@ -47,7 +44,6 @@ class FraudHandler implements HandlerInterface
      *
      * @param Info $paypalInfoManager
      * @param Security $xmlSecurity
-     * @since 2.0.0
      */
     public function __construct(Info $paypalInfoManager, Security $xmlSecurity)
     {
@@ -57,7 +53,6 @@ class FraudHandler implements HandlerInterface
 
     /**
      * {inheritdoc}
-     * @since 2.0.0
      */
     public function handle(InfoInterface $payment, DataObject $response)
     {
@@ -96,7 +91,6 @@ class FraudHandler implements HandlerInterface
      * @param string $rulesString
      * @return array
      * @throws LocalizedException
-     * @since 2.0.0
      */
     private function getFraudRulesDictionary($rulesString)
     {

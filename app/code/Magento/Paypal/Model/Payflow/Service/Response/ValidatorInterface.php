@@ -10,7 +10,6 @@ use Magento\Paypal\Model\Payflow\Transparent;
 
 /**
  * Interface ValidatorInterface
- * @since 2.0.0
  */
 interface ValidatorInterface
 {
@@ -20,7 +19,6 @@ interface ValidatorInterface
      * @param DataObject $response
      * @param Transparent|null $transparentModel
      * @return bool
-     * @since 2.0.0
      */
     public function validate(DataObject $response, Transparent $transparentModel);
 }

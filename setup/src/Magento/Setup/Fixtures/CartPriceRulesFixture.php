@@ -17,13 +17,11 @@ namespace Magento\Setup\Fixtures;
  * <cart_price_rules_floor>{int}</cart_price_rules_floor>
  *
  * @see setup/performance-toolkit/profiles/ce/small.xml
- * @since 2.0.0
  */
 class CartPriceRulesFixture extends Fixture
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $priority = 80;
 
@@ -70,7 +68,6 @@ class CartPriceRulesFixture extends Fixture
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD)
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -449,7 +446,6 @@ class CartPriceRulesFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getActionTitle()
     {
@@ -458,7 +454,6 @@ class CartPriceRulesFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function introduceParamLabels()
     {

@@ -14,13 +14,11 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 /**
  * Class \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Image
  *
- * @since 2.0.0
  */
 class Image extends \Magento\Framework\Data\Form\Element\Image
 {
     /**
      * @return bool|string
-     * @since 2.0.0
      */
     protected function _getUrl()
     {
@@ -35,7 +33,6 @@ class Image extends \Magento\Framework\Data\Form\Element\Image
 
     /**
      * @return string
-     * @since 2.0.0
      */
     protected function _getDeleteCheckbox()
     {

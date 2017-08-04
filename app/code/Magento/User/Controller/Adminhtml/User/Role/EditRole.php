@@ -8,7 +8,6 @@ namespace Magento\User\Controller\Adminhtml\User\Role;
 
 /**
  * Class EditRole
- * @since 2.0.0
  */
 class EditRole extends \Magento\User\Controller\Adminhtml\User\Role
 {
@@ -16,7 +15,6 @@ class EditRole extends \Magento\User\Controller\Adminhtml\User\Role
      * Edit role action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

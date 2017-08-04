@@ -14,7 +14,6 @@ namespace Magento\Review\Model\ResourceModel\Review\Status;
 /**
  * Class \Magento\Review\Model\ResourceModel\Review\Status\Collection
  *
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -22,7 +21,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Review status table
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_reviewStatusTable;
 
@@ -30,7 +28,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Collection model initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -44,7 +41,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Convert items array to array for select options
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

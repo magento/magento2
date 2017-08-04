@@ -13,7 +13,6 @@ namespace Magento\Customer\Block\Adminhtml;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Group extends \Magento\Backend\Block\Widget\Grid\Container
 {
@@ -21,7 +20,6 @@ class Group extends \Magento\Backend\Block\Widget\Grid\Container
      * Modify header & button labels
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -35,7 +33,6 @@ class Group extends \Magento\Backend\Block\Widget\Grid\Container
      * Redefine header css class
      *
      * @return string
-     * @since 2.0.0
      */
     public function getHeaderCssClass()
     {

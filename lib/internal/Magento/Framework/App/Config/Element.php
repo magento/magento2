@@ -11,7 +11,6 @@ namespace Magento\Framework\App\Config;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Element extends \Magento\Framework\Simplexml\Element
 {
@@ -22,7 +21,6 @@ class Element extends \Magento\Framework\Simplexml\Element
      * @param boolean $value
      * @return boolean
      * @SuppressWarnings(PHPMD.ShortMethodName)
-     * @since 2.0.0
      */
     public function is($var, $value = true)
     {
@@ -44,7 +42,6 @@ class Element extends \Magento\Framework\Simplexml\Element
      * Enter description here...
      *
      * @return string
-     * @since 2.0.0
      */
     public function getClassName()
     {

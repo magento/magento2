@@ -12,13 +12,11 @@ use Magento\Payment\Helper\Data as PaymentHelper;
 /**
  * Class \Magento\OfflinePayments\Model\InstructionsConfigProvider
  *
- * @since 2.0.0
  */
 class InstructionsConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var string[]
-     * @since 2.0.0
      */
     protected $methodCodes = [
         Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE,
@@ -27,20 +25,17 @@ class InstructionsConfigProvider implements ConfigProviderInterface
 
     /**
      * @var \Magento\Payment\Model\Method\AbstractMethod[]
-     * @since 2.0.0
      */
     protected $methods = [];
 
     /**
      * @var Escaper
-     * @since 2.0.0
      */
     protected $escaper;
 
     /**
      * @param PaymentHelper $paymentHelper
      * @param Escaper $escaper
-     * @since 2.0.0
      */
     public function __construct(
         PaymentHelper $paymentHelper,
@@ -54,7 +49,6 @@ class InstructionsConfigProvider implements ConfigProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -72,7 +66,6 @@ class InstructionsConfigProvider implements ConfigProviderInterface
      *
      * @param string $code
      * @return string
-     * @since 2.0.0
      */
     protected function getInstructions($code)
     {

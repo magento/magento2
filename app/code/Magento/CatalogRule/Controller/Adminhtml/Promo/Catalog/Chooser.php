@@ -9,13 +9,11 @@ namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 /**
  * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog\Chooser
  *
- * @since 2.0.0
  */
 class Chooser extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

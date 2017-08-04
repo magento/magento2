@@ -18,7 +18,6 @@ use Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
@@ -31,19 +30,16 @@ abstract class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\Abs
 
     /**
      * @var FileFactory
-     * @since 2.0.0
      */
     protected $fileFactory;
 
     /**
      * @var DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
     /**
      * @var Invoice
-     * @since 2.0.0
      */
     protected $pdfInvoice;
 
@@ -54,7 +50,6 @@ abstract class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\Abs
      * @param FileFactory $fileFactory
      * @param Invoice $pdfInvoice
      * @param CollectionFactory $collectionFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -77,7 +72,6 @@ abstract class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\Abs
      * @param AbstractCollection $collection
      * @return ResponseInterface
      * @throws \Exception
-     * @since 2.0.0
      */
     public function massAction(AbstractCollection $collection)
     {

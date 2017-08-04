@@ -11,19 +11,16 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 /**
  * Class \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\TierPrice
  *
- * @since 2.0.0
  */
 class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractPrice
 {
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
-     * @since 2.0.0
      */
     protected $storeResolver;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $_tierPriceColumns = [
         AdvancedPricing::COL_TIER_PRICE_WEBSITE,
@@ -37,7 +34,6 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
@@ -50,7 +46,6 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function init($context)
     {
@@ -63,7 +58,6 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
     /**
      * @param string $attribute
      * @return void
-     * @since 2.0.0
      */
     protected function addDecimalError($attribute)
     {
@@ -83,7 +77,6 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
      * Get existing customers groups
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCustomerGroups()
     {
@@ -100,7 +93,6 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
      * @param mixed $value
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function isValid($value)
     {
@@ -146,7 +138,6 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
      *
      * @param array $value
      * @return bool
-     * @since 2.0.0
      */
     protected function isValidValueAndLength(array $value)
     {
@@ -164,7 +155,6 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
      *
      * @param array $value
      * @return bool
-     * @since 2.0.0
      */
     protected function hasEmptyColumns(array $value)
     {

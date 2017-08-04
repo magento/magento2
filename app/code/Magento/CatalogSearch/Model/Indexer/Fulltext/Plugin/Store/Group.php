@@ -12,7 +12,6 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 
 /**
  * Plugin for Magento\Store\Model\ResourceModel\Group
- * @since 2.0.0
  */
 class Group extends AbstractIndexerPlugin
 {
@@ -64,7 +63,6 @@ class Group extends AbstractIndexerPlugin
      * @return StoreGroupResourceModel
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterDelete(StoreGroupResourceModel $subject, StoreGroupResourceModel $result)
     {

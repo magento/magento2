@@ -15,26 +15,22 @@ use Magento\Framework\App\RequestInterface;
 /**
  * Class \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Builder\Plugin
  *
- * @since 2.0.0
  */
 class Plugin
 {
     /**
      * @var ProductFactory
-     * @since 2.0.0
      */
     protected $productFactory;
 
     /**
      * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
-     * @since 2.0.0
      */
     protected $configurableType;
 
     /**
      * @param ProductFactory $productFactory
      * @param Type\Configurable $configurableType
-     * @since 2.0.0
      */
     public function __construct(ProductFactory $productFactory, Type\Configurable $configurableType)
     {

@@ -9,7 +9,6 @@ namespace Magento\Checkout\Controller\Onepage;
 /**
  * Class \Magento\Checkout\Controller\Onepage\Success
  *
- * @since 2.0.0
  */
 class Success extends \Magento\Checkout\Controller\Onepage
 {
@@ -17,7 +16,6 @@ class Success extends \Magento\Checkout\Controller\Onepage
      * Order success action
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

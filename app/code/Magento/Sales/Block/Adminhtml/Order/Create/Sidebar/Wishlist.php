@@ -10,7 +10,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Wishlist extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
 {
@@ -18,7 +17,6 @@ class Wishlist extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstr
      * Storage action on selected item
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_sidebarStorageAction = 'add_wishlist_item';
 
@@ -26,7 +24,6 @@ class Wishlist extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstr
      * Constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -39,7 +36,6 @@ class Wishlist extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstr
      * Get header text
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -50,7 +46,6 @@ class Wishlist extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstr
      * Retrieve item collection
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getItemCollection()
     {
@@ -69,7 +64,6 @@ class Wishlist extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstr
      * Retrieve all items
      *
      * @return array
-     * @since 2.0.0
      */
     public function getItems()
     {
@@ -88,7 +82,6 @@ class Wishlist extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstr
      *
      * @param \Magento\Wishlist\Model\Item $item
      * @return int
-     * @since 2.0.0
      */
     public function getProductId($item)
     {
@@ -100,7 +93,6 @@ class Wishlist extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstr
      *
      * @param \Magento\Framework\DataObject $item
      * @return int
-     * @since 2.0.0
      */
     public function getIdentifierId($item)
     {
@@ -111,7 +103,6 @@ class Wishlist extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstr
      * Retrieve possibility to display quantity column in grid of wishlist block
      *
      * @return true
-     * @since 2.0.0
      */
     public function canDisplayItemQty()
     {
