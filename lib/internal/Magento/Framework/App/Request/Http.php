@@ -100,7 +100,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      * @param ConfigInterface $routeConfig
      * @param PathInfoProcessorInterface $pathInfoProcessor
      * @param ObjectManagerInterface  $objectManager
-     * @param string|null $uri
+     * @param \Zend\Uri\UriInterface|string|null $uri
      * @param array $directFrontNames
      */
     public function __construct(

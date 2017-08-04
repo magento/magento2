@@ -355,7 +355,6 @@ class Full
         $products = $this->dataProvider
             ->getSearchableProducts($storeId, $staticFields, $productIds, $lastProductId);
         while (count($products) > 0) {
-
             $productsIds = array_column($products, 'entity_id');
             $relatedProducts = $this->getRelatedProducts($products);
             $productsIds = array_merge($productsIds, array_values($relatedProducts));
