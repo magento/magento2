@@ -12,7 +12,7 @@ namespace Magento\Cron\Observer;
 use Magento\Framework\App\State;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Event\ObserverInterface;
-use \Magento\Cron\Model\Schedule;
+use Magento\Cron\Model\Schedule;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
