@@ -5,6 +5,8 @@
  */
 namespace Magento\TestFramework\CodingStandard\Tool;
 
+use PHP_CodeSniffer\Runner;
+
 class CodeSnifferTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -13,7 +15,7 @@ class CodeSnifferTest extends \PHPUnit_Framework_TestCase
     protected $_tool;
 
     /**
-     * @var PHP_CodeSniffer_CLI
+     * @var Runner
      */
     protected $_wrapper;
 
@@ -42,11 +44,9 @@ class CodeSnifferTest extends \PHPUnit_Framework_TestCase
         $whiteList = ['test' . rand(), 'test' . rand()];
         $extensions = ['test' . rand(), 'test' . rand()];
 
-        $this->_wrapper->expects($this->once())->method('getDefaults')->will($this->returnValue([]));
-
         $expectedCliEmulation = [
             'files' => $whiteList,
-            'standard' => [self::RULE_SET],
+            'standards' => [self::RULE_SET],
             'extensions' => $extensions,
             'warningSeverity' => 0,
             'reports' => ['full' => self::REPORT_FILE],
@@ -54,9 +54,12 @@ class CodeSnifferTest extends \PHPUnit_Framework_TestCase
 
         $this->_tool->setExtensions($extensions);
 
-        $this->_wrapper->expects($this->once())->method('setValues')->with($this->equalTo($expectedCliEmulation));
+        $this->_wrapper->expects($this->once())
+            ->method('setSettings')
+            ->with($this->equalTo($expectedCliEmulation));
 
-        $this->_wrapper->expects($this->once())->method('process');
+        $this->_wrapper->expects($this->once())
+            ->method('runPHPCS');
 
         $this->_tool->run($whiteList);
     }

@@ -25,7 +25,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 class FilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     *\PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit_Framework_MockObject_MockObject
      */
     private $requestMock;
 
@@ -48,12 +48,12 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     *\PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit_Framework_MockObject_MockObject
      */
     private $dataProviderMock;
 
     /**
-     *\PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit_Framework_MockObject_MockObject
      */
     private $abstractDbMock;
 

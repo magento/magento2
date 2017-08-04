@@ -5,6 +5,7 @@ All,All
 Yes,Yes
 No,No
 Results,Results
+"Advanced Search Results","Advanced Search Results"
 Grid,Grid
 List,List
 "Search Weight","Search Weight"
@@ -14,17 +15,19 @@ Relevance,Relevance
 "Please specify at least one search term.","Please specify at least one search term."
 "%1 and greater","%1 and greater"
 "up to %1","up to %1"
+". "" which is inconsistent with state of scope resolver""",". "" which is inconsistent with state of scope resolver"""
 Category,Category
 "%1 and above","%1 and above"
 "%1 - %2","%1 - %2"
-"Bucket do not exists","Bucket do not exists"
+"Sorry, something went wrong. You can find out more in the error log.","Sorry, something went wrong. You can find out more in the error log."
+"Bucket does not exist","Bucket does not exist"
 Product,Product
 "Search Settings","Search Settings"
 Search,Search
 "Advanced Search","Advanced Search"
 "<strong>%1 item</strong> were found using the following search criteria","<strong>%1 item</strong> were found using the following search criteria"
 "<strong>%1 items</strong> were found using the following search criteria","<strong>%1 items</strong> were found using the following search criteria"
-"We can\'t find any items matching these search criteria.","We can\'t find any items matching these search criteria."
+"We can't find any items matching these search criteria.","We can't find any items matching these search criteria."
 "Modify your search.","Modify your search."
 name,name
 "Don't see what you're looking for?","Don't see what you're looking for?"

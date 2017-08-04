@@ -11,6 +11,9 @@
  */
 namespace Magento\Reports\Controller\Adminhtml;
 
+/**
+ * @api
+ */
 abstract class Index extends \Magento\Backend\App\Action
 {
     /**

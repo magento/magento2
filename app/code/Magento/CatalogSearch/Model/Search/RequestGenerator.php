@@ -13,6 +13,9 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\QueryInterface;
 
+/**
+ * @api
+ */
 class RequestGenerator
 {
     /** Filter name suffix */
@@ -75,16 +78,20 @@ class RequestGenerator
             if ($attribute->getData($attributeType)) {
                 if (!in_array($attribute->getAttributeCode(), ['price', 'category_ids'], true)) {
                     $queryName = $attribute->getAttributeCode() . '_query';
-
                     $request['queries'][$container]['queryReference'][] = [
-                        'clause' => 'should',
+                        'clause' => 'must',
                         'ref' => $queryName,
                     ];
                     $filterName = $attribute->getAttributeCode() . self::FILTER_SUFFIX;
                     $request['queries'][$queryName] = [
                         'name' => $queryName,
                         'type' => QueryInterface::TYPE_FILTER,
-                        'filterReference' => [['ref' => $filterName]],
+                        'filterReference' => [
+                            [
+                                'clause' => 'must',
+                                'ref' => $filterName,
+                            ]
+                        ],
                     ];
                     $bucketName = $attribute->getAttributeCode() . self::BUCKET_SUFFIX;
                     $generator = $this->generatorResolver->getGeneratorForType($attribute->getBackendType());
@@ -97,14 +104,7 @@ class RequestGenerator
                 // Some fields have their own specific handlers
                 continue;
             }
-
-            // Match search by custom price attribute isn't supported
-            if ($useFulltext && $attribute->getFrontendInput() !== 'price') {
-                $request['queries']['search']['match'][] = [
-                    'field' => $attribute->getAttributeCode(),
-                    'boost' => $attribute->getSearchWeight() ?: 1,
-                ];
-            }
+            $request = $this->processPriceAttribute($useFulltext, $attribute, $request);
         }
 
         return $request;
@@ -145,10 +145,9 @@ class RequestGenerator
                 //same fields have special semantics
                 continue;
             }
-
             $queryName = $attribute->getAttributeCode() . '_query';
             $request['queries']['advanced_search_container']['queryReference'][] = [
-                'clause' => 'should',
+                'clause' => 'must',
                 'ref' => $queryName,
             ];
             switch ($attribute->getBackendType()) {
@@ -161,9 +160,12 @@ class RequestGenerator
                         $request['queries'][$queryName] = [
                             'name' => $queryName,
                             'type' => QueryInterface::TYPE_FILTER,
-                            'filterReference' => [['ref' => $filterName]],
+                            'filterReference' => [
+                                [
+                                    'ref' => $filterName,
+                                ],
+                            ],
                         ];
-
                         $request['filters'][$filterName] = [
                             'type' => FilterInterface::TYPE_TERM,
                             'name' => $filterName,
@@ -191,7 +193,11 @@ class RequestGenerator
                     $request['queries'][$queryName] = [
                         'name' => $queryName,
                         'type' => QueryInterface::TYPE_FILTER,
-                        'filterReference' => [['ref' => $filterName]],
+                        'filterReference' => [
+                            [
+                                'ref' => $filterName,
+                            ],
+                        ],
                     ];
                     $request['filters'][$filterName] = [
                         'field' => $attribute->getAttributeCode(),
@@ -206,9 +212,12 @@ class RequestGenerator
                     $request['queries'][$queryName] = [
                         'name' => $queryName,
                         'type' => QueryInterface::TYPE_FILTER,
-                        'filterReference' => [['ref' => $filterName]],
+                        'filterReference' => [
+                            [
+                                'ref' => $filterName,
+                            ],
+                        ],
                     ];
-
                     $request['filters'][$filterName] = [
                         'type' => FilterInterface::TYPE_TERM,
                         'name' => $filterName,
@@ -216,6 +225,27 @@ class RequestGenerator
                         'value' => '$' . $attribute->getAttributeCode() . '$',
                     ];
             }
+        }
+
+        return $request;
+    }
+
+    /**
+     * Modify request for price attribute.
+     *
+     * @param bool $useFulltext
+     * @param Attribute $attribute
+     * @param array $request
+     * @return array
+     */
+    private function processPriceAttribute($useFulltext, $attribute, $request)
+    {
+        // Match search by custom price attribute isn't supported
+        if ($useFulltext && $attribute->getFrontendInput() !== 'price') {
+            $request['queries']['search']['match'][] = [
+                'field' => $attribute->getAttributeCode(),
+                'boost' => $attribute->getSearchWeight() ?: 1,
+            ];
         }
 
         return $request;

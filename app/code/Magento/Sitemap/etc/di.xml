@@ -6,6 +6,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Sitemap\Model\SitemapItemInterface" type="Magento\Sitemap\Model\SitemapItem" />
+    <preference for="Magento\Sitemap\Model\ItemResolver\ItemResolverInterface" type="Magento\Sitemap\Model\ItemResolver\Composite" />
+    <preference for="Magento\Sitemap\Model\SitemapConfigReaderInterface" type="Magento\Sitemap\Model\SitemapConfigReader" />
+
     <type name="Magento\Sitemap\Model\Sitemap">
         <arguments>
             <argument name="resource" xsi:type="object">Magento\Sitemap\Model\ResourceModel\Sitemap</argument>
@@ -16,6 +20,30 @@
             <argument name="sensitive" xsi:type="array">
                 <item name="sitemap/generate/error_email" xsi:type="string">1</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Model\ItemResolver\Composite">
+        <arguments>
+            <argument name="itemResolvers" xsi:type="array">
+                <item name="categoryResolver" xsi:type="object">Magento\Sitemap\Model\ItemResolver\Category</item>
+                <item name="cmsPageResolver" xsi:type="object">Magento\Sitemap\Model\ItemResolver\CmsPage</item>
+                <item name="productResolver" xsi:type="object">Magento\Sitemap\Model\ItemResolver\Product</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Model\ItemResolver\Category">
+        <arguments>
+            <argument name="configReader" xsi:type="object">Magento\Sitemap\Model\ItemResolver\CategoryConfigReader</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Model\ItemResolver\Product">
+        <arguments>
+            <argument name="configReader" xsi:type="object">Magento\Sitemap\Model\ItemResolver\ProductConfigReader</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Model\ItemResolver\CmsPage">
+        <arguments>
+            <argument name="configReader" xsi:type="object">Magento\Sitemap\Model\ItemResolver\CmsPageConfigReader</argument>
         </arguments>
     </type>
 </config>
