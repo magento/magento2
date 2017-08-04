@@ -22,11 +22,10 @@
                     <item name="breakLine" xsi:type="boolean">false</item>
                 </item>
             </argument>
-            <container name="assign_sources_button" component="Magento_Ui/js/form/components/button">
+            <container name="assign_sources_button" component="Magento_Ui/js/form/components/button" template="ui/form/components/button/container">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
-                        <item name="template" xsi:type="string">ui/form/components/button/container</item>
                         <item name="actions" xsi:type="array">
                             <item name="0" xsi:type="array">
                                 <item name="targetName" xsi:type="string">product_form.product_form.sources.assign_sources_modal</item>
