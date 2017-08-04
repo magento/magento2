@@ -39,6 +39,11 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
     private $source;
 
     /**
+     * @var SourceSearchResultsInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $searchResult;
+
+    /**
      * @var SourceRepository
      */
     private $sourceRepository;
@@ -49,6 +54,7 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->commandGet = $this->getMockBuilder(GetInterface::class)->getMock();
         $this->commandGetList = $this->getMockBuilder(GetListInterface::class)->getMock();
         $this->source = $this->getMockBuilder(SourceInterface::class)->getMock();
+        $this->searchResult = $this->getMockBuilder(SourceSearchResultsInterface::class)->getMock();
 
         $this->sourceRepository = (new ObjectManager($this))->getObject(
             SourceRepository::class,
@@ -120,28 +126,25 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetListWithoutSearchCriteria()
     {
-        $searchResult = $this->getMockBuilder(SourceSearchResultsInterface::class)->getMock();
-
         $this->commandGetList
             ->expects($this->once())
             ->method('execute')
             ->with(null)
-            ->willReturn($searchResult);
+            ->willReturn($this->searchResult);
 
-        self::assertEquals($searchResult, $this->sourceRepository->getList());
+        self::assertEquals($this->searchResult, $this->sourceRepository->getList());
     }
 
     public function testGetListWithSearchCriteria()
     {
         $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)->getMock();
-        $searchResult = $this->getMockBuilder(SourceSearchResultsInterface::class)->getMock();
 
         $this->commandGetList
             ->expects($this->once())
             ->method('execute')
             ->with($searchCriteria)
-            ->willReturn($searchResult);
+            ->willReturn($this->searchResult);
 
-        self::assertEquals($searchResult, $this->sourceRepository->getList($searchCriteria));
+        self::assertEquals($this->searchResult, $this->sourceRepository->getList($searchCriteria));
     }
 }
