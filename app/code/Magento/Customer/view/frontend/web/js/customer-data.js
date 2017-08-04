@@ -197,7 +197,8 @@ define([
                 privateContentVersion = 'private_content_version',
                 privateContent = $.cookieStorage.get(privateContentVersion),
                 localPrivateContent = $.localStorage.get(privateContentVersion),
-                needVersion = 'need_version';
+                needVersion = 'need_version',
+                expiredSectionNames = this.getExpiredSectionNames();
 
             if (privateContent &&
                 !$.cookieStorage.isSet(privateContentVersion) &&
@@ -213,11 +214,11 @@ define([
                 }
                 $.localStorage.set(privateContentVersion, privateContent);
                 this.reload([], false);
-            } else if (this.needReload()) {
+            } else if (expiredSectionNames.length > 0) {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
                 });
-                this.reload(this.getExpiredKeys(), false);
+                this.reload(expiredSectionNames, false);
             } else {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
@@ -238,57 +239,66 @@ define([
         },
 
         /**
-         * @return {Boolean}
+         * Retrieve the list of sections that has expired since last page reload.
+         *
+         * Sections can expire due to lifetime constraints or due to inconsistent storage information
+         * (validated by cookie data).
+         *
+         * @return {Array}
          */
-        needReload: function () {
-            var cookieSections = $.cookieStorage.get('section_data_ids'),
-                storageVal,
-                name;
+        getExpiredSectionNames: function () {
+            var expiredSectionNames = [],
+                cookieSectionTimestamps = $.cookieStorage.get('section_data_ids') || {},
+                sectionLifetime = options.expirableSectionLifetime * 60,
+                currentTimestamp = Math.floor(Date.now() / 1000),
+                sectionData;
 
-            if (typeof cookieSections != 'object') {
-                return true;
-            }
+            // process sections that can expire due to lifetime constraints
+            _.each(options.expirableSectionNames, function (sectionName) {
+                sectionData = storage.get(sectionName);
 
-            for (name in cookieSections) {
-                if (name !== undefined) {
-                    storageVal = storage.get(name);
-
-                    if (typeof storageVal === 'undefined' || //eslint-disable-line max-depth
-                        typeof storageVal == 'object' && cookieSections[name] > storageVal['data_id']
-                    ) {
-                        return true;
-                    }
+                if (typeof sectionData === 'object' && sectionData['data_id'] + sectionLifetime <= currentTimestamp) {
+                    expiredSectionNames.push(sectionName);
                 }
-            }
+            });
 
-            return false;
+            // process sections that can expire due to storage information inconsistency
+            _.each(cookieSectionTimestamps, function (cookieSectionTimestamp, sectionName) {
+                sectionData = storage.get(sectionName);
+
+                if (typeof sectionData === 'undefined' ||
+                    typeof sectionData === 'object' &&
+                    cookieSectionTimestamp != sectionData['data_id'] //eslint-disable-line
+                ) {
+                    expiredSectionNames.push(sectionName);
+                }
+            });
+
+            return _.uniq(expiredSectionNames);
         },
 
         /**
+         * Check if some sections have to be reloaded.
+         *
+         * @deprecated Use getExpiredSectionNames instead.
+         *
+         * @return {Boolean}
+         */
+        needReload: function () {
+            var expiredSectionNames = this.getExpiredSectionNames();
+
+            return expiredSectionNames.length > 0;
+        },
+
+        /**
+         * Retrieve the list of expired keys.
+         *
+         * @deprecated Use getExpiredSectionNames instead.
          *
          * @return {Array}
          */
         getExpiredKeys: function () {
-            var cookieSections = $.cookieStorage.get('section_data_ids'),
-                storageVal,
-                name,
-                expiredKeys = [];
-
-            if (typeof cookieSections != 'object') {
-                return [];
-            }
-
-            for (name in cookieSections) { //eslint-disable-line guard-for-in
-                storageVal = storage.get(name);
-
-                if (typeof storageVal === 'undefined' ||
-                    typeof storageVal == 'object' && cookieSections[name] !=  storage.get(name)['data_id'] //eslint-disable-line
-                ) {
-                    expiredKeys.push(name);
-                }
-            }
-
-            return expiredKeys;
+            return this.getExpiredSectionNames();
         },
 
         /**

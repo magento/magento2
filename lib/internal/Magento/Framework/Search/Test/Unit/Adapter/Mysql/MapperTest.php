@@ -6,16 +6,15 @@
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
 
 use Magento\Framework\DB\Select;
-use \Magento\Framework\Search\Adapter\Mysql\Mapper;
+use Magento\Framework\Search\Adapter\Mysql\Mapper;
 
 use Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\Query\Filter;
 use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -526,9 +525,14 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->method('limit')
             ->with($isInternal ? self::REQUEST_LIMIT : 10000000000)
             ->willReturnSelf();
-        $select->expects($isInternal ? $this->once() : $this->never())
+        $select->expects($isInternal ? $this->exactly(2) : $this->never())
             ->method('order')
-            ->with('relevance DESC')
+            ->with(
+                $this->logicalOr(
+                    'relevance DESC',
+                    'entity_id DESC'
+                )
+            )
             ->willReturnSelf();
         $select->expects($isGrouped ? $this->once() : $this->never())
             ->method('group')

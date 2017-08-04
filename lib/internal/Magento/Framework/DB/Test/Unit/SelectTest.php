@@ -20,66 +20,56 @@ class SelectTest extends \PHPUnit_Framework_TestCase
         $quote = new \Magento\Framework\DB\Platform\Quote();
         $renderer = new \Magento\Framework\DB\Select\SelectRenderer(
             [
-                'distinct' =>
-                    [
-                        'renderer' => new \Magento\Framework\DB\Select\DistinctRenderer(),
-                        'sort' => 100,
-                        'part' => 'distinct'
-                    ],
-                'columns' =>
-                    [
-                        'renderer' => new \Magento\Framework\DB\Select\ColumnsRenderer($quote),
-                        'sort' => 200,
-                        'part' => 'columns'
-                    ],
-                'union' =>
-                    [
-                        'renderer' => new \Magento\Framework\DB\Select\UnionRenderer(),
-                        'sort' => 300,
-                        'part' => 'union'
-                    ],
-                'from' =>
-                    [
-                        'renderer' => new \Magento\Framework\DB\Select\FromRenderer($quote),
-                        'sort' => 400,
-                        'part' => 'from'
-                    ],
-                'where' =>
-                    [
-                        'renderer' => new \Magento\Framework\DB\Select\WhereRenderer(),
-                        'sort' => 500,
-                        'part' => 'where'
-                    ],
-                'group' =>
-                    [
-                        'renderer' => new \Magento\Framework\DB\Select\GroupRenderer($quote),
-                        'sort' => 600,
-                        'part' => 'group'
-                    ],
-                'having' =>
-                    [
-                        'renderer' => new \Magento\Framework\DB\Select\HavingRenderer(),
-                        'sort' => 700,
-                        'part' => 'having'
-                    ],
-                'order' =>
-                    [
-                        'renderer' => new \Magento\Framework\DB\Select\OrderRenderer($quote),
-                        'sort' => 800,
-                        'part' => 'order'
-                    ],
-                'limit' =>
-                    [
-                        'renderer' => new \Magento\Framework\DB\Select\LimitRenderer(),
-                        'sort' => 900,
-                        'part' => 'limitcount'
-                    ],
-                'for_update' =>
-                    [
-                        'renderer' => new \Magento\Framework\DB\Select\ForUpdateRenderer(),
-                        'sort' => 1000,
-                        'part' => 'forupdate'
-                    ],
+                'distinct' => [
+                    'renderer' => new \Magento\Framework\DB\Select\DistinctRenderer(),
+                    'sort' => 100,
+                    'part' => 'distinct'
+                ],
+                'columns' => [
+                    'renderer' => new \Magento\Framework\DB\Select\ColumnsRenderer($quote),
+                    'sort' => 200,
+                    'part' => 'columns'
+                ],
+                'union' => [
+                    'renderer' => new \Magento\Framework\DB\Select\UnionRenderer(),
+                    'sort' => 300,
+                    'part' => 'union'
+                ],
+                'from' => [
+                    'renderer' => new \Magento\Framework\DB\Select\FromRenderer($quote),
+                    'sort' => 400,
+                    'part' => 'from'
+                ],
+                'where' => [
+                    'renderer' => new \Magento\Framework\DB\Select\WhereRenderer(),
+                    'sort' => 500,
+                    'part' => 'where'
+                ],
+                'group' => [
+                    'renderer' => new \Magento\Framework\DB\Select\GroupRenderer($quote),
+                    'sort' => 600,
+                    'part' => 'group'
+                ],
+                'having' => [
+                    'renderer' => new \Magento\Framework\DB\Select\HavingRenderer(),
+                    'sort' => 700,
+                    'part' => 'having'
+                ],
+                'order' => [
+                    'renderer' => new \Magento\Framework\DB\Select\OrderRenderer($quote),
+                    'sort' => 800,
+                    'part' => 'order'
+                ],
+                'limit' => [
+                    'renderer' => new \Magento\Framework\DB\Select\LimitRenderer(),
+                    'sort' => 900,
+                    'part' => 'limitcount'
+                ],
+                'for_update' => [
+                    'renderer' => new \Magento\Framework\DB\Select\ForUpdateRenderer(),
+                    'sort' => 1000,
+                    'part' => 'forupdate'
+                ],
             ]
         );
 
