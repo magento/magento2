@@ -143,7 +143,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Could not find theme 'nonexistent_theme' for area 'area'
+     * @expectedExceptionMessage Could not find theme by full path 'nonexistent_theme' for area 'area'
      * @return void
      */
     public function testUpdateDesignParamsWrongTheme()
@@ -271,7 +271,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->designMock
             ->expects($this->any())
             ->method('getConfigurationDesignTheme')
-            ->willReturn('Magento/luma');
+            ->willReturn('Vendor/themename');
 
         $themeMock = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class);
         $themeMock->expects($this->any())
@@ -284,7 +284,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->themeProvider
             ->expects($this->any())
             ->method('getThemeByFullPath')
-            ->with('frontend/Magento/luma')
+            ->with('frontend/Vendor/themename')
             ->willReturn($themeMock);
 
         $this->repository->updateDesignParams($params);
@@ -297,7 +297,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Could not find theme '1' for area 'frontend'
+     * @expectedExceptionMessage Could not find theme by id '1' for area 'frontend'
      * @return void
      */
     public function testUpdateDesignParamsCrossAreaWithoutSuitableTheme()

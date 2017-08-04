@@ -124,8 +124,6 @@ class Repository
      * @param array &$params
      * @throws \UnexpectedValueException
      * @return $this
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function updateDesignParams(array &$params)
     {
@@ -135,19 +133,18 @@ class Repository
         }
 
         // Set themeModel
+        $themeModel = null;
         $area = $params['area'];
         if (!empty($params['themeId'])) {
-            $params['themeModel'] = $this->getThemeById($params['themeId'], $area);
+            $themeModel = $this->getThemeById($params['themeId'], $area);
         } elseif (isset($params['theme'])) {
-            $params['themeModel'] = $this->getThemeByPath($params['theme'], $area);
+            $themeModel = $this->getThemeByPath($params['theme'], $area);
         } elseif (empty($params['themeModel']) && $area !== $this->getDefaultParameter('area')) {
             $themeId = $this->design->getConfigurationDesignTheme($area);
-            $params['themeModel'] = $this->getTheme($themeId, $area);
+            $themeModel = $this->getTheme($themeId, $area);
         }
 
-        if (empty($params['themeModel'])) {
-            $params['themeModel'] = $this->getDefaultParameter('themeModel');
-        }
+        $params['themeModel'] = $themeModel ?: $this->getDefaultParameter('themeModel');
 
         // Set module
         if (!array_key_exists('module', $params)) {
@@ -187,13 +184,13 @@ class Repository
     {
         $themeModel = $this->getThemeProvider()->getThemeByFullPath($area . '/' . $themePath);
         if (!$themeModel) {
-            throw new \UnexpectedValueException("Could not find theme '$themePath' for area '$area'");
+            throw new \UnexpectedValueException("Could not find theme by full path '$themePath' for area '$area'");
         }
         return $themeModel;
     }
 
     /**
-     * @param string $themeId
+     * @param int $themeId
      * @param string $area
      * @return \Magento\Framework\View\Design\ThemeInterface
      * @throws \UnexpectedValueException
@@ -202,7 +199,7 @@ class Repository
     {
         $themeModel = $this->getThemeProvider()->getThemeById($themeId);
         if (!$themeModel || $themeModel->getArea() != $area) {
-            throw new \UnexpectedValueException("Could not find theme '$themeId' for area '$area'");
+            throw new \UnexpectedValueException("Could not find theme by id '$themeId' for area '$area'");
         }
         return $themeModel;
     }
