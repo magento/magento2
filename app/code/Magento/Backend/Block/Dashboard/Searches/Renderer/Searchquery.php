@@ -7,6 +7,7 @@ namespace Magento\Backend\Block\Dashboard\Searches\Renderer;
 
 /**
  * Dashboard search query column renderer
+ * @api
  */
 class Searchquery extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {

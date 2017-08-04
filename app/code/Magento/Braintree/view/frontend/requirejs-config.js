@@ -6,7 +6,7 @@
 var config = {
     map: {
         '*': {
-            braintree: 'https://js.braintreegateway.com/js/braintree-2.25.0.min.js'
+            braintree: 'https://js.braintreegateway.com/js/braintree-2.32.0.min.js'
         }
     }
 };

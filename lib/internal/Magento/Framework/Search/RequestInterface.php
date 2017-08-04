@@ -11,6 +11,8 @@ use Magento\Framework\Search\Request\QueryInterface;
 
 /**
  * Search Request
+ *
+ * @api
  */
 interface RequestInterface
 {

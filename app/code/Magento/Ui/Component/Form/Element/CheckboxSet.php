@@ -6,7 +6,7 @@
 namespace Magento\Ui\Component\Form\Element;
 
 /**
- * Class CheckboxSet
+ * @api
  */
 class CheckboxSet extends AbstractOptionsField
 {

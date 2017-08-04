@@ -30,7 +30,7 @@ class Messages implements SectionSourceInterface
 
     /**
      * Constructor
-     * 
+     *
      * @param MessageManager $messageManager
      * @param InterpretationStrategyInterface $interpretationStrategy
      */

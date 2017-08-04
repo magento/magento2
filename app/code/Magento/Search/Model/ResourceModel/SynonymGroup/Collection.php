@@ -7,6 +7,7 @@ namespace Magento\Search\Model\ResourceModel\SynonymGroup;
 
 /**
  * Collection for SynonymGroup
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

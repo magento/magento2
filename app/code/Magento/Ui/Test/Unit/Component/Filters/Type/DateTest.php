@@ -228,10 +228,12 @@ class DateTest extends \PHPUnit_Framework_TestCase
                 ->with($filterData[$name])
                 ->willReturn(new \DateTime($filterData[$name]));
         } else {
+            $from = new \DateTime($filterData[$name]['from']);
+            $to = new \DateTime($filterData[$name]['to'] . ' 23:59:59');
             $uiComponent->method('convertDate')
                 ->willReturnMap([
-                    [$filterData[$name]['from'], 0, 0, 0, new \DateTime($filterData[$name]['from'])],
-                    [$filterData[$name]['to'], 23, 59, 59, new \DateTime($filterData[$name]['to'] . ' 23:59:59')],
+                    [$filterData[$name]['from'], 0, 0, 0, true, $from],
+                    [$filterData[$name]['to'], 23, 59, 59, true, $to],
                 ]);
         }
 

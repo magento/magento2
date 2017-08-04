@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Cache;
 
 /**
@@ -28,11 +26,26 @@ class CleanMediaTest extends \PHPUnit_Framework_TestCase
             ['setIsUrlNotice'],
             $helper->getConstructArguments(\Magento\Backend\Model\Session::class)
         );
+
+        $exceptionMessageFactory = $this->getMockBuilder(
+            \Magento\Framework\Message\ExceptionMessageLookupFactory::class
+        )
+            ->disableOriginalConstructor()
+            ->setMethods(
+                ['getMessageGenerator']
+            )
+            ->getMock();
+
+        $messageManagerParams = $helper->getConstructArguments(\Magento\Framework\Message\Manager::class);
+
+        $messageManagerParams['exceptionMessageFactory'] = $exceptionMessageFactory;
+
         $messageManager = $this->getMock(
             \Magento\Framework\Message\Manager::class,
             ['addSuccess'],
-            $helper->getConstructArguments(\Magento\Framework\Message\Manager::class)
+            $messageManagerParams
         );
+
         $context = $this->getMock(
             \Magento\Backend\App\Action\Context::class,
             ['getRequest', 'getResponse', 'getMessageManager', 'getSession', 'getResultFactory'],
@@ -78,8 +91,7 @@ class CleanMediaTest extends \PHPUnit_Framework_TestCase
 
         $messageManager->expects($this->once())
             ->method('addSuccess')
-            ->with('The JavaScript/CSS cache has been cleaned.'
-        );
+            ->with('The JavaScript/CSS cache has been cleaned.');
 
         $valueMap = [
             [\Magento\Framework\View\Asset\MergeService::class, $mergeService],

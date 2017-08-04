@@ -2,7 +2,7 @@
     "name": "magento/framework",
     "description": "N/A",
     "type": "magento2-library",
-    "version": "100.2.0-dev",
+    "version": "100.3.0-dev",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -21,6 +21,17 @@
         "lib-libxml": "*",
         "ext-xsl": "*",
         "symfony/process": "~2.1",
+        "colinmollenhour/php-redis-session-abstract": "~1.2.2",
+        "composer/composer": "1.4.1",
+        "monolog/monolog": "^1.17",
+        "oyejorge/less.php": "~1.7.0",
+        "symfony/console": "~2.3, !=2.7.0",
+        "tedivm/jshrink": "~1.1.0",
+        "zendframework/zend-code": "^3.1.0",
+        "zendframework/zend-crypt": "^2.6.0",
+        "zendframework/zend-mvc": "~2.6.3",
+        "zendframework/zend-uri": "^2.5.1",
+        "zendframework/zend-validator": "^2.6.0",
         "zendframework/zend-stdlib": "^2.7.7",
         "zendframework/zend-http": "^2.6.0"
     },

@@ -300,6 +300,11 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                 'allowImport' => true
             ],
             [
+                'skus' => ['newSku' => ['sku' => ['sku' => 'SKU', 'entity_id' => 3, 'type_id' => 'bundle']]],
+                'bunch' => ['bundle_values' => 'value1', 'sku' => 'SKU', 'name' => 'name'],
+                'allowImport' => true
+            ],
+            [
                 'skus' => ['newSku' => ['sku' => ['sku' => 'sku', 'entity_id' => 3, 'type_id' => 'simple']]],
                 'bunch' => ['bundle_values' => 'value1', 'sku' => 'sku', 'name' => 'name'],
                 'allowImport' => true
@@ -308,6 +313,11 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                 'skus' => ['newSku' => ['sku' => ['sku' => 'sku', 'entity_id' => 3, 'type_id' => 'bundle']]],
                 'bunch' => ['bundle_values' => 'value1', 'sku' => 'sku', 'name' => 'name'],
                 'allowImport' => false
+            ],
+            'Import without bundle values' => [
+                'skus' => ['newSku' => ['sku' => ['sku' => 'sku', 'entity_id' => 3, 'type_id' => 'bundle']]],
+                'bunch' => ['sku' => 'sku', 'name' => 'name'],
+                'allowImport' => true,
             ],
             [
                 'skus' => ['newSku' => [

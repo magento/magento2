@@ -8,7 +8,7 @@
 <sections>
     <images-and-videos>
         <class>\Magento\ProductVideo\Test\Block\Adminhtml\Product\Edit\Tab\ImagesAndVideos</class>
-        <selector>[data-index="block_gallery"]</selector>
+        <selector>[data-index="gallery"]</selector>
         <strategy>css selector</strategy>
         <fields>
             <position />

@@ -33,18 +33,21 @@ class TotalsProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcess()
     {
+        $jsLayoutData = [
+            'sub-total' => [],
+            'grand-total' => [],
+            'non-existant-total' => null
+        ];
+        $expectedResultData = [
+            'sub-total' => ['sortOrder' => 10],
+            'grand-total' => ['sortOrder' => 20],
+            'non-existant-total' => null
+        ];
         $jsLayout['components']['checkout']['children']['sidebar']['children']['summary']
-            ['children']['totals']['children'] = [
-                'sub-total' => [],
-                'grand-total' => [],
-                'non-existant-total' => null
-            ];
+            ['children']['totals']['children'] = $jsLayoutData;
         $expectedResult['components']['checkout']['children']['sidebar']['children']['summary']
-            ['children']['totals']['children'] = [
-                'sub-total' => ['sortOrder' => 10],
-                'grand-total' => ['sortOrder' => 20],
-                'non-existant-total' => null
-            ];
+            ['children']['totals']['children'] = $expectedResultData;
+
         $configData = ['sub_total' => 10, 'grand_total' => 20];
 
         $this->scopeConfigMock->expects($this->once())->method('getValue')->with('sales/totals_sort')
