@@ -4,18 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sitemap\Model\ItemResolver;
+namespace Magento\Sitemap\Model\ItemProvider;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
-class CmsPageConfigReader implements ConfigReaderInterface
+class CategoryConfigReader implements ConfigReaderInterface
 {
     /**#@+
      * Xpath config settings
      */
-    const XML_PATH_CHANGE_FREQUENCY = 'sitemap/page/changefreq';
-    const XML_PATH_PRIORITY = 'sitemap/page/priority';
+    const XML_PATH_CHANGE_FREQUENCY = 'sitemap/category/changefreq';
+    const XML_PATH_PRIORITY = 'sitemap/category/priority';
     /**#@-*/
 
     /**

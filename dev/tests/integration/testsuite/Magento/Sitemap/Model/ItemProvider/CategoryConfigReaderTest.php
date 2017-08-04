@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sitemap\Model\ItemResolver;
+namespace Magento\Sitemap\Model\ItemProvider;
 
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class ProductConfigReaderTest extends \PHPUnit_Framework_TestCase
+class CategoryConfigReaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var CategoryConfigReader
@@ -18,11 +18,11 @@ class ProductConfigReaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->model = Bootstrap::getObjectManager()->get(ProductConfigReader::class);
+        $this->model = Bootstrap::getObjectManager()->get(CategoryConfigReader::class);
     }
 
     /**
-     * @magentoConfigFixture default_store sitemap/product/changefreq monthly
+     * @magentoConfigFixture default_store sitemap/category/changefreq monthly
      */
     public function testGetChangeFrequency()
     {
@@ -31,11 +31,11 @@ class ProductConfigReaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoConfigFixture default_store sitemap/product/priority 100
+     * @magentoConfigFixture default_store sitemap/category/priority 100
      */
     public function testGetCategoryPriority()
     {
-        $this->assertEquals(1, $this->model->getPriority(Store::DEFAULT_STORE_ID));
+        $this->assertEquals(0.5, $this->model->getPriority(Store::DEFAULT_STORE_ID));
         $this->assertEquals(100, $this->model->getPriority(Store::DISTRO_STORE_ID));
     }
 }

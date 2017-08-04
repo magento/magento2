@@ -4,19 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sitemap\Model\ItemResolver;
+namespace Magento\Sitemap\Model\ItemProvider;
 
-use Magento\Sitemap\Model\ResourceModel\Catalog\ProductFactory;
+use Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory;
 use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
 
-class Product implements ItemResolverInterface
+class Category implements ItemProviderInterface
 {
     /**
-     * Product factory
+     * Category factory
      *
-     * @var ProductFactory
+     * @var CategoryFactory
      */
-    private $productFactory;
+    private $categoryFactory;
 
     /**
      * Sitemap item factory
@@ -33,18 +33,18 @@ class Product implements ItemResolverInterface
     private $configReader;
 
     /**
-     * ProductSitemapItemResolver constructor.
+     * CategorySitemapItemResolver constructor.
      *
      * @param ConfigReaderInterface $configReader
-     * @param ProductFactory $productFactory
+     * @param CategoryFactory $categoryFactory
      * @param SitemapItemInterfaceFactory $itemFactory
      */
     public function __construct(
         ConfigReaderInterface $configReader,
-        ProductFactory $productFactory,
+        CategoryFactory $categoryFactory,
         SitemapItemInterfaceFactory $itemFactory
     ) {
-        $this->productFactory = $productFactory;
+        $this->categoryFactory = $categoryFactory;
         $this->itemFactory = $itemFactory;
         $this->configReader = $configReader;
     }
@@ -54,7 +54,7 @@ class Product implements ItemResolverInterface
      */
     public function getItems($storeId)
     {
-        $collection = $this->productFactory->create()
+        $collection = $this->categoryFactory->create()
             ->getCollection($storeId);
 
         $items = array_map(function ($item) use ($storeId) {

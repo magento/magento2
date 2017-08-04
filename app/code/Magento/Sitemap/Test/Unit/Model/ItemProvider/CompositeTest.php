@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sitemap\Test\Unit\Model\ItemResolver;
+namespace Magento\Sitemap\Test\Unit\Model\ItemProvider;
 
-use Magento\Sitemap\Model\ItemResolver\Composite as CompositeItemResolver;
-use Magento\Sitemap\Model\ItemResolver\ItemResolverInterface;
+use Magento\Sitemap\Model\ItemProvider\Composite as CompositeItemResolver;
+use Magento\Sitemap\Model\ItemProvider\ItemProviderInterface;
 use Magento\Sitemap\Model\SitemapItemInterface;
 
 class CompositeTest extends \PHPUnit_Framework_TestCase
@@ -28,7 +28,7 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
         $mockResolvers = [];
 
         foreach ($itemResolverData as $data) {
-            $mockResolver = $this->getMockForAbstractClass(ItemResolverInterface::class);
+            $mockResolver = $this->getMockForAbstractClass(ItemProviderInterface::class);
             $mockResolver->expects(self::once())
                 ->method('getItems')
                 ->willReturn($data);

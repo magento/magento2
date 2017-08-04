@@ -10,9 +10,9 @@
  */
 namespace Magento\Sitemap\Helper;
 
-use Magento\Sitemap\Model\ItemResolver\CategoryConfigReader;
-use Magento\Sitemap\Model\ItemResolver\CmsPageConfigReader;
-use Magento\Sitemap\Model\ItemResolver\ProductConfigReader;
+use Magento\Sitemap\Model\ItemProvider\CategoryConfigReader;
+use Magento\Sitemap\Model\ItemProvider\CmsPageConfigReader;
+use Magento\Sitemap\Model\ItemProvider\ProductConfigReader;
 use Magento\Sitemap\Model\SitemapConfigReader;
 use Magento\Store\Model\ScopeInterface;
 

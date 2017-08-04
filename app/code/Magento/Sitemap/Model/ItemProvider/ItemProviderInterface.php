@@ -3,16 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sitemap\Model\ItemResolver;
+namespace Magento\Sitemap\Model\ItemProvider;
 
 use Magento\Sitemap\Model\SitemapItemInterface;
 
 /**
- * Sitemap item resolver interface
+ * Sitemap item provider interface
  *
  * @api
  */
-interface ItemResolverInterface
+interface ItemProviderInterface
 {
     /**
      * Get sitemap items
