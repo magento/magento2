@@ -339,7 +339,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         );
         $this->dispatch('backend/catalog/category/save');
         $this->assertSessionMessages(
-            $this->equalTo(['The value of attribute "is_active" must be set']),
+            $this->equalTo(['The value of attribute "name" must be set']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }
