@@ -22,16 +22,10 @@ class Data extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      * @param \Magento\Framework\DataObject $row
      * @return int|string
      * @since 2.0.0
+     * @deprecated since it doesn't bring any value anymore
      */
     protected function _getValue(\Magento\Framework\DataObject $row)
     {
-        $data = parent::_getValue($row);
-        if (intval($data) == $data) {
-            return (string)number_format($data, 2);
-        }
-        if ($data !== null) {
-            return $data * 1;
-        }
-        return $this->getColumn()->getDefault();
+        return parent::_getValue($row);
     }
 }

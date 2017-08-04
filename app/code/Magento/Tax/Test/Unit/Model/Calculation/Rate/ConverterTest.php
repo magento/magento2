@@ -15,14 +15,19 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     protected $converter;
 
     /**
-     * @var \Magento\Tax\Api\Data\TaxRateInterfaceFactory
+     * @var \Magento\Tax\Api\Data\TaxRateInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $taxRateDataObjectFactory;
 
     /**
-     * @var \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory
+     * @var \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $taxRateTitleDataObjectFactory;
+
+    /**
+     * @var \Magento\Framework\Locale\FormatInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $format;
 
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper
@@ -45,12 +50,16 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
+        $this->format = $this->getMockBuilder(\Magento\Framework\Locale\FormatInterface::class)
+            ->getMock();
+
         $this->objectManager = new ObjectManager($this);
         $this->converter =  $this->objectManager->getObject(
             \Magento\Tax\Model\Calculation\Rate\Converter::class,
             [
                 'taxRateDataObjectFactory' =>  $this->taxRateDataObjectFactory,
                 'taxRateTitleDataObjectFactory' => $this->taxRateTitleDataObjectFactory,
+                'format' => $this->format,
             ]
         );
     }
@@ -109,11 +118,13 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $taxRate = $this->objectManager->getObject(
             \Magento\Tax\Model\Calculation\Rate::class,
             [
-                'data' =>$dataArray,
+                'data' => $dataArray,
             ]
         );
 
         $this->taxRateDataObjectFactory->expects($this->once())->method('create')->willReturn($taxRate);
+
+        $this->format->expects($this->once())->method('getNumber')->willReturnArgument(0);
 
         $this->assertSame($taxRate, $this->converter->populateTaxRateData($dataArray));
         $this->assertEquals($taxRate->getTitles(), $rateTitles);

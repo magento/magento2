@@ -5,6 +5,9 @@
  */
 namespace Magento\Tax\Model\Calculation\Rate;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Locale\FormatInterface;
+
 /**
  * Tax Rate Model converter.
  *
@@ -26,16 +29,25 @@ class Converter
     protected $taxRateTitleDataObjectFactory;
 
     /**
+     * @var FormatInterface|null
+     * @since 2.2.0
+     */
+    private $format;
+
+    /**
      * @param \Magento\Tax\Api\Data\TaxRateInterfaceFactory $taxRateDataObjectFactory
-     * @param \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory,
+     * @param \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory ,
+     * @param FormatInterface|null $format
      * @since 2.0.0
      */
     public function __construct(
         \Magento\Tax\Api\Data\TaxRateInterfaceFactory $taxRateDataObjectFactory,
-        \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory
+        \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory,
+        FormatInterface $format = null
     ) {
         $this->taxRateDataObjectFactory = $taxRateDataObjectFactory;
         $this->taxRateTitleDataObjectFactory = $taxRateTitleDataObjectFactory;
+        $this->format = $format ?: ObjectManager::getInstance()->get(FormatInterface::class);
     }
 
     /**
@@ -131,7 +143,7 @@ class Converter
             ->setTaxRegionId($this->extractFormData($formData, 'tax_region_id'))
             ->setTaxPostcode($this->extractFormData($formData, 'tax_postcode'))
             ->setCode($this->extractFormData($formData, 'code'))
-            ->setRate($this->extractFormData($formData, 'rate'));
+            ->setRate($this->format->getNumber($this->extractFormData($formData, 'rate')));
         if (isset($formData['zip_is_range']) && $formData['zip_is_range']) {
             $taxRate->setZipFrom($this->extractFormData($formData, 'zip_from'))
                 ->setZipTo($this->extractFormData($formData, 'zip_to'))->setZipIsRange(1);
