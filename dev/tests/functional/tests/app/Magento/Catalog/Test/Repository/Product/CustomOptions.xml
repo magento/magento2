@@ -55,7 +55,7 @@
                         <item name="price" xsi:type="string">20</item>
                         <item name="price_type" xsi:type="string">Percent</item>
                         <item name="sku" xsi:type="string">sku_drop_down_row_2</item>
-                        <item name="sort_order" xsi:type="string">0</item>
+                        <item name="sort_order" xsi:type="string">1</item>
                     </item>
                 </item>
             </field>
