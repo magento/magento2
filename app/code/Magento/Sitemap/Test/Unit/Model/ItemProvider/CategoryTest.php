@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sitemap\Test\Unit\Model\ItemResolver;
+namespace Magento\Sitemap\Test\Unit\Model\ItemProvider;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Sitemap\Model\ItemResolver\Category as CategoryItemResolver;
-use Magento\Sitemap\Model\ItemResolver\ConfigReaderInterface;
+use Magento\Sitemap\Model\ItemProvider\Category as CategoryItemResolver;
+use Magento\Sitemap\Model\ItemProvider\ConfigReaderInterface;
 use Magento\Sitemap\Model\ResourceModel\Catalog\Category as CategoryResource;
 use Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory;
 use Magento\Sitemap\Model\SitemapItem;

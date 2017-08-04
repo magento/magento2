@@ -4,25 +4,25 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sitemap\Model\ItemResolver;
+namespace Magento\Sitemap\Model\ItemProvider;
 
-class Composite implements ItemResolverInterface
+class Composite implements ItemProviderInterface
 {
     /**
      * Item resolvers
      *
-     * @var ItemResolverInterface[]
+     * @var ItemProviderInterface[]
      */
-    private $itemResolvers;
+    private $itemProviders;
 
     /**
      * Composite constructor.
      *
-     * @param ItemResolverInterface[] $itemResolvers
+     * @param ItemProviderInterface[] $itemProviders
      */
-    public function __construct($itemResolvers = [])
+    public function __construct($itemProviders = [])
     {
-        $this->itemResolvers = $itemResolvers;
+        $this->itemProviders = $itemProviders;
     }
 
     /**
@@ -32,7 +32,7 @@ class Composite implements ItemResolverInterface
     {
         $items = [];
 
-        foreach ($this->itemResolvers as $resolver) {
+        foreach ($this->itemProviders as $resolver) {
             foreach ($resolver->getItems($storeId) as $item) {
                 $items[] = $item;
             }
