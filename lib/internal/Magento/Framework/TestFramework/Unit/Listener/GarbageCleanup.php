@@ -87,7 +87,6 @@ class GarbageCleanup implements \PHPUnit\Framework\TestListener
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function endTest(\PHPUnit\Framework\Test $test, $time)
     {
