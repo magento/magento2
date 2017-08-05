@@ -43,11 +43,6 @@ class InstallSchema implements InstallSchemaInterface
     private $createStockSourceLinkTable;
 
     /**
-     * @var CreateStockItemIndexTable
-     */
-    private $createStockItemIndexTable;
-
-    /**
      * @param CreateSourceTable $createSourceTable
      * @param CreateSourceCarrierLinkTable $createSourceCarrierLinkTable
      * @param CreateSourceItemTable $createSourceItemTable
@@ -59,15 +54,13 @@ class InstallSchema implements InstallSchemaInterface
         CreateSourceCarrierLinkTable $createSourceCarrierLinkTable,
         CreateSourceItemTable $createSourceItemTable,
         CreateStockTable $createStockTable,
-        CreateStockSourceLinkTable $createStockSourceLinkTable,
-        CreateStockItemIndexTable $createStockItemIndexTable
+        CreateStockSourceLinkTable $createStockSourceLinkTable
     ) {
         $this->createSourceTable = $createSourceTable;
         $this->createSourceCarrierLinkTable = $createSourceCarrierLinkTable;
         $this->createSourceItemTable = $createSourceItemTable;
         $this->createStockTable = $createStockTable;
         $this->createStockSourceLinkTable = $createStockSourceLinkTable;
-        $this->createStockItemIndexTable = $createStockItemIndexTable;
     }
 
     /**
@@ -82,7 +75,6 @@ class InstallSchema implements InstallSchemaInterface
         $this->createSourceItemTable->execute($setup);
         $this->createStockTable->execute($setup);
         $this->createStockSourceLinkTable->execute($setup);
-        $this->createStockItemIndexTable->execute($setup);
 
         $setup->endSetup();
     }
