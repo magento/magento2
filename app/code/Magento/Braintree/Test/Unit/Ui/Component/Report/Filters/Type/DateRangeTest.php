@@ -17,7 +17,7 @@ use Magento\Ui\Component\Form\Element\DataType\Date as FormDate;
 /**
  * Class DateRangeTest
  */
-class DateRangeTest extends \PHPUnit_Framework_TestCase
+class DateRangeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -202,7 +202,7 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
             ->with($expectedDate)
             ->willReturnSelf();
 
-        $filterMock = $this->getMock(Filter::class);
+        $filterMock = $this->createMock(Filter::class);
         $this->filterBuilderMock->expects(static::at($i++))
             ->method('create')
             ->willReturn($filterMock);

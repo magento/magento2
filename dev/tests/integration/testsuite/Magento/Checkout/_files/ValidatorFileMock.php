@@ -10,7 +10,7 @@ use Magento\Catalog\Model\Product\Option\Type\File\ValidatorFile;
 /**
  * Creates mock for ValidatorFile to replace real instance in fixtures.
  */
-class ValidatorFileMock extends \PHPUnit_Framework_TestCase
+class ValidatorFileMock extends \PHPUnit\Framework\TestCase
 {
     /**
      * Returns mock.

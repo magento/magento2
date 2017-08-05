@@ -20,7 +20,7 @@ use Magento\Theme\Controller\Result\MessagePlugin;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MessagePluginTest extends \PHPUnit_Framework_TestCase
+class MessagePluginTest extends \PHPUnit\Framework\TestCase
 {
     /** @var MessagePlugin */
     protected $model;

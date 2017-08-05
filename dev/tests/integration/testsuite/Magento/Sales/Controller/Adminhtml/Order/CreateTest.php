@@ -106,12 +106,46 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $this->dispatch('backend/sales/order_create/index');
         $html = $this->getResponse()->getBody();
 
-        $this->assertSelectCount('div#order-customer-selector', true, $html);
-        $this->assertSelectCount('[data-grid-id=sales_order_create_customer_grid]', true, $html);
-        $this->assertSelectCount('div#order-billing_method_form', true, $html);
-        $this->assertSelectCount('#shipping-method-overlay', true, $html);
-        $this->assertSelectCount('div#sales_order_create_search_grid', true, $html);
-        $this->assertSelectCount('#coupons:code', true, $html);
+        $this->assertGreaterThanOrEqual(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//div[@id="order-customer-selector"]',
+                $html
+            )
+        );
+        $this->assertGreaterThanOrEqual(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@data-grid-id="sales_order_create_customer_grid"]',
+                $html
+            )
+        );
+        $this->assertGreaterThanOrEqual(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//div[@id="order-billing_method_form"]',
+                $html
+            )
+        );
+        $this->assertGreaterThanOrEqual(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="shipping-method-overlay"]',
+                $html
+            )
+        );
+        $this->assertGreaterThanOrEqual(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//div[@id="sales_order_create_search_grid"]',
+                $html
+            )
+        );
+
+        $this->assertGreaterThanOrEqual(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath('//*[@id="coupons:code"]', $html)
+        );
     }
 
     /**

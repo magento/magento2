@@ -13,7 +13,7 @@ use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
 
-class AttributeLoaderTest extends \PHPUnit_Framework_TestCase
+class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config|\PHPUnit_Framework_MockObject_MockObject
@@ -40,28 +40,21 @@ class AttributeLoaderTest extends \PHPUnit_Framework_TestCase
      */
     private $attributeLoader;
 
-    /**
-     * @inheritdoc
-     */
     protected function setUp()
     {
-        $this->configMock = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();
+        $this->configMock = $this->createMock(Config::class, [], [], '', false);
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->setMethods(['create'])
-            ->disableOriginalConstructor()->getMockForAbstractClass();
-        $this->entityMock = $this->getMockBuilder(AbstractEntity::class)->disableOriginalConstructor()->getMock();
-        $this->entityTypeMock = $this->getMockBuilder(Type::class)->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->entityMock = $this->createMock(AbstractEntity::class, [], [], '', false);
+        $this->entityTypeMock = $this->createMock(Type::class, [], [], '', false);
         $this->attributeLoader = new AttributeLoader(
             $this->configMock,
             $this->objectManagerMock
         );
     }
 
-    /**
-     * Test for loadAllAttributes method.
-     *
-     * @return void
-     */
     public function testLoadAllAttributes()
     {
         $attributeCode = 'bar';
@@ -89,15 +82,18 @@ class AttributeLoaderTest extends \PHPUnit_Framework_TestCase
         $this->attributeLoader->loadAllAttributes($this->entityMock, $dataObject);
     }
 
-    /**
-     * Test for loadAllAttributes method with attribute codes present in default attributes.
-     *
-     * @return void
-     */
     public function testLoadAllAttributesAttributeCodesPresentInDefaultAttributes()
     {
-        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Attribute::class)
-            ->disableOriginalConstructor()->getMock();
+        $attributeMock = $this->createPartialMock(
+            \Magento\Eav\Model\Attribute::class,
+            [
+                'setAttributeCode',
+                'setBackendType',
+                'setIsGlobal',
+                'setEntityType',
+                'setEntityTypeId'
+            ]
+        );
         $attributeCodes = ['bar' => $attributeMock];
         $defaultAttributes = ['bar'];
         $dataObject = new DataObject();

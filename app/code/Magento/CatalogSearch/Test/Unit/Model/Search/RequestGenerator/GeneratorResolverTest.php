@@ -9,7 +9,7 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Search\RequestGenerator;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorInterface;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorResolver;
 
-class GeneratorResolverTest extends \PHPUnit_Framework_TestCase
+class GeneratorResolverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  GeneratorResolver */
     private $resolver;

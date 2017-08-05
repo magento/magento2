@@ -13,7 +13,7 @@ use Magento\Tax\Model\TaxRuleFixtureFactory;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tax helper
