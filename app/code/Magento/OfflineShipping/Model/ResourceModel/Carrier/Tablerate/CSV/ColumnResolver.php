@@ -9,7 +9,6 @@ namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV;
 /**
  * Class \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\ColumnResolver
  *
- * @since 2.1.0
  */
 class ColumnResolver
 {
@@ -22,7 +21,6 @@ class ColumnResolver
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $nameToPositionIdMap = [
         self::COLUMN_COUNTRY => 0,
@@ -35,7 +33,6 @@ class ColumnResolver
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $headers;
 
@@ -43,7 +40,6 @@ class ColumnResolver
      * ColumnResolver constructor.
      * @param array $headers
      * @param array $columns
-     * @since 2.1.0
      */
     public function __construct(array $headers, array $columns = [])
     {
@@ -56,7 +52,6 @@ class ColumnResolver
      * @param array $values
      * @return string|int|float|null
      * @throws ColumnNotFoundException
-     * @since 2.1.0
      */
     public function getColumnValue($column, array $values)
     {

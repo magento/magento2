@@ -75,13 +75,11 @@ class Config
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var VclGeneratorFactory
-     * @since 2.2.0
      */
     private $vclGeneratorFactory;
 
@@ -114,7 +112,7 @@ class Config
      *
      * @return int
      * @api
-     * @deprecated 2.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
+     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     public function getType()
     {
@@ -126,7 +124,7 @@ class Config
      *
      * @return int
      * @api
-     * @deprecated 2.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
+     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     public function getTtl()
     {
@@ -138,7 +136,7 @@ class Config
      *
      * @param string $vclTemplatePath
      * @return string
-     * @deprecated 2.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
+     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      * @api
      */
     public function getVclFile($vclTemplatePath)
@@ -168,7 +166,7 @@ class Config
      * Prepare data for VCL config
      *
      * @return array
-     * @deprecated 2.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
+     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     protected function _getReplacements()
     {
@@ -198,7 +196,7 @@ class Config
      *  "127.0.0.2";
      *
      * @return mixed|null|string
-     * @deprecated 2.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
+     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     protected function _getAccessList()
     {
@@ -223,7 +221,7 @@ class Config
      * we have to convert "/pattern/iU" into "(?Ui)pattern"
      *
      * @return string
-     * @deprecated 2.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
+     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     protected function _getDesignExceptions()
     {
@@ -256,7 +254,7 @@ class Config
      *
      * @return bool
      * @api
-     * @deprecated 2.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
+     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     public function isEnabled()
     {

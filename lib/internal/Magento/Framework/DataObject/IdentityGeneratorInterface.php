@@ -7,7 +7,6 @@ namespace Magento\Framework\DataObject;
 
 /**
  * Interface UuidInterface
- * @since 2.2.0
  */
 interface IdentityGeneratorInterface
 {
@@ -15,7 +14,6 @@ interface IdentityGeneratorInterface
      * Generate id
      *
      * @return string
-     * @since 2.2.0
      **/
     public function generateId();
     
@@ -24,7 +22,6 @@ interface IdentityGeneratorInterface
      *
      * @param string $data
      * @return string
-     * @since 2.2.0
      **/
     public function generateIdForData($data);
 }

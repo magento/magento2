@@ -59,7 +59,6 @@ class Base extends StreamHandler
      *
      * @return string
      * @throws \InvalidArgumentException
-     * @since 2.2.0
      */
     private function sanitizeFileName($fileName)
     {

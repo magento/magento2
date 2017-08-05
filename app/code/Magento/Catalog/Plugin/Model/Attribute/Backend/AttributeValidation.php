@@ -10,20 +10,17 @@ use Magento\Store\Model\Store;
 /**
  * Class \Magento\Catalog\Plugin\Model\Attribute\Backend\AttributeValidation
  *
- * @since 2.1.0
  */
 class AttributeValidation
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.1.0
      */
     private $storeManager;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $allowedEntityTypes
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -38,7 +35,6 @@ class AttributeValidation
      * @param \Closure $proceed
      * @param \Magento\Framework\DataObject $entity
      * @return bool
-     * @since 2.1.0
      */
     public function aroundValidate(
         \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend $subject,

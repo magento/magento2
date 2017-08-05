@@ -17,7 +17,6 @@ class Metrics
      * Available metrics
      *
      * @var string[]
-     * @since 2.2.0
      */
     private $allowedMetrics = ['count', 'sum', 'min', 'max', 'avg'];
 

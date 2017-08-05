@@ -11,19 +11,16 @@ use Magento\Framework\DB\Platform\Quote;
 /**
  * Class \Magento\Framework\DB\Select\FromRenderer
  *
- * @since 2.1.0
  */
 class FromRenderer implements RendererInterface
 {
     /**
      * @var Quote
-     * @since 2.1.0
      */
     protected $quote;
 
     /**
      * @param Quote $quote
-     * @since 2.1.0
      */
     public function __construct(
         Quote $quote
@@ -38,7 +35,6 @@ class FromRenderer implements RendererInterface
      * @param string $sql
      * @return string
      * @throws \Zend_Db_Select_Exception
-     * @since 2.1.0
      */
     public function render(Select $select, $sql = '')
     {
@@ -80,7 +76,6 @@ class FromRenderer implements RendererInterface
      *
      * @param string   $schema  The schema name OPTIONAL
      * @return string|null
-     * @since 2.1.0
      */
     protected function getQuotedSchema($schema = null)
     {
@@ -96,7 +91,6 @@ class FromRenderer implements RendererInterface
      * @param string   $tableName        The table name
      * @param string   $correlationName  The correlation name OPTIONAL
      * @return string
-     * @since 2.1.0
      */
     protected function getQuotedTable($tableName, $correlationName = null)
     {

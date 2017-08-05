@@ -17,19 +17,16 @@ use Magento\SalesRule\Api\Data\RuleInterface;
 /**
  * Class \Magento\SalesRule\Setup\UpgradeData
  *
- * @since 2.2.0
  */
 class UpgradeData implements UpgradeDataInterface
 {
     /**
      * @var MetadataPool
-     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var AggregatedFieldDataConverter
-     * @since 2.2.0
      */
     private $aggregatedFieldConverter;
 
@@ -38,7 +35,6 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param AggregatedFieldDataConverter $aggregatedFieldConverter
      * @param MetadataPool $metadataPool
-     * @since 2.2.0
      */
     public function __construct(
         AggregatedFieldDataConverter $aggregatedFieldConverter,
@@ -50,7 +46,6 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -69,7 +64,6 @@ class UpgradeData implements UpgradeDataInterface
      * @param ModuleDataSetupInterface $setup
      *
      * @return void
-     * @since 2.2.0
      */
     public function convertSerializedDataToJson($setup)
     {

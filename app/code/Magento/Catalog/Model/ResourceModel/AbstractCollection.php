@@ -8,19 +8,16 @@ namespace Magento\Catalog\Model\ResourceModel;
 /**
  * Flat abstract collection
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
  */
 abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Collection
 {
     /**
      * @var \Magento\Framework\DB\Select
-     * @since 2.1.0
      */
     protected $_countSelect;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaInterface
-     * @since 2.1.0
      */
     protected $searchCriteria;
 
@@ -29,7 +26,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      *
      * @param \Magento\Framework\DB\Select $countSelect
      * @return $this
-     * @since 2.1.0
      */
     public function setSelectCountSql(\Magento\Framework\DB\Select $countSelect)
     {
@@ -41,7 +37,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * get select count sql
      *
      * @return \Magento\Framework\DB\Select
-     * @since 2.1.0
      */
     public function getSelectCountSql()
     {
@@ -57,7 +52,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * @param string|\Magento\Eav\Model\Entity\Attribute $attribute
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.1.0
      */
     protected function _attributeToField($attribute)
     {
@@ -79,7 +73,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      *
      * @param string $attribute
      * @return $this
-     * @since 2.1.0
      */
     public function addAttributeToSelect($attribute)
     {
@@ -94,7 +87,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * @param string|\Magento\Eav\Model\Entity\Attribute $attribute
      * @param array|int|string|null $condition
      * @return $this
-     * @since 2.1.0
      */
     public function addAttributeToFilter($attribute, $condition = null)
     {
@@ -109,7 +101,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * @param string $attribute
      * @param string $dir
      * @return $this
-     * @since 2.1.0
      */
     public function addAttributeToSort($attribute, $dir = 'asc')
     {
@@ -124,7 +115,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * @param int $pageNum
      * @param int $pageSize
      * @return $this
-     * @since 2.1.0
      */
     public function setPage($pageNum, $pageSize)
     {
@@ -139,7 +129,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * @param int $limit
      * @param int $offset
      * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
-     * @since 2.1.0
      */
     protected function _getAllIdsSelect($limit = null, $offset = null)
     {
@@ -160,7 +149,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * @param int $limit
      * @param int $offset
      * @return array
-     * @since 2.1.0
      */
     public function getAllIds($limit = null, $offset = null)
     {
@@ -171,7 +159,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * Get search criteria.
      *
      * @return \Magento\Framework\Api\SearchCriteriaInterface|null
-     * @since 2.1.0
      */
     public function getSearchCriteria()
     {
@@ -184,7 +171,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
     {
@@ -196,7 +182,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * Get total count.
      *
      * @return int
-     * @since 2.1.0
      */
     public function getTotalCount()
     {
@@ -209,7 +194,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * @param int $totalCount
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function setTotalCount($totalCount)
     {
@@ -221,7 +205,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      *
      * @param \Magento\Framework\Api\ExtensibleDataInterface[] $items
      * @return $this
-     * @since 2.1.0
      */
     public function setItems(array $items = null)
     {

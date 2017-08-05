@@ -9,7 +9,6 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Factory class for @see \Magento\Analytics\ReportXml\DB\SelectBuilder
- * @since 2.2.0
  */
 class SelectBuilderFactory
 {
@@ -17,7 +16,6 @@ class SelectBuilderFactory
      * Object Manager instance
      *
      * @var ObjectManagerInterface
-     * @since 2.2.0
      */
     private $objectManager;
 
@@ -25,7 +23,6 @@ class SelectBuilderFactory
      * SelectBuilderFactory constructor.
      *
      * @param ObjectManagerInterface $objectManager
-     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager
@@ -38,7 +35,6 @@ class SelectBuilderFactory
      *
      * @param array $data
      * @return SelectBuilder
-     * @since 2.2.0
      */
     public function create(array $data = [])
     {

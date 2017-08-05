@@ -91,7 +91,6 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
 
     /**
      * @var string
-     * @since 2.1.0
      */
     private $distroBaseUrl;
 

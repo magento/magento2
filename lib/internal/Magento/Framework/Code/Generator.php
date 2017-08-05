@@ -73,7 +73,6 @@ class Generator
      *
      * @param array $generatedEntities
      * @return $this
-     * @since 2.1.0
      */
     public function setGeneratedEntities($generatedEntities)
     {

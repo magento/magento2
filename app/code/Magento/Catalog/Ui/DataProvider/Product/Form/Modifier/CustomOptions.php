@@ -30,7 +30,7 @@ use Magento\Framework\Locale\CurrencyInterface;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
+ * @since 101.0.0
  */
 class CustomOptions extends AbstractModifier
 {
@@ -94,51 +94,47 @@ class CustomOptions extends AbstractModifier
     const CUSTOM_OPTIONS_LISTING = 'product_custom_options_listing';
     /**#@-*/
 
-    /**
-     * @var \Magento\Catalog\Model\Locator\LocatorInterface
-     * @since 2.1.0
-     */
+    /**#@-*/
     protected $locator;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Catalog\Model\ProductOptions\ConfigInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $productOptionsConfig;
 
     /**
      * @var \Magento\Catalog\Model\Config\Source\Product\Options\Price
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $productOptionsPrice;
 
     /**
      * @var UrlInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var ArrayManager
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $arrayManager;
 
     /**
      * @var array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $meta = [];
 
     /**
      * @var CurrencyInterface
-     * @since 2.1.0
      */
     private $localeCurrency;
 
@@ -149,7 +145,7 @@ class CustomOptions extends AbstractModifier
      * @param ProductOptionsPrice $productOptionsPrice
      * @param UrlInterface $urlBuilder
      * @param ArrayManager $arrayManager
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -169,7 +165,7 @@ class CustomOptions extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function modifyData(array $data)
     {
@@ -214,7 +210,7 @@ class CustomOptions extends AbstractModifier
      * @param string $path
      * @param array $data
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function formatPriceByPath($path, array $data)
     {
@@ -229,7 +225,7 @@ class CustomOptions extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function modifyMeta(array $meta)
     {
@@ -244,7 +240,7 @@ class CustomOptions extends AbstractModifier
      * Create "Customizable Options" panel
      *
      * @return $this
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function createCustomOptionsPanel()
     {
@@ -291,7 +287,7 @@ class CustomOptions extends AbstractModifier
      *
      * @param int $sortOrder
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getHeaderContainerConfig($sortOrder)
     {
@@ -367,7 +363,7 @@ class CustomOptions extends AbstractModifier
      *
      * @param int $sortOrder
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getOptionsGridConfig($sortOrder)
     {
@@ -437,7 +433,7 @@ class CustomOptions extends AbstractModifier
      *
      * @param int $sortOrder
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getEnableFieldConfig($sortOrder)
     {
@@ -461,7 +457,7 @@ class CustomOptions extends AbstractModifier
      * Get config for modal window "Import Options"
      *
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getImportOptionsModalConfig()
     {
@@ -528,7 +524,7 @@ class CustomOptions extends AbstractModifier
      *
      * @param int $sortOrder
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getCommonContainerConfig($sortOrder)
     {
@@ -590,7 +586,7 @@ class CustomOptions extends AbstractModifier
      *
      * @param int $sortOrder
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getStaticTypeContainerConfig($sortOrder)
     {
@@ -625,7 +621,7 @@ class CustomOptions extends AbstractModifier
      *
      * @param int $sortOrder
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getSelectTypeGridConfig($sortOrder)
     {
@@ -695,7 +691,7 @@ class CustomOptions extends AbstractModifier
      *
      * @param int $sortOrder
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getOptionIdFieldConfig($sortOrder)
     {
@@ -720,7 +716,7 @@ class CustomOptions extends AbstractModifier
      * @param int $sortOrder
      * @param array $options
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getTitleFieldConfig($sortOrder, array $options = [])
     {
@@ -751,7 +747,7 @@ class CustomOptions extends AbstractModifier
      *
      * @param int $sortOrder
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getTypeFieldConfig($sortOrder)
     {
@@ -827,7 +823,7 @@ class CustomOptions extends AbstractModifier
      *
      * @param int $sortOrder
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getIsRequireFieldConfig($sortOrder)
     {
@@ -857,7 +853,7 @@ class CustomOptions extends AbstractModifier
      *
      * @param int $sortOrder
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getPositionFieldConfig($sortOrder)
     {
@@ -882,7 +878,7 @@ class CustomOptions extends AbstractModifier
      *
      * @param int $sortOrder
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getIsDeleteFieldConfig($sortOrder)
     {
@@ -904,7 +900,7 @@ class CustomOptions extends AbstractModifier
      *
      * @param int $sortOrder
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getPriceFieldConfig($sortOrder)
     {
@@ -934,7 +930,7 @@ class CustomOptions extends AbstractModifier
      * @param int $sortOrder
      * @param array $config
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getPriceTypeFieldConfig($sortOrder, array $config = [])
     {
@@ -963,7 +959,7 @@ class CustomOptions extends AbstractModifier
      *
      * @param int $sortOrder
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getSkuFieldConfig($sortOrder)
     {
@@ -988,7 +984,7 @@ class CustomOptions extends AbstractModifier
      *
      * @param int $sortOrder
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getMaxCharactersFieldConfig($sortOrder)
     {
@@ -1016,7 +1012,7 @@ class CustomOptions extends AbstractModifier
      *
      * @param int $sortOrder
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getFileExtensionFieldConfig($sortOrder)
     {
@@ -1041,7 +1037,7 @@ class CustomOptions extends AbstractModifier
      *
      * @param int $sortOrder
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getImageSizeXFieldConfig($sortOrder)
     {
@@ -1071,7 +1067,7 @@ class CustomOptions extends AbstractModifier
      *
      * @param int $sortOrder
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getImageSizeYFieldConfig($sortOrder)
     {
@@ -1099,7 +1095,7 @@ class CustomOptions extends AbstractModifier
      * Get options for drop-down control with product option types
      *
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getProductOptionTypes()
     {
@@ -1136,7 +1132,7 @@ class CustomOptions extends AbstractModifier
      * Get currency symbol
      *
      * @return string
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getCurrencySymbol()
     {
@@ -1148,8 +1144,7 @@ class CustomOptions extends AbstractModifier
      *
      * @return \Magento\Framework\Locale\CurrencyInterface
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 101.0.0
      */
     private function getLocaleCurrency()
     {
@@ -1164,7 +1159,7 @@ class CustomOptions extends AbstractModifier
      *
      * @param mixed $value
      * @return string
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function formatPrice($value)
     {

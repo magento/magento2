@@ -14,13 +14,11 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 /**
  * Class \Magento\GiftMessage\Setup\UpgradeData
  *
- * @since 2.1.0
  */
 class UpgradeData implements UpgradeDataInterface
 {
     /**
      * @var CategorySetupFactory
-     * @since 2.1.0
      */
     protected $categorySetupFactory;
 
@@ -28,7 +26,6 @@ class UpgradeData implements UpgradeDataInterface
      * UpgradeData constructor
      *
      * @param CategorySetupFactory $categorySetupFactory
-     * @since 2.1.0
      */
     public function __construct(CategorySetupFactory $categorySetupFactory)
     {
@@ -37,7 +34,6 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

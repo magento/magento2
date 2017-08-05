@@ -12,26 +12,22 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\GoogleOptimizer\Model\Plugin\Catalog\Category\DataProvider
  *
- * @since 2.1.0
  */
 class DataProvider
 {
     /**
      * @var \Magento\GoogleOptimizer\Helper\Data
-     * @since 2.1.0
      */
     protected $_helper;
 
     /**
      * @var \Magento\Framework\View\LayoutInterface
-     * @since 2.1.0
      */
     protected $_layout;
 
     /**
      * @param \Magento\GoogleOptimizer\Helper\Data $helper
      * @param \Magento\Framework\View\LayoutInterface $layout
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\GoogleOptimizer\Helper\Data $helper,
@@ -46,7 +42,6 @@ class DataProvider
      * @param array $result
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function afterPrepareMeta(\Magento\Catalog\Model\Category\DataProvider $subject, $result)
     {

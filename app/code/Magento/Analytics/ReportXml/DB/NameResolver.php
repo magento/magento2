@@ -9,7 +9,6 @@ namespace Magento\Analytics\ReportXml\DB;
  * Class NameResolver
  *
  * Resolver for source names
- * @since 2.2.0
  */
 class NameResolver
 {
@@ -18,7 +17,6 @@ class NameResolver
      *
      * @param array $elementConfig
      * @return string
-     * @since 2.2.0
      */
     public function getName($elementConfig)
     {
@@ -30,7 +28,6 @@ class NameResolver
      *
      * @param array $elementConfig
      * @return string
-     * @since 2.2.0
      */
     public function getAlias($elementConfig)
     {

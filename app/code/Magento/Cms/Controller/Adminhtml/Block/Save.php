@@ -20,7 +20,6 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**
      * @var DataPersistorInterface
-     * @since 2.1.0
      */
     protected $dataPersistor;
 
@@ -28,7 +27,6 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
      * @param Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param DataPersistorInterface $dataPersistor
-     * @since 2.1.0
      */
     public function __construct(
         Context $context,

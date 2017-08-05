@@ -53,7 +53,6 @@ class VarnishPlugin
      * @return ResponseHttp|ResultInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterDispatch(FrontControllerInterface $subject, $result)
     {

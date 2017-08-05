@@ -38,7 +38,6 @@ abstract class AbstractSchemaGenerator
 
     /**
      * @var Authorization
-     * @since 2.1.0
      */
     protected $authorization;
 
@@ -46,7 +45,6 @@ abstract class AbstractSchemaGenerator
      * Instance of serializer.
      *
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -165,7 +163,6 @@ abstract class AbstractSchemaGenerator
      *
      * @param string[] $requestedServices
      * @return array
-     * @since 2.1.0
      */
     protected function getAllowedServicesMetadata($requestedServices)
     {
@@ -190,7 +187,6 @@ abstract class AbstractSchemaGenerator
      *
      * @param array &$serviceMetadata
      * @return void
-     * @since 2.1.0
      */
     protected function removeRestrictedRoutes(&$serviceMetadata)
     {

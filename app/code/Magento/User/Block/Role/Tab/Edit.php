@@ -57,7 +57,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $coreRegistry = null;
 
@@ -92,8 +92,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      *
      * @param \Magento\Framework\Registry $coreRegistry
      * @return void
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
+     * @since 100.1.0
      */
     public function setCoreRegistry(\Magento\Framework\Registry $coreRegistry)
     {
@@ -104,8 +104,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * Get core registry
      *
      * @return \Magento\Framework\Registry
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
+     * @since 100.1.0
      */
     public function getCoreRegistry()
     {
@@ -172,7 +172,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * Get selected resources
      *
      * @return array|mixed|\string[]
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getSelectedResources()
     {
@@ -209,7 +209,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * Get lit of all ACL resources declared in the system.
      *
      * @return array
-     * @since 2.2.0
      */
     private function getAclResources()
     {

@@ -34,7 +34,7 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return string
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0 2.1.0
      * @since 2.1.0
      */
     public function getFormBlockType()
@@ -298,7 +298,7 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return string
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0 2.1.0
      * @since 2.1.0
      */
     public function getInfoBlockType()
@@ -312,7 +312,7 @@ class NullPaymentProvider implements MethodInterface
      * @return InfoInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0 2.1.0
      * @since 2.1.0
      */
     public function getInfoInstance()
@@ -326,7 +326,7 @@ class NullPaymentProvider implements MethodInterface
      * @param InfoInterface $info
      * @return void
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0 2.1.0
      * @since 2.1.0
      */
     public function setInfoInstance(InfoInterface $info)
@@ -529,7 +529,7 @@ class NullPaymentProvider implements MethodInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0 2.1.0
      * @since 2.1.0
      */
     public function initialize($paymentAction, $stateObject)

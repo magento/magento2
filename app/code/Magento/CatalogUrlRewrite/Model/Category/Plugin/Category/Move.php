@@ -22,7 +22,6 @@ class Move
 
     /**
      * @var ChildrenCategoriesProvider
-     * @since 2.2.0
      */
     private $childrenCategoriesProvider;
 
@@ -48,7 +47,6 @@ class Move
      * @param null|int $afterCategoryId
      * @return \Magento\Catalog\Model\ResourceModel\Category
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterChangeParent(
         \Magento\Catalog\Model\ResourceModel\Category $subject,

@@ -31,7 +31,7 @@ class CategoryUrlRewriteGenerator
 
     /**
      * @var \Magento\Catalog\Model\Category
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected $category;
 
@@ -52,7 +52,6 @@ class CategoryUrlRewriteGenerator
 
     /**
      * @var \Magento\UrlRewrite\Model\MergeDataProvider
-     * @since 2.2.0
      */
     private $mergeDataProviderPrototype;
 

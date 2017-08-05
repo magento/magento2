@@ -287,7 +287,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * Retrieve all ids from collection
      *
      * @return int[]
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getAllIds()
     {

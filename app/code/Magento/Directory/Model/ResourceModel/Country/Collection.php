@@ -59,13 +59,12 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @var AllowedCountries
-     * @since 2.1.3
      */
     private $allowedCountriesReader;
 
     /**
      * @var string[]
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $countriesWithNotRequiredStates;
 
@@ -125,7 +124,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param $emptyLabel
      * @param $options
      * @return array
-     * @since 2.2.0
      */
     private function addForegroundCountriesToOptionArray($emptyLabel, $options)
     {
@@ -151,9 +149,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Return Allowed Countries reader
      *
-     * @deprecated 2.1.3
+     * @deprecated 100.1.2
      * @return \Magento\Directory\Model\AllowedCountries
-     * @since 2.1.3
      */
     private function getAllowedCountriesReader()
     {
@@ -317,7 +314,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Get list of countries with required states
      *
      * @return \Magento\Directory\Model\Country[]
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getCountriesWithRequiredStates()
     {

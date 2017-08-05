@@ -17,26 +17,22 @@ use Magento\Framework\App\ResourceConnection;
  *
  * The main idea of this strategy is using fulltext search index table as main table for query
  * in case when search request does not requires any search by attributes
- * @since 2.2.0
  */
 class BaseSelectFullTextSearchStrategy implements BaseSelectStrategyInterface
 {
     /**
      * @var IndexScopeResolver
-     * @since 2.2.0
      */
     private $scopeResolver;
 
     /**
      * @var ResourceConnection
-     * @since 2.2.0
      */
     private $resource;
 
     /**
      * @param ResourceConnection $resource
      * @param IndexScopeResolver $scopeResolver
-     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -52,7 +48,6 @@ class BaseSelectFullTextSearchStrategy implements BaseSelectStrategyInterface
      * @param SelectContainer $selectContainer
      * @return SelectContainer
      * @throws \DomainException
-     * @since 2.2.0
      */
     public function createBaseSelect(SelectContainer $selectContainer)
     {

@@ -129,7 +129,6 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      * {@inheritdoc}. In addition, it sets status 'invalidate' for config caches
      *
      * @return $this
-     * @since 2.1.0
      */
     public function afterDelete()
     {

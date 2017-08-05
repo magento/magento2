@@ -12,7 +12,7 @@ namespace Magento\Sales\Api\Data;
  * Interface ShipmentItemCreationInterface
  *
  * @api
- * @since 2.1.2
+ * @since 100.1.2
  */
 interface ShipmentItemCreationInterface extends
     LineItemInterface,
@@ -22,7 +22,7 @@ interface ShipmentItemCreationInterface extends
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\ShipmentItemCreationExtensionInterface|null
-     * @since 2.1.2
+     * @since 100.1.2
      */
     public function getExtensionAttributes();
 
@@ -31,7 +31,7 @@ interface ShipmentItemCreationInterface extends
      *
      * @param \Magento\Sales\Api\Data\ShipmentItemCreationExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.1.2
+     * @since 100.1.2
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\ShipmentItemCreationExtensionInterface $extensionAttributes

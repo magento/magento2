@@ -12,7 +12,6 @@ use Magento\Backend\App\Action;
 
 /**
  * Unlock Customer Controller
- * @since 2.1.0
  */
 class Unlock extends \Magento\Backend\App\Action
 {
@@ -20,7 +19,6 @@ class Unlock extends \Magento\Backend\App\Action
      * Authentication
      *
      * @var AuthenticationInterface
-     * @since 2.1.0
      */
     protected $authentication;
 
@@ -29,7 +27,6 @@ class Unlock extends \Magento\Backend\App\Action
      *
      * @param Action\Context $context
      * @param AuthenticationInterface $authentication
-     * @since 2.1.0
      */
     public function __construct(
         Action\Context $context,
@@ -43,7 +40,6 @@ class Unlock extends \Magento\Backend\App\Action
      * Unlock specified customer
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.1.0
      */
     public function execute()
     {

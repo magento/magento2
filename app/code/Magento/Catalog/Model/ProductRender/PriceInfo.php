@@ -11,14 +11,12 @@ use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface;
 
 /**
  * @inheritdoc
- * @since 2.2.0
  */
 class PriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel implements
     PriceInfoInterface
 {
     /**
      * @return string
-     * @since 2.2.0
      */
     public function getFinalPrice()
     {
@@ -28,7 +26,6 @@ class PriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     /**
      * @param string $finalPrice
      * @return void
-     * @since 2.2.0
      */
     public function setFinalPrice($finalPrice)
     {
@@ -40,7 +37,6 @@ class PriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      * and we can to retrieve final price instead
      *
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getMaxRegularPrice()
     {
@@ -53,7 +49,6 @@ class PriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setMaxRegularPrice($maxRegularPrice)
     {
@@ -65,7 +60,6 @@ class PriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      * and we can to retrieve final price instead
      *
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getMinimalRegularPrice()
     {
@@ -78,7 +72,6 @@ class PriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setMinimalRegularPrice($minRegularPrice)
     {
@@ -87,7 +80,6 @@ class PriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setSpecialPrice($specialPrice)
     {
@@ -96,7 +88,6 @@ class PriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getSpecialPrice()
     {
@@ -105,7 +96,6 @@ class PriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @return string
-     * @since 2.2.0
      */
     public function getMaxPrice()
     {
@@ -115,7 +105,6 @@ class PriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     /**
      * @param string $maxPrice
      * @return void
-     * @since 2.2.0
      */
     public function setMaxPrice($maxPrice)
     {
@@ -124,7 +113,6 @@ class PriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @return string
-     * @since 2.2.0
      */
     public function getMinimalPrice()
     {
@@ -134,7 +122,6 @@ class PriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     /**
      * @param string $minimalPrice
      * @return void
-     * @since 2.2.0
      */
     public function setMinimalPrice($minimalPrice)
     {
@@ -143,7 +130,6 @@ class PriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @return string
-     * @since 2.2.0
      */
     public function getRegularPrice()
     {
@@ -153,7 +139,6 @@ class PriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     /**
      * @param string $regularPrice
      * @return void
-     * @since 2.2.0
      */
     public function setRegularPrice($regularPrice)
     {
@@ -162,7 +147,6 @@ class PriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getFormattedPrices()
     {
@@ -171,7 +155,6 @@ class PriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setFormattedPrices(FormattedPriceInfoInterface $formattedPriceInfo)
     {
@@ -180,7 +163,6 @@ class PriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getExtensionAttributes()
     {
@@ -189,7 +171,6 @@ class PriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterface $extensionAttributes

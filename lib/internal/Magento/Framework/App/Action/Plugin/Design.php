@@ -20,7 +20,6 @@ class Design
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
-     * @since 2.1.0
      */
     protected $messageManager;
 
@@ -44,7 +43,6 @@ class Design
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function beforeDispatch(
         \Magento\Framework\App\ActionInterface $subject,

@@ -39,7 +39,6 @@ class Source implements \Magento\Framework\Data\OptionSourceInterface
 
     /**
      * @var \Magento\Tax\Model\Rate\Provider
-     * @since 2.2.0
      */
     protected $rateProvider;
 

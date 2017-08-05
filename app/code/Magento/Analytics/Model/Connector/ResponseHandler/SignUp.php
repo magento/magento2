@@ -11,26 +11,22 @@ use Magento\Analytics\Model\Connector\Http\ResponseHandlerInterface;
 
 /**
  * Stores access token to MBI that received in body.
- * @since 2.2.0
  */
 class SignUp implements ResponseHandlerInterface
 {
     /**
      * @var AnalyticsToken
-     * @since 2.2.0
      */
     private $analyticsToken;
 
     /**
      * @var ConverterInterface
-     * @since 2.2.0
      */
     private $converter;
 
     /**
      * @param AnalyticsToken $analyticsToken
      * @param ConverterInterface $converter
-     * @since 2.2.0
      */
     public function __construct(
         AnalyticsToken $analyticsToken,
@@ -42,7 +38,6 @@ class SignUp implements ResponseHandlerInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function handleResponse(array $body)
     {

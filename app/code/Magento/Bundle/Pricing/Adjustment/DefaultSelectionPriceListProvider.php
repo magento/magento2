@@ -13,25 +13,21 @@ use Magento\Bundle\Model\Product\Price;
 
 /**
  * Provide lightweight implementation which uses price index
- * @since 2.2.0
  */
 class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInterface
 {
     /**
      * @var BundleSelectionFactory
-     * @since 2.2.0
      */
     private $selectionFactory;
 
     /**
      * @var \Magento\Bundle\Pricing\Price\BundleSelectionPrice[]
-     * @since 2.2.0
      */
     private $priceList;
 
     /**
      * @param BundleSelectionFactory $bundleSelectionFactory
-     * @since 2.2.0
      */
     public function __construct(BundleSelectionFactory $bundleSelectionFactory)
     {
@@ -40,7 +36,6 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getPriceList(Product $bundleProduct, $searchMin, $useRegularPrice)
     {
@@ -91,7 +86,6 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
      * @param Product $bundleProduct
      * @param bool $searchMin
      * @return bool
-     * @since 2.2.0
      */
     private function isShouldFindMinOption(Product $bundleProduct, $searchMin)
     {
@@ -114,7 +108,6 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
      * @param bool $searchMin
      * @param bool $useRegularPrice
      * @return void
-     * @since 2.2.0
      */
     private function addMiniMaxPriceList(Product $bundleProduct, $selectionsCollection, $searchMin, $useRegularPrice)
     {
@@ -142,7 +135,6 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
      * @param \Magento\Bundle\Model\ResourceModel\Selection\Collection $selectionsCollection
      * @param bool $useRegularPrice
      * @return void
-     * @since 2.2.0
      */
     private function addMaximumMultiSelectionPriceList(Product $bundleProduct, $selectionsCollection, $useRegularPrice)
     {
@@ -162,7 +154,6 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
 
     /**
      * @return void
-     * @since 2.2.0
      */
     private function processMinPriceForNonRequiredOptions()
     {
@@ -184,7 +175,6 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
      * @param Option $option
      * @param bool $canSkipRequiredOption
      * @return bool
-     * @since 2.2.0
      */
     private function canSkipOption($option, $canSkipRequiredOption)
     {
@@ -196,7 +186,6 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
      *
      * @param Product $bundleProduct
      * @return bool
-     * @since 2.2.0
      */
     private function hasRequiredOption($bundleProduct)
     {
@@ -211,7 +200,6 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
      *
      * @param Product $saleableItem
      * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
-     * @since 2.2.0
      */
     private function getBundleOptions(Product $saleableItem)
     {

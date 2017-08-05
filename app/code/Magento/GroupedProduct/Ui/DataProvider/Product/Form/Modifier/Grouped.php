@@ -25,7 +25,6 @@ use Magento\Framework\Locale\CurrencyInterface;
 /**
  * Data provider for Grouped products
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
  */
 class Grouped extends AbstractModifier
 {
@@ -37,55 +36,46 @@ class Grouped extends AbstractModifier
 
     /**
      * @var LocatorInterface
-     * @since 2.1.0
      */
     protected $locator;
 
     /**
      * @var UrlInterface
-     * @since 2.1.0
      */
     protected $urlBuilder;
 
     /**
      * @var ProductLinkRepositoryInterface
-     * @since 2.1.0
      */
     protected $productLinkRepository;
 
     /**
      * @var ProductRepositoryInterface
-     * @since 2.1.0
      */
     protected $productRepository;
 
     /**
      * @var Status
-     * @since 2.1.0
      */
     protected $status;
 
     /**
      * @var AttributeSetRepositoryInterface
-     * @since 2.1.0
      */
     protected $attributeSetRepository;
 
     /**
      * @var ImageHelper
-     * @since 2.1.0
      */
     protected $imageHelper;
 
     /**
      * @var CurrencyInterface
-     * @since 2.1.0
      */
     protected $localeCurrency;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $uiComponentsConfig = [
         'button_set' => 'grouped_products_button_set',
@@ -96,19 +86,16 @@ class Grouped extends AbstractModifier
 
     /**
      * @var string
-     * @since 2.1.0
      */
     private static $codeQuantityAndStockStatus = 'quantity_and_stock_status';
 
     /**
      * @var string
-     * @since 2.1.0
      */
     private static $codeQtyContainer = 'quantity_and_stock_status_qty';
 
     /**
      * @var string
-     * @since 2.1.0
      */
     private static $codeQty = 'qty';
 
@@ -122,7 +109,6 @@ class Grouped extends AbstractModifier
      * @param AttributeSetRepositoryInterface $attributeSetRepository
      * @param CurrencyInterface $localeCurrency
      * @param array $uiComponentsConfig
-     * @since 2.1.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -148,7 +134,6 @@ class Grouped extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -177,7 +162,6 @@ class Grouped extends AbstractModifier
      * @param ProductInterface $linkedProduct
      * @param ProductLinkInterface $linkItem
      * @return array
-     * @since 2.1.0
      */
     protected function fillData(ProductInterface $linkedProduct, ProductLinkInterface $linkItem)
     {
@@ -202,7 +186,6 @@ class Grouped extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -240,7 +223,6 @@ class Grouped extends AbstractModifier
      *
      * @param array $meta
      * @return array
-     * @since 2.1.0
      */
     protected function modifyQtyAndStockStatus(array $meta)
     {
@@ -289,7 +271,6 @@ class Grouped extends AbstractModifier
      * Retrieve child meta configuration
      *
      * @return array
-     * @since 2.1.0
      */
     protected function getChildren()
     {
@@ -305,7 +286,6 @@ class Grouped extends AbstractModifier
      * Returns Modal configuration
      *
      * @return array
-     * @since 2.1.0
      */
     protected function getModal()
     {
@@ -351,7 +331,6 @@ class Grouped extends AbstractModifier
      * Returns Listing configuration
      *
      * @return array
-     * @since 2.1.0
      */
     protected function getListing()
     {
@@ -399,7 +378,6 @@ class Grouped extends AbstractModifier
      * Returns Buttons Set configuration
      *
      * @return array
-     * @since 2.1.0
      */
     protected function getButtonSet()
     {
@@ -464,7 +442,6 @@ class Grouped extends AbstractModifier
      * Returns dynamic rows configuration
      *
      * @return array
-     * @since 2.1.0
      */
     protected function getGrid()
     {
@@ -508,7 +485,6 @@ class Grouped extends AbstractModifier
      * Returns Dynamic rows records configuration
      *
      * @return array
-     * @since 2.1.0
      */
     protected function getRows()
     {
@@ -534,7 +510,6 @@ class Grouped extends AbstractModifier
      * Fill meta columns
      *
      * @return array
-     * @since 2.1.0
      */
     protected function fillMeta()
     {
@@ -619,7 +594,6 @@ class Grouped extends AbstractModifier
      * @param Phrase $label
      * @param int $sortOrder
      * @return array
-     * @since 2.1.0
      */
     protected function getTextColumn($dataScope, $fit, Phrase $label, $sortOrder)
     {

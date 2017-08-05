@@ -13,19 +13,16 @@ use Magento\Framework\DB\AggregatedFieldDataConverter;
 
 /**
  * Convert serialized widget data for categories and products tables to JSON
- * @since 2.2.0
  */
 class UpgradeWidgetData
 {
     /**
      * @var EavSetup
-     * @since 2.2.0
      */
     private $eavSetup;
 
     /**
      * @var QueryModifierFactory
-     * @since 2.2.0
      */
     private $queryModifierFactory;
 
@@ -35,7 +32,6 @@ class UpgradeWidgetData
      * @param EavSetup $eavSetup
      * @param QueryModifierFactory $queryModifierFactory
      * @param AggregatedFieldDataConverter $aggregatedFieldDataConverter
-     * @since 2.2.0
      */
     public function __construct(
         EavSetup $eavSetup,
@@ -52,7 +48,6 @@ class UpgradeWidgetData
      *
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.2.0
      */
     public function upgrade()
     {

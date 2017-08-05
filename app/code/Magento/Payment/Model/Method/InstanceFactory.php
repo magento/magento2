@@ -9,19 +9,16 @@ use Magento\Payment\Api\Data\PaymentMethodInterface;
 
 /**
  * Payment method instance factory.
- * @since 2.1.3
  */
 class InstanceFactory
 {
     /**
      * @var \Magento\Payment\Helper\Data
-     * @since 2.1.3
      */
     private $helper;
 
     /**
      * @param \Magento\Payment\Helper\Data $helper
-     * @since 2.1.3
      */
     public function __construct(
         \Magento\Payment\Helper\Data $helper
@@ -34,7 +31,6 @@ class InstanceFactory
      *
      * @param PaymentMethodInterface $paymentMethod
      * @return \Magento\Payment\Model\MethodInterface
-     * @since 2.1.3
      */
     public function create(PaymentMethodInterface $paymentMethod)
     {

@@ -32,7 +32,6 @@ class StoreCheck
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws \Magento\Framework\Exception\State\InitException
-     * @since 2.2.0
      */
     public function beforeDispatch(
         \Magento\Framework\App\Action\AbstractAction $subject,

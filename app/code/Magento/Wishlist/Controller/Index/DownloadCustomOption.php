@@ -26,7 +26,6 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex
      * Json Serializer Instance
      *
      * @var Json
-     * @since 2.2.0
      */
     private $json;
 

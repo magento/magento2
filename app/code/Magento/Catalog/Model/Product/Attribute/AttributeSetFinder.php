@@ -14,19 +14,16 @@ use Magento\Framework\DB\Select;
 /**
  * Class \Magento\Catalog\Model\Product\Attribute\AttributeSetFinder
  *
- * @since 2.1.0
  */
 class AttributeSetFinder implements AttributeSetFinderInterface
 {
     /**
      * @var CollectionFactory
-     * @since 2.1.0
      */
     private $productCollectionFactory;
 
     /**
      * @param CollectionFactory $productCollectionFactory
-     * @since 2.1.0
      */
     public function __construct(CollectionFactory $productCollectionFactory)
     {
@@ -35,7 +32,6 @@ class AttributeSetFinder implements AttributeSetFinderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function findAttributeSetIdsByProductIds(array $productIds)
     {

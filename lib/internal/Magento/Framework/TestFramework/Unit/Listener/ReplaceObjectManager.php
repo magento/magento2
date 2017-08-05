@@ -10,7 +10,6 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * The event listener which instantiates ObjectManager before test run
- * @since 2.2.0
  */
 class ReplaceObjectManager extends \PHPUnit_Framework_BaseTestListener
 {
@@ -25,7 +24,6 @@ class ReplaceObjectManager extends \PHPUnit_Framework_BaseTestListener
      * @param \PHPUnit_Framework_Test $test
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function startTest(\PHPUnit_Framework_Test $test)
     {

@@ -18,13 +18,11 @@ class MutableScopeConfig extends Config implements MutableScopeConfigInterface
 {
     /**
      * @var array
-     * @since 2.2.0
      */
     private $data;
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getValue(
         $path = null,
@@ -58,7 +56,6 @@ class MutableScopeConfig extends Config implements MutableScopeConfigInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function clean()
     {

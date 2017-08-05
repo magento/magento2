@@ -11,7 +11,7 @@ use Magento\Framework\DataObject;
  * Backend grid item renderer
  *
  * @api
- * @deprecated 2.2.0 in favour of UI component implementation
+ * @deprecated 100.2.0 in favour of UI component implementation
  */
 class Text extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -41,7 +41,6 @@ class Text extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      *
      * @param DataObject $row
      * @return string
-     * @since 2.2.0
      */
     private function getSimpleValue(DataObject $row)
     {
@@ -58,7 +57,6 @@ class Text extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      *
      * @param DataObject $row
      * @return string
-     * @since 2.2.0
      */
     private function getFormattedValue(DataObject $row)
     {

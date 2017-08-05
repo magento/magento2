@@ -148,7 +148,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Retrieve saved resource
      *
      * @return array|bool
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function retrieveFormResources()
     {
@@ -188,7 +188,6 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Get lit of all ACL resources declared in the system.
      *
      * @return array
-     * @since 2.2.0
      */
     private function getAclResources()
     {

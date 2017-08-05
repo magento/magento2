@@ -11,26 +11,22 @@ use Magento\Framework\EntityManager\Operation\ExtensionPool;
 
 /**
  * Class DeleteExtensions
- * @since 2.1.0
  */
 class DeleteExtensions
 {
     /**
      * @var TypeResolver
-     * @since 2.1.0
      */
     private $typeResolver;
 
     /**
      * @var ExtensionPool
-     * @since 2.1.0
      */
     private $extensionPool;
 
     /**
      * @param TypeResolver $typeResolver
      * @param ExtensionPool $extensionPool
-     * @since 2.1.0
      */
     public function __construct(
         TypeResolver $typeResolver,
@@ -44,7 +40,6 @@ class DeleteExtensions
      * @param object $entity
      * @param array $arguments
      * @return object
-     * @since 2.1.0
      */
     public function execute($entity, $arguments = [])
     {

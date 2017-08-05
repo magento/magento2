@@ -23,7 +23,6 @@ class ReturnUrl extends \Magento\Paypal\Controller\Payflow\ReturnUrl
     /**
      * Payment method code
      * @var string
-     * @since 2.0.1
      */
     protected $allowedPaymentMethodCodes = [
         Config::METHOD_PAYFLOWADVANCED

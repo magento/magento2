@@ -26,14 +26,12 @@ class InstallData implements InstallDataInterface
 
     /**
      * @var DefaultCategory
-     * @since 2.1.0
      */
     private $defaultCategory;
 
     /**
-     * @deprecated 2.1.0
+     * @deprecated 101.0.0
      * @return DefaultCategory
-     * @since 2.1.0
      */
     private function getDefaultCategory()
     {

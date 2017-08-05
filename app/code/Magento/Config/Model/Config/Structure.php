@@ -89,7 +89,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      * List of config sections
      *
      * @var array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $sectionList;
 
@@ -108,7 +108,6 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      * ```
      *
      * @var array
-     * @since 2.2.0
      */
     private $mappedPaths;
 
@@ -153,7 +152,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getSectionList()
     {
@@ -185,7 +184,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      *
      * @param string $path The configuration path
      * @return \Magento\Config\Model\Config\Structure\ElementInterface|null
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getElementByConfigPath($path)
     {
@@ -365,7 +364,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      * ```
      *
      * @return array An array of config path to config structure path map
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getFieldPaths()
     {
@@ -383,7 +382,6 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      *
      * @param array $elements The elements to be parsed
      * @return array An array of config path to config structure path map
-     * @since 2.2.0
      */
     private function getFieldsRecursively(array $elements = [])
     {

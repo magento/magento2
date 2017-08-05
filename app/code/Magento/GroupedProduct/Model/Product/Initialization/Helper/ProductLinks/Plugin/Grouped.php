@@ -22,19 +22,16 @@ class Grouped
 
     /**
      * @var ProductLinkInterfaceFactory
-     * @since 2.1.0
      */
     protected $productLinkFactory;
 
     /**
      * @var ProductRepositoryInterface
-     * @since 2.1.0
      */
     protected $productRepository;
 
     /**
      * @var ProductLinkExtensionFactory
-     * @since 2.1.0
      */
     protected $productLinkExtensionFactory;
 
@@ -44,7 +41,6 @@ class Grouped
      * @param ProductLinkInterfaceFactory $productLinkFactory
      * @param ProductRepositoryInterface $productRepository
      * @param ProductLinkExtensionFactory $productLinkExtensionFactory
-     * @since 2.1.0
      */
     public function __construct(
         ProductLinkInterfaceFactory $productLinkFactory,
@@ -133,7 +129,6 @@ class Grouped
      * @param array $existingLinks
      * @param array $newLinks
      * @return array
-     * @since 2.1.0
      */
     private function removeUnExistingLinks($existingLinks, $newLinks)
     {

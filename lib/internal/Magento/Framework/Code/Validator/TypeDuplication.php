@@ -29,7 +29,6 @@ class TypeDuplication implements ValidatorInterface
 
     /**
      * @var \Magento\Framework\Code\Reader\ScalarTypesProvider
-     * @since 2.2.0
      */
     private $scalarTypesProvider;
 

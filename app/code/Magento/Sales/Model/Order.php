@@ -184,7 +184,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @deprecated 2.2.0 Remove unused dependency.
+     * @deprecated 100.2.0 Remove unused dependency.
      */
     protected $productRepository;
 

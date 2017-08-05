@@ -69,7 +69,7 @@ class Document extends AbstractSimpleObject implements DocumentInterface, \Itera
      * Implementation of \IteratorAggregate::getIterator()
      *
      * @return \ArrayIterator
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getIterator()
     {

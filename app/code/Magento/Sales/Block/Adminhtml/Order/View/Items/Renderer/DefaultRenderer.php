@@ -263,7 +263,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      * @param null $field
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getColumnHtml(\Magento\Framework\DataObject $item, $column, $field = null)
     {
@@ -301,7 +301,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
 
     /**
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getColumns()
     {

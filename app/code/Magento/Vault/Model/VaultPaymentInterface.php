@@ -11,6 +11,7 @@ use Magento\Payment\Model\MethodInterface;
  * Interface VaultPaymentInterface
  * @api
  * @since 2.1.0
+ * @since 100.1.0
  */
 interface VaultPaymentInterface extends MethodInterface
 {
@@ -25,6 +26,7 @@ interface VaultPaymentInterface extends MethodInterface
     /**
      * @return string|null
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function getProviderCode();
 }

@@ -41,25 +41,25 @@ class Helper
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
-     * @deprecated 2.1.0
+     * @deprecated 101.0.0
      */
     protected $dateFilter;
 
     /**
      * @var CustomOptionFactory
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $customOptionFactory;
 
     /**
      * @var ProductLinkFactory
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $productLinkFactory;
 
     /**
      * @var ProductRepository
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $productRepository;
 
@@ -70,19 +70,16 @@ class Helper
 
     /**
      * @var LinkResolver
-     * @since 2.1.0
      */
     private $linkResolver;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\DateTime
-     * @since 2.1.0
      */
     private $dateTimeFilter;
 
     /**
      * @var \Magento\Catalog\Model\Product\LinkTypeProvider
-     * @since 2.2.0
      */
     private $linkTypeProvider;
 
@@ -138,7 +135,7 @@ class Helper
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function initializeFromData(\Magento\Catalog\Model\Product $product, array $productData)
     {
@@ -238,7 +235,7 @@ class Helper
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function setProductLinks(\Magento\Catalog\Model\Product $product)
     {
@@ -287,7 +284,7 @@ class Helper
      * @param array $productData
      * @return array
      * @todo Remove this method
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function normalize(array $productData)
     {
@@ -350,7 +347,6 @@ class Helper
      * @param array $option
      * @param array $overwriteOptions
      * @return array
-     * @since 2.2.0
      */
     private function overwriteValue($optionId, $option, $overwriteOptions)
     {
@@ -370,8 +366,7 @@ class Helper
 
     /**
      * @return LinkResolver
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 101.0.0
      */
     private function getLinkResolver()
     {
@@ -383,8 +378,7 @@ class Helper
 
     /**
      * @return \Magento\Framework\Stdlib\DateTime\Filter\DateTime
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 101.0.0
      */
     private function getDateTimeFilter()
     {
@@ -402,7 +396,6 @@ class Helper
      *
      * @param array $websiteIds
      * @return array
-     * @since 2.2.0
      */
     private function filterWebsiteIds($websiteIds)
     {
@@ -421,7 +414,6 @@ class Helper
      * @param Product $product
      * @param array $productOptions
      * @return Product
-     * @since 2.2.0
      */
     private function fillProductOptions(Product $product, array $productOptions)
     {

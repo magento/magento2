@@ -21,13 +21,11 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Activates subscription to Magento BI Advanced Reporting.
- * @since 2.2.0
  */
 class Activate extends Action
 {
     /**
      * @var LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
@@ -35,7 +33,6 @@ class Activate extends Action
      * Resource for managing last notification time about subscription to Magento BI.
      *
      * @var NotificationTime
-     * @since 2.2.0
      */
     private $notificationTime;
 
@@ -43,19 +40,16 @@ class Activate extends Action
      * Agreement on subscription value into request.
      *
      * @var string
-     * @since 2.2.0
      */
     private $subscriptionApprovedField = 'analytics_subscription_checkbox';
 
     /**
      * @var AbstractDb
-     * @since 2.2.0
      */
     private $configValueResource;
 
     /**
      * @var PreparedValueFactory
-     * @since 2.2.0
      */
     private $preparedValueFactory;
 
@@ -67,7 +61,6 @@ class Activate extends Action
      * @param NotificationTime $notificationTime
      * @param AbstractDb $configValueResource
      * @param PreparedValueFactory $preparedValueFactory
-     * @since 2.2.0
      */
     public function __construct(
         Context $context,
@@ -87,7 +80,6 @@ class Activate extends Action
      * Check admin permissions for this controller
      *
      * @return boolean
-     * @since 2.2.0
      */
     protected function _isAllowed()
     {
@@ -98,7 +90,6 @@ class Activate extends Action
      * Activate subscription to Magento BI via AJAX.
      *
      * @return Json
-     * @since 2.2.0
      */
     public function execute()
     {

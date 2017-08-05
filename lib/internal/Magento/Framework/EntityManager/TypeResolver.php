@@ -7,19 +7,16 @@ namespace Magento\Framework\EntityManager;
 
 /**
  * Class TypeResolver
- * @since 2.1.0
  */
 class TypeResolver
 {
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $typeMapping = [
         \Magento\SalesRule\Model\Rule::class => \Magento\SalesRule\Api\Data\RuleInterface::class,
@@ -30,7 +27,6 @@ class TypeResolver
     /**
      * TypeResolver constructor.
      * @param MetadataPool $metadataPool
-     * @since 2.1.0
      */
     public function __construct(MetadataPool $metadataPool)
     {
@@ -41,7 +37,6 @@ class TypeResolver
      * @param object $type
      * @return string
      * @throws \Exception
-     * @since 2.1.0
      */
     public function resolve($type)
     {

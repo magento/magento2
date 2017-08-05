@@ -10,19 +10,16 @@ use Magento\Framework\FlagManager;
 
 /**
  * Manage saving and loading FileInfo object.
- * @since 2.2.0
  */
 class FileInfoManager
 {
     /**
      * @var FlagManager
-     * @since 2.2.0
      */
     private $flagManager;
 
     /**
      * @var FileInfoFactory
-     * @since 2.2.0
      */
     private $fileInfoFactory;
 
@@ -30,7 +27,6 @@ class FileInfoManager
      * Flag code for a stored FileInfo object.
      *
      * @var string
-     * @since 2.2.0
      */
     private $flagCode = 'analytics_file_info';
 
@@ -38,7 +34,6 @@ class FileInfoManager
      * Parameters which have to be saved into encoded form.
      *
      * @var array
-     * @since 2.2.0
      */
     private $encodedParameters = [
         'initializationVector'
@@ -47,7 +42,6 @@ class FileInfoManager
     /**
      * @param FlagManager $flagManager
      * @param FileInfoFactory $fileInfoFactory
-     * @since 2.2.0
      */
     public function __construct(
         FlagManager $flagManager,
@@ -63,7 +57,6 @@ class FileInfoManager
      * @param FileInfo $fileInfo
      * @return bool
      * @throws LocalizedException
-     * @since 2.2.0
      */
     public function save(FileInfo $fileInfo)
     {
@@ -91,7 +84,6 @@ class FileInfoManager
      * Load FileInfo object.
      *
      * @return FileInfo
-     * @since 2.2.0
      */
     public function load()
     {
@@ -112,7 +104,6 @@ class FileInfoManager
      *
      * @param string $value
      * @return string
-     * @since 2.2.0
      */
     private function encodeValue($value)
     {
@@ -124,7 +115,6 @@ class FileInfoManager
      *
      * @param string $value
      * @return string
-     * @since 2.2.0
      */
     private function decodeValue($value)
     {

@@ -44,7 +44,6 @@ class XmlCatalogGenerateCommand extends Command
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadFactory
-     * @since 2.1.0
      */
     private $readFactory;
 

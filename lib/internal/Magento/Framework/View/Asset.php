@@ -10,49 +10,41 @@ use Magento\Framework\View\Asset\Repository;
 /**
  * Class \Magento\Framework\View\Asset
  *
- * @since 2.2.0
  */
 class Asset
 {
     /**
      * @var string
-     * @since 2.2.0
      */
     private $fileName;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $sourcePath;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     protected $module;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     protected $area;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     protected $theme;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     protected $locale;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $extension;
 
@@ -64,7 +56,6 @@ class Asset
      * @param string|null $theme
      * @param string|null $locale
      * @param string|null $module
-     * @since 2.2.0
      */
     public function __construct(
         $fileName,
@@ -84,7 +75,6 @@ class Asset
 
     /**
      * @return string
-     * @since 2.2.0
      */
     public function getFileName()
     {
@@ -93,7 +83,6 @@ class Asset
 
     /**
      * @return string
-     * @since 2.2.0
      */
     public function getFileId()
     {
@@ -105,7 +94,6 @@ class Asset
 
     /**
      * @return string
-     * @since 2.2.0
      */
     public function getFilePath()
     {
@@ -117,7 +105,6 @@ class Asset
 
     /**
      * @return string
-     * @since 2.2.0
      */
     public function getSourcePath()
     {
@@ -126,7 +113,6 @@ class Asset
 
     /**
      * @return string
-     * @since 2.2.0
      */
     public function getModule()
     {
@@ -135,7 +121,6 @@ class Asset
 
     /**
      * @return string
-     * @since 2.2.0
      */
     public function getArea()
     {
@@ -144,7 +129,6 @@ class Asset
 
     /**
      * @return string
-     * @since 2.2.0
      */
     public function getTheme()
     {
@@ -153,7 +137,6 @@ class Asset
 
     /**
      * @return string
-     * @since 2.2.0
      */
     public function getLocale()
     {
@@ -162,7 +145,6 @@ class Asset
 
     /**
      * @return string
-     * @since 2.2.0
      */
     public function getExtension()
     {

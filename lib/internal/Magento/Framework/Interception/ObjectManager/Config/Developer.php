@@ -20,7 +20,6 @@ class Developer extends \Magento\Framework\ObjectManager\Config\Config implement
 {
     /**
      * @var InterceptableValidator
-     * @since 2.0.1
      */
     private $interceptableValidator;
 
@@ -28,7 +27,6 @@ class Developer extends \Magento\Framework\ObjectManager\Config\Config implement
      * @param RelationsInterface $relations
      * @param DefinitionInterface $definitions
      * @param InterceptableValidator $interceptableValidator
-     * @since 2.0.1
      */
     public function __construct(
         RelationsInterface $relations = null,

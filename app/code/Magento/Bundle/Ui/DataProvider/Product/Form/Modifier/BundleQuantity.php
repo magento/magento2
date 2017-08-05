@@ -9,7 +9,6 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 
 /**
  * Disable Quantity field by default
- * @since 2.1.0
  */
 class BundleQuantity extends AbstractModifier
 {
@@ -19,7 +18,6 @@ class BundleQuantity extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -68,7 +66,6 @@ class BundleQuantity extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyData(array $data)
     {

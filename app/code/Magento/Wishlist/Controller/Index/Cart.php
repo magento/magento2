@@ -61,7 +61,6 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
 
     /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator
-     * @since 2.1.0
      */
     protected $formKeyValidator;
 

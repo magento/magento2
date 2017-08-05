@@ -11,19 +11,16 @@ use Magento\Framework\App\ResourceConnection;
 
 /**
  * Class DeleteRow
- * @since 2.1.0
  */
 class DeleteRow
 {
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
     /**
      * @var ResourceConnection
-     * @since 2.1.0
      */
     private $resourceConnection;
 
@@ -32,7 +29,6 @@ class DeleteRow
      *
      * @param MetadataPool $metadataPool
      * @param ResourceConnection $resourceConnection
-     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -47,7 +43,6 @@ class DeleteRow
      * @param array $data
      * @return int
      * @throws \Exception
-     * @since 2.1.0
      */
     public function execute($entityType, $data)
     {

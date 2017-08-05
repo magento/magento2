@@ -14,7 +14,6 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
 {
     /**
      * @var \Magento\SalesRule\Model\RuleFactory
-     * @since 2.1.0
      */
     private $ruleFactory;
 
@@ -26,7 +25,6 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param array $data
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -41,14 +39,12 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * @var string
-     * @since 2.1.0
      */
     protected $_nameInLayout = 'store_view_labels';
 
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.1.0
      */
     public function getTabClass()
     {
@@ -58,7 +54,6 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.1.0
      */
     public function getTabUrl()
     {
@@ -68,7 +63,6 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.1.0
      */
     public function isAjaxLoaded()
     {

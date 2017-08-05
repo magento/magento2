@@ -15,13 +15,11 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\Reporting;
 /**
  * Class \Magento\Cms\Ui\Component\DataProvider
  *
- * @since 2.1.0
  */
 class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
 {
     /**
      * @var AuthorizationInterface
-     * @since 2.2.0
      */
     private $authorization;
 
@@ -35,7 +33,6 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
      * @param FilterBuilder $filterBuilder
      * @param array $meta
      * @param array $data
-     * @since 2.1.0
      */
     public function __construct(
         $name,
@@ -64,9 +61,8 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
     }
 
     /**
-     * @deprecated 2.2.0
+     * @deprecated 101.1.0
      * @return AuthorizationInterface|mixed
-     * @since 2.2.0
      */
     private function getAuthorizationInstance()
     {
@@ -80,7 +76,6 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
      * Prepares Meta
      *
      * @return array
-     * @since 2.2.0
      */
     public function prepareMetadata()
     {

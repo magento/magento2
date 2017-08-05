@@ -36,7 +36,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      *
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.2.0
      */
     private function addFailuresToAdminUserTable(SchemaSetupInterface $setup)
     {
@@ -75,7 +74,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      *
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.2.0
      */
     private function createAdminPasswordsTable(SchemaSetupInterface $setup)
     {

@@ -17,37 +17,31 @@ use Magento\Tax\Model\Calculation as TaxCalculation;
 /**
  * Class \Magento\Catalog\Block\Category\Plugin\PriceBoxTags
  *
- * @since 2.1.0
  */
 class PriceBoxTags
 {
     /**
      * @var TimezoneInterface
-     * @since 2.1.0
      */
     protected $dateTime;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.1.0
      */
     protected $customerSession;
 
     /**
      * @var PriceCurrencyInterface
-     * @since 2.1.0
      */
     private $priceCurrency;
     
     /**
      * @var ScopeResolverInterface
-     * @since 2.1.0
      */
     private $scopeResolver;
 
     /**
      * @var TaxCalculation
-     * @since 2.1.0
      */
     private $taxCalculation;
 
@@ -57,7 +51,6 @@ class PriceBoxTags
      * @param TimezoneInterface $dateTime
      * @param ScopeResolverInterface $scopeResolver
      * @param Session $customerSession
-     * @since 2.1.0
      */
     public function __construct(
         PriceCurrencyInterface $priceCurrency,
@@ -75,7 +68,6 @@ class PriceBoxTags
      * @param PriceBox $subject
      * @param string $result
      * @return string
-     * @since 2.1.0
      */
     public function afterGetCacheKey(PriceBox $subject, $result)
     {
@@ -95,7 +87,6 @@ class PriceBoxTags
     /**
      * @param PriceBox $subject
      * @return string
-     * @since 2.1.0
      */
     private function getTaxRateIds(PriceBox $subject)
     {
@@ -134,8 +125,7 @@ class PriceBoxTags
      *
      * @return \Magento\Tax\Model\Calculation
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 101.0.0
      */
     private function getTaxCalculation()
     {

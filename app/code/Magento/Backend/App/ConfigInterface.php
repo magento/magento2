@@ -27,7 +27,7 @@ interface ConfigInterface
     /**
      * Set config value
      *
-     * @deprecated 2.1.3
+     * @deprecated 100.1.2
      * @param string $path
      * @param mixed $value
      * @return void

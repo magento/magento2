@@ -15,19 +15,16 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
  *
  * Creates connection instance for export according to existing one
  * This connection does not use buffered statement, also this connection is not persistent
- * @since 2.2.0
  */
 class ConnectionFactory
 {
     /**
      * @var ResourceConnection
-     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var ObjectManagerInterface
-     * @since 2.2.0
      */
     private $objectManager;
 
@@ -36,7 +33,6 @@ class ConnectionFactory
      *
      * @param ResourceConnection $resourceConnection
      * @param ObjectManagerInterface $objectManager
-     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -51,7 +47,6 @@ class ConnectionFactory
      *
      * @param string $connectionName
      * @return AdapterInterface
-     * @since 2.2.0
      */
     public function getConnection($connectionName)
     {

@@ -98,7 +98,6 @@ class ContextPlugin
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.2.0
      */
     public function beforeDispatch(
         \Magento\Framework\App\ActionInterface $subject,

@@ -14,19 +14,16 @@ use Magento\CatalogInventory\Model\Stock\Item as StockItem;
 /**
  * Class \Magento\CatalogInventory\Setup\UpgradeSchema
  *
- * @since 2.2.0
  */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
      * @var string
-     * @since 2.2.0
      */
     private $productCompositeKeyVersion = '2.2.0';
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -47,7 +44,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
     /**
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.2.0
      */
     private function upgradeProductCompositeKey(SchemaSetupInterface $setup)
     {
@@ -89,7 +85,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * @param SchemaSetupInterface $setup
      * @param array                $keys
      * @return void
-     * @since 2.2.0
      */
     private function dropForeignKeys(SchemaSetupInterface $setup, array $keys)
     {
@@ -102,7 +97,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * @param SchemaSetupInterface $setup
      * @param array                $keys
      * @return void
-     * @since 2.2.0
      */
     private function createForeignKeys(SchemaSetupInterface $setup, array $keys)
     {
@@ -122,7 +116,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * @param SchemaSetupInterface $setup
      * @param array                $compositeKeys
      * @return array
-     * @since 2.2.0
      */
     private function getForeignKeys(SchemaSetupInterface $setup, array $compositeKeys)
     {
@@ -142,7 +135,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      *
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.2.0
      */
     private function addCatalogInventoryStockStatusIndexOnStockStatus(SchemaSetupInterface $setup)
     {
@@ -166,7 +158,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * @param string $existingTable
      * @param string $replicaTable
      * @return void
-     * @since 2.2.0
      */
     private function addReplicaTable(SchemaSetupInterface $setup, $existingTable, $replicaTable)
     {

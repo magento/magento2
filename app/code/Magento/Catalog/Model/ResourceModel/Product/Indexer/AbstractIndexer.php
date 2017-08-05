@@ -25,7 +25,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $metadataPool;
 
@@ -234,7 +234,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getMetadataPool()
     {

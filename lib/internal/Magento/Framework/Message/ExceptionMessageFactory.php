@@ -11,19 +11,16 @@ use Magento\Framework\Exception\RuntimeException;
 /**
  * Class \Magento\Framework\Message\ExceptionMessageFactory
  *
- * @since 2.2.0
  */
 class ExceptionMessageFactory implements ExceptionMessageFactoryInterface
 {
     /**
      * @var \Magento\Framework\Message\Factory
-     * @since 2.2.0
      */
     private $messageFactory;
 
     /**
      * @param Factory $messageFactory
-     * @since 2.2.0
      */
     public function __construct(Factory $messageFactory)
     {
@@ -32,7 +29,6 @@ class ExceptionMessageFactory implements ExceptionMessageFactoryInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function createMessage(\Exception $exception, $type = MessageInterface::TYPE_ERROR)
     {

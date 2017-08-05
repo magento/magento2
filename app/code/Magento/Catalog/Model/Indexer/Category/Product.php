@@ -36,7 +36,7 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
 
     /**
      * @var \Magento\Framework\Indexer\CacheContext
-     * @since 2.0.11
+     * @since 100.0.11
      */
     protected $cacheContext;
 
@@ -72,7 +72,7 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
      *
      * @param int[] $ids
      * @return void
-     * @since 2.0.11
+     * @since 100.0.11
      */
     protected function registerEntities($ids)
     {
@@ -94,7 +94,7 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
      * Add tags to cache context
      *
      * @return void
-     * @since 2.0.11
+     * @since 100.0.11
      */
     protected function registerTags()
     {
@@ -148,8 +148,8 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
      * Get cache context
      *
      * @return \Magento\Framework\Indexer\CacheContext
-     * @deprecated 2.0.11
-     * @since 2.0.11
+     * @deprecated 100.0.11
+     * @since 100.0.11
      */
     protected function getCacheContext()
     {

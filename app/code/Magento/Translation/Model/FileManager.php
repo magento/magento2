@@ -99,7 +99,6 @@ class FileManager
     /**
      * @param string $content
      * @return void
-     * @since 2.1.0
      */
     public function updateTranslationFileContent($content)
     {

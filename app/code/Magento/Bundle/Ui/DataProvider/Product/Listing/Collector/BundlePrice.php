@@ -19,7 +19,6 @@ use Magento\Catalog\Model\ProductRender\FormattedPriceInfoBuilder;
  *
  * This information can be used on front in order to render product list or product view
  * Price is collected always with VAT and fixed taxes
- * @since 2.2.0
  */
 class BundlePrice implements ProductRenderCollectorInterface
 {
@@ -30,25 +29,21 @@ class BundlePrice implements ProductRenderCollectorInterface
 
     /**
      * @var PriceCurrencyInterface
-     * @since 2.2.0
      */
     private $priceCurrency;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $excludeAdjustments;
 
     /**
      * @var PriceInfoInterfaceFactory
-     * @since 2.2.0
      */
     private $priceInfoFactory;
 
     /**
      * @var FormattedPriceInfoBuilder
-     * @since 2.2.0
      */
     private $formattedPriceInfoBuilder;
 
@@ -58,7 +53,6 @@ class BundlePrice implements ProductRenderCollectorInterface
      * @param PriceInfoInterfaceFactory $priceInfoFactory
      * @param FormattedPriceInfoBuilder $formattedPriceInfoBuilder
      * @param array $excludeAdjustments
-     * @since 2.2.0
      */
     public function __construct(
         PriceCurrencyInterface $priceCurrency,
@@ -74,7 +68,6 @@ class BundlePrice implements ProductRenderCollectorInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function collect(ProductInterface $product, ProductRenderInterface $productRender)
     {

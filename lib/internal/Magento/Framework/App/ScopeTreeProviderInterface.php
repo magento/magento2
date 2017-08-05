@@ -8,7 +8,6 @@ namespace Magento\Framework\App;
 /**
  * Interface \Magento\Framework\App\ScopeTreeProviderInterface
  *
- * @since 2.1.0
  */
 interface ScopeTreeProviderInterface
 {
@@ -30,7 +29,6 @@ interface ScopeTreeProviderInterface
      * ]
      *
      * @return array
-     * @since 2.1.0
      */
     public function get();
 }

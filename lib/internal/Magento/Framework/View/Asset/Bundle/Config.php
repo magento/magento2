@@ -15,7 +15,7 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 
 /**
  * Class Config
- * @deprecated 2.2.0 since 2.2.0
+ * @deprecated 100.2.0 since 2.2.0
  * @see \Magento\Deploy\Config\BundleConfig
  */
 class Config implements Bundle\ConfigInterface
@@ -37,13 +37,11 @@ class Config implements Bundle\ConfigInterface
 
     /**
      * @var ThemeProviderInterface
-     * @since 2.1.1
      */
     private $themeProvider;
 
     /**
      * @var \Magento\Framework\Config\View[]
-     * @since 2.1.1
      */
     private $config = [];
 
@@ -111,7 +109,6 @@ class Config implements Bundle\ConfigInterface
 
     /**
      * @return ThemeProviderInterface
-     * @since 2.1.1
      */
     private function getThemeProvider()
     {

@@ -15,7 +15,6 @@ use Magento\Paypal\Model\Payflow\Transparent;
 /**
  * Class \Magento\Paypal\Gateway\Payflowpro\Command\SaleCommand
  *
- * @since 2.1.0
  */
 class SaleCommand implements CommandInterface
 {
@@ -23,14 +22,12 @@ class SaleCommand implements CommandInterface
 
     /**
      * @var Transparent
-     * @since 2.1.0
      */
     private $payflowFacade;
 
     /**
      * SaleCommand constructor.
      * @param Transparent $payflowFacade
-     * @since 2.1.0
      */
     public function __construct(
         Transparent $payflowFacade
@@ -43,7 +40,6 @@ class SaleCommand implements CommandInterface
      *
      * @param array $commandSubject
      * @return null|ResultInterface
-     * @since 2.1.0
      */
     public function execute(array $commandSubject)
     {

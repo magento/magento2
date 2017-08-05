@@ -54,26 +54,23 @@ class Redirect
     protected $customerUrl;
 
     /**
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @var UrlInterface
      */
     protected $url;
 
     /**
      * @var ResultFactory
-     * @since 2.1.0
      */
     protected $resultFactory;
 
     /**
      * @var CookieManagerInterface
-     * @since 2.0.11
      */
     protected $cookieManager;
 
     /**
      * @var HostChecker
-     * @since 2.2.0
      */
     private $hostChecker;
 
@@ -232,9 +229,8 @@ class Redirect
     /**
      * Get Cookie manager. For release backward compatibility.
      *
-     * @deprecated 2.0.11
+     * @deprecated 100.0.10
      * @return CookieManagerInterface
-     * @since 2.0.11
      */
     protected function getCookieManager()
     {
@@ -247,10 +243,9 @@ class Redirect
     /**
      * Set cookie manager. For unit tests.
      *
-     * @deprecated 2.0.11
+     * @deprecated 100.0.10
      * @param object $value
      * @return void
-     * @since 2.0.11
      */
     public function setCookieManager($value)
     {
@@ -261,7 +256,6 @@ class Redirect
      * Get redirect route from cookie for case of successful login/registration
      *
      * @return null|string
-     * @since 2.0.11
      */
     public function getRedirectCookie()
     {
@@ -273,7 +267,6 @@ class Redirect
      *
      * @param string $route
      * @return void
-     * @since 2.0.11
      */
     public function setRedirectCookie($route)
     {
@@ -284,7 +277,6 @@ class Redirect
      * Clear cookie with requested route
      *
      * @return void
-     * @since 2.0.11
      */
     public function clearRedirectCookie()
     {

@@ -17,7 +17,7 @@ class VariationHandler
 {
     /**
      * @var \Magento\Catalog\Model\Product\Gallery\Processor
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $mediaGalleryProcessor;
 
@@ -43,13 +43,12 @@ class VariationHandler
 
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
-     * @since 2.1.3
      */
     private $attributes;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     protected $stockConfiguration;
 
@@ -114,7 +113,7 @@ class VariationHandler
     /**
      * Prepare attribute set comprising all selected configurable attributes
      *
-     * @deprecated 2.1.0 since 2.1.0
+     * @deprecated 100.1.0 since 2.1.0
      * @param \Magento\Catalog\Model\Product $product
      * @return void
      */
@@ -128,7 +127,7 @@ class VariationHandler
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return void
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function prepareAttributeSet(\Magento\Catalog\Model\Product $product)
     {

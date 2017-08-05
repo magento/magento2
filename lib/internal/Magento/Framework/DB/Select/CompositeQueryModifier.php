@@ -9,13 +9,11 @@ use Magento\Framework\DB\Select;
 
 /**
  * Apply multiple query modifiers to select
- * @since 2.2.0
  */
 class CompositeQueryModifier implements QueryModifierInterface
 {
     /**
      * @var QueryModifierInterface[]
-     * @since 2.2.0
      */
     private $queryModifiers;
 
@@ -23,7 +21,6 @@ class CompositeQueryModifier implements QueryModifierInterface
      * Constructor
      *
      * @param QueryModifierInterface[] $queryModifiers
-     * @since 2.2.0
      */
     public function __construct(
         array $queryModifiers = []
@@ -33,7 +30,6 @@ class CompositeQueryModifier implements QueryModifierInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function modify(Select $select)
     {

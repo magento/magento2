@@ -30,7 +30,6 @@ abstract class AbstractIndexerCommand extends Command
 
     /**
      * @var \Magento\Indexer\Model\Indexer\CollectionFactory
-     * @since 2.2.0
      */
     private $collectionFactory;
 
@@ -82,8 +81,7 @@ abstract class AbstractIndexerCommand extends Command
      * Get collection factory
      *
      * @return \Magento\Indexer\Model\Indexer\CollectionFactory
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getCollectionFactory()
     {

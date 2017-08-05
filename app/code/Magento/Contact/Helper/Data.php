@@ -15,7 +15,7 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 /**
  * Contact base helper
  *
- * @deprecated 2.2.0
+ * @deprecated 100.2.0
  * @see \Magento\Contact\Model\ConfigInterface
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
@@ -36,13 +36,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @var DataPersistorInterface
-     * @since 2.1.0
      */
     private $dataPersistor;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $postData = null;
 
@@ -65,7 +63,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if enabled
      *
      * @return string|null
-     * @deprecated 2.2.0 use \Magento\Contact\Api\ConfigInterface::isEnabled() instead
+     * @deprecated 100.2.0 use \Magento\Contact\Api\ConfigInterface::isEnabled() instead
      */
     public function isEnabled()
     {
@@ -116,7 +114,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $key
      * @return string
-     * @since 2.1.0
      */
     public function getPostValue($key)
     {
@@ -136,7 +133,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get Data Persistor
      *
      * @return DataPersistorInterface
-     * @since 2.1.0
      */
     private function getDataPersistor()
     {

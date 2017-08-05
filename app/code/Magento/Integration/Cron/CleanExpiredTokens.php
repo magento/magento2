@@ -11,19 +11,16 @@ use Magento\Integration\Helper\Oauth\Data as OauthHelper;
 
 /**
  * Cron class for deleting expired OAuth tokens.
- * @since 2.2.0
  */
 class CleanExpiredTokens
 {
     /**
      * @var TokenResourceModel
-     * @since 2.2.0
      */
     private $tokenResourceModel;
 
     /**
      * @var OauthHelper
-     * @since 2.2.0
      */
     private $oauthHelper;
 
@@ -32,7 +29,6 @@ class CleanExpiredTokens
      *
      * @param TokenResourceModel $tokenResourceModel
      * @param OauthHelper $oauthHelper
-     * @since 2.2.0
      */
     public function __construct(
         TokenResourceModel $tokenResourceModel,
@@ -46,7 +42,6 @@ class CleanExpiredTokens
      * Delete expired customer and admin tokens.
      *
      * @return void
-     * @since 2.2.0
      */
     public function execute()
     {

@@ -53,13 +53,13 @@ class Link extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var \Magento\Catalog\Model\Product\Link\SaveHandler
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $saveProductLinks;
 
     /**
      * @var \Magento\CatalogInventory\Helper\Stock
-     * @deprecated 2.1.1
+     * @deprecated 101.0.1
      */
     protected $stockHelper;
 
@@ -189,7 +189,6 @@ class Link extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return Link\SaveHandler
-     * @since 2.1.0
      */
     private function getProductLinkSaveHandler()
     {

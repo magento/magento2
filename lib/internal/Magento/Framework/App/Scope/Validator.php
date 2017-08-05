@@ -14,19 +14,16 @@ use Magento\Framework\Phrase;
 
 /**
  * Class Validator validates scope and scope code.
- * @since 2.2.0
  */
 class Validator implements ValidatorInterface
 {
     /**
      * @var ScopeResolverPool
-     * @since 2.2.0
      */
     private $scopeResolverPool;
 
     /**
      * @param ScopeResolverPool $scopeResolverPool
-     * @since 2.2.0
      */
     public function __construct(ScopeResolverPool $scopeResolverPool)
     {
@@ -35,7 +32,6 @@ class Validator implements ValidatorInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function isValid($scope, $scopeCode = null)
     {
@@ -77,7 +73,6 @@ class Validator implements ValidatorInterface
      * @param string $scopeCode
      * @return void
      * @throws LocalizedException if scope code is empty or has a wrong format
-     * @since 2.2.0
      */
     private function validateScopeCode($scopeCode)
     {

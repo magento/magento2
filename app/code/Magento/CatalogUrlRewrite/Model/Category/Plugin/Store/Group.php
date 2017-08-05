@@ -82,7 +82,6 @@ class Group
      * @param AbstractModel $group
      * @return \Magento\Store\Model\ResourceModel\Group
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterSave(
         \Magento\Store\Model\ResourceModel\Group $subject,

@@ -48,7 +48,6 @@ class StockStatusRepository implements StockStatusRepositoryInterface
 
     /**
      * @var StockRegistryStorage
-     * @since 2.1.0
      */
     protected $stockRegistryStorage;
 
@@ -153,7 +152,6 @@ class StockStatusRepository implements StockStatusRepositoryInterface
 
     /**
      * @return StockRegistryStorage
-     * @since 2.1.0
      */
     private function getStockRegistryStorage()
     {

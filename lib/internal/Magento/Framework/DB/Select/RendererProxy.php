@@ -7,7 +7,6 @@ namespace Magento\Framework\DB\Select;
 
 /**
  * Proxy class for @see \Magento\Framework\DB\Select\SelectRenderer
- * @since 2.1.0
  */
 class RendererProxy extends SelectRenderer
 {
@@ -15,7 +14,6 @@ class RendererProxy extends SelectRenderer
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.1.0
      */
     protected $_objectManager = null;
 
@@ -23,7 +21,6 @@ class RendererProxy extends SelectRenderer
      * Proxied instance name
      *
      * @var string
-     * @since 2.1.0
      */
     protected $_instanceName = null;
 
@@ -31,7 +28,6 @@ class RendererProxy extends SelectRenderer
      * Proxied instance
      *
      * @var \Magento\Framework\DB\Select\SelectRenderer
-     * @since 2.1.0
      */
     protected $_subject = null;
 
@@ -39,7 +35,6 @@ class RendererProxy extends SelectRenderer
      * Instance shareability flag
      *
      * @var bool
-     * @since 2.1.0
      */
     protected $_isShared = null;
 
@@ -49,7 +44,6 @@ class RendererProxy extends SelectRenderer
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
      * @param bool $shared
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -63,7 +57,6 @@ class RendererProxy extends SelectRenderer
 
     /**
      * @return array
-     * @since 2.1.0
      */
     public function __sleep()
     {
@@ -74,7 +67,6 @@ class RendererProxy extends SelectRenderer
      * Retrieve ObjectManager from global scope
      *
      * @return void
-     * @since 2.1.0
      */
     public function __wakeup()
     {
@@ -85,7 +77,6 @@ class RendererProxy extends SelectRenderer
      * Clone proxied instance
      *
      * @return void
-     * @since 2.1.0
      */
     public function __clone()
     {
@@ -96,7 +87,6 @@ class RendererProxy extends SelectRenderer
      * Get proxied instance
      *
      * @return \Magento\Framework\DB\Select\SelectRenderer
-     * @since 2.1.0
      */
     protected function _getSubject()
     {
@@ -110,7 +100,6 @@ class RendererProxy extends SelectRenderer
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function render(\Magento\Framework\DB\Select $select, $sql = '')
     {

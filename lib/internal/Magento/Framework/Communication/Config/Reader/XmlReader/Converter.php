@@ -12,7 +12,6 @@ use Magento\Framework\Stdlib\BooleanUtils;
 
 /**
  * Converts Communication config from \DOMDocument to array
- * @since 2.1.0
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
@@ -24,25 +23,21 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
     /**
      * @var ReflectionGenerator
-     * @since 2.1.0
      */
     private $reflectionGenerator;
 
     /**
      * @var BooleanUtils
-     * @since 2.1.0
      */
     private $booleanUtils;
 
     /**
      * @var Validator
-     * @since 2.1.0
      */
     private $xmlValidator;
 
     /**
      * @var ConfigParser
-     * @since 2.2.0
      */
     private $configParser;
 
@@ -52,7 +47,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param ReflectionGenerator $reflectionGenerator
      * @param BooleanUtils $booleanUtils
      * @param Validator $xmlValidator
-     * @since 2.1.0
      */
     public function __construct(
         ReflectionGenerator $reflectionGenerator,
@@ -68,8 +62,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * The getter function to get the new ConfigParser dependency.
      *
      * @return \Magento\Framework\Communication\Config\ConfigParser
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getConfigParser()
     {
@@ -85,7 +78,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMDocument $source
      * @return array
-     * @since 2.1.0
      */
     public function convert($source)
     {
@@ -100,7 +92,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMDocument $config
      * @return array
-     * @since 2.1.0
      */
     protected function extractTopics($config)
     {
@@ -168,7 +159,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMNode $topicNode
      * @return array List of handlers, each contain service name and method name
-     * @since 2.1.0
      */
     protected function extractTopicResponseHandlers($topicNode)
     {
@@ -202,7 +192,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMNode $topicNode
      * @return string|null
-     * @since 2.1.0
      */
     protected function extractTopicRequestSchema($topicNode)
     {
@@ -221,7 +210,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMNode $topicNode
      * @return string|null
-     * @since 2.1.0
      */
     protected function extractTopicResponseSchema($topicNode)
     {
@@ -240,7 +228,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMNode $topicNode
      * @return array|null Contains class name and method name
-     * @since 2.1.0
      */
     protected function getServiceMethodBySchema($topicNode)
     {
@@ -259,7 +246,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param string $serviceMethod
      * @param string $topicName
      * @return array Contains class name and method name
-     * @since 2.1.0
      */
     protected function parseServiceMethod($serviceMethod, $topicName)
     {

@@ -15,7 +15,6 @@ use Magento\Framework\DB\Select;
  * The map, upon initialization, might have a dependency on some other DataMapInterfaces
  * The map has to free memory after we're done using it
  * We need to destroy those maps too when calling resetData
- * @since 2.2.0
  */
 interface HashMapInterface
 {
@@ -24,7 +23,6 @@ interface HashMapInterface
      *
      * @param int $categoryId
      * @return array
-     * @since 2.2.0
      */
     public function getAllData($categoryId);
 
@@ -34,7 +32,6 @@ interface HashMapInterface
      * @param int $categoryId
      * @param string $key
      * @return array
-     * @since 2.2.0
      */
     public function getData($categoryId, $key);
 
@@ -43,7 +40,6 @@ interface HashMapInterface
      *
      * @param int $categoryId
      * @return void
-     * @since 2.2.0
      */
     public function resetData($categoryId);
 }

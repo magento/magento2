@@ -24,7 +24,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
 
     /**
      * @var \Magento\Framework\Indexer\CacheContext
-     * @since 2.1.0
      */
     private $cacheContext;
 
@@ -55,7 +54,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      *
      * @param array $entityIds
      * @return void
-     * @since 2.1.0
      */
     private function registerProducts($entityIds)
     {
@@ -67,7 +65,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      *
      * @param array $entityIds
      * @return void
-     * @since 2.1.0
      */
     private function registerCategories($entityIds)
     {
@@ -146,8 +143,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Get cache context
      *
      * @return \Magento\Framework\Indexer\CacheContext
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 101.0.0
      */
     private function getCacheContext()
     {

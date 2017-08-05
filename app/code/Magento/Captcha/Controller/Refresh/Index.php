@@ -23,7 +23,6 @@ class Index extends \Magento\Framework\App\Action\Action
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     protected $serializer;
 

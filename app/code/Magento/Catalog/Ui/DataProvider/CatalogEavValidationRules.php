@@ -11,7 +11,7 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
  * Class build validation rules for catalog EAV attributes
  *
  * @api
- * @since 2.1.0
+ * @since 101.0.0
  */
 class CatalogEavValidationRules
 {
@@ -21,7 +21,7 @@ class CatalogEavValidationRules
      * @param ProductAttributeInterface $attribute
      * @param array $data
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function build(ProductAttributeInterface $attribute, array $data)
     {
@@ -57,7 +57,7 @@ class CatalogEavValidationRules
      * @param string $class
      * @param array $rules
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function mapRules($class, array $rules)
     {

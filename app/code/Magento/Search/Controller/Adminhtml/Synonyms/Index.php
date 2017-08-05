@@ -8,7 +8,6 @@ namespace Magento\Search\Controller\Adminhtml\Synonyms;
 /**
  * Class \Magento\Search\Controller\Adminhtml\Synonyms\Index
  *
- * @since 2.1.0
  */
 class Index extends \Magento\Backend\App\Action
 {
@@ -21,7 +20,6 @@ class Index extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Search\Controller\Adminhtml\Synonyms\ResultPageBuilder $pageBuilder
-     * @since 2.1.0
      */
     private $pageBuilder;
 
@@ -30,7 +28,6 @@ class Index extends \Magento\Backend\App\Action
      *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Search\Controller\Adminhtml\Synonyms\ResultPageBuilder $pageBuilder
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -44,7 +41,6 @@ class Index extends \Magento\Backend\App\Action
      * Synonyms grid
      *
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.1.0
      */
     public function execute()
     {

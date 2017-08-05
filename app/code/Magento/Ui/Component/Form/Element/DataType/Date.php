@@ -33,7 +33,6 @@ class Date extends AbstractDataType
 
     /**
      * @var TimezoneInterface
-     * @since 2.2.0
      */
     private $localeDate;
 

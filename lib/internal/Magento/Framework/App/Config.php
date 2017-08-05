@@ -23,13 +23,11 @@ class Config implements ScopeConfigInterface
 
     /**
      * @var ScopeCodeResolver
-     * @since 2.1.3
      */
     private $scopeCodeResolver;
 
     /**
      * @var ConfigTypeInterface[]
-     * @since 2.1.3
      */
     private $types;
 
@@ -100,7 +98,6 @@ class Config implements ScopeConfigInterface
      * Clean scopeCodeResolver
      *
      * @return void
-     * @since 2.1.3
      */
     public function clean()
     {
@@ -126,7 +123,6 @@ class Config implements ScopeConfigInterface
      * @param string|null $path
      * @param mixed|null $default
      * @return array
-     * @since 2.1.3
      */
     public function get($configType, $path = '', $default = null)
     {

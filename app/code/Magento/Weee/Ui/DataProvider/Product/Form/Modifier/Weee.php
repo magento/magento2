@@ -23,7 +23,6 @@ use Magento\Weee\Ui\DataProvider\Product\Form\Modifier\Manager\Website as Websit
 /**
  * Class Weee
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
  */
 class Weee extends AbstractModifier
 {
@@ -31,43 +30,36 @@ class Weee extends AbstractModifier
 
     /**
      * @var LocatorInterface
-     * @since 2.1.0
      */
     protected $locator;
 
     /**
      * @var SourceCountry
-     * @since 2.1.0
      */
     protected $sourceCountry;
 
     /**
      * @var DirectoryHelper
-     * @since 2.1.0
      */
     protected $directoryHelper;
 
     /**
      * @var EavAttributeFactory
-     * @since 2.1.0
      */
     protected $eavAttributeFactory;
 
     /**
      * @var WebsiteManager
-     * @since 2.1.0
      */
     protected $websiteManager;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $countries;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $regions;
 
@@ -77,7 +69,6 @@ class Weee extends AbstractModifier
      * @param DirectoryHelper $directoryHelper
      * @param EavAttributeFactory $eavAttributeFactory
      * @param WebsiteManager $websiteManager
-     * @since 2.1.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -95,7 +86,6 @@ class Weee extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -104,7 +94,6 @@ class Weee extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -120,7 +109,6 @@ class Weee extends AbstractModifier
      *
      * @param array $metaConfig
      * @return array
-     * @since 2.1.0
      */
     protected function modifyMetaConfig(array $metaConfig)
     {
@@ -147,7 +135,6 @@ class Weee extends AbstractModifier
      * @param array $attributeConfig
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.1.0
      */
     protected function modifyAttributeConfig($attributeCode, array $attributeConfig)
     {
@@ -305,7 +292,6 @@ class Weee extends AbstractModifier
      * Retrieve countries
      *
      * @return array|null
-     * @since 2.1.0
      */
     protected function getCountries()
     {
@@ -320,7 +306,6 @@ class Weee extends AbstractModifier
      * Retrieve regions
      *
      * @return array
-     * @since 2.1.0
      */
     protected function getRegions()
     {

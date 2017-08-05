@@ -12,7 +12,6 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 /**
  * Class \Magento\Store\Setup\UpgradeData
  *
- * @since 2.2.0
  */
 class UpgradeData implements UpgradeDataInterface
 {
@@ -23,7 +22,6 @@ class UpgradeData implements UpgradeDataInterface
      * @param ModuleContextInterface $context
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -37,7 +35,6 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param ModuleDataSetupInterface $setup
      * @return void
-     * @since 2.2.0
      */
     private function updateStoreGroupCodes($setup)
     {

@@ -9,37 +9,31 @@ namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate;
 /**
  * Class \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\LocationDirectory
  *
- * @since 2.1.0
  */
 class LocationDirectory
 {
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $regions;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $iso2Countries;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $iso3Countries;
 
     /**
      * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
-     * @since 2.1.0
      */
     protected $_countryCollectionFactory;
 
     /**
      * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
-     * @since 2.1.0
      */
     protected $_regionCollectionFactory;
 
@@ -47,7 +41,6 @@ class LocationDirectory
      * LocationDirectory constructor.
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
      * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
@@ -60,7 +53,6 @@ class LocationDirectory
     /**
      * @param string $countryCode
      * @return null|string
-     * @since 2.1.0
      */
     public function getCountryId($countryCode)
     {
@@ -79,7 +71,6 @@ class LocationDirectory
      * Load directory countries
      *
      * @return \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate
-     * @since 2.1.0
      */
     protected function loadCountries()
     {
@@ -103,7 +94,6 @@ class LocationDirectory
     /**
      * @param string $countryCode
      * @return bool
-     * @since 2.1.0
      */
     public function hasCountryId($countryCode)
     {
@@ -115,7 +105,6 @@ class LocationDirectory
      * @param string $countryId
      * @param string $regionCode
      * @return bool
-     * @since 2.1.0
      */
     public function hasRegionId($countryId, $regionCode)
     {
@@ -127,7 +116,6 @@ class LocationDirectory
      * Load directory regions
      *
      * @return \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate
-     * @since 2.1.0
      */
     protected function loadRegions()
     {
@@ -150,7 +138,6 @@ class LocationDirectory
      * @param int $countryId
      * @param string $regionCode
      * @return string
-     * @since 2.1.0
      */
     public function getRegionId($countryId, $regionCode)
     {

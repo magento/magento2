@@ -8,14 +8,12 @@ namespace Magento\Catalog\Model\Product\Price\Validation;
 
 /**
  * Class is responsible to detect list of invalid SKU values from list of provided skus and allowed product types.
- * @since 2.2.0
  */
 class InvalidSkuProcessor
 {
     /**
      * @param \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator,
@@ -32,7 +30,6 @@ class InvalidSkuProcessor
      * @param array $allowedProductTypes
      * @param int|null $allowedPriceTypeValue
      * @return array
-     * @since 2.2.0
      */
     public function retrieveInvalidSkuList(array $skus, array $allowedProductTypes, $allowedPriceTypeValue = null)
     {
@@ -72,7 +69,6 @@ class InvalidSkuProcessor
      * @param array $allowedProductTypes
      * @param int|null $allowedPriceTypeValue
      * @return array
-     * @since 2.2.0
      */
     public function filterSkuList(array $skus, array $allowedProductTypes, $allowedPriceTypeValue = null)
     {

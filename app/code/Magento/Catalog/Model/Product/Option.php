@@ -32,13 +32,13 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
 {
     /**
      * @var Option\Repository
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $optionRepository;
 
     /**
      * Option type percent
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected static $typePercent = 'percent';
 
@@ -99,7 +99,6 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
@@ -196,7 +195,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      *
      * @param string $type
      * @return bool
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function hasValues($type = null)
     {
@@ -336,7 +335,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function beforeSave()
     {
@@ -452,7 +451,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      *
      * @param Product $product
      * @return \Magento\Catalog\Model\ResourceModel\Product\Option\Collection
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function getProductOptions(Product $product)
     {
@@ -823,7 +822,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Return regular price.
      *
      * @return float|int
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function getRegularPrice()
     {
@@ -879,7 +878,6 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
 
     /**
      * @return Option\Repository
-     * @since 2.1.0
      */
     private function getOptionRepository()
     {
@@ -892,7 +890,6 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
      */
     private function getMetadataPool()
     {

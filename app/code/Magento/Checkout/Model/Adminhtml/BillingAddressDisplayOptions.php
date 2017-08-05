@@ -10,7 +10,6 @@ use Magento\Framework\Option\ArrayInterface;
 /**
  * BillingAddressDisplayOptions gets list of configuration options for billing address displaying on
  * the Payment step on checkout
- * @since 2.1.4
  */
 class BillingAddressDisplayOptions implements ArrayInterface
 {
@@ -22,7 +21,6 @@ class BillingAddressDisplayOptions implements ArrayInterface
      *  ['label' => 'Payment Method', 'value' => 0],
      *  ['label' => 'Payment Page', 'value' => 1]
      * ]
-     * @since 2.1.4
      */
     public function toOptionArray()
     {

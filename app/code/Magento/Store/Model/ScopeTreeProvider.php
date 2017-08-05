@@ -14,19 +14,16 @@ use Magento\Store\Model\Website;
 /**
  * Class \Magento\Store\Model\ScopeTreeProvider
  *
- * @since 2.1.0
  */
 class ScopeTreeProvider implements ScopeTreeProviderInterface
 {
     /**
      * @var StoreManagerInterface
-     * @since 2.1.0
      */
     protected $storeManager;
 
     /**
      * @param StoreManagerInterface $storeManager
-     * @since 2.1.0
      */
     public function __construct(
         StoreManagerInterface $storeManager
@@ -36,7 +33,6 @@ class ScopeTreeProvider implements ScopeTreeProviderInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function get()
     {

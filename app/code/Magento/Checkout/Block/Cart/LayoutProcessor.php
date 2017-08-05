@@ -33,7 +33,6 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
 
     /**
      * @var \Magento\Directory\Model\TopDestinationCountries
-     * @since 2.2.0
      */
     private $topDestinationCountries;
 

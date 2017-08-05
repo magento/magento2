@@ -7,7 +7,7 @@ namespace Magento\Sales\Api\Exception;
 
 /**
  * @api
- * @since 2.1.2
+ * @since 100.1.2
  */
 interface CouldNotInvoiceExceptionInterface
 {

@@ -17,25 +17,21 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Postpones notification about subscription to Magento BI Advanced Reporting.
- * @since 2.2.0
  */
 class Postpone extends Action
 {
     /**
      * @var DateTimeFactory
-     * @since 2.2.0
      */
     private $dateTimeFactory;
 
     /**
      * @var NotificationTime
-     * @since 2.2.0
      */
     private $notificationTime;
 
     /**
      * @var LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
@@ -44,7 +40,6 @@ class Postpone extends Action
      * @param DateTimeFactory $dateTimeFactory
      * @param NotificationTime $notificationTime
      * @param LoggerInterface $logger
-     * @since 2.2.0
      */
     public function __construct(
         Context $context,
@@ -62,7 +57,6 @@ class Postpone extends Action
      * Check admin permissions for this controller
      *
      * @return boolean
-     * @since 2.2.0
      */
     protected function _isAllowed()
     {
@@ -73,7 +67,6 @@ class Postpone extends Action
      * Postpones notification about subscription
      *
      * @return Json
-     * @since 2.2.0
      */
     public function execute()
     {

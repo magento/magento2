@@ -11,25 +11,21 @@ use Magento\Deploy\Process\Queue;
 
 /**
  * Quick deployment strategy implementation
- * @since 2.2.0
  */
 class QuickDeploy implements StrategyInterface
 {
     /**
      * @var PackagePool
-     * @since 2.2.0
      */
     private $packagePool;
 
     /**
      * @var Queue
-     * @since 2.2.0
      */
     private $queue;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $baseLocalePackages = [];
 
@@ -38,7 +34,6 @@ class QuickDeploy implements StrategyInterface
      *
      * @param PackagePool $packagePool
      * @param Queue $queue
-     * @since 2.2.0
      */
     public function __construct(
         PackagePool $packagePool,
@@ -50,7 +45,6 @@ class QuickDeploy implements StrategyInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function deploy(array $options)
     {
@@ -88,7 +82,6 @@ class QuickDeploy implements StrategyInterface
      * @param int $level
      * @param Package[] $levelPackages
      * @return void
-     * @since 2.2.0
      */
     private function preparePackages($level, array $levelPackages)
     {
@@ -126,7 +119,6 @@ class QuickDeploy implements StrategyInterface
      *
      * @param Package $package
      * @return int
-     * @since 2.2.0
      */
     private function getInheritanceLevel(Package $package)
     {

@@ -26,7 +26,6 @@ class EmailAddress extends \Zend_Validate_EmailAddress implements \Magento\Frame
      * 'deep'     => If a deep MX check should be done, boolean
      *
      * @param array|string|Zend_Config $options OPTIONAL
-     * @since 2.2.0
      */
     public function __construct($options = [])
     {
@@ -40,7 +39,6 @@ class EmailAddress extends \Zend_Validate_EmailAddress implements \Magento\Frame
      *
      * @param bool $shouldValidate
      * @return void
-     * @since 2.2.0
      */
     public function setValidateTld(bool $shouldValidate)
     {

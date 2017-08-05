@@ -15,13 +15,13 @@ use Magento\Review\Helper\Data as StatusSource;
  * Class Status
  *
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class Status extends Column implements OptionSourceInterface
 {
     /**
      * @var StatusSource
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $source;
 
@@ -31,7 +31,7 @@ class Status extends Column implements OptionSourceInterface
      * @param StatusSource $source
      * @param array $components
      * @param array $data
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         ContextInterface $context,
@@ -46,7 +46,7 @@ class Status extends Column implements OptionSourceInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -68,7 +68,7 @@ class Status extends Column implements OptionSourceInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function toOptionArray()
     {

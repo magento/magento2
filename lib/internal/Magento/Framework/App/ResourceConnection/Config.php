@@ -22,13 +22,11 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig
-     * @since 2.1.3
      */
     private $deploymentConfig;
 
     /**
      * @var bool
-     * @since 2.1.3
      */
     private $initialized = false;
 
@@ -95,7 +93,6 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
      * Initialise connections
      *
      * @return void
-     * @since 2.1.3
      */
     private function initConnections()
     {

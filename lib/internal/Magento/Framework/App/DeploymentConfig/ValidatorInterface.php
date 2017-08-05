@@ -7,7 +7,6 @@ namespace Magento\Framework\App\DeploymentConfig;
 
 /**
  * Validator interface for section data from shared configuration files.
- * @since 2.2.0
  */
 interface ValidatorInterface
 {
@@ -17,7 +16,6 @@ interface ValidatorInterface
      *
      * @param array $data Data that should be validated
      * @return string[] The array of messages with description of wrong data.
-     * @since 2.2.0
      */
     public function validate(array $data);
 }

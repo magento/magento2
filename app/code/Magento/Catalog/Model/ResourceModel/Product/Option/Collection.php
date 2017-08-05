@@ -20,13 +20,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 {
     /**
      * @var JoinProcessorInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $joinProcessor;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $metadataPool;
 
@@ -248,7 +248,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * @return void
      * @throws \Exception
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function _initSelect()
     {
@@ -268,7 +268,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $storeId
      * @param bool $requiredOnly
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface[]
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function getProductOptions($productId, $storeId, $requiredOnly = false)
     {
@@ -330,7 +330,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @return JoinProcessorInterface
-     * @since 2.1.0
      */
     private function getJoinProcessor()
     {

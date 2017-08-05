@@ -31,7 +31,6 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Prefix of model events names
      *
      * @var string
-     * @since 2.2.0
      */
     protected $_eventPrefix = 'cataloginventory_stock_item';
 
@@ -43,7 +42,6 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * In observe method you can use $observer->getEvent()->getItem() in this case
      *
      * @var string
-     * @since 2.2.0
      */
     protected $_eventObject = 'item';
 

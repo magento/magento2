@@ -31,7 +31,6 @@ class BlockActions extends Column
 
     /**
      * @var Escaper
-     * @since 2.2.0
      */
     private $escaper;
 
@@ -101,8 +100,7 @@ class BlockActions extends Column
     /**
      * Get instance of escaper
      * @return Escaper
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 101.1.0
      */
     private function getEscaper()
     {

@@ -11,7 +11,6 @@ namespace Magento\Analytics\ReportXml\Config;
  * Transforms configuration data to improve its usability.
  *
  * @see usage examples in \Magento\Analytics\ReportXml\Config\Reader
- * @since 2.2.0
  */
 class Mapper
 {
@@ -20,7 +19,6 @@ class Mapper
      *
      * @param array $configData
      * @return array
-     * @since 2.2.0
      */
     public function execute($configData)
     {

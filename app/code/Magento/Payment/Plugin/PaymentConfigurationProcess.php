@@ -9,26 +9,22 @@ namespace Magento\Payment\Plugin;
  * Class PaymentConfigurationProcess
  *
  * Removes inactive payment methods and group from checkout configuration.
- * @since 2.2.0
  */
 class PaymentConfigurationProcess
 {
     /**
      * @var \Magento\Payment\Api\PaymentMethodListInterface
-     * @since 2.2.0
      */
     private $paymentMethodList;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @param \Magento\Payment\Api\PaymentMethodListInterface $paymentMethodList
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Payment\Api\PaymentMethodListInterface $paymentMethodList,
@@ -45,7 +41,6 @@ class PaymentConfigurationProcess
      * @param array $jsLayout
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function beforeProcess(\Magento\Checkout\Block\Checkout\LayoutProcessor $processor, $jsLayout)
     {

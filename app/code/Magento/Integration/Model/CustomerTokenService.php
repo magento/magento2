@@ -49,7 +49,6 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
 
     /**
      * @var RequestThrottler
-     * @since 2.0.3
      */
     private $requestThrottler;
 
@@ -121,8 +120,7 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
      * Get request throttler instance
      *
      * @return RequestThrottler
-     * @deprecated 2.0.3
-     * @since 2.0.3
+     * @deprecated 100.0.4
      */
     private function getRequestThrottler()
     {

@@ -11,31 +11,26 @@ use Magento\Framework\DB\Select;
  * Class Query
  *
  * Query object, contains SQL statement, information about connection, query arguments
- * @since 2.2.0
  */
 class Query implements \JsonSerializable
 {
     /**
      * @var Select
-     * @since 2.2.0
      */
     private $select;
 
     /**
      * @var \Magento\Analytics\ReportXml\SelectHydrator
-     * @since 2.2.0
      */
     private $selectHydrator;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $connectionName;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $config;
 
@@ -46,7 +41,6 @@ class Query implements \JsonSerializable
      * @param SelectHydrator $selectHydrator
      * @param string $connectionName
      * @param array $config
-     * @since 2.2.0
      */
     public function __construct(
         Select $select,
@@ -62,7 +56,6 @@ class Query implements \JsonSerializable
 
     /**
      * @return Select
-     * @since 2.2.0
      */
     public function getSelect()
     {
@@ -71,7 +64,6 @@ class Query implements \JsonSerializable
 
     /**
      * @return string
-     * @since 2.2.0
      */
     public function getConnectionName()
     {
@@ -80,7 +72,6 @@ class Query implements \JsonSerializable
 
     /**
      * @return array
-     * @since 2.2.0
      */
     public function getConfig()
     {
@@ -92,7 +83,6 @@ class Query implements \JsonSerializable
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
      * @return mixed data which can be serialized by <b>json_encode</b>,
      * which is a value of any type other than a resource.
-     * @since 2.2.0
      */
     public function jsonSerialize()
     {

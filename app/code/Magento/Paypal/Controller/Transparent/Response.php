@@ -39,13 +39,11 @@ class Response extends \Magento\Framework\App\Action\Action
 
     /**
      * @var LayoutFactory
-     * @since 2.1.0
      */
     private $resultLayoutFactory;
 
     /**
      * @var Transparent
-     * @since 2.1.0
      */
     private $transparent;
 

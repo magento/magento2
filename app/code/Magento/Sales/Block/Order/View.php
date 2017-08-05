@@ -28,7 +28,7 @@ class View extends \Magento\Framework\View\Element\Template
 
     /**
      * @var \Magento\Framework\App\Http\Context
-     * @since 2.2.0
+     * @since 100.2.0
      */
     protected $httpContext;
 

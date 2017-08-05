@@ -11,26 +11,22 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
  * Class DeviceDataBuilder
- * @since 2.1.3
  */
 class DeviceDataBuilder implements BuilderInterface
 {
     /**
      * @var string
-     * @since 2.1.3
      */
     private static $deviceDataKey = 'deviceData';
 
     /**
      * @var SubjectReader
-     * @since 2.1.3
      */
     private $subjectReader;
 
     /**
      * DeviceDataBuilder constructor.
      * @param SubjectReader $subjectReader
-     * @since 2.1.3
      */
     public function __construct(SubjectReader $subjectReader)
     {
@@ -39,7 +35,6 @@ class DeviceDataBuilder implements BuilderInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.3
      */
     public function build(array $buildSubject)
     {

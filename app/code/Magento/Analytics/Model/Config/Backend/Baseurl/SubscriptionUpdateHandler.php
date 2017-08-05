@@ -13,7 +13,6 @@ use Magento\Framework\FlagManager;
 
 /**
  * Class for processing of change of Base URL.
- * @since 2.2.0
  */
 class SubscriptionUpdateHandler
 {
@@ -36,13 +35,11 @@ class SubscriptionUpdateHandler
      * Max value for a reserve counter to update subscription.
      *
      * @var int
-     * @since 2.2.0
      */
     private $attemptsInitValue = 48;
 
     /**
      * @var WriterInterface
-     * @since 2.2.0
      */
     private $configWriter;
 
@@ -50,25 +47,21 @@ class SubscriptionUpdateHandler
      * Cron expression for a update handler.
      *
      * @var string
-     * @since 2.2.0
      */
     private $cronExpression = '0 * * * *';
 
     /**
      * @var FlagManager
-     * @since 2.2.0
      */
     private $flagManager;
 
     /**
      * @var ReinitableConfigInterface
-     * @since 2.2.0
      */
     private $reinitableConfig;
 
     /**
      * @var AnalyticsToken
-     * @since 2.2.0
      */
     private $analyticsToken;
 
@@ -77,7 +70,6 @@ class SubscriptionUpdateHandler
      * @param FlagManager $flagManager
      * @param ReinitableConfigInterface $reinitableConfig
      * @param WriterInterface $configWriter
-     * @since 2.2.0
      */
     public function __construct(
         AnalyticsToken $analyticsToken,
@@ -96,7 +88,6 @@ class SubscriptionUpdateHandler
      *
      * @param string $url
      * @return bool
-     * @since 2.2.0
      */
     public function processUrlUpdate(string $url)
     {

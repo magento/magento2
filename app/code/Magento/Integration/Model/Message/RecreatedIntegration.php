@@ -14,31 +14,26 @@ use Magento\Integration\Model\Integration;
 
 /**
  * Class RecreatedIntegration to display message when a config-based integration needs to be reactivated
- * @since 2.1.0
  */
 class RecreatedIntegration implements \Magento\Framework\Notification\MessageInterface
 {
     /**
      * @var Config
-     * @since 2.1.0
      */
     protected $integrationConfig;
 
     /**
      * @var UrlInterface
-     * @since 2.1.0
      */
     protected $urlBuilder;
 
     /**
      * @var IntegrationServiceInterface
-     * @since 2.1.0
      */
     protected $integrationService;
 
     /**
      * @var ConsolidatedConfig
-     * @since 2.1.0
      */
     protected $consolidatedConfig;
 
@@ -47,7 +42,6 @@ class RecreatedIntegration implements \Magento\Framework\Notification\MessageInt
      * @param UrlInterface $urlBuilder
      * @param IntegrationServiceInterface $integrationService
      * @param ConsolidatedConfig $consolidatedConfig
-     * @since 2.1.0
      */
     public function __construct(
         Config $integrationConfig,
@@ -65,7 +59,6 @@ class RecreatedIntegration implements \Magento\Framework\Notification\MessageInt
      * Check whether all indices are valid or not
      *
      * @return bool
-     * @since 2.1.0
      */
     public function isDisplayed()
     {
@@ -85,7 +78,6 @@ class RecreatedIntegration implements \Magento\Framework\Notification\MessageInt
      * Retrieve unique message identity
      *
      * @return string
-     * @since 2.1.0
      */
     public function getIdentity()
     {
@@ -96,7 +88,6 @@ class RecreatedIntegration implements \Magento\Framework\Notification\MessageInt
      * Retrieve message text
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.1.0
      */
     public function getText()
     {
@@ -111,7 +102,6 @@ class RecreatedIntegration implements \Magento\Framework\Notification\MessageInt
      * Retrieve message severity
      *
      * @return int
-     * @since 2.1.0
      */
     public function getSeverity()
     {

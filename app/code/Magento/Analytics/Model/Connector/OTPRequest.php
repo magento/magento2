@@ -19,7 +19,6 @@ use Psr\Log\LoggerInterface;
  *
  * OTP (One-Time Password) is a password that is valid for short period of time
  * and may be used only for one login session.
- * @since 2.2.0
  */
 class OTPRequest
 {
@@ -27,31 +26,26 @@ class OTPRequest
      * Resource for handling MBI token value.
      *
      * @var AnalyticsToken
-     * @since 2.2.0
      */
     private $analyticsToken;
 
     /**
      * @var Http\ClientInterface
-     * @since 2.2.0
      */
     private $httpClient;
 
     /**
      * @var LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.2.0
      */
     private $config;
 
     /**
      * @var ResponseResolver
-     * @since 2.2.0
      */
     private $responseResolver;
 
@@ -60,7 +54,6 @@ class OTPRequest
      * an URL that provides an OTP.
      *
      * @var string
-     * @since 2.2.0
      */
     private $otpUrlConfigPath = 'analytics/url/otp';
 
@@ -70,7 +63,6 @@ class OTPRequest
      * @param ScopeConfigInterface $config
      * @param ResponseResolver $responseResolver
      * @param LoggerInterface $logger
-     * @since 2.2.0
      */
     public function __construct(
         AnalyticsToken $analyticsToken,
@@ -92,7 +84,6 @@ class OTPRequest
      * Returns received OTP or FALSE in case of failure.
      *
      * @return string|false
-     * @since 2.2.0
      */
     public function call()
     {

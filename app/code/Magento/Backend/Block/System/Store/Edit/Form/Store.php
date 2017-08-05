@@ -178,7 +178,6 @@ class Store extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
      * @param \Magento\Store\Model\Store $storeModel
      * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
      * @return \Magento\Framework\Data\Form\Element\Fieldset
-     * @since 2.1.0
      */
     private function prepareGroupIdField(
         \Magento\Framework\Data\Form $form,

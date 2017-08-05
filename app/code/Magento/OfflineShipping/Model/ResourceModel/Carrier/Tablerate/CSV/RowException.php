@@ -10,7 +10,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class RowException extends LocalizedException
 {

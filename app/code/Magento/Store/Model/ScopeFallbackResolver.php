@@ -11,25 +11,21 @@ use Magento\Framework\App\ScopeFallbackResolverInterface;
 /**
  * Class \Magento\Store\Model\ScopeFallbackResolver
  *
- * @since 2.1.0
  */
 class ScopeFallbackResolver implements ScopeFallbackResolverInterface
 {
     /**
      * @var StoreManagerInterface
-     * @since 2.1.0
      */
     protected $storeManager;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $fallback = [];
 
     /**
      * @param StoreManagerInterface $storeManager
-     * @since 2.1.0
      */
     public function __construct(
         StoreManagerInterface $storeManager
@@ -39,7 +35,6 @@ class ScopeFallbackResolver implements ScopeFallbackResolverInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function getFallbackScope($scope, $scopeId, $forConfig = true)
     {

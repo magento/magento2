@@ -12,7 +12,6 @@ use Magento\Framework\App\CacheInterface;
  *
  * for cases when need to disable interaction with cache
  * but no specific cache type is used
- * @since 2.1.3
  */
 class Dummy implements CacheInterface
 {
@@ -20,7 +19,6 @@ class Dummy implements CacheInterface
      * Required by CacheInterface
      *
      * @return null
-     * @since 2.1.3
      */
     public function getFrontend()
     {
@@ -31,7 +29,6 @@ class Dummy implements CacheInterface
      * Pretend to load data from cache by id
      *
      * {@inheritdoc}
-     * @since 2.1.3
      */
     public function load($identifier)
     {
@@ -42,7 +39,6 @@ class Dummy implements CacheInterface
      * Pretend to save data
      *
      * {@inheritdoc}
-     * @since 2.1.3
      */
     public function save($data, $identifier, $tags = [], $lifeTime = null)
     {
@@ -53,7 +49,6 @@ class Dummy implements CacheInterface
      * Pretend to remove cached data by identifier
      *
      * {@inheritdoc}
-     * @since 2.1.3
      */
     public function remove($identifier)
     {
@@ -64,7 +59,6 @@ class Dummy implements CacheInterface
      * Pretend to clean cached data by specific tag
      *
      * {@inheritdoc}
-     * @since 2.1.3
      */
     public function clean($tags = [])
     {

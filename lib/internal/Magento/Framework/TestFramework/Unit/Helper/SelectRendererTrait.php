@@ -8,14 +8,12 @@ namespace Magento\Framework\TestFramework\Unit\Helper;
 
 /**
  * Class SelectRendererTrait
- * @since 2.1.0
  */
 trait SelectRendererTrait
 {
     /**
      * @param \Magento\Framework\TestFramework\Unit\Helper\ObjectManager $objectManager
      * @return \Magento\Framework\DB\Select\SelectRenderer
-     * @since 2.1.0
      */
     protected function getSelectRenderer(\Magento\Framework\TestFramework\Unit\Helper\ObjectManager $objectManager)
     {

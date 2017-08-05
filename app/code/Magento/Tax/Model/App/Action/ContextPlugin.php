@@ -74,7 +74,6 @@ class ContextPlugin
      * @param \Magento\Framework\App\RequestInterface $request
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function beforeDispatch(
         \Magento\Framework\App\ActionInterface $subject,

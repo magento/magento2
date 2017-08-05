@@ -10,31 +10,26 @@ use \Magento\Store\Model\ScopeInterface;
 
 /**
  * Plugin to set default store for admin area.
- * @since 2.1.0
  */
 class DefaultStore
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.1.0
      */
     protected $storeManager;
 
     /**
      * @var ReaderList
-     * @since 2.1.0
      */
     protected $readerList;
 
     /**
      * @var string
-     * @since 2.1.0
      */
     protected $runMode;
 
     /**
      * @var string
-     * @since 2.1.0
      */
     protected $scopeCode;
 
@@ -45,7 +40,6 @@ class DefaultStore
      * @param ReaderList $readerList
      * @param string $runMode
      * @param null $scopeCode
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -67,7 +61,6 @@ class DefaultStore
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function beforeDispatch(
         \Magento\Framework\App\FrontController $subject,

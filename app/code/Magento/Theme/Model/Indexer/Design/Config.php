@@ -17,55 +17,46 @@ use Magento\Framework\Indexer\SaveHandlerFactory;
 /**
  * Class \Magento\Theme\Model\Indexer\Design\Config
  *
- * @since 2.1.0
  */
 class Config implements ActionInterface
 {
     /**
      * @var CollectionFactory
-     * @since 2.1.0
      */
     protected $collectionFactory;
 
     /**
      * @var SaveHandlerFactory
-     * @since 2.1.0
      */
     protected $saveHandlerFactory;
 
     /**
      * @var StructureFactory
-     * @since 2.1.0
      */
     protected $structureFactory;
 
     /**
      * @var IndexerInterface
-     * @since 2.1.0
      */
     protected $saveHandler;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $filterable = [];
 
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $searchable = [];
 
     /**
      * @var FieldsetPool
-     * @since 2.1.0
      */
     protected $fieldsetPool;
 
     /**
      * @var HandlerPool
-     * @since 2.1.0
      */
     protected $handlerPool;
 
@@ -78,7 +69,6 @@ class Config implements ActionInterface
      * @param HandlerPool $handlerPool
      * @param CollectionFactory $collectionFactory
      * @param array $data
-     * @since 2.1.0
      */
     public function __construct(
         StructureFactory $structureFactory,
@@ -101,7 +91,6 @@ class Config implements ActionInterface
      *
      * @param null|int|array $ids
      * @return void
-     * @since 2.1.0
      */
     protected function execute(array $ids = [])
     {
@@ -119,7 +108,6 @@ class Config implements ActionInterface
      * Execute full indexation
      *
      * @return void
-     * @since 2.1.0
      */
     public function executeFull()
     {
@@ -131,7 +119,6 @@ class Config implements ActionInterface
      *
      * @param int[] $ids
      * @return void
-     * @since 2.1.0
      */
     public function executeList(array $ids)
     {
@@ -143,7 +130,6 @@ class Config implements ActionInterface
      *
      * @param int $id
      * @return void
-     * @since 2.1.0
      */
     public function executeRow($id)
     {
@@ -154,7 +140,6 @@ class Config implements ActionInterface
      * Return save handler
      *
      * @return IndexerInterface
-     * @since 2.1.0
      */
     protected function getSaveHandler()
     {
@@ -174,7 +159,6 @@ class Config implements ActionInterface
      * Prepare configuration data
      *
      * @return void
-     * @since 2.1.0
      */
     protected function prepareFields()
     {
@@ -208,7 +192,6 @@ class Config implements ActionInterface
      *
      * @param array $field
      * @return void
-     * @since 2.1.0
      */
     protected function saveFieldByType($field)
     {
@@ -226,7 +209,6 @@ class Config implements ActionInterface
      * Return indexer structure instance
      *
      * @return IndexStructureInterface
-     * @since 2.1.0
      */
     protected function getStructureInstance()
     {

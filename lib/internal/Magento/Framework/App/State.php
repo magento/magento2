@@ -64,7 +64,6 @@ class State
 
     /**
      * @var AreaList
-     * @since 2.2.0
      */
     private $areaList;
 
@@ -201,7 +200,6 @@ class State
      * @param string $areaCode
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
-     * @since 2.2.0
      */
     private function checkAreaCode($areaCode)
     {
@@ -221,8 +219,7 @@ class State
      * Get Instance of AreaList
      *
      * @return AreaList
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getAreaListInstance()
     {

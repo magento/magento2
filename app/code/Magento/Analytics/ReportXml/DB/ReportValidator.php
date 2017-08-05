@@ -13,19 +13,16 @@ use Magento\Framework\Api\SearchCriteriaInterface;
  * Class ReportValidator
  *
  * Validates report definitions by doing query to storage with limit 0
- * @since 2.2.0
  */
 class ReportValidator
 {
     /**
      * @var ConnectionFactory
-     * @since 2.2.0
      */
     private $connectionFactory;
 
     /**
      * @var QueryFactory
-     * @since 2.2.0
      */
     private $queryFactory;
 
@@ -36,7 +33,6 @@ class ReportValidator
      *
      * @param ConnectionFactory $connectionFactory
      * @param QueryFactory $queryFactory
-     * @since 2.2.0
      */
     public function __construct(ConnectionFactory $connectionFactory, QueryFactory $queryFactory)
     {
@@ -51,7 +47,6 @@ class ReportValidator
      * @param SearchCriteriaInterface $criteria
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function validate($name, SearchCriteriaInterface $criteria = null)
     {

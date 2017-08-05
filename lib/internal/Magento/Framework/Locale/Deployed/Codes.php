@@ -13,7 +13,6 @@ use Magento\Framework\View\DesignInterface;
 
 /**
  * Returns array of deployed locale codes for the theme.
- * @since 2.2.0
  */
 class Codes implements AvailableLocalesInterface
 {
@@ -21,7 +20,6 @@ class Codes implements AvailableLocalesInterface
      * Works with file system.
      *
      * @var Filesystem
-     * @since 2.2.0
      */
     private $fileSystem;
 
@@ -29,7 +27,6 @@ class Codes implements AvailableLocalesInterface
      * Factory for creating objects that implements \Magento\Framework\View\Design\ThemeInterface.
      *
      * @var FlyweightFactory
-     * @since 2.2.0
      */
     private $flyweightFactory;
 
@@ -37,7 +34,6 @@ class Codes implements AvailableLocalesInterface
      * @param FlyweightFactory $flyweightFactory factory for creating objects
      *        that implements \Magento\Framework\View\Design\ThemeInterface
      * @param Filesystem $fileSystem works with file system
-     * @since 2.2.0
      */
     public function __construct(
         FlyweightFactory $flyweightFactory,
@@ -51,7 +47,6 @@ class Codes implements AvailableLocalesInterface
      * {@inheritdoc}
      *
      * If theme or file directory for theme static content does not exist then return an empty array.
-     * @since 2.2.0
      */
     public function getList($code, $area = DesignInterface::DEFAULT_AREA)
     {

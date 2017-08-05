@@ -15,25 +15,21 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class StoreConfigurationProvider
  * Provides config data report
- * @since 2.2.0
  */
 class StoreConfigurationProvider
 {
     /**
      * @var ScopeConfigInterface
-     * @since 2.2.0
      */
     private $scopeConfig;
 
     /**
      * @var string[]
-     * @since 2.2.0
      */
     private $configPaths;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.2.0
      */
     private $storeManager;
 
@@ -41,7 +37,6 @@ class StoreConfigurationProvider
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
      * @param string[] $configPaths
-     * @since 2.2.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -57,7 +52,6 @@ class StoreConfigurationProvider
      * Generates report using config paths from di.xml
      * For each website and store
      * @return \IteratorIterator
-     * @since 2.2.0
      */
     public function getReport()
     {
@@ -87,7 +81,6 @@ class StoreConfigurationProvider
      * @param string $scope
      * @param int $scopeId
      * @return array
-     * @since 2.2.0
      */
     private function generateReportForScope($scope, $scopeId)
     {

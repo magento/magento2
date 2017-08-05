@@ -48,26 +48,23 @@ class UiComponentFactory extends DataObject
     /**
      * UI component manager
      *
-     * @deprecated 2.2.0 since 2.2.0
+     * @deprecated 100.2.0 since 2.2.0
      * @var ManagerInterface
      */
     protected $componentManager;
 
     /**
      * @var ComponentFactoryInterface[]
-     * @since 2.2.0
      */
     private $componentChildFactories;
 
     /**
      * @var DataInterfaceFactory
-     * @since 2.2.0
      */
     private $configFactory;
 
     /**
      * @var \Magento\Ui\Config\Reader\Definition\Data
-     * @since 2.2.0
      */
     private $definitionData;
 
@@ -251,7 +248,7 @@ class UiComponentFactory extends DataObject
      * @param array $children
      * @return array
      * @throws LocalizedException
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function getBundleChildren(array $children = [])
     {
@@ -294,7 +291,7 @@ class UiComponentFactory extends DataObject
      * @param array $bundleComponents
      * @param bool $reverseMerge
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function mergeMetadata($identifier, array $bundleComponents, $reverseMerge = false)
     {
@@ -319,7 +316,7 @@ class UiComponentFactory extends DataObject
      * @param array $data
      * @param bool $reverseMerge
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function mergeMetadataElement(array $bundleComponents, $name, array $data, $reverseMerge = false)
     {
@@ -357,7 +354,7 @@ class UiComponentFactory extends DataObject
      * @param bool $reverseMerge
      * @return array
      * @throws LocalizedException
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function mergeMetadataItem(array $bundleComponents, array $metadata, $reverseMerge = false)
     {
@@ -410,7 +407,7 @@ class UiComponentFactory extends DataObject
      * @param string $identifier
      * @param array $bundleComponents
      * @return DataProviderInterface|null
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function getDataProvider($identifier, array $bundleComponents)
     {

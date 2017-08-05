@@ -259,7 +259,6 @@ class Design implements \Magento\Framework\View\DesignInterface
     /**
      * @param \Magento\Framework\Locale\ResolverInterface $locale
      * @return $this
-     * @since 2.2.0
      */
     public function setLocale(\Magento\Framework\Locale\ResolverInterface $locale)
     {

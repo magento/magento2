@@ -37,7 +37,6 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
      * Product entity identifier field
      *
      * @var string
-     * @since 2.1.0
      */
     private $productEntityIdentifierField;
 
@@ -138,7 +137,6 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
      * Get product entity identifier field
      *
      * @return string
-     * @since 2.1.0
      */
     private function getProductEntityIdentifierField()
     {

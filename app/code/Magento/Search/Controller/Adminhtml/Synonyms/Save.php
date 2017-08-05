@@ -11,7 +11,6 @@ use Magento\Search\Model\Synonym\MergeConflictException;
 /**
  * Class \Magento\Search\Controller\Adminhtml\Synonyms\Save
  *
- * @since 2.1.0
  */
 class Save extends \Magento\Backend\App\Action
 {
@@ -24,7 +23,6 @@ class Save extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
-     * @since 2.1.0
      */
     private $synGroupRepository;
 
@@ -33,7 +31,6 @@ class Save extends \Magento\Backend\App\Action
      *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -47,7 +44,6 @@ class Save extends \Magento\Backend\App\Action
      * Save action
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.1.0
      */
     public function execute()
     {
@@ -116,7 +112,6 @@ class Save extends \Magento\Backend\App\Action
      *
      * @param MergeConflictException $exception
      * @return \Magento\Framework\Phrase
-     * @since 2.1.0
      */
     private function getErrorMessage(MergeConflictException $exception)
     {

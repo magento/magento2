@@ -32,7 +32,6 @@ class Link extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
 
     /**
      * @var DocumentRoot
-     * @since 2.2.0
      */
     protected $documentRoot;
 

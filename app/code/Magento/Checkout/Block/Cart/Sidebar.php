@@ -31,7 +31,6 @@ class Sidebar extends AbstractCart
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -89,7 +88,7 @@ class Sidebar extends AbstractCart
 
     /**
      * @return string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getSerializedConfig()
     {
@@ -205,7 +204,6 @@ class Sidebar extends AbstractCart
      * Return max visible item count for minicart
      *
      * @return int
-     * @since 2.0.9
      */
     private function getMiniCartMaxItemsCount()
     {
@@ -217,7 +215,6 @@ class Sidebar extends AbstractCart
      * This setting regulates how many items will be displayed in minicart
      *
      * @return int
-     * @since 2.2.0
      */
     private function getMaxItemsToDisplay()
     {

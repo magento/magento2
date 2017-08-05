@@ -23,7 +23,6 @@ class Simple implements Fallback\ResolverInterface
      * Directory read factory
      *
      * @var ReadFactory
-     * @since 2.1.0
      */
     protected $readFactory;
 
@@ -36,7 +35,6 @@ class Simple implements Fallback\ResolverInterface
 
     /**
      * @var DirectoryList
-     * @since 2.1.0
      */
     private $directoryList;
 
@@ -90,7 +88,6 @@ class Simple implements Fallback\ResolverInterface
      * @param string $fileName
      * @param string $filePath
      * @return bool
-     * @since 2.1.0
      */
     private function checkFilePathAccess($fileName, $filePath)
     {
@@ -138,7 +135,6 @@ class Simple implements Fallback\ResolverInterface
      * Retrieve directory list object
      *
      * @return DirectoryList
-     * @since 2.1.0
      */
     protected function getDirectoryList()
     {

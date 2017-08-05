@@ -404,7 +404,6 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getDefaultValue()
     {
@@ -413,7 +412,6 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setDefaultValue($defaultValue)
     {

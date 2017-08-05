@@ -22,55 +22,46 @@ use Magento\Framework\Phrase;
  * Class Create
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
  */
 class Create implements CreateInterface
 {
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
     /**
      * @var TypeResolver
-     * @since 2.1.0
      */
     private $typeResolver;
 
     /**
      * @var ResourceConnection
-     * @since 2.1.0
      */
     private $resourceConnection;
 
     /**
      * @var EventManager
-     * @since 2.1.0
      */
     private $eventManager;
 
     /**
      * @var CreateMain
-     * @since 2.1.0
      */
     private $createMain;
 
     /**
      * @var CreateAttributes
-     * @since 2.1.0
      */
     private $createAttributes;
 
     /**
      * @var CreateExtensions
-     * @since 2.1.0
      */
     private $createExtensions;
 
     /**
      * @var SequenceApplier
-     * @since 2.2.0
      */
     private $sequenceApplier;
 
@@ -82,7 +73,6 @@ class Create implements CreateInterface
      * @param CreateMain $createMain
      * @param CreateAttributes $createAttributes
      * @param CreateExtensions $createExtensions
-     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -108,7 +98,6 @@ class Create implements CreateInterface
      * @return object
      * @throws \Exception
      * @throws AlreadyExistsException
-     * @since 2.1.0
      */
     public function execute($entity, $arguments = [])
     {
@@ -153,8 +142,7 @@ class Create implements CreateInterface
     /**
      * @return SequenceApplier
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getSequenceApplier()
     {

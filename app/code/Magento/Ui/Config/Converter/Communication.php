@@ -11,19 +11,16 @@ use Magento\Ui\Config\ConverterUtils;
 
 /**
  * Converter for "communication" types of configuration settings ('imports', 'exports', 'links', etc)
- * @since 2.2.0
  */
 class Communication implements ConverterInterface
 {
     /**
      * @var ConverterUtils
-     * @since 2.2.0
      */
     private $converterUtils;
 
     /**
      * @param ConverterUtils $converterUtils
-     * @since 2.2.0
      */
     public function __construct(ConverterUtils $converterUtils)
     {
@@ -32,7 +29,6 @@ class Communication implements ConverterInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function convert(\DOMNode $node, array $data = [])
     {
@@ -47,7 +43,6 @@ class Communication implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return array
-     * @since 2.2.0
      */
     private function toArray(\DOMNode $node)
     {
@@ -76,7 +71,6 @@ class Communication implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return bool
-     * @since 2.2.0
      */
     private function hasChildNodes(\DOMNode $node)
     {

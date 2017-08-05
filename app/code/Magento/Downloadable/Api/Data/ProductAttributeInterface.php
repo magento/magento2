@@ -8,7 +8,7 @@ namespace Magento\Downloadable\Api\Data;
 /**
  * Interface ProductAttributeInterface
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 interface ProductAttributeInterface extends \Magento\Catalog\Api\Data\ProductAttributeInterface
 {

@@ -78,7 +78,7 @@ class StockIndex implements StockIndexInterface
      *
      * @param int $productId
      * @param int $scopeId
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      * @return true
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -109,7 +109,7 @@ class StockIndex implements StockIndexInterface
      *
      * @param int $productId
      * @param int $websiteId
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      * @return void
      */
     public function updateProductStockStatus($productId, $websiteId)

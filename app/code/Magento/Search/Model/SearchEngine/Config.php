@@ -8,7 +8,6 @@ namespace Magento\Search\Model\SearchEngine;
 /**
  * Class \Magento\Search\Model\SearchEngine\Config
  *
- * @since 2.1.0
  */
 class Config implements \Magento\Framework\Search\SearchEngine\ConfigInterface
 {
@@ -16,7 +15,6 @@ class Config implements \Magento\Framework\Search\SearchEngine\ConfigInterface
      * Search engine config data storage
      *
      * @var Config\Data
-     * @since 2.1.0
      */
     protected $dataStorage;
 
@@ -24,7 +22,6 @@ class Config implements \Magento\Framework\Search\SearchEngine\ConfigInterface
      * Constructor
      *
      * @param \Magento\Framework\Config\DataInterface $dataStorage
-     * @since 2.1.0
      */
     public function __construct(\Magento\Framework\Config\DataInterface $dataStorage)
     {
@@ -33,7 +30,6 @@ class Config implements \Magento\Framework\Search\SearchEngine\ConfigInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getDeclaredFeatures($searchEngine)
     {
@@ -42,7 +38,6 @@ class Config implements \Magento\Framework\Search\SearchEngine\ConfigInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function isFeatureSupported($featureName, $searchEngine)
     {

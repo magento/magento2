@@ -9,7 +9,7 @@ namespace Magento\Backend\Block\Widget\Form;
  * Backend form container block
  *
  * @api
- * @deprecated 2.2.0 in favour of UI component implementation
+ * @deprecated 100.2.0 in favour of UI component implementation
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Container extends \Magento\Backend\Block\Widget\Container

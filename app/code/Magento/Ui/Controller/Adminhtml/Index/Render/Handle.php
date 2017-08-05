@@ -12,7 +12,6 @@ use Magento\Ui\Controller\Adminhtml\AbstractAction;
 
 /**
  * Class Handle
- * @since 2.1.0
  */
 class Handle extends AbstractAction
 {
@@ -20,7 +19,6 @@ class Handle extends AbstractAction
      * Render UI component by namespace in handle context
      *
      * @return void
-     * @since 2.1.0
      */
     public function execute()
     {

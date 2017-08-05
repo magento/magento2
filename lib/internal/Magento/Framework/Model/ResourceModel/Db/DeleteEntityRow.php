@@ -11,19 +11,16 @@ use Magento\Framework\EntityManager\EntityMetadata;
 /**
  * Class \Magento\Framework\Model\ResourceModel\Db\DeleteEntityRow
  *
- * @since 2.1.0
  */
 class DeleteEntityRow
 {
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @param MetadataPool $metadataPool
-     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool
@@ -36,7 +33,6 @@ class DeleteEntityRow
      * @param array $data
      * @return bool
      * @throws \Exception
-     * @since 2.1.0
      */
     public function execute($entityType, $data)
     {

@@ -14,7 +14,6 @@ use Magento\Framework\Intl\DateTimeFactory;
  *
  * Dynamic validator for UI signUp notification form, manage Ui component visibility.
  * Return true if last notification was shipped seven days ago.
- * @since 2.2.0
  */
 class CanViewNotification implements VisibilityConditionInterface
 {
@@ -27,19 +26,16 @@ class CanViewNotification implements VisibilityConditionInterface
      * Time interval in seconds
      *
      * @var int
-     * @since 2.2.0
      */
     private $notificationInterval = 604800;
 
     /**
      * @var NotificationTime
-     * @since 2.2.0
      */
     private $notificationTime;
 
     /**
      * @var DateTimeFactory
-     * @since 2.2.0
      */
     private $dateTimeFactory;
 
@@ -48,7 +44,6 @@ class CanViewNotification implements VisibilityConditionInterface
      *
      * @param NotificationTime $notificationTime
      * @param DateTimeFactory $dateTimeFactory
-     * @since 2.2.0
      */
     public function __construct(
         NotificationTime $notificationTime,
@@ -62,7 +57,6 @@ class CanViewNotification implements VisibilityConditionInterface
      * Validate is notification popup can be shown
      *
      * @inheritdoc
-     * @since 2.2.0
      */
     public function isVisible(array $arguments)
     {
@@ -78,7 +72,6 @@ class CanViewNotification implements VisibilityConditionInterface
 
     /**
      * @return string
-     * @since 2.2.0
      */
     public function getName()
     {

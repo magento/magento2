@@ -11,7 +11,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Interface for collection values from user input
- * @since 2.2.0
  */
 interface CollectorInterface
 {
@@ -31,7 +30,6 @@ interface CollectorInterface
      * ]
      * ```
      * @throws LocalizedException
-     * @since 2.2.0
      */
     public function getValues(InputInterface $input, OutputInterface $output, array $configPaths);
 }

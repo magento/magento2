@@ -12,25 +12,21 @@ use Magento\Analytics\Model\SubscriptionStatusProvider;
 
 /**
  * Removes stored token and triggers subscription process.
- * @since 2.2.0
  */
 class ReSignUp implements ResponseHandlerInterface
 {
     /**
      * @var AnalyticsToken
-     * @since 2.2.0
      */
     private $analyticsToken;
     
     /**
      * @var SubscriptionHandler
-     * @since 2.2.0
      */
     private $subscriptionHandler;
 
     /**
      * @var SubscriptionStatusProvider
-     * @since 2.2.0
      */
     private $subscriptionStatusProvider;
 
@@ -38,7 +34,6 @@ class ReSignUp implements ResponseHandlerInterface
      * @param AnalyticsToken $analyticsToken
      * @param SubscriptionHandler $subscriptionHandler
      * @param SubscriptionStatusProvider $subscriptionStatusProvider
-     * @since 2.2.0
      */
     public function __construct(
         AnalyticsToken $analyticsToken,
@@ -52,7 +47,6 @@ class ReSignUp implements ResponseHandlerInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function handleResponse(array $responseBody)
     {

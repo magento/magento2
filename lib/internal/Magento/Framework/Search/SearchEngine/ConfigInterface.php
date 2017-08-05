@@ -8,7 +8,6 @@ namespace Magento\Framework\Search\SearchEngine;
 /**
  * Interface \Magento\Framework\Search\SearchEngine\ConfigInterface
  *
- * @since 2.1.0
  */
 interface ConfigInterface
 {
@@ -22,7 +21,6 @@ interface ConfigInterface
      *
      * @param string $searchEngine
      * @return string[]
-     * @since 2.1.0
      */
     public function getDeclaredFeatures($searchEngine);
 
@@ -32,7 +30,6 @@ interface ConfigInterface
      * @param string $featureName
      * @param string $searchEngine
      * @return bool
-     * @since 2.1.0
      */
     public function isFeatureSupported($featureName, $searchEngine);
 }

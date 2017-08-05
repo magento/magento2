@@ -15,6 +15,7 @@ use Magento\Vault\Model\CustomerTokenManagement;
  * Class ConfigProvider
  * @api
  * @since 2.1.0
+ * @since 100.1.0
  */
 class TokensConfigProvider implements ConfigProviderInterface
 {
@@ -55,6 +56,7 @@ class TokensConfigProvider implements ConfigProviderInterface
      * @param CustomerTokenManagement $customerTokenManagement
      * @param TokenUiComponentProviderInterface[] $tokenUiComponentProviders
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -71,6 +73,7 @@ class TokensConfigProvider implements ConfigProviderInterface
      *
      * @return array
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function getConfig()
     {
@@ -148,7 +151,7 @@ class TokensConfigProvider implements ConfigProviderInterface
     /**
      * Get instance of vault payment list instance
      * @return PaymentMethodListInterface
-     * @deprecated 2.1.3
+     * @deprecated 100.2.0 2.1.3
      * @since 2.1.3
      */
     private function getVaultPaymentList()

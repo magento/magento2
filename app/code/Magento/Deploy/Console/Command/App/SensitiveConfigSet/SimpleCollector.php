@@ -16,26 +16,22 @@ use Symfony\Component\Console\Helper\QuestionHelper;
 
 /**
  * Class SimpleCollector collects configuration value from user input
- * @since 2.2.0
  */
 class SimpleCollector implements CollectorInterface
 {
     /**
      * @var QuestionFactory
-     * @since 2.2.0
      */
     private $questionFactory;
 
     /**
      * @var QuestionHelper
-     * @since 2.2.0
      */
     private $questionHelper;
 
     /**
      * @param QuestionFactory $questionFactory
      * @param QuestionHelper $questionHelper
-     * @since 2.2.0
      */
     public function __construct(
         QuestionFactory $questionFactory,
@@ -53,7 +49,6 @@ class SimpleCollector implements CollectorInterface
      * ['some/configuration/path' => 'someValue']
      * ```
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getValues(InputInterface $input, OutputInterface $output, array $configPaths)
     {
@@ -79,7 +74,6 @@ class SimpleCollector implements CollectorInterface
      *
      * @param array $configPaths
      * @return Question
-     * @since 2.2.0
      */
     private function getConfigPathQuestion(array $configPaths)
     {
@@ -100,7 +94,6 @@ class SimpleCollector implements CollectorInterface
      * Get Question to fill configuration value in interactive mode
      *
      * @return Question
-     * @since 2.2.0
      */
     private function getConfigValueQuestion()
     {
@@ -125,7 +118,6 @@ class SimpleCollector implements CollectorInterface
      * @param array $configPaths List of allowed paths.
      * @return void
      * @throws LocalizedException If config path not exist in allowed config paths
-     * @since 2.2.0
      */
     private function validatePath($configPath, array $configPaths)
     {

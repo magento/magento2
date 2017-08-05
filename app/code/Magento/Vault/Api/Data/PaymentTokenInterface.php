@@ -10,6 +10,7 @@ namespace Magento\Vault\Api\Data;
  *
  * @api
  * @since 2.1.0
+ * @since 100.1.0
  */
 interface PaymentTokenInterface
 {
@@ -66,6 +67,7 @@ interface PaymentTokenInterface
      *
      * @return int|null Entity ID.
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function getEntityId();
 
@@ -75,6 +77,7 @@ interface PaymentTokenInterface
      * @param int $entityId
      * @return $this
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function setEntityId($entityId);
 
@@ -83,6 +86,7 @@ interface PaymentTokenInterface
      *
      * @return int|null Customer ID.
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function getCustomerId();
 
@@ -92,6 +96,7 @@ interface PaymentTokenInterface
      * @param int $customerId
      * @return $this
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function setCustomerId($customerId);
 
@@ -100,6 +105,7 @@ interface PaymentTokenInterface
      *
      * @return string
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function getPublicHash();
 
@@ -109,6 +115,7 @@ interface PaymentTokenInterface
      * @param string $hash
      * @return $this
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function setPublicHash($hash);
 
@@ -117,6 +124,7 @@ interface PaymentTokenInterface
      *
      * @return string
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function getPaymentMethodCode();
 
@@ -126,6 +134,7 @@ interface PaymentTokenInterface
      * @param string $code
      * @return $this
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function setPaymentMethodCode($code);
 
@@ -134,6 +143,7 @@ interface PaymentTokenInterface
      *
      * @return string
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function getType();
 
@@ -143,6 +153,7 @@ interface PaymentTokenInterface
      * @param string $type
      * @return $this
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function setType($type);
 
@@ -151,6 +162,7 @@ interface PaymentTokenInterface
      *
      * @return string|null
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function getCreatedAt();
 
@@ -160,6 +172,7 @@ interface PaymentTokenInterface
      * @param string $timestamp
      * @return $this
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function setCreatedAt($timestamp);
 
@@ -168,6 +181,7 @@ interface PaymentTokenInterface
      *
      * @return string|null
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function getExpiresAt();
 
@@ -177,6 +191,7 @@ interface PaymentTokenInterface
      * @param string $timestamp
      * @return $this
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function setExpiresAt($timestamp);
 
@@ -185,6 +200,7 @@ interface PaymentTokenInterface
      *
      * @return string
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function getGatewayToken();
 
@@ -194,6 +210,7 @@ interface PaymentTokenInterface
      * @param string $token
      * @return $this
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function setGatewayToken($token);
 
@@ -202,6 +219,7 @@ interface PaymentTokenInterface
      *
      * @return string
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function getTokenDetails();
 
@@ -211,6 +229,7 @@ interface PaymentTokenInterface
      * @param string $details
      * @return $this
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function setTokenDetails($details);
 
@@ -220,6 +239,7 @@ interface PaymentTokenInterface
      * @return bool Is active.
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function getIsActive();
 
@@ -229,6 +249,7 @@ interface PaymentTokenInterface
      * @param bool $isActive
      * @return $this
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function setIsActive($isActive);
 
@@ -238,6 +259,7 @@ interface PaymentTokenInterface
      * @return bool Is visible.
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function getIsVisible();
 
@@ -247,6 +269,7 @@ interface PaymentTokenInterface
      * @param bool $isVisible
      * @return $this
      * @since 2.1.0
+     * @since 100.1.0
      */
     public function setIsVisible($isVisible);
 }

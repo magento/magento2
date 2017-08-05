@@ -125,7 +125,6 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface, D
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getParents($filename, $scope)
     {
@@ -164,7 +163,6 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface, D
      * @param array $iterator
      * @param int $index
      * @return array
-     * @since 2.1.0
      */
     private function getParentConfigs(ThemeInterface $theme, array $iterator, $index = 0)
     {

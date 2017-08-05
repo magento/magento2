@@ -8,49 +8,41 @@ namespace Magento\Catalog\Model\Product\Price\Validation;
 
 /**
  * Tier Price Validator.
- * @since 2.2.0
  */
 class TierPriceValidator
 {
     /**
      * @var \Magento\Catalog\Model\ProductIdLocatorInterface
-     * @since 2.2.0
      */
     private $productIdLocator;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     * @since 2.2.0
      */
     private $searchCriteriaBuilder;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
-     * @since 2.2.0
      */
     private $filterBuilder;
 
     /**
      * @var \Magento\Customer\Api\GroupRepositoryInterface
-     * @since 2.2.0
      */
     private $customerGroupRepository;
 
     /**
      * @var \Magento\Store\Api\WebsiteRepositoryInterface
-     * @since 2.2.0
      */
     private $websiteRepository;
 
     /**
      * @var \Magento\Catalog\Model\Product\Price\Validation\Result
-     * @since 2.2.0
      */
     private $validationResult;
 
     /**
      * @var \Magento\Catalog\Model\Product\Price\TierPricePersistence
-     * @since 2.2.0
      */
     private $tierPricePersistence;
 
@@ -58,13 +50,11 @@ class TierPriceValidator
      * Groups by code cache.
      *
      * @var array
-     * @since 2.2.0
      */
     private $customerGroupsByCode = [];
 
     /**
      * @var \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor
-     * @since 2.2.0
      */
     private $invalidSkuProcessor;
 
@@ -72,7 +62,6 @@ class TierPriceValidator
      * All groups value.
      *
      * @var string
-     * @since 2.2.0
      */
     private $allGroupsValue = 'all groups';
 
@@ -80,7 +69,6 @@ class TierPriceValidator
      * All websites value.
      *
      * @var string
-     * @since 2.2.0
      */
     private $allWebsitesValue = "0";
 
@@ -88,7 +76,6 @@ class TierPriceValidator
      * Allowed product types.
      *
      * @var array
-     * @since 2.2.0
      */
     private $allowedProductTypes = [];
 
@@ -104,7 +91,6 @@ class TierPriceValidator
      * @param \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult
      * @param \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor $invalidSkuProcessor
      * @param array $allowedProductTypes [optional]
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator,
@@ -133,7 +119,6 @@ class TierPriceValidator
      *
      * @param array $skus
      * @return array
-     * @since 2.2.0
      */
     public function validateSkus(array $skus)
     {
@@ -146,7 +131,6 @@ class TierPriceValidator
      * @param array $prices
      * @param array $existingPrices
      * @return \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult
-     * @since 2.2.0
      */
     public function retrieveValidationResult(array $prices, array $existingPrices = [])
     {
@@ -190,7 +174,6 @@ class TierPriceValidator
      * @param array $invalidSkus
      * @param Result $validationResult
      * @return void
-     * @since 2.2.0
      */
     private function checkSku(
         \Magento\Catalog\Api\Data\TierPriceInterface $price,
@@ -228,7 +211,6 @@ class TierPriceValidator
      * @param int $key
      * @param Result $validationResult
      * @return void
-     * @since 2.2.0
      */
     private function checkPrice(\Magento\Catalog\Api\Data\TierPriceInterface $price, $key, Result $validationResult)
     {
@@ -270,7 +252,6 @@ class TierPriceValidator
      * @param int $key
      * @param Result $validationResult
      * @return void
-     * @since 2.2.0
      */
     private function checkPriceType(
         \Magento\Catalog\Api\Data\TierPriceInterface $price,
@@ -319,7 +300,6 @@ class TierPriceValidator
      * @param int $key
      * @param Result $validationResult
      * @return void
-     * @since 2.2.0
      */
     private function checkQuantity(\Magento\Catalog\Api\Data\TierPriceInterface $price, $key, Result $validationResult)
     {
@@ -353,7 +333,6 @@ class TierPriceValidator
      * @param int $key
      * @param Result $validationResult
      * @return void
-     * @since 2.2.0
      */
     private function checkWebsite(\Magento\Catalog\Api\Data\TierPriceInterface $price, $key, Result $validationResult)
     {
@@ -390,7 +369,6 @@ class TierPriceValidator
      * @param int $key
      * @param Result $validationResult
      * @return void
-     * @since 2.2.0
      */
     private function checkUnique(
         \Magento\Catalog\Api\Data\TierPriceInterface $tierPrice,
@@ -441,7 +419,6 @@ class TierPriceValidator
      * @param int $key
      * @param Result $validationResult
      * @return void
-     * @since 2.2.0
      */
     private function checkGroup(\Magento\Catalog\Api\Data\TierPriceInterface $price, $key, Result $validationResult)
     {
@@ -475,7 +452,6 @@ class TierPriceValidator
      *
      * @param string $code
      * @return int|bool
-     * @since 2.2.0
      */
     private function retrieveGroupValue($code)
     {

@@ -12,7 +12,6 @@ use Magento\Framework\FlagManager;
  *
  * Manage access to notification time flag
  *
- * @since 2.2.0
  */
 class NotificationTime
 {
@@ -20,7 +19,6 @@ class NotificationTime
 
     /**
      * @var FlagManager
-     * @since 2.2.0
      */
     private $flagManager;
 
@@ -28,7 +26,6 @@ class NotificationTime
      * NotificationTime constructor.
      *
      * @param FlagManager $flagManager
-     * @since 2.2.0
      */
     public function __construct(
         FlagManager $flagManager
@@ -41,7 +38,6 @@ class NotificationTime
      *
      * @param string $value
      * @return bool
-     * @since 2.2.0
      */
     public function storeLastTimeNotification($value)
     {
@@ -52,7 +48,6 @@ class NotificationTime
      * Returns last time when merchant was notified about Analytic services
      *
      * @return int
-     * @since 2.2.0
      */
     public function getLastTimeNotification()
     {
@@ -63,7 +58,6 @@ class NotificationTime
      * Remove last notification time flag.
      *
      * @return bool
-     * @since 2.2.0
      */
     public function unsetLastTimeNotificationValue()
     {

@@ -16,7 +16,6 @@ use Magento\Framework\Filesystem\Directory\ReadInterface;
 
 /**
  * PSR logger implementation for CLI
- * @since 2.2.0
  */
 class ConsoleLogger extends AbstractLogger
 {
@@ -34,7 +33,6 @@ class ConsoleLogger extends AbstractLogger
      * Public static files directory read interface
      *
      * @var ReadInterface
-     * @since 2.2.0
      */
     private $tmpDir;
 
@@ -42,7 +40,6 @@ class ConsoleLogger extends AbstractLogger
      * Console output interface
      *
      * @var OutputInterface
-     * @since 2.2.0
      */
     private $output;
 
@@ -50,7 +47,6 @@ class ConsoleLogger extends AbstractLogger
      * Helper for preparing data of specific formats (date, percentage, etc)
      *
      * @var FormatterHelper
-     * @since 2.2.0
      */
     private $formatterHelper;
 
@@ -58,7 +54,6 @@ class ConsoleLogger extends AbstractLogger
      * Maximum progress bar row string length
      *
      * @var int
-     * @since 2.2.0
      */
     private $initialMaxBarSize = 0;
 
@@ -68,7 +63,6 @@ class ConsoleLogger extends AbstractLogger
      * Used for clearing previously rendered progress bars
      *
      * @var int
-     * @since 2.2.0
      */
     private $renderedLines = 0;
 
@@ -76,13 +70,11 @@ class ConsoleLogger extends AbstractLogger
      * Time of previous rendering tick
      *
      * @var int
-     * @since 2.2.0
      */
     private $lastTimeRefreshed = 0;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $verbosityLevelMap = [
         LogLevel::EMERGENCY => OutputInterface::VERBOSITY_NORMAL,
@@ -97,7 +89,6 @@ class ConsoleLogger extends AbstractLogger
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $formatLevelMap = [
         LogLevel::EMERGENCY => self::ERROR,
@@ -114,7 +105,6 @@ class ConsoleLogger extends AbstractLogger
      * Running deployment processes info
      *
      * @var array[]
-     * @since 2.2.0
      */
     private $processes = [];
 
@@ -124,7 +114,6 @@ class ConsoleLogger extends AbstractLogger
      * @param FormatterHelper $formatterHelper
      * @param array $verbosityLevelMap
      * @param array $formatLevelMap
-     * @since 2.2.0
      */
     public function __construct(
         Filesystem $filesystem,
@@ -142,7 +131,6 @@ class ConsoleLogger extends AbstractLogger
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function log($level, $message, array $context = [])
     {
@@ -173,7 +161,6 @@ class ConsoleLogger extends AbstractLogger
      *
      * @param array $context
      * @return void
-     * @since 2.2.0
      */
     private function registerProcess(array $context)
     {
@@ -190,7 +177,6 @@ class ConsoleLogger extends AbstractLogger
      *
      * @param OutputInterface $output
      * @return void
-     * @since 2.2.0
      */
     private function refresh(OutputInterface $output)
     {
@@ -230,7 +216,6 @@ class ConsoleLogger extends AbstractLogger
      * @param string $deployedPackagePath
      * @param array $process
      * @return void
-     * @since 2.2.0
      */
     private function updateProcessInfo($deployedPackagePath, array & $process)
     {
@@ -255,7 +240,6 @@ class ConsoleLogger extends AbstractLogger
      * Clear rendered lines
      *
      * @return void
-     * @since 2.2.0
      */
     private function cleanUp()
     {
@@ -275,7 +259,6 @@ class ConsoleLogger extends AbstractLogger
      * @param OutputInterface $output
      * @param array $process
      * @return string
-     * @since 2.2.0
      */
     private function renderProgressBar(OutputInterface $output, array $process)
     {
@@ -298,7 +281,6 @@ class ConsoleLogger extends AbstractLogger
      * @param OutputInterface $output
      * @param array $process
      * @return string
-     * @since 2.2.0
      */
     private function renderBar(OutputInterface $output, array $process)
     {
@@ -320,7 +302,6 @@ class ConsoleLogger extends AbstractLogger
      *
      * @param string $relativePath
      * @return string|false
-     * @since 2.2.0
      */
     private function getPackageDeploymentInfo($relativePath)
     {

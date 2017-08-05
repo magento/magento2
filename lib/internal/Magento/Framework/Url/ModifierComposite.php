@@ -7,19 +7,16 @@ namespace Magento\Framework\Url;
 
 /**
  * Composite URL modifier.
- * @since 2.1.0
  */
 class ModifierComposite implements ModifierInterface
 {
     /**
      * @var ModifierInterface[]
-     * @since 2.1.0
      */
     private $modifiers;
 
     /**
      * @param ModifierInterface[] $modifiers
-     * @since 2.1.0
      */
     public function __construct(array $modifiers = [])
     {
@@ -28,7 +25,6 @@ class ModifierComposite implements ModifierInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function execute($url, $mode = ModifierInterface::MODE_ENTIRE)
     {

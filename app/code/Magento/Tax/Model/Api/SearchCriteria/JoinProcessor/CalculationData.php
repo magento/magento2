@@ -11,7 +11,6 @@ use Magento\Framework\Data\Collection\AbstractDb;
 /**
  * Class CalculationData
  * @package Magento\Tax\Model\Api\SearchCriteria\JoinProcessor
- * @since 2.2.0
  */
 class CalculationData implements CustomJoinInterface
 {
@@ -21,7 +20,6 @@ class CalculationData implements CustomJoinInterface
     /**
      * @param \Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection $collection
      * @return bool
-     * @since 2.2.0
      */
     public function apply(AbstractDb $collection)
     {
