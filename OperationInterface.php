@@ -8,7 +8,7 @@ namespace Magento\Framework\Bulk;
 /**
  * Interface OperationInterface
  * @api
- * @since 2.2.0
+ * @since 100.2.0
  */
 interface OperationInterface
 {
@@ -37,7 +37,7 @@ interface OperationInterface
      * Operation id
      *
      * @return int
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getId();
 
@@ -46,7 +46,7 @@ interface OperationInterface
      *
      * @param int $id
      * @return $this
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function setId($id);
 
@@ -54,7 +54,7 @@ interface OperationInterface
      * Get bulk uuid
      *
      * @return string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getBulkUuid();
 
@@ -63,7 +63,7 @@ interface OperationInterface
      *
      * @param string $bulkId
      * @return $this
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function setBulkUuid($bulkId);
 
@@ -71,7 +71,7 @@ interface OperationInterface
      * Message Queue Topic
      *
      * @return string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getTopicName();
 
@@ -80,7 +80,7 @@ interface OperationInterface
      *
      * @param string $topic
      * @return $this
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function setTopicName($topic);
 
@@ -88,7 +88,7 @@ interface OperationInterface
      * Serialized Data
      *
      * @return string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getSerializedData();
 
@@ -97,7 +97,7 @@ interface OperationInterface
      *
      * @param string $serializedData
      * @return $this
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function setSerializedData($serializedData);
 
@@ -107,7 +107,7 @@ interface OperationInterface
      * OPEN | COMPLETE | RETRIABLY_FAILED | NOT_RETRIABLY_FAILED
      *
      * @return int
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getStatus();
 
@@ -116,7 +116,7 @@ interface OperationInterface
      *
      * @param int $status
      * @return $this
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function setStatus($status);
 
@@ -124,7 +124,7 @@ interface OperationInterface
      * Get result message
      *
      * @return string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getResultMessage();
 
@@ -133,7 +133,7 @@ interface OperationInterface
      *
      * @param string $resultMessage
      * @return $this
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function setResultMessage($resultMessage);
 
@@ -141,7 +141,7 @@ interface OperationInterface
      * Get error code
      *
      * @return int
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getErrorCode();
 
@@ -150,7 +150,7 @@ interface OperationInterface
      *
      * @param int $errorCode
      * @return $this
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function setErrorCode($errorCode);
 }
