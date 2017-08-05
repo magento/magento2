@@ -9,13 +9,11 @@ namespace Magento\AsynchronousOperations\Controller\Adminhtml\Index;
 /**
  * Class \Magento\AsynchronousOperations\Controller\Adminhtml\Index\Index
  *
- * @since 2.2.0
  */
 class Index extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.2.0
      */
     private $resultPageFactory;
 
@@ -23,7 +21,6 @@ class Index extends \Magento\Backend\App\Action
      * Details constructor.
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -35,7 +32,6 @@ class Index extends \Magento\Backend\App\Action
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     protected function _isAllowed()
     {
@@ -46,7 +42,6 @@ class Index extends \Magento\Backend\App\Action
      * Bulk list action
      *
      * @return \Magento\Framework\View\Result\Page
-     * @since 2.2.0
      */
     public function execute()
     {

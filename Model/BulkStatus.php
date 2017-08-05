@@ -14,37 +14,31 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class BulkStatus
- * @since 2.2.0
  */
 class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
 {
     /**
      * @var \Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory
-     * @since 2.2.0
      */
     private $bulkCollectionFactory;
 
     /**
      * @var \Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory
-     * @since 2.2.0
      */
     private $operationCollectionFactory;
 
     /**
      * @var ResourceConnection
-     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var CalculatedStatusSql
-     * @since 2.2.0
      */
     private $calculatedStatusSql;
 
     /**
      * @var MetadataPool
-     * @since 2.2.0
      */
     private $metadataPool;
 
@@ -55,7 +49,6 @@ class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
      * @param ResourceConnection $resourceConnection
      * @param CalculatedStatusSql $calculatedStatusSql
      * @param MetadataPool $metadataPool
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\AsynchronousOperations\Model\ResourceModel\Bulk\CollectionFactory $bulkCollection,
@@ -73,7 +66,6 @@ class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function getFailedOperationsByBulkId($bulkUuid, $failureType = null)
     {
@@ -92,7 +84,6 @@ class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function getOperationsCountByBulkIdAndStatus($bulkUuid, $status)
     {
@@ -121,7 +112,6 @@ class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function getBulksByUser($userId)
     {
@@ -146,7 +136,6 @@ class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function getBulkStatus($bulkUuid)
     {
@@ -196,7 +185,6 @@ class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
      *
      * @param string $bulkUuid
      * @return int
-     * @since 2.2.0
      */
     private function getOperationCount($bulkUuid)
     {

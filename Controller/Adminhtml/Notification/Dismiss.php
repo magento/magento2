@@ -12,13 +12,11 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class Bulk Notification Dismiss Controller
- * @since 2.2.0
  */
 class Dismiss extends Action
 {
     /**
      * @var BulkNotificationManagement
-     * @since 2.2.0
      */
     private $notificationManagement;
 
@@ -27,7 +25,6 @@ class Dismiss extends Action
      *
      * @param Context $context
      * @param BulkNotificationManagement $notificationManagement
-     * @since 2.2.0
      */
     public function __construct(
         Context $context,
@@ -39,7 +36,6 @@ class Dismiss extends Action
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     protected function _isAllowed()
     {
@@ -48,7 +44,6 @@ class Dismiss extends Action
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function execute()
     {

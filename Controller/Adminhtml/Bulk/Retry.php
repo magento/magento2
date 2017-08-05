@@ -15,25 +15,21 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class Bulk Retry Controller
- * @since 2.2.0
  */
 class Retry extends Action
 {
     /**
      * @var BulkManagement
-     * @since 2.2.0
      */
     private $bulkManagement;
 
     /**
      * @var BulkNotificationManagement
-     * @since 2.2.0
      */
     private $notificationManagement;
 
     /**
      * @var \Magento\AsynchronousOperations\Model\AccessValidator
-     * @since 2.2.0
      */
     private $accessValidator;
 
@@ -43,7 +39,6 @@ class Retry extends Action
      * @param BulkManagement $bulkManagement
      * @param BulkNotificationManagement $notificationManagement
      * @param AccessValidator $accessValidator
-     * @since 2.2.0
      */
     public function __construct(
         Context $context,
@@ -59,7 +54,6 @@ class Retry extends Action
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     protected function _isAllowed()
     {
@@ -69,7 +63,6 @@ class Retry extends Action
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function execute()
     {

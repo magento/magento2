@@ -18,49 +18,41 @@ use Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFacto
  * Class BulkManagement
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.2.0
  */
 class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
 {
     /**
      * @var EntityManager
-     * @since 2.2.0
      */
     private $entityManager;
 
     /**
      * @var BulkSummaryInterfaceFactory
-     * @since 2.2.0
      */
     private $bulkSummaryFactory;
 
     /**
      * @var CollectionFactory
-     * @since 2.2.0
      */
     private $operationCollectionFactory;
 
     /**
      * @var BulkPublisherInterface
-     * @since 2.2.0
      */
     private $publisher;
 
     /**
      * @var MetadataPool
-     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var ResourceConnection
-     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
@@ -73,7 +65,6 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
      * @param MetadataPool $metadataPool
      * @param ResourceConnection $resourceConnection
      * @param \Psr\Log\LoggerInterface $logger
-     * @since 2.2.0
      */
     public function __construct(
         EntityManager $entityManager,
@@ -95,7 +86,6 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function scheduleBulk($bulkUuid, array $operations, $description, $userId = null)
     {
@@ -131,7 +121,6 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
      * @param string $bulkUuid target bulk UUID
      * @param array $errorCodes list of corresponding error codes
      * @return int number of affected bulk operations
-     * @since 2.2.0
      */
     public function retryBulk($bulkUuid, array $errorCodes)
     {
@@ -189,7 +178,6 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
      *
      * @param array $operations
      * @return void
-     * @since 2.2.0
      */
     private function publishOperations(array $operations)
     {
@@ -204,7 +192,6 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function deleteBulk($bulkId)
     {

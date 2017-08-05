@@ -14,13 +14,11 @@ use Magento\Framework\Bulk\OperationInterface;
 
 /**
  * Class SearchResult
- * @since 2.2.0
  */
 class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult
 {
     /**
      * @var IdentifierResolver
-     * @since 2.2.0
      */
     private $identifierResolver;
 
@@ -34,7 +32,6 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
      * @param string $mainTable
      * @param null $resourceModel
      * @param string $identifierName
-     * @since 2.2.0
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -60,7 +57,6 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     protected function _initSelect()
     {

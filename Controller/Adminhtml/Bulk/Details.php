@@ -7,19 +7,16 @@ namespace Magento\AsynchronousOperations\Controller\Adminhtml\Bulk;
 
 /**
  * Class View Opertion Details Controller
- * @since 2.2.0
  */
 class Details extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.2.0
      */
     private $resultPageFactory;
 
     /**
      * @var \Magento\AsynchronousOperations\Model\AccessValidator
-     * @since 2.2.0
      */
     private $accessValidator;
 
@@ -28,7 +25,6 @@ class Details extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\AsynchronousOperations\Model\AccessValidator $accessValidator
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -42,7 +38,6 @@ class Details extends \Magento\Backend\App\Action
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     protected function _isAllowed()
     {
@@ -54,7 +49,6 @@ class Details extends \Magento\Backend\App\Action
      * Bulk details action
      *
      * @return \Magento\Framework\View\Result\Page
-     * @since 2.2.0
      */
     public function execute()
     {

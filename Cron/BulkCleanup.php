@@ -14,37 +14,31 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 /**
  * Class \Magento\AsynchronousOperations\Cron\BulkCleanup
  *
- * @since 2.2.0
  */
 class BulkCleanup
 {
     /**
      * @var DateTime
-     * @since 2.2.0
      */
     private $dateTime;
 
     /**
      * @var MetadataPool
-     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var ResourceConnection
-     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.2.0
      */
     private $scopeConfig;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.2.0
      */
     private $date;
 
@@ -55,7 +49,6 @@ class BulkCleanup
      * @param DateTime $dateTime
      * @param ScopeConfigInterface $scopeConfig
      * @param DateTime\DateTime $time
-     * @since 2.2.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -75,7 +68,6 @@ class BulkCleanup
      * Remove all expired bulks and corresponding operations
      *
      * @return void
-     * @since 2.2.0
      */
     public function execute()
     {

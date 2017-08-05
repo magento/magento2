@@ -10,26 +10,22 @@ use Magento\Framework\Bulk\OperationInterface;
 
 /**
  * Back button configuration provider
- * @since 2.2.0
  */
 class DoneButton implements ButtonProviderInterface
 {
     /**
      * @var \Magento\Framework\Bulk\BulkStatusInterface
-     * @since 2.2.0
      */
     private $bulkStatus;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.2.0
      */
     private $request;
 
     /**
      * @param \Magento\Framework\Bulk\BulkStatusInterface $bulkStatus
      * @param \Magento\Framework\App\RequestInterface $request
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Bulk\BulkStatusInterface $bulkStatus,
@@ -43,7 +39,6 @@ class DoneButton implements ButtonProviderInterface
      * Retrieve button data
      *
      * @return array button configuration
-     * @since 2.2.0
      */
     public function getButtonData()
     {

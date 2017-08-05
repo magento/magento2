@@ -10,26 +10,22 @@ use Magento\Framework\Bulk\OperationInterface;
 /**
  * Class \Magento\AsynchronousOperations\Model\Operation\Details
  *
- * @since 2.2.0
  */
 class Details
 {
     /**
      * @var array
-     * @since 2.2.0
      */
     private $operationCache = [];
 
     /**
      * @var \Magento\Framework\Bulk\BulkStatusInterface
-     * @since 2.2.0
      */
     private $bulkStatus;
 
     /**
      * Map between status codes and human readable indexes
      * @var array
-     * @since 2.2.0
      */
     private $statusMap = [
         OperationInterface::STATUS_TYPE_COMPLETE => 'operations_successful',
@@ -39,7 +35,6 @@ class Details
 
     /**
      * @param \Magento\Framework\Bulk\BulkStatusInterface $bulkStatus
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Bulk\BulkStatusInterface $bulkStatus
@@ -52,7 +47,6 @@ class Details
      *
      * @param string $bulkUuid
      * @return array
-     * @since 2.2.0
      */
     public function getDetails($bulkUuid)
     {
