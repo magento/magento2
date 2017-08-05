@@ -12,13 +12,11 @@ use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
 
 /**
  * @codeCoverageIgnore
- * @since 2.2.0
  */
 class InstallData implements InstallDataInterface
 {
     /**
      * @var MessageQueueConfig
-     * @since 2.2.0
      */
     private $messageQueueConfig;
 
@@ -26,7 +24,6 @@ class InstallData implements InstallDataInterface
      * Initialize dependencies.
      *
      * @param MessageQueueConfig $messageQueueConfig
-     * @since 2.2.0
      */
     public function __construct(MessageQueueConfig $messageQueueConfig)
     {
@@ -35,7 +32,6 @@ class InstallData implements InstallDataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

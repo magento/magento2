@@ -96,7 +96,7 @@ class QueueManagement
      * @param array $messages
      * @param string[] $queueNames
      * @return $this
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function addMessagesToQueues($topic, $messages, $queueNames)
     {

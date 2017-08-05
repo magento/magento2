@@ -44,7 +44,6 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $messageTopic
      * @param array $messages
      * @return array List of IDs of inserted records
-     * @since 2.2.0
      */
     public function saveMessages($messageTopic, array $messages)
     {
@@ -79,7 +78,6 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $messageIds
      * @param string[] $queueNames
      * @return $this
-     * @since 2.2.0
      */
     public function linkMessagesWithQueues(array $messageIds, array $queueNames)
     {

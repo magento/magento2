@@ -11,19 +11,16 @@ use Magento\MysqlMq\Model\QueueManagement;
 
 /**
  * Used to send messages in bulk in MySQL queue.
- * @since 2.2.0
  */
 class Exchange implements ExchangeInterface
 {
     /**
      * @var MessageQueueConfig
-     * @since 2.2.0
      */
     private $messageQueueConfig;
 
     /**
      * @var QueueManagement
-     * @since 2.2.0
      */
     private $queueManagement;
 
@@ -32,7 +29,6 @@ class Exchange implements ExchangeInterface
      *
      * @param MessageQueueConfig $messageQueueConfig
      * @param QueueManagement $queueManagement
-     * @since 2.2.0
      */
     public function __construct(MessageQueueConfig $messageQueueConfig, QueueManagement $queueManagement)
     {
@@ -42,7 +38,6 @@ class Exchange implements ExchangeInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function enqueue($topic, array $envelopes)
     {
