@@ -251,7 +251,7 @@ class TokensConfigProvider
     /**
      * Get payment data helper instance
      * @return Data
-     * @deprecated 100.1.0 100.1.0 2.1.0
+     * @deprecated 100.1.0
      */
     private function getPaymentDataHelper()
     {
@@ -264,7 +264,7 @@ class TokensConfigProvider
     /**
      * Returns order repository instance
      * @return OrderRepositoryInterface
-     * @deprecated 100.2.0 100.2.0 2.1.3
+     * @deprecated 100.2.0
      */
     private function getOrderRepository()
     {
@@ -279,7 +279,7 @@ class TokensConfigProvider
     /**
      * Returns payment token management instance
      * @return PaymentTokenManagementInterface
-     * @deprecated 100.2.0 100.2.0 2.1.3
+     * @deprecated 100.2.0
      */
     private function getPaymentTokenManagement()
     {

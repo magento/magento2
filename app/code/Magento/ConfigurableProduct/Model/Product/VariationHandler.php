@@ -113,7 +113,7 @@ class VariationHandler
     /**
      * Prepare attribute set comprising all selected configurable attributes
      *
-     * @deprecated 100.1.0 since 2.1.0
+     * @deprecated 100.1.0
      * @param \Magento\Catalog\Model\Product $product
      * @return void
      */

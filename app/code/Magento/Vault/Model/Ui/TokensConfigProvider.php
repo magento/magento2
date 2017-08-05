@@ -141,7 +141,7 @@ class TokensConfigProvider implements ConfigProviderInterface
     /**
      * Get instance of vault payment list instance
      * @return PaymentMethodListInterface
-     * @deprecated 100.2.0 100.2.0 2.1.3
+     * @deprecated 100.2.0
      */
     private function getVaultPaymentList()
     {
