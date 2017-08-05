@@ -8,7 +8,7 @@ namespace Magento\Amqp\Model;
 /**
  * {@inheritdoc}
  *
- * @deprecated 2.2.0
+ * @deprecated 100.2.0
  */
 class Config extends \Magento\Framework\Amqp\Config
 {
