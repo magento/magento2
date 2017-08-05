@@ -7,7 +7,6 @@ namespace Magento\Setup\Model\Description\Mixin\Helper;
 
 /**
  * Apply specific format to words from source
- * @since 2.2.0
  */
 class WordWrapper
 {
@@ -18,7 +17,6 @@ class WordWrapper
      * @param array $words
      * @param string $format
      * @return string
-     * @since 2.2.0
      */
     public function wrapWords($source, array $words, $format)
     {

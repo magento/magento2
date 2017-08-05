@@ -11,13 +11,11 @@ use Zend\View\Model\ViewModel;
 /**
  * Class \Magento\Setup\Controller\MarketplaceCredentials
  *
- * @since 2.0.11
  */
 class MarketplaceCredentials extends AbstractActionController
 {
     /**
      * @return ViewModel
-     * @since 2.0.11
      */
     public function indexAction()
     {

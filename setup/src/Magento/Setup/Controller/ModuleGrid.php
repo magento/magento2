@@ -10,7 +10,6 @@ use Magento\Setup\Model\Grid;
 
 /**
  * Controller for module grid tasks
- * @since 2.2.0
  */
 class ModuleGrid extends \Zend\Mvc\Controller\AbstractActionController
 {
@@ -18,13 +17,11 @@ class ModuleGrid extends \Zend\Mvc\Controller\AbstractActionController
      * Module grid
      *
      * @var Grid\Module
-     * @since 2.2.0
      */
     private $gridModule;
 
     /**
      * @param Grid\Module $gridModule
-     * @since 2.2.0
      */
     public function __construct(
         Grid\Module $gridModule
@@ -36,7 +33,6 @@ class ModuleGrid extends \Zend\Mvc\Controller\AbstractActionController
      * Index page action
      *
      * @return \Zend\View\Model\ViewModel
-     * @since 2.2.0
      */
     public function indexAction()
     {
@@ -50,7 +46,6 @@ class ModuleGrid extends \Zend\Mvc\Controller\AbstractActionController
      *
      * @return \Zend\View\Model\JsonModel
      * @throws \RuntimeException
-     * @since 2.2.0
      */
     public function modulesAction()
     {

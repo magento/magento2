@@ -14,13 +14,11 @@ use Magento\Vault\Controller\CardsManagement;
 /**
  * Class \Magento\Vault\Controller\Cards\ListAction
  *
- * @since 2.1.0
  */
 class ListAction extends CardsManagement
 {
     /**
      * @var PageFactory
-     * @since 2.1.0
      */
     private $pageFactory;
 
@@ -28,7 +26,6 @@ class ListAction extends CardsManagement
      * @param Context $context
      * @param Session $customerSession
      * @param PageFactory $pageFactory
-     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -44,7 +41,6 @@ class ListAction extends CardsManagement
      *
      * @return \Magento\Framework\Controller\ResultInterface|ResponseInterface
      * @throws \Magento\Framework\Exception\NotFoundException
-     * @since 2.1.0
      */
     public function execute()
     {

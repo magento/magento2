@@ -60,7 +60,6 @@ class Xml extends AbstractAdapter
      * @param \SimpleXMLElement $attributes
      * @param \SimpleXMLElement $element
      * @return void
-     * @since 2.2.0
      */
     private function parseTranslatableNodes(\SimpleXMLElement $attributes, \SimpleXMLElement $element)
     {

@@ -9,7 +9,6 @@ namespace Magento\Vault\Api\Data;
  * Gateway vault payment token search result interface.
  *
  * @api
- * @since 2.1.0
  * @since 100.1.0
  */
 interface PaymentTokenSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
@@ -18,7 +17,6 @@ interface PaymentTokenSearchResultsInterface extends \Magento\Framework\Api\Sear
      * Gets collection items.
      *
      * @return \Magento\Vault\Api\Data\PaymentTokenInterface[] Array of collection items.
-     * @since 2.1.0
      * @since 100.1.0
      */
     public function getItems();
@@ -28,7 +26,6 @@ interface PaymentTokenSearchResultsInterface extends \Magento\Framework\Api\Sear
      *
      * @param \Magento\Vault\Api\Data\PaymentTokenInterface[] $items
      * @return $this
-     * @since 2.1.0
      * @since 100.1.0
      */
     public function setItems(array $items);

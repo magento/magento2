@@ -9,7 +9,6 @@ use Magento\Framework\Composer\ComposerInformation;
 
 /**
  * Class TypeMapper
- * @since 2.2.0
  */
 class TypeMapper
 {
@@ -28,7 +27,6 @@ class TypeMapper
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $packageTypesMap = [
         ComposerInformation::THEME_PACKAGE_TYPE => self::THEME_PACKAGE_TYPE,
@@ -45,7 +43,6 @@ class TypeMapper
      * @param string $packageType
      * @return string
      * @internal param string $packageName
-     * @since 2.2.0
      */
     public function map($packageType)
     {
