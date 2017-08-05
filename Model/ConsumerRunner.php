@@ -30,13 +30,11 @@ class ConsumerRunner
 
     /**
      * @var MaintenanceMode
-     * @since 2.2.0
      */
     private $maintenanceMode;
 
     /**
      * @var integer
-     * @since 2.2.0
      */
     private $maintenanceSleepInterval;
 

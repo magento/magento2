@@ -14,13 +14,11 @@ use Magento\MessageQueue\Model\ResourceModel\Lock;
  * Initializes lock table to lock messages that were processed already.
  *
  * @codeCoverageIgnore
- * @since 2.1.0
  */
 class InstallSchema implements InstallSchemaInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
