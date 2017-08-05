@@ -14,67 +14,38 @@ use Magento\Inventory\Model\Indexer\StockItem\Action\Rows as RowsAction;
 /**
  * Stock item Indexer @todo
  */
-class StockItem implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
+class StockItem implements \Magento\Framework\Indexer\ActionInterface
 {
 
     /**
-     * @var FullAction
-     */
-    private $fullAction;
-
-    /**
-     * @var RowAction
-     */
-    private $rowAction;
-
-    /**
-     * @var RowsAction
-     */
-    private $rowsAction;
-
-    /**
-     * StockItem constructor.
-     * @param FullAction $fullAction
-     * @param RowAction $rowAction
-     * @param  RowsAction $rowsAction
-     */
-    public function __construct(FullAction $fullAction, RowAction $rowAction, RowsAction $rowsAction)
-    {
-        $this->fullAction = $fullAction;
-        $this->rowAction = $rowAction;
-        $this->rowsAction = $rowsAction;
-    }
-
-
-    /**
-     * @inheritdoc
-     */
-    public function execute($ids)
-    {
-        $this->rowsAction->execute($ids);
-    }
-
-    /**
-     * @inheritdoc
+     * Execute full indexation
+     *
+     * @return void
      */
     public function executeFull()
     {
-        $this->fullAction->execute();
+        // TODO: Implement executeFull() method.
     }
 
     /**
-     * @inheritdoc
+     * Execute partial indexation by ID list
+     *
+     * @param int[] $ids
+     * @return void
      */
     public function executeList(array $ids)
     {
-        $this->rowsAction->execute($ids);
+        // TODO: Implement executeList() method.
     }
 
     /**
-     * @inheritdoc
+     * Execute partial indexation by ID
+     *
+     * @param int $id
+     * @return void
      */
     public function executeRow($id)
     {
-        $this->rowAction->execute($id);
+        // TODO: Implement executeRow() method.
     }
 }
