@@ -11,8 +11,8 @@ use Magento\Framework\Filesystem\Directory\Write as DirectoryWrite;
 use Magento\Framework\Filesystem\File\Write;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sitemap\Helper\Data;
-use Magento\Sitemap\Model\ItemResolver\ConfigReaderInterface;
-use Magento\Sitemap\Model\ItemResolver\ItemResolverInterface;
+use Magento\Sitemap\Model\ItemProvider\ConfigReaderInterface;
+use Magento\Sitemap\Model\ItemProvider\ItemProviderInterface;
 use Magento\Sitemap\Model\ResourceModel\Catalog\Category;
 use Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory;
 use Magento\Sitemap\Model\ResourceModel\Catalog\Product;
@@ -77,9 +77,9 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     private $storeManagerMock;
 
     /**
-     * @var ItemResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ItemProviderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $itemResolverMock;
+    private $itemProviderMock;
 
     /**
      * @var ConfigReaderInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -146,7 +146,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->directoryMock);
 
         $this->configReaderMock = $this->getMockForAbstractClass(SitemapConfigReaderInterface::class);
-        $this->itemResolverMock = $this->getMockForAbstractClass(ItemResolverInterface::class);
+        $this->itemProviderMock = $this->getMockForAbstractClass(ItemProviderInterface::class);
     }
 
     /**
@@ -525,7 +525,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
 
         $storeBaseMediaUrl = 'http://store.com/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/';
 
-        $this->itemResolverMock->expects($this->any())
+        $this->itemProviderMock->expects($this->any())
             ->method('getItems')
             ->willReturn([
                 new SitemapItem('category.html', '1.0', 'daily', '2012-12-21 00:00:00'),
@@ -610,7 +610,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $this->storeManagerMock,
                 'sitemapData' => $this->helperMockSitemap,
                 'filesystem' => $this->filesystemMock,
-                'itemResolver' => $this->itemResolverMock,
+                'itemProvider' => $this->itemProviderMock,
                 'configReader' => $this->configReaderMock,
             ]
         );

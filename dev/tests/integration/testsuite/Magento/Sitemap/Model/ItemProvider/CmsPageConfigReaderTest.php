@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sitemap\Model\ItemResolver;
+namespace Magento\Sitemap\Model\ItemProvider;
 
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;

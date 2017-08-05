@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sitemap\Model\ItemResolver;
+namespace Magento\Sitemap\Model\ItemProvider;
 
 use Magento\Sitemap\Model\ResourceModel\Cms\PageFactory;
 use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
 
-class CmsPage implements ItemResolverInterface
+class CmsPage implements ItemProviderInterface
 {
     /**
      * Cms page factory
