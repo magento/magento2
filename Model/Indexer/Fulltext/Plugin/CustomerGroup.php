@@ -17,19 +17,16 @@ use Magento\Search\Model\EngineResolver;
 /**
  * Class \Magento\AdvancedSearch\Model\Indexer\Fulltext\Plugin\CustomerGroup
  *
- * @since 2.1.0
  */
 class CustomerGroup extends AbstractPlugin
 {
     /**
      * @var ClientOptionsInterface
-     * @since 2.1.0
      */
     protected $clientOptions;
 
     /**
      * @var EngineResolver
-     * @since 2.1.0
      */
     protected $engineResolver;
 
@@ -37,7 +34,6 @@ class CustomerGroup extends AbstractPlugin
      * @param IndexerRegistry $indexerRegistry
      * @param ClientOptionsInterface $clientOptions
      * @param EngineResolver $engineResolver
-     * @since 2.1.0
      */
     public function __construct(
         IndexerRegistry $indexerRegistry,
@@ -57,7 +53,6 @@ class CustomerGroup extends AbstractPlugin
      * @param AbstractModel $group
      * @return Attribute
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function aroundSave(
         Group $subject,

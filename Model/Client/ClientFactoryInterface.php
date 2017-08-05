@@ -7,7 +7,7 @@ namespace Magento\AdvancedSearch\Model\Client;
 
 /**
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 interface ClientFactoryInterface
 {
@@ -16,7 +16,7 @@ interface ClientFactoryInterface
      *
      * @param array $options
      * @return ClientInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function create(array $options = []);
 }

@@ -7,7 +7,7 @@ namespace Magento\AdvancedSearch\Model\Client;
 
 /**
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 interface ClientOptionsInterface
 {
@@ -16,7 +16,7 @@ interface ClientOptionsInterface
      *
      * @param array $options
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function prepareClientOptions($options = []);
 }

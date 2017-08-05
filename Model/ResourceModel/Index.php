@@ -13,19 +13,19 @@ use Magento\Catalog\Api\Data\CategoryInterface;
 
 /**
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class Index extends AbstractDb
 {
     /**
      * @var StoreManagerInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $storeManager;
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $metadataPool;
 
@@ -35,7 +35,7 @@ class Index extends AbstractDb
      * @param StoreManagerInterface $storeManager
      * @param MetadataPool $metadataPool
      * @param null $connectionName
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         Context $context,
@@ -51,7 +51,7 @@ class Index extends AbstractDb
     /**
      * Implementation of abstract construct
      * @return void
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function _construct()
     {
@@ -62,7 +62,7 @@ class Index extends AbstractDb
      *
      * @param null|array $productIds
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function _getCatalogProductPriceData($productIds = null)
     {
@@ -91,7 +91,7 @@ class Index extends AbstractDb
      * @param null|array $productIds
      * @param int $storeId
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getPriceIndexData($productIds, $storeId)
     {
@@ -111,7 +111,7 @@ class Index extends AbstractDb
      * @param int $storeId
      * @param null|array $productIds
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getCategoryProductIndexData($storeId = null, $productIds = null)
     {
@@ -142,7 +142,7 @@ class Index extends AbstractDb
      *
      * @param int $categoryId
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getMovedCategoryProductIds($categoryId)
     {

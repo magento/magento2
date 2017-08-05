@@ -8,19 +8,16 @@ namespace Magento\AdvancedSearch\Model\Adapter\DataMapper;
 /**
  * Provide additional fields for data mapper during search indexer
  * Must return array with the following format: [[product id] => [field name1 => value1, ...], ...]
- * @since 2.2.0
  */
 class AdditionalFieldsProvider implements AdditionalFieldsProviderInterface
 {
     /**
      * @var AdditionalFieldsProviderInterface[]
-     * @since 2.2.0
      */
     private $fieldsProviders;
 
     /**
      * @param AdditionalFieldsProviderInterface[] $fieldsProviders
-     * @since 2.2.0
      */
     public function __construct(array $fieldsProviders)
     {
@@ -29,7 +26,6 @@ class AdditionalFieldsProvider implements AdditionalFieldsProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getFields(array $productIds, $storeId)
     {

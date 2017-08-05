@@ -17,13 +17,11 @@ class SuggestedQueries implements SuggestedQueriesInterface
 {
     /**
      * @var EngineResolver
-     * @since 2.1.0
      */
     private $engineResolver;
 
     /**
      * @var ObjectManagerInterface
-     * @since 2.1.0
      */
     private $objectManager;
 
@@ -31,13 +29,11 @@ class SuggestedQueries implements SuggestedQueriesInterface
      * Array of SuggestedQueriesInterface class names.
      *
      * @var array
-     * @since 2.1.0
      */
     private $data;
 
     /**
      * @var SuggestedQueriesInterface
-     * @since 2.1.0
      */
     private $dataProvider;
 
@@ -47,7 +43,6 @@ class SuggestedQueries implements SuggestedQueriesInterface
      * @param EngineResolver $engineResolver
      * @param ObjectManagerInterface $objectManager
      * @param array $data
-     * @since 2.1.0
      */
     public function __construct(EngineResolver $engineResolver, ObjectManagerInterface $objectManager, array $data)
     {
@@ -77,7 +72,6 @@ class SuggestedQueries implements SuggestedQueriesInterface
      *
      * @return SuggestedQueriesInterface|SuggestedQueriesInterface[]
      * @throws \Exception
-     * @since 2.1.0
      */
     private function getDataProvider()
     {

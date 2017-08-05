@@ -8,7 +8,7 @@ namespace Magento\AdvancedSearch\Block\Adminhtml\System\Config;
 /**
  * Search engine test connection block
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class TestConnection extends \Magento\Config\Block\System\Config\Form\Field
 {
@@ -16,7 +16,7 @@ class TestConnection extends \Magento\Config\Block\System\Config\Form\Field
      * Set template to itself
      *
      * @return $this
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function _prepareLayout()
     {
@@ -30,7 +30,7 @@ class TestConnection extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -44,7 +44,7 @@ class TestConnection extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -65,7 +65,7 @@ class TestConnection extends \Magento\Config\Block\System\Config\Form\Field
      * Returns configuration fields required to perform the ping request
      *
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function _getFieldMapping()
     {

@@ -10,7 +10,7 @@ use \Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class ClientResolver
 {
@@ -18,7 +18,7 @@ class ClientResolver
      * Scope configuration
      *
      * @var ScopeConfigInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $scopeConfig;
 
@@ -26,7 +26,7 @@ class ClientResolver
      * Object Manager instance
      *
      * @var ObjectManagerInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $objectManager;
 
@@ -34,7 +34,6 @@ class ClientResolver
      * Pool of existing client factories
      *
      * @var array
-     * @since 2.1.0
      */
     private $clientFactoryPool;
 
@@ -42,7 +41,6 @@ class ClientResolver
      * Pool of client option classes
      *
      * @var array
-     * @since 2.1.0
      */
     private $clientOptionsPool;
 
@@ -50,13 +48,13 @@ class ClientResolver
      * Config path
      *
      * @var string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $path;
 
     /**
      * Config Scope
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $scope;
 
@@ -67,7 +65,7 @@ class ClientResolver
      * @param array $clientOptions
      * @param string $path
      * @param string scope
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -89,7 +87,7 @@ class ClientResolver
      * Returns configured search engine
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getCurrentEngine()
     {
@@ -102,7 +100,7 @@ class ClientResolver
      * @param string $engine
      * @param array $data
      * @return ClientInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function create($engine = '', array $data = [])
     {
