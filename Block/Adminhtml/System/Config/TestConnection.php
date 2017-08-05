@@ -8,13 +8,11 @@ namespace Magento\Elasticsearch\Block\Adminhtml\System\Config;
 /**
  * Elasticsearch test connection block
  * @codeCoverageIgnore
- * @since 2.1.0
  */
 class TestConnection extends \Magento\AdvancedSearch\Block\Adminhtml\System\Config\TestConnection
 {
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     protected function _getFieldMapping()
     {

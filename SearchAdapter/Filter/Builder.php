@@ -15,7 +15,6 @@ use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Wildcard;
 /**
  * Class \Magento\Elasticsearch\SearchAdapter\Filter\Builder
  *
- * @since 2.1.0
  */
 class Builder implements BuilderInterface
 {
@@ -41,7 +40,6 @@ class Builder implements BuilderInterface
 
     /**
      * @var FilterInterface[]
-     * @since 2.1.0
      */
     protected $filters;
 
@@ -49,7 +47,6 @@ class Builder implements BuilderInterface
      * @param Range $range
      * @param Term $term
      * @param Wildcard $wildcard
-     * @since 2.1.0
      */
     public function __construct(
         Range $range,
@@ -65,7 +62,6 @@ class Builder implements BuilderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function build(RequestFilterInterface $filter, $conditionType)
     {
@@ -76,7 +72,6 @@ class Builder implements BuilderInterface
      * @param RequestFilterInterface $filter
      * @param string $conditionType
      * @return array
-     * @since 2.1.0
      */
     protected function processFilter(RequestFilterInterface $filter, $conditionType)
     {
@@ -100,7 +95,6 @@ class Builder implements BuilderInterface
      * @param RequestFilterInterface|BoolExpression $filter
      * @param bool $isNegation
      * @return array
-     * @since 2.1.0
      */
     protected function processBoolFilter(RequestFilterInterface $filter, $isNegation)
     {
@@ -129,7 +123,6 @@ class Builder implements BuilderInterface
      * @param RequestFilterInterface[] $filters
      * @param string $conditionType
      * @return string
-     * @since 2.1.0
      */
     private function buildFilters(array $filters, $conditionType)
     {
@@ -149,7 +142,6 @@ class Builder implements BuilderInterface
     /**
      * @param string $conditionType
      * @return bool
-     * @since 2.1.0
      */
     protected function isNegation($conditionType)
     {
@@ -160,7 +152,6 @@ class Builder implements BuilderInterface
      * @param string $conditionType
      * @param bool $isNegation
      * @return string
-     * @since 2.1.0
      */
     private function mapConditionType($conditionType, $isNegation)
     {

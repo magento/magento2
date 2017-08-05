@@ -11,7 +11,7 @@ use Magento\Framework\Search\Request\Dimension;
 
 /**
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 interface BucketBuilderInterface
 {
@@ -21,7 +21,7 @@ interface BucketBuilderInterface
      * @param array $queryResult
      * @param DataProviderInterface $dataProvider
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function build(
         RequestBucketInterface $bucket,

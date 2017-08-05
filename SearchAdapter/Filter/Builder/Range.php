@@ -12,19 +12,16 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 /**
  * Class \Magento\Elasticsearch\SearchAdapter\Filter\Builder\Range
  *
- * @since 2.1.0
  */
 class Range implements FilterInterface
 {
     /**
      * @var FieldMapperInterface
-     * @since 2.1.0
      */
     protected $fieldMapper;
 
     /**
      * @param FieldMapperInterface $fieldMapper
-     * @since 2.1.0
      */
     public function __construct(
         FieldMapperInterface $fieldMapper
@@ -35,7 +32,6 @@ class Range implements FilterInterface
     /**
      * @param RequestFilterInterface|RangeFilterRequest $filter
      * @return array
-     * @since 2.1.0
      */
     public function buildFilter(RequestFilterInterface $filter)
     {

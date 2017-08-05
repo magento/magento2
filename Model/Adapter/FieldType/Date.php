@@ -12,25 +12,21 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 /**
  * Class \Magento\Elasticsearch\Model\Adapter\FieldType\Date
  *
- * @since 2.1.0
  */
 class Date
 {
     /**
      * @var DateTime
-     * @since 2.1.0
      */
     private $dateTime;
 
     /**
      * @var TimezoneInterface
-     * @since 2.1.0
      */
     private $localeDate;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.1.0
      */
     private $scopeConfig;
 
@@ -40,7 +36,6 @@ class Date
      * @param DateTime $dateTime
      * @param TimezoneInterface $localeDate
      * @param ScopeConfigInterface $scopeConfig
-     * @since 2.1.0
      */
     public function __construct(
         DateTime $dateTime,
@@ -60,7 +55,6 @@ class Date
      * @param string|null $date
      * @return string|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function formatDate($storeId, $date = null)
     {

@@ -15,7 +15,6 @@ use Magento\Framework\App\ScopeResolverInterface;
 /**
  * Class \Magento\Elasticsearch\Model\Indexer\IndexerHandler
  *
- * @since 2.1.0
  */
 class IndexerHandler implements IndexerInterface
 {
@@ -26,43 +25,36 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * @var IndexStructureInterface
-     * @since 2.1.0
      */
     private $indexStructure;
 
     /**
      * @var ElasticsearchAdapter
-     * @since 2.1.0
      */
     private $adapter;
 
     /**
      * @var IndexNameResolver
-     * @since 2.1.0
      */
     private $indexNameResolver;
 
     /**
      * @var Batch
-     * @since 2.1.0
      */
     private $batch;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $data;
 
     /**
      * @var int
-     * @since 2.1.0
      */
     private $batchSize;
 
     /**
      * @var ScopeResolverInterface
-     * @since 2.1.0
      */
     private $scopeResolver;
 
@@ -74,7 +66,6 @@ class IndexerHandler implements IndexerInterface
      * @param ScopeResolverInterface $scopeResolver
      * @param array $data
      * @param int $batchSize
-     * @since 2.1.0
      */
     public function __construct(
         IndexStructureInterface $indexStructure,
@@ -96,7 +87,6 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function saveIndex($dimensions, \Traversable $documents)
     {
@@ -112,7 +102,6 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function deleteIndex($dimensions, \Traversable $documents)
     {
@@ -128,7 +117,6 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function cleanIndex($dimensions)
     {
@@ -139,7 +127,6 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function isAvailable()
     {
@@ -148,7 +135,6 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * @return string
-     * @since 2.1.0
      */
     private function getIndexerId()
     {

@@ -7,7 +7,7 @@ namespace Magento\Elasticsearch\Model\Adapter;
 
 /**
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 interface FieldMapperInterface
 {
@@ -25,7 +25,7 @@ interface FieldMapperInterface
      * @param string $attributeCode
      * @param array $context
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getFieldName($attributeCode, $context = []);
 
@@ -34,7 +34,7 @@ interface FieldMapperInterface
      *
      * @param array $context
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getAllAttributesTypes($context = []);
 }

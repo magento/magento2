@@ -15,26 +15,22 @@ use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 /**
  * Class \Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\Dynamic
  *
- * @since 2.1.0
  */
 class Dynamic implements BucketBuilderInterface
 {
     /**
      * @var Repository
-     * @since 2.1.0
      */
     private $algorithmRepository;
 
     /**
      * @var EntityStorageFactory
-     * @since 2.1.0
      */
     private $entityStorageFactory;
 
     /**
      * @param Repository $algorithmRepository
      * @param EntityStorageFactory $entityStorageFactory
-     * @since 2.1.0
      */
     public function __construct(Repository $algorithmRepository, EntityStorageFactory $entityStorageFactory)
     {
@@ -44,7 +40,6 @@ class Dynamic implements BucketBuilderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function build(
         RequestBucketInterface $bucket,
@@ -65,7 +60,6 @@ class Dynamic implements BucketBuilderInterface
      *
      * @param array $queryResult
      * @return EntityStorage
-     * @since 2.1.0
      */
     private function getEntityStorage(array $queryResult)
     {
@@ -82,7 +76,6 @@ class Dynamic implements BucketBuilderInterface
      *
      * @param array $data
      * @return array
-     * @since 2.1.0
      */
     private function prepareData($data)
     {

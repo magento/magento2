@@ -9,34 +9,29 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 
 /**
- * @deprecated 2.2.0
+ * @deprecated 100.2.0
  * This class is used only in deprecated \Magento\Elasticsearch\Model\Adapter\DataMapper\ProductDataMapper
  * and must not be used for new code
- * @since 2.1.0
  */
 class Attribute
 {
     /**
      * @var string[]
-     * @since 2.1.0
      */
     private $idToCodeMap = [];
 
     /**
      * @var Collection
-     * @since 2.1.0
      */
     private $attributeCollection;
 
     /**
      * @var EavAttribute[]
-     * @since 2.1.0
      */
     private $attributes = [];
 
     /**
      * @param Collection $attributeCollection
-     * @since 2.1.0
      */
     public function __construct(Collection $attributeCollection)
     {
@@ -46,7 +41,6 @@ class Attribute
     /**
      * @param int $attributeId
      * @return string
-     * @since 2.1.0
      */
     public function getAttributeCodeById($attributeId)
     {
@@ -62,7 +56,6 @@ class Attribute
     /**
      * @param string $attributeCode
      * @return int
-     * @since 2.1.0
      */
     public function getAttributeIdByCode($attributeCode)
     {
@@ -79,7 +72,6 @@ class Attribute
     /**
      * @param string $attributeCode
      * @return EavAttribute|null
-     * @since 2.1.0
      */
     public function getAttribute($attributeCode)
     {
@@ -91,7 +83,6 @@ class Attribute
 
     /**
      * @return EavAttribute[]
-     * @since 2.1.0
      */
     public function getAttributes()
     {

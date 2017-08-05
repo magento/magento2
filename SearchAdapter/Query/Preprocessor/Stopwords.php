@@ -12,7 +12,7 @@ use Magento\Framework\Module\Dir;
 
 /**
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class Stopwords implements PreprocessorInterface
 {
@@ -28,55 +28,52 @@ class Stopwords implements PreprocessorInterface
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Framework\Locale\Resolver
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $localeResolver;
 
     /**
      * @var ReadFactory
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $readFactory;
 
     /**
      * @var \Magento\Framework\App\Cache\Type\Config
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $configCache;
 
     /**
      * @var EsConfigInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $esConfig;
 
     /**
      * @var \Magento\Framework\Module\Dir\Reader
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $moduleDirReader;
 
     /**
      * @var string
-     * @since 2.1.0
      */
     private $stopwordsModule;
 
     /**
      * @var string
-     * @since 2.1.0
      */
     private $stopwordsDirectory;
 
     /**
      * @var \Magento\Framework\Serialize\SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -91,7 +88,7 @@ class Stopwords implements PreprocessorInterface
      * @param \Magento\Framework\Module\Dir\Reader $moduleDirReader
      * @param string $stopwordsModule
      * @param string $stopwordsDirectory
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -115,7 +112,7 @@ class Stopwords implements PreprocessorInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function process($query)
     {
@@ -129,7 +126,7 @@ class Stopwords implements PreprocessorInterface
      * Get stopwords list for current locale
      *
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function getStopwordsList()
     {
@@ -153,7 +150,7 @@ class Stopwords implements PreprocessorInterface
      * Get stopwords file for current locale
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function getStopwordsFile()
     {
@@ -169,8 +166,7 @@ class Stopwords implements PreprocessorInterface
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {

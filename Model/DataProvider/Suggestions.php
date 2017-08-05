@@ -18,7 +18,6 @@ use Magento\Store\Model\StoreManagerInterface as StoreManager;
 /**
  * Class \Magento\Elasticsearch\Model\DataProvider\Suggestions
  *
- * @since 2.1.0
  */
 class Suggestions implements SuggestedQueriesInterface
 {
@@ -42,37 +41,31 @@ class Suggestions implements SuggestedQueriesInterface
 
     /**
      * @var Config
-     * @since 2.1.0
      */
     private $config;
 
     /**
      * @var QueryResultFactory
-     * @since 2.1.0
      */
     private $queryResultFactory;
 
     /**
      * @var ConnectionManager
-     * @since 2.1.0
      */
     private $connectionManager;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.1.0
      */
     private $scopeConfig;
 
     /**
      * @var SearchIndexNameResolver
-     * @since 2.1.0
      */
     private $searchIndexNameResolver;
 
     /**
      * @var StoreManager
-     * @since 2.1.0
      */
     private $storeManager;
 
@@ -83,7 +76,6 @@ class Suggestions implements SuggestedQueriesInterface
      * @param ConnectionManager $connectionManager
      * @param SearchIndexNameResolver $searchIndexNameResolver
      * @param StoreManager $storeManager
-     * @since 2.1.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -105,7 +97,6 @@ class Suggestions implements SuggestedQueriesInterface
      * {@inheritdoc}
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function getItems(QueryInterface $query, $limit = null, $additionalFilters = null)
     {
@@ -132,7 +123,6 @@ class Suggestions implements SuggestedQueriesInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function isResultsCountEnabled()
     {
@@ -145,7 +135,6 @@ class Suggestions implements SuggestedQueriesInterface
     /**
      * @param QueryInterface $query
      * @return array
-     * @since 2.1.0
      */
     private function getSuggestions(QueryInterface $query)
     {
@@ -195,7 +184,6 @@ class Suggestions implements SuggestedQueriesInterface
     /**
      * @param array $query
      * @return array
-     * @since 2.1.0
      */
     private function fetchQuery(array $query)
     {
@@ -206,7 +194,6 @@ class Suggestions implements SuggestedQueriesInterface
      * Get search suggestions Max Count from config
      *
      * @return int
-     * @since 2.1.0
      */
     private function getSearchSuggestionsCount()
     {
@@ -218,7 +205,6 @@ class Suggestions implements SuggestedQueriesInterface
 
     /**
      * @return bool
-     * @since 2.1.0
      */
     private function isSuggestionsAllowed()
     {

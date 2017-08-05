@@ -10,7 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Response Factory
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class ResponseFactory
 {
@@ -18,7 +18,7 @@ class ResponseFactory
      * Object Manager instance
      *
      * @var ObjectManagerInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $objectManager;
 
@@ -26,7 +26,7 @@ class ResponseFactory
      * Document Factory
      *
      * @var DocumentFactory
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $documentFactory;
 
@@ -34,7 +34,7 @@ class ResponseFactory
      * Aggregation Factory
      *
      * @var AggregationFactory
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $aggregationFactory;
 
@@ -42,7 +42,7 @@ class ResponseFactory
      * @param ObjectManagerInterface $objectManager
      * @param DocumentFactory $documentFactory
      * @param AggregationFactory $aggregationFactory
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -59,7 +59,7 @@ class ResponseFactory
      *
      * @param array $response
      * @return \Magento\Framework\Search\Response\QueryResponse
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function create($response)
     {

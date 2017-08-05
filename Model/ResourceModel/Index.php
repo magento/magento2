@@ -16,25 +16,25 @@ use Magento\Framework\EntityManager\MetadataPool;
 /**
  * Elasticsearch index resource model
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
 {
     /**
      * @var ProductRepositoryInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $productRepository;
 
     /**
      * @var CategoryRepositoryInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $categoryRepository;
 
     /**
      * @var Config
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $eavConfig;
 
@@ -48,7 +48,7 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
      * @param Config $eavConfig
      * @param null $connectionName
      * @SuppressWarnings(Magento.TypeDuplication)
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         Context $context,
@@ -76,7 +76,7 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
      * @param int $productId
      * @param array $indexData
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getFullProductIndexData($productId, $indexData)
     {
@@ -121,7 +121,7 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
      * @param int $storeId
      * @param null|array $productIds
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getFullCategoryProductIndexData($storeId = null, $productIds = null)
     {

@@ -7,19 +7,19 @@ namespace Magento\Elasticsearch\Model\Adapter\Index\Config;
 
 /**
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 interface EsConfigInterface
 {
     /**
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getStemmerInfo();
 
     /**
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getStopwordsInfo();
 }

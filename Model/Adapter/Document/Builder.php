@@ -7,19 +7,18 @@ namespace Magento\Elasticsearch\Model\Adapter\Document;
 
 /**
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class Builder
 {
     /**
      * @var array
-     * @since 2.1.0
      */
     private $fields = [];
 
     /**
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function build()
     {
@@ -33,7 +32,6 @@ class Builder
 
     /**
      * @return void
-     * @since 2.1.0
      */
     private function clear()
     {
@@ -45,7 +43,6 @@ class Builder
      * @param string $field
      * @param string|int|float $value
      * @return array
-     * @since 2.1.0
      */
     private function addFieldToDocument($document, $field, $value)
     {
@@ -70,7 +67,7 @@ class Builder
      * @param string $field
      * @param string|array|int|float $value
      * @return $this
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function addField($field, $value)
     {
@@ -81,7 +78,7 @@ class Builder
     /**
      * @param array $fields
      * @return $this
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function addFields(array $fields)
     {

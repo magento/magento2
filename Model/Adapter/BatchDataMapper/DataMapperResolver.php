@@ -12,25 +12,21 @@ use Magento\Elasticsearch\Model\Config;
 
 /**
  * Map index data to search engine metadata
- * @since 2.2.0
  */
 class DataMapperResolver implements BatchDataMapperInterface
 {
     /**
      * @var BatchDataMapperInterface
-     * @since 2.2.0
      */
     private $dataMapperEntity;
 
     /**
      * @var DataMapperFactory
-     * @since 2.2.0
      */
     private $dataMapperFactory;
 
     /**
      * @param DataMapperFactory $dataMapperFactory
-     * @since 2.2.0
      */
     public function __construct(DataMapperFactory $dataMapperFactory)
     {
@@ -39,7 +35,6 @@ class DataMapperResolver implements BatchDataMapperInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function map(array $documentData, $storeId, array $context = [])
     {
@@ -54,7 +49,6 @@ class DataMapperResolver implements BatchDataMapperInterface
      * @return BatchDataMapperInterface
      * @throws NoSuchEntityException
      * @throws ConfigurationMismatchException
-     * @since 2.2.0
      */
     private function getDataMapper($entityType)
     {

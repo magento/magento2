@@ -9,7 +9,6 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Elasticsearch adapter
- * @since 2.1.0
  */
 class Elasticsearch
 {
@@ -22,64 +21,52 @@ class Elasticsearch
     const BULK_ACTION_UPDATE = 'update';
     /**#@-*/
 
-    /**
-     * @var \Magento\Elasticsearch\SearchAdapter\ConnectionManager
-     * @since 2.1.0
-     */
+    /**#@-*/
     protected $connectionManager;
 
     /**
      * @var DataMapperInterface
-     * @deprecated 2.2.0 Will be replaced with BatchDataMapperInterface
-     * @since 2.1.0
+     * @deprecated 100.2.0 Will be replaced with BatchDataMapperInterface
      */
     protected $documentDataMapper;
 
     /**
      * @var \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver
-     * @since 2.1.0
      */
     protected $indexNameResolver;
 
     /**
      * @var FieldMapperInterface
-     * @since 2.1.0
      */
     protected $fieldMapper;
 
     /**
      * @var \Magento\Elasticsearch\Model\Config
-     * @since 2.1.0
      */
     protected $clientConfig;
 
     /**
      * @var \Magento\Elasticsearch\Model\Client\Elasticsearch
-     * @since 2.1.0
      */
     protected $client;
 
     /**
      * @var \Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface
-     * @since 2.1.0
      */
     protected $indexBuilder;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.1.0
      */
     protected $logger;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $preparedIndex = [];
 
     /**
      * @var BatchDataMapperInterface
-     * @since 2.2.0
      */
     private $batchDocumentDataMapper;
 
@@ -96,7 +83,6 @@ class Elasticsearch
      * @param array $options
      * @param BatchDataMapperInterface $batchDocumentDataMapper
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager,
@@ -134,7 +120,6 @@ class Elasticsearch
      *
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.1.0
      */
     public function ping()
     {
@@ -154,7 +139,6 @@ class Elasticsearch
      * @param array $documentData
      * @param int $storeId
      * @return array
-     * @since 2.1.0
      */
     public function prepareDocsPerStore(array $documentData, $storeId)
     {
@@ -176,7 +160,6 @@ class Elasticsearch
      * @param string $mappedIndexerId
      * @return $this
      * @throws \Exception
-     * @since 2.1.0
      */
     public function addDocs(array $documents, $storeId, $mappedIndexerId)
     {
@@ -200,7 +183,6 @@ class Elasticsearch
      * @param int $storeId
      * @param string $mappedIndexerId
      * @return $this
-     * @since 2.1.0
      */
     public function cleanIndex($storeId, $mappedIndexerId)
     {
@@ -235,7 +217,6 @@ class Elasticsearch
      * @param string $mappedIndexerId
      * @return $this
      * @throws \Exception
-     * @since 2.1.0
      */
     public function deleteDocs(array $documentIds, $storeId, $mappedIndexerId)
     {
@@ -263,7 +244,6 @@ class Elasticsearch
      * @param string $indexName
      * @param string $action
      * @return array
-     * @since 2.1.0
      */
     protected function getDocsArrayInBulkIndexFormat(
         $documents,
@@ -300,7 +280,6 @@ class Elasticsearch
      * @param bool $checkAlias
      * @param string $mappedIndexerId
      * @return $this
-     * @since 2.1.0
      */
     public function checkIndex(
         $storeId,
@@ -329,7 +308,6 @@ class Elasticsearch
      * @param int $storeId
      * @param string $mappedIndexerId
      * @return $this
-     * @since 2.1.0
      */
     public function updateAlias($storeId, $mappedIndexerId)
     {
@@ -363,7 +341,6 @@ class Elasticsearch
      * @param string $indexName
      * @param string $mappedIndexerId
      * @return $this
-     * @since 2.1.0
      */
     protected function prepareIndex($storeId, $indexName, $mappedIndexerId)
     {

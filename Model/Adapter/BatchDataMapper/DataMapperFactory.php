@@ -12,7 +12,6 @@ use Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface;
 
 /**
  * Data mapper factory
- * @since 2.2.0
  */
 class DataMapperFactory
 {
@@ -20,20 +19,17 @@ class DataMapperFactory
      * Object Manager instance
      *
      * @var ObjectManagerInterface
-     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @var string[]
-     * @since 2.2.0
      */
     private $dataMappers;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param string[] $dataMappers
-     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -50,7 +46,6 @@ class DataMapperFactory
      * @return BatchDataMapperInterface
      * @throws NoSuchEntityException
      * @throws ConfigurationMismatchException
-     * @since 2.2.0
      */
     public function create($entityType)
     {

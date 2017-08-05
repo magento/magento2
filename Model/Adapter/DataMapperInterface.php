@@ -6,9 +6,8 @@
 namespace Magento\Elasticsearch\Model\Adapter;
 
 /**
- * @deprecated 2.2.0
+ * @deprecated 100.2.0
  * @see \Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface
- * @since 2.1.0
  */
 interface DataMapperInterface
 {
@@ -20,7 +19,6 @@ interface DataMapperInterface
      * @param int $storeId
      * @param array $context
      * @return array
-     * @since 2.1.0
      */
     public function map($entityId, array $entityIndexData, $storeId, $context = []);
 }

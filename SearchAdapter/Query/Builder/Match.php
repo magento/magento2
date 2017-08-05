@@ -13,7 +13,6 @@ use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 /**
  * Class \Magento\Elasticsearch\SearchAdapter\Query\Builder\Match
  *
- * @since 2.1.0
  */
 class Match implements QueryInterface
 {
@@ -24,20 +23,17 @@ class Match implements QueryInterface
 
     /**
      * @var FieldMapperInterface
-     * @since 2.1.0
      */
     private $fieldMapper;
 
     /**
      * @var PreprocessorInterface[]
-     * @since 2.1.0
      */
     protected $preprocessorContainer;
 
     /**
      * @param FieldMapperInterface $fieldMapper
      * @param PreprocessorInterface[] $preprocessorContainer
-     * @since 2.1.0
      */
     public function __construct(
         FieldMapperInterface $fieldMapper,
@@ -49,7 +45,6 @@ class Match implements QueryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function build(array $selectQuery, RequestQueryInterface $requestQuery, $conditionType)
     {
@@ -71,7 +66,6 @@ class Match implements QueryInterface
      * @param string $queryValue
      * @param string $conditionType
      * @return array
-     * @since 2.1.0
      */
     protected function prepareQuery($queryValue, $conditionType)
     {
@@ -100,7 +94,6 @@ class Match implements QueryInterface
      * @param array $matches
      * @param array $queryValue
      * @return array
-     * @since 2.1.0
      */
     protected function buildQueries($matches, $queryValue)
     {
@@ -133,7 +126,6 @@ class Match implements QueryInterface
      *
      * @param string $value
      * @return string
-     * @since 2.1.0
      */
     protected function escape($value)
     {

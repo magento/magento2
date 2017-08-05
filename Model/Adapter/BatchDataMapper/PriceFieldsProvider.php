@@ -12,25 +12,21 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider;
 
 /**
  * Provide data mapping for price fields
- * @since 2.2.0
  */
 class PriceFieldsProvider implements AdditionalFieldsProviderInterface
 {
     /**
      * @var Index
-     * @since 2.2.0
      */
     private $resourceIndex;
 
     /**
      * @var DataProvider
-     * @since 2.2.0
      */
     private $dataProvider;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.2.0
      */
     private $storeManager;
 
@@ -38,7 +34,6 @@ class PriceFieldsProvider implements AdditionalFieldsProviderInterface
      * @param Index $resourceIndex
      * @param DataProvider $dataProvider
      * @param StoreManagerInterface $storeManager
-     * @since 2.2.0
      */
     public function __construct(
         Index $resourceIndex,
@@ -52,7 +47,6 @@ class PriceFieldsProvider implements AdditionalFieldsProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getFields(array $productIds, $storeId)
     {
@@ -76,7 +70,6 @@ class PriceFieldsProvider implements AdditionalFieldsProviderInterface
      * @param int $websiteId
      * @param array $priceIndexData
      * @return array
-     * @since 2.2.0
      */
     private function getProductPriceData($productId, $websiteId, array $priceIndexData)
     {

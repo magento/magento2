@@ -15,31 +15,26 @@ use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\BucketBuilderInterfa
 /**
  * Class \Magento\Elasticsearch\SearchAdapter\Aggregation\Builder
  *
- * @since 2.1.0
  */
 class Builder
 {
     /**
      * @var DataProviderInterface[]
-     * @since 2.1.0
      */
     protected $dataProviderContainer;
 
     /**
      * @var BucketBuilderInterface[]
-     * @since 2.1.0
      */
     protected $aggregationContainer;
 
     /**
      * @var DataProviderFactory
-     * @since 2.2.0
      */
     private $dataProviderFactory;
 
     /**
      * @var QueryContainer
-     * @since 2.2.0
      */
     private $query = null;
 
@@ -47,7 +42,6 @@ class Builder
      * @param  DataProviderInterface[] $dataProviderContainer
      * @param  BucketBuilderInterface[] $aggregationContainer
      * @param DataProviderFactory|null $dataProviderFactory
-     * @since 2.1.0
      */
     public function __construct(
         array $dataProviderContainer,
@@ -81,7 +75,6 @@ class Builder
      * @return array
      * @throws \LogicException thrown by DataProviderFactory for validation issues
      * @see \Magento\Elasticsearch\SearchAdapter\Aggregation\DataProviderFactory
-     * @since 2.1.0
      */
     public function build(RequestInterface $request, array $queryResult)
     {
@@ -112,7 +105,6 @@ class Builder
      *
      * @param QueryContainer $query
      * @return $this
-     * @since 2.2.0
      */
     public function setQuery(QueryContainer $query)
     {

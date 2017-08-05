@@ -10,9 +10,8 @@ use Magento\Elasticsearch\Model\Adapter\DataMapperInterface;
 use Magento\Elasticsearch\Model\Config;
 
 /**
- * @deprecated 2.2.0
+ * @deprecated 100.2.0
  * @see \Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface
- * @since 2.1.0
  */
 class DataMapperResolver implements DataMapperInterface
 {
@@ -20,13 +19,11 @@ class DataMapperResolver implements DataMapperInterface
      * Object Manager instance
      *
      * @var ObjectManagerInterface
-     * @since 2.1.0
      */
     private $objectManager;
 
     /**
      * @var string[]
-     * @since 2.1.0
      */
     private $dataMappers;
 
@@ -34,14 +31,12 @@ class DataMapperResolver implements DataMapperInterface
      * Data Mapper instance
      *
      * @var DataMapperInterface
-     * @since 2.1.0
      */
     private $dataMapperEntity;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param string[] $dataMappers
-     * @since 2.1.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -53,7 +48,6 @@ class DataMapperResolver implements DataMapperInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function map(
         $entityId,
@@ -71,7 +65,6 @@ class DataMapperResolver implements DataMapperInterface
      * @param string $entityType
      * @return DataMapperInterface
      * @throws \Exception
-     * @since 2.1.0
      */
     private function getEntity($entityType = '')
     {

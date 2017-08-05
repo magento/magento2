@@ -11,19 +11,16 @@ use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
 /**
  * Class \Magento\Elasticsearch\Model\Adapter\Index\Builder
  *
- * @since 2.1.0
  */
 class Builder implements BuilderInterface
 {
     /**
      * @var LocaleResolver
-     * @since 2.1.0
      */
     protected $localeResolver;
 
     /**
      * @var EsConfigInterface
-     * @since 2.1.0
      */
     protected $esConfig;
 
@@ -31,14 +28,12 @@ class Builder implements BuilderInterface
      * Current store ID.
      *
      * @var int
-     * @since 2.1.0
      */
     protected $storeId;
 
     /**
      * @param LocaleResolver $localeResolver
      * @param EsConfigInterface $esConfig
-     * @since 2.1.0
      */
     public function __construct(
         LocaleResolver $localeResolver,
@@ -50,7 +45,6 @@ class Builder implements BuilderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function build()
     {
@@ -82,7 +76,6 @@ class Builder implements BuilderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function setStoreId($storeId)
     {
@@ -91,7 +84,6 @@ class Builder implements BuilderInterface
 
     /**
      * @return array
-     * @since 2.1.0
      */
     protected function getTokenizer()
     {
@@ -105,7 +97,6 @@ class Builder implements BuilderInterface
 
     /**
      * @return array
-     * @since 2.1.0
      */
     protected function getFilter()
     {
@@ -121,7 +112,6 @@ class Builder implements BuilderInterface
 
     /**
      * @return array
-     * @since 2.1.0
      */
     protected function getCharFilter()
     {
@@ -135,7 +125,6 @@ class Builder implements BuilderInterface
 
     /**
      * @return array
-     * @since 2.1.0
      */
     protected function getStemmerConfig()
     {

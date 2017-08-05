@@ -15,25 +15,21 @@ use \Magento\Customer\Model\Session as CustomerSession;
 
 /**
  * Class ProductFieldMapper
- * @since 2.1.0
  */
 class ProductFieldMapper implements FieldMapperInterface
 {
     /**
      * @var Config
-     * @since 2.1.0
      */
     protected $eavConfig;
 
     /**
      * @var FieldType
-     * @since 2.1.0
      */
     protected $fieldType;
 
     /**
      * @var CustomerSession
-     * @since 2.1.0
      */
     protected $customerSession;
 
@@ -41,7 +37,6 @@ class ProductFieldMapper implements FieldMapperInterface
      * Store manager
      *
      * @var StoreManager
-     * @since 2.1.0
      */
     protected $storeManager;
 
@@ -49,7 +44,6 @@ class ProductFieldMapper implements FieldMapperInterface
      * Core registry
      *
      * @var Registry
-     * @since 2.1.0
      */
     protected $coreRegistry;
 
@@ -59,7 +53,6 @@ class ProductFieldMapper implements FieldMapperInterface
      * @param CustomerSession $customerSession
      * @param StoreManager $storeManager
      * @param Registry $coreRegistry
-     * @since 2.1.0
      */
     public function __construct(
         Config $eavConfig,
@@ -77,7 +70,6 @@ class ProductFieldMapper implements FieldMapperInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getFieldName($attributeCode, $context = [])
     {
@@ -114,7 +106,6 @@ class ProductFieldMapper implements FieldMapperInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getAllAttributesTypes($context = [])
     {
@@ -155,7 +146,6 @@ class ProductFieldMapper implements FieldMapperInterface
     /**
      * @param Object $attribute
      * @return bool
-     * @since 2.1.0
      */
     protected function isAttributeUsedInAdvancedSearch($attribute)
     {
@@ -169,7 +159,6 @@ class ProductFieldMapper implements FieldMapperInterface
      * @param string $fieldType
      * @param string $attributeCode
      * @return string
-     * @since 2.1.0
      */
     protected function getRefinedFieldName($frontendInput, $fieldType, $attributeCode)
     {
@@ -182,7 +171,6 @@ class ProductFieldMapper implements FieldMapperInterface
      * @param string $fieldType
      * @param string $attributeCode
      * @return string
-     * @since 2.1.0
      */
     protected function getQueryTypeFieldName($frontendInput, $fieldType, $attributeCode)
     {
@@ -199,7 +187,6 @@ class ProductFieldMapper implements FieldMapperInterface
      *
      * @param array $context
      * @return string
-     * @since 2.1.0
      */
     protected function getPositionFiledName($context)
     {
@@ -218,7 +205,6 @@ class ProductFieldMapper implements FieldMapperInterface
      *
      * @param array $context
      * @return string
-     * @since 2.1.0
      */
     protected function getPriceFieldName($context)
     {

@@ -14,7 +14,6 @@ use Magento\Framework\Search\Dynamic\DataProviderInterface;
 /**
  * It's a factory which allows to override instance of DataProviderInterface
  * with the instance of the same class but with injected search query.
- * @since 2.2.0
  */
 class DataProviderFactory
 {
@@ -22,13 +21,11 @@ class DataProviderFactory
      * Object Manager
      *
      * @var ObjectManagerInterface
-     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @since 2.2.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -54,7 +51,6 @@ class DataProviderFactory
      * @param QueryContainer $query
      * @return DataProviderInterface
      * @throws \LogicException when the query is missing but it required according to the QueryAwareInterface
-     * @since 2.2.0
      */
     public function create(DataProviderInterface $dataProvider, QueryContainer $query = null)
     {

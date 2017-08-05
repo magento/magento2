@@ -16,7 +16,7 @@ use Magento\Framework\Api\Search\DocumentInterface;
 /**
  * Document Factory
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class DocumentFactory
 {
@@ -24,21 +24,20 @@ class DocumentFactory
      * Object Manager instance
      *
      * @var ObjectManagerInterface
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
+     * @since 100.1.0
      */
     protected $objectManager;
 
     /**
      * @var EntityMetadata
-     * @since 2.1.0
      */
     private $entityMetadata;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param EntityMetadata $entityMetadata
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(ObjectManagerInterface $objectManager, EntityMetadata $entityMetadata)
     {
@@ -51,7 +50,7 @@ class DocumentFactory
      *
      * @param array $rawDocument
      * @return Document
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function create($rawDocument)
     {

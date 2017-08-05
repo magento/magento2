@@ -15,7 +15,6 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext;
 /**
  * Class \Magento\Elasticsearch\SearchAdapter\Aggregation\Interval
  *
- * @since 2.1.0
  */
 class Interval implements IntervalInterface
 {
@@ -26,43 +25,36 @@ class Interval implements IntervalInterface
 
     /**
      * @var ConnectionManager
-     * @since 2.1.0
      */
     protected $connectionManager;
 
     /**
      * @var FieldMapperInterface
-     * @since 2.1.0
      */
     protected $fieldMapper;
 
     /**
      * @var Config
-     * @since 2.1.0
      */
     protected $clientConfig;
 
     /**
      * @var string
-     * @since 2.1.0
      */
     private $fieldName;
 
     /**
      * @var string
-     * @since 2.1.0
      */
     private $storeId;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $entityIds;
 
     /**
      * @var SearchIndexNameResolver
-     * @since 2.1.0
      */
     private $searchIndexNameResolver;
 
@@ -74,7 +66,6 @@ class Interval implements IntervalInterface
      * @param string $fieldName
      * @param string $storeId
      * @param array $entityIds
-     * @since 2.1.0
      */
     public function __construct(
         ConnectionManager $connectionManager,
@@ -96,7 +87,6 @@ class Interval implements IntervalInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function load($limit, $offset = null, $lower = null, $upper = null)
     {
@@ -156,7 +146,6 @@ class Interval implements IntervalInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function loadPrevious($data, $index, $lower = null)
     {
@@ -216,7 +205,6 @@ class Interval implements IntervalInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function loadNext($data, $rightIndex, $upper = null)
     {
@@ -290,7 +278,6 @@ class Interval implements IntervalInterface
      * @param string $fieldName
      *
      * @return float[]
-     * @since 2.1.0
      */
     private function arrayValuesToFloat($hits, $fieldName)
     {
