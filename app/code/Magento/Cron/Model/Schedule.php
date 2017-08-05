@@ -66,8 +66,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-        $this->dateTime = $dateTime ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Stdlib\DateTime\DateTime::class);
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -103,6 +102,8 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      */
     public function trySchedule()
     {
+        $this->dateTime = $this->dateTime ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Stdlib\DateTime\DateTime::class);
         $time = $this->getScheduledAt();
         $e = $this->getCronExprArr();
 
