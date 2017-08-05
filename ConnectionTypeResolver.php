@@ -12,7 +12,7 @@ use Magento\Framework\App\DeploymentConfig;
  * Amqp connection type resolver.
  *
  * @api
- * @since 2.2.0
+ * @since 100.0.0
  */
 class ConnectionTypeResolver implements ConnectionTypeResolverInterface
 {
@@ -20,7 +20,6 @@ class ConnectionTypeResolver implements ConnectionTypeResolverInterface
      * Amqp connection names.
      *
      * @var string[]
-     * @since 2.2.0
      */
     private $amqpConnectionName = [];
 
@@ -28,7 +27,7 @@ class ConnectionTypeResolver implements ConnectionTypeResolverInterface
      * Initialize dependencies.
      *
      * @param DeploymentConfig $deploymentConfig
-     * @since 2.2.0
+     * @since 100.0.0
      */
     public function __construct(DeploymentConfig $deploymentConfig)
     {
@@ -43,7 +42,7 @@ class ConnectionTypeResolver implements ConnectionTypeResolverInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 100.0.0
      */
     public function getConnectionType($connectionName)
     {

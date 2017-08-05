@@ -17,31 +17,27 @@ use Psr\Log\LoggerInterface;
  * Class Queue
  *
  * @api
- * @since 2.2.0
+ * @since 100.0.0
  */
 class Queue implements QueueInterface
 {
     /**
      * @var Config
-     * @since 2.2.0
      */
     private $amqpConfig;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $queueName;
 
     /**
      * @var EnvelopeFactory
-     * @since 2.2.0
      */
     private $envelopeFactory;
 
     /**
      * @var LoggerInterface $logger
-     * @since 2.2.0
      */
     private $logger;
 
@@ -52,7 +48,7 @@ class Queue implements QueueInterface
      * @param EnvelopeFactory $envelopeFactory
      * @param string $queueName
      * @param LoggerInterface $logger
-     * @since 2.2.0
+     * @since 100.0.0
      */
     public function __construct(
         Config $amqpConfig,
@@ -68,7 +64,7 @@ class Queue implements QueueInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 100.0.0
      */
     public function dequeue()
     {
@@ -103,7 +99,7 @@ class Queue implements QueueInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 100.0.0
      */
     public function acknowledge(EnvelopeInterface $envelope)
     {
@@ -124,7 +120,7 @@ class Queue implements QueueInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 100.0.0
      */
     public function subscribe($callback)
     {
@@ -158,7 +154,7 @@ class Queue implements QueueInterface
 
     /**
      * (@inheritdoc)
-     * @since 2.2.0
+     * @since 100.0.0
      */
     public function reject(EnvelopeInterface $envelope, $requeue = true, $rejectionMessage = null)
     {
@@ -177,7 +173,7 @@ class Queue implements QueueInterface
 
     /**
      * (@inheritdoc)
-     * @since 2.2.0
+     * @since 100.0.0
      */
     public function push(EnvelopeInterface $envelope)
     {

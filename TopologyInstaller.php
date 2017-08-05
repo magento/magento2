@@ -11,43 +11,36 @@ use Magento\Framework\MessageQueue\Topology\ConfigInterface;
 
 /**
  * Class Topology creates topology for Amqp messaging
- * @since 2.2.0
  */
 class TopologyInstaller
 {
     /**
      * @var ConfigInterface
-     * @since 2.2.0
      */
     private $topologyConfig;
 
     /**
      * @var \Magento\Framework\Amqp\Topology\ExchangeInstaller
-     * @since 2.2.0
      */
     private $exchangeInstaller;
 
     /**
      * @var ConfigPool
-     * @since 2.2.0
      */
     private $configPool;
 
     /**
      * @var \Magento\Framework\Amqp\Topology\QueueInstaller
-     * @since 2.2.0
      */
     private $queueInstaller;
 
     /**
      * @var ConnectionTypeResolver
-     * @since 2.2.0
      */
     private $connectionTypeResolver;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.2.0
      */
     protected $logger;
 
@@ -60,7 +53,6 @@ class TopologyInstaller
      * @param QueueInstaller $queueInstaller
      * @param ConnectionTypeResolver $connectionTypeResolver
      * @param \Psr\Log\LoggerInterface $logger
-     * @since 2.2.0
      */
     public function __construct(
         ConfigInterface $topologyConfig,
@@ -82,7 +74,6 @@ class TopologyInstaller
      * Install Amqp Exchanges, Queues and bind them
      *
      * @return void
-     * @since 2.2.0
      */
     public function install()
     {

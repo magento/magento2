@@ -9,7 +9,7 @@ namespace Magento\Framework\Amqp;
  * Factory class for @see \Magento\Framework\Amqp\Exchange
  *
  * @api
- * @since 2.2.0
+ * @since 100.0.0
  */
 class ExchangeFactory implements \Magento\Framework\MessageQueue\ExchangeFactoryInterface
 {
@@ -17,7 +17,6 @@ class ExchangeFactory implements \Magento\Framework\MessageQueue\ExchangeFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.2.0
      */
     private $objectManager = null;
 
@@ -25,13 +24,11 @@ class ExchangeFactory implements \Magento\Framework\MessageQueue\ExchangeFactory
      * Instance name to create
      *
      * @var string
-     * @since 2.2.0
      */
     private $instanceName = null;
 
     /**
      * @var ConfigPool
-     * @since 2.2.0
      */
     private $configPool;
 
@@ -41,7 +38,7 @@ class ExchangeFactory implements \Magento\Framework\MessageQueue\ExchangeFactory
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param ConfigPool $configPool
      * @param string $instanceName
-     * @since 2.2.0
+     * @since 100.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -55,7 +52,7 @@ class ExchangeFactory implements \Magento\Framework\MessageQueue\ExchangeFactory
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 100.0.0
      */
     public function create($connectionName, array $data = [])
     {

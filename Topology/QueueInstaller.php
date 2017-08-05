@@ -9,7 +9,6 @@ use Magento\Framework\MessageQueue\Topology\Config\QueueConfigItemInterface;
 
 /**
  * Queue installer.
- * @since 2.2.0
  */
 class QueueInstaller
 {
@@ -21,7 +20,6 @@ class QueueInstaller
      * @param \PhpAmqpLib\Channel\AMQPChannel $channel
      * @param QueueConfigItemInterface $queue
      * @return void
-     * @since 2.2.0
      */
     public function install(\PhpAmqpLib\Channel\AMQPChannel $channel, QueueConfigItemInterface $queue)
     {
