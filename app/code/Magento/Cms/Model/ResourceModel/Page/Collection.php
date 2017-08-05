@@ -51,7 +51,8 @@ class Collection extends AbstractCollection
             $identifier = $item->getData('identifier');
 
             $data['value'] = $identifier;
-            $data['label'] = $item->getData('title') . ' (' . $item->getData('store_code') . ')';
+            $data['label'] = $item->getData('title');
+            $data['store'] = $item->getData('store_code');
 
             if (in_array($identifier, $existingIdentifiers)) {
                 $data['value'] .= '|' . $item->getData('page_id');
@@ -62,11 +63,41 @@ class Collection extends AbstractCollection
             $res[] = $data;
         }
 
+        // sort cms pages by their title
         usort($res, function ($optionA, $optionB) {
             return strcmp($optionA['label'], $optionB['label']);
         });
 
+        $res = $this->groupOptionsByStore($res);
+
+        // TODO: transform the storecode to the website/store/storeview name here
+        // we have to do this here, because website/store/storeview combination isn't strictly unique,
+        // whereas the storecode is
+        // if we do the transformation earlier, the 'groupOptionsByStore' method would behave incorrectly
+        // TODO: also sort the array by the website/store/storeview name
+
         return $res;
+    }
+
+    /**
+     * Changes the options, so they are grouped by store
+     *
+     * @param array $options
+     * @return array
+     */
+    private function groupOptionsByStore(array $options)
+    {
+        $grouped = [];
+
+        foreach ($options as $option) {
+            $store = $option['store'];
+            if (!array_key_exists($store, $grouped)) {
+                $grouped[$store] = ['label' => $store, 'value' => []];
+            }
+            $grouped[$store]['value'][] = ['label' => $option['label'], 'value' => $option['value']];
+        }
+
+        return ['values' => ['label' => '', 'value' => $grouped]];
     }
 
     /**
