@@ -9,19 +9,16 @@ use Magento\Sales\Model\Order;
 
 /**
  * Prepare data related to person or organization receiving the items purchased
- * @since 2.2.0
  */
 class RecipientBuilder
 {
     /**
      * @var AddressBuilder
-     * @since 2.2.0
      */
     private $addressBuilder;
 
     /**
      * @param AddressBuilder $addressBuilder
-     * @since 2.2.0
      */
     public function __construct(
         AddressBuilder $addressBuilder
@@ -34,7 +31,6 @@ class RecipientBuilder
      *
      * @param Order $order
      * @return array
-     * @since 2.2.0
      */
     public function build(Order $order)
     {

@@ -12,13 +12,11 @@ use Magento\Store\Model\Store;
 
 /**
  * Input field transformed to text node with link to store Signifyd webhooks controller.
- * @since 2.2.0
  */
 class WebhookUrl extends Field
 {
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     protected function _getElementHtml(AbstractElement $element)
     {
@@ -34,7 +32,6 @@ class WebhookUrl extends Field
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     protected function _isInheritCheckboxRequired(AbstractElement $element)
     {
@@ -45,7 +42,6 @@ class WebhookUrl extends Field
      * Return base store URL.
      *
      * @return string
-     * @since 2.2.0
      */
     private function getStoreUrl()
     {

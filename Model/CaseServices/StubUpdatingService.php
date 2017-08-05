@@ -10,13 +10,11 @@ use Magento\Signifyd\Api\Data\CaseInterface;
 /**
  * Stub implementation for case updating service interface and might be used
  * for test Signifyd webhooks
- * @since 2.2.0
  */
 class StubUpdatingService implements UpdatingServiceInterface
 {
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function update(CaseInterface $case, array $data)
     {

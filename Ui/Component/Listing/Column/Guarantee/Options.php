@@ -11,13 +11,11 @@ use Magento\Signifyd\Api\Data\CaseInterface;
 
 /**
  * Class Options
- * @since 2.2.0
  */
 class Options implements OptionSourceInterface
 {
     /**
      * @var Escaper
-     * @since 2.2.0
      */
     private $escaper;
 
@@ -25,7 +23,6 @@ class Options implements OptionSourceInterface
      * Constructor
      *
      * @param Escaper $escaper
-     * @since 2.2.0
      */
     public function __construct(Escaper $escaper)
     {
@@ -34,7 +31,6 @@ class Options implements OptionSourceInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function toOptionArray()
     {

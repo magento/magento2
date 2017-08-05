@@ -9,19 +9,16 @@ use Magento\Framework\App\Request\Http;
 
 /**
  *  Reads Signifyd webhook request data.
- * @since 2.2.0
  */
 class WebhookRequest
 {
     /**
      * @var Http
-     * @since 2.2.0
      */
     private $request;
 
     /**
      * @param Http $request
-     * @since 2.2.0
      */
     public function __construct(
         Http $request
@@ -33,7 +30,6 @@ class WebhookRequest
      * Returns Base64 encoded output of the HMAC SHA256 encoding of the JSON body of the message.
      *
      * @return string
-     * @since 2.2.0
      */
     public function getHash()
     {
@@ -44,7 +40,6 @@ class WebhookRequest
      * Returns event topic identifier.
      *
      * @return string
-     * @since 2.2.0
      */
     public function getEventTopic()
     {
@@ -55,7 +50,6 @@ class WebhookRequest
      * Returns raw data from the request body.
      *
      * @return string
-     * @since 2.2.0
      */
     public function getBody()
     {

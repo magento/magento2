@@ -10,13 +10,11 @@ use Magento\Signifyd\Model\QuoteSession\QuoteSessionInterface;
 
 /**
  * Implementation of QuoteSessionInterface for Magento backend checkout.
- * @since 2.2.0
  */
 class BackendSession implements QuoteSessionInterface
 {
     /**
      * @var BackendQuoteSession
-     * @since 2.2.0
      */
     private $backendQuoteSession;
 
@@ -26,7 +24,6 @@ class BackendSession implements QuoteSessionInterface
      * Class uses backend session for retrieving quote.
      *
      * @param BackendQuoteSession $backendQuoteSession
-     * @since 2.2.0
      */
     public function __construct(BackendQuoteSession $backendQuoteSession)
     {
@@ -35,7 +32,6 @@ class BackendSession implements QuoteSessionInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getQuote()
     {

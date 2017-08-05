@@ -9,13 +9,11 @@ use Magento\Config\Block\System\Config\Form\Fieldset;
 
 /**
  * Fieldset renderer with url attached to comment.
- * @since 2.2.0
  */
 class Info extends Fieldset
 {
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     protected function _getHeaderCommentHtml($element)
     {

@@ -16,37 +16,31 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Register guarantee at Signifyd and updates case entity
- * @since 2.2.0
  */
 class CreationService implements GuaranteeCreationServiceInterface
 {
     /**
      * @var CaseManagementInterface
-     * @since 2.2.0
      */
     private $caseManagement;
 
     /**
      * @var UpdatingServiceFactory
-     * @since 2.2.0
      */
     private $caseUpdatingServiceFactory;
 
     /**
      * @var Gateway
-     * @since 2.2.0
      */
     private $gateway;
 
     /**
      * @var CreateGuaranteeAbility
-     * @since 2.2.0
      */
     private $createGuaranteeAbility;
 
     /**
      * @var LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
@@ -58,7 +52,6 @@ class CreationService implements GuaranteeCreationServiceInterface
      * @param Gateway $gateway
      * @param CreateGuaranteeAbility $createGuaranteeAbility
      * @param LoggerInterface $logger
-     * @since 2.2.0
      */
     public function __construct(
         CaseManagementInterface $caseManagement,
@@ -76,7 +69,6 @@ class CreationService implements GuaranteeCreationServiceInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function createForOrder($orderId)
     {

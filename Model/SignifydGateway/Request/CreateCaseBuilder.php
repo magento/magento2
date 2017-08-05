@@ -12,49 +12,41 @@ use Magento\Sales\Model\OrderFactory;
  *
  * Handles the conversion from Magento Order to Signifyd Case.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.2.0
  */
 class CreateCaseBuilder implements CreateCaseBuilderInterface
 {
     /**
      * @var OrderFactory
-     * @since 2.2.0
      */
     private $orderFactory;
 
     /**
      * @var PurchaseBuilder
-     * @since 2.2.0
      */
     private $purchaseBuilder;
 
     /**
      * @var CardBuilder
-     * @since 2.2.0
      */
     private $cardBuilder;
 
     /**
      * @var RecipientBuilder
-     * @since 2.2.0
      */
     private $recipientBuilder;
 
     /**
      * @var SellerBuilder
-     * @since 2.2.0
      */
     private $sellerBuilder;
 
     /**
      * @var ClientVersionBuilder
-     * @since 2.2.0
      */
     private $clientVersionBuilder;
 
     /**
      * @var UserAccountBuilder
-     * @since 2.2.0
      */
     private $userAccountBuilder;
 
@@ -66,7 +58,6 @@ class CreateCaseBuilder implements CreateCaseBuilderInterface
      * @param SellerBuilder $sellerBuilder
      * @param ClientVersionBuilder $clientVersionBuilder
      * @param UserAccountBuilder $userAccountBuilder
-     * @since 2.2.0
      */
     public function __construct(
         OrderFactory $orderFactory,
@@ -88,7 +79,6 @@ class CreateCaseBuilder implements CreateCaseBuilderInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function build($orderId)
     {
@@ -112,7 +102,6 @@ class CreateCaseBuilder implements CreateCaseBuilderInterface
      *
      * @param array $data
      * @return array
-     * @since 2.2.0
      */
     private function removeEmptyValues($data)
     {
@@ -134,7 +123,6 @@ class CreateCaseBuilder implements CreateCaseBuilderInterface
      *
      * @param mixed $value
      * @return bool
-     * @since 2.2.0
      */
     private function isEmpty($value)
     {

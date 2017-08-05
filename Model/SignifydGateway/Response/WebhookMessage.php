@@ -13,7 +13,6 @@ namespace Magento\Signifyd\Model\SignifydGateway\Response;
  * They allow your application to receive pushed updates about a case, rather than poll SIGNIFYD for status changes.
  *
  * @see https://www.signifyd.com/docs/api/#/reference/webhooks
- * @since 2.2.0
  */
 class WebhookMessage
 {
@@ -21,7 +20,6 @@ class WebhookMessage
      * Decoded webhook request body.
      *
      * @var array
-     * @since 2.2.0
      */
     private $data;
 
@@ -29,14 +27,12 @@ class WebhookMessage
      * Event topic identifier.
      *
      * @var string
-     * @since 2.2.0
      */
     private $eventTopic;
 
     /**
      * @param array $data
      * @param string $eventTopic
-     * @since 2.2.0
      */
     public function __construct(
         array $data,
@@ -50,7 +46,6 @@ class WebhookMessage
      * Returns decoded webhook request body.
      *
      * @return array
-     * @since 2.2.0
      */
     public function getData()
     {
@@ -61,7 +56,6 @@ class WebhookMessage
      * Returns event topic identifier.
      *
      * @return string
-     * @since 2.2.0
      */
     public function getEventTopic()
     {

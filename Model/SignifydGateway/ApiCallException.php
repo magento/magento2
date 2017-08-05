@@ -7,13 +7,11 @@ namespace Magento\Signifyd\Model\SignifydGateway;
 
 /**
  * Exception of interaction with Signifyd API
- * @since 2.2.0
  */
 class ApiCallException extends GatewayException
 {
     /**
      * @var string
-     * @since 2.2.0
      */
     private $requestData;
 
@@ -23,7 +21,6 @@ class ApiCallException extends GatewayException
      * @param int $code
      * @param \Exception|null $previous
      * @param string $requestData in JSON format
-     * @since 2.2.0
      */
     public function __construct($message = '', $code = 0, \Exception $previous = null, $requestData = '')
     {
@@ -34,7 +31,6 @@ class ApiCallException extends GatewayException
     /**
      * Gets request data for unsuccessful request in JSON format
      * @return string
-     * @since 2.2.0
      */
     public function getRequestData()
     {

@@ -10,14 +10,12 @@ use Exception;
 /**
  * This debugger ignores any information.
  * Optimal production environment.
- * @since 2.2.0
  */
 class BlackHole implements DebuggerInterface
 {
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function success($requestUrl, $requestData, $responseStatus, $responseBody)
     {
@@ -27,7 +25,6 @@ class BlackHole implements DebuggerInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function failure($requestUrl, $requestData, Exception $exception)
     {

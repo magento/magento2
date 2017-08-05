@@ -10,49 +10,42 @@ use Magento\Signifyd\Model\MessageGeneratorInterface;
 
 /**
  * Creates instance of message generator based on received type of message.
- * @since 2.2.0
  */
 class GeneratorFactory
 {
     /**
      * Type of message for Signifyd case creation.
      * @var string
-     * @since 2.2.0
      */
     private static $caseCreation = 'cases/creation';
 
     /**
      * Type of message for Signifyd case re-scoring.
      * @var string
-     * @since 2.2.0
      */
     private static $caseRescore = 'cases/rescore';
 
     /**
      * Type of message for Signifyd case reviewing
      * @var string
-     * @since 2.2.0
      */
     private static $caseReview = 'cases/review';
 
     /**
      * Type of message of Signifyd guarantee completion
      * @var string
-     * @since 2.2.0
      */
     private static $guaranteeCompletion = 'guarantees/completion';
 
     /**
      * Type of message of Signifyd guarantee creation
      * @var string
-     * @since 2.2.0
      */
     private static $guaranteeCreation = 'guarantees/creation';
 
     /**
      * Type of message of Signifyd guarantee canceling
      * @var string
-     * @since 2.2.0
      */
     private static $guaranteeCancel = 'guarantees/cancel';
 
@@ -60,7 +53,6 @@ class GeneratorFactory
      * UpdatingServiceFactory constructor.
      *
      * @param ObjectManagerInterface $objectManager
-     * @since 2.2.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -74,7 +66,6 @@ class GeneratorFactory
      * @param string $type
      * @return GeneratorInterface
      * @throws \InvalidArgumentException
-     * @since 2.2.0
      */
     public function create($type)
     {

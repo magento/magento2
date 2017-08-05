@@ -15,25 +15,21 @@ use Magento\Signifyd\Model\CaseManagement;
 
 /**
  * Checks if is possible to create Guarantee for order.
- * @since 2.2.0
  */
 class CreateGuaranteeAbility
 {
     /**
      * @var CaseManagement
-     * @since 2.2.0
      */
     private $caseManagement;
 
     /**
      * @var OrderRepositoryInterface
-     * @since 2.2.0
      */
     private $orderRepository;
 
     /**
      * @var DateTimeFactory
-     * @since 2.2.0
      */
     private $dateTimeFactory;
 
@@ -41,7 +37,6 @@ class CreateGuaranteeAbility
      * Eligible count of days from the order creation date to submit a case for Guarantee.
      *
      * @var int
-     * @since 2.2.0
      */
     private static $guarantyEligibleDays = 7;
 
@@ -49,7 +44,6 @@ class CreateGuaranteeAbility
      * @param CaseManagement $caseManagement
      * @param OrderRepositoryInterface $orderRepository
      * @param DateTimeFactory $dateTimeFactory
-     * @since 2.2.0
      */
     public function __construct(
         CaseManagement $caseManagement,
@@ -66,7 +60,6 @@ class CreateGuaranteeAbility
      *
      * @param int $orderId
      * @return bool
-     * @since 2.2.0
      */
     public function isAvailable($orderId)
     {
@@ -101,7 +94,6 @@ class CreateGuaranteeAbility
      * @param OrderInterface $order
      * @param int $days number of days from the order creation date to submit a case for Guarantee.
      * @return bool
-     * @since 2.2.0
      */
     private function isOrderOlderThen($days, OrderInterface $order)
     {
@@ -116,7 +108,6 @@ class CreateGuaranteeAbility
      *
      * @param int $orderId
      * @return OrderInterface|null
-     * @since 2.2.0
      */
     private function getOrder($orderId)
     {

@@ -12,26 +12,22 @@ use Magento\Sales\Model\ResourceModel\GridInterface;
  * Perfoms sales order grid updating operations.
  *
  * Serves order grid updates in both synchronous and asynchronous modes.
- * @since 2.2.0
  */
 class OrderGridUpdater
 {
     /**
      * @var ScopeConfigInterface
-     * @since 2.2.0
      */
     private $globalConfig;
 
     /**
      * @var GridInterface
-     * @since 2.2.0
      */
     private $entityGrid;
 
     /**
      * @param GridInterface $entityGrid
      * @param ScopeConfigInterface $globalConfig
-     * @since 2.2.0
      */
     public function __construct(
         GridInterface $entityGrid,
@@ -49,7 +45,6 @@ class OrderGridUpdater
      *
      * @param int $orderId
      * @return void
-     * @since 2.2.0
      */
     public function update($orderId)
     {

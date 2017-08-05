@@ -11,7 +11,6 @@ use Magento\Signifyd\Model\Config;
 /**
  * Validates webhook request.
  *
- * @since 2.2.0
  */
 class WebhookRequestValidator
 {
@@ -19,7 +18,6 @@ class WebhookRequestValidator
      * Allowed topic identifiers which will be sent in the X-SIGNIFYD-TOPIC header of the webhook.
      *
      * @var array
-     * @since 2.2.0
      */
     private $allowedTopicValues = [
         'cases/creation',
@@ -31,20 +29,17 @@ class WebhookRequestValidator
 
     /**
      * @var Config
-     * @since 2.2.0
      */
     private $config;
 
     /**
      * @var DecoderInterface
-     * @since 2.2.0
      */
     private $decoder;
 
     /**
      * @param Config $config
      * @param DecoderInterface $decoder
-     * @since 2.2.0
      */
     public function __construct(
         Config $config,
@@ -59,7 +54,6 @@ class WebhookRequestValidator
      *
      * @param WebhookRequest $webhookRequest
      * @return bool
-     * @since 2.2.0
      */
     public function validate(WebhookRequest $webhookRequest)
     {
@@ -77,7 +71,6 @@ class WebhookRequestValidator
      *
      * @param string $topic topic identifier.
      * @return bool
-     * @since 2.2.0
      */
     private function isValidTopic($topic)
     {
@@ -89,7 +82,6 @@ class WebhookRequestValidator
      *
      * @param string $body
      * @return bool
-     * @since 2.2.0
      */
     private function isValidBody($body)
     {
@@ -109,7 +101,6 @@ class WebhookRequestValidator
      * @param string $body
      * @param string $hash
      * @return bool
-     * @since 2.2.0
      */
     private function isValidHash($eventTopic, $body, $hash)
     {

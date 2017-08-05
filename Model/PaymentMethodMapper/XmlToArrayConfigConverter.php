@@ -9,7 +9,6 @@ use Magento\Framework\Config\Dom\ValidationSchemaException;
 
 /**
  * Converts XML config file to payment methods mapping.
- * @since 2.2.0
  */
 class XmlToArrayConfigConverter implements \Magento\Framework\Config\ConverterInterface
 {
@@ -17,7 +16,6 @@ class XmlToArrayConfigConverter implements \Magento\Framework\Config\ConverterIn
      * Node type wrapper for magento and signifyd payment codes
      *
      * @var string
-     * @since 2.2.0
      */
     private static $paymentMethodNodeType = 'payment_method';
 
@@ -25,7 +23,6 @@ class XmlToArrayConfigConverter implements \Magento\Framework\Config\ConverterIn
      * Node type for payment methods code
      *
      * @var string
-     * @since 2.2.0
      */
     private static $magentoCodeNodeType = 'magento_code';
 
@@ -33,13 +30,11 @@ class XmlToArrayConfigConverter implements \Magento\Framework\Config\ConverterIn
      * Node type for Sygnifyd payment methods code
      *
      * @var string
-     * @since 2.2.0
      */
     private static $signifydCodeNodeType = 'signifyd_code';
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function convert($source)
     {
@@ -59,7 +54,6 @@ class XmlToArrayConfigConverter implements \Magento\Framework\Config\ConverterIn
      * @param \DOMElement $payment
      * @return array
      * @throws ValidationSchemaException
-     * @since 2.2.0
      */
     private function getPaymentMethodMapping(\DOMElement $payment)
     {
@@ -76,7 +70,6 @@ class XmlToArrayConfigConverter implements \Magento\Framework\Config\ConverterIn
      * @param string      $subNodeType
      * @return mixed
      * @throws ValidationSchemaException
-     * @since 2.2.0
      */
     private function readSubnodeValue(\DOMElement $element, $subNodeType)
     {

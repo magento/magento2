@@ -9,25 +9,21 @@ use Magento\Framework\App\ProductMetadataInterface;
 
 /**
  * Provides platform name, edition and version info
- * @since 2.2.0
  */
 class ClientVersionBuilder
 {
     /**
      * @var string
-     * @since 2.2.0
      */
     private static $clientVersion = '1.0';
 
     /**
      * @var ProductMetadataInterface
-     * @since 2.2.0
      */
     private $productMetadata;
 
     /**
      * @param ProductMetadataInterface $productMetadata
-     * @since 2.2.0
      */
     public function __construct(
         ProductMetadataInterface $productMetadata
@@ -39,7 +35,6 @@ class ClientVersionBuilder
      * Returns version info
      *
      * @return array
-     * @since 2.2.0
      */
     public function build()
     {

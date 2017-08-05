@@ -12,13 +12,11 @@ use Magento\Framework\HTTP\ZendClient;
 /**
  * Class RequestSender
  * Gets HTTP client end sends request to Signifyd API
- * @since 2.2.0
  */
 class RequestSender
 {
     /**
      * @var DebuggerFactory
-     * @since 2.2.0
      */
     private $debuggerFactory;
 
@@ -26,7 +24,6 @@ class RequestSender
      * RequestSender constructor.
      *
      * @param DebuggerFactory $debuggerFactory
-     * @since 2.2.0
      */
     public function __construct(
         DebuggerFactory $debuggerFactory
@@ -44,7 +41,6 @@ class RequestSender
      * @param ZendClient $client
      * @return \Zend_Http_Response
      * @throws ApiCallException
-     * @since 2.2.0
      */
     public function send(ZendClient $client)
     {

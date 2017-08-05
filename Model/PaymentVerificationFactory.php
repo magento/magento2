@@ -13,31 +13,26 @@ use Magento\Framework\Exception\ConfigurationMismatchException;
 /**
  * Creates verification service for provided payment method, or PaymentVerificationInterface::class
  * if payment method does not support AVS, CVV verifications.
- * @since 2.2.0
  */
 class PaymentVerificationFactory
 {
     /**
      * @var ConfigInterface
-     * @since 2.2.0
      */
     private $config;
 
     /**
      * @var ObjectManagerInterface
-     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @var PaymentVerificationInterface
-     * @since 2.2.0
      */
     private $avsDefaultAdapter;
 
     /**
      * @var PaymentVerificationInterface
-     * @since 2.2.0
      */
     private $cvvDefaultAdapter;
 
@@ -46,7 +41,6 @@ class PaymentVerificationFactory
      * @param ConfigInterface|Config $config
      * @param PaymentVerificationInterface $avsDefaultAdapter
      * @param PaymentVerificationInterface $cvvDefaultAdapter
-     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -67,7 +61,6 @@ class PaymentVerificationFactory
      * @param string $paymentCode
      * @return PaymentVerificationInterface
      * @throws \Exception
-     * @since 2.2.0
      */
     public function createPaymentCvv($paymentCode)
     {
@@ -81,7 +74,6 @@ class PaymentVerificationFactory
      * @param string $paymentCode
      * @return PaymentVerificationInterface
      * @throws \Exception
-     * @since 2.2.0
      */
     public function createPaymentAvs($paymentCode)
     {
@@ -98,7 +90,6 @@ class PaymentVerificationFactory
      * @return PaymentVerificationInterface
      * @throws ConfigurationMismatchException If payment verification instance
      * does not implement PaymentVerificationInterface.
-     * @since 2.2.0
      */
     private function create(PaymentVerificationInterface $defaultAdapter, $paymentCode, $configKey)
     {

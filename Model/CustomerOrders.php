@@ -18,49 +18,41 @@ use Psr\Log\LoggerInterface;
  * Provides information about customer orders.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.2.0
  */
 class CustomerOrders
 {
     /**
      * @var SearchCriteriaBuilder
-     * @since 2.2.0
      */
     private $searchCriteriaBuilder;
 
     /**
      * @var FilterBuilder
-     * @since 2.2.0
      */
     private $filterBuilder;
 
     /**
      * @var OrderRepositoryInterface
-     * @since 2.2.0
      */
     private $orderRepository;
 
     /**
      * @var LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
     /**
      * @var CurrencyFactory
-     * @since 2.2.0
      */
     private $currencyFactory;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $currencies = [];
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private static $usdCurrencyCode = 'USD';
 
@@ -70,7 +62,6 @@ class CustomerOrders
      * @param OrderRepositoryInterface $orderRepository
      * @param CurrencyFactory $currencyFactory
      * @param LoggerInterface $logger
-     * @since 2.2.0
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
@@ -95,7 +86,6 @@ class CustomerOrders
      *
      * @param int $customerId
      * @return array
-     * @since 2.2.0
      */
     public function getAggregatedOrdersInfo($customerId)
     {
@@ -131,7 +121,6 @@ class CustomerOrders
      *
      * @param int $customerId
      * @return OrderInterface[]
-     * @since 2.2.0
      */
     private function getCustomerOrders($customerId)
     {
@@ -151,7 +140,6 @@ class CustomerOrders
      * @param float $amount
      * @param string $currency
      * @return float
-     * @since 2.2.0
      */
     private function getUsdOrderTotal($amount, $currency)
     {
@@ -169,7 +157,6 @@ class CustomerOrders
      *
      * @param string|null $currencyCode
      * @return Currency
-     * @since 2.2.0
      */
     private function getCurrencyByCode($currencyCode)
     {

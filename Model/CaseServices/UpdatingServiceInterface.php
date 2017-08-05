@@ -9,7 +9,6 @@ use Magento\Signifyd\Api\Data\CaseInterface;
 
 /**
  * Common abstraction to perform updating operations with Signifyd case entity.
- * @since 2.2.0
  */
 interface UpdatingServiceInterface
 {
@@ -19,7 +18,6 @@ interface UpdatingServiceInterface
      * @param CaseInterface $case
      * @param array $data
      * @return void
-     * @since 2.2.0
      */
     public function update(CaseInterface $case, array $data);
 }

@@ -12,13 +12,11 @@ use Magento\Store\Model\ScopeInterface;
  * Signifyd integration configuration.
  *
  * Class is a proxy service for retrieving configuration settings.
- * @since 2.2.0
  */
 class Config
 {
     /**
      * @var ScopeConfigInterface
-     * @since 2.2.0
      */
     private $scopeConfig;
 
@@ -26,7 +24,6 @@ class Config
      * Config constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
-     * @since 2.2.0
      */
     public function __construct(ScopeConfigInterface $scopeConfig)
     {
@@ -38,7 +35,6 @@ class Config
      * (only possibility to configure Signifyd setting in admin)
      *
      * @return bool
-     * @since 2.2.0
      */
     public function isActive()
     {
@@ -56,7 +52,6 @@ class Config
      * @see https://app.signifyd.com/settings
      *
      * @return string
-     * @since 2.2.0
      */
     public function getApiKey()
     {
@@ -72,7 +67,6 @@ class Config
      * Usually equals to https://api.signifyd.com/v2 and should not be changed
      *
      * @return string
-     * @since 2.2.0
      */
     public function getApiUrl()
     {
@@ -87,7 +81,6 @@ class Config
      * If is "true" extra information about interaction with Signifyd API are written to debug.log file
      *
      * @return bool
-     * @since 2.2.0
      */
     public function isDebugModeEnabled()
     {

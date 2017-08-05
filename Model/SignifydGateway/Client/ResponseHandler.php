@@ -10,7 +10,6 @@ use Magento\Framework\Json\DecoderInterface;
 
 /**
  * Class ResponseHandler
- * @since 2.2.0
  */
 class ResponseHandler
 {
@@ -18,13 +17,11 @@ class ResponseHandler
      * Successful HTTP response codes.
      *
      * @var array
-     * @since 2.2.0
      */
     private static $successResponseCodes = [200, 201, 204];
 
     /**
      * Current servers PHP version id.
-     * @since 2.2.0
      */
     private static $phpVersionId = PHP_VERSION_ID;
 
@@ -32,7 +29,6 @@ class ResponseHandler
      * Failure HTTP response codes with messages.
      *
      * @var array
-     * @since 2.2.0
      */
     private static $failureResponses = [
         400 => 'Bad Request - The request could not be parsed. Response: %s',
@@ -47,13 +43,11 @@ class ResponseHandler
      * Unexpected Signifyd API response message.
      *
      * @var string
-     * @since 2.2.0
      */
     private static $unexpectedResponse = 'Unexpected Signifyd API response code "%s" with content "%s".';
 
     /**
      * @var DecoderInterface
-     * @since 2.2.0
      */
     private $dataDecoder;
 
@@ -61,7 +55,6 @@ class ResponseHandler
      * ResponseHandler constructor.
      *
      * @param DecoderInterface $dataDecoder
-     * @since 2.2.0
      */
     public function __construct(
         DecoderInterface $dataDecoder
@@ -75,7 +68,6 @@ class ResponseHandler
      * @param \Zend_Http_Response $response
      * @return array
      * @throws ApiCallException
-     * @since 2.2.0
      */
     public function handle(\Zend_Http_Response $response)
     {
@@ -114,7 +106,6 @@ class ResponseHandler
      *
      * @param \Zend_Http_Response $response
      * @return string
-     * @since 2.2.0
      */
     private function buildApiCallFailureMessage(\Zend_Http_Response $response)
     {

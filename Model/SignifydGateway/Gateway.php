@@ -12,7 +12,6 @@ use Magento\Signifyd\Model\SignifydGateway\ApiClient;
  * Signifyd Gateway.
  *
  * Encapsulates interaction with Signifyd API.
- * @since 2.2.0
  */
 class Gateway
 {
@@ -46,13 +45,11 @@ class Gateway
 
     /**
      * @var CreateCaseBuilderInterface
-     * @since 2.2.0
      */
     private $createCaseBuilder;
 
     /**
      * @var ApiClient
-     * @since 2.2.0
      */
     private $apiClient;
 
@@ -61,7 +58,6 @@ class Gateway
      *
      * @param CreateCaseBuilderInterface $createCaseBuilder
      * @param ApiClient $apiClient
-     * @since 2.2.0
      */
     public function __construct(
         CreateCaseBuilderInterface $createCaseBuilder,
@@ -78,7 +74,6 @@ class Gateway
      * @param int $orderId
      * @return int Signifyd case (investigation) identifier
      * @throws GatewayException
-     * @since 2.2.0
      */
     public function createCase($orderId)
     {
@@ -104,7 +99,6 @@ class Gateway
      * @param int $signifydCaseId
      * @return string
      * @throws GatewayException
-     * @since 2.2.0
      */
     public function submitCaseForGuarantee($signifydCaseId)
     {
@@ -127,7 +121,6 @@ class Gateway
      * @param int $caseId
      * @return string
      * @throws GatewayException
-     * @since 2.2.0
      */
     public function cancelGuarantee($caseId)
     {
@@ -155,7 +148,6 @@ class Gateway
      * @param array $result
      * @return string
      * @throws GatewayException
-     * @since 2.2.0
      */
     private function processDispositionResult(array $result)
     {

@@ -11,13 +11,11 @@ use Magento\Signifyd\Model\ResourceModel\CaseEntity as CaseResourceModel;
 
 /**
  * Collection of case entities
- * @since 2.2.0
  */
 class Collection extends AbstractCollection
 {
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function _construct()
     {

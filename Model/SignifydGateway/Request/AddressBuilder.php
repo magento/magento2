@@ -9,7 +9,6 @@ use Magento\Sales\Api\Data\OrderAddressInterface;
 
 /**
  * Prepare address data
- * @since 2.2.0
  */
 class AddressBuilder
 {
@@ -18,7 +17,6 @@ class AddressBuilder
      *
      * @param OrderAddressInterface $address
      * @return array
-     * @since 2.2.0
      */
     public function build(OrderAddressInterface $address)
     {
@@ -38,7 +36,6 @@ class AddressBuilder
      * @param int $number
      * @param string[]|null $street
      * @return string
-     * @since 2.2.0
      */
     private function getStreetLine($number, $street)
     {

@@ -9,13 +9,11 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
  * Implementation of case resource model
- * @since 2.2.0
  */
 class CaseEntity extends AbstractDb
 {
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     protected function _construct()
     {

@@ -9,13 +9,11 @@ use Magento\Signifyd\Model\SignifydGateway\Client\RequestBuilder;
 
 /**
  * Encapsulates Signifyd API protocol.
- * @since 2.2.0
  */
 class ApiClient
 {
     /**
      * @var RequestBuilder
-     * @since 2.2.0
      */
     private $requestBuilder;
 
@@ -23,7 +21,6 @@ class ApiClient
      * ApiClient constructor.
      *
      * @param RequestBuilder $requestBuilder
-     * @since 2.2.0
      */
     public function __construct(
         RequestBuilder $requestBuilder
@@ -41,7 +38,6 @@ class ApiClient
      * @param string $method
      * @param array  $params
      * @return array
-     * @since 2.2.0
      */
     public function makeApiCall($url, $method, array $params = [])
     {

@@ -13,7 +13,6 @@ use Magento\Signifyd\Model\Config;
 /**
  * Class HttpClientFactory
  * Creates and configures HTTP client for RequestBuilder
- * @since 2.2.0
  */
 class HttpClientFactory
 {
@@ -21,7 +20,6 @@ class HttpClientFactory
      * Specifies basic HTTP access authentication Header.
      *
      * @var string
-     * @since 2.2.0
      */
     private static $authorizationType = 'Authorization';
 
@@ -29,31 +27,26 @@ class HttpClientFactory
      * JSON HTTP Content-Type Header.
      *
      * @var string
-     * @since 2.2.0
      */
     private static $jsonDataType = 'application/json';
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private static $urlSeparator = '/';
 
     /**
      * @var Config
-     * @since 2.2.0
      */
     private $config;
 
     /**
      * @var ZendClientFactory
-     * @since 2.2.0
      */
     private $clientFactory;
 
     /**
      * @var EncoderInterface
-     * @since 2.2.0
      */
     private $dataEncoder;
 
@@ -63,7 +56,6 @@ class HttpClientFactory
      * @param Config $config
      * @param ZendClientFactory $clientFactory
      * @param EncoderInterface $dataEncoder
-     * @since 2.2.0
      */
     public function __construct(
         Config $config,
@@ -82,7 +74,6 @@ class HttpClientFactory
      * @param string $method
      * @param array $params
      * @return ZendClient
-     * @since 2.2.0
      */
     public function create($url, $method, array $params = [])
     {
@@ -106,7 +97,6 @@ class HttpClientFactory
 
     /**
      * @return ZendClient
-     * @since 2.2.0
      */
     private function createNewClient()
     {
@@ -118,7 +108,6 @@ class HttpClientFactory
      *
      * @see https://www.signifyd.com/docs/api/#/introduction/authentication
      * @return string
-     * @since 2.2.0
      */
     private function getApiKey()
     {
@@ -130,7 +119,6 @@ class HttpClientFactory
      *
      * @param string $url
      * @return string
-     * @since 2.2.0
      */
     private function buildFullApiUrl($url)
     {
@@ -144,7 +132,6 @@ class HttpClientFactory
      * Base Sigifyd API URL without trailing slash.
      *
      * @return string
-     * @since 2.2.0
      */
     private function getBaseApiUrl()
     {

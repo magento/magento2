@@ -13,19 +13,16 @@ use Magento\Signifyd\Api\GuaranteeCancelingServiceInterface;
  * Plugin for Magento\Payment\Model\MethodInterface.
  *
  * @see MethodInterface
- * @since 2.2.0
  */
 class PaymentPlugin
 {
     /**
      * @var GuaranteeCancelingServiceInterface
-     * @since 2.2.0
      */
     private $guaranteeCancelingService;
 
     /**
      * @param GuaranteeCancelingServiceInterface $guaranteeCancelingService
-     * @since 2.2.0
      */
     public function __construct(
         GuaranteeCancelingServiceInterface $guaranteeCancelingService
@@ -43,7 +40,6 @@ class PaymentPlugin
      * @param MethodInterface|bool $result
      * @param InfoInterface $payment
      * @return bool|MethodInterface
-     * @since 2.2.0
      */
     public function afterDenyPayment(MethodInterface $subject, $result, InfoInterface $payment)
     {
@@ -63,7 +59,6 @@ class PaymentPlugin
      * @param InfoInterface $payment
      * @param MethodInterface $result
      * @return bool
-     * @since 2.2.0
      */
     private function isPaymentDenied($payment, $result)
     {

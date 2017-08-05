@@ -14,19 +14,17 @@ use Magento\Signifyd\Model\CaseManagement;
  * Get Signifyd Case Info
  *
  * @api
- * @since 2.2.0
+ * @since 100.2.0
  */
 class CaseInfo extends Template
 {
     /**
      * @var CaseInterface
-     * @since 2.2.0
      */
     private $caseEntity = false;
 
     /**
      * @var CaseManagement
-     * @since 2.2.0
      */
     private $caseManagement;
 
@@ -34,7 +32,7 @@ class CaseInfo extends Template
      * @param Context $context
      * @param CaseManagement $caseManagement
      * @param array $data
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function __construct(
         Context $context,
@@ -50,7 +48,6 @@ class CaseInfo extends Template
      * Gets case entity associated with order id.
      *
      * @return CaseInterface|null
-     * @since 2.2.0
      */
     private function getCaseEntity()
     {
@@ -69,7 +66,6 @@ class CaseInfo extends Template
      * @param mixed $defaultValue
      * @param callable $callback
      * @return mixed
-     * @since 2.2.0
      */
     private function getCaseProperty($defaultValue, callable $callback)
     {
@@ -80,7 +76,7 @@ class CaseInfo extends Template
      * Checks if case is exists for order
      *
      * @return bool
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function isEmptyCase()
     {
@@ -91,7 +87,7 @@ class CaseInfo extends Template
      * Gets case guarantee disposition status.
      *
      * @return string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getCaseGuaranteeDisposition()
     {
@@ -117,7 +113,6 @@ class CaseInfo extends Template
      * Retrieves current order Id.
      *
      * @return integer
-     * @since 2.2.0
      */
     private function getOrderId()
     {

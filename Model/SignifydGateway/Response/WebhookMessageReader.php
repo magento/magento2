@@ -9,26 +9,22 @@ use Magento\Framework\Json\DecoderInterface;
 
 /**
  * Reads request and produces webhook message data object based on request params.
- * @since 2.2.0
  */
 class WebhookMessageReader
 {
     /**
      * @var DecoderInterface
-     * @since 2.2.0
      */
     private $dataDecoder;
 
     /**
      * @var WebhookMessageFactory
-     * @since 2.2.0
      */
     private $webhookMessageFactory;
 
     /**
      * @param DecoderInterface $decoder
      * @param WebhookMessageFactory $webhookMessageFactory
-     * @since 2.2.0
      */
     public function __construct(
         DecoderInterface $decoder,
@@ -44,7 +40,6 @@ class WebhookMessageReader
      * @param WebhookRequest $request
      * @return WebhookMessage
      * @throws \InvalidArgumentException
-     * @since 2.2.0
      */
     public function read(WebhookRequest $request)
     {

@@ -15,19 +15,16 @@ use Magento\Signifyd\Api\Data\CaseInterface;
 
 /**
  * Implementation of Signifyd Case interface.
- * @since 2.2.0
  */
 class CaseEntity extends AbstractModel implements CaseInterface
 {
     /**
      * @var string
-     * @since 2.2.0
      */
     protected $_eventPrefix = 'signifyd_case';
 
     /**
      * @var SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -40,7 +37,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
      * @param array $data
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
-     * @since 2.2.0
      */
     public function __construct(
         Context $context,
@@ -56,7 +52,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     protected function _construct()
     {
@@ -65,7 +60,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getEntityId()
     {
@@ -74,7 +68,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setEntityId($id)
     {
@@ -84,7 +77,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getCaseId()
     {
@@ -93,7 +85,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setCaseId($id)
     {
@@ -103,7 +94,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function isGuaranteeEligible()
     {
@@ -113,7 +103,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setGuaranteeEligible($guaranteeEligible)
     {
@@ -123,7 +112,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getGuaranteeDisposition()
     {
@@ -132,7 +120,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setGuaranteeDisposition($disposition)
     {
@@ -142,7 +129,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getStatus()
     {
@@ -151,7 +137,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setStatus($status)
     {
@@ -161,7 +146,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getScore()
     {
@@ -170,7 +154,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setScore($score)
     {
@@ -180,7 +163,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getOrderId()
     {
@@ -189,7 +171,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setOrderId($orderId)
     {
@@ -199,7 +180,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getAssociatedTeam()
     {
@@ -209,7 +189,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setAssociatedTeam(array $team)
     {
@@ -219,7 +198,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getReviewDisposition()
     {
@@ -228,7 +206,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setReviewDisposition($disposition)
     {
@@ -238,7 +215,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getCreatedAt()
     {
@@ -247,7 +223,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setCreatedAt($datetime)
     {
@@ -257,7 +232,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getUpdatedAt()
     {
@@ -266,7 +240,6 @@ class CaseEntity extends AbstractModel implements CaseInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setUpdatedAt($datetime)
     {

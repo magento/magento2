@@ -11,13 +11,11 @@ use Magento\Signifyd\Api\Data\CaseInterface;
 
 /**
  * Updates case order comments history.
- * @since 2.2.0
  */
 class CommentsHistoryUpdater
 {
     /**
      * @var HistoryFactory
-     * @since 2.2.0
      */
     private $historyFactory;
 
@@ -25,7 +23,6 @@ class CommentsHistoryUpdater
      * CommentsHistoryUpdater constructor.
      *
      * @param HistoryFactory $historyFactory
-     * @since 2.2.0
      */
     public function __construct(HistoryFactory $historyFactory)
     {
@@ -40,7 +37,6 @@ class CommentsHistoryUpdater
      * @param Phrase $message
      * @param string $status
      * @return void
-     * @since 2.2.0
      */
     public function addComment(CaseInterface $case, Phrase $message, $status = '')
     {

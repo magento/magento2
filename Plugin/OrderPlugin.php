@@ -13,19 +13,16 @@ use Magento\Signifyd\Api\GuaranteeCancelingServiceInterface;
  * Plugin for Magento\Sales\Model\Order.
  *
  * @see Order
- * @since 2.2.0
  */
 class OrderPlugin
 {
     /**
      * @var GuaranteeCancelingServiceInterface
-     * @since 2.2.0
      */
     private $guaranteeCancelingService;
 
     /**
      * @param GuaranteeCancelingServiceInterface $guaranteeCancelingService
-     * @since 2.2.0
      */
     public function __construct(
         GuaranteeCancelingServiceInterface $guaranteeCancelingService
@@ -41,7 +38,6 @@ class OrderPlugin
      * @param Order $order
      * @param OrderInterface $result
      * @return OrderInterface
-     * @since 2.2.0
      */
     public function afterCancel(Order $order, $result)
     {

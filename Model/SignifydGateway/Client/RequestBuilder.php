@@ -10,25 +10,21 @@ use Magento\Framework\HTTP\ZendClient;
 /**
  * Class RequestBuilder
  * Creates HTTP client, sends request to Signifyd and handles response
- * @since 2.2.0
  */
 class RequestBuilder
 {
     /**
      * @var HttpClientFactory
-     * @since 2.2.0
      */
     private $clientCreator;
 
     /**
      * @var RequestSender
-     * @since 2.2.0
      */
     private $requestSender;
 
     /**
      * @var ResponseHandler
-     * @since 2.2.0
      */
     private $responseHandler;
 
@@ -38,7 +34,6 @@ class RequestBuilder
      * @param HttpClientFactory $clientCreator
      * @param RequestSender     $requestSender
      * @param ResponseHandler   $responseHandler
-     * @since 2.2.0
      */
     public function __construct(
         HttpClientFactory $clientCreator,
@@ -57,7 +52,6 @@ class RequestBuilder
      * @param string $method
      * @param array  $params
      * @return array
-     * @since 2.2.0
      */
     public function doRequest($url, $method, array $params = [])
     {
