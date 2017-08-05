@@ -10,13 +10,11 @@ use Magento\Framework\Phrase;
 
 /**
  * Composite reader for communication config.
- * @since 2.1.0
  */
 class CompositeReader implements ReaderInterface
 {
     /**
      * @var ReaderInterface[]
-     * @since 2.1.0
      */
     private $readers;
 
@@ -24,7 +22,6 @@ class CompositeReader implements ReaderInterface
      * Initialize dependencies.
      *
      * @param array $readers
-     * @since 2.1.0
      */
     public function __construct(array $readers)
     {
@@ -48,7 +45,6 @@ class CompositeReader implements ReaderInterface
      *
      * @param string|null $scope
      * @return array
-     * @since 2.1.0
      */
     public function read($scope = null)
     {
@@ -64,7 +60,6 @@ class CompositeReader implements ReaderInterface
      *
      * @param array $readers
      * @return array
-     * @since 2.1.0
      */
     private function sortReaders(array $readers)
     {

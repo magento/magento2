@@ -7,7 +7,6 @@ namespace Magento\Framework\MessageQueue\Topology\Config;
 
 /**
  * Instances of this class represent queue config items.
- * @since 2.2.0
  */
 interface QueueConfigItemInterface
 {
@@ -15,7 +14,6 @@ interface QueueConfigItemInterface
      * Get queue name.
      *
      * @return string
-     * @since 2.2.0
      */
     public function getName();
 
@@ -23,7 +21,6 @@ interface QueueConfigItemInterface
      * Get queue connection.
      *
      * @return string
-     * @since 2.2.0
      */
     public function getConnection();
 
@@ -31,7 +28,6 @@ interface QueueConfigItemInterface
      * Check if queue is durable.
      *
      * @return bool
-     * @since 2.2.0
      */
     public function isDurable();
 
@@ -39,7 +35,6 @@ interface QueueConfigItemInterface
      * Check if queue is auto delete.
      *
      * @return bool
-     * @since 2.2.0
      */
     public function isAutoDelete();
 
@@ -47,7 +42,6 @@ interface QueueConfigItemInterface
      * Get queue arguments
      *
      * @return array
-     * @since 2.2.0
      */
     public function getArguments();
 }

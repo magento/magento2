@@ -22,7 +22,6 @@ class QueueRepository
 
     /**
      * @var QueueFactoryInterface
-     * @since 2.2.0
      */
     private $queueFactory;
 
@@ -58,8 +57,7 @@ class QueueRepository
      * Get queue factory.
      *
      * @return QueueFactoryInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getQueueFactory()
     {

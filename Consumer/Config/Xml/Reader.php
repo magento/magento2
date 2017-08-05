@@ -9,13 +9,11 @@ use Magento\Framework\MessageQueue\Consumer\Config\ReaderInterface;
 
 /**
  * Reader for etc/queue_consumer.xml configs.
- * @since 2.2.0
  */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem implements ReaderInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     protected $_idAttributes = [
         '/config/consumer' => 'name'
@@ -23,7 +21,6 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem implements Read
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,

@@ -33,19 +33,16 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
 
     /**
      * @var QueueRepository
-     * @since 2.1.0
      */
     private $queueRepository;
 
     /**
      * @var ConsumerConfig
-     * @since 2.2.0
      */
     private $consumerConfig;
 
     /**
      * @var CommunicationConfig
-     * @since 2.2.0
      */
     private $communicationConfig;
 
@@ -90,7 +87,6 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getType()
     {
@@ -113,7 +109,6 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getHandlers($topicName)
     {
@@ -122,7 +117,6 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getTopicNames()
     {
@@ -132,7 +126,6 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getQueue()
     {
@@ -142,7 +135,6 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getMessageSchemaType($topicName)
     {
@@ -154,7 +146,6 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      * @param string $topicName
      * @return array
      * @throws \LogicException
-     * @since 2.2.0
      */
     private function getTopicConfig($topicName)
     {
@@ -183,8 +174,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      *
      * @return ConsumerConfig
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getConsumerConfig()
     {
@@ -199,8 +189,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      *
      * @return CommunicationConfig
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getCommunicationConfig()
     {

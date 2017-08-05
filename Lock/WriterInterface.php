@@ -7,7 +7,6 @@ namespace Magento\Framework\MessageQueue\Lock;
 
 /**
  * Message lock writer
- * @since 2.1.0
  */
 interface WriterInterface
 {
@@ -16,7 +15,6 @@ interface WriterInterface
      *
      * @param \Magento\Framework\MessageQueue\LockInterface $lock
      * @return void
-     * @since 2.1.0
      */
     public function saveLock(\Magento\Framework\MessageQueue\LockInterface $lock);
 
@@ -24,7 +22,6 @@ interface WriterInterface
      * Remove outdated locks
      *
      * @return void
-     * @since 2.1.0
      */
     public function releaseOutdatedLocks();
 }

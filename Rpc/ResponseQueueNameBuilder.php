@@ -9,7 +9,6 @@ namespace Magento\Framework\MessageQueue\Rpc;
 /**
  * Class \Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder
  *
- * @since 2.2.0
  */
 class ResponseQueueNameBuilder
 {
@@ -23,7 +22,6 @@ class ResponseQueueNameBuilder
      *
      * @param string $topicName
      * @return string
-     * @since 2.2.0
      */
     public function getQueueName($topicName)
     {

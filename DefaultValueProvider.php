@@ -7,7 +7,6 @@ namespace Magento\Framework\MessageQueue;
 
 /**
  * Message Queue default config value provider.
- * @since 2.2.0
  */
 class DefaultValueProvider
 {
@@ -15,7 +14,6 @@ class DefaultValueProvider
      * Default connection name.
      *
      * @var string
-     * @since 2.2.0
      */
     private $connection;
 
@@ -23,7 +21,6 @@ class DefaultValueProvider
      * Default exchange name.
      *
      * @var string
-     * @since 2.2.0
      */
     private $exchange;
 
@@ -32,7 +29,6 @@ class DefaultValueProvider
      *
      * @param string $connection
      * @param string $exchange
-     * @since 2.2.0
      */
     public function __construct($connection = 'amqp', $exchange = 'magento')
     {
@@ -44,7 +40,6 @@ class DefaultValueProvider
      * Get default connection name.
      *
      * @return string
-     * @since 2.2.0
      */
     public function getConnection()
     {
@@ -55,7 +50,6 @@ class DefaultValueProvider
      * Get default exchange name.
      *
      * @return string
-     * @since 2.2.0
      */
     public function getExchange()
     {

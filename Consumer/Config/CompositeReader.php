@@ -11,19 +11,16 @@ use Magento\Framework\MessageQueue\Consumer\Config\ValidatorInterface;
 
 /**
  * Composite reader for consumer config.
- * @since 2.2.0
  */
 class CompositeReader implements ReaderInterface
 {
     /**
      * @var ValidatorInterface
-     * @since 2.2.0
      */
     private $validator;
 
     /**
      * @var ReaderInterface[]
-     * @since 2.2.0
      */
     private $readers;
 
@@ -32,7 +29,6 @@ class CompositeReader implements ReaderInterface
      *
      * @param ValidatorInterface $validator
      * @param ReaderInterface[] $readers
-     * @since 2.2.0
      */
     public function __construct(ValidatorInterface $validator, array $readers)
     {
@@ -45,7 +41,6 @@ class CompositeReader implements ReaderInterface
      *
      * @param string|null $scope
      * @return array
-     * @since 2.2.0
      */
     public function read($scope = null)
     {

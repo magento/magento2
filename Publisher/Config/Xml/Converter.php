@@ -10,7 +10,6 @@ use Magento\Framework\MessageQueue\DefaultValueProvider;
 
 /**
  * Converts MessageQueue publishers config from \DOMDocument to array
- * @since 2.2.0
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
@@ -18,7 +17,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * Boolean value converter.
      *
      * @var BooleanUtils
-     * @since 2.2.0
      */
     private $booleanUtils;
 
@@ -26,7 +24,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * Default value provider.
      *
      * @var DefaultValueProvider
-     * @since 2.2.0
      */
     private $defaultValueProvider;
 
@@ -35,7 +32,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param BooleanUtils $booleanUtils
      * @param DefaultValueProvider $defaultValueProvider
-     * @since 2.2.0
      */
     public function __construct(BooleanUtils $booleanUtils, DefaultValueProvider $defaultValueProvider)
     {
@@ -45,7 +41,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function convert($source)
     {
@@ -94,7 +89,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param string $attributeName
      * @param mixed $default
      * @return string|null
-     * @since 2.2.0
      */
     private function getAttributeValue(\DOMNode $node, $attributeName, $default = null)
     {

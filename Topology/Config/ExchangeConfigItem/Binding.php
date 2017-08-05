@@ -7,7 +7,6 @@ namespace Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem;
 
 /**
  * Instances of this class represent config binding items declared in etc/queue_topology.xsd
- * @since 2.2.0
  */
 class Binding implements BindingInterface
 {
@@ -15,7 +14,6 @@ class Binding implements BindingInterface
      * Binding id.
      *
      * @var string
-     * @since 2.2.0
      */
     private $id;
 
@@ -23,7 +21,6 @@ class Binding implements BindingInterface
      * Binding destination type.
      *
      * @var string
-     * @since 2.2.0
      */
     private $destinationType;
 
@@ -31,14 +28,12 @@ class Binding implements BindingInterface
      * Binding destination.
      *
      * @var string
-     * @since 2.2.0
      */
     private $destination;
 
     /**
      * Flag. Is binding disabled.
      * @var bool
-     * @since 2.2.0
      */
     private $isDisabled;
 
@@ -46,7 +41,6 @@ class Binding implements BindingInterface
      * Topic name.
      *
      * @var string
-     * @since 2.2.0
      */
     private $topic;
 
@@ -54,13 +48,11 @@ class Binding implements BindingInterface
      * Binding arguments.
      *
      * @var array
-     * @since 2.2.0
      */
     private $arguments;
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getId()
     {
@@ -69,7 +61,6 @@ class Binding implements BindingInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getDestinationType()
     {
@@ -78,7 +69,6 @@ class Binding implements BindingInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getDestination()
     {
@@ -87,7 +77,6 @@ class Binding implements BindingInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function isDisabled()
     {
@@ -96,7 +85,6 @@ class Binding implements BindingInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getTopic()
     {
@@ -105,7 +93,6 @@ class Binding implements BindingInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getArguments()
     {
@@ -117,7 +104,6 @@ class Binding implements BindingInterface
      *
      * @param array $data
      * @return void
-     * @since 2.2.0
      */
     public function setData(array $data)
     {

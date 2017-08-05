@@ -29,13 +29,11 @@ class ConsumerFactory
 
     /**
      * @var ConsumerConfig
-     * @since 2.2.0
      */
     private $consumerConfig;
 
     /**
      * @var CommunicationConfig
-     * @since 2.2.0
      */
     private $communicationConfig;
 
@@ -124,8 +122,7 @@ class ConsumerFactory
      *
      * @return ConsumerConfig
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getConsumerConfig()
     {
@@ -140,8 +137,7 @@ class ConsumerFactory
      *
      * @return CommunicationConfig
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getCommunicationConfig()
     {
@@ -157,7 +153,6 @@ class ConsumerFactory
      *
      * @param string $topicName
      * @return array
-     * @since 2.2.0
      */
     private function getHandlersFromCommunicationConfig($topicName)
     {

@@ -18,7 +18,6 @@ class ExchangeRepository
 
     /**
      * @var ExchangeFactoryInterface
-     * @since 2.2.0
      */
     private $exchangeFactory;
 
@@ -26,7 +25,6 @@ class ExchangeRepository
      * Pool of exchange instances.
      *
      * @var ExchangeInterface[]
-     * @since 2.2.0
      */
     private $exchangePool = [];
 
@@ -59,8 +57,7 @@ class ExchangeRepository
      * Get exchange factory.
      *
      * @return ExchangeFactoryInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getExchangeFactory()
     {

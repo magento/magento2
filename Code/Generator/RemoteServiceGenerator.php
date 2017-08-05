@@ -17,7 +17,6 @@ use Zend\Code\Reflection\MethodReflection;
  * Code generator for remote services.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
  */
 class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbstract
 {
@@ -26,19 +25,16 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
 
     /**
      * @var CommunicationConfig
-     * @since 2.1.0
      */
     protected $communicationConfig;
 
     /**
      * @var ServiceMethodsMap
-     * @since 2.1.0
      */
     private $serviceMethodsMap;
 
     /**
      * @var ReflectionGenerator
-     * @since 2.2.0
      */
     private $reflectionGenerator;
 
@@ -55,7 +51,6 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
      * @param DefinedClasses $definedClasses
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function __construct(
         CommunicationConfig $communicationConfig,
@@ -80,7 +75,6 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     protected function _getDefaultConstructorDefinition()
     {
@@ -104,7 +98,6 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     protected function _getClassProperties()
     {
@@ -127,7 +120,6 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     protected function _getClassMethods()
     {
@@ -175,7 +167,6 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     protected function _validateData()
     {
@@ -185,7 +176,6 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     protected function _generateCode()
     {
@@ -197,7 +187,6 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
      * Ensure that result class name corresponds to the source class name.
      *
      * @return bool
-     * @since 2.1.0
      */
     protected function validateResultClassName()
     {
@@ -229,8 +218,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
      *
      * @return ReflectionGenerator
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getReflectionGenerator()
     {

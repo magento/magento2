@@ -9,13 +9,11 @@ use Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface;
 
 /**
  * Publisher config data validator. Validates that publisher config has all required fields.
- * @since 2.2.0
  */
 class Format implements ValidatorInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function validate($configData)
     {

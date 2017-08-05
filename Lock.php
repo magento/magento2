@@ -7,13 +7,11 @@ namespace Magento\Framework\MessageQueue;
 
 /**
  * Class Lock to handle message lock transactions.
- * @since 2.1.0
  */
 class Lock extends \Magento\Framework\DataObject implements LockInterface
 {
     /**
      * @inheritDoc
-     * @since 2.1.0
      */
     public function getId()
     {
@@ -22,7 +20,6 @@ class Lock extends \Magento\Framework\DataObject implements LockInterface
 
     /**
      * @inheritDoc
-     * @since 2.1.0
      */
     public function setId($value)
     {
@@ -31,7 +28,6 @@ class Lock extends \Magento\Framework\DataObject implements LockInterface
 
     /**
      * @inheritDoc
-     * @since 2.1.0
      */
     public function getMessageCode()
     {
@@ -40,7 +36,6 @@ class Lock extends \Magento\Framework\DataObject implements LockInterface
 
     /**
      * @inheritDoc
-     * @since 2.1.0
      */
     public function setMessageCode($value)
     {
@@ -49,7 +44,6 @@ class Lock extends \Magento\Framework\DataObject implements LockInterface
 
     /**
      * @inheritDoc
-     * @since 2.1.0
      */
     public function getCreatedAt()
     {
@@ -58,7 +52,6 @@ class Lock extends \Magento\Framework\DataObject implements LockInterface
 
     /**
      * @inheritDoc
-     * @since 2.1.0
      */
     public function setCreatedAt($value)
     {

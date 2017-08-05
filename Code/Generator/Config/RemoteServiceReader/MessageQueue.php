@@ -11,8 +11,7 @@ use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 /**
  * Remote service configuration reader.
  *
- * @deprecated 2.2.0
- * @since 2.1.0
+ * @deprecated 100.2.0
  */
 class MessageQueue implements \Magento\Framework\Config\ReaderInterface
 {
@@ -22,7 +21,6 @@ class MessageQueue implements \Magento\Framework\Config\ReaderInterface
 
     /**
      * @var Communication
-     * @since 2.1.0
      */
     private $communicationReader;
 
@@ -30,7 +28,6 @@ class MessageQueue implements \Magento\Framework\Config\ReaderInterface
      * Initialize dependencies.
      *
      * @param Communication $communicationReader
-     * @since 2.1.0
      */
     public function __construct(
         Communication $communicationReader
@@ -43,7 +40,6 @@ class MessageQueue implements \Magento\Framework\Config\ReaderInterface
      *
      * @param string|null $scope
      * @return array
-     * @since 2.1.0
      */
     public function read($scope = null)
     {

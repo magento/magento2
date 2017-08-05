@@ -10,14 +10,12 @@ use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 /**
  * Plugin which provides access to topology declared in queue config using topology config interface.
  *
- * @deprecated 2.2.0
- * @since 2.2.0
+ * @deprecated 100.2.0
  */
 class ConfigReaderPlugin
 {
     /**
      * @var QueueConfig
-     * @since 2.2.0
      */
     private $queueConfig;
 
@@ -25,7 +23,6 @@ class ConfigReaderPlugin
      * Initialize dependencies.
      *
      * @param QueueConfig $queueConfig
-     * @since 2.2.0
      */
     public function __construct(QueueConfig $queueConfig)
     {
@@ -41,7 +38,6 @@ class ConfigReaderPlugin
      * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterRead(
         \Magento\Framework\MessageQueue\Topology\Config\CompositeReader $subject,
@@ -66,7 +62,6 @@ class ConfigReaderPlugin
      * Get data from queue config in format compatible with topology config data internal structure.
      *
      * @return array
-     * @since 2.2.0
      */
     private function getTopologyConfigDataFromQueueConfig()
     {
