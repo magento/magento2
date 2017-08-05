@@ -22,7 +22,10 @@ class ScheduleDesignUpdate extends AbstractModifier
     const CODE_CUSTOM_DESIGN_TO = 'custom_design_to';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var ArrayManager
+     * @since 101.0.0
+     */
     protected $arrayManager;
 
     /**

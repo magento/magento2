@@ -31,7 +31,10 @@ class Categories extends AbstractModifier
     const CATEGORY_TREE_ID = 'CATALOG_PRODUCT_CATEGORY_TREE';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var CategoryCollectionFactory
+     * @since 101.0.0
+     */
     protected $categoryCollectionFactory;
 
     /**
@@ -360,7 +363,7 @@ class Categories extends AbstractModifier
             $categoryById[$category->getId()]['label'] = $category->getName();
             $categoryById[$category->getParentId()]['optgroup'][] = &$categoryById[$category->getId()];
         }
-        
+
         $this->getCacheManager()->save(
             $this->serializer->serialize($categoryById[CategoryModel::TREE_ROOT_ID]['optgroup']),
             self::CATEGORY_TREE_ID . '_' . $filter,

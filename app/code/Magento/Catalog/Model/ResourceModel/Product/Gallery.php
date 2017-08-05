@@ -25,7 +25,10 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     const GALLERY_VALUE_TO_ENTITY_TABLE = 'catalog_product_entity_media_gallery_value_to_entity';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var \Magento\Framework\EntityManager\EntityMetadata
+     * @since 101.0.0
+     */
     protected $metadata;
 
     /**

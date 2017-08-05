@@ -26,7 +26,10 @@ class Images extends AbstractModifier
     const CODE_SWATCH_IMAGE = 'swatch_image';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var LocatorInterface
+     * @since 101.0.0
+     */
     protected $locator;
 
     /**

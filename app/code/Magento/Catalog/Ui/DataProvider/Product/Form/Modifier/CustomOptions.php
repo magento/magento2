@@ -94,7 +94,10 @@ class CustomOptions extends AbstractModifier
     const CUSTOM_OPTIONS_LISTING = 'product_custom_options_listing';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var LocatorInterface
+     * @since 101.0.0
+     */
     protected $locator;
 
     /**
