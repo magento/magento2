@@ -6,16 +6,19 @@
 
 namespace Magento\Inventory\Model\Indexer;
 
-use Magento\Inventory\Model\Indexer\StockItem\Action\Full as FullAction;
-use Magento\Inventory\Model\Indexer\StockItem\Action\Row as RowAction;
-use Magento\Inventory\Model\Indexer\StockItem\Action\Rows as RowsAction;
-
+use Magento\Inventory\Model\Indexer\StockItem\IndexHandlerFactory;
+use Magento\Inventory\Model\Indexer\StockItem\IndexStructure;
 
 /**
  * Stock item Indexer @todo
  */
 class StockItem implements \Magento\Framework\Indexer\ActionInterface
 {
+
+    /**
+     * Indexer ID in configuration
+     */
+    const INDEXER_ID = 'inventory_stock_item_index';
 
     /**
      * Execute full indexation

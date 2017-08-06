@@ -8,10 +8,10 @@ namespace Magento\InventoryApi\Api\Data;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
- * Interface StockItemInterface
+ * Interface StockItemManagerInterface
  * @api
  */
-interface StockItemInterface extends ExtensibleDataInterface
+interface StockItemManagerInterface extends ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -92,15 +92,15 @@ interface StockItemInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object
      *
-     * @return \Magento\InventoryApi\Api\Data\StockExtensionInterface|null
+     * @return \Magento\InventoryApi\Api\Data\StockItemManagerExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object
      *
-     * @param \Magento\InventoryApi\Api\Data\StockExtensionInterface $extensionAttributes
+     * @param \Magento\InventoryApi\Api\Data\StockItemManagerExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(StockExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(StockItemManagerExtensionInterface $extensionAttributes);
 }

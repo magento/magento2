@@ -7,16 +7,15 @@ namespace Magento\Inventory\Model;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
-use Magento\InventoryApi\Api\Data\SourceItemExtensionInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\Data\StockItemInterface;
-
+use Magento\InventoryApi\Api\Data\StockItemManagerInterface;
+use Magento\InventoryApi\Api\Data\StockItemManagerExtensionInterface;
 /**
  * {@inheritdoc}
  *
  * @codeCoverageIgnore
  */
-class StockItem extends AbstractExtensibleModel implements StockItemInterface
+class StockItemManager extends AbstractExtensibleModel implements StockItemManagerInterface
 {
     /**
      * @inheritdoc
@@ -97,7 +96,7 @@ class StockItem extends AbstractExtensibleModel implements StockItemInterface
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (null === $extensionAttributes) {
-            $extensionAttributes = $this->extensionAttributesFactory->create(SourceItemInterface::class);
+            $extensionAttributes = $this->extensionAttributesFactory->create(StockItemManagerInterface::class);
             $this->setExtensionAttributes($extensionAttributes);
         }
         return $extensionAttributes;
@@ -106,7 +105,7 @@ class StockItem extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(SourceItemExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(StockItemManagerExtensionInterface $extensionAttributes)
     {
         $this->_setExtensionAttributes($extensionAttributes);
     }

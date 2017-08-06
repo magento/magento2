@@ -6,11 +6,6 @@
 
 namespace Magento\Inventory\Model\Indexer\StockItem\Mview;
 
-use Magento\Inventory\Model\Indexer\StockItem\Action\Full as FullAction;
-use Magento\Inventory\Model\Indexer\StockItem\Action\Row as RowAction;
-use Magento\Inventory\Model\Indexer\StockItem\Action\Rows as RowsAction;
-
-
 /**
  * @todo add description
  */
