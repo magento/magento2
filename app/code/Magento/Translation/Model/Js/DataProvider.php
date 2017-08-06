@@ -139,7 +139,7 @@ class DataProvider implements DataProviderInterface
             if ($result) {
                 if (isset($matches[2])) {
                     foreach ($matches[2] as $match) {
-                        $phrases[] = str_replace('\\\'', '\'', $match);
+                        $phrases[] = str_replace(["\'", '\"'], ["'", '"'], $match);
                     }
                 }
             }
