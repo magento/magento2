@@ -10,19 +10,16 @@ use Magento\Framework\DB\Platform\Quote;
 
 /**
  * Class ColumnsRenderer
- * @since 2.1.0
  */
 class ColumnsRenderer implements RendererInterface
 {
     /**
      * @var Quote
-     * @since 2.1.0
      */
     protected $quote;
 
     /**
      * @param Quote $quote
-     * @since 2.1.0
      */
     public function __construct(
         Quote $quote
@@ -37,7 +34,6 @@ class ColumnsRenderer implements RendererInterface
      * @param string $sql
      * @return null|string
      * @throws \Zend_Db_Select_Exception
-     * @since 2.1.0
      */
     public function render(Select $select, $sql = '')
     {

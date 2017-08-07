@@ -63,7 +63,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 
     /**
      * @var Format
-     * @since 2.2.0
      */
     private $localeFormat;
 
@@ -111,7 +110,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Get cache key informative items.
      *
      * @return array
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getCacheKeyInfo()
     {
@@ -242,7 +241,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Get product images for configurable variations
      *
      * @return array
-     * @since 2.2.0
+     * @since 100.2.0
      */
     protected function getOptionImages()
     {
@@ -314,7 +313,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Replace ',' on '.' for js
      *
-     * @deprecated 2.2.0 Will be removed in major release
+     * @deprecated 100.2.0 Will be removed in major release
      * @param float $price
      * @return string
      */
@@ -327,7 +326,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Should we generate "As low as" block or not
      *
      * @return bool
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function showMinimalPrice()
     {

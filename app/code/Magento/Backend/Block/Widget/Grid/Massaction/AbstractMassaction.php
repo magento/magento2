@@ -14,7 +14,7 @@ use Magento\Framework\DataObject;
  * @api
  * @method \Magento\Quote\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
  * @method boolean getHideFormElement()
- * @deprecated 2.2.0 in favour of UI component implementation
+ * @deprecated 100.2.0 in favour of UI component implementation
  */
 abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
 {
@@ -103,7 +103,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      *
      * @param DataObject $item
      * @return bool
-     * @since 2.2.0
      */
     private function isVisible(DataObject $item)
     {

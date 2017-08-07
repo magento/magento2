@@ -11,25 +11,21 @@ use Magento\Framework\EntityManager\Db\UpdateRow;
 
 /**
  * Class UpdateMain
- * @since 2.1.0
  */
 class UpdateMain
 {
     /**
      * @var TypeResolver
-     * @since 2.1.0
      */
     private $typeResolver;
 
     /**
      * @var HydratorPool
-     * @since 2.1.0
      */
     private $hydratorPool;
 
     /**
      * @var UpdateRow
-     * @since 2.1.0
      */
     private $updateRow;
 
@@ -37,7 +33,6 @@ class UpdateMain
      * @param TypeResolver $typeResolver
      * @param HydratorPool $hydratorPool
      * @param UpdateRow $updateRow
-     * @since 2.1.0
      */
     public function __construct(
         TypeResolver $typeResolver,
@@ -53,7 +48,6 @@ class UpdateMain
      * @param object $entity
      * @param array $arguments
      * @return object
-     * @since 2.1.0
      */
     public function execute($entity, $arguments = [])
     {

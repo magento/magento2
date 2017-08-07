@@ -37,13 +37,13 @@ class Base implements ActionInterface
 
     /**
      * @var AdapterInterface
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected $connection;
 
     /**
      * @var SourceProviderInterface[]
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected $sources;
 
@@ -54,7 +54,7 @@ class Base implements ActionInterface
 
     /**
      * @var HandlerInterface[]
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected $handlers;
 
@@ -65,7 +65,7 @@ class Base implements ActionInterface
 
     /**
      * @var array
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected $columnTypesMap = [
         'varchar'    => ['type' => Table::TYPE_TEXT, 'size' => 255],
@@ -75,13 +75,13 @@ class Base implements ActionInterface
 
     /**
      * @var array
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected $filterColumns;
 
     /**
      * @var array
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected $searchColumns;
 
@@ -102,7 +102,7 @@ class Base implements ActionInterface
 
     /**
      * @var String
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected $string;
 
@@ -113,13 +113,13 @@ class Base implements ActionInterface
 
     /**
      * @var array
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected $filterable = [];
 
     /**
      * @var array
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected $searchable = [];
 
@@ -353,7 +353,7 @@ class Base implements ActionInterface
      * @param array $field
      * @return void
      *
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected function saveFieldByType($field)
     {

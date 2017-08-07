@@ -19,25 +19,21 @@ use Magento\Catalog\Api\Data\ProductInterface;
  *
  * Can be used with batch size manager to ensure that the batch will be handled correctly by the database.
  * @see \Magento\Framework\Indexer\BatchSizeManagement
- * @since 2.2.0
  */
 class DecimalRowSizeEstimator implements IndexTableRowSizeEstimatorInterface
 {
     /**
      * @var Decimal
-     * @since 2.2.0
      */
     private $indexerResource;
 
     /**
      * @var StoreManagementInterface
-     * @since 2.2.0
      */
     private $storeManagement;
 
     /**
      * @var MetadataPool
-     * @since 2.2.0
      */
     private $metadataPool;
 
@@ -45,7 +41,6 @@ class DecimalRowSizeEstimator implements IndexTableRowSizeEstimatorInterface
      * @param StoreManagementInterface $storeManagement
      * @param Decimal $indexerResource
      * @param MetadataPool $metadataPool
-     * @since 2.2.0
      */
     public function __construct(
         StoreManagementInterface $storeManagement,
@@ -59,7 +54,6 @@ class DecimalRowSizeEstimator implements IndexTableRowSizeEstimatorInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function estimateRowSize()
     {

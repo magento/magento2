@@ -8,7 +8,6 @@ namespace Magento\Framework\App;
 /**
  * Interface \Magento\Framework\App\ScopeValidatorInterface
  *
- * @since 2.1.0
  */
 interface ScopeValidatorInterface
 {
@@ -18,7 +17,6 @@ interface ScopeValidatorInterface
      * @param string $scope
      * @param string $scopeId
      * @return bool
-     * @since 2.1.0
      */
     public function isValidScope($scope, $scopeId = null);
 }

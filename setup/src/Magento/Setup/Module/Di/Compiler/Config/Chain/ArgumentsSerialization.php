@@ -23,7 +23,6 @@ class ArgumentsSerialization implements ModificationInterface
      * Used for serialize/unserialize data.
      *
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -31,7 +30,6 @@ class ArgumentsSerialization implements ModificationInterface
      * Constructor.
      *
      * @param SerializerInterface|null $serializer
-     * @since 2.2.0
      */
     public function __construct(SerializerInterface $serializer = null)
     {

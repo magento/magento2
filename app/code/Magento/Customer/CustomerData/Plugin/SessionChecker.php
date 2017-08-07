@@ -12,26 +12,22 @@ use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 /**
  * Class \Magento\Customer\CustomerData\Plugin\SessionChecker
  *
- * @since 2.1.0
  */
 class SessionChecker
 {
     /**
      * @var PhpCookieManager
-     * @since 2.1.0
      */
     private $cookieManager;
 
     /**
      * @var CookieMetadataFactory
-     * @since 2.1.0
      */
     private $cookieMetadataFactory;
 
     /**
      * @param PhpCookieManager $cookieManager
      * @param CookieMetadataFactory $cookieMetadataFactory
-     * @since 2.1.0
      */
     public function __construct(
         PhpCookieManager $cookieManager,
@@ -46,7 +42,6 @@ class SessionChecker
      *
      * @param SessionManager $sessionManager
      * @return void
-     * @since 2.1.0
      */
     public function beforeStart(SessionManager $sessionManager)
     {

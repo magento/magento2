@@ -12,13 +12,11 @@ use Magento\Sales\Model\Order\Payment;
 /**
  * Class \Magento\Braintree\Gateway\Request\VoidDataBuilder
  *
- * @since 2.1.0
  */
 class VoidDataBuilder implements BuilderInterface
 {
     /**
      * @var SubjectReader
-     * @since 2.1.0
      */
     private $subjectReader;
 
@@ -26,7 +24,6 @@ class VoidDataBuilder implements BuilderInterface
      * Constructor
      *
      * @param SubjectReader $subjectReader
-     * @since 2.1.0
      */
     public function __construct(SubjectReader $subjectReader)
     {
@@ -38,7 +35,6 @@ class VoidDataBuilder implements BuilderInterface
      *
      * @param array $buildSubject
      * @return array
-     * @since 2.1.0
      */
     public function build(array $buildSubject)
     {

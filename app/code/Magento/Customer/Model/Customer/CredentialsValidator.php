@@ -11,7 +11,6 @@ use Magento\Framework\Exception\InputException;
 
 /**
  * Class to invalidate user credentials
- * @since 2.2.0
  */
 class CredentialsValidator
 {
@@ -22,7 +21,6 @@ class CredentialsValidator
      * @param string $password
      * @return void
      * @throws InputException
-     * @since 2.2.0
      */
     public function checkPasswordDifferentFromEmail($email, $password)
     {

@@ -33,7 +33,6 @@ class ReaderPlugin
      * @param string|null $scope
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterRead(
         \Magento\Framework\Config\ReaderInterface $subject,

@@ -18,13 +18,11 @@ class Config implements ConfigInterface
 {
     /**
      * @var \Magento\Framework\App\Config
-     * @since 2.1.3
      */
     protected $appConfig;
 
     /**
      * @var array
-     * @since 2.1.3
      */
     private $data;
 

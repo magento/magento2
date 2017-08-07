@@ -13,20 +13,17 @@ use Magento\Framework\Data\Collection\AbstractDb;
  * This class was created, as extension point, in order to resolve problem with area specific plugins, which
  * listens product collection. F.E. this class allows to apply stock filter not only for frontend area
  * but for other areas for product collection too
- * @since 2.2.0
  */
 class CollectionModifier implements CollectionModifierInterface
 {
     /**
      * @var CollectionModifierInterface[]
-     * @since 2.2.0
      */
     private $conditions;
 
     /**
      * CollectionConditionApplier constructor.
      * @param array $conditions
-     * @since 2.2.0
      */
     public function __construct(
         array $conditions
@@ -40,7 +37,6 @@ class CollectionModifier implements CollectionModifierInterface
      *
      * @param AbstractDb $collection
      * @return void
-     * @since 2.2.0
      */
     public function apply(AbstractDb $collection)
     {

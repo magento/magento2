@@ -9,7 +9,6 @@ use Magento\Deploy\Package\Package;
 
 /**
  * Deploy packages processor interface
- * @since 2.2.0
  */
 interface ProcessorInterface
 {
@@ -21,7 +20,6 @@ interface ProcessorInterface
      * @param Package $package
      * @param array $options
      * @return bool true on success
-     * @since 2.2.0
      */
     public function process(Package $package, array $options);
 }

@@ -8,7 +8,6 @@ namespace Magento\Framework\Convert;
 
 /**
  * Magento data size converter class
- * @since 2.1.0
  */
 class DataSize
 {
@@ -18,7 +17,6 @@ class DataSize
      *
      * @param string $size
      * @return integer
-     * @since 2.1.0
      */
     public function convertSizeToBytes($size)
     {

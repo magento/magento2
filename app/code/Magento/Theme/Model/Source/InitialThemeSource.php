@@ -15,7 +15,6 @@ use Magento\Theme\Model\ResourceModel\ThemeFactory;
  * Class InitialThemeSource.
  *
  * Retrieves theme configurations by path.
- * @since 2.2.0
  */
 class InitialThemeSource implements ConfigSourceInterface
 {
@@ -23,7 +22,6 @@ class InitialThemeSource implements ConfigSourceInterface
      * A deployment config.
      *
      * @var DeploymentConfig
-     * @since 2.2.0
      */
     private $deploymentConfig;
 
@@ -31,7 +29,6 @@ class InitialThemeSource implements ConfigSourceInterface
      * A theme factory.
      *
      * @var ThemeFactory
-     * @since 2.2.0
      */
     private $themeFactory;
 
@@ -39,7 +36,6 @@ class InitialThemeSource implements ConfigSourceInterface
      * A data object factory.
      *
      * @var DataObjectFactory
-     * @since 2.2.0
      */
     private $dataObjectFactory;
 
@@ -47,7 +43,6 @@ class InitialThemeSource implements ConfigSourceInterface
      * Array with theme data.
      *
      * @var array
-     * @since 2.2.0
      */
     private $data;
 
@@ -55,7 +50,6 @@ class InitialThemeSource implements ConfigSourceInterface
      * @param DeploymentConfig $deploymentConfig A deployment config
      * @param ThemeFactory $themeFactory A theme factory
      * @param DataObjectFactory $dataObjectFactory A data object factory
-     * @since 2.2.0
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
@@ -87,7 +81,6 @@ class InitialThemeSource implements ConfigSourceInterface
      *
      * @param string $path The path to theme configuration.
      * @return array The data array with theme configurations.
-     * @since 2.2.0
      */
     public function get($path = '')
     {
@@ -119,7 +112,6 @@ class InitialThemeSource implements ConfigSourceInterface
      * Fetches themes from data source.
      *
      * @return array An associative list with found themes
-     * @since 2.2.0
      */
     private function fetchThemes()
     {

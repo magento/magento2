@@ -17,7 +17,7 @@ namespace Magento\Rule\Model\Condition;
  * the classes they were introduced for.
  *
  * @api
- * @deprecated 2.2.0
+ * @deprecated 100.2.0
  */
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {

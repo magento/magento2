@@ -9,13 +9,11 @@ use Magento\Framework\View\EntitySpecificHandlesList;
 
 /**
  * Plugin for @see \Magento\Framework\View\Model\Layout\Merge
- * @since 2.2.0
  */
 class MergePlugin
 {
     /**
      * @var EntitySpecificHandlesList
-     * @since 2.2.0
      */
     private $entitySpecificHandlesList;
 
@@ -23,7 +21,6 @@ class MergePlugin
      * Constructor
      *
      * @param EntitySpecificHandlesList $entitySpecificHandlesList
-     * @since 2.2.0
      */
     public function __construct(
         EntitySpecificHandlesList $entitySpecificHandlesList
@@ -41,7 +38,6 @@ class MergePlugin
      * @param string $updateXml
      * @return array|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function beforeValidateUpdate(\Magento\Framework\View\Model\Layout\Merge $subject, $handle, $updateXml)
     {

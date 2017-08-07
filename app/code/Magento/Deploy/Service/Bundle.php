@@ -19,7 +19,6 @@ use Magento\Framework\View\Asset\RepositoryMap;
  *
  * Read all static files from deployed packages and generate bundles. Bundle Factory can be configured to use
  * bundle format different from RequireJS used out of the box
- * @since 2.2.0
  */
 class Bundle
 {
@@ -42,7 +41,6 @@ class Bundle
      * Public static directory writable interface
      *
      * @var Filesystem\Directory\WriteInterface
-     * @since 2.2.0
      */
     private $pubStaticDir;
 
@@ -51,7 +49,6 @@ class Bundle
      *
      * @see BundleInterface
      * @var BundleInterfaceFactory
-     * @since 2.2.0
      */
     private $bundleFactory;
 
@@ -59,7 +56,6 @@ class Bundle
      * Utility class for collecting files by specific pattern and location
      *
      * @var Files
-     * @since 2.2.0
      */
     private $utilityFiles;
 
@@ -67,7 +63,6 @@ class Bundle
      * Cached data about files which must be excluded from bundling
      *
      * @var array
-     * @since 2.2.0
      */
     private $excludedCache = [];
 
@@ -75,7 +70,6 @@ class Bundle
      * List of supported types of static files
      *
      * @var array
-     * @since 2.2.0
      * */
     public static $availableTypes = [
         self::ASSET_TYPE_JS,
@@ -89,7 +83,6 @@ class Bundle
      * @param BundleInterfaceFactory $bundleFactory
      * @param BundleConfig $bundleConfig
      * @param Files $files
-     * @since 2.2.0
      */
     public function __construct(
         Filesystem $filesystem,
@@ -110,7 +103,6 @@ class Bundle
      * @param string $theme
      * @param string $locale
      * @return void
-     * @since 2.2.0
      */
     public function deploy($area, $theme, $locale)
     {
@@ -167,7 +159,6 @@ class Bundle
      *
      * @param string $filePath
      * @return bool
-     * @since 2.2.0
      */
     private function hasMinVersion($filePath)
     {
@@ -196,7 +187,6 @@ class Bundle
      * @param string $area
      * @param string $theme
      * @return bool
-     * @since 2.2.0
      */
     private function isExcluded($filePath, $area, $theme)
     {
@@ -223,7 +213,6 @@ class Bundle
      *
      * @param string $path
      * @return array|bool
-     * @since 2.2.0
      */
     private function prepareExcludePath($path)
     {

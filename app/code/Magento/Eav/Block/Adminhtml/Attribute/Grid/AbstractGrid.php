@@ -10,7 +10,7 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Grid;
  *
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @deprecated 2.2.0
+ * @deprecated 100.2.0
  */
 abstract class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
 {

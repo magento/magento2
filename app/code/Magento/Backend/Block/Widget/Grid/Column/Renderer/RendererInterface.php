@@ -11,7 +11,7 @@ use Magento\Backend\Block\Widget\Grid\Column;
  * Backend grid item renderer interface
  *
  * @api
- * @deprecated 2.2.0 in favour of UI component implementation
+ * @deprecated 100.2.0 in favour of UI component implementation
  */
 interface RendererInterface
 {

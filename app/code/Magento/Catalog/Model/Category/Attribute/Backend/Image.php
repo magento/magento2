@@ -15,40 +15,38 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * @var \Magento\MediaStorage\Model\File\UploaderFactory
      *
-     * @deprecated 2.1.0
+     * @deprecated 101.0.0
      */
     protected $_uploaderFactory;
 
     /**
      * @var \Magento\Framework\Filesystem
      *
-     * @deprecated 2.1.0
+     * @deprecated 101.0.0
      */
     protected $_filesystem;
 
     /**
      * @var \Magento\MediaStorage\Model\File\UploaderFactory
      *
-     * @deprecated 2.1.0
+     * @deprecated 101.0.0
      */
     protected $_fileUploaderFactory;
 
     /**
      * @var \Psr\Log\LoggerInterface
      *
-     * @deprecated 2.1.0
+     * @deprecated 101.0.0
      */
     protected $_logger;
 
     /**
      * @var \Magento\Catalog\Model\ImageUploader
-     * @since 2.1.0
      */
     private $imageUploader;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $additionalData = '_additional_data_';
 
@@ -73,7 +71,6 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param array $value Attribute value
      * @return string
-     * @since 2.2.0
      */
     private function getUploadedImageName($value)
     {
@@ -90,7 +87,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function beforeSave($object)
     {
@@ -110,8 +107,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * @return \Magento\Catalog\Model\ImageUploader
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 101.0.0
      */
     private function getImageUploader()
     {
@@ -128,7 +124,6 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param array $value
      * @return bool
-     * @since 2.2.0
      */
     private function isTmpFileAvailable($value)
     {

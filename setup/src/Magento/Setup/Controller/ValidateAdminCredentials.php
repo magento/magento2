@@ -14,19 +14,16 @@ use Zend\View\Model\JsonModel;
 
 /**
  * Controller for admin credentials validation
- * @since 2.1.0
  */
 class ValidateAdminCredentials extends AbstractActionController
 {
     /**
      * @var AdminCredentialsValidator
-     * @since 2.1.0
      */
     private $adminCredentialsValidator;
 
     /**
      * @var RequestDataConverter
-     * @since 2.1.0
      */
     private $requestDataConverter;
 
@@ -35,7 +32,6 @@ class ValidateAdminCredentials extends AbstractActionController
      *
      * @param AdminCredentialsValidator $adminCredentialsValidator
      * @param RequestDataConverter $requestDataConverter
-     * @since 2.1.0
      */
     public function __construct(
         AdminCredentialsValidator $adminCredentialsValidator,
@@ -49,7 +45,6 @@ class ValidateAdminCredentials extends AbstractActionController
      * Validate admin credentials.
      *
      * @return JsonModel
-     * @since 2.1.0
      */
     public function indexAction()
     {

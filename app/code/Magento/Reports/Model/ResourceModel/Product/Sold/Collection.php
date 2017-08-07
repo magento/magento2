@@ -114,7 +114,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
 
     /**
      * @return Select
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getSelectCountSql()
     {

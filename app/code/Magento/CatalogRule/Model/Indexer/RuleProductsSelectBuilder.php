@@ -8,37 +8,31 @@ namespace Magento\CatalogRule\Model\Indexer;
 
 /**
  * Build select for rule relation with product.
- * @since 2.2.0
  */
 class RuleProductsSelectBuilder
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.2.0
      */
     private $resource;
 
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.2.0
      */
     private $eavConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
-     * @since 2.2.0
      */
     private $activeTableSwitcher;
 
@@ -48,7 +42,6 @@ class RuleProductsSelectBuilder
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -71,7 +64,6 @@ class RuleProductsSelectBuilder
      * @param \Magento\Catalog\Model\Product|null $product
      * @param bool $useAdditionalTable
      * @return \Zend_Db_Statement_Interface
-     * @since 2.2.0
      */
     public function build(
         $websiteId,

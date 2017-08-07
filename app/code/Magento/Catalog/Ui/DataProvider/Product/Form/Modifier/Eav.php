@@ -39,7 +39,7 @@ use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
- * @since 2.1.0
+ * @since 101.0.0
  */
 class Eav extends AbstractModifier
 {
@@ -47,151 +47,143 @@ class Eav extends AbstractModifier
 
     /**
      * @var LocatorInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $locator;
 
     /**
      * @var Config
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $eavConfig;
 
     /**
      * @var CatalogEavValidationRules
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $catalogEavValidationRules;
 
     /**
      * @var RequestInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $request;
 
     /**
      * @var GroupCollectionFactory
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $groupCollectionFactory;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $storeManager;
 
     /**
      * @var FormElementMapper
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $formElementMapper;
 
     /**
      * @var MetaPropertiesMapper
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $metaPropertiesMapper;
 
     /**
      * @var ProductAttributeGroupRepositoryInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $attributeGroupRepository;
 
     /**
      * @var SearchCriteriaBuilder
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var ProductAttributeRepositoryInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $attributeRepository;
 
     /**
      * @var SortOrderBuilder
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $sortOrderBuilder;
 
     /**
      * @var EavAttributeFactory
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $eavAttributeFactory;
 
     /**
      * @var Translit
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $translitFilter;
 
     /**
      * @var ArrayManager
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $arrayManager;
 
     /**
      * @var ScopeOverriddenValue
-     * @since 2.1.0
      */
     private $scopeOverriddenValue;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $attributesToDisable;
 
     /**
      * @var array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $attributesToEliminate;
 
     /**
      * @var DataPersistorInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $dataPersistor;
 
     /**
      * @var EavAttribute[]
-     * @since 2.1.0
      */
     private $attributes = [];
 
     /**
      * @var AttributeGroupInterface[]
-     * @since 2.1.0
      */
     private $attributeGroups = [];
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $canDisplayUseDefault = [];
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $bannedInputTypes = ['media_image'];
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $prevSetAttributes;
 
     /**
      * @var CurrencyInterface
-     * @since 2.1.0
      */
     private $localeCurrency;
 
@@ -216,7 +208,7 @@ class Eav extends AbstractModifier
      * @param array $attributesToDisable
      * @param array $attributesToEliminate
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -262,7 +254,7 @@ class Eav extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function modifyMeta(array $meta)
     {
@@ -294,7 +286,6 @@ class Eav extends AbstractModifier
      * @param string $groupCode
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.1.0
      */
     private function getAttributesMeta(array $attributes, $groupCode)
     {
@@ -330,7 +321,7 @@ class Eav extends AbstractModifier
      * @param int $sortOrder
      * @return array
      * @api
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function addContainerChildren(
         array $attributeContainer,
@@ -361,7 +352,7 @@ class Eav extends AbstractModifier
      * @param int $sortOrder
      * @return array
      * @api
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function getContainerChildren(ProductAttributeInterface $attribute, $groupCode, $sortOrder)
     {
@@ -374,7 +365,7 @@ class Eav extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function modifyData(array $data)
     {
@@ -407,7 +398,6 @@ class Eav extends AbstractModifier
      *
      * @param array $data
      * @return array
-     * @since 2.1.0
      */
     private function resolvePersistentData(array $data)
     {
@@ -431,7 +421,6 @@ class Eav extends AbstractModifier
      * Get product type
      *
      * @return null|string
-     * @since 2.1.0
      */
     private function getProductType()
     {
@@ -442,7 +431,6 @@ class Eav extends AbstractModifier
      * Return prev set id
      *
      * @return int
-     * @since 2.1.0
      */
     private function getPreviousSetId()
     {
@@ -453,7 +441,6 @@ class Eav extends AbstractModifier
      * Retrieve groups
      *
      * @return AttributeGroupInterface[]
-     * @since 2.1.0
      */
     private function getGroups()
     {
@@ -472,7 +459,6 @@ class Eav extends AbstractModifier
      * Initialize attribute group search criteria with filters.
      *
      * @return SearchCriteriaBuilder
-     * @since 2.1.0
      */
     private function prepareGroupSearchCriteria()
     {
@@ -486,7 +472,6 @@ class Eav extends AbstractModifier
      * Return current attribute set id
      *
      * @return int|null
-     * @since 2.1.0
      */
     private function getAttributeSetId()
     {
@@ -497,7 +482,6 @@ class Eav extends AbstractModifier
      * Retrieve attributes
      *
      * @return ProductAttributeInterface[]
-     * @since 2.1.0
      */
     private function getAttributes()
     {
@@ -515,7 +499,6 @@ class Eav extends AbstractModifier
      *
      * @param AttributeGroupInterface $group
      * @return ProductAttributeInterface[]
-     * @since 2.1.0
      */
     private function loadAttributes(AttributeGroupInterface $group)
     {
@@ -547,7 +530,6 @@ class Eav extends AbstractModifier
      *
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.1.0
      */
     private function getPreviousSetAttributes()
     {
@@ -569,7 +551,6 @@ class Eav extends AbstractModifier
      * Check is product already new or we trying to create one
      *
      * @return bool
-     * @since 2.2.0
      */
     private function isProductExists()
     {
@@ -587,7 +568,7 @@ class Eav extends AbstractModifier
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @api
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function setupAttributeMeta(ProductAttributeInterface $attribute, $groupCode, $sortOrder)
     {
@@ -669,7 +650,6 @@ class Eav extends AbstractModifier
      * @param ProductAttributeInterface $attribute
      * @param array $meta
      * @return array
-     * @since 2.1.0
      */
     private function addUseDefaultValueCheckbox(ProductAttributeInterface $attribute, array $meta)
     {
@@ -695,7 +675,7 @@ class Eav extends AbstractModifier
      * @param ProductAttributeInterface $attribute
      * @return array
      * @api
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function setupAttributeContainerMeta(ProductAttributeInterface $attribute)
     {
@@ -730,7 +710,7 @@ class Eav extends AbstractModifier
      * @param ProductAttributeInterface $attribute
      * @return mixed|null
      * @api
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function setupAttributeData(ProductAttributeInterface $attribute)
     {
@@ -753,7 +733,6 @@ class Eav extends AbstractModifier
      * @param ProductAttributeInterface $attribute
      * @param array $meta
      * @return array
-     * @since 2.1.0
      */
     private function customizeCheckbox(ProductAttributeInterface $attribute, array $meta)
     {
@@ -774,7 +753,6 @@ class Eav extends AbstractModifier
      * @param ProductAttributeInterface $attribute
      * @param array $meta
      * @return array
-     * @since 2.1.0
      */
     private function customizePriceAttribute(ProductAttributeInterface $attribute, array $meta)
     {
@@ -793,7 +771,6 @@ class Eav extends AbstractModifier
      * @param ProductAttributeInterface $attribute
      * @param array $meta
      * @return array
-     * @since 2.1.0
      */
     private function customizeWysiwyg(ProductAttributeInterface $attribute, array $meta)
     {
@@ -819,7 +796,6 @@ class Eav extends AbstractModifier
      *
      * @param string $value
      * @return mixed
-     * @since 2.1.0
      */
     private function getFormElementsMapValue($value)
     {
@@ -833,7 +809,6 @@ class Eav extends AbstractModifier
      *
      * @param ProductAttributeInterface $attribute
      * @return mixed
-     * @since 2.1.0
      */
     private function getValue(ProductAttributeInterface $attribute)
     {
@@ -848,7 +823,6 @@ class Eav extends AbstractModifier
      *
      * @param ProductAttributeInterface $attribute
      * @return \Magento\Framework\Phrase|string
-     * @since 2.1.0
      */
     private function getScopeLabel(ProductAttributeInterface $attribute)
     {
@@ -875,7 +849,6 @@ class Eav extends AbstractModifier
      *
      * @param ProductAttributeInterface $attribute
      * @return bool
-     * @since 2.1.0
      */
     private function canDisplayUseDefault(ProductAttributeInterface $attribute)
     {
@@ -900,7 +873,6 @@ class Eav extends AbstractModifier
      *
      * @param ProductAttributeInterface $attribute
      * @return bool
-     * @since 2.1.0
      */
     private function isScopeGlobal($attribute)
     {
@@ -914,7 +886,6 @@ class Eav extends AbstractModifier
      *
      * @param ProductAttributeInterface $attribute
      * @return EavAttribute
-     * @since 2.1.0
      */
     private function getAttributeModel($attribute)
     {
@@ -930,7 +901,6 @@ class Eav extends AbstractModifier
      *
      * @param AttributeGroupInterface $group
      * @return string
-     * @since 2.1.0
      */
     private function calculateGroupCode(AttributeGroupInterface $group)
     {
@@ -948,8 +918,7 @@ class Eav extends AbstractModifier
      *
      * @return \Magento\Framework\Locale\CurrencyInterface
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 101.0.0
      */
     private function getLocaleCurrency()
     {
@@ -964,7 +933,7 @@ class Eav extends AbstractModifier
      *
      * @param mixed $value
      * @return string
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function formatPrice($value)
     {

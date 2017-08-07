@@ -14,19 +14,16 @@ use Magento\GroupedProduct\Model\ResourceModel\Product\Link as GroupedLink;
 /**
  * Class \Magento\GroupedProduct\Model\ResourceModel\Product\Link\RelationPersister
  *
- * @since 2.1.0
  */
 class RelationPersister
 {
     /**
      * @var Relation
-     * @since 2.1.0
      */
     private $relationProcessor;
 
     /**
      * @var LinkFactory
-     * @since 2.1.0
      */
     private $linkFactory;
 
@@ -35,7 +32,6 @@ class RelationPersister
      *
      * @param Relation $relationProcessor
      * @param LinkFactory $linkFactory
-     * @since 2.1.0
      */
     public function __construct(Relation $relationProcessor, LinkFactory $linkFactory)
     {
@@ -53,7 +49,6 @@ class RelationPersister
      * @param int $typeId
      * @return Link
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterSaveProductLinks(Link $subject, Link $result, $parentId, $data, $typeId)
     {
@@ -75,7 +70,6 @@ class RelationPersister
      * @param \Closure $proceed
      * @param int $linkId
      * @return Link
-     * @since 2.1.0
      */
     public function aroundDeleteProductLink(Link $subject, \Closure $proceed, $linkId)
     {

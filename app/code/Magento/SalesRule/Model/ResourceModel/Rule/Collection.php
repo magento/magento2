@@ -26,7 +26,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Rule\DateApplier
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $dateApplier;
 
@@ -37,7 +37,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
     /**
      * @var Json $serializer
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -83,7 +82,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @param string $objectField
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function mapAssociatedEntities($entityType, $objectField)
     {
@@ -115,7 +114,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     /**
      * @return $this
      * @throws \Exception
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function _afterLoad()
     {
@@ -343,7 +342,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      *
      * @param int $customerGroupId
      * @return $this
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function addCustomerGroupFilter($customerGroupId)
     {
@@ -364,8 +363,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
     /**
      * @return array
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getAssociatedEntitiesMap()
     {
@@ -379,8 +377,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
     /**
      * @return DateApplier
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getDateApplier()
     {

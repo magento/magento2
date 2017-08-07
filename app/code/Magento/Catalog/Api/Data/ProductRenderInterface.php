@@ -15,7 +15,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  * This information is put into part as Add To Cart or Add to Compare Data or Price Data
  *
  * @api
- * @since 2.2.0
+ * @since 101.1.0
  */
 interface ProductRenderInterface extends ExtensibleDataInterface
 {
@@ -23,7 +23,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      * Provide information needed for render "Add To Cart" button on front
      *
      * @return \Magento\Catalog\Api\Data\ProductRender\ButtonInterface
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function getAddToCartButton();
 
@@ -32,7 +32,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      *
      * @param \Magento\Catalog\Api\Data\ProductRender\ButtonInterface $addToCartData
      * @return void
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function setAddToCartButton(ButtonInterface $cartAddToCartButton);
 
@@ -40,7 +40,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      * Provide information needed for render "Add To Compare" button on front
      *
      * @return \Magento\Catalog\Api\Data\ProductRender\ButtonInterface
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function getAddToCompareButton();
 
@@ -49,7 +49,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      *
      * @param ButtonInterface $compareUrlData
      * @return string
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function setAddToCompareButton(ButtonInterface $compareButton);
 
@@ -58,7 +58,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      * Prices are represented in raw format and in current currency
      *
      * @return \Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function getPriceInfo();
 
@@ -67,7 +67,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      *
      * @param \Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface $priceInfo
      * @return void
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function setPriceInfo(PriceInfoInterface $priceInfo);
 
@@ -76,7 +76,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      * Images can be separated by image codes
      *
      * @return \Magento\Catalog\Api\Data\ProductRender\ImageInterface[]
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function getImages();
 
@@ -85,7 +85,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      *
      * @param \Magento\Catalog\Api\Data\ProductRender\ImageInterface[] $images
      * @return void
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function setImages(array $images);
 
@@ -93,7 +93,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      * Provide product url
      *
      * @return string
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function getUrl();
 
@@ -102,7 +102,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      *
      * @param string $url
      * @return void
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function setUrl($url);
 
@@ -110,7 +110,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      * Provide product identifier
      *
      * @return int
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function getId();
 
@@ -119,7 +119,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      *
      * @param int $id
      * @return void
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function setId($id);
 
@@ -127,7 +127,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      * Provide product name
      *
      * @return string
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function getName();
 
@@ -136,7 +136,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      *
      * @param string $name
      * @return void
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function setName($name);
 
@@ -144,7 +144,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      * Provide product type. Such as bundle, grouped, simple, etc...
      *
      * @return string
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function getType();
 
@@ -153,7 +153,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      *
      * @param string $productType
      * @return void
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function setType($productType);
 
@@ -161,7 +161,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      * Provide information about product saleability (In Stock)
      *
      * @return string
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function getIsSalable();
 
@@ -172,7 +172,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      *
      * @param string $isSalable
      * @return void
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function setIsSalable($isSalable);
 
@@ -182,7 +182,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      * This setting affect store scope attributes
      *
      * @return int
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function getStoreId();
 
@@ -191,7 +191,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      *
      * @param int $storeId
      * @return void
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function setStoreId($storeId);
 
@@ -200,7 +200,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      * This setting affect formatted prices*
      *
      * @return string
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function getCurrencyCode();
 
@@ -209,7 +209,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      *
      * @param string $currencyCode
      * @return void
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function setCurrencyCode($currencyCode);
 
@@ -217,7 +217,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Catalog\Api\Data\ProductRenderExtensionInterface
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function getExtensionAttributes();
 
@@ -226,7 +226,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
      *
      * @param \Magento\Catalog\Api\Data\ProductRenderExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductRenderExtensionInterface $extensionAttributes

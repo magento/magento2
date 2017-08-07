@@ -12,7 +12,6 @@ use Magento\Framework\Phrase;
 
 /**
  * UI Component definition config reader
- * @since 2.2.0
  */
 class Definition extends \Magento\Framework\Config\Reader\Filesystem implements ReaderInterface
 {
@@ -21,7 +20,6 @@ class Definition extends \Magento\Framework\Config\Reader\Filesystem implements 
      *
      * @param string|null $scope
      * @return array
-     * @since 2.2.0
      */
     public function read($scope = null)
     {
@@ -41,7 +39,6 @@ class Definition extends \Magento\Framework\Config\Reader\Filesystem implements 
      * @param array $fileList
      * @return array
      * @throws LocalizedException if XML file is invalid
-     * @since 2.2.0
      */
     private function readFiles($fileList)
     {

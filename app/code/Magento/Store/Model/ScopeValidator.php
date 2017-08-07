@@ -13,19 +13,16 @@ use Magento\Framework\App\ScopeResolverPool;
 /**
  * Class \Magento\Store\Model\ScopeValidator
  *
- * @since 2.1.0
  */
 class ScopeValidator implements ScopeValidatorInterface
 {
     /**
      * @var ScopeResolverPool
-     * @since 2.1.0
      */
     protected $scopeResolverPool;
 
     /**
      * @param ScopeResolverPool $scopeResolverPool
-     * @since 2.1.0
      */
     public function __construct(ScopeResolverPool $scopeResolverPool)
     {
@@ -34,7 +31,6 @@ class ScopeValidator implements ScopeValidatorInterface
 
     /**
      * @inheritDoc
-     * @since 2.1.0
      */
     public function isValidScope($scope, $scopeId = null)
     {

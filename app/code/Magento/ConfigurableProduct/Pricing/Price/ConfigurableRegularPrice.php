@@ -42,13 +42,11 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
 
     /**
      * @var ConfigurableOptionsProviderInterface
-     * @since 2.1.1
      */
     private $configurableOptionsProvider;
 
     /**
      * @var LowestPriceOptionsProviderInterface
-     * @since 2.1.3
      */
     private $lowestPriceOptionsProvider;
 
@@ -162,8 +160,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
 
     /**
      * @return \Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface
-     * @deprecated 2.1.1
-     * @since 2.1.1
+     * @deprecated 100.1.1
      */
     private function getConfigurableOptionsProvider()
     {

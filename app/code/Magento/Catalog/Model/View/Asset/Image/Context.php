@@ -18,30 +18,25 @@ use Magento\Framework\View\Asset\ContextInterface;
  *
  * As Magento moves from inheritance-based APIs all such classes will be deprecated together with
  * the classes they were introduced for.
- * @since 2.2.0
  */
 class Context implements ContextInterface
 {
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     * @since 2.2.0
      */
     private $mediaDirectory;
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\ConfigInterface
-     * @since 2.2.0
      */
     private $mediaConfig;
 
     /**
      * @var \Magento\Framework\Filesystem
-     * @since 2.2.0
      */
     private $filesystem;
 
     /**
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Media\ConfigInterface $mediaConfig,
@@ -55,7 +50,6 @@ class Context implements ContextInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getPath()
     {
@@ -64,7 +58,6 @@ class Context implements ContextInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getBaseUrl()
     {

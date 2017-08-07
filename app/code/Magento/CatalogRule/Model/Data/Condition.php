@@ -10,13 +10,11 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 /**
  * Class Condition
  * @codeCoverageIgnore
- * @since 2.1.0
  */
 class Condition extends AbstractExtensibleModel implements \Magento\CatalogRule\Api\Data\ConditionInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function setType($type)
     {
@@ -25,7 +23,6 @@ class Condition extends AbstractExtensibleModel implements \Magento\CatalogRule\
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getType()
     {
@@ -34,7 +31,6 @@ class Condition extends AbstractExtensibleModel implements \Magento\CatalogRule\
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function setAttribute($attribute)
     {
@@ -43,7 +39,6 @@ class Condition extends AbstractExtensibleModel implements \Magento\CatalogRule\
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getAttribute()
     {
@@ -52,7 +47,6 @@ class Condition extends AbstractExtensibleModel implements \Magento\CatalogRule\
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function setOperator($operator)
     {
@@ -61,7 +55,6 @@ class Condition extends AbstractExtensibleModel implements \Magento\CatalogRule\
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getOperator()
     {
@@ -70,7 +63,6 @@ class Condition extends AbstractExtensibleModel implements \Magento\CatalogRule\
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function setValue($value)
     {
@@ -79,7 +71,6 @@ class Condition extends AbstractExtensibleModel implements \Magento\CatalogRule\
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getValue()
     {
@@ -88,7 +79,6 @@ class Condition extends AbstractExtensibleModel implements \Magento\CatalogRule\
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function setIsValueParsed($isValueParsed)
     {
@@ -97,7 +87,6 @@ class Condition extends AbstractExtensibleModel implements \Magento\CatalogRule\
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getIsValueParsed()
     {
@@ -106,7 +95,6 @@ class Condition extends AbstractExtensibleModel implements \Magento\CatalogRule\
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function setAggregator($aggregator)
     {
@@ -115,7 +103,6 @@ class Condition extends AbstractExtensibleModel implements \Magento\CatalogRule\
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getAggregator()
     {
@@ -124,7 +111,6 @@ class Condition extends AbstractExtensibleModel implements \Magento\CatalogRule\
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function setConditions($conditions)
     {
@@ -133,7 +119,6 @@ class Condition extends AbstractExtensibleModel implements \Magento\CatalogRule\
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getConditions()
     {
@@ -142,7 +127,6 @@ class Condition extends AbstractExtensibleModel implements \Magento\CatalogRule\
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getExtensionAttributes()
     {
@@ -151,7 +135,6 @@ class Condition extends AbstractExtensibleModel implements \Magento\CatalogRule\
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function setExtensionAttributes(
         \Magento\CatalogRule\Api\Data\ConditionExtensionInterface $extensionAttributes

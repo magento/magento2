@@ -38,7 +38,6 @@ class QuoteItem
      * @param array $additional
      * @return OrderItemInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterConvert(
         ToOrderItem $subject,

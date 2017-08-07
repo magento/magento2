@@ -58,7 +58,6 @@ class Scoped extends \Magento\Framework\Config\Data
 
     /**
      * @var SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 

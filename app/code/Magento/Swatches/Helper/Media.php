@@ -68,7 +68,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @var \Magento\Theme\Model\ResourceModel\Theme\Collection
-     * @since 2.2.0
      */
     private $registeredThemesCache;
 
@@ -337,7 +336,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @return \Magento\Theme\Model\ResourceModel\Theme\Collection
-     * @since 2.2.0
      */
     private function getRegisteredThemes()
     {

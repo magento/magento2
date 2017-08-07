@@ -211,7 +211,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param Attribute $attribute
      * @return \Magento\Framework\Phrase
-     * @since 2.2.0
+     * @since 100.2.0
      */
     protected function getFromAttributePrefix(Attribute $attribute)
     {

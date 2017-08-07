@@ -9,7 +9,6 @@ use Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\AbstractEnable;
 
 /**
  * Class MerchantId
- * @since 2.1.0
  */
 class MerchantId extends AbstractEnable
 {
@@ -17,7 +16,6 @@ class MerchantId extends AbstractEnable
      * Getting the name of a UI attribute
      *
      * @return string
-     * @since 2.1.0
      */
     protected function getDataAttributeName()
     {

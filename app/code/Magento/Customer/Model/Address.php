@@ -50,7 +50,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
 
     /**
      * @var \Magento\Customer\Model\Address\CustomAttributeListInterface
-     * @since 2.0.5
      */
     private $attributeList;
 
@@ -357,7 +356,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
 
     /**
      * {@inheritdoc}
-     * @since 2.0.5
+     * @since 100.0.6
      */
     protected function getCustomAttributesCodes()
     {
@@ -367,8 +366,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * Get new AttributeList dependency for application code.
      * @return \Magento\Customer\Model\Address\CustomAttributeListInterface
-     * @deprecated 2.0.5
-     * @since 2.0.5
+     * @deprecated 100.0.6
      */
     private function getAttributeList()
     {
@@ -384,7 +382,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Retrieve attribute set id for customer address.
      *
      * @return int
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getAttributeSetId()
     {

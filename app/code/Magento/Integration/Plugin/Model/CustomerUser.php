@@ -9,19 +9,16 @@ use Magento\Integration\Model\CustomerTokenService;
 
 /**
  * Plugin to delete customer tokens when customer becomes inactive
- * @since 2.1.7
  */
 class CustomerUser
 {
     /**
      * @var CustomerTokenService
-     * @since 2.1.7
      */
     private $customerTokenService;
 
     /**
      * @param CustomerTokenService $customerTokenService
-     * @since 2.1.7
      */
     public function __construct(
         CustomerTokenService $customerTokenService
@@ -35,7 +32,6 @@ class CustomerUser
      * @param \Magento\Customer\Model\Customer $subject
      * @param \Magento\Framework\DataObject $object
      * @return $this
-     * @since 2.1.7
      */
     public function afterSave(
         \Magento\Customer\Model\Customer $subject,

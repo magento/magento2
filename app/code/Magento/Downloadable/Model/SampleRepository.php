@@ -43,7 +43,6 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
 
     /**
      * @var SampleFactory
-     * @since 2.1.0
      */
     protected $sampleFactory;
 
@@ -64,13 +63,11 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
 
     /**
      * @var SampleHandler
-     * @since 2.1.0
      */
     private $sampleTypeHandler;
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
@@ -330,9 +327,8 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     /**
      * Get MetadataPool instance
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      * @return MetadataPool
-     * @since 2.1.0
      */
     private function getMetadataPool()
     {
@@ -346,9 +342,8 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     /**
      * Get SampleTypeHandler Instance
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      * @return SampleHandler
-     * @since 2.1.0
      */
     private function getSampleTypeHandler()
     {

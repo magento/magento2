@@ -16,7 +16,6 @@ class Native extends \SessionHandler
      *
      * @param string $sessionId
      * @return string
-     * @since 2.1.0
      */
     public function read($sessionId)
     {

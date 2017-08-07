@@ -31,25 +31,21 @@ class IndexBuilder implements IndexBuilderInterface
 {
     /**
      * @var DimensionsProcessor
-     * @since 2.2.0
      */
     private $dimensionsProcessor;
 
     /**
      * @var SelectContainerBuilder
-     * @since 2.2.0
      */
     private $selectContainerBuilder;
 
     /**
      * @var BaseSelectStrategyMapper
-     * @since 2.2.0
      */
     private $baseSelectStrategyMapper;
 
     /**
      * @var FilterMapper
-     * @since 2.2.0
      */
     private $filterMapper;
 

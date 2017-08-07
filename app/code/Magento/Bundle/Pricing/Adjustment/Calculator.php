@@ -52,13 +52,11 @@ class Calculator implements BundleCalculatorInterface
 
     /**
      * @var \Magento\Framework\Pricing\Amount\AmountInterface[]
-     * @since 2.2.0
      */
     private $optionAmount = [];
 
     /**
      * @var SelectionPriceListProviderInterface
-     * @since 2.2.0
      */
     private $selectionPriceListProvider;
 
@@ -201,8 +199,7 @@ class Calculator implements BundleCalculatorInterface
 
     /**
      * @return SelectionPriceListProviderInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getSelectionPriceListProvider()
     {
@@ -220,7 +217,7 @@ class Calculator implements BundleCalculatorInterface
      * @param \Magento\Bundle\Model\Option $option
      * @param bool $canSkipRequiredOption
      * @return bool
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected function canSkipOption($option, $canSkipRequiredOption)
     {
@@ -232,7 +229,7 @@ class Calculator implements BundleCalculatorInterface
      *
      * @param Product $bundleProduct
      * @return bool
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected function hasRequiredOption($bundleProduct)
     {
@@ -250,7 +247,7 @@ class Calculator implements BundleCalculatorInterface
      *
      * @param Product $saleableItem
      * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected function getBundleOptions(Product $saleableItem)
     {

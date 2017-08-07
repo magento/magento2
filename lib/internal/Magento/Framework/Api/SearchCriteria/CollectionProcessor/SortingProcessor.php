@@ -14,26 +14,22 @@ use Magento\Framework\Data\Collection\AbstractDb;
 /**
  * Class \Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor
  *
- * @since 2.2.0
  */
 class SortingProcessor implements CollectionProcessorInterface
 {
     /**
      * @var array
-     * @since 2.2.0
      */
     private $fieldMapping;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $defaultOrders;
 
     /**
      * @param array $fieldMapping
      * @param array $defaultOrders
-     * @since 2.2.0
      */
     public function __construct(
         array $fieldMapping = [],
@@ -49,7 +45,6 @@ class SortingProcessor implements CollectionProcessorInterface
      * @param SearchCriteriaInterface $searchCriteria
      * @param AbstractDb $collection
      * @return void
-     * @since 2.2.0
      */
     public function process(SearchCriteriaInterface $searchCriteria, AbstractDb $collection)
     {
@@ -65,7 +60,6 @@ class SortingProcessor implements CollectionProcessorInterface
      *
      * @param string $field
      * @return string
-     * @since 2.2.0
      */
     private function getFieldMapping($field)
     {
@@ -78,7 +72,6 @@ class SortingProcessor implements CollectionProcessorInterface
      * @param SortOrder[] $sortOrders
      * @param AbstractDb $collection
      * @return void
-     * @since 2.2.0
      */
     private function applyOrders(array $sortOrders, AbstractDb $collection)
     {
@@ -97,7 +90,6 @@ class SortingProcessor implements CollectionProcessorInterface
      *
      * @param AbstractDb $collection
      * @return void
-     * @since 2.2.0
      */
     private function applyDefaultOrders(AbstractDb $collection)
     {

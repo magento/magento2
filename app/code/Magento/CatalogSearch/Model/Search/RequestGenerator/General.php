@@ -13,13 +13,11 @@ use Magento\Framework\Search\Request\FilterInterface;
 /**
  * Class \Magento\CatalogSearch\Model\Search\RequestGenerator\General
  *
- * @since 2.2.0
  */
 class General implements GeneratorInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getFilterData(Attribute $attribute, $filterName)
     {
@@ -33,7 +31,6 @@ class General implements GeneratorInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getAggregationData(Attribute $attribute, $bucketName)
     {

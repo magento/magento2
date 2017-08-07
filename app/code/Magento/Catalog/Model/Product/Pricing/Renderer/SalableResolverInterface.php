@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\Product\Pricing\Renderer;
 
 /**
  * Interface resolver checks whether product available for sale
- * @since 2.1.3
  */
 interface SalableResolverInterface
 {
@@ -17,7 +16,6 @@ interface SalableResolverInterface
      *
      * @param \Magento\Framework\Pricing\SaleableInterface $salableItem
      * @return boolean
-     * @since 2.1.3
      */
     public function isSalable(\Magento\Framework\Pricing\SaleableInterface $salableItem);
 }

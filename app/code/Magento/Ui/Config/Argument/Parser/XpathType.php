@@ -9,14 +9,12 @@ use Magento\Ui\Config\Argument\ParserInterface;
 
 /**
  * This class convert xml node to array as is
- * @since 2.2.0
  */
 class XpathType implements ParserInterface
 {
     /**
      * @inheritdoc
      * @throws \InvalidArgumentException if type isn't passed
-     * @since 2.2.0
      */
     public function parse(array $data, \DOMNode $node)
     {

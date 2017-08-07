@@ -20,7 +20,6 @@ class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var array
-     * @since 2.0.5
      */
     private $layoutUpdateCache;
 

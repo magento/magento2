@@ -13,7 +13,7 @@ use Magento\Config\Model\Config\Export\ExcludeList;
  * Used when you need to know if the configuration path belongs to a certain type.
  * Participates in the mechanism for creating the configuration dump file.
  * @api
- * @since 2.2.0
+ * @since 100.2.0
  */
 class TypePool
 {
@@ -31,7 +31,6 @@ class TypePool
      * List of sensitive configuration fields paths.
      *
      * @var array
-     * @since 2.2.0
      */
     private $sensitive;
 
@@ -39,7 +38,6 @@ class TypePool
      * List of environment configuration fields paths.
      *
      * @var array
-     * @since 2.2.0
      */
     private $environment;
 
@@ -47,7 +45,6 @@ class TypePool
      * Filtered configuration array
      *
      * @var array
-     * @since 2.2.0
      */
     private $filteredPaths;
 
@@ -55,12 +52,11 @@ class TypePool
      * Checks if the configuration path is contained in exclude list.
      *
      * @var ExcludeList
-     * @deprecated 2.2.0 We use it only to support backward compatibility. If some configurations
+     * @deprecated 100.2.0 We use it only to support backward compatibility. If some configurations
      *             were set to this list before, we need to read them.
      *             It will be supported for next 2 minor releases or until a major release.
      *             TypePool should be used to mark configurations with types.
      * @see TypePool
-     * @since 2.2.0
      */
     private $excludeList;
 
@@ -68,7 +64,7 @@ class TypePool
      * @param array $sensitive List of sensitive configuration fields paths
      * @param array $environment List of environment configuration fields paths
      * @param ExcludeList $excludeList Checks if the configuration path is contained in exclude list
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function __construct(array $sensitive = [], array $environment = [], ExcludeList $excludeList = null)
     {
@@ -88,7 +84,7 @@ class TypePool
      * @param string $path Configuration field path. For example, 'contact/email/recipient_email'
      * @param string $type Type of configuration fields
      * @return bool True when the path belongs to requested type, false otherwise
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function isPresent($path, $type)
     {
@@ -125,7 +121,6 @@ class TypePool
      * - sensitive or TypePool::TYPE_SENSITIVE;
      * - environment or TypePool::TYPE_ENVIRONMENT.
      * @return array
-     * @since 2.2.0
      */
     private function getPathsByType($type)
     {

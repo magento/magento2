@@ -113,7 +113,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * URL rewrite model
      *
      * @var \Magento\UrlRewrite\Model\UrlRewrite
-     * @deprecated 2.2.0 since 2.2.0
+     * @deprecated 101.1.0
      */
     protected $_urlRewrite;
 

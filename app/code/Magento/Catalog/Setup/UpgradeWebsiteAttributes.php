@@ -18,7 +18,6 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
  * @package Magento\Catalog\Setup
  *
  * IMPORTANT: This class const/methods can not be reused because it needs to be isolated
- * @since 2.2.0
  */
 class UpgradeWebsiteAttributes
 {
@@ -31,7 +30,6 @@ class UpgradeWebsiteAttributes
 
     /**
      * Map table names to metadata classes where link field might be found
-     * @since 2.2.0
      */
     private $tableMetaDataClass = [
         'catalog_category_entity_datetime' => CategoryInterface::class,
@@ -58,31 +56,26 @@ class UpgradeWebsiteAttributes
      *  ]
      *
      * @var array
-     * @since 2.2.0
      */
     private $groupedStoreViews = [];
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $processedAttributeValues = [];
 
     /**
      * @var Generator
-     * @since 2.2.0
      */
     private $batchQueryGenerator;
 
     /**
      * @var MetadataPool
-     * @since 2.2.0
      */
     private $metaDataPool;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $linkFields = [];
 
@@ -90,7 +83,6 @@ class UpgradeWebsiteAttributes
      * UpgradeWebsiteAttributes constructor.
      * @param Generator $batchQueryGenerator
      * @param MetadataPool $metadataPool
-     * @since 2.2.0
      */
     public function __construct(Generator $batchQueryGenerator, MetadataPool $metadataPool)
     {
@@ -101,7 +93,6 @@ class UpgradeWebsiteAttributes
     /**
      * @param ModuleDataSetupInterface $setup
      * @return void
-     * @since 2.2.0
      */
     public function upgrade(ModuleDataSetupInterface $setup)
     {
@@ -114,7 +105,6 @@ class UpgradeWebsiteAttributes
      * @param ModuleDataSetupInterface $setup
      * @param string $tableName
      * @return void
-     * @since 2.2.0
      */
     private function upgradeTable(ModuleDataSetupInterface $setup, $tableName)
     {
@@ -129,7 +119,6 @@ class UpgradeWebsiteAttributes
      * @param array $attributeValueItems
      * @param string $tableName
      * @return void
-     * @since 2.2.0
      */
     private function processAttributeValues(ModuleDataSetupInterface $setup, array $attributeValueItems, $tableName)
     {
@@ -156,7 +145,6 @@ class UpgradeWebsiteAttributes
      * @param string $tableName
      * @yield array
      * @return void
-     * @since 2.2.0
      */
     private function fetchAttributeValues(ModuleDataSetupInterface $setup, $tableName)
     {
@@ -201,7 +189,6 @@ class UpgradeWebsiteAttributes
     /**
      * @param ModuleDataSetupInterface $setup
      * @return array
-     * @since 2.2.0
      */
     private function getGroupedStoreViews(ModuleDataSetupInterface $setup)
     {
@@ -234,7 +221,6 @@ class UpgradeWebsiteAttributes
      * @param array $attributeValue
      * @param string $tableName
      * @return bool
-     * @since 2.2.0
      */
     private function isProcessedAttributeValue(array $attributeValue, $tableName)
     {
@@ -251,7 +237,6 @@ class UpgradeWebsiteAttributes
     /**
      * Resets processed attribute values
      * @return void
-     * @since 2.2.0
      */
     private function resetProcessedAttributeValues()
     {
@@ -262,7 +247,6 @@ class UpgradeWebsiteAttributes
      * @param array $attributeValue
      * @param string $tableName
      * @return void
-     * @since 2.2.0
      */
     private function markAttributeValueProcessed(array $attributeValue, $tableName)
     {
@@ -278,7 +262,6 @@ class UpgradeWebsiteAttributes
      * @param int $attributeId
      * @param int $websiteId
      * @return string
-     * @since 2.2.0
      */
     private function getAttributeValueKey($entityId, $attributeId, $websiteId)
     {
@@ -295,7 +278,6 @@ class UpgradeWebsiteAttributes
      * @param array $attributeValue
      * @param string $tableName
      * @return array|null
-     * @since 2.2.0
      */
     private function generateAttributeValueInsertions(
         ModuleDataSetupInterface $setup,
@@ -327,7 +309,6 @@ class UpgradeWebsiteAttributes
      * @param array $insertions
      * @param string $tableName
      * @return void
-     * @since 2.2.0
      */
     private function executeInsertions(ModuleDataSetupInterface $setup, array $insertions, $tableName)
     {
@@ -350,7 +331,6 @@ class UpgradeWebsiteAttributes
      *
      * @param array $insertions
      * @return array
-     * @since 2.2.0
      */
     private function getPlaceholderValues(array $insertions)
     {
@@ -370,7 +350,6 @@ class UpgradeWebsiteAttributes
      *
      * @param array $insertions
      * @return string
-     * @since 2.2.0
      */
     private function prepareInsertValuesStatement(array $insertions)
     {
@@ -387,7 +366,6 @@ class UpgradeWebsiteAttributes
      * @param string $tableName
      * @return string
      * @throws LocalizedException
-     * @since 2.2.0
      */
     private function getTableLinkField($tableName)
     {

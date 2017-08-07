@@ -12,13 +12,11 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 
 /**
  * DataProvider for product attributes listing
- * @since 2.1.0
  */
 class Listing extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
     /**
      * @var RequestInterface
-     * @since 2.1.0
      */
     protected $request;
 
@@ -30,7 +28,6 @@ class Listing extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param RequestInterface $request
      * @param array $meta
      * @param array $data
-     * @since 2.1.0
      */
     public function __construct(
         $name,
@@ -48,7 +45,6 @@ class Listing extends \Magento\Ui\DataProvider\AbstractDataProvider
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getData()
     {

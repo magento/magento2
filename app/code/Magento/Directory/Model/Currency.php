@@ -229,7 +229,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param mixed $toCurrency
      * @return string
      * @throws \Magento\Framework\Exception\InputException
-     * @since 2.1.0
      */
     private function getCurrencyCodeFromToCurrency($toCurrency)
     {
@@ -415,7 +414,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $string
      * @return $this
-     * @since 2.1.0
      */
     private function trimUnicodeDirectionMark($string)
     {

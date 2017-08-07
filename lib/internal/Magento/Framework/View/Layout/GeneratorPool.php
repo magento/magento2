@@ -30,7 +30,6 @@ class GeneratorPool
 
     /**
      * @var \Magento\Framework\View\Layout\Condition\ConditionFactory
-     * @since 2.2.0
      */
     private $conditionFactory;
 
@@ -231,7 +230,7 @@ class GeneratorPool
      * @param array $data
      *
      * @return bool
-     * @since 2.2.0
+     * @since 100.2.0
      */
     protected function visibilityConditionsExistsIn(array $data)
     {

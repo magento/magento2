@@ -12,7 +12,6 @@ namespace Magento\SalesRule\Model;
  * discount (fixed or in percents) on whole customer shopping cart or on items in this shopping cart.
  * Class was added due to Backward Compatibility and is used as proxy to:
  * @see \Magento\SalesRule\Model\Service\CouponManagementService
- * @since 2.2.0
  */
 class CouponGenerator
 {
@@ -25,7 +24,6 @@ class CouponGenerator
      *  - value = key in old service
      *
      * @var array
-     * @since 2.2.0
      */
     private $keyMap = [
         'quantity' => 'qty'
@@ -33,13 +31,11 @@ class CouponGenerator
 
     /**
      * @var Service\CouponManagementService
-     * @since 2.2.0
      */
     private $couponManagementService;
 
     /**
      * @var \Magento\SalesRule\Api\Data\CouponGenerationSpecInterfaceFactory
-     * @since 2.2.0
      */
     private $generationSpecFactory;
 
@@ -49,7 +45,6 @@ class CouponGenerator
      *
      * @param Service\CouponManagementService $couponManagementService
      * @param \Magento\SalesRule\Api\Data\CouponGenerationSpecInterfaceFactory $generationSpecFactory
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\SalesRule\Model\Service\CouponManagementService $couponManagementService,
@@ -69,7 +64,6 @@ class CouponGenerator
      *
      * @param array $parameters
      * @return string[]
-     * @since 2.2.0
      */
     public function generateCodes(array $parameters)
     {
@@ -84,7 +78,6 @@ class CouponGenerator
      *
      * @param array $data
      * @return array
-     * @since 2.2.0
      */
     private function convertCouponSpecData(array $data)
     {

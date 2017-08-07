@@ -9,7 +9,6 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Interface Validator for validating scope and scope code
- * @since 2.2.0
  */
 interface ValidatorInterface
 {
@@ -21,7 +20,6 @@ interface ValidatorInterface
      * @param string $scopeCode
      * @return boolean
      * @throws LocalizedException
-     * @since 2.2.0
      */
     public function isValid($scope, $scopeCode = null);
 }

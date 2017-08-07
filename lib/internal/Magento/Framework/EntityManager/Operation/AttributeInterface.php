@@ -8,7 +8,6 @@ namespace Magento\Framework\EntityManager\Operation;
 
 /**
  * Interface AttributeInterface
- * @since 2.1.0
  */
 interface AttributeInterface
 {
@@ -17,7 +16,6 @@ interface AttributeInterface
      * @param array $entityData
      * @param array $arguments
      * @return array
-     * @since 2.1.0
      */
     public function execute($entityType, $entityData, $arguments = []);
 }

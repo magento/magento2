@@ -23,7 +23,6 @@ class Grouped extends DefaultPrice implements GroupedInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     protected function reindex($entityIds = null)
     {
@@ -77,7 +76,6 @@ class Grouped extends DefaultPrice implements GroupedInterface
      *
      * @param int|array $entityIds  the parent entity ids limitation
      * @return \Magento\Framework\DB\Select
-     * @since 2.2.0
      */
     protected function _prepareGroupedProductPriceDataSelect($entityIds = null)
     {

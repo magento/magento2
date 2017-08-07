@@ -8,7 +8,6 @@ namespace Magento\Search\Controller;
 /**
  * Declarations of core registry keys used by the search module
  *
- * @since 2.1.0
  */
 class RegistryConstants
 {

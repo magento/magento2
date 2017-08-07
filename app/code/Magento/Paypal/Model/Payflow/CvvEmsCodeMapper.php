@@ -16,7 +16,6 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  *
  * @see https://developer.paypal.com/docs/classic/payflow/integration-guide/#credit-card-transaction-responses
  * @see http://www.emsecommerce.net/avs_cvv2_response_codes.htm
- * @since 2.2.0
  */
 class CvvEmsCodeMapper implements PaymentVerificationInterface
 {
@@ -24,7 +23,6 @@ class CvvEmsCodeMapper implements PaymentVerificationInterface
      * Default code for mismatch mapping
      *
      * @var string
-     * @since 2.2.0
      */
     private static $notProvidedCode = 'P';
 
@@ -32,7 +30,6 @@ class CvvEmsCodeMapper implements PaymentVerificationInterface
      * List of mapping CVV codes
      *
      * @var array
-     * @since 2.2.0
      */
     private static $cvvMap = [
         'Y' => 'M',
@@ -45,7 +42,6 @@ class CvvEmsCodeMapper implements PaymentVerificationInterface
      * @param OrderPaymentInterface $orderPayment
      * @return string
      * @throws \InvalidArgumentException If specified order payment has different payment method code.
-     * @since 2.2.0
      */
     public function getCode(OrderPaymentInterface $orderPayment)
     {

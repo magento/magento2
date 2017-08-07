@@ -94,7 +94,7 @@ class Tree extends Dbp
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $metadataPool;
 
@@ -680,7 +680,6 @@ class Tree extends Dbp
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
      */
     private function getMetadataPool()
     {

@@ -10,7 +10,6 @@ use Magento\Backend\App\Action;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\VoidAction
  *
- * @since 2.2.0
  */
 class VoidAction extends Action
 {
@@ -23,13 +22,11 @@ class VoidAction extends Action
 
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
-     * @since 2.2.0
      */
     protected $creditmemoLoader;
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
-     * @since 2.2.0
      */
     protected $resultForwardFactory;
 
@@ -37,7 +34,6 @@ class VoidAction extends Action
      * @param Action\Context $context
      * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     * @since 2.2.0
      */
     public function __construct(
         Action\Context $context,
@@ -53,7 +49,6 @@ class VoidAction extends Action
      * Void creditmemo action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Backend\Model\View\Result\Forward
-     * @since 2.2.0
      */
     public function execute()
     {

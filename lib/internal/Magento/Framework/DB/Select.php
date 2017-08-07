@@ -48,7 +48,6 @@ class Select extends \Zend_Db_Select
 
     /**
      * @var Select\SelectRenderer
-     * @since 2.1.1
      */
     private $selectRenderer;
 
@@ -502,7 +501,7 @@ class Select extends \Zend_Db_Select
      * Converts this object to an SQL SELECT string.
      *
      * @return string|null This object as a SELECT string. (or null if a string cannot be produced.)
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function assemble()
     {
@@ -511,7 +510,7 @@ class Select extends \Zend_Db_Select
 
     /**
      * @return string[]
-     * @since 2.0.9
+     * @since 100.0.11
      */
     public function __sleep()
     {
@@ -530,7 +529,7 @@ class Select extends \Zend_Db_Select
      * Init not serializable fields
      *
      * @return void
-     * @since 2.0.9
+     * @since 100.0.11
      */
     public function __wakeup()
     {

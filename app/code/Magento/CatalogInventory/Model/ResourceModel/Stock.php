@@ -75,7 +75,7 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
 
     /**
      * @var StoreManagerInterface
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     protected $storeManager;
 

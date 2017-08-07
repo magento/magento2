@@ -39,7 +39,6 @@ abstract class AbstractTypeHandler
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     protected $metadataPool;
 
@@ -199,7 +198,6 @@ abstract class AbstractTypeHandler
     /**
      * Get MetadataPool instance
      * @return MetadataPool
-     * @since 2.1.0
      */
     protected function getMetadataPool()
     {

@@ -40,7 +40,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $metadataPool;
 

@@ -25,25 +25,21 @@ class StructurePlugin
 
     /**
      * @var BackendHelper
-     * @since 2.2.0
      */
     private $backendHelper;
 
     /**
      * @var ScopeDefiner
-     * @since 2.2.0
      */
     private $scopeDefiner;
 
     /**
      * @var PaymentSectionModifier
-     * @since 2.1.4
      */
     private $paymentSectionModifier;
 
     /**
      * @var string[]
-     * @since 2.2.0
      */
     private static $paypalConfigCountries = [
         'payment_us',
@@ -139,7 +135,6 @@ class StructurePlugin
      *
      * @param Section $result
      * @return void
-     * @since 2.1.3
      */
     private function restructurePayments(Section $result)
     {

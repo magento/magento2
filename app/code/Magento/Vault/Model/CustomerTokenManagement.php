@@ -11,19 +11,16 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 /**
  * Class \Magento\Vault\Model\CustomerTokenManagement
  *
- * @since 2.1.0
  */
 class CustomerTokenManagement
 {
     /**
      * @var PaymentTokenManagement
-     * @since 2.1.0
      */
     private $tokenManagement;
 
     /**
      * @var Session
-     * @since 2.1.0
      */
     private $session;
 
@@ -31,7 +28,6 @@ class CustomerTokenManagement
      * CustomerTokenManagement constructor.
      * @param PaymentTokenManagement $tokenManagement
      * @param Session $session
-     * @since 2.1.0
      */
     public function __construct(
         PaymentTokenManagement $tokenManagement,
@@ -45,7 +41,6 @@ class CustomerTokenManagement
      * Returns list of payment tokens for current customer session
      *
      * @return PaymentTokenInterface[]
-     * @since 2.1.0
      */
     public function getCustomerSessionTokens()
     {

@@ -163,7 +163,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Product entity link field
      *
      * @var string
-     * @since 2.1.0
      */
     private $productEntityLinkField;
 
@@ -620,7 +619,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Get product entity link field
      *
      * @return string
-     * @since 2.1.0
      */
     private function getProductEntityLinkField()
     {

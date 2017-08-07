@@ -221,7 +221,6 @@ class Installer
 
     /**
      * @var PhpReadinessCheck
-     * @since 2.1.0
      */
     private $phpReadinessCheck;
 
@@ -363,7 +362,6 @@ class Installer
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
-     * @since 2.0.6
      */
     private function writeInstallationDate()
     {
@@ -470,7 +468,6 @@ class Installer
      *
      * @return void
      * @throws \Exception
-     * @since 2.1.0
      */
     public function checkExtensions()
     {
@@ -799,7 +796,6 @@ class Installer
      *
      * @return void
      * @throws \Exception If some of the required directories isn't writable
-     * @since 2.2.0
      */
     public function checkFilePermissionsForDbUpgrade()
     {
@@ -814,7 +810,6 @@ class Installer
      * @param array $paths List of not writable paths
      * @return void
      * @throws \Exception If given not empty array of not writable paths
-     * @since 2.2.0
      */
     private function throwExceptionForNotWritablePaths(array $paths)
     {
@@ -906,7 +901,6 @@ class Installer
     /**
      * @return void
      * @throws \Magento\Setup\Exception
-     * @since 2.0.6
      */
     private function assertDbConfigExists()
     {
@@ -1295,7 +1289,6 @@ class Installer
      * Clear generated/code and reset object manager
      *
      * @return void
-     * @since 2.1.0
      */
     private function cleanupGeneratedFiles()
     {

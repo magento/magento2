@@ -13,7 +13,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
  * Interface CustomerNameGenerationInterface
  *
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 interface CustomerNameGenerationInterface
 {
@@ -22,7 +22,7 @@ interface CustomerNameGenerationInterface
      *
      * @param CustomerInterface $customerData
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getCustomerName(CustomerInterface $customerData);
 }

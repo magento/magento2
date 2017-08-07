@@ -10,13 +10,11 @@ use Magento\Catalog\Api\Data\SpecialPriceInterface;
 
 /**
  * Product Special Price class is used to encapsulate data that can be processed by efficient price API.
- * @since 2.2.0
  */
 class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel implements SpecialPriceInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function setPrice($price)
     {
@@ -25,7 +23,6 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getPrice()
     {
@@ -34,7 +31,6 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function setStoreId($storeId)
     {
@@ -43,7 +39,6 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getStoreId()
     {
@@ -52,7 +47,6 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function setSku($sku)
     {
@@ -61,7 +55,6 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getSku()
     {
@@ -70,7 +63,6 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function setPriceFrom($datetime)
     {
@@ -79,7 +71,6 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getPriceFrom()
     {
@@ -88,7 +79,6 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function setPriceTo($datetime)
     {
@@ -97,7 +87,6 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getPriceTo()
     {
@@ -106,7 +95,6 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getExtensionAttributes()
     {
@@ -115,7 +103,6 @@ class SpecialPrice extends \Magento\Framework\Model\AbstractExtensibleModel impl
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\SpecialPriceExtensionInterface $extensionAttributes

@@ -35,7 +35,6 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * @var AllowedCountries
-     * @since 2.1.3
      */
     private $allowedCountriesReader;
 
@@ -51,13 +50,11 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * @var StoreManagerInterface
-     * @since 2.1.3
      */
     private $storeManager;
 
     /**
      * @var FieldDataConverterFactory
-     * @since 2.2.0
      */
     private $fieldDataConverterFactory;
 
@@ -171,9 +168,8 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * Retrieve Store Manager
      *
-     * @deprecated 2.1.3
+     * @deprecated 100.1.3
      * @return StoreManagerInterface
-     * @since 2.1.3
      */
     private function getStoreManager()
     {
@@ -187,9 +183,8 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * Retrieve Allowed Countries Reader
      *
-     * @deprecated 2.1.3
+     * @deprecated 100.1.3
      * @return AllowedCountries
-     * @since 2.1.3
      */
     private function getAllowedCountriesReader()
     {
@@ -207,7 +202,6 @@ class UpgradeData implements UpgradeDataInterface
      * @param array $newCountries
      * @param string $identifier
      * @return array
-     * @since 2.1.3
      */
     private function mergeAllowedCountries(array $countries, array $newCountries, $identifier)
     {
@@ -227,7 +221,6 @@ class UpgradeData implements UpgradeDataInterface
      * @param string $scope
      * @param int $scopeCode
      * @return array
-     * @since 2.1.3
      */
     private function getAllowedCountries($scope, $scopeCode)
     {
@@ -240,7 +233,6 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param SetupInterface $setup
      * @return void
-     * @since 2.1.3
      */
     private function migrateStoresAllowedCountriesToWebsite(SetupInterface $setup)
     {
@@ -344,7 +336,6 @@ class UpgradeData implements UpgradeDataInterface
      * @param CustomerSetup $customerSetup
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.1.0
      */
     private function upgradeVersionTwoZeroOne($customerSetup)
     {
@@ -468,7 +459,6 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @param CustomerSetup $customerSetup
      * @return void
-     * @since 2.1.0
      */
     private function upgradeVersionTwoZeroTwo($customerSetup)
     {
@@ -482,7 +472,6 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @param CustomerSetup $customerSetup
      * @return void
-     * @since 2.1.0
      */
     private function upgradeVersionTwoZeroThree($customerSetup)
     {
@@ -514,7 +503,6 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @param CustomerSetup $customerSetup
      * @return void
-     * @since 2.1.0
      */
     private function upgradeVersionTwoZeroFour($customerSetup)
     {
@@ -537,7 +525,6 @@ class UpgradeData implements UpgradeDataInterface
      * @param CustomerSetup $customerSetup
      * @param ModuleDataSetupInterface $setup
      * @return void
-     * @since 2.1.0
      */
     private function upgradeVersionTwoZeroFive($customerSetup, $setup)
     {
@@ -556,7 +543,6 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @param CustomerSetup $customerSetup
      * @return void
-     * @since 2.1.0
      */
     private function upgradeVersionTwoZeroSix($customerSetup)
     {
@@ -608,7 +594,6 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @param CustomerSetup $customerSetup
      * @return void
-     * @since 2.1.0
      */
     private function upgradeVersionTwoZeroSeven($customerSetup)
     {
@@ -658,7 +643,6 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @param CustomerSetup $customerSetup
      * @return void
-     * @since 2.2.0
      */
     private function upgradeVersionTwoZeroTwelve(CustomerSetup $customerSetup)
     {
@@ -668,7 +652,6 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @param ModuleDataSetupInterface $setup
      * @return void
-     * @since 2.1.0
      */
     private function upgradeCustomerPasswordResetlinkExpirationPeriodConfig($setup)
     {

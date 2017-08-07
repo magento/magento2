@@ -8,7 +8,6 @@ namespace Magento\Framework\Model;
 
 /**
  * Class CallbackPool
- * @since 2.1.0
  */
 class CallbackPool
 {
@@ -16,7 +15,6 @@ class CallbackPool
      * Array of callbacks subscribed to commit transaction commit
      *
      * @var array
-     * @since 2.1.0
      */
     private static $commitCallbacks = [];
 
@@ -24,7 +22,6 @@ class CallbackPool
      * @param string $hashKey
      * @param array $callback
      * @return void
-     * @since 2.1.0
      */
     public static function attach($hashKey, $callback)
     {
@@ -34,7 +31,6 @@ class CallbackPool
     /**
      * @param string $hashKey
      * @return void
-     * @since 2.1.0
      */
     public static function clear($hashKey)
     {
@@ -44,7 +40,6 @@ class CallbackPool
     /**
      * @param string $hashKey
      * @return array
-     * @since 2.1.0
      */
     public static function get($hashKey)
     {

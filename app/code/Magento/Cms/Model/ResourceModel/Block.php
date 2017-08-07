@@ -31,13 +31,11 @@ class Block extends AbstractDb
 
     /**
      * @var EntityManager
-     * @since 2.1.0
      */
     protected $entityManager;
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     protected $metadataPool;
 
@@ -73,7 +71,6 @@ class Block extends AbstractDb
 
     /**
      * @inheritDoc
-     * @since 2.1.0
      */
     public function getConnection()
     {
@@ -104,7 +101,6 @@ class Block extends AbstractDb
      * @return bool|int|string
      * @throws LocalizedException
      * @throws \Exception
-     * @since 2.1.0
      */
     private function getBlockId(AbstractModel $object, $value, $field = null)
     {
@@ -243,7 +239,6 @@ class Block extends AbstractDb
      * @param AbstractModel $object
      * @return $this
      * @throws \Exception
-     * @since 2.1.0
      */
     public function save(AbstractModel $object)
     {
@@ -253,7 +248,6 @@ class Block extends AbstractDb
 
     /**
      * @inheritDoc
-     * @since 2.1.0
      */
     public function delete(AbstractModel $object)
     {

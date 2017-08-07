@@ -8,7 +8,6 @@ namespace Magento\Integration\Model\Oauth\Token\RequestLog;
 
 /**
  * OAuth token request log writer interface.
- * @since 2.0.3
  */
 interface WriterInterface
 {
@@ -19,7 +18,6 @@ interface WriterInterface
      * @param int $userType
      * @param return void
      * @return void
-     * @since 2.0.3
      */
     public function resetFailuresCount($userName, $userType);
 
@@ -30,7 +28,6 @@ interface WriterInterface
      * @param int $userType
      * @param return void
      * @return void
-     * @since 2.0.3
      */
     public function incrementFailuresCount($userName, $userType);
 
@@ -38,7 +35,6 @@ interface WriterInterface
      * Clear expired authentication failure logs.
      *
      * @return void
-     * @since 2.0.3
      */
     public function clearExpiredFailures();
 }

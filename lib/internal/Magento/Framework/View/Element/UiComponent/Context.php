@@ -301,7 +301,6 @@ class Context implements ContextInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.1.0
      */
     public function addHtmlBlocks(array $htmlBlocks, UiComponentInterface $component)
     {
@@ -375,7 +374,6 @@ class Context implements ContextInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getUiComponentFactory()
     {

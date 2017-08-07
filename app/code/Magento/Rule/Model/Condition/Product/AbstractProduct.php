@@ -82,7 +82,6 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
 
     /**
      * @var ProductCategoryList
-     * @since 2.2.0
      */
     private $productCategoryList;
 

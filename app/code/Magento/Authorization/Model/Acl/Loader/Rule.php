@@ -26,25 +26,21 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
 
     /**
      * @var \Magento\Framework\Acl\RootResource
-     * @since 2.2.0
      */
     private $_rootResource;
 
     /**
      * @var \Magento\Framework\Acl\Data\CacheInterface
-     * @since 2.2.0
      */
     private $aclDataCache;
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $cacheKey;
 
@@ -104,7 +100,6 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
      * Get application ACL rules array.
      *
      * @return array
-     * @since 2.2.0
      */
     private function getRulesArray()
     {

@@ -69,7 +69,6 @@ class Form extends \Magento\Framework\View\Element\Template
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 

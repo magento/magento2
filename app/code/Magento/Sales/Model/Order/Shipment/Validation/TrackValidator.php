@@ -10,14 +10,12 @@ use Magento\Sales\Model\ValidatorInterface;
 
 /**
  * Class TrackRequiredField
- * @since 2.1.2
  */
 class TrackValidator implements ValidatorInterface
 {
     /**
      * @param object|ShipmentInterface $entity
      * @return array
-     * @since 2.1.2
      */
     public function validate($entity)
     {

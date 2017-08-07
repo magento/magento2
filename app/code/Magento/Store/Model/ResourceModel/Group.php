@@ -41,7 +41,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize unique fields
      *
      * @return $this
-     * @since 2.2.0
+     * @since 100.2.0
      */
     protected function _initUniqueFields()
     {

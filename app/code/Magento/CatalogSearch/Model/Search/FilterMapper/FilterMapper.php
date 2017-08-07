@@ -13,37 +13,31 @@ use Magento\CatalogInventory\Model\Stock;
 /**
  * Class FilterMapper
  * This class applies filters to Select based on SelectContainer configuration
- * @since 2.2.0
  */
 class FilterMapper
 {
     /**
      * @var AliasResolver
-     * @since 2.2.0
      */
     private $aliasResolver;
 
     /**
      * @var CustomAttributeFilter
-     * @since 2.2.0
      */
     private $customAttributeFilter;
 
     /**
      * @var FilterStrategyInterface
-     * @since 2.2.0
      */
     private $filterStrategy;
 
     /**
      * @var VisibilityFilter
-     * @since 2.2.0
      */
     private $visibilityFilter;
 
     /**
      * @var StockStatusFilter
-     * @since 2.2.0
      */
     private $stockStatusFilter;
 
@@ -53,7 +47,6 @@ class FilterMapper
      * @param FilterStrategyInterface $filterStrategy
      * @param VisibilityFilter $visibilityFilter
      * @param StockStatusFilter $stockStatusFilter
-     * @since 2.2.0
      */
     public function __construct(
         AliasResolver $aliasResolver,
@@ -78,7 +71,6 @@ class FilterMapper
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \InvalidArgumentException
      * @throws \DomainException
-     * @since 2.2.0
      */
     public function applyFilters(SelectContainer $selectContainer)
     {

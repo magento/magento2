@@ -12,7 +12,7 @@ use Magento\PageCache\Exception\UnsupportedVarnishVersion;
  * Vcl template locator interface
  *
  * @api
- * @since 2.2.0
+ * @since 100.2.0
  */
 interface VclTemplateLocatorInterface
 {
@@ -22,7 +22,7 @@ interface VclTemplateLocatorInterface
      * @param int $version
      * @return string
      * @throws UnsupportedVarnishVersion
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getTemplate($version);
 }

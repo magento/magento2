@@ -14,25 +14,21 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class SaveHandler
- * @since 2.1.0
  */
 class SaveHandler implements ExtensionInterface
 {
     /**
      * @var OptionRepository
-     * @since 2.1.0
      */
     protected $optionRepository;
 
     /**
      * @var ProductLinkManagementInterface
-     * @since 2.1.0
      */
     protected $productLinkManagement;
 
     /**
      * @var MetadataPool
-     * @since 2.2.0
      */
     private $metadataPool;
 
@@ -40,7 +36,6 @@ class SaveHandler implements ExtensionInterface
      * @param OptionRepository $optionRepository
      * @param ProductLinkManagementInterface $productLinkManagement
      * @param MetadataPool|null $metadataPool
-     * @since 2.1.0
      */
     public function __construct(
         OptionRepository $optionRepository,
@@ -59,7 +54,6 @@ class SaveHandler implements ExtensionInterface
      * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function execute($entity, $arguments = [])
     {
@@ -104,7 +98,6 @@ class SaveHandler implements ExtensionInterface
      * @param string $entitySku
      * @param \Magento\Bundle\Api\Data\OptionInterface $option
      * @return void
-     * @since 2.1.0
      */
     protected function removeOptionLinks($entitySku, $option)
     {

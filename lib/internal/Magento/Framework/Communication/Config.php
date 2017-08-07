@@ -11,13 +11,11 @@ use Magento\Framework\Phrase;
 
 /**
  * Class for accessing to communication configuration.
- * @since 2.1.0
  */
 class Config implements ConfigInterface
 {
     /**
      * @var ConfigData
-     * @since 2.1.0
      */
     protected $data;
 
@@ -25,7 +23,6 @@ class Config implements ConfigInterface
      * Initialize dependencies.
      *
      * @param ConfigData $configData
-     * @since 2.1.0
      */
     public function __construct(ConfigData $configData)
     {
@@ -34,7 +31,6 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getTopic($topicName)
     {
@@ -49,7 +45,6 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getTopicHandlers($topicName)
     {
@@ -59,7 +54,6 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getTopics()
     {

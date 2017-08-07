@@ -54,115 +54,96 @@ class StoresFixture extends Fixture
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $websiteIds = [];
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $storeGroupsIds = [];
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $storeGroupsToWebsites = [];
 
     /**
      * @var StoreManager
-     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var Writer
-     * @since 2.2.0
      */
     private $scopeConfig;
 
     /**
      * @var Group
-     * @since 2.2.0
      */
     private $defaultStoreGroup;
 
     /**
      * @var Website
-     * @since 2.2.0
      */
     private $defaultWebsite;
 
     /**
      * @var int
-     * @since 2.2.0
      */
     private $defaultParentCategoryId;
 
     /**
      * @var int
-     * @since 2.2.0
      */
     private $defaultStoreGroupId;
 
     /**
      * @var int
-     * @since 2.2.0
      */
     private $defaultWebsiteId;
 
     /**
      * @var int
-     * @since 2.2.0
      */
     private $storeGroupsCount;
 
     /**
      * @var int
-     * @since 2.2.0
      */
     private $storesCount;
 
     /**
      * @var int
-     * @since 2.2.0
      */
     private $websitesCount;
 
     /**
      * @var bool
-     * @since 2.2.0
      */
     private $singleRootCategory;
 
     /**
      * @var StoreInterface
-     * @since 2.2.0
      */
     private $defaultStoreView;
 
     /**
      * @var int
-     * @since 2.2.0
      */
     private $storeViewIds;
 
     /**
      * @var ManagerInterface
-     * @since 2.2.0
      */
     private $eventManager;
 
     /**
      * @var CategoryFactory
-     * @since 2.2.0
      */
     private $categoryFactory;
 
     /**
      * @var Config
-     * @since 2.2.0
      */
     private $localeConfig;
 
@@ -174,7 +155,6 @@ class StoresFixture extends Fixture
      * @param CategoryFactory $categoryFactory
      * @param Config $localeConfig
      * @param Writer $scopeConfig
-     * @since 2.2.0
      */
     public function __construct(
         FixtureModel $fixtureModel,
@@ -239,7 +219,6 @@ class StoresFixture extends Fixture
     /**
      * Generating web sites
      * @return void
-     * @since 2.2.0
      */
     private function generateWebsites()
     {
@@ -266,7 +245,6 @@ class StoresFixture extends Fixture
     /**
      * Generating store groups ('stores' on frontend)
      * @return void
-     * @since 2.2.0
      */
     private function generateStoreGroups()
     {
@@ -297,7 +275,6 @@ class StoresFixture extends Fixture
     /**
      * Generating store views
      * @return void
-     * @since 2.2.0
      */
     private function generateStoreViews()
     {
@@ -338,7 +315,6 @@ class StoresFixture extends Fixture
      * @param int $storeId
      * @param string $localeCode
      * @return void
-     * @since 2.2.0
      */
     private function saveStoreLocale($storeId, $localeCode)
     {
@@ -355,7 +331,6 @@ class StoresFixture extends Fixture
      *
      * @param string $storeGroupName
      * @return int
-     * @since 2.2.0
      */
     private function getStoreCategoryId($storeGroupName)
     {
@@ -401,7 +376,6 @@ class StoresFixture extends Fixture
      * Get default category id
      *
      * @return int
-     * @since 2.2.0
      */
     private function getDefaultCategoryId()
     {

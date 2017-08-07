@@ -11,7 +11,6 @@ use Magento\Framework\Pricing\Amount\AmountInterface;
 
 /**
  * Interface define methods which control display of "As low as" price
- * @since 2.2.0
  */
 interface MinimalPriceCalculatorInterface
 {
@@ -20,7 +19,6 @@ interface MinimalPriceCalculatorInterface
      *
      * @param SaleableInterface $saleableItem
      * @return float|null
-     * @since 2.2.0
      */
     public function getValue(SaleableInterface $saleableItem);
 
@@ -29,7 +27,6 @@ interface MinimalPriceCalculatorInterface
      *
      * @param SaleableInterface $saleableItem
      * @return AmountInterface|null
-     * @since 2.2.0
      */
     public function getAmount(SaleableInterface $saleableItem);
 }

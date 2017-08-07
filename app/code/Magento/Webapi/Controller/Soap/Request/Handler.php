@@ -46,7 +46,6 @@ class Handler
 
     /**
      * @var \Magento\Framework\Webapi\Authorization
-     * @since 2.1.0
      */
     protected $authorization;
 

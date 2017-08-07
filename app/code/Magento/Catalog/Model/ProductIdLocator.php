@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model;
 
 /**
  * Product ID locator provides all product IDs by SKUs.
- * @since 2.2.0
  */
 class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterface
 {
@@ -16,7 +15,6 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
      * Limit values for array IDs by SKU.
      *
      * @var int
-     * @since 2.2.0
      */
     private $idsLimit;
 
@@ -24,13 +22,11 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
      * Metadata pool.
      *
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     * @since 2.2.0
      */
     private $collectionFactory;
 
@@ -38,7 +34,6 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
      * IDs by SKU cache.
      *
      * @var array
-     * @since 2.2.0
      */
     private $idsBySku = [];
 
@@ -46,7 +41,6 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
      * @param string $limitIdsBySkuValues
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
@@ -60,7 +54,6 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function retrieveProductIdsBySkus(array $skus)
     {
@@ -99,7 +92,6 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
      * Cleanup IDs by SKU cache more than some limit.
      *
      * @return void
-     * @since 2.2.0
      */
     private function truncateToLimit()
     {

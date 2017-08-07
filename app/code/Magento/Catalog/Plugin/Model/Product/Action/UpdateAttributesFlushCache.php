@@ -43,7 +43,6 @@ class UpdateAttributesFlushCache
      * @return Action
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function afterUpdateAttributes(
         \Magento\Catalog\Model\Product\Action $subject,
@@ -58,7 +57,6 @@ class UpdateAttributesFlushCache
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function afterUpdateWebsites(
         \Magento\Catalog\Model\Product\Action $subject

@@ -154,7 +154,6 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.3
      */
     protected function _getExtraJs($element)
     {

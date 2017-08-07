@@ -10,25 +10,21 @@ use Magento\Backend\Controller\Adminhtml\Auth\Login;
 
 /**
  * Magento\Backend\Controller\Adminhtml\Auth\Login decorator
- * @since 2.1.0
  */
 class LoginController
 {
     /**
      * @var \Magento\Framework\Message\ManagerInterface
-     * @since 2.1.0
      */
     private $messageManager;
 
     /**
      * @var AdminSessionsManager
-     * @since 2.1.0
      */
     private $sessionsManager;
 
     /**
      * @var \Magento\Security\Model\SecurityCookie
-     * @since 2.1.0
      */
     private $securityCookie;
 
@@ -36,7 +32,6 @@ class LoginController
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param AdminSessionsManager $sessionsManager
      * @param \Magento\Security\Model\SecurityCookie $securityCookie
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\Message\ManagerInterface $messageManager,
@@ -53,7 +48,6 @@ class LoginController
      *
      * @param Login $login
      * @return void
-     * @since 2.1.0
      */
     public function beforeExecute(Login $login)
     {
@@ -71,7 +65,6 @@ class LoginController
      *
      * @param Login $login
      * @return bool
-     * @since 2.1.0
      */
     private function isLoginForm(Login $login)
     {

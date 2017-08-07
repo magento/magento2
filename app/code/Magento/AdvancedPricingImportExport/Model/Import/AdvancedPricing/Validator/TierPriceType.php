@@ -11,13 +11,11 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
 /**
  * Class TierPriceType validates tier price type.
- * @since 2.2.0
  */
 class TierPriceType extends \Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractImportValidator
 {
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function init($context)
     {
@@ -29,7 +27,6 @@ class TierPriceType extends \Magento\CatalogImportExport\Model\Import\Product\Va
      *
      * @param array $value
      * @return bool
-     * @since 2.2.0
      */
     public function isValid($value)
     {

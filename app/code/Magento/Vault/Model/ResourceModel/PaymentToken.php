@@ -10,7 +10,6 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;
 
 /**
  * Vault Payment Token Resource Model
- * @since 2.1.0
  */
 class PaymentToken extends AbstractDb
 {
@@ -18,7 +17,6 @@ class PaymentToken extends AbstractDb
      * Resource initialization
      *
      * @return void
-     * @since 2.1.0
      */
     protected function _construct()
     {
@@ -30,7 +28,6 @@ class PaymentToken extends AbstractDb
      *
      * @param int $paymentId
      * @return array
-     * @since 2.1.0
      */
     public function getByOrderPaymentId($paymentId)
     {
@@ -55,7 +52,6 @@ class PaymentToken extends AbstractDb
      * @param int $customerId Customer ID.
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.1.0
      */
     public function getByGatewayToken($token, $paymentMethodCode, $customerId = 0)
     {
@@ -80,7 +76,6 @@ class PaymentToken extends AbstractDb
      * @param int $customerId Customer ID.
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.1.0
      */
     public function getByPublicHash($hash, $customerId = 0)
     {
@@ -103,7 +98,6 @@ class PaymentToken extends AbstractDb
      * @param int $paymentTokenId
      * @param int $orderPaymentId
      * @return bool
-     * @since 2.1.0
      */
     public function addLinkToOrderPayment($paymentTokenId, $orderPaymentId)
     {

@@ -16,25 +16,21 @@ use Magento\Framework\View\Asset\LocalInterface;
  * A locally available image file asset that can be referred with a file path
  *
  * This class is a value object with lazy loading of some of its data (content, physical file path)
- * @since 2.2.0
  */
 class Image implements LocalInterface
 {
     /**
      * @var string
-     * @since 2.2.0
      */
     private $filePath;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $contentType = 'image';
 
     /**
      * @var ContextInterface
-     * @since 2.2.0
      */
     private $context;
 
@@ -42,19 +38,16 @@ class Image implements LocalInterface
      * Misc image params depend on size, transparency, quality, watermark etc.
      *
      * @var array
-     * @since 2.2.0
      */
     private $miscParams;
 
     /**
      * @var ConfigInterface
-     * @since 2.2.0
      */
     private $mediaConfig;
 
     /**
      * @var EncryptorInterface
-     * @since 2.2.0
      */
     private $encryptor;
 
@@ -66,7 +59,6 @@ class Image implements LocalInterface
      * @param EncryptorInterface $encryptor
      * @param string $filePath
      * @param array $miscParams
-     * @since 2.2.0
      */
     public function __construct(
         ConfigInterface $mediaConfig,
@@ -84,7 +76,6 @@ class Image implements LocalInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getUrl()
     {
@@ -93,7 +84,6 @@ class Image implements LocalInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getContentType()
     {
@@ -102,7 +92,6 @@ class Image implements LocalInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getPath()
     {
@@ -115,7 +104,6 @@ class Image implements LocalInterface
      * @param string $path
      * @param string $item
      * @return string
-     * @since 2.2.0
      */
     private function join($path, $item)
     {
@@ -127,7 +115,6 @@ class Image implements LocalInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getSourceFile()
     {
@@ -139,7 +126,6 @@ class Image implements LocalInterface
      * Get source content type
      *
      * @return string
-     * @since 2.2.0
      */
     public function getSourceContentType()
     {
@@ -148,7 +134,6 @@ class Image implements LocalInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getContent()
     {
@@ -157,7 +142,6 @@ class Image implements LocalInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getFilePath()
     {
@@ -167,7 +151,6 @@ class Image implements LocalInterface
     /**
      * {@inheritdoc}
      * @return ContextInterface
-     * @since 2.2.0
      */
     public function getContext()
     {
@@ -176,7 +159,6 @@ class Image implements LocalInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getModule()
     {
@@ -187,7 +169,6 @@ class Image implements LocalInterface
      * Retrieve part of path based on misc params
      *
      * @return string
-     * @since 2.2.0
      */
     private function getMiscPath()
     {
@@ -199,7 +180,6 @@ class Image implements LocalInterface
      *
      * @param string $result
      * @return string
-     * @since 2.2.0
      */
     private function getAbsolutePath($result)
     {
@@ -215,7 +195,6 @@ class Image implements LocalInterface
      *
      * @param string $result
      * @return string
-     * @since 2.2.0
      */
     private function getRelativePath($result)
     {

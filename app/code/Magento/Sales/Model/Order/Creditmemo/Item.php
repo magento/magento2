@@ -144,7 +144,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * @param int $qty
      * @param \Magento\Sales\Model\Order\Item $orderItem
      * @return bool
-     * @since 2.1.0
      */
     private function isQtyAvailable($qty, \Magento\Sales\Model\Order\Item $orderItem)
     {
@@ -193,7 +192,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * @return int|float
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.1.0
      */
     private function processQty()
     {

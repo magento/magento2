@@ -29,7 +29,6 @@ class ChildrenUrlRewriteGenerator
 
     /**
      * @var \Magento\UrlRewrite\Model\MergeDataProvider
-     * @since 2.2.0
      */
     private $mergeDataProviderPrototype;
 

@@ -30,13 +30,12 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
 
     /**
      * @var \Magento\Framework\Unserialize\Unserialize
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected $unserialize;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 

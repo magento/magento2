@@ -19,7 +19,7 @@ use Magento\Ui\Component\DynamicRows;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
+ * @since 101.0.0
  */
 class Websites extends AbstractModifier
 {
@@ -27,43 +27,43 @@ class Websites extends AbstractModifier
 
     /**
      * @var LocatorInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $locator;
 
     /**
      * @var \Magento\Store\Api\WebsiteRepositoryInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $websiteRepository;
 
     /**
      * @var \Magento\Store\Api\GroupRepositoryInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $groupRepository;
 
     /**
      * @var \Magento\Store\Api\StoreRepositoryInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $storeRepository;
 
     /**
      * @var array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $websitesOptionsList;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $storeManager;
 
     /**
      * @var array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $websitesList;
 
@@ -73,7 +73,7 @@ class Websites extends AbstractModifier
      * @param WebsiteRepositoryInterface $websiteRepository
      * @param GroupRepositoryInterface $groupRepository
      * @param StoreRepositoryInterface $storeRepository
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -91,7 +91,7 @@ class Websites extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function modifyData(array $data)
     {
@@ -119,7 +119,7 @@ class Websites extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function modifyMeta(array $meta)
     {
@@ -158,7 +158,7 @@ class Websites extends AbstractModifier
      * Prepares children for the parent fieldset
      *
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getFieldsForFieldset()
     {
@@ -221,7 +221,7 @@ class Websites extends AbstractModifier
      * @param int $websiteId
      * @param int $sortOrder
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getDynamicRow($websiteId, $sortOrder)
     {
@@ -321,7 +321,7 @@ class Websites extends AbstractModifier
      * Manage options list for selects
      *
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getWebsitesOptions()
     {
@@ -333,7 +333,7 @@ class Websites extends AbstractModifier
 
     /**
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getWebsitesOptionsList()
     {
@@ -388,7 +388,7 @@ class Websites extends AbstractModifier
      *
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getWebsitesList()
     {
@@ -443,7 +443,7 @@ class Websites extends AbstractModifier
      * Return array of websites ids, assigned to the product
      *
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getWebsitesValues()
     {

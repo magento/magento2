@@ -11,26 +11,22 @@ use Magento\Framework\EntityManager\Operation\AttributeInterface;
 
 /**
  * Class ReadHandler
- * @since 2.1.0
  */
 class ReadHandler implements AttributeInterface
 {
     /**
      * @var Rule
-     * @since 2.1.0
      */
     protected $ruleResource;
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @param Rule $ruleResource
      * @param MetadataPool $metadataPool
-     * @since 2.1.0
      */
     public function __construct(
         Rule $ruleResource,
@@ -46,7 +42,6 @@ class ReadHandler implements AttributeInterface
      * @param array $arguments
      * @return array
      * @throws \Exception
-     * @since 2.1.0
      */
     public function execute($entityType, $entityData, $arguments = [])
     {

@@ -17,7 +17,7 @@ class Hint extends Template implements RendererInterface
 {
     /**
      * @var string
-     * @deprecated 2.1.3
+     * @deprecated 100.1.2
      */
     protected $_template = 'Magento_Paypal::system/config/fieldset/hint.phtml';
 

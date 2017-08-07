@@ -29,19 +29,16 @@ class Form extends Cc
 
     /**
      * @var Config
-     * @since 2.1.0
      */
     protected $gatewayConfig;
 
     /**
      * @var CcType
-     * @since 2.1.0
      */
     protected $ccType;
 
     /**
      * @var Data
-     * @since 2.1.0
      */
     private $paymentDataHelper;
 
@@ -90,7 +87,6 @@ class Form extends Cc
     /**
      * Check if vault enabled
      * @return bool
-     * @since 2.1.0
      */
     public function isVaultEnabled()
     {
@@ -102,7 +98,6 @@ class Form extends Cc
     /**
      * Get card types available for Braintree
      * @return array
-     * @since 2.1.0
      */
     private function getConfiguredCardTypes()
     {
@@ -117,7 +112,6 @@ class Form extends Cc
      * @param array $configCardTypes
      * @param string $countryId
      * @return array
-     * @since 2.1.0
      */
     private function filterCardTypesForCountry(array $configCardTypes, $countryId)
     {
@@ -134,7 +128,6 @@ class Form extends Cc
     /**
      * Get configured vault payment for Braintree
      * @return VaultPaymentInterface
-     * @since 2.1.0
      */
     private function getVaultPayment()
     {
@@ -144,8 +137,7 @@ class Form extends Cc
     /**
      * Get payment data helper instance
      * @return Data
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getPaymentDataHelper()
     {

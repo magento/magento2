@@ -18,37 +18,31 @@ use Magento\Catalog\Model\Product;
 
 /**
  * Clean product cache only when stock status was updated
- * @since 2.2.0
  */
 class CacheCleaner
 {
     /**
      * @var ResourceConnection
-     * @since 2.2.0
      */
     private $resource;
 
     /**
      * @var StockConfigurationInterface
-     * @since 2.2.0
      */
     private $stockConfiguration;
 
     /**
      * @var CacheContext
-     * @since 2.2.0
      */
     private $cacheContext;
 
     /**
      * @var ManagerInterface
-     * @since 2.2.0
      */
     private $eventManager;
 
     /**
      * @var AdapterInterface
-     * @since 2.2.0
      */
     private $connection;
 
@@ -57,7 +51,6 @@ class CacheCleaner
      * @param StockConfigurationInterface $stockConfiguration
      * @param CacheContext $cacheContext
      * @param ManagerInterface $eventManager
-     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -75,7 +68,6 @@ class CacheCleaner
      * @param array $productIds
      * @param callable $reindex
      * @return void
-     * @since 2.2.0
      */
     public function clean(array $productIds, callable $reindex)
     {
@@ -92,7 +84,6 @@ class CacheCleaner
     /**
      * @param array $productIds
      * @return array
-     * @since 2.2.0
      */
     private function getProductStockStatuses(array $productIds)
     {
@@ -117,7 +108,6 @@ class CacheCleaner
      * @param array $productStatusesBefore
      * @param array $productStatusesAfter
      * @return array
-     * @since 2.2.0
      */
     private function getProductIdsForCacheClean(array $productStatusesBefore, array $productStatusesAfter)
     {
@@ -143,7 +133,6 @@ class CacheCleaner
 
     /**
      * @return AdapterInterface
-     * @since 2.2.0
      */
     private function getConnection()
     {

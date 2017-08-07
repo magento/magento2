@@ -192,7 +192,6 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     protected $_debugReplacePrivateDataKeys = [
         'SiteID', 'Password'

@@ -43,13 +43,12 @@ class DefaultStock extends AbstractIndexer implements StockInterface
 
     /**
      * @var QueryProcessorComposite
-     * @since 2.1.0
      */
     private $queryProcessorComposite;
 
     /**
      * @var StockConfigurationInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $stockConfiguration;
 
@@ -57,7 +56,6 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * Param for switching logic which depends on action type (full reindex or partial)
      *
      * @var string
-     * @since 2.2.0
      */
     private $actionType;
 
@@ -133,7 +131,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * Returns action run type
      *
      * @return string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getActionType()
     {
@@ -145,7 +143,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      *
      * @param string $type
      * @return $this
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function setActionType($type)
     {
@@ -324,7 +322,6 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * @param array $ids
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.2.0
      */
     private function deleteOldRecords(array $ids)
     {
@@ -367,7 +364,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * @param AdapterInterface $connection
      * @param bool $isAggregate
      * @return mixed
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function getStatusExpression(AdapterInterface $connection, $isAggregate = false)
     {
@@ -391,8 +388,8 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     /**
      * @return StockConfigurationInterface
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
+     * @since 100.1.0
      */
     protected function getStockConfiguration()
     {
@@ -405,7 +402,6 @@ class DefaultStock extends AbstractIndexer implements StockInterface
 
     /**
      * @return QueryProcessorComposite
-     * @since 2.1.0
      */
     private function getQueryProcessorComposite()
     {

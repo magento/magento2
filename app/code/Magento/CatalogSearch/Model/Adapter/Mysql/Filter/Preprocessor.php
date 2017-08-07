@@ -60,25 +60,21 @@ class Preprocessor implements PreprocessorInterface
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.2.0
      */
     private $scopeConfig;
 
     /**
      * @var AliasResolver
-     * @since 2.2.0
      */
     private $aliasResolver;
 
     /**
      * @var Session
-     * @since 2.2.0
      */
     private $customerSession;
 
@@ -277,7 +273,6 @@ class Preprocessor implements PreprocessorInterface
      * Get product metadata pool
      *
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
      */
     protected function getMetadataPool()
     {

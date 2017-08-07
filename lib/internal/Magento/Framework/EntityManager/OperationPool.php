@@ -11,19 +11,16 @@ use Magento\Framework\EntityManager\OperationInterface;
 
 /**
  * Class OperationPool
- * @since 2.1.0
  */
 class OperationPool
 {
     /**
      * @var array
-     * @since 2.1.0
      */
     private $operations;
 
     /**
      * @var ObjectManager
-     * @since 2.1.0
      */
     private $objectManager;
 
@@ -31,7 +28,6 @@ class OperationPool
      * OperationPool constructor.
      * @param ObjectManager $objectManager
      * @param string[] $operations
-     * @since 2.1.0
      */
     public function __construct(
         ObjectManager $objectManager,
@@ -47,7 +43,6 @@ class OperationPool
      * @param string $entityType
      * @param string $operationName
      * @return OperationInterface
-     * @since 2.1.0
      */
     public function getOperation($entityType, $operationName)
     {

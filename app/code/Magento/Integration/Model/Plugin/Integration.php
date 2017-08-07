@@ -31,13 +31,11 @@ class Integration
 
     /**
      * @var \Magento\Integration\Model\IntegrationConfig
-     * @since 2.1.0
      */
     protected $integrationConfig;
 
     /**
      * @var \Magento\Integration\Model\ConsolidatedConfig
-     * @since 2.1.0
      */
     protected $consolidatedConfig;
 

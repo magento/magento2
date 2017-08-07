@@ -12,19 +12,16 @@ use Magento\Catalog\Model\Product;
 /**
  * Class CustomAttributeFilterSelector
  * Checks if FilterInterface is by custom attribute
- * @since 2.2.0
  */
 class CustomAttributeFilterCheck
 {
     /**
      * @var EavConfig
-     * @since 2.2.0
      */
     private $eavConfig;
 
     /**
      * @param EavConfig $eavConfig
-     * @since 2.2.0
      */
     public function __construct(
         EavConfig $eavConfig
@@ -38,7 +35,6 @@ class CustomAttributeFilterCheck
      * @param FilterInterface $filter
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.2.0
      */
     public function isCustom(FilterInterface $filter)
     {
@@ -55,7 +51,6 @@ class CustomAttributeFilterCheck
      * @param string $field
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.2.0
      */
     private function getAttributeByCode($field)
     {

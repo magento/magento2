@@ -53,7 +53,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
+     * @since 100.2.0
      */
     protected $serializer;
 
@@ -483,8 +483,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
 
     /**
      * @return \Magento\Framework\Api\ExtensionAttributesFactory
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getExtensionFactory()
     {
@@ -494,8 +493,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
 
     /**
      * @return \Magento\Framework\Api\AttributeValueFactory
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getCustomAttributeFactory()
     {

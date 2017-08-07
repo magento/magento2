@@ -9,7 +9,6 @@ use Magento\Braintree\Model\Adminhtml\Source\CcType as CcTypeSource;
 
 /**
  * Class CcType
- * @since 2.1.0
  */
 class CcType
 {
@@ -17,19 +16,16 @@ class CcType
      * All possible credit card types
      *
      * @var array
-     * @since 2.1.0
      */
     private $ccTypes = [];
 
     /**
      * @var \Magento\Braintree\Model\Adminhtml\Source\CcType
-     * @since 2.1.0
      */
     private $ccTypeSource;
 
     /**
      * @param CcType $ccTypeSource
-     * @since 2.1.0
      */
     public function __construct(CcTypeSource $ccTypeSource)
     {
@@ -40,7 +36,6 @@ class CcType
      * All possible credit card types
      *
      * @return array
-     * @since 2.1.0
      */
     public function getCcTypes()
     {

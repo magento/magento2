@@ -13,25 +13,21 @@ use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFac
 
 /**
  * Check by requests number per fixed period of time
- * @since 2.1.0
  */
 class Quantity implements SecurityCheckerInterface
 {
     /**
      * @var \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory
-     * @since 2.1.0
      */
     protected $collectionFactory;
 
     /**
      * @var ConfigInterface
-     * @since 2.1.0
      */
     protected $securityConfig;
 
     /**
      * @var RemoteAddress
-     * @since 2.1.0
      */
     private $remoteAddress;
 
@@ -39,7 +35,6 @@ class Quantity implements SecurityCheckerInterface
      * @param ConfigInterface $securityConfig
      * @param CollectionFactory $collectionFactory
      * @param RemoteAddress $remoteAddress
-     * @since 2.1.0
      */
     public function __construct(
         ConfigInterface $securityConfig,
@@ -53,7 +48,6 @@ class Quantity implements SecurityCheckerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function check($securityEventType, $accountReference = null, $longIp = null)
     {
@@ -79,7 +73,6 @@ class Quantity implements SecurityCheckerInterface
      * @param string $accountReference
      * @param int $longIp
      * @return \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection
-     * @since 2.1.0
      */
     protected function prepareCollection($securityEventType, $accountReference, $longIp)
     {

@@ -9,20 +9,17 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class TMapFactory
- * @since 2.1.0
  */
 class TMapFactory
 {
     /**
      * @var ObjectManagerInterface
-     * @since 2.1.0
      */
     private $objectManager;
 
     /**
      * TMapFactory constructor.
      * @param ObjectManagerInterface $objectManager
-     * @since 2.1.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -32,7 +29,6 @@ class TMapFactory
     /**
      * @param array $args
      * @return TMap
-     * @since 2.1.0
      */
     public function create(array $args)
     {
@@ -42,7 +38,6 @@ class TMapFactory
     /**
      * @param array $args
      * @return TMap
-     * @since 2.1.0
      */
     public function createSharedObjectsMap(array $args)
     {

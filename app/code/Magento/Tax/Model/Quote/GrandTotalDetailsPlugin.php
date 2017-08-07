@@ -42,7 +42,6 @@ class GrandTotalDetailsPlugin
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -93,7 +92,6 @@ class GrandTotalDetailsPlugin
      * @return \Magento\Quote\Api\Data\TotalSegmentInterface[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.2.0
      */
     public function afterProcess(
         \Magento\Quote\Model\Cart\TotalsConverter $subject,

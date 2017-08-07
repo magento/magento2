@@ -7,7 +7,6 @@ namespace Magento\Setup\Model\Description\Mixin;
 
 /**
  * Add paragraph html tag to description
- * @since 2.2.0
  */
 class ParagraphMixin implements DescriptionMixinInterface
 {
@@ -16,7 +15,6 @@ class ParagraphMixin implements DescriptionMixinInterface
      *
      * @param string $text
      * @return string
-     * @since 2.2.0
      */
     public function apply($text)
     {

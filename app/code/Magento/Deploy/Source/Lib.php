@@ -15,7 +15,6 @@ use Magento\Deploy\Package\PackageFileFactory;
  * Collect files eligible for deployment from library
  *
  * Provides files collected from web library
- * @since 2.2.0
  */
 class Lib implements SourceInterface
 {
@@ -23,19 +22,16 @@ class Lib implements SourceInterface
 
     /**
      * @var Files
-     * @since 2.2.0
      */
     private $filesUtil;
 
     /**
      * @var Filesystem\Directory\WriteInterface
-     * @since 2.2.0
      */
     private $libDir;
 
     /**
      * @var PackageFileFactory
-     * @since 2.2.0
      */
     private $packageFileFactory;
 
@@ -45,7 +41,6 @@ class Lib implements SourceInterface
      * @param Files $filesUtil
      * @param Filesystem $filesystem
      * @param PackageFileFactory $packageFileFactory
-     * @since 2.2.0
      */
     public function __construct(
         Files $filesUtil,
@@ -59,7 +54,6 @@ class Lib implements SourceInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function get()
     {

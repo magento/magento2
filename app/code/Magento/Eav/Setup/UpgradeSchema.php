@@ -12,13 +12,11 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 
 /**
  * Upgrade the Eav module DB scheme
- * @since 2.2.0
  */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -33,7 +31,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
     /**
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.2.0
      */
     private function addUniqueKeyToEavAttributeGroupTable(SchemaSetupInterface $setup)
     {

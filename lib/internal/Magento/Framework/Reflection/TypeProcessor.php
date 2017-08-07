@@ -44,7 +44,6 @@ class TypeProcessor
 
     /**
      * @var NameFinder
-     * @since 2.1.0
      */
     private $nameFinder;
 
@@ -53,8 +52,7 @@ class TypeProcessor
      *
      * @return NameFinder
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getNameFinder()
     {
@@ -243,7 +241,7 @@ class TypeProcessor
      * @param string $getterName
      * @return string
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     public function dataObjectGetterNameToFieldName($getterName)
     {
@@ -256,7 +254,7 @@ class TypeProcessor
      * @param string $shortDescription
      * @return string
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     protected function dataObjectGetterDescriptionToFieldDescription($shortDescription)
     {
@@ -402,7 +400,6 @@ class TypeProcessor
      * @see http://php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration
      * @param string $type
      * @return bool
-     * @since 2.1.0
      */
     public function isValidTypeDeclaration($type)
     {
@@ -568,7 +565,7 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding getter method
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     public function findGetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -606,7 +603,7 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     public function findSetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -623,7 +620,7 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     protected function findAccessorMethodName(
         ClassReflection $class,
@@ -644,7 +641,7 @@ class TypeProcessor
      * @param string $methodName
      * @return bool
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     protected function classHasMethod(ClassReflection $class, $methodName)
     {
@@ -702,7 +699,6 @@ class TypeProcessor
      *
      * @param string $type
      * @return string
-     * @since 2.1.0
      */
     private function getNormalizedType($type)
     {

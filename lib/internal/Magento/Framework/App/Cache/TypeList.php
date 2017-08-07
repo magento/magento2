@@ -38,7 +38,6 @@ class TypeList implements TypeListInterface
 
     /**
      * @var SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 

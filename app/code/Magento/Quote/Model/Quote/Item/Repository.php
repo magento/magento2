@@ -42,7 +42,6 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
 
     /**
      * @var CartItemOptionsProcessor
-     * @since 2.1.0
      */
     private $cartItemOptionsProcessor;
 
@@ -123,8 +122,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
 
     /**
      * @return CartItemOptionsProcessor
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getCartItemOptionsProcessor()
     {

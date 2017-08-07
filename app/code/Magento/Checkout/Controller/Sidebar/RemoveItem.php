@@ -33,7 +33,6 @@ class RemoveItem extends \Magento\Framework\App\Action\Action
 
     /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator
-     * @since 2.0.10
      */
     private $formKeyValidator;
 
@@ -96,8 +95,7 @@ class RemoveItem extends \Magento\Framework\App\Action\Action
 
     /**
      * @return \Magento\Framework\Data\Form\FormKey\Validator
-     * @deprecated 2.0.10
-     * @since 2.0.10
+     * @deprecated 100.0.9
      */
     private function getFormKeyValidator()
     {

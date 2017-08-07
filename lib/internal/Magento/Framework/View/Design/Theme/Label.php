@@ -59,7 +59,6 @@ class Label implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function toOptionArray()
     {

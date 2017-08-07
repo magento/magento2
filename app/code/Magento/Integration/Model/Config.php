@@ -13,7 +13,7 @@ use Magento\Integration\Model\Cache\Type;
  * Integration Config Model.
  *
  * This is a parent class for storing information about Integrations.
- * @deprecated 2.1.0
+ * @deprecated 100.1.0
  */
 class Config
 {
@@ -38,7 +38,6 @@ class Config
 
     /**
      * @var SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 

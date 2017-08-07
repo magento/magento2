@@ -27,7 +27,6 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
 
     /**
      * @var \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
-     * @since 2.1.0
      */
     private $minimumAmountErrorMessage;
 
@@ -91,8 +90,7 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
 
     /**
      * @return \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getMinimumAmountErrorMessage()
     {

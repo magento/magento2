@@ -19,43 +19,36 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
  */
 class ConfigFactory
 {
     /**
      * @var DesignConfigInterfaceFactory
-     * @since 2.1.0
      */
     protected $designConfigFactory;
 
     /**
      * @var MetadataProviderInterface
-     * @since 2.1.0
      */
     protected $metadataProvider;
 
     /**
      * @var DesignConfigDataInterfaceFactory
-     * @since 2.1.0
      */
     protected $designConfigDataFactory;
 
     /**
      * @var DesignConfigExtensionFactory
-     * @since 2.1.0
      */
     protected $configExtensionFactory;
 
     /**
      * @var ScopeValidatorInterface
-     * @since 2.1.0
      */
     protected $scopeValidator;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.1.0
      */
     protected $storeManager;
 
@@ -66,7 +59,6 @@ class ConfigFactory
      * @param DesignConfigExtensionFactory $configExtensionFactory
      * @param ScopeValidatorInterface $scopeValidator
      * @param StoreManagerInterface $storeManager
-     * @since 2.1.0
      */
     public function __construct(
         DesignConfigInterfaceFactory $designConfigFactory,
@@ -92,7 +84,6 @@ class ConfigFactory
      * @param array $data
      * @return DesignConfigInterface
      * @throws LocalizedException
-     * @since 2.1.0
      */
     public function create($scope, $scopeId, array $data = [])
     {
@@ -127,7 +118,6 @@ class ConfigFactory
      * @param string $scope
      * @param string $scopeId
      * @return DesignConfigInterface
-     * @since 2.1.0
      */
     protected function getDesignConfigData($scope, $scopeId)
     {
@@ -147,7 +137,6 @@ class ConfigFactory
      * @param string $scope
      * @param string $scopeId
      * @return array
-     * @since 2.1.0
      */
     protected function getCorrectScope($scope, $scopeId)
     {

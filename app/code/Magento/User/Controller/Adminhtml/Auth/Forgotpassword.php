@@ -16,7 +16,6 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
 {
     /**
      * @var SecurityManager
-     * @since 2.1.0
      */
     protected $securityManager;
 
@@ -24,7 +23,6 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\User\Model\UserFactory $userFactory
      * @param \Magento\Security\Model\SecurityManager $securityManager
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,

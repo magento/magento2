@@ -9,7 +9,6 @@ use Magento\Quote\Model\Quote;
 
 /**
  * Abstract class AbstractHelper
- * @since 2.1.0
  */
 abstract class AbstractHelper
 {
@@ -18,7 +17,6 @@ abstract class AbstractHelper
      *
      * @param Quote $quote
      * @return void
-     * @since 2.1.0
      */
     protected function disabledQuoteAddressValidation(Quote $quote)
     {

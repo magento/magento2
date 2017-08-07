@@ -42,7 +42,6 @@ class CheckContactUsFormObserver implements ObserverInterface
 
     /**
      * @var DataPersistorInterface
-     * @since 2.1.0
      */
     private $dataPersistor;
 
@@ -93,7 +92,6 @@ class CheckContactUsFormObserver implements ObserverInterface
      * Get Data Persistor
      *
      * @return DataPersistorInterface
-     * @since 2.1.0
      */
     private function getDataPersistor()
     {

@@ -66,7 +66,6 @@ class Minifier implements MinifierInterface
 
     /**
      * @var Filesystem\Directory\ReadFactory
-     * @since 2.1.0
      */
     protected $readFactory;
 
@@ -161,7 +160,6 @@ class Minifier implements MinifierInterface
      *
      * @param string $sourcePath
      * @return string
-     * @since 2.1.0
      */
     private function getRelativeGeneratedPath($sourcePath)
     {

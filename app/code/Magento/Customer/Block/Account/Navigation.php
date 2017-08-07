@@ -13,13 +13,13 @@ use \Magento\Customer\Block\Account\SortLinkInterface;
  * Class for sorting links in navigation panels.
  *
  * @api
- * @since 2.2.0
+ * @since 100.2.0
  */
 class Navigation extends Links
 {
     /**
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getLinks()
     {
@@ -43,7 +43,6 @@ class Navigation extends Links
      * @param SortLinkInterface $secondLink
      * @return int
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
-     * @since 2.2.0
      */
     private function compare(SortLinkInterface $firstLink, SortLinkInterface $secondLink)
     {

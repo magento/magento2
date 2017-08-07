@@ -43,7 +43,6 @@ class CleanMergedJsCss
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterCleanMergedJsCss(\Magento\Framework\View\Asset\MergeService $subject, $result)
     {

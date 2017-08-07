@@ -24,7 +24,6 @@ class QuoteItem
      * @return OrderItemInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterConvert(ToOrderItem $subject, OrderItemInterface $orderItem, AbstractItem $item, $data = [])
     {

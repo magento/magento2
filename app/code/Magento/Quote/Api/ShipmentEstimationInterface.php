@@ -10,7 +10,7 @@ use Magento\Quote\Api\Data\AddressInterface;
 /**
  * Interface ShipmentManagementInterface
  * @api
- * @since 2.0.10
+ * @since 100.0.7
  */
 interface ShipmentEstimationInterface
 {
@@ -19,7 +19,7 @@ interface ShipmentEstimationInterface
      * @param mixed $cartId
      * @param AddressInterface $address
      * @return \Magento\Quote\Api\Data\ShippingMethodInterface[] An array of shipping methods
-     * @since 2.0.10
+     * @since 100.0.7
      */
     public function estimateByExtendedAddress($cartId, AddressInterface $address);
 }

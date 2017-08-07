@@ -9,20 +9,17 @@ namespace Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock;
 /**
  * Class \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\QueryProcessorComposite
  *
- * @since 2.1.0
  */
 class QueryProcessorComposite implements QueryProcessorInterface
 {
     /**
      * @var array
-     * @since 2.1.0
      */
     private $queryProcessors;
 
     /**
      * QueryProcessorPool constructor.
      * @param QueryProcessorInterface[] $queryProcessors
-     * @since 2.1.0
      */
     public function __construct(array $queryProcessors = [])
     {
@@ -34,7 +31,6 @@ class QueryProcessorComposite implements QueryProcessorInterface
      * @param null|array $entityIds
      * @param bool $usePrimaryTable
      * @return \Magento\Framework\DB\Select
-     * @since 2.1.0
      */
     public function processQuery(\Magento\Framework\DB\Select $select, $entityIds = null, $usePrimaryTable = false)
     {

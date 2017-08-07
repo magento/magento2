@@ -547,7 +547,6 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param array $definitions
      * @return array
-     * @since 2.1.0
      */
     private function snakeCaseDefinitions($definitions)
     {
@@ -571,7 +570,6 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param array $properties
      * @return array
-     * @since 2.1.0
      */
     private function convertArrayToSnakeCase($properties)
     {
@@ -905,7 +903,6 @@ class Generator extends AbstractSchemaGenerator
      * Retrieve a list of services visible to current user.
      *
      * @return string[]
-     * @since 2.2.0
      */
     public function getListOfServices()
     {

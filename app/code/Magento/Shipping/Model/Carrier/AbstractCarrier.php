@@ -635,7 +635,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      *
      * @param string $data
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function filterDebugData($data)
     {
@@ -652,7 +652,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * Recursive replace sensitive xml nodes values by specified mask
      * @param \SimpleXMLElement $xml
      * @return void
-     * @since 2.1.0
      */
     private function filterXmlData(\SimpleXMLElement $xml)
     {

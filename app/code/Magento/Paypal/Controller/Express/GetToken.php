@@ -18,7 +18,6 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class GetToken
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
  */
 class GetToken extends AbstractExpress
 {
@@ -26,7 +25,6 @@ class GetToken extends AbstractExpress
      * Config mode type
      *
      * @var string
-     * @since 2.1.0
      */
     protected $_configType = \Magento\Paypal\Model\Config::class;
 
@@ -34,7 +32,6 @@ class GetToken extends AbstractExpress
      * Config method type
      *
      * @var string
-     * @since 2.1.0
      */
     protected $_configMethod = \Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS;
 
@@ -42,13 +39,11 @@ class GetToken extends AbstractExpress
      * Checkout mode type
      *
      * @var string
-     * @since 2.1.0
      */
     protected $_checkoutType = \Magento\Paypal\Model\Express\Checkout::class;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
@@ -62,7 +57,6 @@ class GetToken extends AbstractExpress
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Psr\Log\LoggerInterface|null $logger
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -90,7 +84,6 @@ class GetToken extends AbstractExpress
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function execute()
     {
@@ -127,7 +120,6 @@ class GetToken extends AbstractExpress
     /**
      * @return string|null
      * @throws LocalizedException
-     * @since 2.1.0
      */
     protected function getToken()
     {
@@ -195,7 +187,6 @@ class GetToken extends AbstractExpress
     /**
      * @param ResultInterface $controllerResult
      * @return ResultInterface
-     * @since 2.1.0
      */
     private function getErrorResponse(ResultInterface $controllerResult)
     {

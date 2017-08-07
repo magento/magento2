@@ -50,7 +50,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Customer registry
      *
      * @var \Magento\Customer\Model\CustomerRegistry
-     * @since 2.1.0
      */
     protected $customerRegistry;
 
@@ -155,8 +154,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      *
      * @param \Magento\Framework\Registry $coreRegistry
      * @return void
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     public function setCustomerRegistry(\Magento\Customer\Model\CustomerRegistry $customerRegistry)
     {
@@ -168,8 +166,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Get customer registry
      *
      * @return \Magento\Customer\Model\CustomerRegistry
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     public function getCustomerRegistry()
     {
@@ -471,7 +468,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Get customer account lock status
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.1.0
      */
     public function getAccountLock()
     {

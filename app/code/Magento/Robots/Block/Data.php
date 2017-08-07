@@ -17,19 +17,17 @@ use Magento\Store\Model\StoreResolver;
  * Prepares base content for robots.txt and implements Page Cache functionality.
  *
  * @api
- * @since 2.2.0
+ * @since 100.2.0
  */
 class Data extends AbstractBlock implements IdentityInterface
 {
     /**
      * @var Robots
-     * @since 2.2.0
      */
     private $robots;
 
     /**
      * @var StoreResolver
-     * @since 2.2.0
      */
     private $storeResolver;
 
@@ -38,7 +36,7 @@ class Data extends AbstractBlock implements IdentityInterface
      * @param Robots $robots
      * @param StoreResolver $storeResolver
      * @param array $data
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function __construct(
         Context $context,
@@ -56,7 +54,7 @@ class Data extends AbstractBlock implements IdentityInterface
      * Retrieve base content for robots.txt file
      *
      * @return string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     protected function _toHtml()
     {
@@ -67,7 +65,7 @@ class Data extends AbstractBlock implements IdentityInterface
      * Get unique page cache identities
      *
      * @return array
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getIdentities()
     {

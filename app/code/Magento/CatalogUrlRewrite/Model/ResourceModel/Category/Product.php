@@ -79,7 +79,6 @@ class Product extends AbstractDb
      *
      * @param array $filter
      * @return int
-     * @since 2.2.0
      */
     public function removeMultipleByProductCategory(array $filter)
     {
@@ -94,7 +93,6 @@ class Product extends AbstractDb
      *
      * @param array $data
      * @return \Magento\Framework\DB\Select
-     * @since 2.2.0
      */
     private function prepareSelect($data)
     {

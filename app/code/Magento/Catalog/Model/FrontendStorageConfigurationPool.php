@@ -14,20 +14,17 @@ use Magento\Framework\Exception\LocalizedException;
  * Each configuration object should have \Magento\Catalog\Model\FrontendStorageConfigurationInterface interface
  * Each configuration object provide only dynamic settings. For example, from Stores Configurations
  * All configurations will be used in front
- * @since 2.2.0
  */
 class FrontendStorageConfigurationPool
 {
     /**
      * @var array
-     * @since 2.2.0
      */
     private $storageConfigurations;
 
     /**
      * StorageConfigurationPool constructor.
      * @param array $storageConfigurations
-     * @since 2.2.0
      */
     public function __construct(array $storageConfigurations = [])
     {
@@ -40,7 +37,6 @@ class FrontendStorageConfigurationPool
      * @param string $namespace
      * @return FrontendStorageConfigurationInterface | bool
      * @throws LocalizedException
-     * @since 2.2.0
      */
     public function get($namespace)
     {

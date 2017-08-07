@@ -12,14 +12,12 @@ use Magento\Msrp\Api\Data\ProductRender\MsrpPriceInfoInterface;
 /**
  * Class \Magento\Msrp\Model\ProductRender\MsrpPriceInfo
  *
- * @since 2.2.0
  */
 class MsrpPriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel implements
     MsrpPriceInfoInterface
 {
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setMsrpPrice($msrpPrice)
     {
@@ -28,7 +26,6 @@ class MsrpPriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getMsrpPrice()
     {
@@ -37,7 +34,6 @@ class MsrpPriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setIsApplicable($isApplicable)
     {
@@ -46,7 +42,6 @@ class MsrpPriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getIsApplicable()
     {
@@ -55,7 +50,6 @@ class MsrpPriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setIsShownPriceOnGesture($isShownOnGesture)
     {
@@ -64,7 +58,6 @@ class MsrpPriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getIsShownPriceOnGesture()
     {
@@ -73,7 +66,6 @@ class MsrpPriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setMsrpMessage($msrpMessage)
     {
@@ -82,7 +74,6 @@ class MsrpPriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getMsrpMessage()
     {
@@ -91,7 +82,6 @@ class MsrpPriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setExplanationMessage($explanationMessage)
     {
@@ -100,7 +90,6 @@ class MsrpPriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getExplanationMessage()
     {
@@ -109,7 +98,6 @@ class MsrpPriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getExtensionAttributes()
     {
@@ -118,7 +106,6 @@ class MsrpPriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setExtensionAttributes(
         \Magento\Msrp\Api\Data\ProductRender\MsrpPriceInfoExtensionInterface $extensionAttributes

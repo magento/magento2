@@ -52,7 +52,6 @@ class ImageExtractor implements \Magento\Framework\View\Xsd\Media\TypeDataExtrac
      *
      * @param string $backgroundString
      * @return int[]
-     * @since 2.1.0
      */
     private function processImageBackground($backgroundString)
     {
