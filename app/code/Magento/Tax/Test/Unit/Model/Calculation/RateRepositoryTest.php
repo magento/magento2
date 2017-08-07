@@ -436,13 +436,13 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
         $rateTitles = ['Label 1', 'Label 2'];
 
         $countryCode = 'US';
-        $countryMock = $this->getMock(\Magento\Directory\Model\Country::class, [], [], '', false);
+        $countryMock = $this->createMock(\Magento\Directory\Model\Country::class);
         $countryMock->expects($this->any())->method('getId')->will($this->returnValue(1));
         $countryMock->expects($this->any())->method('loadByCode')->with($countryCode)->will($this->returnSelf());
         $this->countryFactoryMock->expects($this->once())->method('create')->will($this->returnValue($countryMock));
 
         $regionId = 2;
-        $regionMock = $this->getMock(\Magento\Directory\Model\Region::class, [], [], '', false);
+        $regionMock = $this->createMock(\Magento\Directory\Model\Region::class);
         $regionMock->expects($this->any())->method('getId')->will($this->returnValue($regionId));
         $regionMock->expects($this->any())->method('load')->with($regionId)->will($this->returnSelf());
         $this->regionFactoryMock->expects($this->once())->method('create')->will($this->returnValue($regionMock));
