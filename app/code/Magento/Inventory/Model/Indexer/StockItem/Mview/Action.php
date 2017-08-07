@@ -6,18 +6,39 @@
 
 namespace Magento\Inventory\Model\Indexer\StockItem\Mview;
 
+use Magento\Framework\Indexer\IndexerInterfaceFactory;
+use Magento\Inventory\Model\Indexer\StockItem;
+
 /**
  * @todo add description
  */
 class Action implements \Magento\Framework\Mview\ActionInterface
 {
+
     /**
-     *  Rebuild the stock item index
+     * @var IndexerInterfaceFactory
+     */
+    private $indexerFactory;
+
+    /**
+     * @param IndexerInterfaceFactory $indexerFactory
+     */
+    public function __construct(IndexerInterfaceFactory $indexerFactory)
+    {
+        $this->indexerFactory = $indexerFactory;
+    }
+
+    /**
+     * Execute materialization on ids entities
      *
-     * {@inheritdoc}
+     * @param int[] $ids
+     * @return void
+     * @api
      */
     public function execute($ids)
     {
-        // TODO: Implement execute() method.
+        /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
+        $indexer = $this->indexerFactory->create()->load(StockItem::INDEXER_ID);
+        $indexer->reindexList($ids);
     }
 }
