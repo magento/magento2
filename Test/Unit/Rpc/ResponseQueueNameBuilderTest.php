@@ -7,7 +7,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Rpc;
 
 use Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder;
 
-class ResponseQueueNameBuilderTest extends \PHPUnit_Framework_TestCase
+class ResponseQueueNameBuilderTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQueueName()
     {

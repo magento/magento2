@@ -8,14 +8,14 @@ namespace Magento\Framework\MessageQueue\Test\Unit;
 use Magento\Framework\MessageQueue\ConnectionTypeResolverInterface;
 use Magento\Framework\MessageQueue\ConnectionTypeResolver;
 
-class ConnectionTypeResolverTest extends \PHPUnit_Framework_TestCase
+class ConnectionTypeResolverTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetConnectionType()
     {
-        $resolverOne = $this->getMock(ConnectionTypeResolverInterface::class);
+        $resolverOne = $this->createMock(ConnectionTypeResolverInterface::class);
         $resolverOne->expects($this->once())->method('getConnectionType')->with('test')->willReturn(null);
 
-        $resolverTwo = $this->getMock(ConnectionTypeResolverInterface::class);
+        $resolverTwo = $this->createMock(ConnectionTypeResolverInterface::class);
         $resolverTwo->expects($this->once())->method('getConnectionType')->with('test')->willReturn('some-type');
 
         $model = new ConnectionTypeResolver([$resolverOne, $resolverTwo]);
@@ -28,10 +28,10 @@ class ConnectionTypeResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConnectionTypeWithException()
     {
-        $resolverOne = $this->getMock(ConnectionTypeResolverInterface::class);
+        $resolverOne = $this->createMock(ConnectionTypeResolverInterface::class);
         $resolverOne->expects($this->once())->method('getConnectionType')->with('test')->willReturn(null);
 
-        $resolverTwo = $this->getMock(ConnectionTypeResolverInterface::class);
+        $resolverTwo = $this->createMock(ConnectionTypeResolverInterface::class);
         $resolverTwo->expects($this->once())->method('getConnectionType')->with('test')->willReturn(null);
 
         $model = new ConnectionTypeResolver([$resolverOne, $resolverTwo]);

@@ -8,7 +8,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Publisher;
 /**
  * @codingStandardsIgnoreFile
  */
-class XsdTest extends \PHPUnit_Framework_TestCase
+class XsdTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string
@@ -31,7 +31,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     public function testExemplarXml($fixtureXml, array $expectedErrors)
     {
-        $validationState = $this->getMock(\Magento\Framework\Config\ValidationStateInterface::class, [], [], '', false);
+        $validationState = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $validationState->expects($this->any())
             ->method('isValidationRequired')
             ->willReturn(true);

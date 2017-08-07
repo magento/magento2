@@ -13,7 +13,7 @@ use Magento\Framework\Phrase;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConsumerTest extends \PHPUnit_Framework_TestCase
+class ConsumerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\MessageQueue\ConsumerConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -114,7 +114,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
             $this->messageController
         );
         $this->communicationConfig = $this
-            ->getMock(\Magento\Framework\Communication\ConfigInterface::class, [], [], '', false);
+            ->createMock(\Magento\Framework\Communication\ConfigInterface::class);
         $objectManager->setBackwardCompatibleProperty(
             $this->consumer,
             'communicationConfig',

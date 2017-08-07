@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Framework\MessageQueue\ConfigInterface;
 use Magento\Framework\MessageQueue\Consumer\Config\CompositeReader as ConsumerConfigCompositeReader;
 
-class ConfigReaderPluginTest extends \PHPUnit_Framework_TestCase
+class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConsumerConfigReaderPlugin

@@ -8,7 +8,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Publisher\Config;
 use Magento\Framework\MessageQueue\Publisher\Config\CompositeValidator;
 use Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface;
 
-class CompositeValidatorTest extends \PHPUnit_Framework_TestCase
+class CompositeValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CompositeValidator
@@ -30,8 +30,8 @@ class CompositeValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->validatorOneMock = $this->getMock(ValidatorInterface::class);
-        $this->validatorTwoMock = $this->getMock(ValidatorInterface::class);
+        $this->validatorOneMock = $this->createMock(ValidatorInterface::class);
+        $this->validatorTwoMock = $this->createMock(ValidatorInterface::class);
 
         $this->model = new CompositeValidator([$this->validatorOneMock, $this->validatorTwoMock]);
     }
@@ -61,7 +61,7 @@ class CompositeValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidReaderInstance()
     {
-        $this->setExpectedException(
+        $this->expectException(
             '\LogicException',
             'Validator [stdClass] does not implements ' .
             'Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface'

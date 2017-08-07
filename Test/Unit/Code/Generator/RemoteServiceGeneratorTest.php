@@ -14,12 +14,12 @@ use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject_MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RemoteServiceGeneratorTest extends \PHPUnit_Framework_TestCase
+class RemoteServiceGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CommunicationConfigInterface|MockObject
