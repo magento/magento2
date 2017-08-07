@@ -5,7 +5,7 @@
  */
 namespace Magento\AsynchronousOperations\Test\Unit\Block\Adminhtml\Bulk\Details;
 
-class BackButtonTest extends \PHPUnit_Framework_TestCase
+class BackButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\AsynchronousOperations\Block\Adminhtml\Bulk\Details\BackButton

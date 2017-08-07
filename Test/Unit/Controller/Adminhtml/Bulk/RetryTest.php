@@ -15,7 +15,7 @@ use Magento\AsynchronousOperations\Model\BulkNotificationManagement;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\Result\Json;
 
-class RetryTest extends \PHPUnit_Framework_TestCase
+class RetryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Retry
@@ -60,26 +60,14 @@ class RetryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->bulkManagementMock = $this->getMock(BulkManagement::class, [], [], '', false);
-        $this->notificationManagementMock = $this->getMock(BulkNotificationManagement::class, [], [], '', false);
-        $this->requestMock = $this->getMock(RequestInterface::class);
-        $this->resultFactoryMock = $this->getMock(
-            ResultFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->jsonResultMock = $this->getMock(Json::class, [], [], '', false);
+        $this->bulkManagementMock = $this->createMock(BulkManagement::class);
+        $this->notificationManagementMock = $this->createMock(BulkNotificationManagement::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->resultFactoryMock = $this->createPartialMock(ResultFactory::class, ['create']);
+        $this->jsonResultMock = $this->createMock(Json::class);
 
-        $this->resultRedirectFactoryMock = $this->getMock(
-            RedirectFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->resultRedirectMock = $this->getMock(Redirect::class, [], [], '', false);
+        $this->resultRedirectFactoryMock = $this->createPartialMock(RedirectFactory::class, ['create']);
+        $this->resultRedirectMock = $this->createMock(Redirect::class);
 
         $this->model = $objectManager->getObject(
             Retry::class,

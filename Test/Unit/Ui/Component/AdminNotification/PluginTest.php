@@ -7,7 +7,7 @@ namespace Magento\AsynchronousOperations\Test\Unit\Ui\Component\AdminNotificatio
 
 use Magento\Framework\AuthorizationInterface;
 
-class PluginTest extends \PHPUnit_Framework_TestCase
+class PluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\AsynchronousOperations\Ui\Component\AdminNotification\Plugin
@@ -21,7 +21,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->authorizationMock = $this->getMock(AuthorizationInterface::class);
+        $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
         $this->plugin = new \Magento\AsynchronousOperations\Ui\Component\AdminNotification\Plugin(
             $this->authorizationMock
         );
@@ -41,13 +41,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
-        $dataProviderMock = $this->getMock(
-            \Magento\AdminNotification\Ui\Component\DataProvider\DataProvider::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $dataProviderMock = $this->createMock(\Magento\AdminNotification\Ui\Component\DataProvider\DataProvider::class);
         $this->authorizationMock->expects($this->once())->method('isAllowed')->willReturn(true);
         $this->assertEquals($expectedResult, $this->plugin->afterGetMeta($dataProviderMock, $result));
     }

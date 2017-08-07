@@ -6,7 +6,7 @@
 
 namespace Magento\AsynchronousOperations\Test\Unit\Model\BulkDescription;
 
-class OptionsTest extends \PHPUnit_Framework_TestCase
+class OptionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\AsynchronousOperations\Model\BulkDescription\Options
@@ -25,14 +25,11 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->bulkCollectionFactoryMock = $this->getMock(
+        $this->bulkCollectionFactoryMock = $this->createPartialMock(
             \Magento\AsynchronousOperations\Model\ResourceModel\Bulk\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->userContextMock = $this->getMock(\Magento\Authorization\Model\UserContextInterface::class);
+        $this->userContextMock = $this->createMock(\Magento\Authorization\Model\UserContextInterface::class);
         $this->model = new \Magento\AsynchronousOperations\Model\BulkDescription\Options(
             $this->bulkCollectionFactoryMock,
             $this->userContextMock
@@ -42,14 +39,8 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     public function testToOptionsArray()
     {
         $userId = 100;
-        $collectionMock = $this->getMock(
-            \Magento\AsynchronousOperations\Model\ResourceModel\Bulk\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $collectionMock = $this->createMock(\Magento\AsynchronousOperations\Model\ResourceModel\Bulk\Collection::class);
+        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
         $this->bulkCollectionFactoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
 
         $this->userContextMock->expects($this->once())->method('getUserId')->willReturn($userId);
@@ -61,12 +52,9 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $selectMock->expects($this->once())->method('from')->with('table', ['description'])->willReturnSelf();
         $selectMock->expects($this->once())->method('where')->with('user_id = ?', $userId)->willReturnSelf();
 
-        $itemMock = $this->getMock(
+        $itemMock = $this->createPartialMock(
             \Magento\AsynchronousOperations\Model\BulkSummary::class,
-            ['getDescription'],
-            [],
-            '',
-            false
+            ['getDescription']
         );
         $itemMock->expects($this->exactly(2))->method('getDescription')->willReturn('description');
 

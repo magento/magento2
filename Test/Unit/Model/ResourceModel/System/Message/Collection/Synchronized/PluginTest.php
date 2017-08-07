@@ -18,7 +18,7 @@ use Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Sync
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PluginTest extends \PHPUnit_Framework_TestCase
+class PluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Plugin
@@ -77,28 +77,19 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->messagefactoryMock = $this->getMock(
+        $this->messagefactoryMock = $this->createPartialMock(
             \Magento\AdminNotification\Model\System\MessageFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->bulkStatusMock = $this->getMock(BulkStatusInterface::class);
+        $this->bulkStatusMock = $this->createMock(BulkStatusInterface::class);
 
-        $this->userContextMock = $this->getMock(UserContextInterface::class);
-        $this->operationsDetailsMock = $this->getMock(Details::class, [], [], '', false);
-        $this->authorizationMock = $this->getMock(AuthorizationInterface::class);
-        $this->messageMock = $this->getMock(\Magento\AdminNotification\Model\System\Message::class, [], [], '', false);
-        $this->collectionMock = $this->getMock(Synchronized::class, [], [], '', false);
-        $this->bulkNotificationMock = $this->getMock(BulkNotificationManagement::class, [], [], '', false);
-        $this->statusMapper = $this->getMock(
-            \Magento\AsynchronousOperations\Model\StatusMapper::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->userContextMock = $this->createMock(UserContextInterface::class);
+        $this->operationsDetailsMock = $this->createMock(Details::class);
+        $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
+        $this->messageMock = $this->createMock(\Magento\AdminNotification\Model\System\Message::class);
+        $this->collectionMock = $this->createMock(Synchronized::class);
+        $this->bulkNotificationMock = $this->createMock(BulkNotificationManagement::class);
+        $this->statusMapper = $this->createMock(\Magento\AsynchronousOperations\Model\StatusMapper::class);
         $this->plugin = new Plugin(
             $this->messagefactoryMock,
             $this->bulkStatusMock,
@@ -128,7 +119,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     public function testAfterTo($operationDetails)
     {
         $methods = ['getBulkId', 'getDescription', 'getStatus', 'getStartTime'];
-        $bulkMock = $this->getMock(\Magento\AsynchronousOperations\Model\BulkSummary::class, $methods, [], '', false);
+        $bulkMock = $this->createPartialMock(\Magento\AsynchronousOperations\Model\BulkSummary::class, $methods);
         $result = ['items' =>[], 'totalRecords' => 1];
         $userBulks = [$bulkMock];
         $userId = 1;
