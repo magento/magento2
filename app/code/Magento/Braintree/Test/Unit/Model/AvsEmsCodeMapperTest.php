@@ -10,7 +10,7 @@ use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class AvsEmsCodeMapperTest extends \PHPUnit_Framework_TestCase
+class AvsEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AvsEmsCodeMapper

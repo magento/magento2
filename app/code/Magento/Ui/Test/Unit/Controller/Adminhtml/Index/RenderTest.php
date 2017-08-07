@@ -10,7 +10,7 @@ use \Magento\Ui\Controller\Adminhtml\Index\Render;
 /**
  * Class RenderTest
  */
-class RenderTest extends \PHPUnit_Framework_TestCase
+class RenderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Render

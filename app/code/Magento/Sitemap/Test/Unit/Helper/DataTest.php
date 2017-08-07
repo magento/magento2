@@ -11,7 +11,7 @@ use \Magento\Sitemap\Helper\Data;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Sitemap\Helper\Data */
     protected $data;

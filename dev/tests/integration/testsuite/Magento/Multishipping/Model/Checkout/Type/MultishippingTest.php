@@ -10,7 +10,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppArea frontend
  */
-class MultishippingTest extends \PHPUnit_Framework_TestCase
+class MultishippingTest extends \PHPUnit\Framework\TestCase
 {
     const ADDRESS_TYPE_SHIPPING = 'shipping';
 

@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit\Utility;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 
-class FilesTest extends \PHPUnit_Framework_TestCase
+class FilesTest extends \PHPUnit\Framework\Testcase
 {
     /**
      * @var \Magento\Framework\Component\DirSearch|\PHPUnit_Framework_MockObject_MockObject
@@ -18,7 +18,7 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->dirSearchMock = $this->getMock(\Magento\Framework\Component\DirSearch::class, [], [], '', false);
+        $this->dirSearchMock = $this->createMock(\Magento\Framework\Component\DirSearch::class);
         $fileUtilities = $objectManager->getObject(
             Files::class,
             [

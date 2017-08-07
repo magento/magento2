@@ -8,7 +8,7 @@ namespace Magento\Sitemap\Test\Unit\Block;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RobotsTest extends \PHPUnit_Framework_TestCase
+class RobotsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Element\Context|\PHPUnit_Framework_MockObject_MockObject

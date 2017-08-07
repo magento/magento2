@@ -29,9 +29,9 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     {
         $testObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->messageManager = $this->getMock(\Magento\Framework\Message\Manager::class, [], [], '', false);
-        $this->cookieManagerMock = $this->getMock(CookieManagerInterface::class, [], [], '', false);
-        $this->interpretationStrategyMock = $this->getMock(InterpretationStrategyInterface::class, [], [], '', false);
+        $this->messageManager = $this->createMock(\Magento\Framework\Message\Manager::class);
+        $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
+        $this->interpretationStrategyMock = $this->createMock(InterpretationStrategyInterface::class);
         $this->interpretationStrategyMock->expects($this->any())
             ->method('interpret')
             ->willReturnCallback(
@@ -42,13 +42,8 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
 
         $request = $testObjectManager->getObject(\Magento\TestFramework\Request::class);
         $response = $testObjectManager->getObject(\Magento\TestFramework\Response::class);
-        $this->_objectManager = $this->getMock(
-            \Magento\TestFramework\ObjectManager::class,
-            ['get', 'create'],
-            [],
-            '',
-            false
-        );
+        $this->_objectManager =
+            $this->createPartialMock(\Magento\TestFramework\ObjectManager::class, ['get', 'create']);
         $this->_objectManager->expects($this->any())
             ->method('get')
             ->will(
@@ -73,13 +68,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     protected function _getBootstrap()
     {
         if (!$this->_bootstrap) {
-            $this->_bootstrap = $this->getMock(
-                \Magento\TestFramework\Bootstrap::class,
-                ['getAllOptions'],
-                [],
-                '',
-                false
-            );
+            $this->_bootstrap = $this->createPartialMock(\Magento\TestFramework\Bootstrap::class, ['getAllOptions']);
         }
         return $this->_bootstrap;
     }
@@ -110,14 +99,14 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
         $this->getResponse()->setBody('');
         try {
             $this->assert404NotFound();
-        } catch (\PHPUnit_Framework_AssertionFailedError $e) {
+        } catch (\PHPUnit\Framework\AssertionFailedError $e) {
             return;
         }
         $this->fail('Failed response body validation');
     }
 
     /**
-     * @expectedException \PHPUnit_Framework_AssertionFailedError
+     * @expectedException \PHPUnit\Framework\AssertionFailedError
      */
     public function testAssertRedirectFailure()
     {
@@ -148,8 +137,9 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     public function testAssertSessionMessagesSuccess(array $expectedMessages, $messageTypeFilter)
     {
         $this->addSessionMessages();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\PHPUnit_Framework_Constraint $constraint */
-        $constraint = $this->getMock(\PHPUnit_Framework_Constraint::class, ['toString', 'matches']);
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\PHPUnit\Framework\Constraint\Constraint $constraint */
+        $constraint =
+            $this->createPartialMock(\PHPUnit\Framework\Constraint\Constraint::class, ['toString', 'matches']);
         $constraint->expects(
             $this->once()
         )->method('matches')
