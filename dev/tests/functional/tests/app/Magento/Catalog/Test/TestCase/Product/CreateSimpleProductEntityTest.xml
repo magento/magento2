@@ -327,7 +327,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage" />
         </variation>
-        <variation name="CreateSimpleProductEntityTestVariation18">
+        <variation name="CreateSimpleProductEntityTestVariation18" summary="Import custom options from simple product" ticketId="MAGETWO-71386">
             <data name="description" xsi:type="string">Create product wit suite of custom options</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
