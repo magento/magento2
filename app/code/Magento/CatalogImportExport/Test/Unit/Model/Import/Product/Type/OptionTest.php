@@ -305,8 +305,8 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                 '',
                 false
             ),
-            $optionValueCollectionFactoryMock,
-            $this->_getModelDependencies($addExpectations, $deleteBehavior, $doubleOptions)
+            $this->_getModelDependencies($addExpectations, $deleteBehavior, $doubleOptions),
+            $optionValueCollectionFactoryMock
         ];
 
         $modelClassName = \Magento\CatalogImportExport\Model\Import\Product\Option::class;

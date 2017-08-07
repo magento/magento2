@@ -383,8 +383,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $dateTime
      * @param ProcessingErrorAggregatorInterface $errorAggregator
-     * @param ProductOptionValueCollectionFactory $productOptionValueCollectionFactory
      * @param array $data
+     * @param ProductOptionValueCollectionFactory $productOptionValueCollectionFactory
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -402,8 +402,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $dateTime,
         ProcessingErrorAggregatorInterface $errorAggregator,
-        ProductOptionValueCollectionFactory $productOptionValueCollectionFactory = null,
-        array $data = []
+        array $data = [],
+        ProductOptionValueCollectionFactory $productOptionValueCollectionFactory = null
     ) {
         $this->_resource = $resource;
         $this->_catalogData = $catalogData;
