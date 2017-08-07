@@ -10,7 +10,7 @@ use Magento\MysqlMq\Model\ConnectionTypeResolver;
 /**
  * Unit tests for Mysql connection type resolver
  */
-class ConnectionTypeResolverTest extends \PHPUnit_Framework_TestCase
+class ConnectionTypeResolverTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetConnectionTypeWithDefaultValues()
     {

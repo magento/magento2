@@ -9,7 +9,7 @@ namespace Magento\MysqlMq\Test\Unit\Model\ResourceModel;
 /**
  * Unit test for Queue resource model.
  */
-class QueueTest extends \PHPUnit_Framework_TestCase
+class QueueTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
