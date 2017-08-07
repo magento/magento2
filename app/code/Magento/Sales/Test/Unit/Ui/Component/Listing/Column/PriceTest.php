@@ -12,7 +12,7 @@ use Magento\Sales\Ui\Component\Listing\Column\Price;
 /**
  * Class PriceTest
  */
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Price

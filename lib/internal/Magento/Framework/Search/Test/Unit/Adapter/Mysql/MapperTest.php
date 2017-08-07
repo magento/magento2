@@ -7,19 +7,18 @@ namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
 
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Mapper;
-
 use Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
+use \PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\Query\Filter;
 use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MapperTest extends \PHPUnit_Framework_TestCase
+class MapperTest extends \PHPUnit\Framework\TestCase
 {
     const INDEX_NAME = 'test_index_fulltext';
     const REQUEST_LIMIT = 120321;

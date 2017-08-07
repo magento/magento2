@@ -10,7 +10,7 @@ namespace Magento\ImportExport\Model\ResourceModel\Import;
  *
  * @magentoDataFixture Magento/ImportExport/_files/import_data.php
  */
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ImportExport\Model\ResourceModel\Import\Data

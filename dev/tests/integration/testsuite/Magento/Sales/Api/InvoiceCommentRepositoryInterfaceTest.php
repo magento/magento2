@@ -12,7 +12,7 @@ use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Sales\Api\Data\InvoiceCommentInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class InvoiceCommentRepositoryInterfaceTest extends \PHPUnit_Framework_TestCase
+class InvoiceCommentRepositoryInterfaceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var InvoiceCommentRepositoryInterface

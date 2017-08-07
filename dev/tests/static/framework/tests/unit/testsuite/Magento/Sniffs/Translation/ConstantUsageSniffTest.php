@@ -7,7 +7,7 @@ namespace Magento\Sniffs\Translation;
 
 use PHP_CodeSniffer\Files\File;
 
-class ConstantUsageSniffTest extends \PHPUnit_Framework_TestCase
+class ConstantUsageSniffTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var File|\PHPUnit_Framework_MockObject_MockObject
@@ -21,7 +21,7 @@ class ConstantUsageSniffTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fileMock = $this->getMock(File::class, [], [], '', false);
+        $this->fileMock = $this->createMock(File::class);
         $this->constantUsageSniff = new ConstantUsageSniff();
     }
 

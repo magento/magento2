@@ -10,7 +10,7 @@ namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Filter;
  * Class DateTimeTest to test Magento\Backend\Block\Widget\Grid\Column\Filter\Date
  *
  */
-class DatetimeTest extends \PHPUnit_Framework_TestCase
+class DatetimeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Backend\Block\Widget\Grid\Column\Filter\Datetime */
     protected $model;

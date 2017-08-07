@@ -15,7 +15,7 @@ use Magento\Framework\Serialize\SerializerInterface;
  * @deprecated We don't need anymore serialize arguments, this class will be removed in the next
  *             backward incompatible release.
  */
-class ArgumentsSerializationTest extends \PHPUnit_Framework_TestCase
+class ArgumentsSerializationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SerializerInterface|PHPUnit_Framework_MockObject_MockObject

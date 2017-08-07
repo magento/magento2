@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Template\Filter;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -24,7 +24,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_factory = $objectManagerHelper->getObject(
@@ -42,7 +42,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $className = \Magento\Framework\Filter\Template::class;
 
-        $filterMock = $this->getMock($className, [], [], '', false);
+        $filterMock = $this->createMock($className);
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(
@@ -67,7 +67,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $className = \Magento\Framework\Filter\Template::class;
         $arguments = ['foo', 'bar'];
 
-        $filterMock = $this->getMock($className, [], [], '', false);
+        $filterMock = $this->createMock($className);
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(
@@ -93,7 +93,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $className = 'WrongClass';
 
-        $filterMock = $this->getMock($className, [], [], '', false);
+        $filterMock = $this->getMockBuilder($className)->disableOriginalConstructor()->getMock();
         $this->_objectManagerMock->expects($this->once())->method('create')->will($this->returnValue($filterMock));
 
         $this->_factory->create($className);

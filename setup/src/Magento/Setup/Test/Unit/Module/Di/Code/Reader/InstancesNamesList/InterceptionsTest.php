@@ -12,7 +12,7 @@ use Magento\Setup\Module\Di\Compiler\Log\Log;
  *
  * @package Magento\Setup\Module\Di\Code\Reader\Decorator
  */
-class InterceptionsTest extends \PHPUnit_Framework_TestCase
+class InterceptionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\Di\Code\Reader\ClassesScanner | \PHPUnit_Framework_MockObject_MockObject

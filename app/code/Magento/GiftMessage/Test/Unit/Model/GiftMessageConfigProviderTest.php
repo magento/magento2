@@ -5,16 +5,16 @@
  */
 namespace Magento\GiftMessage\Test\Unit\Model;
 
-use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
-use Magento\Store\Model\ScopeInterface as Scope;
+use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
 use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Framework\UrlInterface;
-use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
+use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
+use Magento\Store\Model\ScopeInterface as Scope;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GiftMessageConfigProviderTest extends \PHPUnit_Framework_TestCase
+class GiftMessageConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\GiftMessage\Model\GiftMessageConfigProvider
@@ -63,33 +63,15 @@ class GiftMessageConfigProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->checkoutSessionMock = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
-        $this->httpContextMock = $this->getMock(\Magento\Framework\App\Http\Context::class, [], [], '', false);
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
-        $this->localeFormatMock = $this->getMock(\Magento\Framework\Locale\FormatInterface::class, [], [], '', false);
-        $this->formKeyMock = $this->getMock(\Magento\Framework\Data\Form\FormKey::class, [], [], '', false);
-        $this->scopeConfigMock = $this->getMock(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $contextMock = $this->getMock(\Magento\Framework\App\Helper\Context::class, [], [], '', false);
-        $this->cartRepositoryMock = $this->getMock(
-            \Magento\GiftMessage\Api\CartRepositoryInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->itemRepositoryMock = $this->getMock(
-            \Magento\GiftMessage\Api\ItemRepositoryInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->checkoutSessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
+        $this->httpContextMock = $this->createMock(\Magento\Framework\App\Http\Context::class);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->localeFormatMock = $this->createMock(\Magento\Framework\Locale\FormatInterface::class);
+        $this->formKeyMock = $this->createMock(\Magento\Framework\Data\Form\FormKey::class);
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $contextMock = $this->createMock(\Magento\Framework\App\Helper\Context::class);
+        $this->cartRepositoryMock = $this->createMock(\Magento\GiftMessage\Api\CartRepositoryInterface::class);
+        $this->itemRepositoryMock = $this->createMock(\Magento\GiftMessage\Api\ItemRepositoryInterface::class);
         $contextMock->expects($this->atLeastOnce())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
 
         $this->model = new \Magento\GiftMessage\Model\GiftMessageConfigProvider(
@@ -118,23 +100,17 @@ class GiftMessageConfigProviderTest extends \PHPUnit_Framework_TestCase
         $formKey = 'ABCDEFGHIJKLMNOP';
         $isFrontUrlSecure = true;
         $baseUrl = 'https://magento.com/';
-        $quoteItemMock = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
-        $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $storeMock = $this->getMock(
+        $quoteItemMock = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
+        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $storeMock = $this->createPartialMock(
             \Magento\Store\Model\Store::class,
-            ['isFrontUrlSecure', 'getBaseUrl', 'getCode'],
-            [],
-            '',
-            false
+            ['isFrontUrlSecure', 'getBaseUrl', 'getCode']
         );
-        $quoteMock = $this->getMock(
+        $quoteMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote::class,
-            ['getQuoteCurrencyCode', 'getStore', 'getIsVirtual', 'getAllVisibleItems', 'getId'],
-            [],
-            '',
-            false
+            ['getQuoteCurrencyCode', 'getStore', 'getIsVirtual', 'getAllVisibleItems', 'getId']
         );
-        $messageMock = $this->getMock(\Magento\GiftMessage\Model\Message::class, [], [], '', false);
+        $messageMock = $this->createMock(\Magento\GiftMessage\Model\Message::class);
 
         $this->scopeConfigMock->expects($this->atLeastOnce())->method('getValue')->willReturnMap(
             [

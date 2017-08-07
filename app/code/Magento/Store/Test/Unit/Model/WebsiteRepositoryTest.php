@@ -8,7 +8,7 @@ namespace Magento\Store\Test\Unit\Model;
 
 use Magento\Framework\App\Config;
 
-class WebsiteRepositoryTest extends \PHPUnit_Framework_TestCase
+class WebsiteRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\WebsiteRepository
