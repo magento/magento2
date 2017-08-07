@@ -171,7 +171,7 @@
     <preference for="Magento\Framework\View\Page\FaviconInterface" type="Magento\Theme\Model\Favicon\Favicon" />
     <preference for="Magento\Framework\View\Element\Message\InterpretationStrategyInterface" type="Magento\Framework\View\Element\Message\InterpretationMediator" />
     <preference for="Magento\Framework\App\FeedInterface" type="Magento\Framework\App\Feed" />
-    <preference for="Magento\Framework\App\FeedImporterInterface" type="Magento\Framework\App\Feed\Importer" />
+    <preference for="Magento\Framework\App\FeedFactoryInterface" type="Magento\Framework\App\FeedFactory" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>

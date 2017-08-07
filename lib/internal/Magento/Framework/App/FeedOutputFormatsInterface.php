@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App;
 
-interface FeedFormatsInterface
+interface FeedOutputFormatsInterface
 {
-    const DEFAULT_FORMAT = 'rss';
+    const DEFAULT_FORMAT = 'xml';
 }

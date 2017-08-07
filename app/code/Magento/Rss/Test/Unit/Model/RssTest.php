@@ -65,9 +65,9 @@ class RssTest extends \PHPUnit_Framework_TestCase
     private $cacheMock;
 
     /**
-     * @var \Magento\Framework\App\FeedImporterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\FeedFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $feedImporterMock;
+    private $feedFactoryMock;
 
     /**
      * @var \Magento\Framework\App\FeedInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -83,7 +83,7 @@ class RssTest extends \PHPUnit_Framework_TestCase
     {
         $this->cacheMock = $this->getMock(\Magento\Framework\App\CacheInterface::class);
         $this->serializerMock = $this->getMock(SerializerInterface::class);
-        $this->feedImporterMock = $this->getMock(\Magento\Framework\App\FeedImporterInterface::class);
+        $this->feedFactoryMock = $this->getMock(\Magento\Framework\App\FeedFactoryInterface::class);
         $this->feedMock = $this->getMock(\Magento\Framework\App\FeedInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -91,7 +91,7 @@ class RssTest extends \PHPUnit_Framework_TestCase
             \Magento\Rss\Model\Rss::class,
             [
                 'cache' => $this->cacheMock,
-                'feedImporter' => $this->feedImporterMock,
+                'feedFactory' => $this->feedFactoryMock,
                 'serializer' => $this->serializerMock
             ]
         );
@@ -152,12 +152,13 @@ class RssTest extends \PHPUnit_Framework_TestCase
         $dataProvider->expects($this->any())->method('getRssData')->will($this->returnValue($this->feedData));
 
         $this->feedMock->expects($this->once())
-            ->method('asXml')
+            ->method('getFormatedContentAs')
+            ->with(\Magento\Framework\App\FeedOutputFormatsInterface::DEFAULT_FORMAT)
             ->will($this->returnValue($this->feedXml));
 
-        $this->feedImporterMock->expects($this->once())
+        $this->feedFactoryMock->expects($this->once())
             ->method('importArray')
-            ->with($this->feedData)
+            ->with($this->feedData, \Magento\Framework\App\FeedFormatsInterface::DEFAULT_FORMAT)
             ->will($this->returnValue($this->feedMock));
 
         $this->rss->setDataProvider($dataProvider);

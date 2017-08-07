@@ -8,7 +8,7 @@ namespace Magento\Framework\App;
 class Feed implements \Magento\Framework\App\FeedInterface
 {
     /**
-     * @var \Magento\Framework\App\FeedImporterInterface
+     * @var \Zend_Feed_Abstract
      */
     private $feed;
 
@@ -25,8 +25,15 @@ class Feed implements \Magento\Framework\App\FeedInterface
      *
      * @return string
      */
-    public function asXml()
-    {
-        return $this->feed->saveXml();
+    public function getFormatedContentAs(
+        $format = FeedOutputFormatsInterface::DEFAULT_FORMAT
+    ) {
+        if ($format === FeedOutputFormatsInterface::DEFAULT_FORMAT) {
+            return $this->feed->saveXml();
+        }
+        throw new \Magento\Framework\Exception\RuntimeException(
+            __('Given feed format is not supported'),
+            $e
+        );
     }
 }

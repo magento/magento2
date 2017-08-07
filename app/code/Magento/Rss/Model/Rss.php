@@ -8,7 +8,7 @@ namespace Magento\Rss\Model;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Rss\DataProviderInterface;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\App\FeedImporterInterface;
+use Magento\Framework\App\FeedFactoryInterface;
 
 class Rss
 {
@@ -23,9 +23,9 @@ class Rss
     protected $cache;
 
     /**
-     * @var \Magento\Framework\App\FeedImporterInterface
+     * @var \Magento\Framework\App\FeedFactoryInterface
      */
-    private $feedImporter;
+    private $feedFactory;
 
     /**
      * @var SerializerInterface
@@ -37,16 +37,16 @@ class Rss
      *
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param SerializerInterface|null $serializer
-     * @param FeedImporterInterface|null $feedImporter
+     * @param FeedFactoryInterface|null $feedFactory
      */
     public function __construct(
         \Magento\Framework\App\CacheInterface $cache,
         SerializerInterface $serializer = null,
-        FeedImporterInterface $feedImporter = null
+        FeedFactoryInterface $feedFactory = null
     ) {
         $this->cache = $cache;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
-        $this->feedImporter = $feedImporter ?: ObjectManager::getInstance()->get(FeedImporterInterface::class);
+        $this->feedFactory = $feedFactory ?: ObjectManager::getInstance()->get(FeedFactoryInterface::class);
     }
 
     /**
@@ -95,7 +95,13 @@ class Rss
      */
     public function createRssXml()
     {
-        $rssFeed = $this->feedImporter->importArray($this->getFeeds(), 'rss');
-        return $rssFeed->asXML();
+        $feed = $this->feedFactory->importArray(
+            $this->getFeeds(), 
+            \Magento\Framework\App\FeedFormatsInterface::DEFAULT_FORMAT
+        );
+
+        return $feed->getFormatedContentAs(
+            \Magento\Framework\App\FeedOutputFormatsInterface::DEFAULT_FORMAT
+        );
     }
 }

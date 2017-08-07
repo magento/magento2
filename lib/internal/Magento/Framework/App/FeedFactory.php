@@ -9,9 +9,9 @@ use Magento\Framework\App\FeedFactory;
 use Psr\Log\LoggerInterface;
 
 /**
- * Feed importer
+ * Feed factory
  */
-class FeedFactory implements \Magento\Framework\App\FeedImporterInterface
+class FeedFactory implements \Magento\Framework\App\FeedFactoryInterface
 {
     /**
      * @var \Zend_Feed
@@ -43,9 +43,8 @@ class FeedFactory implements \Magento\Framework\App\FeedImporterInterface
      * @param  string $format
      * @return \Magento\Framework\App\FeedInterface
      */
-    public function importArray(array $data, $format = 'atom')
+    public function importArray(array $data, $format = FeedFormatsInterface::DEFAULT_FORMAT)
     {
-
         try {
             return $this->feedProcessor->importArray($data, $format);
         } catch (\Zend_Feed_Exception $e) {

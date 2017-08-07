@@ -10,5 +10,7 @@ interface FeedInterface
     /**
      * @return string
      */
-    public function asXml();
+    public function getFormatedContentAs(
+        $format = FeedOutputFormatsInterface::DEFAULT_FORMAT
+    );
 }
