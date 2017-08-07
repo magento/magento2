@@ -8,7 +8,7 @@ namespace Magento\Persistent\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ObserverTest extends \PHPUnit_Framework_TestCase
+class ObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Persistent\Model\Observer
