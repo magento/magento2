@@ -20,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
+class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface
@@ -170,7 +170,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
             'CONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE_ENVIRONMENT4 for web/test/test_sensitive_environment4',
             'CONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE_ENVIRONMENT5 for web/test/test_sensitive_environment5'
         ]);
-        $outputMock = $this->getMock(OutputInterface::class);
+        $outputMock = $this->createMock(OutputInterface::class);
         $outputMock->expects($this->at(0))
             ->method('writeln')
             ->with(['system' => $comment]);
@@ -180,7 +180,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
 
         /** @var ApplicationDumpCommand command */
         $command = $this->objectManager->create(ApplicationDumpCommand::class);
-        $command->run($this->getMock(InputInterface::class), $outputMock);
+        $command->run($this->createMock(InputInterface::class), $outputMock);
 
         $config = $this->loadConfig();
 

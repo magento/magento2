@@ -18,7 +18,7 @@ use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepos
  * Class DirectpostTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DirectpostTest extends \PHPUnit_Framework_TestCase
+class DirectpostTest extends \PHPUnit\Framework\TestCase
 {
     const TOTAL_AMOUNT = 100.02;
     const INVOICE_NUM = '00000001';
@@ -657,7 +657,7 @@ class DirectpostTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Get mock for authorize.net request factory
-     * @return \PHPUnit_Framework_MockObject_MockBuilder
+     * @return \PHPUnit\Framework\MockObject_MockBuilder
      */
     private function getRequestFactoryMock()
     {

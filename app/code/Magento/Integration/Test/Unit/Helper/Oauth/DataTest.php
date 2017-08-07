@@ -5,7 +5,7 @@
  */
 namespace Magento\Integration\Test\Unit\Helper\Oauth;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
     protected $_scopeConfigMock;

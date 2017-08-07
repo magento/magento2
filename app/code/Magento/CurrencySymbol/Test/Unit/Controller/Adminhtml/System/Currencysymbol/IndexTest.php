@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Class IndexTest
  */
-class IndexTest extends \PHPUnit_Framework_TestCase
+class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol\Index
@@ -61,14 +61,14 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->menuItemMock = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false);
-        $this->menuMock = $this->getMock(\Magento\Backend\Model\Menu::class, [], [], '', false);
+        $this->menuItemMock = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
+        $this->menuMock = $this->createMock(\Magento\Backend\Model\Menu::class);
 
-        $this->titleMock = $this->getMock(\Magento\Framework\View\Page\Title::class, [], [], '', false);
+        $this->titleMock = $this->createMock(\Magento\Framework\View\Page\Title::class);
 
-        $this->pageConfigMock = $this->getMock(\Magento\Framework\View\Page\Config::class, [], [], '', false);
+        $this->pageConfigMock = $this->createMock(\Magento\Framework\View\Page\Config::class);
 
-        $this->pageMock = $this->getMock(\Magento\Framework\View\Result\Page::class, [], [], '', false);
+        $this->pageMock = $this->createMock(\Magento\Framework\View\Result\Page::class);
 
         $this->blockMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\Element\BlockInterface::class,
@@ -80,9 +80,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ['addLink', 'setActive', 'getMenuModel']
         );
 
-        $this->layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
+        $this->layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
 
-        $this->viewMock = $this->getMock(\Magento\Framework\App\ViewInterface::class, [], [], '', false);
+        $this->viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);
 
         $this->action = $objectManager->getObject(
             \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol\Index::class,

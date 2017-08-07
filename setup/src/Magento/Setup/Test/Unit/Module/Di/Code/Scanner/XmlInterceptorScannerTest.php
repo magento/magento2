@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Scanner;
 
-class XmlInterceptorScannerTest extends \PHPUnit_Framework_TestCase
+class XmlInterceptorScannerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\Di\Code\Scanner\XmlInterceptorScanner

@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Test\Unit\Model\Product\Plugin;
 
-class UpdateQuoteItemsTest extends \PHPUnit_Framework_TestCase
+class UpdateQuoteItemsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Model\Product\Plugin\UpdateQuoteItems
@@ -33,7 +33,7 @@ class UpdateQuoteItemsTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterUpdate($originalPrice, $newPrice, $callMethod)
     {
-        $productResourceMock = $this->getMock(\Magento\Catalog\Model\ResourceModel\Product::class, [], [], '', false);
+        $productResourceMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productMock = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOrigData', 'getPrice', 'getId'])

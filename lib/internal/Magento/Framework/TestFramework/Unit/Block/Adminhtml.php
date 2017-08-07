@@ -15,7 +15,7 @@ namespace Magento\Framework\TestFramework\Unit\Block;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Adminhtml extends \PHPUnit_Framework_TestCase
+class Adminhtml extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

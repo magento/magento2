@@ -19,7 +19,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  *
  * @see Importer
  */
-class SaveProcessorTest extends \PHPUnit_Framework_TestCase
+class SaveProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SaveProcessor
