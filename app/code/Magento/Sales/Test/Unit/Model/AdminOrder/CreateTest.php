@@ -374,7 +374,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->once())->method('setCouponCode')->with($couponCode)->willReturnSelf();
 
         $addressMock->expects($this->once())->method('setCollectShippingRates')->with(true)->willReturnSelf();
-        $addressMock->expects($this->once())->method('setFreeShipping')->with(null)->willReturnSelf();
+        $addressMock->expects($this->once())->method('setFreeShipping')->with(0)->willReturnSelf();
 
         $this->adminOrderCreate->applyCoupon($couponCode);
     }
