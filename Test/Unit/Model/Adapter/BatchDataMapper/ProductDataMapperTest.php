@@ -17,7 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductDataMapperTest extends \PHPUnit\Framework\Testcase
+class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductDataMapper

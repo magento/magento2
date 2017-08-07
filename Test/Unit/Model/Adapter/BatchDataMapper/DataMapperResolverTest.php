@@ -10,7 +10,7 @@ use Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Elasticsearch\Model\Adapter\BatchDataMapper\DataMapperResolver;
 
-class DataMapperResolverTest extends \PHPUnit\Framework\Testcase
+class DataMapperResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DataMapperResolver
