@@ -5,7 +5,7 @@
  */
 namespace Magento\Analytics\ReportXml;
 
-use Magento\Analytics\ReportXml\Config\Data;
+use Magento\Framework\Config\DataInterface;
 
 /**
  * Class Config
@@ -15,17 +15,17 @@ use Magento\Analytics\ReportXml\Config\Data;
 class Config implements ConfigInterface
 {
     /**
-     * @var Data
+     * @var DataInterface
      */
     private $data;
 
     /**
      * Config constructor.
      *
-     * @param Data $data
+     * @param DataInterface $data
      */
     public function __construct(
-        Data $data
+        DataInterface $data
     ) {
         $this->data = $data;
     }

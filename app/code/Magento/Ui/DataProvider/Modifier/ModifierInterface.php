@@ -6,7 +6,7 @@
 namespace Magento\Ui\DataProvider\Modifier;
 
 /**
- * Class ModifierInterface
+ * @api
  */
 interface ModifierInterface
 {

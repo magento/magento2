@@ -7,6 +7,7 @@ namespace Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset;
 
 /**
  * Form fieldset renderer
+ * @api
  */
 class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element implements
     \Magento\Framework\Data\Form\Element\Renderer\RendererInterface

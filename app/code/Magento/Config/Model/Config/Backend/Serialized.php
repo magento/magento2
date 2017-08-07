@@ -8,6 +8,9 @@ namespace Magento\Config\Model\Config\Backend;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * @api
+ */
 class Serialized extends \Magento\Framework\App\Config\Value
 {
     /**

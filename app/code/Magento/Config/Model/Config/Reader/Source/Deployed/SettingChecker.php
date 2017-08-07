@@ -14,6 +14,7 @@ use Magento\Framework\App\Config\ScopeCodeResolver;
 
 /**
  * Class for checking settings that defined in config file
+ * @api
  */
 class SettingChecker
 {

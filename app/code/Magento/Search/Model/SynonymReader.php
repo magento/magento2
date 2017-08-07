@@ -24,6 +24,7 @@ use Magento\Framework\Registry;
  * @method int getWebsiteId()
  * @method \Magento\Search\Model\SynonymReader setSynonyms(string $value)
  * @method string getSynonyms()
+ * @api
  */
 class SynonymReader extends AbstractModel
 {

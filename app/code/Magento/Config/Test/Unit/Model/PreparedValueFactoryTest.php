@@ -12,15 +12,18 @@ use Magento\Config\Model\Config\StructureFactory;
 use Magento\Framework\App\Config\Value;
 use Magento\Config\Model\Config\Structure;
 use Magento\Config\Model\Config\Structure\Element\Field;
+use Magento\Config\Model\Config\Structure\Element\Group;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 use Magento\Framework\App\ScopeResolver;
 use Magento\Framework\App\ScopeResolverPool;
+use Magento\Store\Model\ScopeTypeNormalizer;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
  * @inheritdoc
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -70,6 +73,11 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
     private $scopeMock;
 
     /**
+     * @var ScopeTypeNormalizer|Mock
+     */
+    private $scopeTypeNormalizer;
+
+    /**
      * @var PreparedValueFactory
      */
     private $preparedValueFactory;
@@ -95,7 +103,10 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->valueMock = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setPath', 'setScope', 'setScopeId', 'setValue'])
+            ->setMethods([
+                'setPath', 'setScope', 'setScopeId', 'setValue', 'setField',
+                'setGroupId', 'setFieldConfig', 'setScopeCode'
+            ])
             ->getMock();
         $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
@@ -107,12 +118,16 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->scopeMock = $this->getMockBuilder(ScopeInterface::class)
             ->getMockForAbstractClass();
+        $this->scopeTypeNormalizer = $this->getMockBuilder(ScopeTypeNormalizer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->preparedValueFactory = new PreparedValueFactory(
             $this->scopeResolverPoolMock,
             $this->structureFactoryMock,
             $this->valueFactoryMock,
-            $this->configMock
+            $this->configMock,
+            $this->scopeTypeNormalizer
         );
     }
 
@@ -133,6 +148,11 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
         $scopeCode,
         $scopeId
     ) {
+        $groupPath = 'some/group';
+        $groupId = 'some_group';
+        $fieldId = 'some_field';
+        $fieldData = ['backend_model' => 'some_model'];
+
         if (ScopeInterface::SCOPE_DEFAULT !== $scope) {
             $this->scopeResolverPoolMock->expects($this->once())
                 ->method('get')
@@ -146,19 +166,43 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
                 ->method('getId')
                 ->willReturn($scopeId);
         }
+        /** @var Group|Mock $groupMock */
+        $groupMock = $this->getMockBuilder(Group::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $groupMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($groupId);
 
+        $this->scopeTypeNormalizer->expects($this->once())
+            ->method('normalize')
+            ->with($scope, true)
+            ->willReturnArgument(0);
         $this->structureFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->structureMock);
         $this->structureMock->expects($this->once())
             ->method('getElementByConfigPath')
             ->willReturn($this->fieldMock);
+        $this->structureMock->expects($this->once())
+            ->method('getElement')
+            ->with($groupPath)
+            ->willReturn($groupMock);
         $this->fieldMock->expects($this->once())
             ->method('hasBackendModel')
             ->willReturn(true);
         $this->fieldMock
             ->method('getConfigPath')
             ->willReturn($configPath);
+        $this->fieldMock
+            ->method('getId')
+            ->willReturn($fieldId);
+        $this->fieldMock
+            ->method('getData')
+            ->willReturn($fieldData);
+        $this->fieldMock->expects($this->once())
+            ->method('getGroupPath')
+            ->willReturn($groupPath);
         $this->valueFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->valueMock);
@@ -175,8 +219,24 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ->with($scopeId)
             ->willReturnSelf();
         $this->valueMock->expects($this->once())
+            ->method('setScopeCode')
+            ->with($scopeCode)
+            ->willReturnSelf();
+        $this->valueMock->expects($this->once())
             ->method('setValue')
             ->with($value)
+            ->willReturnSelf();
+        $this->valueMock->expects($this->once())
+            ->method('setField')
+            ->with($fieldId)
+            ->willReturnSelf();
+        $this->valueMock->expects($this->once())
+            ->method('setGroupId')
+            ->with($groupId)
+            ->willReturnSelf();
+        $this->valueMock->expects($this->once())
+            ->method('setFieldConfig')
+            ->with($fieldData)
             ->willReturnSelf();
 
         $this->assertInstanceOf(

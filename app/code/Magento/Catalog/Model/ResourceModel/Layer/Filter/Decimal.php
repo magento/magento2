@@ -5,8 +5,6 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Layer\Filter;
 
-use Magento\Framework\App\ObjectManager;
-
 /**
  * Catalog Layer Decimal attribute Filter Resource Model
  *
@@ -16,27 +14,6 @@ use Magento\Framework\App\ObjectManager;
  */
 class Decimal extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
-    /**
-     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
-     */
-    private $frontendResource;
-
-    /**
-     * Attribute constructor.
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param null $connectionName
-     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $frontendResource
-     */
-    public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        $connectionName = null,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $frontendResource = null
-    ) {
-        $this->frontendResource = $frontendResource ?: ObjectManager::getInstance()
-            ->get(\Magento\Catalog\Model\ResourceModel\Product\Indexer\EavDecimal\FrontendResource::class);
-        parent::__construct($context, $connectionName);
-    }
-
     /**
      * Initialize connection and define main table name
      *
@@ -165,13 +142,5 @@ class Decimal extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $select->group($rangeExpr);
 
         return $connection->fetchPairs($select);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getMainTable()
-    {
-        return $this->frontendResource->getMainTable();
     }
 }

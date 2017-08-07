@@ -10,6 +10,9 @@ use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @api
+ */
 class IndexStructureFactory
 {
     /**

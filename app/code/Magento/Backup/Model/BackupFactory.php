@@ -11,6 +11,9 @@
  */
 namespace Magento\Backup\Model;
 
+/**
+ * @api
+ */
 class BackupFactory
 {
     /**

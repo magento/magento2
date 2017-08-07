@@ -113,6 +113,16 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     protected $backend;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $reindexRuleProductPrice;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $reindexRuleGroupWebsite;
+
+    /**
      * Set up test
      *
      * @return void
@@ -166,34 +176,26 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         $this->eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, ['getAttribute'], [], '', false);
         $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
         $this->productFactory = $this->getMock(\Magento\Catalog\Model\ProductFactory::class, ['create'], [], '', false);
-
         $this->connection->expects($this->any())->method('select')->will($this->returnValue($this->select));
         $this->connection->expects($this->any())->method('query')->will($this->returnValue($this->db));
-
         $this->select->expects($this->any())->method('distinct')->will($this->returnSelf());
         $this->select->expects($this->any())->method('where')->will($this->returnSelf());
         $this->select->expects($this->any())->method('from')->will($this->returnSelf());
         $this->select->expects($this->any())->method('order')->will($this->returnSelf());
-
         $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($this->connection));
         $this->resource->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
-
         $this->storeManager->expects($this->any())->method('getWebsites')->will($this->returnValue([$this->website]));
         $this->storeManager->expects($this->any())->method('getWebsite')->will($this->returnValue($this->website));
-
         $this->rules->expects($this->any())->method('getId')->will($this->returnValue(1));
         $this->rules->expects($this->any())->method('getWebsiteIds')->will($this->returnValue([1]));
         $this->rules->expects($this->any())->method('getCustomerGroupIds')->will($this->returnValue([1]));
-
         $this->ruleCollectionFactory->expects($this->any())->method('create')->will($this->returnSelf());
         $this->ruleCollectionFactory->expects($this->any())->method('addFieldToFilter')->will(
             $this->returnValue([$this->rules])
         );
-
         $this->product->expects($this->any())->method('load')->will($this->returnSelf());
         $this->product->expects($this->any())->method('getId')->will($this->returnValue(1));
         $this->product->expects($this->any())->method('getWebsiteIds')->will($this->returnValue([1]));
-
         $this->rules->expects($this->any())->method('validate')->with($this->product)->willReturn(true);
         $this->attribute->expects($this->any())->method('getBackend')->will($this->returnValue($this->backend));
         $this->productFactory->expects($this->any())->method('create')->will($this->returnValue($this->product));
@@ -209,9 +211,18 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             $this->dateTime,
             $this->productFactory
         );
-
+        $this->reindexRuleProductPrice =
+            $this->getMockBuilder(\Magento\CatalogRule\Model\Indexer\ReindexRuleProductPrice::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->reindexRuleGroupWebsite =
+            $this->getMockBuilder(\Magento\CatalogRule\Model\Indexer\ReindexRuleGroupWebsite::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->setProperties($this->indexBuilder, [
-            'metadataPool' => $this->metadataPool
+            'metadataPool' => $this->metadataPool,
+            'reindexRuleProductPrice' => $this->reindexRuleProductPrice,
+            'reindexRuleGroupWebsite' => $this->reindexRuleGroupWebsite
         ]);
     }
 
@@ -253,12 +264,9 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         $priceAttrMock->expects($this->any())
             ->method('getBackend')
             ->will($this->returnValue($backendModelMock));
-        $this->eavConfig->expects($this->at(0))
-            ->method('getAttribute')
-            ->with(\Magento\Catalog\Model\Product::ENTITY, 'price')
-            ->will($this->returnValue($this->attribute));
 
-        $this->select->expects($this->once())->method('insertFromSelect')->with('catalogrule_group_website');
+        $this->reindexRuleProductPrice->expects($this->once())->method('execute')->willReturn(true);
+        $this->reindexRuleGroupWebsite->expects($this->once())->method('execute')->willReturn(true);
 
         $this->indexBuilder->reindexByIds([1]);
     }

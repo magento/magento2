@@ -10,6 +10,7 @@ use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Class is used to work with placeholders for environment variables names based on config paths
+ * @api
  */
 class Environment implements PlaceholderInterface
 {

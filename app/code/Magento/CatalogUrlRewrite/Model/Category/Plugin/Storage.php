@@ -33,15 +33,15 @@ class Storage
 
     /**
      * @param \Magento\UrlRewrite\Model\StorageInterface $object
-     * @param null $result
+     * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $result
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urls
-     * @return void
+     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterReplace(StorageInterface $object, $result, array $urls)
+    public function afterReplace(StorageInterface $object, array $result, array $urls)
     {
         $toSave = [];
-        foreach ($this->filterUrls($urls) as $record) {
+        foreach ($this->filterUrls($result) as $record) {
             $metadata = $record->getMetadata();
             $toSave[] = [
                 'url_rewrite_id' => $record->getUrlRewriteId(),
@@ -52,6 +52,7 @@ class Storage
         if ($toSave) {
             $this->productResource->saveMultiple($toSave);
         }
+        return $result;
     }
 
     /**

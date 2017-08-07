@@ -17,7 +17,7 @@ define([
             url: url,
             cache: true,
             dataType: 'html',
-            showLoader: true,
+            showLoader: false,
             loaderContext: $('.product.data.items')
         }).done(function (data) {
             $('#product-review-container').html(data);

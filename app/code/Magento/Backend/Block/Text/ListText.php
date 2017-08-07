@@ -11,6 +11,9 @@
  */
 namespace Magento\Backend\Block\Text;
 
+/**
+ * @api
+ */
 class ListText extends \Magento\Framework\View\Element\Text\ListText
 {
 }

@@ -1,0 +1,57 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div if="hasData()"
+     class="block" css="additionalClasses">
+    <div class="block-title">
+        <strong role="heading"
+                aria-level="2"
+                text="label"/>
+    </div>
+    <div class="block-content">
+        <div css="'products-' + displayMode">
+            <ol class="product-items">
+                <li class="product-item" repeat="foreach: filteredRows, item: '$row'">
+                    <div class="product-item-info">
+                        <fastForEach args="data: getRegion('general-area'), as: '$col'" >
+                            <render args="$col.getBody()"/>
+                        </fastForEach>
+
+                        <div class="product-item-details">
+                            <fastForEach args="data: getRegion('details-area'), as: '$col'" >
+                                <render args="$col.getBody()"/>
+                            </fastForEach>
+
+                            <div if="getRegion('action-primary-area')().length || getRegion('action-secondary-area')().length"
+                                 class="product-item-actions">
+                                <div class="actions-primary" if="getRegion('action-primary-area')().length">
+                                    <fastForEach args="data: getRegion('action-primary-area'), as: '$col'" >
+                                        <render args="$col.getBody()"/>
+                                    </fastForEach>
+                                </div>
+
+                                <div if="getRegion('action-secondary-area')().length"
+                                     class="actions-secondary"
+                                     data-role="add-to-links">
+                                    <fastForEach args="data: getRegion('action-secondary-area'), as: '$col'" >
+                                        <render args="$col.getBody()"/>
+                                    </fastForEach>
+                                </div>
+                            </div>
+
+                            <div if="getRegion('description-area')().length"
+                                 class="product-item-description">
+                                <fastForEach args="data: getRegion('description-area'), as: '$col'" >
+                                    <render args="$col.getBody()"/>
+                                </fastForEach>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>

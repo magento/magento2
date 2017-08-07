@@ -29,7 +29,7 @@ if ($minProduct) {
 <div class="price-box" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
     <?php if ($minProduct && \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW != $block->getZone()): ?>
     <p class="minimal-price">
-        <span class="price-label"><?php /* @escapeNotVerified */ echo __('Starting at')?></span><?php echo $amountRender->toHtml();?>
+        <span class="price-label"><?= /* @escapeNotVerified */ __('Starting at') ?></span><?= $amountRender->toHtml() ?>
     </p>
     <?php endif ?>
 </div>

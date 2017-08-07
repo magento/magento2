@@ -497,7 +497,7 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
 
     public function testSaveData()
     {
-        $this->_entityModel->expects($this->any())->method('getNewSku')->will($this->returnValue([
+        $newSkus = array_change_key_case([
             'configurableskuI22' =>
                 [$this->productEntityLinkField => 1, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
             'testconf2-attr2val1-testattr3v1' =>
@@ -518,7 +518,10 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 [$this->productEntityLinkField => 8, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
             'configurableskuI22BadPrice' =>
                 [$this->productEntityLinkField => 9, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-        ]));
+        ]);
+        $this->_entityModel->expects($this->any())
+            ->method('getNewSku')
+            ->will($this->returnValue($newSkus));
 
         // at(0) is select() call, quoteIdentifier() is invoked at(1) and at(2)
         $this->_connection->expects($this->at(1))->method('quoteIdentifier')->with('m.attribute_id')->willReturn('a');
@@ -559,7 +562,7 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                         ->will($this->returnCallback([$this, 'isRowAllowedToImport']));
 
         $this->_entityModel->expects($this->any())->method('getOldSku')->will($this->returnValue([
-            'testSimpleOld' => [
+            'testsimpleold' => [
                 $this->productEntityLinkField => 10,
                 'type_id' => 'simple',
                 'attr_set_code' => 'Default'

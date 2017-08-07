@@ -10,7 +10,7 @@ use Magento\Store\Model\Website;
 /**
  * EAV additional attribute resource collection (Using Forms)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
 {

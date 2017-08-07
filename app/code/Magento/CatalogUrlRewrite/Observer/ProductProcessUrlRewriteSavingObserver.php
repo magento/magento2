@@ -16,12 +16,12 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
     /**
      * @var ProductUrlRewriteGenerator
      */
-    protected $productUrlRewriteGenerator;
+    private $productUrlRewriteGenerator;
 
     /**
      * @var UrlPersistInterface
      */
-    protected $urlPersist;
+    private $urlPersist;
 
     /**
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
