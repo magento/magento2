@@ -9,73 +9,61 @@ namespace Magento\Sales\Model\Service;
 /**
  * Class CreditmemoService
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterface
 {
     /**
      * @var \Magento\Sales\Api\CreditmemoRepositoryInterface
-     * @since 2.0.0
      */
     protected $creditmemoRepository;
 
     /**
      * @var \Magento\Sales\Api\CreditmemoCommentRepositoryInterface
-     * @since 2.0.0
      */
     protected $commentRepository;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
-     * @since 2.0.0
      */
     protected $filterBuilder;
 
     /**
      * @var \Magento\Sales\Model\Order\CreditmemoNotifier
-     * @since 2.0.0
      */
     protected $creditmemoNotifier;
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.2.0
      */
     private $resource;
 
     /**
      * @var \Magento\Sales\Model\Order\RefundAdapterInterface
-     * @since 2.2.0
      */
     private $refundAdapter;
 
     /**
      * @var \Magento\Sales\Api\OrderRepositoryInterface
-     * @since 2.2.0
      */
     private $orderRepository;
 
     /**
      * @var \Magento\Sales\Api\InvoiceRepositoryInterface
-     * @since 2.2.0
      */
     private $invoiceRepository;
 
@@ -87,7 +75,6 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
      * @param \Magento\Sales\Model\Order\CreditmemoNotifier $creditmemoNotifier
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Api\CreditmemoRepositoryInterface $creditmemoRepository,
@@ -113,7 +100,6 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
      * @param int $id Credit Memo Id
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function cancel($id)
     {
@@ -137,7 +123,6 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
      *
      * @param int $id
      * @return \Magento\Sales\Api\Data\CreditmemoCommentSearchResultInterface
-     * @since 2.0.0
      */
     public function getCommentsList($id)
     {
@@ -153,7 +138,6 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
      *
      * @param int $id
      * @return bool
-     * @since 2.0.0
      */
     public function notify($id)
     {
@@ -168,7 +152,6 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
      * @param bool $offlineRequested
      * @return \Magento\Sales\Api\Data\CreditmemoInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function refund(
         \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo,
@@ -209,7 +192,6 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
      * @param \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function validateForRefund(\Magento\Sales\Api\Data\CreditmemoInterface $creditmemo)
     {
@@ -239,8 +221,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     /**
      * @return \Magento\Sales\Model\Order\RefundAdapterInterface
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.1.3
      */
     private function getRefundAdapter()
     {
@@ -254,8 +235,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     /**
      * @return \Magento\Framework\App\ResourceConnection|mixed
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.1.3
      */
     private function getResource()
     {
@@ -269,8 +249,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     /**
      * @return \Magento\Sales\Api\OrderRepositoryInterface
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.1.3
      */
     private function getOrderRepository()
     {
@@ -284,8 +263,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     /**
      * @return \Magento\Sales\Api\InvoiceRepositoryInterface
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.1.3
      */
     private function getInvoiceRepository()
     {

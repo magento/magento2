@@ -17,25 +17,21 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 /**
  * Class \Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator
  *
- * @since 2.1.0
  */
 class AnchorUrlRewriteGenerator
 {
     /**
      * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
-     * @since 2.1.0
      */
     protected $urlPathGenerator;
 
     /**
      * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory
-     * @since 2.1.0
      */
     protected $urlRewriteFactory;
 
     /**
      * @var \Magento\Catalog\Api\CategoryRepositoryInterface
-     * @since 2.1.0
      */
     private $categoryRepository;
 
@@ -43,7 +39,6 @@ class AnchorUrlRewriteGenerator
      * @param ProductUrlPathGenerator $urlPathGenerator
      * @param UrlRewriteFactory $urlRewriteFactory
      * @param CategoryRepositoryInterface $categoryRepository
-     * @since 2.1.0
      */
     public function __construct(
         ProductUrlPathGenerator $urlPathGenerator,
@@ -62,7 +57,6 @@ class AnchorUrlRewriteGenerator
      * @param Product $product
      * @param ObjectRegistry $productCategories
      * @return UrlRewrite[]
-     * @since 2.1.0
      */
     public function generate($storeId, Product $product, ObjectRegistry $productCategories)
     {

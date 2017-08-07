@@ -14,19 +14,16 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class \Magento\Framework\App\Config\MetadataConfigTypeProcessor
  *
- * @since 2.2.0
  */
 class MetadataConfigTypeProcessor implements PostProcessorInterface
 {
     /**
      * @var ProcessorFactory
-     * @since 2.2.0
      */
     protected $_processorFactory;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     protected $_metadata = [];
 
@@ -34,7 +31,6 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
      * Source of configurations
      *
      * @var ConfigSourceInterface
-     * @since 2.2.0
      */
     private $configSource;
 
@@ -42,7 +38,6 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
      * The resolver for configuration paths
      *
      * @var ConfigPathResolver
-     * @since 2.2.0
      */
     private $configPathResolver;
 
@@ -51,7 +46,6 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
      * @param Initial $initialConfig
      * @param ConfigSourceInterface $configSource Source of configurations
      * @param ConfigPathResolver $configPathResolver The resolver for configuration paths
-     * @since 2.2.0
      */
     public function __construct(
         ProcessorFactory $processorFactory,
@@ -73,7 +67,6 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
      * @param array $data
      * @param string $path
      * @return string|null
-     * @since 2.2.0
      */
     protected function _getValue(array $data, $path)
     {
@@ -95,7 +88,6 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
      * @param string $path
      * @param string $value
      * @return void
-     * @since 2.2.0
      */
     protected function _setValue(array &$container, $path, $value)
     {
@@ -119,7 +111,6 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
      * @param string $scope The configuration scope
      * @param string|null $scopeCode The configuration scope code
      * @return array An array of processed configuration
-     * @since 2.2.0
      */
     private function processScopeData(
         array $data,
@@ -145,7 +136,6 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
      *
      * @param array $rawData An array of configuration
      * @return array
-     * @since 2.2.0
      */
     public function process(array $rawData)
     {

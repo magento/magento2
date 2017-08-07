@@ -22,19 +22,16 @@ use Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface;
  *
  * @method bool getUseLinkForAsLowAs()
  * @method bool getDisplayMinimalPrice()
- * @since 2.0.0
  */
 class FinalPriceBox extends BasePriceBox
 {
     /**
      * @var SalableResolverInterface
-     * @since 2.2.0
      */
     private $salableResolver;
 
     /**
      * @var MinimalPriceCalculatorInterface
-     * @since 2.2.0
      */
     private $minimalPriceCalculator;
 
@@ -46,7 +43,6 @@ class FinalPriceBox extends BasePriceBox
      * @param array $data
      * @param SalableResolverInterface $salableResolver
      * @param MinimalPriceCalculatorInterface $minimalPriceCalculator
-     * @since 2.2.0
      */
     public function __construct(
         Context $context,
@@ -65,7 +61,6 @@ class FinalPriceBox extends BasePriceBox
 
     /**
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -95,7 +90,6 @@ class FinalPriceBox extends BasePriceBox
      * Check is MSRP applicable for the current product.
      *
      * @return bool
-     * @since 2.2.0
      */
     protected function isMsrpPriceApplicable()
     {
@@ -116,7 +110,6 @@ class FinalPriceBox extends BasePriceBox
      *
      * @param string $html
      * @return string
-     * @since 2.0.0
      */
     protected function wrapResult($html)
     {
@@ -130,7 +123,6 @@ class FinalPriceBox extends BasePriceBox
      * Render minimal amount
      *
      * @return string
-     * @since 2.0.0
      */
     public function renderAmountMinimal()
     {
@@ -156,7 +148,6 @@ class FinalPriceBox extends BasePriceBox
      * Define if the special price should be shown
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasSpecialPrice()
     {
@@ -169,7 +160,6 @@ class FinalPriceBox extends BasePriceBox
      * Define if the minimal price should be shown
      *
      * @return bool
-     * @since 2.0.0
      */
     public function showMinimalPrice()
     {
@@ -188,7 +178,6 @@ class FinalPriceBox extends BasePriceBox
      * Get Key for caching block content
      *
      * @return string
-     * @since 2.2.0
      */
     public function getCacheKey()
     {
@@ -199,7 +188,6 @@ class FinalPriceBox extends BasePriceBox
      * {@inheritdoc}
      *
      * @return array
-     * @since 2.2.0
      */
     public function getCacheKeyInfo()
     {
@@ -214,7 +202,6 @@ class FinalPriceBox extends BasePriceBox
      * By default (if flag is not set) is false
      *
      * @return bool
-     * @since 2.2.0
      */
     public function isProductList()
     {

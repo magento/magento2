@@ -12,32 +12,27 @@ use Magento\Framework\View\Asset\Source;
  * Class CcConfigProvider
  *
  * @api
- * @since 2.0.0
  */
 class CcConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var array
-     * @since 2.1.0
      */
     private $icons = [];
 
     /**
      * @var CcConfig
-     * @since 2.0.0
      */
     protected $ccConfig;
 
     /**
      * @var \Magento\Framework\View\Asset\Source
-     * @since 2.0.0
      */
     protected $assetSource;
 
     /**
      * @param CcConfig $ccConfig
      * @param Source $assetSource
-     * @since 2.0.0
      */
     public function __construct(
         CcConfig $ccConfig,
@@ -49,7 +44,6 @@ class CcConfigProvider implements ConfigProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -66,7 +60,6 @@ class CcConfigProvider implements ConfigProviderInterface
      * Get icons for available payment methods
      *
      * @return array
-     * @since 2.0.0
      */
     public function getIcons()
     {

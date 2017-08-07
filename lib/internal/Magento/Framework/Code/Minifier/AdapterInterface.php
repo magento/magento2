@@ -12,7 +12,6 @@ namespace Magento\Framework\Code\Minifier;
 /**
  * Interface \Magento\Framework\Code\Minifier\AdapterInterface
  *
- * @since 2.0.0
  */
 interface AdapterInterface
 {
@@ -21,7 +20,6 @@ interface AdapterInterface
      *
      * @param string $content
      * @return string
-     * @since 2.0.0
      */
     public function minify($content);
 }

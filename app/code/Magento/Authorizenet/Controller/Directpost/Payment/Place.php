@@ -23,31 +23,26 @@ use Psr\Log\LoggerInterface;
  * Class Place
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Place extends Payment
 {
     /**
      * @var \Magento\Quote\Api\CartManagementInterface
-     * @since 2.0.0
      */
     protected $cartManagement;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @var \Magento\Checkout\Model\Type\Onepage
-     * @since 2.0.0
      */
     protected $onepageCheckout;
 
     /**
      * @var \Magento\Framework\Json\Helper\Data
-     * @since 2.0.0
      */
     protected $jsonHelper;
 
@@ -55,7 +50,6 @@ class Place extends Payment
      * Logger for exception details
      *
      * @var LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
@@ -67,7 +61,6 @@ class Place extends Payment
      * @param Onepage $onepageCheckout
      * @param JsonHelper $jsonHelper
      * @param LoggerInterface|null $logger
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -90,7 +83,6 @@ class Place extends Payment
      * Send request to authorize.net
      *
      * @return string
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -131,7 +123,6 @@ class Place extends Payment
      * Place order for checkout flow
      *
      * @return string
-     * @since 2.0.0
      */
     protected function placeCheckoutOrder()
     {

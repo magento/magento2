@@ -12,7 +12,6 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableT
 
 /**
  * Data provider for price in the Configurable products
- * @since 2.1.0
  */
 class ConfigurablePrice extends AbstractModifier
 {
@@ -20,19 +19,16 @@ class ConfigurablePrice extends AbstractModifier
 
     /**
      * @var string
-     * @since 2.1.0
      */
     private static $advancedPricingButton = 'advanced_pricing_button';
 
     /**
      * @var LocatorInterface
-     * @since 2.1.0
      */
     private $locator;
 
     /**
      * @param LocatorInterface $locator
-     * @since 2.1.0
      */
     public function __construct(
         LocatorInterface $locator
@@ -42,7 +38,6 @@ class ConfigurablePrice extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -51,7 +46,6 @@ class ConfigurablePrice extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {

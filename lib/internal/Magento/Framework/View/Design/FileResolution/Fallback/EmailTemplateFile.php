@@ -10,13 +10,11 @@ use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Model that finds file paths by their fileId
- * @since 2.0.0
  */
 class EmailTemplateFile
 {
     /**
      * @var \Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple
-     * @since 2.0.0
      */
     protected $resolver;
 
@@ -24,7 +22,6 @@ class EmailTemplateFile
      * Constructor
      *
      * @param \Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple $resolver
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple $resolver
@@ -41,7 +38,6 @@ class EmailTemplateFile
      * @param string $file
      * @param string|null $module
      * @return bool|string
-     * @since 2.0.0
      */
     public function getFile($area, ThemeInterface $themeModel, $locale, $file, $module = null)
     {
@@ -52,7 +48,6 @@ class EmailTemplateFile
      * Get fallback type
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getFallbackType()
     {

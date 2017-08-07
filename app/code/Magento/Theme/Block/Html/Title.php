@@ -15,7 +15,6 @@ use Magento\Framework\View\Element\Template;
  * @method string getTitleId()
  * @method string getTitleClass()
  * @api
- * @since 2.0.0
  */
 class Title extends Template
 {
@@ -23,7 +22,6 @@ class Title extends Template
      * Own page title to display on the page
      *
      * @var string
-     * @since 2.0.0
      */
     protected $pageTitle;
 
@@ -31,7 +29,6 @@ class Title extends Template
      * Provide own page title or pick it from Head Block
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPageTitle()
     {
@@ -45,7 +42,6 @@ class Title extends Template
      * Provide own page content heading
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPageHeading()
     {
@@ -60,7 +56,6 @@ class Title extends Template
      *
      * @param string $pageTitle
      * @return void
-     * @since 2.0.0
      */
     public function setPageTitle($pageTitle)
     {

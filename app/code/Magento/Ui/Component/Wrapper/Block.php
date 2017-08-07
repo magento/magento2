@@ -11,8 +11,7 @@ use Magento\Ui\Component\AbstractComponent;
 use Magento\Framework\View\Element\UiComponent\BlockWrapperInterface;
 
 /**
- * @deprecated 2.2.0
- * @since 2.0.0
+ * @deprecated 100.2.0
  */
 class Block extends AbstractComponent implements BlockWrapperInterface
 {
@@ -20,7 +19,6 @@ class Block extends AbstractComponent implements BlockWrapperInterface
 
     /**
      * @var BlockInterface
-     * @since 2.0.0
      */
     protected $block;
 
@@ -31,7 +29,6 @@ class Block extends AbstractComponent implements BlockWrapperInterface
      * @param BlockInterface $block
      * @param array $components
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -47,7 +44,6 @@ class Block extends AbstractComponent implements BlockWrapperInterface
      * Get wrapped block
      *
      * @return BlockInterface
-     * @since 2.0.0
      */
     public function getBlock()
     {
@@ -58,7 +54,6 @@ class Block extends AbstractComponent implements BlockWrapperInterface
      * Get component name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getComponentName()
     {
@@ -67,7 +62,6 @@ class Block extends AbstractComponent implements BlockWrapperInterface
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function render()
     {
@@ -76,7 +70,6 @@ class Block extends AbstractComponent implements BlockWrapperInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getConfiguration()
     {

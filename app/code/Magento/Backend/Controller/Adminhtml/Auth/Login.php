@@ -8,13 +8,11 @@ namespace Magento\Backend\Controller\Adminhtml\Auth;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Login extends \Magento\Backend\Controller\Adminhtml\Auth
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -23,7 +21,6 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth
      *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -37,7 +34,6 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth
      * Administrator login action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -63,7 +59,6 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth
      *
      * @param string $path
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     private function getRedirect($path)
     {

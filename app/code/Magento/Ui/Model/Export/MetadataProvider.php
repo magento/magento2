@@ -16,43 +16,36 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class MetadataProvider
 {
     /**
      * @var Filter
-     * @since 2.0.0
      */
     protected $filter;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $columns;
 
     /**
      * @var TimezoneInterface
-     * @since 2.0.0
      */
     protected $localeDate;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $locale;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $dateFormat;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $data;
 
@@ -62,7 +55,6 @@ class MetadataProvider
      * @param ResolverInterface $localeResolver
      * @param string $dateFormat
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Filter $filter,
@@ -84,7 +76,6 @@ class MetadataProvider
      * @param UiComponentInterface $component
      * @return UiComponentInterface
      * @throws \Exception
-     * @since 2.0.0
      */
     protected function getColumnsComponent(UiComponentInterface $component)
     {
@@ -101,7 +92,6 @@ class MetadataProvider
      *
      * @param UiComponentInterface $component
      * @return UiComponentInterface[]
-     * @since 2.0.0
      */
     protected function getColumns(UiComponentInterface $component)
     {
@@ -121,7 +111,6 @@ class MetadataProvider
      *
      * @param UiComponentInterface $component
      * @return string[]
-     * @since 2.0.0
      */
     public function getHeaders(UiComponentInterface $component)
     {
@@ -137,7 +126,6 @@ class MetadataProvider
      *
      * @param UiComponentInterface $component
      * @return array
-     * @since 2.0.0
      */
     public function getFields(UiComponentInterface $component)
     {
@@ -155,7 +143,6 @@ class MetadataProvider
      * @param array $fields
      * @param array $options
      * @return array
-     * @since 2.0.0
      */
     public function getRowData(DocumentInterface $document, $fields, $options)
     {
@@ -182,7 +169,6 @@ class MetadataProvider
      * @param string $label
      * @param array $output
      * @return void
-     * @since 2.0.0
      */
     protected function getComplexLabel($list, $label, &$output)
     {
@@ -200,7 +186,6 @@ class MetadataProvider
      *
      * @param Select $filter
      * @return array
-     * @since 2.0.0
      */
     protected function getFilterOptions(Select $filter)
     {
@@ -223,7 +208,6 @@ class MetadataProvider
      * Returns Filters with options
      *
      * @return array
-     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -249,7 +233,6 @@ class MetadataProvider
      * @param \Magento\Framework\Api\Search\DocumentInterface $document
      * @param string $componentName
      * @return void
-     * @since 2.0.0
      */
     public function convertDate($document, $componentName)
     {

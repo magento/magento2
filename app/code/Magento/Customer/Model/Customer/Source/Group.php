@@ -14,25 +14,21 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 /**
  * Class \Magento\Customer\Model\Customer\Source\Group
  *
- * @since 2.1.0
  */
 class Group implements GroupSourceInterface
 {
     /**
      * @var ModuleManager
-     * @since 2.1.0
      */
     protected $moduleManager;
 
     /**
      * @var GroupRepositoryInterface
-     * @since 2.1.0
      */
     protected $groupRepository;
 
     /**
      * @var SearchCriteriaBuilder
-     * @since 2.1.0
      */
     protected $searchCriteriaBuilder;
 
@@ -40,7 +36,6 @@ class Group implements GroupSourceInterface
      * @param ModuleManager $moduleManager
      * @param GroupRepositoryInterface $groupRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @since 2.1.0
      */
     public function __construct(
         ModuleManager $moduleManager,
@@ -56,7 +51,6 @@ class Group implements GroupSourceInterface
      * Return array of customer groups
      *
      * @return array
-     * @since 2.1.0
      */
     public function toOptionArray()
     {

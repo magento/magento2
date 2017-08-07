@@ -8,7 +8,6 @@ namespace Magento\Indexer\Controller\Adminhtml;
 /**
  * Class \Magento\Indexer\Controller\Adminhtml\Indexer
  *
- * @since 2.0.0
  */
 abstract class Indexer extends \Magento\Backend\App\Action
 {
@@ -16,7 +15,6 @@ abstract class Indexer extends \Magento\Backend\App\Action
      * Check ACL permissions
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _isAllowed()
     {

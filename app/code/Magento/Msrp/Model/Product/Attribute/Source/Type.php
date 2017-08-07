@@ -7,7 +7,6 @@ namespace Magento\Msrp\Model\Product\Attribute\Source;
 
 /**
  * Catalog product Msrp "Display Actual Price" attribute source
- * @since 2.0.0
  */
 class Type extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
@@ -30,7 +29,6 @@ class Type extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Get all options
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllOptions()
     {

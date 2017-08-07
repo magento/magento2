@@ -10,7 +10,6 @@ use Magento\Sales\Model\Order;
 
 /**
  * Class InvoiceService
- * @since 2.0.0
  */
 class InvoiceService implements InvoiceManagementInterface
 {
@@ -18,7 +17,6 @@ class InvoiceService implements InvoiceManagementInterface
      * Repository
      *
      * @var \Magento\Sales\Api\InvoiceRepositoryInterface
-     * @since 2.0.0
      */
     protected $repository;
 
@@ -26,7 +24,6 @@ class InvoiceService implements InvoiceManagementInterface
      * Repository
      *
      * @var \Magento\Sales\Api\InvoiceCommentRepositoryInterface
-     * @since 2.0.0
      */
     protected $commentRepository;
 
@@ -34,7 +31,6 @@ class InvoiceService implements InvoiceManagementInterface
      * Search Criteria Builder
      *
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     * @since 2.0.0
      */
     protected $criteriaBuilder;
 
@@ -42,7 +38,6 @@ class InvoiceService implements InvoiceManagementInterface
      * Filter Builder
      *
      * @var \Magento\Framework\Api\FilterBuilder
-     * @since 2.0.0
      */
     protected $filterBuilder;
 
@@ -50,19 +45,16 @@ class InvoiceService implements InvoiceManagementInterface
      * Invoice Notifier
      *
      * @var \Magento\Sales\Model\Order\InvoiceNotifier
-     * @since 2.0.0
      */
     protected $invoiceNotifier;
 
     /**
      * @var \Magento\Sales\Api\OrderRepositoryInterface
-     * @since 2.0.0
      */
     protected $orderRepository;
 
     /**
      * @var \Magento\Sales\Model\Convert\Order
-     * @since 2.0.0
      */
     protected $orderConverter;
 
@@ -76,7 +68,6 @@ class InvoiceService implements InvoiceManagementInterface
      * @param \Magento\Sales\Model\Order\InvoiceNotifier $notifier
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Sales\Model\Convert\Order $orderConverter
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Api\InvoiceRepositoryInterface $repository,
@@ -98,7 +89,6 @@ class InvoiceService implements InvoiceManagementInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function setCapture($id)
     {
@@ -107,7 +97,6 @@ class InvoiceService implements InvoiceManagementInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function getCommentsList($id)
     {
@@ -120,7 +109,6 @@ class InvoiceService implements InvoiceManagementInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function notify($id)
     {
@@ -130,7 +118,6 @@ class InvoiceService implements InvoiceManagementInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function setVoid($id)
     {
@@ -142,7 +129,6 @@ class InvoiceService implements InvoiceManagementInterface
      * @param array $qtys
      * @return \Magento\Sales\Model\Order\Invoice
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function prepareInvoice(Order $order, array $qtys = [])
     {
@@ -179,7 +165,6 @@ class InvoiceService implements InvoiceManagementInterface
      * @param Order $order
      * @param array $qtys
      * @return array
-     * @since 2.2.0
      */
     private function prepareItemsQty(Order $order, array $qtys = [])
     {
@@ -213,7 +198,6 @@ class InvoiceService implements InvoiceManagementInterface
      * @param \Magento\Sales\Api\Data\OrderItemInterface $item
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _canInvoiceItem(\Magento\Sales\Api\Data\OrderItemInterface $item)
     {
@@ -255,7 +239,6 @@ class InvoiceService implements InvoiceManagementInterface
      * @param float $qty
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function setInvoiceItemQuantity(\Magento\Sales\Api\Data\InvoiceItemInterface $item, $qty)
     {

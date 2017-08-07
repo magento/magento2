@@ -13,7 +13,6 @@ use Magento\Framework\App\ResourceConnection;
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -31,13 +30,11 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * Resource instance
      *
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.0.0
      */
     protected $_resource;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_columns;
 
@@ -45,7 +42,6 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * List of indexes uses in flat product table
      *
      * @var null|array
-     * @since 2.0.0
      */
     protected $_indexes;
 
@@ -53,7 +49,6 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve catalog product flat columns array in old format (used before MMDB support)
      *
      * @return array
-     * @since 2.0.0
      */
     protected $_attributes;
 
@@ -61,7 +56,6 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * Required system attributes for preload
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_systemAttributes = ['status', 'required_options', 'tax_class_id', 'weight'];
 
@@ -69,37 +63,31 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * EAV Config instance
      *
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $_eavConfig;
 
     /**
      * @var \Magento\Catalog\Model\Attribute\Config
-     * @since 2.0.0
      */
     protected $_attributeConfig;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_attributeCodes;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_entityTypeId;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Config
-     * @since 2.0.0
      */
     protected $_catalogConfig;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_flatAttributeGroups = [];
 
@@ -107,37 +95,31 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * Config factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\ConfigFactory
-     * @since 2.0.0
      */
     protected $_configFactory;
 
     /**
      * @var \Magento\Eav\Model\Entity\AttributeFactory
-     * @since 2.0.0
      */
     protected $_attributeFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_addFilterableAttrs;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_addChildData;
 
     /**
      * @var \Magento\Framework\Mview\View\Changelog
-     * @since 2.0.0
      */
     protected $_changelog;
 
@@ -154,7 +136,6 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * @param bool $addChildData
      * @param array $flatAttributeGroups
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -186,7 +167,6 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve catalog product flat columns array in DDL format
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFlatColumnsDdlDefinition()
     {
@@ -242,7 +222,6 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * Check whether filterable attributes should be added
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isAddFilterableAttributes()
     {
@@ -253,7 +232,6 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * Check whether child data should be added
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isAddChildData()
     {
@@ -264,7 +242,6 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve catalog product flat table columns array
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFlatColumns()
     {
@@ -289,7 +266,6 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve entity type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getEntityType()
     {
@@ -300,7 +276,6 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve Catalog Entity Type Id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getEntityTypeId()
     {
@@ -314,7 +289,6 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve attribute objects for flat
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAttributes()
     {
@@ -348,7 +322,6 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve attribute codes using for flat
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAttributeCodes()
     {
@@ -401,7 +374,6 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve catalog product flat table indexes array
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFlatIndexes()
     {
@@ -455,7 +427,6 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param array $attributes
      * @return array
-     * @since 2.0.0
      */
     public function getTablesStructure(array $attributes)
     {
@@ -477,7 +448,6 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string|array $name
      * @return string
-     * @since 2.0.0
      */
     public function getTable($name)
     {
@@ -489,7 +459,6 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
-     * @since 2.0.0
      */
     public function getFlatTableName($storeId)
     {
@@ -502,7 +471,6 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $attributeCode
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Eav\Model\Entity\Attribute
-     * @since 2.0.0
      */
     public function getAttribute($attributeCode)
     {
@@ -524,7 +492,6 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * Delete all product flat tables for not existing stores
      *
      * @return void
-     * @since 2.0.0
      */
     public function deleteAbandonedStoreFlatTables()
     {

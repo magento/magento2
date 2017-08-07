@@ -10,7 +10,6 @@ namespace Magento\ConfigurableProduct\Model\Product\CartConfiguration\Plugin;
 /**
  * Class \Magento\ConfigurableProduct\Model\Product\CartConfiguration\Plugin\Configurable
  *
- * @since 2.0.0
  */
 class Configurable
 {
@@ -24,7 +23,6 @@ class Configurable
      *
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function aroundIsProductConfigured(
         \Magento\Catalog\Model\Product\CartConfiguration $subject,

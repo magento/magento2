@@ -15,61 +15,52 @@ use Magento\Framework\Exception\NoSuchEntityException;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Matrix extends \Magento\Backend\Block\Template
 {
     /**
      * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
-     * @since 2.0.0
      */
     protected $_configurableType;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
-     * @since 2.0.0
      */
     protected $stockRegistry;
 
     /**
      * @var \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix
-     * @since 2.0.0
      */
     protected $variationMatrix;
 
     /**
      * @var ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var \Magento\Catalog\Helper\Image
-     * @since 2.0.0
      */
     protected $image;
 
     /**
      * @var null|array
-     * @since 2.0.0
      */
     private $productMatrix;
 
     /**
      * @var null|array
-     * @since 2.0.0
      */
     private $productAttributes;
 
     /**
      * @var \Magento\Framework\Locale\CurrencyInterface
-     * @since 2.0.0
      */
     protected $localeCurrency;
 
     /**
      * @var LocatorInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $locator;
 
@@ -83,7 +74,6 @@ class Matrix extends \Magento\Backend\Block\Template
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param LocatorInterface $locator
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -108,7 +98,6 @@ class Matrix extends \Magento\Backend\Block\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getCurrencySymbol()
     {
@@ -119,7 +108,6 @@ class Matrix extends \Magento\Backend\Block\Template
      * Retrieve currently edited product object
      *
      * @return Product
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -130,7 +118,6 @@ class Matrix extends \Magento\Backend\Block\Template
      * Retrieve all possible attribute values combinations
      *
      * @return array
-     * @since 2.0.0
      */
     public function getVariations()
     {
@@ -141,7 +128,7 @@ class Matrix extends \Magento\Backend\Block\Template
      * Retrieve data source for variations data
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getProvider()
     {
@@ -152,7 +139,7 @@ class Matrix extends \Magento\Backend\Block\Template
      * Retrieve configurable modal name
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getModal()
     {
@@ -163,7 +150,7 @@ class Matrix extends \Magento\Backend\Block\Template
      * Retrieve form name
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getForm()
     {
@@ -174,7 +161,7 @@ class Matrix extends \Magento\Backend\Block\Template
      * Retrieve configurable modal name
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getConfigurableModal()
     {
@@ -186,7 +173,6 @@ class Matrix extends \Magento\Backend\Block\Template
      *
      * @param string $id
      * @return string
-     * @since 2.0.0
      */
     public function getEditProductUrl($id)
     {
@@ -197,7 +183,6 @@ class Matrix extends \Magento\Backend\Block\Template
      * Retrieve attributes data
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getAttributes()
     {
@@ -227,7 +212,6 @@ class Matrix extends \Magento\Backend\Block\Template
      * Get used product attributes
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getUsedAttributes()
     {
@@ -238,7 +222,6 @@ class Matrix extends \Magento\Backend\Block\Template
      * Retrieve actual list of associated products, array key is obtained from varying attributes values
      *
      * @return Product[]
-     * @since 2.0.0
      */
     protected function getAssociatedProducts()
     {
@@ -259,7 +242,6 @@ class Matrix extends \Magento\Backend\Block\Template
      * - previously saved in database relations are not considered)
      *
      * @return Product[]
-     * @since 2.0.0
      */
     protected function _getAssociatedProducts()
     {
@@ -284,7 +266,6 @@ class Matrix extends \Magento\Backend\Block\Template
      * Get url to upload files
      *
      * @return string
-     * @since 2.0.0
      */
     public function getImageUploadUrl()
     {
@@ -294,7 +275,6 @@ class Matrix extends \Magento\Backend\Block\Template
     /**
      * @param Product $product
      * @return float
-     * @since 2.0.0
      */
     public function getProductStockQty(Product $product)
     {
@@ -304,7 +284,6 @@ class Matrix extends \Magento\Backend\Block\Template
     /**
      * @param array $initData
      * @return string
-     * @since 2.0.0
      */
     public function getVariationWizard($initData)
     {
@@ -319,7 +298,6 @@ class Matrix extends \Magento\Backend\Block\Template
 
     /**
      * @return array|null
-     * @since 2.0.0
      */
     public function getProductMatrix()
     {
@@ -331,7 +309,6 @@ class Matrix extends \Magento\Backend\Block\Template
 
     /**
      * @return array|null
-     * @since 2.0.0
      */
     public function getProductAttributes()
     {
@@ -345,7 +322,6 @@ class Matrix extends \Magento\Backend\Block\Template
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @return void
      * TODO: move to class
-     * @since 2.0.0
      */
     protected function prepareVariations()
     {

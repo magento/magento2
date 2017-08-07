@@ -13,55 +13,46 @@ use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.2.0
  */
 class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBuilderInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.2.0
      */
     private $resource;
 
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.2.0
      */
     private $eavConfig;
 
     /**
      * @var \Magento\Catalog\Helper\Data
-     * @since 2.2.0
      */
     private $catalogHelper;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
-     * @since 2.2.0
      */
     private $dateTime;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.2.0
      */
     private $localeDate;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var BaseSelectProcessorInterface
-     * @since 2.2.0
      */
     private $baseSelectProcessor;
 
@@ -74,7 +65,6 @@ class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBui
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param BaseSelectProcessorInterface $baseSelectProcessor
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -99,7 +89,6 @@ class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBui
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function build($productId)
     {

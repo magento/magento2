@@ -17,7 +17,6 @@ use Magento\Framework\View\File\CollectorInterface;
 /**
  * @magento_import instruction preprocessor
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Must be deleted after moving themeProvider to construct
- * @since 2.0.0
  */
 class MagentoImport implements PreProcessorInterface
 {
@@ -29,38 +28,32 @@ class MagentoImport implements PreProcessorInterface
 
     /**
      * @var DesignInterface
-     * @since 2.0.0
      */
     protected $design;
 
     /**
      * @var CollectorInterface
-     * @since 2.0.0
      */
     protected $fileSource;
 
     /**
      * @var ErrorHandlerInterface
-     * @since 2.0.0
      */
     protected $errorHandler;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
-     * @since 2.0.0
      */
     protected $assetRepo;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ListInterface
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 100.1.1
      */
     protected $themeList;
 
     /**
      * @var ThemeProviderInterface
-     * @since 2.2.0
      */
     private $themeProvider;
 
@@ -70,7 +63,6 @@ class MagentoImport implements PreProcessorInterface
      * @param ErrorHandlerInterface $errorHandler
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\Design\Theme\ListInterface $themeList
-     * @since 2.0.0
      */
     public function __construct(
         DesignInterface $design,
@@ -88,7 +80,6 @@ class MagentoImport implements PreProcessorInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function process(\Magento\Framework\View\Asset\PreProcessor\Chain $chain)
     {
@@ -105,7 +96,6 @@ class MagentoImport implements PreProcessorInterface
      * @param array $matchedContent
      * @param LocalInterface $asset
      * @return string
-     * @since 2.0.0
      */
     protected function replace(array $matchedContent, LocalInterface $asset)
     {
@@ -134,7 +124,6 @@ class MagentoImport implements PreProcessorInterface
      *
      * @param LocalInterface $asset
      * @return \Magento\Framework\View\Design\ThemeInterface
-     * @since 2.0.0
      */
     protected function getTheme(LocalInterface $asset)
     {
@@ -149,8 +138,7 @@ class MagentoImport implements PreProcessorInterface
 
     /**
      * @return ThemeProviderInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.1.1
      */
     private function getThemeProvider()
     {

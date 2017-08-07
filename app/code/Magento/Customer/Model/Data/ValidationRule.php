@@ -10,14 +10,12 @@ use Magento\Customer\Api\Data\ValidationRuleInterface;
 /**
  * Class \Magento\Customer\Model\Data\ValidationRule
  *
- * @since 2.0.0
  */
 class ValidationRule extends \Magento\Framework\Api\AbstractSimpleObject implements
     \Magento\Customer\Api\Data\ValidationRuleInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -26,7 +24,6 @@ class ValidationRule extends \Magento\Framework\Api\AbstractSimpleObject impleme
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getValue()
     {
@@ -38,7 +35,6 @@ class ValidationRule extends \Magento\Framework\Api\AbstractSimpleObject impleme
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -50,7 +46,6 @@ class ValidationRule extends \Magento\Framework\Api\AbstractSimpleObject impleme
      *
      * @param string $value
      * @return $this
-     * @since 2.0.0
      */
     public function setValue($value)
     {

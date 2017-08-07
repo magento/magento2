@@ -12,14 +12,12 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 /**
  * Class \Magento\CatalogUrlRewrite\Model\Storage\DbStorage
  *
- * @since 2.0.0
  */
 class DbStorage extends BaseDbStorage
 {
     /**
      * @param array $data
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function prepareSelect(array $data)
     {

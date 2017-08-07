@@ -7,7 +7,6 @@ namespace Magento\UrlRewrite\Block;
 
 /**
  * @api
- * @since 2.0.0
  */
 class GridContainer extends \Magento\Backend\Block\Widget\Grid\Container
 {
@@ -15,13 +14,11 @@ class GridContainer extends \Magento\Backend\Block\Widget\Grid\Container
      * Part for generating appropriate grid block name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_controller = 'url_rewrite';
 
     /**
      * @var \Magento\UrlRewrite\Block\Selector
-     * @since 2.0.0
      */
     protected $_urlrewriteSelector;
 
@@ -29,7 +26,6 @@ class GridContainer extends \Magento\Backend\Block\Widget\Grid\Container
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param Selector $urlrewriteSelector
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -44,7 +40,6 @@ class GridContainer extends \Magento\Backend\Block\Widget\Grid\Container
      * Set custom labels and headers
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -57,7 +52,6 @@ class GridContainer extends \Magento\Backend\Block\Widget\Grid\Container
      * Customize grid row URLs
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCreateUrl()
     {

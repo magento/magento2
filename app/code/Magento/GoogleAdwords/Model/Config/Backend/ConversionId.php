@@ -9,7 +9,6 @@ namespace Magento\GoogleAdwords\Model\Config\Backend;
 
 /**
  * @api
- * @since 2.0.0
  */
 class ConversionId extends \Magento\GoogleAdwords\Model\Config\Backend\AbstractConversion
 {
@@ -17,7 +16,6 @@ class ConversionId extends \Magento\GoogleAdwords\Model\Config\Backend\AbstractC
      * Validation rule conversion id
      *
      * @return \Zend_Validate_Interface|null
-     * @since 2.0.0
      */
     protected function _getValidationRulesBeforeSave()
     {
@@ -32,7 +30,6 @@ class ConversionId extends \Magento\GoogleAdwords\Model\Config\Backend\AbstractC
      * Get tested value
      *
      * @return string
-     * @since 2.0.0
      */
     public function getConversionId()
     {

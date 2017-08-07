@@ -11,7 +11,6 @@ use Magento\Framework\Model\AbstractModel;
  * Review summary resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Summary extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -19,7 +18,6 @@ class Summary extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define module
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -33,7 +31,6 @@ class Summary extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param mixed $value
      * @param AbstractModel $object
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -47,7 +44,6 @@ class Summary extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param array $summary
      * @return $this
-     * @since 2.0.0
      */
     public function reAggregate($summary)
     {

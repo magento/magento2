@@ -14,7 +14,6 @@ use Magento\Framework\DB\Ddl\Trigger;
 /**
  * Class \Magento\Framework\Mview\View\Subscription
  *
- * @since 2.0.0
  */
 class Subscription implements SubscriptionInterface
 {
@@ -22,37 +21,31 @@ class Subscription implements SubscriptionInterface
      * Database connection
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected $connection;
 
     /**
      * @var \Magento\Framework\DB\Ddl\TriggerFactory
-     * @since 2.0.0
      */
     protected $triggerFactory;
 
     /**
      * @var \Magento\Framework\Mview\View\CollectionInterface
-     * @since 2.0.0
      */
     protected $viewCollection;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $view;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $tableName;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $columnName;
 
@@ -60,13 +53,11 @@ class Subscription implements SubscriptionInterface
      * List of views linked to the same entity as the current view
      *
      * @var array
-     * @since 2.0.0
      */
     protected $linkedViews = [];
 
     /**
      * @var Resource
-     * @since 2.0.0
      */
     protected $resource;
 
@@ -77,7 +68,6 @@ class Subscription implements SubscriptionInterface
      * @param \Magento\Framework\Mview\ViewInterface $view
      * @param string $tableName
      * @param string $columnName
-     * @since 2.0.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -100,7 +90,6 @@ class Subscription implements SubscriptionInterface
      * Create subsciption
      *
      * @return \Magento\Framework\Mview\View\SubscriptionInterface
-     * @since 2.0.0
      */
     public function create()
     {
@@ -132,7 +121,6 @@ class Subscription implements SubscriptionInterface
      * Remove subscription
      *
      * @return \Magento\Framework\Mview\View\SubscriptionInterface
-     * @since 2.0.0
      */
     public function remove()
     {
@@ -166,7 +154,6 @@ class Subscription implements SubscriptionInterface
      * Retrieve list of linked views
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getLinkedViews()
     {
@@ -197,7 +184,6 @@ class Subscription implements SubscriptionInterface
      * @param string $event
      * @param \Magento\Framework\Mview\View\ChangelogInterface $changelog
      * @return string
-     * @since 2.0.0
      */
     protected function buildStatement($event, $changelog)
     {
@@ -230,7 +216,6 @@ class Subscription implements SubscriptionInterface
      * @param string $event The DB level event, like "update" or "insert"
      *
      * @return string
-     * @since 2.0.0
      */
     private function getAfterEventTriggerName($event)
     {
@@ -246,7 +231,6 @@ class Subscription implements SubscriptionInterface
      *
      * @return \Magento\Framework\Mview\ViewInterface
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getView()
     {
@@ -258,7 +242,6 @@ class Subscription implements SubscriptionInterface
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getTableName()
     {
@@ -270,7 +253,6 @@ class Subscription implements SubscriptionInterface
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getColumnName()
     {

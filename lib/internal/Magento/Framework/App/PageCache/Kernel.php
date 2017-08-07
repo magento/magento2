@@ -7,57 +7,48 @@ namespace Magento\Framework\App\PageCache;
 
 /**
  * Builtin cache processor
- * @since 2.0.0
  */
 class Kernel
 {
     /**
      * @var \Magento\PageCache\Model\Cache\Type
      *
-     * @deprecated 2.1.0
-     * @since 2.0.0
+     * @deprecated 100.1.0
      */
     protected $cache;
 
     /**
      * @var Identifier
-     * @since 2.0.0
      */
     protected $identifier;
 
     /**
      * @var \Magento\Framework\App\Request\Http
-     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var \Magento\PageCache\Model\Cache\Type
-     * @since 2.1.0
      */
     private $fullPageCache;
 
     /**
      * @var \Magento\Framework\Serialize\SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var \Magento\Framework\App\Http\Context
-     * @since 2.2.0
      */
     private $context;
 
     /**
      * @var \Magento\Framework\App\Http\ContextFactory
-     * @since 2.2.0
      */
     private $contextFactory;
 
     /**
      * @var \Magento\Framework\App\Response\HttpFactory
-     * @since 2.2.0
      */
     private $httpFactory;
 
@@ -69,7 +60,6 @@ class Kernel
      * @param \Magento\Framework\App\Http\ContextFactory|null $contextFactory
      * @param \Magento\Framework\App\Response\HttpFactory|null $httpFactory
      * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\PageCache\Cache $cache,
@@ -118,7 +108,6 @@ class Kernel
      * Load response from cache
      *
      * @return \Magento\Framework\App\Response\Http|false
-     * @since 2.0.0
      */
     public function load()
     {
@@ -142,7 +131,6 @@ class Kernel
      *
      * @param \Magento\Framework\App\Response\Http $response
      * @return void
-     * @since 2.0.0
      */
     public function process(\Magento\Framework\App\Response\Http $response)
     {
@@ -176,7 +164,6 @@ class Kernel
      *
      * @param \Magento\Framework\App\Response\Http $response
      * @return array
-     * @since 2.2.0
      */
     private function getPreparedData(\Magento\Framework\App\Response\Http $response)
     {
@@ -193,7 +180,6 @@ class Kernel
      *
      * @param array $responseData
      * @return \Magento\Framework\App\Response\Http
-     * @since 2.2.0
      */
     private function buildResponse($responseData)
     {
@@ -222,7 +208,6 @@ class Kernel
      * TODO: Workaround to support backwards compatibility, will rework to use Dependency Injection in MAGETWO-49547
      *
      * @return \Magento\PageCache\Model\Cache\Type
-     * @since 2.1.0
      */
     private function getCache()
     {

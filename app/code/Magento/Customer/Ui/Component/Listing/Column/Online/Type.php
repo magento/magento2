@@ -10,7 +10,6 @@ use Magento\Customer\Model\Visitor;
 
 /**
  * Class Type
- * @since 2.0.0
  */
 class Type extends Column
 {
@@ -19,7 +18,6 @@ class Type extends Column
      *
      * @param array $dataSource
      * @return void
-     * @since 2.0.0
      */
     public function prepareDataSource(array $dataSource)
     {

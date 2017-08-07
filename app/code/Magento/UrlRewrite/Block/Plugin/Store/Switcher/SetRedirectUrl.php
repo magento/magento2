@@ -15,31 +15,26 @@ use Magento\Framework\App\ActionInterface;
 /**
  * Class \Magento\UrlRewrite\Block\Plugin\Store\Switcher\SetRedirectUrl
  *
- * @since 2.0.0
  */
 class SetRedirectUrl
 {
     /**
      * @var \Magento\Framework\Url\Helper\Data
-     * @since 2.0.0
      */
     private $urlHelper;
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     private $urlBuilder;
 
     /**
      * @var \Magento\UrlRewrite\Model\UrlFinderInterface
-     * @since 2.0.0
      */
     private $urlFinder;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     private $request;
 
@@ -48,7 +43,6 @@ class SetRedirectUrl
      * @param UrlInterface $urlBuilder
      * @param UrlFinderInterface $urlFinder
      * @param RequestInterface $request
-     * @since 2.0.0
      */
     public function __construct(
         UrlHelper $urlHelper,
@@ -70,7 +64,6 @@ class SetRedirectUrl
      * @param array $data
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function beforeGetTargetStorePostData(
         \Magento\Store\Block\Switcher $switcher,
@@ -92,7 +85,6 @@ class SetRedirectUrl
     /**
      * @param string $path
      * @return string
-     * @since 2.0.0
      */
     private function trimSlashInPath($path)
     {

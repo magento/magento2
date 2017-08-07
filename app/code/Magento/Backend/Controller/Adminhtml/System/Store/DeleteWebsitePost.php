@@ -11,13 +11,11 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Backend\Controller\Adminhtml\System\Store\DeleteWebsitePost
  *
- * @since 2.0.0
  */
 class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

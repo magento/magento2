@@ -11,7 +11,6 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Paypal\Controller\Express\AbstractExpress\Review
  *
- * @since 2.0.0
  */
 class Review extends \Magento\Paypal\Controller\Express\AbstractExpress
 {
@@ -19,7 +18,6 @@ class Review extends \Magento\Paypal\Controller\Express\AbstractExpress
      * Review order after returning from PayPal
      *
      * @return void|\Magento\Framework\Controller\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -9,7 +9,6 @@ namespace Magento\Framework\Config\Data;
 /**
  * Data transfer object to store config data for config options
  * @api
- * @since 2.0.0
  */
 class ConfigData
 {
@@ -17,7 +16,6 @@ class ConfigData
      * File key
      *
      * @var string
-     * @since 2.0.0
      */
     private $fileKey;
 
@@ -25,7 +23,6 @@ class ConfigData
      * Data
      *
      * @var array
-     * @since 2.0.0
      */
     private $data = [];
 
@@ -33,7 +30,6 @@ class ConfigData
      * Override previous config options when save
      *
      * @var bool
-     * @since 2.1.0
      */
     private $overrideWhenSave = false;
 
@@ -41,7 +37,6 @@ class ConfigData
      * Constructor
      *
      * @param string $fileKey
-     * @since 2.0.0
      */
     public function __construct($fileKey)
     {
@@ -52,7 +47,6 @@ class ConfigData
      * Gets File Key
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFileKey()
     {
@@ -63,7 +57,6 @@ class ConfigData
      * Gets Data
      *
      * @return array
-     * @since 2.0.0
      */
     public function getData()
     {
@@ -75,7 +68,7 @@ class ConfigData
      *
      * @param bool $overrideWhenSave
      * @return void
-     * @since 2.1.0
+     * @since 100.0.5
      */
     public function setOverrideWhenSave($overrideWhenSave)
     {
@@ -86,7 +79,7 @@ class ConfigData
      * Gets override when save flag
      *
      * @return bool
-     * @since 2.1.0
+     * @since 100.0.5
      */
     public function isOverrideWhenSave()
     {
@@ -99,7 +92,6 @@ class ConfigData
      * @param string $path
      * @param mixed $value
      * @return void
-     * @since 2.0.0
      */
     public function set($path, $value)
     {
@@ -128,7 +120,6 @@ class ConfigData
      * @param string $path
      * @return string[]
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     private function expand($path)
     {

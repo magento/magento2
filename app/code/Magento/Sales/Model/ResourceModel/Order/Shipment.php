@@ -15,7 +15,6 @@ use Magento\Sales\Model\Spi\ShipmentResourceInterface;
  * Flat sales order shipment resource
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Shipment extends SalesResource implements ShipmentResourceInterface
 {
@@ -23,7 +22,6 @@ class Shipment extends SalesResource implements ShipmentResourceInterface
      * Event prefix
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_shipment_resource';
 
@@ -31,7 +29,6 @@ class Shipment extends SalesResource implements ShipmentResourceInterface
      * Fields that should be serialized before persistence
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_serializableFields = ['packages' => [[], []]];
 
@@ -39,7 +36,6 @@ class Shipment extends SalesResource implements ShipmentResourceInterface
      * Model initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -52,7 +48,6 @@ class Shipment extends SalesResource implements ShipmentResourceInterface
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {

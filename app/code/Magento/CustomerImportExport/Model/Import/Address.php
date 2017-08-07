@@ -13,7 +13,6 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Address extends AbstractCustomer
 {
@@ -69,12 +68,7 @@ class Address extends AbstractCustomer
 
     /**#@-*/
 
-    /**
-     * Default addresses column names to appropriate customer attribute code
-     *
-     * @var array
-     * @since 2.0.0
-     */
+    /**#@-*/
     protected static $_defaultAddressAttributeMapping = [
         self::COLUMN_DEFAULT_BILLING => 'default_billing',
         self::COLUMN_DEFAULT_SHIPPING => 'default_shipping',
@@ -84,7 +78,6 @@ class Address extends AbstractCustomer
      * Permanent entity columns
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_permanentAttributes = [self::COLUMN_WEBSITE, self::COLUMN_EMAIL, self::COLUMN_ADDRESS_ID];
 
@@ -99,7 +92,6 @@ class Address extends AbstractCustomer
      * )
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_addresses = [];
 
@@ -107,7 +99,6 @@ class Address extends AbstractCustomer
      * Attributes with index (not label) value
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_indexValueAttributes = [self::COLUMN_COUNTRY_ID];
 
@@ -115,7 +106,6 @@ class Address extends AbstractCustomer
      * Customer entity DB table name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_entityTable;
 
@@ -134,7 +124,6 @@ class Address extends AbstractCustomer
      * )
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_countryRegions = [];
 
@@ -142,7 +131,6 @@ class Address extends AbstractCustomer
      * Region ID to region default name pairs
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_regions = [];
 
@@ -150,7 +138,6 @@ class Address extends AbstractCustomer
      * Column names that holds values with particular meaning
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_specialAttributes = [
         self::COLUMN_ACTION,
@@ -165,7 +152,6 @@ class Address extends AbstractCustomer
      * Customer entity
      *
      * @var \Magento\Customer\Model\Customer
-     * @since 2.0.0
      */
     protected $_customerEntity;
 
@@ -173,7 +159,6 @@ class Address extends AbstractCustomer
      * Entity ID incremented value
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_nextEntityId;
 
@@ -181,7 +166,6 @@ class Address extends AbstractCustomer
      * Array of region parameters
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_regionParameters;
 
@@ -189,7 +173,6 @@ class Address extends AbstractCustomer
      * Address attributes collection
      *
      * @var \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection
-     * @since 2.0.0
      */
     protected $_attributeCollection;
 
@@ -197,7 +180,6 @@ class Address extends AbstractCustomer
      * Collection of existent addresses
      *
      * @var \Magento\Customer\Model\ResourceModel\Address\Collection
-     * @since 2.0.0
      */
     protected $_addressCollection;
 
@@ -205,37 +187,31 @@ class Address extends AbstractCustomer
      * Store imported row primary keys
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_importedRowPks = [];
 
     /**
      * @var \Magento\ImportExport\Model\ResourceModel\Helper
-     * @since 2.0.0
      */
     protected $_resourceHelper;
 
     /**
      * @var \Magento\Customer\Model\CustomerFactory
-     * @since 2.0.0
      */
     protected $_customerFactory;
 
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $_eavConfig;
 
     /**
      * @var \Magento\Customer\Model\AddressFactory
-     * @since 2.0.0
      */
     protected $_addressFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
@@ -243,7 +219,6 @@ class Address extends AbstractCustomer
      * Customer attributes
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_customerAttributes = [];
 
@@ -251,7 +226,6 @@ class Address extends AbstractCustomer
      * Valid column names
      *
      * @array
-     * @since 2.0.0
      */
     protected $validColumnNames = [
         "region_id", "vat_is_valid", "vat_request_date", "vat_request_id", "vat_request_success"
@@ -259,7 +233,6 @@ class Address extends AbstractCustomer
 
     /**
      * @var \Magento\Customer\Model\Address\Validator\Postcode
-     * @since 2.1.0
      */
     protected $postcodeValidator;
 
@@ -285,7 +258,6 @@ class Address extends AbstractCustomer
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\StringUtils $string,
@@ -363,7 +335,6 @@ class Address extends AbstractCustomer
      * Customer entity getter
      *
      * @return \Magento\Customer\Model\Customer
-     * @since 2.0.0
      */
     protected function _getCustomerEntity()
     {
@@ -377,7 +348,6 @@ class Address extends AbstractCustomer
      * Get next address entity ID
      *
      * @return int
-     * @since 2.0.0
      */
     protected function _getNextEntityId()
     {
@@ -394,7 +364,6 @@ class Address extends AbstractCustomer
      * Initialize existent addresses data
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initAddresses()
     {
@@ -416,7 +385,6 @@ class Address extends AbstractCustomer
      * Initialize country regions hash for clever recognition
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initCountryRegions()
     {
@@ -438,7 +406,6 @@ class Address extends AbstractCustomer
      * @abstract
      * @return boolean
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _importData()
     {
@@ -496,7 +463,6 @@ class Address extends AbstractCustomer
      * @param array $newAttributes
      * @param array $attributes
      * @return array
-     * @since 2.0.0
      */
     protected function _mergeEntityAttributes(array $newAttributes, array $attributes)
     {
@@ -517,7 +483,6 @@ class Address extends AbstractCustomer
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _prepareDataForUpdate(array $rowData)
     {
@@ -623,7 +588,6 @@ class Address extends AbstractCustomer
      * @param array $addRows Rows for insert
      * @param array $updateRows Rows for update
      * @return $this
-     * @since 2.0.0
      */
     protected function _saveAddressEntities(array $addRows, array $updateRows)
     {
@@ -645,7 +609,6 @@ class Address extends AbstractCustomer
      *
      * @param array $attributesData
      * @return $this
-     * @since 2.0.0
      */
     protected function _saveAddressAttributes(array $attributesData)
     {
@@ -671,7 +634,6 @@ class Address extends AbstractCustomer
      * @param array $defaults
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     protected function _saveCustomerDefaults(array $defaults)
     {
@@ -692,7 +654,6 @@ class Address extends AbstractCustomer
      *
      * @param array $entityRowIds Row IDs for delete
      * @return $this
-     * @since 2.0.0
      */
     protected function _deleteAddressEntities(array $entityRowIds)
     {
@@ -707,7 +668,6 @@ class Address extends AbstractCustomer
      *
      * @abstract
      * @return string
-     * @since 2.0.0
      */
     public function getEntityTypeCode()
     {
@@ -719,7 +679,6 @@ class Address extends AbstractCustomer
      *
      * @static
      * @return array
-     * @since 2.0.0
      */
     public static function getDefaultAddressAttributeMapping()
     {
@@ -731,7 +690,6 @@ class Address extends AbstractCustomer
      *
      * @param array $rowData
      * @return array
-     * @since 2.0.0
      */
     protected function _isOptionalAddressEmpty(array $rowData)
     {
@@ -761,7 +719,6 @@ class Address extends AbstractCustomer
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _validateRowForUpdate(array $rowData, $rowNumber)
     {
@@ -839,7 +796,6 @@ class Address extends AbstractCustomer
      * @param array $rowData
      * @param int $rowNumber
      * @return void
-     * @since 2.0.0
      */
     protected function _validateRowForDelete(array $rowData, $rowNumber)
     {
@@ -867,7 +823,6 @@ class Address extends AbstractCustomer
      * @param int $customerId
      * @param int $addressId
      * @return bool
-     * @since 2.0.0
      */
     protected function _checkRowDuplicate($customerId, $addressId)
     {
@@ -888,7 +843,6 @@ class Address extends AbstractCustomer
      *
      * @param array $customerAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setCustomerAttributes($customerAttributes)
     {

@@ -10,8 +10,7 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class Delete
- * @deprecated 2.2.0
- * @since 2.0.0
+ * @deprecated 100.2.0
  */
 class Delete extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {
@@ -19,7 +18,6 @@ class Delete extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
      * Delete action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

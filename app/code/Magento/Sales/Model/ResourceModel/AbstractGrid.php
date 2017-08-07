@@ -11,31 +11,26 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 /**
  * Class AbstractGrid
  * @api
- * @since 2.0.0
  */
 abstract class AbstractGrid extends AbstractDb implements GridInterface
 {
     /**
      * @var AdapterInterface
-     * @since 2.0.0
      */
     protected $connection;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $gridTableName;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $orderTableName = 'sales_order';
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $addressTableName = 'sales_order_address';
 
@@ -43,7 +38,6 @@ abstract class AbstractGrid extends AbstractDb implements GridInterface
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -55,7 +49,6 @@ abstract class AbstractGrid extends AbstractDb implements GridInterface
      *
      * @todo: make method protected
      * @return AdapterInterface
-     * @since 2.0.0
      */
     public function getConnection()
     {
@@ -69,7 +62,6 @@ abstract class AbstractGrid extends AbstractDb implements GridInterface
      * Returns grid table name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getGridTable()
     {
@@ -82,7 +74,6 @@ abstract class AbstractGrid extends AbstractDb implements GridInterface
      * @param int|string $value
      * @param null|string $field
      * @return int
-     * @since 2.0.0
      */
     public function purge($value, $field = null)
     {
@@ -99,10 +90,9 @@ abstract class AbstractGrid extends AbstractDb implements GridInterface
      *
      * @param string $default
      * @return string
-     * @deprecated 2.2.0 this method is not used in abstract model but only in single child so
+     * @deprecated 100.2.0 this method is not used in abstract model but only in single child so
      * this deprecation is a part of cleaning abstract classes.
      * @see \Magento\Sales\Model\ResourceModel\Provider\UpdatedIdListProvider
-     * @since 2.0.0
      */
     protected function getLastUpdatedAtValue($default = '0000-00-00 00:00:00')
     {

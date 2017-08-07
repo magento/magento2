@@ -15,14 +15,12 @@ use Magento\Framework\DB\Ddl\Table;
 
 /**
  * Upgrade the Catalog module DB scheme
- * @since 2.0.0
  */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -136,7 +134,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      *
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.2.0
      */
     private function fixCustomerGroupIdColumn(SchemaSetupInterface $setup)
     {
@@ -176,7 +173,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      *
      * @param SchemaSetupInterface $installer
      * @return void
-     * @since 2.2.0
      */
     private function addCatalogProductFrontendActionTable(SchemaSetupInterface $installer)
     {
@@ -273,7 +269,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      *
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.2.0
      */
     private function addSourceEntityIdToProductEavIndex(SchemaSetupInterface $setup)
     {
@@ -315,7 +310,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
     /**
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.1.0
      */
     protected function addUniqueKeyToCategoryProductTable(SchemaSetupInterface $setup)
     {
@@ -335,7 +329,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      *
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.0.0
      */
     protected function createValueToEntityTable(SchemaSetupInterface $setup)
     {
@@ -399,7 +392,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      *
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.0.0
      */
     protected function addForeignKeys(SchemaSetupInterface $setup)
     {
@@ -438,7 +430,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
     /**
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.0.0
      */
     private function addSupportVideoMediaAttributes(SchemaSetupInterface $setup)
     {
@@ -533,7 +524,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * Remove Group Price
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.0.0
      */
     private function removeGroupPrice(SchemaSetupInterface $setup)
     {
@@ -565,7 +555,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * Add percentage value column
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.2.0
      */
     private function addPercentageValueColumn(SchemaSetupInterface $setup)
     {
@@ -599,7 +588,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      *
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.2.0
      */
     private function recreateCatalogCategoryProductIndexTmpTable(SchemaSetupInterface $setup)
     {
@@ -668,7 +656,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      *
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.2.0
      */
     private function addPathKeyToCategoryEntityTableIfNotExists(SchemaSetupInterface $setup)
     {
@@ -702,7 +689,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * @param string $existingTable
      * @param string $replicaTable
      * @return void
-     * @since 2.2.0
      */
     private function addReplicaTable(SchemaSetupInterface $setup, $existingTable, $replicaTable)
     {

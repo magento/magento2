@@ -8,7 +8,6 @@ namespace Magento\Framework\Authorization\RoleLocator;
 /**
  * Class \Magento\Framework\Authorization\RoleLocator\DefaultRoleLocator
  *
- * @since 2.0.0
  */
 class DefaultRoleLocator implements \Magento\Framework\Authorization\RoleLocatorInterface
 {
@@ -16,7 +15,6 @@ class DefaultRoleLocator implements \Magento\Framework\Authorization\RoleLocator
      * Retrieve current role
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAclRoleId()
     {

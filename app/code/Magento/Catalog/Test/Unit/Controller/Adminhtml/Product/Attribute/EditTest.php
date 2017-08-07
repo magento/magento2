@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EditTest extends \PHPUnit_Framework_TestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Controller\Adminhtml\Product\Attribute\Edit
@@ -93,15 +93,12 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)->getMock();
 
-        $this->eavAttribute = $this->getMock(
+        $this->eavAttribute = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
-            ['setEntityTypeId', 'load', 'getId', 'getEntityTypeId', 'addData', 'getName'],
-            [],
-            '',
-            false
+            ['setEntityTypeId', 'load', 'getId', 'getEntityTypeId', 'addData', 'getName']
         );
 
-        $this->registry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
+        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
 
         $this->resultPage = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Page::class)
             ->disableOriginalConstructor()
@@ -125,17 +122,21 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->layout = $this->getMock(\Magento\Framework\View\Layout::class, ['getBlock'], [], '', false);
+        $this->layout = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getBlock']);
 
         $this->session = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->blockTemplate = $this->getMockBuilder(\Magento\Backend\Block\Template::class)
+            ->setMethods(['setIsPopup'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
+        $this->context = $this->createPartialMock(
+            \Magento\Backend\App\Action\Context::class,
+            ['getRequest', 'getObjectManager', 'getResultPageFactory', 'getSession']
+        );
         $this->context->expects($this->any())->method('getRequest')->willReturn($this->request);
         $this->context->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
         $this->context->expects($this->any())->method('getResultPageFactory')->willReturn($this->resultPageFactory);

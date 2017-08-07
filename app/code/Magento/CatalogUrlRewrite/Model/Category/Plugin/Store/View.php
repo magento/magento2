@@ -20,43 +20,36 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @see \Magento\Store\Model\ResourceModel\Store
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @package Magento\CatalogUrlRewrite\Model\Category\Plugin\Store
- * @since 2.0.0
  */
 class View
 {
     /**
      * @var \Magento\UrlRewrite\Model\UrlPersistInterface
-     * @since 2.0.0
      */
     protected $urlPersist;
 
     /**
      * @var \Magento\Catalog\Model\CategoryFactory
-     * @since 2.0.0
      */
     protected $categoryFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $productFactory;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator
-     * @since 2.0.0
      */
     protected $categoryUrlRewriteGenerator;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator
-     * @since 2.0.0
      */
     protected $productUrlRewriteGenerator;
 
     /**
      * @var AbstractModel
-     * @since 2.2.0
      */
     private $origStore;
 
@@ -66,7 +59,6 @@ class View
      * @param ProductFactory $productFactory
      * @param CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
-     * @since 2.0.0
      */
     public function __construct(
         UrlPersistInterface $urlPersist,
@@ -87,7 +79,6 @@ class View
      * @param AbstractModel $store
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function beforeSave(
         \Magento\Store\Model\ResourceModel\Store $object,
@@ -103,7 +94,6 @@ class View
      * @param \Magento\Store\Model\ResourceModel\Store $store
      * @return \Magento\Store\Model\ResourceModel\Store
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterSave(
         \Magento\Store\Model\ResourceModel\Store $object,
@@ -136,7 +126,6 @@ class View
      * @param int $originWebsiteId
      * @param int $storeId
      * @return array
-     * @since 2.0.0
      */
     protected function generateProductUrls($websiteId, $originWebsiteId, $storeId)
     {
@@ -164,7 +153,6 @@ class View
      * @param int $rootCategoryId
      * @param int $storeId
      * @return array
-     * @since 2.0.0
      */
     protected function generateCategoryUrls($rootCategoryId, $storeId)
     {
@@ -189,7 +177,6 @@ class View
      * @param AbstractModel $store
      * @return \Magento\Store\Model\ResourceModel\Store
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterDelete(
         \Magento\Store\Model\ResourceModel\Store $subject,

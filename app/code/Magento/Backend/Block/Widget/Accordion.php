@@ -9,25 +9,21 @@ namespace Magento\Backend\Block\Widget;
  * Magento_Backend accordion widget
  *
  * @api
- * @since 2.0.0
  */
 class Accordion extends \Magento\Backend\Block\Widget
 {
     /**
      * @var string[]
-     * @since 2.0.0
      */
     protected $_items = [];
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Backend::widget/accordion.phtml';
 
     /**
      * @return string[]
-     * @since 2.0.0
      */
     public function getItems()
     {
@@ -38,7 +34,6 @@ class Accordion extends \Magento\Backend\Block\Widget
      * @param string $itemId
      * @param array $config
      * @return $this
-     * @since 2.0.0
      */
     public function addItem($itemId, $config)
     {

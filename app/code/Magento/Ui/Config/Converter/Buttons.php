@@ -12,26 +12,22 @@ use Magento\Ui\Config\ConverterUtils;
 
 /**
  * Converter for 'settings/buttons' configuration settings
- * @since 2.2.0
  */
 class Buttons implements ConverterInterface
 {
     /**
      * @var ConverterInterface
-     * @since 2.2.0
      */
     private $converter;
 
     /**
      * @var ConverterUtils
-     * @since 2.2.0
      */
     private $converterUtils;
 
     /**
      * @param ConverterInterface $converter
      * @param ConverterUtils $converterUtils
-     * @since 2.2.0
      */
     public function __construct(ConverterInterface $converter, ConverterUtils $converterUtils)
     {
@@ -41,7 +37,6 @@ class Buttons implements ConverterInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function convert(\DOMNode $node, array $data = [])
     {
@@ -65,7 +60,6 @@ class Buttons implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return array
-     * @since 2.2.0
      */
     private function toArray(\DOMNode $node)
     {
@@ -100,7 +94,6 @@ class Buttons implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return bool
-     * @since 2.2.0
      */
     private function hasChildElements(\DOMNode $node)
     {
@@ -119,7 +112,6 @@ class Buttons implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return array
-     * @since 2.2.0
      */
     private function processAttributes(\DOMNode $node)
     {
@@ -142,7 +134,6 @@ class Buttons implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return array
-     * @since 2.2.0
      */
     private function processChildNodes(\DOMNode $node)
     {

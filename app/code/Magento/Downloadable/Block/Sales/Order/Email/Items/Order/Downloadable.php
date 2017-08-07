@@ -17,31 +17,26 @@ use Magento\Store\Model\ScopeInterface;
  * Downloadable Sales Order Email items renderer
  *
  * @api
- * @since 2.0.0
  */
 class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultOrder
 {
     /**
      * @var \Magento\Downloadable\Model\Link\Purchased
-     * @since 2.0.0
      */
     protected $_purchased;
 
     /**
      * @var \Magento\Downloadable\Model\Link\PurchasedFactory
-     * @since 2.0.0
      */
     protected $_purchasedFactory;
 
     /**
      * @var \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory
-     * @since 2.0.0
      */
     protected $_itemsFactory;
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.1.0
      */
     private $frontendUrlBuilder;
 
@@ -50,7 +45,6 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultO
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
      * @param \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -67,7 +61,6 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultO
      * Enter description here...
      *
      * @return \Magento\Downloadable\Model\Link\Purchased
-     * @since 2.0.0
      */
     public function getLinks()
     {
@@ -83,7 +76,6 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultO
 
     /**
      * @return null|string
-     * @since 2.0.0
      */
     public function getLinksTitle()
     {
@@ -96,7 +88,6 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultO
     /**
      * @param Item $item
      * @return string
-     * @since 2.0.0
      */
     public function getPurchasedLinkUrl($item)
     {
@@ -116,8 +107,7 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultO
      * Get frontend URL builder
      *
      * @return \Magento\Framework\UrlInterface
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getFrontendUrlBuilder()
     {

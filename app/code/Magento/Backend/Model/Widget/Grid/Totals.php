@@ -7,7 +7,6 @@ namespace Magento\Backend\Model\Widget\Grid;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Totals extends \Magento\Backend\Model\Widget\Grid\AbstractTotals
 {
@@ -17,7 +16,6 @@ class Totals extends \Magento\Backend\Model\Widget\Grid\AbstractTotals
      * @param string $index
      * @param \Magento\Framework\Data\Collection $collection
      * @return float|int
-     * @since 2.0.0
      */
     protected function _countSum($index, $collection)
     {
@@ -38,7 +36,6 @@ class Totals extends \Magento\Backend\Model\Widget\Grid\AbstractTotals
      * @param string $index
      * @param \Magento\Framework\Data\Collection $collection
      * @return float|int
-     * @since 2.0.0
      */
     protected function _countAverage($index, $collection)
     {

@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Price;
 
 /**
  * Special price resource.
- * @since 2.2.0
  */
 class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
 {
@@ -16,7 +15,6 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
      * Price storage table.
      *
      * @var string
-     * @since 2.2.0
      */
     private $priceTable = 'catalog_product_entity_decimal';
 
@@ -24,25 +22,21 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
      * Datetime storage table.
      *
      * @var string
-     * @since 2.2.0
      */
     private $datetimeTable = 'catalog_product_entity_datetime';
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Attribute
-     * @since 2.2.0
      */
     private $attributeResource;
 
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
-     * @since 2.2.0
      */
     private $attributeRepository;
 
     /**
      * @var \Magento\Catalog\Model\ProductIdLocatorInterface
-     * @since 2.2.0
      */
     private $productIdLocator;
 
@@ -50,7 +44,6 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
      * Metadata pool.
      *
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.2.0
      */
     private $metadataPool;
 
@@ -58,7 +51,6 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
      * Special Price attribute ID.
      *
      * @var int
-     * @since 2.2.0
      */
     private $priceAttributeId;
 
@@ -66,7 +58,6 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
      * Special price from attribute ID.
      *
      * @var int
-     * @since 2.2.0
      */
     private $priceFromAttributeId;
 
@@ -74,7 +65,6 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
      * Special price to attribute ID.
      *
      * @var int
-     * @since 2.2.0
      */
     private $priceToAttributeId;
 
@@ -82,7 +72,6 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
      * Items per operation.
      *
      * @var int
-     * @since 2.2.0
      */
     private $itemsPerOperation = 500;
 
@@ -91,7 +80,6 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource,
@@ -107,7 +95,6 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function get(array $skus)
     {
@@ -146,7 +133,6 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function update(array $prices)
     {
@@ -202,7 +188,6 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function delete(array $prices)
     {
@@ -249,7 +234,6 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
      * Get link field.
      *
      * @return string
-     * @since 2.2.0
      */
     public function getEntityLinkField()
     {
@@ -263,7 +247,6 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
      * @param array $items
      * @param string $table
      * @return void
-     * @since 2.2.0
      */
     private function updateItems(array $items, $table)
     {
@@ -280,7 +263,6 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
      * Get special price attribute ID.
      *
      * @return int
-     * @since 2.2.0
      */
     private function getPriceAttributeId()
     {
@@ -295,7 +277,6 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
      * Get special price from attribute ID.
      *
      * @return int
-     * @since 2.2.0
      */
     private function getPriceFromAttributeId()
     {
@@ -310,7 +291,6 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
      * Get special price to attribute ID.
      *
      * @return int
-     * @since 2.2.0
      */
     private function getPriceToAttributeId()
     {
@@ -326,7 +306,6 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
      *
      * @param array $skus
      * @return array
-     * @since 2.2.0
      */
     private function retrieveAffectedIds(array $skus)
     {

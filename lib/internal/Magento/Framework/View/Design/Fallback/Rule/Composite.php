@@ -9,7 +9,6 @@ namespace Magento\Framework\View\Design\Fallback\Rule;
  * Composite Rules
  *
  * Composite rule that represents sequence of child fallback rules
- * @since 2.0.0
  */
 class Composite implements RuleInterface
 {
@@ -17,7 +16,6 @@ class Composite implements RuleInterface
      * Rules
      *
      * @var RuleInterface[]
-     * @since 2.0.0
      */
     protected $rules = [];
 
@@ -26,7 +24,6 @@ class Composite implements RuleInterface
      *
      * @param RuleInterface[] $rules
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function __construct(array $rules)
     {
@@ -43,7 +40,6 @@ class Composite implements RuleInterface
      *
      * @param array $params
      * @return array
-     * @since 2.0.0
      */
     public function getPatternDirs(array $params)
     {

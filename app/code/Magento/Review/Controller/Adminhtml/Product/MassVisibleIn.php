@@ -12,13 +12,11 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Review\Controller\Adminhtml\Product\MassVisibleIn
  *
- * @since 2.0.0
  */
 class MassVisibleIn extends ProductController
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

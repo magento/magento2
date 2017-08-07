@@ -10,7 +10,6 @@ namespace Magento\CatalogSearch\Model\ResourceModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
- * @since 2.0.0
  */
 class Advanced extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -18,7 +17,6 @@ class Advanced extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager = null;
 
@@ -26,7 +24,6 @@ class Advanced extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -37,7 +34,6 @@ class Advanced extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -54,7 +50,6 @@ class Advanced extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize connection and define catalog product table as main table
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -68,7 +63,6 @@ class Advanced extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string|array $value
      * @return string|array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function prepareCondition($attribute, $value)
     {

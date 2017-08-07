@@ -15,49 +15,41 @@ use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 
 /**
  * Class Conditions
- * @since 2.0.0
  */
 class Conditions extends Template implements RendererInterface
 {
     /**
      * @var \Magento\Rule\Block\Conditions
-     * @since 2.0.0
      */
     protected $conditions;
 
     /**
      * @var \Magento\CatalogWidget\Model\Rule
-     * @since 2.0.0
      */
     protected $rule;
 
     /**
      * @var \Magento\Framework\Data\Form\Element\Factory
-     * @since 2.0.0
      */
     protected $elementFactory;
 
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $registry;
 
     /**
      * @var AbstractElement
-     * @since 2.0.0
      */
     protected $element;
 
     /**
      * @var \Magento\Framework\Data\Form\Element\Text
-     * @since 2.0.0
      */
     protected $input;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'product/widget/conditions.phtml';
 
@@ -68,7 +60,6 @@ class Conditions extends Template implements RendererInterface
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -87,7 +78,6 @@ class Conditions extends Template implements RendererInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -106,7 +96,6 @@ class Conditions extends Template implements RendererInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function render(AbstractElement $element)
     {
@@ -117,7 +106,6 @@ class Conditions extends Template implements RendererInterface
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getNewChildUrl()
     {
@@ -128,7 +116,6 @@ class Conditions extends Template implements RendererInterface
 
     /**
      * @return AbstractElement
-     * @since 2.0.0
      */
     public function getElement()
     {
@@ -137,7 +124,6 @@ class Conditions extends Template implements RendererInterface
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getHtmlId()
     {
@@ -146,7 +132,6 @@ class Conditions extends Template implements RendererInterface
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getInputHtml()
     {

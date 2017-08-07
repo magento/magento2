@@ -20,7 +20,6 @@ use Magento\Payment\Model\MethodInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -28,7 +27,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @var \Magento\Payment\Model\Config
-     * @since 2.0.0
      */
     protected $_paymentConfig;
 
@@ -36,7 +34,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Layout
      *
      * @var \Magento\Framework\View\LayoutInterface
-     * @since 2.0.0
      */
     protected $_layout;
 
@@ -44,7 +41,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Factory for payment method models
      *
      * @var \Magento\Payment\Model\Method\Factory
-     * @since 2.0.0
      */
     protected $_methodFactory;
 
@@ -52,13 +48,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * App emulation model
      *
      * @var \Magento\Store\Model\App\Emulation
-     * @since 2.0.0
      */
     protected $_appEmulation;
 
     /**
      * @var \Magento\Framework\App\Config\Initial
-     * @since 2.0.0
      */
     protected $_initialConfig;
 
@@ -71,7 +65,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @param \Magento\Payment\Model\Config $paymentConfig
      * @param \Magento\Framework\App\Config\Initial $initialConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -92,7 +85,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param string $code
      * @return string
-     * @since 2.0.0
      */
     protected function getMethodModelConfigName($code)
     {
@@ -106,7 +98,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return MethodInterface
-     * @since 2.0.0
      */
     public function getMethodInstance($code)
     {
@@ -128,9 +119,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param null|string|bool|int $store
      * @param Quote|null $quote
      * @return AbstractMethod[]
-     * @deprecated 2.2.0
+     * @deprecated 100.1.3
      * @see \Magento\Payment\Api\PaymentMethodListInterface
-     * @since 2.0.0
      */
     public function getStoreMethods($store = null, $quote = null)
     {
@@ -181,7 +171,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param MethodInterface $method
      * @param LayoutInterface $layout
      * @return Form
-     * @since 2.0.0
      */
     public function getMethodFormBlock(MethodInterface $method, LayoutInterface $layout)
     {
@@ -196,7 +185,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param InfoInterface $info
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @return Template
-     * @since 2.0.0
      */
     public function getInfoBlock(InfoInterface $info, LayoutInterface $layout = null)
     {
@@ -214,7 +202,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param int $storeId
      * @return string
      * @throws \Exception
-     * @since 2.0.0
      */
     public function getInfoBlockHtml(InfoInterface $info, $storeId)
     {
@@ -242,7 +229,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve all payment methods
      *
      * @return array
-     * @since 2.0.0
      */
     public function getPaymentMethods()
     {
@@ -272,7 +258,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function getPaymentMethodList($sorted = true, $asLabelValue = false, $withGroups = false, $store = null)
     {
@@ -325,7 +310,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function isZeroSubTotal($store = null)
     {
@@ -341,7 +325,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|string|bool|int|Store $store
      * @return string
-     * @since 2.0.0
      */
     public function getZeroSubTotalOrderStatus($store = null)
     {
@@ -357,7 +340,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|string|bool|int|Store $store
      * @return string
-     * @since 2.0.0
      */
     public function getZeroSubTotalPaymentAutomaticInvoice($store = null)
     {

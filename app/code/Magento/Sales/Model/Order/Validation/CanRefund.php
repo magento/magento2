@@ -12,13 +12,11 @@ use Magento\Sales\Model\ValidatorInterface;
 
 /**
  * Class CanRefund
- * @since 2.2.0
  */
 class CanRefund implements ValidatorInterface
 {
     /**
      * @var PriceCurrencyInterface
-     * @since 2.2.0
      */
     private $priceCurrency;
 
@@ -26,7 +24,6 @@ class CanRefund implements ValidatorInterface
      * CanRefund constructor.
      *
      * @param PriceCurrencyInterface $priceCurrency
-     * @since 2.2.0
      */
     public function __construct(PriceCurrencyInterface $priceCurrency)
     {
@@ -35,7 +32,6 @@ class CanRefund implements ValidatorInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function validate($entity)
     {
@@ -63,7 +59,6 @@ class CanRefund implements ValidatorInterface
      *
      * @param OrderInterface $order
      * @return bool
-     * @since 2.2.0
      */
     private function isTotalPaidEnoughForRefund(OrderInterface $order)
     {

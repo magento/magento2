@@ -9,7 +9,6 @@ namespace Magento\Backend\Controller\Adminhtml\Cache;
 /**
  * Class \Magento\Backend\Controller\Adminhtml\Cache\FlushSystem
  *
- * @since 2.0.0
  */
 class FlushSystem extends \Magento\Backend\Controller\Adminhtml\Cache
 {
@@ -17,7 +16,6 @@ class FlushSystem extends \Magento\Backend\Controller\Adminhtml\Cache
      * Flush all magento cache
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

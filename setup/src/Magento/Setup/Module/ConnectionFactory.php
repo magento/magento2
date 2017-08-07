@@ -12,13 +12,11 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * Connection adapter factory
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class ConnectionFactory implements \Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface
 {
     /**
      * @var ServiceLocatorInterface
-     * @since 2.0.0
      */
     private $serviceLocator;
 
@@ -26,7 +24,6 @@ class ConnectionFactory implements \Magento\Framework\Model\ResourceModel\Type\D
      * Constructor
      *
      * @param ServiceLocatorInterface $serviceLocator
-     * @since 2.0.0
      */
     public function __construct(ServiceLocatorInterface $serviceLocator)
     {
@@ -35,7 +32,6 @@ class ConnectionFactory implements \Magento\Framework\Model\ResourceModel\Type\D
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function create(array $connectionConfig)
     {

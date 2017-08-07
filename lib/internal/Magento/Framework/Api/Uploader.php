@@ -8,13 +8,11 @@ namespace Magento\Framework\Api;
 
 /**
  * Class Uploader specific to uploading images using services
- * @since 2.0.0
  */
 class Uploader extends \Magento\Framework\File\Uploader
 {
     /**
      * Avoid running the default constructor specific to FILE upload
-     * @since 2.0.0
      */
     public function __construct()
     {
@@ -26,7 +24,6 @@ class Uploader extends \Magento\Framework\File\Uploader
      * @param array $fileAttributes
      * @return void
      * @throws \Exception
-     * @since 2.0.0
      */
     public function processFileAttributes($fileAttributes)
     {

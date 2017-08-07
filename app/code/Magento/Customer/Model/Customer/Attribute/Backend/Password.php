@@ -8,9 +8,8 @@ namespace Magento\Customer\Model\Customer\Attribute\Backend;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * @deprecated 2.2.0
+ * @deprecated 100.2.0
  * Customer password attribute backend
- * @since 2.0.0
  */
 class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -23,13 +22,11 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
      * Magento string lib
      *
      * @var \Magento\Framework\Stdlib\StringUtils
-     * @since 2.0.0
      */
     protected $string;
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Stdlib\StringUtils $string)
     {
@@ -44,7 +41,6 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
      * @param \Magento\Framework\DataObject $object
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function beforeSave($object)
     {
@@ -67,10 +63,9 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
     }
 
     /**
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @param \Magento\Framework\DataObject $object
      * @return bool
-     * @since 2.0.0
      */
     public function validate($object)
     {

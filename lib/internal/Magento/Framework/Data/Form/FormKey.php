@@ -7,7 +7,6 @@ namespace Magento\Framework\Data\Form;
 
 /**
  * @api
- * @since 2.0.0
  */
 class FormKey
 {
@@ -18,19 +17,17 @@ class FormKey
 
     /**
      * @var \Magento\Framework\Math\Random
-     * @since 2.0.0
      */
     protected $mathRandom;
 
     /**
      * @var \Magento\Framework\Session\SessionManagerInterface
-     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var \Magento\Framework\Escaper
-     * @since 2.1.0
+     * @since 100.0.3
      */
     protected $escaper;
 
@@ -38,7 +35,6 @@ class FormKey
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Framework\Escaper $escaper
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Math\Random $mathRandom,
@@ -54,7 +50,6 @@ class FormKey
      * Retrieve Session Form Key
      *
      * @return string A 16 bit unique key for forms
-     * @since 2.0.0
      */
     public function getFormKey()
     {
@@ -66,7 +61,6 @@ class FormKey
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isPresent()
     {
@@ -76,7 +70,6 @@ class FormKey
     /**
      * @param string $value
      * @return void
-     * @since 2.0.0
      */
     public function set($value)
     {

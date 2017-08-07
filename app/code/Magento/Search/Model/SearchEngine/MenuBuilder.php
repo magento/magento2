@@ -15,7 +15,6 @@ use Magento\Search\Model\EngineResolver;
  *
  * The purpose of this plugin is to go through the menu tree and remove "Search Terms" menu item if the
  * selected search engine does not support "synonyms" feature.
- * @since 2.1.0
  */
 class MenuBuilder
 {
@@ -26,13 +25,11 @@ class MenuBuilder
 
     /**
      * @var ConfigInterface $searchFeatureConfig
-     * @since 2.1.0
      */
     protected $searchFeatureConfig;
 
     /**
      * @var EngineResolver $engineResolver
-     * @since 2.1.0
      */
     protected $engineResolver;
 
@@ -41,7 +38,6 @@ class MenuBuilder
      *
      * @param ConfigInterface $searchFeatureConfig
      * @param EngineResolver $engineResolver
-     * @since 2.1.0
      */
     public function __construct(
         ConfigInterface $searchFeatureConfig,
@@ -58,7 +54,6 @@ class MenuBuilder
      * @param Menu $menu
      * @return Menu
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function afterGetResult(Builder $subject, Menu $menu)
     {

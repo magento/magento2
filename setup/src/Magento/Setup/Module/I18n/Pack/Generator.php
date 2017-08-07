@@ -11,7 +11,6 @@ use Magento\Setup\Module\I18n\Pack;
 
 /**
  * Pack generator
- * @since 2.0.0
  */
 class Generator
 {
@@ -19,7 +18,6 @@ class Generator
      * Dictionary loader
      *
      * @var \Magento\Setup\Module\I18n\Dictionary\Loader\FileInterface
-     * @since 2.0.0
      */
     protected $dictionaryLoader;
 
@@ -27,7 +25,6 @@ class Generator
      * Pack writer
      *
      * @var \Magento\Setup\Module\I18n\Pack\WriterInterface
-     * @since 2.0.0
      */
     protected $packWriter;
 
@@ -35,7 +32,6 @@ class Generator
      * Domain abstract factory
      *
      * @var \Magento\Setup\Module\I18n\Factory
-     * @since 2.0.0
      */
     protected $factory;
 
@@ -45,7 +41,6 @@ class Generator
      * @param \Magento\Setup\Module\I18n\Dictionary\Loader\FileInterface $dictionaryLoader
      * @param \Magento\Setup\Module\I18n\Pack\WriterInterface $packWriter
      * @param \Magento\Setup\Module\I18n\Factory $factory
-     * @since 2.0.0
      */
     public function __construct(
         Dictionary\Loader\FileInterface $dictionaryLoader,
@@ -66,7 +61,6 @@ class Generator
      * @param bool $allowDuplicates
      * @return void
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     public function generate(
         $dictionaryPath,
@@ -96,7 +90,6 @@ class Generator
      *
      * @param array $duplicates
      * @return string
-     * @since 2.0.0
      */
     protected function createDuplicatesPhrasesError($duplicates)
     {

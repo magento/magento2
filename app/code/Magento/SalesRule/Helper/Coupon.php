@@ -12,7 +12,6 @@ namespace Magento\SalesRule\Helper;
  * Helper for coupon codes creating and managing
  *
  * @api
- * @since 2.0.0
  */
 class Coupon extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -45,14 +44,12 @@ class Coupon extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_couponParameters;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param array $couponParameters
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -66,7 +63,6 @@ class Coupon extends \Magento\Framework\App\Helper\AbstractHelper
      * Get all possible coupon codes formats
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFormatsList()
     {
@@ -81,7 +77,6 @@ class Coupon extends \Magento\Framework\App\Helper\AbstractHelper
      * Get default coupon code length
      *
      * @return int
-     * @since 2.0.0
      */
     public function getDefaultLength()
     {
@@ -92,7 +87,6 @@ class Coupon extends \Magento\Framework\App\Helper\AbstractHelper
      * Get default coupon code format
      *
      * @return int
-     * @since 2.0.0
      */
     public function getDefaultFormat()
     {
@@ -103,7 +97,6 @@ class Coupon extends \Magento\Framework\App\Helper\AbstractHelper
      * Get default coupon code prefix
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultPrefix()
     {
@@ -114,7 +107,6 @@ class Coupon extends \Magento\Framework\App\Helper\AbstractHelper
      * Get default coupon code suffix
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultSuffix()
     {
@@ -125,7 +117,6 @@ class Coupon extends \Magento\Framework\App\Helper\AbstractHelper
      * Get dashes occurrences frequency in coupon code
      *
      * @return int
-     * @since 2.0.0
      */
     public function getDefaultDashInterval()
     {
@@ -137,7 +128,6 @@ class Coupon extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $format
      * @return array|bool
-     * @since 2.0.0
      */
     public function getCharset($format)
     {
@@ -148,7 +138,6 @@ class Coupon extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve Separator
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCodeSeparator()
     {

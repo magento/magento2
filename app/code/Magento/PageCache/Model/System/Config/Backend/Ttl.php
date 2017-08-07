@@ -10,7 +10,6 @@ namespace Magento\PageCache\Model\System\Config\Backend;
  * Backend model for processing Public content cache lifetime settings
  *
  * Class Ttl
- * @since 2.0.0
  */
 class Ttl extends \Magento\Framework\App\Config\Value
 {
@@ -19,7 +18,6 @@ class Ttl extends \Magento\Framework\App\Config\Value
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function beforeSave()
     {

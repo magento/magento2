@@ -10,20 +10,17 @@ use Magento\Customer\CustomerData\SectionSourceInterface;
 
 /**
  * Cart source
- * @since 2.0.0
  */
 class DirectoryData implements SectionSourceInterface
 {
     /**
      * @var \Magento\Directory\Helper\Data
-     * @since 2.0.0
      */
     protected $directoryHelper;
 
     /**
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(\Magento\Directory\Helper\Data $directoryHelper)
     {
@@ -32,7 +29,6 @@ class DirectoryData implements SectionSourceInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getSectionData()
     {

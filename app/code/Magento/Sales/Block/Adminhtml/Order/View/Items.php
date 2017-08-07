@@ -11,13 +11,12 @@ use Magento\Sales\Model\ResourceModel\Order\Item\Collection;
  * Adminhtml order items grid
  *
  * @api
- * @since 2.0.0
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
     /**
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getColumns()
     {
@@ -30,7 +29,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -45,7 +43,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve order items collection
      *
      * @return Collection
-     * @since 2.0.0
      */
     public function getItemsCollection()
     {

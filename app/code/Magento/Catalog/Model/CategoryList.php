@@ -18,37 +18,31 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 /**
  * Class \Magento\Catalog\Model\CategoryList
  *
- * @since 2.2.0
  */
 class CategoryList implements CategoryListInterface
 {
     /**
      * @var CollectionFactory
-     * @since 2.2.0
      */
     private $categoryCollectionFactory;
 
     /**
      * @var JoinProcessorInterface
-     * @since 2.2.0
      */
     private $extensionAttributesJoinProcessor;
 
     /**
      * @var CategorySearchResultsInterfaceFactory
-     * @since 2.2.0
      */
     private $categorySearchResultsFactory;
 
     /**
      * @var CategoryRepositoryInterface
-     * @since 2.2.0
      */
     private $categoryRepository;
 
     /**
      * @var CollectionProcessorInterface
-     * @since 2.2.0
      */
     private $collectionProcessor;
 
@@ -58,7 +52,6 @@ class CategoryList implements CategoryListInterface
      * @param CategorySearchResultsInterfaceFactory $categorySearchResultsFactory
      * @param CategoryRepositoryInterface $categoryRepository
      * @param CollectionProcessorInterface $collectionProcessor
-     * @since 2.2.0
      */
     public function __construct(
         CollectionFactory $categoryCollectionFactory,
@@ -76,7 +69,6 @@ class CategoryList implements CategoryListInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -102,9 +94,8 @@ class CategoryList implements CategoryListInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated 2.2.0
+     * @deprecated 101.1.0
      * @return CollectionProcessorInterface
-     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

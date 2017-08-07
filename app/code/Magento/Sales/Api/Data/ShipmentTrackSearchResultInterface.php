@@ -12,7 +12,6 @@ namespace Magento\Sales\Api\Data;
  * document lists the products and their quantities in the delivery package. Merchants and customers can track
  * shipments.
  * @api
- * @since 2.0.0
  */
 interface ShipmentTrackSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
@@ -20,7 +19,6 @@ interface ShipmentTrackSearchResultInterface extends \Magento\Framework\Api\Sear
      * Gets collection items.
      *
      * @return \Magento\Sales\Api\Data\ShipmentTrackInterface[] Array of collection items.
-     * @since 2.0.0
      */
     public function getItems();
 
@@ -29,7 +27,6 @@ interface ShipmentTrackSearchResultInterface extends \Magento\Framework\Api\Sear
      *
      * @param \Magento\Sales\Api\Data\ShipmentTrackInterface[] $items
      * @return $this
-     * @since 2.0.0
      */
     public function setItems(array $items);
 }

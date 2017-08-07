@@ -18,31 +18,26 @@ use Magento\Sales\Model\Service\InvoiceService;
 /**
  * Class UpdateQty
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {
     /**
      * @var JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @var RawFactory
-     * @since 2.0.0
      */
     protected $resultRawFactory;
 
     /**
      * @var InvoiceService
-     * @since 2.0.0
      */
     private $invoiceService;
 
@@ -54,7 +49,6 @@ class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvo
      * @param JsonFactory $resultJsonFactory
      * @param RawFactory $resultRawFactory
      * @param InvoiceService $invoiceService
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -76,7 +70,6 @@ class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvo
      * Update items qty action
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

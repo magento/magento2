@@ -8,26 +8,22 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 /**
  * Store grid column filter
  * @api
- * @deprecated 2.2.0 in favour of UI component implementation
- * @since 2.0.0
+ * @deprecated 100.2.0 in favour of UI component implementation
  */
 class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_skipAllStoresLabel = false;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_skipEmptyStoresLabel = false;
 
     /**
      * @var \Magento\Store\Model\System\Store
-     * @since 2.0.0
      */
     protected $_systemStore;
 
@@ -35,7 +31,6 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -50,7 +45,6 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      * Retrieve System Store model
      *
      * @return \Magento\Store\Model\System\Store
-     * @since 2.0.0
      */
     protected function _getStoreModel()
     {
@@ -62,7 +56,6 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     protected function _getShowAllStoresLabelFlag()
     {
@@ -78,7 +71,6 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     protected function _getShowEmptyStoresLabelFlag()
     {
@@ -96,7 +88,6 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      * @return \Magento\Framework\Phrase|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {
@@ -148,7 +139,6 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      * @param \Magento\Framework\DataObject $row
      * @return \Magento\Framework\Phrase|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function renderExport(\Magento\Framework\DataObject $row)
     {

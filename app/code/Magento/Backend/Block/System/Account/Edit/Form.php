@@ -12,7 +12,6 @@ use Magento\Framework\Locale\OptionInterface;
  * Adminhtml edit admin user account form
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -20,19 +19,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @var \Magento\Backend\Model\Auth\Session
-     * @since 2.0.0
      */
     protected $_authSession;
 
     /**
      * @var \Magento\User\Model\UserFactory
-     * @since 2.0.0
      */
     protected $_userFactory;
 
     /**
      * @var \Magento\Framework\Locale\ListsInterface
-     * @since 2.0.0
      */
     protected $_localeLists;
 
@@ -40,7 +36,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Operates with deployed locales.
      *
      * @var OptionInterface
-     * @since 2.2.0
      */
     private $deployedLocales;
 
@@ -53,7 +48,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Locale\ListsInterface $localeLists
      * @param array $data
      * @param OptionInterface $deployedLocales Operates with deployed locales
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -75,7 +69,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {

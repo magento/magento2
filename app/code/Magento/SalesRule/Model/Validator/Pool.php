@@ -8,19 +8,16 @@ namespace Magento\SalesRule\Model\Validator;
 
 /**
  * Class Pool collects custom validators for items before SalesRules are applied
- * @since 2.0.0
  */
 class Pool
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $validators = [];
 
     /**
      * @param array $validators
-     * @since 2.0.0
      */
     public function __construct(array $validators = [])
     {
@@ -32,7 +29,6 @@ class Pool
      *
      * @param string $type
      * @return array
-     * @since 2.0.0
      */
     public function getValidators($type)
     {

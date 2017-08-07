@@ -13,19 +13,16 @@ use Magento\Vault\Model\Ui\TokenUiComponentInterfaceFactory;
 
 /**
  * Class TokenUiComponentProvider
- * @since 2.1.0
  */
 class TokenUiComponentProvider implements TokenUiComponentProviderInterface
 {
     /**
      * @var TokenUiComponentInterfaceFactory
-     * @since 2.1.0
      */
     private $componentFactory;
 
     /**
      * @param TokenUiComponentInterfaceFactory $componentFactory
-     * @since 2.1.0
      */
     public function __construct(
         TokenUiComponentInterfaceFactory $componentFactory
@@ -37,7 +34,6 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
      * Get UI component for token
      * @param PaymentTokenInterface $paymentToken
      * @return TokenUiComponentInterface
-     * @since 2.1.0
      */
     public function getComponentForToken(PaymentTokenInterface $paymentToken)
     {

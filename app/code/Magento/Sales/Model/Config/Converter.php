@@ -12,7 +12,6 @@ namespace Magento\Sales\Model\Config;
 /**
  * Class \Magento\Sales\Model\Config\Converter
  *
- * @since 2.0.0
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
@@ -23,7 +22,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @return array
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function convert($source)
     {

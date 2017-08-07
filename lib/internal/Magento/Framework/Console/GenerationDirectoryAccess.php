@@ -14,19 +14,16 @@ use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 
 /**
  * Check generated/code read and write access
- * @since 2.1.0
  */
 class GenerationDirectoryAccess
 {
     /**
      * @var ServiceManager
-     * @since 2.1.0
      */
     private $serviceManager;
 
     /**
      * @param ServiceManager $serviceManager
-     * @since 2.1.0
      */
     public function __construct(
         ServiceManager $serviceManager
@@ -38,7 +35,6 @@ class GenerationDirectoryAccess
      * Check write permissions to generation folders
      *
      * @return bool
-     * @since 2.1.0
      */
     public function check()
     {

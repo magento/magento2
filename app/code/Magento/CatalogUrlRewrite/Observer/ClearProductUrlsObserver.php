@@ -14,19 +14,16 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Class ClearProductUrlsObserver
- * @since 2.0.0
  */
 class ClearProductUrlsObserver implements ObserverInterface
 {
     /**
      * @var \Magento\UrlRewrite\Model\UrlPersistInterface
-     * @since 2.0.0
      */
     protected $urlPersist;
 
     /**
      * @param UrlPersistInterface $urlPersist
-     * @since 2.0.0
      */
     public function __construct(
         UrlPersistInterface $urlPersist
@@ -39,7 +36,6 @@ class ClearProductUrlsObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

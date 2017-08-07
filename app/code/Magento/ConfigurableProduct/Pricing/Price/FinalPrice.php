@@ -9,19 +9,16 @@ namespace Magento\ConfigurableProduct\Pricing\Price;
 /**
  * Class \Magento\ConfigurableProduct\Pricing\Price\FinalPrice
  *
- * @since 2.0.0
  */
 class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice
 {
     /**
      * @var \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface
-     * @since 2.0.0
      */
     protected $priceResolver;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $values = [];
 
@@ -31,7 +28,6 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice
      * @param \Magento\Framework\Pricing\Adjustment\CalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param PriceResolverInterface $priceResolver
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Pricing\SaleableInterface $saleableItem,
@@ -46,7 +42,6 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getValue()
     {

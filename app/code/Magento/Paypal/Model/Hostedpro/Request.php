@@ -17,7 +17,6 @@ use Magento\Tax\Helper\Data;
  *  Website Payments Pro Hosted Solution request model to get token.
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Request extends DataObject
 {
@@ -27,7 +26,6 @@ class Request extends DataObject
      * Request's order model
      *
      * @var \Magento\Sales\Model\Order
-     * @since 2.1.0
      */
     protected $order;
 
@@ -35,7 +33,6 @@ class Request extends DataObject
      * Request's Hosted Pro payment method model
      *
      * @var \Magento\Paypal\Model\Hostedpro
-     * @since 2.1.0
      */
     protected $paymentMethod;
 
@@ -43,7 +40,6 @@ class Request extends DataObject
      * Name format for button variables
      *
      * @var string
-     * @since 2.1.0
      */
     protected $buttonVarFormat = 'L_BUTTONVAR%d';
 
@@ -51,7 +47,6 @@ class Request extends DataObject
      * Request Parameters which dont have to wrap as button vars
      *
      * @var string[]
-     * @since 2.1.0
      */
     protected $notButtonVars = ['METHOD', 'BUTTONCODE', 'BUTTONTYPE'];
 
@@ -59,7 +54,6 @@ class Request extends DataObject
      * Customer address
      *
      * @var \Magento\Customer\Helper\Address
-     * @since 2.1.0
      */
     protected $customerAddress = null;
 
@@ -67,7 +61,6 @@ class Request extends DataObject
      * Tax data
      *
      * @var \Magento\Tax\Helper\Data
-     * @since 2.1.0
      */
     protected $taxData;
 
@@ -75,7 +68,6 @@ class Request extends DataObject
      * Locale Resolver
      *
      * @var \Magento\Framework\Locale\Resolver
-     * @since 2.0.0
      */
     protected $localeResolver;
 
@@ -84,7 +76,6 @@ class Request extends DataObject
      * @param \Magento\Customer\Helper\Address $customerAddress
      * @param \Magento\Tax\Helper\Data $taxData
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Resolver $localeResolver,
@@ -102,7 +93,6 @@ class Request extends DataObject
      * Build and return request array from object data
      *
      * @return array
-     * @since 2.0.0
      */
     public function getRequestData()
     {
@@ -130,7 +120,6 @@ class Request extends DataObject
      *
      * @param \Magento\Paypal\Model\Hostedpro $paymentMethod
      * @return $this
-     * @since 2.0.0
      */
     public function setPaymentMethod($paymentMethod)
     {
@@ -146,7 +135,6 @@ class Request extends DataObject
      *
      * @param \Magento\Sales\Model\Order $order
      * @return $this
-     * @since 2.0.0
      */
     public function setOrder(Order $order)
     {
@@ -163,7 +151,6 @@ class Request extends DataObject
      * @access public
      * @param \Magento\Sales\Model\Order $order
      * @return $this
-     * @since 2.0.0
      */
     public function setAmount(Order $order)
     {
@@ -176,7 +163,6 @@ class Request extends DataObject
      * @param \Magento\Sales\Model\Order $order
      * @return array
      * @throws \Exception
-     * @since 2.1.0
      */
     protected function getAmountData(Order $order)
     {
@@ -192,7 +178,6 @@ class Request extends DataObject
      * Get payment amount data with excluded tax
      * @param \Magento\Sales\Model\Order $order
      * @return array
-     * @since 2.0.0
      */
     private function getNonTaxableAmount(Order $order)
     {
@@ -212,7 +197,6 @@ class Request extends DataObject
      * Get order amount data with included tax
      * @param \Magento\Sales\Model\Order $order
      * @return array
-     * @since 2.0.0
      */
     private function getTaxableAmount(Order $order)
     {
@@ -229,7 +213,6 @@ class Request extends DataObject
      *
      * @param \Magento\Paypal\Model\Hostedpro $paymentMethod
      * @return array
-     * @since 2.1.0
      */
     protected function getPaymentData(Hostedpro $paymentMethod)
     {
@@ -257,7 +240,6 @@ class Request extends DataObject
      *
      * @param \Magento\Sales\Model\Order $order
      * @return array
-     * @since 2.1.0
      */
     protected function getOrderData(Order $order)
     {
@@ -287,7 +269,6 @@ class Request extends DataObject
      * @param DataObject $address
      * @param string $type
      * @return array
-     * @since 2.1.0
      */
     protected function getAddress(DataObject $address, $type = '')
     {
@@ -313,7 +294,6 @@ class Request extends DataObject
      *
      * @param DataObject $address
      * @return string
-     * @since 2.1.0
      */
     protected function getRegion(DataObject $address)
     {
@@ -326,7 +306,6 @@ class Request extends DataObject
      *
      * @param DataObject $address
      * @return array
-     * @since 2.1.0
      */
     protected function getAddressStreets(DataObject $address)
     {

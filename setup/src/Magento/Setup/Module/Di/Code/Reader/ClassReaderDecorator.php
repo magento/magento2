@@ -11,19 +11,16 @@ use Magento\Setup\Module\Di\Compiler\ConstructorArgument;
 /**
  * Class \Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator
  *
- * @since 2.0.0
  */
 class ClassReaderDecorator implements \Magento\Framework\Code\Reader\ClassReaderInterface
 {
     /**
      * @var \Magento\Framework\Code\Reader\ClassReader
-     * @since 2.0.0
      */
     private $classReader;
 
     /**
      * @param \Magento\Framework\Code\Reader\ClassReader $classReader
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Code\Reader\ClassReader $classReader)
     {
@@ -36,7 +33,6 @@ class ClassReaderDecorator implements \Magento\Framework\Code\Reader\ClassReader
      * @param string $className
      * @return ConstructorArgument[]|null
      * @throws \ReflectionException
-     * @since 2.0.0
      */
     public function getConstructor($className)
     {
@@ -64,7 +60,6 @@ class ClassReaderDecorator implements \Magento\Framework\Code\Reader\ClassReader
      *
      * @param string $className
      * @return string[]
-     * @since 2.0.0
      */
     public function getParents($className)
     {

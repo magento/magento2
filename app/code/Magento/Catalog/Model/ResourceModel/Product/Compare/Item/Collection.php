@@ -12,7 +12,6 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Compare\Item;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
@@ -20,7 +19,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Customer Filter
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_customerId = 0;
 
@@ -28,7 +26,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Visitor Filter
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_visitorId = 0;
 
@@ -36,7 +33,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Comparable attributes cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_comparableAttributes;
 
@@ -44,7 +40,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Catalog product compare
      *
      * @var \Magento\Catalog\Helper\Product\Compare
-     * @since 2.0.0
      */
     protected $_catalogProductCompare = null;
 
@@ -52,7 +47,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Catalog product compare item
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item
-     * @since 2.0.0
      */
     protected $_catalogProductCompareItem;
 
@@ -82,7 +76,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -138,7 +131,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Initialize resources
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -154,7 +146,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param int $customerId
      * @return $this
-     * @since 2.0.0
      */
     public function setCustomerId($customerId)
     {
@@ -168,7 +159,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param int $visitorId
      * @return $this
-     * @since 2.0.0
      */
     public function setVisitorId($visitorId)
     {
@@ -181,7 +171,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Retrieve customer filter applied to collection
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCustomerId()
     {
@@ -192,7 +181,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Retrieve visitor filter applied to collection
      *
      * @return int
-     * @since 2.0.0
      */
     public function getVisitorId()
     {
@@ -203,7 +191,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Retrieve condition for join filters
      *
      * @return array
-     * @since 2.0.0
      */
     public function getConditionForJoin()
     {
@@ -222,7 +209,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Add join to select
      *
      * @return $this
-     * @since 2.0.0
      */
     public function _addJoinToSelect()
     {
@@ -248,7 +234,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Retrieve comapre products attribute set ids
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getAttributeSetIds()
     {
@@ -290,7 +275,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param array $setIds
      * @return array
-     * @since 2.0.0
      */
     protected function _getAttributeIdsBySetIds(array $setIds)
     {
@@ -310,7 +294,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Retrieve Merged comparable attributes for compared product items
      *
      * @return array
-     * @since 2.0.0
      */
     public function getComparableAttributes()
     {
@@ -361,7 +344,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Load Comparable attributes
      *
      * @return $this
-     * @since 2.0.0
      */
     public function loadComparableAttributes()
     {
@@ -379,7 +361,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Use product as collection item
      *
      * @return $this
-     * @since 2.0.0
      */
     public function useProductItem()
     {
@@ -395,7 +376,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Retrieve product ids from collection
      *
      * @return int[]
-     * @since 2.0.0
      */
     public function getProductIds()
     {
@@ -411,7 +391,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Clear compare items by condition
      *
      * @return $this
-     * @since 2.0.0
      */
     public function clear()
     {
@@ -426,7 +405,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Overwrite disable flat for compared item if required EAV resource
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isEnabledFlat()
     {

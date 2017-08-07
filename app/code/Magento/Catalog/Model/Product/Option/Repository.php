@@ -14,49 +14,41 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory
-     * @since 2.1.0
      */
     protected $collectionFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product\OptionFactory
-     * @since 2.1.0
      */
     protected $optionFactory;
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Option
-     * @since 2.0.0
      */
     protected $optionResource;
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @var HydratorPool
-     * @since 2.1.0
      */
     protected $hydratorPool;
 
     /**
      * @var Converter
-     * @since 2.0.0
      */
     protected $converter;
 
@@ -69,7 +61,6 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory|null $collectionFactory
      * @param \Magento\Catalog\Model\Product\OptionFactory|null $optionFactory
      * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -92,7 +83,6 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getList($sku)
     {
@@ -102,7 +92,6 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getProductOptions(ProductInterface $product, $requiredOnly = false)
     {
@@ -115,7 +104,6 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function get($sku, $optionId)
     {
@@ -129,7 +117,6 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function delete(\Magento\Catalog\Api\Data\ProductCustomOptionInterface $entity)
     {
@@ -139,7 +126,6 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function duplicate(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -156,7 +142,6 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function save(\Magento\Catalog\Api\Data\ProductCustomOptionInterface $option)
     {
@@ -197,7 +182,6 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function deleteByIdentifier($sku, $optionId)
     {
@@ -225,7 +209,6 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
      * @param $newValues array
      * @param $originalValues \Magento\Catalog\Model\Product\Option\Value[]
      * @return array
-     * @since 2.0.0
      */
     protected function markRemovedValues($newValues, $originalValues)
     {
@@ -249,8 +232,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
 
     /**
      * @return \Magento\Framework\EntityManager\HydratorPool
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 101.0.0
      */
     private function getHydratorPool()
     {

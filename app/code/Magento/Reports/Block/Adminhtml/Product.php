@@ -9,13 +9,11 @@ namespace Magento\Reports\Block\Adminhtml;
  * Adminhtml products report page content block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Product extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _construct()
     {

@@ -13,26 +13,22 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class AllowedCountries
- * @since 2.2.0
  */
 class AllowedCountries
 {
     /**
      * @var \Magento\Customer\Model\Config\Share
-     * @since 2.2.0
      */
     private $shareConfig;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @param Share $share
      * @param StoreManagerInterface $storeManager
-     * @since 2.2.0
      */
     public function __construct(
         Share $share,
@@ -50,7 +46,6 @@ class AllowedCountries
      * @param string $scope
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function beforeGetAllowedCountries(
         \Magento\Directory\Model\AllowedCountries $subject,

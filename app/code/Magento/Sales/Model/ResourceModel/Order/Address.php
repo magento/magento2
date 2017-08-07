@@ -11,7 +11,6 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 
 /**
  * Flat sales order address resource
- * @since 2.0.0
  */
 class Address extends SalesResource implements OrderAddressResourceInterface
 {
@@ -19,19 +18,16 @@ class Address extends SalesResource implements OrderAddressResourceInterface
      * Event prefix
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_address_resource';
 
     /**
      * @var \Magento\Sales\Model\Order\Address\Validator
-     * @since 2.0.0
      */
     protected $_validator;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\GridPool
-     * @since 2.0.0
      */
     protected $gridPool;
 
@@ -44,7 +40,6 @@ class Address extends SalesResource implements OrderAddressResourceInterface
      * @param \Magento\Sales\Model\Order\Address\Validator $validator
      * @param \Magento\Sales\Model\ResourceModel\GridPool $gridPool
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -72,7 +67,6 @@ class Address extends SalesResource implements OrderAddressResourceInterface
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -83,7 +77,6 @@ class Address extends SalesResource implements OrderAddressResourceInterface
      * Return configuration for all attributes
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllAttributes()
     {
@@ -109,7 +102,6 @@ class Address extends SalesResource implements OrderAddressResourceInterface
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {

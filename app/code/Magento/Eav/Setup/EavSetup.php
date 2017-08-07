@@ -17,7 +17,6 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class EavSetup
 {
@@ -25,7 +24,6 @@ class EavSetup
      * Cache
      *
      * @var CacheInterface
-     * @since 2.0.0
      */
     private $cache;
 
@@ -33,7 +31,6 @@ class EavSetup
      * Attribute group collection factory
      *
      * @var CollectionFactory
-     * @since 2.0.0
      */
     private $attrGroupCollectionFactory;
 
@@ -41,7 +38,6 @@ class EavSetup
      * Attribute mapper
      *
      * @var PropertyMapperInterface
-     * @since 2.0.0
      */
     private $attributeMapper;
 
@@ -49,7 +45,6 @@ class EavSetup
      * Setup model
      *
      * @var ModuleDataSetupInterface
-     * @since 2.0.0
      */
     private $setup;
 
@@ -57,7 +52,6 @@ class EavSetup
      * General Attribute Group Name
      *
      * @var string
-     * @since 2.0.0
      */
     private $_generalGroupName = 'General';
 
@@ -65,7 +59,6 @@ class EavSetup
      * Default attribute group name to id pairs
      *
      * @var array
-     * @since 2.0.0
      */
     private $defaultGroupIdAssociations = ['general' => 1];
 
@@ -73,7 +66,6 @@ class EavSetup
      * Default attribute group name
      *
      * @var string
-     * @since 2.0.0
      */
     private $_defaultGroupName = 'Default';
 
@@ -81,7 +73,6 @@ class EavSetup
      * Default attribute set name
      *
      * @var string
-     * @since 2.0.0
      */
     private $_defaultAttributeSetName = 'Default';
 
@@ -92,7 +83,6 @@ class EavSetup
      * @param Context $context
      * @param CacheInterface $cache
      * @param CollectionFactory $attrGroupCollectionFactory
-     * @since 2.0.0
      */
     public function __construct(
         ModuleDataSetupInterface $setup,
@@ -110,7 +100,6 @@ class EavSetup
      * Gets setup model
      *
      * @return ModuleDataSetupInterface
-     * @since 2.0.0
      */
     public function getSetup()
     {
@@ -121,7 +110,6 @@ class EavSetup
      * Gets attribute group collection factory
      *
      * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection
-     * @since 2.0.0
      */
     public function getAttributeGroupCollectionFactory()
     {
@@ -132,7 +120,6 @@ class EavSetup
      * Clean cache
      *
      * @return $this
-     * @since 2.0.0
      */
     public function cleanCache()
     {
@@ -144,7 +131,6 @@ class EavSetup
      * Install Default Group Ids
      *
      * @return $this
-     * @since 2.0.0
      */
     public function installDefaultGroupIds()
     {
@@ -190,7 +176,6 @@ class EavSetup
      * @param string $code
      * @param array $params
      * @return $this
-     * @since 2.0.0
      */
     public function addEntityType($code, array $params)
     {
@@ -235,7 +220,6 @@ class EavSetup
      * @param string $field
      * @param string $value
      * @return $this
-     * @since 2.0.0
      */
     public function updateEntityType($code, $field, $value = null)
     {
@@ -255,7 +239,6 @@ class EavSetup
      * @param int|string $id
      * @param string $field
      * @return mixed
-     * @since 2.0.0
      */
     public function getEntityType($id, $field = null)
     {
@@ -273,7 +256,6 @@ class EavSetup
      * @param int|string $entityTypeId
      * @return int
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function getEntityTypeId($entityTypeId)
     {
@@ -292,7 +274,6 @@ class EavSetup
      *
      * @param int|string $id
      * @return $this
-     * @since 2.0.0
      */
     public function removeEntityType($id)
     {
@@ -313,7 +294,6 @@ class EavSetup
      * @param int|string $entityTypeId
      * @param int $sortOrder
      * @return int
-     * @since 2.0.0
      */
     public function getAttributeSetSortOrder($entityTypeId, $sortOrder = null)
     {
@@ -340,7 +320,6 @@ class EavSetup
      * @param int $sortOrder
      * @param int $setId
      * @return $this
-     * @since 2.0.0
      */
     public function addAttributeSet($entityTypeId, $name, $sortOrder = null, $setId = null)
     {
@@ -374,7 +353,6 @@ class EavSetup
      * @param string $field
      * @param mixed $value
      * @return $this
-     * @since 2.0.0
      */
     public function updateAttributeSet($entityTypeId, $id, $field, $value = null)
     {
@@ -397,7 +375,6 @@ class EavSetup
      * @param int|string $id
      * @param string $field
      * @return mixed
-     * @since 2.0.0
      */
     public function getAttributeSet($entityTypeId, $id, $field = null)
     {
@@ -418,7 +395,6 @@ class EavSetup
      * @param int|string $setId
      * @return int
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function getAttributeSetId($entityTypeId, $setId)
     {
@@ -438,7 +414,6 @@ class EavSetup
      * @param int|string $entityTypeId
      * @param int|string $id
      * @return $this
-     * @since 2.0.0
      */
     public function removeAttributeSet($entityTypeId, $id)
     {
@@ -456,7 +431,6 @@ class EavSetup
      * @param int|string $entityType
      * @param string $attributeSet
      * @return $this
-     * @since 2.0.0
      */
     public function setDefaultSetToEntityType($entityType, $attributeSet = 'Default')
     {
@@ -471,7 +445,6 @@ class EavSetup
      *
      * @param int|string|null $entityTypeId
      * @return array
-     * @since 2.0.0
      */
     public function getAllAttributeSetIds($entityTypeId = null)
     {
@@ -492,7 +465,6 @@ class EavSetup
      *
      * @param string|int $entityType
      * @return int
-     * @since 2.0.0
      */
     public function getDefaultAttributeSetId($entityType)
     {
@@ -521,7 +493,6 @@ class EavSetup
      * @param int|string $setId
      * @param int $sortOrder
      * @return int
-     * @since 2.0.0
      */
     public function getAttributeGroupSortOrder($entityTypeId, $setId, $sortOrder = null)
     {
@@ -548,7 +519,6 @@ class EavSetup
      * @param string $name
      * @param int $sortOrder
      * @return $this
-     * @since 2.0.0
      */
     public function addAttributeGroup($entityTypeId, $setId, $name, $sortOrder = null)
     {
@@ -587,7 +557,7 @@ class EavSetup
     /**
      * @param string $groupName
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function convertToAttributeGroupCode($groupName)
     {
@@ -603,7 +573,6 @@ class EavSetup
      * @param string $field
      * @param mixed $value
      * @return $this
-     * @since 2.0.0
      */
     public function updateAttributeGroup($entityTypeId, $setId, $id, $field, $value = null)
     {
@@ -628,7 +597,6 @@ class EavSetup
      * @param int|string $id
      * @param string $field
      * @return mixed
-     * @since 2.0.0
      */
     public function getAttributeGroup($entityTypeId, $setId, $id, $field = null)
     {
@@ -662,7 +630,7 @@ class EavSetup
      * @param string $code
      * @param string $field
      * @return mixed
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getAttributeGroupByCode($entityTypeId, $setId, $code, $field = null)
     {
@@ -684,7 +652,6 @@ class EavSetup
      * @param int|string $groupId
      * @return $this
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function getAttributeGroupId($entityTypeId, $setId, $groupId)
     {
@@ -709,7 +676,6 @@ class EavSetup
      * @param int|string $setId
      * @param int|string $id
      * @return $this
-     * @since 2.0.0
      */
     public function removeAttributeGroup($entityTypeId, $setId, $id)
     {
@@ -727,7 +693,6 @@ class EavSetup
      * @param string|int $entityType
      * @param int $attributeSetId
      * @return int
-     * @since 2.0.0
      */
     public function getDefaultAttributeGroupId($entityType, $attributeSetId = null)
     {
@@ -758,7 +723,6 @@ class EavSetup
      * @param int|string $groupId
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAttributesNumberInGroup($entityTypeId, $setId, $groupId)
     {
@@ -788,7 +752,6 @@ class EavSetup
      * @param string $key
      * @param string $default
      * @return string
-     * @since 2.0.0
      */
     private function _getValue($array, $key, $default = null)
     {
@@ -804,7 +767,6 @@ class EavSetup
      * @param  array $data
      * @return true
      * @throws LocalizedException
-     * @since 2.0.0
      */
     private function _validateAttributeData($data)
     {
@@ -835,7 +797,6 @@ class EavSetup
      * @param string $code
      * @param array $attr
      * @return $this
-     * @since 2.0.0
      */
     public function addAttribute($entityTypeId, $code, array $attr)
     {
@@ -901,7 +862,6 @@ class EavSetup
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function addAttributeOption($option)
     {
@@ -968,7 +928,6 @@ class EavSetup
      * @param mixed $value
      * @param int $sortOrder
      * @return $this
-     * @since 2.0.0
      */
     public function updateAttribute($entityTypeId, $id, $field, $value = null, $sortOrder = null)
     {
@@ -987,7 +946,6 @@ class EavSetup
      * @param int $sortOrder
      * @return $this
      * @throws LocalizedException
-     * @since 2.0.0
      */
     private function _updateAttribute($entityTypeId, $id, $field, $value = null, $sortOrder = null)
     {
@@ -1045,7 +1003,6 @@ class EavSetup
      * @param mixed $value
      * @return $this
      * @throws LocalizedException
-     * @since 2.0.0
      */
     private function _updateAttributeAdditionalData($entityTypeId, $id, $field, $value = null)
     {
@@ -1101,7 +1058,6 @@ class EavSetup
      * @param array $attribute
      *
      * @return void
-     * @since 2.0.0
      */
     private function updateCachedRow($field, $value, $attribute)
     {
@@ -1136,7 +1092,6 @@ class EavSetup
      * @param int|string $id
      * @param string $field
      * @return mixed
-     * @since 2.0.0
      */
     public function getAttribute($entityTypeId, $id, $field = null)
     {
@@ -1186,7 +1141,6 @@ class EavSetup
      * @param int|string $entityTypeId
      * @param int|string $id
      * @return int
-     * @since 2.0.0
      */
     public function getAttributeId($entityTypeId, $id)
     {
@@ -1205,7 +1159,6 @@ class EavSetup
      * @param int|string $entityTypeId Entity Type id or Entity Type code
      * @param int|string $id Attribute id or Attribute code
      * @return string
-     * @since 2.0.0
      */
     public function getAttributeTable($entityTypeId, $id)
     {
@@ -1246,7 +1199,6 @@ class EavSetup
      * @param int|string $entityTypeId
      * @param int|string $code
      * @return $this
-     * @since 2.0.0
      */
     public function removeAttribute($entityTypeId, $code)
     {
@@ -1270,7 +1222,6 @@ class EavSetup
      * @param int|string $groupId
      * @param int $sortOrder
      * @return $this
-     * @since 2.0.0
      */
     public function getAttributeSortOrder($entityTypeId, $setId, $groupId, $sortOrder = null)
     {
@@ -1298,7 +1249,6 @@ class EavSetup
      * @param int|string $attributeId
      * @param int $sortOrder
      * @return $this
-     * @since 2.0.0
      */
     public function addAttributeToSet($entityTypeId, $setId, $groupId, $attributeId, $sortOrder = null)
     {
@@ -1348,7 +1298,6 @@ class EavSetup
      * @param int|string $attributeId
      * @param int $sortOrder
      * @return $this
-     * @since 2.0.0
      */
     public function addAttributeToGroup($entityType, $setId, $groupId, $attributeId, $sortOrder = null)
     {
@@ -1415,7 +1364,6 @@ class EavSetup
      * Gets default entities and attributes
      *
      * @return array
-     * @since 2.0.0
      */
     public function getDefaultEntities()
     {
@@ -1429,7 +1377,6 @@ class EavSetup
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function installEntities($entities = null)
     {
@@ -1483,7 +1430,6 @@ class EavSetup
      * Retrieve attribute table fields
      *
      * @return array
-     * @since 2.0.0
      */
     private function _getAttributeTableFields()
     {
@@ -1495,7 +1441,6 @@ class EavSetup
      *
      * @param array $data
      * @return $this
-     * @since 2.0.0
      */
     private function _insertAttribute(array $data)
     {
@@ -1528,7 +1473,6 @@ class EavSetup
      * @param int|string $entityTypeId
      * @param array $data
      * @return $this
-     * @since 2.0.0
      */
     private function _insertAttributeAdditionalData($entityTypeId, array $data)
     {

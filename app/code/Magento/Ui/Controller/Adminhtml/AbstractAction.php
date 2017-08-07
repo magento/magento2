@@ -13,20 +13,17 @@ use Magento\Framework\View\Element\UiComponentFactory;
 /**
  * Class Render
  * @api
- * @since 2.0.0
  */
 abstract class AbstractAction extends Action implements UiActionInterface
 {
     /**
      * @var UiComponentFactory
-     * @since 2.0.0
      */
     protected $factory;
 
     /**
      * @param Context $context
      * @param UiComponentFactory $factory
-     * @since 2.0.0
      */
     public function __construct(Context $context, UiComponentFactory $factory)
     {
@@ -38,7 +35,6 @@ abstract class AbstractAction extends Action implements UiActionInterface
      * Getting name
      *
      * @return mixed
-     * @since 2.0.0
      */
     protected function getName()
     {
@@ -49,7 +45,6 @@ abstract class AbstractAction extends Action implements UiActionInterface
      * Getting component
      *
      * @return mixed
-     * @since 2.0.0
      */
     protected function getComponent()
     {
@@ -60,7 +55,6 @@ abstract class AbstractAction extends Action implements UiActionInterface
      * Action for AJAX request
      *
      * @return void
-     * @since 2.0.0
      */
     public function executeAjaxRequest()
     {
@@ -69,7 +63,6 @@ abstract class AbstractAction extends Action implements UiActionInterface
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     protected function _isAllowed()
     {

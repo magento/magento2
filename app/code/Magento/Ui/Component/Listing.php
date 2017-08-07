@@ -9,7 +9,6 @@ use Magento\Ui\Component\Listing\Columns;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Listing extends AbstractComponent
 {
@@ -17,7 +16,6 @@ class Listing extends AbstractComponent
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $columns = [];
 
@@ -25,7 +23,6 @@ class Listing extends AbstractComponent
      * Get component name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getComponentName()
     {
@@ -34,7 +31,6 @@ class Listing extends AbstractComponent
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getDataSourceData()
     {

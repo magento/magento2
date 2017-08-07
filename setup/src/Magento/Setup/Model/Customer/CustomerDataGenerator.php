@@ -7,31 +7,26 @@ namespace Magento\Setup\Model\Customer;
 
 /**
  * Generate customer data for customer fixture
- * @since 2.2.0
  */
 class CustomerDataGenerator
 {
     /**
      * @var array
-     * @since 2.2.0
      */
     private $config;
 
     /**
      * @var \Magento\Setup\Model\Address\AddressDataGenerator
-     * @since 2.2.0
      */
     private $addressDataGenerator;
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\Group\CollectionFactory
-     * @since 2.2.0
      */
     private $groupCollectionFactory;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $customerGroupIds;
 
@@ -39,7 +34,6 @@ class CustomerDataGenerator
      * @param \Magento\Customer\Model\ResourceModel\Group\CollectionFactory $groupCollectionFactory
      * @param \Magento\Setup\Model\Address\AddressDataGenerator $addressDataGenerator
      * @param array $config
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Customer\Model\ResourceModel\Group\CollectionFactory $groupCollectionFactory,
@@ -56,7 +50,6 @@ class CustomerDataGenerator
      *
      * @param int $customerId
      * @return array
-     * @since 2.2.0
      */
     public function generate($customerId)
     {
@@ -74,7 +67,6 @@ class CustomerDataGenerator
      * Get customer group id for customer
      * @param int $customerId
      * @return int
-     * @since 2.2.0
      */
     private function getGroupIdForCustomer($customerId)
     {
@@ -91,7 +83,6 @@ class CustomerDataGenerator
      * 50% as billing address
      *
      * @return array
-     * @since 2.2.0
      */
     private function generateAddresses()
     {

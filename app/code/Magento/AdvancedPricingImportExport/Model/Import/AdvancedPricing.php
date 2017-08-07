@@ -16,7 +16,6 @@ use Magento\Framework\App\ResourceConnection;
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
- * @since 2.0.0
  */
 class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 {
@@ -58,7 +57,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Validation failure message template definitions.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_messageTemplates = [
         ValidatorInterface::ERROR_INVALID_WEBSITE => 'Invalid value in Website column (website does not exists?)',
@@ -78,7 +76,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * If we should check column names
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $needColumnCheck = true;
 
@@ -86,7 +83,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Valid column names.
      *
      * @array
-     * @since 2.0.0
      */
     protected $validColumnNames = [
         self::COL_SKU,
@@ -101,55 +97,46 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Need to log in import history
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $logInHistory = true;
 
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory
-     * @since 2.0.0
      */
     protected $_resourceFactory;
 
     /**
      * @var \Magento\Catalog\Helper\Data
-     * @since 2.0.0
      */
     protected $_catalogData;
 
     /**
      * @var \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     protected $_productModel;
 
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
-     * @since 2.0.0
      */
     protected $_storeResolver;
 
     /**
      * @var ImportProduct
-     * @since 2.0.0
      */
     protected $_importProduct;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_validators = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_cachedSkuToDelete;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_oldSkus = null;
 
@@ -157,7 +144,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Permanent entity columns.
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_permanentAttributes = [self::COL_SKU];
 
@@ -165,13 +151,11 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Catalog product entity
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_catalogProductEntity;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
@@ -179,7 +163,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Product entity link field
      *
      * @var string
-     * @since 2.1.0
      */
     private $productEntityLinkField;
 
@@ -203,7 +186,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param AdvancedPricing\Validator\Website $websiteValidator
      * @param AdvancedPricing\Validator\TierPrice $tierPriceValidator
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
@@ -252,7 +234,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      *
      * @param string $type
      * @return AdvancedPricing\Validator|AdvancedPricing\Validator\Website
-     * @since 2.0.0
      */
     protected function _getValidator($type)
     {
@@ -263,7 +244,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Entity type code getter.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getEntityTypeCode()
     {
@@ -276,7 +256,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param array $rowData
      * @param int $rowNum
      * @return bool
-     * @since 2.0.0
      */
     public function validateRow(array $rowData, $rowNum)
     {
@@ -312,7 +291,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      *
      * @throws \Exception
      * @return bool Result of operation.
-     * @since 2.0.0
      */
     protected function _importData()
     {
@@ -331,7 +309,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Save advanced pricing
      *
      * @return $this
-     * @since 2.0.0
      */
     public function saveAdvancedPricing()
     {
@@ -343,7 +320,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Deletes Advanced price data from raw data.
      *
      * @return $this
-     * @since 2.0.0
      */
     public function deleteAdvancedPricing()
     {
@@ -372,7 +348,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Replace advanced pricing
      *
      * @return $this
-     * @since 2.0.0
      */
     public function replaceAdvancedPricing()
     {
@@ -386,7 +361,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function saveAndReplaceAdvancedPrices()
     {
@@ -450,7 +424,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param array $priceData
      * @param string $table
      * @return $this
-     * @since 2.0.0
      */
     protected function saveProductPrices(array $priceData, $table)
     {
@@ -482,7 +455,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param array $listSku
      * @param string $table
      * @return boolean
-     * @since 2.0.0
      */
     protected function deleteProductTierPrices(array $listSku, $table)
     {
@@ -520,7 +492,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      *
      * @param array $listSku
      * @return $this
-     * @since 2.0.0
      */
     protected function setUpdatedAt(array $listSku)
     {
@@ -538,7 +509,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      *
      * @param string $websiteCode
      * @return array|int|string
-     * @since 2.0.0
      */
     protected function getWebSiteId($websiteCode)
     {
@@ -552,7 +522,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      *
      * @param string $customerGroup
      * @return int
-     * @since 2.0.0
      */
     protected function getCustomerGroupId($customerGroup)
     {
@@ -564,7 +533,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Retrieve product skus
      *
      * @return array
-     * @since 2.0.0
      */
     protected function retrieveOldSkus()
     {
@@ -585,7 +553,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param array $prices
      * @param string $table
      * @return $this
-     * @since 2.0.0
      */
     protected function processCountExistingPrices($prices, $table)
     {
@@ -620,7 +587,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param array $prices
      * @param array $existingPrice
      * @return void
-     * @since 2.0.0
      */
     protected function incrementCounterUpdated($prices, $existingPrice)
     {
@@ -638,7 +604,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      *
      * @param array $tierPrices
      * @return $this
-     * @since 2.0.0
      */
     protected function processCountNewPrices(array $tierPrices)
     {
@@ -654,7 +619,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Get product entity link field
      *
      * @return string
-     * @since 2.1.0
      */
     private function getProductEntityLinkField()
     {

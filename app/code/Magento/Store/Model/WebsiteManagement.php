@@ -10,19 +10,16 @@ use Magento\Store\Model\ResourceModel\Website\CollectionFactory;
 
 /**
  * @api
- * @since 2.0.0
  */
 class WebsiteManagement implements WebsiteManagementInterface
 {
     /**
      * @var CollectionFactory
-     * @since 2.0.0
      */
     protected $websitesFactory;
 
     /**
      * @param CollectionFactory $websitesFactory
-     * @since 2.0.0
      */
     public function __construct(CollectionFactory $websitesFactory)
     {
@@ -31,7 +28,6 @@ class WebsiteManagement implements WebsiteManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCount()
     {

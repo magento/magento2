@@ -8,19 +8,16 @@ namespace Magento\Framework\View\Element\Message\Renderer;
 /**
  * Class \Magento\Framework\View\Element\Message\Renderer\RenderersPool
  *
- * @since 2.0.0
  */
 class RenderersPool implements PoolInterface
 {
     /**
      * @var RendererInterface[]
-     * @since 2.0.0
      */
     private $renderers;
 
     /**
      * @param array $renderers
-     * @since 2.0.0
      */
     public function __construct(
         array $renderers = []
@@ -40,7 +37,6 @@ class RenderersPool implements PoolInterface
      *
      * @param string $rendererCode
      * @return RendererInterface | null
-     * @since 2.0.0
      */
     public function get($rendererCode)
     {

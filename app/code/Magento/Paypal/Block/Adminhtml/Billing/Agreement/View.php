@@ -9,7 +9,6 @@ namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement;
  * Adminhtml billing agreement view
  *
  * @api
- * @since 2.0.0
  */
 class View extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -17,7 +16,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -25,7 +23,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -40,7 +37,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Initialize view container
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -87,7 +83,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve header text
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -98,7 +93,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve cancel billing agreement url
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getCancelUrl()
     {
@@ -109,7 +103,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve billing agreement model
      *
      * @return \Magento\Paypal\Model\Billing\Agreement
-     * @since 2.0.0
      */
     protected function _getBillingAgreement()
     {
@@ -121,7 +114,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      *
      * @param string $resourceId
      * @return bool
-     * @since 2.0.0
      */
     protected function _isAllowed($resourceId)
     {

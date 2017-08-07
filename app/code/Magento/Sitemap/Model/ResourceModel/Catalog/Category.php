@@ -11,7 +11,6 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
  * Sitemap resource catalog collection model
  *
  * @api
- * @since 2.0.0
  */
 class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -19,7 +18,6 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Collection Zend Db select
      *
      * @var \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected $_select;
 
@@ -27,25 +25,22 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Attribute cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_attributesCache = [];
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category
-     * @since 2.0.0
      */
     protected $_categoryResource;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $metadataPool;
 
@@ -55,7 +50,6 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\ResourceModel\Category $categoryResource
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -72,7 +66,6 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -84,7 +77,6 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $storeId
      * @return array|bool
-     * @since 2.0.0
      */
     public function getCollection($storeId)
     {
@@ -141,7 +133,6 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param array $categoryRow
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     protected function _prepareCategory(array $categoryRow)
     {
@@ -162,7 +153,6 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param mixed $value
      * @param string $type
      * @return \Magento\Framework\DB\Select|bool
-     * @since 2.0.0
      */
     protected function _addFilter($storeId, $attributeCode, $value, $type = '=')
     {

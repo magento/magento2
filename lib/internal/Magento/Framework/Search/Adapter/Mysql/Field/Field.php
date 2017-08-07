@@ -9,25 +9,21 @@ namespace Magento\Framework\Search\Adapter\Mysql\Field;
 /**
  * Class \Magento\Framework\Search\Adapter\Mysql\Field\Field
  *
- * @since 2.0.0
  */
 class Field implements FieldInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     private $column;
 
     /**
      * @var int|null
-     * @since 2.0.0
      */
     private $attributeId;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     private $type;
 
@@ -35,7 +31,6 @@ class Field implements FieldInterface
      * @param string $column
      * @param int|null $attributeId
      * @param int $type
-     * @since 2.0.0
      */
     public function __construct($column, $attributeId = null, $type = self::TYPE_FULLTEXT)
     {
@@ -46,7 +41,6 @@ class Field implements FieldInterface
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getColumn()
     {
@@ -55,7 +49,6 @@ class Field implements FieldInterface
 
     /**
      * @return int|null
-     * @since 2.0.0
      */
     public function getAttributeId()
     {
@@ -64,7 +57,6 @@ class Field implements FieldInterface
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getType()
     {

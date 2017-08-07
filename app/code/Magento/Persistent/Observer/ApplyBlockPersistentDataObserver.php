@@ -11,7 +11,6 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\Persistent\Observer\ApplyBlockPersistentDataObserver
  *
- * @since 2.0.0
  */
 class ApplyBlockPersistentDataObserver implements ObserverInterface
 {
@@ -19,7 +18,6 @@ class ApplyBlockPersistentDataObserver implements ObserverInterface
      * Persistent config factory
      *
      * @var \Magento\Persistent\Model\Persistent\ConfigFactory
-     * @since 2.0.0
      */
     protected $_persistentConfigFactory;
 
@@ -27,7 +25,6 @@ class ApplyBlockPersistentDataObserver implements ObserverInterface
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
@@ -35,7 +32,6 @@ class ApplyBlockPersistentDataObserver implements ObserverInterface
      * Persistent data
      *
      * @var \Magento\Persistent\Helper\Data
-     * @since 2.0.0
      */
     protected $_persistentData = null;
 
@@ -43,7 +39,6 @@ class ApplyBlockPersistentDataObserver implements ObserverInterface
      * Persistent session
      *
      * @var \Magento\Persistent\Helper\Session
-     * @since 2.0.0
      */
     protected $_persistentSession = null;
 
@@ -52,7 +47,6 @@ class ApplyBlockPersistentDataObserver implements ObserverInterface
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Persistent\Model\Persistent\ConfigFactory $persistentConfigFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
@@ -71,7 +65,6 @@ class ApplyBlockPersistentDataObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

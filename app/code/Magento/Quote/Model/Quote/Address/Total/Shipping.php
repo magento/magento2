@@ -11,26 +11,22 @@ use Magento\Quote\Model\Quote\Address\FreeShippingInterface;
 /**
  * Class \Magento\Quote\Model\Quote\Address\Total\Shipping
  *
- * @since 2.0.0
  */
 class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var FreeShippingInterface
-     * @since 2.0.0
      */
     protected $freeShipping;
 
     /**
      * @param PriceCurrencyInterface $priceCurrency
      * @param FreeShippingInterface $freeShipping
-     * @since 2.0.0
      */
     public function __construct(
         PriceCurrencyInterface $priceCurrency,
@@ -51,7 +47,6 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function collect(
         \Magento\Quote\Model\Quote $quote,
@@ -199,7 +194,6 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
@@ -220,7 +214,6 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * Get Shipping label
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getLabel()
     {

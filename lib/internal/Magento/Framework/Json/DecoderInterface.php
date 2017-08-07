@@ -10,8 +10,7 @@ namespace Magento\Framework\Json;
  *
  * @api
  *
- * @deprecated 2.2.0 @see \Magento\Framework\Serialize\Serializer\Json::unserialize
- * @since 2.0.0
+ * @deprecated 100.2.0 @see \Magento\Framework\Serialize\Serializer\Json::unserialize
  */
 interface DecoderInterface
 {
@@ -20,7 +19,6 @@ interface DecoderInterface
      *
      * @param string $data
      * @return mixed
-     * @since 2.0.0
      */
     public function decode($data);
 }

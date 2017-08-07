@@ -9,7 +9,6 @@ namespace Magento\Backend\Controller\Adminhtml\Cache;
 /**
  * Class \Magento\Backend\Controller\Adminhtml\Cache\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Backend\Controller\Adminhtml\Cache
 {
@@ -17,7 +16,6 @@ class Index extends \Magento\Backend\Controller\Adminhtml\Cache
      * Display cache management grid
      *
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

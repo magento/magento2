@@ -14,7 +14,6 @@ use Magento\Framework\App\ObjectManager;
  * GoogleAnalytics Page Block
  *
  * @api
- * @since 2.0.0
  */
 class Ga extends \Magento\Framework\View\Element\Template
 {
@@ -22,19 +21,16 @@ class Ga extends \Magento\Framework\View\Element\Template
      * Google analytics data
      *
      * @var \Magento\GoogleAnalytics\Helper\Data
-     * @since 2.0.0
      */
     protected $_googleAnalyticsData = null;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
-     * @since 2.0.0
      */
     protected $_salesOrderCollection;
 
     /**
      * @var \Magento\Cookie\Helper\Cookie
-     * @since 2.2.0
      */
     private $cookieHelper;
 
@@ -44,7 +40,6 @@ class Ga extends \Magento\Framework\View\Element\Template
      * @param \Magento\GoogleAnalytics\Helper\Data $googleAnalyticsData
      * @param array $data
      * @param \Magento\Cookie\Helper\Cookie|null $cookieHelper
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -64,7 +59,6 @@ class Ga extends \Magento\Framework\View\Element\Template
      *
      * @param string $path
      * @return mixed
-     * @since 2.0.0
      */
     public function getConfig($path)
     {
@@ -75,7 +69,6 @@ class Ga extends \Magento\Framework\View\Element\Template
      * Get a specific page name (may be customized via layout)
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getPageName()
     {
@@ -90,8 +83,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      * @return string
      * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/method-reference#set
      * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/method-reference#gaObjectMethods
-     * @deprecated 2.2.0 please use getPageTrackingData method
-     * @since 2.0.0
+     * @deprecated 100.2.0 please use getPageTrackingData method
      */
     public function getPageTrackingCode($accountId)
     {
@@ -112,8 +104,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#transaction
      *
      * @return string|void
-     * @deprecated 2.2.0 please use getOrdersTrackingData method
-     * @since 2.0.0
+     * @deprecated 100.2.0 please use getOrdersTrackingData method
      */
     public function getOrdersTrackingCode()
     {
@@ -168,7 +159,6 @@ class Ga extends \Magento\Framework\View\Element\Template
      * Render GA tracking scripts
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -183,7 +173,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      * Return cookie restriction mode value.
      *
      * @return bool
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function isCookieRestrictionModeEnabled()
     {
@@ -194,7 +184,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      * Return current website id.
      *
      * @return int
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getCurrentWebsiteId()
     {
@@ -209,7 +199,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      *
      * @param string $accountId
      * @return array
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getPageTrackingData($accountId)
     {
@@ -228,7 +218,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#transaction
      *
      * @return array
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getOrdersTrackingData()
     {
@@ -265,7 +255,6 @@ class Ga extends \Magento\Framework\View\Element\Template
      * Return page url for tracking.
      *
      * @return string
-     * @since 2.2.0
      */
     private function getOptPageUrl()
     {

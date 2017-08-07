@@ -14,25 +14,21 @@ use Zend\Code\Exception\InvalidArgumentException;
 
 /**
  * Class Updater
- * @since 2.0.0
  */
 class Updater
 {
     /**
      * @var ProductFactory
-     * @since 2.0.0
      */
     protected $productFactory;
 
     /**
      * @var FormatInterface
-     * @since 2.0.0
      */
     protected $localeFormat;
 
     /**
      * @var ObjectFactory
-     * @since 2.0.0
      */
     protected $objectFactory;
 
@@ -40,7 +36,6 @@ class Updater
      * Serializer interface instance.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -49,7 +44,6 @@ class Updater
      * @param FormatInterface $localeFormat
      * @param ObjectFactory $objectFactory
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         ProductFactory $productFactory,
@@ -73,7 +67,6 @@ class Updater
      * @throws InvalidArgumentException
      * @return Updater
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function update(Item $item, array $info)
     {
@@ -113,7 +106,6 @@ class Updater
      * @param array $info
      * @param Item $item
      * @return void
-     * @since 2.0.0
      */
     protected function setCustomPrice(array $info, Item $item)
     {
@@ -139,7 +131,6 @@ class Updater
      *
      * @param Item $item
      * @return void
-     * @since 2.0.0
      */
     protected function unsetCustomPrice(Item $item)
     {
@@ -163,7 +154,6 @@ class Updater
      *
      * @param float|int $price
      * @return float|int
-     * @since 2.0.0
      */
     protected function parseCustomPrice($price)
     {

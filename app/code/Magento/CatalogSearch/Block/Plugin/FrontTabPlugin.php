@@ -12,19 +12,16 @@ use Magento\Framework\Data\Form\Element\Fieldset;
 
 /**
  * Plugin for Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front
- * @since 2.0.0
  */
 class FrontTabPlugin
 {
     /**
      * @var Weight
-     * @since 2.0.0
      */
     private $weightSource;
 
     /**
      * @param Weight $weightSource
-     * @since 2.0.0
      */
     public function __construct(Weight $weightSource)
     {
@@ -37,7 +34,6 @@ class FrontTabPlugin
      * @param ProductAttributeFrontTabBlock $subject
      * @param Form $form
      * @return void
-     * @since 2.2.0
      */
     public function beforeSetForm(ProductAttributeFrontTabBlock $subject, Form $form)
     {

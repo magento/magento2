@@ -13,26 +13,22 @@ use Psr\Log\LoggerInterface as Logger;
 /**
  * Class \Magento\Framework\Cache\InvalidateLogger
  *
- * @since 2.0.0
  */
 class InvalidateLogger
 {
     /**
      * @var HttpRequest
-     * @since 2.0.0
      */
     private $request;
 
     /**
      * @var Logger
-     * @since 2.0.0
      */
     private $logger;
 
     /**
      * @param HttpRequest $request
      * @param Logger $logger
-     * @since 2.0.0
      */
     public function __construct(HttpRequest $request, Logger $logger)
     {
@@ -44,7 +40,6 @@ class InvalidateLogger
      * Logger invalidate cache
      * @param mixed $invalidateInfo
      * @return void
-     * @since 2.0.0
      */
     public function execute($invalidateInfo)
     {
@@ -55,7 +50,6 @@ class InvalidateLogger
      * Make extra data to logger message
      * @param mixed $invalidateInfo
      * @return array
-     * @since 2.0.0
      */
     private function makeParams($invalidateInfo)
     {
@@ -70,7 +64,6 @@ class InvalidateLogger
      * @param string $message
      * @param mixed $params
      * @return void
-     * @since 2.0.0
      */
     public function critical($message, $params)
     {

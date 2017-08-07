@@ -15,7 +15,6 @@ use Magento\Tax\Api\TaxRateRepositoryInterface;
 
 /**
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class UpgradeData implements UpgradeDataInterface
 {
@@ -23,7 +22,6 @@ class UpgradeData implements UpgradeDataInterface
      * Tax setup factory
      *
      * @var TaxSetupFactory
-     * @since 2.0.0
      */
     private $taxSetupFactory;
 
@@ -31,19 +29,16 @@ class UpgradeData implements UpgradeDataInterface
      * Tax rate repository
      *
      * @var TaxRateRepositoryInterface
-     * @since 2.2.0
      */
     private $taxRateRepository;
 
     /**
      * @var SearchCriteriaFactory
-     * @since 2.2.0
      */
     private $searchCriteriaFactory;
 
     /**
      * @var RegionFactory
-     * @since 2.2.0
      */
     private $directoryRegionFactory;
 
@@ -54,7 +49,6 @@ class UpgradeData implements UpgradeDataInterface
      * @param TaxRateRepositoryInterface $taxRateRepository
      * @param SearchCriteriaFactory $searchCriteriaFactory
      * @param RegionFactory $directoryRegionFactory
-     * @since 2.0.0
      */
     public function __construct(
         TaxSetupFactory $taxSetupFactory,
@@ -70,7 +64,6 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -113,7 +106,6 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param string $taxCode
      * @return string
-     * @since 2.2.0
      */
     private function parseRegionFromTaxCode($taxCode)
     {

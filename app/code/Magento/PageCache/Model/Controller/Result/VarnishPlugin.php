@@ -14,31 +14,26 @@ use Magento\Framework\Controller\ResultInterface;
 
 /**
  * Plugin for processing varnish cache
- * @since 2.0.0
  */
 class VarnishPlugin
 {
     /**
      * @var Config
-     * @since 2.0.0
      */
     private $config;
 
     /**
      * @var Version
-     * @since 2.0.0
      */
     private $version;
 
     /**
      * @var AppState
-     * @since 2.0.0
      */
     private $state;
 
     /**
      * @var Registry
-     * @since 2.0.0
      */
     private $registry;
 
@@ -47,7 +42,6 @@ class VarnishPlugin
      * @param Version $version
      * @param AppState $state
      * @param Registry $registry
-     * @since 2.0.0
      */
     public function __construct(Config $config, Version $version, AppState $state, Registry $registry)
     {
@@ -66,7 +60,6 @@ class VarnishPlugin
      * @return ResultInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterRenderResult(ResultInterface $subject, ResultInterface $result, ResponseHttp $response)
     {

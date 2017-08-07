@@ -10,26 +10,22 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\MediaStorage\Model\Asset\Plugin\CleanMergedJsCss
  *
- * @since 2.0.0
  */
 class CleanMergedJsCss
 {
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
-     * @since 2.0.0
      */
     protected $database;
 
     /**
      * @var \Magento\Framework\Filesystem
-     * @since 2.0.0
      */
     protected $filesystem;
 
     /**
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $database
      * @param \Magento\Framework\Filesystem $filesystem
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\MediaStorage\Helper\File\Storage\Database $database,
@@ -47,7 +43,6 @@ class CleanMergedJsCss
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterCleanMergedJsCss(\Magento\Framework\View\Asset\MergeService $subject, $result)
     {

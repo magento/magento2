@@ -17,13 +17,11 @@ use Magento\Framework\Data\OptionSourceInterface;
 /**
  * Class \Magento\Catalog\Model\Product\Attribute\Source\Countryofmanufacture
  *
- * @since 2.0.0
  */
 class Countryofmanufacture extends AbstractSource implements OptionSourceInterface
 {
     /**
      * @var \Magento\Framework\App\Cache\Type\Config
-     * @since 2.0.0
      */
     protected $_configCacheType;
 
@@ -31,7 +29,6 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -39,13 +36,11 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
      * Country factory
      *
      * @var \Magento\Directory\Model\CountryFactory
-     * @since 2.0.0
      */
     protected $_countryFactory;
 
     /**
      * @var \Magento\Framework\Serialize\SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -55,7 +50,6 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Directory\Model\CountryFactory $countryFactory,
@@ -71,7 +65,6 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
      * Get list of all available countries
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllOptions()
     {
@@ -93,8 +86,7 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 101.1.0
      */
     private function getSerializer()
     {

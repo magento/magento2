@@ -7,7 +7,7 @@ namespace Magento\Test\Integrity\Modular;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-class RouteConfigFilesTest extends \PHPUnit_Framework_TestCase
+class RouteConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Config\ValidationStateInterface
@@ -42,13 +42,7 @@ class RouteConfigFilesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->validationStateMock = $this->getMock(
-            \Magento\Framework\Config\ValidationStateInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $this->validationStateMock->method('isValidationRequired')
             ->willReturn(true);
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();

@@ -18,7 +18,6 @@ use Magento\Usps\Helper\Data as DataHelper;
  * USPS shipping
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
@@ -67,7 +66,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Code of the carrier
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_code = self::CODE;
 
@@ -75,7 +73,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Weight precision
      *
      * @var int
-     * @since 2.1.0
      */
     private static $weightPrecision = 10;
 
@@ -83,7 +80,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Rate request data
      *
      * @var \Magento\Quote\Model\Quote\Address\RateRequest|null
-     * @since 2.0.0
      */
     protected $_request = null;
 
@@ -91,7 +87,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Rate result data
      *
      * @var Result|null
-     * @since 2.0.0
      */
     protected $_result = null;
 
@@ -99,7 +94,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Default cgi gateway url
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_defaultGatewayUrl = 'http://production.shippingapis.com/ShippingAPI.dll';
 
@@ -107,7 +101,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Container types that could be customized for USPS carrier
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_customizableContainerTypes = ['VARIABLE', 'RECTANGULAR', 'NONRECTANGULAR'];
 
@@ -115,25 +108,21 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Carrier helper
      *
      * @var \Magento\Shipping\Helper\Carrier
-     * @since 2.0.0
      */
     protected $_carrierHelper;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     * @since 2.0.0
      */
     protected $_productCollectionFactory;
 
     /**
      * @var \Magento\Framework\HTTP\ZendClientFactory
-     * @since 2.0.0
      */
     protected $_httpClientFactory;
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     protected $_debugReplacePrivateDataKeys = [
         'USERID'
@@ -141,7 +130,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
     /**
      * @var DataHelper
-     * @since 2.2.0
      */
     private $dataHelper;
 
@@ -167,7 +155,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -218,7 +205,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param RateRequest $request
      * @return \Magento\Quote\Model\Quote\Address\RateResult\Error|bool|Result
-     * @since 2.0.0
      */
     public function collectRates(RateRequest $request)
     {
@@ -241,7 +227,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function setRequest(\Magento\Quote\Model\Quote\Address\RateRequest $request)
     {
@@ -373,7 +358,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Get result of request
      *
      * @return Result|null
-     * @since 2.0.0
      */
     public function getResult()
     {
@@ -384,7 +368,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Get quotes
      *
      * @return Result
-     * @since 2.0.0
      */
     protected function _getQuotes()
     {
@@ -396,7 +379,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param string $freeMethod
      * @return void
-     * @since 2.0.0
      */
     protected function _setFreeMethodRequest($freeMethod)
     {
@@ -417,7 +399,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _getXmlQuotes()
     {
@@ -551,7 +532,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @link http://www.usps.com/webtools/htm/Rate-Calculators-v2-3.htm
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _parseXmlResponse($response)
     {
@@ -656,7 +636,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string $code
      * @return array|false
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function getCode($type, $code = '')
     {
@@ -998,7 +977,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param string|string[] $trackings
      * @return Result|null
-     * @since 2.0.0
      */
     public function getTracking($trackings)
     {
@@ -1017,7 +995,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Set tracking request
      *
      * @return void
-     * @since 2.0.0
      */
     protected function setTrackingReqeust()
     {
@@ -1034,7 +1011,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param string[] $trackings
      * @return void
-     * @since 2.0.0
      */
     protected function _getXmlTracking($trackings)
     {
@@ -1084,7 +1060,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     protected function _parseXmlTrackingResponse($trackingvalue, $response)
     {
@@ -1141,7 +1116,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Get tracking response
      *
      * @return string
-     * @since 2.0.0
      */
     public function getResponse()
     {
@@ -1170,7 +1144,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Get allowed shipping methods
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllowedMethods()
     {
@@ -1190,7 +1163,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string $countryId
      * @return string|false
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _getCountryName($countryId)
     {
@@ -1431,7 +1403,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param  string $name
      * @return string
-     * @since 2.0.0
      */
     protected function _filterServiceName($name)
     {
@@ -1452,7 +1423,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param \Magento\Framework\DataObject $request
      * @return string
-     * @since 2.0.0
      */
     protected function _formUsExpressShipmentRequest(\Magento\Framework\DataObject $request)
     {
@@ -1523,7 +1493,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @return string
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _formUsSignatureConfirmationShipmentRequest(\Magento\Framework\DataObject $request, $serviceType)
     {
@@ -1609,7 +1578,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param float $weightInPounds
      * @return float[]
-     * @since 2.0.0
      */
     protected function _convertPoundOunces($weightInPounds)
     {
@@ -1630,7 +1598,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _formIntlShipmentRequest(\Magento\Framework\DataObject $request)
     {
@@ -1884,7 +1851,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Framework\DataObject $request
      * @return \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _doShipmentRequest(\Magento\Framework\DataObject $request)
     {
@@ -1971,7 +1937,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param \Magento\Framework\DataObject|null $params
      * @return array|bool
-     * @since 2.0.0
      */
     public function getContainerTypes(\Magento\Framework\DataObject $params = null)
     {
@@ -1986,7 +1951,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Return all container types of carrier
      *
      * @return array|bool
-     * @since 2.0.0
      */
     public function getContainerTypesAll()
     {
@@ -1997,7 +1961,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Return structured data of containers witch related with shipping methods
      *
      * @return array|bool
-     * @since 2.0.0
      */
     public function getContainerTypesFilter()
     {
@@ -2009,7 +1972,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param \Magento\Framework\DataObject|null $params
      * @return array
-     * @since 2.0.0
      */
     public function getDeliveryConfirmationTypes(\Magento\Framework\DataObject $params = null)
     {
@@ -2030,7 +1992,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param null|string $countyDest
      * @param null|string $carrierMethodCode
      * @return bool
-     * @since 2.0.0
      */
     public function isGirthAllowed($countyDest = null, $carrierMethodCode = null)
     {
@@ -2043,7 +2004,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param \Magento\Framework\DataObject $params
      * @return array
-     * @since 2.0.0
      */
     public function getContentTypes(\Magento\Framework\DataObject $params)
     {
@@ -2070,7 +2030,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string $zipString
      * @param bool $returnFull
      * @return string[]
-     * @since 2.0.0
      */
     protected function _parseZip($zipString, $returnFull = false)
     {
@@ -2099,7 +2058,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param \SimpleXMLElement $service
      * @return boolean
-     * @since 2.1.0
      */
     private function isServiceAvailable(\SimpleXMLElement $service)
     {
@@ -2131,7 +2089,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string $data
      * @return string
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.1.0
      */
     protected function filterDebugData($data)
     {
@@ -2155,8 +2112,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Gets Data helper object
      *
      * @return DataHelper
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getDataHelper()
     {

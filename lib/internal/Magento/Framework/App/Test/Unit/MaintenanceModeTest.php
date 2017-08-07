@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit;
 
 use \Magento\Framework\App\MaintenanceMode;
 
-class MaintenanceModeTest extends \PHPUnit_Framework_TestCase
+class MaintenanceModeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var MaintenanceMode
@@ -23,7 +23,7 @@ class MaintenanceModeTest extends \PHPUnit_Framework_TestCase
     protected function setup()
     {
         $this->flagDir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
-        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $filesystem->expects($this->any())
             ->method('getDirectoryWrite')
             ->will($this->returnValue($this->flagDir));

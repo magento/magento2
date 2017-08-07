@@ -13,13 +13,11 @@ namespace Magento\Newsletter\Block\Adminhtml\Subscriber;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
     /**
      * @var \Magento\Newsletter\Model\QueueFactory
-     * @since 2.0.0
      */
     protected $_queueFactory;
 
@@ -28,7 +26,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Newsletter\Model\QueueFactory $queueFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -44,7 +41,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Prepare collection for grid
      *
      * @return \Magento\Backend\Block\Widget\Grid
-     * @since 2.0.0
      */
     protected function _prepareCollection()
     {

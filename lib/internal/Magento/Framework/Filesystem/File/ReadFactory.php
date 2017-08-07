@@ -11,7 +11,6 @@ use Magento\Framework\Filesystem\DriverPool;
 /**
  * Class \Magento\Framework\Filesystem\File\ReadFactory
  *
- * @since 2.0.0
  */
 class ReadFactory
 {
@@ -19,7 +18,6 @@ class ReadFactory
      * Pool of filesystem drivers
      *
      * @var DriverPool
-     * @since 2.0.0
      */
     private $driverPool;
 
@@ -27,7 +25,6 @@ class ReadFactory
      * Constructor
      *
      * @param DriverPool $driverPool
-     * @since 2.0.0
      */
     public function __construct(DriverPool $driverPool)
     {
@@ -40,7 +37,6 @@ class ReadFactory
      * @param string $path
      * @param DriverInterface|string $driver Driver or driver code
      * @return \Magento\Framework\Filesystem\File\ReadInterface
-     * @since 2.0.0
      */
     public function create($path, $driver)
     {

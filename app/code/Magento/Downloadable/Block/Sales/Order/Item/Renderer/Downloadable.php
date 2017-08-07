@@ -16,25 +16,21 @@ use Magento\Store\Model\ScopeInterface;
  * Downloadable order item render block
  *
  * @api
- * @since 2.0.0
  */
 class Downloadable extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
 {
     /**
      * @var Purchased
-     * @since 2.0.0
      */
     protected $_purchasedLinks;
 
     /**
      * @var \Magento\Downloadable\Model\Link\PurchasedFactory
-     * @since 2.0.0
      */
     protected $_purchasedFactory;
 
     /**
      * @var \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory
-     * @since 2.0.0
      */
     protected $_itemsFactory;
 
@@ -45,7 +41,6 @@ class Downloadable extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRende
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
      * @param \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -62,7 +57,6 @@ class Downloadable extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRende
 
     /**
      * @return Purchased
-     * @since 2.0.0
      */
     public function getLinks()
     {
@@ -81,7 +75,6 @@ class Downloadable extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRende
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getLinksTitle()
     {

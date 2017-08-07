@@ -13,26 +13,22 @@ use Magento\SalesRule\Model\Rule;
 /**
  * Class \Magento\SalesRule\Model\Converter\ToModel
  *
- * @since 2.0.0
  */
 class ToModel
 {
     /**
      * @var \Magento\SalesRule\Model\RuleFactory
-     * @since 2.0.0
      */
     protected $ruleFactory;
 
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
-     * @since 2.0.0
      */
     protected $dataObjectProcessor;
 
     /**
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,
@@ -46,7 +42,6 @@ class ToModel
      * @param \Magento\SalesRule\Model\Rule $ruleModel
      * @param RuleDataModel $dataModel
      * @return $this
-     * @since 2.0.0
      */
     protected function mapConditions(\Magento\SalesRule\Model\Rule $ruleModel, RuleDataModel $dataModel)
     {
@@ -63,7 +58,6 @@ class ToModel
      * @param \Magento\SalesRule\Model\Rule $ruleModel
      * @param RuleDataModel $dataModel
      * @return $this
-     * @since 2.0.0
      */
     protected function mapActionConditions(\Magento\SalesRule\Model\Rule $ruleModel, RuleDataModel $dataModel)
     {
@@ -80,7 +74,6 @@ class ToModel
      * @param Rule $ruleModel
      * @param RuleDataModel $dataModel
      * @return $this
-     * @since 2.0.0
      */
     protected function mapStoreLabels(Rule $ruleModel, RuleDataModel $dataModel)
     {
@@ -99,7 +92,6 @@ class ToModel
     /**
      * @param Rule $ruleModel
      * @return $this
-     * @since 2.0.0
      */
     protected function mapCouponType(Rule $ruleModel)
     {
@@ -126,7 +118,6 @@ class ToModel
      * @param \Magento\SalesRule\Model\Rule $ruleModel
      * @param RuleDataModel $dataModel
      * @return $this
-     * @since 2.0.0
      */
     protected function mapFields(\Magento\SalesRule\Model\Rule $ruleModel, RuleDataModel $dataModel)
     {
@@ -143,7 +134,6 @@ class ToModel
      * @param Condition $condition
      * @param string $key
      * @return array
-     * @since 2.0.0
      */
     public function dataModelToArray(Condition $condition, $key = 'conditions')
     {
@@ -171,7 +161,6 @@ class ToModel
      * @return $this|Rule
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
-     * @since 2.0.0
      */
     public function toModel(RuleDataModel $dataModel)
     {
@@ -224,7 +213,6 @@ class ToModel
      *
      * @param string|null $date
      * @return string|null
-     * @since 2.1.0
      */
     private function formattingDate($date)
     {

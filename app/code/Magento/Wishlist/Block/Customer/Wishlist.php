@@ -13,7 +13,6 @@ namespace Magento\Wishlist\Block\Customer;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
 {
@@ -21,25 +20,21 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * List of product options rendering configurations by product type
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_optionsCfg = [];
 
     /**
      * @var \Magento\Catalog\Helper\Product\ConfigurationPool
-     * @since 2.0.0
      */
     protected $_helperPool;
 
     /**
      * @var \Magento\Customer\Helper\Session\CurrentCustomer
-     * @since 2.0.0
      */
     protected $currentCustomer;
 
     /**
      * @var \Magento\Framework\Data\Helper\PostHelper
-     * @since 2.0.0
      */
     protected $postDataHelper;
 
@@ -50,7 +45,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -75,7 +69,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      *
      * @param  \Magento\Wishlist\Model\ResourceModel\Item\Collection $collection
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareCollection($collection)
     {
@@ -87,7 +80,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * Preparing global layout
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -99,7 +91,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * Retrieve Back URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -111,7 +102,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      *
      * @param null|array $optionCfg
      * @return $this
-     * @since 2.0.0
      */
     public function setOptionsRenderCfgs($optionCfg)
     {
@@ -123,7 +113,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * Returns all options render configurations
      *
      * @return array
-     * @since 2.0.0
      */
     public function getOptionsRenderCfgs()
     {
@@ -137,7 +126,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * @param string $helperName
      * @param null|string $template
      * @return $this
-     * @since 2.0.0
      */
     public function addOptionsRenderCfg($productType, $helperName, $template = null)
     {
@@ -150,7 +138,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      *
      * @param string $productType
      * @return array|null
-     * @since 2.0.0
      */
     public function getOptionsRenderCfg($productType)
     {
@@ -168,7 +155,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      *
      * @param \Magento\Wishlist\Model\Item $item
      * @return string
-     * @since 2.0.0
      */
     public function getDetailsHtml(\Magento\Wishlist\Model\Item $item)
     {
@@ -202,7 +188,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      *
      * @param \Magento\Wishlist\Model\Item $item
      * @return float
-     * @since 2.0.0
      */
     public function getAddToCartQty(\Magento\Wishlist\Model\Item $item)
     {
@@ -213,7 +198,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     /**
      * Get add all to cart params for POST request
      * @return string
-     * @since 2.0.0
      */
     public function getAddAllToCartParams()
     {
@@ -225,7 +209,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
 
     /**
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

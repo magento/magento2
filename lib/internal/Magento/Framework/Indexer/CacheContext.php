@@ -7,19 +7,16 @@ namespace Magento\Framework\Indexer;
 
 /**
  * Class Context
- * @since 2.0.0
  */
 class CacheContext implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $entities = [];
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $tags = [];
 
@@ -29,7 +26,6 @@ class CacheContext implements \Magento\Framework\DataObject\IdentityInterface
      * @param string $cacheTag
      * @param array $ids
      * @return $this
-     * @since 2.0.0
      */
     public function registerEntities($cacheTag, $ids)
     {
@@ -43,7 +39,6 @@ class CacheContext implements \Magento\Framework\DataObject\IdentityInterface
      *
      * @param string $cacheTag
      * @return $this
-     * @since 2.1.0
      */
     public function registerTags($cacheTags)
     {
@@ -56,7 +51,6 @@ class CacheContext implements \Magento\Framework\DataObject\IdentityInterface
      *
      * @param string $cacheTag
      * @return array
-     * @since 2.0.0
      */
     public function getRegisteredEntity($cacheTag)
     {
@@ -71,7 +65,6 @@ class CacheContext implements \Magento\Framework\DataObject\IdentityInterface
      * Returns identities
      *
      * @return array
-     * @since 2.0.0
      */
     public function getIdentities()
     {

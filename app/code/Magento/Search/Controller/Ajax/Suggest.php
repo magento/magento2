@@ -13,20 +13,17 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Search\Controller\Ajax\Suggest
  *
- * @since 2.0.0
  */
 class Suggest extends Action
 {
     /**
      * @var  \Magento\Search\Model\AutocompleteInterface
-     * @since 2.0.0
      */
     private $autocomplete;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Search\Model\AutocompleteInterface $autocomplete
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -38,7 +35,6 @@ class Suggest extends Action
 
     /**
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

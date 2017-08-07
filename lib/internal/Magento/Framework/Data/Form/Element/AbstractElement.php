@@ -16,37 +16,31 @@ use Magento\Framework\Escaper;
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @since 2.0.0
  */
 abstract class AbstractElement extends AbstractForm
 {
     /**
      * @var string|int
-     * @since 2.0.0
      */
     protected $_id;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_type;
 
     /**
      * @var Form
-     * @since 2.0.0
      */
     protected $_form;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_elements;
 
     /**
      * @var RendererInterface
-     * @since 2.0.0
      */
     protected $_renderer;
 
@@ -54,13 +48,11 @@ abstract class AbstractElement extends AbstractForm
      * Shows whether current element belongs to Basic or Advanced form layout
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_advanced = false;
 
     /**
      * @var Escaper
-     * @since 2.0.0
      */
     protected $_escaper;
 
@@ -68,7 +60,6 @@ abstract class AbstractElement extends AbstractForm
      * Lock html attribute
      *
      * @var string
-     * @since 2.0.0
      */
     private $lockHtmlAttribute = 'data-locked';
 
@@ -77,7 +68,6 @@ abstract class AbstractElement extends AbstractForm
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -96,7 +86,6 @@ abstract class AbstractElement extends AbstractForm
      * @param AbstractElement $element
      * @param bool $after
      * @return Form
-     * @since 2.0.0
      */
     public function addElement(AbstractElement $element, $after = false)
     {
@@ -113,7 +102,6 @@ abstract class AbstractElement extends AbstractForm
      * Shows whether current element belongs to Basic or Advanced form layout
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isAdvanced()
     {
@@ -125,7 +113,6 @@ abstract class AbstractElement extends AbstractForm
      *
      * @param bool $advanced
      * @return $this
-     * @since 2.0.0
      */
     public function setAdvanced($advanced)
     {
@@ -137,7 +124,6 @@ abstract class AbstractElement extends AbstractForm
      * Get id.
      *
      * @return string|int
-     * @since 2.0.0
      */
     public function getId()
     {
@@ -148,7 +134,6 @@ abstract class AbstractElement extends AbstractForm
      * Get type.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -159,7 +144,6 @@ abstract class AbstractElement extends AbstractForm
      * Get form
      *
      * @return Form
-     * @since 2.0.0
      */
     public function getForm()
     {
@@ -171,7 +155,6 @@ abstract class AbstractElement extends AbstractForm
      *
      * @param string|int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setId($id)
     {
@@ -184,7 +167,6 @@ abstract class AbstractElement extends AbstractForm
      * Get the Html Id.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getHtmlId()
     {
@@ -195,7 +177,6 @@ abstract class AbstractElement extends AbstractForm
      * Get the name.
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -211,7 +192,6 @@ abstract class AbstractElement extends AbstractForm
      *
      * @param string $type
      * @return $this
-     * @since 2.0.0
      */
     public function setType($type)
     {
@@ -223,7 +203,6 @@ abstract class AbstractElement extends AbstractForm
     /**
      * @param AbstractForm $form
      * @return $this
-     * @since 2.0.0
      */
     public function setForm($form)
     {
@@ -236,7 +215,6 @@ abstract class AbstractElement extends AbstractForm
      *
      * @param string $elementId
      * @return AbstractForm
-     * @since 2.0.0
      */
     public function removeField($elementId)
     {
@@ -248,7 +226,6 @@ abstract class AbstractElement extends AbstractForm
      * Return the attributes for Html.
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getHtmlAttributes()
     {
@@ -275,7 +252,6 @@ abstract class AbstractElement extends AbstractForm
      *
      * @param string $class
      * @return $this
-     * @since 2.0.0
      */
     public function addClass($class)
     {
@@ -289,7 +265,6 @@ abstract class AbstractElement extends AbstractForm
      *
      * @param string $class
      * @return $this
-     * @since 2.0.0
      */
     public function removeClass($class)
     {
@@ -306,7 +281,6 @@ abstract class AbstractElement extends AbstractForm
      *
      * @param string $string
      * @return string
-     * @since 2.0.0
      */
     protected function _escape($string)
     {
@@ -318,7 +292,6 @@ abstract class AbstractElement extends AbstractForm
      *
      * @param null|int|string $index
      * @return string
-     * @since 2.0.0
      */
     public function getEscapedValue($index = null)
     {
@@ -335,7 +308,6 @@ abstract class AbstractElement extends AbstractForm
      *
      * @param RendererInterface $renderer
      * @return $this
-     * @since 2.0.0
      */
     public function setRenderer(RendererInterface $renderer)
     {
@@ -347,7 +319,6 @@ abstract class AbstractElement extends AbstractForm
      * Get the renderer.
      *
      * @return RendererInterface
-     * @since 2.0.0
      */
     public function getRenderer()
     {
@@ -357,7 +328,6 @@ abstract class AbstractElement extends AbstractForm
     /**
      * @param null|string $suffix
      * @return string
-     * @since 2.0.0
      */
     protected function _getUiId($suffix = null)
     {
@@ -372,7 +342,6 @@ abstract class AbstractElement extends AbstractForm
      * Get the Html for the element.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -404,7 +373,6 @@ abstract class AbstractElement extends AbstractForm
      * Get the before element html.
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getBeforeElementHtml()
     {
@@ -415,7 +383,6 @@ abstract class AbstractElement extends AbstractForm
      * Get the after element html.
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getAfterElementHtml()
     {
@@ -426,7 +393,6 @@ abstract class AbstractElement extends AbstractForm
      * Get the after element Javascript.
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getAfterElementJs()
     {
@@ -439,7 +405,6 @@ abstract class AbstractElement extends AbstractForm
      * @param string $idSuffix
      * @param string $scopeLabel
      * @return string
-     * @since 2.0.0
      */
     public function getLabelHtml($idSuffix = '', $scopeLabel = '')
     {
@@ -462,7 +427,6 @@ abstract class AbstractElement extends AbstractForm
      * Get the default html.
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getDefaultHtml()
     {
@@ -480,7 +444,6 @@ abstract class AbstractElement extends AbstractForm
      * Get the html.
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getHtml()
     {
@@ -499,7 +462,6 @@ abstract class AbstractElement extends AbstractForm
      * Get the html.
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function toHtml()
     {
@@ -514,7 +476,6 @@ abstract class AbstractElement extends AbstractForm
      * @param string $fieldSeparator
      * @param string $quote
      * @return string
-     * @since 2.0.0
      */
     public function serialize($attributes = [], $valueSeparator = '=', $fieldSeparator = ' ', $quote = '"')
     {
@@ -538,7 +499,6 @@ abstract class AbstractElement extends AbstractForm
      * Indicates the elements readonly status.
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getReadonly()
     {
@@ -553,7 +513,6 @@ abstract class AbstractElement extends AbstractForm
      * Get the container Id.
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getHtmlContainerId()
     {
@@ -572,7 +531,6 @@ abstract class AbstractElement extends AbstractForm
      * @param bool $overwrite
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function addElementValues($values, $overwrite = false)
     {
@@ -601,7 +559,6 @@ abstract class AbstractElement extends AbstractForm
      * Lock element
      *
      * @return void
-     * @since 2.0.0
      */
     public function lock()
     {
@@ -612,7 +569,6 @@ abstract class AbstractElement extends AbstractForm
      * Is element locked
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isLocked()
     {

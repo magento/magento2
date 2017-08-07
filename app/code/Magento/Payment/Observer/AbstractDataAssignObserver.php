@@ -15,7 +15,6 @@ use Magento\Payment\Model\MethodInterface;
  * Class AbstractDataAssignObserver
  * @package Magento\Payment\Observer
  * @api
- * @since 2.0.0
  */
 abstract class AbstractDataAssignObserver implements ObserverInterface
 {
@@ -30,7 +29,6 @@ abstract class AbstractDataAssignObserver implements ObserverInterface
      *
      * @param Observer $observer
      * @return MethodInterface
-     * @since 2.0.0
      */
     protected function readMethodArgument(Observer $observer)
     {
@@ -42,7 +40,7 @@ abstract class AbstractDataAssignObserver implements ObserverInterface
      *
      * @param Observer $observer
      * @return InfoInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function readPaymentModelArgument(Observer $observer)
     {
@@ -54,7 +52,6 @@ abstract class AbstractDataAssignObserver implements ObserverInterface
      *
      * @param Observer $observer
      * @return DataObject
-     * @since 2.0.0
      */
     protected function readDataArgument(Observer $observer)
     {
@@ -69,7 +66,6 @@ abstract class AbstractDataAssignObserver implements ObserverInterface
      * @param string $type
      * @return mixed
      * @throws \LogicException
-     * @since 2.0.0
      */
     protected function readArgument(Observer $observer, $key, $type)
     {

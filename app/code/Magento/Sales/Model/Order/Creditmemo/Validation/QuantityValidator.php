@@ -17,25 +17,21 @@ use Magento\Sales\Model\ValidatorInterface;
 
 /**
  * Class QuantityValidator
- * @since 2.2.0
  */
 class QuantityValidator implements ValidatorInterface
 {
     /**
      * @var OrderRepositoryInterface
-     * @since 2.2.0
      */
     private $orderRepository;
 
     /**
      * @var InvoiceRepositoryInterface
-     * @since 2.2.0
      */
     private $invoiceRepository;
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     * @since 2.2.0
      */
     private $priceCurrency;
 
@@ -45,7 +41,6 @@ class QuantityValidator implements ValidatorInterface
      * @param OrderRepositoryInterface $orderRepository
      * @param InvoiceRepositoryInterface $invoiceRepository
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @since 2.2.0
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
@@ -59,7 +54,6 @@ class QuantityValidator implements ValidatorInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function validate($entity)
     {
@@ -116,7 +110,6 @@ class QuantityValidator implements ValidatorInterface
      *
      * @param OrderInterface $order
      * @return bool
-     * @since 2.2.0
      */
     private function canRefundShipping(OrderInterface $order)
     {
@@ -127,7 +120,6 @@ class QuantityValidator implements ValidatorInterface
      * @param CreditmemoInterface $creditmemo
      * @param OrderInterface $order
      * @return array
-     * @since 2.2.0
      */
     private function getInvoiceQtysRefundLimits(CreditmemoInterface $creditmemo, OrderInterface $order)
     {
@@ -166,7 +158,6 @@ class QuantityValidator implements ValidatorInterface
     /**
      * @param OrderInterface $order
      * @return OrderItemInterface[]
-     * @since 2.2.0
      */
     private function getOrderItems(OrderInterface $order)
     {
@@ -182,7 +173,6 @@ class QuantityValidator implements ValidatorInterface
      * @param Item $orderItem
      * @param int $qty
      * @return bool
-     * @since 2.2.0
      */
     private function isQtyAvailable(Item $orderItem, $qty)
     {
@@ -196,7 +186,6 @@ class QuantityValidator implements ValidatorInterface
      * @param double $qty
      * @param array $invoiceQtysRefundLimits
      * @return bool
-     * @since 2.2.0
      */
     private function canRefundItem(\Magento\Sales\Model\Order\Item $item, $qty, array $invoiceQtysRefundLimits)
     {
@@ -213,7 +202,6 @@ class QuantityValidator implements ValidatorInterface
      * @param \Magento\Sales\Model\Order\Item $item
      * @param array $invoiceQtysRefundLimits
      * @return bool
-     * @since 2.2.0
      */
     private function canRefundNoDummyItem(\Magento\Sales\Model\Order\Item $item, array $invoiceQtysRefundLimits = [])
     {
@@ -231,7 +219,6 @@ class QuantityValidator implements ValidatorInterface
      * @param int $qty
      * @param array $invoiceQtysRefundLimits
      * @return bool
-     * @since 2.2.0
      */
     private function canRefundDummyItem(\Magento\Sales\Model\Order\Item $item, $qty, array $invoiceQtysRefundLimits)
     {
@@ -253,7 +240,6 @@ class QuantityValidator implements ValidatorInterface
      * @param int $qty
      * @param array $invoiceQtysRefundLimits
      * @return bool
-     * @since 2.2.0
      */
     private function canRefundRequestedQty(
         \Magento\Sales\Model\Order\Item $item,

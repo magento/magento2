@@ -8,7 +8,6 @@ namespace Magento\Persistent\Model\Plugin;
 /**
  * Class \Magento\Persistent\Model\Plugin\CustomerData
  *
- * @since 2.1.0
  */
 class CustomerData
 {
@@ -16,7 +15,6 @@ class CustomerData
      * Persistent data
      *
      * @var \Magento\Persistent\Helper\Data
-     * @since 2.1.0
      */
     protected $persistentData;
 
@@ -24,7 +22,6 @@ class CustomerData
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
-     * @since 2.1.0
      */
     protected $customerSession;
 
@@ -32,7 +29,6 @@ class CustomerData
      * Persistent session
      *
      * @var \Magento\Persistent\Helper\Session
-     * @since 2.1.0
      */
     protected $persistentSession;
 
@@ -42,7 +38,6 @@ class CustomerData
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Persistent\Helper\Session $persistentSession
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Persistent\Helper\Data $persistentData,
@@ -62,7 +57,6 @@ class CustomerData
      *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function aroundGetSectionData(
         \Magento\Customer\CustomerData\Customer $subject,

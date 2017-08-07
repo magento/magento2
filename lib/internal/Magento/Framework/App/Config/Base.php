@@ -11,7 +11,6 @@ namespace Magento\Framework\App\Config;
 /**
  * Class \Magento\Framework\App\Config\Base
  *
- * @since 2.0.0
  */
 class Base extends \Magento\Framework\Simplexml\Config
 {
@@ -19,13 +18,11 @@ class Base extends \Magento\Framework\Simplexml\Config
      * List of instances
      *
      * @var Base[]
-     * @since 2.0.0
      */
     public static $instances = [];
 
     /**
      * @param \Magento\Framework\Simplexml\Element|string $sourceData $sourceData
-     * @since 2.0.0
      */
     public function __construct($sourceData = null)
     {
@@ -38,7 +35,6 @@ class Base extends \Magento\Framework\Simplexml\Config
      * Cleanup objects because of simplexml memory leak
      *
      * @return void
-     * @since 2.0.0
      */
     public static function destroy()
     {

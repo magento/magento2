@@ -10,13 +10,11 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
  *
  * @method getArea()
  * @method getTheme()
- * @since 2.0.0
  */
 class Layout extends \Magento\Framework\View\Element\Html\Select
 {
     /**
      * @var \Magento\Framework\View\Layout\PageType\Config
-     * @since 2.0.0
      */
     protected $_config;
 
@@ -24,7 +22,6 @@ class Layout extends \Magento\Framework\View\Element\Html\Select
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Framework\View\Layout\PageType\Config $config
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
@@ -39,7 +36,6 @@ class Layout extends \Magento\Framework\View\Element\Html\Select
      * Add necessary options
      *
      * @return \Magento\Framework\View\Element\AbstractBlock
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -56,7 +52,6 @@ class Layout extends \Magento\Framework\View\Element\Html\Select
      *
      * @param array $pageTypes
      * @return void
-     * @since 2.0.0
      */
     protected function _addPageTypeOptions(array $pageTypes)
     {

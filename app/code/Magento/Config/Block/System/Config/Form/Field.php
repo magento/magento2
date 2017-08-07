@@ -14,7 +14,6 @@ namespace Magento\Config\Block\System\Config\Form;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @since 2.0.0
  */
 class Field extends \Magento\Backend\Block\Template implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
@@ -23,7 +22,6 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -35,7 +33,6 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -67,7 +64,6 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     protected function _renderValue(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -92,7 +88,6 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     protected function _renderInheritCheckbox(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -123,7 +118,6 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return bool
-     * @since 2.0.0
      */
     protected function _isInheritCheckboxRequired(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -137,7 +131,6 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     protected function _getInheritCheckboxLabel(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -156,7 +149,6 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     protected function _renderScopeLabel(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -173,7 +165,6 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     protected function _renderHint(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -191,7 +182,6 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @param string $html
      * @return string
-     * @since 2.0.0
      */
     protected function _decorateRowHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element, $html)
     {

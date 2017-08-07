@@ -14,7 +14,6 @@ use Magento\Payment\Model\InfoInterface;
  *
  * Payment information model
  * @api
- * @since 2.0.0
  */
 class Info extends AbstractModel implements InfoInterface
 {
@@ -22,7 +21,6 @@ class Info extends AbstractModel implements InfoInterface
      * Additional information container
      *
      * @var array
-     * @since 2.0.0
      */
     protected $additionalInformation = [];
 
@@ -30,13 +28,11 @@ class Info extends AbstractModel implements InfoInterface
      * Payment data
      *
      * @var \Magento\Payment\Helper\Data
-     * @since 2.0.0
      */
     protected $paymentData;
 
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
-     * @since 2.0.0
      */
     protected $encryptor;
 
@@ -50,7 +46,6 @@ class Info extends AbstractModel implements InfoInterface
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -82,7 +77,6 @@ class Info extends AbstractModel implements InfoInterface
      * @param string $key
      * @param mixed $index
      * @return mixed
-     * @since 2.0.0
      */
     public function getData($key = '', $index = null)
     {
@@ -108,7 +102,6 @@ class Info extends AbstractModel implements InfoInterface
      *
      * @return \Magento\Payment\Model\MethodInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getMethodInstance()
     {
@@ -134,7 +127,6 @@ class Info extends AbstractModel implements InfoInterface
      *
      * @param string $data
      * @return string
-     * @since 2.0.0
      */
     public function encrypt($data)
     {
@@ -146,7 +138,6 @@ class Info extends AbstractModel implements InfoInterface
      *
      * @param string $data
      * @return string
-     * @since 2.0.0
      */
     public function decrypt($data)
     {
@@ -162,7 +153,6 @@ class Info extends AbstractModel implements InfoInterface
      * @param mixed $value
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function setAdditionalInformation($key, $value = null)
     {
@@ -183,7 +173,6 @@ class Info extends AbstractModel implements InfoInterface
      *
      * @param string $key
      * @return array|null|mixed
-     * @since 2.0.0
      */
     public function getAdditionalInformation($key = null)
     {
@@ -199,7 +188,6 @@ class Info extends AbstractModel implements InfoInterface
      *
      * @param string $key
      * @return $this
-     * @since 2.0.0
      */
     public function unsAdditionalInformation($key = null)
     {
@@ -219,7 +207,6 @@ class Info extends AbstractModel implements InfoInterface
      *
      * @param mixed|null $key
      * @return bool
-     * @since 2.0.0
      */
     public function hasAdditionalInformation($key = null)
     {
@@ -235,7 +222,6 @@ class Info extends AbstractModel implements InfoInterface
      * if property empty
      *
      * @return void
-     * @since 2.0.0
      */
     protected function initAdditionalInformation()
     {

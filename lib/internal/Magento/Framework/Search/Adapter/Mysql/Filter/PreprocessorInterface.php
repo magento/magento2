@@ -10,7 +10,6 @@ use Magento\Framework\Search\Request\FilterInterface;
 /**
  * Interface \Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface
  *
- * @since 2.0.0
  */
 interface PreprocessorInterface
 {
@@ -19,7 +18,6 @@ interface PreprocessorInterface
      * @param bool $isNegation
      * @param string $query
      * @return string
-     * @since 2.0.0
      */
     public function process(FilterInterface $filter, $isNegation, $query);
 }

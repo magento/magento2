@@ -9,7 +9,6 @@ namespace Magento\Email\Model\ResourceModel\Template;
  * Templates collection
  *
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -17,7 +16,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Template table name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_templateTable;
 
@@ -25,7 +23,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Define resource table
      *
      * @return void
-     * @since 2.0.0
      */
     public function _construct()
     {
@@ -37,7 +34,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Convert collection items to select options array
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

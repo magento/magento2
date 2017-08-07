@@ -12,7 +12,6 @@ use Magento\Review\Model\Review;
 /**
  * Class \Magento\Review\Controller\Product\Post
  *
- * @since 2.0.0
  */
 class Post extends ProductController
 {
@@ -22,7 +21,6 @@ class Post extends ProductController
      * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

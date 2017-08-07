@@ -10,7 +10,6 @@ namespace Magento\Customer\Model\ResourceModel\Customer;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\AbstractCollection
 {
@@ -21,13 +20,11 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
 
     /**
      * @var \Magento\Framework\DataObject\Copy\Config
-     * @since 2.0.0
      */
     protected $_fieldsetConfig;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_modelName;
 
@@ -47,7 +44,6 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
      * @param string $modelName
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -85,7 +81,6 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -96,7 +91,6 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
      * Group result by customer email
      *
      * @return $this
-     * @since 2.0.0
      */
     public function groupByEmail()
     {
@@ -116,7 +110,6 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
      * Add Name to select
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addNameToSelect()
     {
@@ -166,7 +159,6 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
      * Get SQL for get record count
      *
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     public function getSelectCountSql()
     {
@@ -182,7 +174,6 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
      * @param int $limit
      * @param int $offset
      * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
-     * @since 2.0.0
      */
     protected function _getAllIdsSelect($limit = null, $offset = null)
     {

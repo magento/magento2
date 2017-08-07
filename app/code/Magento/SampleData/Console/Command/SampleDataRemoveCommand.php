@@ -19,32 +19,27 @@ use Composer\Console\ApplicationFactory;
 
 /**
  * Command for remove Sample Data packages
- * @since 2.0.0
  */
 class SampleDataRemoveCommand extends Command
 {
     /**
      * @var Filesystem
-     * @since 2.0.0
      */
     private $filesystem;
 
     /**
      * @var Dependency
-     * @since 2.0.0
      */
     private $sampleDataDependency;
 
     /**
      * @var ArrayInputFactory
-     * @deprecated 2.1.0
-     * @since 2.0.0
+     * @deprecated 100.1.0
      */
     private $arrayInputFactory;
 
     /**
      * @var ApplicationFactory
-     * @since 2.0.0
      */
     private $applicationFactory;
 
@@ -53,7 +48,6 @@ class SampleDataRemoveCommand extends Command
      * @param Dependency $sampleDataDependency
      * @param ArrayInputFactory $arrayInputFactory
      * @param ApplicationFactory $applicationFactory
-     * @since 2.0.0
      */
     public function __construct(
         Filesystem $filesystem,
@@ -70,7 +64,6 @@ class SampleDataRemoveCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -81,7 +74,6 @@ class SampleDataRemoveCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

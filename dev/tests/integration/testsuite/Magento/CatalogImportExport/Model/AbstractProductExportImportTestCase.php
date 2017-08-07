@@ -14,7 +14,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
+abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogImportExport\Model\Export\Product

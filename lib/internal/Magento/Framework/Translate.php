@@ -12,7 +12,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
- * @since 2.0.0
  */
 class Translate implements \Magento\Framework\TranslateInterface
 {
@@ -20,7 +19,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      * Locale code
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_localeCode;
 
@@ -28,7 +26,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      * Translator configuration array
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_config;
 
@@ -36,7 +33,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      * Cache identifier
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_cacheId;
 
@@ -44,91 +40,76 @@ class Translate implements \Magento\Framework\TranslateInterface
      * Translation data
      *
      * @var []
-     * @since 2.0.0
      */
     protected $_data = [];
 
     /**
      * @var \Magento\Framework\View\DesignInterface
-     * @since 2.0.0
      */
     protected $_viewDesign;
 
     /**
      * @var \Magento\Framework\Cache\FrontendInterface $cache
-     * @since 2.0.0
      */
     protected $_cache;
 
     /**
      * @var \Magento\Framework\View\FileSystem
-     * @since 2.0.0
      */
     protected $_viewFileSystem;
 
     /**
      * @var \Magento\Framework\Module\ModuleList
-     * @since 2.0.0
      */
     protected $_moduleList;
 
     /**
      * @var \Magento\Framework\Module\Dir\Reader
-     * @since 2.0.0
      */
     protected $_modulesReader;
 
     /**
      * @var \Magento\Framework\App\ScopeResolverInterface
-     * @since 2.0.0
      */
     protected $_scopeResolver;
 
     /**
      * @var \Magento\Framework\Translate\ResourceInterface
-     * @since 2.0.0
      */
     protected $_translateResource;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $_locale;
 
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     protected $_appState;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\Read
-     * @since 2.0.0
      */
     protected $directory;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var \Magento\Framework\File\Csv
-     * @since 2.0.0
      */
     protected $_csvParser;
 
     /**
      * @var \Magento\Framework\App\Language\Dictionary
-     * @since 2.0.0
      */
     protected $packDictionary;
 
     /**
      * @var \Magento\Framework\Serialize\SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -148,7 +129,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      * @param \Magento\Framework\App\Language\Dictionary $packDictionary
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\DesignInterface $viewDesign,
@@ -186,7 +166,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      * @param string|null $area
      * @param bool $forceReload
      * @return $this
-     * @since 2.0.0
      */
     public function loadData($area = null, $forceReload = false)
     {
@@ -219,7 +198,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      *
      * @param   array $config
      * @return  $this
-     * @since 2.0.0
      */
     protected function setConfig($config)
     {
@@ -243,7 +221,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      * Retrieve scope code
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getScope()
     {
@@ -256,7 +233,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      *
      * @param   string $key
      * @return  mixed
-     * @since 2.0.0
      */
     protected function getConfig($key)
     {
@@ -269,7 +245,6 @@ class Translate implements \Magento\Framework\TranslateInterface
     /**
      * Retrieve name of the current module
      * @return mixed
-     * @since 2.0.0
      */
     protected function getControllerModuleName()
     {
@@ -280,7 +255,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      * Load data from module translation files
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _loadModuleTranslation()
     {
@@ -297,7 +271,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      *
      * @param array $modules
      * @return $this
-     * @since 2.0.0
      */
     protected function loadModuleTranslationByModulesList(array $modules)
     {
@@ -313,7 +286,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      *
      * @param array $data
      * @return $this
-     * @since 2.0.0
      */
     protected function _addData($data)
     {
@@ -334,7 +306,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      * Load current theme translation
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _loadThemeTranslation()
     {
@@ -353,7 +324,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      * Load translation dictionary from language packages
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _loadPackTranslation()
     {
@@ -365,7 +335,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      * Loading current translation from DB
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _loadDbTranslation()
     {
@@ -380,7 +349,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      * @param string $moduleName
      * @param string $locale
      * @return string
-     * @since 2.0.0
      */
     protected function _getModuleTranslationFile($moduleName, $locale)
     {
@@ -394,7 +362,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      *
      * @param string $locale
      * @return string
-     * @since 2.0.0
      */
     protected function _getThemeTranslationFile($locale)
     {
@@ -409,7 +376,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      *
      * @param string $file
      * @return array
-     * @since 2.0.0
      */
     protected function _getFileData($file)
     {
@@ -425,7 +391,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      * Retrieve translation data
      *
      * @return array
-     * @since 2.0.0
      */
     public function getData()
     {
@@ -439,7 +404,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      * Retrieve locale
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLocale()
     {
@@ -454,7 +418,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      *
      * @param string $locale
      * @return \Magento\Framework\TranslateInterface
-     * @since 2.0.0
      */
     public function setLocale($locale)
     {
@@ -468,7 +431,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      * Retrieve theme code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTheme()
     {
@@ -484,7 +446,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      *
      * @param bool $forceReload
      * @return string
-     * @since 2.0.0
      */
     protected function getCacheId($forceReload = false)
     {
@@ -513,7 +474,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      * Loading data cache
      *
      * @return array|bool
-     * @since 2.0.0
      */
     protected function _loadCache()
     {
@@ -528,7 +488,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      * Saving data cache
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _saveCache()
     {
@@ -540,8 +499,7 @@ class Translate implements \Magento\Framework\TranslateInterface
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {

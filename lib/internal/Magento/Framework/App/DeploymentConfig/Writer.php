@@ -14,7 +14,6 @@ use Magento\Framework\Phrase;
 
 /**
  * Deployment configuration writer to files: env.php, config.php.
- * @since 2.0.0
  */
 class Writer
 {
@@ -22,7 +21,6 @@ class Writer
      * Deployment config reader
      *
      * @var Reader
-     * @since 2.0.0
      */
     private $reader;
 
@@ -30,7 +28,6 @@ class Writer
      * Application filesystem
      *
      * @var Filesystem
-     * @since 2.0.0
      */
     private $filesystem;
 
@@ -38,19 +35,16 @@ class Writer
      * Formatter
      *
      * @var Writer\FormatterInterface
-     * @since 2.0.0
      */
     private $formatter;
 
     /**
      * @var ConfigFilePool
-     * @since 2.0.0
      */
     private $configFilePool;
 
     /**
      * @var DeploymentConfig
-     * @since 2.0.0
      */
     private $deploymentConfig;
 
@@ -58,7 +52,6 @@ class Writer
      * The parser of comments from configuration files.
      *
      * @var CommentParser
-     * @since 2.2.0
      */
     private $commentParser;
 
@@ -69,7 +62,6 @@ class Writer
      * @param DeploymentConfig $deploymentConfig
      * @param Writer\FormatterInterface $formatter
      * @param CommentParser $commentParser The parser of comments from configuration files
-     * @since 2.0.0
      */
     public function __construct(
         Reader $reader,
@@ -91,7 +83,6 @@ class Writer
      * Check if configuration file is writable
      *
      * @return bool
-     * @since 2.0.0
      */
     public function checkIfWritable()
     {
@@ -127,7 +118,6 @@ class Writer
      * @return void
      * @throws FileSystemException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function saveConfig(array $data, $override = false, $pool = null, array $comments = [])
     {

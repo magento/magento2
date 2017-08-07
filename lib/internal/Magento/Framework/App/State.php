@@ -12,7 +12,6 @@ namespace Magento\Framework\App;
  * Note: Area code communication and emulation will be removed from this class.
  *
  * @api
- * @since 2.0.0
  */
 class State
 {
@@ -25,7 +24,6 @@ class State
      * Application mode
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_appMode;
 
@@ -33,7 +31,6 @@ class State
      * Is downloader flag
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isDownloader = false;
 
@@ -41,7 +38,6 @@ class State
      * Update mode flag
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_updateMode = false;
 
@@ -49,7 +45,6 @@ class State
      * Config scope model
      *
      * @var \Magento\Framework\Config\ScopeInterface
-     * @since 2.0.0
      */
     protected $_configScope;
 
@@ -57,7 +52,6 @@ class State
      * Area code
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_areaCode;
 
@@ -65,13 +59,11 @@ class State
      * Is area code being emulated
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isAreaCodeEmulated = false;
 
     /**
      * @var AreaList
-     * @since 2.2.0
      */
     private $areaList;
 
@@ -90,7 +82,6 @@ class State
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param string $mode
      * @throws \LogicException
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\ScopeInterface $configScope,
@@ -112,7 +103,6 @@ class State
      * Return current app mode
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMode()
     {
@@ -124,7 +114,6 @@ class State
      *
      * @param bool $flag
      * @return void
-     * @since 2.0.0
      */
     public function setIsDownloader($flag = true)
     {
@@ -137,7 +126,6 @@ class State
      * @param string $code
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function setAreaCode($code)
     {
@@ -157,7 +145,6 @@ class State
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getAreaCode()
     {
@@ -173,7 +160,6 @@ class State
      * Checks whether area code is being emulated
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isAreaCodeEmulated()
     {
@@ -188,7 +174,6 @@ class State
      * @param array $params
      * @return mixed
      * @throws \Exception
-     * @since 2.0.0
      */
     public function emulateAreaCode($areaCode, $callback, $params = [])
     {
@@ -215,7 +200,6 @@ class State
      * @param string $areaCode
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
-     * @since 2.2.0
      */
     private function checkAreaCode($areaCode)
     {
@@ -235,8 +219,7 @@ class State
      * Get Instance of AreaList
      *
      * @return AreaList
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getAreaListInstance()
     {

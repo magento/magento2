@@ -8,19 +8,16 @@ namespace Magento\ConfigurableProduct\Model\Order\Admin\Item\Plugin;
 /**
  * Class \Magento\ConfigurableProduct\Model\Order\Admin\Item\Plugin\Configurable
  *
- * @since 2.0.0
  */
 class Configurable
 {
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $productFactory;
 
     /**
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @since 2.0.0
      */
     public function __construct(\Magento\Catalog\Model\ProductFactory $productFactory)
     {
@@ -36,7 +33,6 @@ class Configurable
      *
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function aroundGetSku(
         \Magento\Sales\Model\Order\Admin\Item $subject,
@@ -60,7 +56,6 @@ class Configurable
      *
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function aroundGetName(
         \Magento\Sales\Model\Order\Admin\Item $subject,
@@ -84,7 +79,6 @@ class Configurable
      *
      * @return int
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function aroundGetProductId(
         \Magento\Sales\Model\Order\Admin\Item $subject,

@@ -23,7 +23,7 @@ use Magento\Framework\Stdlib\ArrayUtils;
  * {@inheritdoc}
  * @see \Magento\Deploy\Console\Command\App\ConfigImport\Importer
  * @api
- * @since 2.2.0
+ * @since 100.2.0
  */
 class Importer implements ImporterInterface
 {
@@ -36,7 +36,6 @@ class Importer implements ImporterInterface
      * The flag manager.
      *
      * @var FlagManager
-     * @since 2.2.0
      */
     private $flagManager;
 
@@ -44,7 +43,6 @@ class Importer implements ImporterInterface
      * An array utils.
      *
      * @var ArrayUtils
-     * @since 2.2.0
      */
     private $arrayUtils;
 
@@ -52,7 +50,6 @@ class Importer implements ImporterInterface
      * The application config storage.
      *
      * @var ScopeConfigInterface
-     * @since 2.2.0
      */
     private $scopeConfig;
 
@@ -60,7 +57,6 @@ class Importer implements ImporterInterface
      * The application state.
      *
      * @var State
-     * @since 2.2.0
      */
     private $state;
 
@@ -68,7 +64,6 @@ class Importer implements ImporterInterface
      * The application scope to run.
      *
      * @var ScopeInterface
-     * @since 2.2.0
      */
     private $scope;
 
@@ -76,7 +71,6 @@ class Importer implements ImporterInterface
      * The configuration saving processor.
      *
      * @var SaveProcessor
-     * @since 2.2.0
      */
     private $saveProcessor;
 
@@ -87,7 +81,7 @@ class Importer implements ImporterInterface
      * @param ScopeConfigInterface $scopeConfig The application config storage.
      * @param State $state The application scope to run
      * @param ScopeInterface $scope The application scope
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function __construct(
         FlagManager $flagManager,
@@ -110,7 +104,7 @@ class Importer implements ImporterInterface
      * or current value is different from previously imported.
      *
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function import(array $data)
     {
@@ -150,7 +144,7 @@ class Importer implements ImporterInterface
     /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getWarningMessages(array $data)
     {

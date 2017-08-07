@@ -14,7 +14,6 @@ namespace Magento\Fedex\Model\Source;
 /**
  * Class \Magento\Fedex\Model\Source\Dropoff
  *
- * @since 2.0.0
  */
 class Dropoff extends \Magento\Fedex\Model\Source\Generic
 {
@@ -22,7 +21,6 @@ class Dropoff extends \Magento\Fedex\Model\Source\Generic
      * Carrier code
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_code = 'dropoff';
 }

@@ -12,7 +12,6 @@ use Magento\Framework\App\Cache\Type\FrontendPool;
 /**
  * Class \Magento\Framework\App\Interception\Cache\CompiledConfig
  *
- * @since 2.0.0
  */
 class CompiledConfig extends TagScope implements CacheInterface
 {
@@ -28,7 +27,6 @@ class CompiledConfig extends TagScope implements CacheInterface
 
     /**
      * @param FrontendPool $cacheFrontendPool
-     * @since 2.0.0
      */
     public function __construct(FrontendPool $cacheFrontendPool)
     {

@@ -17,7 +17,6 @@ use Magento\Framework\Model\AbstractModel;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -25,25 +24,21 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Eav Entity attributes cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected static $_entityAttributes = [];
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var Type
-     * @since 2.0.0
      */
     protected $_eavEntityType;
 
     /**
      * @var Config
-     * @since 2.1.0
      */
     private $config;
 
@@ -55,7 +50,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param Type $eavEntityType
      * @param string $connectionName
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -73,7 +67,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -85,7 +78,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _initUniqueFields()
     {
@@ -102,7 +94,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $entityTypeId
      * @param string $code
      * @return bool
-     * @since 2.0.0
      */
     public function loadByCode(AbstractModel $object, $entityTypeId, $code)
     {
@@ -123,7 +114,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param AbstractModel $object
      * @return int
-     * @since 2.0.0
      */
     private function _getMaxSortOrder(AbstractModel $object)
     {
@@ -153,7 +143,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractMode $object
      * @return $this
-     * @since 2.0.0
      */
     public function deleteEntity(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -175,7 +164,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param EntityAttribute|AbstractModel $object
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _beforeSave(AbstractModel $object)
     {
@@ -204,7 +192,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param EntityAttribute|AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterSave(AbstractModel $object)
     {
@@ -227,7 +214,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
+     * @since 100.0.7
      */
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -237,8 +224,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @return Config
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.0.7
      */
     private function getConfig()
     {
@@ -253,7 +239,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param EntityAttribute|\Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _saveStoreLabels(AbstractModel $object)
     {
@@ -281,7 +266,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param EntityAttribute|\Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _saveAdditionalAttributeData(AbstractModel $object)
     {
@@ -317,7 +301,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param null $attributeSortOrder
      * @return $this
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function saveInSetIncluding(
         AbstractModel $object,
@@ -357,7 +340,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param EntityAttribute|AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _saveOption(AbstractModel $object)
     {
@@ -384,7 +366,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param EntityAttribute|AbstractModel $object
      * @param array $option
      * @return array
-     * @since 2.0.0
      */
     protected function _processAttributeOptions($object, $option)
     {
@@ -407,7 +388,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $values
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _checkDefaultOptionValue($values)
     {
@@ -424,7 +404,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $intOptionId
      * @param array $defaultValue
      * @return void
-     * @since 2.0.0
      */
     protected function _updateDefaultValue($object, $optionId, $intOptionId, &$defaultValue)
     {
@@ -444,7 +423,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param AbstractModel $object
      * @param array $defaultValue
      * @return void
-     * @since 2.0.0
      */
     protected function _saveDefaultValue($object, $defaultValue)
     {
@@ -462,7 +440,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $optionId
      * @param array $option
      * @return int|bool
-     * @since 2.0.0
      */
     protected function _updateAttributeOption($object, $optionId, $option)
     {
@@ -498,7 +475,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $optionId
      * @param array $values
      * @return void
-     * @since 2.0.0
      */
     protected function _updateAttributeOptionValues($optionId, $values)
     {
@@ -523,7 +499,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $entityType
      * @param string $code
      * @return int
-     * @since 2.0.0
      */
     public function getIdByCode($entityType, $code)
     {
@@ -550,7 +525,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int|string $entityAttributeId
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getEntityAttribute($entityAttributeId)
     {
@@ -568,7 +543,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $frontendType
      * @return array
-     * @since 2.0.0
      */
     public function getAttributeCodesByFrontendType($frontendType)
     {
@@ -590,7 +564,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param AbstractAttribute $attribute
      * @param int $storeId
      * @return Select
-     * @since 2.0.0
      */
     public function getFlatUpdateSelect(AbstractAttribute $attribute, $storeId)
     {
@@ -639,7 +612,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $table
      * @return array
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function describeTable($table)
     {
@@ -652,7 +624,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $entityTypeId
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getAdditionalAttributeTable($entityTypeId)
     {
@@ -665,7 +636,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param EntityAttribute|AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterLoad(AbstractModel $object)
     {
@@ -697,7 +667,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $storeLabelsCache = [];
 
@@ -706,7 +675,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $attributeId
      * @return array
-     * @since 2.0.0
      */
     public function getStoreLabelsByAttributeId($attributeId)
     {
@@ -730,7 +698,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param array $attributeIds
      * @return array
-     * @since 2.0.0
      */
     public function getValidAttributeIds($attributeIds)
     {
@@ -750,7 +717,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Provide variables to serialize
      *
      * @return array
-     * @since 2.1.0
+     * @since 100.0.7
      */
     public function __sleep()
     {
@@ -763,7 +730,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Restore global dependencies
      *
      * @return void
-     * @since 2.1.0
+     * @since 100.0.7
      */
     public function __wakeup()
     {

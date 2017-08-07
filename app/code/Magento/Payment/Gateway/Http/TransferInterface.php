@@ -9,7 +9,6 @@ namespace Magento\Payment\Gateway\Http;
  * Interface TransferInterface
  * @package Magento\Payment\Gateway\Http
  * @api
- * @since 2.0.0
  */
 interface TransferInterface
 {
@@ -17,7 +16,6 @@ interface TransferInterface
      * Returns gateway client configuration
      *
      * @return array
-     * @since 2.0.0
      */
     public function getClientConfig();
 
@@ -25,7 +23,6 @@ interface TransferInterface
      * Returns method used to place request
      *
      * @return string|int
-     * @since 2.0.0
      */
     public function getMethod();
 
@@ -33,7 +30,6 @@ interface TransferInterface
      * Returns headers
      *
      * @return array
-     * @since 2.0.0
      */
     public function getHeaders();
 
@@ -41,7 +37,6 @@ interface TransferInterface
      * Whether body should be encoded before place
      *
      * @return bool
-     * @since 2.0.0
      */
     public function shouldEncode();
 
@@ -49,7 +44,6 @@ interface TransferInterface
      * Returns request body
      *
      * @return array|string
-     * @since 2.0.0
      */
     public function getBody();
 
@@ -57,7 +51,6 @@ interface TransferInterface
      * Returns URI
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUri();
 
@@ -65,7 +58,6 @@ interface TransferInterface
      * Returns Auth username
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAuthUsername();
 
@@ -73,7 +65,6 @@ interface TransferInterface
      * Returns Auth password
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAuthPassword();
 }

@@ -12,25 +12,21 @@ use Magento\Theme\Api\DesignConfigRepositoryInterface;
 /**
  * Class \Magento\Theme\Model\Design\Config\DataProvider\DataLoader
  *
- * @since 2.1.0
  */
 class DataLoader
 {
     /**
      * @var RequestInterface
-     * @since 2.1.0
      */
     protected $request;
 
     /**
      * @var DesignConfigRepositoryInterface
-     * @since 2.1.0
      */
     protected $designConfigRepository;
 
     /**
      * @var DataPersistorInterface
-     * @since 2.1.0
      */
     protected $dataPersistor;
 
@@ -38,7 +34,6 @@ class DataLoader
      * @param RequestInterface $request
      * @param DesignConfigRepositoryInterface $designConfigRepository
      * @param DataPersistorInterface $dataPersistor
-     * @since 2.1.0
      */
     public function __construct(
         RequestInterface $request,
@@ -54,7 +49,6 @@ class DataLoader
      * Retrieve configuration data
      *
      * @return array
-     * @since 2.1.0
      */
     public function getData()
     {
@@ -75,7 +69,6 @@ class DataLoader
      * @param string $scope
      * @param string $scopeId
      * @return array
-     * @since 2.1.0
      */
     protected function loadData($scope, $scopeId)
     {

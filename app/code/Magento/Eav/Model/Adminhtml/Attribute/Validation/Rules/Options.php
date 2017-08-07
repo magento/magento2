@@ -7,7 +7,6 @@ namespace Magento\Eav\Model\Adminhtml\Attribute\Validation\Rules;
 
 /**
  * Class Options
- * @since 2.1.0
  */
 class Options implements \Magento\Framework\Data\OptionSourceInterface
 {
@@ -15,7 +14,6 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
      * Return array of options as value-label pairs
      *
      * @return array Format: array(array('value' => '<value>', 'label' => '<label>'), ...)
-     * @since 2.1.0
      */
     public function toOptionArray()
     {

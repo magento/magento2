@@ -12,7 +12,6 @@ use Magento\Store\Model\ScopeInterface;
  * GoogleAnalytics data helper
  *
  * @api
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -30,7 +29,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function isGoogleAnalyticsAvailable($store = null)
     {
@@ -43,7 +41,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function isAnonymizedIpActive($store = null)
     {

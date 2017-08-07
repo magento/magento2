@@ -21,73 +21,61 @@ use Psr\Log\LoggerInterface;
 /**
  * Class RefundInvoice
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.2.0
  */
 class RefundInvoice implements RefundInvoiceInterface
 {
     /**
      * @var ResourceConnection
-     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var OrderStateResolverInterface
-     * @since 2.2.0
      */
     private $orderStateResolver;
 
     /**
      * @var OrderRepositoryInterface
-     * @since 2.2.0
      */
     private $orderRepository;
 
     /**
      * @var InvoiceRepositoryInterface
-     * @since 2.2.0
      */
     private $invoiceRepository;
 
     /**
      * @var CreditmemoRepositoryInterface
-     * @since 2.2.0
      */
     private $creditmemoRepository;
 
     /**
      * @var RefundAdapterInterface
-     * @since 2.2.0
      */
     private $refundAdapter;
 
     /**
      * @var CreditmemoDocumentFactory
-     * @since 2.2.0
      */
     private $creditmemoDocumentFactory;
 
     /**
      * @var NotifierInterface
-     * @since 2.2.0
      */
     private $notifier;
 
     /**
      * @var OrderConfig
-     * @since 2.2.0
      */
     private $config;
 
     /**
      * @var LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
     /**
      * @var RefundInvoiceValidator
-     * @since 2.2.0
      */
     private $validator;
 
@@ -106,7 +94,6 @@ class RefundInvoice implements RefundInvoiceInterface
      * @param OrderConfig $config
      * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -136,7 +123,6 @@ class RefundInvoice implements RefundInvoiceInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function execute(
         $invoiceId,

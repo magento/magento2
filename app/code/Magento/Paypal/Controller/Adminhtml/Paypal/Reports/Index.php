@@ -9,7 +9,6 @@ namespace Magento\Paypal\Controller\Adminhtml\Paypal\Reports;
 /**
  * Class \Magento\Paypal\Controller\Adminhtml\Paypal\Reports\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
 {
@@ -24,7 +23,6 @@ class Index extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
      * Grid action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -10,19 +10,16 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Baseurl extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Framework\View\Asset\MergeService
-     * @since 2.0.0
      */
     protected $_mergeService;
 
     /**
      * @var UrlValidator
-     * @since 2.2.0
      */
     private $urlValidator;
 
@@ -35,7 +32,6 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -56,7 +52,6 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -79,7 +74,6 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      *
      * @param string $value
      * @return bool
-     * @since 2.0.0
      */
     private function _validateUnsecure($value)
     {
@@ -106,7 +100,6 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      *
      * @param string $value
      * @return bool
-     * @since 2.0.0
      */
     private function _validateSecure($value)
     {
@@ -135,7 +128,6 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      * @param string $value
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     private function _assertValuesOrUrl(array $values, $value)
     {
@@ -153,7 +145,6 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      * @param string $value
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     private function _assertStartsWithValuesOrUrl(array $values, $value)
     {
@@ -176,7 +167,6 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      * @param string $value
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     private function _assertStartsWithValuesOrUrlOrEmpty(array $values, $value)
     {
@@ -198,7 +188,6 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      * @param string $value
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     private function _validateFullyQualifiedUrl($value)
     {
@@ -212,7 +201,6 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      *
      * @param string $value
      * @return bool
-     * @since 2.0.0
      */
     private function _isFullyQualifiedUrl($value)
     {
@@ -223,7 +211,6 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      * Clean compiled JS/CSS when updating url configuration settings
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -243,9 +230,8 @@ class Baseurl extends \Magento\Framework\App\Config\Value
     /**
      * Get URL Validator
      *
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @return UrlValidator
-     * @since 2.2.0
      */
     private function getUrlValidator()
     {

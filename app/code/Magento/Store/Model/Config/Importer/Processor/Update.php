@@ -18,7 +18,6 @@ use Magento\Framework\Event\ManagerInterface;
  * The process for updating of existing entities.
  *
  * {@inheritdoc}
- * @since 2.2.0
  */
 class Update implements ProcessorInterface
 {
@@ -26,7 +25,6 @@ class Update implements ProcessorInterface
      * The calculator for data differences.
      *
      * @var DataDifferenceCalculator
-     * @since 2.2.0
      */
     private $dataDifferenceCalculator;
 
@@ -34,7 +32,6 @@ class Update implements ProcessorInterface
      * The factory for website entity.
      *
      * @var WebsiteFactory
-     * @since 2.2.0
      */
     private $websiteFactory;
 
@@ -42,7 +39,6 @@ class Update implements ProcessorInterface
      * The factory for store entity.
      *
      * @var StoreFactory
-     * @since 2.2.0
      */
     private $storeFactory;
 
@@ -50,7 +46,6 @@ class Update implements ProcessorInterface
      * The factory for group entity.
      *
      * @var GroupFactory
-     * @since 2.2.0
      */
     private $groupFactory;
 
@@ -58,7 +53,6 @@ class Update implements ProcessorInterface
      * The event manager.
      *
      * @var ManagerInterface
-     * @since 2.2.0
      */
     private $eventManager;
 
@@ -68,7 +62,6 @@ class Update implements ProcessorInterface
      * @param StoreFactory $storeFactory The factory for store entity
      * @param GroupFactory $groupFactory The factory for group entity
      * @param ManagerInterface $eventManager The event manager
-     * @since 2.2.0
      */
     public function __construct(
         DataDifferenceCalculator $dataDifferenceCalculator,
@@ -88,7 +81,6 @@ class Update implements ProcessorInterface
      * Updates entities in application according to the data set.
      *
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function run(array $data)
     {
@@ -132,7 +124,6 @@ class Update implements ProcessorInterface
      * @param array $items The items to update
      * @param array $data The data to be updated
      * @return void
-     * @since 2.2.0
      */
     private function updateWebsites(array $items, array $data)
     {
@@ -156,7 +147,6 @@ class Update implements ProcessorInterface
      * @param array $items The items to update
      * @param array $data The data to be updated
      * @return void
-     * @since 2.2.0
      */
     private function updateStores(array $items, array $data)
     {
@@ -200,7 +190,6 @@ class Update implements ProcessorInterface
      * @param array $data The data to be updated
      * @throws CouldNotSaveException If group could not be saved
      * @return void
-     * @since 2.2.0
      */
     private function updateGroups(array $items, array $data)
     {
@@ -240,7 +229,6 @@ class Update implements ProcessorInterface
      * @param array $data The data to be searched in
      * @param string $websiteId The website id
      * @return \Magento\Store\Model\Website|null
-     * @since 2.2.0
      */
     private function findWebsiteById(array $data, $websiteId)
     {
@@ -263,7 +251,6 @@ class Update implements ProcessorInterface
      * @param array $data The data to be searched in
      * @param string $groupId The group id
      * @return \Magento\Store\Model\Group|null
-     * @since 2.2.0
      */
     private function findGroupById(array $data, $groupId)
     {
@@ -286,7 +273,6 @@ class Update implements ProcessorInterface
      * @param array $data The data to be searched in
      * @param string $storeId The store id
      * @return \Magento\Store\Model\Store|null
-     * @since 2.2.0
      */
     private function findStoreById(array $data, $storeId)
     {

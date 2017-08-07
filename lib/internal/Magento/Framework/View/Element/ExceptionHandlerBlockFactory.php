@@ -8,7 +8,6 @@ namespace Magento\Framework\View\Element;
 /**
  * Class ExceptionHandlerBlockFactory
  * @package Magento\Framework\View\Element
- * @since 2.0.0
  */
 class ExceptionHandlerBlockFactory
 {
@@ -16,20 +15,17 @@ class ExceptionHandlerBlockFactory
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $instanceName;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -44,7 +40,6 @@ class ExceptionHandlerBlockFactory
      *
      * @param array $data
      * @return \Magento\Framework\View\Element\BlockInterface
-     * @since 2.0.0
      */
     public function create(array $data = [])
     {

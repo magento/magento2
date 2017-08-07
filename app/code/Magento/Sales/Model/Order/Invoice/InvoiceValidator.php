@@ -9,20 +9,17 @@ use Magento\Sales\Api\Data\InvoiceInterface;
 
 /**
  * Class InvoiceValidatorRunner
- * @since 2.2.0
  */
 class InvoiceValidator implements InvoiceValidatorInterface
 {
     /**
      * @var \Magento\Sales\Model\Validator
-     * @since 2.2.0
      */
     private $validator;
 
     /**
      * InvoiceValidatorRunner constructor.
      * @param \Magento\Sales\Model\Validator $validator
-     * @since 2.2.0
      */
     public function __construct(\Magento\Sales\Model\Validator $validator)
     {
@@ -31,7 +28,6 @@ class InvoiceValidator implements InvoiceValidatorInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function validate(InvoiceInterface $entity, array $validators)
     {

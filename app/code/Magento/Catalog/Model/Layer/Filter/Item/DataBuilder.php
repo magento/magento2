@@ -12,7 +12,6 @@ namespace Magento\Catalog\Model\Layer\Filter\Item;
 /**
  * Class \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder
  *
- * @since 2.0.0
  */
 class DataBuilder
 {
@@ -27,7 +26,6 @@ class DataBuilder
      * )
      *
      * @return array
-     * @since 2.0.0
      */
     protected $_itemsData = [];
 
@@ -38,7 +36,6 @@ class DataBuilder
      * @param string $label
      * @param int $count
      * @return void
-     * @since 2.0.0
      */
     public function addItemData($label, $value, $count)
     {
@@ -53,7 +50,6 @@ class DataBuilder
      * Get Items Data
      *
      * @return array
-     * @since 2.0.0
      */
     public function build()
     {

@@ -12,7 +12,6 @@ use Magento\GroupedProduct\Model\Product\Type\Grouped as TypeGrouped;
 
 /**
  * Class Grouped
- * @since 2.0.0
  */
 class Grouped
 {
@@ -23,19 +22,16 @@ class Grouped
 
     /**
      * @var ProductLinkInterfaceFactory
-     * @since 2.1.0
      */
     protected $productLinkFactory;
 
     /**
      * @var ProductRepositoryInterface
-     * @since 2.1.0
      */
     protected $productRepository;
 
     /**
      * @var ProductLinkExtensionFactory
-     * @since 2.1.0
      */
     protected $productLinkExtensionFactory;
 
@@ -45,7 +41,6 @@ class Grouped
      * @param ProductLinkInterfaceFactory $productLinkFactory
      * @param ProductRepositoryInterface $productRepository
      * @param ProductLinkExtensionFactory $productLinkExtensionFactory
-     * @since 2.1.0
      */
     public function __construct(
         ProductLinkInterfaceFactory $productLinkFactory,
@@ -68,7 +63,6 @@ class Grouped
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function beforeInitializeLinks(
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $subject,
@@ -135,7 +129,6 @@ class Grouped
      * @param array $existingLinks
      * @param array $newLinks
      * @return array
-     * @since 2.1.0
      */
     private function removeUnExistingLinks($existingLinks, $newLinks)
     {

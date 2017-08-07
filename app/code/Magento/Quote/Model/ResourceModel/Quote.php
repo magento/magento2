@@ -15,13 +15,11 @@ use Magento\SalesSequence\Model\Manager;
 
 /**
  * Quote resource model
- * @since 2.0.0
  */
 class Quote extends AbstractDb
 {
     /**
      * @var \Magento\SalesSequence\Model\Manager
-     * @since 2.0.0
      */
     protected $sequenceManager;
 
@@ -31,7 +29,6 @@ class Quote extends AbstractDb
      * @param RelationComposite $entityRelationComposite,
      * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -48,7 +45,6 @@ class Quote extends AbstractDb
      * Initialize table nad PK name
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -62,7 +58,6 @@ class Quote extends AbstractDb
      * @param mixed $value
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -88,7 +83,6 @@ class Quote extends AbstractDb
      * @param \Magento\Quote\Model\Quote $quote
      * @param int $customerId
      * @return $this
-     * @since 2.0.0
      */
     public function loadByCustomerId($quote, $customerId)
     {
@@ -123,7 +117,6 @@ class Quote extends AbstractDb
      * @param \Magento\Quote\Model\Quote $quote
      * @param int $quoteId
      * @return $this
-     * @since 2.0.0
      */
     public function loadActive($quote, $quoteId)
     {
@@ -146,7 +139,6 @@ class Quote extends AbstractDb
      * @param \Magento\Quote\Model\Quote $quote
      * @param int $quoteId
      * @return $this
-     * @since 2.0.0
      */
     public function loadByIdWithoutStore($quote, $quoteId)
     {
@@ -170,7 +162,6 @@ class Quote extends AbstractDb
      *
      * @param \Magento\Quote\Model\Quote $quote
      * @return string
-     * @since 2.0.0
      */
     public function getReservedOrderId($quote)
     {
@@ -187,7 +178,6 @@ class Quote extends AbstractDb
      *
      * @param int $orderIncrementId
      * @return bool
-     * @since 2.2.0
      */
     public function isOrderIncrementIdUsed($orderIncrementId)
     {
@@ -209,7 +199,6 @@ class Quote extends AbstractDb
      * Mark quotes - that depend on catalog price rules - to be recollected on demand
      *
      * @return $this
-     * @since 2.0.0
      */
     public function markQuotesRecollectOnCatalogRules()
     {
@@ -244,7 +233,6 @@ class Quote extends AbstractDb
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
-     * @since 2.0.0
      */
     public function substractProductFromQuotes($product)
     {
@@ -291,7 +279,6 @@ class Quote extends AbstractDb
      *
      * @param array|int|\Zend_Db_Expr $productIds
      * @return $this
-     * @since 2.0.0
      */
     public function markQuotesRecollect($productIds)
     {
@@ -320,7 +307,6 @@ class Quote extends AbstractDb
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {

@@ -13,7 +13,6 @@ use Magento\Framework\View\Layout\Reader\Visibility\Condition;
 
 /**
  * Block structure reader
- * @since 2.0.0
  */
 class Block implements Layout\ReaderInterface
 {
@@ -42,10 +41,7 @@ class Block implements Layout\ReaderInterface
     const ATTRIBUTE_ACL = 'aclResource';
     /**#@-*/
 
-    /**
-     * @var array
-     * @since 2.0.0
-     */
+    /**#@-*/
     protected $attributes = [
         self::ATTRIBUTE_GROUP,
         self::ATTRIBUTE_CLASS,
@@ -56,44 +52,37 @@ class Block implements Layout\ReaderInterface
 
     /**
      * @var \Magento\Framework\View\Layout\ScheduledStructure\Helper
-     * @since 2.0.0
      */
     protected $helper;
 
     /**
      * @var \Magento\Framework\View\Layout\Argument\Parser
-     * @since 2.0.0
      */
     protected $argumentParser;
 
     /**
      * @var \Magento\Framework\View\Layout\ReaderPool
-     * @since 2.0.0
      */
     protected $readerPool;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $scopeType;
 
     /**
      * @var InterpreterInterface
-     * @since 2.0.0
      */
     protected $argumentInterpreter;
 
     /**
      * @var Condition
-     * @since 2.2.0
      */
     private $conditionReader;
 
     /**
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @var string
-     * @since 2.2.0
      */
     private $deprecatedAttributeAcl = 'acl';
 
@@ -106,7 +95,6 @@ class Block implements Layout\ReaderInterface
      * @param InterpreterInterface $argumentInterpreter
      * @param Condition $conditionReader
      * @param string|null $scopeType
-     * @since 2.0.0
      */
     public function __construct(
         Layout\ScheduledStructure\Helper $helper,
@@ -128,7 +116,6 @@ class Block implements Layout\ReaderInterface
      * {@inheritdoc}
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getSupportedNodes()
     {
@@ -142,7 +129,6 @@ class Block implements Layout\ReaderInterface
      * @param Element $currentElement
      * @param Element $parentElement
      * @return $this
-     * @since 2.0.0
      */
     public function interpret(Context $readerContext, Element $currentElement)
     {
@@ -167,7 +153,6 @@ class Block implements Layout\ReaderInterface
      * @param ScheduledStructure $scheduledStructure
      * @param Element $currentElement
      * @return void
-     * @since 2.0.0
      */
     protected function scheduleBlock(
         ScheduledStructure $scheduledStructure,
@@ -195,7 +180,6 @@ class Block implements Layout\ReaderInterface
      * @param array $elementData
      * @param Element $currentElement
      * @return array
-     * @since 2.0.0
      */
     protected function mergeBlockAttributes(array $elementData, Element $currentElement)
     {
@@ -227,7 +211,6 @@ class Block implements Layout\ReaderInterface
      * @param array|Element $data
      *
      * @return array|Element
-     * @since 2.2.0
      */
     private function replaceDeprecatedAclKey($data)
     {
@@ -244,7 +227,6 @@ class Block implements Layout\ReaderInterface
      * @param ScheduledStructure $scheduledStructure
      * @param Element $currentElement
      * @return void
-     * @since 2.0.0
      */
     protected function scheduleReference(
         ScheduledStructure $scheduledStructure,
@@ -271,7 +253,6 @@ class Block implements Layout\ReaderInterface
      * @param Element $currentElement
      * @param array &$data
      * @return array
-     * @since 2.0.0
      */
     protected function updateScheduledData($currentElement, array &$data)
     {
@@ -291,7 +272,6 @@ class Block implements Layout\ReaderInterface
      *
      * @param Element $blockElement
      * @return array
-     * @since 2.0.0
      */
     protected function getAttributes(Element $blockElement)
     {
@@ -307,7 +287,6 @@ class Block implements Layout\ReaderInterface
      *
      * @param Element $blockElement
      * @return array[]
-     * @since 2.0.0
      */
     protected function getActions(Element $blockElement)
     {
@@ -327,7 +306,6 @@ class Block implements Layout\ReaderInterface
      *
      * @param Element $blockElement
      * @return array
-     * @since 2.0.0
      */
     protected function getArguments(Element $blockElement)
     {
@@ -343,7 +321,6 @@ class Block implements Layout\ReaderInterface
      * @param Element $element
      * @param string $type
      * @return array
-     * @since 2.0.0
      */
     protected function getElementsByType(Element $element, $type)
     {
@@ -362,7 +339,6 @@ class Block implements Layout\ReaderInterface
      *
      * @param Element $node
      * @return array
-     * @since 2.0.0
      */
     protected function parseArguments(Element $node)
     {
@@ -383,7 +359,6 @@ class Block implements Layout\ReaderInterface
      * @param Element $blockElement
      * @param array $data
      * @return void
-     * @since 2.0.0
      */
     protected function evaluateArguments(Element $blockElement, array &$data)
     {

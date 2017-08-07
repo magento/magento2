@@ -7,7 +7,6 @@ namespace Magento\Payment\Model\ResourceModel\Grid;
 
 /**
  * Sales transaction types option array
- * @since 2.0.0
  */
 class GroupList implements \Magento\Framework\Option\ArrayInterface
 {
@@ -15,13 +14,11 @@ class GroupList implements \Magento\Framework\Option\ArrayInterface
      * Payment data
      *
      * @var \Magento\Payment\Helper\Data
-     * @since 2.0.0
      */
     protected $paymentData;
 
     /**
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @since 2.0.0
      */
     public function __construct(\Magento\Payment\Helper\Data $paymentData)
     {
@@ -32,7 +29,6 @@ class GroupList implements \Magento\Framework\Option\ArrayInterface
      * Return option array
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

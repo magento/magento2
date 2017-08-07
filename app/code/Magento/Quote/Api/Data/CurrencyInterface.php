@@ -8,7 +8,6 @@ namespace Magento\Quote\Api\Data;
 /**
  * Interface CurrencyInterface
  * @api
- * @since 2.0.0
  */
 interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -37,7 +36,6 @@ interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * Get global currency code
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getGlobalCurrencyCode();
 
@@ -46,7 +44,6 @@ interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      *
      * @param string $globalCurrencyCode
      * @return $this
-     * @since 2.0.0
      */
     public function setGlobalCurrencyCode($globalCurrencyCode);
 
@@ -54,7 +51,6 @@ interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * Get base currency code
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getBaseCurrencyCode();
 
@@ -63,7 +59,6 @@ interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      *
      * @param string $baseCurrencyCode
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseCurrencyCode($baseCurrencyCode);
 
@@ -71,7 +66,6 @@ interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * Get store currency code
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getStoreCurrencyCode();
 
@@ -80,7 +74,6 @@ interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      *
      * @param string $storeCurrencyCode
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreCurrencyCode($storeCurrencyCode);
 
@@ -88,7 +81,6 @@ interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * Get quote currency code
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getQuoteCurrencyCode();
 
@@ -97,7 +89,6 @@ interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      *
      * @param string $quoteCurrencyCode
      * @return $this
-     * @since 2.0.0
      */
     public function setQuoteCurrencyCode($quoteCurrencyCode);
 
@@ -105,7 +96,6 @@ interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * Get store currency to base currency rate
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getStoreToBaseRate();
 
@@ -114,7 +104,6 @@ interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      *
      * @param float $storeToBaseRate
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreToBaseRate($storeToBaseRate);
 
@@ -122,7 +111,6 @@ interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * Get store currency to quote currency rate
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getStoreToQuoteRate();
 
@@ -131,7 +119,6 @@ interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      *
      * @param float $storeToQuoteRate
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreToQuoteRate($storeToQuoteRate);
 
@@ -139,7 +126,6 @@ interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * Get base currency to global currency rate
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseToGlobalRate();
 
@@ -148,7 +134,6 @@ interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      *
      * @param float $baseToGlobalRate
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseToGlobalRate($baseToGlobalRate);
 
@@ -156,7 +141,6 @@ interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * Get base currency to quote currency rate
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseToQuoteRate();
 
@@ -165,7 +149,6 @@ interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      *
      * @param float $baseToQuoteRate
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseToQuoteRate($baseToQuoteRate);
 
@@ -173,7 +156,6 @@ interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Quote\Api\Data\CurrencyExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -182,7 +164,6 @@ interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      *
      * @param \Magento\Quote\Api\Data\CurrencyExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Quote\Api\Data\CurrencyExtensionInterface $extensionAttributes);
 }

@@ -12,26 +12,22 @@ use Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement;
 
 /**
  * Class BillingAgreementConfigProvider
- * @since 2.0.0
  */
 class BillingAgreementConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var CurrentCustomer
-     * @since 2.0.0
      */
     protected $currentCustomer;
 
     /**
      * @var AgreementFactory
-     * @since 2.0.0
      */
     protected $agreementFactory;
 
     /**
      * @param CurrentCustomer $currentCustomer
      * @param AgreementFactory $agreementFactory
-     * @since 2.0.0
      */
     public function __construct(
         CurrentCustomer $currentCustomer,
@@ -43,7 +39,6 @@ class BillingAgreementConfigProvider implements ConfigProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -63,7 +58,6 @@ class BillingAgreementConfigProvider implements ConfigProviderInterface
      * Retrieve available customer billing agreements
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getBillingAgreements()
     {

@@ -13,7 +13,6 @@ use Magento\Sales\Model\ResourceModel\Order\Comment\Collection\AbstractCollectio
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Collection extends AbstractCollection implements ShipmentCommentSearchResultInterface
 {
@@ -21,7 +20,6 @@ class Collection extends AbstractCollection implements ShipmentCommentSearchResu
      * Event prefix
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_shipment_comment_collection';
 
@@ -29,7 +27,6 @@ class Collection extends AbstractCollection implements ShipmentCommentSearchResu
      * Event object
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'order_shipment_comment_collection';
 
@@ -37,7 +34,6 @@ class Collection extends AbstractCollection implements ShipmentCommentSearchResu
      * Model initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -52,7 +48,6 @@ class Collection extends AbstractCollection implements ShipmentCommentSearchResu
      *
      * @param int $shipmentId
      * @return $this
-     * @since 2.0.0
      */
     public function setShipmentFilter($shipmentId)
     {

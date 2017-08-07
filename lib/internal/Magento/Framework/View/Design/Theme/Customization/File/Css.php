@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Design\Theme\Customization\File;
 
 /**
  * Theme CSS file service class
- * @since 2.0.0
  */
 class Css extends \Magento\Framework\View\Design\Theme\Customization\AbstractFile
 {
@@ -24,7 +23,6 @@ class Css extends \Magento\Framework\View\Design\Theme\Customization\AbstractFil
      * Get type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -35,7 +33,6 @@ class Css extends \Magento\Framework\View\Design\Theme\Customization\AbstractFil
      * Get content type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getContentType()
     {

@@ -9,14 +9,12 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
  * Country column type renderer
  *
  * @api
- * @deprecated 2.2.0 in favour of UI component implementation
- * @since 2.0.0
+ * @deprecated 100.2.0 in favour of UI component implementation
  */
 class Country extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var \Magento\Framework\Locale\ListsInterface
-     * @since 2.0.0
      */
     protected $localeLists;
 
@@ -24,7 +22,6 @@ class Country extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\Locale\ListsInterface $localeLists
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -40,7 +37,6 @@ class Country extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
      *
      * @param   \Magento\Framework\DataObject $row
      * @return  string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

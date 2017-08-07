@@ -15,31 +15,26 @@ use Magento\Store\Model\ResourceModel\Store\Collection;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Options extends \Magento\Backend\Block\Template
 {
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_registry;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory
-     * @since 2.0.0
      */
     protected $_attrOptionCollectionFactory;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Catalog::catalog/product/attribute/options.phtml';
 
     /**
      * @var \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @since 2.0.0
      */
     protected $_universalFactory;
 
@@ -49,7 +44,6 @@ class Options extends \Magento\Backend\Block\Template
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -69,7 +63,6 @@ class Options extends \Magento\Backend\Block\Template
      * Option labels and position for such attributes are kept in source model and thus cannot be overridden
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canManageOptionDefaultOnly()
     {
@@ -83,7 +76,6 @@ class Options extends \Magento\Backend\Block\Template
      * Retrieve stores collection with default store
      *
      * @return array
-     * @since 2.0.0
      */
     public function getStores()
     {
@@ -97,7 +89,7 @@ class Options extends \Magento\Backend\Block\Template
      * Returns stores sorted by Sort Order
      *
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getStoresSortedBySortOrder()
     {
@@ -117,7 +109,6 @@ class Options extends \Magento\Backend\Block\Template
      * Retrieve attribute option values if attribute input type select or multiselect
      *
      * @return array
-     * @since 2.0.0
      */
     public function getOptionValues()
     {
@@ -141,7 +132,6 @@ class Options extends \Magento\Backend\Block\Template
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @param array|\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $optionCollection
      * @return array
-     * @since 2.0.0
      */
     protected function _prepareOptionValues(
         \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute,
@@ -182,7 +172,6 @@ class Options extends \Magento\Backend\Block\Template
      *
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @return array|\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection
-     * @since 2.0.0
      */
     protected function _getOptionValuesCollection(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute)
     {
@@ -211,7 +200,6 @@ class Options extends \Magento\Backend\Block\Template
      * @param array $defaultValues
      * @param string $valuePrefix
      * @return array
-     * @since 2.0.0
      */
     protected function _prepareSystemAttributeOptionValues($option, $inputType, $defaultValues, $valuePrefix = '')
     {
@@ -250,7 +238,6 @@ class Options extends \Magento\Backend\Block\Template
      * @param string $inputType
      * @param array $defaultValues
      * @return array
-     * @since 2.0.0
      */
     protected function _prepareUserDefinedAttributeOptionValues($option, $inputType, $defaultValues)
     {
@@ -279,7 +266,6 @@ class Options extends \Magento\Backend\Block\Template
      *
      * @param int $storeId
      * @return array
-     * @since 2.0.0
      */
     public function getStoreOptionValues($storeId)
     {
@@ -305,7 +291,6 @@ class Options extends \Magento\Backend\Block\Template
      *
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function getAttributeObject()
     {

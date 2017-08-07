@@ -12,7 +12,6 @@ use Magento\Framework\Api\ArrayObjectSearch;
  * Class Dob
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Dob extends AbstractWidget
 {
@@ -27,19 +26,16 @@ class Dob extends AbstractWidget
      * Date inputs
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_dateInputs = [];
 
     /**
      * @var \Magento\Framework\View\Element\Html\Date
-     * @since 2.0.0
      */
     protected $dateElement;
 
     /**
      * @var \Magento\Framework\Data\Form\FilterFactory
-     * @since 2.1.0
      */
     protected $filterFactory;
 
@@ -50,7 +46,6 @@ class Dob extends AbstractWidget
      * @param \Magento\Framework\View\Element\Html\Date $dateElement
      * @param \Magento\Framework\Data\Form\FilterFactory $filterFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -67,7 +62,6 @@ class Dob extends AbstractWidget
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function _construct()
     {
@@ -77,7 +71,6 @@ class Dob extends AbstractWidget
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isEnabled()
     {
@@ -87,7 +80,6 @@ class Dob extends AbstractWidget
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isRequired()
     {
@@ -98,7 +90,6 @@ class Dob extends AbstractWidget
     /**
      * @param string $date
      * @return $this
-     * @since 2.0.0
      */
     public function setDate($date)
     {
@@ -111,7 +102,6 @@ class Dob extends AbstractWidget
      * Return Data Form Filter or false
      *
      * @return \Magento\Framework\Data\Form\Filter\FilterInterface|false
-     * @since 2.1.0
      */
     protected function getFormFilter()
     {
@@ -133,7 +123,6 @@ class Dob extends AbstractWidget
      *
      * @param string $value
      * @return string
-     * @since 2.1.0
      */
     protected function applyOutputFilter($value)
     {
@@ -146,7 +135,6 @@ class Dob extends AbstractWidget
 
     /**
      * @return string|bool
-     * @since 2.0.0
      */
     public function getDay()
     {
@@ -155,7 +143,6 @@ class Dob extends AbstractWidget
 
     /**
      * @return string|bool
-     * @since 2.0.0
      */
     public function getMonth()
     {
@@ -164,7 +151,6 @@ class Dob extends AbstractWidget
 
     /**
      * @return string|bool
-     * @since 2.0.0
      */
     public function getYear()
     {
@@ -175,7 +161,6 @@ class Dob extends AbstractWidget
      * Return label
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getLabel()
     {
@@ -186,7 +171,6 @@ class Dob extends AbstractWidget
      * Create correct date field
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFieldHtml()
     {
@@ -211,7 +195,6 @@ class Dob extends AbstractWidget
      * Return id
      *
      * @return string
-     * @since 2.0.0
      */
     public function getHtmlId()
     {
@@ -222,7 +205,6 @@ class Dob extends AbstractWidget
      * Return data-validate rules
      *
      * @return string
-     * @since 2.2.0
      */
     public function getHtmlExtraParams()
     {
@@ -243,7 +225,6 @@ class Dob extends AbstractWidget
      * Returns format which will be applied for DOB in javascript
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDateFormat()
     {
@@ -256,7 +237,6 @@ class Dob extends AbstractWidget
      * @param string $code
      * @param string $html
      * @return void
-     * @since 2.0.0
      */
     public function setDateInput($code, $html)
     {
@@ -269,7 +249,6 @@ class Dob extends AbstractWidget
      * @param bool $stripNonInputChars
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSortedDateInputs($stripNonInputChars = true)
     {
@@ -291,7 +270,6 @@ class Dob extends AbstractWidget
      * Return minimal date range value
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getMinDateRange()
     {
@@ -313,7 +291,6 @@ class Dob extends AbstractWidget
      * Return maximal date range value
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getMaxDateRange()
     {

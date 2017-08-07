@@ -9,7 +9,6 @@ namespace Magento\Cookie\Controller\Index;
 /**
  * Class \Magento\Cookie\Controller\Index\NoCookies
  *
- * @since 2.0.0
  */
 class NoCookies extends \Magento\Framework\App\Action\Action
 {
@@ -17,7 +16,6 @@ class NoCookies extends \Magento\Framework\App\Action\Action
      * No cookies action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

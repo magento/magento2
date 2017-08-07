@@ -7,13 +7,11 @@ namespace Magento\Multishipping\Controller\Checkout;
 
 /**
  * Multishipping checkout address manipulation controller
- * @since 2.0.0
  */
 abstract class Address extends \Magento\Framework\App\Action\Action
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function dispatch(\Magento\Framework\App\RequestInterface $request)
     {
@@ -27,7 +25,6 @@ abstract class Address extends \Magento\Framework\App\Action\Action
      * Retrieve multishipping checkout model
      *
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
-     * @since 2.0.0
      */
     protected function _getCheckout()
     {
@@ -38,7 +35,6 @@ abstract class Address extends \Magento\Framework\App\Action\Action
      * Retrieve checkout state model
      *
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping\State
-     * @since 2.0.0
      */
     protected function _getState()
     {

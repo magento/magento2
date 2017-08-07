@@ -10,7 +10,6 @@ namespace Magento\ImportExport\Model\Import\ErrorProcessing;
  * Interface for Processing errors Aggregator
  *
  * @api
- * @since 2.0.0
  */
 interface ProcessingErrorAggregatorInterface
 {
@@ -27,7 +26,6 @@ interface ProcessingErrorAggregatorInterface
      * @param string|null $errorMessage
      * @param string|null $errorDescription
      * @return $this
-     * @since 2.0.0
      */
     public function addError(
         $errorCode,
@@ -43,7 +41,6 @@ interface ProcessingErrorAggregatorInterface
      *
      * @param int $rowNumber
      * @return $this
-     * @since 2.0.0
      */
     public function addRowToSkip($rowNumber);
 
@@ -53,7 +50,6 @@ interface ProcessingErrorAggregatorInterface
      * @param string $code
      * @param string|object $template
      * @return $this
-     * @since 2.0.0
      */
     public function addErrorMessageTemplate($code, $template);
 
@@ -62,7 +58,6 @@ interface ProcessingErrorAggregatorInterface
      *
      * @param int $rowNumber
      * @return bool
-     * @since 2.0.0
      */
     public function isRowInvalid($rowNumber);
 
@@ -70,7 +65,6 @@ interface ProcessingErrorAggregatorInterface
      * Get invalid rows count
      *
      * @return int
-     * @since 2.0.0
      */
     public function getInvalidRowsCount();
 
@@ -81,7 +75,6 @@ interface ProcessingErrorAggregatorInterface
      * @param int $allowedErrorCount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function initValidationStrategy($validationStrategy, $allowedErrorCount = 0);
 
@@ -89,7 +82,6 @@ interface ProcessingErrorAggregatorInterface
      * Check if the further processing should be stopped
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasToBeTerminated();
 
@@ -97,7 +89,6 @@ interface ProcessingErrorAggregatorInterface
      * Check if errors limit is exceeded
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isErrorLimitExceeded();
 
@@ -105,7 +96,6 @@ interface ProcessingErrorAggregatorInterface
      * Check if the aggregator contains error(s) with fatal exception code
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasFatalExceptions();
 
@@ -113,7 +103,6 @@ interface ProcessingErrorAggregatorInterface
      * Get all error(s) entities which has been added to the aggregator
      *
      * @return ProcessingError[]
-     * @since 2.0.0
      */
     public function getAllErrors();
 
@@ -122,7 +111,6 @@ interface ProcessingErrorAggregatorInterface
      *
      * @param array $codes
      * @return array
-     * @since 2.0.0
      */
     public function getErrorsByCode(array $codes);
 
@@ -131,7 +119,6 @@ interface ProcessingErrorAggregatorInterface
      *
      * @param int $rowNumber
      * @return ProcessingError[]
-     * @since 2.0.0
      */
     public function getErrorByRowNumber($rowNumber);
 
@@ -142,7 +129,6 @@ interface ProcessingErrorAggregatorInterface
      * @param array $excludedCodes
      * @param bool|true $replaceCodeWithMessage
      * @return mixed
-     * @since 2.0.0
      */
     public function getRowsGroupedByErrorCode(
         array $errorCode = [],
@@ -154,7 +140,6 @@ interface ProcessingErrorAggregatorInterface
      * Get allowed errors count
      *
      * @return int
-     * @since 2.0.0
      */
     public function getAllowedErrorsCount();
 
@@ -163,7 +148,6 @@ interface ProcessingErrorAggregatorInterface
      *
      * @param string[] $errorLevels
      * @return int
-     * @since 2.0.0
      */
     public function getErrorsCount(
         array $errorLevels = [
@@ -176,7 +160,6 @@ interface ProcessingErrorAggregatorInterface
      * Clear all aggregated data
      *
      * @return $this
-     * @since 2.0.0
      */
     public function clear();
 }

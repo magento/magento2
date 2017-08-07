@@ -12,7 +12,6 @@ namespace Magento\Framework\Notification;
  * Interface NotifierInterface
  *
  * @api
- * @since 2.0.0
  */
 interface NotifierInterface
 {
@@ -26,7 +25,6 @@ interface NotifierInterface
      * @param bool $isInternal
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
-     * @since 2.0.0
      */
     public function add($severity, $title, $description, $url = '', $isInternal = true);
 
@@ -38,7 +36,6 @@ interface NotifierInterface
      * @param string $url
      * @param bool $isInternal
      * @return $this
-     * @since 2.0.0
      */
     public function addCritical($title, $description, $url = '', $isInternal = true);
 
@@ -50,7 +47,6 @@ interface NotifierInterface
      * @param string $url
      * @param bool $isInternal
      * @return $this
-     * @since 2.0.0
      */
     public function addMajor($title, $description, $url = '', $isInternal = true);
 
@@ -62,7 +58,6 @@ interface NotifierInterface
      * @param string $url
      * @param bool $isInternal
      * @return $this
-     * @since 2.0.0
      */
     public function addMinor($title, $description, $url = '', $isInternal = true);
 
@@ -74,7 +69,6 @@ interface NotifierInterface
      * @param string $url
      * @param bool $isInternal
      * @return $this
-     * @since 2.0.0
      */
     public function addNotice($title, $description, $url = '', $isInternal = true);
 }

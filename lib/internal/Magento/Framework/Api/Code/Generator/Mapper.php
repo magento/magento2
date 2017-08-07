@@ -7,7 +7,6 @@ namespace Magento\Framework\Api\Code\Generator;
 
 /**
  * Class Repository
- * @since 2.0.0
  */
 class Mapper extends \Magento\Framework\Code\Generator\EntityAbstract
 {
@@ -20,7 +19,6 @@ class Mapper extends \Magento\Framework\Code\Generator\EntityAbstract
      * Retrieve class properties
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getClassProperties()
     {
@@ -55,7 +53,6 @@ class Mapper extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns source factory property Name
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getSourceBuilderPropertyName()
     {
@@ -66,7 +63,6 @@ class Mapper extends \Magento\Framework\Code\Generator\EntityAbstract
      * Get default constructor definition for generated class
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getDefaultConstructorDefinition()
     {
@@ -97,7 +93,6 @@ class Mapper extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns list of methods for class generator
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getClassMethods()
     {
@@ -132,7 +127,6 @@ class Mapper extends \Magento\Framework\Code\Generator\EntityAbstract
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _validateData()
     {

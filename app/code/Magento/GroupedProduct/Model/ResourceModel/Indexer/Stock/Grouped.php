@@ -18,13 +18,11 @@ use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
  * Stock indexer for grouped product.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
-     * @since 2.2.0
      */
     private $activeTableSwitcher;
 
@@ -36,7 +34,6 @@ class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stoc
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param null $connectionName
      * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -58,7 +55,6 @@ class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stoc
      * @param int|array $entityIds
      * @param bool $usePrimaryTable use primary or temporary index table
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {

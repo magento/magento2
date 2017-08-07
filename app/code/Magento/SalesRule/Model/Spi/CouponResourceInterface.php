@@ -9,7 +9,6 @@ namespace Magento\SalesRule\Model\Spi;
  * Interface ResourceInterface
  *
  * @api
- * @since 2.0.0
  */
 interface CouponResourceInterface
 {
@@ -18,7 +17,6 @@ interface CouponResourceInterface
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     public function save(\Magento\Framework\Model\AbstractModel $object);
 
@@ -29,7 +27,6 @@ interface CouponResourceInterface
      * @param \Magento\Framework\Model\AbstractModel $object
      * @param string|null $field field to load by (defaults to model id)
      * @return mixed
-     * @since 2.0.0
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null);
 
@@ -38,7 +35,6 @@ interface CouponResourceInterface
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return mixed
-     * @since 2.0.0
      */
     public function delete(\Magento\Framework\Model\AbstractModel $object);
 }

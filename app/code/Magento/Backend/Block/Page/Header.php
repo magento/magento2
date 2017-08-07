@@ -11,13 +11,11 @@ namespace Magento\Backend\Block\Page;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Header extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'page/header.phtml';
 
@@ -25,13 +23,11 @@ class Header extends \Magento\Backend\Block\Template
      * Backend data
      *
      * @var \Magento\Backend\Helper\Data
-     * @since 2.0.0
      */
     protected $_backendData = null;
 
     /**
      * @var \Magento\Backend\Model\Auth\Session
-     * @since 2.0.0
      */
     protected $_authSession;
 
@@ -40,7 +36,6 @@ class Header extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Backend\Helper\Data $backendData
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -55,7 +50,6 @@ class Header extends \Magento\Backend\Block\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getHomeLink()
     {
@@ -64,7 +58,6 @@ class Header extends \Magento\Backend\Block\Template
 
     /**
      * @return \Magento\User\Model\User|null
-     * @since 2.0.0
      */
     public function getUser()
     {
@@ -73,7 +66,6 @@ class Header extends \Magento\Backend\Block\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getLogoutLink()
     {
@@ -84,7 +76,6 @@ class Header extends \Magento\Backend\Block\Template
      * Check if noscript notice should be displayed
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function displayNoscriptNotice()
     {

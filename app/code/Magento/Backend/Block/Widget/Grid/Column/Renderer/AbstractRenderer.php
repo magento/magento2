@@ -13,26 +13,22 @@ use Magento\Framework\DataObject;
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @api
- * @since 2.0.0
  */
 abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock implements RendererInterface
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_defaultWidth;
 
     /**
      * @var Column
-     * @since 2.0.0
      */
     protected $_column;
 
     /**
      * @param Column $column
      * @return $this
-     * @since 2.0.0
      */
     public function setColumn($column)
     {
@@ -42,7 +38,6 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
 
     /**
      * @return Column
-     * @since 2.0.0
      */
     public function getColumn()
     {
@@ -54,7 +49,6 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
      *
      * @param   Object $row
      * @return  string
-     * @since 2.0.0
      */
     public function render(DataObject $row)
     {
@@ -73,7 +67,6 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
      *
      * @param Object $row
      * @return string
-     * @since 2.0.0
      */
     public function renderExport(DataObject $row)
     {
@@ -83,7 +76,6 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     /**
      * @param Object $row
      * @return mixed
-     * @since 2.0.0
      */
     protected function _getValue(DataObject $row)
     {
@@ -101,7 +93,6 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     /**
      * @param Object $row
      * @return string
-     * @since 2.0.0
      */
     public function _getInputValueElement(DataObject $row)
     {
@@ -118,7 +109,6 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     /**
      * @param Object $row
      * @return mixed
-     * @since 2.0.0
      */
     protected function _getInputValue(DataObject $row)
     {
@@ -127,7 +117,6 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function renderHeader()
     {
@@ -159,7 +148,6 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function renderProperty()
     {
@@ -184,7 +172,6 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function renderCss()
     {

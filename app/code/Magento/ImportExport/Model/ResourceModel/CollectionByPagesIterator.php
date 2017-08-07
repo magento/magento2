@@ -9,7 +9,6 @@ namespace Magento\ImportExport\Model\ResourceModel;
  * Collection by pages iterator
  *
  * @api
- * @since 2.0.0
  */
 class CollectionByPagesIterator
 {
@@ -20,7 +19,6 @@ class CollectionByPagesIterator
      * @param int $pageSize Number of items to fetch from db in one query
      * @param array $callbacks Array of callbacks which should be applied to each collection item
      * @return void
-     * @since 2.0.0
      */
     public function iterate(\Magento\Framework\Data\Collection\AbstractDb $collection, $pageSize, array $callbacks)
     {

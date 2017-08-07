@@ -7,7 +7,6 @@ namespace Magento\Ups\Model\Config\Source;
 
 /**
  * Class Method
- * @since 2.0.0
  */
 class Method extends \Magento\Ups\Model\Config\Source\Generic
 {
@@ -15,7 +14,6 @@ class Method extends \Magento\Ups\Model\Config\Source\Generic
      * Carrier code
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_code = 'method';
 }

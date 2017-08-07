@@ -11,25 +11,21 @@ use Magento\Store\Model\Store;
 /**
  * Path config to be used in adminhtml area
  * @api
- * @since 2.0.0
  */
 class AdminPathConfig implements PathConfigInterface
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $coreConfig;
 
     /**
      * @var \Magento\Backend\App\ConfigInterface
-     * @since 2.0.0
      */
     protected $backendConfig;
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $url;
 
@@ -39,7 +35,6 @@ class AdminPathConfig implements PathConfigInterface
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
      * @param \Magento\Framework\UrlInterface $url
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
@@ -56,7 +51,6 @@ class AdminPathConfig implements PathConfigInterface
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return string
-     * @since 2.0.0
      */
     public function getCurrentSecureUrl(\Magento\Framework\App\RequestInterface $request)
     {
@@ -68,7 +62,6 @@ class AdminPathConfig implements PathConfigInterface
      *
      * @param string $path
      * @return bool
-     * @since 2.0.0
      */
     public function shouldBeSecure($path)
     {
@@ -87,7 +80,6 @@ class AdminPathConfig implements PathConfigInterface
      * {@inheritdoc}
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultPath()
     {

@@ -12,7 +12,6 @@ use Magento\Framework\App\Helper\AbstractHelper;
 /**
  * Helper for fetching properties by product configuration item
  * @api
- * @since 2.0.0
  */
 class Configuration extends AbstractHelper implements ConfigurationInterface
 {
@@ -20,7 +19,6 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      * Core data
      *
      * @var \Magento\Framework\Pricing\Helper\Data
-     * @since 2.0.0
      */
     protected $pricingHelper;
 
@@ -28,7 +26,6 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      * Catalog product configuration
      *
      * @var \Magento\Catalog\Helper\Product\Configuration
-     * @since 2.0.0
      */
     protected $productConfiguration;
 
@@ -36,7 +33,6 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      * Escaper
      *
      * @var \Magento\Framework\Escaper
-     * @since 2.0.0
      */
     protected $escaper;
 
@@ -44,7 +40,6 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      * Serializer interface instance.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -54,7 +49,6 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -77,7 +71,6 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      * @param \Magento\Catalog\Model\Product $product
      * @param int $selectionId
      * @return float
-     * @since 2.0.0
      */
     public function getSelectionQty(\Magento\Catalog\Model\Product $product, $selectionId)
     {
@@ -94,7 +87,6 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      * @param ItemInterface $item
      * @param \Magento\Catalog\Model\Product $selectionProduct
      * @return float
-     * @since 2.0.0
      */
     public function getSelectionFinalPrice(ItemInterface $item, \Magento\Catalog\Model\Product $selectionProduct)
     {
@@ -122,7 +114,6 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      *
      * @param ItemInterface $item
      * @return array
-     * @since 2.0.0
      */
     public function getBundleOptions(ItemInterface $item)
     {
@@ -186,7 +177,6 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      *
      * @param ItemInterface $item
      * @return array
-     * @since 2.0.0
      */
     public function getOptions(ItemInterface $item)
     {

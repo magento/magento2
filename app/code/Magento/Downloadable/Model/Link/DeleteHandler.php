@@ -10,19 +10,16 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class DeleteHandler
- * @since 2.1.0
  */
 class DeleteHandler implements ExtensionInterface
 {
     /**
      * @var LinkRepository
-     * @since 2.1.0
      */
     protected $linkRepository;
 
     /**
      * @param LinkRepository $linkRepository
-     * @since 2.1.0
      */
     public function __construct(LinkRepository $linkRepository)
     {
@@ -34,7 +31,6 @@ class DeleteHandler implements ExtensionInterface
      * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function execute($entity, $arguments = [])
     {

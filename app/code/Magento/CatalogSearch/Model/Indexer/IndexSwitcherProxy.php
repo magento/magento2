@@ -12,7 +12,6 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Proxy for adapter-specific index switcher
- * @since 2.2.0
  */
 class IndexSwitcherProxy implements IndexSwitcherInterface
 {
@@ -20,7 +19,6 @@ class IndexSwitcherProxy implements IndexSwitcherInterface
      * Object Manager instance
      *
      * @var ObjectManagerInterface
-     * @since 2.2.0
      */
     private $objectManager = null;
 
@@ -28,13 +26,11 @@ class IndexSwitcherProxy implements IndexSwitcherInterface
      * Instance name to create
      *
      * @var string
-     * @since 2.2.0
      */
     private $handlers;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.2.0
      */
     private $scopeConfig;
 
@@ -42,7 +38,6 @@ class IndexSwitcherProxy implements IndexSwitcherInterface
      * Configuration path by which current indexer handler stored
      *
      * @var string
-     * @since 2.2.0
      */
     private $configPath;
 
@@ -53,7 +48,6 @@ class IndexSwitcherProxy implements IndexSwitcherInterface
      * @param ScopeConfigInterface $scopeConfig
      * @param string $configPath
      * @param string[] $handlers
-     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -75,7 +69,6 @@ class IndexSwitcherProxy implements IndexSwitcherInterface
      * which cannot create temporary indexes on the fly.
      * That's the reason why this method do nothing for the case
      * when switcher is not defined for a specific search engine.
-     * @since 2.2.0
      */
     public function switchIndex(array $dimensions)
     {
@@ -91,7 +84,6 @@ class IndexSwitcherProxy implements IndexSwitcherInterface
      *
      * @param string $handler
      * @return IndexSwitcherInterface
-     * @since 2.2.0
      */
     private function create($handler)
     {

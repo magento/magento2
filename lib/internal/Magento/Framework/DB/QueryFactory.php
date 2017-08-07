@@ -8,19 +8,16 @@ namespace Magento\Framework\DB;
 
 /**
  * Class QueryFactory
- * @since 2.0.0
  */
 class QueryFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -34,7 +31,6 @@ class QueryFactory
      * @param array $arguments
      * @return QueryInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function create($className, array $arguments = [])
     {

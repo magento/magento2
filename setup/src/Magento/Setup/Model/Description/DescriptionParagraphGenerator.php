@@ -7,26 +7,22 @@ namespace Magento\Setup\Model\Description;
 
 /**
  * Generate random paragraph for description based on configuration
- * @since 2.2.0
  */
 class DescriptionParagraphGenerator
 {
     /**
      * @var \Magento\Setup\Model\Description\DescriptionSentenceGenerator
-     * @since 2.2.0
      */
     private $sentenceGenerator;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $paragraphConfig;
 
     /**
      * @param \Magento\Setup\Model\Description\DescriptionSentenceGenerator $sentenceGenerator
      * @param array $paragraphConfig
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Setup\Model\Description\DescriptionSentenceGenerator $sentenceGenerator,
@@ -40,7 +36,6 @@ class DescriptionParagraphGenerator
      * Generate paragraph for description
      *
      * @return string
-     * @since 2.2.0
      */
     public function generate()
     {

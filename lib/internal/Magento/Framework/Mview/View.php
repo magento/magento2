@@ -13,7 +13,6 @@ use Magento\Framework\Mview\View\SubscriptionFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class View extends \Magento\Framework\DataObject implements ViewInterface
 {
@@ -24,43 +23,36 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_idFieldName = 'view_id';
 
     /**
      * @var ConfigInterface
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var ActionFactory
-     * @since 2.0.0
      */
     protected $actionFactory;
 
     /**
      * @var View\ChangelogInterface
-     * @since 2.0.0
      */
     protected $changelog;
 
     /**
      * @var View\SubscriptionFactory
-     * @since 2.0.0
      */
     protected $subscriptionFactory;
 
     /**
      * @var \Magento\Framework\Mview\View\StateInterface
-     * @since 2.0.0
      */
     protected $state;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $changelogBatchSize;
 
@@ -72,7 +64,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * @param SubscriptionFactory $subscriptionFactory
      * @param array $data
      * @param array $changelogBatchSize
-     * @since 2.0.0
      */
     public function __construct(
         ConfigInterface $config,
@@ -96,7 +87,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * Return ID
      *
      * @return string
-     * @since 2.0.0
      */
     public function getId()
     {
@@ -108,7 +98,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      *
      * @param string $id
      * @return $this
-     * @since 2.0.0
      */
     public function setId($id)
     {
@@ -121,7 +110,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      *
      * @param  string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setIdFieldName($name)
     {
@@ -133,7 +121,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * Id field name getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getIdFieldName()
     {
@@ -144,7 +131,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * Return view action class
      *
      * @return string
-     * @since 2.0.0
      */
     public function getActionClass()
     {
@@ -155,7 +141,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * Return view group
      *
      * @return string
-     * @since 2.0.0
      */
     public function getGroup()
     {
@@ -166,7 +151,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * Return view subscriptions
      *
      * @return array
-     * @since 2.0.0
      */
     public function getSubscriptions()
     {
@@ -179,7 +163,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * @param string $viewId
      * @return ViewInterface
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function load($viewId)
     {
@@ -199,7 +182,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      *
      * @throws \Exception
      * @return ViewInterface
-     * @since 2.0.0
      */
     public function subscribe()
     {
@@ -239,7 +221,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      *
      * @throws \Exception
      * @return ViewInterface
-     * @since 2.0.0
      */
     public function unsubscribe()
     {
@@ -276,7 +257,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      *
      * @return void
      * @throws \Exception
-     * @since 2.0.0
      */
     public function update()
     {
@@ -324,7 +304,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * Suspend view updates and set version ID to changelog's end
      *
      * @return void
-     * @since 2.0.0
      */
     public function suspend()
     {
@@ -340,7 +319,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * Resume view updates
      *
      * @return void
-     * @since 2.0.0
      */
     public function resume()
     {
@@ -355,7 +333,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * Clear precessed changelog entries
      *
      * @return void
-     * @since 2.0.0
      */
     public function clearChangelog()
     {
@@ -368,7 +345,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * Return related state object
      *
      * @return View\StateInterface
-     * @since 2.0.0
      */
     public function getState()
     {
@@ -383,7 +359,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      *
      * @param View\StateInterface $state
      * @return ViewInterface
-     * @since 2.0.0
      */
     public function setState(View\StateInterface $state)
     {
@@ -395,7 +370,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * Check whether view is enabled
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isEnabled()
     {
@@ -406,7 +380,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * Check whether view is idle
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isIdle()
     {
@@ -417,7 +390,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * Check whether view is working
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isWorking()
     {
@@ -428,7 +400,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * Check whether view is suspended
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isSuspended()
     {
@@ -439,7 +410,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * Return view updated datetime
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUpdated()
     {
@@ -450,7 +420,6 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * Retrieve linked changelog
      *
      * @return View\ChangelogInterface
-     * @since 2.0.0
      */
     public function getChangelog()
     {

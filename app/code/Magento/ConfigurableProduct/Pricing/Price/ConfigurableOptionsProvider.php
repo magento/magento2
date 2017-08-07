@@ -16,19 +16,16 @@ use Magento\Framework\App\RequestSafetyInterface;
 /**
  * Class \Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProvider
  *
- * @since 2.2.0
  */
 class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterface
 {
     /**
      * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
-     * @since 2.2.0
      */
     private $configurable;
 
     /**
      * @var ProductInterface[]
-     * @since 2.2.0
      */
     private $products;
 
@@ -39,7 +36,6 @@ class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterfac
      * @param CollectionFactory $collectionFactory
      * @param RequestSafetyInterface $requestSafety
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function __construct(
         Configurable $configurable,
@@ -53,7 +49,6 @@ class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterfac
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getProducts(ProductInterface $product)
     {

@@ -11,7 +11,6 @@ use Magento\Framework\App\ResponseInterface;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Shopcart\ExportCustomerCsv
  *
- * @since 2.0.0
  */
 class ExportCustomerCsv extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
 {
@@ -19,7 +18,6 @@ class ExportCustomerCsv extends \Magento\Reports\Controller\Adminhtml\Report\Sho
      * Export shopcart customer report to CSV format
      *
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

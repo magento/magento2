@@ -12,26 +12,22 @@ use Magento\Framework\Event\ManagerInterface as EventManager;
 /**
  * Class \Magento\Catalog\Plugin\Model\Product\Action\UpdateAttributesFlushCache
  *
- * @since 2.0.0
  */
 class UpdateAttributesFlushCache
 {
     /**
      * @var CacheContext
-     * @since 2.0.0
      */
     protected $cacheContext;
 
     /**
      * @var EventManager
-     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @param CacheContext $cacheContext
      * @param EventManager $eventManager
-     * @since 2.0.0
      */
     public function __construct(
         CacheContext $cacheContext,
@@ -47,7 +43,6 @@ class UpdateAttributesFlushCache
      * @return Action
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function afterUpdateAttributes(
         \Magento\Catalog\Model\Product\Action $subject,
@@ -62,7 +57,6 @@ class UpdateAttributesFlushCache
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function afterUpdateWebsites(
         \Magento\Catalog\Model\Product\Action $subject

@@ -23,7 +23,6 @@ use Magento\Framework\View\Element\UiComponent\Factory\ComponentFactoryInterface
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class UiComponentFactory extends DataObject
 {
@@ -31,7 +30,6 @@ class UiComponentFactory extends DataObject
      * Object manager
      *
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -39,40 +37,34 @@ class UiComponentFactory extends DataObject
      * Argument interpreter
      *
      * @var InterpreterInterface
-     * @since 2.0.0
      */
     protected $argumentInterpreter;
 
     /**
      * @var ContextFactory
-     * @since 2.0.0
      */
     protected $contextFactory;
 
     /**
      * UI component manager
      *
-     * @deprecated 2.2.0 since 2.2.0
+     * @deprecated 100.2.0
      * @var ManagerInterface
-     * @since 2.0.0
      */
     protected $componentManager;
 
     /**
      * @var ComponentFactoryInterface[]
-     * @since 2.2.0
      */
     private $componentChildFactories;
 
     /**
      * @var DataInterfaceFactory
-     * @since 2.2.0
      */
     private $configFactory;
 
     /**
      * @var \Magento\Ui\Config\Reader\Definition\Data
-     * @since 2.2.0
      */
     private $definitionData;
 
@@ -85,7 +77,6 @@ class UiComponentFactory extends DataObject
      * @param array $data
      * @param array $componentChildFactories
      * @param DataInterface|null $definitionData
-     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -116,7 +107,6 @@ class UiComponentFactory extends DataObject
      * @param string $identifier
      * @param array $arguments
      * @return UiComponentInterface
-     * @since 2.0.0
      */
     protected function createChildComponent(
         array &$bundleComponents,
@@ -170,7 +160,6 @@ class UiComponentFactory extends DataObject
      * @param string $identifier
      * @param array $componentData
      * @return array
-     * @since 2.0.0
      */
     protected function argumentsResolver($identifier, array $componentData)
     {
@@ -197,7 +186,6 @@ class UiComponentFactory extends DataObject
      * @return UiComponentInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function create($identifier, $name = null, array $arguments = [])
     {
@@ -260,7 +248,7 @@ class UiComponentFactory extends DataObject
      * @param array $children
      * @return array
      * @throws LocalizedException
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function getBundleChildren(array $children = [])
     {
@@ -303,7 +291,7 @@ class UiComponentFactory extends DataObject
      * @param array $bundleComponents
      * @param bool $reverseMerge
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function mergeMetadata($identifier, array $bundleComponents, $reverseMerge = false)
     {
@@ -328,7 +316,7 @@ class UiComponentFactory extends DataObject
      * @param array $data
      * @param bool $reverseMerge
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function mergeMetadataElement(array $bundleComponents, $name, array $data, $reverseMerge = false)
     {
@@ -366,7 +354,7 @@ class UiComponentFactory extends DataObject
      * @param bool $reverseMerge
      * @return array
      * @throws LocalizedException
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function mergeMetadataItem(array $bundleComponents, array $metadata, $reverseMerge = false)
     {
@@ -419,7 +407,7 @@ class UiComponentFactory extends DataObject
      * @param string $identifier
      * @param array $bundleComponents
      * @return DataProviderInterface|null
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function getDataProvider($identifier, array $bundleComponents)
     {

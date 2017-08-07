@@ -14,37 +14,31 @@ use Magento\Customer\Model\Session as CustomerSession;
 /**
  * Class \Magento\Persistent\Model\Checkout\ConfigProviderPlugin
  *
- * @since 2.0.0
  */
 class ConfigProviderPlugin
 {
     /**
      * @var PersistentSession
-     * @since 2.0.0
      */
     private $persistentSession;
 
     /**
      * @var PersistentHelper
-     * @since 2.0.0
      */
     private $persistentHelper;
 
     /**
      * @var CheckoutSession
-     * @since 2.0.0
      */
     private $checkoutSession;
 
     /**
      * @var QuoteIdMaskFactory
-     * @since 2.0.0
      */
     private $quoteIdMaskFactory;
 
     /**
      * @var CustomerSession
-     * @since 2.0.0
      */
     private $customerSession;
 
@@ -54,7 +48,6 @@ class ConfigProviderPlugin
      * @param CheckoutSession $checkoutSession
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      * @param CustomerSession $customerSession
-     * @since 2.0.0
      */
     public function __construct(
         PersistentHelper $persistentHelper,
@@ -75,7 +68,6 @@ class ConfigProviderPlugin
      * @param array $result
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterGetConfig(\Magento\Checkout\Model\DefaultConfigProvider $subject, array $result)
     {

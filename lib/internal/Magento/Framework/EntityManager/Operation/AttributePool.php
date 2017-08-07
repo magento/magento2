@@ -10,26 +10,22 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class AttributePool
- * @since 2.1.0
  */
 class AttributePool
 {
     /**
      * @var ObjectManagerInterface
-     * @since 2.1.0
      */
     private $objectManager;
 
     /**
      * @var object[]
-     * @since 2.1.0
      */
     private $actions;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param array $extensionActions
-     * @since 2.1.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -44,7 +40,6 @@ class AttributePool
      * @param string $actionName
      * @return object[]
      * @throws \Exception
-     * @since 2.1.0
      */
     public function getActions($entityType, $actionName)
     {

@@ -12,7 +12,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Class \Magento\Framework\Acl\AclResource\Provider
  *
- * @since 2.0.0
  */
 class Provider implements ProviderInterface
 {
@@ -23,31 +22,26 @@ class Provider implements ProviderInterface
 
     /**
      * @var \Magento\Framework\Config\ReaderInterface
-     * @since 2.0.0
      */
     protected $_configReader;
 
     /**
      * @var TreeBuilder
-     * @since 2.0.0
      */
     protected $_resourceTreeBuilder;
 
     /**
      * @var \Magento\Framework\Acl\Data\CacheInterface
-     * @since 2.2.0
      */
     private $aclDataCache;
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $cacheKey;
 
@@ -57,7 +51,6 @@ class Provider implements ProviderInterface
      * @param \Magento\Framework\Acl\Data\CacheInterface $aclDataCache
      * @param Json $serializer
      * @param string $cacheKey
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\ReaderInterface $configReader,
@@ -77,7 +70,6 @@ class Provider implements ProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAclResources()
     {

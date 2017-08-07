@@ -8,31 +8,26 @@ namespace Magento\Framework\Filter;
 /**
  * Class \Magento\Framework\Filter\Sprintf
  *
- * @since 2.0.0
  */
 class Sprintf implements \Zend_Filter_Interface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $format;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $decimals;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $decPoint;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $thousandsSep;
 
@@ -41,7 +36,6 @@ class Sprintf implements \Zend_Filter_Interface
      * @param null|int $decimals
      * @param string $decPoint
      * @param string $thousandsSep
-     * @since 2.0.0
      */
     public function __construct($format, $decimals = null, $decPoint = '.', $thousandsSep = ',')
     {
@@ -54,7 +48,6 @@ class Sprintf implements \Zend_Filter_Interface
     /**
      * @param string $value
      * @return string
-     * @since 2.0.0
      */
     public function filter($value)
     {

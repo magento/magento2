@@ -17,7 +17,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.TooManyFields)
- * @since 2.0.0
  */
 class IndexBuilder
 {
@@ -25,8 +24,8 @@ class IndexBuilder
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @deprecated 2.2.0
-     * @since 2.1.0
+     * @deprecated 100.2.0
+     * @since 100.1.0
      */
     protected $metadataPool;
 
@@ -36,122 +35,102 @@ class IndexBuilder
      * This array contain list of CatalogRuleGroupWebsite table columns
      *
      * @var array
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 100.2.0
      */
     protected $_catalogRuleGroupWebsiteColumnsList = ['rule_id', 'customer_group_id', 'website_id'];
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var RuleCollectionFactory
-     * @since 2.0.0
      */
     protected $ruleCollectionFactory;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $eavConfig;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
-     * @since 2.0.0
      */
     protected $dateFormat;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $productFactory;
 
     /**
      * @var Product[]
-     * @since 2.0.0
      */
     protected $loadedProducts;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $batchCount;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected $connection;
 
     /**
      * @var \Magento\CatalogRule\Model\Indexer\ProductPriceCalculator
-     * @since 2.2.0
      */
     private $productPriceCalculator;
 
     /**
      * @var \Magento\CatalogRule\Model\Indexer\ReindexRuleProduct
-     * @since 2.2.0
      */
     private $reindexRuleProduct;
 
     /**
      * @var \Magento\CatalogRule\Model\Indexer\ReindexRuleGroupWebsite
-     * @since 2.2.0
      */
     private $reindexRuleGroupWebsite;
 
     /**
      * @var \Magento\CatalogRule\Model\Indexer\RuleProductsSelectBuilder
-     * @since 2.2.0
      */
     private $ruleProductsSelectBuilder;
 
     /**
      * @var \Magento\CatalogRule\Model\Indexer\ReindexRuleProductPrice
-     * @since 2.2.0
      */
     private $reindexRuleProductPrice;
 
     /**
      * @var \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor
-     * @since 2.2.0
      */
     private $pricesPersistor;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
-     * @since 2.2.0
      */
     private $activeTableSwitcher;
 
@@ -174,7 +153,6 @@ class IndexBuilder
      * @param \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor|null $pricesPersistor
      * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         RuleCollectionFactory $ruleCollectionFactory,
@@ -236,7 +214,6 @@ class IndexBuilder
      * @param int $id
      * @return void
      * @api
-     * @since 2.0.0
      */
     public function reindexById($id)
     {
@@ -250,7 +227,6 @@ class IndexBuilder
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      * @api
-     * @since 2.0.0
      */
     public function reindexByIds(array $ids)
     {
@@ -269,7 +245,6 @@ class IndexBuilder
      *
      * @param array $ids
      * @return void
-     * @since 2.0.0
      */
     protected function doReindexByIds($ids)
     {
@@ -288,7 +263,6 @@ class IndexBuilder
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      * @api
-     * @since 2.0.0
      */
     public function reindexFull()
     {
@@ -306,7 +280,6 @@ class IndexBuilder
      * Full reindex Template method
      *
      * @return void
-     * @since 2.0.0
      */
     protected function doReindexFull()
     {
@@ -339,7 +312,6 @@ class IndexBuilder
      *
      * @param array $productIds
      * @return void
-     * @since 2.0.0
      */
     protected function cleanByIds($productIds)
     {
@@ -369,7 +341,6 @@ class IndexBuilder
      * @return $this
      * @throws \Exception
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function applyRule(Rule $rule, $product)
     {
@@ -438,7 +409,6 @@ class IndexBuilder
     /**
      * @param string $tableName
      * @return string
-     * @since 2.0.0
      */
     protected function getTable($tableName)
     {
@@ -448,9 +418,8 @@ class IndexBuilder
     /**
      * @param Rule $rule
      * @return $this
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @see \Magento\CatalogRule\Model\Indexer\ReindexRuleProduct::execute
-     * @since 2.0.0
      */
     protected function updateRuleProductData(Rule $rule)
     {
@@ -475,10 +444,9 @@ class IndexBuilder
      * @param Product|null $product
      * @throws \Exception
      * @return $this
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @see \Magento\CatalogRule\Model\Indexer\ReindexRuleProductPrice::execute
      * @see \Magento\CatalogRule\Model\Indexer\ReindexRuleGroupWebsite::execute
-     * @since 2.0.0
      */
     protected function applyAllRules(Product $product = null)
     {
@@ -491,9 +459,8 @@ class IndexBuilder
      * Update CatalogRuleGroupWebsite data
      *
      * @return $this
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @see \Magento\CatalogRule\Model\Indexer\ReindexRuleGroupWebsite::execute
-     * @since 2.0.0
      */
     protected function updateCatalogRuleGroupWebsiteData()
     {
@@ -505,7 +472,6 @@ class IndexBuilder
      * Clean rule price index
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function deleteOldData()
     {
@@ -517,9 +483,8 @@ class IndexBuilder
      * @param array $ruleData
      * @param null $productData
      * @return float
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @see \Magento\CatalogRule\Model\Indexer\ProductPriceCalculator::calculate
-     * @since 2.0.0
      */
     protected function calcRuleProductPrice($ruleData, $productData = null)
     {
@@ -531,9 +496,8 @@ class IndexBuilder
      * @param Product|null $product
      * @return \Zend_Db_Statement_Interface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @see \Magento\CatalogRule\Model\Indexer\RuleProductsSelectBuilder::build
-     * @since 2.0.0
      */
     protected function getRuleProductsStmt($websiteId, Product $product = null)
     {
@@ -544,9 +508,8 @@ class IndexBuilder
      * @param array $arrData
      * @return $this
      * @throws \Exception
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @see \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor::execute
-     * @since 2.0.0
      */
     protected function saveRuleProductPrices($arrData)
     {
@@ -558,7 +521,6 @@ class IndexBuilder
      * Get active rules
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getActiveRules()
     {
@@ -569,7 +531,6 @@ class IndexBuilder
      * Get active rules
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getAllRules()
     {
@@ -579,7 +540,6 @@ class IndexBuilder
     /**
      * @param int $productId
      * @return Product
-     * @since 2.0.0
      */
     protected function getProduct($productId)
     {
@@ -592,7 +552,6 @@ class IndexBuilder
     /**
      * @param \Exception $e
      * @return void
-     * @since 2.0.0
      */
     protected function critical($e)
     {

@@ -13,7 +13,6 @@ use Magento\Sales\Model\Spi\CreditmemoCommentResourceInterface;
  * Flat sales order creditmemo comment resource
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Comment extends EntityAbstract implements CreditmemoCommentResourceInterface
 {
@@ -21,7 +20,6 @@ class Comment extends EntityAbstract implements CreditmemoCommentResourceInterfa
      * Event prefix
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_creditmemo_comment_resource';
 
@@ -29,7 +27,6 @@ class Comment extends EntityAbstract implements CreditmemoCommentResourceInterfa
      * Validator
      *
      * @var \Magento\Sales\Model\Order\Creditmemo\Comment\Validator
-     * @since 2.0.0
      */
     protected $validator;
 
@@ -41,7 +38,6 @@ class Comment extends EntityAbstract implements CreditmemoCommentResourceInterfa
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param \Magento\Sales\Model\Order\Creditmemo\Comment\Validator $validator
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -67,7 +63,6 @@ class Comment extends EntityAbstract implements CreditmemoCommentResourceInterfa
      * Model initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -80,7 +75,6 @@ class Comment extends EntityAbstract implements CreditmemoCommentResourceInterfa
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {

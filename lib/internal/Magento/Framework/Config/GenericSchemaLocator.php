@@ -11,31 +11,26 @@ use Magento\Framework\Module\Dir\Reader as ModuleDirReader;
 
 /**
  * Class GenericSchemaLocator
- * @since 2.0.0
  */
 class GenericSchemaLocator implements SchemaLocatorInterface
 {
     /**
      * @var ModuleDirReader
-     * @since 2.0.0
      */
     private $moduleDirReader;
     
     /**
      * @var string
-     * @since 2.0.0
      */
     private $moduleName;
     
     /**
      * @var string
-     * @since 2.0.0
      */
     private $perFileSchema;
     
     /**
      * @var string|null
-     * @since 2.0.0
      */
     private $schema;
 
@@ -44,7 +39,6 @@ class GenericSchemaLocator implements SchemaLocatorInterface
      * @param string $moduleName
      * @param string $schema
      * @param string|null $perFileSchema
-     * @since 2.0.0
      */
     public function __construct(ModuleDirReader $reader, $moduleName, $schema, $perFileSchema = null)
     {
@@ -58,7 +52,6 @@ class GenericSchemaLocator implements SchemaLocatorInterface
      * Get path to merged config schema
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getSchema()
     {
@@ -69,7 +62,6 @@ class GenericSchemaLocator implements SchemaLocatorInterface
      * Get path to per file validation schema
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getPerFileSchema()
     {

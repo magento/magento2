@@ -10,7 +10,6 @@ namespace Magento\Customer\Model\ResourceModel\Address;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\AbstractCollection
 {
@@ -18,7 +17,6 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -30,7 +28,6 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
      *
      * @param \Magento\Customer\Model\Customer|array $customer
      * @return $this
-     * @since 2.0.0
      */
     public function setCustomerFilter($customer)
     {

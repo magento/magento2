@@ -8,7 +8,6 @@ namespace Magento\Framework\Backup\Exception;
 
 /**
  * @api
- * @since 2.0.0
  */
 class FtpValidationFailed extends \Magento\Framework\Backup\BackupException
 {

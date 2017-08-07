@@ -10,37 +10,31 @@ use Magento\Framework\DB\Select\QueryModifierInterface;
 
 /**
  * Value object for information about a field to be converted
- * @since 2.2.0
  */
 class FieldToConvert
 {
     /**
      * @var string
-     * @since 2.2.0
      */
     private $dataConverterClass;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $tableName;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $identifierField;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $fieldName;
 
     /**
      * @var QueryModifierInterface|null
-     * @since 2.2.0
      */
     private $queryModifier;
 
@@ -52,7 +46,6 @@ class FieldToConvert
      * @param string $identifierField
      * @param string $fieldName
      * @param QueryModifierInterface $queryModifier
-     * @since 2.2.0
      */
     public function __construct(
         $dataConverter,
@@ -72,7 +65,6 @@ class FieldToConvert
      * Get data converter class name
      *
      * @return string
-     * @since 2.2.0
      */
     public function getDataConverterClass()
     {
@@ -83,7 +75,6 @@ class FieldToConvert
      * Get table name
      *
      * @return string
-     * @since 2.2.0
      */
     public function getTableName()
     {
@@ -94,7 +85,6 @@ class FieldToConvert
      * Get ID field name
      *
      * @return string
-     * @since 2.2.0
      */
     public function getIdentifierField()
     {
@@ -105,7 +95,6 @@ class FieldToConvert
      * Get field name
      *
      * @return string
-     * @since 2.2.0
      */
     public function getFieldName()
     {
@@ -116,7 +105,6 @@ class FieldToConvert
      * Get query modifier
      *
      * @return QueryModifierInterface|null
-     * @since 2.2.0
      */
     public function getQueryModifier()
     {

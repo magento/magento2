@@ -12,19 +12,16 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\GoogleOptimizer\Observer\Product\DeleteProductGoogleExperimentScriptObserver
  *
- * @since 2.0.0
  */
 class DeleteProductGoogleExperimentScriptObserver implements ObserverInterface
 {
     /**
      * @var \Magento\GoogleOptimizer\Model\Code
-     * @since 2.0.0
      */
     protected $_modelCode;
 
     /**
      * @param \Magento\GoogleOptimizer\Model\Code $modelCode
-     * @since 2.0.0
      */
     public function __construct(\Magento\GoogleOptimizer\Model\Code $modelCode)
     {
@@ -36,7 +33,6 @@ class DeleteProductGoogleExperimentScriptObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

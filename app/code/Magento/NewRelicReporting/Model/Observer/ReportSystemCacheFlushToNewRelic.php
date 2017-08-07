@@ -11,25 +11,21 @@ use Magento\NewRelicReporting\Model\Config;
 
 /**
  * Class ReportSystemCacheFlushToNewRelic
- * @since 2.0.0
  */
 class ReportSystemCacheFlushToNewRelic implements ObserverInterface
 {
     /**
      * @var Config
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Backend\Model\Auth\Session
-     * @since 2.0.0
      */
     protected $backendAuthSession;
 
     /**
      * @var \Magento\NewRelicReporting\Model\Apm\DeploymentsFactory
-     * @since 2.0.0
      */
     protected $deploymentsFactory;
 
@@ -37,7 +33,6 @@ class ReportSystemCacheFlushToNewRelic implements ObserverInterface
      * @param Config $config
      * @param \Magento\Backend\Model\Auth\Session $backendAuthSession
      * @param \Magento\NewRelicReporting\Model\Apm\DeploymentsFactory $deploymentsFactory
-     * @since 2.0.0
      */
     public function __construct(
         Config $config,
@@ -55,7 +50,6 @@ class ReportSystemCacheFlushToNewRelic implements ObserverInterface
      * @param Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

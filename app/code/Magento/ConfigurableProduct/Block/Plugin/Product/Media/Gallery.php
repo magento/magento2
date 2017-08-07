@@ -11,19 +11,16 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Provides a serialized media gallery data for configurable product options.
- * @since 2.1.0
  */
 class Gallery
 {
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $json;
 
     /**
      * @param Json $json
-     * @since 2.1.0
      */
     public function __construct(
         Json $json
@@ -35,7 +32,6 @@ class Gallery
      * @param \Magento\Catalog\Block\Product\View\Gallery $subject
      * @param string $result
      * @return string
-     * @since 2.1.0
      */
     public function afterGetOptionsMediaGalleryDataJson(
         \Magento\Catalog\Block\Product\View\Gallery $subject,
@@ -59,7 +55,6 @@ class Gallery
     /**
      * @param Product $product
      * @return array
-     * @since 2.1.0
      */
     private function getProductGallery($product)
     {

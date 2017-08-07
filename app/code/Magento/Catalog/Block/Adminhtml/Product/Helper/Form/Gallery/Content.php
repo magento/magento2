@@ -21,31 +21,26 @@ use Magento\Framework\Exception\FileSystemException;
 /**
  * Class \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content
  *
- * @since 2.0.0
  */
 class Content extends \Magento\Backend\Block\Widget
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'catalog/product/helper/gallery.phtml';
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
-     * @since 2.0.0
      */
     protected $_mediaConfig;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
     /**
      * @var \Magento\Catalog\Helper\Image
-     * @since 2.2.0
      */
     private $imageHelper;
 
@@ -54,7 +49,6 @@ class Content extends \Magento\Backend\Block\Widget
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -69,7 +63,6 @@ class Content extends \Magento\Backend\Block\Widget
 
     /**
      * @return AbstractBlock
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -97,7 +90,6 @@ class Content extends \Magento\Backend\Block\Widget
      * Retrieve uploader block
      *
      * @return Uploader
-     * @since 2.0.0
      */
     public function getUploader()
     {
@@ -108,7 +100,6 @@ class Content extends \Magento\Backend\Block\Widget
      * Retrieve uploader block html
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUploaderHtml()
     {
@@ -117,7 +108,6 @@ class Content extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getJsObjectName()
     {
@@ -126,7 +116,6 @@ class Content extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getAddImagesButton()
     {
@@ -140,7 +129,6 @@ class Content extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getImagesJson()
     {
@@ -173,7 +161,6 @@ class Content extends \Magento\Backend\Block\Widget
      *
      * @param array $images
      * @return array
-     * @since 2.1.0
      */
     private function sortImagesByPosition($images)
     {
@@ -187,7 +174,6 @@ class Content extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getImagesValuesJson()
     {
@@ -205,7 +191,6 @@ class Content extends \Magento\Backend\Block\Widget
      * Get image types data
      *
      * @return array
-     * @since 2.0.0
      */
     public function getImageTypes()
     {
@@ -227,7 +212,6 @@ class Content extends \Magento\Backend\Block\Widget
      * Retrieve default state allowance
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasUseDefault()
     {
@@ -244,7 +228,6 @@ class Content extends \Magento\Backend\Block\Widget
      * Retrieve media attributes
      *
      * @return array
-     * @since 2.0.0
      */
     public function getMediaAttributes()
     {
@@ -255,7 +238,6 @@ class Content extends \Magento\Backend\Block\Widget
      * Retrieve JSON data
      *
      * @return string
-     * @since 2.0.0
      */
     public function getImageTypesJson()
     {
@@ -264,8 +246,7 @@ class Content extends \Magento\Backend\Block\Widget
 
     /**
      * @return \Magento\Catalog\Helper\Image
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 101.0.3
      */
     private function getImageHelper()
     {

@@ -12,56 +12,47 @@ use Magento\Framework\App\Config;
 
 /**
  * Information Expert in store websites handling
- * @since 2.0.0
  */
 class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
 {
     /**
      * @var WebsiteFactory
-     * @since 2.0.0
      */
     protected $factory;
 
     /**
      * @var CollectionFactory
-     * @since 2.0.0
      */
     protected $websiteCollectionFactory;
 
     /**
      * @var \Magento\Store\Api\Data\WebsiteInterface[]
-     * @since 2.0.0
      */
     protected $entities = [];
 
     /**
      * @var \Magento\Store\Api\Data\WebsiteInterface[]
-     * @since 2.0.0
      */
     protected $entitiesById = [];
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $allLoaded = false;
 
     /**
      * @var \Magento\Store\Api\Data\WebsiteInterface[]
-     * @since 2.0.0
      */
     protected $default;
 
     /**
      * @var Config
-     * @since 2.2.0
      */
     private $appConfig;
 
     /**
      * @param WebsiteFactory $factory
      * @param CollectionFactory $websiteCollectionFactory
-     * @since 2.0.0
      */
     public function __construct(
         WebsiteFactory $factory,
@@ -73,7 +64,6 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function get($code)
     {
@@ -96,7 +86,6 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getById($id)
     {
@@ -119,7 +108,6 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getList()
     {
@@ -139,7 +127,6 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getDefault()
     {
@@ -163,7 +150,6 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function clean()
     {
@@ -176,9 +162,8 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
     /**
      * Retrieve application config.
      *
-     * @deprecated 2.2.0
+     * @deprecated 100.1.3
      * @return Config
-     * @since 2.2.0
      */
     private function getAppConfig()
     {
@@ -191,7 +176,6 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
     /**
      * Initialize default website.
      * @return void
-     * @since 2.2.0
      */
     private function initDefaultWebsite()
     {

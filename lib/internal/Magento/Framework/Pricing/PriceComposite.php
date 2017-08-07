@@ -11,26 +11,22 @@ use Magento\Framework\Pricing\Price\PriceInterface;
 
 /**
  * Composite price model
- * @since 2.0.0
  */
 class PriceComposite
 {
     /**
      * @var PriceFactory
-     * @since 2.0.0
      */
     protected $priceFactory;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $metadata;
 
     /**
      * @param PriceFactory $priceFactory
      * @param array $metadata
-     * @since 2.0.0
      */
     public function __construct(PriceFactory $priceFactory, array $metadata = [])
     {
@@ -40,7 +36,6 @@ class PriceComposite
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getPriceCodes()
     {
@@ -51,7 +46,6 @@ class PriceComposite
      * Returns metadata for prices
      *
      * @return array
-     * @since 2.0.0
      */
     public function getMetadata()
     {
@@ -64,7 +58,6 @@ class PriceComposite
      * @param float $quantity
      * @return PriceInterface
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function createPriceObject(SaleableInterface $salableItem, $priceCode, $quantity)
     {

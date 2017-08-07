@@ -14,7 +14,6 @@ use Magento\Framework\Code\Generator\ClassGenerator;
  * These files must be generated since they are referenced in many interfaces/classes and cannot be mocked easily.
  * For unit tests, these are just empty type definitions. You should use integration tests if you want to see the real
  * types be generated with the properties from the extension attributes config.
- * @since 2.2.0
  */
 class ExtensionAttributesGenerator implements GeneratorInterface
 {
@@ -25,7 +24,6 @@ class ExtensionAttributesGenerator implements GeneratorInterface
      *
      * @param string $className
      * @return bool|string
-     * @since 2.2.0
      */
     public function generate($className)
     {
@@ -43,7 +41,6 @@ class ExtensionAttributesGenerator implements GeneratorInterface
      *
      * @param string $className
      * @return bool
-     * @since 2.2.0
      */
     private function isExtension($className)
     {

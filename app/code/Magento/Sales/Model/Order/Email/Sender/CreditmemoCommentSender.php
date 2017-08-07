@@ -15,13 +15,11 @@ use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Class CreditmemoCommentSender
- * @since 2.0.0
  */
 class CreditmemoCommentSender extends NotifySender
 {
     /**
      * @var Renderer
-     * @since 2.0.0
      */
     protected $addressRenderer;
 
@@ -29,7 +27,6 @@ class CreditmemoCommentSender extends NotifySender
      * Application Event Dispatcher
      *
      * @var ManagerInterface
-     * @since 2.0.0
      */
     protected $eventManager;
 
@@ -40,7 +37,6 @@ class CreditmemoCommentSender extends NotifySender
      * @param \Psr\Log\LoggerInterface $logger
      * @param Renderer $addressRenderer
      * @param ManagerInterface $eventManager
-     * @since 2.0.0
      */
     public function __construct(
         Template $templateContainer,
@@ -62,7 +58,6 @@ class CreditmemoCommentSender extends NotifySender
      * @param bool $notify
      * @param string $comment
      * @return bool
-     * @since 2.0.0
      */
     public function send(Creditmemo $creditmemo, $notify = true, $comment = '')
     {

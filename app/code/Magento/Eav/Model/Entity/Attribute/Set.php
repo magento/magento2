@@ -25,7 +25,6 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Eav\Api\Data\AttributeSetInterface
@@ -39,43 +38,33 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     const KEY_ENTITY_TYPE_ID = 'entity_type_id';
     /**#@-*/
 
-    /**
-     * Resource instance
-     *
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set
-     * @since 2.0.0
-     */
+    /**#@-*/
     protected $_resource;
 
     /**
      * Prefix of model events names
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'eav_entity_attribute_set';
 
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $_eavConfig;
 
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\GroupFactory
-     * @since 2.0.0
      */
     protected $_attrGroupFactory;
 
     /**
      * @var \Magento\Eav\Model\Entity\AttributeFactory
-     * @since 2.0.0
      */
     protected $_attributeFactory;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute
-     * @since 2.0.0
      */
     protected $_resourceAttribute;
 
@@ -93,7 +82,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -128,7 +116,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -140,7 +127,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param int $skeletonId
      * @return $this
-     * @since 2.0.0
      */
     public function initFromSkeleton($skeletonId)
     {
@@ -186,7 +172,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function organizeData($data)
     {
@@ -266,7 +251,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * @param array $group
      * @return Group
-     * @since 2.0.0
      */
     private function initGroupModel($group)
     {
@@ -294,7 +278,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @return bool
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function validate()
     {
@@ -318,7 +301,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param int $setId
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function addSetInfo($entityType, array $attributes, $setId = null)
     {
@@ -373,7 +355,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param int $setId
      * @return int|null
-     * @since 2.0.0
      */
     public function getDefaultGroupId($setId = null)
     {
@@ -388,7 +369,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get resource instance
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @since 2.0.0
      */
     protected function _getResource()
     {
@@ -398,7 +378,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * {@inheritdoc}
      * @codeCoverageIgnoreStart
-     * @since 2.0.0
      */
     public function getAttributeSetId()
     {
@@ -407,7 +386,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAttributeSetName()
     {
@@ -416,7 +394,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getSortOrder()
     {
@@ -425,7 +402,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getEntityTypeId()
     {
@@ -437,7 +413,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $name
      * @return void
-     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -449,7 +424,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param int $attributeSetId
      * @return $this
-     * @since 2.0.0
      */
     public function setAttributeSetId($attributeSetId)
     {
@@ -461,7 +435,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $attributeSetName
      * @return $this
-     * @since 2.0.0
      */
     public function setAttributeSetName($attributeSetName)
     {
@@ -473,7 +446,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param int $sortOrder
      * @return $this
-     * @since 2.0.0
      */
     public function setSortOrder($sortOrder)
     {
@@ -485,7 +457,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param int $entityTypeId
      * @return $this
-     * @since 2.0.0
      */
     public function setEntityTypeId($entityTypeId)
     {
@@ -496,7 +467,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * {@inheritdoc}
      *
      * @return \Magento\Eav\Api\Data\AttributeSetExtensionInterface|null|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -508,7 +478,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param \Magento\Eav\Api\Data\AttributeSetExtensionInterface|null $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Eav\Api\Data\AttributeSetExtensionInterface $extensionAttributes)
     {

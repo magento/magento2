@@ -13,19 +13,16 @@ use Magento\Framework\Api\SimpleDataObjectConverter;
 
 /**
  * Override parameter values
- * @since 2.0.0
  */
 class ParamsOverrider
 {
     /**
      * @var ParamOverriderInterface[]
-     * @since 2.0.0
      */
     private $paramOverriders;
 
     /**
      * @var MethodsMap
-     * @since 2.1.0
      */
     private $methodsMap;
 
@@ -33,7 +30,6 @@ class ParamsOverrider
      * Initialize dependencies
      *
      * @param ParamOverriderInterface[] $paramOverriders
-     * @since 2.0.0
      */
     public function __construct(
         array $paramOverriders = []
@@ -47,7 +43,6 @@ class ParamsOverrider
      * @param array $inputData Incoming data from request
      * @param array $parameters Contains parameters to replace or default
      * @return array Data in same format as $inputData with appropriate parameters added or changed
-     * @since 2.0.0
      */
     public function override(array $inputData, array $parameters)
     {
@@ -72,7 +67,6 @@ class ParamsOverrider
      * @param array &$nestedArray
      * @param string[] $arrayKeys
      * @return bool true if array value is set
-     * @since 2.0.0
      */
     protected function isNestedArrayValueSet(&$nestedArray, $arrayKeys)
     {
@@ -94,7 +88,6 @@ class ParamsOverrider
      * @param string[] $arrayKeys
      * @param string $valueToSet
      * @return void
-     * @since 2.0.0
      */
     protected function setNestedArrayValue(&$nestedArray, $arrayKeys, $valueToSet)
     {
@@ -128,7 +121,6 @@ class ParamsOverrider
      * @param string $serviceClassName name of the service class that we are trying to call
      * @param string $serviceMethodName name of the method that we are trying to call
      * @return array
-     * @since 2.1.0
      */
     public function overrideRequestBodyIdWithPathParam(
         array $urlPathParams,
@@ -172,7 +164,6 @@ class ParamsOverrider
      * @param string $key
      * @param string $value
      * @return void
-     * @since 2.1.0
      */
     private function substituteParameters(array &$requestData, $key, $value)
     {
@@ -194,7 +185,6 @@ class ParamsOverrider
      * @param string $serviceMethodParamName
      * @param string $objectProperty
      * @return bool
-     * @since 2.1.0
      */
     private function isPropertyDeclaredInDataObject(
         $serviceClassName,
@@ -224,8 +214,7 @@ class ParamsOverrider
      *
      * @return \Magento\Framework\Reflection\MethodsMap
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getMethodsMap()
     {

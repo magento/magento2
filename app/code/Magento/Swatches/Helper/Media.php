@@ -13,7 +13,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * Helper to move images from tmp to catalog directory
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Media extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -25,13 +24,11 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
-     * @since 2.0.0
      */
     protected $mediaConfig;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     * @since 2.0.0
      */
     protected $mediaDirectory;
 
@@ -39,7 +36,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * Core file storage database
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
-     * @since 2.0.0
      */
     protected $fileStorageDb = null;
 
@@ -47,37 +43,31 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Framework\Image\Factory
-     * @since 2.0.0
      */
     protected $imageFactory;
 
     /**
      * @var \Magento\Theme\Model\ResourceModel\Theme\Collection
-     * @since 2.0.0
      */
     protected $themeCollection;
 
     /**
      * @var \Magento\Framework\View\ConfigInterface
-     * @since 2.0.0
      */
     protected $viewConfig;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $swatchImageTypes = ['swatch_image', 'swatch_thumb'];
 
     /**
      * @var \Magento\Theme\Model\ResourceModel\Theme\Collection
-     * @since 2.2.0
      */
     private $registeredThemesCache;
 
@@ -89,7 +79,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Image\Factory $imageFactory
      * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection
      * @param \Magento\Framework\View\ConfigInterface $configInterface
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
@@ -113,7 +102,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $swatchType
      * @param string $file
      * @return string
-     * @since 2.0.0
      */
     public function getSwatchAttributeImage($swatchType, $file)
     {
@@ -131,7 +119,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $file
      * @return string path
-     * @since 2.0.0
      */
     public function moveImageFromTmp($file)
     {
@@ -166,7 +153,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param <type> $file
      * @return string
-     * @since 2.0.0
      */
     protected function getUniqueFileName($file)
     {
@@ -189,7 +175,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $imageUrl
      * @return $this
-     * @since 2.0.0
      */
     public function generateSwatchVariations($imageUrl)
     {
@@ -212,7 +197,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Image $image
      * @param bool $isSwatch
      * @return $this
-     * @since 2.0.0
      */
     protected function setupImageProperties(\Magento\Framework\Image $image, $isSwatch = false)
     {
@@ -234,7 +218,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $imageUrl
      * @param string $swatchType
      * @return array
-     * @since 2.0.0
      */
     protected function generateNamePath($imageConfig, $imageUrl, $swatchType)
     {
@@ -252,7 +235,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $swatchType
      * @param null $imageConfig
      * @return string
-     * @since 2.0.0
      */
     public function getFolderNameSize($swatchType, $imageConfig = null)
     {
@@ -266,7 +248,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * Merged config from view.xml
      *
      * @return array
-     * @since 2.0.0
      */
     public function getImageConfig()
     {
@@ -289,7 +270,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $imageUrl
      * @return array
-     * @since 2.0.0
      */
     protected function prepareFileName($imageUrl)
     {
@@ -303,7 +283,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * Url type http://url/pub/media/attribute/swatch/
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSwatchMediaUrl()
     {
@@ -317,7 +296,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $file
      * @return string
-     * @since 2.0.0
      */
     public function getAttributeSwatchPath($file)
     {
@@ -328,7 +306,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * Media swatch path
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSwatchMediaPath()
     {
@@ -340,7 +317,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $swatchType
      * @return string
-     * @since 2.0.0
      */
     public function getSwatchCachePath($swatchType)
     {
@@ -352,7 +328,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $file
      * @return string
-     * @since 2.0.0
      */
     protected function prepareFile($file)
     {
@@ -361,7 +336,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @return \Magento\Theme\Model\ResourceModel\Theme\Collection
-     * @since 2.2.0
      */
     private function getRegisteredThemes()
     {

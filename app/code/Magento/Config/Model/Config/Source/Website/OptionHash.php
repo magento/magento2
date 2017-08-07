@@ -10,7 +10,6 @@ use Magento\Store\Model\System\Store;
 
 /**
  * @api
- * @since 2.0.0
  */
 class OptionHash implements ArrayInterface
 {
@@ -18,20 +17,17 @@ class OptionHash implements ArrayInterface
      * System Store Model
      *
      * @var Store
-     * @since 2.0.0
      */
     protected $_systemStore;
 
     /**
      * @var bool True if the default website (Admin) should be included
-     * @since 2.0.0
      */
     protected $_withDefaultWebsite;
 
     /**
      * @param Store $systemStore
      * @param bool $withDefaultWebsite
-     * @since 2.0.0
      */
     public function __construct(Store $systemStore, $withDefaultWebsite = false)
     {
@@ -43,7 +39,6 @@ class OptionHash implements ArrayInterface
      * Return websites array
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

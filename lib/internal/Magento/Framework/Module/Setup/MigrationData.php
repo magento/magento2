@@ -9,7 +9,6 @@ namespace Magento\Framework\Module\Setup;
  * Replace patterns needed for migration process between Magento versions
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class MigrationData
 {
@@ -17,7 +16,6 @@ class MigrationData
      * List of required params
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_requiredParams = ['plain', 'wiki', 'xml', 'serialized'];
 
@@ -25,14 +23,12 @@ class MigrationData
      * List of replace patterns
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_patterns = [];
 
     /**
      * @param array $data
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function __construct(
         array $data
@@ -49,7 +45,6 @@ class MigrationData
      * Get replace pattern
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPlainFindPattern()
     {
@@ -60,7 +55,6 @@ class MigrationData
      * Get replace pattern
      *
      * @return string
-     * @since 2.0.0
      */
     public function getWikiFindPattern()
     {
@@ -71,7 +65,6 @@ class MigrationData
      * Get replace pattern
      *
      * @return string
-     * @since 2.0.0
      */
     public function getXmlFindPattern()
     {
@@ -82,7 +75,6 @@ class MigrationData
      * Get replace pattern
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSerializedFindPattern()
     {

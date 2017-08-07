@@ -14,7 +14,6 @@ namespace Magento\Framework\HTTP\Adapter;
 /**
  * Class \Magento\Framework\HTTP\Adapter\Curl
  *
- * @since 2.0.0
  */
 class Curl implements \Zend_Http_Client_Adapter_Interface
 {
@@ -22,7 +21,6 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * Parameters array
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_config = [
         'protocols' => (CURLPROTO_HTTP
@@ -38,7 +36,6 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * Curl handle
      *
      * @var resource
-     * @since 2.0.0
      */
     protected $_resource;
 
@@ -46,7 +43,6 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * Allow parameters
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_allowedParams = [
         'timeout'      => CURLOPT_TIMEOUT,
@@ -66,7 +62,6 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * Array of CURL options
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_options = [];
 
@@ -74,7 +69,6 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * Apply current configuration array to transport resource
      *
      * @return \Magento\Framework\HTTP\Adapter\Curl
-     * @since 2.0.0
      */
     protected function _applyConfig()
     {
@@ -95,7 +89,6 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * Get default options
      *
      * @return array
-     * @since 2.2.0
      */
     private function getDefaultConfig()
     {
@@ -113,7 +106,6 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      *
      * @param array $options
      * @return $this
-     * @since 2.0.0
      */
     public function setOptions(array $options = [])
     {
@@ -127,7 +119,6 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * @param  int $option      the CURLOPT_* constants
      * @param  mixed $value
      * @return $this
-     * @since 2.0.0
      */
     public function addOption($option, $value)
     {
@@ -140,7 +131,6 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      *
      * @param array $config
      * @return $this
-     * @since 2.0.0
      */
     public function setConfig($config = [])
     {
@@ -158,7 +148,6 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * @param boolean $secure
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function connect($host, $port = 80, $secure = false)
     {
@@ -175,7 +164,6 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * @param string $body
      * @return string Request as text
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function write($method, $url, $http_ver = '1.1', $headers = [], $body = '')
     {
@@ -216,7 +204,6 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * Read response from server
      *
      * @return string
-     * @since 2.0.0
      */
     public function read()
     {
@@ -240,7 +227,6 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * Close the connection to the server
      *
      * @return $this
-     * @since 2.0.0
      */
     public function close()
     {
@@ -253,7 +239,6 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * Returns a cURL handle on success
      *
      * @return resource
-     * @since 2.0.0
      */
     protected function _getResource()
     {
@@ -267,7 +252,6 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * Get last error number
      *
      * @return int
-     * @since 2.0.0
      */
     public function getErrno()
     {
@@ -278,7 +262,6 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * Get string with last error for the current session
      *
      * @return string
-     * @since 2.0.0
      */
     public function getError()
     {
@@ -290,7 +273,6 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      *
      * @param int $opt CURLINFO option
      * @return mixed
-     * @since 2.0.0
      */
     public function getInfo($opt = 0)
     {
@@ -303,7 +285,6 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * @param array $urls
      * @param array $options
      * @return array
-     * @since 2.0.0
      */
     public function multiRequest($urls, $options = [])
     {

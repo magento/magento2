@@ -10,7 +10,7 @@ namespace Magento\User\Test\Unit\Observer\Backend;
  * Test class for Magento\User\Observer\Backend\TrackAdminNewPasswordObserver
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TrackAdminNewPasswordObserverTest extends \PHPUnit_Framework_TestCase
+class TrackAdminNewPasswordObserverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\User\Model\Backend\Config\ObserverConfig */
     protected $observerConfig;

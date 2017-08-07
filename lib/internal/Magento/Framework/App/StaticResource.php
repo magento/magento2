@@ -14,67 +14,56 @@ use Psr\Log\LoggerInterface;
  * Entry point for retrieving static resources like JS, CSS, images by requested public path
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class StaticResource implements \Magento\Framework\AppInterface
 {
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     private $state;
 
     /**
      * @var \Magento\Framework\App\Response\FileInterface
-     * @since 2.0.0
      */
     private $response;
 
     /**
      * @var \Magento\Framework\App\Request\Http
-     * @since 2.0.0
      */
     private $request;
 
     /**
      * @var \Magento\Framework\App\View\Asset\Publisher
-     * @since 2.0.0
      */
     private $publisher;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
-     * @since 2.0.0
      */
     private $assetRepo;
 
     /**
      * @var \Magento\Framework\Module\ModuleList
-     * @since 2.0.0
      */
     private $moduleList;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var \Magento\Framework\ObjectManager\ConfigLoaderInterface
-     * @since 2.0.0
      */
     private $configLoader;
 
     /**
      * @var \Magento\Framework\Filesystem
-     * @since 2.1.0
      */
     private $filesystem;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
@@ -87,7 +76,6 @@ class StaticResource implements \Magento\Framework\AppInterface
      * @param \Magento\Framework\Module\ModuleList $moduleList
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param ConfigLoaderInterface $configLoader
-     * @since 2.0.0
      */
     public function __construct(
         State $state,
@@ -114,7 +102,6 @@ class StaticResource implements \Magento\Framework\AppInterface
      *
      * @return \Magento\Framework\App\ResponseInterface
      * @throws \Exception
-     * @since 2.0.0
      */
     public function launch()
     {
@@ -139,7 +126,6 @@ class StaticResource implements \Magento\Framework\AppInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function catchException(Bootstrap $bootstrap, \Exception $exception)
     {
@@ -161,7 +147,6 @@ class StaticResource implements \Magento\Framework\AppInterface
      * @param string $path
      * @throws \InvalidArgumentException
      * @return array
-     * @since 2.0.0
      */
     protected function parsePath($path)
     {
@@ -191,9 +176,8 @@ class StaticResource implements \Magento\Framework\AppInterface
     /**
      * Lazyload filesystem driver
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      * @return Filesystem
-     * @since 2.1.0
      */
     private function getFilesystem()
     {
@@ -207,8 +191,7 @@ class StaticResource implements \Magento\Framework\AppInterface
      * Retrieves LoggerInterface instance
      *
      * @return LoggerInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getLogger()
     {

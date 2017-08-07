@@ -12,13 +12,11 @@ use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
 /**
  * Class ResponseValidator
- * @since 2.1.0
  */
 class ResponseValidator extends GeneralResponseValidator
 {
     /**
      * @return array
-     * @since 2.1.0
      */
     protected function getResponseValidators()
     {

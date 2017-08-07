@@ -10,13 +10,11 @@ use Magento\Search\Api\SynonymAnalyzerInterface;
 /**
  * Class \Magento\Search\Model\SynonymAnalyzer
  *
- * @since 2.1.0
  */
 class SynonymAnalyzer implements SynonymAnalyzerInterface
 {
     /**
      * @var SynonymReader $synReaderModel
-     * @since 2.1.0
      */
     protected $synReaderModel;
 
@@ -24,7 +22,6 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
      * Constructor
      *
      * @param SynonymReader $synReader
-     * @since 2.1.0
      */
     public function __construct(SynonymReader $synReader)
     {
@@ -46,7 +43,6 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
      * ]
      * @param string $phrase
      * @return array
-     * @since 2.1.0
      */
     public function getSynonymsForPhrase($phrase)
     {
@@ -84,7 +80,6 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
      * @param string $word
      * @param $array $wordsArray
      * @return boolean | int
-     * @since 2.1.0
      */
     private function findInArray($word, $wordsArray)
     {

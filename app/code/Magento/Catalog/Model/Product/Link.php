@@ -23,7 +23,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection as Produ
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Link extends \Magento\Framework\Model\AbstractModel
 {
@@ -35,7 +34,6 @@ class Link extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var mixed
-     * @since 2.0.0
      */
     protected $_attributes = null;
 
@@ -43,7 +41,6 @@ class Link extends \Magento\Framework\Model\AbstractModel
      * Product collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Link\Product\CollectionFactory
-     * @since 2.0.0
      */
     protected $_productCollectionFactory;
 
@@ -51,20 +48,18 @@ class Link extends \Magento\Framework\Model\AbstractModel
      * Link collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Link\CollectionFactory
-     * @since 2.0.0
      */
     protected $_linkCollectionFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product\Link\SaveHandler
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $saveProductLinks;
 
     /**
      * @var \Magento\CatalogInventory\Helper\Stock
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 101.0.1
      */
     protected $stockHelper;
 
@@ -77,7 +72,6 @@ class Link extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -99,7 +93,6 @@ class Link extends \Magento\Framework\Model\AbstractModel
      * Initialize resource
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -108,7 +101,6 @@ class Link extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function useRelatedLinks()
     {
@@ -118,7 +110,6 @@ class Link extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function useUpSellLinks()
     {
@@ -128,7 +119,6 @@ class Link extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function useCrossSellLinks()
     {
@@ -141,7 +131,6 @@ class Link extends \Magento\Framework\Model\AbstractModel
      *
      * @param   string $type
      * @return  string
-     * @since 2.0.0
      */
     public function getAttributeTypeTable($type)
     {
@@ -152,7 +141,6 @@ class Link extends \Magento\Framework\Model\AbstractModel
      * Retrieve linked product collection
      *
      * @return ProductCollection
-     * @since 2.0.0
      */
     public function getProductCollection()
     {
@@ -164,7 +152,6 @@ class Link extends \Magento\Framework\Model\AbstractModel
      * Retrieve link collection
      *
      * @return Collection
-     * @since 2.0.0
      */
     public function getLinkCollection()
     {
@@ -175,7 +162,6 @@ class Link extends \Magento\Framework\Model\AbstractModel
     /**
      * @param int $type
      * @return array
-     * @since 2.0.0
      */
     public function getAttributes($type = null)
     {
@@ -194,7 +180,6 @@ class Link extends \Magento\Framework\Model\AbstractModel
      *
      * @param   \Magento\Catalog\Model\Product $product
      * @return  $this
-     * @since 2.0.0
      */
     public function saveProductRelations($product)
     {
@@ -204,7 +189,6 @@ class Link extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return Link\SaveHandler
-     * @since 2.1.0
      */
     private function getProductLinkSaveHandler()
     {

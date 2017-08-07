@@ -10,7 +10,7 @@ namespace Magento\Sales\Model\Order\Invoice;
  * Interface for Invoice notifier.
  *
  * @api
- * @since 2.2.0
+ * @since 100.1.2
  */
 interface NotifierInterface
 {
@@ -23,7 +23,7 @@ interface NotifierInterface
      * @param bool $forceSyncMode
      *
      * @return void
-     * @since 2.2.0
+     * @since 100.1.2
      */
     public function notify(
         \Magento\Sales\Api\Data\OrderInterface $order,

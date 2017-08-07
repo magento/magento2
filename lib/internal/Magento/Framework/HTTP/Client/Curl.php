@@ -10,98 +10,84 @@ namespace Magento\Framework\HTTP\Client;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * @since 2.0.0
  */
 class Curl implements \Magento\Framework\HTTP\ClientInterface
 {
     /**
      * Max supported protocol by curl CURL_SSLVERSION_TLSv1_2
      * @var int
-     * @since 2.2.0
      */
     private $sslVersion;
 
     /**
      * Hostname
      * @var string
-     * @since 2.0.0
      */
     protected $_host = 'localhost';
 
     /**
      * Port
      * @var int
-     * @since 2.0.0
      */
     protected $_port = 80;
 
     /**
      * Stream resource
      * @var object
-     * @since 2.0.0
      */
     protected $_sock = null;
 
     /**
      * Request headers
      * @var array
-     * @since 2.0.0
      */
     protected $_headers = [];
 
     /**
      * Fields for POST method - hash
      * @var array
-     * @since 2.0.0
      */
     protected $_postFields = [];
 
     /**
      * Request cookies
      * @var array
-     * @since 2.0.0
      */
     protected $_cookies = [];
 
     /**
      * Response headers
      * @var array
-     * @since 2.0.0
      */
     protected $_responseHeaders = [];
 
     /**
      * Response body
      * @var string
-     * @since 2.0.0
      */
     protected $_responseBody = '';
 
     /**
      * Response status
      * @var int
-     * @since 2.0.0
      */
     protected $_responseStatus = 0;
 
     /**
      * Request timeout
      * @var int type
-     * @since 2.0.0
      */
     protected $_timeout = 300;
 
     /**
      * TODO
      * @var int
-     * @since 2.0.0
      */
     protected $_redirectCount = 0;
 
     /**
      * Curl
      * @var resource
-     * @since 2.0.0
      */
     protected $_ch;
 
@@ -110,7 +96,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * Are applied before curl_exec
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_curlUserOptions = [];
 
@@ -118,7 +103,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * Header count, used while parsing headers
      * in CURL callback function
      * @var int
-     * @since 2.0.0
      */
     protected $_headerCount = 0;
 
@@ -127,7 +111,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      *
      * @param int $value
      * @return void
-     * @since 2.0.0
      */
     public function setTimeout($value)
     {
@@ -136,7 +119,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * @param int|null $sslVersion
-     * @since 2.0.0
      */
     public function __construct($sslVersion = null)
     {
@@ -148,7 +130,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      *
      * @param array $headers
      * @return void
-     * @since 2.0.0
      */
     public function setHeaders($headers)
     {
@@ -161,7 +142,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param string $name name, ex. "Location"
      * @param string $value value ex. "http://google.com"
      * @return void
-     * @since 2.0.0
      */
     public function addHeader($name, $value)
     {
@@ -173,7 +153,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      *
      * @param string $name
      * @return void
-     * @since 2.0.0
      */
     public function removeHeader($name)
     {
@@ -187,7 +166,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param string $login username
      * @param string $pass password
      * @return void
-     * @since 2.0.0
      */
     public function setCredentials($login, $pass)
     {
@@ -201,7 +179,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param string $name
      * @param string $value
      * @return void
-     * @since 2.0.0
      */
     public function addCookie($name, $value)
     {
@@ -213,7 +190,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      *
      * @param string $name
      * @return void
-     * @since 2.0.0
      */
     public function removeCookie($name)
     {
@@ -225,7 +201,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      *
      * @param array $cookies
      * @return void
-     * @since 2.0.0
      */
     public function setCookies($cookies)
     {
@@ -235,7 +210,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     /**
      * Clear cookies
      * @return void
-     * @since 2.0.0
      */
     public function removeCookies()
     {
@@ -247,7 +221,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      *
      * @param string $uri uri relative to host, ex. "/index.php"
      * @return void
-     * @since 2.0.0
      */
     public function get($uri)
     {
@@ -265,7 +238,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @return void
      *
      * @see \Magento\Framework\HTTP\Client#post($uri, $params)
-     * @since 2.0.0
      */
     public function post($uri, $params)
     {
@@ -276,7 +248,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * Get response headers
      *
      * @return array
-     * @since 2.0.0
      */
     public function getHeaders()
     {
@@ -287,7 +258,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * Get response body
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBody()
     {
@@ -298,7 +268,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * Get cookies response hash
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCookies()
     {
@@ -325,7 +294,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * Get cookies array with details
      * (domain, expire time etc)
      * @return array
-     * @since 2.0.0
      */
     public function getCookiesFull()
     {
@@ -362,7 +330,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @see lib\Magento\Framework\HTTP\Client#getStatus()
      *
      * @return int
-     * @since 2.0.0
      */
     public function getStatus()
     {
@@ -381,7 +348,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function makeRequest($method, $uri, $params = [])
     {
@@ -447,7 +413,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param string $string
      * @return void
      * @throws \Exception
-     * @since 2.0.0
      */
     public function doError($string)
     {
@@ -462,7 +427,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @return int
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function parseHeaders($ch, $data)
     {
@@ -502,7 +466,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param string $name
      * @param string $value
      * @return void
-     * @since 2.0.0
      */
     protected function curlOption($name, $value)
     {
@@ -513,7 +476,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * Set curl options array directly
      * @param array $arr
      * @return void
-     * @since 2.0.0
      */
     protected function curlOptions($arr)
     {
@@ -524,7 +486,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * Set CURL options overrides array
      * @param array $arr
      * @return void
-     * @since 2.0.0
      */
     public function setOptions($arr)
     {
@@ -537,7 +498,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param string $name
      * @param string $value
      * @return void
-     * @since 2.0.0
      */
     public function setOption($name, $value)
     {

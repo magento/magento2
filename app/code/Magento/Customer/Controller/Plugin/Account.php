@@ -15,26 +15,22 @@ use Magento\Framework\Controller\ResultInterface;
 /**
  * Class \Magento\Customer\Controller\Plugin\Account
  *
- * @since 2.0.0
  */
 class Account
 {
     /**
      * @var Session
-     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $allowedActions = [];
 
     /**
      * @param Session $customerSession
      * @param array $allowedActions List of actions that are allowed for not authorized users
-     * @since 2.0.0
      */
     public function __construct(
         Session $customerSession,
@@ -50,7 +46,6 @@ class Account
      * @param AbstractAction $subject
      * @param RequestInterface $request
      * @return void
-     * @since 2.2.0
      */
     public function beforeDispatch(AbstractAction $subject, RequestInterface $request)
     {
@@ -74,7 +69,6 @@ class Account
      * @param RequestInterface $request
      * @return ResponseInterface|ResultInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterDispatch(AbstractAction $subject, $result, RequestInterface $request)
     {

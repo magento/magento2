@@ -9,19 +9,16 @@ use Ramsey\Uuid\Uuid;
 
 /**
  * Class IdentityService
- * @since 2.2.0
  */
 class IdentityService implements IdentityGeneratorInterface
 {
     /**
      * @var \Ramsey\Uuid\UuidFactoryInterface
-     * @since 2.2.0
      */
     private $uuidFactory;
 
     /**
      * IdentityService constructor.
-     * @since 2.2.0
      */
     public function __construct()
     {
@@ -30,7 +27,6 @@ class IdentityService implements IdentityGeneratorInterface
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function generateId()
     {
@@ -40,7 +36,6 @@ class IdentityService implements IdentityGeneratorInterface
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function generateIdForData($data)
     {

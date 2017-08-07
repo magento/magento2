@@ -9,19 +9,16 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Factory class for @see \Magento\Framework\View\Asset\File\FallbackContext
- * @since 2.0.0
  */
 class FallbackContextFactory
 {
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -33,7 +30,6 @@ class FallbackContextFactory
      *
      * @param array $data
      * @return \Magento\Framework\View\Asset\File\FallbackContext
-     * @since 2.0.0
      */
     public function create(array $data = [])
     {

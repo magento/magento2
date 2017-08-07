@@ -8,19 +8,16 @@ namespace Magento\Framework\Filter\Template;
 /**
  * Class \Magento\Framework\Filter\Template\Simple
  *
- * @since 2.0.0
  */
 class Simple extends \Magento\Framework\DataObject implements \Zend_Filter_Interface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_startTag = '{{';
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_endTag = '}}';
 
@@ -30,7 +27,6 @@ class Simple extends \Magento\Framework\DataObject implements \Zend_Filter_Inter
      * @param string $start
      * @param string $end
      * @return $this
-     * @since 2.0.0
      */
     public function setTags($start, $end)
     {
@@ -44,7 +40,6 @@ class Simple extends \Magento\Framework\DataObject implements \Zend_Filter_Inter
      *
      * @param string $value
      * @return string
-     * @since 2.0.0
      */
     public function filter($value)
     {

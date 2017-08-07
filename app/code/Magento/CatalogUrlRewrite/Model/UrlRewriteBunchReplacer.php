@@ -10,19 +10,16 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
 /**
  * Class \Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer
  *
- * @since 2.2.0
  */
 class UrlRewriteBunchReplacer
 {
     /**
      * @var UrlPersistInterface
-     * @since 2.2.0
      */
     private $urlPersist;
 
     /**
      * @param UrlPersistInterface $urlPersist
-     * @since 2.2.0
      */
     public function __construct(UrlPersistInterface $urlPersist)
     {
@@ -35,7 +32,6 @@ class UrlRewriteBunchReplacer
      * @param array $urls
      * @param int $bunchSize
      * @return void
-     * @since 2.2.0
      */
     public function doBunchReplace(array $urls, $bunchSize = 10000)
     {

@@ -16,19 +16,16 @@ use Magento\Framework\Image as MagentoImage;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Image extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_width;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_height;
 
@@ -36,169 +33,141 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Default quality value (for JPEG images only).
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_quality = 80;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_keepAspectRatio = true;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_keepFrame = true;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_keepTransparency = true;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_constrainOnly = true;
 
     /**
      * @var int[]
-     * @since 2.0.0
      */
     protected $_backgroundColor = [255, 255, 255];
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_baseFile;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_isBaseFilePlaceholder;
 
     /**
      * @var string|bool
-     * @since 2.0.0
      */
     protected $_newFile;
 
     /**
      * @var MagentoImage
-     * @since 2.0.0
      */
     protected $_processor;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_destinationSubdir;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_angle;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_watermarkFile;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_watermarkPosition;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_watermarkWidth;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_watermarkHeight;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_watermarkImageOpacity = 70;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     * @since 2.0.0
      */
     protected $_mediaDirectory;
 
     /**
      * @var \Magento\Framework\Image\Factory
-     * @since 2.0.0
      */
     protected $_imageFactory;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
-     * @since 2.0.0
      */
     protected $_assetRepo;
 
     /**
      * @var \Magento\Framework\View\FileSystem
-     * @since 2.0.0
      */
     protected $_viewFileSystem;
 
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
-     * @since 2.0.0
      */
     protected $_coreFileStorageDatabase = null;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
-     * @since 2.0.0
      */
     protected $_catalogProductMediaConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Catalog\Model\View\Asset\ImageFactory
-     * @since 2.2.0
      */
     private $viewAssetImageFactory;
 
     /**
      * @var \Magento\Catalog\Model\View\Asset\PlaceholderFactory
-     * @since 2.2.0
      */
     private $viewAssetPlaceholderFactory;
 
     /**
      * @var \Magento\Framework\View\Asset\LocalInterface
-     * @since 2.2.0
      */
     private $imageAsset;
 
@@ -222,7 +191,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Catalog\Model\View\Asset\PlaceholderFactory|null $viewAssetPlaceholderFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -259,7 +227,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @param int $width
      * @return $this
-     * @since 2.0.0
      */
     public function setWidth($width)
     {
@@ -269,7 +236,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getWidth()
     {
@@ -279,7 +245,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @param int $height
      * @return $this
-     * @since 2.0.0
      */
     public function setHeight($height)
     {
@@ -289,7 +254,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getHeight()
     {
@@ -301,7 +265,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $quality
      * @return $this
-     * @since 2.0.0
      */
     public function setQuality($quality)
     {
@@ -313,7 +276,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Get image quality
      *
      * @return int
-     * @since 2.0.0
      */
     public function getQuality()
     {
@@ -323,7 +285,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @param bool $keep
      * @return $this
-     * @since 2.0.0
      */
     public function setKeepAspectRatio($keep)
     {
@@ -334,7 +295,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @param bool $keep
      * @return $this
-     * @since 2.0.0
      */
     public function setKeepFrame($keep)
     {
@@ -345,7 +305,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @param bool $keep
      * @return $this
-     * @since 2.0.0
      */
     public function setKeepTransparency($keep)
     {
@@ -356,7 +315,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @param bool $flag
      * @return $this
-     * @since 2.0.0
      */
     public function setConstrainOnly($flag)
     {
@@ -367,7 +325,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @param int[] $rgbArray
      * @return $this
-     * @since 2.0.0
      */
     public function setBackgroundColor(array $rgbArray)
     {
@@ -378,7 +335,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @param string $size
      * @return $this
-     * @since 2.0.0
      */
     public function setSize($size)
     {
@@ -402,7 +358,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @param string|null $file
      * @return bool
-     * @since 2.0.0
      */
     protected function _checkMemory($file = null)
     {
@@ -414,7 +369,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return string
-     * @since 2.0.0
      */
     protected function _getMemoryLimit()
     {
@@ -438,7 +392,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return int
-     * @since 2.0.0
      */
     protected function _getMemoryUsage()
     {
@@ -452,7 +405,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param string|null $file
      * @return float|int
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _getNeedMemoryForFile($file = null)
     {
@@ -488,7 +440,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @param int[] $rgbArray
      * @return string
-     * @since 2.0.0
      */
     protected function _rgbToString($rgbArray)
     {
@@ -509,7 +460,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param string $file
      * @return $this
      * @throws \Exception
-     * @since 2.0.0
      */
     public function setBaseFile($file)
     {
@@ -539,7 +489,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getBaseFile()
     {
@@ -547,9 +496,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @deprecated 2.2.0
+     * @deprecated 101.1.0
      * @return bool|string
-     * @since 2.0.0
      */
     public function getNewFile()
     {
@@ -560,7 +508,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Retrieve 'true' if image is a base file placeholder
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isBaseFilePlaceholder()
     {
@@ -570,7 +517,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @param MagentoImage $processor
      * @return $this
-     * @since 2.0.0
      */
     public function setImageProcessor($processor)
     {
@@ -580,7 +526,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return MagentoImage
-     * @since 2.0.0
      */
     public function getImageProcessor()
     {
@@ -600,7 +545,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @see \Magento\Framework\Image\Adapter\AbstractAdapter
      * @return $this
-     * @since 2.0.0
      */
     public function resize()
     {
@@ -614,7 +558,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @param int $angle
      * @return $this
-     * @since 2.0.0
      */
     public function rotate($angle)
     {
@@ -630,7 +573,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $angle
      * @return $this
-     * @since 2.0.0
      */
     public function setAngle($angle)
     {
@@ -650,7 +592,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param int $opacity
      * @return $this
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function setWatermark(
         $file,
@@ -701,7 +642,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function saveFile()
     {
@@ -716,7 +656,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getUrl()
     {
@@ -726,7 +665,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @param string $dir
      * @return $this
-     * @since 2.0.0
      */
     public function setDestinationSubdir($dir)
     {
@@ -736,7 +674,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getDestinationSubdir()
     {
@@ -745,7 +682,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return bool|void
-     * @since 2.0.0
      */
     public function isCached()
     {
@@ -757,7 +693,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $file
      * @return $this
-     * @since 2.0.0
      */
     public function setWatermarkFile($file)
     {
@@ -769,7 +704,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Get watermark file name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getWatermarkFile()
     {
@@ -781,7 +715,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * or false if file not found
      *
      * @return string | bool
-     * @since 2.0.0
      */
     protected function _getWatermarkFilePath()
     {
@@ -816,7 +749,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $position
      * @return $this
-     * @since 2.0.0
      */
     public function setWatermarkPosition($position)
     {
@@ -828,7 +760,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Get watermark position
      *
      * @return string
-     * @since 2.0.0
      */
     public function getWatermarkPosition()
     {
@@ -840,7 +771,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $imageOpacity
      * @return $this
-     * @since 2.0.0
      */
     public function setWatermarkImageOpacity($imageOpacity)
     {
@@ -852,7 +782,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Get watermark image opacity
      *
      * @return int
-     * @since 2.0.0
      */
     public function getWatermarkImageOpacity()
     {
@@ -864,7 +793,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @param array $size
      * @return $this
-     * @since 2.0.0
      */
     public function setWatermarkSize($size)
     {
@@ -879,7 +807,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $width
      * @return $this
-     * @since 2.0.0
      */
     public function setWatermarkWidth($width)
     {
@@ -891,7 +818,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Get watermark width
      *
      * @return int
-     * @since 2.0.0
      */
     public function getWatermarkWidth()
     {
@@ -903,7 +829,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $height
      * @return $this
-     * @since 2.0.0
      */
     public function setWatermarkHeight($height)
     {
@@ -915,7 +840,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Get watermark height
      *
      * @return string
-     * @since 2.0.0
      */
     public function getWatermarkHeight()
     {
@@ -924,7 +848,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function clearCache()
     {
@@ -940,7 +863,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $filename
      * @return bool
-     * @since 2.0.0
      */
     protected function _fileExists($filename)
     {
@@ -957,7 +879,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Return resized product image information
      *
      * @return array
-     * @since 2.0.0
      */
     public function getResizedImageInfo()
     {
@@ -974,7 +895,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.2.0
      */
     private function getMiscParams()
     {

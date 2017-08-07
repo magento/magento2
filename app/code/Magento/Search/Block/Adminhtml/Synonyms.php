@@ -7,13 +7,11 @@ namespace Magento\Search\Block\Adminhtml;
 
 /**
  * Adminhtml synonym group content block
- * @since 2.1.0
  */
 class Synonyms extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * @return void
-     * @since 2.1.0
      */
     protected function _construct()
     {

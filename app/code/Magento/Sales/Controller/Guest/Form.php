@@ -9,20 +9,17 @@ namespace Magento\Sales\Controller\Guest;
 /**
  * Class \Magento\Sales\Controller\Guest\Form
  *
- * @since 2.0.0
  */
 class Form extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -36,7 +33,6 @@ class Form extends \Magento\Framework\App\Action\Action
      * Order view form page
      *
      * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

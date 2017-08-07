@@ -9,7 +9,6 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Catalog product option text type
- * @since 2.0.0
  */
 class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 {
@@ -17,13 +16,11 @@ class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Magento string lib
      *
      * @var \Magento\Framework\Stdlib\StringUtils
-     * @since 2.0.0
      */
     protected $string;
 
     /**
      * @var \Magento\Framework\Escaper
-     * @since 2.0.0
      */
     protected $_escaper = null;
 
@@ -33,7 +30,6 @@ class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -53,7 +49,6 @@ class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param array $values All product option values, i.e. array (option_id => mixed, option_id => mixed...)
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function validateUserValue($values)
     {
@@ -83,7 +78,6 @@ class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Prepare option value for cart
      *
      * @return string|null Prepared option value
-     * @since 2.0.0
      */
     public function prepareForCart()
     {
@@ -99,7 +93,6 @@ class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @param string $value Prepared for cart option value
      * @return string
-     * @since 2.0.0
      */
     public function getFormattedOptionValue($value)
     {

@@ -9,7 +9,7 @@ namespace Magento\Sales\Model\Order\Creditmemo;
  * Interface for CreditMemo notifier.
  *
  * @api
- * @since 2.2.0
+ * @since 100.1.3
  */
 interface NotifierInterface
 {
@@ -22,7 +22,7 @@ interface NotifierInterface
      * @param bool $forceSyncMode
      *
      * @return void
-     * @since 2.2.0
+     * @since 100.1.3
      */
     public function notify(
         \Magento\Sales\Api\Data\OrderInterface $order,

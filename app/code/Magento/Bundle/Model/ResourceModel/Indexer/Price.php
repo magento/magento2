@@ -11,13 +11,11 @@ use Magento\Catalog\Api\Data\ProductInterface;
  * Bundle products Price indexer resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
 {
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     protected function reindex($entityIds = null)
     {
@@ -28,7 +26,6 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
      * Retrieve temporary price index table name for fixed bundle products
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getBundlePriceTable()
     {
@@ -39,7 +36,6 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
      * Retrieve table name for temporary bundle selection prices index
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getBundleSelectionTable()
     {
@@ -50,7 +46,6 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
      * Retrieve table name for temporary bundle option prices index
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getBundleOptionTable()
     {
@@ -61,7 +56,6 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
      * Prepare temporary price index table for fixed bundle products
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareBundlePriceTable()
     {
@@ -73,7 +67,6 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
      * Prepare table structure for temporary bundle selection prices index
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareBundleSelectionTable()
     {
@@ -85,7 +78,6 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
      * Prepare table structure for temporary bundle option prices index
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareBundleOptionTable()
     {
@@ -100,7 +92,6 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
      * @param int|array $entityIds the entity ids limitation
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _prepareBundlePriceByType($priceType, $entityIds = null)
     {
@@ -243,7 +234,6 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
      * Calculate fixed bundle product selections price
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _calculateBundleOptionPrice()
     {
@@ -323,7 +313,6 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
      * @param int $priceType
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _calculateBundleSelectionPrice($priceType)
     {
@@ -440,7 +429,6 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
      *
      * @param int|array $entityIds  the entity ids limitation
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareBundlePrice($entityIds = null)
     {
@@ -465,7 +453,6 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
      *
      * @param int|array $entityIds
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareTierPriceIndex($entityIds = null)
     {

@@ -18,7 +18,6 @@ use Magento\Framework\Phrase;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Dom
 {
@@ -34,7 +33,6 @@ class Dom
 
     /**
      * @var \Magento\Framework\Config\ValidationStateInterface
-     * @since 2.0.0
      */
     private $validationState;
 
@@ -42,13 +40,11 @@ class Dom
      * Dom document
      *
      * @var \DOMDocument
-     * @since 2.0.0
      */
     protected $dom;
 
     /**
      * @var Dom\NodeMergingConfig
-     * @since 2.0.0
      */
     protected $nodeMergingConfig;
 
@@ -56,7 +52,6 @@ class Dom
      * Name of attribute that specifies type of argument node
      *
      * @var string|null
-     * @since 2.0.0
      */
     protected $typeAttributeName;
 
@@ -64,7 +59,6 @@ class Dom
      * Schema validation file
      *
      * @var string
-     * @since 2.0.0
      */
     protected $schema;
 
@@ -72,7 +66,6 @@ class Dom
      * Format of error messages
      *
      * @var string
-     * @since 2.0.0
      */
     protected $errorFormat;
 
@@ -80,19 +73,16 @@ class Dom
      * Default namespace for xml elements
      *
      * @var string
-     * @since 2.0.0
      */
     protected $rootNamespace;
 
     /**
      * @var \Magento\Framework\Config\Dom\UrnResolver
-     * @since 2.0.0
      */
     private static $urnResolver;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private static $resolvedSchemaPaths = [];
 
@@ -108,7 +98,6 @@ class Dom
      * @param string $typeAttributeName
      * @param string $schemaFile
      * @param string $errorFormat
-     * @since 2.0.0
      */
     public function __construct(
         $xml,
@@ -132,7 +121,6 @@ class Dom
      *
      * @param string $errorFormat
      * @return string[]
-     * @since 2.1.0
      */
     private static function getXmlErrors($errorFormat)
     {
@@ -153,7 +141,6 @@ class Dom
      *
      * @param string $xml
      * @return void
-     * @since 2.0.0
      */
     public function merge($xml)
     {
@@ -173,7 +160,6 @@ class Dom
      * @param string $parentPath path to parent node
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _mergeNode(\DOMElement $node, $parentPath)
     {
@@ -226,7 +212,6 @@ class Dom
      *
      * @param \DOMElement $node
      * @return bool
-     * @since 2.0.0
      */
     protected function _isTextNode($node)
     {
@@ -239,7 +224,6 @@ class Dom
      * @param \DOMElement $baseNode
      * @param \DOMNode $mergeNode
      * @return void
-     * @since 2.0.0
      */
     protected function _mergeAttributes($baseNode, $mergeNode)
     {
@@ -254,7 +238,6 @@ class Dom
      * @param \DOMElement $node
      * @param string $parentPath
      * @return string
-     * @since 2.0.0
      */
     protected function _getNodePathByParent(\DOMElement $node, $parentPath)
     {
@@ -281,7 +264,6 @@ class Dom
      * @throws \Magento\Framework\Exception\LocalizedException An exception is possible if original document contains
      *     multiple nodes for identifier
      * @return \DOMElement|null
-     * @since 2.0.0
      */
     protected function _getMatchedNode($nodePath)
     {
@@ -309,7 +291,6 @@ class Dom
      * @param string $errorFormat
      * @return array of errors
      * @throws \Exception
-     * @since 2.0.0
      */
     public static function validateDomDocument(
         \DOMDocument $dom,
@@ -354,7 +335,6 @@ class Dom
      * @param string $format
      * @return string
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     private static function _renderErrorMessage(\LibXMLError $errorInfo, $format)
     {
@@ -386,7 +366,6 @@ class Dom
      * DOM document getter
      *
      * @return \DOMDocument
-     * @since 2.0.0
      */
     public function getDom()
     {
@@ -399,7 +378,6 @@ class Dom
      * @param string $xml
      * @return \DOMDocument
      * @throws \Magento\Framework\Config\Dom\ValidationException
-     * @since 2.0.0
      */
     protected function _initDom($xml)
     {
@@ -427,7 +405,6 @@ class Dom
      * @param string $schemaFileName absolute path to schema file
      * @param array &$errors
      * @return bool
-     * @since 2.0.0
      */
     public function validate($schemaFileName, &$errors = [])
     {
@@ -443,7 +420,6 @@ class Dom
      *
      * @param string $schemaFile
      * @return $this
-     * @since 2.0.0
      */
     public function setSchemaFile($schemaFile)
     {
@@ -456,7 +432,6 @@ class Dom
      *
      * @param \DOMAttr $attribute
      * @return string
-     * @since 2.0.0
      */
     private function _getAttributeName($attribute)
     {

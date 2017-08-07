@@ -12,49 +12,41 @@ use Magento\Framework\View\Page\Config;
  * Page config Renderer model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Renderer implements RendererInterface
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $assetTypeOrder = ['css', 'ico', 'js'];
 
     /**
      * @var \Magento\Framework\View\Page\Config
-     * @since 2.0.0
      */
     protected $pageConfig;
 
     /**
      * @var \Magento\Framework\View\Asset\MergeService
-     * @since 2.0.0
      */
     protected $assetMergeService;
 
     /**
      * @var \Magento\Framework\Escaper
-     * @since 2.0.0
      */
     protected $escaper;
 
     /**
      * @var \Magento\Framework\Stdlib\StringUtils
-     * @since 2.0.0
      */
     protected $string;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $urlBuilder;
 
@@ -65,7 +57,6 @@ class Renderer implements RendererInterface
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Psr\Log\LoggerInterface $logger
-     * @since 2.0.0
      */
     public function __construct(
         Config $pageConfig,
@@ -86,7 +77,6 @@ class Renderer implements RendererInterface
     /**
      * @param string $elementType
      * @return string
-     * @since 2.0.0
      */
     public function renderElementAttributes($elementType)
     {
@@ -99,7 +89,6 @@ class Renderer implements RendererInterface
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function renderHeadContent()
     {
@@ -114,7 +103,6 @@ class Renderer implements RendererInterface
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function renderTitle()
     {
@@ -123,7 +111,6 @@ class Renderer implements RendererInterface
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function renderMetadata()
     {
@@ -145,7 +132,6 @@ class Renderer implements RendererInterface
      * @param string $name
      * @param string $content
      * @return mixed
-     * @since 2.0.0
      */
     protected function processMetadataContent($name, $content)
     {
@@ -159,7 +145,6 @@ class Renderer implements RendererInterface
     /**
      * @param string $name
      * @return bool|string
-     * @since 2.0.0
      */
     protected function getMetadataTemplate($name)
     {
@@ -193,7 +178,6 @@ class Renderer implements RendererInterface
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function prepareFavicon()
     {
@@ -230,7 +214,6 @@ class Renderer implements RendererInterface
      * @param array $resultGroups
      *
      * @return string
-     * @since 2.0.0
      */
     public function renderAssets($resultGroups = [])
     {
@@ -250,7 +233,6 @@ class Renderer implements RendererInterface
      *
      * @param \Magento\Framework\View\Asset\PropertyGroup $group
      * @return string
-     * @since 2.0.0
      */
     protected function renderAssetGroup(\Magento\Framework\View\Asset\PropertyGroup $group)
     {
@@ -263,7 +245,6 @@ class Renderer implements RendererInterface
      * @param array $groupAssets
      * @param \Magento\Framework\View\Asset\PropertyGroup $group
      * @return array
-     * @since 2.0.0
      */
     protected function processMerge($groupAssets, $group)
     {
@@ -279,7 +260,6 @@ class Renderer implements RendererInterface
     /**
      * @param \Magento\Framework\View\Asset\PropertyGroup $group
      * @return string|null
-     * @since 2.0.0
      */
     protected function getGroupAttributes($group)
     {
@@ -302,7 +282,6 @@ class Renderer implements RendererInterface
      * @param string $contentType
      * @param string $attributes
      * @return string
-     * @since 2.0.0
      */
     protected function addDefaultAttributes($contentType, $attributes)
     {
@@ -322,7 +301,6 @@ class Renderer implements RendererInterface
      * @param string $contentType
      * @param string|null $attributes
      * @return string
-     * @since 2.0.0
      */
     protected function getAssetTemplate($contentType, $attributes)
     {
@@ -343,7 +321,6 @@ class Renderer implements RendererInterface
      * @param string $groupHtml
      * @param \Magento\Framework\View\Asset\PropertyGroup $group
      * @return string
-     * @since 2.0.0
      */
     protected function processIeCondition($groupHtml, $group)
     {
@@ -359,7 +336,6 @@ class Renderer implements RendererInterface
      *
      * @param \Magento\Framework\View\Asset\PropertyGroup $group
      * @return string
-     * @since 2.0.0
      */
     protected function renderAssetHtml(\Magento\Framework\View\Asset\PropertyGroup $group)
     {
@@ -388,7 +364,6 @@ class Renderer implements RendererInterface
      *
      * @param \Magento\Framework\View\Asset\AssetInterface $asset
      * @return string
-     * @since 2.2.0
      */
     protected function getAssetContentType(\Magento\Framework\View\Asset\AssetInterface $asset)
     {
@@ -397,7 +372,6 @@ class Renderer implements RendererInterface
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getAvailableResultGroups()
     {

@@ -12,7 +12,6 @@ namespace Magento\Sales\Api\Data;
  * items, billing and shipping addresses, and shipping and payment methods. A corresponding external document, known as
  * a purchase order, is emailed to the customer.
  * @api
- * @since 2.0.0
  */
 interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -56,7 +55,6 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
      * Gets the comment for the order status history.
      *
      * @return string Comment.
-     * @since 2.0.0
      */
     public function getComment();
 
@@ -64,7 +62,6 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
      * Gets the created-at timestamp for the order status history.
      *
      * @return string|null Created-at timestamp.
-     * @since 2.0.0
      */
     public function getCreatedAt();
 
@@ -73,7 +70,6 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param string $createdAt timestamp
      * @return $this
-     * @since 2.0.0
      */
     public function setCreatedAt($createdAt);
 
@@ -81,7 +77,6 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
      * Gets the ID for the order status history.
      *
      * @return int|null Order status history ID.
-     * @since 2.0.0
      */
     public function getEntityId();
 
@@ -90,7 +85,6 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param int $entityId
      * @return $this
-     * @since 2.0.0
      */
     public function setEntityId($entityId);
 
@@ -98,7 +92,6 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
      * Gets the entity name for the order status history.
      *
      * @return string|null Entity name.
-     * @since 2.0.0
      */
     public function getEntityName();
 
@@ -106,7 +99,6 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
      * Gets the is-customer-notified flag value for the order status history.
      *
      * @return int Is-customer-notified flag value.
-     * @since 2.0.0
      */
     public function getIsCustomerNotified();
 
@@ -114,7 +106,6 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
      * Gets the is-visible-on-storefront flag value for the order status history.
      *
      * @return int Is-visible-on-storefront flag value.
-     * @since 2.0.0
      */
     public function getIsVisibleOnFront();
 
@@ -122,7 +113,6 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
      * Gets the parent ID for the order status history.
      *
      * @return int Parent ID.
-     * @since 2.0.0
      */
     public function getParentId();
 
@@ -130,7 +120,6 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
      * Gets the status for the order status history.
      *
      * @return string|null Status.
-     * @since 2.0.0
      */
     public function getStatus();
 
@@ -139,7 +128,6 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setParentId($id);
 
@@ -148,7 +136,6 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param int $isCustomerNotified
      * @return $this
-     * @since 2.0.0
      */
     public function setIsCustomerNotified($isCustomerNotified);
 
@@ -157,7 +144,6 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param int $isVisibleOnFront
      * @return $this
-     * @since 2.0.0
      */
     public function setIsVisibleOnFront($isVisibleOnFront);
 
@@ -166,7 +152,6 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param string $comment
      * @return $this
-     * @since 2.0.0
      */
     public function setComment($comment);
 
@@ -175,7 +160,6 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param string $status
      * @return $this
-     * @since 2.0.0
      */
     public function setStatus($status);
 
@@ -184,7 +168,6 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param string $entityName
      * @return $this
-     * @since 2.0.0
      */
     public function setEntityName($entityName);
 
@@ -192,7 +175,6 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\OrderStatusHistoryExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -201,7 +183,6 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param \Magento\Sales\Api\Data\OrderStatusHistoryExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\OrderStatusHistoryExtensionInterface $extensionAttributes

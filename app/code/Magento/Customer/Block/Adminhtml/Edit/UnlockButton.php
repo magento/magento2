@@ -10,13 +10,11 @@ use Magento\Customer\Model\CustomerRegistry;
 
 /**
  * Class UnlockButton
- * @since 2.1.0
  */
 class UnlockButton extends GenericButton implements ButtonProviderInterface
 {
     /**
      * @var \Magento\Customer\Model\CustomerRegistry
-     * @since 2.1.0
      */
     protected $customerRegistry;
 
@@ -26,7 +24,6 @@ class UnlockButton extends GenericButton implements ButtonProviderInterface
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -41,7 +38,6 @@ class UnlockButton extends GenericButton implements ButtonProviderInterface
      * Returns Unlock button data
      *
      * @return array
-     * @since 2.1.0
      */
     public function getButtonData()
     {
@@ -65,7 +61,6 @@ class UnlockButton extends GenericButton implements ButtonProviderInterface
      * Returns customer unlock action URL
      *
      * @return string
-     * @since 2.1.0
      */
     protected function getUnlockUrl()
     {

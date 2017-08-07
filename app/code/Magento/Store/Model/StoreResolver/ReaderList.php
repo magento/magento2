@@ -10,19 +10,16 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Class \Magento\Store\Model\StoreResolver\ReaderList
  *
- * @since 2.0.0
  */
 class ReaderList
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $resolverMap;
 
@@ -31,7 +28,6 @@ class ReaderList
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $resolverMap
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -52,7 +48,6 @@ class ReaderList
      *
      * @param string $runMode
      * @return ReaderInterface
-     * @since 2.0.0
      */
     public function getReader($runMode)
     {

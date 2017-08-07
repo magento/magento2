@@ -13,19 +13,16 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Provide product template generator based on specified product type from fixture
- * @since 2.2.0
  */
 class ProductTemplateGeneratorFactory
 {
     /**
      * @var ObjectManagerInterface
-     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $templateEntityMap = [
         Type::TYPE_SIMPLE => SimpleProductTemplateGenerator::class,
@@ -35,7 +32,6 @@ class ProductTemplateGeneratorFactory
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @since 2.2.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -46,7 +42,6 @@ class ProductTemplateGeneratorFactory
      * @param array $fixture
      * @return TemplateEntityGeneratorInterface
      * @throws \InvalidArgumentException
-     * @since 2.2.0
      */
     public function create(array $fixture)
     {

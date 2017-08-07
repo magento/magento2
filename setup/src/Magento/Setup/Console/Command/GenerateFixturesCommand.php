@@ -17,7 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command generates fixtures for performance tests
- * @since 2.0.0
  */
 class GenerateFixturesCommand extends Command
 {
@@ -30,13 +29,11 @@ class GenerateFixturesCommand extends Command
 
     /**
      * @var FixtureModel
-     * @since 2.0.0
      */
     private $fixtureModel;
 
     /**
      * @param FixtureModel $fixtureModel
-     * @since 2.0.0
      */
     public function __construct(FixtureModel $fixtureModel)
     {
@@ -46,7 +43,6 @@ class GenerateFixturesCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -70,7 +66,6 @@ class GenerateFixturesCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -137,7 +132,6 @@ class GenerateFixturesCommand extends Command
      * Clear changelog after generation
      *
      * @return void
-     * @since 2.2.0
      */
     private function clearChangelog()
     {

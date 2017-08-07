@@ -11,19 +11,16 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Downloadable\Controller\Adminhtml\Downloadable\File\Upload
  *
- * @since 2.0.0
  */
 class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\File
 {
     /**
      * @var \Magento\Downloadable\Model\Link
-     * @since 2.0.0
      */
     protected $_link;
 
     /**
      * @var \Magento\Downloadable\Model\Sample
-     * @since 2.0.0
      */
     protected $_sample;
 
@@ -31,19 +28,16 @@ class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Fil
      * Downloadable file helper.
      *
      * @var \Magento\Downloadable\Helper\File
-     * @since 2.0.0
      */
     protected $_fileHelper;
 
     /**
      * @var \Magento\MediaStorage\Model\File\UploaderFactory
-     * @since 2.0.0
      */
     private $uploaderFactory;
 
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
-     * @since 2.0.0
      */
     private $storageDatabase;
 
@@ -57,7 +51,6 @@ class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Fil
      * @param \Magento\Downloadable\Helper\File $fileHelper
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $storageDatabase
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -79,7 +72,6 @@ class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Fil
      * Upload file controller action
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

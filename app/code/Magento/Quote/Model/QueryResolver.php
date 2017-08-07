@@ -13,31 +13,26 @@ use Magento\Framework\Serialize\SerializerInterface;
 /**
  * Class \Magento\Quote\Model\QueryResolver
  *
- * @since 2.0.0
  */
 class QueryResolver
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     private $data = [];
 
     /**
      * @var ConfigInterface
-     * @since 2.0.0
      */
     private $config;
 
     /**
      * @var CacheInterface
-     * @since 2.0.0
      */
     private $cache;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $cacheId;
 
@@ -45,13 +40,11 @@ class QueryResolver
      * Cache tags
      *
      * @var array
-     * @since 2.0.0
      */
     private $cacheTags = [];
 
     /**
      * @var SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -60,7 +53,6 @@ class QueryResolver
      * @param CacheInterface $cache
      * @param string $cacheId
      * @param SerializerInterface $serializer
-     * @since 2.0.0
      */
     public function __construct(
         ConfigInterface $config,
@@ -78,7 +70,6 @@ class QueryResolver
      * Get flag value
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isSingleQuery()
     {
@@ -91,7 +82,6 @@ class QueryResolver
     /**
      * Initialise data for configuration
      * @return void
-     * @since 2.0.0
      */
     protected function initData()
     {
@@ -111,7 +101,6 @@ class QueryResolver
      *
      * @param array $config
      * @return void
-     * @since 2.0.0
      */
     public function merge(array $config)
     {

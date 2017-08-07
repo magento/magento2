@@ -16,31 +16,26 @@ use Magento\Framework\App\RequestInterface;
 
 /**
  * Class ContextPlugin
- * @since 2.0.0
  */
 class Context
 {
     /**
      * @var \Magento\Framework\Session\SessionManagerInterface
-     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var \Magento\Framework\App\Http\Context
-     * @since 2.0.0
      */
     protected $httpContext;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var StoreCookieManagerInterface
-     * @since 2.0.0
      */
     protected $storeCookieManager;
 
@@ -49,7 +44,6 @@ class Context
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param StoreCookieManagerInterface $storeCookieManager
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Session\SessionManagerInterface $session,
@@ -70,7 +64,6 @@ class Context
      * @param RequestInterface $request
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function beforeDispatch(AbstractAction $subject, RequestInterface $request)
     {

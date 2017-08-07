@@ -15,7 +15,6 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\GroupedProduct\Controller\Adminhtml\Edit\Popup
  *
- * @since 2.0.0
  */
 class Popup extends AbstractAction
 {
@@ -28,19 +27,16 @@ class Popup extends AbstractAction
 
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $registry;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $factory;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
@@ -49,7 +45,6 @@ class Popup extends AbstractAction
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ProductFactory $factory
      * @param \Psr\Log\LoggerInterface $logger
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -67,7 +62,6 @@ class Popup extends AbstractAction
      * Get associated grouped products grid popup
      *
      * @return \Magento\Framework\View\Result\Layout
-     * @since 2.0.0
      */
     public function execute()
     {

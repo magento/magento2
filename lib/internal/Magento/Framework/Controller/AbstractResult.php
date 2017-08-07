@@ -12,37 +12,31 @@ use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 /**
  * Class \Magento\Framework\Controller\AbstractResult
  *
- * @since 2.0.0
  */
 abstract class AbstractResult implements ResultInterface
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $httpResponseCode;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $headers = [];
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $statusHeaderCode;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $statusHeaderVersion;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $statusHeaderPhrase;
 
@@ -51,7 +45,6 @@ abstract class AbstractResult implements ResultInterface
      *
      * @param int $httpCode
      * @return $this
-     * @since 2.0.0
      */
     public function setHttpResponseCode($httpCode)
     {
@@ -69,7 +62,6 @@ abstract class AbstractResult implements ResultInterface
      * @param string $value
      * @param boolean $replace
      * @return $this
-     * @since 2.0.0
      */
     public function setHeader($name, $value, $replace = false)
     {
@@ -86,7 +78,6 @@ abstract class AbstractResult implements ResultInterface
      * @param null|int|string $version
      * @param null|string $phrase
      * @return $this
-     * @since 2.0.0
      */
     public function setStatusHeader($httpCode, $version = null, $phrase = null)
     {
@@ -99,7 +90,6 @@ abstract class AbstractResult implements ResultInterface
     /**
      * @param HttpResponseInterface $response
      * @return $this
-     * @since 2.0.0
      */
     protected function applyHttpHeaders(HttpResponseInterface $response)
     {
@@ -124,7 +114,6 @@ abstract class AbstractResult implements ResultInterface
     /**
      * @param HttpResponseInterface $response
      * @return $this
-     * @since 2.0.0
      */
     abstract protected function render(HttpResponseInterface $response);
 
@@ -133,7 +122,6 @@ abstract class AbstractResult implements ResultInterface
      *
      * @param HttpResponseInterface|ResponseInterface $response
      * @return $this
-     * @since 2.0.0
      */
     public function renderResult(ResponseInterface $response)
     {

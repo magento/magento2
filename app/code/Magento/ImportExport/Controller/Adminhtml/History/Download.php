@@ -11,13 +11,11 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\ImportExport\Controller\Adminhtml\History\Download
  *
- * @since 2.0.0
  */
 class Download extends \Magento\ImportExport\Controller\Adminhtml\History
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
-     * @since 2.0.0
      */
     protected $resultRawFactory;
 
@@ -25,7 +23,6 @@ class Download extends \Magento\ImportExport\Controller\Adminhtml\History
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -43,7 +40,6 @@ class Download extends \Magento\ImportExport\Controller\Adminhtml\History
      * Download backup action
      *
      * @return void|\Magento\Backend\App\Action
-     * @since 2.0.0
      */
     public function execute()
     {

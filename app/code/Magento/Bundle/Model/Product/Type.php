@@ -21,7 +21,6 @@ use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier as Sel
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 {
@@ -34,7 +33,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Product is composite
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isComposite = true;
 
@@ -42,7 +40,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Cache key for Options Collection
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_keyOptionsCollection = '_cache_instance_options_collection';
 
@@ -50,8 +47,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Cache key for Selections Collection
      *
      * @var string
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 100.2.0
      */
     protected $_keySelectionsCollection = '_cache_instance_selections_collection';
 
@@ -59,7 +55,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Cache key for used Selections
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_keyUsedSelections = '_cache_instance_used_selections';
 
@@ -67,7 +62,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Cache key for used selections ids
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_keyUsedSelectionsIds = '_cache_instance_used_selections_ids';
 
@@ -75,7 +69,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Cache key for used options
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_keyUsedOptions = '_cache_instance_used_options';
 
@@ -83,7 +76,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Cache key for used options ids
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_keyUsedOptionsIds = '_cache_instance_used_options_ids';
 
@@ -91,7 +83,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Product is possible to configure
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_canConfigure = true;
 
@@ -99,7 +90,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Catalog data
      *
      * @var \Magento\Catalog\Helper\Data
-     * @since 2.0.0
      */
     protected $_catalogData = null;
 
@@ -107,79 +97,66 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Catalog product
      *
      * @var \Magento\Catalog\Helper\Product
-     * @since 2.0.0
      */
     protected $_catalogProduct = null;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Bundle\Model\OptionFactory
-     * @since 2.0.0
      */
     protected $_bundleOption;
 
     /**
      * @var \Magento\Bundle\Model\ResourceModel\Selection
-     * @since 2.0.0
      */
     protected $_bundleSelection;
 
     /**
      * @var \Magento\Catalog\Model\Config
-     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @var \Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory
-     * @since 2.0.0
      */
     protected $_bundleCollection;
 
     /**
      * @var \Magento\Bundle\Model\ResourceModel\BundleFactory
-     * @since 2.0.0
      */
     protected $_bundleFactory;
 
     /**
      * @var \Magento\Bundle\Model\SelectionFactory $bundleModelSelection
-     * @since 2.0.0
      */
     protected $_bundleModelSelection;
 
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
-     * @since 2.0.0
      */
     protected $_stockRegistry;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockStateInterface
-     * @since 2.0.0
      */
     protected $_stockState;
 
     /**
      * @var MetadataPool
-     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var SelectionCollectionFilterApplier
-     * @since 2.2.0
      */
     private $selectionCollectionFilterApplier;
 
@@ -210,7 +187,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param SelectionCollectionFilterApplier|null $selectionCollectionFilterApplier
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Option $catalogProductOption,
@@ -275,7 +251,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Return relation info about used products
      *
      * @return \Magento\Framework\DataObject Object with information data
-     * @since 2.0.0
      */
     public function getRelationInfo()
     {
@@ -296,7 +271,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param int $parentId
      * @param bool $required
      * @return array
-     * @since 2.0.0
      */
     public function getChildrenIds($parentId, $required = true)
     {
@@ -308,7 +282,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param int|array $childId
      * @return array
-     * @since 2.0.0
      */
     public function getParentIdsByChild($childId)
     {
@@ -320,7 +293,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return string
-     * @since 2.0.0
      */
     public function getSku($product)
     {
@@ -351,7 +323,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return float
-     * @since 2.0.0
      */
     public function getWeight($product)
     {
@@ -383,7 +354,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
-     * @since 2.0.0
      */
     public function isVirtual($product)
     {
@@ -410,7 +380,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @return $this|void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function beforeSave($product)
     {
@@ -455,7 +424,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     public function getOptions($product)
     {
@@ -468,7 +436,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
-     * @since 2.0.0
      */
     public function getOptionsIds($product)
     {
@@ -481,7 +448,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
-     * @since 2.0.0
      */
     public function getOptionsCollection($product)
     {
@@ -510,7 +476,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param array $optionIds
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Bundle\Model\ResourceModel\Selection\Collection
-     * @since 2.0.0
      */
     public function getSelectionsCollection($optionIds, $product)
     {
@@ -556,7 +521,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param   mixed $value
      * @param   \Magento\Catalog\Model\Product $product
      * @return $this
-     * @since 2.0.0
      */
     public function updateQtyOption($options, \Magento\Framework\DataObject $option, $value, $product)
     {
@@ -590,7 +554,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @return int
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function prepareQuoteItemQty($qty, $product)
     {
@@ -604,7 +567,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function isSalable($product)
     {
@@ -670,7 +632,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _prepareProduct(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
@@ -829,7 +790,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * @param array $array
      * @return int[]|int[][]
-     * @since 2.0.0
      */
     private function recursiveIntval(array $array)
     {
@@ -849,7 +809,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * @param array $array
      * @return int[]
-     * @since 2.0.0
      */
     private function multiToFlatArray(array $array)
     {
@@ -869,7 +828,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Retrieve message for specify option(s)
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getSpecifyOptionMessage()
     {
@@ -882,7 +840,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param array $selectionIds
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Bundle\Model\ResourceModel\Selection\Collection
-     * @since 2.0.0
      */
     public function getSelectionsByIds($selectionIds, $product)
     {
@@ -931,7 +888,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param array $optionIds
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
-     * @since 2.0.0
      */
     public function getOptionsByIds($optionIds, $product)
     {
@@ -967,7 +923,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
-     * @since 2.0.0
      */
     public function getOrderOptions($product)
     {
@@ -1035,7 +990,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param  \Magento\Catalog\Model\Product $firstItem
      * @param  \Magento\Catalog\Model\Product $secondItem
      * @return int
-     * @since 2.0.0
      */
     public function shakeSelections($firstItem, $secondItem)
     {
@@ -1065,7 +1019,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
-     * @since 2.0.0
      */
     public function hasOptions($product)
     {
@@ -1088,7 +1041,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @return boolean true
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getForceChildItemQtyChanges($product)
     {
@@ -1101,7 +1053,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
-     * @since 2.0.0
      */
     public function getSearchableData($product)
     {
@@ -1125,7 +1076,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function checkProductBuyState($product)
     {
@@ -1171,7 +1121,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param  \Magento\Catalog\Model\Product $product
      * @return array
-     * @since 2.0.0
      */
     public function getProductsToPurchaseByReqGroups($product)
     {
@@ -1203,7 +1152,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param  \Magento\Framework\DataObject $buyRequest
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function processBuyRequest($product, $buyRequest)
     {
@@ -1223,7 +1171,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
-     * @since 2.0.0
      */
     public function canConfigure($product)
     {
@@ -1238,7 +1185,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product)
     {
@@ -1249,7 +1195,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
-     * @since 2.0.0
      */
     public function getIdentities(\Magento\Catalog\Model\Product $product)
     {
@@ -1272,7 +1217,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param int[] $qtys
      * @param int $selectionOptionId
      * @return float
-     * @since 2.0.0
      */
     protected function getQty($selection, $qtys, $selectionOptionId)
     {
@@ -1290,7 +1234,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Framework\DataObject $selection
      * @return float|int
-     * @since 2.0.0
      */
     protected function getBeforeQty($product, $selection)
     {
@@ -1311,7 +1254,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param int[] $options
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function checkIsAllRequiredOptions($product, $isStrictProcessMode, $optionsCollection, $options)
     {
@@ -1331,7 +1273,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param int[] $options
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function checkSelectionsIsSale($selections, $skipSaleableCheck, $optionsCollection, $options)
     {
@@ -1359,7 +1300,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param array $_result
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function checkIsResult($_result)
     {
@@ -1378,7 +1318,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Product\Option[] $options
      * @param \Magento\Framework\DataObject[] $selections
      * @return \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     protected function mergeSelectionsWithOptions($options, $selections)
     {

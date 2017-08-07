@@ -11,19 +11,16 @@ use Magento\Framework\Data\Collection\AbstractDb;
 /**
  * Class \Magento\Framework\Api\SearchCriteria\CollectionProcessor
  *
- * @since 2.2.0
  */
 class CollectionProcessor implements CollectionProcessorInterface
 {
     /**
      * @var CollectionProcessorInterface[]
-     * @since 2.2.0
      */
     private $processors;
 
     /**
      * @param CollectionProcessorInterface[] $processors
-     * @since 2.2.0
      */
     public function __construct(
         array $processors
@@ -33,7 +30,6 @@ class CollectionProcessor implements CollectionProcessorInterface
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function process(SearchCriteriaInterface $searchCriteria, AbstractDb $collection)
     {

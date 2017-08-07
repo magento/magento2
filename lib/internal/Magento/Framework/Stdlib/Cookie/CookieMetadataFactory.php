@@ -11,19 +11,16 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * CookieMetadataFactory is used to construct SensitiveCookieMetadata and PublicCookieMetadata objects.
  * @api
- * @since 2.0.0
  */
 class CookieMetadataFactory
 {
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -35,7 +32,6 @@ class CookieMetadataFactory
      *
      * @param array $metadata
      * @return SensitiveCookieMetadata
-     * @since 2.0.0
      */
     public function createSensitiveCookieMetadata($metadata = [])
     {
@@ -50,7 +46,6 @@ class CookieMetadataFactory
      *
      * @param array $metadata
      * @return PublicCookieMetadata
-     * @since 2.0.0
      */
     public function createPublicCookieMetadata($metadata = [])
     {
@@ -65,7 +60,6 @@ class CookieMetadataFactory
      *
      * @param array $metadata
      * @return CookieMetadata
-     * @since 2.0.0
      */
     public function createCookieMetadata($metadata = [])
     {

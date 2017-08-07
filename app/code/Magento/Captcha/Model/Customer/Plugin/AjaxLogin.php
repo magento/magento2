@@ -12,37 +12,31 @@ use Magento\Framework\Controller\Result\JsonFactory;
 /**
  * Class \Magento\Captcha\Model\Customer\Plugin\AjaxLogin
  *
- * @since 2.0.0
  */
 class AjaxLogin
 {
     /**
      * @var \Magento\Captcha\Helper\Data
-     * @since 2.0.0
      */
     protected $helper;
 
     /**
      * @var \Magento\Framework\Session\SessionManagerInterface
-     * @since 2.0.0
      */
     protected $sessionManager;
 
     /**
      * @var JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     protected $serializer;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $formIds;
 
@@ -53,7 +47,6 @@ class AjaxLogin
      * @param array $formIds
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     public function __construct(
         CaptchaHelper $helper,
@@ -76,7 +69,6 @@ class AjaxLogin
      * @return $this
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function aroundExecute(
         \Magento\Customer\Controller\Ajax\Login $subject,

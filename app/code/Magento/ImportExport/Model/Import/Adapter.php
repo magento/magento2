@@ -11,7 +11,6 @@ use Magento\Framework\Filesystem\Directory\Write;
  * Import adapter model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Adapter
 {
@@ -26,7 +25,6 @@ class Adapter
      * @return AbstractSource
      *
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public static function factory($type, $directory, $source, $options = null)
     {
@@ -60,7 +58,6 @@ class Adapter
      * @param mixed $options OPTIONAL Adapter constructor options
      *
      * @return AbstractSource
-     * @since 2.0.0
      */
     public static function findAdapterFor($source, $directory, $options = null)
     {

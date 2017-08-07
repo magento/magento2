@@ -13,7 +13,6 @@ use Magento\Framework\Setup\InstallSchemaInterface;
 /**
  * Class InstallSchema
  * @codeCoverageIgnore
- * @since 2.1.0
  */
 class InstallSchema implements InstallSchemaInterface
 {
@@ -27,7 +26,6 @@ class InstallSchema implements InstallSchemaInterface
      * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @throws \Zend_Db_Exception
-     * @since 2.1.0
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {

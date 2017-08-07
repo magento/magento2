@@ -9,38 +9,32 @@ namespace Magento\Directory\Model\Config\Source;
  * Options provider for regions list
  *
  * @api
- * @since 2.0.0
  */
 class Allregion implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_countries;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_options;
 
     /**
      * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
-     * @since 2.0.0
      */
     protected $_countryCollectionFactory;
 
     /**
      * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
-     * @since 2.0.0
      */
     protected $_regionCollectionFactory;
 
     /**
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
      * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
@@ -53,7 +47,6 @@ class Allregion implements \Magento\Framework\Option\ArrayInterface
     /**
      * @param bool $isMultiselect
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray($isMultiselect = false)
     {
@@ -92,7 +85,6 @@ class Allregion implements \Magento\Framework\Option\ArrayInterface
      * @param string $a
      * @param string $b
      * @return int
-     * @since 2.0.0
      */
     public function sortRegionCountries($a, $b)
     {

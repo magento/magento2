@@ -8,7 +8,6 @@ namespace Magento\Framework\Filesystem\File;
 /**
  * Interface \Magento\Framework\Filesystem\File\ReadInterface
  *
- * @since 2.0.0
  */
 interface ReadInterface
 {
@@ -17,7 +16,6 @@ interface ReadInterface
      *
      * @param int $length The number of bytes to read
      * @return string
-     * @since 2.0.0
      */
     public function read($length);
 
@@ -27,7 +25,6 @@ interface ReadInterface
      * @param int $length The number of bytes to read
      * @param string $ending [optional]
      * @return string
-     * @since 2.0.0
      */
     public function readLine($length, $ending = null);
 
@@ -39,7 +36,6 @@ interface ReadInterface
      * @param string $enclosure [optional]
      * @param string $escape [optional]
      * @return array|bool false on end of file
-     * @since 2.0.0
      */
     public function readCsv($length = 0, $delimiter = ',', $enclosure = '"', $escape = '\\');
 
@@ -47,7 +43,6 @@ interface ReadInterface
      * Returns the current position
      *
      * @return int
-     * @since 2.0.0
      */
     public function tell();
 
@@ -57,7 +52,6 @@ interface ReadInterface
      * @param int $length
      * @param int $whence
      * @return int
-     * @since 2.0.0
      */
     public function seek($length, $whence = SEEK_SET);
 
@@ -65,7 +59,6 @@ interface ReadInterface
      * Checks if the current position is the end-of-file
      *
      * @return bool
-     * @since 2.0.0
      */
     public function eof();
 
@@ -73,7 +66,6 @@ interface ReadInterface
      * Closes the file.
      *
      * @return bool
-     * @since 2.0.0
      */
     public function close();
 
@@ -81,7 +73,6 @@ interface ReadInterface
      * Get file properties.
      *
      * @return array
-     * @since 2.0.0
      */
     public function stat();
 }

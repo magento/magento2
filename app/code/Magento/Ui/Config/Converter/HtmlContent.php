@@ -10,13 +10,11 @@ use Magento\Ui\Config\ConverterInterface;
 
 /**
  * Converter for htmlContent component wrapped block
- * @since 2.2.0
  */
 class HtmlContent implements ConverterInterface
 {
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function convert(\DOMNode $node, array $data)
     {

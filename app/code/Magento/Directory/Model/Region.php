@@ -20,13 +20,11 @@ namespace Magento\Directory\Model;
  * @method \Magento\Directory\Model\Region setDefaultName(string $value)
  *
  * @api
- * @since 2.0.0
  */
 class Region extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -39,7 +37,6 @@ class Region extends \Magento\Framework\Model\AbstractModel
      * If name is not declared, then default_name is used
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -56,7 +53,6 @@ class Region extends \Magento\Framework\Model\AbstractModel
      * @param string $code
      * @param string $countryId
      * @return $this
-     * @since 2.0.0
      */
     public function loadByCode($code, $countryId)
     {
@@ -72,7 +68,6 @@ class Region extends \Magento\Framework\Model\AbstractModel
      * @param string $name
      * @param string $countryId
      * @return $this
-     * @since 2.0.0
      */
     public function loadByName($name, $countryId)
     {

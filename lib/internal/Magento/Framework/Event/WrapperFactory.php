@@ -10,19 +10,16 @@ namespace Magento\Framework\Event;
 /**
  * Class \Magento\Framework\Event\WrapperFactory
  *
- * @since 2.0.0
  */
 class WrapperFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -34,7 +31,6 @@ class WrapperFactory
      *
      * @param array $arguments
      * @return \Magento\Framework\Event\Observer
-     * @since 2.0.0
      */
     public function create(array $arguments = [])
     {

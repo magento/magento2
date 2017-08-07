@@ -9,7 +9,6 @@ namespace Magento\Framework;
  * Registry model. Used to manage values in registry
  *
  * @api
- * @since 2.0.0
  */
 class Registry
 {
@@ -17,7 +16,6 @@ class Registry
      * Registry collection
      *
      * @var array
-     * @since 2.0.0
      */
     private $_registry = [];
 
@@ -26,7 +24,6 @@ class Registry
      *
      * @param string $key
      * @return mixed
-     * @since 2.0.0
      */
     public function registry($key)
     {
@@ -44,7 +41,6 @@ class Registry
      * @param bool $graceful
      * @return void
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     public function register($key, $value, $graceful = false)
     {
@@ -62,7 +58,6 @@ class Registry
      *
      * @param string $key
      * @return void
-     * @since 2.0.0
      */
     public function unregister($key)
     {
@@ -79,7 +74,6 @@ class Registry
 
     /**
      * Destruct registry items
-     * @since 2.0.0
      */
     public function __destruct()
     {

@@ -18,7 +18,6 @@ use Magento\Framework\View\Asset\ContentProcessorInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Filter extends \Magento\Framework\Filter\Template
 {
@@ -36,7 +35,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * Use absolute links flag
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_useAbsoluteLinks = false;
 
@@ -44,7 +42,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * Whether to allow SID in store directive: NO
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_useSessionInUrl = false;
 
@@ -52,7 +49,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * Modifier Callbacks
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_modifiers = ['nl2br' => ''];
 
@@ -60,7 +56,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * Whether template being filtered is child of another template
      *
      * @var bool
-     * @since 2.0.0
      */
     private $isChildTemplate = false;
 
@@ -68,7 +63,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * List of CSS files to inline
      *
      * @var []
-     * @since 2.0.0
      */
     private $inlineCssFiles = [];
 
@@ -76,37 +70,31 @@ class Filter extends \Magento\Framework\Filter\Template
      * Store id
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_storeId;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $designParams = [];
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     private $plainTemplateMode = false;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
-     * @since 2.0.0
      */
     protected $_assetRepo;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $_logger;
 
     /**
      * @var \Magento\Framework\Escaper
-     * @since 2.0.0
      */
     protected $_escaper;
 
@@ -115,25 +103,21 @@ class Filter extends \Magento\Framework\Filter\Template
      * Variable factory
      *
      * @var \Magento\Variable\Model\VariableFactory
-     * @since 2.0.0
      */
     protected $_variableFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\View\LayoutInterface
-     * @since 2.0.0
      */
     protected $_layout;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
-     * @since 2.0.0
      */
     protected $_layoutFactory;
 
@@ -141,7 +125,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * Setup callbacks for filters
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -149,7 +132,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * Layout directive params
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_directiveParams;
 
@@ -157,37 +139,31 @@ class Filter extends \Magento\Framework\Filter\Template
      * App state
      *
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     protected $_appState;
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $urlModel;
 
     /**
      * @var \Pelago\Emogrifier
-     * @since 2.0.0
      */
     protected $emogrifier;
 
     /**
      * @var \Magento\Email\Model\Source\Variables
-     * @since 2.0.0
      */
     protected $configVariables;
 
     /**
      * @var \Magento\Email\Model\Template\Css\Processor
-     * @since 2.2.0
      */
     private $cssProcessor;
 
     /**
      * @var ReadInterface
-     * @since 2.2.0
      */
     private $pubDirectory;
 
@@ -208,7 +184,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param array $variables
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\StringUtils $string,
@@ -247,7 +222,6 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param bool $flag
      * @return $this
-     * @since 2.0.0
      */
     public function setUseAbsoluteLinks($flag)
     {
@@ -260,7 +234,6 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param bool $flag
      * @return $this
-     * @since 2.0.0
      */
     public function setUseSessionInUrl($flag)
     {
@@ -273,7 +246,6 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param bool $plainTemplateMode
      * @return $this
-     * @since 2.0.0
      */
     public function setPlainTemplateMode($plainTemplateMode)
     {
@@ -285,7 +257,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * Check whether template is plain
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isPlainTemplateMode()
     {
@@ -297,7 +268,6 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param bool $isChildTemplate
      * @return $this
-     * @since 2.0.0
      */
     public function setIsChildTemplate($isChildTemplate)
     {
@@ -309,7 +279,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * Get whether template being filtered is child of another template
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isChildTemplate()
     {
@@ -321,7 +290,6 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param int $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreId($storeId)
     {
@@ -334,7 +302,6 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param array $designParams
      * @return $this
-     * @since 2.0.0
      */
     public function setDesignParams(array $designParams)
     {
@@ -343,9 +310,8 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * @deprecated 2.2.0
+     * @deprecated 100.1.2
      * @return Css\Processor
-     * @since 2.2.0
      */
     private function getCssProcessor()
     {
@@ -356,10 +322,9 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * @deprecated 2.2.0
+     * @deprecated 100.1.2
      * @param string $dirType
      * @return ReadInterface
-     * @since 2.2.0
      */
     private function getPubDirectory($dirType)
     {
@@ -373,7 +338,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * Get design parameters
      *
      * @return array
-     * @since 2.0.0
      */
     public function getDesignParams()
     {
@@ -384,7 +348,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * Getter. If $_storeId is null, return design store id.
      *
      * @return integer
-     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -401,7 +364,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function blockDirective($construction)
     {
@@ -448,7 +410,6 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param string[] $construction
      * @return string
-     * @since 2.0.0
      */
     public function layoutDirective($construction)
     {
@@ -470,7 +431,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * Retrieve layout html directive callback
      *
      * @return string
-     * @since 2.0.0
      */
     public function emulateAreaCallback()
     {
@@ -515,7 +475,6 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param mixed $value
      * @return array
-     * @since 2.0.0
      */
     protected function _getBlockParameters($value)
     {
@@ -530,7 +489,6 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param string[] $construction
      * @return string
-     * @since 2.0.0
      */
     public function viewDirective($construction)
     {
@@ -544,7 +502,6 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param string[] $construction
      * @return string
-     * @since 2.0.0
      */
     public function mediaDirective($construction)
     {
@@ -559,7 +516,6 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param string[] $construction
      * @return string
-     * @since 2.0.0
      */
     public function storeDirective($construction)
     {
@@ -596,7 +552,6 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param \Magento\Framework\UrlInterface $urlModel
      * @return $this
-     * @since 2.0.0
      */
     public function setUrlModel(\Magento\Framework\UrlInterface $urlModel)
     {
@@ -616,7 +571,6 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param string[] $construction
      * @return string
-     * @since 2.0.0
      */
     public function transDirective($construction)
     {
@@ -636,7 +590,6 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param string $value raw parameters
      * @return array always a two-part array in the format [value, [param, ...]]
-     * @since 2.0.0
      */
     protected function getTransParameters($value)
     {
@@ -661,7 +614,6 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param string[] $construction
      * @return string
-     * @since 2.0.0
      */
     public function varDirective($construction)
     {
@@ -687,7 +639,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $value
      * @param string $default assumed modifier if none present
      * @return array
-     * @since 2.0.0
      */
     protected function explodeModifiers($value, $default = null)
     {
@@ -706,7 +657,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $value
      * @param string $modifiers
      * @return string
-     * @since 2.0.0
      */
     protected function applyModifiers($value, $modifiers)
     {
@@ -734,7 +684,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $value
      * @param string $type
      * @return string
-     * @since 2.0.0
      */
     public function modifierEscape($value, $type = 'html')
     {
@@ -764,7 +713,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string[] $construction
      * @throws \Magento\Framework\Exception\MailException
      * @return string
-     * @since 2.0.0
      */
     public function protocolDirective($construction)
     {
@@ -798,7 +746,6 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param string[] $construction
      * @return string
-     * @since 2.0.0
      */
     public function configDirective($construction)
     {
@@ -820,7 +767,6 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param string $variable
      * @return bool
-     * @since 2.0.0
      */
     private function isAvailableConfigVariable($variable)
     {
@@ -835,7 +781,6 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param string[] $construction
      * @return string
-     * @since 2.0.0
      */
     public function customvarDirective($construction)
     {
@@ -868,7 +813,6 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param string[] $construction
      * @return string
-     * @since 2.0.0
      */
     public function cssDirective($construction)
     {
@@ -914,7 +858,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string[] $construction
      * @return string
      * @throws \Magento\Framework\Exception\MailException
-     * @since 2.0.0
      */
     public function inlinecssDirective($construction)
     {
@@ -948,7 +891,6 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param string $file
      * @return $this
-     * @since 2.0.0
      */
     protected function addInlineCssFile($file)
     {
@@ -960,7 +902,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * Get filename of CSS file to inline
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getInlineCssFiles()
     {
@@ -973,7 +914,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param [] $files
      * @return string
      * @throws \Magento\Framework\Exception\MailException
-     * @since 2.0.0
      */
     public function getCssFilesContent(array $files)
     {
@@ -1013,7 +953,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $html
      * @return string
      * @throws \Magento\Framework\Exception\MailException
-     * @since 2.0.0
      */
     public function applyInlineCss($html)
     {
@@ -1067,7 +1006,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $value
      * @return string
      * @SuppressWarnings(PHPMD.ConstructorWithNameAsEnclosingClass)
-     * @since 2.0.0
      */
     public function filter($value)
     {

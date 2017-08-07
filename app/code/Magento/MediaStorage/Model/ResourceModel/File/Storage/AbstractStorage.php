@@ -7,7 +7,6 @@ namespace Magento\MediaStorage\Model\ResourceModel\File\Storage;
 
 /**
  * Class AbstractStorage
- * @since 2.0.0
  */
 abstract class AbstractStorage extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -15,7 +14,6 @@ abstract class AbstractStorage extends \Magento\Framework\Model\ResourceModel\Db
      * File storage connection name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_connectionName = null;
 
@@ -24,7 +22,6 @@ abstract class AbstractStorage extends \Magento\Framework\Model\ResourceModel\Db
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setConnectionName($name)
     {
@@ -37,7 +34,6 @@ abstract class AbstractStorage extends \Magento\Framework\Model\ResourceModel\Db
      *
      * @todo: make method protected
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function getConnection()
     {
@@ -49,7 +45,6 @@ abstract class AbstractStorage extends \Magento\Framework\Model\ResourceModel\Db
      *
      * @param string $resourceName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected function _getConnection($resourceName)
     {

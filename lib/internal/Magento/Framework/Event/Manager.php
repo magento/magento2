@@ -11,7 +11,6 @@ namespace Magento\Framework\Event;
 /**
  * Class \Magento\Framework\Event\Manager
  *
- * @since 2.0.0
  */
 class Manager implements ManagerInterface
 {
@@ -19,7 +18,6 @@ class Manager implements ManagerInterface
      * Events cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_events = [];
 
@@ -27,7 +25,6 @@ class Manager implements ManagerInterface
      * Event invoker
      *
      * @var InvokerInterface
-     * @since 2.0.0
      */
     protected $_invoker;
 
@@ -35,14 +32,12 @@ class Manager implements ManagerInterface
      * Event config
      *
      * @var ConfigInterface
-     * @since 2.0.0
      */
     protected $_eventConfig;
 
     /**
      * @param InvokerInterface $invoker
      * @param ConfigInterface $eventConfig
-     * @since 2.0.0
      */
     public function __construct(InvokerInterface $invoker, ConfigInterface $eventConfig)
     {
@@ -59,7 +54,6 @@ class Manager implements ManagerInterface
      * @param string $eventName
      * @param array $data
      * @return void
-     * @since 2.0.0
      */
     public function dispatch($eventName, array $data = [])
     {

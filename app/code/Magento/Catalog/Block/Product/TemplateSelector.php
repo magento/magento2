@@ -9,7 +9,6 @@ namespace Magento\Catalog\Block\Product;
  * Product gallery
  *
  * @SuppressWarnings(PHPMD.LongVariable)
- * @since 2.0.0
  */
 class TemplateSelector extends \Magento\Framework\View\Element\Template
 {
@@ -17,7 +16,6 @@ class TemplateSelector extends \Magento\Framework\View\Element\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -25,7 +23,6 @@ class TemplateSelector extends \Magento\Framework\View\Element\Template
      * Set collection factory
      *
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory
-     * @since 2.0.0
      */
     protected $_setColFactory;
 
@@ -33,7 +30,6 @@ class TemplateSelector extends \Magento\Framework\View\Element\Template
      * Catalog resource helper
      *
      * @var \Magento\Catalog\Model\ResourceModel\Helper
-     * @since 2.0.0
      */
     protected $_resourceHelper;
 
@@ -43,7 +39,6 @@ class TemplateSelector extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -63,7 +58,6 @@ class TemplateSelector extends \Magento\Framework\View\Element\Template
      *
      * @param string $labelPart
      * @return array
-     * @since 2.0.0
      */
     public function getSuggestedTemplates($labelPart)
     {

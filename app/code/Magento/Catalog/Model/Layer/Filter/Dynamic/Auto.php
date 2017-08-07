@@ -15,7 +15,6 @@ use Magento\Framework\Search\Dynamic\Algorithm;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Auto implements AlgorithmInterface
 {
@@ -23,43 +22,36 @@ class Auto implements AlgorithmInterface
 
     /**
      * @var Algorithm
-     * @since 2.0.0
      */
     private $algorithm;
 
     /**
      * @var \Magento\Catalog\Model\Layer
-     * @since 2.0.0
      */
     private $layer;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     private $scopeConfig;
 
     /**
      * @var Render
-     * @since 2.0.0
      */
     private $render;
 
     /**
      * @var Registry
-     * @since 2.0.0
      */
     private $coreRegistry;
 
     /**
      * @var Range
-     * @since 2.0.0
      */
     private $range;
 
     /**
      * @var Price
-     * @since 2.0.0
      */
     private $resource;
 
@@ -71,7 +63,6 @@ class Auto implements AlgorithmInterface
      * @param Registry $coreRegistry
      * @param Price $resource
      * @param Range $range
-     * @since 2.0.0
      */
     public function __construct(
         Algorithm $algorithm,
@@ -93,7 +84,6 @@ class Auto implements AlgorithmInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getItemsData(array $intervals = [], $additionalRequestData = '')
     {
@@ -112,7 +102,6 @@ class Auto implements AlgorithmInterface
 
     /**
      * @return number
-     * @since 2.0.0
      */
     private function getRange()
     {
@@ -131,7 +120,6 @@ class Auto implements AlgorithmInterface
      * Get maximum price from layer products set
      *
      * @return float
-     * @since 2.0.0
      */
     public function getMaxPriceInt()
     {

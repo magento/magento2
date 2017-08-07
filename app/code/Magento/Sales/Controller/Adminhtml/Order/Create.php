@@ -14,25 +14,21 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @since 2.0.0
  */
 abstract class Create extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\Escaper
-     * @since 2.0.0
      */
     protected $escaper;
 
     /**
      * @var PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
-     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
@@ -42,7 +38,6 @@ abstract class Create extends \Magento\Backend\App\Action
      * @param \Magento\Framework\Escaper $escaper
      * @param PageFactory $resultPageFactory
      * @param ForwardFactory $resultForwardFactory
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -62,7 +57,6 @@ abstract class Create extends \Magento\Backend\App\Action
      * Retrieve session object
      *
      * @return \Magento\Backend\Model\Session\Quote
-     * @since 2.0.0
      */
     protected function _getSession()
     {
@@ -73,7 +67,6 @@ abstract class Create extends \Magento\Backend\App\Action
      * Retrieve quote object
      *
      * @return \Magento\Quote\Model\Quote
-     * @since 2.0.0
      */
     protected function _getQuote()
     {
@@ -84,7 +77,6 @@ abstract class Create extends \Magento\Backend\App\Action
      * Retrieve order create model
      *
      * @return \Magento\Sales\Model\AdminOrder\Create
-     * @since 2.0.0
      */
     protected function _getOrderCreateModel()
     {
@@ -95,7 +87,6 @@ abstract class Create extends \Magento\Backend\App\Action
      * Retrieve gift message save model
      *
      * @return \Magento\GiftMessage\Model\Save
-     * @since 2.0.0
      */
     protected function _getGiftmessageSaveModel()
     {
@@ -106,7 +97,6 @@ abstract class Create extends \Magento\Backend\App\Action
      * Initialize order creation session data
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initSession()
     {
@@ -138,7 +128,6 @@ abstract class Create extends \Magento\Backend\App\Action
      * Processing request data
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _processData()
     {
@@ -153,7 +142,6 @@ abstract class Create extends \Magento\Backend\App\Action
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _processActionData($action = null)
     {
@@ -353,7 +341,6 @@ abstract class Create extends \Magento\Backend\App\Action
      *
      * @param array $items
      * @return array
-     * @since 2.0.0
      */
     protected function _processFiles($items)
     {
@@ -372,7 +359,6 @@ abstract class Create extends \Magento\Backend\App\Action
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _reloadQuote()
     {
@@ -385,7 +371,6 @@ abstract class Create extends \Magento\Backend\App\Action
      * Acl check for admin
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _isAllowed()
     {
@@ -396,7 +381,6 @@ abstract class Create extends \Magento\Backend\App\Action
      * Get acl resource
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getAclResource()
     {

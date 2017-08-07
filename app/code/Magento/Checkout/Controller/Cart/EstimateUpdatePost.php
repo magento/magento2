@@ -9,13 +9,11 @@ namespace Magento\Checkout\Controller\Cart;
 /**
  * Class \Magento\Checkout\Controller\Cart\EstimateUpdatePost
  *
- * @since 2.0.0
  */
 class EstimateUpdatePost extends \Magento\Checkout\Controller\Cart
 {
     /**
      * @return \Magento\Framework\Controller\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

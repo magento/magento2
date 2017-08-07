@@ -9,19 +9,16 @@ use Magento\Ui\Config\Argument\ParserInterface;
 
 /**
  * This class parse array arguments according to own type
- * @since 2.2.0
  */
 class ConfigurableObjectType implements ParserInterface
 {
     /**
      * @var ParserInterface
-     * @since 2.2.0
      */
     private $argumentParser;
 
     /**
      * @param ParserInterface $argumentParser
-     * @since 2.2.0
      */
     public function __construct(ParserInterface $argumentParser)
     {
@@ -31,7 +28,6 @@ class ConfigurableObjectType implements ParserInterface
     /**
      * @inheritdoc
      * @throws \InvalidArgumentException if array arguments isn't passed
-     * @since 2.2.0
      */
     public function parse(array $data, \DOMNode $node)
     {

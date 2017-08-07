@@ -12,19 +12,16 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 
 /**
  * Vault Payment Token extension attribute model
- * @since 2.1.0
  */
 class PaymentToken extends AbstractModel implements PaymentTokenInterface
 {
     /**
      * @var string
-     * @since 2.1.0
      */
     protected $_eventPrefix = 'vault_payment_token';
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     protected function _construct()
     {
@@ -33,7 +30,6 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function getCustomerId()
     {
@@ -42,7 +38,6 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function setCustomerId($customerId)
     {
@@ -52,7 +47,6 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function getPaymentMethodCode()
     {
@@ -61,7 +55,6 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function setPaymentMethodCode($code)
     {
@@ -71,7 +64,6 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function getType()
     {
@@ -80,7 +72,6 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function setType($type)
     {
@@ -90,7 +81,6 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function getCreatedAt()
     {
@@ -99,7 +89,6 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function setCreatedAt($timestamp)
     {
@@ -109,7 +98,6 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function getExpiresAt()
     {
@@ -118,7 +106,6 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function setExpiresAt($timestamp)
     {
@@ -128,7 +115,6 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function getGatewayToken()
     {
@@ -137,7 +123,6 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function setGatewayToken($token)
     {
@@ -147,7 +132,6 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function getTokenDetails()
     {
@@ -156,7 +140,6 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function setTokenDetails($details)
     {
@@ -169,7 +152,6 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
      *
      * @return bool Is active.
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.1.0
      */
     public function getIsActive()
     {
@@ -181,7 +163,6 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
      *
      * @param bool $isActive
      * @return $this
-     * @since 2.1.0
      */
     public function setIsActive($isActive)
     {
@@ -193,7 +174,6 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
      * Get frontend hash
      *
      * @return string
-     * @since 2.1.0
      */
     public function getPublicHash()
     {
@@ -205,7 +185,6 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
      *
      * @param string $hash
      * @return $this
-     * @since 2.1.0
      */
     public function setPublicHash($hash)
     {
@@ -218,7 +197,6 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
      *
      * @return bool Is visible.
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.1.0
      */
     public function getIsVisible()
     {
@@ -230,7 +208,6 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
      *
      * @param bool $isVisible
      * @return $this
-     * @since 2.1.0
      */
     public function setIsVisible($isVisible)
     {

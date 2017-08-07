@@ -10,7 +10,6 @@ use Magento\Framework\View\Element\UiComponent\Control\ControlInterface;
 
 /**
  * Class Button
- * @since 2.0.0
  */
 class Button extends Template implements ControlInterface
 {
@@ -18,7 +17,6 @@ class Button extends Template implements ControlInterface
      * Define block template
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -31,7 +29,6 @@ class Button extends Template implements ControlInterface
      * Retrieve template path
      *
      * @return string
-     * @since 2.1.0
      */
     protected function getTemplatePath()
     {
@@ -42,7 +39,6 @@ class Button extends Template implements ControlInterface
      * Retrieve button type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -57,7 +53,6 @@ class Button extends Template implements ControlInterface
      * Retrieve attributes html
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAttributesHtml()
     {
@@ -81,7 +76,6 @@ class Button extends Template implements ControlInterface
      * Retrieve onclick handler
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getOnClick()
     {
@@ -104,7 +98,6 @@ class Button extends Template implements ControlInterface
      * @param array $classes
      * @param string $disabled
      * @return array
-     * @since 2.0.0
      */
     protected function prepareAttributes($title, $classes, $disabled)
     {
@@ -133,7 +126,6 @@ class Button extends Template implements ControlInterface
      *
      * @param array $attributes
      * @return string
-     * @since 2.0.0
      */
     protected function attributesToHtml($attributes)
     {

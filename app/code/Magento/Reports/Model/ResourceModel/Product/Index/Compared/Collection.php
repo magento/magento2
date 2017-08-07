@@ -13,7 +13,6 @@ namespace Magento\Reports\Model\ResourceModel\Product\Index\Compared;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Reports\Model\ResourceModel\Product\Index\Collection\AbstractCollection
 {
@@ -21,7 +20,6 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Index\Coll
      * Retrieve Product Index table name
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getTableName()
     {

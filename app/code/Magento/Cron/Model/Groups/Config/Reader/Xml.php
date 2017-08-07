@@ -7,7 +7,6 @@ namespace Magento\Cron\Model\Groups\Config\Reader;
 
 /**
  * Reader for XML files
- * @since 2.0.0
  */
 class Xml extends \Magento\Framework\Config\Reader\Filesystem
 {
@@ -15,7 +14,6 @@ class Xml extends \Magento\Framework\Config\Reader\Filesystem
      * Mapping XML name nodes
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_idAttributes = ['/config/group' => 'id'];
 
@@ -28,7 +26,6 @@ class Xml extends \Magento\Framework\Config\Reader\Filesystem
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,

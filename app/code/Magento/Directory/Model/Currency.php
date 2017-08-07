@@ -15,7 +15,6 @@ use Magento\Directory\Model\Currency\Filter;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Currency extends \Magento\Framework\Model\AbstractModel
 {
@@ -30,7 +29,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var Filter
-     * @since 2.0.0
      */
     protected $_filter;
 
@@ -38,37 +36,31 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * Currency Rates
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_rates;
 
     /**
      * @var \Magento\Framework\Locale\FormatInterface
-     * @since 2.0.0
      */
     protected $_localeFormat;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Directory\Helper\Data
-     * @since 2.0.0
      */
     protected $_directoryHelper;
 
     /**
      * @var \Magento\Directory\Model\Currency\FilterFactory
-     * @since 2.0.0
      */
     protected $_currencyFilterFactory;
 
     /**
      * @var \Magento\Framework\Locale\CurrencyInterface
-     * @since 2.0.0
      */
     protected $_localeCurrency;
 
@@ -84,7 +76,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -114,7 +105,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -125,7 +115,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * Get currency code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCode()
     {
@@ -136,7 +125,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * Get currency code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCurrencyCode()
     {
@@ -147,7 +135,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * Currency Rates getter
      *
      * @return array
-     * @since 2.0.0
      */
     public function getRates()
     {
@@ -159,7 +146,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @param array $rates Currency Rates
      * @return $this
-     * @since 2.0.0
      */
     public function setRates(array $rates)
     {
@@ -174,7 +160,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param   string $field
      * @return  $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function load($id, $field = null)
     {
@@ -188,7 +173,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @param mixed $toCurrency
      * @return float
-     * @since 2.0.0
      */
     public function getRate($toCurrency)
     {
@@ -206,7 +190,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @param mixed $toCurrency
      * @return float
-     * @since 2.0.0
      */
     public function getAnyRate($toCurrency)
     {
@@ -226,7 +209,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param   mixed $toCurrency
      * @return  float
      * @throws \Exception
-     * @since 2.0.0
      */
     public function convert($price, $toCurrency = null)
     {
@@ -247,7 +229,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param mixed $toCurrency
      * @return string
      * @throws \Magento\Framework\Exception\InputException
-     * @since 2.1.0
      */
     private function getCurrencyCodeFromToCurrency($toCurrency)
     {
@@ -265,7 +246,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * Get currency filter
      *
      * @return Filter
-     * @since 2.0.0
      */
     public function getFilter()
     {
@@ -284,7 +264,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param bool $includeContainer
      * @param bool $addBrackets
      * @return string
-     * @since 2.0.0
      */
     public function format($price, $options = [], $includeContainer = true, $addBrackets = false)
     {
@@ -300,7 +279,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param   bool $includeContainer
      * @param   bool $addBrackets
      * @return  string
-     * @since 2.0.0
      */
     public function formatPrecision(
         $price,
@@ -325,7 +303,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param float $price
      * @param array $options
      * @return string
-     * @since 2.0.0
      */
     public function formatTxt($price, $options = [])
     {
@@ -346,7 +323,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * Return currency symbol for current locale and currency code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCurrencySymbol()
     {
@@ -355,7 +331,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getOutputFormat()
     {
@@ -368,7 +343,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * Retrieve allowed currencies according to config
      *
      * @return array
-     * @since 2.0.0
      */
     public function getConfigAllowCurrencies()
     {
@@ -391,7 +365,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * Retrieve default currencies according to config
      *
      * @return array
-     * @since 2.0.0
      */
     public function getConfigDefaultCurrencies()
     {
@@ -401,7 +374,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getConfigBaseCurrencies()
     {
@@ -415,7 +387,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param string $currency
      * @param array|null $toCurrencies
      * @return array
-     * @since 2.0.0
      */
     public function getCurrencyRates($currency, $toCurrencies = null)
     {
@@ -431,7 +402,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @param array $rates
      * @return $this
-     * @since 2.0.0
      */
     public function saveRates($rates)
     {
@@ -444,7 +414,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $string
      * @return $this
-     * @since 2.1.0
      */
     private function trimUnicodeDirectionMark($string)
     {

@@ -10,19 +10,16 @@ use Magento\Catalog\Model\Indexer\Product\Flat\TableBuilder;
 
 /**
  * Class Row reindex action
- * @since 2.0.0
  */
 class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\Action\Indexer
-     * @since 2.0.0
      */
     protected $flatItemWriter;
 
     /**
      * @var Eraser
-     * @since 2.0.0
      */
     protected $flatItemEraser;
 
@@ -35,7 +32,6 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
      * @param FlatTableBuilder $flatTableBuilder
      * @param Indexer $flatItemWriter
      * @param Eraser $flatItemEraser
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -65,7 +61,6 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
      * @param int|null $id
      * @return \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function execute($id = null)
     {

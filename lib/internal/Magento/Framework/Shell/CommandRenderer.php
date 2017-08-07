@@ -8,7 +8,6 @@ namespace Magento\Framework\Shell;
 /**
  * Class \Magento\Framework\Shell\CommandRenderer
  *
- * @since 2.0.0
  */
 class CommandRenderer implements CommandRendererInterface
 {
@@ -18,7 +17,6 @@ class CommandRenderer implements CommandRendererInterface
      * @param string $command
      * @param array $arguments
      * @return string
-     * @since 2.0.0
      */
     public function render($command, array $arguments = [])
     {

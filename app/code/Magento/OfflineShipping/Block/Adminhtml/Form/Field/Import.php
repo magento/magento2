@@ -9,13 +9,11 @@ namespace Magento\OfflineShipping\Block\Adminhtml\Form\Field;
  * Custom import CSV file field for shipping table rates
  *
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Import extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -27,7 +25,6 @@ class Import extends \Magento\Framework\Data\Form\Element\AbstractElement
      * Enter description here...
      *
      * @return string
-     * @since 2.0.0
      */
     public function getElementHtml()
     {

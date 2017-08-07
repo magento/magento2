@@ -38,7 +38,6 @@ use Magento\Store\Model\StoreManagerInterface;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Template extends AbstractTemplate implements \Magento\Framework\Mail\TemplateInterface
 {
@@ -60,7 +59,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * BCC list
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_bcc = [];
 
@@ -68,7 +66,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * Return path
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_returnPath = '';
 
@@ -76,19 +73,16 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * Reply address
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_replyTo = '';
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_vars = [];
 
     /**
      * @var \Exception|null
-     * @since 2.0.0
      */
     protected $_sendingException = null;
 
@@ -96,13 +90,11 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * Email filter factory
      *
      * @var \Magento\Email\Model\Template\FilterFactory
-     * @since 2.0.0
      */
     private $filterFactory;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -127,7 +119,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * @throws \RuntimeException
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -170,7 +161,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * Initialize email template model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -181,7 +171,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * Return template id
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getId()
     {
@@ -193,7 +182,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      *
      * @param int $value
      * @return $this
-     * @since 2.0.0
      */
     public function setId($value)
     {
@@ -204,7 +192,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * Return true if this template can be used for sending queue as main template
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isValidForSend()
     {
@@ -215,7 +202,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * Getter for template type
      *
      * @return int
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -232,7 +218,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      *
      * @return \Exception|null
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getSendingException()
     {
@@ -245,7 +230,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * @param array $variables
      * @return string
      * @throws \Magento\Framework\Exception\MailException
-     * @since 2.0.0
      */
     public function getProcessedTemplateSubject(array $variables)
     {
@@ -273,7 +257,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * @param string|array $bcc
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function addBcc($bcc)
     {
@@ -287,7 +270,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * @param string $email
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setReturnPath($email)
     {
@@ -301,7 +283,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * @param string $email
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setReplyTo($email)
     {
@@ -314,7 +295,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      *
      * @param string $variablesString
      * @return array
-     * @since 2.0.0
      */
     protected function _parseVariablesString($variablesString)
     {
@@ -331,7 +311,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      *
      * @param boolean $withGroup if true wrap variable options in group
      * @return array
-     * @since 2.0.0
      */
     public function getVariablesOptionArray($withGroup = false)
     {
@@ -353,7 +332,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      *
      * @throws \Magento\Framework\Exception\MailException
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -373,7 +351,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      *
      * @return string
      * @throws \Magento\Framework\Exception\MailException
-     * @since 2.0.0
      */
     public function processTemplate()
     {
@@ -406,7 +383,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * Get processed subject
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSubject()
     {
@@ -418,7 +394,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      *
      * @param array $vars
      * @return $this
-     * @since 2.0.0
      */
     public function setVars(array $vars)
     {
@@ -431,7 +406,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      *
      * @param array $options
      * @return $this
-     * @since 2.0.0
      */
     public function setOptions(array $options)
     {
@@ -440,7 +414,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
 
     /**
      * @return \Magento\Email\Model\Template\FilterFactory
-     * @since 2.0.0
      */
     protected function getFilterFactory()
     {
@@ -451,7 +424,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * Retrieve template variables
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getVars()
     {

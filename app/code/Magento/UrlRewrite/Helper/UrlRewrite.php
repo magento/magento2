@@ -8,7 +8,6 @@ namespace Magento\UrlRewrite\Helper;
 /**
  * Class \Magento\UrlRewrite\Helper\UrlRewrite
  *
- * @since 2.0.0
  */
 class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -30,7 +29,6 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $requestPath
      * @return bool
      * @throws \Exception
-     * @since 2.0.0
      */
     protected function _validateRequestPath($requestPath)
     {
@@ -53,7 +51,6 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $requestPath
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
-     * @since 2.0.0
      */
     public function validateRequestPath($requestPath)
     {
@@ -72,7 +69,6 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $suffix
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
-     * @since 2.0.0
      */
     public function validateSuffix($suffix)
     {

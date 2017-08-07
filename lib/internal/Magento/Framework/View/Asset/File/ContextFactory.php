@@ -9,19 +9,16 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Factory class for @see \Magento\Framework\View\Asset\File\Context
- * @since 2.0.0
  */
 class ContextFactory
 {
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -33,7 +30,6 @@ class ContextFactory
      *
      * @param array $data
      * @return \Magento\Framework\View\Asset\File\Context
-     * @since 2.0.0
      */
     public function create(array $data = [])
     {

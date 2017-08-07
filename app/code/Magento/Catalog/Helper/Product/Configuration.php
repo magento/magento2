@@ -14,7 +14,6 @@ use Magento\Framework\App\Helper\AbstractHelper;
  * Helper for fetching properties by product configurational item
  *
  * @SuppressWarnings(PHPMD.LongVariable)
- * @since 2.0.0
  */
 class Configuration extends AbstractHelper implements ConfigurationInterface
 {
@@ -22,7 +21,6 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      * Filter manager
      *
      * @var \Magento\Framework\Filter\FilterManager
-     * @since 2.0.0
      */
     protected $filter;
 
@@ -30,7 +28,6 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      * Product option factory
      *
      * @var \Magento\Catalog\Model\Product\OptionFactory
-     * @since 2.0.0
      */
     protected $_productOptionFactory;
 
@@ -38,13 +35,11 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      * Magento string lib
      *
      * @var \Magento\Framework\Stdlib\StringUtils
-     * @since 2.0.0
      */
     protected $string;
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -54,7 +49,6 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      * @param \Magento\Framework\Filter\FilterManager $filter
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param Json $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -75,7 +69,6 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      *
      * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
      * @return array
-     * @since 2.0.0
      */
     public function getCustomOptions(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item)
     {
@@ -133,7 +126,6 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      *
      * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
      * @return array
-     * @since 2.0.0
      */
     public function getOptions(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item)
     {
@@ -165,7 +157,6 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function getFormattedOptionValue($optionValue, $params = null)
     {

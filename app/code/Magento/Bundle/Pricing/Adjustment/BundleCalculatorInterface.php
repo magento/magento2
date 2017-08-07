@@ -11,7 +11,6 @@ use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 
 /**
  * Bundle calculator interface
- * @since 2.0.0
  */
 interface BundleCalculatorInterface extends CalculatorInterface
 {
@@ -20,7 +19,6 @@ interface BundleCalculatorInterface extends CalculatorInterface
      * @param Product $saleableItem
      * @param null|bool|string|array $exclude
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     public function getMaxAmount($amount, Product $saleableItem, $exclude = null);
 
@@ -29,7 +27,6 @@ interface BundleCalculatorInterface extends CalculatorInterface
      * @param Product $saleableItem
      * @param null|bool|string|array $exclude
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     public function getMaxRegularAmount($amount, Product $saleableItem, $exclude = null);
 
@@ -38,7 +35,6 @@ interface BundleCalculatorInterface extends CalculatorInterface
      * @param Product $saleableItem
      * @param null|bool|string|array $exclude
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     public function getMinRegularAmount($amount, Product $saleableItem, $exclude = null);
 
@@ -50,7 +46,6 @@ interface BundleCalculatorInterface extends CalculatorInterface
      * @param bool $searchMin
      * @param \Magento\Framework\Pricing\Amount\AmountInterface|null $bundleProductAmount
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     public function getOptionsAmount(
         Product $saleableItem,
@@ -67,7 +62,6 @@ interface BundleCalculatorInterface extends CalculatorInterface
      * @param \Magento\Bundle\Pricing\Price\BundleSelectionPrice[] $selectionPriceList
      * @param null|bool|string|array $exclude code of adjustment that has to be excluded
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     public function calculateBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude = null);
 
@@ -78,7 +72,6 @@ interface BundleCalculatorInterface extends CalculatorInterface
      * @param Product $bundleProduct
      * @param bool $useRegularPrice
      * @return \Magento\Bundle\Pricing\Price\BundleSelectionPrice[]
-     * @since 2.0.0
      */
     public function createSelectionPriceList($option, $bundleProduct, $useRegularPrice = false);
 
@@ -89,7 +82,6 @@ interface BundleCalculatorInterface extends CalculatorInterface
      * @param \Magento\Bundle\Pricing\Price\BundleSelectionPrice[] $selectionPriceList
      * @param bool $searchMin
      * @return \Magento\Bundle\Pricing\Price\BundleSelectionPrice[]
-     * @since 2.0.0
      */
     public function processOptions($option, $selectionPriceList, $searchMin = true);
 
@@ -97,7 +89,6 @@ interface BundleCalculatorInterface extends CalculatorInterface
      * @param float $amount
      * @param Product $saleableItem
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     public function getAmountWithoutOption($amount, Product $saleableItem);
 }

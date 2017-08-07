@@ -10,7 +10,6 @@ namespace Magento\Variable\Controller\Adminhtml\System\Variable;
  * Save variable POST controller
  *
  * @api
- * @since 2.0.0
  */
 class Save extends \Magento\Variable\Controller\Adminhtml\System\Variable
 {
@@ -18,7 +17,6 @@ class Save extends \Magento\Variable\Controller\Adminhtml\System\Variable
      * Save Action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

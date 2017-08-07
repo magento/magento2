@@ -25,7 +25,6 @@ use Magento\Framework\App\ObjectManager;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @codingStandardsIgnoreFile
  * @api
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -43,7 +42,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Tax configuration object
      *
      * @var Config
-     * @since 2.0.0
      */
     protected $_config;
 
@@ -51,7 +49,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Postcode cut to this length when creating search templates
      *
      * @var integer
-     * @since 2.0.0
      */
     protected $_postCodeSubStringLength = 10;
 
@@ -59,55 +56,46 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Json Helper
      *
      * @var \Magento\Framework\Json\Helper\Data
-     * @since 2.0.0
      */
     protected $jsonHelper;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\Locale\FormatInterface
-     * @since 2.0.0
      */
     protected $_localeFormat;
 
     /**
      * @var \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory
-     * @since 2.0.0
      */
     protected $_orderTaxCollectionFactory;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $_localeResolver;
 
     /**
      * @var \Magento\Catalog\Helper\Data
-     * @since 2.0.0
      */
     protected $catalogHelper;
 
     /**
      * @var OrderTaxManagementInterface
-     * @since 2.0.0
      */
     protected $orderTaxManagement;
 
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -126,7 +114,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param PriceCurrencyInterface $priceCurrency
      * @param Json $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -158,7 +145,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Return max postcode length to create search templates
      *
      * @return int $len
-     * @since 2.0.0
      */
     public function getPostCodeSubStringLength()
     {
@@ -174,7 +160,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get tax configuration object
      *
      * @return Config
-     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -186,7 +171,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|int|string|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function priceIncludesTax($store = null)
     {
@@ -198,7 +182,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|int|string|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function applyTaxAfterDiscount($store = null)
     {
@@ -213,7 +196,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|int|string|Store $store
      * @return int
-     * @since 2.0.0
      */
     public function getPriceDisplayType($store = null)
     {
@@ -226,7 +208,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|int|string|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function needPriceConversion($store = null)
     {
@@ -238,7 +219,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|int|string|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function displayFullSummary($store = null)
     {
@@ -250,7 +230,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|int|string|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function displayZeroTax($store = null)
     {
@@ -262,7 +241,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|int|string|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function displayCartPriceInclTax($store = null)
     {
@@ -274,7 +252,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|int|string|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function displayCartPriceExclTax($store = null)
     {
@@ -286,7 +263,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|int|string|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function displayCartBothPrices($store = null)
     {
@@ -298,7 +274,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|int|string|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function displaySalesPriceInclTax($store = null)
     {
@@ -310,7 +285,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|int|string|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function displaySalesPriceExclTax($store = null)
     {
@@ -322,7 +296,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|int|string|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function displaySalesBothPrices($store = null)
     {
@@ -334,7 +307,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|int|string|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function displaySalesSubtotalBoth($store = null)
     {
@@ -346,7 +318,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|int|string|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function displaySalesSubtotalInclTax($store = null)
     {
@@ -358,7 +329,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|int|string|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function displaySalesSubtotalExclTax($store = null)
     {
@@ -370,7 +340,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|int|string|Store $store
      * @return string
-     * @since 2.0.0
      */
     public function getPriceFormat($store = null)
     {
@@ -388,7 +357,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if we have display in catalog prices including tax
      *
      * @return bool
-     * @since 2.0.0
      */
     public function displayPriceIncludingTax()
     {
@@ -399,7 +367,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if we have display in catalog prices excluding tax
      *
      * @return bool
-     * @since 2.0.0
      */
     public function displayPriceExcludingTax()
     {
@@ -411,7 +378,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|int|string|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function displayBothPrices($store = null)
     {
@@ -423,7 +389,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|string|bool|int|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function shippingPriceIncludesTax($store = null)
     {
@@ -435,7 +400,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|string|bool|int|Store $store
      * @return int
-     * @since 2.0.0
      */
     public function getShippingPriceDisplayType($store = null)
     {
@@ -446,7 +410,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Returns whether the shipping price should display with taxes included
      *
      * @return bool
-     * @since 2.0.0
      */
     public function displayShippingPriceIncludingTax()
     {
@@ -457,7 +420,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Returns whether the shipping price should display without taxes
      *
      * @return bool
-     * @since 2.0.0
      */
     public function displayShippingPriceExcludingTax()
     {
@@ -468,7 +430,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Returns whether the shipping price should display both with and without taxes
      *
      * @return bool
-     * @since 2.0.0
      */
     public function displayShippingBothPrices()
     {
@@ -480,7 +441,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|string|bool|int|Store $store
      * @return int
-     * @since 2.0.0
      */
     public function getShippingTaxClass($store)
     {
@@ -496,7 +456,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  int|null                   $ctc
      * @param  null|string|bool|int|Store $store
      * @return float
-     * @since 2.0.0
      */
     public function getShippingPrice($price, $includingTax = null, $shippingAddress = null, $ctc = null, $store = null)
     {
@@ -527,7 +486,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|string|bool|int|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function discountTax($store = null)
     {
@@ -539,7 +497,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|string|bool|int|Store $store
      * @return string|null
-     * @since 2.0.0
      */
     public function getTaxBasedOn($store = null)
     {
@@ -555,7 +512,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|string|bool|int|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function applyTaxOnCustomPrice($store = null)
     {
@@ -571,7 +527,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|string|bool|int|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function applyTaxOnOriginalPrice($store = null)
     {
@@ -590,7 +545,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|int|string|Store $store
      * @return string
-     * @since 2.0.0
      */
     public function getCalculationSequence($store = null)
     {
@@ -602,7 +556,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|string|bool|int|Store $store
      * @return string
-     * @since 2.0.0
      */
     public function getCalculationAlgorithm($store = null)
     {
@@ -624,7 +577,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  \Magento\Sales\Model\Order|\Magento\Sales\Model\Order\Invoice|\Magento\Sales\Model\Order\Creditmemo $source
      * @return array
-     * @since 2.0.0
      */
     public function getCalculatedTaxes($source)
     {
@@ -667,7 +619,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  OrderTaxDetailsItemInterface $itemTaxDetail
      * @param  float                        $ratio
      * @return array
-     * @since 2.0.0
      */
     private function _aggregateTaxes($taxClassAmount, OrderTaxDetailsItemInterface $itemTaxDetail, $ratio)
     {
@@ -699,7 +650,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  \Magento\Sales\Model\Order $order
      * @return array
-     * @since 2.0.0
      */
     protected function _getTaxRateSubtotals($order)
     {
@@ -710,7 +660,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve default customer tax class from config
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getDefaultCustomerTaxClass()
     {
@@ -724,7 +673,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve default product tax class from config
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getDefaultProductTaxClass()
     {
@@ -739,7 +687,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|int|string|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function isCrossBorderTradeEnabled($store = null)
     {
@@ -749,7 +696,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param  EntityInterface $current
      * @return array
-     * @since 2.0.0
      */
     protected function calculateTaxForOrder(EntityInterface $current)
     {
@@ -773,7 +719,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  EntityInterface $salesItem
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function calculateTaxForItems(EntityInterface $order, EntityInterface $salesItem)
     {
@@ -837,7 +782,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|int|string|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function isCatalogPriceDisplayAffectedByTax($store = null)
     {

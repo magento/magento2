@@ -12,7 +12,6 @@ use Magento\Paypal\Helper\Shortcut\ValidatorInterface;
 /**
  * Class \Magento\Paypal\Block\Bml\Shortcut
  *
- * @since 2.0.0
  */
 class Shortcut extends \Magento\Framework\View\Element\Template implements CatalogBlock\ShortcutInterface
 {
@@ -20,7 +19,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * Whether the block should be eventually rendered
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_shouldRender = true;
 
@@ -28,7 +26,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * Payment method code
      *
      * @var string
-     * @since 2.0.0
      */
     private $_paymentMethodCode = '';
 
@@ -36,7 +33,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * Shortcut alias
      *
      * @var string
-     * @since 2.0.0
      */
     private $_alias = '';
 
@@ -44,19 +40,16 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * Start express action
      *
      * @var string
-     * @since 2.0.0
      */
     private $_startAction = '';
 
     /**
      * @var \Magento\Payment\Helper\Data
-     * @since 2.0.0
      */
     private $_paymentData;
 
     /**
      * @var \Magento\Framework\Math\Random
-     * @since 2.0.0
      */
     private $_mathRandom;
 
@@ -64,7 +57,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * Bml method code
      *
      * @var string
-     * @since 2.0.0
      */
     private $_bmlMethodCode = '';
 
@@ -75,7 +67,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
 
     /**
      * @var ValidatorInterface
-     * @since 2.0.0
      */
     private $_shortcutValidator;
 
@@ -91,7 +82,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * @param string $shortcutTemplate
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -119,7 +109,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
 
     /**
      * @return \Magento\Framework\View\Element\AbstractBlock
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -155,7 +144,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * Render the block if needed
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -169,7 +157,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * Check is "OR" label position before shortcut
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isOrPositionBefore()
     {
@@ -180,7 +167,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * Check is "OR" label position after shortcut
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isOrPositionAfter()
     {
@@ -191,7 +177,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * Get shortcut alias
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAlias()
     {

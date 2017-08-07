@@ -12,7 +12,6 @@ namespace Magento\Catalog\Block\Product\View;
 /**
  * Class \Magento\Catalog\Block\Product\View\Price
  *
- * @since 2.0.0
  */
 class Price extends \Magento\Framework\View\Element\Template
 {
@@ -20,7 +19,6 @@ class Price extends \Magento\Framework\View\Element\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -28,7 +26,6 @@ class Price extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -41,7 +38,6 @@ class Price extends \Magento\Framework\View\Element\Template
 
     /**
      * @return  array|float
-     * @since 2.0.0
      */
     public function getPrice()
     {

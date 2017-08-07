@@ -10,13 +10,11 @@ use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Provider of dynamic view files
- * @since 2.0.0
  */
 class File
 {
     /**
      * @var ResolverInterface
-     * @since 2.0.0
      */
     private $resolver;
 
@@ -24,7 +22,6 @@ class File
      * Constructor
      *
      * @param ResolverInterface $resolver
-     * @since 2.0.0
      */
     public function __construct(ResolverInterface $resolver)
     {
@@ -39,7 +36,6 @@ class File
      * @param string $file
      * @param string|null $module
      * @return string|bool
-     * @since 2.0.0
      */
     public function getFile($area, ThemeInterface $themeModel, $file, $module = null)
     {
@@ -48,7 +44,6 @@ class File
 
     /**
      * @return string
-     * @since 2.0.0
      */
     protected function getFallbackType()
     {

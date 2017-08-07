@@ -7,15 +7,13 @@ namespace Magento\Backend\Block\Widget\Grid;
 
 /**
  * @api
- * @deprecated 2.2.0 in favour of UI component implementation
+ * @deprecated 100.2.0 in favour of UI component implementation
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class ColumnSet extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Backend\Model\Widget\Grid\Row\UrlGenerator
-     * @since 2.0.0
      */
     protected $_rowUrlGenerator;
 
@@ -23,7 +21,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Column headers visibility
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_headersVisibility = true;
 
@@ -31,7 +28,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Filter visibility
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_filterVisibility = true;
 
@@ -39,7 +35,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Empty grid text
      *
      * @var string|null
-     * @since 2.0.0
      */
     protected $_emptyText;
 
@@ -47,7 +42,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Empty grid text CSS class
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_emptyTextCss = 'empty-text';
 
@@ -55,7 +49,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Label for empty cell
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_emptyCellLabel = '';
 
@@ -63,7 +56,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Count subtotals
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_countSubTotals = false;
 
@@ -71,7 +63,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Count totals
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_countTotals = false;
 
@@ -79,13 +70,11 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Columns to group by
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_groupedColumn = [];
 
     /**
      * @var boolean
-     * @since 2.0.0
      */
     protected $_isCollapsed;
 
@@ -93,19 +82,16 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Path to template file in theme
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Backend::widget/grid/column_set.phtml';
 
     /**
      * @var \Magento\Backend\Model\Widget\Grid\SubTotals
-     * @since 2.0.0
      */
     protected $_subTotals = null;
 
     /**
      * @var \Magento\Backend\Model\Widget\Grid\Totals
-     * @since 2.0.0
      */
     protected $_totals = null;
 
@@ -116,7 +102,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * @param \Magento\Backend\Model\Widget\Grid\Totals $totals
      * @param array $data
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -160,7 +145,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Retrieve the list of columns
      *
      * @return array
-     * @since 2.0.0
      */
     public function getColumns()
     {
@@ -177,7 +161,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Count columns
      *
      * @return int
-     * @since 2.0.0
      */
     public function getColumnCount()
     {
@@ -189,7 +172,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      *
      * @param bool $value
      * @return $this
-     * @since 2.0.0
      */
     public function setSortable($value)
     {
@@ -207,7 +189,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * @param string $type
      * @param string $className
      * @return $this
-     * @since 2.0.0
      */
     public function setRendererType($type, $className)
     {
@@ -223,7 +204,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * @param string $type
      * @param string $className
      * @return $this
-     * @since 2.0.0
      */
     public function setFilterType($type, $className)
     {
@@ -237,7 +217,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Prepare block for rendering
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -260,7 +239,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Framework\DataObject $item
      * @return string
-     * @since 2.0.0
      */
     public function getRowUrl($item)
     {
@@ -276,7 +254,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Framework\DataObject $item
      * @return array
-     * @since 2.0.0
      */
     public function getMultipleRows($item)
     {
@@ -288,7 +265,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Framework\DataObject $item
      * @return bool
-     * @since 2.0.0
      */
     public function hasMultipleRows($item)
     {
@@ -298,7 +274,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve columns for multiple rows
      * @return array
-     * @since 2.0.0
      */
     public function getMultipleRowColumns()
     {
@@ -314,7 +289,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Framework\DataObject $item
      * @return boolean
-     * @since 2.0.0
      */
     public function shouldRenderSubTotal($item)
     {
@@ -325,7 +299,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Check whether total should be rendered
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function shouldRenderTotal()
     {
@@ -338,7 +311,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\DataObject $item
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return int|false
-     * @since 2.0.0
      */
     public function getRowspan($item, $column)
     {
@@ -360,7 +332,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * @param string|object $column
      * @param string $value
      * @return bool|$this
-     * @since 2.0.0
      */
     public function isColumnGrouped($column, $value = null)
     {
@@ -380,7 +351,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\DataObject $item
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return boolean
-     * @since 2.0.0
      */
     public function shouldRenderEmptyCell($item, $column)
     {
@@ -391,7 +361,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Retrieve colspan for empty cell
      *
      * @return int
-     * @since 2.0.0
      */
     public function getEmptyCellColspan()
     {
@@ -404,7 +373,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\DataObject $item
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return boolean
-     * @since 2.0.0
      */
     public function shouldRenderCell($item, $column)
     {
@@ -422,7 +390,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      *
      * @param boolean $visible
      * @return void
-     * @since 2.0.0
      */
     public function setHeadersVisibility($visible = true)
     {
@@ -433,7 +400,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Return visibility of column headers
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isHeaderVisible()
     {
@@ -445,7 +411,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      *
      * @param bool $visible
      * @return void
-     * @since 2.0.0
      */
     public function setFilterVisibility($visible = true)
     {
@@ -456,7 +421,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Return visibility of filter
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isFilterVisible()
     {
@@ -468,7 +432,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      *
      * @param string $cssClass
      * @return $this
-     * @since 2.0.0
      */
     public function setEmptyTextClass($cssClass)
     {
@@ -480,7 +443,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Return empty text CSS class
      *
      * @return string
-     * @since 2.0.0
      */
     public function getEmptyTextClass()
     {
@@ -491,7 +453,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Retrieve label for empty cell
      *
      * @return string
-     * @since 2.0.0
      */
     public function getEmptyCellLabel()
     {
@@ -503,7 +464,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      *
      * @param string $label
      * @return $this
-     * @since 2.0.0
      */
     public function setEmptyCellLabel($label)
     {
@@ -516,7 +476,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      *
      * @param bool $isCollapsed
      * @return $this
-     * @since 2.0.0
      */
     public function setIsCollapsed($isCollapsed)
     {
@@ -529,7 +488,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsCollapsed()
     {
@@ -540,7 +498,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Return grid of current column set
      *
      * @return \Magento\Backend\Block\Widget\Grid
-     * @since 2.0.0
      */
     public function getGrid()
     {
@@ -551,7 +508,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Return collection of current grid
      *
      * @return \Magento\Framework\Data\Collection
-     * @since 2.0.0
      */
     public function getCollection()
     {
@@ -563,7 +519,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      *
      * @param bool $flag
      * @return $this
-     * @since 2.0.0
      */
     public function setCountSubTotals($flag = true)
     {
@@ -576,7 +531,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getCountSubTotals()
     {
@@ -588,7 +542,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      *
      * @param bool $flag
      * @return $this
-     * @since 2.0.0
      */
     public function setCountTotals($flag = true)
     {
@@ -601,7 +554,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getCountTotals()
     {
@@ -613,7 +565,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Framework\DataObject $item
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getSubTotals($item)
     {
@@ -626,7 +577,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Retrieve subtotal items
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getTotals()
     {
@@ -640,7 +590,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Framework\DataObject $item
      * @return void
-     * @since 2.0.0
      */
     public function updateItemByFirstMultiRow(\Magento\Framework\DataObject $item)
     {
@@ -658,7 +607,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Prepare sub-total object for counting sub-totals
      *
      * @return void
-     * @since 2.0.0
      */
     public function _prepareSubTotals()
     {
@@ -676,7 +624,6 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Prepare total object for counting totals
      *
      * @return void
-     * @since 2.0.0
      */
     public function _prepareTotals()
     {

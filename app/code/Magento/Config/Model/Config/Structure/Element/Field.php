@@ -9,7 +9,6 @@ namespace Magento\Config\Model\Config\Structure\Element;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
 {
@@ -22,7 +21,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Backend model factory
      *
      * @var \Magento\Config\Model\Config\BackendFactory
-     * @since 2.0.0
      */
     protected $_backendFactory;
 
@@ -30,7 +28,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Source model factory
      *
      * @var \Magento\Config\Model\Config\SourceFactory
-     * @since 2.0.0
      */
     protected $_sourceFactory;
 
@@ -38,14 +35,12 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Comment model factory
      *
      * @var \Magento\Config\Model\Config\CommentFactory
-     * @since 2.0.0
      */
     protected $_commentFactory;
 
     /**
      *
      * @var \Magento\Config\Model\Config\Structure\Element\Dependency\Mapper
-     * @since 2.0.0
      */
     protected $_dependencyMapper;
 
@@ -53,7 +48,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Block factory
      *
      * @var \Magento\Framework\View\Element\BlockFactory
-     * @since 2.0.0
      */
     protected $_blockFactory;
 
@@ -65,7 +59,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * @param \Magento\Config\Model\Config\CommentFactory $commentFactory
      * @param \Magento\Framework\View\Element\BlockFactory $blockFactory
      * @param Dependency\Mapper $dependencyMapper
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -89,7 +82,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      *
      * @param string $labelPrefix
      * @return string
-     * @since 2.0.0
      */
     public function getLabel($labelPrefix = '')
     {
@@ -105,7 +97,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Retrieve field hint
      *
      * @return string
-     * @since 2.0.0
      */
     public function getHint()
     {
@@ -117,7 +108,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      *
      * @param string $currentValue
      * @return string
-     * @since 2.0.0
      */
     public function getComment($currentValue = '')
     {
@@ -139,7 +129,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Retrieve tooltip text
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTooltip()
     {
@@ -155,7 +144,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Retrieve field type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -168,7 +156,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * @param string $fieldPrefix
      * @param string $elementType
      * @return string[]
-     * @since 2.0.0
      */
     protected function _getRequiredElements($fieldPrefix = '', $elementType = 'group')
     {
@@ -190,7 +177,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      *
      * @param string $fieldPrefix
      * @return string[]
-     * @since 2.0.0
      */
     public function getRequiredGroups($fieldPrefix = '')
     {
@@ -202,7 +188,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      *
      * @param string $fieldPrefix
      * @return string[]
-     * @since 2.0.0
      */
     public function getRequiredFields($fieldPrefix = '')
     {
@@ -213,7 +198,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Retrieve frontend css class
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFrontendClass()
     {
@@ -224,7 +208,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Check whether field has backend model
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasBackendModel()
     {
@@ -235,7 +218,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Retrieve backend model
      *
      * @return \Magento\Framework\App\Config\ValueInterface
-     * @since 2.0.0
      */
     public function getBackendModel()
     {
@@ -246,7 +228,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Retrieve field section id
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSectionId()
     {
@@ -258,7 +239,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Retrieve field group path
      *
      * @return string
-     * @since 2.0.0
      */
     public function getGroupPath()
     {
@@ -269,7 +249,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Retrieve config path
      *
      * @return null|string
-     * @since 2.0.0
      */
     public function getConfigPath()
     {
@@ -280,7 +259,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Check whether field should be shown in default scope
      *
      * @return bool
-     * @since 2.0.0
      */
     public function showInDefault()
     {
@@ -291,7 +269,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Check whether field should be shown in website scope
      *
      * @return bool
-     * @since 2.0.0
      */
     public function showInWebsite()
     {
@@ -302,7 +279,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Check whether field should be shown in store scope
      *
      * @return bool
-     * @since 2.0.0
      */
     public function showInStore()
     {
@@ -313,7 +289,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Check if the field can be restored to default
      *
      * @return bool
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function canRestore()
     {
@@ -325,7 +301,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $formField
      * @return void
-     * @since 2.0.0
      */
     public function populateInput($formField)
     {
@@ -342,7 +317,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Check whether field has validation class
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasValidation()
     {
@@ -353,7 +327,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Retrieve field validation class
      *
      * @return string
-     * @since 2.0.0
      */
     public function getValidation()
     {
@@ -364,7 +337,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Check whether field can be empty
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canBeEmpty()
     {
@@ -375,7 +347,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Check whether field has source model
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasSourceModel()
     {
@@ -386,7 +357,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Check whether field has options or source model
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasOptions()
     {
@@ -397,7 +367,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Retrieve static options or source model option list
      *
      * @return array
-     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -418,7 +387,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      *
      * @param array $options
      * @return array
-     * @since 2.0.0
      */
     protected function _getStaticOptions(array $options)
     {
@@ -434,7 +402,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      *
      * @param string $label an option label that should be translated
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     private function _translateLabel($label)
     {
@@ -446,7 +413,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      *
      * @param string $value an option value that may contain a placeholder for a constant value
      * @return mixed|string the value after being replaced by the constant if needed
-     * @since 2.0.0
      */
     private function _fillInConstantPlaceholders($value)
     {
@@ -461,7 +427,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      *
      * @param string $sourceModel Source model class name or class::method
      * @return array
-     * @since 2.0.0
      */
     protected function _getOptionsFromSourceModel($sourceModel)
     {
@@ -500,7 +465,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * @param string $fieldPrefix
      * @param string $storeCode
      * @return array
-     * @since 2.0.0
      */
     public function getDependencies($fieldPrefix, $storeCode)
     {
@@ -520,7 +484,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Check whether element should be displayed for advanced users
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isAdvanced()
     {

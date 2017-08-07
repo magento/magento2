@@ -11,7 +11,6 @@ namespace Magento\User\Block\User;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -19,7 +18,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -27,7 +25,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -42,7 +39,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Class constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -90,7 +86,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * - click "Delete User" at top left part of the page;
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getDeleteMessage()
     {
@@ -103,7 +99,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Magento\User\Controller\Adminhtml\User\Delete
      *
      * @return string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getDeleteUrl()
     {
@@ -116,7 +112,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * to create a new user account OR to edit the previously created user account
      *
      * @return int
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getObjectId()
     {
@@ -125,7 +121,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -141,7 +136,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Return validation url for edit form
      *
      * @return string
-     * @since 2.0.0
      */
     public function getValidationUrl()
     {
@@ -152,7 +146,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Return invalidate url for edit form
      *
      * @return string
-     * @since 2.0.0
      */
     public function getInvalidateUrl()
     {

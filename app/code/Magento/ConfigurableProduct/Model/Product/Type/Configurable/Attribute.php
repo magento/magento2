@@ -16,7 +16,6 @@ use Magento\Framework\EntityManager\MetadataPool;
  * @method Attribute getResource()
  * @method Attribute setProductAttribute(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $value)
  * @method \Magento\Eav\Model\Entity\Attribute\AbstractAttribute getProductAttribute()
- * @since 2.0.0
  */
 class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\ConfigurableProduct\Api\Data\OptionInterface
@@ -32,10 +31,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     const KEY_PRODUCT_ID = 'product_id';
     /**#@-*/
 
-    /**
-     * @var MetadataPool
-     * @since 2.1.0
-     */
+    /**#@-*/
     private $metadataPool;
 
     /**
@@ -47,7 +43,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -75,7 +70,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -86,7 +80,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      * Get attribute options
      *
      * @return array
-     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -95,7 +88,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getLabel()
     {
@@ -112,7 +104,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      * After save process
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -127,7 +118,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute  $attribute
      * @return void
-     * @since 2.0.0
      */
     public function loadByProductAndAttribute($product, $attribute)
     {
@@ -147,7 +137,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return void
-     * @since 2.0.0
      */
     public function deleteByProduct($product)
     {
@@ -158,7 +147,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getAttributeId()
     {
@@ -168,7 +156,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getPosition()
     {
@@ -178,7 +165,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getIsUseDefault()
     {
@@ -188,7 +174,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getValues()
     {
@@ -200,7 +185,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     /**
      * @param string $attributeId
      * @return $this
-     * @since 2.0.0
      */
     public function setAttributeId($attributeId)
     {
@@ -210,7 +194,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     /**
      * @param string $label
      * @return $this
-     * @since 2.0.0
      */
     public function setLabel($label)
     {
@@ -220,7 +203,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     /**
      * @param int $position
      * @return $this
-     * @since 2.0.0
      */
     public function setPosition($position)
     {
@@ -230,7 +212,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     /**
      * @param bool $isUseDefault
      * @return $this
-     * @since 2.0.0
      */
     public function setIsUseDefault($isUseDefault)
     {
@@ -240,7 +221,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     /**
      * @param \Magento\ConfigurableProduct\Api\Data\OptionValueInterface[] $values
      * @return $this
-     * @since 2.0.0
      */
     public function setValues(array $values = null)
     {
@@ -251,7 +231,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      * {@inheritdoc}
      *
      * @return \Magento\ConfigurableProduct\Api\Data\OptionExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -263,7 +242,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      *
      * @param \Magento\ConfigurableProduct\Api\Data\OptionExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\ConfigurableProduct\Api\Data\OptionExtensionInterface $extensionAttributes
@@ -273,7 +251,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getProductId()
     {
@@ -282,7 +259,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setProductId($value)
     {
@@ -293,7 +269,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function __sleep()
     {
@@ -305,7 +280,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function __wakeup()
     {

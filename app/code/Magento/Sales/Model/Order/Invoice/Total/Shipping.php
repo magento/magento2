@@ -9,14 +9,12 @@ namespace Magento\Sales\Model\Order\Invoice\Total;
  * Order invoice shipping total calculation model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Shipping extends AbstractTotal
 {
     /**
      * @param \Magento\Sales\Model\Order\Invoice $invoice
      * @return $this
-     * @since 2.0.0
      */
     public function collect(\Magento\Sales\Model\Order\Invoice $invoice)
     {

@@ -10,7 +10,6 @@ use Magento\Payment\Block\ConfigurableInfo;
 
 /**
  * Class Info
- * @since 2.0.0
  */
 class Info extends ConfigurableInfo
 {
@@ -19,7 +18,6 @@ class Info extends ConfigurableInfo
      *
      * @param string $field
      * @return Phrase
-     * @since 2.1.0
      */
     protected function getLabel($field)
     {

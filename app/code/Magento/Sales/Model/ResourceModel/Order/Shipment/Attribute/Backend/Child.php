@@ -9,7 +9,6 @@ namespace Magento\Sales\Model\ResourceModel\Order\Shipment\Attribute\Backend;
  * Invoice backend model for child attribute
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Child extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -18,7 +17,6 @@ class Child extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave($object)
     {

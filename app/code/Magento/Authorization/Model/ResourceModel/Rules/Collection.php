@@ -9,7 +9,6 @@ namespace Magento\Authorization\Model\ResourceModel\Rules;
  * Rules collection
  *
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -17,7 +16,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -32,7 +30,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $roleId
      * @return $this
-     * @since 2.0.0
      */
     public function getByRoles($roleId)
     {
@@ -44,7 +41,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Sort by length
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addSortByLength()
     {

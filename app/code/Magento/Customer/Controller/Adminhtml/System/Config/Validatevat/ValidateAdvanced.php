@@ -9,20 +9,17 @@ namespace Magento\Customer\Controller\Adminhtml\System\Config\Validatevat;
 /**
  * Class \Magento\Customer\Controller\Adminhtml\System\Config\Validatevat\ValidateAdvanced
  *
- * @since 2.0.0
  */
 class ValidateAdvanced extends \Magento\Customer\Controller\Adminhtml\System\Config\Validatevat
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -36,7 +33,6 @@ class ValidateAdvanced extends \Magento\Customer\Controller\Adminhtml\System\Con
      * Retrieve validation result as JSON
      *
      * @return \Magento\Framework\Controller\Result\Json
-     * @since 2.0.0
      */
     public function execute()
     {

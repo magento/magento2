@@ -22,7 +22,6 @@ use Magento\Cms\Api\Data\PageInterface;
 /**
  * Cms page mysql resource
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Page extends AbstractDb
 {
@@ -30,7 +29,6 @@ class Page extends AbstractDb
      * Store model
      *
      * @var null|Store
-     * @since 2.0.0
      */
     protected $_store = null;
 
@@ -38,25 +36,21 @@ class Page extends AbstractDb
      * Store manager
      *
      * @var StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
     /**
      * @var EntityManager
-     * @since 2.1.0
      */
     protected $entityManager;
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     protected $metadataPool;
 
@@ -67,7 +61,6 @@ class Page extends AbstractDb
      * @param EntityManager $entityManager
      * @param MetadataPool $metadataPool
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -88,7 +81,6 @@ class Page extends AbstractDb
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -97,7 +89,6 @@ class Page extends AbstractDb
 
     /**
      * @inheritDoc
-     * @since 2.1.0
      */
     public function getConnection()
     {
@@ -110,7 +101,6 @@ class Page extends AbstractDb
      * @param AbstractModel $object
      * @return $this
      * @throws LocalizedException
-     * @since 2.0.0
      */
     protected function _beforeSave(AbstractModel $object)
     {
@@ -146,7 +136,6 @@ class Page extends AbstractDb
      * @return bool|int|string
      * @throws LocalizedException
      * @throws \Exception
-     * @since 2.1.0
      */
     private function getPageId(AbstractModel $object, $value, $field = null)
     {
@@ -177,7 +166,6 @@ class Page extends AbstractDb
      * @param mixed $value
      * @param string $field field to load by (defaults to model id)
      * @return $this
-     * @since 2.0.0
      */
     public function load(AbstractModel $object, $value, $field = null)
     {
@@ -195,7 +183,6 @@ class Page extends AbstractDb
      * @param mixed $value
      * @param CmsPage|AbstractModel $object
      * @return Select
-     * @since 2.0.0
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -230,7 +217,6 @@ class Page extends AbstractDb
      * @param int|array $store
      * @param int $isActive
      * @return Select
-     * @since 2.0.0
      */
     protected function _getLoadByIdentifierSelect($identifier, $store, $isActive = null)
     {
@@ -259,7 +245,6 @@ class Page extends AbstractDb
      *
      * @param AbstractModel $object
      * @return bool
-     * @since 2.0.0
      */
     protected function isNumericPageIdentifier(AbstractModel $object)
     {
@@ -271,7 +256,6 @@ class Page extends AbstractDb
      *
      * @param AbstractModel $object
      * @return bool
-     * @since 2.0.0
      */
     protected function isValidPageIdentifier(AbstractModel $object)
     {
@@ -285,7 +269,6 @@ class Page extends AbstractDb
      * @param string $identifier
      * @param int $storeId
      * @return int
-     * @since 2.0.0
      */
     public function checkIdentifier($identifier, $storeId)
     {
@@ -306,7 +289,6 @@ class Page extends AbstractDb
      *
      * @param string $identifier
      * @return string|false
-     * @since 2.0.0
      */
     public function getCmsPageTitleByIdentifier($identifier)
     {
@@ -329,7 +311,6 @@ class Page extends AbstractDb
      *
      * @param string $id
      * @return string|false
-     * @since 2.0.0
      */
     public function getCmsPageTitleById($id)
     {
@@ -348,7 +329,6 @@ class Page extends AbstractDb
      *
      * @param string $id
      * @return string|false
-     * @since 2.0.0
      */
     public function getCmsPageIdentifierById($id)
     {
@@ -367,7 +347,6 @@ class Page extends AbstractDb
      *
      * @param int $pageId
      * @return array
-     * @since 2.0.0
      */
     public function lookupStoreIds($pageId)
     {
@@ -393,7 +372,6 @@ class Page extends AbstractDb
      *
      * @param Store $store
      * @return $this
-     * @since 2.0.0
      */
     public function setStore($store)
     {
@@ -405,7 +383,6 @@ class Page extends AbstractDb
      * Retrieve store model
      *
      * @return Store
-     * @since 2.0.0
      */
     public function getStore()
     {
@@ -414,7 +391,6 @@ class Page extends AbstractDb
 
     /**
      * @inheritDoc
-     * @since 2.1.0
      */
     public function save(AbstractModel $object)
     {
@@ -424,7 +400,6 @@ class Page extends AbstractDb
 
     /**
      * @inheritDoc
-     * @since 2.1.0
      */
     public function delete(AbstractModel $object)
     {

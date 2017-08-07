@@ -9,7 +9,6 @@ namespace Magento\Framework\Config;
  * Config validation state interface.
  *
  * @api
- * @since 2.0.0
  */
 interface ValidationStateInterface
 {
@@ -17,7 +16,6 @@ interface ValidationStateInterface
      * Retrieve current validation state
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isValidationRequired();
 }

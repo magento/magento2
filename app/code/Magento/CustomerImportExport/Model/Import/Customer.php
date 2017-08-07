@@ -14,7 +14,6 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Customer extends AbstractCustomer
 {
@@ -77,7 +76,6 @@ class Customer extends AbstractCustomer
      * Customers information from import file
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_newCustomers = [];
 
@@ -87,7 +85,6 @@ class Customer extends AbstractCustomer
      * or just to deny this attribute processing.
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_ignoredAttributes = ['website_id', 'store_id'];
 
@@ -95,7 +92,6 @@ class Customer extends AbstractCustomer
      * Customer entity DB table name.
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_entityTable;
 
@@ -103,7 +99,6 @@ class Customer extends AbstractCustomer
      * Customer model
      *
      * @var \Magento\Customer\Model\Customer
-     * @since 2.0.0
      */
     protected $_customerModel;
 
@@ -111,7 +106,6 @@ class Customer extends AbstractCustomer
      * Id of next customer entity row
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_nextEntityId;
 
@@ -119,19 +113,16 @@ class Customer extends AbstractCustomer
      * Address attributes collection
      *
      * @var \Magento\Customer\Model\ResourceModel\Attribute\Collection
-     * @since 2.0.0
      */
     protected $_attributeCollection;
 
     /**
      * @var \Magento\ImportExport\Model\ResourceModel\Helper
-     * @since 2.0.0
      */
     protected $_resourceHelper;
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected $masterAttributeCode = 'email';
 
@@ -139,7 +130,6 @@ class Customer extends AbstractCustomer
      * Valid column names
      *
      * @array
-     * @since 2.0.0
      */
     protected $validColumnNames = [
         self::COLUMN_DEFAULT_BILLING,
@@ -149,7 +139,6 @@ class Customer extends AbstractCustomer
 
     /**
      * Customer fields in file
-     * @since 2.0.0
      */
     protected $customerFields = [
         CustomerInterface::GROUP_ID,
@@ -189,7 +178,6 @@ class Customer extends AbstractCustomer
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\StringUtils $string,
@@ -269,7 +257,6 @@ class Customer extends AbstractCustomer
      * @param array $entitiesToCreate Rows for insert
      * @param array $entitiesToUpdate Rows for update
      * @return $this
-     * @since 2.0.0
      */
     protected function _saveCustomerEntities(array $entitiesToCreate, array $entitiesToUpdate)
     {
@@ -293,7 +280,6 @@ class Customer extends AbstractCustomer
      *
      * @param array $attributesData
      * @return $this
-     * @since 2.0.0
      */
     protected function _saveCustomerAttributes(array $attributesData)
     {
@@ -319,7 +305,6 @@ class Customer extends AbstractCustomer
      *
      * @param array $entitiesToDelete customers id list
      * @return $this
-     * @since 2.0.0
      */
     protected function _deleteCustomerEntities(array $entitiesToDelete)
     {
@@ -333,7 +318,6 @@ class Customer extends AbstractCustomer
      * Retrieve next customer entity id
      *
      * @return int
-     * @since 2.0.0
      */
     protected function _getNextEntityId()
     {
@@ -350,7 +334,6 @@ class Customer extends AbstractCustomer
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _prepareDataForUpdate(array $rowData)
     {
@@ -445,7 +428,6 @@ class Customer extends AbstractCustomer
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _importData()
     {
@@ -506,7 +488,6 @@ class Customer extends AbstractCustomer
      * EAV entity type code getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getEntityTypeCode()
     {
@@ -521,7 +502,6 @@ class Customer extends AbstractCustomer
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _validateRowForUpdate(array $rowData, $rowNumber)
     {
@@ -568,7 +548,6 @@ class Customer extends AbstractCustomer
      * @param array $rowData
      * @param int $rowNumber
      * @return void
-     * @since 2.0.0
      */
     protected function _validateRowForDelete(array $rowData, $rowNumber)
     {
@@ -583,7 +562,6 @@ class Customer extends AbstractCustomer
      * Entity table name getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getEntityTable()
     {
@@ -592,7 +570,6 @@ class Customer extends AbstractCustomer
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function getValidColumnNames()
     {

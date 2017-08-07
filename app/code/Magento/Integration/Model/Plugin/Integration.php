@@ -16,31 +16,26 @@ use Magento\Integration\Model\ConsolidatedConfig;
 
 /**
  * Plugin for \Magento\Integration\Model\IntegrationService.
- * @since 2.0.0
  */
 class Integration
 {
     /**
      * @var \Magento\Integration\Api\AuthorizationServiceInterface
-     * @since 2.0.0
      */
     protected $integrationAuthorizationService;
 
     /**
      * @var \Magento\Authorization\Model\Acl\AclRetriever
-     * @since 2.0.0
      */
     protected $aclRetriever;
 
     /**
      * @var \Magento\Integration\Model\IntegrationConfig
-     * @since 2.1.0
      */
     protected $integrationConfig;
 
     /**
      * @var \Magento\Integration\Model\ConsolidatedConfig
-     * @since 2.1.0
      */
     protected $consolidatedConfig;
 
@@ -51,7 +46,6 @@ class Integration
      * @param AclRetriever $aclRetriever
      * @param IntegrationConfig $integrationConfig
      * @param ConsolidatedConfig $consolidatedConfig
-     * @since 2.0.0
      */
     public function __construct(
         AuthorizationServiceInterface $integrationAuthorizationService,
@@ -73,7 +67,6 @@ class Integration
      *
      * @return IntegrationModel
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterCreate(IntegrationServiceInterface $subject, $integration)
     {
@@ -92,7 +85,6 @@ class Integration
      *
      * @return IntegrationModel
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterUpdate(IntegrationServiceInterface $subject, $integration)
     {
@@ -111,7 +103,6 @@ class Integration
      *
      * @return IntegrationModel
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterGet(IntegrationServiceInterface $subject, $integration)
     {
@@ -124,7 +115,6 @@ class Integration
      *
      * @param IntegrationModel $integration
      * @return void
-     * @since 2.0.0
      */
     protected function _addAllowedResources(IntegrationModel $integration)
     {
@@ -158,7 +148,6 @@ class Integration
      *
      * @param IntegrationModel $integration
      * @return void
-     * @since 2.0.0
      */
     protected function _saveApiPermissions(IntegrationModel $integration)
     {
@@ -182,7 +171,6 @@ class Integration
      *
      * @return array $integrationData
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterDelete(IntegrationServiceInterface $subject, array $integrationData)
     {

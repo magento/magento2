@@ -9,31 +9,26 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Reports Event observer model
- * @since 2.0.0
  */
 class CatalogProductCompareAddProductObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Reports\Model\Product\Index\ComparedFactory
-     * @since 2.0.0
      */
     protected $_productCompFactory;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Customer\Model\Visitor
-     * @since 2.0.0
      */
     protected $_customerVisitor;
 
     /**
      * @var EventSaver
-     * @since 2.0.0
      */
     protected $eventSaver;
 
@@ -42,7 +37,6 @@ class CatalogProductCompareAddProductObserver implements ObserverInterface
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param EventSaver $eventSaver
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Reports\Model\Product\Index\ComparedFactory $productCompFactory,
@@ -63,7 +57,6 @@ class CatalogProductCompareAddProductObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

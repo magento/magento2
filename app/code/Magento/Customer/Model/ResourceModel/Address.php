@@ -16,19 +16,16 @@ use Magento\Framework\App\ObjectManager;
  * Class Address
  * @package Magento\Customer\Model\ResourceModel
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 {
     /**
      * @var \Magento\Framework\Validator\Factory
-     * @since 2.0.0
      */
     protected $_validatorFactory;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerRepository;
 
@@ -39,7 +36,6 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * @param \Magento\Framework\Validator\Factory $validatorFactory
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
@@ -58,7 +54,6 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * Resource initialization.
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -70,7 +65,6 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Eav\Model\Entity\Type
-     * @since 2.0.0
      */
     public function getEntityType()
     {
@@ -85,7 +79,6 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      *
      * @param \Magento\Framework\DataObject $address
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\DataObject $address)
     {
@@ -102,7 +95,6 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * @param \Magento\Framework\DataObject $address
      * @return void
      * @throws \Magento\Framework\Validator\Exception When validation failed
-     * @since 2.0.0
      */
     protected function _validate($address)
     {
@@ -119,7 +111,6 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function delete($object)
     {
@@ -129,9 +120,8 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     }
 
     /**
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @return DeleteRelation
-     * @since 2.2.0
      */
     private function getDeleteRelation()
     {
@@ -139,9 +129,8 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     }
 
     /**
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @return CustomerRegistry
-     * @since 2.2.0
      */
     private function getCustomerRegistry()
     {
@@ -151,7 +140,6 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     /**
      * @param \Magento\Customer\Model\Address $address
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterDelete(\Magento\Framework\DataObject $address)
     {

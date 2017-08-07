@@ -12,49 +12,41 @@ use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Provide data for theme grid and for theme edit page
- * @since 2.0.0
  */
 class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProviderInterface
 {
     /**
      * @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory
-     * @since 2.0.0
      */
     protected $collectionFactory;
 
     /**
      * @var \Magento\Theme\Model\ThemeFactory
-     * @since 2.0.0
      */
     protected $themeFactory;
 
     /**
      * @var \Magento\Framework\App\CacheInterface
-     * @since 2.1.0
      */
     protected $cache;
 
     /**
      * @var \Magento\Framework\View\Design\ThemeInterface[]
-     * @since 2.2.0
      */
     private $themes;
 
     /**
      * @var ListInterface
-     * @since 2.2.0
      */
     private $themeList;
 
     /**
      * @var DeploymentConfig
-     * @since 2.2.0
      */
     private $deploymentConfig;
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -65,7 +57,6 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      * @param \Magento\Theme\Model\ThemeFactory $themeFactory
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param Json $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $collectionFactory,
@@ -81,7 +72,6 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function getThemeByFullPath($fullPath)
     {
@@ -111,7 +101,6 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function getThemeCustomizations(
         $area = \Magento\Framework\App\Area::AREA_FRONTEND,
@@ -125,7 +114,6 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function getThemeById($themeId)
     {
@@ -152,7 +140,6 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      *
      * @param string $cacheId
      * @return \Magento\Theme\Model\Theme|null
-     * @since 2.2.0
      */
     private function loadThemeFromCache($cacheId)
     {
@@ -172,7 +159,6 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      * @param \Magento\Theme\Model\Theme $theme
      * @param string $cacheId
      * @return void
-     * @since 2.2.0
      */
     private function saveThemeToCache(\Magento\Theme\Model\Theme $theme, $cacheId)
     {
@@ -181,9 +167,8 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
     }
 
     /**
-     * @deprecated 2.2.0
+     * @deprecated 100.1.3
      * @return ListInterface
-     * @since 2.2.0
      */
     private function getThemeList()
     {
@@ -194,9 +179,8 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
     }
 
     /**
-     * @deprecated 2.2.0
+     * @deprecated 100.1.3
      * @return DeploymentConfig
-     * @since 2.2.0
      */
     private function getDeploymentConfig()
     {

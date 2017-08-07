@@ -25,7 +25,6 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Customer Observer Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class AfterAddressSaveObserver implements ObserverInterface
 {
@@ -36,55 +35,46 @@ class AfterAddressSaveObserver implements ObserverInterface
 
     /**
      * @var HelperAddress
-     * @since 2.0.0
      */
     protected $_customerAddress;
 
     /**
      * @var Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var Vat
-     * @since 2.0.0
      */
     protected $_customerVat;
 
     /**
      * @var GroupManagementInterface
-     * @since 2.0.0
      */
     protected $_groupManagement;
 
     /**
      * @var AppState
-     * @since 2.0.0
      */
     protected $appState;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var ManagerInterface
-     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var Escaper
-     * @since 2.0.0
      */
     protected $escaper;
 
     /**
      * @var CustomerSession
-     * @since 2.1.0
      */
     private $customerSession;
 
@@ -98,7 +88,6 @@ class AfterAddressSaveObserver implements ObserverInterface
      * @param Escaper $escaper
      * @param AppState $appState
      * @param CustomerSession $customerSession
-     * @since 2.0.0
      */
     public function __construct(
         Vat $customerVat,
@@ -128,7 +117,6 @@ class AfterAddressSaveObserver implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
@@ -195,7 +183,6 @@ class AfterAddressSaveObserver implements ObserverInterface
      *
      * @param Address $address
      * @return bool
-     * @since 2.0.0
      */
     protected function _canProcessAddress($address)
     {
@@ -221,7 +208,6 @@ class AfterAddressSaveObserver implements ObserverInterface
      *
      * @param Address $address
      * @return bool
-     * @since 2.0.0
      */
     protected function _isDefaultBilling($address)
     {
@@ -235,7 +221,6 @@ class AfterAddressSaveObserver implements ObserverInterface
      *
      * @param Address $address
      * @return bool
-     * @since 2.0.0
      */
     protected function _isDefaultShipping($address)
     {
@@ -250,7 +235,6 @@ class AfterAddressSaveObserver implements ObserverInterface
      * @param Address $customerAddress
      * @param DataObject $validationResult
      * @return $this
-     * @since 2.0.0
      */
     protected function addValidMessage($customerAddress, $validationResult)
     {
@@ -281,7 +265,6 @@ class AfterAddressSaveObserver implements ObserverInterface
      *
      * @param Address $customerAddress
      * @return $this
-     * @since 2.0.0
      */
     protected function addInvalidMessage($customerAddress)
     {
@@ -307,7 +290,6 @@ class AfterAddressSaveObserver implements ObserverInterface
      *
      * @param Address $customerAddress
      * @return $this
-     * @since 2.0.0
      */
     protected function addErrorMessage($customerAddress)
     {

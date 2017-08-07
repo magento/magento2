@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\Config\Source\Product;
 /**
  * Catalog products per page on Grid mode source
  *
- * @since 2.0.0
  */
 class Thumbnail implements \Magento\Framework\Option\ArrayInterface
 {
@@ -20,7 +19,6 @@ class Thumbnail implements \Magento\Framework\Option\ArrayInterface
      * {@inheritdoc}
      *
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

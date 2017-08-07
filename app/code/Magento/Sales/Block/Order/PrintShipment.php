@@ -11,7 +11,6 @@ use Magento\Framework\View\Element\AbstractBlock;
  * Order information for print
  *
  * @api
- * @since 2.0.0
  */
 class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
 {
@@ -19,19 +18,16 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Payment\Helper\Data
-     * @since 2.0.0
      */
     protected $_paymentHelper;
 
     /**
      * @var \Magento\Sales\Model\Order\Address\Renderer
-     * @since 2.0.0
      */
     protected $addressRenderer;
 
@@ -41,7 +37,6 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
      * @param \Magento\Payment\Helper\Data $paymentHelper
      * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -58,7 +53,6 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -69,7 +63,6 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getPaymentInfoHtml()
     {
@@ -78,7 +71,6 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return \Magento\Sales\Model\Order|null
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -89,7 +81,7 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
      * Disable pager for printing page
      *
      * @return bool
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function isPagerDisplayed()
     {
@@ -100,7 +92,7 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
      * Get order items
      *
      * @return \Magento\Framework\DataObject[]
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getItems()
     {
@@ -113,7 +105,6 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * @param AbstractBlock $renderer
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareItem(AbstractBlock $renderer)
     {
@@ -126,7 +117,6 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
      *
      * @param Address $address
      * @return null|string
-     * @since 2.0.0
      */
     public function getFormattedAddress(\Magento\Sales\Model\Order\Address $address)
     {

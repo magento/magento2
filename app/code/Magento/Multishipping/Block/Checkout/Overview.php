@@ -13,7 +13,6 @@ use Magento\Quote\Model\Quote\Address;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Overview extends \Magento\Sales\Block\Items\AbstractItems
 {
@@ -24,31 +23,26 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @var \Magento\Multishipping\Model\Checkout\Type\Multishipping
-     * @since 2.0.0
      */
     protected $_multishipping;
 
     /**
      * @var \Magento\Tax\Helper\Data
-     * @since 2.0.0
      */
     protected $_taxHelper;
 
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var \Magento\Quote\Model\Quote\TotalsCollector
-     * @since 2.0.0
      */
     protected $totalsCollector;
 
     /**
      * @var \Magento\Quote\Model\Quote\TotalsReader
-     * @since 2.0.0
      */
     protected $totalsReader;
 
@@ -60,7 +54,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
      * @param \Magento\Quote\Model\Quote\TotalsReader $totalsReader
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -84,7 +77,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      * Initialize default item renderer
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -98,7 +90,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      * Get multishipping checkout model
      *
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
-     * @since 2.0.0
      */
     public function getCheckout()
     {
@@ -107,7 +98,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return Address
-     * @since 2.0.0
      */
     public function getBillingAddress()
     {
@@ -116,7 +106,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getPaymentHtml()
     {
@@ -127,7 +116,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      * Get object with payment info posted data
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getPayment()
     {
@@ -140,7 +128,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getShippingAddresses()
     {
@@ -149,7 +136,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return int|mixed
-     * @since 2.0.0
      */
     public function getShippingAddressCount()
     {
@@ -165,7 +151,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      * @param Address $address
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getShippingAddressRate($address)
     {
@@ -179,7 +164,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * @param Address $address
      * @return mixed
-     * @since 2.0.0
      */
     public function getShippingPriceInclTax($address)
     {
@@ -191,7 +175,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * @param Address $address
      * @return mixed
-     * @since 2.0.0
      */
     public function getShippingPriceExclTax($address)
     {
@@ -203,7 +186,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      * @return mixed
      *
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function formatPrice($price)
     {
@@ -218,7 +200,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * @param Address $address
      * @return mixed
-     * @since 2.0.0
      */
     public function getShippingAddressItems($address)
     {
@@ -228,7 +209,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * @param Address $address
      * @return mixed
-     * @since 2.0.0
      */
     public function getShippingAddressTotals($address)
     {
@@ -247,7 +227,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return float
-     * @since 2.0.0
      */
     public function getTotal()
     {
@@ -256,7 +235,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getAddressesEditUrl()
     {
@@ -266,7 +244,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * @param Address $address
      * @return string
-     * @since 2.0.0
      */
     public function getEditShippingAddressUrl($address)
     {
@@ -276,7 +253,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * @param Address $address
      * @return string
-     * @since 2.0.0
      */
     public function getEditBillingAddressUrl($address)
     {
@@ -285,7 +261,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getEditShippingUrl()
     {
@@ -294,7 +269,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getPostActionUrl()
     {
@@ -303,7 +277,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getEditBillingUrl()
     {
@@ -312,7 +285,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -323,7 +295,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      * Retrieve virtual product edit url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getVirtualProductEditUrl()
     {
@@ -334,7 +305,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      * Retrieve virtual product collection array
      *
      * @return array
-     * @since 2.0.0
      */
     public function getVirtualItems()
     {
@@ -354,7 +324,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      * Retrieve quote
      *
      * @return \Magento\Quote\Model\Quote
-     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -363,7 +332,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getBillinAddressTotals()
     {
@@ -375,7 +343,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      * @param mixed $totals
      * @param null $colspan
      * @return string
-     * @since 2.0.0
      */
     public function renderTotals($totals, $colspan = null)
     {
@@ -405,7 +372,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      *
      * @param \Magento\Framework\DataObject $item
      * @return string
-     * @since 2.0.0
      */
     public function getRowItemHtml(\Magento\Framework\DataObject $item)
     {
@@ -420,7 +386,6 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      *
      * @param string $type
      * @return \Magento\Framework\View\Element\AbstractBlock
-     * @since 2.0.0
      */
     protected function _getRowItemRenderer($type)
     {

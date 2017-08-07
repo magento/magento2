@@ -13,7 +13,6 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class Totals extends AbstractExtensibleModel implements TotalsInterface
 {
@@ -21,7 +20,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get grand total in quote currency
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getGrandTotal()
     {
@@ -33,7 +31,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param float $grandTotal
      * @return $this
-     * @since 2.0.0
      */
     public function setGrandTotal($grandTotal)
     {
@@ -44,7 +41,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get grand total in base currency
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseGrandTotal()
     {
@@ -56,7 +52,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param float $baseGrandTotal
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseGrandTotal($baseGrandTotal)
     {
@@ -67,7 +62,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get subtotal in quote currency
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getSubtotal()
     {
@@ -79,7 +73,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param float $subtotal
      * @return $this
-     * @since 2.0.0
      */
     public function setSubtotal($subtotal)
     {
@@ -90,7 +83,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get subtotal in base currency
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseSubtotal()
     {
@@ -102,7 +94,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param float $baseSubtotal
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseSubtotal($baseSubtotal)
     {
@@ -113,7 +104,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get discount amount in quote currency
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getDiscountAmount()
     {
@@ -125,7 +115,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param float $discountAmount
      * @return $this
-     * @since 2.0.0
      */
     public function setDiscountAmount($discountAmount)
     {
@@ -136,7 +125,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get discount amount in base currency
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseDiscountAmount()
     {
@@ -148,7 +136,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param float $baseDiscountAmount
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseDiscountAmount($baseDiscountAmount)
     {
@@ -159,7 +146,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get subtotal in quote currency with applied discount
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getSubtotalWithDiscount()
     {
@@ -171,7 +157,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param float $subtotalWithDiscount
      * @return $this
-     * @since 2.0.0
      */
     public function setSubtotalWithDiscount($subtotalWithDiscount)
     {
@@ -182,7 +167,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get subtotal in base currency with applied discount
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseSubtotalWithDiscount()
     {
@@ -194,7 +178,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param float $baseSubtotalWithDiscount
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseSubtotalWithDiscount($baseSubtotalWithDiscount)
     {
@@ -205,7 +188,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get shipping amount in quote currency
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getShippingAmount()
     {
@@ -217,7 +199,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param float $shippingAmount
      * @return $this
-     * @since 2.0.0
      */
     public function setShippingAmount($shippingAmount)
     {
@@ -228,7 +209,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get shipping amount in base currency
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseShippingAmount()
     {
@@ -240,7 +220,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param float $baseShippingAmount
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseShippingAmount($baseShippingAmount)
     {
@@ -251,7 +230,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get shipping discount amount in quote currency
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getShippingDiscountAmount()
     {
@@ -263,7 +241,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param float $shippingDiscountAmount
      * @return $this
-     * @since 2.0.0
      */
     public function setShippingDiscountAmount($shippingDiscountAmount)
     {
@@ -274,7 +251,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get shipping discount amount in base currency
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseShippingDiscountAmount()
     {
@@ -286,7 +262,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param float $baseShippingDiscountAmount
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseShippingDiscountAmount($baseShippingDiscountAmount)
     {
@@ -297,7 +272,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get tax amount in quote currency
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getTaxAmount()
     {
@@ -309,7 +283,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param float $taxAmount
      * @return $this
-     * @since 2.0.0
      */
     public function setTaxAmount($taxAmount)
     {
@@ -320,7 +293,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get tax amount in base currency
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseTaxAmount()
     {
@@ -332,7 +304,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param float $baseTaxAmount
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseTaxAmount($baseTaxAmount)
     {
@@ -343,7 +314,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Returns the total weee tax applied amount in quote currency.
      *
      * @return float Item weee tax applied amount in quote currency.
-     * @since 2.0.0
      */
     public function getWeeeTaxAppliedAmount()
     {
@@ -355,7 +325,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param float $weeeTaxAppliedAmount
      * @return $this
-     * @since 2.0.0
      */
     public function setWeeeTaxAppliedAmount($weeeTaxAppliedAmount)
     {
@@ -366,7 +335,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get shipping tax amount in quote currency
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getShippingTaxAmount()
     {
@@ -378,7 +346,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param float $shippingTaxAmount
      * @return $this
-     * @since 2.0.0
      */
     public function setShippingTaxAmount($shippingTaxAmount)
     {
@@ -389,7 +356,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get shipping tax amount in base currency
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseShippingTaxAmount()
     {
@@ -401,7 +367,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param float $baseShippingTaxAmount
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseShippingTaxAmount($baseShippingTaxAmount)
     {
@@ -412,7 +377,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get subtotal including tax in quote currency
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getSubtotalInclTax()
     {
@@ -424,7 +388,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param float $subtotalInclTax
      * @return $this
-     * @since 2.0.0
      */
     public function setSubtotalInclTax($subtotalInclTax)
     {
@@ -435,7 +398,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get subtotal including tax in base currency
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseSubtotalInclTax()
     {
@@ -447,7 +409,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param float $baseSubtotalInclTax
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseSubtotalInclTax($baseSubtotalInclTax)
     {
@@ -458,7 +419,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get shipping including tax in quote currency
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getShippingInclTax()
     {
@@ -470,7 +430,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param float $shippingInclTax
      * @return $this
-     * @since 2.0.0
      */
     public function setShippingInclTax($shippingInclTax)
     {
@@ -481,7 +440,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get shipping including tax in base currency
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseShippingInclTax()
     {
@@ -493,7 +451,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param float $baseShippingInclTax
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseShippingInclTax($baseShippingInclTax)
     {
@@ -504,7 +461,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get base currency code
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getBaseCurrencyCode()
     {
@@ -516,7 +472,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param string $baseCurrencyCode
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseCurrencyCode($baseCurrencyCode)
     {
@@ -527,7 +482,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get quote currency code
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getQuoteCurrencyCode()
     {
@@ -539,7 +493,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param string $quoteCurrencyCode
      * @return $this
-     * @since 2.0.0
      */
     public function setQuoteCurrencyCode($quoteCurrencyCode)
     {
@@ -548,7 +501,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCouponCode()
     {
@@ -557,7 +509,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setCouponCode($couponCode)
     {
@@ -568,7 +519,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get items qty
      *
      * @return int||null
-     * @since 2.0.0
      */
     public function getItemsQty()
     {
@@ -580,7 +530,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param int $itemsQty
      * @return $this
-     * @since 2.0.0
      */
     public function setItemsQty($itemsQty = null)
     {
@@ -591,7 +540,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * Get totals by items
      *
      * @return \Magento\Quote\Api\Data\TotalsItemInterface[]|null
-     * @since 2.0.0
      */
     public function getItems()
     {
@@ -603,7 +551,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param \Magento\Quote\Api\Data\TotalsItemInterface[] $items
      * @return $this
-     * @since 2.0.0
      */
     public function setItems(array $items = null)
     {
@@ -612,7 +559,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTotalSegments()
     {
@@ -621,7 +567,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setTotalSegments($totals = [])
     {
@@ -632,7 +577,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * {@inheritdoc}
      *
      * @return \Magento\Quote\Api\Data\TotalsExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -644,7 +588,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      *
      * @param \Magento\Quote\Api\Data\TotalsExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Quote\Api\Data\TotalsExtensionInterface $extensionAttributes)
     {

@@ -8,7 +8,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Create\AddConfigured
  *
- * @since 2.0.0
  */
 class AddConfigured extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
@@ -16,7 +15,6 @@ class AddConfigured extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * Adds configured product to quote
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

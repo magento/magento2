@@ -9,7 +9,6 @@ namespace Magento\Integration\Controller\Adminhtml\Integration;
 /**
  * Class \Magento\Integration\Controller\Adminhtml\Integration\NewAction
  *
- * @since 2.0.0
  */
 class NewAction extends \Magento\Integration\Controller\Adminhtml\Integration
 {
@@ -17,7 +16,6 @@ class NewAction extends \Magento\Integration\Controller\Adminhtml\Integration
      * New integration action.
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -10,7 +10,6 @@ use Magento\Setup\Model\ObjectManagerProvider;
 
 /**
  * Provider of Timezone instance
- * @since 2.1.0
  */
 class TimeZoneProvider
 {
@@ -18,7 +17,6 @@ class TimeZoneProvider
      * Object Manager provider
      *
      * @var ObjectManagerProvider
-     * @since 2.1.0
      */
     private $objectManagerProvider;
 
@@ -26,7 +24,6 @@ class TimeZoneProvider
      * Instance of Timezone
      *
      * @var \Magento\Framework\Stdlib\DateTime\Timezone
-     * @since 2.1.0
      */
     private $timezone;
 
@@ -34,7 +31,6 @@ class TimeZoneProvider
      * Init
      *
      * @param ObjectManagerProvider $objectManagerProvider
-     * @since 2.1.0
      */
     public function __construct(ObjectManagerProvider $objectManagerProvider)
     {
@@ -45,7 +41,6 @@ class TimeZoneProvider
      * Get instance of Timezone
      *
      * @return \Magento\Framework\Stdlib\DateTime\Timezone
-     * @since 2.1.0
      */
     public function get()
     {

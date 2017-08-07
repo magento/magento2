@@ -12,7 +12,6 @@ use Magento\Quote\Model\Quote;
  * Checks that order total is meaningful
  *
  * @api
- * @since 2.0.0
  */
 class ZeroTotal implements SpecificationInterface
 {
@@ -23,7 +22,6 @@ class ZeroTotal implements SpecificationInterface
      * @param MethodInterface $paymentMethod
      * @param \Magento\Quote\Model\Quote $quote
      * @return bool
-     * @since 2.0.0
      */
     public function isApplicable(MethodInterface $paymentMethod, Quote $quote)
     {

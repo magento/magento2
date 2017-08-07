@@ -22,9 +22,8 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Manager
- * @deprecated 2.2.0
+ * @deprecated 100.2.0
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Manager implements ManagerInterface
 {
@@ -37,7 +36,6 @@ class Manager implements ManagerInterface
      * Configuration provider for UI component
      *
      * @var ComponentDefinition
-     * @since 2.0.0
      */
     protected $componentConfigProvider;
 
@@ -45,7 +43,6 @@ class Manager implements ManagerInterface
      * Argument interpreter
      *
      * @var InterpreterInterface
-     * @since 2.0.0
      */
     protected $argumentInterpreter;
 
@@ -53,7 +50,6 @@ class Manager implements ManagerInterface
      * DOM document merger
      *
      * @var DomMergerInterface
-     * @since 2.0.0
      */
     protected $domMerger;
 
@@ -61,7 +57,6 @@ class Manager implements ManagerInterface
      * Factory for UI config reader
      *
      * @var ReaderFactory
-     * @since 2.0.0
      */
     protected $readerFactory;
 
@@ -69,7 +64,6 @@ class Manager implements ManagerInterface
      * Component data
      *
      * @var ArrayObject
-     * @since 2.0.0
      */
     protected $componentsData;
 
@@ -77,7 +71,6 @@ class Manager implements ManagerInterface
      * Components pool
      *
      * @var ArrayObject
-     * @since 2.0.0
      */
     protected $componentsPool;
 
@@ -85,31 +78,26 @@ class Manager implements ManagerInterface
      * Factory for ArrayObject
      *
      * @var ArrayObjectFactory
-     * @since 2.0.0
      */
     protected $arrayObjectFactory;
 
     /**
      * @var AggregatedFileCollectorFactory
-     * @since 2.0.0
      */
     protected $aggregatedFileCollectorFactory;
 
     /**
      * @var CacheInterface
-     * @since 2.0.0
      */
     protected $cache;
 
     /**
      * @var UiReaderInterface[]
-     * @since 2.0.0
      */
     protected $uiReader;
 
     /**
      * @var SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -122,7 +110,6 @@ class Manager implements ManagerInterface
      * @param CacheInterface $cache
      * @param InterpreterInterface $argumentInterpreter
      * @param SerializerInterface|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         ComponentDefinition $componentConfigProvider,
@@ -150,7 +137,6 @@ class Manager implements ManagerInterface
      *
      * @param string $name
      * @return array
-     * @since 2.0.0
      */
     public function getData($name)
     {
@@ -162,7 +148,6 @@ class Manager implements ManagerInterface
      *
      * @param string $name
      * @return bool
-     * @since 2.0.0
      */
     protected function hasData($name)
     {
@@ -175,7 +160,6 @@ class Manager implements ManagerInterface
      * @param string $name
      * @return ManagerInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function prepareData($name)
     {
@@ -210,7 +194,6 @@ class Manager implements ManagerInterface
      *
      * @param array $components
      * @return array
-     * @since 2.0.0
      */
     protected function evaluateComponentArguments($components)
     {
@@ -233,7 +216,6 @@ class Manager implements ManagerInterface
      * @param string $component
      * @param bool $evaluated
      * @return array
-     * @since 2.0.0
      */
     public function createRawComponentData($component, $evaluated = true)
     {
@@ -262,7 +244,6 @@ class Manager implements ManagerInterface
      *
      * @param string $name
      * @return UiReaderInterface
-     * @since 2.0.0
      */
     public function getReader($name)
     {
@@ -286,7 +267,6 @@ class Manager implements ManagerInterface
      *
      * @param string $name
      * @return void
-     * @since 2.0.0
      */
     protected function prepare($name)
     {
@@ -307,7 +287,6 @@ class Manager implements ManagerInterface
      * @param string $name
      * @param array $componentsPool
      * @return array
-     * @since 2.0.0
      */
     protected function createDataForComponent($name, array $componentsPool)
     {
@@ -348,7 +327,6 @@ class Manager implements ManagerInterface
      * @param string $instanceName
      * @param array $configuration
      * @return void
-     * @since 2.0.0
      */
     protected function addComponentIntoPool($instanceName, array $configuration)
     {
@@ -361,7 +339,6 @@ class Manager implements ManagerInterface
      * @param array $componentData
      * @param array $rootComponentData
      * @return array
-     * @since 2.0.0
      */
     protected function mergeArguments(array $componentData, array $rootComponentData)
     {
@@ -381,7 +358,6 @@ class Manager implements ManagerInterface
      * @param array $componentData
      * @param array $rootComponentData
      * @return array
-     * @since 2.0.0
      */
     protected function mergeAttributes(array $componentData, array $rootComponentData)
     {
@@ -403,7 +379,6 @@ class Manager implements ManagerInterface
      * @param string|int $key
      * @param string $componentName
      * @return string
-     * @since 2.0.0
      */
     protected function createName(array $componentData, $key, $componentName)
     {

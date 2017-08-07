@@ -12,7 +12,6 @@ use Magento\Framework\Model\AbstractModel;
 /**
  * Class \Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product
  *
- * @since 2.0.0
  */
 class Product extends AbstractPlugin
 {
@@ -23,7 +22,6 @@ class Product extends AbstractPlugin
      * @param \Closure $proceed
      * @param AbstractModel $product
      * @return ResourceProduct
-     * @since 2.0.0
      */
     public function aroundSave(ResourceProduct $productResource, \Closure $proceed, AbstractModel $product)
     {
@@ -37,7 +35,6 @@ class Product extends AbstractPlugin
      * @param \Closure $proceed
      * @param AbstractModel $product
      * @return ResourceProduct
-     * @since 2.0.0
      */
     public function aroundDelete(ResourceProduct $productResource, \Closure $proceed, AbstractModel $product)
     {
@@ -50,7 +47,6 @@ class Product extends AbstractPlugin
      * @param AbstractModel $product
      * @return ResourceProduct
      * @throws \Exception
-     * @since 2.1.0
      */
     private function addCommitCallback(ResourceProduct $productResource, \Closure $proceed, AbstractModel $product)
     {

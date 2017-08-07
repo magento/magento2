@@ -13,25 +13,21 @@ use Magento\Catalog\Model\Indexer\Category\Product;
 /**
  * Class \Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreGroup
  *
- * @since 2.0.0
  */
 class StoreGroup
 {
     /**
      * @var bool
-     * @since 2.2.0
      */
     private $needInvalidating;
 
     /**
      * @var IndexerRegistry
-     * @since 2.0.0
      */
     protected $indexerRegistry;
 
     /**
      * @param IndexerRegistry $indexerRegistry
-     * @since 2.0.0
      */
     public function __construct(IndexerRegistry $indexerRegistry)
     {
@@ -46,7 +42,6 @@ class StoreGroup
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function beforeSave(AbstractDb $subject, AbstractModel $group)
     {
@@ -61,7 +56,6 @@ class StoreGroup
      *
      * @return AbstractDb
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterSave(AbstractDb $subject, AbstractDb $objectResource)
     {
@@ -77,7 +71,6 @@ class StoreGroup
      *
      * @param AbstractModel $group
      * @return bool
-     * @since 2.0.0
      */
     protected function validate(AbstractModel $group)
     {

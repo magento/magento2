@@ -10,7 +10,6 @@ namespace Magento\Framework\Setup;
  * Interface to Log Message in Setup
  *
  * @api
- * @since 2.0.0
  */
 interface LoggerInterface
 {
@@ -19,7 +18,6 @@ interface LoggerInterface
      *
      * @param string $message
      * @return void
-     * @since 2.0.0
      */
     public function logSuccess($message);
 
@@ -28,7 +26,6 @@ interface LoggerInterface
      *
      * @param \Exception $e
      * @return void
-     * @since 2.0.0
      */
     public function logError(\Exception $e);
 
@@ -37,7 +34,6 @@ interface LoggerInterface
      *
      * @param string $message
      * @return void
-     * @since 2.0.0
      */
     public function log($message);
 
@@ -46,7 +42,6 @@ interface LoggerInterface
      *
      * @param string $message
      * @return void
-     * @since 2.0.0
      */
     public function logInline($message);
 
@@ -55,7 +50,6 @@ interface LoggerInterface
      *
      * @param string $message
      * @return void
-     * @since 2.0.0
      */
     public function logMeta($message);
 }

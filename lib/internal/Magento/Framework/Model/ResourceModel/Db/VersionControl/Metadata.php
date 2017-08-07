@@ -7,13 +7,11 @@ namespace Magento\Framework\Model\ResourceModel\Db\VersionControl;
 
 /**
  * Class Metadata represents a list of entity fields that are applicable for persistence operations
- * @since 2.0.0
  */
 class Metadata
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $metadataInfo = [];
 
@@ -23,7 +21,6 @@ class Metadata
      * @param \Magento\Framework\DataObject $entity
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getFields(\Magento\Framework\DataObject $entity)
     {

@@ -20,55 +20,46 @@ use Magento\Framework\View\Element\Template;
  * @method string getPriceId()
  * @method bool getIncludeContainer()
  * @method bool getSkipAdjustments()
- * @since 2.0.0
  */
 class Amount extends Template implements AmountRenderInterface
 {
     /**
      * @var SaleableInterface
-     * @since 2.0.0
      */
     protected $saleableItem;
 
     /**
      * @var PriceInterface
-     * @since 2.0.0
      */
     protected $price;
 
     /**
      * @var AdjustmentRenderInterface[]
-     * @since 2.0.0
      */
     protected $adjustmentRenders;
 
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var RendererPool
-     * @since 2.0.0
      */
     protected $rendererPool;
 
     /**
      * @var AmountInterface
-     * @since 2.0.0
      */
     protected $amount;
 
     /**
      * @var null|float
-     * @since 2.0.0
      */
     protected $displayValue;
 
     /**
      * @var string[]
-     * @since 2.0.0
      */
     protected $adjustmentsHtml = [];
 
@@ -80,7 +71,6 @@ class Amount extends Template implements AmountRenderInterface
      * @param SaleableInterface $saleableItem
      * @param \Magento\Framework\Pricing\Price\PriceInterface $price
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Template\Context $context,
@@ -102,7 +92,6 @@ class Amount extends Template implements AmountRenderInterface
     /**
      * @param float $value
      * @return void
-     * @since 2.0.0
      */
     public function setDisplayValue($value)
     {
@@ -111,7 +100,6 @@ class Amount extends Template implements AmountRenderInterface
 
     /**
      * @return float
-     * @since 2.0.0
      */
     public function getDisplayValue()
     {
@@ -124,7 +112,6 @@ class Amount extends Template implements AmountRenderInterface
 
     /**
      * @return AmountInterface
-     * @since 2.0.0
      */
     public function getAmount()
     {
@@ -133,7 +120,6 @@ class Amount extends Template implements AmountRenderInterface
 
     /**
      * @return SaleableInterface
-     * @since 2.0.0
      */
     public function getSaleableItem()
     {
@@ -142,7 +128,6 @@ class Amount extends Template implements AmountRenderInterface
 
     /**
      * @return \Magento\Framework\Pricing\Price\PriceInterface
-     * @since 2.0.0
      */
     public function getPrice()
     {
@@ -151,7 +136,6 @@ class Amount extends Template implements AmountRenderInterface
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getDisplayCurrencyCode()
     {
@@ -160,7 +144,6 @@ class Amount extends Template implements AmountRenderInterface
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getDisplayCurrencySymbol()
     {
@@ -169,7 +152,6 @@ class Amount extends Template implements AmountRenderInterface
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function hasAdjustmentsHtml()
     {
@@ -178,7 +160,6 @@ class Amount extends Template implements AmountRenderInterface
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getAdjustmentsHtml()
     {
@@ -187,7 +168,6 @@ class Amount extends Template implements AmountRenderInterface
 
     /**
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -205,7 +185,6 @@ class Amount extends Template implements AmountRenderInterface
 
     /**
      * @return AdjustmentRenderInterface[]
-     * @since 2.0.0
      */
     protected function getAdjustmentRenders()
     {
@@ -215,7 +194,6 @@ class Amount extends Template implements AmountRenderInterface
     /**
      * @param AdjustmentRenderInterface[] $adjustmentRenders
      * @return array
-     * @since 2.0.0
      */
     protected function getAdjustments($adjustmentRenders)
     {
@@ -240,7 +218,6 @@ class Amount extends Template implements AmountRenderInterface
      * @param bool $includeContainer
      * @param int $precision
      * @return float
-     * @since 2.0.0
      */
     public function formatCurrency(
         $amount,
@@ -253,7 +230,6 @@ class Amount extends Template implements AmountRenderInterface
     /**
      * @param AdjustmentRenderInterface[] $adjustmentRenders
      * @return array
-     * @since 2.0.0
      */
     protected function setAdjustmentCssClasses($adjustmentRenders)
     {

@@ -10,7 +10,6 @@ use Magento\Framework\Reflection\MethodsMap;
 
 /**
  * Communication config generator based on service methods reflection
- * @since 2.1.0
  */
 class ReflectionGenerator
 {
@@ -18,7 +17,6 @@ class ReflectionGenerator
 
     /**
      * @var MethodsMap
-     * @since 2.1.0
      */
     private $methodsMap;
 
@@ -26,7 +24,6 @@ class ReflectionGenerator
      * Initialize dependencies
      *
      * @param MethodsMap $methodsMap
-     * @since 2.1.0
      */
     public function __construct(MethodsMap $methodsMap)
     {
@@ -39,7 +36,6 @@ class ReflectionGenerator
      * @param string $className
      * @param string $methodName
      * @return array
-     * @since 2.1.0
      */
     public function extractMethodMetadata($className, $methodName)
     {
@@ -68,7 +64,6 @@ class ReflectionGenerator
      * @param string $serviceMethod
      * @param array|null $handlers
      * @return array
-     * @since 2.1.0
      */
     public function generateTopicConfigForServiceMethod($topicName, $serviceType, $serviceMethod, $handlers = [])
     {
@@ -95,7 +90,6 @@ class ReflectionGenerator
      * @param string $typeName
      * @param string $methodName
      * @return string
-     * @since 2.2.0
      */
     public function generateTopicName($typeName, $methodName)
     {

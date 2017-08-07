@@ -14,37 +14,31 @@ use Magento\Downloadable\Api\Data\LinkInterfaceFactory;
 /**
  * Class \Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Downloadable
  *
- * @since 2.0.0
  */
 class Downloadable
 {
     /**
      * @var RequestInterface
-     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var SampleInterfaceFactory
-     * @since 2.1.0
      */
     private $sampleFactory;
 
     /**
      * @var LinkInterfaceFactory
-     * @since 2.1.0
      */
     private $linkFactory;
 
     /**
      * @var SampleBuilder
-     * @since 2.1.0
      */
     private $sampleBuilder;
 
     /**
      * @var LinkBuilder
-     * @since 2.1.0
      */
     private $linkBuilder;
 
@@ -56,7 +50,6 @@ class Downloadable
      * @param SampleBuilder $sampleBuilder
      * @param SampleInterfaceFactory $sampleFactory
      * @param LinkInterfaceFactory $linkFactory
-     * @since 2.0.0
      */
     public function __construct(
         RequestInterface $request,
@@ -81,7 +74,6 @@ class Downloadable
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function afterInitialize(
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject,

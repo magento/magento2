@@ -10,7 +10,6 @@ namespace Magento\Quote\Api;
 /**
  * Coupon management service interface.
  * @api
- * @since 2.0.0
  */
 interface CouponManagementInterface
 {
@@ -20,7 +19,6 @@ interface CouponManagementInterface
      * @param int $cartId The cart ID.
      * @return string The coupon code data.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
-     * @since 2.0.0
      */
     public function get($cartId);
 
@@ -32,7 +30,6 @@ interface CouponManagementInterface
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
      * @throws \Magento\Framework\Exception\CouldNotSaveException The specified coupon could not be added.
-     * @since 2.0.0
      */
     public function set($cartId, $couponCode);
 
@@ -43,7 +40,6 @@ interface CouponManagementInterface
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
      * @throws \Magento\Framework\Exception\CouldNotDeleteException The specified coupon could not be deleted.
-     * @since 2.0.0
      */
     public function remove($cartId);
 }

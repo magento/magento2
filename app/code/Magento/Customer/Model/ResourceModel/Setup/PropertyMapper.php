@@ -12,7 +12,6 @@ use Magento\Eav\Model\Entity\Setup\PropertyMapperAbstract;
 /**
  * Class \Magento\Customer\Model\ResourceModel\Setup\PropertyMapper
  *
- * @since 2.0.0
  */
 class PropertyMapper extends PropertyMapperAbstract
 {
@@ -24,7 +23,6 @@ class PropertyMapper extends PropertyMapperAbstract
      * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function map(array $input, $entityTypeId)
     {

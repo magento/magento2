@@ -14,7 +14,6 @@ use Magento\Framework\App\Action\Action;
  * Catalog products compare block
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
 {
@@ -22,7 +21,6 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      * Product Compare items collection
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection
-     * @since 2.0.0
      */
     protected $_items;
 
@@ -30,7 +28,6 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      * Compare Products comparable attributes cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_attributes;
 
@@ -38,7 +35,6 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      * Flag which allow/disallow to use link for as low as price
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_useLinkForAsLowAs = false;
 
@@ -46,13 +42,11 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      * Customer id
      *
      * @var null|int
-     * @since 2.0.0
      */
     protected $_customerId = null;
 
     /**
      * @var \Magento\Framework\App\Http\Context
-     * @since 2.0.0
      */
     protected $httpContext;
 
@@ -60,7 +54,6 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      * Customer visitor
      *
      * @var \Magento\Customer\Model\Visitor
-     * @since 2.0.0
      */
     protected $_customerVisitor;
 
@@ -68,7 +61,6 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      * Catalog product visibility
      *
      * @var \Magento\Catalog\Model\Product\Visibility
-     * @since 2.0.0
      */
     protected $_catalogProductVisibility;
 
@@ -76,19 +68,16 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      * Item collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory
-     * @since 2.0.0
      */
     protected $_itemCollectionFactory;
 
     /**
      * @var \Magento\Framework\Url\EncoderInterface
-     * @since 2.0.0
      */
     protected $urlEncoder;
 
     /**
      * @var \Magento\Customer\Helper\Session\CurrentCustomer
-     * @since 2.0.0
      */
     protected $currentCustomer;
 
@@ -101,7 +90,6 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -130,7 +118,6 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @param Product $product
      * @return string
-     * @since 2.0.0
      */
     public function getAddToWishlistParams($product)
     {
@@ -146,7 +133,6 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      * Preparing layout
      *
      * @return \Magento\Catalog\Block\Product\Compare\ListCompare
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -160,7 +146,6 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      * Retrieve Product Compare items collection
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection
-     * @since 2.0.0
      */
     public function getItems()
     {
@@ -192,7 +177,6 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      * Retrieve Product Compare Attributes
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAttributes()
     {
@@ -209,7 +193,6 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param Product $product
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return \Magento\Framework\Phrase|string
-     * @since 2.0.0
      */
     public function getProductAttributeValue($product, $attribute)
     {
@@ -234,7 +217,6 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      * Retrieve Print URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPrintUrl()
     {
@@ -246,7 +228,6 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @param int $id
      * @return \Magento\Catalog\Block\Product\Compare\ListCompare
-     * @since 2.0.0
      */
     public function setCustomerId($id)
     {
@@ -260,7 +241,6 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param Product $product
      * @param string|null $idSuffix
      * @return string
-     * @since 2.0.0
      */
     public function getProductPrice(\Magento\Catalog\Model\Product $product, $idSuffix = '')
     {

@@ -8,26 +8,22 @@ namespace Magento\Customer\Model;
 
 /**
  * System configuration operations for customer groups.
- * @since 2.2.0
  */
 class CustomerGroupConfig implements \Magento\Customer\Api\CustomerGroupConfigInterface
 {
     /**
      * @var \Magento\Config\Model\Config
-     * @since 2.2.0
      */
     private $config;
 
     /**
      * @var \Magento\Customer\Api\GroupRepositoryInterface
-     * @since 2.2.0
      */
     private $groupRepository;
 
     /**
      * @param \Magento\Config\Model\Config $config
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Config\Model\Config $config,
@@ -39,7 +35,6 @@ class CustomerGroupConfig implements \Magento\Customer\Api\CustomerGroupConfigIn
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setDefaultCustomerGroup($id)
     {

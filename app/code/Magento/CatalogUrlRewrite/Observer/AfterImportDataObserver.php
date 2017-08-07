@@ -28,7 +28,6 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class AfterImportDataObserver implements ObserverInterface
 {
@@ -39,115 +38,96 @@ class AfterImportDataObserver implements ObserverInterface
 
     /**
      * @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService
-     * @since 2.0.0
      */
     protected $storeViewService;
 
     /**
      * @var \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     protected $product;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $productsWithStores;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $products = [];
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory
-     * @since 2.0.0
      */
     protected $objectRegistryFactory;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\ObjectRegistry
-     * @since 2.0.0
      */
     protected $productCategories;
 
     /**
      * @var \Magento\UrlRewrite\Model\UrlFinderInterface
-     * @since 2.1.0
      */
     protected $urlFinder;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\UrlRewrite\Model\UrlPersistInterface
-     * @since 2.0.0
      */
     protected $urlPersist;
 
     /**
      * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory
-     * @since 2.0.0
      */
     protected $urlRewriteFactory;
 
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product
-     * @since 2.0.0
      */
     protected $import;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $catalogProductFactory;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $acceptableCategories;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
-     * @since 2.0.0
      */
     protected $productUrlPathGenerator;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $websitesToStoreIds;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $storesCache = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $categoryCache = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $websiteCache = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $vitalForGenerationFields = [
         'sku',
@@ -159,7 +139,6 @@ class AfterImportDataObserver implements ObserverInterface
 
     /**
      * @var \Magento\UrlRewrite\Model\MergeDataProvider
-     * @since 2.2.0
      */
     private $mergeDataProviderPrototype;
 
@@ -167,7 +146,6 @@ class AfterImportDataObserver implements ObserverInterface
      * Factory for creating category collection.
      *
      * @var CategoryCollectionFactory
-     * @since 2.2.0
      */
     private $categoryCollectionFactory;
 
@@ -175,7 +153,6 @@ class AfterImportDataObserver implements ObserverInterface
      * Array of invoked categories during url rewrites generation.
      *
      * @var array
-     * @since 2.2.0
      */
     private $categoriesCache = [];
 
@@ -191,7 +168,6 @@ class AfterImportDataObserver implements ObserverInterface
      * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
      * @param CategoryCollectionFactory|null $categoryCollectionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ProductFactory $catalogProductFactory,
@@ -228,7 +204,6 @@ class AfterImportDataObserver implements ObserverInterface
      * @param Observer $observer
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {
@@ -251,7 +226,6 @@ class AfterImportDataObserver implements ObserverInterface
      *
      * @return ImportExport
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _populateForUrlGeneration($rowData)
     {
@@ -296,7 +270,6 @@ class AfterImportDataObserver implements ObserverInterface
      * @param \Magento\Catalog\Model\Product $product
      * @param array $rowData
      * @return void
-     * @since 2.0.0
      */
     protected function setStoreToProduct(\Magento\Catalog\Model\Product $product, array $rowData)
     {
@@ -315,7 +288,6 @@ class AfterImportDataObserver implements ObserverInterface
      * @param \Magento\Catalog\Model\Product $product
      * @param string $storeId
      * @return $this
-     * @since 2.0.0
      */
     protected function addProductToImport($product, $storeId)
     {
@@ -334,7 +306,6 @@ class AfterImportDataObserver implements ObserverInterface
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
-     * @since 2.0.0
      */
     protected function populateGlobalProduct($product)
     {
@@ -353,7 +324,6 @@ class AfterImportDataObserver implements ObserverInterface
      * Generate product url rewrites
      *
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
-     * @since 2.0.0
      */
     protected function generateUrls()
     {
@@ -374,7 +344,6 @@ class AfterImportDataObserver implements ObserverInterface
      *
      * @param int|null $storeId
      * @return bool
-     * @since 2.0.0
      */
     protected function isGlobalScope($storeId)
     {
@@ -385,7 +354,6 @@ class AfterImportDataObserver implements ObserverInterface
      * Generate list based on store view
      *
      * @return UrlRewrite[]
-     * @since 2.0.0
      */
     protected function canonicalUrlRewriteGenerate()
     {
@@ -410,7 +378,6 @@ class AfterImportDataObserver implements ObserverInterface
      * Generate list based on categories.
      *
      * @return UrlRewrite[]
-     * @since 2.0.0
      */
     protected function categoriesUrlRewriteGenerate()
     {
@@ -440,7 +407,6 @@ class AfterImportDataObserver implements ObserverInterface
      * Generate list based on current rewrites
      *
      * @return UrlRewrite[]
-     * @since 2.0.0
      */
     protected function currentUrlRewritesRegenerate()
     {
@@ -473,7 +439,6 @@ class AfterImportDataObserver implements ObserverInterface
      * @param UrlRewrite $url
      * @param Category $category
      * @return array
-     * @since 2.0.0
      */
     protected function generateForAutogenerated($url, $category)
     {
@@ -508,7 +473,6 @@ class AfterImportDataObserver implements ObserverInterface
      * @param UrlRewrite $url
      * @param Category $category
      * @return array
-     * @since 2.0.0
      */
     protected function generateForCustom($url, $category)
     {
@@ -541,7 +505,6 @@ class AfterImportDataObserver implements ObserverInterface
     /**
      * @param UrlRewrite $url
      * @return Category|null|bool
-     * @since 2.0.0
      */
     protected function retrieveCategoryFromMetadata($url)
     {
@@ -557,7 +520,6 @@ class AfterImportDataObserver implements ObserverInterface
      * @param \Magento\Catalog\Model\Category $category
      * @param int $storeId
      * @return bool
-     * @since 2.0.0
      */
     protected function isCategoryProperForGenerating($category, $storeId)
     {
@@ -583,7 +545,6 @@ class AfterImportDataObserver implements ObserverInterface
      * @param int $categoryId
      * @param int $storeId
      * @return Category|\Magento\Framework\DataObject
-     * @since 2.2.0
      */
     private function getCategoryById($categoryId, $storeId)
     {

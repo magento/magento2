@@ -14,14 +14,12 @@ use Magento\Catalog\Model\Product;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 {
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $options;
 
@@ -29,37 +27,31 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      * Catalog product
      *
      * @var \Magento\Catalog\Helper\Product
-     * @since 2.0.0
      */
     protected $catalogProduct;
 
     /**
      * @var \Magento\Bundle\Model\Product\PriceFactory
-     * @since 2.0.0
      */
     protected $productPriceFactory;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $jsonEncoder;
 
     /**
      * @var \Magento\Framework\Locale\FormatInterface
-     * @since 2.0.0
      */
     protected $localeFormat;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $selectedOptions = [];
 
     /**
      * @var \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
-     * @since 2.2.0
      */
     private $catalogRuleProcessor;
 
@@ -71,7 +63,6 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -94,9 +85,8 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @return \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
-     * @since 2.2.0
      */
     private function getCatalogRuleProcessor()
     {
@@ -115,7 +105,6 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      *
      * @param bool $stripSelection
      * @return array
-     * @since 2.0.0
      */
     public function getOptions($stripSelection = false)
     {
@@ -146,7 +135,6 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function hasOptions()
     {
@@ -162,7 +150,6 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      *
      * @return string
      *
-     * @since 2.0.0
      */
     public function getJsonConfig()
     {
@@ -218,7 +205,6 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      *
      * @param Option $option
      * @return string
-     * @since 2.0.0
      */
     public function getOptionHtml(Option $option)
     {
@@ -235,7 +221,6 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param Product $product
      * @param Product $selection
      * @return array
-     * @since 2.0.0
      */
     private function getSelectionItemData(Product $product, Product $selection)
     {
@@ -276,7 +261,6 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param Product $product
      * @param Product $selection
      * @return array
-     * @since 2.0.0
      */
     private function getTierPrices(Product $product, Product $selection)
     {
@@ -317,7 +301,6 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param Option $option
      * @param Product $product
      * @return array
-     * @since 2.0.0
      */
     private function getSelections(Option $option, Product $product)
     {
@@ -344,7 +327,6 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param Product $product
      * @param int $position
      * @return array
-     * @since 2.0.0
      */
     private function getOptionItemData(Option $option, Product $product, $position)
     {
@@ -362,7 +344,6 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param Product $product
      * @param array $options
      * @return array
-     * @since 2.0.0
      */
     private function getConfigData(Product $product, array $options)
     {

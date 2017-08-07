@@ -12,7 +12,6 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
  * Customer Reviews list block
  *
  * @api
- * @since 2.0.0
  */
 class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
 {
@@ -20,7 +19,6 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * Product reviews collection
      *
      * @var \Magento\Review\Model\ResourceModel\Review\Product\Collection
-     * @since 2.0.0
      */
     protected $_collection;
 
@@ -28,13 +26,11 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * Review resource model
      *
      * @var \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory
-     * @since 2.0.0
      */
     protected $_collectionFactory;
 
     /**
      * @var \Magento\Customer\Helper\Session\CurrentCustomer
-     * @since 2.0.0
      */
     protected $currentCustomer;
 
@@ -47,7 +43,6 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * @param \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory $collectionFactory
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -75,7 +70,6 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * Get html code for toolbar
      *
      * @return string
-     * @since 2.0.0
      */
     public function getToolbarHtml()
     {
@@ -86,7 +80,6 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * Initializes toolbar
      *
      * @return \Magento\Framework\View\Element\AbstractBlock
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -107,7 +100,6 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * Get reviews
      *
      * @return bool|\Magento\Review\Model\ResourceModel\Review\Product\Collection
-     * @since 2.0.0
      */
     public function getReviews()
     {
@@ -128,8 +120,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * Get review link
      *
      * @return string
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 100.2.0
      */
     public function getReviewLink()
     {
@@ -141,7 +132,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      *
      * @param \Magento\Review\Model\Review $review
      * @return string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getReviewUrl($review)
     {
@@ -152,8 +143,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * Get product link
      *
      * @return string
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 100.2.0
      */
     public function getProductLink()
     {
@@ -165,7 +155,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      *
      * @param \Magento\Review\Model\Review $review
      * @return string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getProductUrl($review)
     {
@@ -177,7 +167,6 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      *
      * @param string $date
      * @return string
-     * @since 2.0.0
      */
     public function dateFormat($date)
     {
@@ -188,7 +177,6 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * Add review summary
      *
      * @return \Magento\Framework\View\Element\AbstractBlock
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {

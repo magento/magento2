@@ -18,20 +18,17 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 /**
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $_productFactory;
 
     /**
      * @var \Magento\Catalog\Helper\Product\Edit\Action\Attribute
-     * @since 2.0.0
      */
     protected $_attributeAction;
 
@@ -42,7 +39,6 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeAction
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -59,7 +55,6 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -69,7 +64,6 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -106,7 +100,6 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
      * Retrieve attributes for product mass update
      *
      * @return \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     public function getAttributes()
     {
@@ -117,7 +110,6 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
      * Additional element types for product attributes
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getAdditionalElementTypes()
     {
@@ -134,7 +126,6 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
      *
      * @param AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     protected function _getAdditionalElementHtml($element)
     {
@@ -164,7 +155,6 @@ HTML;
 
     /**
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -173,7 +163,6 @@ HTML;
 
     /**
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -182,7 +171,6 @@ HTML;
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -191,7 +179,6 @@ HTML;
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isHidden()
     {

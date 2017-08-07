@@ -8,13 +8,11 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer\Options;
 /**
  * Class \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Extended
  *
- * @since 2.0.0
  */
 class Extended extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options
 {
     /**
      * @var \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter
-     * @since 2.0.0
      */
     protected $_converter;
 
@@ -22,7 +20,6 @@ class Extended extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Option
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter $converter
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -37,7 +34,6 @@ class Extended extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Option
      * Prepare data for renderer
      *
      * @return array
-     * @since 2.0.0
      */
     public function _getOptions()
     {

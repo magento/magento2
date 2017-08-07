@@ -8,7 +8,6 @@ namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
 /**
  * Delete Controller
- * @since 2.1.0
  */
 class Delete extends \Magento\Backend\App\Action
 {
@@ -21,13 +20,11 @@ class Delete extends \Magento\Backend\App\Action
 
     /**
      * @var \Psr\Log\LoggerInterface $logger
-     * @since 2.1.0
      */
     private $logger;
 
     /**
      * @var \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
-     * @since 2.1.0
      */
     private $synGroupRepository;
 
@@ -37,7 +34,6 @@ class Delete extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
      * @param \Psr\Log\LoggerInterface $logger
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -53,7 +49,6 @@ class Delete extends \Magento\Backend\App\Action
      * Delete action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.1.0
      */
     public function execute()
     {

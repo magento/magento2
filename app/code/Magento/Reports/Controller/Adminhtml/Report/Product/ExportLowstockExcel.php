@@ -12,7 +12,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Product\ExportLowstockExcel
  *
- * @since 2.0.0
  */
 class ExportLowstockExcel extends \Magento\Reports\Controller\Adminhtml\Report\Product
 {
@@ -27,7 +26,6 @@ class ExportLowstockExcel extends \Magento\Reports\Controller\Adminhtml\Report\P
      * Export low stock products report to XML format
      *
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

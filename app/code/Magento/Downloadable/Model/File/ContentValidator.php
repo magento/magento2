@@ -11,7 +11,6 @@ use Magento\Framework\Exception\InputException;
 /**
  * Class \Magento\Downloadable\Model\File\ContentValidator
  *
- * @since 2.0.0
  */
 class ContentValidator
 {
@@ -21,7 +20,6 @@ class ContentValidator
      * @param ContentInterface $fileContent
      * @throws InputException
      * @return bool
-     * @since 2.0.0
      */
     public function isValid(ContentInterface $fileContent)
     {
@@ -41,7 +39,6 @@ class ContentValidator
      *
      * @param string $fileName
      * @return bool
-     * @since 2.0.0
      */
     protected function isFileNameValid($fileName)
     {

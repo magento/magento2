@@ -34,7 +34,6 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Category extends \Magento\Catalog\Model\AbstractModel implements
     \Magento\Framework\DataObject\IdentityInterface,
@@ -86,19 +85,13 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     const KEY_CHILDREN_DATA = 'children_data';
     /**#@-*/
 
-    /**
-     * Prefix of model events names
-     *
-     * @var string
-     * @since 2.0.0
-     */
+    /**#@-*/
     protected $_eventPrefix = 'catalog_category';
 
     /**
      * Parameter name in event
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'category';
 
@@ -106,7 +99,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Model cache tag for clear cache in after save and after delete
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_cacheTag = self::CACHE_TAG;
 
@@ -114,7 +106,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * URL Model instance
      *
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $_url;
 
@@ -122,8 +113,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * URL rewrite model
      *
      * @var \Magento\UrlRewrite\Model\UrlRewrite
-     * @deprecated 2.2.0 since 2.2.0
-     * @since 2.0.0
+     * @deprecated 101.1.0
      */
     protected $_urlRewrite;
 
@@ -131,7 +121,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Use flat resource model flag
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_useFlatResource = false;
 
@@ -139,7 +128,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Category design attributes
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_designAttributes = [
         'custom_design',
@@ -154,7 +142,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Attributes are that part of interface
      *
      * @var array
-     * @since 2.0.0
      */
     protected $interfaceAttributes = [
         'id',
@@ -174,7 +161,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Category tree model
      *
      * @var \Magento\Catalog\Model\ResourceModel\Category\Tree
-     * @since 2.0.0
      */
     protected $_treeModel = null;
 
@@ -182,7 +168,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Core data
      *
      * @var \Magento\Framework\Filter\FilterManager
-     * @since 2.0.0
      */
     protected $filter;
 
@@ -190,7 +175,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Catalog config
      *
      * @var \Magento\Catalog\Model\Config
-     * @since 2.0.0
      */
     protected $_catalogConfig;
 
@@ -198,7 +182,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Product collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     * @since 2.0.0
      */
     protected $_productCollectionFactory;
 
@@ -206,7 +189,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Store collection factory
      *
      * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory
-     * @since 2.0.0
      */
     protected $_storeCollectionFactory;
 
@@ -214,43 +196,36 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Category tree factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Category\TreeFactory
-     * @since 2.0.0
      */
     protected $_categoryTreeFactory;
 
     /**
      * @var Indexer\Category\Flat\State
-     * @since 2.0.0
      */
     protected $flatState;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
-     * @since 2.0.0
      */
     protected $categoryUrlPathGenerator;
 
     /**
      * @var \Magento\UrlRewrite\Model\UrlFinderInterface
-     * @since 2.0.0
      */
     protected $urlFinder;
 
     /**
      * @var \Magento\Framework\Indexer\IndexerRegistry
-     * @since 2.0.0
      */
     protected $indexerRegistry;
 
     /**
      * @var CategoryRepositoryInterface
-     * @since 2.0.0
      */
     protected $categoryRepository;
 
     /**
      * @var \Magento\Framework\Api\MetadataServiceInterface
-     * @since 2.0.0
      */
     protected $metadataService;
 
@@ -277,7 +252,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -331,7 +305,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Initialize resource mode
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -346,7 +319,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function getCustomAttributesCodes()
     {
@@ -362,7 +334,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getUseFlatResource()
     {
@@ -373,7 +344,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve URL instance
      *
      * @return \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     public function getUrlInstance()
     {
@@ -384,7 +354,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve category tree model
      *
      * @return \Magento\Catalog\Model\ResourceModel\Category\Tree
-     * @since 2.0.0
      */
     public function getTreeModel()
     {
@@ -395,7 +364,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Enter description here...
      *
      * @return \Magento\Catalog\Model\ResourceModel\Category\Tree
-     * @since 2.0.0
      */
     public function getTreeModelInstance()
     {
@@ -409,7 +377,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param  null|int $afterCategoryId category id after which we have put current category
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException|\Exception
-     * @since 2.0.0
      */
     public function move($parentId, $afterCategoryId)
     {
@@ -489,7 +456,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve default attribute set id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getDefaultAttributeSetId()
     {
@@ -500,7 +466,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Get category products collection
      *
      * @return \Magento\Framework\Data\Collection\AbstractDb
-     * @since 2.0.0
      */
     public function getProductCollection()
     {
@@ -519,7 +484,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @return array
      * @todo Use with Flat Resource
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function getAttributes($noDesignAttributes = false)
     {
@@ -543,7 +507,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * array($productId => $position)
      *
      * @return array
-     * @since 2.0.0
      */
     public function getProductsPosition()
     {
@@ -563,7 +526,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve array of store ids for category
      *
      * @return array
-     * @since 2.0.0
      */
     public function getStoreIds()
     {
@@ -609,7 +571,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * If store id is underfined for category return current active store id
      *
      * @return integer
-     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -624,7 +585,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param int|string $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreId($storeId)
     {
@@ -640,7 +600,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Get category url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUrl()
     {
@@ -675,7 +634,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve category id URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCategoryIdUrl()
     {
@@ -691,7 +649,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param string $str
      * @return string
-     * @since 2.0.0
      */
     public function formatUrlKey($str)
     {
@@ -702,7 +659,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param string $attributeCode
      * @return bool|string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getImageUrl($attributeCode = 'image')
     {
@@ -726,7 +682,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Get parent category object
      *
      * @return \Magento\Catalog\Model\Category
-     * @since 2.0.0
      */
     public function getParentCategory()
     {
@@ -740,7 +695,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Get parent category identifier
      *
      * @return int
-     * @since 2.0.0
      */
     public function getParentId()
     {
@@ -756,7 +710,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Get all parent categories ids
      *
      * @return array
-     * @since 2.0.0
      */
     public function getParentIds()
     {
@@ -767,7 +720,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve dates for custom design (from & to)
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCustomDesignDate()
     {
@@ -782,7 +734,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve design attributes array
      *
      * @return array
-     * @since 2.0.0
      */
     public function getDesignAttributes()
     {
@@ -798,7 +749,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param string $attributeCode
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
-     * @since 2.0.0
      */
     private function _getAttribute($attributeCode)
     {
@@ -815,7 +765,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param boolean $asArray return result as array instead of comma-separated list of IDs
      * @return array|string
-     * @since 2.0.0
      */
     public function getAllChildren($asArray = false)
     {
@@ -831,7 +780,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve children ids comma separated
      *
      * @return string
-     * @since 2.0.0
      */
     public function getChildren()
     {
@@ -843,7 +791,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Return comma separated string
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPathInStore()
     {
@@ -863,7 +810,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param   int $id
      * @return  bool
-     * @since 2.0.0
      */
     public function checkId($id)
     {
@@ -875,7 +821,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Result array contain id of current category because it is part of the path
      *
      * @return array
-     * @since 2.0.0
      */
     public function getPathIds()
     {
@@ -891,7 +836,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve level
      *
      * @return int
-     * @since 2.0.0
      */
     public function getLevel()
     {
@@ -906,7 +850,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param array $ids
      * @return bool
-     * @since 2.0.0
      */
     public function verifyIds(array $ids)
     {
@@ -917,7 +860,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve Is Category has children flag
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasChildren()
     {
@@ -928,7 +870,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve Request Path
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRequestPath()
     {
@@ -939,7 +880,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve Name data wrapper
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -951,7 +891,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
-     * @since 2.0.0
      */
     public function beforeDelete()
     {
@@ -965,7 +904,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve anchors above
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAnchorsAbove()
     {
@@ -996,7 +934,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve count products of category
      *
      * @return int
-     * @since 2.0.0
      */
     public function getProductCount()
     {
@@ -1014,7 +951,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param bool $asCollection
      * @param bool $toLoad
      * @return \Magento\Framework\Data\Tree\Node\Collection|\Magento\Catalog\Model\ResourceModel\Category\Collection
-     * @since 2.0.0
      */
     public function getCategories($parent, $recursionLevel = 0, $sorted = false, $asCollection = false, $toLoad = true)
     {
@@ -1026,7 +962,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Return parent categories of current category
      *
      * @return \Magento\Framework\DataObject[]|\Magento\Catalog\Model\Category[]
-     * @since 2.0.0
      */
     public function getParentCategories()
     {
@@ -1037,7 +972,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Return children categories of current category
      *
      * @return \Magento\Catalog\Model\ResourceModel\Category\Collection|\Magento\Catalog\Model\Category[]
-     * @since 2.0.0
      */
     public function getChildrenCategories()
     {
@@ -1048,7 +982,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Return parent category of current category with own custom design settings
      *
      * @return \Magento\Catalog\Model\Category
-     * @since 2.0.0
      */
     public function getParentDesignCategory()
     {
@@ -1059,7 +992,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Check category is in Root Category list
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isInRootCategoryList()
     {
@@ -1071,7 +1003,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve Available int Product Listing sort by
      *
      * @return null|array
-     * @since 2.0.0
      */
     public function getAvailableSortBy()
     {
@@ -1090,7 +1021,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * code as key, value - name
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAvailableSortByOptions()
     {
@@ -1115,7 +1045,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve Product Listing Default Sort By
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultSortBy()
     {
@@ -1136,7 +1065,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @throws \Magento\Eav\Model\Entity\Attribute\Exception
      * @return true|array
-     * @since 2.0.0
      */
     public function validate()
     {
@@ -1147,7 +1075,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Add reindexCallback
      *
      * @return \Magento\Catalog\Model\Category
-     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -1160,7 +1087,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Init indexing process after category save
      *
      * @return void
-     * @since 2.0.0
      */
     public function reindex()
     {
@@ -1182,7 +1108,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Init indexing process after category delete
      *
      * @return \Magento\Framework\Model\AbstractModel
-     * @since 2.0.0
      */
     public function afterDeleteCommit()
     {
@@ -1194,7 +1119,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Get identities
      *
      * @return array
-     * @since 2.0.0
      */
     public function getIdentities()
     {
@@ -1213,7 +1137,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * @codeCoverageIgnoreStart
      * @return string|null
-     * @since 2.0.0
      */
     public function getPath()
     {
@@ -1222,7 +1145,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @return int|null
-     * @since 2.0.0
      */
     public function getPosition()
     {
@@ -1231,7 +1153,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getChildrenCount()
     {
@@ -1240,7 +1161,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @return string|null
-     * @since 2.0.0
      */
     public function getCreatedAt()
     {
@@ -1249,7 +1169,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @return string|null
-     * @since 2.0.0
      */
     public function getUpdatedAt()
     {
@@ -1259,7 +1178,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsActive()
     {
@@ -1268,7 +1186,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @return int|null
-     * @since 2.0.0
      */
     public function getCategoryId()
     {
@@ -1277,7 +1194,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @return string|null
-     * @since 2.0.0
      */
     public function getDisplayMode()
     {
@@ -1286,7 +1202,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @return bool|null
-     * @since 2.0.0
      */
     public function getIncludeInMenu()
     {
@@ -1295,7 +1210,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @return string|null
-     * @since 2.0.0
      */
     public function getUrlKey()
     {
@@ -1304,7 +1218,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @return \Magento\Catalog\Api\Data\CategoryTreeInterface[]|null
-     * @since 2.0.0
      */
     public function getChildrenData()
     {
@@ -1318,7 +1231,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @return array
      * @todo refactor with converter for AbstractExtensibleModel
-     * @since 2.0.0
      */
     public function __toArray()
     {
@@ -1345,7 +1257,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Convert Category model into flat array.
      *
      * @return array
-     * @since 2.0.0
      */
     public function toFlatArray()
     {
@@ -1370,7 +1281,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param int $parentId
      * @return $this
-     * @since 2.0.0
      */
     public function setParentId($parentId)
     {
@@ -1382,7 +1292,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -1394,7 +1303,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param bool $isActive
      * @return $this
-     * @since 2.0.0
      */
     public function setIsActive($isActive)
     {
@@ -1406,7 +1314,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param int $position
      * @return $this
-     * @since 2.0.0
      */
     public function setPosition($position)
     {
@@ -1418,7 +1325,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param int $level
      * @return $this
-     * @since 2.0.0
      */
     public function setLevel($level)
     {
@@ -1428,7 +1334,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * @param string $updatedAt
      * @return $this
-     * @since 2.0.0
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -1438,7 +1343,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * @param string $createdAt
      * @return $this
-     * @since 2.0.0
      */
     public function setCreatedAt($createdAt)
     {
@@ -1448,7 +1352,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * @param string $path
      * @return $this
-     * @since 2.0.0
      */
     public function setPath($path)
     {
@@ -1458,7 +1361,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * @param string[]|string $availableSortBy
      * @return $this
-     * @since 2.0.0
      */
     public function setAvailableSortBy($availableSortBy)
     {
@@ -1468,7 +1370,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * @param bool $includeInMenu
      * @return $this
-     * @since 2.0.0
      */
     public function setIncludeInMenu($includeInMenu)
     {
@@ -1480,7 +1381,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param int $productCount
      * @return $this
-     * @since 2.0.0
      */
     public function setProductCount($productCount)
     {
@@ -1490,7 +1390,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * @param \Magento\Catalog\Api\Data\CategoryTreeInterface[] $childrenData
      * @return $this
-     * @since 2.0.0
      */
     public function setChildrenData(array $childrenData = null)
     {
@@ -1501,7 +1400,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * {@inheritdoc}
      *
      * @return \Magento\Catalog\Api\Data\CategoryExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -1513,7 +1411,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param \Magento\Catalog\Api\Data\CategoryExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Catalog\Api\Data\CategoryExtensionInterface $extensionAttributes)
     {

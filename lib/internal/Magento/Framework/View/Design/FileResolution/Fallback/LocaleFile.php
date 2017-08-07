@@ -10,13 +10,11 @@ use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Provider of localized view files
- * @since 2.0.0
  */
 class LocaleFile
 {
     /**
      * @var ResolverInterface
-     * @since 2.0.0
      */
     private $resolver;
 
@@ -24,7 +22,6 @@ class LocaleFile
      * Constructor
      *
      * @param ResolverInterface $resolver
-     * @since 2.0.0
      */
     public function __construct(ResolverInterface $resolver)
     {
@@ -39,7 +36,6 @@ class LocaleFile
      * @param string $locale
      * @param string $file
      * @return string|bool
-     * @since 2.0.0
      */
     public function getFile($area, ThemeInterface $themeModel, $locale, $file)
     {
@@ -48,7 +44,6 @@ class LocaleFile
 
     /**
      * @return string
-     * @since 2.0.0
      */
     protected function getFallbackType()
     {

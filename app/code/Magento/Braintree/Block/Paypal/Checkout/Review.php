@@ -11,7 +11,7 @@ use Magento\Paypal\Block\Express;
  * Class Review
  *
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class Review extends Express\Review
 {
@@ -19,7 +19,7 @@ class Review extends Express\Review
      * Controller path
      *
      * @var string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $_controllerPath = 'braintree/paypal';
 
@@ -28,7 +28,7 @@ class Review extends Express\Review
      *
      * @return null
      * @codeCoverageIgnore
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getEditUrl()
     {

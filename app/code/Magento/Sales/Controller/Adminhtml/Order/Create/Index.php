@@ -8,7 +8,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Create\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
@@ -16,7 +15,6 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * Index page
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -10,7 +10,6 @@ use Magento\Payment\Model\Method\AbstractMethod;
 
 /**
  * Class PaymentAction
- * @since 2.1.0
  */
 class PaymentAction implements ArrayInterface
 {
@@ -18,7 +17,6 @@ class PaymentAction implements ArrayInterface
      * Possible actions on order place
      *
      * @return array
-     * @since 2.1.0
      */
     public function toOptionArray()
     {

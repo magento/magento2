@@ -9,20 +9,17 @@ namespace Magento\MediaStorage\Controller\Adminhtml\System\Config\System\Storage
 /**
  * Class \Magento\MediaStorage\Controller\Adminhtml\System\Config\System\Storage\Status
  *
- * @since 2.0.0
  */
 class Status extends \Magento\MediaStorage\Controller\Adminhtml\System\Config\System\Storage
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -37,7 +34,6 @@ class Status extends \Magento\MediaStorage\Controller\Adminhtml\System\Config\Sy
      *
      * @return \Magento\Framework\Controller\Result\Json
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

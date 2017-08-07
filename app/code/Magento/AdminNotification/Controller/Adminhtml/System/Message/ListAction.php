@@ -9,19 +9,16 @@ namespace Magento\AdminNotification\Controller\Adminhtml\System\Message;
 /**
  * Class \Magento\AdminNotification\Controller\Adminhtml\System\Message\ListAction
  *
- * @since 2.0.0
  */
 class ListAction extends \Magento\Backend\App\AbstractAction
 {
     /**
      * @var \Magento\Framework\Json\Helper\Data
-     * @since 2.0.0
      */
     protected $jsonHelper;
 
     /**
      * @var \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection
-     * @since 2.0.0
      */
     protected $messageCollection;
 
@@ -31,7 +28,6 @@ class ListAction extends \Magento\Backend\App\AbstractAction
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection $messageCollection
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -45,7 +41,6 @@ class ListAction extends \Magento\Backend\App\AbstractAction
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

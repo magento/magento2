@@ -13,13 +13,11 @@ namespace Magento\CurrencySymbol\Block\Adminhtml\System;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Currency extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'system/currency/rates.phtml';
 
@@ -27,7 +25,6 @@ class Currency extends \Magento\Backend\Block\Template
      * Prepare layout
      *
      * @return \Magento\Framework\View\Element\AbstractBlock
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -78,7 +75,6 @@ class Currency extends \Magento\Backend\Block\Template
      *
      * @return \Magento\Framework\Phrase
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getHeader()
     {
@@ -90,7 +86,6 @@ class Currency extends \Magento\Backend\Block\Template
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getSaveButtonHtml()
     {
@@ -102,7 +97,6 @@ class Currency extends \Magento\Backend\Block\Template
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getResetButtonHtml()
     {
@@ -114,7 +108,6 @@ class Currency extends \Magento\Backend\Block\Template
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getImportButtonHtml()
     {
@@ -126,7 +119,6 @@ class Currency extends \Magento\Backend\Block\Template
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getServicesHtml()
     {
@@ -138,7 +130,6 @@ class Currency extends \Magento\Backend\Block\Template
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getRatesMatrixHtml()
     {
@@ -150,7 +141,6 @@ class Currency extends \Magento\Backend\Block\Template
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getImportFormAction()
     {

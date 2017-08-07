@@ -21,7 +21,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Command for uninstalling language and backup-code feature
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class UninstallLanguageCommand extends Command
 {
@@ -37,31 +36,26 @@ class UninstallLanguageCommand extends Command
 
     /**
      * @var DependencyChecker
-     * @since 2.0.0
      */
     private $dependencyChecker;
 
     /**
      * @var Remove
-     * @since 2.0.0
      */
     private $remove;
 
     /**
      * @var ComposerInformation
-     * @since 2.0.0
      */
     private $composerInfo;
 
     /**
      * @var Cache
-     * @since 2.0.0
      */
     private $cache;
 
     /**
      * @var BackupRollbackFactory
-     * @since 2.0.0
      */
     private $backupRollbackFactory;
 
@@ -73,7 +67,6 @@ class UninstallLanguageCommand extends Command
      * @param ComposerInformation $composerInfo
      * @param Cache $cache
      * @param BackupRollbackFactory $backupRollbackFactory
-     * @since 2.0.0
      */
     public function __construct(
         DependencyChecker $dependencyChecker,
@@ -93,7 +86,6 @@ class UninstallLanguageCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -118,7 +110,6 @@ class UninstallLanguageCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -159,7 +150,6 @@ class UninstallLanguageCommand extends Command
      * @param string $package
      *
      * @return bool
-     * @since 2.0.0
      */
     private function validate($package)
     {

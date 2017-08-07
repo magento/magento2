@@ -10,13 +10,11 @@ use Magento\Setup\Model\ObjectManagerProvider;
 /**
  * Factory class to create DataSetup
  * @api
- * @since 2.0.0
  */
 class DataSetupFactory
 {
     /**
      * @var ObjectManagerProvider
-     * @since 2.0.0
      */
     private $objectManagerProvider;
 
@@ -24,7 +22,6 @@ class DataSetupFactory
      * Constructor
      *
      * @param ObjectManagerProvider $objectManagerProvider
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerProvider $objectManagerProvider)
     {
@@ -35,7 +32,6 @@ class DataSetupFactory
      * Creates DataSetup
      *
      * @return DataSetup
-     * @since 2.0.0
      */
     public function create()
     {

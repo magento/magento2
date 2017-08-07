@@ -15,25 +15,21 @@ use Magento\Framework\Controller\ResultInterface;
 
 /**
  * Varnish for processing builtin cache
- * @since 2.0.0
  */
 class VarnishPlugin
 {
     /**
      * @var Config
-     * @since 2.0.0
      */
     private $config;
 
     /**
      * @var Version
-     * @since 2.0.0
      */
     private $version;
 
     /**
      * @var AppState
-     * @since 2.0.0
      */
     private $state;
 
@@ -41,7 +37,6 @@ class VarnishPlugin
      * @param Config $config
      * @param Version $version
      * @param AppState $state
-     * @since 2.0.0
      */
     public function __construct(Config $config, Version $version, AppState $state)
     {
@@ -58,7 +53,6 @@ class VarnishPlugin
      * @return ResponseHttp|ResultInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterDispatch(FrontControllerInterface $subject, $result)
     {

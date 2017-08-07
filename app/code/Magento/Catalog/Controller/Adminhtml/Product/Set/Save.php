@@ -9,19 +9,16 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 /**
  * Class \Magento\Catalog\Controller\Adminhtml\Product\Set\Save
  *
- * @since 2.0.0
  */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
 {
     /**
      * @var \Magento\Framework\View\LayoutFactory
-     * @since 2.0.0
      */
     protected $layoutFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
@@ -30,7 +27,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -47,7 +43,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
      * Retrieve catalog product entity type id
      *
      * @return int
-     * @since 2.0.0
      */
     protected function _getEntityTypeId()
     {
@@ -65,7 +60,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
      *
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

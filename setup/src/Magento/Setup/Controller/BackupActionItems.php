@@ -16,7 +16,6 @@ use Zend\View\Model\JsonModel;
 /**
  * Class \Magento\Setup\Controller\BackupActionItems
  *
- * @since 2.0.0
  */
 class BackupActionItems extends AbstractActionController
 {
@@ -25,7 +24,6 @@ class BackupActionItems extends AbstractActionController
      * Handler for BackupRollback
      *
      * @var \Magento\Framework\Setup\BackupRollback
-     * @since 2.0.0
      */
     private $backupHandler;
 
@@ -33,7 +31,6 @@ class BackupActionItems extends AbstractActionController
      * Filesystem
      *
      * @var \Magento\Framework\Backup\Filesystem
-     * @since 2.0.0
      */
     private $fileSystem;
 
@@ -41,7 +38,6 @@ class BackupActionItems extends AbstractActionController
      * Filesystem Directory List
      *
      * @var \Magento\Framework\App\Filesystem\DirectoryList
-     * @since 2.0.0
      */
     private $directoryList;
 
@@ -52,7 +48,6 @@ class BackupActionItems extends AbstractActionController
      * @param \Magento\Setup\Model\WebLogger $logger
      * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList
      * @param \Magento\Framework\Backup\Filesystem $fileSystem
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
@@ -73,7 +68,6 @@ class BackupActionItems extends AbstractActionController
      * No index action, return 404 error page
      *
      * @return \Zend\View\Model\ViewModel
-     * @since 2.1.0
      */
     public function indexAction()
     {
@@ -87,7 +81,6 @@ class BackupActionItems extends AbstractActionController
      * Checks disk space availability
      *
      * @return \Zend\View\Model\JsonModel
-     * @since 2.0.0
      */
     public function checkAction()
     {
@@ -126,7 +119,6 @@ class BackupActionItems extends AbstractActionController
      * Takes backup for code, media or DB
      *
      * @return \Zend\View\Model\JsonModel
-     * @since 2.0.0
      */
     public function createAction()
     {

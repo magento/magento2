@@ -12,19 +12,16 @@ use Magento\Framework\Pricing\PriceInfoInterface;
 
 /**
  * Bundle tier prices model
- * @since 2.0.0
  */
 class TierPrice extends \Magento\Catalog\Pricing\Price\TierPrice implements DiscountProviderInterface
 {
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $filterByBasePrice = false;
 
     /**
      * @var float|false
-     * @since 2.0.0
      */
     protected $percent;
 
@@ -32,7 +29,6 @@ class TierPrice extends \Magento\Catalog\Pricing\Price\TierPrice implements Disc
      * Returns percent discount
      *
      * @return bool|float
-     * @since 2.0.0
      */
     public function getDiscountPercent()
     {
@@ -64,7 +60,6 @@ class TierPrice extends \Magento\Catalog\Pricing\Price\TierPrice implements Disc
      * Returns pricing value
      *
      * @return bool|float
-     * @since 2.0.0
      */
     public function getValue()
     {
@@ -86,7 +81,6 @@ class TierPrice extends \Magento\Catalog\Pricing\Price\TierPrice implements Disc
      * Returns regular price
      *
      * @return bool|float
-     * @since 2.0.0
      */
     protected function getRegularPrice()
     {
@@ -101,7 +95,6 @@ class TierPrice extends \Magento\Catalog\Pricing\Price\TierPrice implements Disc
      * @param float $firstPrice
      * @param float $secondPrice
      * @return bool
-     * @since 2.0.0
      */
     protected function isFirstPriceBetter($firstPrice, $secondPrice)
     {
@@ -110,7 +103,6 @@ class TierPrice extends \Magento\Catalog\Pricing\Price\TierPrice implements Disc
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isPercentageDiscount()
     {

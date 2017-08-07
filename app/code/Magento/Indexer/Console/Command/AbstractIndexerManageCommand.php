@@ -15,7 +15,6 @@ use Magento\Indexer\Model\IndexerFactory;
 
 /**
  * An Abstract class for all Indexer related commands.
- * @since 2.0.0
  */
 abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
 {
@@ -26,7 +25,6 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
 
     /**
      * @var IndexerFactory
-     * @since 2.2.0
      */
     private $indexerFactory;
 
@@ -35,7 +33,6 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
      *
      * @param ObjectManagerFactory $objectManagerFactory
      * @param IndexerFactory|null $indexerFactory
-     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
@@ -51,7 +48,6 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
      * @param InputInterface $input
      * @return IndexerInterface[]
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     protected function getIndexers(InputInterface $input)
     {
@@ -93,7 +89,6 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
      * Get list of options and arguments for the command
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getInputList()
     {
@@ -110,8 +105,7 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
      * Get indexer factory
      *
      * @return IndexerFactory
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getIndexerFactory()
     {

@@ -9,7 +9,6 @@ namespace Magento\Customer\Controller\Review;
 /**
  * Class \Magento\Customer\Controller\Review\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Customer\Controller\Review
 {

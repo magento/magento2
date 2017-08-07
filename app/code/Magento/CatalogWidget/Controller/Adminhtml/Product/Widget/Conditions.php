@@ -9,20 +9,17 @@ use Magento\Rule\Model\Condition\AbstractCondition;
 
 /**
  * Class Conditions
- * @since 2.0.0
  */
 class Conditions extends \Magento\CatalogWidget\Controller\Adminhtml\Product\Widget
 {
     /**
      * @var \Magento\CatalogWidget\Model\Rule
-     * @since 2.0.0
      */
     protected $rule;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\CatalogWidget\Model\Rule $rule
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -34,7 +31,6 @@ class Conditions extends \Magento\CatalogWidget\Controller\Adminhtml\Product\Wid
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

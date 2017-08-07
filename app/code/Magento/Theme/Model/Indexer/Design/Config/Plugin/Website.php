@@ -12,19 +12,16 @@ use Magento\Theme\Model\Data\Design\Config;
 /**
  * Class \Magento\Theme\Model\Indexer\Design\Config\Plugin\Website
  *
- * @since 2.1.0
  */
 class Website
 {
     /**
      * @var IndexerRegistry
-     * @since 2.1.0
      */
     protected $indexerRegistry;
 
     /**
      * @param IndexerRegistry $indexerRegistry
-     * @since 2.1.0
      */
     public function __construct(
         IndexerRegistry $indexerRegistry
@@ -39,7 +36,6 @@ class Website
      * @param \Closure $proceed
      * @return StoreWebsite
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function aroundSave(StoreWebsite $subject, \Closure $proceed)
     {
@@ -59,7 +55,6 @@ class Website
      * @return StoreWebsite
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function afterDelete(StoreWebsite $subject, $result)
     {

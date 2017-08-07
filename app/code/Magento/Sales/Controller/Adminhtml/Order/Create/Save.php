@@ -10,7 +10,6 @@ use Magento\Framework\Exception\PaymentException;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Create\Save
  *
- * @since 2.0.0
  */
 class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
@@ -20,7 +19,6 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * @return \Magento\Backend\Model\View\Result\Forward|\Magento\Backend\Model\View\Result\Redirect
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

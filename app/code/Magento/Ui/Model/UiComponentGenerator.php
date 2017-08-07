@@ -15,19 +15,16 @@ use Magento\Framework\View\Element\UiComponentInterface;
  * Sometimes we need to generate components dynamicly (not from layout).
  * Tha basic example, is creating widget UI component, based on CMS page or CMS block
  * directive
- * @since 2.2.0
  */
 class UiComponentGenerator
 {
     /**
      * @var ContextFactory
-     * @since 2.2.0
      */
     private $contextFactory;
 
     /**
      * @var UiComponentFactory
-     * @since 2.2.0
      */
     private $uiComponentFactory;
 
@@ -36,7 +33,6 @@ class UiComponentGenerator
      * @param ContextFactory $contextFactory
      * @param UiComponentFactory $uiComponentFactory
      * @param array $data
-     * @since 2.2.0
      */
     public function __construct(
         ContextFactory $contextFactory,
@@ -52,7 +48,6 @@ class UiComponentGenerator
      * @param string $name
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @return UiComponentInterface
-     * @since 2.2.0
      */
     public function generateUiComponent($name, \Magento\Framework\View\LayoutInterface $layout)
     {
@@ -76,7 +71,6 @@ class UiComponentGenerator
      *
      * @param UiComponentInterface $component
      * @return UiComponentInterface
-     * @since 2.2.0
      */
     private function prepareComponent(UiComponentInterface $component)
     {

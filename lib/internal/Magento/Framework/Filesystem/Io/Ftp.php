@@ -11,7 +11,6 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * FTP client
- * @since 2.0.0
  */
 class Ftp extends AbstractIo
 {
@@ -33,7 +32,6 @@ class Ftp extends AbstractIo
      * Connection config
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_config;
 
@@ -41,7 +39,6 @@ class Ftp extends AbstractIo
      * An FTP connection
      *
      * @var resource
-     * @since 2.0.0
      */
     protected $_conn;
 
@@ -49,13 +46,11 @@ class Ftp extends AbstractIo
      * Error code
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_error;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_tmpFilename;
 
@@ -78,7 +73,6 @@ class Ftp extends AbstractIo
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function open(array $args = [])
     {
@@ -149,7 +143,6 @@ class Ftp extends AbstractIo
      * Close a connection
      *
      * @return bool
-     * @since 2.0.0
      */
     public function close()
     {
@@ -165,7 +158,6 @@ class Ftp extends AbstractIo
      * @param bool $recursive
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function mkdir($dir, $mode = 0777, $recursive = true)
     {
@@ -179,7 +171,6 @@ class Ftp extends AbstractIo
      * @param bool $recursive
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function rmdir($dir, $recursive = false)
     {
@@ -190,7 +181,6 @@ class Ftp extends AbstractIo
      * Get current working directory
      *
      * @return string
-     * @since 2.0.0
      */
     public function pwd()
     {
@@ -203,7 +193,6 @@ class Ftp extends AbstractIo
      * @param string $dir
      * @return bool
      * @SuppressWarnings(PHPMD.ShortMethodName)
-     * @since 2.0.0
      */
     public function cd($dir)
     {
@@ -216,7 +205,6 @@ class Ftp extends AbstractIo
      * @param string $filename
      * @param string|resource|null $dest destination file name, stream, or if null will return file contents
      * @return false|string
-     * @since 2.0.0
      */
     public function read($filename, $dest = null)
     {
@@ -253,7 +241,6 @@ class Ftp extends AbstractIo
      * @param null $mode
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function write($filename, $src, $mode = null)
     {
@@ -285,7 +272,6 @@ class Ftp extends AbstractIo
      * @param string $filename
      * @return bool
      * @SuppressWarnings(PHPMD.ShortMethodName)
-     * @since 2.0.0
      */
     public function rm($filename)
     {
@@ -299,7 +285,6 @@ class Ftp extends AbstractIo
      * @param string $dest
      * @return bool
      * @SuppressWarnings(PHPMD.ShortMethodName)
-     * @since 2.0.0
      */
     public function mv($src, $dest)
     {
@@ -312,7 +297,6 @@ class Ftp extends AbstractIo
      * @param string $filename
      * @param int $mode
      * @return bool
-     * @since 2.0.0
      */
     public function chmod($filename, $mode)
     {
@@ -324,7 +308,6 @@ class Ftp extends AbstractIo
      * @return array
      * @SuppressWarnings(PHPMD.ShortMethodName)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function ls($grep = null)
     {
@@ -341,7 +324,6 @@ class Ftp extends AbstractIo
     /**
      * @param bool $new
      * @return string
-     * @since 2.0.0
      */
     protected function _tmpFilename($new = false)
     {

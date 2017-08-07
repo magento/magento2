@@ -12,7 +12,6 @@ use Magento\Integration\Model\Integration as IntegrationModel;
  * Main Integration info edit form
  *
  * @api
- * @since 2.0.0
  */
 class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -43,7 +42,6 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * Set form id prefix, declare fields for integration info
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -62,7 +60,6 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * Prepare label for tab
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -73,7 +70,6 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * Prepare title for tab
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -84,7 +80,6 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * Returns status flag about this tab can be showen or not
      *
      * @return true
-     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -95,7 +90,6 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * Returns status flag about this tab hidden or not
      *
      * @return true
-     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -108,7 +102,6 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * @param \Magento\Framework\Data\Form $form
      * @param array $integrationData
      * @return void
-     * @since 2.0.0
      */
     protected function _addGeneralFieldset($form, $integrationData)
     {
@@ -196,7 +189,6 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * @param \Magento\Framework\Data\Form $form
      * @param array $integrationData
      * @return void
-     * @since 2.0.0
      */
     protected function _addDetailsFieldset($form, $integrationData)
     {

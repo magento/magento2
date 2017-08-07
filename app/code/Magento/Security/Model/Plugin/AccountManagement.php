@@ -12,25 +12,21 @@ use Magento\Security\Model\PasswordResetRequestEvent;
 
 /**
  * Magento\Customer\Model\AccountManagement decorator
- * @since 2.1.0
  */
 class AccountManagement
 {
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.1.0
      */
     protected $request;
 
     /**
      * @var SecurityManager
-     * @since 2.1.0
      */
     protected $securityManager;
 
     /**
      * @var int
-     * @since 2.2.0
      */
     protected $passwordRequestEvent;
 
@@ -40,7 +36,6 @@ class AccountManagement
      * @param \Magento\Framework\App\RequestInterface $request
      * @param SecurityManager $securityManager
      * @param int $passwordRequestEvent
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -61,7 +56,6 @@ class AccountManagement
      * @throws SecurityViolationException
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function beforeInitiatePasswordReset(
         AccountManagementOriginal $accountManagement,

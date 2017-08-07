@@ -16,7 +16,6 @@ use Magento\Framework\Data\Form\Element\Fieldset;
  * Abstract class for form, column and fieldset
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class AbstractForm extends \Magento\Framework\DataObject
 {
@@ -24,7 +23,6 @@ class AbstractForm extends \Magento\Framework\DataObject
      * Form level elements collection
      *
      * @var Collection
-     * @since 2.0.0
      */
     protected $_elements;
 
@@ -32,25 +30,21 @@ class AbstractForm extends \Magento\Framework\DataObject
      * Element type classes
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_types = [];
 
     /**
      * @var Factory
-     * @since 2.0.0
      */
     protected $_factoryElement;
 
     /**
      * @var CollectionFactory
-     * @since 2.0.0
      */
     protected $_factoryCollection;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $customAttributes = [];
 
@@ -58,7 +52,6 @@ class AbstractForm extends \Magento\Framework\DataObject
      * @param Factory $factoryElement
      * @param CollectionFactory $factoryCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(Factory $factoryElement, CollectionFactory $factoryCollection, $data = [])
     {
@@ -74,7 +67,6 @@ class AbstractForm extends \Magento\Framework\DataObject
      * Please override this one instead of overriding real __construct constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -86,7 +78,6 @@ class AbstractForm extends \Magento\Framework\DataObject
      * @param string $type
      * @param string $className
      * @return $this
-     * @since 2.0.0
      */
     public function addType($type, $className)
     {
@@ -98,7 +89,6 @@ class AbstractForm extends \Magento\Framework\DataObject
      * Get elements collection
      *
      * @return Collection
-     * @since 2.0.0
      */
     public function getElements()
     {
@@ -114,7 +104,6 @@ class AbstractForm extends \Magento\Framework\DataObject
      * @param boolean $readonly
      * @param boolean $useDisabled
      * @return $this
-     * @since 2.0.0
      */
     public function setReadonly($readonly, $useDisabled = false)
     {
@@ -137,7 +126,6 @@ class AbstractForm extends \Magento\Framework\DataObject
      * @param AbstractElement $element
      * @param bool|string|null $after
      * @return $this
-     * @since 2.0.0
      */
     public function addElement(AbstractElement $element, $after = null)
     {
@@ -158,7 +146,6 @@ class AbstractForm extends \Magento\Framework\DataObject
      * @param   array  $config
      * @param   bool|string|null  $after
      * @return AbstractElement
-     * @since 2.0.0
      */
     public function addField($elementId, $type, $config, $after = false)
     {
@@ -176,7 +163,6 @@ class AbstractForm extends \Magento\Framework\DataObject
      *
      * @param string $elementId
      * @return $this
-     * @since 2.0.0
      */
     public function removeField($elementId)
     {
@@ -192,7 +178,6 @@ class AbstractForm extends \Magento\Framework\DataObject
      * @param bool|string|null $after
      * @param bool $isAdvanced
      * @return Fieldset
-     * @since 2.0.0
      */
     public function addFieldset($elementId, $config, $after = false, $isAdvanced = false)
     {
@@ -209,7 +194,6 @@ class AbstractForm extends \Magento\Framework\DataObject
      * @param string $elementId
      * @param array $config
      * @return Column
-     * @since 2.0.0
      */
     public function addColumn($elementId, $config)
     {
@@ -225,7 +209,6 @@ class AbstractForm extends \Magento\Framework\DataObject
      * @param array $arrAttributes
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function convertToArray(array $arrAttributes = [])
     {
@@ -244,7 +227,6 @@ class AbstractForm extends \Magento\Framework\DataObject
      * @param string $key
      * @param mixed $value
      * @return $this
-     * @since 2.0.0
      */
     public function addCustomAttribute($key, $value)
     {
@@ -260,7 +242,6 @@ class AbstractForm extends \Magento\Framework\DataObject
      * @param string $fieldSeparator
      * @param string $quote
      * @return string
-     * @since 2.0.0
      */
     public function serialize($keys = [], $valueSeparator = '=', $fieldSeparator = ' ', $quote = '"')
     {

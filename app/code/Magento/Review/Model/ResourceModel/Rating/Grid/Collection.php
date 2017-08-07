@@ -9,7 +9,6 @@ namespace Magento\Review\Model\ResourceModel\Rating\Grid;
  * Rating grid collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Collection extends \Magento\Review\Model\ResourceModel\Rating\Collection
 {
@@ -17,7 +16,6 @@ class Collection extends \Magento\Review\Model\ResourceModel\Rating\Collection
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -31,7 +29,6 @@ class Collection extends \Magento\Review\Model\ResourceModel\Rating\Collection
      * @param \Magento\Framework\Registry $coreRegistry
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -61,7 +58,6 @@ class Collection extends \Magento\Review\Model\ResourceModel\Rating\Collection
      * Add entity filter
      *
      * @return $this
-     * @since 2.0.0
      */
     public function _initSelect()
     {

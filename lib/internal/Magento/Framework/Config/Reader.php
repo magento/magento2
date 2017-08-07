@@ -11,19 +11,16 @@ use Magento\Framework\Exception\LocalizedException;
  * Read config from different sources and aggregate them
  *
  * @package Magento\Framework\Config
- * @since 2.2.0
  */
 class Reader implements \Magento\Framework\App\Config\Scope\ReaderInterface
 {
     /**
      * @var array
-     * @since 2.2.0
      */
     private $sources;
 
     /**
      * @param array $sources
-     * @since 2.2.0
      */
     public function __construct(array $sources)
     {
@@ -36,7 +33,6 @@ class Reader implements \Magento\Framework\App\Config\Scope\ReaderInterface
      * @param null|string $scope
      * @throws LocalizedException Exception is thrown when scope other than default is given
      * @return array
-     * @since 2.2.0
      */
     public function read($scope = null)
     {
@@ -55,7 +51,6 @@ class Reader implements \Magento\Framework\App\Config\Scope\ReaderInterface
      *
      * @param array $array
      * @return array
-     * @since 2.2.0
      */
     private function prepareSources(array $array)
     {

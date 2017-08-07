@@ -14,31 +14,26 @@ use Magento\Ui\Component\Form;
 /**
  * Class \Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\UsedDefault
  *
- * @since 2.1.0
  */
 class UsedDefault extends AbstractModifier
 {
     /**
      * @var LocatorInterface
-     * @since 2.1.0
      */
     protected $locator;
 
     /**
      * @var ArrayManager
-     * @since 2.1.0
      */
     protected $arrayManager;
 
     /**
      * @var scopeConfigInterface
-     * @since 2.1.0
      */
     protected $scopeConfig;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $meta = [];
 
@@ -46,7 +41,6 @@ class UsedDefault extends AbstractModifier
      * @param LocatorInterface $locator
      * @param ScopeConfigInterface $scopeConfig
      * @param ArrayManager $arrayManager
-     * @since 2.1.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -60,7 +54,6 @@ class UsedDefault extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -69,7 +62,6 @@ class UsedDefault extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -89,7 +81,6 @@ class UsedDefault extends AbstractModifier
      *
      * @param string $titleIndex
      * @return $this
-     * @since 2.1.0
      */
     protected function titleUsedDefault($titleIndex)
     {
@@ -115,7 +106,6 @@ class UsedDefault extends AbstractModifier
      * Add default service to price in grid
      *
      * @return $this
-     * @since 2.1.0
      */
     protected function priceUsedDefault()
     {
@@ -151,7 +141,6 @@ class UsedDefault extends AbstractModifier
      *
      * @param string $indexTitle
      * @return $this
-     * @since 2.1.0
      */
     protected function titleUsedDefaultInGrid($indexTitle)
     {

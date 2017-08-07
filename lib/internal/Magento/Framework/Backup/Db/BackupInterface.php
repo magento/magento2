@@ -7,7 +7,6 @@ namespace Magento\Framework\Backup\Db;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface BackupInterface
 {
@@ -16,7 +15,6 @@ interface BackupInterface
      *
      * @param int $time
      * @return $this
-     * @since 2.0.0
      */
     public function setTime($time);
 
@@ -25,7 +23,6 @@ interface BackupInterface
      *
      * @param string $type
      * @return $this
-     * @since 2.0.0
      */
     public function setType($type);
 
@@ -34,7 +31,6 @@ interface BackupInterface
      *
      * @param string $path
      * @return $this
-     * @since 2.0.0
      */
     public function setPath($path);
 
@@ -43,7 +39,6 @@ interface BackupInterface
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setName($name);
 
@@ -52,7 +47,6 @@ interface BackupInterface
      *
      * @param bool $write
      * @return $this
-     * @since 2.0.0
      */
     public function open($write = false);
 
@@ -61,7 +55,6 @@ interface BackupInterface
      *
      * @param string $data
      * @return $this
-     * @since 2.0.0
      */
     public function write($data);
 
@@ -69,7 +62,6 @@ interface BackupInterface
      * Close open backup file
      *
      * @return $this
-     * @since 2.0.0
      */
     public function close();
 }

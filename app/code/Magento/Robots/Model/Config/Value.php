@@ -20,7 +20,7 @@ use Magento\Store\Model\StoreResolver;
  * Required to implement Page Cache functionality.
  *
  * @api
- * @since 2.2.0
+ * @since 100.2.0
  */
 class Value extends ConfigValue implements IdentityInterface
 {
@@ -33,13 +33,12 @@ class Value extends ConfigValue implements IdentityInterface
      * Model cache tag for clear cache in after save and after delete
      *
      * @var string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     protected $_cacheTag = true;
 
     /**
      * @var StoreResolver
-     * @since 2.2.0
      */
     private $storeResolver;
 
@@ -52,7 +51,7 @@ class Value extends ConfigValue implements IdentityInterface
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function __construct(
         Context $context,
@@ -81,7 +80,7 @@ class Value extends ConfigValue implements IdentityInterface
      * Get unique page cache identities
      *
      * @return array
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getIdentities()
     {

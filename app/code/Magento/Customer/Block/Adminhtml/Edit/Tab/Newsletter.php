@@ -11,25 +11,21 @@ use Magento\Ui\Component\Layout\Tabs\TabInterface;
 
 /**
  * Customer account form block
- * @since 2.0.0
  */
 class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements TabInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'tab/newsletter.phtml';
 
     /**
      * @var \Magento\Newsletter\Model\SubscriberFactory
-     * @since 2.0.0
      */
     protected $_subscriberFactory;
 
     /**
      * @var AccountManagementInterface
-     * @since 2.0.0
      */
     protected $customerAccountManagement;
 
@@ -37,7 +33,6 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -50,7 +45,6 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      * @param AccountManagementInterface $customerAccountManagement
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -69,7 +63,6 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
      * Return Tab label
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -80,7 +73,6 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
      * Return Tab title
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -91,7 +83,6 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
      * Tab class getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTabClass()
     {
@@ -102,7 +93,6 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
      * Return URL link to Tab content
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTabUrl()
     {
@@ -113,7 +103,6 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
      * Tab should be loaded trough Ajax call
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isAjaxLoaded()
     {
@@ -124,7 +113,6 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
      * Can show tab in tabs
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -135,7 +123,6 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
      * Tab is hidden
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -147,7 +134,6 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
      *
      * @return $this
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function initForm()
     {
@@ -206,7 +192,6 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
      * @param \Magento\Framework\Data\Form $form
      * @param int $customerId
      * @return void
-     * @since 2.1.0
      */
     protected function updateFromSession(\Magento\Framework\Data\Form $form, $customerId)
     {
@@ -223,7 +208,6 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
      * Retrieve the date when the subscriber status changed.
      *
      * @return null|string
-     * @since 2.0.0
      */
     public function getStatusChangedDate()
     {
@@ -241,7 +225,6 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
 
     /**
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

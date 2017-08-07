@@ -11,13 +11,11 @@ use Magento\Framework\Escaper;
 
 /**
  * Product form MSRP field helper
- * @since 2.0.0
  */
 class Price extends \Magento\Framework\Data\Form\Element\Select
 {
     /**
      * @var \Magento\Msrp\Model\Config
-     * @since 2.0.0
      */
     protected $config;
 
@@ -27,7 +25,6 @@ class Price extends \Magento\Framework\Data\Form\Element\Select
      * @param Escaper $escaper
      * @param \Magento\Msrp\Model\Config $config
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -42,7 +39,6 @@ class Price extends \Magento\Framework\Data\Form\Element\Select
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function toHtml()
     {

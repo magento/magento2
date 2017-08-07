@@ -7,7 +7,6 @@ namespace Magento\Setup\Module\I18n\Parser;
 
 /**
  * Parser
- * @since 2.0.0
  */
 class Parser extends AbstractParser
 {
@@ -16,7 +15,6 @@ class Parser extends AbstractParser
      *
      * @param array $options
      * @return void
-     * @since 2.0.0
      */
     protected function _parseByTypeOptions($options)
     {
@@ -35,7 +33,6 @@ class Parser extends AbstractParser
      *
      * @param array $phraseData
      * @return void
-     * @since 2.0.0
      */
     protected function _addPhrase($phraseData)
     {

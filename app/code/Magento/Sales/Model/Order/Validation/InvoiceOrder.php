@@ -18,25 +18,21 @@ use Magento\Sales\Model\ValidatorResultMerger;
 /**
  * Class InvoiceOrder
  * Validation for invoice order operation
- * @since 2.2.0
  */
 class InvoiceOrder implements InvoiceOrderInterface
 {
     /**
      * @var InvoiceValidatorInterface
-     * @since 2.2.0
      */
     private $invoiceValidator;
 
     /**
      * @var OrderValidatorInterface
-     * @since 2.2.0
      */
     private $orderValidator;
 
     /**
      * @var ValidatorResultMerger
-     * @since 2.2.0
      */
     private $validatorResultMerger;
 
@@ -45,7 +41,6 @@ class InvoiceOrder implements InvoiceOrderInterface
      * @param InvoiceValidatorInterface $invoiceValidator
      * @param OrderValidatorInterface $orderValidator
      * @param ValidatorResultMerger $validatorResultMerger
-     * @since 2.2.0
      */
     public function __construct(
         InvoiceValidatorInterface $invoiceValidator,
@@ -59,7 +54,6 @@ class InvoiceOrder implements InvoiceOrderInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function validate(
         OrderInterface $order,

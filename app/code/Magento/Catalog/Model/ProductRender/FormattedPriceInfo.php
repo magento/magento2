@@ -10,14 +10,12 @@ use Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterface;
 
 /**
  * @inheritdoc
- * @since 2.2.0
  */
 class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel implements
     FormattedPriceInfoInterface
 {
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getFinalPrice()
     {
@@ -26,7 +24,6 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setFinalPrice($finalPrice)
     {
@@ -35,7 +32,6 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getMaxPrice()
     {
@@ -44,7 +40,6 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setMaxPrice($maxPrice)
     {
@@ -53,7 +48,6 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getMinimalPrice()
     {
@@ -65,7 +59,6 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
      * and we can to retrieve final price instead
      *
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getMaxRegularPrice()
     {
@@ -78,7 +71,6 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setMaxRegularPrice($maxRegularPrice)
     {
@@ -90,7 +82,6 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
      * and we can to retrieve final price instead
      *
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getMinimalRegularPrice()
     {
@@ -103,7 +94,6 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setMinimalRegularPrice($minRegularPrice)
     {
@@ -112,7 +102,6 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setSpecialPrice($specialPrice)
     {
@@ -121,7 +110,6 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getSpecialPrice()
     {
@@ -130,7 +118,6 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setMinimalPrice($minimalPrice)
     {
@@ -139,7 +126,6 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getRegularPrice()
     {
@@ -148,7 +134,6 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setRegularPrice($regularPrice)
     {
@@ -157,7 +142,6 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getExtensionAttributes()
     {
@@ -166,7 +150,6 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoExtensionInterface $extensionAttributes

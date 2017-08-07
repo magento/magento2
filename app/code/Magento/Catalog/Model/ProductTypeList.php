@@ -13,7 +13,6 @@ use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 /**
  * Class \Magento\Catalog\Model\ProductTypeList
  *
- * @since 2.0.0
  */
 class ProductTypeList implements ProductTypeListInterface
 {
@@ -21,7 +20,6 @@ class ProductTypeList implements ProductTypeListInterface
      * Product type configuration provider
      *
      * @var ConfigInterface
-     * @since 2.0.0
      */
     private $productTypeConfig;
 
@@ -29,7 +27,6 @@ class ProductTypeList implements ProductTypeListInterface
      * Product type factory
      *
      * @var \Magento\Catalog\Api\Data\ProductTypeInterfaceFactory
-     * @since 2.0.0
      */
     private $productTypeFactory;
 
@@ -37,14 +34,12 @@ class ProductTypeList implements ProductTypeListInterface
      * List of product types
      *
      * @var array
-     * @since 2.0.0
      */
     private $productTypes;
 
     /**
      * @param ConfigInterface $productTypeConfig
      * @param \Magento\Catalog\Api\Data\ProductTypeInterfaceFactory $productTypeFactory
-     * @since 2.0.0
      */
     public function __construct(
         ConfigInterface $productTypeConfig,
@@ -56,7 +51,6 @@ class ProductTypeList implements ProductTypeListInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getProductTypes()
     {

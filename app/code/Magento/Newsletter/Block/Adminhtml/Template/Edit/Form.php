@@ -14,13 +14,11 @@ namespace Magento\Newsletter\Block\Adminhtml\Template\Edit;
 /**
  * Class \Magento\Newsletter\Block\Adminhtml\Template\Edit\Form
  *
- * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\Cms\Model\Wysiwyg\Config
-     * @since 2.0.0
      */
     protected $_wysiwygConfig;
 
@@ -30,7 +28,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -47,7 +44,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Retrieve template object
      *
      * @return \Magento\Newsletter\Model\Template
-     * @since 2.0.0
      */
     public function getModel()
     {
@@ -60,7 +56,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @return $this
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {

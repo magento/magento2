@@ -9,13 +9,11 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Order creditmemo shipping total calculation model
- * @since 2.0.0
  */
 class Shipping extends AbstractTotal
 {
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
@@ -23,14 +21,12 @@ class Shipping extends AbstractTotal
      * Tax config
      *
      * @var \Magento\Tax\Model\Config
-     * @since 2.1.0
      */
     private $taxConfig;
 
     /**
      * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         PriceCurrencyInterface $priceCurrency,
@@ -44,7 +40,6 @@ class Shipping extends AbstractTotal
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function collect(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {
@@ -124,7 +119,6 @@ class Shipping extends AbstractTotal
      *
      * @param \Magento\Sales\Model\Order $order
      * @return bool
-     * @since 2.1.0
      */
     private function isSuppliedShippingAmountInclTax($order)
     {
@@ -138,8 +132,7 @@ class Shipping extends AbstractTotal
      *
      * @return \Magento\Tax\Model\Config
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getTaxConfig()
     {

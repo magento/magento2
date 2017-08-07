@@ -14,25 +14,21 @@ use Magento\Framework\App\ResourceConnection;
  *
  * @package Magento\Catalog\Model\Indexer\Category\Product\Action
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
 {
     /**
      * @var \Magento\Framework\Indexer\BatchSizeManagementInterface
-     * @since 2.2.0
      */
     private $batchSizeManagement;
 
     /**
      * @var \Magento\Framework\Indexer\BatchProviderInterface
-     * @since 2.2.0
      */
     private $batchProvider;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.2.0
      */
     protected $metadataPool;
 
@@ -40,13 +36,11 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Row count to process in a batch
      *
      * @var int
-     * @since 2.2.0
      */
     private $batchRowsCount;
 
     /**
      * @var ActiveTableSwitcher
-     * @since 2.2.0
      */
     private $activeTableSwitcher;
 
@@ -61,7 +55,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
      * @param int|null $batchRowsCount
      * @param ActiveTableSwitcher|null $activeTableSwitcher
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -98,7 +91,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Refresh entities index
      *
      * @return $this
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -111,7 +103,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Return select for remove unnecessary data
      *
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function getSelectUnnecessaryData()
     {
@@ -136,7 +127,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Remove unnecessary data
      *
      * @return void
-     * @since 2.0.0
      */
     protected function removeUnnecessaryData()
     {
@@ -149,7 +139,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Publish data from tmp to index
      *
      * @return void
-     * @since 2.0.0
      */
     protected function publishData()
     {
@@ -171,7 +160,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Clear all index data
      *
      * @return void
-     * @since 2.0.0
      */
     protected function clearTmpData()
     {
@@ -180,7 +168,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     protected function reindexRootCategory(\Magento\Store\Model\Store $store)
     {
@@ -194,7 +181,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      *
      * @param \Magento\Store\Model\Store $store
      * @return void
-     * @since 2.2.0
      */
     protected function reindexAnchorCategories(\Magento\Store\Model\Store $store)
     {
@@ -206,7 +192,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      *
      * @param \Magento\Store\Model\Store $store
      * @return void
-     * @since 2.2.0
      */
     protected function reindexNonAnchorCategories(\Magento\Store\Model\Store $store)
     {
@@ -219,7 +204,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * @param \Magento\Framework\DB\Select $basicSelect
      * @param string $whereCondition
      * @return void
-     * @since 2.2.0
      */
     private function reindexCategoriesBySelect(\Magento\Framework\DB\Select $basicSelect, $whereCondition)
     {

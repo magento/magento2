@@ -12,25 +12,21 @@ namespace Magento\Newsletter\Block\Adminhtml\Queue\Edit;
  * Newsletter queue edit form
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\Cms\Model\Wysiwyg\Config
-     * @since 2.0.0
      */
     protected $_wysiwygConfig;
 
     /**
      * @var \Magento\Store\Model\System\Store
-     * @since 2.0.0
      */
     protected $_systemStore;
 
     /**
      * @var \Magento\Newsletter\Model\QueueFactory
-     * @since 2.0.0
      */
     protected $_queueFactory;
 
@@ -42,7 +38,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -68,7 +63,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -290,7 +284,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Retrieve queue object
      *
      * @return \Magento\Newsletter\Model\Queue
-     * @since 2.0.0
      */
     protected function getQueue()
     {

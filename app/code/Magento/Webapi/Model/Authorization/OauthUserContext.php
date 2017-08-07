@@ -14,37 +14,31 @@ use Magento\Framework\Webapi\Request;
 
 /**
  * A user context determined by OAuth headers in a HTTP request.
- * @since 2.0.0
  */
 class OauthUserContext implements UserContextInterface
 {
     /**
      * @var Request
-     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var IntegrationServiceInterface
-     * @since 2.0.0
      */
     protected $integrationService;
 
     /**
      * @var OauthService
-     * @since 2.0.0
      */
     protected $oauthService;
 
     /**
      * @var  OauthRequestHelper
-     * @since 2.0.0
      */
     protected $oauthHelper;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $integrationId;
 
@@ -55,7 +49,6 @@ class OauthUserContext implements UserContextInterface
      * @param IntegrationServiceInterface $integrationService
      * @param OauthService $oauthService
      * @param OauthRequestHelper $oauthHelper
-     * @since 2.0.0
      */
     public function __construct(
         Request $request,
@@ -71,7 +64,6 @@ class OauthUserContext implements UserContextInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getUserId()
     {
@@ -94,7 +86,6 @@ class OauthUserContext implements UserContextInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getUserType()
     {

@@ -8,7 +8,6 @@ namespace Magento\Setup\Module\Di\Code\Scanner;
 /**
  * Class \Magento\Setup\Module\Di\Code\Scanner\PluginScanner
  *
- * @since 2.0.0
  */
 class PluginScanner implements ScannerInterface
 {
@@ -17,7 +16,6 @@ class PluginScanner implements ScannerInterface
      *
      * @param array $files
      * @return array
-     * @since 2.0.0
      */
     public function collectEntities(array $files)
     {

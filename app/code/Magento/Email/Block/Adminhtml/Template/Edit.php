@@ -14,31 +14,26 @@ use Magento\Backend\Block\Widget\ContainerInterface;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @method array getTemplateOptions()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Edit extends Widget implements ContainerInterface
 {
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_registryManager;
 
     /**
      * @var \Magento\Backend\Model\Menu\Config
-     * @since 2.0.0
      */
     protected $_menuConfig;
 
     /**
      * @var \Magento\Config\Model\Config\Structure
-     * @since 2.0.0
      */
     protected $_configStructure;
 
     /**
      * @var \Magento\Email\Model\Template\Config
-     * @since 2.0.0
      */
     private $_emailConfig;
 
@@ -46,31 +41,26 @@ class Edit extends Widget implements ContainerInterface
      * Template file
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'template/edit.phtml';
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
     /**
      * @var \Magento\Framework\Json\Helper\Data
-     * @since 2.0.0
      */
     protected $jsonHelper;
 
     /**
      * @var \Magento\Backend\Block\Widget\Button\ButtonList
-     * @since 2.0.0
      */
     protected $buttonList;
 
     /**
      * @var \Magento\Backend\Block\Widget\Button\ToolbarInterface
-     * @since 2.0.0
      */
     protected $toolbar;
 
@@ -87,7 +77,6 @@ class Edit extends Widget implements ContainerInterface
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -114,7 +103,6 @@ class Edit extends Widget implements ContainerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function updateButton($buttonId, $key, $data)
     {
@@ -124,7 +112,6 @@ class Edit extends Widget implements ContainerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function canRender(\Magento\Backend\Block\Widget\Button\Item $item)
     {
@@ -133,7 +120,6 @@ class Edit extends Widget implements ContainerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function removeButton($buttonId)
     {
@@ -146,7 +132,6 @@ class Edit extends Widget implements ContainerInterface
      *
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -238,7 +223,6 @@ class Edit extends Widget implements ContainerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
     {
@@ -250,7 +234,6 @@ class Edit extends Widget implements ContainerInterface
      * Collect, sort and set template options
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -268,7 +251,6 @@ class Edit extends Widget implements ContainerInterface
      * Get default templates as options array
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getDefaultTemplatesAsOptionsArray()
     {
@@ -289,7 +271,6 @@ class Edit extends Widget implements ContainerInterface
      * Get the html element for load button
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLoadButtonHtml()
     {
@@ -300,7 +281,6 @@ class Edit extends Widget implements ContainerInterface
      * Return edit flag for block
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getEditMode()
     {
@@ -311,7 +291,6 @@ class Edit extends Widget implements ContainerInterface
      * Return header text for form
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -325,7 +304,6 @@ class Edit extends Widget implements ContainerInterface
      * Return form block HTML
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFormHtml()
     {
@@ -336,7 +314,6 @@ class Edit extends Widget implements ContainerInterface
      * Return action url for form
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSaveUrl()
     {
@@ -347,7 +324,6 @@ class Edit extends Widget implements ContainerInterface
      * Return preview action url for form
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPreviewUrl()
     {
@@ -358,7 +334,6 @@ class Edit extends Widget implements ContainerInterface
      * Return true if template type is text; return false otherwise
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isTextType()
     {
@@ -369,7 +344,6 @@ class Edit extends Widget implements ContainerInterface
      * Return template type from template object
      *
      * @return int
-     * @since 2.0.0
      */
     public function getTemplateType()
     {
@@ -380,7 +354,6 @@ class Edit extends Widget implements ContainerInterface
      * Return delete url for customer group
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDeleteUrl()
     {
@@ -391,7 +364,6 @@ class Edit extends Widget implements ContainerInterface
      * Retrieve email template model
      *
      * @return \Magento\Email\Model\Template
-     * @since 2.0.0
      */
     public function getEmailTemplate()
     {
@@ -402,7 +374,6 @@ class Edit extends Widget implements ContainerInterface
      * Load template url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLoadUrl()
     {
@@ -414,7 +385,6 @@ class Edit extends Widget implements ContainerInterface
      *
      * @param bool $asJSON
      * @return string
-     * @since 2.0.0
      */
     public function getCurrentlyUsedForPaths($asJSON = true)
     {
@@ -434,7 +404,6 @@ class Edit extends Widget implements ContainerInterface
      * @param array $paths
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _getSystemConfigPathsParts($paths)
     {
@@ -506,7 +475,6 @@ class Edit extends Widget implements ContainerInterface
      * Return original template code of current template
      *
      * @return string
-     * @since 2.0.0
      */
     public function getOrigTemplateCode()
     {

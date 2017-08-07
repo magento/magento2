@@ -13,7 +13,6 @@ use Magento\Framework\Data\Collection\EntityFactoryInterface;
 
 /**
  * Class TransactionsCollection
- * @since 2.1.0
  */
 class TransactionsCollection extends Collection implements SearchResultInterface
 {
@@ -26,31 +25,26 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      * Item object class name
      *
      * @var string
-     * @since 2.1.0
      */
     protected $_itemObjectClass = \Magento\Braintree\Model\Report\Row\TransactionMap::class;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $filtersList = [];
 
     /**
      * @var FilterMapper
-     * @since 2.1.0
      */
     private $filterMapper;
 
     /**
      * @var BraintreeAdapter
-     * @since 2.1.0
      */
     private $braintreeAdapter;
 
     /**
      * @var \Braintree\ResourceCollection | null
-     * @since 2.1.0
      */
     private $collection;
 
@@ -58,7 +52,6 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      * @param EntityFactoryInterface $entityFactory
      * @param BraintreeAdapter $braintreeAdapter
      * @param FilterMapper $filterMapper
-     * @since 2.1.0
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
@@ -72,7 +65,6 @@ class TransactionsCollection extends Collection implements SearchResultInterface
 
     /**
      * @return \Magento\Framework\Api\Search\DocumentInterface[]
-     * @since 2.1.0
      */
     public function getItems()
     {
@@ -108,7 +100,6 @@ class TransactionsCollection extends Collection implements SearchResultInterface
     /**
      * Fetch collection from Braintree
      * @return \Braintree\ResourceCollection|null
-     * @since 2.1.0
      */
     protected function fetchIdsCollection()
     {
@@ -131,7 +122,6 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      * @param \Magento\Framework\Api\Search\DocumentInterface[] $items
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function setItems(array $items = null)
     {
@@ -140,7 +130,6 @@ class TransactionsCollection extends Collection implements SearchResultInterface
 
     /**
      * @return \Magento\Framework\Api\Search\AggregationInterface
-     * @since 2.1.0
      */
     public function getAggregations()
     {
@@ -151,7 +140,6 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      * @param \Magento\Framework\Api\Search\AggregationInterface $aggregations
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function setAggregations($aggregations)
     {
@@ -162,7 +150,6 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      * Get search criteria.
      *
      * @return \Magento\Framework\Api\Search\SearchCriteriaInterface
-     * @since 2.1.0
      */
     public function getSearchCriteria()
     {
@@ -175,7 +162,6 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function setSearchCriteria(SearchCriteriaInterface $searchCriteria)
     {
@@ -186,7 +172,6 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      * Get total count.
      *
      * @return int
-     * @since 2.1.0
      */
     public function getTotalCount()
     {
@@ -198,7 +183,6 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      * Retrieve collection page size
      *
      * @return int
-     * @since 2.1.0
      */
     public function getPageSize()
     {
@@ -212,7 +196,6 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      * @param int $totalCount
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function setTotalCount($totalCount)
     {
@@ -221,7 +204,6 @@ class TransactionsCollection extends Collection implements SearchResultInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function addFieldToFilter($field, $condition)
     {
@@ -243,7 +225,6 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      *
      * @param object $filter
      * @return void
-     * @since 2.1.0
      */
     private function addFilterToList($filter)
     {
@@ -254,7 +235,6 @@ class TransactionsCollection extends Collection implements SearchResultInterface
 
     /**
      * @return array
-     * @since 2.1.0
      */
     private function getFilters()
     {

@@ -20,49 +20,41 @@ use Magento\Framework\Exception\LocalizedException;
  * @method \Magento\Framework\App\RequestInterface getRequest()
  * @method \Magento\Framework\App\Response\Http getResponse()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Login extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Framework\Session\Generic
-     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var AccountManagementInterface
-     * @since 2.0.0
      */
     protected $customerAccountManagement;
 
     /**
      * @var \Magento\Framework\Json\Helper\Data $helper
-     * @since 2.0.0
      */
     protected $helper;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
-     * @since 2.0.0
      */
     protected $resultRawFactory;
 
     /**
      * @var AccountRedirect
-     * @since 2.1.0
      */
     protected $accountRedirect;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.1.0
      */
     protected $scopeConfig;
 
@@ -75,7 +67,6 @@ class Login extends \Magento\Framework\App\Action\Action
      * @param AccountManagementInterface $customerAccountManagement
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -97,9 +88,8 @@ class Login extends \Magento\Framework\App\Action\Action
      * Get account redirect.
      * For release backward compatibility.
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.0.10
      * @return AccountRedirect
-     * @since 2.1.0
      */
     protected function getAccountRedirect()
     {
@@ -112,10 +102,9 @@ class Login extends \Magento\Framework\App\Action\Action
     /**
      * Account redirect setter for unit tests.
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.0.10
      * @param AccountRedirect $value
      * @return void
-     * @since 2.1.0
      */
     public function setAccountRedirect($value)
     {
@@ -123,9 +112,8 @@ class Login extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * @deprecated 2.1.0
+     * @deprecated 100.0.10
      * @return ScopeConfigInterface
-     * @since 2.1.0
      */
     protected function getScopeConfig()
     {
@@ -136,10 +124,9 @@ class Login extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * @deprecated 2.1.0
+     * @deprecated 100.0.10
      * @param ScopeConfigInterface $value
      * @return void
-     * @since 2.1.0
      */
     public function setScopeConfig($value)
     {
@@ -153,7 +140,6 @@ class Login extends \Magento\Framework\App\Action\Action
      *
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -14,20 +14,19 @@ use Magento\Framework\App\DeploymentConfig;
  * Class DocumentRoot
  * @package Magento\Config\Model\Config\Reader\Source\Deployed
  * @api
- * @since 2.2.0
+ * @since 100.2.0
  */
 class DocumentRoot
 {
     /**
      * @var DeploymentConfig
-     * @since 2.2.0
      */
     private $config;
 
     /**
      * DocumentRoot constructor.
      * @param DeploymentConfig $config
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function __construct(DeploymentConfig $config)
     {
@@ -39,7 +38,7 @@ class DocumentRoot
      * deployment configuration.
      *
      * @return string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getPath()
     {
@@ -52,7 +51,7 @@ class DocumentRoot
      * likely be extended to control other areas).
      *
      * @return bool
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function isPub()
     {

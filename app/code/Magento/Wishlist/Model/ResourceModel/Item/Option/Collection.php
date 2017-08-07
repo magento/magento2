@@ -16,7 +16,6 @@ use Magento\Wishlist\Model\Item;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -24,7 +23,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Array of option ids grouped by item id
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_optionsByItem = [];
 
@@ -32,7 +30,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Array of option ids grouped by product id
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_optionsByProduct = [];
 
@@ -40,7 +37,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Define resource model for collection
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -54,7 +50,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Fill array of options by item and product
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -84,7 +79,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param  int|array|Item $item
      * @return $this
-     * @since 2.0.0
      */
     public function addItemFilter($item)
     {
@@ -106,7 +100,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Get array of all product ids
      *
      * @return array
-     * @since 2.0.0
      */
     public function getProductIds()
     {
@@ -120,7 +113,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param Item|int|string $item
      * @return array
-     * @since 2.0.0
      */
     public function getOptionsByItem($item)
     {
@@ -147,7 +139,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param  Product|int|string $product
      * @return array
-     * @since 2.0.0
      */
     public function getOptionsByProduct($product)
     {

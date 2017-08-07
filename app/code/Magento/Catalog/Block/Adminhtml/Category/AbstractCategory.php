@@ -10,7 +10,6 @@ use Magento\Store\Model\Store;
 
 /**
  * Class AbstractCategory
- * @since 2.0.0
  */
 class AbstractCategory extends \Magento\Backend\Block\Template
 {
@@ -18,25 +17,21 @@ class AbstractCategory extends \Magento\Backend\Block\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category\Tree
-     * @since 2.0.0
      */
     protected $_categoryTree;
 
     /**
      * @var \Magento\Catalog\Model\CategoryFactory
-     * @since 2.0.0
      */
     protected $_categoryFactory;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_withProductCount;
 
@@ -46,7 +41,6 @@ class AbstractCategory extends \Magento\Backend\Block\Template
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -66,7 +60,6 @@ class AbstractCategory extends \Magento\Backend\Block\Template
      * Retrieve current category instance
      *
      * @return array|null
-     * @since 2.0.0
      */
     public function getCategory()
     {
@@ -75,7 +68,6 @@ class AbstractCategory extends \Magento\Backend\Block\Template
 
     /**
      * @return int|string|null
-     * @since 2.0.0
      */
     public function getCategoryId()
     {
@@ -87,7 +79,6 @@ class AbstractCategory extends \Magento\Backend\Block\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getCategoryName()
     {
@@ -96,7 +87,6 @@ class AbstractCategory extends \Magento\Backend\Block\Template
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getCategoryPath()
     {
@@ -108,7 +98,6 @@ class AbstractCategory extends \Magento\Backend\Block\Template
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function hasStoreRootCategory()
     {
@@ -121,7 +110,6 @@ class AbstractCategory extends \Magento\Backend\Block\Template
 
     /**
      * @return Store
-     * @since 2.0.0
      */
     public function getStore()
     {
@@ -134,7 +122,6 @@ class AbstractCategory extends \Magento\Backend\Block\Template
      * @param int $recursionLevel
      * @return Node|array|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function getRoot($parentNodeCategory = null, $recursionLevel = 3)
     {
@@ -176,7 +163,6 @@ class AbstractCategory extends \Magento\Backend\Block\Template
 
     /**
      * @return int
-     * @since 2.0.0
      */
     protected function _getDefaultStoreId()
     {
@@ -185,7 +171,6 @@ class AbstractCategory extends \Magento\Backend\Block\Template
 
     /**
      * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
-     * @since 2.0.0
      */
     public function getCategoryCollection()
     {
@@ -220,7 +205,6 @@ class AbstractCategory extends \Magento\Backend\Block\Template
      *
      * @param array $ids
      * @return mixed
-     * @since 2.0.0
      */
     public function getRootByIds($ids)
     {
@@ -246,7 +230,6 @@ class AbstractCategory extends \Magento\Backend\Block\Template
      * @param mixed $parentNodeCategory
      * @param int $recursionLevel
      * @return Node
-     * @since 2.0.0
      */
     public function getNode($parentNodeCategory, $recursionLevel = 2)
     {
@@ -268,7 +251,6 @@ class AbstractCategory extends \Magento\Backend\Block\Template
     /**
      * @param array $args
      * @return string
-     * @since 2.0.0
      */
     public function getSaveUrl(array $args = [])
     {
@@ -279,7 +261,6 @@ class AbstractCategory extends \Magento\Backend\Block\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getEditUrl()
     {
@@ -293,7 +274,6 @@ class AbstractCategory extends \Magento\Backend\Block\Template
      * Return ids of root categories as array
      *
      * @return array
-     * @since 2.0.0
      */
     public function getRootIds()
     {

@@ -11,7 +11,6 @@ use Magento\Framework\View\File\FileList\CollateInterface;
 
 /**
  * Unordered list of view file instances with awareness of view file identity
- * @since 2.0.0
  */
 class FileList
 {
@@ -19,7 +18,6 @@ class FileList
      * Array of files
      *
      * @var File[]
-     * @since 2.0.0
      */
     protected $files = [];
 
@@ -27,7 +25,6 @@ class FileList
      * Collator
      *
      * @var \Magento\Framework\View\File\FileList\CollateInterface
-     * @since 2.0.0
      */
     protected $collator;
 
@@ -35,7 +32,6 @@ class FileList
      * Constructor
      *
      * @param \Magento\Framework\View\File\FileList\CollateInterface $collator
-     * @since 2.0.0
      */
     public function __construct(CollateInterface $collator)
     {
@@ -46,7 +42,6 @@ class FileList
      * Retrieve all view file instances
      *
      * @return File[]
-     * @since 2.0.0
      */
     public function getAll()
     {
@@ -59,7 +54,6 @@ class FileList
      * @param \Magento\Framework\View\File[] $files
      * @return void
      * @throws \LogicException
-     * @since 2.0.0
      */
     public function add(array $files)
     {
@@ -80,7 +74,6 @@ class FileList
      *
      * @param File[] $files
      * @return void
-     * @since 2.0.0
      */
     public function replace(array $files)
     {

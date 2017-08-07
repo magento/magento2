@@ -7,13 +7,11 @@ namespace Magento\ImportExport\Model\Import\Source;
 
 /**
  * CSV import adapter
- * @since 2.0.0
  */
 class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
 {
     /**
      * @var \Magento\Framework\Filesystem\File\Write
-     * @since 2.0.0
      */
     protected $_file;
 
@@ -21,13 +19,11 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
      * Delimiter.
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_delimiter = ',';
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_enclosure = '';
 
@@ -41,7 +37,6 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
      * @param string $delimiter
      * @param string $enclosure
      * @throws \LogicException
-     * @since 2.0.0
      */
     public function __construct(
         $file,
@@ -66,7 +61,6 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
      * Close file handle
      *
      * @return void
-     * @since 2.0.0
      */
     public function destruct()
     {
@@ -79,7 +73,6 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
      * Read next line from CSV-file
      *
      * @return array|bool
-     * @since 2.0.0
      */
     protected function _getNextRow()
     {
@@ -101,7 +94,6 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
      * Rewind the \Iterator to the first element (\Iterator interface)
      *
      * @return void
-     * @since 2.0.0
      */
     public function rewind()
     {

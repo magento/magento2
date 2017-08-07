@@ -16,7 +16,6 @@ use Magento\Framework\DB\SelectFactory;
 /**
  * Class \Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql
  *
- * @since 2.0.0
  */
 class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements
     ConnectionAdapterInterface
@@ -24,13 +23,11 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $connectionConfig;
 
     /**
      * @var MysqlFactory
-     * @since 2.2.0
      */
     private $mysqlFactory;
 
@@ -39,7 +36,6 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements
      *
      * @param array $config
      * @param MysqlFactory|null $mysqlFactory
-     * @since 2.0.0
      */
     public function __construct(
         array $config,
@@ -52,7 +48,6 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getConnection(DB\LoggerInterface $logger = null, SelectFactory $selectFactory = null)
     {
@@ -73,7 +68,6 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements
      * @param DB\LoggerInterface|null $logger
      * @param SelectFactory|null $selectFactory
      * @return \Magento\Framework\DB\Adapter\Pdo\Mysql
-     * @since 2.0.0
      */
     protected function getDbConnectionInstance(DB\LoggerInterface $logger = null, SelectFactory $selectFactory = null)
     {
@@ -89,7 +83,6 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements
      * Retrieve DB connection class name
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getDbConnectionClassName()
     {
@@ -101,7 +94,6 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements
      *
      * @param array $config
      * @return array
-     * @since 2.0.0
      */
     private function getValidConfig(array $config)
     {

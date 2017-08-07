@@ -8,7 +8,7 @@ namespace Magento\Framework\TestFramework\Test\Unit\Autoloader;
 
 use Magento\Framework\TestFramework\Unit\Autoloader\ExtensionAttributesGenerator;
 
-class ExtensionAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
+class ExtensionAttributesGeneratorTest extends \PHPUnit\Framework\Testcase
 {
     /**
      * @var ExtensionAttributesGenerator

@@ -8,7 +8,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\Email
  *
- * @since 2.0.0
  */
 class Email extends \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\Email
 {

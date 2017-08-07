@@ -17,7 +17,6 @@ use Magento\Framework\Config\File\ConfigFilePool;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -25,7 +24,6 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Encryptor interface
      *
      * @var \Magento\Framework\Encryption\EncryptorInterface
-     * @since 2.0.0
      */
     protected $encryptor;
 
@@ -33,7 +31,6 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Filesystem directory write interface
      *
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     * @since 2.0.0
      */
     protected $directory;
 
@@ -41,7 +38,6 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * System configuration structure
      *
      * @var \Magento\Config\Model\Config\Structure
-     * @since 2.0.0
      */
     protected $structure;
 
@@ -49,7 +45,6 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Configuration writer
      *
      * @var \Magento\Framework\App\DeploymentConfig\Writer
-     * @since 2.0.0
      */
     protected $writer;
 
@@ -57,7 +52,7 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Random
      *
      * @var \Magento\Framework\Math\Random
-     * @since 2.1.0
+     * @since 100.0.4
      */
     protected $random;
 
@@ -69,7 +64,6 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\App\DeploymentConfig\Writer $writer
      * @param \Magento\Framework\Math\Random $random
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -92,7 +86,6 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -105,7 +98,6 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string|null $key
      * @return null|string
      * @throws \Exception
-     * @since 2.0.0
      */
     public function changeEncryptionKey($key = null)
     {
@@ -142,7 +134,6 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Gather all encrypted system config values and re-encrypt them
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _reEncryptSystemConfigurationValues()
     {
@@ -178,7 +169,6 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Gather saved credit card numbers from sales order payments and re-encrypt them
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _reEncryptCreditCardNumbers()
     {

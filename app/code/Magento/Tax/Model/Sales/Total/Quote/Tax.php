@@ -17,7 +17,6 @@ use Magento\Tax\Model\Calculation;
 /**
  * Tax totals calculation model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Tax extends CommonTaxCollector
 {
@@ -25,7 +24,6 @@ class Tax extends CommonTaxCollector
      * Counter
      *
      * @var int
-     * @since 2.0.0
      */
     protected $counter = 0;
 
@@ -33,7 +31,6 @@ class Tax extends CommonTaxCollector
      * Tax module helper
      *
      * @var \Magento\Tax\Helper\Data
-     * @since 2.0.0
      */
     protected $_taxData;
 
@@ -41,7 +38,6 @@ class Tax extends CommonTaxCollector
      * Tax configuration object
      *
      * @var \Magento\Tax\Model\Config
-     * @since 2.0.0
      */
     protected $_config;
 
@@ -49,13 +45,11 @@ class Tax extends CommonTaxCollector
      * Discount tax compensationes array
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_discountTaxCompensationes = [];
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -71,7 +65,6 @@ class Tax extends CommonTaxCollector
      * @param CustomerAddressRegionFactory $customerAddressRegionFactory
      * @param \Magento\Tax\Helper\Data $taxData
      * @param Json $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Tax\Model\Config $taxConfig,
@@ -106,7 +99,6 @@ class Tax extends CommonTaxCollector
      * @param Address\Total $total
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function collect(
         \Magento\Quote\Model\Quote $quote,
@@ -153,7 +145,6 @@ class Tax extends CommonTaxCollector
      *
      * @param Address\Total $total
      * @return void
-     * @since 2.0.0
      */
     protected function clearValues(Address\Total $total)
     {
@@ -176,7 +167,6 @@ class Tax extends CommonTaxCollector
      * @param Address\Total $total
      * @param bool $useBaseCurrency
      * @return \Magento\Tax\Api\Data\TaxDetailsInterface
-     * @since 2.0.0
      */
     protected function getQuoteTaxDetails($shippingAssignment, $total, $useBaseCurrency)
     {
@@ -217,7 +207,6 @@ class Tax extends CommonTaxCollector
      * @param Address $address
      * @param bool $useBaseCurrency
      * @return \Magento\Tax\Api\Data\QuoteDetailsItemInterface[]
-     * @since 2.0.0
      */
     public function mapQuoteExtraTaxables(
         \Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory $itemDataObjectFactory,
@@ -260,7 +249,6 @@ class Tax extends CommonTaxCollector
      * @param array $itemsByType
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     protected function processExtraTaxables(Address\Total $total, array $itemsByType)
     {
@@ -315,7 +303,6 @@ class Tax extends CommonTaxCollector
      * @return array|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
@@ -376,7 +363,6 @@ class Tax extends CommonTaxCollector
      * @param \Magento\Quote\Model\Quote $quote
      * @param Address\Total $total
      * @return null
-     * @since 2.0.0
      */
     protected function enhanceTotalData(
         \Magento\Quote\Model\Quote $quote,
@@ -416,7 +402,6 @@ class Tax extends CommonTaxCollector
      * @param   array $config
      * @param   store $store
      * @return  array
-     * @since 2.0.0
      */
     public function processConfigArray($config, $store)
     {
@@ -436,7 +421,6 @@ class Tax extends CommonTaxCollector
      * Get Tax label
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getLabel()
     {

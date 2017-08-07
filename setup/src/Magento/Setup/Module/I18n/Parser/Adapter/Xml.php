@@ -12,13 +12,11 @@ namespace Magento\Setup\Module\I18n\Parser\Adapter;
  * Parse "translate" and 'translatable' node and collect phrases:
  * - from itself, it @translate or @translatable == true
  * - from given attributes, split by ",", " "
- * @since 2.0.0
  */
 class Xml extends AbstractAdapter
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _parse()
     {
@@ -40,7 +38,6 @@ class Xml extends AbstractAdapter
      *
      * @param string $file
      * @return array
-     * @since 2.0.0
      */
     protected function _getNodes($file)
     {
@@ -63,7 +60,6 @@ class Xml extends AbstractAdapter
      * @param \SimpleXMLElement $attributes
      * @param \SimpleXMLElement $element
      * @return void
-     * @since 2.2.0
      */
     private function parseTranslatableNodes(\SimpleXMLElement $attributes, \SimpleXMLElement $element)
     {

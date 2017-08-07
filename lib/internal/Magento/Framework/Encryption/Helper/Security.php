@@ -12,7 +12,6 @@ use Zend\Crypt\Utils;
  * Class implements compareString from Zend\Crypt
  *
  * @api
- * @since 2.0.0
  */
 class Security
 {
@@ -22,7 +21,6 @@ class Security
      * @param  string $expected
      * @param  string $actual
      * @return bool
-     * @since 2.0.0
      */
     public static function compareStrings($expected, $actual)
     {

@@ -10,31 +10,26 @@ use Magento\Framework\App\ResourceConnection;
 
 /**
  * Map that holds data for products ids from a category and subcategories
- * @since 2.2.0
  */
 class DataProductHashMap implements HashMapInterface
 {
     /**
      * @var int[]
-     * @since 2.2.0
      */
     private $hashMap = [];
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     * @since 2.2.0
      */
     private $collectionFactory;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\Map\HashMapPool
-     * @since 2.2.0
      */
     private $hashMapPool;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.2.0
      */
     private $connection;
 
@@ -42,7 +37,6 @@ class DataProductHashMap implements HashMapInterface
      * @param CollectionFactory $collectionFactory
      * @param HashMapPool $hashMapPool
      * @param ResourceConnection $connection
-     * @since 2.2.0
      */
     public function __construct(
         CollectionFactory $collectionFactory,
@@ -59,7 +53,6 @@ class DataProductHashMap implements HashMapInterface
      *
      * @param int $categoryId
      * @return array
-     * @since 2.2.0
      */
     public function getAllData($categoryId)
     {
@@ -89,7 +82,6 @@ class DataProductHashMap implements HashMapInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getData($categoryId, $key)
     {
@@ -102,7 +94,6 @@ class DataProductHashMap implements HashMapInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function resetData($categoryId)
     {

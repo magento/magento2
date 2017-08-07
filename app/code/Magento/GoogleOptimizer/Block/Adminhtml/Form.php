@@ -13,13 +13,11 @@ use Magento\Backend\Block\Widget\Form\Generic;
 
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.1.0
  */
 class Form extends Generic
 {
     /**
      * @var \Magento\GoogleOptimizer\Helper\Form
-     * @since 2.1.0
      */
     protected $formHelper;
 
@@ -29,7 +27,6 @@ class Form extends Generic
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\GoogleOptimizer\Helper\Form $formHelper
      * @param array $data
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -45,7 +42,6 @@ class Form extends Generic
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     protected function _prepareForm()
     {

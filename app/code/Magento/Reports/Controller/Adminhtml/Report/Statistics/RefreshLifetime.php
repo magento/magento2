@@ -9,7 +9,6 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Statistics;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Statistics\RefreshLifetime
  *
- * @since 2.0.0
  */
 class RefreshLifetime extends \Magento\Reports\Controller\Adminhtml\Report\Statistics
 {
@@ -17,7 +16,6 @@ class RefreshLifetime extends \Magento\Reports\Controller\Adminhtml\Report\Stati
      * Refresh statistics for all period
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

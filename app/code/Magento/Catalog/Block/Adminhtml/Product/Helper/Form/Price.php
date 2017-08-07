@@ -8,7 +8,6 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
 /**
  * Product form price field helper
- * @since 2.0.0
  */
 class Price extends \Magento\Framework\Data\Form\Element\Text
 {
@@ -16,19 +15,16 @@ class Price extends \Magento\Framework\Data\Form\Element\Text
      * Tax data
      *
      * @var \Magento\Tax\Helper\Data
-     * @since 2.0.0
      */
     protected $_taxData;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\Locale\CurrencyInterface
-     * @since 2.0.0
      */
     protected $_localeCurrency;
 
@@ -40,7 +36,6 @@ class Price extends \Magento\Framework\Data\Form\Element\Text
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param \Magento\Tax\Helper\Data $taxData
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
@@ -59,7 +54,6 @@ class Price extends \Magento\Framework\Data\Form\Element\Text
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -69,7 +63,6 @@ class Price extends \Magento\Framework\Data\Form\Element\Text
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getAfterElementHtml()
     {
@@ -102,7 +95,6 @@ class Price extends \Magento\Framework\Data\Form\Element\Text
     /**
      * @param mixed $attribute
      * @return string
-     * @since 2.0.0
      */
     protected function _getTaxObservingCode($attribute)
     {
@@ -114,7 +106,6 @@ class Price extends \Magento\Framework\Data\Form\Element\Text
     /**
      * @param mixed $attribute
      * @return \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     protected function getStore($attribute)
     {
@@ -129,7 +120,6 @@ class Price extends \Magento\Framework\Data\Form\Element\Text
      * @param null|int|string $index
      * @return null|string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getEscapedValue($index = null)
     {

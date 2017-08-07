@@ -10,7 +10,6 @@ namespace Magento\Framework\App\Config;
 /**
  * Class \Magento\Framework\App\Config\Data
  *
- * @since 2.0.0
  */
 class Data implements DataInterface
 {
@@ -18,7 +17,6 @@ class Data implements DataInterface
      * Config data
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_data = [];
 
@@ -26,14 +24,12 @@ class Data implements DataInterface
      * Config source data
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_source = [];
 
     /**
      * @param MetadataProcessor $processor
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(MetadataProcessor $processor, array $data)
     {
@@ -44,7 +40,6 @@ class Data implements DataInterface
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getSource()
     {
@@ -53,7 +48,6 @@ class Data implements DataInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function getValue($path = null)
     {
@@ -74,7 +68,6 @@ class Data implements DataInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function setValue($path, $value)
     {
@@ -95,7 +88,6 @@ class Data implements DataInterface
      *
      * @param array $data
      * @return array
-     * @since 2.1.0
      */
     private function arrayClone(array $data)
     {

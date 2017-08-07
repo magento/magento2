@@ -9,7 +9,6 @@ namespace Magento\Sales\Controller\AbstractController;
 /**
  * Interface \Magento\Sales\Controller\AbstractController\OrderViewAuthorizationInterface
  *
- * @since 2.0.0
  */
 interface OrderViewAuthorizationInterface
 {
@@ -18,7 +17,6 @@ interface OrderViewAuthorizationInterface
      *
      * @param \Magento\Sales\Model\Order $order
      * @return bool
-     * @since 2.0.0
      */
     public function canView(\Magento\Sales\Model\Order $order);
 }

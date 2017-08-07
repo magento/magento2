@@ -13,31 +13,26 @@ use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 /**
  * Class \Magento\Setup\Module\Di\App\Task\Operation\RepositoryGenerator
  *
- * @since 2.0.0
  */
 class RepositoryGenerator implements OperationInterface
 {
     /**
      * @var Scanner\RepositoryScanner
-     * @since 2.0.0
      */
     private $repositoryScanner;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $data;
 
     /**
      * @var ClassesScanner
-     * @since 2.0.0
      */
     private $classesScanner;
 
     /**
      * @var Scanner\ConfigurationScanner
-     * @since 2.1.0
      */
     private $configurationScanner;
 
@@ -46,7 +41,6 @@ class RepositoryGenerator implements OperationInterface
      * @param Scanner\RepositoryScanner $repositoryScanner
      * @param Scanner\ConfigurationScanner $configurationScanner
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         ClassesScanner $classesScanner,
@@ -64,7 +58,6 @@ class RepositoryGenerator implements OperationInterface
      * Processes operation task
      *
      * @return void
-     * @since 2.0.0
      */
     public function doOperation()
     {
@@ -83,7 +76,6 @@ class RepositoryGenerator implements OperationInterface
      * Returns operation name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName()
     {

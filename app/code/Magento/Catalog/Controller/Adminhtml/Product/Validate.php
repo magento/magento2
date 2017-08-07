@@ -15,51 +15,43 @@ use Magento\Store\Model\StoreManagerInterface;
  * Product validate
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
      *
-     * @deprecated 2.1.0
-     * @since 2.0.0
+     * @deprecated 101.0.0
      */
     protected $_dateFilter;
 
     /**
      * @var \Magento\Catalog\Model\Product\Validator
-     * @since 2.0.0
      */
     protected $productValidator;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
-     * @since 2.0.0
      */
     protected $layoutFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $productFactory;
 
     /**
      * @var Initialization\Helper
-     * @since 2.1.0
      */
     protected $initializationHelper;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.1.0
      */
     private $storeManager;
 
@@ -71,7 +63,6 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -96,7 +87,6 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
      * @return \Magento\Framework\Controller\Result\Json
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -159,8 +149,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @return StoreManagerInterface
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 101.0.0
      */
     private function getStoreManager()
     {
@@ -173,8 +162,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @return Initialization\Helper
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 101.0.0
      */
     protected function getInitializationHelper()
     {

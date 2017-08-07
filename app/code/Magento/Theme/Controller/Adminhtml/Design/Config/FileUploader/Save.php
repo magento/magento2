@@ -14,13 +14,13 @@ use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
  * File Uploads Action Controller
  *
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class Save extends Action
 {
     /**
      * @var FileProcessor
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $fileProcessor;
 
@@ -32,7 +32,7 @@ class Save extends Action
     /**
      * @param Context $context
      * @param FileProcessor $fileProcessor
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         Context $context,
@@ -44,7 +44,7 @@ class Save extends Action
 
     /**
      * @inheritDoc
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function execute()
     {

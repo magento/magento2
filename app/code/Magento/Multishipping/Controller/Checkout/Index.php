@@ -9,7 +9,6 @@ namespace Magento\Multishipping\Controller\Checkout;
 /**
  * Class \Magento\Multishipping\Controller\Checkout\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Multishipping\Controller\Checkout
 {
@@ -17,7 +16,6 @@ class Index extends \Magento\Multishipping\Controller\Checkout
      * Index action of Multishipping checkout
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

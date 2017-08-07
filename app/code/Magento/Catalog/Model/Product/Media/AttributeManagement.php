@@ -12,26 +12,22 @@ use Magento\Catalog\Model\Product;
 /**
  * Class \Magento\Catalog\Model\Product\Media\AttributeManagement
  *
- * @since 2.0.0
  */
 class AttributeManagement implements ProductMediaAttributeManagementInterface
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
-     * @since 2.0.0
      */
     private $collectionFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     private $storeManager;
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory
      * @param StoreManagerInterface $storeManager
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory,
@@ -43,7 +39,6 @@ class AttributeManagement implements ProductMediaAttributeManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getList($attributeSetName)
     {

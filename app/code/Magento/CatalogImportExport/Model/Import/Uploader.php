@@ -12,7 +12,6 @@ use Magento\Framework\Filesystem\DriverPool;
  * Import entity product model
  *
  * @api
- * @since 2.0.0
  */
 class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 {
@@ -21,7 +20,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * HTTP scheme
      * used to compare against the filename and select the proper DriverPool adapter
      * @var string
-     * @since 2.2.0
      */
     private $httpScheme = 'http://';
 
@@ -29,7 +27,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * Temp directory.
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_tmpDir = '';
 
@@ -37,7 +34,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * Destination directory.
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_destDir = '';
 
@@ -45,7 +41,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * All mime types.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_allowedMimeTypes = [
         'jpg' => 'image/jpeg',
@@ -60,7 +55,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * Image factory.
      *
      * @var \Magento\Framework\Image\AdapterFactory
-     * @since 2.0.0
      */
     protected $_imageFactory;
 
@@ -68,7 +62,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * Validator.
      *
      * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension
-     * @since 2.0.0
      */
     protected $_validator;
 
@@ -76,7 +69,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * Instance of filesystem directory write interface.
      *
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     * @since 2.0.0
      */
     protected $_directory;
 
@@ -84,7 +76,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * Instance of filesystem read factory.
      *
      * @var \Magento\Framework\Filesystem\File\ReadFactory
-     * @since 2.0.0
      */
     protected $_readFactory;
 
@@ -92,7 +83,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * Instance of media file storage database.
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
-     * @since 2.0.0
      */
     protected $_coreFileStorageDb;
 
@@ -100,7 +90,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * Instance of media file storage.
      *
      * @var \Magento\MediaStorage\Helper\File\Storage
-     * @since 2.0.0
      */
     protected $_coreFileStorage;
 
@@ -113,7 +102,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * @param \Magento\Framework\Filesystem\File\ReadFactory $readFactory
      * @param null $filePath
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb,
@@ -139,7 +127,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * Initiate uploader default settings
      *
      * @return void
-     * @since 2.0.0
      */
     public function init()
     {
@@ -158,7 +145,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * @param string $fileName
      * @param bool $renameFileOff
      * @return array
-     * @since 2.0.0
      */
     public function move($fileName, $renameFileOff = false)
     {
@@ -195,7 +181,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * @param string $filePath
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _setUploadFile($filePath)
     {
@@ -214,7 +199,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      *
      * @param string $filePath
      * @return array
-     * @since 2.0.0
      */
     protected function _readFileInfo($filePath)
     {
@@ -234,7 +218,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      *
      * @return void
      * @throws \Exception
-     * @since 2.0.0
      */
     protected function _validateFile()
     {
@@ -265,7 +248,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      *
      * @param string $ext
      * @return string
-     * @since 2.0.0
      */
     protected function _getMimeTypeByExt($ext)
     {
@@ -279,7 +261,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * Obtain TMP file path prefix
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTmpDir()
     {
@@ -291,7 +272,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      *
      * @param string $path
      * @return bool
-     * @since 2.0.0
      */
     public function setTmpDir($path)
     {
@@ -306,7 +286,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * Obtain destination file path prefix
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDestDir()
     {
@@ -318,7 +297,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      *
      * @param string $path
      * @return bool
-     * @since 2.0.0
      */
     public function setDestDir($path)
     {
@@ -335,7 +313,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * @param string $tmpPath
      * @param string $destPath
      * @return bool
-     * @since 2.0.0
      */
     protected function _moveFile($tmpPath, $destPath)
     {
@@ -354,7 +331,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function chmod($file)
     {

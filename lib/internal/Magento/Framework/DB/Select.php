@@ -28,7 +28,6 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
  * @method \Magento\Framework\DB\Select distinct($flag = true)
  * @method \Magento\Framework\DB\Select reset($part = null)
  * @method \Magento\Framework\DB\Select columns($cols = '*', $correlationName = null)
- * @since 2.0.0
  */
 class Select extends \Zend_Db_Select
 {
@@ -49,7 +48,6 @@ class Select extends \Zend_Db_Select
 
     /**
      * @var Select\SelectRenderer
-     * @since 2.2.0
      */
     private $selectRenderer;
 
@@ -60,7 +58,6 @@ class Select extends \Zend_Db_Select
      * @param Adapter\Pdo\Mysql $adapter
      * @param Select\SelectRenderer $selectRenderer
      * @param array $parts
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\DB\Adapter\Pdo\Mysql $adapter,
@@ -107,7 +104,6 @@ class Select extends \Zend_Db_Select
      * @param string $value OPTIONAL A single value to quote into the condition.
      * @param string|int|null $type OPTIONAL The type of the given value
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     public function where($cond, $value = null, $type = null)
     {
@@ -129,7 +125,6 @@ class Select extends \Zend_Db_Select
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function resetJoinLeft()
     {
@@ -208,7 +203,6 @@ class Select extends \Zend_Db_Select
      * Validate LEFT joins, and remove it if not exists
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _resetJoinLeft()
     {
@@ -242,7 +236,6 @@ class Select extends \Zend_Db_Select
      * @param string $table
      * @param string $cond
      * @return bool
-     * @since 2.0.0
      */
     protected function _findTableInCond($table, $cond)
     {
@@ -295,7 +288,6 @@ class Select extends \Zend_Db_Select
      * @param  string $schema The database name to specify, if any.
      * @return \Magento\Framework\DB\Select This \Magento\Framework\DB\Select object
      * @throws \Zend_Db_Select_Exception
-     * @since 2.0.0
      */
     protected function _join($type, $name, $cond, $cols, $schema = null)
     {
@@ -311,7 +303,6 @@ class Select extends \Zend_Db_Select
      * @param int $count OPTIONAL The number of rows to return.
      * @param int $offset OPTIONAL Start returning after this many rows.
      * @return $this
-     * @since 2.0.0
      */
     public function limit($count = null, $offset = null)
     {
@@ -333,7 +324,6 @@ class Select extends \Zend_Db_Select
      *
      * @param string|array $table
      * @return string
-     * @since 2.0.0
      */
     public function crossUpdateFromSelect($table)
     {
@@ -347,7 +337,6 @@ class Select extends \Zend_Db_Select
      * @param array $fields
      * @param bool $onDuplicate
      * @return string
-     * @since 2.0.0
      */
     public function insertFromSelect($tableName, $fields = [], $onDuplicate = true)
     {
@@ -361,7 +350,6 @@ class Select extends \Zend_Db_Select
      * @param string $tableName
      * @param array $fields
      * @return string
-     * @since 2.0.0
      */
     public function insertIgnoreFromSelect($tableName, $fields = [])
     {
@@ -373,7 +361,6 @@ class Select extends \Zend_Db_Select
      *
      * @param string $table The table name or alias
      * @return string
-     * @since 2.0.0
      */
     public function deleteFromSelect($table)
     {
@@ -387,7 +374,6 @@ class Select extends \Zend_Db_Select
      * @param mixed $value
      * @return $this
      * @throws \Zend_Db_Select_Exception
-     * @since 2.0.0
      */
     public function setPart($part, $value)
     {
@@ -404,7 +390,6 @@ class Select extends \Zend_Db_Select
      *
      * @param bool $flag Whether or not the SELECT use STRAIGHT_JOIN (default true).
      * @return $this
-     * @since 2.0.0
      */
     public function useStraightJoin($flag = true)
     {
@@ -417,7 +402,6 @@ class Select extends \Zend_Db_Select
      *
      * @param string   $sql SQL query
      * @return string
-     * @since 2.0.0
      */
     protected function _renderStraightjoin($sql)
     {
@@ -437,7 +421,6 @@ class Select extends \Zend_Db_Select
      * @param  bool|string $afterCorrelationName True if it should be prepended,
      *     a correlation name if it should be inserted
      * @return void
-     * @since 2.0.0
      */
     protected function _tableCols($correlationName, $cols, $afterCorrelationName = null)
     {
@@ -459,7 +442,6 @@ class Select extends \Zend_Db_Select
      *
      * @param string $field     integer field name
      * @return $this
-     * @since 2.0.0
      */
     public function orderRand($field = null)
     {
@@ -472,7 +454,6 @@ class Select extends \Zend_Db_Select
      *
      * @param string   $sql SQL query
      * @return string
-     * @since 2.0.0
      */
     protected function _renderForupdate($sql)
     {
@@ -490,7 +471,6 @@ class Select extends \Zend_Db_Select
      * @param  string           $joinCondition
      * @param   bool            $isExists
      * @return $this
-     * @since 2.0.0
      */
     public function exists($select, $joinCondition, $isExists = true)
     {
@@ -511,7 +491,6 @@ class Select extends \Zend_Db_Select
      * Get adapter
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function getConnection()
     {
@@ -522,7 +501,7 @@ class Select extends \Zend_Db_Select
      * Converts this object to an SQL SELECT string.
      *
      * @return string|null This object as a SELECT string. (or null if a string cannot be produced.)
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function assemble()
     {
@@ -531,7 +510,7 @@ class Select extends \Zend_Db_Select
 
     /**
      * @return string[]
-     * @since 2.1.0
+     * @since 100.0.11
      */
     public function __sleep()
     {
@@ -550,7 +529,7 @@ class Select extends \Zend_Db_Select
      * Init not serializable fields
      *
      * @return void
-     * @since 2.1.0
+     * @since 100.0.11
      */
     public function __wakeup()
     {

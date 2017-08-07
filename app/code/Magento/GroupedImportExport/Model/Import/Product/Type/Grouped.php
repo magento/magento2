@@ -13,7 +13,6 @@ use Magento\ImportExport\Model\Import;
 /**
  * Class \Magento\GroupedImportExport\Model\Import\Product\Type\Grouped
  *
- * @since 2.0.0
  */
 class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
@@ -26,13 +25,11 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
      * Column names that holds values with particular meaning.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_specialAttributes = ['_associated_sku', '_associated_default_qty', '_associated_position'];
 
     /**
      * @var Grouped\Links
-     * @since 2.0.0
      */
     protected $links;
 
@@ -40,7 +37,6 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
      * Product entity identifier field
      *
      * @var string
-     * @since 2.1.0
      */
     private $productEntityIdentifierField;
 
@@ -50,7 +46,6 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param array $params
      * @param Grouped\Links $links
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
@@ -70,7 +65,6 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function saveData()
     {
@@ -143,7 +137,6 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
      * Get product entity identifier field
      *
      * @return string
-     * @since 2.1.0
      */
     private function getProductEntityIdentifierField()
     {

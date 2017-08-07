@@ -11,7 +11,6 @@ use Magento\Reports\Model\Flag;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Sales\Tax
  *
- * @since 2.0.0
  */
 class Tax extends \Magento\Reports\Controller\Adminhtml\Report\Sales
 {
@@ -19,7 +18,6 @@ class Tax extends \Magento\Reports\Controller\Adminhtml\Report\Sales
      * Tax report action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

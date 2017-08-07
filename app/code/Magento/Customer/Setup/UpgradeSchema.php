@@ -12,13 +12,11 @@ use Magento\Framework\Setup\UpgradeSchemaInterface;
 
 /**
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -124,7 +122,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * @param SchemaSetupInterface $setup
      * @param array $keys
      * @return void
-     * @since 2.2.0
      */
     private function alterTables(SchemaSetupInterface $setup, array $keys)
     {
@@ -153,7 +150,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * @param SchemaSetupInterface $setup
      * @param array $keys
      * @return void
-     * @since 2.2.0
      */
     private function dropForeignKeys(SchemaSetupInterface $setup, array $keys)
     {
@@ -166,7 +162,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * @param SchemaSetupInterface $setup
      * @param array $keys
      * @return void
-     * @since 2.2.0
      */
     private function createForeignKeys(SchemaSetupInterface $setup, array $keys)
     {
@@ -185,7 +180,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
     /**
      * @param SchemaSetupInterface $setup
      * @return array
-     * @since 2.2.0
      */
     private function getForeignKeys(SchemaSetupInterface $setup)
     {

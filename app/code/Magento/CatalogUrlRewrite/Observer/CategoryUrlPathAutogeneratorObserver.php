@@ -16,25 +16,21 @@ use Magento\Store\Model\Store;
 /**
  * Class \Magento\CatalogUrlRewrite\Observer\CategoryUrlPathAutogeneratorObserver
  *
- * @since 2.0.0
  */
 class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
 {
     /**
      * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
-     * @since 2.0.0
      */
     protected $categoryUrlPathGenerator;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider
-     * @since 2.0.0
      */
     protected $childrenCategoriesProvider;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService
-     * @since 2.0.0
      */
     protected $storeViewService;
 
@@ -42,7 +38,6 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
      * @param CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param ChildrenCategoriesProvider $childrenCategoriesProvider
      * @param \Magento\CatalogUrlRewrite\Service\V1\StoreViewService $storeViewService
-     * @since 2.0.0
      */
     public function __construct(
         CategoryUrlPathGenerator $categoryUrlPathGenerator,
@@ -58,7 +53,6 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
@@ -84,7 +78,6 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     /**
      * @param Category $category
      * @return void
-     * @since 2.0.0
      */
     protected function updateUrlPathForChildren(Category $category)
     {
@@ -116,7 +109,6 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
      *
      * @param int|null $storeId
      * @return bool
-     * @since 2.0.0
      */
     protected function isGlobalScope($storeId)
     {
@@ -126,7 +118,6 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     /**
      * @param Category $category
      * @return void
-     * @since 2.0.0
      */
     protected function updateUrlPathForCategory(Category $category)
     {

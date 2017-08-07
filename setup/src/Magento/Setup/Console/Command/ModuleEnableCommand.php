@@ -7,13 +7,11 @@ namespace Magento\Setup\Console\Command;
 
 /**
  * Command for enabling list or all of modules
- * @since 2.0.0
  */
 class ModuleEnableCommand extends AbstractModuleManageCommand
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -26,7 +24,6 @@ class ModuleEnableCommand extends AbstractModuleManageCommand
      * Enable modules
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function isEnable()
     {

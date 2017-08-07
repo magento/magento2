@@ -7,7 +7,6 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Button;
 
 /**
  * Class Cancel
- * @since 2.1.0
  */
 class Cancel extends Generic
 {
@@ -15,7 +14,6 @@ class Cancel extends Generic
      * Get button data
      *
      * @return array
-     * @since 2.1.0
      */
     public function getButtonData()
     {

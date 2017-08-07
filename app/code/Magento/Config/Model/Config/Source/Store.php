@@ -7,25 +7,21 @@ namespace Magento\Config\Model\Config\Source;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Store implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_options;
 
     /**
      * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory
-     * @since 2.0.0
      */
     protected $_storesFactory;
 
     /**
      * @param \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storesFactory
-     * @since 2.0.0
      */
     public function __construct(\Magento\Store\Model\ResourceModel\Store\CollectionFactory $storesFactory)
     {
@@ -34,7 +30,6 @@ class Store implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

@@ -8,7 +8,6 @@ namespace Magento\Payment\Model\Config\Source;
 /**
  * Class \Magento\Payment\Model\Config\Source\Allmethods
  *
- * @since 2.0.0
  */
 class Allmethods implements \Magento\Framework\Option\ArrayInterface
 {
@@ -16,13 +15,11 @@ class Allmethods implements \Magento\Framework\Option\ArrayInterface
      * Payment data
      *
      * @var \Magento\Payment\Helper\Data
-     * @since 2.0.0
      */
     protected $_paymentData;
 
     /**
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @since 2.0.0
      */
     public function __construct(\Magento\Payment\Helper\Data $paymentData)
     {
@@ -31,7 +28,6 @@ class Allmethods implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

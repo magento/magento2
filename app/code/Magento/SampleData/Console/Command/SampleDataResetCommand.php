@@ -13,25 +13,21 @@ use Magento\SampleData\Model\Dependency;
 
 /**
  * Command for reset Sample Data modules version
- * @since 2.0.0
  */
 class SampleDataResetCommand extends Command
 {
     /**
      * @var Dependency
-     * @since 2.0.0
      */
     private $sampleDataDependency;
 
     /**
      * @var \Magento\Framework\Module\ModuleResource
-     * @since 2.0.0
      */
     private $moduleResource;
 
     /**
      * @var \Magento\Framework\Module\PackageInfo
-     * @since 2.0.0
      */
     private $packageInfo;
 
@@ -39,7 +35,6 @@ class SampleDataResetCommand extends Command
      * @param Dependency $sampleDataDependency
      * @param \Magento\Framework\Module\ModuleResource $moduleResource
      * @param \Magento\Framework\Module\PackageInfo $packageInfo
-     * @since 2.0.0
      */
     public function __construct(
         Dependency $sampleDataDependency,
@@ -54,7 +49,6 @@ class SampleDataResetCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -65,7 +59,6 @@ class SampleDataResetCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

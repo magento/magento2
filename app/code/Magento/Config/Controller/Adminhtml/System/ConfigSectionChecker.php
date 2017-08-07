@@ -9,21 +9,18 @@ namespace Magento\Config\Controller\Adminhtml\System;
 use Magento\Framework\Exception\NotFoundException;
 
 /**
- * @deprecated 2.2.0 - unused class.
+ * @deprecated 100.2.0 - unused class.
  * @see \Magento\Config\Model\Config\Structure\Element\Section::isAllowed()
- * @since 2.0.0
  */
 class ConfigSectionChecker
 {
     /**
      * @var \Magento\Config\Model\Config\Structure
-     * @since 2.0.0
      */
     protected $_configStructure;
 
     /**
      * @param \Magento\Config\Model\Config\Structure $configStructure
-     * @since 2.0.0
      */
     public function __construct(\Magento\Config\Model\Config\Structure $configStructure)
     {
@@ -39,7 +36,6 @@ class ConfigSectionChecker
      * @throws \Exception
      * @return bool
      * @throws NotFoundException
-     * @since 2.0.0
      */
     public function isSectionAllowed($sectionId)
     {

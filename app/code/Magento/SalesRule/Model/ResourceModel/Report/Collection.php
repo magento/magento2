@@ -9,7 +9,6 @@ namespace Magento\SalesRule\Model\ResourceModel\Report;
  * Sales report coupons collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
 {
@@ -17,7 +16,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * Period format for report (day, month, year)
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_periodFormat;
 
@@ -25,7 +23,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * Aggregated Data Table
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_aggregationTable = 'salesrule_coupon_aggregated';
 
@@ -33,7 +30,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * Array of columns that should be aggregated
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_selectedColumns = [];
 
@@ -41,13 +37,11 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * Array where rules ids stored
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_rulesIdsFilter;
 
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory $ruleFactory
-     * @since 2.0.0
      */
     protected $_ruleFactory;
 
@@ -59,7 +53,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * @param \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory $ruleFactory
      * @param \Magento\Sales\Model\ResourceModel\Report $resource
      * @param mixed $connection
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -79,7 +72,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * Collect columns for collection
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getSelectedColumns()
     {
@@ -125,7 +117,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * Add selected data
      *
      * @return Collection
-     * @since 2.0.0
      */
     protected function _applyAggregatedTable()
     {
@@ -149,7 +140,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      *
      * @param array $rulesList
      * @return Collection
-     * @since 2.0.0
      */
     public function addRuleFilter(array $rulesList)
     {
@@ -161,7 +151,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * Apply filtering by rules ids
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _applyRulesFilter()
     {
@@ -190,7 +179,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * Apply collection custom filter
      *
      * @return \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
-     * @since 2.0.0
      */
     protected function _applyCustomFilter()
     {

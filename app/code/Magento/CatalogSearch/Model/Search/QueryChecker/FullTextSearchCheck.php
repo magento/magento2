@@ -12,7 +12,6 @@ use Magento\Framework\Search\Request\Query\Filter;
 
 /**
  * Class is responsible for checking if fulltext search is required for search query
- * @since 2.2.0
  */
 class FullTextSearchCheck
 {
@@ -28,7 +27,6 @@ class FullTextSearchCheck
      * @param QueryInterface $query
      * @return bool
      * @throws \InvalidArgumentException
-     * @since 2.2.0
      */
     public function isRequiredForQuery(QueryInterface $query)
     {
@@ -39,7 +37,6 @@ class FullTextSearchCheck
      * @param QueryInterface $query
      * @return bool
      * @throws \InvalidArgumentException
-     * @since 2.2.0
      */
     private function processQuery(QueryInterface $query)
     {
@@ -65,7 +62,6 @@ class FullTextSearchCheck
      * @param BoolExpression $query
      * @return bool
      * @throws \InvalidArgumentException
-     * @since 2.2.0
      */
     private function processBoolQuery(BoolExpression $query)
     {
@@ -94,7 +90,6 @@ class FullTextSearchCheck
      * @param Filter $query
      * @return bool
      * @throws \InvalidArgumentException
-     * @since 2.2.0
      */
     private function processFilterQuery(Filter $query)
     {

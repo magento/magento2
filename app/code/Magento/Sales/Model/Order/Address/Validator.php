@@ -13,13 +13,11 @@ use Magento\Sales\Model\Order\Address;
 
 /**
  * Class Validator
- * @since 2.0.0
  */
 class Validator
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $required = [
         'parent_id' => 'Parent Order Id',
@@ -35,19 +33,16 @@ class Validator
 
     /**
      * @var DirectoryHelper
-     * @since 2.0.0
      */
     protected $directoryHelper;
 
     /**
      * @var CountryFactory
-     * @since 2.0.0
      */
     protected $countryFactory;
 
     /**
      * @var EavConfig
-     * @since 2.2.0
      */
     protected $eavConfig;
 
@@ -55,7 +50,6 @@ class Validator
      * @param DirectoryHelper $directoryHelper
      * @param CountryFactory  $countryFactory
      * @param EavConfig       $eavConfig
-     * @since 2.0.0
      */
     public function __construct(
         DirectoryHelper $directoryHelper,
@@ -84,7 +78,6 @@ class Validator
      *
      * @param \Magento\Sales\Model\Order\Address $address
      * @return array
-     * @since 2.0.0
      */
     public function validate(Address $address)
     {
@@ -111,7 +104,6 @@ class Validator
      * @SuppressWarnings(PHPMD.NPathComplexity)
      *
      * @param Address $address
-     * @since 2.0.0
      */
     public function validateForCustomer(Address $address)
     {
@@ -172,7 +164,6 @@ class Validator
      *
      * @param mixed $value
      * @return bool
-     * @since 2.0.0
      */
     protected function isEmpty($value)
     {
@@ -184,7 +175,6 @@ class Validator
      *
      * @param string $countryId
      * @return bool
-     * @since 2.0.0
      */
     protected function isZipRequired($countryId)
     {
@@ -196,7 +186,6 @@ class Validator
      *
      * @param string $countryId
      * @return bool
-     * @since 2.0.0
      */
     protected function isStateRequired($countryId)
     {
@@ -206,7 +195,6 @@ class Validator
 
     /**
      * @return bool
-     * @since 2.2.0
      */
     protected function isTelephoneRequired()
     {
@@ -215,7 +203,6 @@ class Validator
 
     /**
      * @return bool
-     * @since 2.2.0
      */
     protected function isCompanyRequired()
     {
@@ -224,7 +211,6 @@ class Validator
 
     /**
      * @return bool
-     * @since 2.2.0
      */
     protected function isFaxRequired()
     {

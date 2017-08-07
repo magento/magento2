@@ -22,7 +22,6 @@ use Magento\Framework\Serialize\Serializer\Serialize;
  * Plugin config, provides list of plugins for a type
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class PluginList extends Scoped implements InterceptionPluginList
 {
@@ -30,7 +29,6 @@ class PluginList extends Scoped implements InterceptionPluginList
      * Inherited plugin data
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_inherited;
 
@@ -38,7 +36,6 @@ class PluginList extends Scoped implements InterceptionPluginList
      * Inherited plugin data, preprocessed for read
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_processed;
 
@@ -46,7 +43,6 @@ class PluginList extends Scoped implements InterceptionPluginList
      * Type config
      *
      * @var ConfigInterface
-     * @since 2.0.0
      */
     protected $_omConfig;
 
@@ -54,7 +50,6 @@ class PluginList extends Scoped implements InterceptionPluginList
      * Class relations information provider
      *
      * @var RelationsInterface
-     * @since 2.0.0
      */
     protected $_relations;
 
@@ -62,7 +57,6 @@ class PluginList extends Scoped implements InterceptionPluginList
      * List of interception methods per plugin
      *
      * @var DefinitionInterface
-     * @since 2.0.0
      */
     protected $_definitions;
 
@@ -70,31 +64,26 @@ class PluginList extends Scoped implements InterceptionPluginList
      * List of interceptable application classes
      *
      * @var ClassDefinitions
-     * @since 2.0.0
      */
     protected $_classDefinitions;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_pluginInstances = [];
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
     /**
      * @var SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -113,7 +102,6 @@ class PluginList extends Scoped implements InterceptionPluginList
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         ReaderInterface $reader,
@@ -146,7 +134,6 @@ class PluginList extends Scoped implements InterceptionPluginList
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _inheritPlugins($type)
     {
@@ -220,7 +207,6 @@ class PluginList extends Scoped implements InterceptionPluginList
      *
      * @param array $plugins
      * @return void
-     * @since 2.0.0
      */
     private function trimInstanceStartingBackslash(&$plugins)
     {
@@ -235,7 +221,6 @@ class PluginList extends Scoped implements InterceptionPluginList
      * @param array $itemA
      * @param array $itemB
      * @return int
-     * @since 2.0.0
      */
     protected function _sort($itemA, $itemB)
     {
@@ -257,7 +242,6 @@ class PluginList extends Scoped implements InterceptionPluginList
      * @param string $type
      * @param string $code
      * @return mixed
-     * @since 2.0.0
      */
     public function getPlugin($type, $code)
     {
@@ -276,7 +260,6 @@ class PluginList extends Scoped implements InterceptionPluginList
      * @param string $method
      * @param string $code
      * @return array
-     * @since 2.0.0
      */
     public function getNext($type, $method, $code = '__self')
     {
@@ -293,7 +276,6 @@ class PluginList extends Scoped implements InterceptionPluginList
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _loadScopedData()
     {
@@ -351,7 +333,6 @@ class PluginList extends Scoped implements InterceptionPluginList
      *
      * @param string $scopeCode
      * @return bool
-     * @since 2.0.0
      */
     protected function isCurrentScope($scopeCode)
     {
@@ -362,7 +343,6 @@ class PluginList extends Scoped implements InterceptionPluginList
      * Returns class definitions
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getClassDefinitions()
     {
@@ -374,7 +354,6 @@ class PluginList extends Scoped implements InterceptionPluginList
      *
      * @param array $config
      * @return void
-     * @since 2.0.0
      */
     public function merge(array $config)
     {
@@ -395,7 +374,6 @@ class PluginList extends Scoped implements InterceptionPluginList
      *
      * @param array $plugins
      * @return void
-     * @since 2.2.0
      */
     private function filterPlugins(array &$plugins)
     {
@@ -411,8 +389,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      * Get logger
      *
      * @return \Psr\Log\LoggerInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getLogger()
     {

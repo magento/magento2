@@ -10,19 +10,16 @@ use Magento\Sales\Model\Order\Payment\Transaction;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class PayflowExpress extends \Magento\Paypal\Model\Express
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_code = Config::METHOD_WPP_PE_EXPRESS;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_formBlockType = \Magento\Paypal\Block\PayflowExpress\Form::class;
 
@@ -30,13 +27,11 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
      * Express Checkout payment method instance
      *
      * @var Express
-     * @since 2.0.0
      */
     protected $_ecInstance = null;
 
     /**
      * @var InfoFactory
-     * @since 2.0.0
      */
     protected $_paypalInfoFactory;
 
@@ -44,7 +39,6 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
      * Availability option
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_canFetchTransactionInfo = false;
 
@@ -52,7 +46,6 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
      * Payment Method feature
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_canReviewPayment = false;
 
@@ -77,7 +70,6 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -128,7 +120,6 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
      *
      * @param \Magento\Quote\Api\Data\CartInterface|\Magento\Quote\Model\Quote|null $quote
      * @return bool
-     * @since 2.0.0
      */
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
@@ -152,7 +143,6 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
      * @param Api\Nvp $api
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @return void
-     * @since 2.0.0
      */
     protected function _importToPayment($api, $payment)
     {
@@ -179,7 +169,6 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
      * @see \Magento\Checkout\Controller\Onepage::savePaymentAction()
      * @see \Magento\Quote\Model\Quote\Payment::getCheckoutRedirectUrl()
      * @return string
-     * @since 2.0.0
      */
     public function getCheckoutRedirectUrl()
     {
@@ -192,7 +181,6 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
      * additional information(needed to perform online refund. Requirement of the Payflow gateway)
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canRefund()
     {

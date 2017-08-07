@@ -8,19 +8,16 @@ namespace Magento\Sales\Model\Order\Pdf;
 /**
  * Sales Order Shipment PDF model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Shipment extends AbstractPdf
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $_localeResolver;
 
@@ -40,7 +37,6 @@ class Shipment extends AbstractPdf
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Payment\Helper\Data $paymentData,
@@ -79,7 +75,6 @@ class Shipment extends AbstractPdf
      *
      * @param  \Zend_Pdf_Page $page
      * @return void
-     * @since 2.0.0
      */
     protected function _drawHeader(\Zend_Pdf_Page $page)
     {
@@ -111,7 +106,6 @@ class Shipment extends AbstractPdf
      *
      * @param \Magento\Sales\Model\Order\Shipment[] $shipments
      * @return \Zend_Pdf
-     * @since 2.0.0
      */
     public function getPdf($shipments = [])
     {
@@ -169,7 +163,6 @@ class Shipment extends AbstractPdf
      *
      * @param  array $settings
      * @return \Zend_Pdf_Page
-     * @since 2.0.0
      */
     public function newPage(array $settings = [])
     {

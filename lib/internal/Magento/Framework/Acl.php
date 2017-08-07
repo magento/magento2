@@ -9,7 +9,6 @@ namespace Magento\Framework;
  * ACL. Can be queried for relations between roles and resources.
  *
  * @api
- * @since 2.0.0
  */
 class Acl extends \Zend_Acl
 {
@@ -30,7 +29,6 @@ class Acl extends \Zend_Acl
 
     /**
      * Constructor
-     * @since 2.0.0
      */
     public function __construct()
     {
@@ -43,7 +41,6 @@ class Acl extends \Zend_Acl
      * @param \Zend_Acl_Role $role
      * @param \Zend_Acl_Role $parent
      * @return \Magento\Framework\Acl
-     * @since 2.0.0
      */
     public function addRoleParent($role, $parent)
     {

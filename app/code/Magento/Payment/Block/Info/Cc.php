@@ -9,7 +9,6 @@ namespace Magento\Payment\Block\Info;
  * Credit card generic payment info
  *
  * @api
- * @since 2.0.0
  */
 class Cc extends \Magento\Payment\Block\Info
 {
@@ -17,7 +16,6 @@ class Cc extends \Magento\Payment\Block\Info
      * Payment config model
      *
      * @var \Magento\Payment\Model\Config
-     * @since 2.0.0
      */
     protected $_paymentConfig;
 
@@ -25,7 +23,6 @@ class Cc extends \Magento\Payment\Block\Info
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Payment\Model\Config $paymentConfig
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -40,7 +37,6 @@ class Cc extends \Magento\Payment\Block\Info
      * Retrieve credit card type name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCcTypeName()
     {
@@ -56,7 +52,6 @@ class Cc extends \Magento\Payment\Block\Info
      * Whether current payment method has credit card expiration info
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasCcExpDate()
     {
@@ -67,7 +62,6 @@ class Cc extends \Magento\Payment\Block\Info
      * Retrieve CC expiration month
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCcExpMonth()
     {
@@ -82,7 +76,6 @@ class Cc extends \Magento\Payment\Block\Info
      * Retrieve CC expiration date
      *
      * @return \DateTime
-     * @since 2.0.0
      */
     public function getCcExpDate()
     {
@@ -96,7 +89,6 @@ class Cc extends \Magento\Payment\Block\Info
      *
      * @param \Magento\Framework\DataObject|array $transport
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     protected function _prepareSpecificInformation($transport = null)
     {
@@ -131,7 +123,6 @@ class Cc extends \Magento\Payment\Block\Info
      * @param string $year
      * @param string $month
      * @return string
-     * @since 2.0.0
      */
     protected function _formatCardDate($year, $month)
     {

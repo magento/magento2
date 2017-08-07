@@ -9,7 +9,6 @@ namespace Magento\Framework\Backup;
  * Class to work system backup that excludes media folder
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Nomedia extends \Magento\Framework\Backup\Media
 {
@@ -18,7 +17,6 @@ class Nomedia extends \Magento\Framework\Backup\Media
      *
      * @return string
      * @see BackupInterface::getType()
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -29,7 +27,6 @@ class Nomedia extends \Magento\Framework\Backup\Media
      * Add media folder to ignore list
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareIgnoreList()
     {

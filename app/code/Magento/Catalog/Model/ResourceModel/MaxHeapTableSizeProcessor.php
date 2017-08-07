@@ -8,8 +8,7 @@ namespace Magento\Catalog\Model\ResourceModel;
 use Magento\Framework\App\ResourceConnection;
 
 /**
- * @deprecated 2.2.0
- * @since 2.0.0
+ * @deprecated 101.0.3
  */
 class MaxHeapTableSizeProcessor
 {
@@ -17,13 +16,11 @@ class MaxHeapTableSizeProcessor
      * Database connection adapter
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected $connection;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $defaultMaxHeapTableSie;
 
@@ -31,13 +28,11 @@ class MaxHeapTableSizeProcessor
      * Current max_heap_table_size value (in Bytes)
      *
      * @var int
-     * @since 2.0.0
      */
     protected $currentMaxHeapTableSize = null;
 
     /**
      * @param ResourceConnection $resource
-     * @since 2.0.0
      */
     public function __construct(ResourceConnection $resource)
     {
@@ -52,7 +47,6 @@ class MaxHeapTableSizeProcessor
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      * @return void
-     * @since 2.0.0
      */
     public function set($maxHeapTableSize = null)
     {
@@ -74,7 +68,6 @@ class MaxHeapTableSizeProcessor
      *
      * @throws \RuntimeException
      * @return void
-     * @since 2.0.0
      */
     public function restore()
     {

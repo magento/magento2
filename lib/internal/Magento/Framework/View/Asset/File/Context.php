@@ -10,25 +10,21 @@ use Magento\Framework\View\Asset;
 
 /**
  * A basic path context for assets that includes a directory path
- * @since 2.0.0
  */
 class Context implements Asset\ContextInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     private $baseUrl;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $baseDir;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $path;
 
@@ -36,7 +32,6 @@ class Context implements Asset\ContextInterface
      * @param string $baseUrl
      * @param string $baseDirType
      * @param string $contextPath
-     * @since 2.0.0
      */
     public function __construct($baseUrl, $baseDirType, $contextPath)
     {
@@ -47,7 +42,6 @@ class Context implements Asset\ContextInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getPath()
     {
@@ -56,7 +50,6 @@ class Context implements Asset\ContextInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getBaseUrl()
     {
@@ -67,7 +60,6 @@ class Context implements Asset\ContextInterface
      * Get type of base directory
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBaseDirType()
     {

@@ -10,13 +10,11 @@ use Magento\Framework\Serialize\SerializerInterface;
 /**
  * Less secure than Json implementation, but gives higher performance on big arrays. Does not unserialize objects.
  * Using this implementation is discouraged as it may lead to security vulnerabilities
- * @since 2.2.0
  */
 class Serialize implements SerializerInterface
 {
     /**
      * {@inheritDoc}
-     * @since 2.2.0
      */
     public function serialize($data)
     {
@@ -28,7 +26,6 @@ class Serialize implements SerializerInterface
 
     /**
      * {@inheritDoc}
-     * @since 2.2.0
      */
     public function unserialize($string)
     {

@@ -11,13 +11,11 @@ use Magento\Checkout\Model\Cart as CustomerCart;
 /**
  * Class \Magento\Checkout\Controller\Cart\EstimatePost
  *
- * @since 2.0.0
  */
 class EstimatePost extends \Magento\Checkout\Controller\Cart
 {
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
@@ -30,7 +28,6 @@ class EstimatePost extends \Magento\Checkout\Controller\Cart
      * @param CustomerCart $cart
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         Framework\App\Action\Context $context,
@@ -56,7 +53,6 @@ class EstimatePost extends \Magento\Checkout\Controller\Cart
      * Initialize shipping information
      *
      * @return \Magento\Framework\Controller\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

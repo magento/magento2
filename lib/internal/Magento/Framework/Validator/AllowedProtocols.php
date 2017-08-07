@@ -14,7 +14,6 @@ use \Zend\Uri\Uri;
  *
  * Class AllowedProtocols
  * @package Magento\Framework\Validator
- * @since 2.2.0
  */
 class AllowedProtocols extends AbstractValidator
 {
@@ -22,7 +21,6 @@ class AllowedProtocols extends AbstractValidator
      * List of supported protocols
      *
      * @var array
-     * @since 2.2.0
      */
     private $listOfProtocols = [
         'http',
@@ -32,7 +30,6 @@ class AllowedProtocols extends AbstractValidator
     /**
      * Constructor.
      * @param array $listOfProtocols
-     * @since 2.2.0
      */
     public function __construct($listOfProtocols = [])
     {
@@ -46,7 +43,6 @@ class AllowedProtocols extends AbstractValidator
      *
      * @param string $value
      * @return bool
-     * @since 2.2.0
      */
     public function isValid($value)
     {

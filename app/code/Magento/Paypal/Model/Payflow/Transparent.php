@@ -24,7 +24,6 @@ use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
  * Payflow Pro payment gateway model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Transparent extends Payflowpro implements TransparentInterface
 {
@@ -36,31 +35,26 @@ class Transparent extends Payflowpro implements TransparentInterface
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_formBlockType = \Magento\Payment\Block\Transparent\Info::class;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_infoBlockType = \Magento\Paypal\Block\Payment\Info::class;
 
     /**
      * @var ResponseValidator
-     * @since 2.0.0
      */
     private $responseValidator;
 
     /**
      * @var PaymentTokenInterfaceFactory
-     * @since 2.1.0
      */
     private $paymentTokenFactory;
 
     /**
      * @var OrderPaymentExtensionInterfaceFactory
-     * @since 2.1.0
      */
     private $paymentExtensionFactory;
 
@@ -85,7 +79,6 @@ class Transparent extends Payflowpro implements TransparentInterface
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -133,7 +126,6 @@ class Transparent extends Payflowpro implements TransparentInterface
 
     /**
      * @return ResponseValidator
-     * @since 2.1.0
      */
     public function getResponceValidator()
     {
@@ -144,7 +136,6 @@ class Transparent extends Payflowpro implements TransparentInterface
      * Do not validate payment form using server methods
      *
      * @return bool
-     * @since 2.0.0
      */
     public function validate()
     {
@@ -159,7 +150,6 @@ class Transparent extends Payflowpro implements TransparentInterface
      * @return $this
      * @throws InvalidTransitionException
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function authorize(InfoInterface $payment, $amount)
     {
@@ -202,7 +192,6 @@ class Transparent extends Payflowpro implements TransparentInterface
 
     /**
      * {inheritdoc}
-     * @since 2.0.0
      */
     public function getConfigInterface()
     {
@@ -214,7 +203,6 @@ class Transparent extends Payflowpro implements TransparentInterface
      * @param string $token
      * @throws LocalizedException
      * @return void
-     * @since 2.1.0
      */
     protected function createPaymentToken(Payment $payment, $token)
     {
@@ -235,7 +223,6 @@ class Transparent extends Payflowpro implements TransparentInterface
     /**
      * @param Payment $payment
      * @return string
-     * @since 2.1.0
      */
     private function getExpirationDate(Payment $payment)
     {
@@ -256,7 +243,6 @@ class Transparent extends Payflowpro implements TransparentInterface
     /**
      * @param Payment $payment
      * @return \Magento\Sales\Api\Data\OrderPaymentExtensionInterface
-     * @since 2.1.0
      */
     private function getPaymentExtensionAttributes(Payment $payment)
     {
@@ -277,7 +263,6 @@ class Transparent extends Payflowpro implements TransparentInterface
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException
-     * @since 2.1.0
      */
     public function capture(InfoInterface $payment, $amount)
     {

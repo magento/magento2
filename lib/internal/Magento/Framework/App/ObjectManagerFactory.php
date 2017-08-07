@@ -19,7 +19,6 @@ use Magento\Framework\Code\GeneratedFiles;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class ObjectManagerFactory
 {
@@ -37,7 +36,6 @@ class ObjectManagerFactory
      * Locator class name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_locatorClassName = \Magento\Framework\App\ObjectManager::class;
 
@@ -45,7 +43,6 @@ class ObjectManagerFactory
      * Config class name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_configClassName = \Magento\Framework\Interception\ObjectManager\ConfigInterface::class;
 
@@ -53,7 +50,6 @@ class ObjectManagerFactory
      * Environment factory class name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $envFactoryClassName = \Magento\Framework\App\EnvironmentFactory::class;
 
@@ -61,7 +57,6 @@ class ObjectManagerFactory
      * Filesystem directory list
      *
      * @var DirectoryList
-     * @since 2.0.0
      */
     protected $directoryList;
 
@@ -69,7 +64,6 @@ class ObjectManagerFactory
      * Filesystem driver pool
      *
      * @var DriverPool
-     * @since 2.0.0
      */
     protected $driverPool;
 
@@ -77,7 +71,6 @@ class ObjectManagerFactory
      * Configuration file pool
      *
      * @var ConfigFilePool
-     * @since 2.0.0
      */
     protected $configFilePool;
 
@@ -85,7 +78,6 @@ class ObjectManagerFactory
      * Factory
      *
      * @var \Magento\Framework\ObjectManager\FactoryInterface
-     * @since 2.0.0
      */
     protected $factory;
 
@@ -95,7 +87,6 @@ class ObjectManagerFactory
      * @param DirectoryList $directoryList
      * @param DriverPool $driverPool
      * @param ConfigFilePool $configFilePool
-     * @since 2.0.0
      */
     public function __construct(DirectoryList $directoryList, DriverPool $driverPool, ConfigFilePool $configFilePool)
     {
@@ -111,7 +102,6 @@ class ObjectManagerFactory
      * @return \Magento\Framework\ObjectManagerInterface
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function create(array $arguments)
     {
@@ -206,7 +196,6 @@ class ObjectManagerFactory
      * @param ConfigFilePool $configFilePool
      * @param array $arguments
      * @return DeploymentConfig
-     * @since 2.0.0
      */
     protected function createDeploymentConfig(
         DirectoryList $directoryList,
@@ -228,7 +217,6 @@ class ObjectManagerFactory
      *
      * @param \Magento\Framework\Stdlib\BooleanUtils $booleanUtils
      * @return \Magento\Framework\Data\Argument\InterpreterInterface
-     * @since 2.0.0
      */
     protected function createArgumentInterpreter(
         \Magento\Framework\Stdlib\BooleanUtils $booleanUtils
@@ -260,7 +248,6 @@ class ObjectManagerFactory
      * @param string $appMode
      * @return array
      * @throws \Magento\Framework\Exception\State\InitException
-     * @since 2.0.0
      */
     protected function _loadPrimaryConfig(DirectoryList $directoryList, $driverPool, $argumentMapper, $appMode)
     {
@@ -304,9 +291,8 @@ class ObjectManagerFactory
      * @param \Magento\Framework\ObjectManager\Config\Config $diConfig
      * @param \Magento\Framework\ObjectManager\DefinitionInterface $definitions
      * @return \Magento\Framework\Interception\PluginList\PluginList
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function _createPluginList(
         \Magento\Framework\ObjectManagerInterface $objectManager,

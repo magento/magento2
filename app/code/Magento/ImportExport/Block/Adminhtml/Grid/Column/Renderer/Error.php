@@ -9,7 +9,6 @@ use Magento\ImportExport\Model\Import;
 
 /**
  * Backup grid item renderer
- * @since 2.0.0
  */
 class Error extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {
@@ -18,7 +17,6 @@ class Error extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      *
      * @param \Magento\Framework\DataObject $row
      * @return mixed
-     * @since 2.0.0
      */
     public function _getValue(\Magento\Framework\DataObject $row)
     {

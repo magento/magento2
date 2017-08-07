@@ -16,7 +16,6 @@ namespace Magento\Config\Block\System\Config;
 /**
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Tabs extends \Magento\Backend\Block\Widget
 {
@@ -24,7 +23,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      * Tabs
      *
      * @var \Magento\Config\Model\Config\Structure\Element\Iterator
-     * @since 2.0.0
      */
     protected $_tabs;
 
@@ -32,7 +30,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      * Block template filename
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Config::system/config/tabs.phtml';
 
@@ -40,7 +37,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      * Currently selected section id
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_currentSectionId;
 
@@ -48,7 +44,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      * Current website code
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_websiteCode;
 
@@ -56,13 +51,11 @@ class Tabs extends \Magento\Backend\Block\Widget
      * Current store code
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_storeCode;
 
     /**
      * @var \Magento\Backend\Helper\Data
-     * @since 2.0.0
      */
     protected $_backendHelper;
 
@@ -71,7 +64,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      * @param \Magento\Config\Model\Config\Structure $configStructure
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -94,7 +86,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      * Get all tabs
      *
      * @return \Magento\Config\Model\Config\Structure\Element\Iterator
-     * @since 2.0.0
      */
     public function getTabs()
     {
@@ -106,7 +97,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      *
      * @param \Magento\Config\Model\Config\Structure\Element\Section $section
      * @return string
-     * @since 2.0.0
      */
     public function getSectionUrl(\Magento\Config\Model\Config\Structure\Element\Section $section)
     {
@@ -118,7 +108,6 @@ class Tabs extends \Magento\Backend\Block\Widget
      *
      * @param \Magento\Config\Model\Config\Structure\Element\Section $section
      * @return bool
-     * @since 2.0.0
      */
     public function isSectionActive(\Magento\Config\Model\Config\Structure\Element\Section $section)
     {

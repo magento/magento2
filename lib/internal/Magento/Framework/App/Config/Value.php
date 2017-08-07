@@ -19,7 +19,6 @@ namespace Magento\Framework\App\Config;
  * @method \Magento\Framework\App\Config\ValueInterface setValue(string $value)
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @since 2.0.0
  */
 class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\App\Config\ValueInterface
 {
@@ -27,7 +26,6 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      * Prefix of model events names
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'config_data';
 
@@ -37,19 +35,16 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      * In observe method you can use $observer->getEvent()->getObject() in this case
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'config_data';
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @var \Magento\Framework\App\Cache\TypeListInterface
-     * @since 2.0.0
      */
     protected $cacheTypeList;
 
@@ -61,7 +56,6 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -81,7 +75,6 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      * Check if config data value was changed
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isValueChanged()
     {
@@ -92,7 +85,6 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      * Get old value from existing config
      *
      * @return string
-     * @since 2.0.0
      */
     public function getOldValue()
     {
@@ -108,7 +100,6 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      *
      * @param string $key
      * @return string
-     * @since 2.0.0
      */
     public function getFieldsetDataValue($key)
     {
@@ -122,7 +113,6 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      * {@inheritdoc}. In addition, it sets status 'invalidate' for config caches
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -139,7 +129,6 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      * {@inheritdoc}. In addition, it sets status 'invalidate' for config caches
      *
      * @return $this
-     * @since 2.1.0
      */
     public function afterDelete()
     {

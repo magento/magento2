@@ -27,7 +27,6 @@ use Zend\ServiceManager\ServiceManager;
  *
  * {@inheritdoc}
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Cli extends Console\Application
 {
@@ -43,19 +42,13 @@ class Cli extends Console\Application
     const RETURN_FAILURE = 1;
     /**#@-*/
 
-    /**
-     * Service Manager.
-     *
-     * @var ServiceManager
-     * @since 2.0.0
-     */
+    /**#@-*/
     private $serviceManager;
 
     /**
      * Initialization exception.
      *
      * @var \Exception
-     * @since 2.0.0
      */
     private $initException;
 
@@ -63,7 +56,6 @@ class Cli extends Console\Application
      * Object Manager.
      *
      * @var ObjectManagerInterface
-     * @since 2.2.0
      */
     private $objectManager;
 
@@ -71,7 +63,6 @@ class Cli extends Console\Application
      * @param string $name the application name
      * @param string $version the application version
      * @SuppressWarnings(PHPMD.ExitExpression)
-     * @since 2.0.0
      */
     public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
     {
@@ -107,7 +98,6 @@ class Cli extends Console\Application
      * {@inheritdoc}
      *
      * @throws \Exception The exception in case of unexpected error
-     * @since 2.0.0
      */
     public function doRun(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
@@ -122,7 +112,6 @@ class Cli extends Console\Application
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function getDefaultCommands()
     {
@@ -133,7 +122,6 @@ class Cli extends Console\Application
      * Gets application commands.
      *
      * @return array a list of available application commands
-     * @since 2.0.0
      */
     protected function getApplicationCommands()
     {
@@ -165,7 +153,6 @@ class Cli extends Console\Application
      * Object Manager initialization.
      *
      * @return void
-     * @since 2.2.0
      */
     private function initObjectManager()
     {
@@ -188,7 +175,6 @@ class Cli extends Console\Application
      *
      * @return void
      * @throws GenerationDirectoryAccessException If generation directory is read-only in developer mode
-     * @since 2.2.0
      */
     private function assertGenerationPermissions()
     {
@@ -212,7 +198,6 @@ class Cli extends Console\Application
      *
      * @return void
      * @throws GenerationDirectoryAccessException If generation directory is read-only
-     * @since 2.2.0
      */
     private function assertCompilerPreparation()
     {
@@ -237,7 +222,6 @@ class Cli extends Console\Application
      * @param ObjectManagerInterface $objectManager the object manager
      *
      * @return array an array with external commands
-     * @since 2.0.0
      */
     protected function getVendorCommands($objectManager)
     {

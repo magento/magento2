@@ -15,31 +15,26 @@ use Magento\Setup\Module\Di\Code\Scanner\PhpScanner;
 /**
  * Class \Magento\Setup\Module\Di\App\Task\Operation\ApplicationCodeGenerator
  *
- * @since 2.0.0
  */
 class ApplicationCodeGenerator implements OperationInterface
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     private $data = [];
 
     /**
      * @var ClassesScanner
-     * @since 2.0.0
      */
     private $classesScanner;
 
     /**
      * @var PhpScanner
-     * @since 2.0.0
      */
     private $phpScanner;
 
     /**
      * @var DirectoryScanner
-     * @since 2.0.0
      */
     private $directoryScanner;
 
@@ -48,7 +43,6 @@ class ApplicationCodeGenerator implements OperationInterface
      * @param PhpScanner $phpScanner
      * @param DirectoryScanner $directoryScanner
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         ClassesScanner $classesScanner,
@@ -64,7 +58,6 @@ class ApplicationCodeGenerator implements OperationInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function doOperation()
     {
@@ -96,7 +89,6 @@ class ApplicationCodeGenerator implements OperationInterface
      * Returns operation name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName()
     {

@@ -15,7 +15,6 @@ use Magento\Newsletter\Model\ResourceModel\Queue\Collection;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Subscriber extends \Magento\Backend\Block\Template
 {
@@ -23,19 +22,16 @@ class Subscriber extends \Magento\Backend\Block\Template
      * Queue collection
      *
      * @var Collection
-     * @since 2.0.0
      */
     protected $_queueCollection = null;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'subscriber/list.phtml';
 
     /**
      * @var \Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory
-     * @since 2.0.0
      */
     protected $_collectionFactory;
 
@@ -43,7 +39,6 @@ class Subscriber extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory $collectionFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -58,7 +53,6 @@ class Subscriber extends \Magento\Backend\Block\Template
      * Prepares block to render
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -69,7 +63,6 @@ class Subscriber extends \Magento\Backend\Block\Template
      * Return queue collection with loaded neversent queues
      *
      * @return Collection
-     * @since 2.0.0
      */
     public function getQueueCollection()
     {
@@ -90,7 +83,6 @@ class Subscriber extends \Magento\Backend\Block\Template
      * Get add option for queue
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getShowQueueAdd()
     {
@@ -101,7 +93,6 @@ class Subscriber extends \Magento\Backend\Block\Template
      * Return list of neversent queues for select
      *
      * @return array
-     * @since 2.0.0
      */
     public function getQueueAsOptions()
     {

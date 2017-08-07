@@ -25,61 +25,51 @@ use Magento\Framework\View;
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  *
  * @api
- * @since 2.0.0
  */
 class Page extends Layout
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $pageLayout;
 
     /**
      * @var \Magento\Framework\View\Page\Config
-     * @since 2.0.0
      */
     protected $pageConfig;
 
     /**
      * @var \Magento\Framework\View\Page\Config\RendererInterface
-     * @since 2.0.0
      */
     protected $pageConfigRenderer;
 
     /**
      * @var \Magento\Framework\View\Page\Config\RendererFactory
-     * @since 2.0.0
      */
     protected $pageConfigRendererFactory;
 
     /**
      * @var \Magento\Framework\View\Page\Layout\Reader
-     * @since 2.0.0
      */
     protected $pageLayoutReader;
 
     /**
      * @var \Magento\Framework\View\FileSystem
-     * @since 2.0.0
      */
     protected $viewFileSystem;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $viewVars;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $template;
 
     /**
      * @var Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $request;
 
@@ -87,25 +77,21 @@ class Page extends Layout
      * Asset service
      *
      * @var \Magento\Framework\View\Asset\Repository
-     * @since 2.0.0
      */
     protected $assetRepo;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var View\EntitySpecificHandlesList
-     * @since 2.2.0
      */
     private $entitySpecificHandlesList;
 
@@ -125,7 +111,6 @@ class Page extends Layout
      * @param View\EntitySpecificHandlesList $entitySpecificHandlesList
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         View\Element\Template\Context $context,
@@ -167,7 +152,6 @@ class Page extends Layout
      * Initialize page config reader
      *
      * @return void
-     * @since 2.0.0
      */
     protected function initPageConfigReader()
     {
@@ -178,7 +162,6 @@ class Page extends Layout
      * Create layout builder
      *
      * @return void
-     * @since 2.0.0
      */
     protected function initLayoutBuilder()
     {
@@ -193,7 +176,6 @@ class Page extends Layout
      * Set up default handles for current page
      *
      * @return $this
-     * @since 2.0.0
      */
     public function initLayout()
     {
@@ -210,7 +192,6 @@ class Page extends Layout
      * Add default handle
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addDefaultHandle()
     {
@@ -222,7 +203,6 @@ class Page extends Layout
      * Return page configuration
      *
      * @return \Magento\Framework\View\Page\Config
-     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -236,7 +216,6 @@ class Page extends Layout
      * @param string|null $defaultHandle
      * @param bool $entitySpecific
      * @return bool
-     * @since 2.0.0
      */
     public function addPageLayoutHandles(array $parameters = [], $defaultHandle = null, $entitySpecific = true)
     {
@@ -256,7 +235,6 @@ class Page extends Layout
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function render(HttpResponseInterface $response)
     {
@@ -291,7 +269,6 @@ class Page extends Layout
      * Add default body classes for current page layout
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function addDefaultBodyClasses()
     {
@@ -305,7 +282,6 @@ class Page extends Layout
 
     /**
      * @return string
-     * @since 2.0.0
      */
     protected function getPageLayout()
     {
@@ -318,7 +294,6 @@ class Page extends Layout
      * @param   string|array $key
      * @param   mixed $value
      * @return  $this
-     * @since 2.0.0
      */
     protected function assign($key, $value = null)
     {
@@ -337,7 +312,6 @@ class Page extends Layout
      *
      * @return string
      * @throws \Exception
-     * @since 2.0.0
      */
     protected function renderPage()
     {
@@ -364,7 +338,6 @@ class Page extends Layout
      * @param string $fileId
      * @param array $params
      * @return string
-     * @since 2.0.0
      */
     protected function getViewFileUrl($fileId, array $params = [])
     {

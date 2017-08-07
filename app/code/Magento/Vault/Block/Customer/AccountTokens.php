@@ -11,13 +11,13 @@ use Magento\Vault\Model\AccountPaymentTokenFactory;
  * Class AccountTokens
  *
  * @api
- * @since 2.2.0
+ * @since 100.2.0
  */
 class AccountTokens extends PaymentTokens
 {
     /**
      * @inheritdoc
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getType()
     {

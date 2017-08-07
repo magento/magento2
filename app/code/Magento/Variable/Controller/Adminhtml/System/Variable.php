@@ -9,7 +9,6 @@ use Magento\Backend\App\Action;
 
 /**
  * Custom Variables admin controller
- * @since 2.0.0
  */
 abstract class Variable extends Action
 {
@@ -24,31 +23,26 @@ abstract class Variable extends Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
-     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
-     * @since 2.0.0
      */
     protected $layoutFactory;
 
@@ -59,7 +53,6 @@ abstract class Variable extends Action
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -81,7 +74,6 @@ abstract class Variable extends Action
      * Initialize Layout and set breadcrumbs
      *
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.0.0
      */
     protected function createPage()
     {
@@ -96,7 +88,6 @@ abstract class Variable extends Action
      * Initialize Variable object
      *
      * @return \Magento\Variable\Model\Variable
-     * @since 2.0.0
      */
     protected function _initVariable()
     {

@@ -12,7 +12,7 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
  * Gateway vault payment token repository interface.
  *
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 interface PaymentTokenManagementInterface
 {
@@ -21,7 +21,7 @@ interface PaymentTokenManagementInterface
      *
      * @param int $customerId Customer ID.
      * @return \Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface Payment token search result interface.
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getListByCustomerId($customerId);
 
@@ -30,7 +30,7 @@ interface PaymentTokenManagementInterface
      *
      * @param int $paymentId The gateway payment token ID.
      * @return \Magento\Vault\Api\Data\PaymentTokenInterface Payment token interface.
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getByPaymentId($paymentId);
 
@@ -41,7 +41,7 @@ interface PaymentTokenManagementInterface
      * @param string $paymentMethodCode
      * @param int $customerId Customer ID.
      * @return PaymentTokenInterface|null Payment token interface.
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getByGatewayToken($token, $paymentMethodCode, $customerId);
 
@@ -51,7 +51,7 @@ interface PaymentTokenManagementInterface
      * @param string $hash Public hash.
      * @param int $customerId Customer ID.
      * @return PaymentTokenInterface|null Payment token interface.
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getByPublicHash($hash, $customerId);
 
@@ -59,7 +59,7 @@ interface PaymentTokenManagementInterface
      * @param PaymentTokenInterface $token
      * @param OrderPaymentInterface $payment
      * @return bool
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function saveTokenWithPaymentLink(PaymentTokenInterface $token, OrderPaymentInterface $payment);
 
@@ -69,7 +69,7 @@ interface PaymentTokenManagementInterface
      * @param int $paymentTokenId Payment token ID.
      * @param int $orderPaymentId Order payment ID.
      * @return bool
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function addLinkToOrderPayment($paymentTokenId, $orderPaymentId);
 }

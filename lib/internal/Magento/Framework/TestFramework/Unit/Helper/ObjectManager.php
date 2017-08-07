@@ -3,15 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * Helper class for basic object retrieving, such as blocks, models etc...
- */
 namespace Magento\Framework\TestFramework\Unit\Helper;
 
 /**
+ * Helper class for basic object retrieving, such as blocks, models etc...
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class ObjectManager
 {
@@ -19,7 +16,6 @@ class ObjectManager
      * Special cases configuration
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_specialCases = [
         \Magento\Framework\Model\ResourceModel\AbstractResource::class => '_getResourceModelMock',
@@ -29,18 +25,16 @@ class ObjectManager
     /**
      * Test object
      *
-     * @var \PHPUnit_Framework_TestCase
-     * @since 2.0.0
+     * @var \PHPUnit\Framework\TestCase
      */
     protected $_testObject;
 
     /**
-     * Class constructor
+     * Constructor
      *
-     * @param \PHPUnit_Framework_TestCase $testObject
-     * @since 2.0.0
+     * @param \PHPUnit\Framework\TestCase $testObject
      */
-    public function __construct(\PHPUnit_Framework_TestCase $testObject)
+    public function __construct(\PHPUnit\Framework\TestCase $testObject)
     {
         $this->_testObject = $testObject;
     }
@@ -51,7 +45,6 @@ class ObjectManager
      * @param string $argClassName
      * @param array $originalArguments
      * @return null|object|\PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     protected function _createArgumentMock($argClassName, array $originalArguments)
     {
@@ -71,7 +64,6 @@ class ObjectManager
      * @param string $className
      * @param array $arguments
      * @return null|object
-     * @since 2.0.0
      */
     protected function _processSpecialCases($className, $arguments)
     {
@@ -91,17 +83,16 @@ class ObjectManager
      * Retrieve specific mock of core resource model
      *
      * @return \Magento\Framework\Module\ResourceInterface|\PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     protected function _getResourceModelMock()
     {
-        $resourceMock = $this->_testObject->getMock(
-            \Magento\Framework\Module\ModuleResource::class,
-            ['getIdFieldName', '__sleep', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $resourceMock = $this->_testObject->getMockBuilder(\Magento\Framework\Module\ModuleResource::class)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->setMethods(['getIdFieldName', '__sleep', '__wakeup'])
+            ->getMock();
         $resourceMock->expects(
             $this->_testObject->any()
         )->method(
@@ -118,7 +109,6 @@ class ObjectManager
      *
      * @param string $className
      * @return \Magento\Framework\TranslateInterface|\PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     protected function _getTranslatorMock($className)
     {
@@ -141,17 +131,15 @@ class ObjectManager
      *
      * @param string $className
      * @return \PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     protected function _getMockWithoutConstructorCall($className)
     {
-        $class = new \ReflectionClass($className);
-        $mock = null;
-        if ($class->isAbstract()) {
-            $mock = $this->_testObject->getMockForAbstractClass($className, [], '', false, false);
-        } else {
-            $mock = $this->_testObject->getMock($className, [], [], '', false, false);
-        }
+        $mock = $this->_testObject->getMockBuilder($className)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->getMock();
         return $mock;
     }
 
@@ -161,7 +149,6 @@ class ObjectManager
      * @param string $className
      * @param array $arguments
      * @return object
-     * @since 2.0.0
      */
     public function getObject($className, array $arguments = [])
     {
@@ -195,13 +182,16 @@ class ObjectManager
      * @param string $className
      * @param array $arguments
      * @return object
-     * @since 2.0.0
      */
     protected function getBuilder($className, array $arguments)
     {
         if (!isset($arguments['objectFactory'])) {
-            $objectFactory =
-                $this->_testObject->getMock(\Magento\Framework\Api\ObjectFactory::class, [], [], '', false);
+            $objectFactory = $this->_testObject->getMockBuilder(\Magento\Framework\Api\ObjectFactory::class)
+                ->disableOriginalConstructor()
+                ->disableOriginalClone()
+                ->disableArgumentCloning()
+                ->disallowMockingUnknownTypes()
+                ->getMock();
 
             $objectFactory->expects($this->_testObject->any())
                 ->method('populateWithArray')
@@ -248,7 +238,6 @@ class ObjectManager
      * @param string $className
      * @param array $arguments
      * @return array
-     * @since 2.0.0
      */
     public function getConstructArguments($className, array $arguments = [])
     {
@@ -283,7 +272,12 @@ class ObjectManager
                 if ($firstPosition !== false) {
                     $parameterString = substr($parameterString, $firstPosition + 11);
                     $parameterString = substr($parameterString, 0, strpos($parameterString, ' '));
-                    $object = $this->_testObject->getMock($parameterString, [], [], '', false);
+                    $object = $this->_testObject->getMockBuilder($parameterString)
+                        ->disableOriginalConstructor()
+                        ->disableOriginalClone()
+                        ->disableArgumentCloning()
+                        ->disallowMockingUnknownTypes()
+                        ->getMock();
                 }
             }
 
@@ -299,7 +293,6 @@ class ObjectManager
      * @param array $data
      * @return \PHPUnit_Framework_MockObject_MockObject
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function getCollectionMock($className, array $data)
     {
@@ -308,7 +301,12 @@ class ObjectManager
                 $className . ' does not instance of \Magento\Framework\Data\Collection'
             );
         }
-        $mock = $this->_testObject->getMock($className, [], [], '', false, false);
+        $mock = $this->_testObject->getMockBuilder($className)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->getMock();
         $iterator = new \ArrayIterator($data);
         $mock->expects(
             $this->_testObject->any()
@@ -328,7 +326,6 @@ class ObjectManager
      * @param string $argClassName
      * @param array $arguments
      * @return null|object|\PHPUnit_Framework_MockObject_MockObject
-     * @since 2.0.0
      */
     private function _getMockObject($argClassName, array $arguments)
     {
@@ -349,7 +346,6 @@ class ObjectManager
      * @param object $propertyValue
      * @param string $className The namespace of parent class for injection private property into this class
      * @return void
-     * @since 2.1.0
      */
     public function setBackwardCompatibleProperty($object, $propertyName, $propertyValue, $className = '')
     {

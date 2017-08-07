@@ -15,13 +15,11 @@ use Magento\Framework\Registry;
 
 /**
  * Backend model for static compilation mode switcher
- * @since 2.2.0
  */
 class WorkflowType extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var CleanupFiles
-     * @since 2.2.0
      */
     private $cleaner;
 
@@ -34,7 +32,6 @@ class WorkflowType extends \Magento\Framework\App\Config\Value
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array|null $data
-     * @since 2.2.0
      */
     public function __construct(
         Context $context,
@@ -52,7 +49,6 @@ class WorkflowType extends \Magento\Framework\App\Config\Value
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function beforeSave()
     {
@@ -68,7 +64,6 @@ class WorkflowType extends \Magento\Framework\App\Config\Value
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function afterSave()
     {

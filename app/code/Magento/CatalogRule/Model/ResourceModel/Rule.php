@@ -17,7 +17,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
 {
@@ -28,7 +27,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $_logger;
 
@@ -36,7 +34,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * Catalog rule data
      *
      * @var \Magento\CatalogRule\Helper\Data
-     * @since 2.0.0
      */
     protected $_catalogRuleData = null;
 
@@ -44,49 +41,41 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager = null;
 
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $_eavConfig;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.0.0
      */
     protected $_coreDate;
 
     /**
      * @var \Magento\Catalog\Model\Product\ConditionFactory
-     * @since 2.0.0
      */
     protected $_conditionFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var \Magento\Framework\EntityManager\EntityManager
-     * @since 2.1.0
      */
     protected $entityManager;
 
@@ -104,7 +93,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param PriceCurrencyInterface $priceCurrency
      * @param null $connectionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -137,7 +125,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      *
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -147,7 +134,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     /**
      * @param \Magento\Framework\Model\AbstractModel $rule
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $rule)
     {
@@ -172,7 +158,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param int $gId
      * @param int $pId
      * @return float|false
-     * @since 2.0.0
      */
     public function getRulePrice($date, $wId, $gId, $pId)
     {
@@ -193,7 +178,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param int $customerGroupId
      * @param array $productIds
      * @return array
-     * @since 2.0.0
      */
     public function getRulePrices(\DateTimeInterface $date, $websiteId, $customerGroupId, $productIds)
     {
@@ -216,7 +200,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param int $customerGroupId
      * @param int $productId
      * @return array
-     * @since 2.0.0
      */
     public function getRulesFromProduct($date, $websiteId, $customerGroupId, $productId)
     {
@@ -241,7 +224,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param string $field
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
     {
@@ -253,7 +235,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param AbstractModel $object
      * @return $this
      * @throws \Exception
-     * @since 2.1.0
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -267,7 +248,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Exception
-     * @since 2.1.0
      */
     public function delete(AbstractModel $object)
     {
@@ -277,8 +257,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
 
     /**
      * @return array
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getAssociatedEntitiesMap()
     {
@@ -292,8 +271,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
 
     /**
      * @return \Magento\Framework\EntityManager\EntityManager
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getEntityManager()
     {

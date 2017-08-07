@@ -8,7 +8,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Unhold
  *
- * @since 2.0.0
  */
 class Unhold extends \Magento\Sales\Controller\Adminhtml\Order
 {
@@ -23,7 +22,6 @@ class Unhold extends \Magento\Sales\Controller\Adminhtml\Order
      * Unhold order
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

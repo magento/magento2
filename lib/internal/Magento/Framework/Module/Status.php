@@ -13,7 +13,6 @@ use Magento\Framework\Config\File\ConfigFilePool;
  * A service for controlling module status
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Status
 {
@@ -21,7 +20,6 @@ class Status
      * Module list loader
      *
      * @var ModuleList\Loader
-     * @since 2.0.0
      */
     private $loader;
 
@@ -29,7 +27,6 @@ class Status
      * Module list
      *
      * @var ModuleList
-     * @since 2.0.0
      */
     private $list;
 
@@ -37,7 +34,6 @@ class Status
      * Deployment config writer
      *
      * @var Writer
-     * @since 2.0.0
      */
     private $writer;
 
@@ -45,7 +41,6 @@ class Status
      * Dependency Checker
      *
      * @var DependencyChecker
-     * @since 2.0.0
      */
     private $dependencyChecker;
 
@@ -53,7 +48,6 @@ class Status
      * Conflict checker
      *
      * @var ConflictChecker
-     * @since 2.0.0
      */
     private $conflictChecker;
 
@@ -65,7 +59,6 @@ class Status
      * @param Writer $writer
      * @param ConflictChecker $conflictChecker
      * @param DependencyChecker $dependencyChecker
-     * @since 2.0.0
      */
     public function __construct(
         ModuleList\Loader $loader,
@@ -90,7 +83,6 @@ class Status
      * @param bool $prettyMessage
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function checkConstraints(
         $isEnabled,
@@ -147,7 +139,6 @@ class Status
      * @param bool $isEnabled
      * @param string[] $modules
      * @return void
-     * @since 2.0.0
      */
     public function setIsEnabled($isEnabled, $modules)
     {
@@ -169,7 +160,6 @@ class Status
      * @param bool $isEnabled
      * @param string[] $modules
      * @return string[]
-     * @since 2.0.0
      */
     public function getModulesToChange($isEnabled, $modules)
     {
@@ -191,7 +181,6 @@ class Status
      * @param string[] $modules
      * @return string[]
      * @throws \LogicException
-     * @since 2.0.0
      */
     private function getAllModules($modules)
     {
@@ -214,7 +203,6 @@ class Status
      * @param bool $isEnabled
      * @param string $moduleName
      * @return string
-     * @since 2.0.0
      */
     private function createShortErrorMessage($isEnabled, $moduleName)
     {
@@ -234,7 +222,6 @@ class Status
      * @param string $moduleName
      * @param array $missingDependencies
      * @return string[]
-     * @since 2.0.0
      */
     private function createVerboseErrorMessage($isEnabled, $moduleName, $missingDependencies)
     {

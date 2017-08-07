@@ -8,13 +8,11 @@ namespace Magento\CatalogRule\Model\Rule\Action;
 /**
  * Class \Magento\CatalogRule\Model\Rule\Action\SimpleActionOptionsProvider
  *
- * @since 2.1.0
  */
 class SimpleActionOptionsProvider implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @return array
-     * @since 2.1.0
      */
     public function toOptionArray()
     {

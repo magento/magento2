@@ -12,20 +12,17 @@ use Magento\Backend\App\Action\Context;
 
 /**
  * Class Wizard
- * @since 2.1.0
  */
 class Wizard extends Action
 {
     /**
      * @var Builder
-     * @since 2.1.0
      */
     protected $productBuilder;
 
     /**
      * @param Context $context
      * @param Builder $productBuilder
-     * @since 2.1.0
      */
     public function __construct(Context $context, Builder $productBuilder)
     {
@@ -35,7 +32,6 @@ class Wizard extends Action
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function execute()
     {

@@ -24,43 +24,37 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Suffix extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\UrlRewrite\Helper\UrlRewrite
-     * @since 2.0.0
      */
     protected $urlRewriteHelper;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\UrlRewrite\Model\UrlFinderInterface
-     * @since 2.0.0
      */
     protected $urlFinder;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected $connection;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $resource;
 
     /**
      * @var \Magento\Framework\App\Config
-     * @since 2.2.0
      */
     private $appConfig;
 
@@ -77,7 +71,6 @@ class Suffix extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -104,8 +97,7 @@ class Suffix extends \Magento\Framework\App\Config\Value
      * Get instance of ScopePool
      *
      * @return \Magento\Framework\App\Config
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 101.1.0
      */
     private function getAppConfig()
     {
@@ -121,7 +113,6 @@ class Suffix extends \Magento\Framework\App\Config\Value
      * Check url rewrite suffix - whether we can support it
      *
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -131,7 +122,6 @@ class Suffix extends \Magento\Framework\App\Config\Value
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -149,7 +139,7 @@ class Suffix extends \Magento\Framework\App\Config\Value
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function afterDeleteCommit()
     {
@@ -170,7 +160,6 @@ class Suffix extends \Magento\Framework\App\Config\Value
      * Check is category suffix changed
      *
      * @return bool
-     * @since 2.2.0
      */
     private function isCategorySuffixChanged()
     {
@@ -182,7 +171,6 @@ class Suffix extends \Magento\Framework\App\Config\Value
      * Update suffix for url rewrites
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function updateSuffixForUrlRewrites()
     {
@@ -221,7 +209,6 @@ class Suffix extends \Magento\Framework\App\Config\Value
 
     /**
      * @return array|null
-     * @since 2.0.0
      */
     protected function getStoreIds()
     {
@@ -241,7 +228,6 @@ class Suffix extends \Magento\Framework\App\Config\Value
     /**
      * @param array $storeIds
      * @return array
-     * @since 2.0.0
      */
     protected function getOverrideStoreIds($storeIds)
     {

@@ -8,7 +8,6 @@ namespace Magento\Customer\Model;
 /**
  * Class \Magento\Customer\Model\FileProcessor
  *
- * @since 2.2.0
  */
 class FileProcessor
 {
@@ -19,43 +18,36 @@ class FileProcessor
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     * @since 2.2.0
      */
     private $mediaDirectory;
 
     /**
      * @var \Magento\MediaStorage\Model\File\UploaderFactory
-     * @since 2.2.0
      */
     private $uploaderFactory;
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.2.0
      */
     private $urlBuilder;
 
     /**
      * @var \Magento\Framework\Url\EncoderInterface
-     * @since 2.2.0
      */
     private $urlEncoder;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $entityTypeCode;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $allowedExtensions = [];
 
     /**
      * @var \Magento\Framework\File\Mime
-     * @since 2.2.0
      */
     private $mime;
 
@@ -67,7 +59,6 @@ class FileProcessor
      * @param string $entityTypeCode
      * @param \Magento\Framework\File\Mime $mime
      * @param array $allowedExtensions
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -92,7 +83,6 @@ class FileProcessor
      *
      * @param string $fileName
      * @return string
-     * @since 2.2.0
      */
     public function getBase64EncodedData($fileName)
     {
@@ -109,7 +99,6 @@ class FileProcessor
      *
      * @param string $fileName
      * @return array
-     * @since 2.2.0
      */
     public function getStat($fileName)
     {
@@ -124,7 +113,6 @@ class FileProcessor
      *
      * @param string $fileName
      * @return string
-     * @since 2.2.0
      */
     public function getMimeType($fileName)
     {
@@ -140,7 +128,6 @@ class FileProcessor
      *
      * @param string $fileName
      * @return bool
-     * @since 2.2.0
      */
     public function isExist($fileName)
     {
@@ -156,7 +143,6 @@ class FileProcessor
      * @param string $filePath
      * @param string $type
      * @return string
-     * @since 2.2.0
      */
     public function getViewUrl($filePath, $type)
     {
@@ -184,7 +170,6 @@ class FileProcessor
      * @param string $fileId
      * @return \string[]
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.2.0
      */
     public function saveTemporaryFile($fileId)
     {
@@ -215,7 +200,6 @@ class FileProcessor
      * @param string $fileName
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.2.0
      */
     public function moveTemporaryFile($fileName)
     {
@@ -260,7 +244,6 @@ class FileProcessor
      *
      * @param string $fileName
      * @return bool
-     * @since 2.2.0
      */
     public function removeUploadedFile($fileName)
     {

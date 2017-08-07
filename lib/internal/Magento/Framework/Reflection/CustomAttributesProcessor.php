@@ -16,26 +16,22 @@ use Magento\Framework\Api\AttributeTypeResolverInterface;
 
 /**
  * Processes custom attributes and produces an array for the data.
- * @since 2.0.0
  */
 class CustomAttributesProcessor
 {
     /**
      * @var DataObjectProcessor
-     * @since 2.0.0
      */
     private $dataObjectProcessor;
 
     /**
      * @var AttributeTypeResolverInterface
-     * @since 2.0.0
      */
     private $attributeTypeResolver;
 
     /**
      * @param DataObjectProcessor $dataObjectProcessor
      * @param AttributeTypeResolverInterface $typeResolver
-     * @since 2.0.0
      */
     public function __construct(
         DataObjectProcessor $dataObjectProcessor,
@@ -51,7 +47,6 @@ class CustomAttributesProcessor
      * @param CustomAttributesDataInterface $objectWithCustomAttributes
      * @param string $dataObjectType
      * @return array
-     * @since 2.0.0
      */
     public function buildOutputDataArray(CustomAttributesDataInterface $objectWithCustomAttributes, $dataObjectType)
     {
@@ -69,7 +64,6 @@ class CustomAttributesProcessor
      * @param AttributeInterface $customAttribute
      * @param string $dataObjectType
      * @return array
-     * @since 2.0.0
      */
     private function convertCustomAttribute(AttributeInterface $customAttribute, $dataObjectType)
     {

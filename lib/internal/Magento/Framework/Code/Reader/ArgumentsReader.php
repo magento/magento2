@@ -8,7 +8,6 @@ namespace Magento\Framework\Code\Reader;
 /**
  * Class \Magento\Framework\Code\Reader\ArgumentsReader
  *
- * @since 2.0.0
  */
 class ArgumentsReader
 {
@@ -16,20 +15,17 @@ class ArgumentsReader
 
     /**
      * @var NamespaceResolver
-     * @since 2.2.0
      */
     private $namespaceResolver;
 
     /**
      * @var ScalarTypesProvider
-     * @since 2.2.0
      */
     private $scalarTypesProvider;
 
     /**
      * @param NamespaceResolver|null $namespaceResolver
      * @param ScalarTypesProvider|null $scalarTypesProvider
-     * @since 2.2.0
      */
     public function __construct(
         NamespaceResolver $namespaceResolver = null,
@@ -48,7 +44,6 @@ class ArgumentsReader
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function getConstructorArguments(\ReflectionClass $class, $groupByPosition = false, $inherited = false)
     {
@@ -101,7 +96,6 @@ class ArgumentsReader
      * @param \ReflectionClass $class
      * @param \Zend\Code\Reflection\ParameterReflection $parameter
      * @return string
-     * @since 2.2.0
      */
     private function processType(\ReflectionClass $class, \Zend\Code\Reflection\ParameterReflection $parameter)
     {
@@ -134,7 +128,6 @@ class ArgumentsReader
      * @param \ReflectionClass $class
      * @param array $classArguments
      * @return array|null
-     * @since 2.0.0
      */
     public function getParentCall(\ReflectionClass $class, array $classArguments)
     {
@@ -194,7 +187,6 @@ class ArgumentsReader
      * @param string $requiredType
      * @param string $actualType
      * @return bool
-     * @since 2.0.0
      */
     public function isCompatibleType($requiredType, $actualType)
     {
@@ -228,7 +220,6 @@ class ArgumentsReader
      *
      * @param mixed $var
      * @return mixed|string
-     * @since 2.0.0
      */
     protected function _varExportMin($var)
     {
@@ -249,7 +240,6 @@ class ArgumentsReader
      *
      * @param \ReflectionClass $class
      * @return array
-     * @since 2.0.0
      */
     public function getAnnotations(\ReflectionClass $class)
     {

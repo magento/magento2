@@ -7,7 +7,6 @@ namespace Magento\Persistent\Model\ResourceModel;
 
 /**
  * Persistent Session Resource Model
- * @since 2.0.0
  */
 class Session extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -15,7 +14,6 @@ class Session extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Use is object new method for object saving
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_useIsObjectNew = true;
 
@@ -23,7 +21,6 @@ class Session extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Session factory
      *
      * @var \Magento\Persistent\Model\SessionFactory
-     * @since 2.0.0
      */
     protected $_sessionFactory;
 
@@ -33,7 +30,6 @@ class Session extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Persistent\Model\SessionFactory $sessionFactory
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -48,7 +44,6 @@ class Session extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize connection and define main table and primary key
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -62,7 +57,6 @@ class Session extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param mixed $value
      * @param \Magento\Persistent\Model\Session $object
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -86,7 +80,6 @@ class Session extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $customerId
      * @return $this
-     * @since 2.0.0
      */
     public function deleteByCustomerId($customerId)
     {
@@ -99,7 +92,6 @@ class Session extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $key
      * @return bool
-     * @since 2.0.0
      */
     public function isKeyAllowed($key)
     {
@@ -114,7 +106,6 @@ class Session extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param  int $websiteId
      * @param  string $expiredBefore A formatted date string
      * @return $this
-     * @since 2.0.0
      */
     public function deleteExpired($websiteId, $expiredBefore)
     {

@@ -10,19 +10,16 @@ namespace Magento\Reports\Block\Adminhtml\Shopcart\Product;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 {
     /**
      * @var \Magento\Reports\Model\ResourceModel\Quote\CollectionFactory
-     * @since 2.0.0
      */
     protected $quoteItemCollectionFactory;
 
     /**
      * @var \Magento\Quote\Model\QueryResolver
-     * @since 2.0.0
      */
     protected $queryResolver;
 
@@ -32,7 +29,6 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
      * @param \Magento\Reports\Model\ResourceModel\Quote\Item\CollectionFactory $quoteItemCollectionFactory
      * @param \Magento\Quote\Model\QueryResolver $queryResolver
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -48,7 +44,6 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -58,7 +53,6 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 
     /**
      * @return \Magento\Backend\Block\Widget\Grid
-     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -71,7 +65,6 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 
     /**
      * @return \Magento\Backend\Block\Widget\Grid\Extended
-     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -151,7 +144,6 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
      * @param \Magento\Framework\DataObject $row
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRowUrl($row)
     {

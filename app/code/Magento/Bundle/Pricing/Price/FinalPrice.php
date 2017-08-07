@@ -15,37 +15,31 @@ use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 
 /**
  * Final price model
- * @since 2.0.0
  */
 class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements FinalPriceInterface
 {
     /**
      * @var \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     protected $maximalPrice;
 
     /**
      * @var \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     protected $minimalPrice;
 
     /**
      * @var \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     protected $priceWithoutOption;
 
     /**
      * @var \Magento\Bundle\Pricing\Price\BundleOptionPrice
-     * @since 2.0.0
      */
     protected $bundleOptionPrice;
 
     /**
      * @var \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface
-     * @since 2.1.0
      */
     private $productOptionRepository;
 
@@ -54,7 +48,6 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements Fi
      * @param float $quantity
      * @param CalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @since 2.0.0
      */
     public function __construct(
         Product $saleableItem,
@@ -69,7 +62,6 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements Fi
      * Returns price value
      *
      * @return float
-     * @since 2.0.0
      */
     public function getValue()
     {
@@ -81,7 +73,6 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements Fi
      * Returns max price
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     public function getMaximalPrice()
     {
@@ -101,8 +92,7 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements Fi
      * Return ProductCustomOptionRepository
      *
      * @return ProductCustomOptionRepositoryInterface
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getProductOptionRepository()
     {
@@ -118,7 +108,6 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements Fi
      * Returns min price
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     public function getMinimalPrice()
     {
@@ -129,7 +118,6 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements Fi
      * Returns price amount
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     public function getAmount()
     {
@@ -150,7 +138,6 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements Fi
      * Load product custom options
      *
      * @return void
-     * @since 2.1.0
      */
     private function loadProductCustomOptions()
     {
@@ -168,7 +155,6 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements Fi
      * get bundle product price without any option
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     public function getPriceWithoutOption()
     {
@@ -182,7 +168,6 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements Fi
      * Returns option price
      *
      * @return \Magento\Bundle\Pricing\Price\BundleOptionPrice
-     * @since 2.0.0
      */
     protected function getBundleOptionPrice()
     {

@@ -11,25 +11,21 @@ use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Class Document
- * @since 2.0.0
  */
 class Document extends DataObject implements DocumentInterface
 {
     /**
      * @var string|int
-     * @since 2.0.0
      */
     protected $id;
 
     /**
      * @var AttributeValueFactory
-     * @since 2.0.0
      */
     protected $attributeValueFactory;
 
     /**
      * @param AttributeValueFactory $attributeValueFactory
-     * @since 2.0.0
      */
     public function __construct(AttributeValueFactory $attributeValueFactory)
     {
@@ -38,7 +34,6 @@ class Document extends DataObject implements DocumentInterface
 
     /**
      * @return int|string
-     * @since 2.0.0
      */
     public function getId()
     {
@@ -51,7 +46,6 @@ class Document extends DataObject implements DocumentInterface
     /**
      * @param int $id
      * @return void
-     * @since 2.0.0
      */
     public function setId($id)
     {
@@ -63,7 +57,6 @@ class Document extends DataObject implements DocumentInterface
      *
      * @param string $attributeCode
      * @return \Magento\Framework\Api\AttributeInterface|null
-     * @since 2.0.0
      */
     public function getCustomAttribute($attributeCode)
     {
@@ -80,7 +73,6 @@ class Document extends DataObject implements DocumentInterface
      * @param string $attributeCode
      * @param mixed $attributeValue
      * @return $this
-     * @since 2.0.0
      */
     public function setCustomAttribute($attributeCode, $attributeValue)
     {
@@ -92,7 +84,6 @@ class Document extends DataObject implements DocumentInterface
      * Retrieve custom attributes values.
      *
      * @return \Magento\Framework\Api\AttributeInterface[]|null
-     * @since 2.0.0
      */
     public function getCustomAttributes()
     {
@@ -110,7 +101,6 @@ class Document extends DataObject implements DocumentInterface
      * @param \Magento\Framework\Api\AttributeInterface[] $attributes
      * @return $this
      * @throws \LogicException
-     * @since 2.0.0
      */
     public function setCustomAttributes(array $attributes)
     {

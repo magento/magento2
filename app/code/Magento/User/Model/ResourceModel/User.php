@@ -19,7 +19,6 @@ use Magento\User\Model\User as ModelUser;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -27,25 +26,21 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Role model
      *
      * @var \Magento\Authorization\Model\RoleFactory
-     * @since 2.0.0
      */
     protected $_roleFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
     /**
      * @var CacheInterface
-     * @since 2.2.0
      */
     private $aclDataCache;
 
     /**
      * @var ObserverConfig|null
-     * @since 2.2.0
      */
     private $observerConfig;
 
@@ -58,7 +53,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $connectionName
      * @param CacheInterface $aclDataCache
      * @param ObserverConfig|null $observerConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -79,7 +73,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -90,7 +83,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize unique fields
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initUniqueFields()
     {
@@ -106,7 +98,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param ModelUser $user
      * @return $this
-     * @since 2.0.0
      */
     public function recordLogin(ModelUser $user)
     {
@@ -129,7 +120,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $username
      * @return array
-     * @since 2.0.0
      */
     public function loadByUsername($username)
     {
@@ -147,7 +137,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int|ModelUser $user
      * @return null|array
-     * @since 2.0.0
      */
     public function hasAssigned2Role($user)
     {
@@ -183,7 +172,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $user
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $user)
     {
@@ -200,7 +188,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param ModelUser $user
      * @return void
-     * @since 2.0.0
      */
     public function _clearUserRoles(ModelUser $user)
     {
@@ -214,7 +201,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $parentId
      * @param ModelUser $user
      * @return void
-     * @since 2.0.0
      */
     protected function _createUserRole($parentId, ModelUser $user)
     {
@@ -250,7 +236,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $user
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $user)
     {
@@ -266,7 +251,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\AbstractModel $user
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function delete(\Magento\Framework\Model\AbstractModel $user)
     {
@@ -297,7 +281,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $user
      * @return array
-     * @since 2.0.0
      */
     public function getRoles(\Magento\Framework\Model\AbstractModel $user)
     {
@@ -339,7 +322,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $user
      * @return $this
-     * @since 2.0.0
      */
     public function deleteFromRole(\Magento\Framework\Model\AbstractModel $user)
     {
@@ -367,7 +349,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $user
      * @return array
-     * @since 2.0.0
      */
     public function roleUserExists(\Magento\Framework\Model\AbstractModel $user)
     {
@@ -398,7 +379,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $user
      * @return array
-     * @since 2.0.0
      */
     public function userExists(\Magento\Framework\Model\AbstractModel $user)
     {
@@ -427,7 +407,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $user
      * @return bool
-     * @since 2.0.0
      */
     public function isUserUnique(\Magento\Framework\Model\AbstractModel $user)
     {
@@ -440,7 +419,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\AbstractModel $object
      * @param string $data
      * @return $this
-     * @since 2.0.0
      */
     public function saveExtra($object, $data)
     {
@@ -459,7 +437,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Retrieve the total user count bypassing any filters applied to collections
      *
      * @return int
-     * @since 2.0.0
      */
     public function countAll()
     {
@@ -474,7 +451,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Add validation rules to be applied before saving an entity
      *
      * @return \Zend_Validate_Interface $validator
-     * @since 2.0.0
      */
     public function getValidationRulesBeforeSave()
     {
@@ -492,7 +468,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Authorization\Model\Role $role
      * @return bool
-     * @since 2.0.0
      */
     public function updateRoleUsersAcl(\Magento\Authorization\Model\Role $role)
     {
@@ -514,7 +489,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int|int[] $userIds
      * @return int number of affected rows
-     * @since 2.0.0
      */
     public function unlock($userIds)
     {
@@ -535,7 +509,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $exceptId
      * @param int $lifetime
      * @return int number of affected rows
-     * @since 2.0.0
      */
     public function lock($userIds, $exceptId, $lifetime)
     {
@@ -559,7 +532,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int|bool $setLockExpires
      * @param int|bool $setFirstFailure
      * @return void
-     * @since 2.0.0
      */
     public function updateFailure($user, $setLockExpires = false, $setFirstFailure = false)
     {
@@ -584,7 +556,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param ModelUser $user
      * @param int $retainLimit
      * @return array
-     * @since 2.0.0
      */
     public function getOldPasswords($user, $retainLimit = 4)
     {
@@ -631,7 +602,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
      * @see \Magento\User\Model\Backend\Config\ObserverConfig::_isLatestPasswordExpired()
-     * @since 2.0.0
      */
     public function trackPassword($user, $passwordHash, $lifetime = 0)
     {
@@ -651,7 +621,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $userId
      * @return array
-     * @since 2.0.0
      */
     public function getLatestPassword($userId)
     {

@@ -9,7 +9,6 @@ namespace Magento\SalesRule\Api\Data;
  * Interface CouponInterface
  *
  * @api
- * @since 2.0.0
  */
 interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -20,7 +19,6 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get coupon id
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getCouponId();
 
@@ -29,7 +27,6 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $couponId
      * @return $this
-     * @since 2.0.0
      */
     public function setCouponId($couponId);
 
@@ -37,7 +34,6 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get the id of the rule associated with the coupon
      *
      * @return int
-     * @since 2.0.0
      */
     public function getRuleId();
 
@@ -46,7 +42,6 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $ruleId
      * @return $this
-     * @since 2.0.0
      */
     public function setRuleId($ruleId);
 
@@ -54,7 +49,6 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get coupon code
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getCode();
 
@@ -63,7 +57,6 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function setCode($code);
 
@@ -71,7 +64,6 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get usage limit
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getUsageLimit();
 
@@ -80,7 +72,6 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $usageLimit
      * @return $this
-     * @since 2.0.0
      */
     public function setUsageLimit($usageLimit);
 
@@ -88,7 +79,6 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get usage limit per customer
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getUsagePerCustomer();
 
@@ -97,7 +87,6 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $usagePerCustomer
      * @return $this
-     * @since 2.0.0
      */
     public function setUsagePerCustomer($usagePerCustomer);
 
@@ -105,14 +94,12 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get the number of times the coupon has been used
      *
      * @return int
-     * @since 2.0.0
      */
     public function getTimesUsed();
 
     /**
      * @param int $timesUsed
      * @return $this
-     * @since 2.0.0
      */
     public function setTimesUsed($timesUsed);
 
@@ -120,7 +107,6 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get expiration date
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getExpirationDate();
 
@@ -129,7 +115,6 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $expirationDate
      * @return $this
-     * @since 2.0.0
      */
     public function setExpirationDate($expirationDate);
 
@@ -138,7 +123,6 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsPrimary();
 
@@ -147,7 +131,6 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param bool $isPrimary
      * @return $this
-     * @since 2.0.0
      */
     public function setIsPrimary($isPrimary);
 
@@ -155,7 +138,6 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Date when the coupon is created
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getCreatedAt();
 
@@ -164,7 +146,6 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $createdAt
      * @return $this
-     * @since 2.0.0
      */
     public function setCreatedAt($createdAt);
 
@@ -172,14 +153,12 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Type of coupon
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getType();
 
     /**
      * @param int $type
      * @return $this
-     * @since 2.0.0
      */
     public function setType($type);
 
@@ -187,7 +166,6 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\SalesRule\Api\Data\CouponExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -196,7 +174,6 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\SalesRule\Api\Data\CouponExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\SalesRule\Api\Data\CouponExtensionInterface $extensionAttributes

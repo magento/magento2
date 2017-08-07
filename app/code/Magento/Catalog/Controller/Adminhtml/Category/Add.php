@@ -10,7 +10,6 @@ namespace Magento\Catalog\Controller\Adminhtml\Category;
  * Class Add Category
  *
  * @package Magento\Catalog\Controller\Adminhtml\Category
- * @since 2.0.0
  */
 class Add extends \Magento\Catalog\Controller\Adminhtml\Category
 {
@@ -18,7 +17,6 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Category
      * Forward factory for result
      *
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
-     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
@@ -27,7 +25,6 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Category
      *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -41,7 +38,6 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Category
      * Add new category form
      *
      * @return \Magento\Backend\Model\View\Result\Forward
-     * @since 2.0.0
      */
     public function execute()
     {

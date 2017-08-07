@@ -8,7 +8,6 @@ namespace Magento\Framework\Data;
 
 /**
  * Form factory class
- * @since 2.0.0
  */
 class FormFactory
 {
@@ -16,7 +15,6 @@ class FormFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -24,7 +22,6 @@ class FormFactory
      * Instance name to create
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_instanceName;
 
@@ -33,7 +30,6 @@ class FormFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -49,7 +45,6 @@ class FormFactory
      * @param array $data
      * @return \Magento\Framework\Data\Form
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function create(array $data = [])
     {

@@ -11,7 +11,6 @@ use Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Grouped extends DefaultRenderer
 {
@@ -21,7 +20,6 @@ class Grouped extends DefaultRenderer
      * This method uses renderer for real product type
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

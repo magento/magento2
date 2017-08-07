@@ -8,37 +8,31 @@ namespace Magento\Checkout\Controller\Sidebar;
 /**
  * Class \Magento\Checkout\Controller\Sidebar\RemoveItem
  *
- * @since 2.0.0
  */
 class RemoveItem extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Checkout\Model\Sidebar
-     * @since 2.0.0
      */
     protected $sidebar;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var \Magento\Framework\Json\Helper\Data
-     * @since 2.0.0
      */
     protected $jsonHelper;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator
-     * @since 2.1.0
      */
     private $formKeyValidator;
 
@@ -48,7 +42,6 @@ class RemoveItem extends \Magento\Framework\App\Action\Action
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -66,7 +59,6 @@ class RemoveItem extends \Magento\Framework\App\Action\Action
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -91,7 +83,6 @@ class RemoveItem extends \Magento\Framework\App\Action\Action
      *
      * @param string $error
      * @return \Magento\Framework\App\Response\Http
-     * @since 2.0.0
      */
     protected function jsonResponse($error = '')
     {
@@ -104,8 +95,7 @@ class RemoveItem extends \Magento\Framework\App\Action\Action
 
     /**
      * @return \Magento\Framework\Data\Form\FormKey\Validator
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.0.9
      */
     private function getFormKeyValidator()
     {

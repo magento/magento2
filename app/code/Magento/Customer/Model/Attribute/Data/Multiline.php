@@ -14,7 +14,6 @@ namespace Magento\Customer\Model\Attribute\Data;
 /**
  * Class \Magento\Customer\Model\Attribute\Data\Multiline
  *
- * @since 2.0.0
  */
 class Multiline extends \Magento\Eav\Model\Attribute\Data\Multiline
 {

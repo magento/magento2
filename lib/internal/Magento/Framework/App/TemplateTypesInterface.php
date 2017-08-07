@@ -8,8 +8,7 @@ namespace Magento\Framework\App;
 /**
  * Template Types interface
  *
- * @deprecated 2.2.0 since 2.2.0 because of incorrect location
- * @since 2.0.0
+ * @deprecated 100.2.0 because of incorrect location
  */
 interface TemplateTypesInterface
 {
@@ -24,7 +23,6 @@ interface TemplateTypesInterface
      * Return true if template type eq text
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isPlain();
 
@@ -32,7 +30,6 @@ interface TemplateTypesInterface
      * Getter for template type
      *
      * @return int
-     * @since 2.0.0
      */
     public function getType();
 }

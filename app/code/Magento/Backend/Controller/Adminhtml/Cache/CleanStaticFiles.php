@@ -11,7 +11,6 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Backend\Controller\Adminhtml\Cache\CleanStaticFiles
  *
- * @since 2.0.0
  */
 class CleanStaticFiles extends \Magento\Backend\Controller\Adminhtml\Cache
 {
@@ -19,7 +18,6 @@ class CleanStaticFiles extends \Magento\Backend\Controller\Adminhtml\Cache
      * Clean static files cache
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

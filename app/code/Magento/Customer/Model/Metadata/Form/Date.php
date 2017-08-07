@@ -12,13 +12,11 @@ use Magento\Framework\Api\ArrayObjectSearch;
 /**
  * Class \Magento\Customer\Model\Metadata\Form\Date
  *
- * @since 2.0.0
  */
 class Date extends AbstractData
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function extractValue(\Magento\Framework\App\RequestInterface $request)
     {
@@ -30,7 +28,6 @@ class Date extends AbstractData
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function validateValue($value)
     {
@@ -103,7 +100,6 @@ class Date extends AbstractData
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function compactValue($value)
     {
@@ -118,7 +114,6 @@ class Date extends AbstractData
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function restoreValue($value)
     {
@@ -127,7 +122,6 @@ class Date extends AbstractData
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function outputValue($format = \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_TEXT)
     {

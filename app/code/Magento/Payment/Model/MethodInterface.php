@@ -11,7 +11,6 @@ use Magento\Quote\Api\Data\CartInterface;
 /**
  * Payment interface
  * @api
- * @since 2.0.0
  */
 interface MethodInterface
 {
@@ -20,7 +19,6 @@ interface MethodInterface
      *
      * @return string
      *
-     * @since 2.0.0
      */
     public function getCode();
 
@@ -29,8 +27,7 @@ interface MethodInterface
      *
      * @return string
      *
-     * @deprecated 2.0.0
-     * @since 2.0.0
+     * @deprecated 100.0.2
      */
     public function getFormBlockType();
 
@@ -39,7 +36,6 @@ interface MethodInterface
      *
      * @return string
      *
-     * @since 2.0.0
      */
     public function getTitle();
 
@@ -47,14 +43,12 @@ interface MethodInterface
      * Store id setter
      * @param int $storeId
      * @return void
-     * @since 2.0.0
      */
     public function setStore($storeId);
 
     /**
      * Store id getter
      * @return int
-     * @since 2.0.0
      */
     public function getStore();
 
@@ -63,7 +57,6 @@ interface MethodInterface
      *
      * @return bool
      *
-     * @since 2.0.0
      */
     public function canOrder();
 
@@ -72,7 +65,6 @@ interface MethodInterface
      *
      * @return bool
      *
-     * @since 2.0.0
      */
     public function canAuthorize();
 
@@ -81,7 +73,6 @@ interface MethodInterface
      *
      * @return bool
      *
-     * @since 2.0.0
      */
     public function canCapture();
 
@@ -90,7 +81,6 @@ interface MethodInterface
      *
      * @return bool
      *
-     * @since 2.0.0
      */
     public function canCapturePartial();
 
@@ -99,7 +89,6 @@ interface MethodInterface
      *
      * @return bool
      *
-     * @since 2.0.0
      */
     public function canCaptureOnce();
 
@@ -108,7 +97,6 @@ interface MethodInterface
      *
      * @return bool
      *
-     * @since 2.0.0
      */
     public function canRefund();
 
@@ -117,7 +105,6 @@ interface MethodInterface
      *
      * @return bool
      *
-     * @since 2.0.0
      */
     public function canRefundPartialPerInvoice();
 
@@ -125,7 +112,6 @@ interface MethodInterface
      * Check void availability
      * @return bool
      *
-     * @since 2.0.0
      */
     public function canVoid();
 
@@ -134,7 +120,6 @@ interface MethodInterface
      * Can be used in admin
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canUseInternal();
 
@@ -142,7 +127,6 @@ interface MethodInterface
      * Can be used in regular checkout
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canUseCheckout();
 
@@ -151,7 +135,6 @@ interface MethodInterface
      *
      * @return bool
      *
-     * @since 2.0.0
      */
     public function canEdit();
 
@@ -160,7 +143,6 @@ interface MethodInterface
      *
      * @return bool
      *
-     * @since 2.0.0
      */
     public function canFetchTransactionInfo();
 
@@ -172,7 +154,6 @@ interface MethodInterface
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @since 2.0.0
      */
     public function fetchTransactionInfo(InfoInterface $payment, $transactionId);
 
@@ -181,7 +162,6 @@ interface MethodInterface
      *
      * @return bool
      *
-     * @since 2.0.0
      */
     public function isGateway();
 
@@ -190,7 +170,6 @@ interface MethodInterface
      *
      * @return bool
      *
-     * @since 2.0.0
      */
     public function isOffline();
 
@@ -199,7 +178,6 @@ interface MethodInterface
      *
      * @return bool
      *
-     * @since 2.0.0
      */
     public function isInitializeNeeded();
 
@@ -208,7 +186,6 @@ interface MethodInterface
      *
      * @param string $country
      * @return bool
-     * @since 2.0.0
      */
     public function canUseForCountry($country);
 
@@ -218,7 +195,6 @@ interface MethodInterface
      * @param string $currencyCode
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function canUseForCurrency($currencyCode);
 
@@ -227,8 +203,7 @@ interface MethodInterface
      *
      * @return string
      *
-     * @deprecated 2.0.0
-     * @since 2.0.0
+     * @deprecated 100.0.2
      */
     public function getInfoBlockType();
 
@@ -238,8 +213,7 @@ interface MethodInterface
      * @return InfoInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      *
-     * @deprecated 2.0.0
-     * @since 2.0.0
+     * @deprecated 100.0.2
      */
     public function getInfoInstance();
 
@@ -249,8 +223,7 @@ interface MethodInterface
      * @param InfoInterface $info
      * @return void
      *
-     * @deprecated 2.0.0
-     * @since 2.0.0
+     * @deprecated 100.0.2
      */
     public function setInfoInstance(InfoInterface $info);
 
@@ -260,7 +233,6 @@ interface MethodInterface
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      *
-     * @since 2.0.0
      */
     public function validate();
 
@@ -271,7 +243,6 @@ interface MethodInterface
      * @param float $amount
      * @return $this
      *
-     * @since 2.0.0
      */
     public function order(\Magento\Payment\Model\InfoInterface $payment, $amount);
 
@@ -282,7 +253,6 @@ interface MethodInterface
      * @param float $amount
      * @return $this
      *
-     * @since 2.0.0
      */
     public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount);
 
@@ -293,7 +263,6 @@ interface MethodInterface
      * @param float $amount
      * @return $this
      *
-     * @since 2.0.0
      */
     public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount);
 
@@ -304,7 +273,6 @@ interface MethodInterface
      * @param float $amount
      * @return $this
      *
-     * @since 2.0.0
      */
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount);
 
@@ -314,7 +282,6 @@ interface MethodInterface
      * @param InfoInterface $payment
      * @return $this
      *
-     * @since 2.0.0
      */
     public function cancel(\Magento\Payment\Model\InfoInterface $payment);
 
@@ -324,7 +291,6 @@ interface MethodInterface
      * @param InfoInterface $payment
      * @return $this
      *
-     * @since 2.0.0
      */
     public function void(\Magento\Payment\Model\InfoInterface $payment);
 
@@ -332,7 +298,6 @@ interface MethodInterface
      * Whether this method can accept or deny payment
      * @return bool
      *
-     * @since 2.0.0
      */
     public function canReviewPayment();
 
@@ -343,7 +308,6 @@ interface MethodInterface
      * @return false
      * @throws \Magento\Framework\Exception\LocalizedException
      *
-     * @since 2.0.0
      */
     public function acceptPayment(InfoInterface $payment);
 
@@ -354,7 +318,6 @@ interface MethodInterface
      * @return false
      * @throws \Magento\Framework\Exception\LocalizedException
      *
-     * @since 2.0.0
      */
     public function denyPayment(InfoInterface $payment);
 
@@ -365,7 +328,6 @@ interface MethodInterface
      * @param int|string|null|\Magento\Store\Model\Store $storeId
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getConfigData($field, $storeId = null);
 
@@ -375,7 +337,6 @@ interface MethodInterface
      * @param DataObject $data
      * @return $this
      *
-     * @since 2.0.0
      */
     public function assignData(DataObject $data);
 
@@ -385,7 +346,6 @@ interface MethodInterface
      * @param CartInterface|null $quote
      * @return bool
      *
-     * @since 2.0.0
      */
     public function isAvailable(CartInterface $quote = null);
 
@@ -395,7 +355,6 @@ interface MethodInterface
      * @param int|null $storeId
      * @return bool
      *
-     * @since 2.0.0
      */
     public function isActive($storeId = null);
 
@@ -409,7 +368,6 @@ interface MethodInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @since 2.0.0
      */
     public function initialize($paymentAction, $stateObject);
 
@@ -419,7 +377,6 @@ interface MethodInterface
      *
      * @return string
      *
-     * @since 2.0.0
      */
     public function getConfigPaymentAction();
 }

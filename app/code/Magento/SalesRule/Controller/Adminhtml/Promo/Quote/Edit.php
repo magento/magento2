@@ -9,13 +9,11 @@ namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 /**
  * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\Edit
  *
- * @since 2.0.0
  */
 class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.1.0
      */
     protected $resultPageFactory;
 
@@ -25,7 +23,6 @@ class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -46,7 +43,6 @@ class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
      *
      * @return void
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -13,31 +13,26 @@ use Magento\Quote\Api\Data as QuoteApi;
 /**
  * Class \Magento\Bundle\Model\CartItemProcessor
  *
- * @since 2.0.0
  */
 class CartItemProcessor implements CartItemProcessorInterface
 {
     /**
      * @var \Magento\Framework\DataObject\Factory
-     * @since 2.0.0
      */
     protected $objectFactory;
 
     /**
      * @var QuoteApi\ProductOptionExtensionFactory
-     * @since 2.0.0
      */
     protected $productOptionExtensionFactory;
 
     /**
      * @var BundleOptionInterfaceFactory
-     * @since 2.0.0
      */
     protected $bundleOptionFactory;
 
     /**
      * @var QuoteApi\ProductOptionInterfaceFactory
-     * @since 2.0.0
      */
     protected $productOptionFactory;
 
@@ -46,7 +41,6 @@ class CartItemProcessor implements CartItemProcessorInterface
      * @param QuoteApi\ProductOptionExtensionFactory $productOptionExtensionFactory
      * @param BundleOptionInterfaceFactory $bundleOptionFactory
      * @param QuoteApi\ProductOptionInterfaceFactory $productOptionFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\DataObject\Factory $objectFactory,
@@ -62,7 +56,6 @@ class CartItemProcessor implements CartItemProcessorInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function convertToBuyRequest(CartItemInterface $cartItem)
     {
@@ -86,7 +79,6 @@ class CartItemProcessor implements CartItemProcessorInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function processOptions(CartItemInterface $cartItem)
     {

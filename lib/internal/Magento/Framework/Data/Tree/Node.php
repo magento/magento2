@@ -13,7 +13,6 @@ use Magento\Framework\Data\Tree\Node\Collection;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Node extends \Magento\Framework\DataObject
 {
@@ -21,7 +20,6 @@ class Node extends \Magento\Framework\DataObject
      * Parent node
      *
      * @var Node
-     * @since 2.0.0
      */
     protected $_parent;
 
@@ -29,7 +27,6 @@ class Node extends \Magento\Framework\DataObject
      * Main tree object
      *
      * @var Tree
-     * @since 2.0.0
      */
     protected $_tree;
 
@@ -37,7 +34,6 @@ class Node extends \Magento\Framework\DataObject
      * Child nodes
      *
      * @var Collection
-     * @since 2.0.0
      */
     protected $_childNodes;
 
@@ -45,7 +41,6 @@ class Node extends \Magento\Framework\DataObject
      * Node ID field name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_idField;
 
@@ -56,7 +51,6 @@ class Node extends \Magento\Framework\DataObject
      * @param string $idField
      * @param Tree $tree
      * @param Node $parent
-     * @since 2.0.0
      */
     public function __construct($data, $idField, $tree, $parent = null)
     {
@@ -71,7 +65,6 @@ class Node extends \Magento\Framework\DataObject
      * Retrieve node id
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getId()
     {
@@ -83,7 +76,6 @@ class Node extends \Magento\Framework\DataObject
      *
      * @param   string $idField
      * @return  $this
-     * @since 2.0.0
      */
     public function setIdField($idField)
     {
@@ -95,7 +87,6 @@ class Node extends \Magento\Framework\DataObject
      * Retrieve node id field name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getIdField()
     {
@@ -107,7 +98,6 @@ class Node extends \Magento\Framework\DataObject
      *
      * @param   Tree $tree
      * @return  $this
-     * @since 2.0.0
      */
     public function setTree(Tree $tree)
     {
@@ -119,7 +109,6 @@ class Node extends \Magento\Framework\DataObject
      * Retrieve node tree object
      *
      * @return Tree
-     * @since 2.0.0
      */
     public function getTree()
     {
@@ -131,7 +120,6 @@ class Node extends \Magento\Framework\DataObject
      *
      * @param   Node $parent
      * @return  $this
-     * @since 2.0.0
      */
     public function setParent($parent)
     {
@@ -143,7 +131,6 @@ class Node extends \Magento\Framework\DataObject
      * Retrieve node parent
      *
      * @return Tree
-     * @since 2.0.0
      */
     public function getParent()
     {
@@ -154,7 +141,6 @@ class Node extends \Magento\Framework\DataObject
      * Check node children
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasChildren()
     {
@@ -164,7 +150,6 @@ class Node extends \Magento\Framework\DataObject
     /**
      * @param mixed $level
      * @return $this
-     * @since 2.0.0
      */
     public function setLevel($level)
     {
@@ -175,7 +160,6 @@ class Node extends \Magento\Framework\DataObject
     /**
      * @param mixed $path
      * @return $this
-     * @since 2.0.0
      */
     public function setPathId($path)
     {
@@ -187,7 +171,6 @@ class Node extends \Magento\Framework\DataObject
      * @param Node $node
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function isChildOf($node)
     {
@@ -198,7 +181,6 @@ class Node extends \Magento\Framework\DataObject
      *
      * @param   int  $recursionLevel
      * @return  \Magento\Framework\Data\Tree\Node
-     * @since 2.0.0
      */
     public function loadChildren($recursionLevel = 0)
     {
@@ -210,7 +192,6 @@ class Node extends \Magento\Framework\DataObject
      * Retrieve node children collection
      *
      * @return Collection
-     * @since 2.0.0
      */
     public function getChildren()
     {
@@ -220,7 +201,6 @@ class Node extends \Magento\Framework\DataObject
     /**
      * @param array $nodes
      * @return array
-     * @since 2.0.0
      */
     public function getAllChildNodes(&$nodes = [])
     {
@@ -233,7 +213,6 @@ class Node extends \Magento\Framework\DataObject
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getLastChild()
     {
@@ -245,7 +224,6 @@ class Node extends \Magento\Framework\DataObject
      *
      * @param   Node $node
      * @return  Node
-     * @since 2.0.0
      */
     public function addChild($node)
     {
@@ -256,7 +234,6 @@ class Node extends \Magento\Framework\DataObject
     /**
      * @param Node $prevNode
      * @return $this
-     * @since 2.0.0
      */
     public function appendChild($prevNode = null)
     {
@@ -268,7 +245,6 @@ class Node extends \Magento\Framework\DataObject
      * @param Node $parentNode
      * @param Node $prevNode
      * @return $this
-     * @since 2.0.0
      */
     public function moveTo($parentNode, $prevNode = null)
     {
@@ -280,7 +256,6 @@ class Node extends \Magento\Framework\DataObject
      * @param Node $parentNode
      * @param Node $prevNode
      * @return $this
-     * @since 2.0.0
      */
     public function copyTo($parentNode, $prevNode = null)
     {
@@ -291,7 +266,6 @@ class Node extends \Magento\Framework\DataObject
     /**
      * @param Node $childNode
      * @return $this
-     * @since 2.0.0
      */
     public function removeChild($childNode)
     {
@@ -302,7 +276,6 @@ class Node extends \Magento\Framework\DataObject
     /**
      * @param array $prevNodes
      * @return array
-     * @since 2.0.0
      */
     public function getPath(&$prevNodes = [])
     {
@@ -315,7 +288,6 @@ class Node extends \Magento\Framework\DataObject
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getIsActive()
     {
@@ -324,7 +296,6 @@ class Node extends \Magento\Framework\DataObject
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getName()
     {

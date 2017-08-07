@@ -16,37 +16,31 @@ use Psr\Log\LoggerInterface as Logger;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Builder
 {
     /**
      * @var resourceMetadata
-     * @since 2.0.0
      */
     protected $resourceMetadata;
 
     /**
      * @var ProfileFactory
-     * @since 2.0.0
      */
     protected $profileFactory;
 
     /**
      * @var MetaFactory
-     * @since 2.0.0
      */
     protected $metaFactory;
 
     /**
      * @var AppResource
-     * @since 2.0.0
      */
     protected $appResource;
 
     /**
      * @var DdlSequence
-     * @since 2.0.0
      */
     protected $ddlSequence;
 
@@ -54,7 +48,6 @@ class Builder
      * List of required sequence attribute
      *
      * @var array
-     * @since 2.0.0
      */
     protected $required = [
         'entityType',
@@ -65,7 +58,6 @@ class Builder
      * Default pattern for sequence creation, full list of attributes that can be defined by customer
      *
      * @var array
-     * @since 2.0.0
      */
     protected $pattern = [
         'entity_type',
@@ -82,13 +74,11 @@ class Builder
      * Concrete data of sequence
      *
      * @var array
-     * @since 2.0.0
      */
     protected $data = [];
 
     /**
      * @var Logger
-     * @since 2.0.0
      */
     protected $logger;
 
@@ -99,7 +89,6 @@ class Builder
      * @param AppResource $appResource
      * @param DdlSequence $ddlSequence
      * @param Logger $logger
-     * @since 2.0.0
      */
     public function __construct(
         ResourceMetadata $resourceMetadata,
@@ -121,7 +110,6 @@ class Builder
     /**
      * @param string $entityType
      * @return $this
-     * @since 2.0.0
      */
     public function setEntityType($entityType)
     {
@@ -132,7 +120,6 @@ class Builder
     /**
      * @param int $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreId($storeId)
     {
@@ -143,7 +130,6 @@ class Builder
     /**
      * @param string $prefix
      * @return $this
-     * @since 2.0.0
      */
     public function setPrefix($prefix)
     {
@@ -154,7 +140,6 @@ class Builder
     /**
      * @param string $suffix
      * @return $this
-     * @since 2.0.0
      */
     public function setSuffix($suffix)
     {
@@ -165,7 +150,6 @@ class Builder
     /**
      * @param int $startValue
      * @return $this
-     * @since 2.0.0
      */
     public function setStartValue($startValue)
     {
@@ -176,7 +160,6 @@ class Builder
     /**
      * @param int $step
      * @return $this
-     * @since 2.0.0
      */
     public function setStep($step)
     {
@@ -187,7 +170,6 @@ class Builder
     /**
      * @param int $maxValue
      * @return $this
-     * @since 2.0.0
      */
     public function setMaxValue($maxValue)
     {
@@ -198,7 +180,6 @@ class Builder
     /**
      * @param int $warningValue
      * @return $this
-     * @since 2.0.0
      */
     public function setWarningValue($warningValue)
     {
@@ -210,7 +191,6 @@ class Builder
      * Returns sequence table name
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getSequenceName()
     {
@@ -229,7 +209,6 @@ class Builder
      * @throws \Exception
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      * @return void
-     * @since 2.0.0
      */
     public function create()
     {

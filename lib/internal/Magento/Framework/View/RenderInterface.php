@@ -9,7 +9,6 @@ namespace Magento\Framework\View;
  * Interface RenderInterface
  *
  * @api
- * @since 2.0.0
  */
 interface RenderInterface
 {
@@ -19,7 +18,6 @@ interface RenderInterface
      * @param string $template
      * @param array $data
      * @return string
-     * @since 2.0.0
      */
     public function renderTemplate($template, array $data);
 
@@ -29,7 +27,6 @@ interface RenderInterface
      * @param string $content
      * @param array $containerInfo
      * @return string
-     * @since 2.0.0
      */
     public function renderContainer($content, array $containerInfo = []);
 }

@@ -13,7 +13,6 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class EngineProvider
 {
@@ -21,19 +20,16 @@ class EngineProvider
 
     /**
      * @var \Magento\CatalogSearch\Model\ResourceModel\EngineInterface
-     * @since 2.0.0
      */
     protected $engine;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
@@ -41,7 +37,6 @@ class EngineProvider
      * Pool of existing engines
      *
      * @var array
-     * @since 2.0.0
      */
     private $enginePool;
 
@@ -49,7 +44,6 @@ class EngineProvider
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $engines
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -65,7 +59,6 @@ class EngineProvider
      * Get engine singleton
      *
      * @return EngineInterface
-     * @since 2.0.0
      */
     public function get()
     {

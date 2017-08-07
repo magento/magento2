@@ -16,37 +16,31 @@ use Magento\Framework\Filesystem\Directory\ReadInterface;
 
 /**
  * Deploy static file service
- * @since 2.2.0
  */
 class DeployStaticFile
 {
     /**
      * @var Filesystem
-     * @since 2.2.0
      */
     private $filesystem;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
-     * @since 2.2.0
      */
     private $assetRepo;
 
     /**
      * @var Publisher
-     * @since 2.2.0
      */
     private $assetPublisher;
 
     /**
      * @var FileNameResolver
-     * @since 2.2.0
      */
     private $fileNameResolver;
 
     /**
      * @var Minification
-     * @since 2.2.0
      */
     private $minification;
 
@@ -54,7 +48,6 @@ class DeployStaticFile
      * Public static files directory read interface
      *
      * @var ReadInterface
-     * @since 2.2.0
      */
     private $tmpDir;
 
@@ -66,7 +59,6 @@ class DeployStaticFile
      * @param Publisher $assetPublisher
      * @param FileNameResolver $fileNameResolver
      * @param Minification $minification
-     * @since 2.2.0
      */
     public function __construct(
         Filesystem $filesystem,
@@ -88,7 +80,6 @@ class DeployStaticFile
      * @param string $fileName
      * @param array $params ['area' =>, 'theme' =>, 'locale' =>, 'module' =>]
      * @return string
-     * @since 2.2.0
      */
     public function deployFile($fileName, array $params = [])
     {
@@ -103,7 +94,6 @@ class DeployStaticFile
     /**
      * @param string $path
      * @return void
-     * @since 2.2.0
      */
     public function deleteFile($path)
     {
@@ -127,7 +117,6 @@ class DeployStaticFile
      * @param string $fileName
      * @param string $filePath
      * @return string|false
-     * @since 2.2.0
      */
     public function readFile($fileName, $filePath)
     {
@@ -144,7 +133,6 @@ class DeployStaticFile
      * @param string $fileName
      * @param string $filePath
      * @return WriteInterface
-     * @since 2.2.0
      */
     public function openFile($fileName, $filePath)
     {
@@ -159,7 +147,6 @@ class DeployStaticFile
      * @param string $filePath
      * @param string $content
      * @return int The number of bytes that were written.
-     * @since 2.2.0
      */
     public function writeFile($fileName, $filePath, $content)
     {
@@ -174,7 +161,6 @@ class DeployStaticFile
      * @param string $sourcePath
      * @param string $targetPath
      * @return bool
-     * @since 2.2.0
      */
     public function copyFile($fileName, $sourcePath, $targetPath)
     {
@@ -191,7 +177,6 @@ class DeployStaticFile
      * @param string $fileName
      * @param string $filePath
      * @return string
-     * @since 2.2.0
      */
     public function readTmpFile($fileName, $filePath)
     {
@@ -206,7 +191,6 @@ class DeployStaticFile
      * @param string $filePath
      * @param string $content
      * @return int The number of bytes that were written.
-     * @since 2.2.0
      */
     public function writeTmpFile($fileName, $filePath, $content)
     {
@@ -219,7 +203,6 @@ class DeployStaticFile
      *
      * @param string $fileName
      * @return string
-     * @since 2.2.0
      */
     private function resolveFile($fileName)
     {

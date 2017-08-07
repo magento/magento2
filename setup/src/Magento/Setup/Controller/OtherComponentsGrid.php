@@ -12,26 +12,22 @@ use Zend\View\Model\JsonModel;
 
 /**
  * Controller for other components grid on select version page
- * @since 2.0.0
  */
 class OtherComponentsGrid extends AbstractActionController
 {
     /**
      * @var \Magento\Framework\Composer\ComposerInformation
-     * @since 2.0.0
      */
     private $composerInformation;
 
     /**
      * @var \Magento\Composer\InfoCommand
-     * @since 2.0.0
      */
     private $infoCommand;
 
     /**
      * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
      * @param \Magento\Framework\Composer\MagentoComposerApplicationFactory $magentoComposerApplicationFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Composer\ComposerInformation $composerInformation,
@@ -45,7 +41,6 @@ class OtherComponentsGrid extends AbstractActionController
      * No index action, return 404 error page
      *
      * @return \Zend\View\Model\ViewModel
-     * @since 2.1.0
      */
     public function indexAction()
     {
@@ -60,7 +55,6 @@ class OtherComponentsGrid extends AbstractActionController
      *
      * @return JsonModel
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     public function componentsAction()
     {
@@ -87,7 +81,7 @@ class OtherComponentsGrid extends AbstractActionController
                         'id' => $packageInfo[InfoCommand::CURRENT_VERSION],
                         'name' => $packageInfo[InfoCommand::CURRENT_VERSION]
                     ];
-                    
+
                     $versions[0]['name'] .= ' (latest)';
                     $versions[count($versions) - 1]['name'] .= ' (current)';
 

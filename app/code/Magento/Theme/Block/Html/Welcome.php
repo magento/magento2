@@ -11,7 +11,6 @@ use Magento\Framework\View\Element\Template;
  * Html page welcome block
  *
  * @api
- * @since 2.0.0
  */
 class Welcome extends Template
 {
@@ -19,7 +18,6 @@ class Welcome extends Template
      * Get block message
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

@@ -28,7 +28,6 @@ use Magento\Webapi\Model\Rest\Swagger\Generator;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
- * @since 2.0.0
  */
 class Rest implements \Magento\Framework\App\FrontControllerInterface
 {
@@ -37,121 +36,102 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
 
     /**
      * @var Router
-     * @deprecated 2.1.0
-     * @since 2.0.0
+     * @deprecated 100.1.0
      */
     protected $_router;
 
     /**
      * @var Route
-     * @deprecated 2.1.0
-     * @since 2.0.0
+     * @deprecated 100.1.0
      */
     protected $_route;
 
     /**
      * @var \Magento\Framework\Webapi\Rest\Request
-     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @var \Magento\Framework\Webapi\Rest\Response
-     * @since 2.0.0
      */
     protected $_response;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     protected $_appState;
 
     /**
      * @var Authorization
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     protected $authorization;
 
     /**
      * @var ServiceInputProcessor
-     * @deprecated 2.1.0
-     * @since 2.0.0
+     * @deprecated 100.1.0
      */
     protected $serviceInputProcessor;
 
     /**
      * @var \Magento\Framework\Webapi\ErrorProcessor
-     * @since 2.0.0
      */
     protected $_errorProcessor;
 
     /**
      * @var \Magento\Webapi\Controller\PathProcessor
-     * @since 2.0.0
      */
     protected $_pathProcessor;
 
     /**
      * @var \Magento\Framework\App\AreaList
-     * @since 2.0.0
      */
     protected $areaList;
 
     /**
      * @var \Magento\Framework\Webapi\Rest\Response\FieldsFilter
-     * @since 2.0.0
      */
     protected $fieldsFilter;
 
     /**
      * @var \Magento\Framework\Session\Generic
-     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var ParamsOverrider
-     * @deprecated 2.1.0
-     * @since 2.0.0
+     * @deprecated 100.1.0
      */
     protected $paramsOverrider;
 
     /**
      * @var \Magento\Framework\Webapi\ServiceOutputProcessor
-     * @since 2.0.0
      */
     protected $serviceOutputProcessor;
 
     /**
      * @var \Magento\Webapi\Model\Rest\Swagger\Generator
-     * @since 2.0.0
      */
     protected $swaggerGenerator;
 
     /**
      * @var StoreManagerInterface
-     * @deprecated 2.1.0
-     * @since 2.0.0
+     * @deprecated 100.1.0
      */
     private $storeManager;
 
     /**
      * @var DeploymentConfig
-     * @since 2.1.0
      */
     private $deploymentConfig;
 
     /**
      * @var Rest\InputParamsResolver
-     * @since 2.1.0
      */
     private $inputParamsResolver;
 
@@ -176,7 +156,6 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      *
      * TODO: Consider removal of warning suppression
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         RestRequest $request,
@@ -216,7 +195,6 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * Get deployment config
      *
      * @return DeploymentConfig
-     * @since 2.1.0
      */
     private function getDeploymentConfig()
     {
@@ -232,8 +210,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      *
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      * @return void
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     public function setDeploymentConfig(\Magento\Framework\App\DeploymentConfig $deploymentConfig)
     {
@@ -248,7 +225,6 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
-     * @since 2.0.0
      */
     public function dispatch(\Magento\Framework\App\RequestInterface $request)
     {
@@ -273,7 +249,6 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * Check if current request is schema request.
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function isSchemaRequest()
     {
@@ -284,9 +259,8 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * Retrieve current route.
      *
      * @return Route
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      * @see \Magento\Webapi\Controller\Rest\InputParamsResolver::getRoute
-     * @since 2.0.0
      */
     protected function getCurrentRoute()
     {
@@ -301,9 +275,8 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      *
      * @throws \Magento\Framework\Exception\AuthorizationException
      * @return void
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      * @see \Magento\Webapi\Controller\Rest\RequestValidator::checkPermissions
-     * @since 2.0.0
      */
     protected function checkPermissions()
     {
@@ -320,7 +293,6 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * Execute schema request
      *
      * @return void
-     * @since 2.0.0
      */
     protected function processSchemaRequest()
     {
@@ -344,7 +316,6 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @throws AuthorizationException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Webapi\Exception
-     * @since 2.0.0
      */
     protected function processApiRequest()
     {
@@ -378,9 +349,8 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @throws AuthorizationException
      * @throws \Magento\Framework\Webapi\Exception
      * @return void
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      * @see \Magento\Webapi\Controller\Rest\RequestValidator::validate
-     * @since 2.0.0
      */
     protected function validateRequest()
     {
@@ -400,8 +370,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      *
      * @return \Magento\Webapi\Controller\Rest\InputParamsResolver
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getInputParamsResolver()
     {

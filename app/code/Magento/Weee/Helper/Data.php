@@ -16,7 +16,6 @@ use Magento\Weee\Model\Tax as WeeeDisplayConfig;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -41,17 +40,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**#@-*/
 
-    /**
-     * @var array
-     * @since 2.0.0
-     */
+    /**#@-*/
     protected $_storeDisplayConfig = [];
 
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
@@ -59,37 +54,31 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Tax data
      *
      * @var \Magento\Tax\Helper\Data
-     * @since 2.0.0
      */
     protected $_taxData;
 
     /**
      * @var \Magento\Weee\Model\Tax
-     * @since 2.0.0
      */
     protected $_weeeTax;
 
     /**
      * @var \Magento\Weee\Model\Config
-     * @since 2.0.0
      */
     protected $_weeeConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $cacheProductWeeeAmount = '_cache_product_weee_amount';
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -104,7 +93,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -130,7 +118,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param   null|string|bool|int|Store $store
      * @return  int
-     * @since 2.0.0
      */
     public function getPriceDisplayType($store = null)
     {
@@ -142,7 +129,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param   null|string|bool|int|Store $store
      * @return  int
-     * @since 2.0.0
      */
     public function getListPriceDisplayType($store = null)
     {
@@ -154,7 +140,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param   null|string|bool|int|Store $store
      * @return  int
-     * @since 2.0.0
      */
     public function getSalesPriceDisplayType($store = null)
     {
@@ -166,7 +151,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param   null|string|bool|int|Store $store
      * @return  int
-     * @since 2.0.0
      */
     public function getEmailPriceDisplayType($store = null)
     {
@@ -178,7 +162,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param   null|string|bool|int|Store $store
      * @return  bool
-     * @since 2.0.0
      */
     public function isTaxable($store = null)
     {
@@ -190,7 +173,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param   null|string|bool|int|Store $store
      * @return  bool
-     * @since 2.0.0
      */
     public function includeInSubtotal($store = null)
     {
@@ -202,7 +184,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param   null|string|bool|int|Store $store
      * @return  bool
-     * @since 2.0.0
      */
     public function isEnabled($store = null)
     {
@@ -214,7 +195,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param   null|string|bool|int|Store $store
      * @return  bool
-     * @since 2.0.0
      */
     public function displayTotalsInclTax($store = null)
     {
@@ -228,7 +208,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param   \Magento\Catalog\Model\Product $product
      * @param   mixed $website
      * @return  float
-     * @since 2.0.0
      */
     public function getAmountExclTax($product, $website = null)
     {
@@ -258,7 +237,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param Store|int|string               $store
      * @return bool|int
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function typeOfDisplay(
         $compareTo = null,
@@ -312,7 +290,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param bool                                          $calculateTaxes
      * @param bool                                          $round
      * @return \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     public function getProductWeeeAttributes(
         $product,
@@ -337,7 +314,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return float
-     * @since 2.0.0
      */
     public function getWeeeTaxAppliedAmount($item)
     {
@@ -349,7 +325,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return float
-     * @since 2.0.0
      */
     public function getWeeeTaxAppliedRowAmount($item)
     {
@@ -362,7 +337,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param string $functionName
      * @return float
-     * @since 2.0.0
      */
     protected function getRecursiveNumericAmount($item, $functionName)
     {
@@ -391,7 +365,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return array
-     * @since 2.0.0
      */
     public function getApplied($item)
     {
@@ -422,7 +395,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param array $value
      * @return $this
-     * @since 2.0.0
      */
     public function setApplied($item, $value)
     {
@@ -435,7 +407,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     public function getProductWeeeAttributesForDisplay($product)
     {
@@ -458,7 +429,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param null|Website $website
      * @param bool $calculateTaxes
      * @return \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     public function getProductWeeeAttributesForRenderer(
         $product,
@@ -491,7 +461,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return float
-     * @since 2.0.0
      */
     public function getWeeeTaxInclTax($item)
     {
@@ -508,7 +477,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return float
-     * @since 2.0.0
      */
     public function getBaseWeeeTaxInclTax($item)
     {
@@ -525,7 +493,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return float
-     * @since 2.0.0
      */
     public function getRowWeeeTaxInclTax($item)
     {
@@ -542,7 +509,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return float
-     * @since 2.0.0
      */
     public function getBaseRowWeeeTaxInclTax($item)
     {
@@ -559,7 +525,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return float
-     * @since 2.0.0
      */
     public function getTotalTaxAppliedForWeeeTax($item)
     {
@@ -580,7 +545,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return float
-     * @since 2.0.0
      */
     public function getBaseTotalTaxAppliedForWeeeTax($item)
     {
@@ -599,7 +563,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param \Magento\Sales\Model\Order\Item $orderItem
      * @return float
-     * @since 2.0.0
      */
     public function getWeeeAmountInvoiced($orderItem)
     {
@@ -617,7 +580,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param \Magento\Sales\Model\Order\Item $orderItem
      * @return float
-     * @since 2.0.0
      */
     public function getBaseWeeeAmountInvoiced($orderItem)
     {
@@ -635,7 +597,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param \Magento\Sales\Model\Order\Item $orderItem
      * @return float
-     * @since 2.0.0
      */
     public function getWeeeTaxAmountInvoiced($orderItem)
     {
@@ -653,7 +614,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param \Magento\Sales\Model\Order\Item $orderItem
      * @return float
-     * @since 2.0.0
      */
     public function getBaseWeeeTaxAmountInvoiced($orderItem)
     {
@@ -671,7 +631,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param \Magento\Sales\Model\Order\Item $orderItem
      * @return float
-     * @since 2.0.0
      */
     public function getWeeeAmountRefunded($orderItem)
     {
@@ -689,7 +648,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param \Magento\Sales\Model\Order\Item $orderItem
      * @return float
-     * @since 2.0.0
      */
     public function getBaseWeeeAmountRefunded($orderItem)
     {
@@ -707,7 +665,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param \Magento\Sales\Model\Order\Item $orderItem
      * @return float
-     * @since 2.0.0
      */
     public function getWeeeTaxAmountRefunded($orderItem)
     {
@@ -725,7 +682,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param \Magento\Sales\Model\Order\Item $orderItem
      * @return float
-     * @since 2.0.0
      */
     public function getBaseWeeeTaxAmountRefunded($orderItem)
     {
@@ -746,7 +702,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  \Magento\Quote\Model\Quote\Item\AbstractItem[] $items
      * @param  null|string|bool|int|Store $store
      * @return float
-     * @since 2.0.0
      */
     public function getTotalAmounts($items, $store = null)
     {
@@ -768,7 +723,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  \Magento\Quote\Model\Quote\Item\AbstractItem[] $items
      * @param  null|string|bool|int|Store $store
      * @return float
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getBaseTotalAmounts($items, $store = null)
     {
@@ -789,7 +744,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  int|null $storeId
      * @return bool
-     * @since 2.0.0
      */
     public function isDisplayIncl($storeId = null)
     {
@@ -805,7 +759,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  int|null $storeId
      * @return bool
-     * @since 2.0.0
      */
     public function isDisplayInclDesc($storeId = null)
     {
@@ -821,7 +774,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  int|null $storeId
      * @return bool
-     * @since 2.0.0
      */
     public function isDisplayExclDescIncl($storeId = null)
     {
@@ -837,7 +789,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  int|null $storeId
      * @return bool
-     * @since 2.0.0
      */
     public function isDisplayExcl($storeId = null)
     {
@@ -853,7 +804,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  null|string|bool|int|Store $store
      * @return int
-     * @since 2.0.0
      */
     public function getTaxDisplayConfig($store = null)
     {
@@ -865,7 +815,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  \Magento\Catalog\Model\Product $product
      * @return array
-     * @since 2.0.0
      */
     public function getWeeeAttributesForBundle($product)
     {

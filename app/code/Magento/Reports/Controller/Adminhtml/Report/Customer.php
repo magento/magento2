@@ -14,20 +14,17 @@ namespace Magento\Reports\Controller\Adminhtml\Report;
 
 /**
  * @api
- * @since 2.0.0
  */
 abstract class Customer extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
-     * @since 2.0.0
      */
     protected $_fileFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -41,7 +38,6 @@ abstract class Customer extends \Magento\Backend\App\Action
      * Add reports and customer breadcrumbs
      *
      * @return $this
-     * @since 2.0.0
      */
     public function _initAction()
     {
@@ -60,7 +56,6 @@ abstract class Customer extends \Magento\Backend\App\Action
      * Determine if action is allowed for reports module
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _isAllowed()
     {

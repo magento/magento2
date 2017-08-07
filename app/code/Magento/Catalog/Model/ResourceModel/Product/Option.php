@@ -12,13 +12,11 @@ use Magento\Catalog\Api\Data\ProductInterface;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
      */
     protected $metadataPool;
 
@@ -26,7 +24,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -34,7 +31,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Currency factory
      *
      * @var \Magento\Directory\Model\CurrencyFactory
-     * @since 2.0.0
      */
     protected $_currencyFactory;
 
@@ -42,7 +38,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Core config model
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_config;
 
@@ -54,7 +49,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -73,7 +67,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table and initialize connection
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -85,7 +78,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -102,7 +94,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _saveValuePrices(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -243,7 +234,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _saveValueTitles(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -323,7 +313,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $optionId
      * @param int $storeId
      * @return string
-     * @since 2.0.0
      */
     protected function getColFromOptionTable($tableName, $optionId, $storeId)
     {
@@ -346,7 +335,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $optionId
      * @return $this
-     * @since 2.0.0
      */
     public function deletePrices($optionId)
     {
@@ -363,7 +351,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $optionId
      * @return $this
-     * @since 2.0.0
      */
     public function deleteTitles($optionId)
     {
@@ -382,7 +369,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $oldProductId
      * @param int $newProductId
      * @return \Magento\Catalog\Model\Product\Option
-     * @since 2.0.0
      */
     public function duplicate(\Magento\Catalog\Model\Product\Option $object, $oldProductId, $newProductId)
     {
@@ -466,7 +452,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $storeId
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function getSearchableData($productId, $storeId)
     {
@@ -583,7 +568,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * All Option Types that support price and price_type
      *
      * @return string[]
-     * @since 2.2.0
      */
     public function getPriceTypes()
     {
@@ -599,7 +583,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
      */
     private function getMetadataPool()
     {

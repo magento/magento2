@@ -15,49 +15,41 @@ use Magento\Framework\EntityManager\TypeResolver;
 
 /**
  * Class Read
- * @since 2.1.0
  */
 class Read implements ReadInterface
 {
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
     /**
      * @var HydratorPool
-     * @since 2.1.0
      */
     private $hydratorPool;
 
     /**
      * @var EventManager
-     * @since 2.1.0
      */
     private $eventManager;
 
     /**
      * @var TypeResolver
-     * @since 2.1.0
      */
     private $typeResolver;
 
     /**
      * @var ReadMain
-     * @since 2.1.0
      */
     private $readMain;
 
     /**
      * @var ReadAttributes
-     * @since 2.1.0
      */
     private $readAttributes;
 
     /**
      * @var ReadAttributes
-     * @since 2.1.0
      */
     private $readExtensions;
 
@@ -69,7 +61,6 @@ class Read implements ReadInterface
      * @param ReadMain $readMain
      * @param ReadAttributes $readAttributes
      * @param ReadExtensions $readExtensions
-     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -91,7 +82,6 @@ class Read implements ReadInterface
 
     /**
      * {@inheritDoc}
-     * @since 2.1.0
      */
     public function execute($entity, $identifier, $arguments = [])
     {
