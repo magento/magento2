@@ -9,7 +9,7 @@ namespace Magento\AsynchronousOperations\Test\Unit\Model\ResourceModel\Operation
 /**
  * Unit test for Create operation.
  */
-class CreateTest extends \PHPUnit_Framework_TestCase
+class CreateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject

@@ -12,7 +12,7 @@ use Magento\Framework\Bulk\BulkSummaryInterface;
 /**
  * Class StatusMapperTest
  */
-class StatusMapperTest extends \PHPUnit_Framework_TestCase
+class StatusMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\AsynchronousOperations\Model\StatusMapper

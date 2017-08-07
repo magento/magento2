@@ -8,7 +8,7 @@ namespace Magento\AsynchronousOperations\Test\Unit\Ui\Component\Listing\Column;
 
 use Magento\AsynchronousOperations\Model\BulkSummary;
 
-class ActionsTest extends \PHPUnit_Framework_TestCase
+class ActionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -30,26 +30,11 @@ class ActionsTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->context = $this->getMock(
-            \Magento\Framework\View\Element\UiComponent\ContextInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->uiComponentFactory = $this->getMock(
-            \Magento\Framework\View\Element\UiComponentFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $processor = $this->getMock(
+        $this->context = $this->createMock(\Magento\Framework\View\Element\UiComponent\ContextInterface::class);
+        $this->uiComponentFactory = $this->createMock(\Magento\Framework\View\Element\UiComponentFactory::class);
+        $processor = $this->createPartialMock(
             \Magento\Framework\View\Element\UiComponent\Processor::class,
-            ['getProcessor'],
-            [],
-            '',
-            false
+            ['getProcessor']
         );
         $this->context->expects($this->never())->method('getProcessor')->will($this->returnValue($processor));
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
