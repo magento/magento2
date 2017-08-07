@@ -14,7 +14,7 @@ use Magento\Framework\Phrase;
 /**
  * Unit tests for consumer runner
  */
-class ConsumerRunnerTest extends \PHPUnit_Framework_TestCase
+class ConsumerRunnerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     private $objectManager;
