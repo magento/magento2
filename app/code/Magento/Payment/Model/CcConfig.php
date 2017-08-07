@@ -16,37 +16,31 @@ use Magento\Payment\Model\Config as PaymentConfig;
  * Credit card configuration model
  *
  * @api
- * @since 2.0.0
  */
 class CcConfig
 {
     /**
      * @var \Magento\Payment\Model\Config
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var Repository
-     * @since 2.0.0
      */
     protected $assetRepo;
 
     /**
      * @var RequestInterface
-     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var UrlInterface
-     * @since 2.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
@@ -56,7 +50,6 @@ class CcConfig
      * @param RequestInterface $request
      * @param UrlInterface $urlBuilder
      * @param LoggerInterface $logger
-     * @since 2.0.0
      */
     public function __construct(
         PaymentConfig $paymentConfig,
@@ -77,7 +70,6 @@ class CcConfig
      *
      * @return array
      * @deprecated 2.1.0 unused
-     * @since 2.0.0
      */
     public function getSsStartYears()
     {
@@ -95,7 +87,6 @@ class CcConfig
      * Retrieve availables credit card types
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCcAvailableTypes()
     {
@@ -106,7 +97,6 @@ class CcConfig
      * Retrieve credit card expire months
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCcMonths()
     {
@@ -117,7 +107,6 @@ class CcConfig
      * Retrieve credit card expire years
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCcYears()
     {
@@ -128,7 +117,6 @@ class CcConfig
      * Retrieve has verification configuration
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasVerification()
     {
@@ -140,7 +128,6 @@ class CcConfig
      *
      * @return bool
      * @deprecated 2.1.0 unused
-     * @since 2.0.0
      */
     public function hasSsCardType()
     {
@@ -151,7 +138,6 @@ class CcConfig
      * Retrieve CVV tooltip image url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCvvImageUrl()
     {
@@ -164,7 +150,6 @@ class CcConfig
      * @param string $fileId
      * @param array $params
      * @return string
-     * @since 2.0.0
      */
     public function getViewFileUrl($fileId, array $params = [])
     {
@@ -183,7 +168,6 @@ class CcConfig
      * @param string $fileId
      * @param array $params
      * @return \Magento\Framework\View\Asset\File
-     * @since 2.0.0
      */
     public function createAsset($fileId, array $params = [])
     {

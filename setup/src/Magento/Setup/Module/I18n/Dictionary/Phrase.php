@@ -7,7 +7,6 @@ namespace Magento\Setup\Module\I18n\Dictionary;
 
 /**
  *  Phrase
- * @since 2.0.0
  */
 class Phrase
 {
@@ -29,7 +28,6 @@ class Phrase
      * Phrase
      *
      * @var string
-     * @since 2.0.0
      */
     private $_phrase;
 
@@ -37,7 +35,6 @@ class Phrase
      * Translation
      *
      * @var string
-     * @since 2.0.0
      */
     private $_translation;
 
@@ -45,7 +42,6 @@ class Phrase
      * Context type
      *
      * @var string
-     * @since 2.0.0
      */
     private $_contextType;
 
@@ -53,7 +49,6 @@ class Phrase
      * Context value
      *
      * @var array
-     * @since 2.0.0
      */
     private $_contextValue = [];
 
@@ -61,7 +56,6 @@ class Phrase
      * Quote type that enclose the phrase, single or double
      *
      * @var string
-     * @since 2.0.0
      */
     private $_quote;
 
@@ -73,7 +67,6 @@ class Phrase
      * @param string|null $contextType
      * @param string|array|null $contextValue
      * @param string|null $quote
-     * @since 2.0.0
      */
     public function __construct($phrase, $translation, $contextType = null, $contextValue = null, $quote = null)
     {
@@ -90,7 +83,6 @@ class Phrase
      * @param string $phrase
      * @return void
      * @throws \DomainException
-     * @since 2.0.0
      */
     public function setPhrase($phrase)
     {
@@ -104,7 +96,6 @@ class Phrase
      * Get phrase
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPhrase()
     {
@@ -116,7 +107,6 @@ class Phrase
      *
      * @param string $quote
      * @return void
-     * @since 2.0.0
      */
     public function setQuote($quote)
     {
@@ -129,7 +119,6 @@ class Phrase
      * Get quote type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -142,7 +131,6 @@ class Phrase
      * @param string $translation
      * @return void
      * @throws \DomainException
-     * @since 2.0.0
      */
     public function setTranslation($translation)
     {
@@ -156,7 +144,6 @@ class Phrase
      * Get translation
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTranslation()
     {
@@ -168,7 +155,6 @@ class Phrase
      *
      * @param string $contextType
      * @return void
-     * @since 2.0.0
      */
     public function setContextType($contextType)
     {
@@ -179,7 +165,6 @@ class Phrase
      * Get context type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getContextType()
     {
@@ -192,7 +177,6 @@ class Phrase
      * @param string $contextValue
      * @return void
      * @throws \DomainException
-     * @since 2.0.0
      */
     public function addContextValue($contextValue)
     {
@@ -210,7 +194,6 @@ class Phrase
      * @param string $contextValue
      * @return void
      * @throws \DomainException
-     * @since 2.0.0
      */
     public function setContextValue($contextValue)
     {
@@ -228,7 +211,6 @@ class Phrase
      * Get context value
      *
      * @return array
-     * @since 2.0.0
      */
     public function getContextValue()
     {
@@ -240,7 +222,6 @@ class Phrase
      *
      * @param string $separator
      * @return string
-     * @since 2.0.0
      */
     public function getContextValueAsString($separator = ',')
     {
@@ -251,7 +232,6 @@ class Phrase
      * Get VO identifier key
      *
      * @return string
-     * @since 2.0.0
      */
     public function getKey()
     {
@@ -262,7 +242,6 @@ class Phrase
      * Compile PHP string based on quotes type it enclosed with
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCompiledPhrase()
     {
@@ -273,7 +252,6 @@ class Phrase
      * Compile PHP string based on quotes type it enclosed with
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCompiledTranslation()
     {
@@ -285,7 +263,6 @@ class Phrase
      *
      * @param string $string
      * @return string
-     * @since 2.0.0
      */
     private function getCompiledString($string)
     {

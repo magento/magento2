@@ -11,13 +11,11 @@ use Magento\Rule\Model\Condition\AbstractCondition;
 /**
  * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog\NewConditionHtml
  *
- * @since 2.0.0
  */
 class NewConditionHtml extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

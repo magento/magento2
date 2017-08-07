@@ -14,19 +14,16 @@ namespace Magento\Setup\Fixtures;
  * <tax_rates_file>{csv file name}</tax_rates_file>
  *
  * @see setup/performance-toolkit/profiles/ce/small.xml
- * @since 2.0.0
  */
 class TaxRatesFixture extends Fixture
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $priority = 100;
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -66,7 +63,6 @@ class TaxRatesFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getActionTitle()
     {
@@ -75,7 +71,6 @@ class TaxRatesFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function introduceParamLabels()
     {

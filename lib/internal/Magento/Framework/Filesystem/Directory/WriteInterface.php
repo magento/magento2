@@ -8,7 +8,6 @@ namespace Magento\Framework\Filesystem\Directory;
 /**
  * Interface \Magento\Framework\Filesystem\Directory\WriteInterface
  *
- * @since 2.0.0
  */
 interface WriteInterface extends ReadInterface
 {
@@ -18,7 +17,6 @@ interface WriteInterface extends ReadInterface
      * @param string $path [optional]
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
-     * @since 2.0.0
      */
     public function create($path = null);
 
@@ -28,7 +26,6 @@ interface WriteInterface extends ReadInterface
      * @param string $path [optional]
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
-     * @since 2.0.0
      */
     public function delete($path = null);
 
@@ -40,7 +37,6 @@ interface WriteInterface extends ReadInterface
      * @param WriteInterface $targetDirectory [optional]
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
-     * @since 2.0.0
      */
     public function renameFile($path, $newPath, WriteInterface $targetDirectory = null);
 
@@ -52,7 +48,6 @@ interface WriteInterface extends ReadInterface
      * @param WriteInterface $targetDirectory [optional]
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
-     * @since 2.0.0
      */
     public function copyFile($path, $destination, WriteInterface $targetDirectory = null);
 
@@ -64,7 +59,6 @@ interface WriteInterface extends ReadInterface
      * @param WriteInterface $targetDirectory [optional]
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
-     * @since 2.0.0
      */
     public function createSymlink($path, $destination, WriteInterface $targetDirectory = null);
 
@@ -75,7 +69,6 @@ interface WriteInterface extends ReadInterface
      * @param int $permissions
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
-     * @since 2.0.0
      */
     public function changePermissions($path, $permissions);
 
@@ -87,7 +80,6 @@ interface WriteInterface extends ReadInterface
      * @param int $filePermissions
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
-     * @since 2.0.0
      */
     public function changePermissionsRecursively($path, $dirPermissions, $filePermissions);
 
@@ -98,7 +90,6 @@ interface WriteInterface extends ReadInterface
      * @param int $modificationTime [optional]
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
-     * @since 2.0.0
      */
     public function touch($path, $modificationTime = null);
 
@@ -107,7 +98,6 @@ interface WriteInterface extends ReadInterface
      *
      * @param string $path [optional]
      * @return bool
-     * @since 2.0.0
      */
     public function isWritable($path = null);
 
@@ -117,7 +107,6 @@ interface WriteInterface extends ReadInterface
      * @param string $path
      * @param string $mode
      * @return \Magento\Framework\Filesystem\File\WriteInterface
-     * @since 2.0.0
      */
     public function openFile($path, $mode = 'w');
 
@@ -129,7 +118,6 @@ interface WriteInterface extends ReadInterface
      * @param string $mode [optional]
      * @return int The number of bytes that were written.
      * @throws \Magento\Framework\Exception\FileSystemException
-     * @since 2.0.0
      */
     public function writeFile($path, $content, $mode = null);
 
@@ -137,7 +125,6 @@ interface WriteInterface extends ReadInterface
      * Get driver
      *
      * @return \Magento\Framework\Filesystem\DriverInterface
-     * @since 2.0.0
      */
     public function getDriver();
 }

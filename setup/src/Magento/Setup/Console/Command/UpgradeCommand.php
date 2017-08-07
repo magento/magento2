@@ -17,7 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for updating installed application after the code base has changed
- * @since 2.0.0
  */
 class UpgradeCommand extends AbstractSetupCommand
 {
@@ -30,7 +29,6 @@ class UpgradeCommand extends AbstractSetupCommand
      * Installer service factory
      *
      * @var InstallerFactory
-     * @since 2.0.0
      */
     private $installerFactory;
 
@@ -45,7 +43,6 @@ class UpgradeCommand extends AbstractSetupCommand
      *
      * @param InstallerFactory $installerFactory
      * @param DeploymentConfig $deploymentConfig
-     * @since 2.0.0
      */
     public function __construct(InstallerFactory $installerFactory, DeploymentConfig $deploymentConfig = null)
     {
@@ -56,7 +53,6 @@ class UpgradeCommand extends AbstractSetupCommand
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -78,7 +74,6 @@ class UpgradeCommand extends AbstractSetupCommand
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

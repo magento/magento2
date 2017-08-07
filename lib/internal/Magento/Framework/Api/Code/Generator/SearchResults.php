@@ -11,7 +11,6 @@ use Magento\Framework\Code\Generator\EntityAbstract;
 
 /**
  * Class Builder
- * @since 2.0.0
  */
 
 class SearchResults extends EntityAbstract
@@ -31,7 +30,6 @@ class SearchResults extends EntityAbstract
      * Retrieve class properties
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getClassProperties()
     {
@@ -42,7 +40,6 @@ class SearchResults extends EntityAbstract
      * Returns list of methods for class generator
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getClassMethods()
     {
@@ -67,7 +64,6 @@ class SearchResults extends EntityAbstract
      * Returns default constructor definition
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getDefaultConstructorDefinition()
     {
@@ -78,7 +74,6 @@ class SearchResults extends EntityAbstract
      * Generate code
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _generateCode()
     {

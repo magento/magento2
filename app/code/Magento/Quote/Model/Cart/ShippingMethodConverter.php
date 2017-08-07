@@ -8,7 +8,6 @@ namespace Magento\Quote\Model\Cart;
 /**
  * Quote shipping method data.
  *
- * @since 2.0.0
  */
 class ShippingMethodConverter
 {
@@ -16,13 +15,11 @@ class ShippingMethodConverter
      * Shipping method data factory.
      *
      * @var \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory
-     * @since 2.0.0
      */
     protected $shippingMethodDataFactory;
 
     /**
      * @var \Magento\Tax\Helper\Data
-     * @since 2.0.0
      */
     protected $taxHelper;
 
@@ -32,7 +29,6 @@ class ShippingMethodConverter
      * @param \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory $shippingMethodDataFactory Shipping method factory.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager Store manager interface.
      * @param \Magento\Tax\Helper\Data $taxHelper Tax data helper.
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory $shippingMethodDataFactory,
@@ -50,7 +46,6 @@ class ShippingMethodConverter
      * @param string $quoteCurrencyCode The quote currency code.
      * @param \Magento\Quote\Model\Quote\Address\Rate $rateModel The rate model.
      * @return \Magento\Quote\Api\Data\ShippingMethodInterface Shipping method data object.
-     * @since 2.0.0
      */
     public function modelToDataObject($rateModel, $quoteCurrencyCode)
     {
@@ -81,7 +76,6 @@ class ShippingMethodConverter
      * @param \Magento\Quote\Model\Quote\Address\Rate $rateModel
      * @param bool $flag
      * @return float
-     * @since 2.0.0
      */
     private function getShippingPriceWithFlag($rateModel, $flag)
     {

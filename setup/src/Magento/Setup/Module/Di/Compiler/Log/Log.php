@@ -8,7 +8,6 @@ namespace Magento\Setup\Module\Di\Compiler\Log;
 /**
  * Class \Magento\Setup\Module\Di\Compiler\Log\Log
  *
- * @since 2.0.0
  */
 class Log
 {
@@ -24,7 +23,6 @@ class Log
      * Success log writer
      *
      * @var Writer\Console
-     * @since 2.0.0
      */
     protected $_successWriter;
 
@@ -32,7 +30,6 @@ class Log
      * Error log writer
      *
      * @var Writer\Console
-     * @since 2.0.0
      */
     protected $_errorWriter;
 
@@ -40,7 +37,6 @@ class Log
      * List of success log entries
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_successEntries = [];
 
@@ -48,14 +44,12 @@ class Log
      * List of error entries
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_errorEntries = [];
 
     /**
      * @param Writer\Console $successWriter
      * @param Writer\Console $errorWriter
-     * @since 2.0.0
      */
     public function __construct(Writer\Console $successWriter, Writer\Console $errorWriter)
     {
@@ -76,7 +70,6 @@ class Log
      * @param string $key
      * @param string $message
      * @return void
-     * @since 2.0.0
      */
     public function add($type, $key, $message = '')
     {
@@ -92,7 +85,6 @@ class Log
      *
      * @return void
      * @throws \Magento\Framework\Validator\Exception
-     * @since 2.0.0
      */
     public function report()
     {
@@ -109,7 +101,6 @@ class Log
      * Check whether error exists
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasError()
     {

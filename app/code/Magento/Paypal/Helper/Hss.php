@@ -7,7 +7,6 @@ namespace Magento\Paypal\Helper;
 
 /**
  * Hosted Sole Solution helper
- * @since 2.0.0
  */
 class Hss extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -15,7 +14,6 @@ class Hss extends \Magento\Framework\App\Helper\AbstractHelper
      * Hosted Sole Solution methods
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_hssMethods = [
         \Magento\Paypal\Model\Config::METHOD_HOSTEDPRO,
@@ -25,7 +23,6 @@ class Hss extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @var \Magento\Checkout\Model\Session
-     * @since 2.0.0
      */
     protected $_checkoutSession;
 
@@ -34,7 +31,6 @@ class Hss extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -49,7 +45,6 @@ class Hss extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $name template name
      * @return string
-     * @since 2.0.0
      */
     public function getReviewButtonTemplate($name)
     {
@@ -67,7 +62,6 @@ class Hss extends \Magento\Framework\App\Helper\AbstractHelper
      * Get methods
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getHssMethods()
     {

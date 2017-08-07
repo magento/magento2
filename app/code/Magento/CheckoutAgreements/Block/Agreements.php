@@ -10,13 +10,11 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Agreements extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory
-     * @since 2.0.0
      */
     protected $_agreementCollectionFactory;
 
@@ -25,7 +23,6 @@ class Agreements extends \Magento\Framework\View\Element\Template
      * @param \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory $agreementCollectionFactory
      * @param array $data
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -38,7 +35,6 @@ class Agreements extends \Magento\Framework\View\Element\Template
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getAgreements()
     {

@@ -9,7 +9,6 @@ namespace Magento\Framework\App\DeploymentConfig\Writer;
 /**
  * Interface \Magento\Framework\App\DeploymentConfig\Writer\FormatterInterface
  *
- * @since 2.0.0
  */
 interface FormatterInterface
 {
@@ -19,7 +18,6 @@ interface FormatterInterface
      * @param array $data
      * @param array $comments
      * @return string
-     * @since 2.0.0
      */
     public function format($data, array $comments = []);
 }

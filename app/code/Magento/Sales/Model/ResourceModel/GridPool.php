@@ -9,19 +9,16 @@ namespace Magento\Sales\Model\ResourceModel;
 /**
  * Class GridPool
  * @api
- * @since 2.0.0
  */
 class GridPool
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Grid[]
-     * @since 2.0.0
      */
     protected $grids;
 
     /**
      * @param array $grids
-     * @since 2.0.0
      */
     public function __construct(array $grids)
     {
@@ -33,7 +30,6 @@ class GridPool
      *
      * @param int $orderId
      * @return $this
-     * @since 2.0.0
      */
     public function refreshByOrderId($orderId)
     {

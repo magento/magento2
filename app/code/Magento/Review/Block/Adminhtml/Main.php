@@ -12,7 +12,6 @@ namespace Magento\Review\Block\Adminhtml;
 /**
  * Class \Magento\Review\Block\Adminhtml\Main
  *
- * @since 2.0.0
  */
 class Main extends \Magento\Backend\Block\Widget\Grid\Container
 {
@@ -20,13 +19,11 @@ class Main extends \Magento\Backend\Block\Widget\Grid\Container
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerRepository;
 
@@ -34,7 +31,6 @@ class Main extends \Magento\Backend\Block\Widget\Grid\Container
      * Catalog product model factory
      *
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $_productFactory;
 
@@ -42,7 +38,6 @@ class Main extends \Magento\Backend\Block\Widget\Grid\Container
      * Customer View Helper
      *
      * @var \Magento\Customer\Helper\View
-     * @since 2.0.0
      */
     protected $_customerViewHelper;
 
@@ -53,7 +48,6 @@ class Main extends \Magento\Backend\Block\Widget\Grid\Container
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Customer\Helper\View $customerViewHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -74,7 +68,6 @@ class Main extends \Magento\Backend\Block\Widget\Grid\Container
      * Initialize add new review
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

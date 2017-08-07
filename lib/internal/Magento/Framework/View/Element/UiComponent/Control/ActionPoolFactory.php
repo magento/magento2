@@ -9,7 +9,6 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class ActionPoolFactory
- * @since 2.0.0
  */
 class ActionPoolFactory
 {
@@ -17,7 +16,6 @@ class ActionPoolFactory
 
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -25,7 +23,6 @@ class ActionPoolFactory
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -37,7 +34,6 @@ class ActionPoolFactory
      *
      * @param array $arguments
      * @return ActionPoolInterface
-     * @since 2.0.0
      */
     public function create(array $arguments = [])
     {

@@ -11,7 +11,6 @@ use Exception;
 /**
  * Class \Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite\Wishlist\Configure
  *
- * @since 2.0.0
  */
 class Configure extends \Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite\Wishlist
 {
@@ -19,7 +18,6 @@ class Configure extends \Magento\Customer\Controller\Adminhtml\Wishlist\Product\
      * Ajax handler to response configuration fieldset of composite product in customer's wishlist.
      *
      * @return \Magento\Framework\View\Result\Layout
-     * @since 2.0.0
      */
     public function execute()
     {

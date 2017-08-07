@@ -9,7 +9,6 @@ namespace Magento\Backend\Block\Widget\Tab;
  * Backend Widget Tab Interface
  *
  * @api
- * @since 2.0.0
  */
 interface TabInterface
 {
@@ -18,7 +17,6 @@ interface TabInterface
      *
      * @return string
      * @api
-     * @since 2.0.0
      */
     public function getTabLabel();
 
@@ -27,7 +25,6 @@ interface TabInterface
      *
      * @return string
      * @api
-     * @since 2.0.0
      */
     public function getTabTitle();
 
@@ -36,7 +33,6 @@ interface TabInterface
      *
      * @return boolean
      * @api
-     * @since 2.0.0
      */
     public function canShowTab();
 
@@ -45,7 +41,6 @@ interface TabInterface
      *
      * @return boolean
      * @api
-     * @since 2.0.0
      */
     public function isHidden();
 }

@@ -7,7 +7,6 @@ namespace Magento\Config\Model\Config\Structure\Element;
 
 /**
  * @api
- * @since 2.0.0
  */
 abstract class AbstractComposite extends \Magento\Config\Model\Config\Structure\AbstractElement
 {
@@ -15,7 +14,6 @@ abstract class AbstractComposite extends \Magento\Config\Model\Config\Structure\
      * Child elements iterator
      *
      * @var Iterator
-     * @since 2.0.0
      */
     protected $_childrenIterator;
 
@@ -23,7 +21,6 @@ abstract class AbstractComposite extends \Magento\Config\Model\Config\Structure\
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param Iterator $childrenIterator
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -40,7 +37,6 @@ abstract class AbstractComposite extends \Magento\Config\Model\Config\Structure\
      * @param array $data
      * @param string $scope
      * @return void
-     * @since 2.0.0
      */
     public function setData(array $data, $scope)
     {
@@ -58,7 +54,6 @@ abstract class AbstractComposite extends \Magento\Config\Model\Config\Structure\
      * Check whether element has visible child elements
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasChildren()
     {
@@ -72,7 +67,6 @@ abstract class AbstractComposite extends \Magento\Config\Model\Config\Structure\
      * Retrieve children iterator
      *
      * @return \Magento\Config\Model\Config\Structure\Element\Iterator
-     * @since 2.0.0
      */
     public function getChildren()
     {
@@ -83,7 +77,6 @@ abstract class AbstractComposite extends \Magento\Config\Model\Config\Structure\
      * Check whether element is visible
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isVisible()
     {

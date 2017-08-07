@@ -10,13 +10,11 @@ use \Magento\Cms\Model\ResourceModel\AbstractCollection;
 
 /**
  * CMS Block Collection
- * @since 2.0.0
  */
 class Collection extends AbstractCollection
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_idFieldName = 'block_id';
 
@@ -24,7 +22,6 @@ class Collection extends AbstractCollection
      * Perform operations after collection load
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -39,7 +36,6 @@ class Collection extends AbstractCollection
      * Define resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -52,7 +48,6 @@ class Collection extends AbstractCollection
      * Returns pairs block_id - title
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {
@@ -65,7 +60,6 @@ class Collection extends AbstractCollection
      * @param int|array|\Magento\Store\Model\Store $store
      * @param bool $withAdmin
      * @return $this
-     * @since 2.0.0
      */
     public function addStoreFilter($store, $withAdmin = true)
     {
@@ -78,7 +72,6 @@ class Collection extends AbstractCollection
      * Join store relation table if there is store filter
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _renderFiltersBefore()
     {

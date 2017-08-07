@@ -7,7 +7,6 @@ namespace Magento\Paypal\Model\Billing;
 
 /**
  * Billing Agreement abstaract class
- * @since 2.0.0
  */
 abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
 {
@@ -15,7 +14,6 @@ abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
      * Payment method instance
      *
      * @var \Magento\Payment\Model\MethodInterface
-     * @since 2.0.0
      */
     protected $_paymentMethodInstance = null;
 
@@ -23,7 +21,6 @@ abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
      * Billing Agreement Errors
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_errors = [];
 
@@ -31,7 +28,6 @@ abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
      * Init billing agreement
      *
      * @return string
-     * @since 2.0.0
      */
     abstract public function initToken();
 
@@ -39,7 +35,6 @@ abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
      * Verify billing agreement details
      *
      * @return $this
-     * @since 2.0.0
      */
     abstract public function verifyToken();
 
@@ -47,7 +42,6 @@ abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
      * Create billing agreement
      *
      * @return $this
-     * @since 2.0.0
      */
     abstract public function place();
 
@@ -55,7 +49,6 @@ abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
      * Cancel billing agreement
      *
      * @return $this
-     * @since 2.0.0
      */
     abstract public function cancel();
 
@@ -63,7 +56,6 @@ abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
      * Payment data
      *
      * @var \Magento\Payment\Helper\Data
-     * @since 2.0.0
      */
     protected $_paymentData = null;
 
@@ -74,7 +66,6 @@ abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -92,7 +83,6 @@ abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
      * Retrieve payment method instance
      *
      * @return \Magento\Payment\Model\MethodInterface
-     * @since 2.0.0
      */
     public function getPaymentMethodInstance()
     {
@@ -107,7 +97,6 @@ abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
      * Validate data before save
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isValid()
     {
@@ -126,7 +115,6 @@ abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\AbstractModel
-     * @since 2.0.0
      */
     public function beforeSave()
     {

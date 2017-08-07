@@ -12,7 +12,6 @@ namespace Magento\Framework\Data\Tree;
  * id  |  pid  |  level | order
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Db extends \Magento\Framework\Data\Tree
 {
@@ -28,7 +27,6 @@ class Db extends \Magento\Framework\Data\Tree
      * DB connection
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected $_conn;
 
@@ -36,7 +34,6 @@ class Db extends \Magento\Framework\Data\Tree
      * Data table name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_table;
 
@@ -44,7 +41,6 @@ class Db extends \Magento\Framework\Data\Tree
      * SQL select object
      *
      * @var \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected $_select;
 
@@ -52,7 +48,6 @@ class Db extends \Magento\Framework\Data\Tree
      * Tree structure field name: _idField
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_idField;
 
@@ -60,7 +55,6 @@ class Db extends \Magento\Framework\Data\Tree
      * Tree structure field name: _parentField
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_parentField;
 
@@ -68,7 +62,6 @@ class Db extends \Magento\Framework\Data\Tree
      * Tree structure field name: _levelField
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_levelField;
 
@@ -76,7 +69,6 @@ class Db extends \Magento\Framework\Data\Tree
      * Tree structure field name: _orderField
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_orderField;
 
@@ -94,7 +86,6 @@ class Db extends \Magento\Framework\Data\Tree
      * @param string $table
      * @param array $fields
      * @throws \Exception
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\DB\Adapter\AdapterInterface $connection, $table, $fields)
     {
@@ -131,7 +122,6 @@ class Db extends \Magento\Framework\Data\Tree
 
     /**
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     public function getDbSelect()
     {
@@ -141,7 +131,6 @@ class Db extends \Magento\Framework\Data\Tree
     /**
      * @param \Magento\Framework\DB\Select $select
      * @return void
-     * @since 2.0.0
      */
     public function setDbSelect($select)
     {
@@ -155,7 +144,6 @@ class Db extends \Magento\Framework\Data\Tree
      * @param   int $recursionLevel recursion level
      * @return  $this
      * @throws \Exception
-     * @since 2.0.0
      */
     public function load($parentNode = null, $recursionLevel = 100)
     {
@@ -190,7 +178,6 @@ class Db extends \Magento\Framework\Data\Tree
     /**
      * @param mixed $nodeId
      * @return Node
-     * @since 2.0.0
      */
     public function loadNode($nodeId)
     {
@@ -207,7 +194,6 @@ class Db extends \Magento\Framework\Data\Tree
      * @param Node $parentNode
      * @param Node $prevNode
      * @return Node
-     * @since 2.0.0
      */
     public function appendChild($data, $parentNode, $prevNode = null)
     {
@@ -238,7 +224,6 @@ class Db extends \Magento\Framework\Data\Tree
      * @param Node $prevNode
      * @return void
      * @throws \Exception
-     * @since 2.0.0
      */
     public function moveNodeTo($node, $parentNode, $prevNode = null)
     {
@@ -297,7 +282,6 @@ class Db extends \Magento\Framework\Data\Tree
      * @param mixed $parentId
      * @param int $parentLevel
      * @return $this
-     * @since 2.0.0
      */
     protected function _updateChildLevels($parentId, $parentLevel)
     {
@@ -325,7 +309,6 @@ class Db extends \Magento\Framework\Data\Tree
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _loadFullTree()
     {
@@ -347,7 +330,6 @@ class Db extends \Magento\Framework\Data\Tree
      * @param Node $node
      * @return $this
      * @throws \Exception
-     * @since 2.0.0
      */
     public function removeNode($node)
     {

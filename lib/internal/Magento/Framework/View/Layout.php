@@ -25,7 +25,6 @@ use Psr\Log\LoggerInterface as Logger;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
- * @since 2.0.0
  */
 class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Framework\View\LayoutInterface
 {
@@ -39,7 +38,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Layout Update module
      *
      * @var \Magento\Framework\View\Layout\ProcessorInterface
-     * @since 2.0.0
      */
     protected $_update;
 
@@ -47,7 +45,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Blocks registry
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_blocks = [];
 
@@ -55,7 +52,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Cache of elements to output during rendering
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_output = [];
 
@@ -63,7 +59,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Helper blocks cache for this layout
      *
      * @var array
-     * @since 2.0.0
      */
     protected $sharedBlocks = [];
 
@@ -71,7 +66,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * A variable for transporting output into observer during rendering
      *
      * @var \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     protected $_renderingOutput;
 
@@ -79,7 +73,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Cache of generated elements' HTML
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_renderElementCache = [];
 
@@ -87,7 +80,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Layout structure model
      *
      * @var Layout\Data\Structure
-     * @since 2.0.0
      */
     protected $structure;
 
@@ -95,7 +87,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Renderers registered for particular name
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_renderers = [];
 
@@ -103,91 +94,76 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager;
 
     /**
      * @var \Magento\Framework\View\Layout\ProcessorFactory
-     * @since 2.0.0
      */
     protected $_processorFactory;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
-     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $isPrivate = false;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ResolverInterface
-     * @since 2.0.0
      */
     protected $themeResolver;
 
     /**
      * @var Layout\ReaderPool
-     * @since 2.0.0
      */
     protected $readerPool;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $cacheable;
 
     /**
      * @var \Magento\Framework\View\Layout\GeneratorPool
-     * @since 2.0.0
      */
     protected $generatorPool;
 
     /**
      * @var \Magento\Framework\View\Layout\BuilderInterface
-     * @since 2.0.0
      */
     protected $builder;
 
     /**
      * @var FrontendInterface
-     * @since 2.0.0
      */
     protected $cache;
 
     /**
      * @var Layout\Reader\ContextFactory
-     * @since 2.0.0
      */
     protected $readerContextFactory;
 
     /**
      * @var Layout\Generator\ContextFactory
-     * @since 2.0.0
      */
     protected $generatorContextFactory;
 
     /**
      * @var Layout\Reader\Context
-     * @since 2.0.0
      */
     protected $readerContext;
 
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     protected $appState;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
@@ -212,7 +188,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param \Psr\Log\LoggerInterface $logger
      * @param bool $cacheable
      * @param SerializerInterface|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         Layout\ProcessorFactory $processorFactory,
@@ -252,7 +227,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     /**
      * @param Layout\GeneratorPool $generatorPool
      * @return $this
-     * @since 2.0.0
      */
     public function setGeneratorPool(Layout\GeneratorPool $generatorPool)
     {
@@ -263,7 +237,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     /**
      * @param Layout\BuilderInterface $builder
      * @return $this
-     * @since 2.0.0
      */
     public function setBuilder(Layout\BuilderInterface $builder)
     {
@@ -275,7 +248,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Build layout blocks from generic layouts and/or page configurations
      *
      * @return void
-     * @since 2.0.0
      */
     protected function build()
     {
@@ -287,7 +259,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     /**
      * TODO Will be eliminated in MAGETWO-28359
      * @return void
-     * @since 2.0.0
      */
     public function publicBuild()
     {
@@ -299,7 +270,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * Destructor should be called explicitly in order to work around the PHP bug
      * https://bugs.php.net/bug.php?id=62468
-     * @since 2.0.0
      */
     public function __destruct()
     {
@@ -315,7 +285,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Retrieve the layout update instance
      *
      * @return \Magento\Framework\View\Layout\ProcessorInterface
-     * @since 2.0.0
      */
     public function getUpdate()
     {
@@ -330,7 +299,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Layout xml generation
      *
      * @return $this
-     * @since 2.0.0
      */
     public function generateXml()
     {
@@ -344,7 +312,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Create structure of elements from the loaded XML configuration
      *
      * @return void
-     * @since 2.0.0
      */
     public function generateElements()
     {
@@ -386,7 +353,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Add parent containers to output
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function addToOutputRootContainers()
     {
@@ -404,7 +370,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $parentName
      * @param string $alias
      * @return bool|\Magento\Framework\View\Element\AbstractBlock
-     * @since 2.0.0
      */
     public function getChildBlock($parentName, $alias)
     {
@@ -423,7 +388,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $elementName
      * @param string $alias
      * @return $this
-     * @since 2.0.0
      */
     public function setChild($parentName, $elementName, $alias)
     {
@@ -444,7 +408,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string|int|null $offsetOrSibling
      * @param bool $after
      * @return void
-     * @since 2.0.0
      */
     public function reorderChild($parentName, $childName, $offsetOrSibling, $after = true)
     {
@@ -458,7 +421,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $parentName
      * @param string $alias
      * @return $this
-     * @since 2.0.0
      */
     public function unsetChild($parentName, $alias)
     {
@@ -472,7 +434,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $parentName
      * @return array
-     * @since 2.0.0
      */
     public function getChildNames($parentName)
     {
@@ -487,7 +448,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $parentName
      * @return array
-     * @since 2.0.0
      */
     public function getChildBlocks($parentName)
     {
@@ -508,7 +468,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $parentName
      * @param string $alias
      * @return bool|string
-     * @since 2.0.0
      */
     public function getChildName($parentName, $alias)
     {
@@ -522,7 +481,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $name
      * @param bool $useCache
      * @return string
-     * @since 2.0.0
      */
     public function renderElement($name, $useCache = true)
     {
@@ -549,7 +507,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $name
      * @return bool
-     * @since 2.0.0
      */
     protected function displayElement($name)
     {
@@ -567,7 +524,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $name
      * @return string
      * @throws \Exception
-     * @since 2.0.0
      */
     public function renderNonCachedElement($name)
     {
@@ -596,7 +552,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $name
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _renderBlock($name)
     {
@@ -610,7 +565,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $name
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _renderUiComponent($name)
     {
@@ -623,7 +577,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $name
      * @return string
-     * @since 2.0.0
      */
     protected function _renderContainer($name)
     {
@@ -659,7 +612,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $blockName
      * @param string $parentGroupName
      * @return bool
-     * @since 2.0.0
      */
     public function addToParentGroup($blockName, $parentGroupName)
     {
@@ -673,7 +625,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $blockName
      * @param string $groupName
      * @return array
-     * @since 2.0.0
      */
     public function getGroupChildNames($blockName, $groupName)
     {
@@ -686,7 +637,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $name
      * @return bool
-     * @since 2.0.0
      */
     public function hasElement($name)
     {
@@ -700,7 +650,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $name
      * @param string $attribute
      * @return mixed
-     * @since 2.0.0
      */
     public function getElementProperty($name, $attribute)
     {
@@ -713,7 +662,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $name
      * @return bool
-     * @since 2.0.0
      */
     public function isBlock($name)
     {
@@ -729,7 +677,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $name
      * @return bool
-     * @since 2.0.0
      */
     public function isUiComponent($name)
     {
@@ -745,7 +692,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $name
      * @return bool
-     * @since 2.0.0
      */
     public function isContainer($name)
     {
@@ -761,7 +707,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $name
      * @return bool
-     * @since 2.0.0
      */
     public function isManipulationAllowed($name)
     {
@@ -776,7 +721,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $name
      * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @return $this
-     * @since 2.0.0
      */
     public function setBlock($name, $block)
     {
@@ -789,7 +733,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function unsetElement($name)
     {
@@ -809,7 +752,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $name
      * @param array $arguments
      * @return \Magento\Framework\View\Element\AbstractBlock
-     * @since 2.0.0
      */
     public function createBlock($type, $name = '', array $arguments = [])
     {
@@ -827,7 +769,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $name
      * @param array $arguments
      * @return \Magento\Framework\View\Element\AbstractBlock
-     * @since 2.0.0
      */
     protected function _createBlock($type, $name, array $arguments = [])
     {
@@ -846,7 +787,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $parent
      * @param string $alias
      * @return \Magento\Framework\View\Element\AbstractBlock
-     * @since 2.0.0
      */
     public function addBlock($block, $name = '', $parent = '', $alias = '')
     {
@@ -879,7 +819,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $parent
      * @param string $alias
      * @return void
-     * @since 2.0.0
      */
     public function addContainer($name, $label, array $options = [], $parent = '', $alias = '')
     {
@@ -900,7 +839,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $oldName
      * @param string $newName
      * @return bool
-     * @since 2.0.0
      */
     public function renameElement($oldName, $newName)
     {
@@ -920,7 +858,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Retrieve all blocks from registry as array
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllBlocks()
     {
@@ -933,7 +870,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $name
      * @return \Magento\Framework\View\Element\AbstractBlock|bool
-     * @since 2.0.0
      */
     public function getBlock($name)
     {
@@ -950,7 +886,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $name
      * @return \Magento\Framework\View\Element\AbstractBlock|bool
-     * @since 2.0.0
      */
     public function getUiComponent($name)
     {
@@ -962,7 +897,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $childName
      * @return bool|string
-     * @since 2.0.0
      */
     public function getParentName($childName)
     {
@@ -975,7 +909,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $name
      * @return bool|string
-     * @since 2.0.0
      */
     public function getElementAlias($name)
     {
@@ -988,7 +921,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function addOutputElement($name)
     {
@@ -1001,7 +933,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function removeOutputElement($name)
     {
@@ -1015,7 +946,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Get all blocks marked for output
      *
      * @return string
-     * @since 2.0.0
      */
     public function getOutput()
     {
@@ -1031,7 +961,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Retrieve messages block
      *
      * @return \Magento\Framework\View\Element\Messages
-     * @since 2.0.0
      */
     public function getMessagesBlock()
     {
@@ -1049,7 +978,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $type
      * @return \Magento\Framework\App\Helper\AbstractHelper
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getBlockSingleton($type)
     {
@@ -1072,7 +1000,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $template
      * @param array $data
      * @return $this
-     * @since 2.0.0
      */
     public function addAdjustableRenderer($namespace, $staticType, $dynamicType, $type, $template, $data = [])
     {
@@ -1089,7 +1016,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $staticType
      * @param string $dynamicType
      * @return array|null
-     * @since 2.0.0
      */
     public function getRendererOptions($namespace, $staticType, $dynamicType)
     {
@@ -1111,7 +1037,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $dynamicType
      * @param array $data
      * @return void
-     * @since 2.0.0
      */
     public function executeRenderer($namespace, $staticType, $dynamicType, $data = [])
     {
@@ -1135,7 +1060,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string|array $messageGroups
      * @return void
      * @throws \UnexpectedValueException
-     * @since 2.0.0
      */
     public function initMessages($messageGroups = [])
     {
@@ -1152,7 +1076,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param array $messageGroups
      * @return array
-     * @since 2.0.0
      */
     protected function _prepareMessageGroup($messageGroups)
     {
@@ -1168,7 +1091,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Check is exists non-cacheable layout elements
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isCacheable()
     {
@@ -1181,7 +1103,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Check is exists non-cacheable layout elements
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isPrivate()
     {
@@ -1193,7 +1114,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param bool $isPrivate
      * @return Layout
-     * @since 2.0.0
      */
     public function setIsPrivate($isPrivate = true)
     {
@@ -1205,7 +1125,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Getter and lazy loader for xml element
      *
      * @return \Magento\Framework\Simplexml\Element
-     * @since 2.0.0
      */
     protected function getXml()
     {
@@ -1219,7 +1138,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Getter and lazy loader for reader context
      *
      * @return Layout\Reader\Context
-     * @since 2.0.0
      */
     public function getReaderContext()
     {

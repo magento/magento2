@@ -14,7 +14,6 @@ namespace Magento\Multishipping\Helper;
 /**
  * Class \Magento\Multishipping\Helper\Url
  *
- * @since 2.0.0
  */
 class Url extends \Magento\Framework\Url\Helper\Data
 {
@@ -22,7 +21,6 @@ class Url extends \Magento\Framework\Url\Helper\Data
      * Retrieve shopping cart url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCartUrl()
     {
@@ -33,7 +31,6 @@ class Url extends \Magento\Framework\Url\Helper\Data
      * Retrieve checkout url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMSCheckoutUrl()
     {
@@ -44,7 +41,6 @@ class Url extends \Magento\Framework\Url\Helper\Data
      * Retrieve login url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMSLoginUrl()
     {
@@ -55,7 +51,6 @@ class Url extends \Magento\Framework\Url\Helper\Data
      * Retrieve address url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMSAddressesUrl()
     {
@@ -66,7 +61,6 @@ class Url extends \Magento\Framework\Url\Helper\Data
      * Retrieve shipping address save url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMSShippingAddressSavedUrl()
     {
@@ -77,7 +71,6 @@ class Url extends \Magento\Framework\Url\Helper\Data
      * Retrieve register url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMSRegisterUrl()
     {

@@ -16,13 +16,11 @@ use Magento\Sales\Model\Order\Address\Renderer as AddressRenderer;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Info extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'order/info.phtml';
 
@@ -30,19 +28,16 @@ class Info extends \Magento\Framework\View\Element\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $coreRegistry = null;
 
     /**
      * @var \Magento\Payment\Helper\Data
-     * @since 2.0.0
      */
     protected $paymentHelper;
 
     /**
      * @var AddressRenderer
-     * @since 2.0.0
      */
     protected $addressRenderer;
 
@@ -52,7 +47,6 @@ class Info extends \Magento\Framework\View\Element\Template
      * @param PaymentHelper $paymentHelper
      * @param AddressRenderer $addressRenderer
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         TemplateContext $context,
@@ -70,7 +64,6 @@ class Info extends \Magento\Framework\View\Element\Template
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -81,7 +74,6 @@ class Info extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getPaymentInfoHtml()
     {
@@ -92,7 +84,6 @@ class Info extends \Magento\Framework\View\Element\Template
      * Retrieve current order model instance
      *
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -104,7 +95,6 @@ class Info extends \Magento\Framework\View\Element\Template
      *
      * @param Address $address
      * @return null|string
-     * @since 2.0.0
      */
     public function getFormattedAddress(Address $address)
     {

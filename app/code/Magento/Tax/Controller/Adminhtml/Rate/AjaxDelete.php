@@ -11,7 +11,6 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Tax\Controller\Adminhtml\Rate\AjaxDelete
  *
- * @since 2.0.0
  */
 class AjaxDelete extends \Magento\Tax\Controller\Adminhtml\Rate
 {
@@ -19,7 +18,6 @@ class AjaxDelete extends \Magento\Tax\Controller\Adminhtml\Rate
      * Delete Tax Rate via AJAX
      *
      * @return \Magento\Framework\Controller\Result\Json
-     * @since 2.0.0
      */
     public function execute()
     {

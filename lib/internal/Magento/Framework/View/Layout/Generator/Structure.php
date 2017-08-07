@@ -11,13 +11,11 @@ use Magento\Framework\View\Element\UiComponent\LayoutInterface;
 
 /**
  * Class Structure
- * @since 2.0.0
  */
 class Structure
 {
     /**
      * @var LayoutPool
-     * @since 2.0.0
      */
     protected $layoutPool;
 
@@ -25,7 +23,6 @@ class Structure
      * Constructor
      *
      * @param LayoutPool $layoutPool
-     * @since 2.0.0
      */
     public function __construct(LayoutPool $layoutPool)
     {
@@ -37,7 +34,6 @@ class Structure
      *
      * @param UiComponentInterface $component
      * @return array
-     * @since 2.0.0
      */
     public function generate(UiComponentInterface $component)
     {

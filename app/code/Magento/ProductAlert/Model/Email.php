@@ -12,7 +12,6 @@ namespace Magento\ProductAlert\Model;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
- * @since 2.0.0
  */
 class Email extends \Magento\Framework\Model\AbstractModel
 {
@@ -26,7 +25,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * Type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_type = 'price';
 
@@ -34,7 +32,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * Website Model
      *
      * @var \Magento\Store\Model\Website
-     * @since 2.0.0
      */
     protected $_website;
 
@@ -42,7 +39,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * Customer model
      *
      * @var \Magento\Customer\Api\Data\CustomerInterface
-     * @since 2.0.0
      */
     protected $_customer;
 
@@ -50,7 +46,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * Products collection where changed price
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_priceProducts = [];
 
@@ -58,7 +53,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * Product collection which of back in stock
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_stockProducts = [];
 
@@ -66,7 +60,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * Price block
      *
      * @var \Magento\ProductAlert\Block\Email\Price
-     * @since 2.0.0
      */
     protected $_priceBlock;
 
@@ -74,7 +67,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * Stock block
      *
      * @var \Magento\ProductAlert\Block\Email\Stock
-     * @since 2.0.0
      */
     protected $_stockBlock;
 
@@ -82,7 +74,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * Product alert data
      *
      * @var \Magento\ProductAlert\Helper\Data
-     * @since 2.0.0
      */
     protected $_productAlertData = null;
 
@@ -90,37 +81,31 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Store\Model\App\Emulation
-     * @since 2.0.0
      */
     protected $_appEmulation;
 
     /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder
-     * @since 2.0.0
      */
     protected $_transportBuilder;
 
     /**
      * @var \Magento\Customer\Helper\View
-     * @since 2.0.0
      */
     protected $_customerHelper;
 
@@ -138,7 +123,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -169,7 +153,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $type
      * @return void
-     * @since 2.0.0
      */
     public function setType($type)
     {
@@ -180,7 +163,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * Retrieve model type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -192,7 +174,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Magento\Store\Model\Website $website
      * @return $this
-     * @since 2.0.0
      */
     public function setWebsite(\Magento\Store\Model\Website $website)
     {
@@ -205,7 +186,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $websiteId
      * @return $this
-     * @since 2.0.0
      */
     public function setWebsiteId($websiteId)
     {
@@ -218,7 +198,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $customerId
      * @return $this
-     * @since 2.0.0
      */
     public function setCustomerId($customerId)
     {
@@ -231,7 +210,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return $this
-     * @since 2.0.0
      */
     public function setCustomerData($customer)
     {
@@ -243,7 +221,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * Clean data
      *
      * @return $this
-     * @since 2.0.0
      */
     public function clean()
     {
@@ -259,7 +236,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
-     * @since 2.0.0
      */
     public function addPriceProduct(\Magento\Catalog\Model\Product $product)
     {
@@ -272,7 +248,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
-     * @since 2.0.0
      */
     public function addStockProduct(\Magento\Catalog\Model\Product $product)
     {
@@ -284,7 +259,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * Retrieve price block
      *
      * @return \Magento\ProductAlert\Block\Email\Price
-     * @since 2.0.0
      */
     protected function _getPriceBlock()
     {
@@ -298,7 +272,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * Retrieve stock block
      *
      * @return \Magento\ProductAlert\Block\Email\Stock
-     * @since 2.0.0
      */
     protected function _getStockBlock()
     {
@@ -315,7 +288,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function send()
     {

@@ -7,7 +7,6 @@ namespace Magento\Framework\Search\Request\Config;
 
 /**
  * Search Request xml converter
- * @since 2.0.0
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
@@ -16,7 +15,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMDocument $source
      * @return array
-     * @since 2.0.0
      */
     public function convert($source)
     {
@@ -42,7 +40,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param array $data
      * @return array
-     * @since 2.0.0
      */
     protected function mergeAttributes($data)
     {
@@ -59,7 +56,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param \SimpleXMLElement $nodes
      * @param string $name
      * @return array
-     * @since 2.0.0
      */
     protected function convertNodes(\SimpleXMLElement $nodes, $name)
     {
@@ -87,7 +83,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \SimpleXMLElement $node
      * @return array
-     * @since 2.0.0
      */
     protected function convertToArray(\SimpleXMLElement $node)
     {
@@ -100,7 +95,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param array $element
      * @param \SimpleXMLElement $node
      * @return array
-     * @since 2.0.0
      */
     protected function convertChildNodes(array $element, \SimpleXMLElement $node)
     {

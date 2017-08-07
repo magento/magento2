@@ -11,7 +11,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 abstract class AbstractCacheSetCommand extends AbstractCacheManageCommand
 {
@@ -19,13 +18,11 @@ abstract class AbstractCacheSetCommand extends AbstractCacheManageCommand
      * Is enable cache or not
      *
      * @return bool
-     * @since 2.0.0
      */
     abstract protected function isEnable();
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

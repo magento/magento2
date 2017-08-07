@@ -9,7 +9,6 @@ namespace Magento\Eav\Api\Data;
 /**
  * Interface AttributeSetSearchResultsInterface
  * @api
- * @since 2.0.0
  */
 interface AttributeSetSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
@@ -17,7 +16,6 @@ interface AttributeSetSearchResultsInterface extends \Magento\Framework\Api\Sear
      * Get attribute sets list.
      *
      * @return \Magento\Eav\Api\Data\AttributeSetInterface[]
-     * @since 2.0.0
      */
     public function getItems();
 
@@ -26,7 +24,6 @@ interface AttributeSetSearchResultsInterface extends \Magento\Framework\Api\Sear
      *
      * @param \Magento\Eav\Api\Data\AttributeSetInterface[] $items
      * @return $this
-     * @since 2.0.0
      */
     public function setItems(array $items);
 }

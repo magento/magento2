@@ -9,7 +9,6 @@ namespace Magento\Payment\Model\Method;
  * Interface SpecificationInterface
  *
  * @api
- * @since 2.0.0
  */
 interface SpecificationInterface
 {
@@ -18,7 +17,6 @@ interface SpecificationInterface
      *
      * @param string $paymentMethod
      * @return bool
-     * @since 2.0.0
      */
     public function isSatisfiedBy($paymentMethod);
 }

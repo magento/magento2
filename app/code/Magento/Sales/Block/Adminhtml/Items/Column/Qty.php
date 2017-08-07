@@ -10,7 +10,6 @@ namespace Magento\Sales\Block\Adminhtml\Items\Column;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Qty extends \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn
 {

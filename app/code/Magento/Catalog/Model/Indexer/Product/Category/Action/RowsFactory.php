@@ -7,7 +7,6 @@ namespace Magento\Catalog\Model\Indexer\Product\Category\Action;
 
 /**
  * Factory class for \Magento\Catalog\Model\Indexer\Product\Category\Action\Rows
- * @since 2.0.0
  */
 class RowsFactory extends \Magento\Catalog\Model\Indexer\Category\Product\Action\RowsFactory
 {
@@ -16,7 +15,6 @@ class RowsFactory extends \Magento\Catalog\Model\Indexer\Category\Product\Action
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,

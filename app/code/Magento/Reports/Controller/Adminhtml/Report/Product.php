@@ -13,7 +13,6 @@ namespace Magento\Reports\Controller\Adminhtml\Report;
 
 /**
  * @api
- * @since 2.0.0
  */
 abstract class Product extends AbstractReport
 {
@@ -21,7 +20,6 @@ abstract class Product extends AbstractReport
      * Add report/products breadcrumbs
      *
      * @return $this
-     * @since 2.0.0
      */
     public function _initAction()
     {

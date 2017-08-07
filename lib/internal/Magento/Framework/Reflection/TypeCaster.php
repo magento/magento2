@@ -9,7 +9,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Casts values to the type given.
- * @since 2.0.0
  */
 class TypeCaster
 {
@@ -36,7 +35,6 @@ class TypeCaster
      * @return mixed
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function castValueToType($value, $type)
     {

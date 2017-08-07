@@ -14,7 +14,6 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
- * @since 2.0.0
  */
 class Item
 {
@@ -22,7 +21,6 @@ class Item
      * Menu item id
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_id;
 
@@ -30,7 +28,6 @@ class Item
      * Menu item title
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_title;
 
@@ -38,7 +35,6 @@ class Item
      * Module of menu item
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_moduleName;
 
@@ -46,7 +42,6 @@ class Item
      * Menu item sort index in list
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_sortIndex = null;
 
@@ -54,7 +49,6 @@ class Item
      * Menu item action
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_action = null;
 
@@ -62,7 +56,6 @@ class Item
      * Parent menu item id
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_parentId = null;
 
@@ -70,7 +63,6 @@ class Item
      * Acl resource of menu item
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_resource;
 
@@ -78,7 +70,6 @@ class Item
      * Item tooltip text
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_tooltip;
 
@@ -86,7 +77,6 @@ class Item
      * Path from root element in tree
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_path = '';
 
@@ -94,7 +84,6 @@ class Item
      * Acl
      *
      * @var \Magento\Framework\AuthorizationInterface
-     * @since 2.0.0
      */
     protected $_acl;
 
@@ -102,7 +91,6 @@ class Item
      * Module that item is dependent on
      *
      * @var string|null
-     * @since 2.0.0
      */
     protected $_dependsOnModule;
 
@@ -110,7 +98,6 @@ class Item
      * Global config option that item is dependent on
      *
      * @var string|null
-     * @since 2.0.0
      */
     protected $_dependsOnConfig;
 
@@ -118,31 +105,26 @@ class Item
      * Submenu item list
      *
      * @var Menu
-     * @since 2.0.0
      */
     protected $_submenu;
 
     /**
      * @var \Magento\Backend\Model\MenuFactory
-     * @since 2.0.0
      */
     protected $_menuFactory;
 
     /**
      * @var \Magento\Backend\Model\UrlInterface
-     * @since 2.0.0
      */
     protected $_urlModel;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Backend\Model\Menu\Item\Validator
-     * @since 2.0.0
      */
     protected $_validator;
 
@@ -151,7 +133,6 @@ class Item
      *
      * @var string
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     protected $_serializedSubmenu;
 
@@ -159,13 +140,11 @@ class Item
      * Module list
      *
      * @var \Magento\Framework\Module\ModuleListInterface
-     * @since 2.0.0
      */
     protected $_moduleList;
 
     /**
      * @var \Magento\Framework\Module\Manager
-     * @since 2.0.0
      */
     private $_moduleManager;
 
@@ -186,7 +165,6 @@ class Item
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Model\Menu\Item\Validator $validator,
@@ -216,7 +194,6 @@ class Item
      * @param string $key
      * @param mixed $defaultValue
      * @return mixed
-     * @since 2.0.0
      */
     protected function _getArgument(array $array, $key, $defaultValue = null)
     {
@@ -227,7 +204,6 @@ class Item
      * Retrieve item id
      *
      * @return string
-     * @since 2.0.0
      */
     public function getId()
     {
@@ -249,7 +225,6 @@ class Item
      * Check whether item has subnodes
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasChildren()
     {
@@ -260,7 +235,6 @@ class Item
      * Retrieve submenu
      *
      * @return Menu
-     * @since 2.0.0
      */
     public function getChildren()
     {
@@ -274,7 +248,6 @@ class Item
      * Retrieve menu item url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUrl()
     {
@@ -288,7 +261,6 @@ class Item
      * Retrieve menu item action
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAction()
     {
@@ -301,7 +273,6 @@ class Item
      * @param string $action
      * @return $this
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function setAction($action)
     {
@@ -314,7 +285,6 @@ class Item
      * Check whether item has javascript callback on click
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasClickCallback()
     {
@@ -325,7 +295,6 @@ class Item
      * Retrieve item click callback
      *
      * @return string
-     * @since 2.0.0
      */
     public function getClickCallback()
     {
@@ -339,7 +308,6 @@ class Item
      * Retrieve tooltip text title
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -352,7 +320,6 @@ class Item
      * @param string $title
      * @return $this
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function setTitle($title)
     {
@@ -365,7 +332,6 @@ class Item
      * Check whether item has tooltip text
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasTooltip()
     {
@@ -376,7 +342,6 @@ class Item
      * Retrieve item tooltip text
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTooltip()
     {
@@ -389,7 +354,6 @@ class Item
      * @param string $tooltip
      * @return $this
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function setTooltip($tooltip)
     {
@@ -404,7 +368,6 @@ class Item
      * @param string $module
      * @return $this
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function setModule($module)
     {
@@ -419,7 +382,6 @@ class Item
      * @param string $moduleName
      * @return $this
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function setModuleDependency($moduleName)
     {
@@ -434,7 +396,6 @@ class Item
      * @param string $configPath
      * @return $this
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function setConfigDependency($configPath)
     {
@@ -447,7 +408,6 @@ class Item
      * Check whether item is disabled. Disabled items are not shown to user
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isDisabled()
     {
@@ -460,7 +420,6 @@ class Item
      * Check whether module that item depends on is active
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _isModuleDependenciesAvailable()
     {
@@ -475,7 +434,6 @@ class Item
      * Check whether config dependency is available
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _isConfigDependenciesAvailable()
     {
@@ -489,7 +447,6 @@ class Item
      * Check whether item is allowed to the user
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isAllowed()
     {

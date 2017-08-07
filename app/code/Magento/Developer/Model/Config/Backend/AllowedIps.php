@@ -7,13 +7,11 @@ namespace Magento\Developer\Model\Config\Backend;
 
 /**
  * Backend model for validating ip addresses entered in Developer Client Restrictions
- * @since 2.0.0
  */
 class AllowedIps extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Framework\Message\ManagerInterface
-     * @since 2.0.0
      */
     private $messageManager;
 
@@ -21,7 +19,6 @@ class AllowedIps extends \Magento\Framework\App\Config\Value
      * Escaper
      *
      * @var \Magento\Framework\Escaper
-     * @since 2.0.0
      */
     protected $escaper;
 
@@ -37,7 +34,6 @@ class AllowedIps extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -59,7 +55,6 @@ class AllowedIps extends \Magento\Framework\App\Config\Value
      * Validate ip addresses before save
      *
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {

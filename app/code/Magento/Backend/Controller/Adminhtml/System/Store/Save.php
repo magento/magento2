@@ -10,7 +10,6 @@ namespace Magento\Backend\Controller\Adminhtml\System\Store;
  * Class Save
  *
  * Save controller for system entities such as: Store, StoreGroup, Website
- * @since 2.0.0
  */
 class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
@@ -115,7 +114,6 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -24,7 +24,6 @@ use Magento\Customer\Api\GroupManagementInterface;
  * @method Quote setOrderId($orderId)
  * @method int getOrderId()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Quote extends \Magento\Framework\Session\SessionManager
 {
@@ -32,7 +31,6 @@ class Quote extends \Magento\Framework\Session\SessionManager
      * Quote model object
      *
      * @var \Magento\Quote\Model\Quote
-     * @since 2.0.0
      */
     protected $_quote;
 
@@ -40,7 +38,6 @@ class Quote extends \Magento\Framework\Session\SessionManager
      * Store model object
      *
      * @var \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     protected $_store;
 
@@ -48,19 +45,16 @@ class Quote extends \Magento\Framework\Session\SessionManager
      * Order model object
      *
      * @var \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     protected $_order;
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
-     * @since 2.0.0
      */
     protected $_orderFactory;
 
     /**
      * @var CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerRepository;
 
@@ -68,25 +62,21 @@ class Quote extends \Magento\Framework\Session\SessionManager
      * Sales quote repository
      *
      * @var \Magento\Quote\Api\CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var GroupManagementInterface
-     * @since 2.0.0
      */
     protected $groupManagement;
 
     /**
      * @var \Magento\Quote\Model\QuoteFactory
-     * @since 2.0.0
      */
     protected $quoteFactory;
 
@@ -107,7 +97,6 @@ class Quote extends \Magento\Framework\Session\SessionManager
      * @param GroupManagementInterface $groupManagement
      * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
@@ -152,7 +141,6 @@ class Quote extends \Magento\Framework\Session\SessionManager
      * Retrieve quote model object
      *
      * @return \Magento\Quote\Model\Quote
-     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -189,7 +177,6 @@ class Quote extends \Magento\Framework\Session\SessionManager
      * Retrieve store model object
      *
      * @return \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     public function getStore()
     {
@@ -207,7 +194,6 @@ class Quote extends \Magento\Framework\Session\SessionManager
      * Retrieve order model object
      *
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     public function getOrder()
     {

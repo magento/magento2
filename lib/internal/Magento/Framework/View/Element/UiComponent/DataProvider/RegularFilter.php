@@ -11,7 +11,6 @@ use Magento\Framework\Api\Filter;
 
 /**
  * Class RegularFilter
- * @since 2.0.0
  */
 class RegularFilter implements FilterApplierInterface
 {
@@ -21,7 +20,6 @@ class RegularFilter implements FilterApplierInterface
      * @param Collection $collection
      * @param Filter $filter
      * @return void
-     * @since 2.0.0
      */
     public function apply(Collection $collection, Filter $filter)
     {

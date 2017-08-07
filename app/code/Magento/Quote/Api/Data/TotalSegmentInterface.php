@@ -8,7 +8,6 @@ namespace Magento\Quote\Api\Data;
 /**
  * Interface TotalsInterface
  * @api
- * @since 2.0.0
  */
 interface TotalSegmentInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -25,7 +24,6 @@ interface TotalSegmentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Total code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCode();
 
@@ -34,7 +32,6 @@ interface TotalSegmentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function setCode($code);
 
@@ -42,7 +39,6 @@ interface TotalSegmentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Get total title
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getTitle();
 
@@ -51,7 +47,6 @@ interface TotalSegmentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string|null $title
      * @return $this
-     * @since 2.0.0
      */
     public function setTitle($title = null);
 
@@ -59,7 +54,6 @@ interface TotalSegmentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Get total value
      *
      * @return float
-     * @since 2.0.0
      */
     public function getValue();
 
@@ -68,7 +62,6 @@ interface TotalSegmentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param float $value
      * @return $this
-     * @since 2.0.0
      */
     public function setValue($value);
 
@@ -76,7 +69,6 @@ interface TotalSegmentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Get display area code.
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getArea();
 
@@ -85,7 +77,6 @@ interface TotalSegmentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string|null $area
      * @return $this
-     * @since 2.0.0
      */
     public function setArea($area = null);
 
@@ -93,7 +84,6 @@ interface TotalSegmentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Quote\Api\Data\TotalSegmentExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -102,7 +92,6 @@ interface TotalSegmentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param \Magento\Quote\Api\Data\TotalSegmentExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Quote\Api\Data\TotalSegmentExtensionInterface $extensionAttributes

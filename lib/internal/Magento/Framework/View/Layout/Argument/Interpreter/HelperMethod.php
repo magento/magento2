@@ -10,26 +10,22 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Interpreter that returns invocation result of a helper method
- * @since 2.0.0
  */
 class HelperMethod implements InterpreterInterface
 {
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var NamedParams
-     * @since 2.0.0
      */
     private $paramsInterpreter;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param NamedParams $paramsInterpreter
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager, NamedParams $paramsInterpreter)
     {
@@ -40,7 +36,6 @@ class HelperMethod implements InterpreterInterface
     /**
      * {@inheritdoc}
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function evaluate(array $data)
     {

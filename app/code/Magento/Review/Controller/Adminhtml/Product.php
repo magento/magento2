@@ -13,7 +13,6 @@ use Magento\Review\Model\RatingFactory;
 
 /**
  * Reviews admin controller
- * @since 2.0.0
  */
 abstract class Product extends Action
 {
@@ -21,7 +20,6 @@ abstract class Product extends Action
      * Array of actions which can be processed without secret key validation
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_publicActions = ['edit'];
 
@@ -29,7 +27,6 @@ abstract class Product extends Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $coreRegistry = null;
 
@@ -37,7 +34,6 @@ abstract class Product extends Action
      * Review model factory
      *
      * @var \Magento\Review\Model\ReviewFactory
-     * @since 2.0.0
      */
     protected $reviewFactory;
 
@@ -45,7 +41,6 @@ abstract class Product extends Action
      * Rating model factory
      *
      * @var \Magento\Review\Model\RatingFactory
-     * @since 2.0.0
      */
     protected $ratingFactory;
 
@@ -54,7 +49,6 @@ abstract class Product extends Action
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -70,7 +64,6 @@ abstract class Product extends Action
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     protected function _isAllowed()
     {

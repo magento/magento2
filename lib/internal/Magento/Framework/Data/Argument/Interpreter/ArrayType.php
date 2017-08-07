@@ -9,7 +9,6 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 
 /**
  * Interpreter of array data type that supports arrays of unlimited depth
- * @since 2.0.0
  */
 class ArrayType implements InterpreterInterface
 {
@@ -17,13 +16,11 @@ class ArrayType implements InterpreterInterface
      * Interpreter of individual array item
      *
      * @var InterpreterInterface
-     * @since 2.0.0
      */
     private $itemInterpreter;
 
     /**
      * @param InterpreterInterface $itemInterpreter
-     * @since 2.0.0
      */
     public function __construct(InterpreterInterface $itemInterpreter)
     {
@@ -34,7 +31,6 @@ class ArrayType implements InterpreterInterface
      * {@inheritdoc}
      * @return array
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function evaluate(array $data)
     {

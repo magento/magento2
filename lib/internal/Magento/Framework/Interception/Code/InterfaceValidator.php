@@ -11,7 +11,6 @@ use Magento\Framework\Phrase;
 /**
  * Class \Magento\Framework\Interception\Code\InterfaceValidator
  *
- * @since 2.0.0
  */
 class InterfaceValidator
 {
@@ -25,13 +24,11 @@ class InterfaceValidator
      * Arguments reader model
      *
      * @var \Magento\Framework\Code\Reader\ArgumentsReader
-     * @since 2.0.0
      */
     protected $_argumentsReader;
 
     /**
      * @param \Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader = null)
     {
@@ -48,7 +45,6 @@ class InterfaceValidator
      * @throws ValidatorException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function validate($pluginClass, $interceptedType)
     {
@@ -145,7 +141,6 @@ class InterfaceValidator
      *
      * @return void
      * @throws ValidatorException
-     * @since 2.0.0
      */
     protected function validateMethodsParameters(array $pluginParameters, array $originParameters, $class, $method)
     {
@@ -175,7 +170,6 @@ class InterfaceValidator
      * @param \ReflectionParameter $parameter
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getParametersType(\ReflectionParameter $parameter)
     {
@@ -190,7 +184,6 @@ class InterfaceValidator
      * @param string $pluginMethodName
      *
      * @return string|null
-     * @since 2.0.0
      */
     protected function getOriginMethodName($pluginMethodName)
     {
@@ -213,7 +206,6 @@ class InterfaceValidator
      * @param string $pluginMethodName
      *
      * @return null|string
-     * @since 2.0.0
      */
     protected function getMethodType($pluginMethodName)
     {
@@ -234,7 +226,6 @@ class InterfaceValidator
      * @param \ReflectionMethod $method
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getMethodParameters(\ReflectionMethod $method)
     {

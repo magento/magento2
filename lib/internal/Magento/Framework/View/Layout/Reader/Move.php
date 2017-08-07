@@ -10,7 +10,6 @@ use Magento\Framework\View\Layout;
 /**
  * Class \Magento\Framework\View\Layout\Reader\Move
  *
- * @since 2.0.0
  */
 class Move implements Layout\ReaderInterface
 {
@@ -24,7 +23,6 @@ class Move implements Layout\ReaderInterface
      * {@inheritdoc}
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getSupportedNodes()
     {
@@ -37,7 +35,6 @@ class Move implements Layout\ReaderInterface
      * @param Context $readerContext
      * @param Layout\Element $currentElement
      * @return $this
-     * @since 2.0.0
      */
     public function interpret(Context $readerContext, Layout\Element $currentElement)
     {
@@ -52,7 +49,6 @@ class Move implements Layout\ReaderInterface
      * @param \Magento\Framework\View\Layout\Element $currentElement
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
-     * @since 2.0.0
      */
     protected function scheduleMove(Layout\ScheduledStructure $scheduledStructure, Layout\Element $currentElement)
     {
@@ -78,7 +74,6 @@ class Move implements Layout\ReaderInterface
      *
      * @param \Magento\Framework\View\Layout\Element $node
      * @return array
-     * @since 2.0.0
      */
     protected function beforeAfterToSibling($node)
     {

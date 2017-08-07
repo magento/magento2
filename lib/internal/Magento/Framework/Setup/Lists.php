@@ -15,7 +15,6 @@ use Magento\Framework\Locale\Resolver;
 /**
  * Class \Magento\Framework\Setup\Lists
  *
- * @since 2.0.0
  */
 class Lists
 {
@@ -23,13 +22,11 @@ class Lists
      * List of allowed locales
      *
      * @var array
-     * @since 2.0.0
      */
     protected $allowedLocales;
 
     /**
      * @param ConfigInterface $localeConfig
-     * @since 2.0.0
      */
     public function __construct(ConfigInterface $localeConfig)
     {
@@ -41,7 +38,6 @@ class Lists
      *
      * @param bool $doSort
      * @return array
-     * @since 2.0.0
      */
     public function getTimezoneList($doSort = true)
     {
@@ -66,7 +62,6 @@ class Lists
      * Retrieve list of currencies
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCurrencyList()
     {
@@ -83,7 +78,6 @@ class Lists
      * Retrieve list of locales
      *
      * @return  array
-     * @since 2.0.0
      */
     public function getLocaleList()
     {

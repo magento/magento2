@@ -10,26 +10,22 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Interpreter decorator that passes value, computed by subject of decoration, through the sequence of "updaters"
- * @since 2.0.0
  */
 class Updater implements InterpreterInterface
 {
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var InterpreterInterface
-     * @since 2.0.0
      */
     private $subject;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param InterpreterInterface $subject
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager, InterpreterInterface $subject)
     {
@@ -40,7 +36,6 @@ class Updater implements InterpreterInterface
     /**
      * {@inheritdoc}
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function evaluate(array $data)
     {
@@ -63,7 +58,6 @@ class Updater implements InterpreterInterface
      * @param string $updaterClass
      * @return mixed
      * @throws \UnexpectedValueException
-     * @since 2.0.0
      */
     protected function applyUpdater($value, $updaterClass)
     {

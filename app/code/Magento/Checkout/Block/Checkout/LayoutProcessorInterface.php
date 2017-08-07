@@ -13,7 +13,6 @@ namespace Magento\Checkout\Block\Checkout;
  * @see \Magento\Checkout\Block\Onepage
  *
  * @api
- * @since 2.0.0
  */
 interface LayoutProcessorInterface
 {
@@ -22,7 +21,6 @@ interface LayoutProcessorInterface
      *
      * @param array $jsLayout
      * @return array
-     * @since 2.0.0
      */
     public function process($jsLayout);
 }

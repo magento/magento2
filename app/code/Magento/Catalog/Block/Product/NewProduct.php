@@ -11,7 +11,6 @@ use Magento\Customer\Model\Context as CustomerContext;
  * New products block
  *
  * @SuppressWarnings(PHPMD.LongVariable)
- * @since 2.0.0
  */
 class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implements
     \Magento\Framework\DataObject\IdentityInterface
@@ -25,13 +24,11 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
      * Products count
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_productsCount;
 
     /**
      * @var \Magento\Framework\App\Http\Context
-     * @since 2.0.0
      */
     protected $httpContext;
 
@@ -39,7 +36,6 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
      * Catalog product visibility
      *
      * @var \Magento\Catalog\Model\Product\Visibility
-     * @since 2.0.0
      */
     protected $_catalogProductVisibility;
 
@@ -47,7 +43,6 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
      * Product collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     * @since 2.0.0
      */
     protected $_productCollectionFactory;
 
@@ -57,7 +52,6 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -79,7 +73,6 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
      * Initialize block's cache
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -99,7 +92,6 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
      * Get Key pieces for caching block content
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCacheKeyInfo()
     {
@@ -117,7 +109,6 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
      * Prepare and return product collection
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection|Object|\Magento\Framework\Data\Collection
-     * @since 2.0.0
      */
     protected function _getProductCollection()
     {
@@ -169,7 +160,6 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
      * Prepare collection with new products
      *
      * @return \Magento\Framework\View\Element\AbstractBlock
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -182,7 +172,6 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
      *
      * @param int $count
      * @return $this
-     * @since 2.0.0
      */
     public function setProductsCount($count)
     {
@@ -194,7 +183,6 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
      * Get how much products should be displayed at once.
      *
      * @return int
-     * @since 2.0.0
      */
     public function getProductsCount()
     {
@@ -208,7 +196,6 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
      * Return identifiers for produced content
      *
      * @return array
-     * @since 2.0.0
      */
     public function getIdentities()
     {

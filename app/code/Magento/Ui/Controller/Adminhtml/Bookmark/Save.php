@@ -19,7 +19,6 @@ use Magento\Ui\Controller\Adminhtml\AbstractAction;
  * Class Save action
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Save extends AbstractAction
 {
@@ -34,31 +33,26 @@ class Save extends AbstractAction
 
     /**
      * @var BookmarkRepositoryInterface
-     * @since 2.0.0
      */
     protected $bookmarkRepository;
 
     /**
      * @var BookmarkManagementInterface
-     * @since 2.0.0
      */
     protected $bookmarkManagement;
 
     /**
      * @var BookmarkInterfaceFactory
-     * @since 2.0.0
      */
     protected $bookmarkFactory;
 
     /**
      * @var UserContextInterface
-     * @since 2.0.0
      */
     protected $userContext;
 
     /**
      * @var DecoderInterface
-     * @since 2.0.0
      */
     protected $jsonDecoder;
 
@@ -70,7 +64,6 @@ class Save extends AbstractAction
      * @param BookmarkInterfaceFactory $bookmarkFactory
      * @param UserContextInterface $userContext
      * @param DecoderInterface $jsonDecoder
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -93,7 +86,6 @@ class Save extends AbstractAction
      * Action for AJAX request
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -145,7 +137,6 @@ class Save extends AbstractAction
      * @param string $title
      * @param string $config
      * @return void
-     * @since 2.0.0
      */
     protected function updateBookmark(BookmarkInterface $bookmark, $identifier, $title, $config)
     {
@@ -167,7 +158,6 @@ class Save extends AbstractAction
      *
      * @param string $identifier
      * @return void
-     * @since 2.0.0
      */
     protected function updateCurrentBookmark($identifier)
     {
@@ -187,7 +177,6 @@ class Save extends AbstractAction
      *
      * @param string $identifier
      * @return bool|BookmarkInterface
-     * @since 2.0.0
      */
     protected function checkBookmark($identifier)
     {

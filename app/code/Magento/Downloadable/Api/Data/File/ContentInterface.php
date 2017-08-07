@@ -8,7 +8,6 @@ namespace Magento\Downloadable\Api\Data\File;
 /**
  * @codeCoverageIgnore
  * @api
- * @since 2.0.0
  */
 interface ContentInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -16,7 +15,6 @@ interface ContentInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Retrieve data (base64 encoded content)
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFileData();
 
@@ -25,7 +23,6 @@ interface ContentInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param string $fileData
      * @return $this
-     * @since 2.0.0
      */
     public function setFileData($fileData);
 
@@ -33,7 +30,6 @@ interface ContentInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Retrieve file name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName();
 
@@ -42,7 +38,6 @@ interface ContentInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setName($name);
 
@@ -50,7 +45,6 @@ interface ContentInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Downloadable\Api\Data\File\ContentExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -59,7 +53,6 @@ interface ContentInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param \Magento\Downloadable\Api\Data\File\ContentExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Downloadable\Api\Data\File\ContentExtensionInterface $extensionAttributes

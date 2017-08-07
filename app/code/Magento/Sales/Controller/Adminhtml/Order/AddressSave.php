@@ -9,7 +9,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\AddressSave
  *
- * @since 2.0.0
  */
 class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
 {
@@ -24,7 +23,6 @@ class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
      * Save order address
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

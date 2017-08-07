@@ -11,7 +11,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Class \Magento\Authorization\Model\Acl\Loader\Rule
  *
- * @since 2.0.0
  */
 class Rule implements \Magento\Framework\Acl\LoaderInterface
 {
@@ -22,7 +21,6 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.0.0
      */
     protected $_resource;
 
@@ -58,7 +56,6 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
      * @param Json $serializer
      * @param string $cacheKey
      * @SuppressWarnings(PHPMD.UnusedFormalParameter):
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Acl\RootResource $rootResource,
@@ -82,7 +79,6 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
      *
      * @param \Magento\Framework\Acl $acl
      * @return void
-     * @since 2.0.0
      */
     public function populateAcl(\Magento\Framework\Acl $acl)
     {

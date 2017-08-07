@@ -16,7 +16,7 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ClearProductUrlsObserverTest extends \PHPUnit_Framework_TestCase
+class ClearProductUrlsObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ClearProductUrlsObserver

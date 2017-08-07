@@ -8,7 +8,6 @@ namespace Magento\EncryptionKey\Controller\Adminhtml\Crypt;
 
 /**
  * Encryption key changer controller
- * @since 2.0.0
  */
 abstract class Key extends \Magento\Backend\App\Action
 {

@@ -32,7 +32,6 @@ use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
  * @method ThemeInterface setCode(string $code)
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInterface
 {
@@ -40,7 +39,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * {@inheritdoc}
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'theme';
 
@@ -48,43 +46,36 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * {@inheritdoc}
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'theme';
 
     /**
      * @var \Magento\Framework\View\Design\Theme\FlyweightFactory
-     * @since 2.0.0
      */
     protected $_themeFactory;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\Domain\Factory
-     * @since 2.0.0
      */
     protected $_domainFactory;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ImageFactory
-     * @since 2.0.0
      */
     protected $_imageFactory;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\Validator
-     * @since 2.0.0
      */
     protected $_validator;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\Customization
-     * @since 2.0.0
      */
     protected $_customization;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\CustomizationFactory
-     * @since 2.0.0
      */
     protected $_customFactory;
 
@@ -96,7 +87,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
 
     /**
      * @var ThemeInterface[]
-     * @since 2.0.0
      */
     protected $inheritanceSequence;
 
@@ -115,7 +105,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * @param array $data
      * @param ThemeFactory $themeModelFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -144,7 +133,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * Init resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -155,7 +143,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * Get theme image model
      *
      * @return \Magento\Framework\View\Design\Theme\Image
-     * @since 2.0.0
      */
     public function getThemeImage()
     {
@@ -164,7 +151,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
 
     /**
      * @return \Magento\Framework\View\Design\Theme\Customization
-     * @since 2.0.0
      */
     public function getCustomization()
     {
@@ -178,7 +164,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * Check if theme is deletable
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isDeletable()
     {
@@ -189,7 +174,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * Check if theme is editable
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isEditable()
     {
@@ -200,7 +184,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * Check if theme is virtual
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isVirtual()
     {
@@ -211,7 +194,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * Check if theme is physical
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isPhysical()
     {
@@ -222,7 +204,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * Check theme is visible in backend
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isVisible()
     {
@@ -233,7 +214,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * Check is theme has child virtual themes
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasChildThemes()
     {
@@ -249,7 +229,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * Retrieve theme instance representing the latest changes to a theme
      *
      * @return Theme|null
-     * @since 2.0.0
      */
     public function getStagingVersion()
     {
@@ -267,7 +246,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getParentTheme()
     {
@@ -285,7 +263,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getArea()
     {
@@ -298,7 +275,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getThemePath()
     {
@@ -312,7 +288,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * Used as id in file-system theme collection
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getFullPath()
     {
@@ -321,7 +296,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCode()
     {
@@ -334,7 +308,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * @param int|null $type
      * @return \Magento\Theme\Model\Theme\Domain\Virtual|\Magento\Theme\Model\Theme\Domain\Staging
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function getDomainModel($type = null)
     {
@@ -357,7 +330,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _validate()
     {
@@ -372,7 +344,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * Before theme save
      *
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -384,7 +355,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * Update all relations after deleting theme
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterDelete()
     {
@@ -400,7 +370,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * Return the full theme inheritance sequence, from the root theme till a specified one
      *
      * @return ThemeInterface[]
-     * @since 2.0.0
      */
     public function getInheritedThemes()
     {

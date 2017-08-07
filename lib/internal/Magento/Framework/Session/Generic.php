@@ -7,7 +7,6 @@ namespace Magento\Framework\Session;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Generic extends SessionManager
 {

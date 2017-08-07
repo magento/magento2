@@ -14,7 +14,6 @@ use Magento\Framework\App\ObjectManager;
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Product extends AbstractResource
 {
@@ -22,7 +21,6 @@ class Product extends AbstractResource
      * Product to website linkage table
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_productWebsiteTable;
 
@@ -30,7 +28,6 @@ class Product extends AbstractResource
      * Product to category linkage table
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_productCategoryTable;
 
@@ -38,7 +35,6 @@ class Product extends AbstractResource
      * Catalog category
      *
      * @var Category
-     * @since 2.0.0
      */
     protected $_catalogCategory;
 
@@ -46,25 +42,21 @@ class Product extends AbstractResource
      * Category collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
-     * @since 2.0.0
      */
     protected $_categoryCollectionFactory;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\SetFactory
-     * @since 2.0.0
      */
     protected $setFactory;
 
     /**
      * @var \Magento\Eav\Model\Entity\TypeFactory
-     * @since 2.0.0
      */
     protected $typeFactory;
 
@@ -76,7 +68,6 @@ class Product extends AbstractResource
 
     /**
      * @var \Magento\Catalog\Model\Product\Attribute\DefaultAttributes
-     * @since 2.0.0
      */
     protected $defaultAttributes;
 
@@ -105,7 +96,6 @@ class Product extends AbstractResource
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
@@ -139,7 +129,6 @@ class Product extends AbstractResource
      *
      * @return \Magento\Eav\Model\Entity\Type
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getEntityType()
     {
@@ -153,7 +142,6 @@ class Product extends AbstractResource
      * Product Website table name getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getProductWebsiteTable()
     {
@@ -168,7 +156,6 @@ class Product extends AbstractResource
      *
      * @deprecated 2.2.0
      * @return string
-     * @since 2.0.0
      */
     public function getProductCategoryTable()
     {
@@ -182,7 +169,6 @@ class Product extends AbstractResource
      * Default product attributes
      *
      * @return string[]
-     * @since 2.0.0
      */
     protected function _getDefaultAttributes()
     {
@@ -195,7 +181,6 @@ class Product extends AbstractResource
      * @deprecated 2.2.0
      * @param \Magento\Catalog\Model\Product|int $product
      * @return array
-     * @since 2.0.0
      */
     public function getWebsiteIds($product)
     {
@@ -213,7 +198,6 @@ class Product extends AbstractResource
      *
      * @param   array $productIds
      * @return  array
-     * @since 2.0.0
      */
     public function getWebsiteIdsByProductIds($productIds)
     {
@@ -241,7 +225,6 @@ class Product extends AbstractResource
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
-     * @since 2.0.0
      */
     public function getCategoryIds($product)
     {
@@ -254,7 +237,6 @@ class Product extends AbstractResource
      *
      * @param string $sku
      * @return int|false
-     * @since 2.0.0
      */
     public function getIdBySku($sku)
     {
@@ -272,7 +254,6 @@ class Product extends AbstractResource
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\DataObject $object)
     {
@@ -291,7 +272,6 @@ class Product extends AbstractResource
      *
      * @param \Magento\Framework\DataObject $product
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\DataObject $product)
     {
@@ -301,7 +281,6 @@ class Product extends AbstractResource
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function delete($object)
     {
@@ -319,7 +298,6 @@ class Product extends AbstractResource
      * @deprecated 2.2.0
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
-     * @since 2.0.0
      */
     protected function _saveWebsiteIds($product)
     {
@@ -347,7 +325,6 @@ class Product extends AbstractResource
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     protected function _saveCategories(\Magento\Framework\DataObject $object)
     {
@@ -359,7 +336,6 @@ class Product extends AbstractResource
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\ResourceModel\Category\Collection
-     * @since 2.0.0
      */
     public function getCategoryCollection($product)
     {
@@ -383,7 +359,6 @@ class Product extends AbstractResource
      *
      * @param \Magento\Catalog\Model\Product $object
      * @return array
-     * @since 2.0.0
      */
     public function getAvailableInCategories($object)
     {
@@ -411,7 +386,6 @@ class Product extends AbstractResource
      * Get default attribute source model
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultAttributeSourceModel()
     {
@@ -424,7 +398,6 @@ class Product extends AbstractResource
      * @param \Magento\Catalog\Model\Product $product
      * @param int $categoryId
      * @return string
-     * @since 2.0.0
      */
     public function canBeShowInCategory($product, $categoryId)
     {
@@ -448,7 +421,6 @@ class Product extends AbstractResource
      * @param int $oldId
      * @param int $newId
      * @return $this
-     * @since 2.0.0
      */
     public function duplicate($oldId, $newId)
     {
@@ -502,7 +474,6 @@ class Product extends AbstractResource
      *
      * @param  array $productIds
      * @return array
-     * @since 2.0.0
      */
     public function getProductsSku(array $productIds)
     {
@@ -521,7 +492,6 @@ class Product extends AbstractResource
      *
      * @param  array $productSkuList
      * @return array
-     * @since 2.0.0
      */
     public function getProductsIdsBySkus(array $productSkuList)
     {
@@ -545,7 +515,6 @@ class Product extends AbstractResource
      *
      * @param  array|string|null $columns
      * @return array
-     * @since 2.0.0
      */
     public function getProductEntitiesInfo($columns = null)
     {
@@ -566,7 +535,6 @@ class Product extends AbstractResource
      * Get total number of records in the system
      *
      * @return int
-     * @since 2.0.0
      */
     public function countAll()
     {
@@ -579,7 +547,6 @@ class Product extends AbstractResource
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function validate($object)
     {

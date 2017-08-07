@@ -7,19 +7,16 @@ namespace Magento\Framework\Translate\Locale\Resolver;
 
 /**
  * Magento translate abstract adapter
- * @since 2.0.0
  */
 class Plugin
 {
     /**
      * @var \Magento\Framework\TranslateInterface
-     * @since 2.0.0
      */
     protected $_translate;
 
     /**
      * @param \Magento\Framework\TranslateInterface $translate
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\TranslateInterface $translate)
     {
@@ -31,7 +28,6 @@ class Plugin
      * @param string|null $localeCode
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterEmulate(\Magento\Framework\Locale\ResolverInterface $subject, $localeCode)
     {
@@ -43,7 +39,6 @@ class Plugin
      * @param string|null $localeCode
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterRevert(\Magento\Framework\Locale\ResolverInterface $subject, $localeCode)
     {
@@ -53,7 +48,6 @@ class Plugin
     /**
      * @param string|null $localeCode
      * @return void
-     * @since 2.0.0
      */
     protected function _init($localeCode)
     {

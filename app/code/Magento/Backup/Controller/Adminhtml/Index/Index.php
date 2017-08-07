@@ -9,7 +9,6 @@ namespace Magento\Backup\Controller\Adminhtml\Index;
 /**
  * Class \Magento\Backup\Controller\Adminhtml\Index\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Backup\Controller\Adminhtml\Index
 {
@@ -17,7 +16,6 @@ class Index extends \Magento\Backup\Controller\Adminhtml\Index
      * Backup list action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

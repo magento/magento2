@@ -12,7 +12,6 @@ use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\Save
  *
- * @since 2.0.0
  */
 class Save extends \Magento\Backend\App\Action
 {
@@ -25,19 +24,16 @@ class Save extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
-     * @since 2.0.0
      */
     protected $creditmemoLoader;
 
     /**
      * @var CreditmemoSender
-     * @since 2.0.0
      */
     protected $creditmemoSender;
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
-     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
@@ -46,7 +42,6 @@ class Save extends \Magento\Backend\App\Action
      * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
      * @param CreditmemoSender $creditmemoSender
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -68,7 +63,6 @@ class Save extends \Magento\Backend\App\Action
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

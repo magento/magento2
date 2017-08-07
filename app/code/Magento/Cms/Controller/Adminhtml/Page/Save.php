@@ -14,7 +14,6 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Class \Magento\Cms\Controller\Adminhtml\Page\Save
  *
- * @since 2.0.0
  */
 class Save extends \Magento\Backend\App\Action
 {
@@ -27,7 +26,6 @@ class Save extends \Magento\Backend\App\Action
 
     /**
      * @var PostDataProcessor
-     * @since 2.0.0
      */
     protected $dataProcessor;
 
@@ -56,7 +54,6 @@ class Save extends \Magento\Backend\App\Action
      * @param \Magento\Cms\Model\PageFactory $pageFactory
      * @param \Magento\Cms\Api\PageRepositoryInterface $pageRepository
      *
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -80,7 +77,6 @@ class Save extends \Magento\Backend\App\Action
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

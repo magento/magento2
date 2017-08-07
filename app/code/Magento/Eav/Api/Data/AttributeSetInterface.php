@@ -8,7 +8,6 @@ namespace Magento\Eav\Api\Data;
 /**
  * Interface AttributeSetInterface
  * @api
- * @since 2.0.0
  */
 interface AttributeSetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -16,7 +15,6 @@ interface AttributeSetInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Get attribute set ID
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getAttributeSetId();
 
@@ -25,7 +23,6 @@ interface AttributeSetInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param int $attributeSetId
      * @return $this
-     * @since 2.0.0
      */
     public function setAttributeSetId($attributeSetId);
 
@@ -33,7 +30,6 @@ interface AttributeSetInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Get attribute set name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAttributeSetName();
 
@@ -42,7 +38,6 @@ interface AttributeSetInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $attributeSetName
      * @return $this
-     * @since 2.0.0
      */
     public function setAttributeSetName($attributeSetName);
 
@@ -50,7 +45,6 @@ interface AttributeSetInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Get attribute set sort order index
      *
      * @return int
-     * @since 2.0.0
      */
     public function getSortOrder();
 
@@ -59,7 +53,6 @@ interface AttributeSetInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param int $sortOrder
      * @return $this
-     * @since 2.0.0
      */
     public function setSortOrder($sortOrder);
 
@@ -67,7 +60,6 @@ interface AttributeSetInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Get attribute set entity type id
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getEntityTypeId();
 
@@ -76,7 +68,6 @@ interface AttributeSetInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param int $entityTypeId
      * @return $this
-     * @since 2.0.0
      */
     public function setEntityTypeId($entityTypeId);
 
@@ -84,7 +75,6 @@ interface AttributeSetInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Eav\Api\Data\AttributeSetExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -93,7 +83,6 @@ interface AttributeSetInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param \Magento\Eav\Api\Data\AttributeSetExtensionInterface|null $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Eav\Api\Data\AttributeSetExtensionInterface $extensionAttributes);
 }

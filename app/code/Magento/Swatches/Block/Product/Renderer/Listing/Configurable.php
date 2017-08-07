@@ -11,13 +11,11 @@ use Magento\Catalog\Model\Product;
  * Swatch renderer block in Category page
  *
  * @api
- * @since 2.0.0
  */
 class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
 {
     /**
      * @return string
-     * @since 2.0.0
      */
     protected function getRendererTemplate()
     {
@@ -30,7 +28,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      * Produce and return block's html output
      *
      * @return string
-     * @since 2.2.0
+     * @since 2.1.6
      */
     protected function _toHtml()
     {
@@ -44,7 +42,6 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
 
     /**
      * @return array
-     * @since 2.0.0
      */
     protected function getSwatchAttributesData()
     {
@@ -62,7 +59,6 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      * Composes configuration for js
      *
      * @return string
-     * @since 2.0.0
      */
     public function getJsonConfig()
     {

@@ -7,7 +7,6 @@ namespace Magento\Framework\Indexer;
 
 /**
  * @api Implement custom Fieldset
- * @since 2.0.0
  */
 interface FieldsetInterface
 {
@@ -16,7 +15,6 @@ interface FieldsetInterface
      *
      * @param array $data
      * @return array
-     * @since 2.0.0
      */
     public function addDynamicData(array $data);
 }

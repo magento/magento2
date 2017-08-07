@@ -9,7 +9,6 @@ namespace Magento\GroupedProduct\Block\Order\Email\Items\Order;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Grouped extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultOrder
 {
@@ -19,7 +18,6 @@ class Grouped extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultOrder
      * This method uses renderer for real product type
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

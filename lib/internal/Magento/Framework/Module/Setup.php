@@ -14,7 +14,6 @@ use Magento\Framework\App\ResourceConnection;
 /**
  * Class \Magento\Framework\Module\Setup
  *
- * @since 2.0.0
  */
 class Setup implements SetupInterface
 {
@@ -22,7 +21,6 @@ class Setup implements SetupInterface
      * Setup Connection
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     private $connection = null;
 
@@ -30,7 +28,6 @@ class Setup implements SetupInterface
      * Tables cache array
      *
      * @var array
-     * @since 2.0.0
      */
     private $tables = [];
 
@@ -38,7 +35,6 @@ class Setup implements SetupInterface
      * Modules configuration
      *
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.0.0
      */
     private $resourceModel;
 
@@ -46,7 +42,6 @@ class Setup implements SetupInterface
      * Connection instance name
      *
      * @var string
-     * @since 2.0.0
      */
     private $connectionName;
 
@@ -55,7 +50,6 @@ class Setup implements SetupInterface
      *
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -70,7 +64,6 @@ class Setup implements SetupInterface
      *
      * @param string|null $connectionName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function getConnection($connectionName = null)
     {
@@ -88,7 +81,7 @@ class Setup implements SetupInterface
      * Returns default setup connection instance
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function getDefaultConnection()
     {
@@ -104,7 +97,6 @@ class Setup implements SetupInterface
      * @param string $tableName
      * @param string $realTableName
      * @return $this
-     * @since 2.0.0
      */
     public function setTable($tableName, $realTableName)
     {
@@ -130,7 +122,6 @@ class Setup implements SetupInterface
      * @param string|array $tableName
      * @param string $connectionName
      * @return string
-     * @since 2.0.0
      */
     public function getTable($tableName, $connectionName = ResourceConnection::DEFAULT_CONNECTION)
     {
@@ -146,7 +137,6 @@ class Setup implements SetupInterface
      *
      * @param string|array $tableName
      * @return string
-     * @since 2.0.0
      */
     private function _getTableCacheName($tableName)
     {
@@ -162,7 +152,6 @@ class Setup implements SetupInterface
      * @param string $table
      * @param string $connectionName
      * @return bool
-     * @since 2.0.0
      */
     public function tableExists($table, $connectionName = ResourceConnection::DEFAULT_CONNECTION)
     {
@@ -175,7 +164,6 @@ class Setup implements SetupInterface
      *
      * @param string $sql
      * @return $this
-     * @since 2.0.0
      */
     public function run($sql)
     {
@@ -187,7 +175,6 @@ class Setup implements SetupInterface
      * Prepare database before install/upgrade
      *
      * @return $this
-     * @since 2.0.0
      */
     public function startSetup()
     {
@@ -199,7 +186,6 @@ class Setup implements SetupInterface
      * Prepare database after install/upgrade
      *
      * @return $this
-     * @since 2.0.0
      */
     public function endSetup()
     {

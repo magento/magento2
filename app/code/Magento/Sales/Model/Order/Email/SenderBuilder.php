@@ -12,25 +12,21 @@ use Magento\Sales\Model\Order\Email\Container\Template;
 /**
  * Class \Magento\Sales\Model\Order\Email\SenderBuilder
  *
- * @since 2.0.0
  */
 class SenderBuilder
 {
     /**
      * @var Template
-     * @since 2.0.0
      */
     protected $templateContainer;
 
     /**
      * @var IdentityInterface
-     * @since 2.0.0
      */
     protected $identityContainer;
 
     /**
      * @var TransportBuilder
-     * @since 2.0.0
      */
     protected $transportBuilder;
 
@@ -38,7 +34,6 @@ class SenderBuilder
      * @param Template $templateContainer
      * @param IdentityInterface $identityContainer
      * @param TransportBuilder $transportBuilder
-     * @since 2.0.0
      */
     public function __construct(
         Template $templateContainer,
@@ -54,7 +49,6 @@ class SenderBuilder
      * Prepare and send email message
      *
      * @return void
-     * @since 2.0.0
      */
     public function send()
     {
@@ -81,7 +75,6 @@ class SenderBuilder
      * Prepare and send copy email message
      *
      * @return void
-     * @since 2.0.0
      */
     public function sendCopyTo()
     {
@@ -103,7 +96,6 @@ class SenderBuilder
      * Configure email template
      *
      * @return void
-     * @since 2.0.0
      */
     protected function configureEmailTemplate()
     {

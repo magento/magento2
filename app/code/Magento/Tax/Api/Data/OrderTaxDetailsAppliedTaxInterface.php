@@ -10,7 +10,6 @@ namespace Magento\Tax\Api\Data;
 /**
  * Interface OrderTaxDetailsAppliedTaxInterface
  * @api
- * @since 2.0.0
  */
 interface OrderTaxDetailsAppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -18,7 +17,6 @@ interface OrderTaxDetailsAppliedTaxInterface extends \Magento\Framework\Api\Exte
      * Get code
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getCode();
 
@@ -27,7 +25,6 @@ interface OrderTaxDetailsAppliedTaxInterface extends \Magento\Framework\Api\Exte
      *
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function setCode($code);
 
@@ -35,7 +32,6 @@ interface OrderTaxDetailsAppliedTaxInterface extends \Magento\Framework\Api\Exte
      * Get Title
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getTitle();
 
@@ -44,7 +40,6 @@ interface OrderTaxDetailsAppliedTaxInterface extends \Magento\Framework\Api\Exte
      *
      * @param string $title
      * @return $this
-     * @since 2.0.0
      */
     public function setTitle($title);
 
@@ -52,7 +47,6 @@ interface OrderTaxDetailsAppliedTaxInterface extends \Magento\Framework\Api\Exte
      * Get Tax Percent
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getPercent();
 
@@ -61,7 +55,6 @@ interface OrderTaxDetailsAppliedTaxInterface extends \Magento\Framework\Api\Exte
      *
      * @param float $percent
      * @return $this
-     * @since 2.0.0
      */
     public function setPercent($percent);
 
@@ -69,7 +62,6 @@ interface OrderTaxDetailsAppliedTaxInterface extends \Magento\Framework\Api\Exte
      * Get tax amount
      *
      * @return float
-     * @since 2.0.0
      */
     public function getAmount();
 
@@ -78,7 +70,6 @@ interface OrderTaxDetailsAppliedTaxInterface extends \Magento\Framework\Api\Exte
      *
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function setAmount($amount);
 
@@ -86,7 +77,6 @@ interface OrderTaxDetailsAppliedTaxInterface extends \Magento\Framework\Api\Exte
      * Get tax amount in base currency
      *
      * @return float
-     * @since 2.0.0
      */
     public function getBaseAmount();
 
@@ -95,7 +85,6 @@ interface OrderTaxDetailsAppliedTaxInterface extends \Magento\Framework\Api\Exte
      *
      * @param float $baseAmount
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseAmount($baseAmount);
 
@@ -103,7 +92,6 @@ interface OrderTaxDetailsAppliedTaxInterface extends \Magento\Framework\Api\Exte
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -112,7 +100,6 @@ interface OrderTaxDetailsAppliedTaxInterface extends \Magento\Framework\Api\Exte
      *
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxExtensionInterface $extensionAttributes

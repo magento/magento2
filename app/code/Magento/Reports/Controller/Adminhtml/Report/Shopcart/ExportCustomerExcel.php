@@ -11,7 +11,6 @@ use Magento\Framework\App\ResponseInterface;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Shopcart\ExportCustomerExcel
  *
- * @since 2.0.0
  */
 class ExportCustomerExcel extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
 {
@@ -19,7 +18,6 @@ class ExportCustomerExcel extends \Magento\Reports\Controller\Adminhtml\Report\S
      * Export shopcart customer report to Excel XML format
      *
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

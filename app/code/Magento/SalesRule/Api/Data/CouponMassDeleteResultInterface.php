@@ -9,7 +9,6 @@ namespace Magento\SalesRule\Api\Data;
  * Coupon mass delete results interface.
  *
  * @api
- * @since 2.0.0
  */
 interface CouponMassDeleteResultInterface
 {
@@ -17,7 +16,6 @@ interface CouponMassDeleteResultInterface
      * Get list of failed items.
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getFailedItems();
 
@@ -26,7 +24,6 @@ interface CouponMassDeleteResultInterface
      *
      * @param string[] $items
      * @return $this
-     * @since 2.0.0
      */
     public function setFailedItems(array $items);
 
@@ -34,7 +31,6 @@ interface CouponMassDeleteResultInterface
      * Get list of missing items.
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getMissingItems();
 
@@ -43,7 +39,6 @@ interface CouponMassDeleteResultInterface
      *
      * @param string[] $items
      * @return $this
-     * @since 2.0.0
      */
     public function setMissingItems(array $items);
 }

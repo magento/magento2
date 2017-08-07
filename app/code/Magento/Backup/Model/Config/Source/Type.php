@@ -10,7 +10,6 @@ namespace Magento\Backup\Model\Config\Source;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @api
- * @since 2.0.0
  */
 class Type implements \Magento\Framework\Option\ArrayInterface
 {
@@ -18,13 +17,11 @@ class Type implements \Magento\Framework\Option\ArrayInterface
      * Backup data
      *
      * @var \Magento\Backup\Helper\Data
-     * @since 2.0.0
      */
     protected $_backupData = null;
 
     /**
      * @param \Magento\Backup\Helper\Data $backupData
-     * @since 2.0.0
      */
     public function __construct(\Magento\Backup\Helper\Data $backupData)
     {
@@ -33,7 +30,6 @@ class Type implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

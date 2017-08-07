@@ -11,19 +11,16 @@ use Magento\Framework\View\FileSystem;
 
 /**
  * Module notation normalizer
- * @since 2.0.0
  */
 class Module
 {
     /**
      * @var \Magento\Framework\View\Asset\Repository
-     * @since 2.0.0
      */
     private $assetRepo;
 
     /**
      * @param Asset\Repository $assetRepo
-     * @since 2.0.0
      */
     public function __construct(Asset\Repository $assetRepo)
     {
@@ -40,7 +37,6 @@ class Module
      * @param Asset\LocalInterface $thisAsset
      * @param string $relatedFileId
      * @return string
-     * @since 2.0.0
      */
     public function convertModuleNotationToPath(Asset\LocalInterface $thisAsset, $relatedFileId)
     {

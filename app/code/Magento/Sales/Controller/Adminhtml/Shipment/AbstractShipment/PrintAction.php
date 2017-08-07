@@ -15,7 +15,6 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\PrintAction
  *
- * @since 2.0.0
  */
 abstract class PrintAction extends \Magento\Backend\App\Action
 {
@@ -28,13 +27,11 @@ abstract class PrintAction extends \Magento\Backend\App\Action
 
     /**
      * @var FileFactory
-     * @since 2.0.0
      */
     protected $_fileFactory;
 
     /**
      * @var ForwardFactory
-     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
@@ -42,7 +39,6 @@ abstract class PrintAction extends \Magento\Backend\App\Action
      * @param Context $context
      * @param FileFactory $fileFactory
      * @param ForwardFactory $resultForwardFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -56,7 +52,6 @@ abstract class PrintAction extends \Magento\Backend\App\Action
 
     /**
      * @return ResponseInterface|\Magento\Backend\Model\View\Result\Forward
-     * @since 2.0.0
      */
     public function execute()
     {

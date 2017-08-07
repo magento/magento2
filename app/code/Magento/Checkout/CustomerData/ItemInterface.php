@@ -12,7 +12,6 @@ use Magento\Quote\Model\Quote\Item;
  * Item interface
  *
  * @api
- * @since 2.0.0
  */
 interface ItemInterface
 {
@@ -21,7 +20,6 @@ interface ItemInterface
      *
      * @param Item $item
      * @return array
-     * @since 2.0.0
      */
     public function getItemData(Item $item);
 }

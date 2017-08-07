@@ -10,7 +10,6 @@ namespace Magento\Framework\Profiler\Driver\Standard;
 /**
  * Class \Magento\Framework\Profiler\Driver\Standard\AbstractOutput
  *
- * @since 2.0.0
  */
 abstract class AbstractOutput implements OutputInterface
 {
@@ -18,7 +17,6 @@ abstract class AbstractOutput implements OutputInterface
      * PCRE Regular Expression for filter timer by id
      *
      * @var null|string
-     * @since 2.0.0
      */
     protected $_filterPattern;
 
@@ -26,7 +24,6 @@ abstract class AbstractOutput implements OutputInterface
      * List of threshold (minimal allowed) values for profiler data
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_thresholds = [Stat::TIME => 0.001, Stat::COUNT => 10, Stat::EMALLOC => 10000];
 
@@ -34,7 +31,6 @@ abstract class AbstractOutput implements OutputInterface
      * List of columns to output
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_columns = [
         'Timer Id' => Stat::ID,
@@ -49,7 +45,6 @@ abstract class AbstractOutput implements OutputInterface
      * Constructor
      *
      * @param array|null $config
-     * @since 2.0.0
      */
     public function __construct(array $config = null)
     {
@@ -68,7 +63,6 @@ abstract class AbstractOutput implements OutputInterface
      *
      * @param string $filterPattern PCRE pattern to filter timers by their identifiers
      * @return void
-     * @since 2.0.0
      */
     public function setFilterPattern($filterPattern)
     {
@@ -79,7 +73,6 @@ abstract class AbstractOutput implements OutputInterface
      * Get profiler output timer identifiers filter.
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getFilterPattern()
     {
@@ -94,7 +87,6 @@ abstract class AbstractOutput implements OutputInterface
      * @param string $fetchKey
      * @param int|float|null $minAllowedValue
      * @return void
-     * @since 2.0.0
      */
     public function setThreshold($fetchKey, $minAllowedValue)
     {
@@ -109,7 +101,6 @@ abstract class AbstractOutput implements OutputInterface
      * Get list of thresholds.
      *
      * @return array
-     * @since 2.0.0
      */
     public function getThresholds()
     {
@@ -122,7 +113,6 @@ abstract class AbstractOutput implements OutputInterface
      * @param string|float $value
      * @param string $columnKey
      * @return string
-     * @since 2.0.0
      */
     protected function _renderColumnValue($value, $columnKey)
     {
@@ -145,7 +135,6 @@ abstract class AbstractOutput implements OutputInterface
      *
      * @param string $timerId
      * @return string
-     * @since 2.0.0
      */
     protected function _renderTimerId($timerId)
     {
@@ -156,7 +145,6 @@ abstract class AbstractOutput implements OutputInterface
      * Render a caption for the profiling results
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _renderCaption()
     {
@@ -174,7 +162,6 @@ abstract class AbstractOutput implements OutputInterface
      *
      * @param Stat $stat
      * @return string[]
-     * @since 2.0.0
      */
     protected function _getTimerIds(Stat $stat)
     {

@@ -10,67 +10,67 @@ use Magento\Framework\DB\Select;
 
 /**
  * Query batch iterator
- * @since 2.2.0
+ * @since 2.1.3
  */
 class BatchIterator implements BatchIteratorInterface
 {
     /**
      * @var int
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $batchSize;
 
     /**
      * @var Select
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $select;
 
     /**
      * @var int
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $minValue = 0;
 
     /**
      * @var string
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $correlationName;
 
     /**
      * @var string
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $rangeField;
 
     /**
      * @var Select
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $currentSelect;
 
     /**
      * @var AdapterInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $connection;
 
     /**
      * @var int
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $iteration = 0;
 
     /**
      * @var string
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $rangeFieldAlias;
 
     /**
      * @var bool
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $isValid = true;
 
@@ -82,7 +82,7 @@ class BatchIterator implements BatchIteratorInterface
      * @param string $correlationName
      * @param string $rangeField
      * @param string $rangeFieldAlias
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(
         Select $select,
@@ -101,7 +101,7 @@ class BatchIterator implements BatchIteratorInterface
 
     /**
      * @return Select
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function current()
     {
@@ -115,7 +115,7 @@ class BatchIterator implements BatchIteratorInterface
 
     /**
      * @return Select
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function next()
     {
@@ -136,7 +136,7 @@ class BatchIterator implements BatchIteratorInterface
 
     /**
      * @return int
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function key()
     {
@@ -145,7 +145,7 @@ class BatchIterator implements BatchIteratorInterface
 
     /**
      * @return bool
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function valid()
     {
@@ -154,7 +154,7 @@ class BatchIterator implements BatchIteratorInterface
 
     /**
      * @return void
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function rewind()
     {
@@ -169,7 +169,7 @@ class BatchIterator implements BatchIteratorInterface
      *
      * @param Select $select
      * @return int
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function calculateBatchSize(Select $select)
     {
@@ -190,7 +190,7 @@ class BatchIterator implements BatchIteratorInterface
      * Initialize select object.
      *
      * @return \Magento\Framework\DB\Select
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function initSelectObject()
     {

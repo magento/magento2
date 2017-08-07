@@ -9,7 +9,6 @@ namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Paym
 /**
  * Class \Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Sales\Controller\Adminhtml\Order\Create\Index
 {

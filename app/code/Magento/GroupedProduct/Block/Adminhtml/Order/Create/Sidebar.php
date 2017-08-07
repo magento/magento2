@@ -8,7 +8,6 @@ namespace Magento\GroupedProduct\Block\Adminhtml\Order\Create;
 /**
  * Class \Magento\GroupedProduct\Block\Adminhtml\Order\Create\Sidebar
  *
- * @since 2.0.0
  */
 class Sidebar
 {
@@ -21,7 +20,6 @@ class Sidebar
      *
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function aroundGetItemQty(
         \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar $subject,
@@ -43,7 +41,6 @@ class Sidebar
      *
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function aroundIsConfigurationRequired(
         \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar $subject,

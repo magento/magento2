@@ -10,25 +10,21 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 /**
  * Class \Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Remove
  *
- * @since 2.0.0
  */
 class Remove
 {
     /**
      * @var \Magento\UrlRewrite\Model\UrlPersistInterface
-     * @since 2.0.0
      */
     protected $urlPersist;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator
-     * @since 2.0.0
      */
     protected $productUrlRewriteGenerator;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider
-     * @since 2.0.0
      */
     protected $childrenCategoriesProvider;
 
@@ -43,7 +39,6 @@ class Remove
      * @param \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator $productUrlRewriteGenerator
      * @param \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider $childrenCategoriesProvider
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\UrlRewrite\Model\UrlPersistInterface $urlPersist,
@@ -67,7 +62,6 @@ class Remove
      * @param \Magento\Catalog\Api\Data\CategoryInterface $category
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function aroundDelete(
         \Magento\Catalog\Model\ResourceModel\Category $subject,
@@ -88,7 +82,6 @@ class Remove
      *
      * @param int $categoryId
      * @return void
-     * @since 2.0.0
      */
     protected function deleteRewritesForCategory($categoryId)
     {

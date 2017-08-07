@@ -12,7 +12,6 @@ use Magento\Framework\HTTP\ZendClientFactory;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
 {
@@ -70,7 +69,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
 
     /**
      * @var \Magento\Authorizenet\Helper\Data
-     * @since 2.0.0
      */
     protected $dataHelper;
 
@@ -78,7 +76,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * Request factory
      *
      * @var \Magento\Authorizenet\Model\RequestFactory
-     * @since 2.0.0
      */
     protected $requestFactory;
 
@@ -86,13 +83,11 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * Response factory
      *
      * @var \Magento\Authorizenet\Model\ResponseFactory
-     * @since 2.0.0
      */
     protected $responseFactory;
 
     /**
      * @var \Magento\Authorizenet\Model\TransactionService;
-     * @since 2.0.0
      */
     protected $transactionService;
 
@@ -100,13 +95,11 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * Fields that should be replaced in debug with '***'
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_debugReplacePrivateDataKeys = ['merchantAuthentication', 'x_login'];
 
     /**
      * @var \Magento\Framework\HTTP\ZendClientFactory
-     * @since 2.0.0
      */
     protected $httpClientFactory;
 
@@ -129,7 +122,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -177,7 +169,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      *
      * @param string $currencyCode
      * @return bool
-     * @since 2.0.0
      */
     public function canUseForCurrency($currencyCode)
     {
@@ -191,7 +182,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * Return array of currency codes supplied by Payment Gateway
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAcceptedCurrencyCodes()
     {
@@ -208,7 +198,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      *
      * @param  \Magento\Payment\Model\InfoInterface $payment
      * @return $this
-     * @since 2.0.0
      */
     public function cancel(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -221,7 +210,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param string $transactionId
      * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function fetchTransactionFraudDetails($transactionId)
     {
@@ -248,7 +236,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      *
      * @param \Magento\Framework\Simplexml\Element $fraudFilters
      * @return array
-     * @since 2.0.0
      */
     protected function getFraudFilters($fraudFilters)
     {
@@ -268,7 +255,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * Return authorize payment request
      *
      * @return \Magento\Authorizenet\Model\Request
-     * @since 2.0.0
      */
     protected function getRequest()
     {
@@ -291,7 +277,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function buildRequest(\Magento\Framework\DataObject $payment)
     {
@@ -390,7 +375,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Authorizenet\Model\Request $request
      * @return \Magento\Authorizenet\Model\Response
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function postRequest(\Magento\Authorizenet\Model\Request $request)
     {
@@ -452,7 +436,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      *
      * @param  \Magento\Payment\Model\InfoInterface $payment
      * @return bool
-     * @since 2.0.0
      */
     protected function isGatewayActionsLocked($payment)
     {

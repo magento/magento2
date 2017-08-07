@@ -15,7 +15,6 @@ use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteItem;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
@@ -23,7 +22,6 @@ class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Option factory
      *
      * @var \Magento\Catalog\Model\Product\OptionFactory
-     * @since 2.0.0
      */
     protected $_optionFactory;
 
@@ -34,7 +32,6 @@ class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\Product\OptionFactory $optionFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -52,7 +49,6 @@ class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Get item
      *
      * @return Item|QuoteItem
-     * @since 2.0.0
      */
     public function getItem()
     {
@@ -68,7 +64,6 @@ class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Get order options
      *
      * @return array
-     * @since 2.0.0
      */
     public function getOrderOptions()
     {
@@ -92,7 +87,6 @@ class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      *
      * @param array $optionInfo
      * @return string
-     * @since 2.0.0
      */
     public function getCustomizedOptionValue($optionInfo)
     {
@@ -113,7 +107,6 @@ class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Get sku
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSku()
     {
@@ -125,7 +118,6 @@ class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      *
      * @param QuoteItem|Item|InvoiceItem|CreditmemoItem $item
      * @return mixed
-     * @since 2.0.0
      */
     public function getTotalAmount($item)
     {
@@ -139,7 +131,6 @@ class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      *
      * @param QuoteItem|Item|InvoiceItem|CreditmemoItem $item
      * @return mixed
-     * @since 2.0.0
      */
     public function getBaseTotalAmount($item)
     {

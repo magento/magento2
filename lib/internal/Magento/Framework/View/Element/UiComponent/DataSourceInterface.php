@@ -10,13 +10,11 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Interface DataSourceInterface
- * @since 2.0.0
  */
 interface DataSourceInterface extends UiComponentInterface
 {
     /**
      * @return DataProviderInterface
-     * @since 2.0.0
      */
     public function getDataProvider();
 }

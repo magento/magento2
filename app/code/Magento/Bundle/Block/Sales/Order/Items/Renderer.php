@@ -11,7 +11,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Order item render block
  * @api
- * @since 2.0.0
  */
 class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
 {
@@ -48,7 +47,6 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
      * @param mixed $item
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function isShipmentSeparately($item = null)
     {
@@ -85,7 +83,6 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
      * @param mixed $item
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function isChildCalculated($item = null)
     {
@@ -123,7 +120,6 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
     /**
      * @param mixed $item
      * @return mixed|null
-     * @since 2.0.0
      */
     public function getSelectionAttributes($item)
     {
@@ -141,7 +137,6 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
     /**
      * @param mixed $item
      * @return string
-     * @since 2.0.0
      */
     public function getValueHtml($item)
     {
@@ -158,7 +153,6 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
      *
      * @param \Magento\Framework\DataObject $item
      * @return array
-     * @since 2.0.0
      */
     public function getChildren($item)
     {
@@ -194,7 +188,6 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
     /**
      * @param mixed $item
      * @return bool
-     * @since 2.0.0
      */
     public function canShowPriceInfo($item)
     {
@@ -211,7 +204,6 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
      *
      * @param OrderItem|InvoiceItem|CreditmemoItem $item
      * @return string
-     * @since 2.0.0
      */
     public function getItemPrice($item)
     {

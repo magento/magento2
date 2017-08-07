@@ -12,7 +12,6 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensibleModel
 {
@@ -23,7 +22,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * value for store
      *
      * @var array|null
-     * @since 2.0.0
      */
     protected $_defaultValues;
 
@@ -31,7 +29,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * This array contains codes of attributes which have value in current store
      *
      * @var array|null
-     * @since 2.0.0
      */
     protected $_storeValuesFlags;
 
@@ -39,7 +36,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Locked attributes
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_lockedAttributes = [];
 
@@ -47,7 +43,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Is model deleteable
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_isDeleteable = true;
 
@@ -55,7 +50,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Is model readonly
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_isReadonly = false;
 
@@ -63,7 +57,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -82,7 +75,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -111,7 +103,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @param string $attributeCode
      * @return $this
-     * @since 2.0.0
      */
     public function lockAttribute($attributeCode)
     {
@@ -124,7 +115,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @param string $attributeCode
      * @return $this
-     * @since 2.0.0
      */
     public function unlockAttribute($attributeCode)
     {
@@ -139,7 +129,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Unlock all attributes
      *
      * @return $this
-     * @since 2.0.0
      */
     public function unlockAttributes()
     {
@@ -151,7 +140,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Retrieve locked attributes
      *
      * @return array
-     * @since 2.0.0
      */
     public function getLockedAttributes()
     {
@@ -162,7 +150,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Checks that model have locked attributes
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function hasLockedAttributes()
     {
@@ -174,7 +161,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @param mixed $attributeCode
      * @return boolean
-     * @since 2.0.0
      */
     public function isLockedAttribute($attributeCode)
     {
@@ -194,7 +180,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @param string|array $key
      * @param mixed $value
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function setData($key, $value = null)
     {
@@ -224,7 +209,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @param string $key
      * @return $this
-     * @since 2.0.0
      */
     public function unsetData($key = null)
     {
@@ -239,7 +223,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Get collection instance
      *
      * @return \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
-     * @since 2.0.0
      */
     public function getResourceCollection()
     {
@@ -254,7 +237,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @param null|string|array $value
      * @param string $additionalAttributes
      * @return bool|\Magento\Catalog\Model\AbstractModel
-     * @since 2.0.0
      */
     public function loadByAttribute($attribute, $value, $additionalAttributes = '*')
     {
@@ -278,7 +260,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Retrieve sore object
      *
      * @return \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     public function getStore()
     {
@@ -289,7 +270,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Retrieve all store ids of object current website
      *
      * @return array
-     * @since 2.0.0
      */
     public function getWebsiteStoreIds()
     {
@@ -306,7 +286,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @return  $this
      *
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     public function setAttributeDefaultValue($attributeCode, $value)
     {
@@ -338,7 +317,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @return  array|boolean
      *
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     public function getAttributeDefaultValue($attributeCode)
     {
@@ -361,7 +339,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @return  $this
      *
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     public function setExistsStoreValueFlag($attributeCode)
     {
@@ -377,7 +354,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      *
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     public function getExistsStoreValueFlag($attributeCode)
     {
@@ -401,7 +377,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Before save unlock attributes
      *
      * @return \Magento\Catalog\Model\AbstractModel
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -413,7 +388,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Checks model is deletable
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isDeleteable()
     {
@@ -425,7 +399,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @param boolean $value
      * @return $this
-     * @since 2.0.0
      */
     public function setIsDeleteable($value)
     {
@@ -437,7 +410,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Checks model is deletable
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isReadonly()
     {
@@ -449,7 +421,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @param boolean $value
      * @return $this
-     * @since 2.0.0
      */
     public function setIsReadonly($value)
     {

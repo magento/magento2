@@ -8,13 +8,11 @@ namespace Magento\Framework\View\Element\Message;
 /**
  * Class \Magento\Framework\View\Element\Message\MessageConfigurationsPool
  *
- * @since 2.0.0
  */
 class MessageConfigurationsPool
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     private $configurationsMap;
 
@@ -23,7 +21,6 @@ class MessageConfigurationsPool
      * ['message_identifier' => ['renderer' => '{renderer_code}', 'data' => []], ...]
      *
      * @param array $configurationsMap
-     * @since 2.0.0
      */
     public function __construct(
         array $configurationsMap = []
@@ -58,7 +55,6 @@ class MessageConfigurationsPool
      *
      * @param string $identifier
      * @return null|array
-     * @since 2.0.0
      */
     public function getMessageConfiguration($identifier)
     {

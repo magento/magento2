@@ -9,19 +9,16 @@ namespace Magento\Store\App\Action\Plugin;
 /**
  * Class \Magento\Store\App\Action\Plugin\StoreCheck
  *
- * @since 2.0.0
  */
 class StoreCheck
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager

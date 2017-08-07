@@ -12,13 +12,11 @@ namespace Magento\Config\Model\Config\Backend\Currency;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Base extends AbstractCurrency
 {
     /**
      * @var \Magento\Directory\Model\CurrencyFactory
-     * @since 2.0.0
      */
     private $currencyFactory;
 
@@ -31,7 +29,6 @@ class Base extends AbstractCurrency
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -52,7 +49,6 @@ class Base extends AbstractCurrency
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function afterSave()
     {

@@ -10,7 +10,6 @@ use Magento\Framework\View\Page\Config as PageConfig;
 
 /**
  * Body structure reader
- * @since 2.0.0
  */
 class Body implements Layout\ReaderInterface
 {
@@ -26,17 +25,13 @@ class Body implements Layout\ReaderInterface
     const BODY_ATTRIBUTE = 'attribute';
     /**#@-*/
 
-    /**
-     * @var Layout\ReaderPool
-     * @since 2.0.0
-     */
+    /**#@-*/
     protected $readerPool;
 
     /**
      * Constructor
      *
      * @param Layout\ReaderPool $readerPool
-     * @since 2.0.0
      */
     public function __construct(Layout\ReaderPool $readerPool)
     {
@@ -47,7 +42,6 @@ class Body implements Layout\ReaderInterface
      * {@inheritdoc}
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getSupportedNodes()
     {
@@ -60,7 +54,6 @@ class Body implements Layout\ReaderInterface
      * @param Layout\Reader\Context $readerContext
      * @param Layout\Element $bodyElement
      * @return $this
-     * @since 2.0.0
      */
     public function interpret(
         Layout\Reader\Context $readerContext,
@@ -82,7 +75,6 @@ class Body implements Layout\ReaderInterface
      * @param Layout\Reader\Context $readerContext
      * @param Layout\Element $element
      * @return $this
-     * @since 2.0.0
      */
     protected function setBodyAttributeToStructure(Layout\Reader\Context $readerContext, Layout\Element $element)
     {

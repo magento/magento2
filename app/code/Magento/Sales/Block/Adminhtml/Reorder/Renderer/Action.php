@@ -9,7 +9,6 @@ namespace Magento\Sales\Block\Adminhtml\Reorder\Renderer;
  * Adminhtml alert queue grid block action item renderer
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -17,7 +16,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      * Array to store all options data
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_actions = [];
 
@@ -25,7 +23,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      * Sales reorder
      *
      * @var \Magento\Sales\Helper\Reorder
-     * @since 2.0.0
      */
     protected $_salesReorder = null;
 
@@ -33,7 +30,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Sales\Helper\Reorder $salesReorder
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -47,7 +43,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     /**
      * @param \Magento\Framework\DataObject $row
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {
@@ -73,7 +68,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      *
      * @param string $value
      * @return string
-     * @since 2.0.0
      */
     protected function _getEscapedValue($value)
     {
@@ -85,7 +79,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      *
      * @param array $actions
      * @return string
-     * @since 2.0.0
      */
     protected function _actionsToHtml(array $actions = [])
     {
@@ -108,7 +101,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      *
      * @param array $actionArray
      * @return void
-     * @since 2.0.0
      */
     public function addToActions($actionArray)
     {

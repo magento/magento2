@@ -9,7 +9,6 @@ namespace Magento\Catalog\Block\Category;
  * Class View
  * @api
  * @package Magento\Catalog\Block\Category
- * @since 2.0.0
  */
 class View extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -17,7 +16,6 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -25,13 +23,11 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
      * Catalog layer
      *
      * @var \Magento\Catalog\Model\Layer
-     * @since 2.0.0
      */
     protected $_catalogLayer;
 
     /**
      * @var \Magento\Catalog\Helper\Category
-     * @since 2.0.0
      */
     protected $_categoryHelper;
 
@@ -41,7 +37,6 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Helper\Category $categoryHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -58,7 +53,6 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -99,7 +93,6 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getProductListHtml()
     {
@@ -110,7 +103,6 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
      * Retrieve current category model object
      *
      * @return \Magento\Catalog\Model\Category
-     * @since 2.0.0
      */
     public function getCurrentCategory()
     {
@@ -122,7 +114,6 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getCmsBlockHtml()
     {
@@ -140,7 +131,6 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
     /**
      * Check if category display mode is "Products Only"
      * @return bool
-     * @since 2.0.0
      */
     public function isProductMode()
     {
@@ -150,7 +140,6 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
     /**
      * Check if category display mode is "Static Block and Products"
      * @return bool
-     * @since 2.0.0
      */
     public function isMixedMode()
     {
@@ -162,7 +151,6 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
      * For anchor category with applied filter Static Block Only mode not allowed
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isContentMode()
     {
@@ -184,7 +172,6 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
      * Return identifiers for produced content
      *
      * @return array
-     * @since 2.0.0
      */
     public function getIdentities()
     {

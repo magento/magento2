@@ -20,25 +20,21 @@ use Magento\Tax\Helper\Data as TaxHelper;
 /**
  * Bundle price calculator
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Calculator implements BundleCalculatorInterface
 {
     /**
      * @var CalculatorBase
-     * @since 2.0.0
      */
     protected $calculator;
 
     /**
      * @var AmountFactory
-     * @since 2.0.0
      */
     protected $amountFactory;
 
     /**
      * @var BundleSelectionFactory
-     * @since 2.0.0
      */
     protected $selectionFactory;
 
@@ -46,13 +42,11 @@ class Calculator implements BundleCalculatorInterface
      * Tax helper, needed to get rounding setting
      *
      * @var TaxHelper
-     * @since 2.0.0
      */
     protected $taxHelper;
 
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
@@ -75,7 +69,6 @@ class Calculator implements BundleCalculatorInterface
      * @param TaxHelper $taxHelper
      * @param PriceCurrencyInterface $priceCurrency
      * @param SelectionPriceListProviderInterface|null $selectionPriceListProvider
-     * @since 2.0.0
      */
     public function __construct(
         CalculatorBase $calculator,
@@ -102,7 +95,6 @@ class Calculator implements BundleCalculatorInterface
      * @param null|array $context
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getAmount($amount, SaleableInterface $saleableItem, $exclude = null, $context = [])
     {
@@ -116,7 +108,6 @@ class Calculator implements BundleCalculatorInterface
      * @param Product $saleableItem
      * @param null|bool|string|array $exclude
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     public function getMinRegularAmount($amount, Product $saleableItem, $exclude = null)
     {
@@ -130,7 +121,6 @@ class Calculator implements BundleCalculatorInterface
      * @param Product $saleableItem
      * @param null|bool|string|array $exclude
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     public function getMaxAmount($amount, Product $saleableItem, $exclude = null)
     {
@@ -144,7 +134,6 @@ class Calculator implements BundleCalculatorInterface
      * @param Product $saleableItem
      * @param null|bool|string|array $exclude
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     public function getMaxRegularAmount($amount, Product $saleableItem, $exclude = null)
     {
@@ -160,7 +149,6 @@ class Calculator implements BundleCalculatorInterface
      * @param float $baseAmount
      * @param bool $useRegularPrice
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     public function getOptionsAmount(
         Product $saleableItem,
@@ -188,7 +176,6 @@ class Calculator implements BundleCalculatorInterface
      * @param float $amount
      * @param Product $saleableItem
      * @return \Magento\Framework\Pricing\Amount\AmountInterface|void
-     * @since 2.0.0
      */
     public function getAmountWithoutOption($amount, Product $saleableItem)
     {
@@ -206,7 +193,6 @@ class Calculator implements BundleCalculatorInterface
      * @param bool $searchMin
      * @param bool $useRegularPrice
      * @return array
-     * @since 2.0.0
      */
     protected function getSelectionAmounts(Product $bundleProduct, $searchMin, $useRegularPrice = false)
     {
@@ -235,7 +221,6 @@ class Calculator implements BundleCalculatorInterface
      * @param bool $canSkipRequiredOption
      * @return bool
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     protected function canSkipOption($option, $canSkipRequiredOption)
     {
@@ -248,7 +233,6 @@ class Calculator implements BundleCalculatorInterface
      * @param Product $bundleProduct
      * @return bool
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     protected function hasRequiredOption($bundleProduct)
     {
@@ -267,7 +251,6 @@ class Calculator implements BundleCalculatorInterface
      * @param Product $saleableItem
      * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     protected function getBundleOptions(Product $saleableItem)
     {
@@ -286,7 +269,6 @@ class Calculator implements BundleCalculatorInterface
      * @param \Magento\Bundle\Pricing\Price\BundleSelectionPrice[] $selectionPriceList
      * @param null|bool|string|array $exclude
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     public function calculateBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude = null)
     {
@@ -305,7 +287,6 @@ class Calculator implements BundleCalculatorInterface
      * @param \Magento\Bundle\Pricing\Price\BundleSelectionPrice[] $selectionPriceList
      * @param null|bool|string|arrayy $exclude
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     protected function calculateFixedBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude)
     {
@@ -326,7 +307,6 @@ class Calculator implements BundleCalculatorInterface
      * @param null|bool|string|array $exclude
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function calculateDynamicBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude)
     {
@@ -392,7 +372,6 @@ class Calculator implements BundleCalculatorInterface
      * @param Product $bundleProduct
      * @param bool $useRegularPrice
      * @return \Magento\Bundle\Pricing\Price\BundleSelectionPrice[]
-     * @since 2.0.0
      */
     public function createSelectionPriceList($option, $bundleProduct, $useRegularPrice = false)
     {
@@ -427,7 +406,6 @@ class Calculator implements BundleCalculatorInterface
      * @param bool $searchMin
      * @return \Magento\Bundle\Pricing\Price\BundleSelectionPrice[]
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function processOptions($option, $selectionPriceList, $searchMin = true)
     {

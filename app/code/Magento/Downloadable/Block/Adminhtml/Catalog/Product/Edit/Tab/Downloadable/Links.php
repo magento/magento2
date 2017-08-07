@@ -10,7 +10,6 @@ namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Download
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Links extends \Magento\Backend\Block\Template
 {
@@ -18,7 +17,6 @@ class Links extends \Magento\Backend\Block\Template
      * Block config data
      *
      * @var \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     protected $_config;
 
@@ -26,13 +24,11 @@ class Links extends \Magento\Backend\Block\Template
      * Purchased Separately Attribute cache
      *
      * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute
-     * @since 2.0.0
      */
     protected $_purchasedSeparatelyAttribute = null;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'product/edit/downloadable/links.phtml';
 
@@ -40,7 +36,6 @@ class Links extends \Magento\Backend\Block\Template
      * Downloadable file
      *
      * @var \Magento\Downloadable\Helper\File
-     * @since 2.0.0
      */
     protected $_downloadableFile = null;
 
@@ -48,7 +43,6 @@ class Links extends \Magento\Backend\Block\Template
      * Core file storage database
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
-     * @since 2.0.0
      */
     protected $_coreFileStorageDb = null;
 
@@ -56,37 +50,31 @@ class Links extends \Magento\Backend\Block\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\Eav\Model\Entity\AttributeFactory
-     * @since 2.0.0
      */
     protected $_attributeFactory;
 
     /**
      * @var \Magento\Downloadable\Model\Link
-     * @since 2.0.0
      */
     protected $_link;
 
     /**
      * @var \Magento\Config\Model\Config\Source\Yesno
-     * @since 2.0.0
      */
     protected $_sourceModel;
 
     /**
      * @var \Magento\Backend\Model\UrlFactory
-     * @since 2.0.0
      */
     protected $_urlFactory;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
@@ -102,7 +90,6 @@ class Links extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Model\UrlFactory $urlFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -131,7 +118,6 @@ class Links extends \Magento\Backend\Block\Template
      * Class constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -145,7 +131,6 @@ class Links extends \Magento\Backend\Block\Template
      * Get product that is being edited
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -156,7 +141,6 @@ class Links extends \Magento\Backend\Block\Template
      * Retrieve Purchased Separately Attribute object
      *
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
-     * @since 2.0.0
      */
     public function getPurchasedSeparatelyAttribute()
     {
@@ -176,7 +160,6 @@ class Links extends \Magento\Backend\Block\Template
      * Get Links can be purchased separately value for current product
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isProductLinksCanBePurchasedSeparately()
     {
@@ -187,7 +170,6 @@ class Links extends \Magento\Backend\Block\Template
      * Retrieve Add button HTML
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAddButtonHtml()
     {
@@ -208,7 +190,6 @@ class Links extends \Magento\Backend\Block\Template
      * Retrieve default links title
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLinksTitle()
     {
@@ -225,7 +206,6 @@ class Links extends \Magento\Backend\Block\Template
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getUsedDefault()
     {
@@ -237,7 +217,6 @@ class Links extends \Magento\Backend\Block\Template
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsPriceWebsiteScope()
     {
@@ -257,7 +236,6 @@ class Links extends \Magento\Backend\Block\Template
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function getLinkData()
     {
@@ -350,7 +328,6 @@ class Links extends \Magento\Backend\Block\Template
      *
      * @param float $value
      * @return string
-     * @since 2.0.0
      */
     public function getPriceValue($value)
     {
@@ -361,7 +338,6 @@ class Links extends \Magento\Backend\Block\Template
      * Retrieve max downloads value from config
      *
      * @return int
-     * @since 2.0.0
      */
     public function getConfigMaxDownloads()
     {
@@ -375,7 +351,6 @@ class Links extends \Magento\Backend\Block\Template
      * Prepare block Layout
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -395,7 +370,6 @@ class Links extends \Magento\Backend\Block\Template
      * Retrieve Upload button HTML
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUploadButtonHtml()
     {
@@ -407,7 +381,6 @@ class Links extends \Magento\Backend\Block\Template
      *
      * @param string $type
      * @return string
-     * @since 2.0.0
      */
     public function getFileFieldName($type)
     {
@@ -419,7 +392,6 @@ class Links extends \Magento\Backend\Block\Template
      *
      * @param string $type
      * @return string
-     * @since 2.0.0
      */
     public function getUploadUrl($type)
     {
@@ -434,7 +406,6 @@ class Links extends \Magento\Backend\Block\Template
      *
      * @param string $type
      * @return string
-     * @since 2.0.0
      */
     public function getConfigJson($type = 'links')
     {
@@ -452,7 +423,6 @@ class Links extends \Magento\Backend\Block\Template
      * Retrieve config object
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -465,7 +435,6 @@ class Links extends \Magento\Backend\Block\Template
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isSingleStoreMode()
     {
@@ -475,7 +444,6 @@ class Links extends \Magento\Backend\Block\Template
     /**
      * @param null|string|bool|int|\Magento\Store\Model\Store $storeId $storeId
      * @return string
-     * @since 2.0.0
      */
     public function getBaseCurrencyCode($storeId)
     {
@@ -485,7 +453,6 @@ class Links extends \Magento\Backend\Block\Template
     /**
      * @param null|string|bool|int|\Magento\Store\Model\Store $storeId $storeId
      * @return string
-     * @since 2.0.0
      */
     public function getBaseCurrencySymbol($storeId)
     {

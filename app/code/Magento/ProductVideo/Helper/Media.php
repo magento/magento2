@@ -12,7 +12,6 @@ use Magento\Framework\App\Helper\Context;
  * Helper to get attributes for video
  *
  * @api
- * @since 2.0.0
  */
 class Media extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -48,7 +47,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param Context $context
-     * @since 2.0.0
      */
     public function __construct(
         Context $context
@@ -60,7 +58,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * Get play if base video attribute
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getPlayIfBaseAttribute()
     {
@@ -71,7 +68,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * Get show related youtube attribute
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getShowRelatedAttribute()
     {
@@ -82,7 +78,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * Get video auto restart attribute
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getVideoAutoRestartAttribute()
     {
@@ -93,7 +88,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve YouTube API key
      *
      * @return string
-     * @since 2.0.0
      */
     public function getYouTubeApiKey()
     {

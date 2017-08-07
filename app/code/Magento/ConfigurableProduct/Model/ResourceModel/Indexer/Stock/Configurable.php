@@ -20,7 +20,6 @@ use Magento\Framework\App\ObjectManager;
  * Stock indexer for configurable product.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Configurable extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock
 {
@@ -60,7 +59,6 @@ class Configurable extends \Magento\CatalogInventory\Model\ResourceModel\Indexer
      * @param int|array $entityIds
      * @param bool $usePrimaryTable use primary or temporary index table
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {

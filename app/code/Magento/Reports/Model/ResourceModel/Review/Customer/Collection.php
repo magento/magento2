@@ -13,13 +13,11 @@ namespace Magento\Reports\Model\ResourceModel\Review\Customer;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
 {
     /**
      * @var \Magento\Customer\Model\ResourceModel\Customer
-     * @since 2.0.0
      */
     protected $_customerResource;
 
@@ -35,7 +33,6 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -67,7 +64,6 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
      * Init Select
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initSelect()
     {
@@ -80,7 +76,6 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
      * Join customers
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _joinCustomers()
     {
@@ -111,7 +106,6 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
      * Get select count sql
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSelectCountSql()
     {

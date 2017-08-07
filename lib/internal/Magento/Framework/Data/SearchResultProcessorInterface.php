@@ -7,7 +7,6 @@ namespace Magento\Framework\Data;
 
 /**
  * Interface SearchResultProcessorInterface
- * @since 2.0.0
  */
 interface SearchResultProcessorInterface
 {
@@ -15,7 +14,6 @@ interface SearchResultProcessorInterface
      * Retrieve all ids for collection
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllIds();
 
@@ -23,7 +21,6 @@ interface SearchResultProcessorInterface
      * Get current collection page
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCurrentPage();
 
@@ -31,7 +28,6 @@ interface SearchResultProcessorInterface
      * Retrieve collection page size
      *
      * @return int
-     * @since 2.0.0
      */
     public function getPageSize();
 
@@ -39,7 +35,6 @@ interface SearchResultProcessorInterface
      * Retrieve collection first item
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getFirstItem();
 
@@ -47,7 +42,6 @@ interface SearchResultProcessorInterface
      * Retrieve collection last item
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getLastItem();
 
@@ -56,7 +50,6 @@ interface SearchResultProcessorInterface
      *
      * @param   string $colName
      * @return  array
-     * @since 2.0.0
      */
     public function getColumnValues($colName);
 
@@ -66,7 +59,6 @@ interface SearchResultProcessorInterface
      * @param   string $column
      * @param   mixed $value
      * @return  array
-     * @since 2.0.0
      */
     public function getItemsByColumnValue($column, $value);
 
@@ -76,7 +68,6 @@ interface SearchResultProcessorInterface
      * @param   string $column
      * @param   mixed $value
      * @return  \Magento\Framework\DataObject || null
-     * @since 2.0.0
      */
     public function getItemByColumnValue($column, $value);
 
@@ -85,7 +76,6 @@ interface SearchResultProcessorInterface
      *
      * @param   mixed $idValue
      * @return  \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getItemById($idValue);
 
@@ -98,7 +88,6 @@ interface SearchResultProcessorInterface
      * @param string $callback
      * @param array $arguments
      * @return array
-     * @since 2.0.0
      */
     public function walk($callback, array $arguments = []);
 
@@ -106,7 +95,6 @@ interface SearchResultProcessorInterface
      * Convert collection to XML
      *
      * @return string
-     * @since 2.0.0
      */
     public function toXml();
 
@@ -115,7 +103,6 @@ interface SearchResultProcessorInterface
      *
      * @param array $arrRequiredFields
      * @return array
-     * @since 2.0.0
      */
     public function toArray($arrRequiredFields = []);
 
@@ -134,7 +121,6 @@ interface SearchResultProcessorInterface
      * @param string $labelField
      * @param array $additional
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray($valueField = null, $labelField = null, $additional = []);
 
@@ -147,7 +133,6 @@ interface SearchResultProcessorInterface
      * @param   string $valueField
      * @param   string $labelField
      * @return  array
-     * @since 2.0.0
      */
     public function toOptionHash($valueField, $labelField);
 }

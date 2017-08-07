@@ -10,32 +10,27 @@ namespace Magento\Framework\Webapi\Rest;
 /**
  * Class \Magento\Framework\Webapi\Rest\Response
  *
- * @since 2.0.0
  */
 class Response extends \Magento\Framework\Webapi\Response
 {
     /**
      * @var \Magento\Framework\Webapi\ErrorProcessor
-     * @since 2.0.0
      */
     protected $_errorProcessor;
 
     /**
      * @var \Magento\Framework\Webapi\Rest\Response\RendererInterface
-     * @since 2.0.0
      */
     protected $_renderer;
 
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     protected $_appState;
 
     /**
      * Exception stack
      * @var \Exception
-     * @since 2.0.0
      */
     protected $exceptions = [];
 
@@ -45,7 +40,6 @@ class Response extends \Magento\Framework\Webapi\Response
      * @param \Magento\Framework\Webapi\Rest\Response\RendererFactory $rendererFactory
      * @param \Magento\Framework\Webapi\ErrorProcessor $errorProcessor
      * @param \Magento\Framework\App\State $appState
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Webapi\Rest\Response\RendererFactory $rendererFactory,
@@ -61,7 +55,6 @@ class Response extends \Magento\Framework\Webapi\Response
      * Send response to the client, render exceptions if they are present.
      *
      * @return void
-     * @since 2.0.0
      */
     public function sendResponse()
     {
@@ -90,7 +83,6 @@ class Response extends \Magento\Framework\Webapi\Response
      * Generate and set HTTP response code, error messages to Response object.
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _renderMessages()
     {
@@ -134,7 +126,6 @@ class Response extends \Magento\Framework\Webapi\Response
      *
      * @param array|int|string|bool|float|null $outputData
      * @return $this
-     * @since 2.0.0
      */
     public function prepareResponse($outputData = null)
     {
@@ -150,7 +141,6 @@ class Response extends \Magento\Framework\Webapi\Response
      *
      * @param array|int|string|bool|float|null $data
      * @return void
-     * @since 2.0.0
      */
     protected function _render($data)
     {
@@ -164,7 +154,6 @@ class Response extends \Magento\Framework\Webapi\Response
      *
      * @param \Exception $e
      * @return $this
-     * @since 2.0.0
      */
     public function setException($e)
     {
@@ -176,7 +165,6 @@ class Response extends \Magento\Framework\Webapi\Response
      * Has an exception been registered with the response?
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isException()
     {
@@ -187,7 +175,6 @@ class Response extends \Magento\Framework\Webapi\Response
      * Retrieve the exception stack
      *
      * @return array
-     * @since 2.0.0
      */
     public function getException()
     {
@@ -199,7 +186,6 @@ class Response extends \Magento\Framework\Webapi\Response
      *
      * @param  string $type
      * @return boolean
-     * @since 2.0.0
      */
     public function hasExceptionOfType($type)
     {

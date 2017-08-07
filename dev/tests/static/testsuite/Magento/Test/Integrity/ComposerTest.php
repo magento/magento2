@@ -12,7 +12,7 @@ use Magento\Framework\Composer\MagentoComponent;
 /**
  * A test that enforces validity of composer.json files and any other conventions in Magento components
  */
-class ComposerTest extends \PHPUnit_Framework_TestCase
+class ComposerTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

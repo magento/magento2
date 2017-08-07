@@ -10,7 +10,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Quote shipping/billing address validator service.
  *
- * @since 2.0.0
  */
 class QuoteAddressValidator
 {
@@ -18,7 +17,6 @@ class QuoteAddressValidator
      * Address factory.
      *
      * @var \Magento\Customer\Api\AddressRepositoryInterface
-     * @since 2.0.0
      */
     protected $addressRepository;
 
@@ -26,13 +24,11 @@ class QuoteAddressValidator
      * Customer repository.
      *
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $customerSession;
 
@@ -42,7 +38,6 @@ class QuoteAddressValidator
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository Customer repository.
      * @param \Magento\Customer\Model\Session $customerSession
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
@@ -61,7 +56,6 @@ class QuoteAddressValidator
      * @return bool
      * @throws \Magento\Framework\Exception\InputException The specified address belongs to another customer.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified customer ID or address ID is not valid.
-     * @since 2.0.0
      */
     public function validate(\Magento\Quote\Api\Data\AddressInterface $addressData)
     {

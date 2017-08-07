@@ -11,7 +11,6 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
  * Catalog product random items block
  *
  * @SuppressWarnings(PHPMD.LongVariable)
- * @since 2.0.0
  */
 class Random extends \Magento\Catalog\Block\Product\ListProduct
 {
@@ -19,13 +18,11 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
      * Product collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     * @since 2.0.0
      */
     protected $_productCollectionFactory;
 
     /**
      * @var CategoryRepositoryInterface
-     * @since 2.0.0
      */
     protected $categoryRepository;
 
@@ -37,7 +34,6 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -61,7 +57,6 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
 
     /**
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
-     * @since 2.0.0
      */
     protected function _getProductCollection()
     {

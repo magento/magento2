@@ -34,19 +34,16 @@ use Magento\Quote\Api\Data\PaymentInterface;
  * @method string getCcSsIssue()
  * @method \Magento\Quote\Model\Quote\Payment setCcSsIssue(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_quote_payment';
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'payment';
 
@@ -54,13 +51,11 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      * Quote model object
      *
      * @var \Magento\Quote\Model\Quote
-     * @since 2.0.0
      */
     protected $_quote;
 
     /**
      * @var \Magento\Payment\Model\Checks\SpecificationFactory
-     * @since 2.0.0
      */
     protected $methodSpecificationFactory;
 
@@ -97,7 +92,6 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param \Magento\Framework\Serialize\JsonValidator|null $jsonValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -137,7 +131,6 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -149,7 +142,6 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      *
      * @param \Magento\Quote\Model\Quote $quote
      * @return $this
-     * @since 2.0.0
      */
     public function setQuote(\Magento\Quote\Model\Quote $quote)
     {
@@ -164,7 +156,6 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      * @codeCoverageIgnore
      *
      * @return \Magento\Quote\Model\Quote
-     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -179,7 +170,6 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      * @param array $data
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function importData(array $data)
     {
@@ -222,7 +212,7 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      *
      * @param array $rawData
      * @return array
-     * @since 2.1.0
+     * @since 2.0.6
      */
     private function convertPaymentData(array $rawData)
     {
@@ -253,7 +243,6 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      * Prepare object for save
      *
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -267,7 +256,6 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      * Checkout redirect URL getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCheckoutRedirectUrl()
     {
@@ -282,7 +270,6 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      * Checkout order place redirect URL getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getOrderPlaceRedirectUrl()
     {
@@ -297,7 +284,6 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      * Retrieve payment method model object
      *
      * @return \Magento\Payment\Model\MethodInterface
-     * @since 2.0.0
      */
     public function getMethodInstance()
     {
@@ -314,7 +300,6 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      * Get purchase order number
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getPoNumber()
     {
@@ -326,7 +311,6 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      *
      * @param string $poNumber
      * @return $this
-     * @since 2.0.0
      */
     public function setPoNumber($poNumber)
     {
@@ -337,7 +321,6 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      * Get payment method code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMethod()
     {
@@ -349,7 +332,6 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      *
      * @param string $method
      * @return $this
-     * @since 2.0.0
      */
     public function setMethod($method)
     {
@@ -360,7 +342,6 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      * Get payment additional details
      *
      * @return string[]|null
-     * @since 2.0.0
      */
     public function getAdditionalData()
     {
@@ -382,7 +363,6 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      *
      * @param string $additionalData
      * @return $this
-     * @since 2.0.0
      */
     public function setAdditionalData($additionalData)
     {
@@ -395,7 +375,6 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      * {@inheritdoc}
      *
      * @return \Magento\Quote\Api\Data\PaymentExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -407,7 +386,6 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      *
      * @param \Magento\Quote\Api\Data\PaymentExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Quote\Api\Data\PaymentExtensionInterface $extensionAttributes)
     {

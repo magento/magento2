@@ -12,25 +12,21 @@ use Magento\Customer\Model\Customer;
 
 /**
  * @deprecated 2.1.0
- * @since 2.0.0
  */
 class Grid
 {
     /**
      * @var resource
-     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var \Magento\Framework\Indexer\IndexerRegistry
-     * @since 2.0.0
      */
     protected $indexerRegistry;
 
     /**
      * @var \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver
-     * @since 2.0.0
      */
     protected $flatScopeResolver;
 
@@ -38,7 +34,6 @@ class Grid
      * @param ResourceConnection $resource
      * @param IndexerRegistry $indexerRegistry
      * @param FlatScopeResolver $flatScopeResolver
-     * @since 2.0.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -56,7 +51,6 @@ class Grid
      * @return void
      *
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     public function syncCustomerGrid()
     {
@@ -73,7 +67,6 @@ class Grid
      * @return array
      *
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     protected function getCustomerIdsForReindex()
     {

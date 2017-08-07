@@ -9,13 +9,11 @@ namespace Magento\Directory\Controller\Currency;
 /**
  * Class \Magento\Directory\Controller\Currency\SwitchAction
  *
- * @since 2.0.0
  */
 class SwitchAction extends \Magento\Framework\App\Action\Action
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

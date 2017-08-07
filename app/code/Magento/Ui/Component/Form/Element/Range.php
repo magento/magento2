@@ -7,7 +7,6 @@ namespace Magento\Ui\Component\Form\Element;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Range extends AbstractElement
 {
@@ -17,7 +16,6 @@ class Range extends AbstractElement
      * Get component name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getComponentName()
     {
@@ -26,7 +24,6 @@ class Range extends AbstractElement
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getType()
     {

@@ -11,25 +11,21 @@ use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 /**
  * Class \Magento\Weee\Model\Attribute\Backend\Weee\Tax
  *
- * @since 2.0.0
  */
 class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
 {
     /**
      * @var \Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax
-     * @since 2.0.0
      */
     protected $_attributeTax;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Directory\Helper\Data
-     * @since 2.0.0
      */
     protected $_directoryHelper;
 
@@ -44,7 +40,6 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax $attributeTax
      * @param ScopeOverriddenValue|null $scopeOverriddenValue
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
@@ -71,7 +66,6 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public static function getBackendModelName()
     {
@@ -84,7 +78,6 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
      * @param   \Magento\Catalog\Model\Product $object
      * @return  $this
      * @throws  \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function validate($object)
     {
@@ -115,7 +108,6 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
      * @param   \Magento\Catalog\Model\Product $object
      * @return  $this
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function afterLoad($object)
     {
@@ -143,7 +135,6 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function afterSave($object)
     {
@@ -182,7 +173,6 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function afterDelete($object)
     {
@@ -192,7 +182,6 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTable()
     {

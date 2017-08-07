@@ -13,7 +13,6 @@ use Magento\Backend\App\AbstractAction;
 /**
  * Class \Magento\Backend\App\Action\Plugin\MassactionKey
  *
- * @since 2.0.0
  */
 class MassactionKey
 {

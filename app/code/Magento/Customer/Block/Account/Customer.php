@@ -9,25 +9,21 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Customer extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Customer\Helper\View
-     * @since 2.0.0
      */
     protected $_viewHelper;
 
     /**
      * @var \Magento\Framework\App\Http\Context
-     * @since 2.0.0
      */
     protected $httpContext;
 
@@ -35,7 +31,6 @@ class Customer extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -50,7 +45,6 @@ class Customer extends \Magento\Framework\View\Element\Template
      * Checking customer login status
      *
      * @return bool
-     * @since 2.0.0
      */
     public function customerLoggedIn()
     {

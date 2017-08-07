@@ -10,7 +10,6 @@ namespace Magento\AdminNotification\Block\Grid\Renderer;
 /**
  * Class \Magento\AdminNotification\Block\Grid\Renderer\Notice
  *
- * @since 2.0.0
  */
 class Notice extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -19,7 +18,6 @@ class Notice extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      *
      * @param   \Magento\Framework\DataObject $row
      * @return  string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

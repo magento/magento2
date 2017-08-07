@@ -7,7 +7,6 @@ namespace Magento\Framework\Filter;
 
 /**
  * Magento filter factory interface
- * @since 2.0.0
  */
 interface FactoryInterface
 {
@@ -16,7 +15,6 @@ interface FactoryInterface
      *
      * @param string $alias
      * @return bool
-     * @since 2.0.0
      */
     public function canCreateFilter($alias);
 
@@ -25,7 +23,6 @@ interface FactoryInterface
      *
      * @param string $class
      * @return bool
-     * @since 2.0.0
      */
     public function isShared($class);
 
@@ -35,7 +32,6 @@ interface FactoryInterface
      * @param string $alias
      * @param array $arguments
      * @return \Zend_Filter_Interface
-     * @since 2.0.0
      */
     public function createFilter($alias, array $arguments = []);
 }

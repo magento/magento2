@@ -9,7 +9,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\View;
  * Order history block
  *
  * @api
- * @since 2.0.0
  */
 class History extends \Magento\Backend\Block\Template
 {
@@ -17,7 +16,6 @@ class History extends \Magento\Backend\Block\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -25,13 +23,11 @@ class History extends \Magento\Backend\Block\Template
      * Sales data
      *
      * @var \Magento\Sales\Helper\Data
-     * @since 2.0.0
      */
     protected $_salesData = null;
 
     /**
      * @var \Magento\Sales\Helper\Admin
-     * @since 2.0.0
      */
     private $adminHelper;
 
@@ -41,7 +37,6 @@ class History extends \Magento\Backend\Block\Template
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Helper\Admin $adminHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -60,7 +55,6 @@ class History extends \Magento\Backend\Block\Template
      * Preparing global layout
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -78,7 +72,6 @@ class History extends \Magento\Backend\Block\Template
      * Get stat uses
      *
      * @return array
-     * @since 2.0.0
      */
     public function getStatuses()
     {
@@ -91,7 +84,6 @@ class History extends \Magento\Backend\Block\Template
      * Check allow to send order comment email
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canSendCommentEmail()
     {
@@ -102,7 +94,6 @@ class History extends \Magento\Backend\Block\Template
      * Retrieve order model
      *
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -113,7 +104,6 @@ class History extends \Magento\Backend\Block\Template
      * Check allow to add comment
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canAddComment()
     {
@@ -124,7 +114,6 @@ class History extends \Magento\Backend\Block\Template
      * Submit URL getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSubmitUrl()
     {
@@ -136,7 +125,6 @@ class History extends \Magento\Backend\Block\Template
      *
      * @param  \Magento\Sales\Model\Order\Status\History $history
      * @return bool
-     * @since 2.0.0
      */
     public function isCustomerNotificationNotApplicable(\Magento\Sales\Model\Order\Status\History $history)
     {
@@ -149,7 +137,6 @@ class History extends \Magento\Backend\Block\Template
      * @param array|string $data
      * @param null|array $allowedTags
      * @return string
-     * @since 2.0.0
      */
     public function escapeHtml($data, $allowedTags = null)
     {

@@ -16,37 +16,31 @@ use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Class \Magento\SalesRule\Model\Converter\ToDataModel
  *
- * @since 2.0.0
  */
 class ToDataModel
 {
     /**
      * @var \Magento\SalesRule\Model\RuleFactory
-     * @since 2.0.0
      */
     protected $ruleFactory;
 
     /**
      * @var \Magento\SalesRule\Api\Data\RuleInterfaceFactory
-     * @since 2.0.0
      */
     protected $ruleDataFactory;
 
     /**
      * @var \Magento\SalesRule\Api\Data\ConditionInterfaceFactory
-     * @since 2.0.0
      */
     protected $conditionDataFactory;
 
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
-     * @since 2.0.0
      */
     protected $dataObjectProcessor;
 
     /**
      * @var \Magento\SalesRule\Api\Data\RuleLabelInterfaceFactory
-     * @since 2.0.0
      */
     protected $ruleLabelFactory;
 
@@ -70,7 +64,6 @@ class ToDataModel
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param Json $serializer Optional parameter for backward compatibility
      * @param RuleExtensionFactory|null $extensionFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,
@@ -96,7 +89,6 @@ class ToDataModel
      *
      * @param Rule $ruleModel
      * @return RuleDataModel
-     * @since 2.0.0
      */
     public function toDataModel(Rule $ruleModel)
     {
@@ -115,7 +107,6 @@ class ToDataModel
      * @param RuleDataModel $dataModel
      * @param Rule $ruleModel
      * @return $this
-     * @since 2.0.0
      */
     protected function mapConditions(RuleDataModel $dataModel, Rule $ruleModel)
     {
@@ -134,7 +125,6 @@ class ToDataModel
      * @param RuleDataModel $dataModel
      * @param Rule $ruleModel
      * @return $this
-     * @since 2.0.0
      */
     protected function mapActionConditions(RuleDataModel $dataModel, Rule $ruleModel)
     {
@@ -152,7 +142,6 @@ class ToDataModel
     /**
      * @param RuleDataModel $dataModel
      * @return $this
-     * @since 2.0.0
      */
     protected function mapStoreLabels(RuleDataModel $dataModel)
     {
@@ -173,7 +162,6 @@ class ToDataModel
     /**
      * @param RuleDataModel $dataModel
      * @return $this
-     * @since 2.0.0
      */
     protected function mapCouponType(RuleDataModel $dataModel)
     {
@@ -216,7 +204,6 @@ class ToDataModel
      * @param RuleDataModel $dataModel
      * @param Rule $ruleModel
      * @return $this
-     * @since 2.0.0
      */
     protected function mapFields(RuleDataModel $dataModel, Rule $ruleModel)
     {
@@ -232,7 +219,6 @@ class ToDataModel
      *
      * @param array $input
      * @return Condition
-     * @since 2.0.0
      */
     public function arrayToConditionDataModel(array $input)
     {

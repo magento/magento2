@@ -9,7 +9,7 @@ namespace Magento\Framework\App\Config\Reader\Source;
  * Provide access to data. Each Source can be responsible for each storage, where config data can be placed
  *
  * @package Magento\Framework\App\Config\Reader\Source
- * @since 2.2.0
+ * @since 2.1.3
  */
 interface SourceInterface
 {
@@ -18,7 +18,7 @@ interface SourceInterface
      *
      * @param string|null $scopeCode
      * @return array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function get($scopeCode = null);
 }

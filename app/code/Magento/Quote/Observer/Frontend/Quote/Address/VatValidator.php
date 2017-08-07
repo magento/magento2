@@ -8,7 +8,6 @@ namespace Magento\Quote\Observer\Frontend\Quote\Address;
 /**
  * Class \Magento\Quote\Observer\Frontend\Quote\Address\VatValidator
  *
- * @since 2.0.0
  */
 class VatValidator
 {
@@ -16,7 +15,6 @@ class VatValidator
      * Customer address
      *
      * @var \Magento\Customer\Helper\Address
-     * @since 2.0.0
      */
     protected $customerAddress;
 
@@ -24,14 +22,12 @@ class VatValidator
      * Customer VAT
      *
      * @var \Magento\Customer\Model\Vat
-     * @since 2.0.0
      */
     protected $customerVat;
 
     /**
      * @param \Magento\Customer\Helper\Address $customerAddress
      * @param \Magento\Customer\Model\Vat $customerVat
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddress,
@@ -47,7 +43,6 @@ class VatValidator
      * @param \Magento\Quote\Model\Quote\Address $quoteAddress
      * @param \Magento\Store\Model\Store|int $store
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function validate(\Magento\Quote\Model\Quote\Address $quoteAddress, $store)
     {
@@ -101,7 +96,6 @@ class VatValidator
      * @param \Magento\Quote\Model\Quote\Address $quoteAddress
      * @param \Magento\Store\Model\Store|int $store
      * @return bool
-     * @since 2.0.0
      */
     public function isEnabled(\Magento\Quote\Model\Quote\Address $quoteAddress, $store)
     {

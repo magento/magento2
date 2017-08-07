@@ -16,7 +16,6 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 /**
  * Class \Magento\ImportExport\Controller\Adminhtml\Import\Validate
  *
- * @since 2.0.0
  */
 class Validate extends ImportResultController
 {
@@ -30,7 +29,6 @@ class Validate extends ImportResultController
      * Validate uploaded files action
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

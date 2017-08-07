@@ -12,7 +12,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\PreviewImage
  *
- * @since 2.0.0
  */
 class PreviewImage extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
 {
@@ -20,7 +19,6 @@ class PreviewImage extends \Magento\Theme\Controller\Adminhtml\System\Design\Wys
      * Preview image action
      *
      * @return ResponseInterface|void
-     * @since 2.0.0
      */
     public function execute()
     {

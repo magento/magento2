@@ -8,7 +8,6 @@ namespace Magento\Framework\Api;
 
 /**
  * SearchResults Service Data Object used for the search service requests
- * @since 2.0.0
  */
 class SearchResults extends AbstractSimpleObject implements SearchResultsInterface
 {
@@ -20,7 +19,6 @@ class SearchResults extends AbstractSimpleObject implements SearchResultsInterfa
      * Get items
      *
      * @return \Magento\Framework\Api\AbstractExtensibleObject[]
-     * @since 2.0.0
      */
     public function getItems()
     {
@@ -32,7 +30,6 @@ class SearchResults extends AbstractSimpleObject implements SearchResultsInterfa
      *
      * @param \Magento\Framework\Api\AbstractExtensibleObject[] $items
      * @return $this
-     * @since 2.0.0
      */
     public function setItems(array $items)
     {
@@ -43,7 +40,6 @@ class SearchResults extends AbstractSimpleObject implements SearchResultsInterfa
      * Get search criteria
      *
      * @return \Magento\Framework\Api\SearchCriteria
-     * @since 2.0.0
      */
     public function getSearchCriteria()
     {
@@ -55,7 +51,6 @@ class SearchResults extends AbstractSimpleObject implements SearchResultsInterfa
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @return $this
-     * @since 2.0.0
      */
     public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -66,7 +61,6 @@ class SearchResults extends AbstractSimpleObject implements SearchResultsInterfa
      * Get total count
      *
      * @return int
-     * @since 2.0.0
      */
     public function getTotalCount()
     {
@@ -78,7 +72,6 @@ class SearchResults extends AbstractSimpleObject implements SearchResultsInterfa
      *
      * @param int $count
      * @return $this
-     * @since 2.0.0
      */
     public function setTotalCount($count)
     {

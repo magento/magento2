@@ -9,13 +9,11 @@ namespace Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
 /**
  * Class \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement\Save
  *
- * @since 2.0.0
  */
 class Save extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

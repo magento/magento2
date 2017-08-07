@@ -10,7 +10,6 @@ use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
 
 /**
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInterface
 {
@@ -32,7 +31,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCode()
     {
@@ -41,7 +39,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -50,7 +47,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTaxClassKey()
     {
@@ -59,7 +55,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getUnitPrice()
     {
@@ -68,7 +63,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getQuantity()
     {
@@ -77,7 +71,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getIsTaxIncluded()
     {
@@ -86,7 +79,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getShortDescription()
     {
@@ -95,7 +87,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getDiscountAmount()
     {
@@ -104,7 +95,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getParentCode()
     {
@@ -113,7 +103,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAssociatedItemCode()
     {
@@ -122,7 +111,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTaxClassId()
     {
@@ -134,7 +122,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      *
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function setCode($code)
     {
@@ -146,7 +133,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      *
      * @param string $type
      * @return $this
-     * @since 2.0.0
      */
     public function setType($type)
     {
@@ -158,7 +144,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      *
      * @param \Magento\Tax\Api\Data\TaxClassKeyInterface $taxClassKey
      * @return $this
-     * @since 2.0.0
      */
     public function setTaxClassKey(\Magento\Tax\Api\Data\TaxClassKeyInterface $taxClassKey = null)
     {
@@ -170,7 +155,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      *
      * @param float $unitPrice
      * @return $this
-     * @since 2.0.0
      */
     public function setUnitPrice($unitPrice)
     {
@@ -182,7 +166,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      *
      * @param float $quantity
      * @return $this
-     * @since 2.0.0
      */
     public function setQuantity($quantity)
     {
@@ -194,7 +177,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      *
      * @param bool $isTaxIncluded
      * @return $this
-     * @since 2.0.0
      */
     public function setIsTaxIncluded($isTaxIncluded)
     {
@@ -206,7 +188,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      *
      * @param string $shortDescription
      * @return $this
-     * @since 2.0.0
      */
     public function setShortDescription($shortDescription)
     {
@@ -218,7 +199,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      *
      * @param float $discountAmount
      * @return $this
-     * @since 2.0.0
      */
     public function setDiscountAmount($discountAmount)
     {
@@ -230,7 +210,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      *
      * @param string $parentCode
      * @return $this
-     * @since 2.0.0
      */
     public function setParentCode($parentCode)
     {
@@ -242,7 +221,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      *
      * @param int $associatedItemCode
      * @return $this
-     * @since 2.0.0
      */
     public function setAssociatedItemCode($associatedItemCode)
     {
@@ -254,7 +232,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      *
      * @param int $taxClassId
      * @return $this
-     * @since 2.0.0
      */
     public function setTaxClassId($taxClassId)
     {
@@ -265,7 +242,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      * {@inheritdoc}
      *
      * @return \Magento\Tax\Api\Data\QuoteDetailsItemExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -277,7 +253,6 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      *
      * @param \Magento\Tax\Api\Data\QuoteDetailsItemExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Tax\Api\Data\QuoteDetailsItemExtensionInterface $extensionAttributes

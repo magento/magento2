@@ -10,7 +10,6 @@ use Magento\Backend\App\Action;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\UpdateQty
  *
- * @since 2.0.0
  */
 class UpdateQty extends \Magento\Backend\App\Action
 {
@@ -23,25 +22,21 @@ class UpdateQty extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
-     * @since 2.0.0
      */
     protected $creditmemoLoader;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $pagePageFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
-     * @since 2.0.0
      */
     protected $resultRawFactory;
 
@@ -51,7 +46,6 @@ class UpdateQty extends \Magento\Backend\App\Action
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -71,7 +65,6 @@ class UpdateQty extends \Magento\Backend\App\Action
      * Update items qty action
      *
      * @return \Magento\Framework\Controller\Result\Json|\Magento\Framework\Controller\Result\Raw
-     * @since 2.0.0
      */
     public function execute()
     {

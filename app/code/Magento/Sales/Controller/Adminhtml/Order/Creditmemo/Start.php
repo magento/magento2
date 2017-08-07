@@ -8,7 +8,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\Start
  *
- * @since 2.0.0
  */
 class Start extends \Magento\Backend\App\Action
 {
@@ -23,7 +22,6 @@ class Start extends \Magento\Backend\App\Action
      * Start create creditmemo action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

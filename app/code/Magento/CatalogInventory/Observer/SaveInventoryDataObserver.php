@@ -21,19 +21,16 @@ use Magento\Framework\Event\Observer as EventObserver;
  * @see StockItemInterface when you want to change the stock data
  * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
  * @see StockItemRepositoryInterface::save as extension point for customization of saving process
- * @since 2.0.0
  */
 class SaveInventoryDataObserver implements ObserverInterface
 {
     /**
      * @var StockConfigurationInterface
-     * @since 2.0.0
      */
     private $stockConfiguration;
 
     /**
      * @var StockRegistryInterface
-     * @since 2.0.0
      */
     private $stockRegistry;
 
@@ -45,7 +42,6 @@ class SaveInventoryDataObserver implements ObserverInterface
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $paramListToCheck = [
         'use_config_min_qty' => [
@@ -82,7 +78,6 @@ class SaveInventoryDataObserver implements ObserverInterface
      * @param StockConfigurationInterface $stockConfiguration
      * @param StockRegistryInterface $stockRegistry
      * @param StockItemValidator $stockItemValidator
-     * @since 2.0.0
      */
     public function __construct(
         StockConfigurationInterface $stockConfiguration,
@@ -102,7 +97,6 @@ class SaveInventoryDataObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

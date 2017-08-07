@@ -9,7 +9,6 @@ namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 /**
  * Class \Magento\Variable\Controller\Adminhtml\System\Variable\Delete
  *
- * @since 2.0.0
  */
 class Delete extends \Magento\Variable\Controller\Adminhtml\System\Variable
 {
@@ -17,7 +16,6 @@ class Delete extends \Magento\Variable\Controller\Adminhtml\System\Variable
      * Delete Action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

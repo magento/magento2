@@ -12,25 +12,21 @@ use Magento\Framework\Filesystem;
 /**
  * Backup data helper
  * @api
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * @var Filesystem
-     * @since 2.0.0
      */
     protected $_filesystem;
 
     /**
      * @var \Magento\Framework\AuthorizationInterface
-     * @since 2.0.0
      */
     protected $_authorization;
 
     /**
      * @var \Magento\Framework\App\Cache\TypeListInterface
-     * @since 2.0.0
      */
     protected $_cacheTypeList;
 
@@ -41,7 +37,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param Filesystem $filesystem
      * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -59,7 +54,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get all possible backup type values with descriptive title
      *
      * @return array
-     * @since 2.0.0
      */
     public function getBackupTypes()
     {
@@ -75,7 +69,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get all possible backup type values
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getBackupTypesList()
     {
@@ -91,7 +84,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get default backup type value
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultBackupType()
     {
@@ -102,7 +94,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get directory path where backups stored
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBackupsDir()
     {
@@ -114,7 +105,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $type
      * @return string
-     * @since 2.0.0
      */
     public function getExtensionByType($type)
     {
@@ -126,7 +116,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get all types to extensions map
      *
      * @return array
-     * @since 2.0.0
      */
     public function getExtensions()
     {
@@ -143,7 +132,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Backup\Model\Backup $backup
      * @return string
-     * @since 2.0.0
      */
     public function generateBackupDownloadName(\Magento\Backup\Model\Backup $backup)
     {
@@ -164,7 +152,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check Permission for Rollback
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isRollbackAllowed()
     {
@@ -175,7 +162,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get paths that should be ignored when creating system snapshots
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getBackupIgnorePaths()
     {
@@ -197,7 +183,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get paths that should be ignored when rolling back system snapshots
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getRollbackIgnorePaths()
     {
@@ -220,7 +205,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $type
      * @return void|string
-     * @since 2.0.0
      */
     public function getCreateSuccessMessageByType($type)
     {
@@ -244,7 +228,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Invalidate Cache
      *
      * @return $this
-     * @since 2.0.0
      */
     public function invalidateCache()
     {
@@ -260,7 +243,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $name
      * @return string
-     * @since 2.0.0
      */
     public function nameToDisplayName($name)
     {
@@ -272,7 +254,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $filename
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function extractDataFromFilename($filename)
     {

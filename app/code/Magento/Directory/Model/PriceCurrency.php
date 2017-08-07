@@ -12,25 +12,21 @@ use Magento\Store\Model\Store;
 
 /**
  * Class PriceCurrency model for convert and format price value
- * @since 2.0.0
  */
 class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var CurrencyFactory
-     * @since 2.0.0
      */
     protected $currencyFactory;
 
     /**
      * @var Logger
-     * @since 2.0.0
      */
     protected $logger;
 
@@ -38,7 +34,6 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param CurrencyFactory $currencyFactory
      * @param Logger $logger
-     * @since 2.0.0
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -52,7 +47,6 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function convert($amount, $scope = null, $currency = null)
     {
@@ -65,7 +59,6 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function convertAndRound($amount, $scope = null, $currency = null, $precision = self::DEFAULT_PRECISION)
     {
@@ -76,7 +69,6 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function format(
         $amount,
@@ -91,7 +83,6 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function convertAndFormat(
         $amount,
@@ -107,7 +98,6 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCurrency($scope = null, $currency = null)
     {
@@ -131,7 +121,6 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
      * @param null|string|bool|int|\Magento\Framework\App\ScopeInterface $scope
      * @param \Magento\Framework\Model\AbstractModel|string|null $currency
      * @return string
-     * @since 2.0.0
      */
     public function getCurrencySymbol($scope = null, $currency = null)
     {
@@ -143,7 +132,6 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
      *
      * @param null|string|bool|int|ScopeInterface $scope
      * @return Store
-     * @since 2.0.0
      */
     protected function getStore($scope = null)
     {
@@ -164,7 +152,6 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
      *
      * @param float $price
      * @return float
-     * @since 2.0.0
      */
     public function round($price)
     {

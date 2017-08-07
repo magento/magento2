@@ -14,26 +14,22 @@ namespace Magento\Developer\Model\TemplateEngine\Decorator;
  * Decorates block with block and template hints
  *
  * @api
- * @since 2.0.0
  */
 class DebugHints implements \Magento\Framework\View\TemplateEngineInterface
 {
     /**
      * @var \Magento\Framework\View\TemplateEngineInterface
-     * @since 2.0.0
      */
     private $_subject;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     private $_showBlockHints;
 
     /**
      * @param \Magento\Framework\View\TemplateEngineInterface $subject
      * @param bool $showBlockHints Whether to include block into the debugging information or not
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\View\TemplateEngineInterface $subject, $showBlockHints)
     {
@@ -45,7 +41,6 @@ class DebugHints implements \Magento\Framework\View\TemplateEngineInterface
      * Insert debugging hints into the rendered block contents
      *
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\View\Element\BlockInterface $block, $templateFile, array $dictionary = [])
     {
@@ -63,7 +58,6 @@ class DebugHints implements \Magento\Framework\View\TemplateEngineInterface
      * @param string $blockHtml
      * @param string $templateFile
      * @return string
-     * @since 2.0.0
      */
     protected function _renderTemplateHints($blockHtml, $templateFile)
     {
@@ -81,7 +75,6 @@ HTML;
      * @param string $blockHtml
      * @param \Magento\Framework\View\Element\BlockInterface $block
      * @return string
-     * @since 2.0.0
      */
     protected function _renderBlockHints($blockHtml, \Magento\Framework\View\Element\BlockInterface $block)
     {

@@ -11,31 +11,26 @@ use Magento\Backend\Model\UrlInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Partners
 {
     /**
      * @var Curl
-     * @since 2.0.0
      */
     protected $curlClient;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $urlPrefix = 'https://';
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $apiUrl = 'magento.com/magento-connect/platinumpartners/list';
 
     /**
      * @var \Magento\Marketplace\Helper\Cache
-     * @since 2.0.0
      */
     protected $cache;
 
@@ -43,7 +38,6 @@ class Partners
      * @param Curl $curl
      * @param Cache $cache
      * @param UrlInterface $backendUrl
-     * @since 2.0.0
      */
     public function __construct(Curl $curl, Cache $cache, UrlInterface $backendUrl)
     {
@@ -54,7 +48,6 @@ class Partners
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getApiUrl()
     {
@@ -65,7 +58,6 @@ class Partners
      * Gets partners json
      *
      * @return array
-     * @since 2.0.0
      */
     public function getPartners()
     {
@@ -91,7 +83,6 @@ class Partners
 
     /**
      * @return Curl
-     * @since 2.0.0
      */
     public function getCurlClient()
     {
@@ -100,7 +91,6 @@ class Partners
 
     /**
      * @return cache
-     * @since 2.0.0
      */
     public function getCache()
     {
@@ -109,7 +99,6 @@ class Partners
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getReferer()
     {

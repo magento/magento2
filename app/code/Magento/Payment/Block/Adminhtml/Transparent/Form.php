@@ -7,7 +7,6 @@ namespace Magento\Payment\Block\Adminhtml\Transparent;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Form extends \Magento\Payment\Block\Transparent\Form
 {
@@ -15,7 +14,6 @@ class Form extends \Magento\Payment\Block\Transparent\Form
      * On backend this block does not have any conditional checks
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function shouldRender()
     {
@@ -24,7 +22,6 @@ class Form extends \Magento\Payment\Block\Transparent\Form
 
     /**
      * {inheritdoc}
-     * @since 2.0.0
      */
     protected function initializeMethod()
     {

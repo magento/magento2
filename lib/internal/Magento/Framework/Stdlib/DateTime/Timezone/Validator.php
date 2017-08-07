@@ -10,7 +10,6 @@ use Magento\Framework\Phrase;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Validator
 {
@@ -18,7 +17,6 @@ class Validator
      * Maximum allowed year value
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_yearMaxValue;
 
@@ -26,14 +24,12 @@ class Validator
      * Minimum allowed year value
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_yearMinValue;
 
     /**
      * @param int $yearMinValue
      * @param int $yearMaxValue
-     * @since 2.0.0
      */
     public function __construct(
         $yearMinValue = \Magento\Framework\Stdlib\DateTime::YEAR_MIN_VALUE,
@@ -50,7 +46,6 @@ class Validator
      * @param int|string $toDate
      * @return void
      * @throws \Magento\Framework\Exception\ValidatorException
-     * @since 2.0.0
      */
     public function validate($timestamp, $toDate)
     {

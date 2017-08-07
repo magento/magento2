@@ -9,7 +9,6 @@ use Magento\Framework\DataObject;
 
 /**
  * Response object
- * @since 2.0.0
  */
 class Response extends DataObject
 {

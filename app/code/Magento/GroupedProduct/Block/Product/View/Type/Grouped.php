@@ -9,13 +9,11 @@ namespace Magento\GroupedProduct\Block\Product\View\Type;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Grouped extends \Magento\Catalog\Block\Product\View\AbstractView
 {
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getAssociatedProducts()
     {
@@ -26,7 +24,6 @@ class Grouped extends \Magento\Catalog\Block\Product\View\AbstractView
      * Set preconfigured values to grouped associated products
      *
      * @return $this
-     * @since 2.0.0
      */
     public function setPreconfiguredValue()
     {

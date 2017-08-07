@@ -8,7 +8,6 @@ namespace Magento\Backend\Model\Menu;
 /**
  * Menu iterator
  * @api
- * @since 2.0.0
  */
 class Iterator extends \ArrayIterator
 {
@@ -16,7 +15,6 @@ class Iterator extends \ArrayIterator
      * Rewind to first element
      *
      * @return void
-     * @since 2.0.0
      */
     public function rewind()
     {

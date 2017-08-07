@@ -7,7 +7,6 @@ namespace Magento\Framework\Model\ResourceModel\Db\VersionControl;
 
 /**
  * Interface RelationInterface
- * @since 2.0.0
  */
 interface RelationInterface
 {
@@ -16,7 +15,6 @@ interface RelationInterface
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return void
-     * @since 2.0.0
      */
     public function processRelation(\Magento\Framework\Model\AbstractModel $object);
 }

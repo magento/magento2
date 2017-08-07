@@ -9,7 +9,6 @@ namespace Magento\Framework\Stdlib;
  * Class ArrayUtils
  *
  * @api
- * @since 2.0.0
  */
 class ArrayUtils
 {
@@ -19,7 +18,6 @@ class ArrayUtils
      * @param  array $sort
      * @param  string $locale
      * @return array|bool
-     * @since 2.0.0
      */
     public function ksortMultibyte(array &$sort, $locale)
     {
@@ -61,7 +59,6 @@ class ArrayUtils
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function decorateArray($array, $prefix = 'decorated_', $forceSetAll = false)
     {
@@ -120,7 +117,6 @@ class ArrayUtils
      * @param bool $value
      * @param bool $isSkipped
      * @return void
-     * @since 2.0.0
      */
     private function _decorateArrayObject($element, $key, $value, $isSkipped)
     {

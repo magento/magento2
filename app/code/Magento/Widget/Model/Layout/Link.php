@@ -14,7 +14,6 @@ namespace Magento\Widget\Model\Layout;
  * @method \Magento\Widget\Model\Layout\Link setStoreId($id)
  * @method \Magento\Widget\Model\Layout\Link setThemeId($id)
  * @method \Magento\Widget\Model\Layout\Link setLayoutUpdateId($id)
- * @since 2.0.0
  */
 class Link extends \Magento\Framework\Model\AbstractModel
 {
@@ -22,7 +21,6 @@ class Link extends \Magento\Framework\Model\AbstractModel
      * Layout Update model initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

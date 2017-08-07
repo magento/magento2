@@ -10,7 +10,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
 {
@@ -18,7 +17,6 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
      * Storage action on selected item
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_sidebarStorageAction = 'add_cart_item';
 
@@ -26,7 +24,6 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
      * Constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -39,7 +36,6 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
      * Get header text
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -50,7 +46,6 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
      * Retrieve item collection
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getItemCollection()
     {
@@ -66,7 +61,6 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
      * Retrieve display item qty availability
      *
      * @return true
-     * @since 2.0.0
      */
     public function canDisplayItemQty()
     {
@@ -78,7 +72,6 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
      *
      * @param \Magento\Framework\DataObject $item
      * @return int
-     * @since 2.0.0
      */
     public function getIdentifierId($item)
     {
@@ -90,7 +83,6 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
      *
      * @param \Magento\Quote\Model\Quote\Item $item
      * @return int
-     * @since 2.0.0
      */
     public function getProductId($item)
     {
@@ -103,7 +95,6 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
      * Add button that clears customer's shopping cart
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {

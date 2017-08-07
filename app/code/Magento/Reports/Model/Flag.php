@@ -10,7 +10,6 @@ namespace Magento\Reports\Model;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @api
- * @since 2.0.0
  */
 class Flag extends \Magento\Framework\Flag
 {
@@ -36,7 +35,6 @@ class Flag extends \Magento\Framework\Flag
      *
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function setReportFlagCode($code)
     {

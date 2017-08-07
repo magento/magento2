@@ -11,7 +11,6 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
  * Import entity customer combined model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntity
 {
@@ -54,13 +53,11 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
 
     /**
      * @var \Magento\CustomerImportExport\Model\Import\Customer
-     * @since 2.0.0
      */
     protected $_customerEntity;
 
     /**
      * @var \Magento\CustomerImportExport\Model\Import\Address
-     * @since 2.0.0
      */
     protected $_addressEntity;
 
@@ -68,7 +65,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * Column names that holds values with particular meaning
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_specialAttributes = [
         Customer::COLUMN_WEBSITE,
@@ -81,7 +77,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * Permanent entity columns
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_permanentAttributes = [
         Customer::COLUMN_EMAIL,
@@ -92,7 +87,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * Customer attributes
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_customerAttributes = [];
 
@@ -100,7 +94,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * Address attributes
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_addressAttributes = [];
 
@@ -108,7 +101,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * Website code of current customer row
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_currentWebsiteCode;
 
@@ -116,7 +108,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * Email of current customer
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_currentEmail;
 
@@ -124,7 +115,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * Next customer entity ID
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_nextCustomerId;
 
@@ -132,7 +122,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * DB data source models
      *
      * @var \Magento\ImportExport\Model\ResourceModel\Import\Data[]
-     * @since 2.0.0
      */
     protected $_dataSourceModels;
 
@@ -140,7 +129,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * If we should check column names
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $needColumnCheck = true;
 
@@ -148,7 +136,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * Valid column names
      *
      * @array
-     * @since 2.0.0
      */
     protected $validColumnNames = [
         Customer::COLUMN_DEFAULT_BILLING,
@@ -158,7 +145,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected $masterAttributeCode = 'email';
 
@@ -176,7 +162,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\StringUtils $string,
@@ -251,7 +236,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * Collect customer attributes
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initCustomerAttributes()
     {
@@ -267,7 +251,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * Collect address attributes
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initAddressAttributes()
     {
@@ -283,7 +266,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * Import data rows
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _importData()
     {
@@ -299,7 +281,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * Imported entity type code getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getEntityTypeCode()
     {
@@ -312,7 +293,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * @param array $rowData
      * @param int $rowNumber
      * @return bool
-     * @since 2.0.0
      */
     public function validateRow(array $rowData, $rowNumber)
     {
@@ -361,7 +341,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * @param array $rowData
      * @param int $rowNumber
      * @return bool
-     * @since 2.0.0
      */
     protected function _validateAddressRow(array $rowData, $rowNumber)
     {
@@ -388,7 +367,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      *
      * @param array $rowData
      * @return array
-     * @since 2.0.0
      */
     protected function _prepareAddressRowData(array $rowData)
     {
@@ -417,7 +395,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      *
      * @param array $rowData
      * @return int
-     * @since 2.0.0
      */
     protected function _getRowScope(array $rowData)
     {
@@ -434,7 +411,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      *
      * @param array $parameters
      * @return $this
-     * @since 2.0.0
      */
     public function setParameters(array $parameters)
     {
@@ -455,7 +431,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      *
      * @param \Magento\ImportExport\Model\Import\AbstractSource $source
      * @return \Magento\ImportExport\Model\Import\AbstractEntity
-     * @since 2.0.0
      */
     public function setSource(\Magento\ImportExport\Model\Import\AbstractSource $source)
     {
@@ -469,7 +444,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * Returns number of checked entities
      *
      * @return int
-     * @since 2.0.0
      */
     public function getProcessedEntitiesCount()
     {
@@ -482,7 +456,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      *
      * @param string $attributeCode
      * @return bool
-     * @since 2.0.0
      */
     public function isAttributeParticular($attributeCode)
     {
@@ -498,7 +471,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      *
      * @param array $rowData
      * @return array
-     * @since 2.0.0
      */
     protected function _prepareRowForDb(array $rowData)
     {
@@ -513,7 +485,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function getValidColumnNames()
     {

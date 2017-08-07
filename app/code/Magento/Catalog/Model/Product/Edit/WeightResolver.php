@@ -9,7 +9,6 @@ namespace Magento\Catalog\Model\Product\Edit;
 /**
  * Class \Magento\Catalog\Model\Product\Edit\WeightResolver
  *
- * @since 2.0.0
  */
 class WeightResolver
 {
@@ -26,7 +25,6 @@ class WeightResolver
     /**
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
-     * @since 2.0.0
      */
     public function resolveProductHasWeight(\Magento\Catalog\Model\Product $product)
     {

@@ -27,7 +27,6 @@ use Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\StockInterface;
  *
  * @package Magento\CatalogInventory\Model\Indexer\Stock\Action
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Full extends AbstractAction
 {
@@ -120,7 +119,6 @@ class Full extends AbstractAction
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function execute($ids = null)
     {

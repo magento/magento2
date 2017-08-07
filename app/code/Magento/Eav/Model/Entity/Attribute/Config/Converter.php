@@ -10,7 +10,6 @@ namespace Magento\Eav\Model\Entity\Attribute\Config;
 /**
  * Class \Magento\Eav\Model\Entity\Attribute\Config\Converter
  *
- * @since 2.0.0
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
@@ -19,7 +18,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param mixed $source
      * @return array
-     * @since 2.0.0
      */
     public function convert($source)
     {

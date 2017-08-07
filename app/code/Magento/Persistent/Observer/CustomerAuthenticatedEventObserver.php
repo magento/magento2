@@ -11,7 +11,6 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\Persistent\Observer\CustomerAuthenticatedEventObserver
  *
- * @since 2.0.0
  */
 class CustomerAuthenticatedEventObserver implements ObserverInterface
 {
@@ -19,7 +18,6 @@ class CustomerAuthenticatedEventObserver implements ObserverInterface
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
@@ -27,13 +25,11 @@ class CustomerAuthenticatedEventObserver implements ObserverInterface
      * Request http
      *
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $_requestHttp;
 
     /**
      * @var \Magento\Persistent\Model\QuoteManager
-     * @since 2.0.0
      */
     protected $quoteManager;
 
@@ -41,7 +37,6 @@ class CustomerAuthenticatedEventObserver implements ObserverInterface
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Persistent\Model\QuoteManager $quoteManager
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
@@ -59,7 +54,6 @@ class CustomerAuthenticatedEventObserver implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

@@ -9,19 +9,16 @@ namespace Magento\SalesSequence\Model;
  * Class EntityPool
  *
  * Pool of entities that require sequence
- * @since 2.0.0
  */
 class EntityPool
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $entities;
 
     /**
      * @param array $entities
-     * @since 2.0.0
      */
     public function __construct(array $entities = [])
     {
@@ -32,7 +29,6 @@ class EntityPool
      * Retrieve entities that require sequence
      *
      * @return array
-     * @since 2.0.0
      */
     public function getEntities()
     {

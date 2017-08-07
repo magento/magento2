@@ -19,19 +19,16 @@ use Magento\Framework\View\Element\Template\Context;
  * @method Name setObject(CustomerInterface $customer)
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Name extends AbstractWidget
 {
     /**
      * @var AddressMetadataInterface
-     * @since 2.0.0
      */
     protected $addressMetadata;
 
     /**
      * @var Options
-     * @since 2.0.0
      */
     protected $options;
 
@@ -42,7 +39,6 @@ class Name extends AbstractWidget
      * @param Options $options
      * @param AddressMetadataInterface $addressMetadata
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -60,7 +56,6 @@ class Name extends AbstractWidget
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function _construct()
     {
@@ -75,7 +70,6 @@ class Name extends AbstractWidget
      *
      * @param string $key
      * @return bool
-     * @since 2.0.0
      */
     protected function _showConfig($key)
     {
@@ -86,7 +80,6 @@ class Name extends AbstractWidget
      * Can show prefix
      *
      * @return bool
-     * @since 2.0.0
      */
     public function showPrefix()
     {
@@ -97,7 +90,6 @@ class Name extends AbstractWidget
      * Define if prefix attribute is required
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isPrefixRequired()
     {
@@ -108,7 +100,6 @@ class Name extends AbstractWidget
      * Retrieve name prefix drop-down options
      *
      * @return array|bool
-     * @since 2.0.0
      */
     public function getPrefixOptions()
     {
@@ -125,7 +116,6 @@ class Name extends AbstractWidget
      * Define if middle name attribute can be shown
      *
      * @return bool
-     * @since 2.0.0
      */
     public function showMiddlename()
     {
@@ -136,7 +126,6 @@ class Name extends AbstractWidget
      * Define if middlename attribute is required
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isMiddlenameRequired()
     {
@@ -147,7 +136,6 @@ class Name extends AbstractWidget
      * Define if suffix attribute can be shown
      *
      * @return bool
-     * @since 2.0.0
      */
     public function showSuffix()
     {
@@ -158,7 +146,6 @@ class Name extends AbstractWidget
      * Define if suffix attribute is required
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isSuffixRequired()
     {
@@ -169,7 +156,6 @@ class Name extends AbstractWidget
      * Retrieve name suffix drop-down options
      *
      * @return array|bool
-     * @since 2.0.0
      */
     public function getSuffixOptions()
     {
@@ -185,7 +171,6 @@ class Name extends AbstractWidget
      * Class name getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getClassName()
     {
@@ -199,7 +184,6 @@ class Name extends AbstractWidget
      * Container class name getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getContainerClassName()
     {
@@ -212,7 +196,6 @@ class Name extends AbstractWidget
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _getAttribute($attributeCode)
     {
@@ -241,7 +224,6 @@ class Name extends AbstractWidget
      *
      * @param string $attributeCode
      * @return string
-     * @since 2.0.0
      */
     public function getStoreLabel($attributeCode)
     {
@@ -254,7 +236,6 @@ class Name extends AbstractWidget
      *
      * @param string $attributeCode
      * @return string
-     * @since 2.0.0
      */
     public function getAttributeValidationClass($attributeCode)
     {
@@ -264,7 +245,6 @@ class Name extends AbstractWidget
     /**
      * @param string $attributeCode
      * @return bool
-     * @since 2.0.0
      */
     private function _isAttributeRequired($attributeCode)
     {
@@ -275,7 +255,6 @@ class Name extends AbstractWidget
     /**
      * @param string $attributeCode
      * @return bool
-     * @since 2.0.0
      */
     private function _isAttributeVisible($attributeCode)
     {

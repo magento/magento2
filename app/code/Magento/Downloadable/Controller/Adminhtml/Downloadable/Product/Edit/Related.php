@@ -9,7 +9,6 @@ namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit;
 /**
  * Class \Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Related
  *
- * @since 2.0.0
  */
 class Related extends \Magento\Catalog\Controller\Adminhtml\Product\Related
 {

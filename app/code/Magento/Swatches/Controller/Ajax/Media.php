@@ -11,19 +11,16 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class Media
- * @since 2.0.0
  */
 class Media extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Catalog\Model\Product Factory
-     * @since 2.0.0
      */
     protected $productModelFactory;
 
     /**
      * @var \Magento\Swatches\Helper\Data
-     * @since 2.0.0
      */
     private $swatchHelper;
 
@@ -31,7 +28,6 @@ class Media extends \Magento\Framework\App\Action\Action
      * @param Context $context
      * @param \Magento\Catalog\Model\ProductFactory $productModelFactory
      * @param \Magento\Swatches\Helper\Data $swatchHelper
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -48,7 +44,6 @@ class Media extends \Magento\Framework\App\Action\Action
      * Get product media for specified configurable product variation
      *
      * @return string
-     * @since 2.0.0
      */
     public function execute()
     {

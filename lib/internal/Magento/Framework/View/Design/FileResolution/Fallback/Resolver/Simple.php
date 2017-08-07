@@ -16,7 +16,6 @@ use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Resolver for view files
- * @since 2.0.0
  */
 class Simple implements Fallback\ResolverInterface
 {
@@ -32,7 +31,6 @@ class Simple implements Fallback\ResolverInterface
      * Fallback factory
      *
      * @var RulePool
-     * @since 2.0.0
      */
     protected $rulePool;
 
@@ -45,7 +43,6 @@ class Simple implements Fallback\ResolverInterface
     /**
      * @param ReadFactory $readFactory
      * @param RulePool $rulePool
-     * @since 2.0.0
      */
     public function __construct(ReadFactory $readFactory, RulePool $rulePool)
     {
@@ -55,7 +52,6 @@ class Simple implements Fallback\ResolverInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function resolve($type, $file, $area = null, ThemeInterface $theme = null, $locale = null, $module = null)
     {
@@ -80,7 +76,6 @@ class Simple implements Fallback\ResolverInterface
      * @param string $filePath
      * @throws \InvalidArgumentException
      * @return void
-     * @since 2.0.0
      */
     public static function assertFilePathFormat($filePath)
     {
@@ -125,7 +120,6 @@ class Simple implements Fallback\ResolverInterface
      * @param string $file
      * @param array $params
      * @return string|bool
-     * @since 2.0.0
      */
     protected function resolveFile(RuleInterface $fallbackRule, $file, array $params = [])
     {

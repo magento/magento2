@@ -71,7 +71,7 @@ class CreateHandler implements ExtensionInterface
 
     /**
      * @var array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $mediaAttributeCodes;
 
@@ -429,7 +429,7 @@ class CreateHandler implements ExtensionInterface
      * Get Media Attribute Codes cached value
      *
      * @return array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function getMediaAttributeCodes()
     {

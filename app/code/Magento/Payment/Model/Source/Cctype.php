@@ -11,7 +11,6 @@ namespace Magento\Payment\Model\Source;
  * Inheritance of this class allowed as is a part of legacy implementation.
  *
  * @api
- * @since 2.0.0
  */
 class Cctype implements \Magento\Framework\Option\ArrayInterface
 {
@@ -19,7 +18,6 @@ class Cctype implements \Magento\Framework\Option\ArrayInterface
      * Allowed CC types
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_allowedTypes = [];
 
@@ -27,7 +25,6 @@ class Cctype implements \Magento\Framework\Option\ArrayInterface
      * Payment config model
      *
      * @var \Magento\Payment\Model\Config
-     * @since 2.0.0
      */
     protected $_paymentConfig;
 
@@ -35,7 +32,6 @@ class Cctype implements \Magento\Framework\Option\ArrayInterface
      * Config
      *
      * @param \Magento\Payment\Model\Config $paymentConfig
-     * @since 2.0.0
      */
     public function __construct(\Magento\Payment\Model\Config $paymentConfig)
     {
@@ -46,7 +42,6 @@ class Cctype implements \Magento\Framework\Option\ArrayInterface
      * Return allowed cc types for current method
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllowedTypes()
     {
@@ -58,7 +53,6 @@ class Cctype implements \Magento\Framework\Option\ArrayInterface
      *
      * @param array $values
      * @return $this
-     * @since 2.0.0
      */
     public function setAllowedTypes(array $values)
     {
@@ -68,7 +62,6 @@ class Cctype implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

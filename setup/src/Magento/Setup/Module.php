@@ -17,7 +17,6 @@ use Zend\Mvc\MvcEvent;
 /**
  * Class \Magento\Setup\Module
  *
- * @since 2.0.0
  */
 class Module implements
     BootstrapListenerInterface,
@@ -25,7 +24,6 @@ class Module implements
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function onBootstrap(EventInterface $e)
     {
@@ -68,7 +66,6 @@ class Module implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getConfig()
     {

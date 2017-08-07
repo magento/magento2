@@ -8,13 +8,11 @@ namespace Magento\Framework\ObjectManager\Relations;
 /**
  * Class \Magento\Framework\ObjectManager\Relations\Runtime
  *
- * @since 2.0.0
  */
 class Runtime implements \Magento\Framework\ObjectManager\RelationsInterface
 {
     /**
      * @var \Magento\Framework\Code\Reader\ClassReaderInterface
-     * @since 2.0.0
      */
     protected $_classReader;
 
@@ -22,13 +20,11 @@ class Runtime implements \Magento\Framework\ObjectManager\RelationsInterface
      * Default behavior
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_default = [];
 
     /**
      * @param \Magento\Framework\Code\Reader\ClassReaderInterface $classReader
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Code\Reader\ClassReaderInterface $classReader = null)
     {
@@ -40,7 +36,6 @@ class Runtime implements \Magento\Framework\ObjectManager\RelationsInterface
      *
      * @param string $type
      * @return bool
-     * @since 2.0.0
      */
     public function has($type)
     {
@@ -52,7 +47,6 @@ class Runtime implements \Magento\Framework\ObjectManager\RelationsInterface
      *
      * @param string $type
      * @return array
-     * @since 2.0.0
      */
     public function getParents($type)
     {

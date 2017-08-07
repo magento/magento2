@@ -13,7 +13,6 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Controller disables some types of cache
- * @since 2.0.0
  */
 class MassDisable extends \Magento\Backend\Controller\Adminhtml\Cache
 {
@@ -27,7 +26,6 @@ class MassDisable extends \Magento\Backend\Controller\Adminhtml\Cache
      * Mass action for cache disabling
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

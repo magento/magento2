@@ -11,37 +11,31 @@ namespace Magento\Backend\Block\Widget\Form;
  * @api
  * @deprecated 2.2.0 in favour of UI component implementation
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @since 2.0.0
  */
 class Container extends \Magento\Backend\Block\Widget\Container
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_objectId = 'id';
 
     /**
      * @var string[]
-     * @since 2.0.0
      */
     protected $_formScripts = [];
 
     /**
      * @var string[]
-     * @since 2.0.0
      */
     protected $_formInitScripts = [];
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_mode = 'edit';
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_blockGroup = 'Magento_Backend';
     
@@ -57,13 +51,11 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Backend::widget/form/container.phtml';
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -122,7 +114,6 @@ class Container extends \Magento\Backend\Block\Widget\Container
      * Create form block
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -140,7 +131,6 @@ class Container extends \Magento\Backend\Block\Widget\Container
      * Build child form class name
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _buildFormClassName()
     {
@@ -153,7 +143,6 @@ class Container extends \Magento\Backend\Block\Widget\Container
      * Get URL for back (reset) button
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -162,7 +151,6 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getDeleteUrl()
     {
@@ -174,7 +162,6 @@ class Container extends \Magento\Backend\Block\Widget\Container
      *
      * @see getFormActionUrl()
      * @return string
-     * @since 2.0.0
      */
     public function getSaveUrl()
     {
@@ -185,7 +172,6 @@ class Container extends \Magento\Backend\Block\Widget\Container
      * Get form action URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFormActionUrl()
     {
@@ -197,7 +183,6 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getFormHtml()
     {
@@ -207,7 +192,6 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getFormInitScripts()
     {
@@ -219,7 +203,6 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getFormScripts()
     {
@@ -231,7 +214,6 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getHeaderWidth()
     {
@@ -240,7 +222,6 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getHeaderCssClass()
     {
@@ -249,7 +230,6 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getHeaderHtml()
     {
@@ -261,7 +241,6 @@ class Container extends \Magento\Backend\Block\Widget\Container
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
-     * @since 2.0.0
      */
     public function setDataObject($object)
     {

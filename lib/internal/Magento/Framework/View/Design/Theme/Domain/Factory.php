@@ -9,7 +9,6 @@ use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Theme domain model class factory
- * @since 2.0.0
  */
 class Factory
 {
@@ -17,7 +16,6 @@ class Factory
      * Object manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -25,7 +23,6 @@ class Factory
      * Types
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_types = [
         ThemeInterface::TYPE_PHYSICAL => \Magento\Framework\View\Design\Theme\Domain\PhysicalInterface::class,
@@ -37,7 +34,6 @@ class Factory
      * Constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -50,7 +46,6 @@ class Factory
      * @param ThemeInterface $theme
      * @return mixed
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function create(ThemeInterface $theme)
     {

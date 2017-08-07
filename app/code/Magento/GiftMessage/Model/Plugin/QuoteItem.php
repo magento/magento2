@@ -13,19 +13,16 @@ use Magento\Quote\Model\Quote\Item\AbstractItem;
 /**
  * Class \Magento\GiftMessage\Model\Plugin\QuoteItem
  *
- * @since 2.0.0
  */
 class QuoteItem
 {
     /**
      * @var MessageHelper
-     * @since 2.0.0
      */
     protected $_helper;
 
     /**
      * @param MessageHelper $helper
-     * @since 2.0.0
      */
     public function __construct(MessageHelper $helper)
     {

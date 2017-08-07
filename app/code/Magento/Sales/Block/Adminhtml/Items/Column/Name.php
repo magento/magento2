@@ -9,7 +9,6 @@ namespace Magento\Sales\Block\Adminhtml\Items\Column;
  * Sales Order items name column renderer
  *
  * @api
- * @since 2.0.0
  */
 class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn
 {
@@ -22,7 +21,6 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn
      * @param string &$remainder
      * @param bool $breakWords
      * @return string
-     * @since 2.0.0
      */
     public function truncateString($value, $length = 80, $etc = '...', &$remainder = '', $breakWords = true)
     {
@@ -37,7 +35,6 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn
      *
      * @param string $value
      * @return array
-     * @since 2.0.0
      */
     public function getFormattedOption($value)
     {

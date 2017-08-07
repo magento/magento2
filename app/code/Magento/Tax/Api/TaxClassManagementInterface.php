@@ -10,7 +10,6 @@ namespace Magento\Tax\Api;
 /**
  * Interface for managing classes rates.
  * @api
- * @since 2.0.0
  */
 interface TaxClassManagementInterface
 {
@@ -27,7 +26,6 @@ interface TaxClassManagementInterface
      * @param \Magento\Tax\Api\Data\TaxClassKeyInterface|null $taxClassKey
      * @param string $taxClassType
      * @return int|null
-     * @since 2.0.0
      */
     public function getTaxClassId($taxClassKey, $taxClassType = self::TYPE_PRODUCT);
 }

@@ -11,7 +11,6 @@ use Magento\Framework\Exception\NotFoundException;
 /**
  * Class \Magento\Shipping\Controller\Tracking\Popup
  *
- * @since 2.0.0
  */
 class Popup extends \Magento\Framework\App\Action\Action
 {
@@ -19,19 +18,16 @@ class Popup extends \Magento\Framework\App\Action\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\Shipping\Model\InfoFactory
-     * @since 2.0.0
      */
     protected $_shippingInfoFactory;
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
-     * @since 2.0.0
      */
     protected $_orderFactory;
 
@@ -40,7 +36,6 @@ class Popup extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Shipping\Model\InfoFactory $shippingInfoFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -60,7 +55,6 @@ class Popup extends \Magento\Framework\App\Action\Action
      *
      * @return void
      * @throws NotFoundException
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -16,7 +16,6 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
  * Shipping method management class for guest carts.
- * @since 2.0.0
  */
 class GuestShippingMethodManagement implements
     \Magento\Quote\Api\GuestShippingMethodManagementInterface,
@@ -25,19 +24,17 @@ class GuestShippingMethodManagement implements
 {
     /**
      * @var ShippingMethodManagementInterface
-     * @since 2.0.0
      */
     private $shippingMethodManagement;
 
     /**
      * @var QuoteIdMaskFactory
-     * @since 2.0.0
      */
     private $quoteIdMaskFactory;
 
     /**
      * @var ShipmentEstimationInterface
-     * @since 2.1.0
+     * @since 2.0.10
      */
     private $shipmentEstimationManagement;
 
@@ -46,7 +43,6 @@ class GuestShippingMethodManagement implements
      *
      * @param ShippingMethodManagementInterface $shippingMethodManagement
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
-     * @since 2.0.0
      */
     public function __construct(
         ShippingMethodManagementInterface $shippingMethodManagement,
@@ -58,7 +54,6 @@ class GuestShippingMethodManagement implements
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function get($cartId)
     {
@@ -69,7 +64,6 @@ class GuestShippingMethodManagement implements
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function getList($cartId)
     {
@@ -80,7 +74,6 @@ class GuestShippingMethodManagement implements
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function set($cartId, $carrierCode, $methodCode)
     {
@@ -91,7 +84,6 @@ class GuestShippingMethodManagement implements
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function estimateByAddress($cartId, \Magento\Quote\Api\Data\EstimateAddressInterface $address)
     {
@@ -102,7 +94,7 @@ class GuestShippingMethodManagement implements
 
     /**
      * @inheritdoc
-     * @since 2.1.0
+     * @since 2.0.10
      */
     public function estimateByExtendedAddress($cartId, AddressInterface $address)
     {
@@ -116,8 +108,8 @@ class GuestShippingMethodManagement implements
     /**
      * Get shipment estimation management service
      * @return ShipmentEstimationInterface
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 2.0.10
+     * @since 2.0.10
      */
     private function getShipmentEstimationManagement()
     {

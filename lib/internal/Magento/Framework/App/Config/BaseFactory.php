@@ -10,19 +10,16 @@ namespace Magento\Framework\App\Config;
 /**
  * Class \Magento\Framework\App\Config\BaseFactory
  *
- * @since 2.0.0
  */
 class BaseFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -34,7 +31,6 @@ class BaseFactory
      *
      * @param string|\Magento\Framework\Simplexml\Element $sourceData
      * @return \Magento\Framework\App\Config\Base
-     * @since 2.0.0
      */
     public function create($sourceData = null)
     {

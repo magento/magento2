@@ -15,7 +15,6 @@ use Magento\Indexer\Model\IndexerFactory;
 
 /**
  * Command to run indexers
- * @since 2.0.0
  */
 class IndexerReindexCommand extends AbstractIndexerManageCommand
 {
@@ -54,7 +53,6 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -67,7 +65,6 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

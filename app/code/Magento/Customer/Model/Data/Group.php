@@ -8,7 +8,6 @@ namespace Magento\Customer\Model\Data;
 
 /**
  * Customer Group data model.
- * @since 2.0.0
  */
 class Group extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\Customer\Api\Data\GroupInterface
@@ -17,7 +16,6 @@ class Group extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get ID
      *
      * @return int
-     * @since 2.0.0
      */
     public function getId()
     {
@@ -28,7 +26,6 @@ class Group extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCode()
     {
@@ -39,7 +36,6 @@ class Group extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get tax class ID
      *
      * @return int
-     * @since 2.0.0
      */
     public function getTaxClassId()
     {
@@ -50,7 +46,6 @@ class Group extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get tax class name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTaxClassName()
     {
@@ -62,7 +57,6 @@ class Group extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setId($id)
     {
@@ -74,7 +68,6 @@ class Group extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function setCode($code)
     {
@@ -86,7 +79,6 @@ class Group extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param int $taxClassId
      * @return $this
-     * @since 2.0.0
      */
     public function setTaxClassId($taxClassId)
     {
@@ -98,7 +90,6 @@ class Group extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $taxClassName
      * @return string|null
-     * @since 2.0.0
      */
     public function setTaxClassName($taxClassName)
     {
@@ -109,7 +100,6 @@ class Group extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * {@inheritdoc}
      *
      * @return \Magento\Customer\Api\Data\GroupExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -121,7 +111,6 @@ class Group extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param \Magento\Customer\Api\Data\GroupExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Customer\Api\Data\GroupExtensionInterface $extensionAttributes)
     {

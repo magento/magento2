@@ -12,26 +12,22 @@ use Magento\Framework\View\Asset\LocalInterface;
 
 /**
  * Class RelatedGenerator
- * @since 2.0.0
  */
 class RelatedGenerator
 {
     /**
      * @var Repository
-     * @since 2.0.0
      */
     private $assetRepository;
 
     /**
      * @var Temporary
-     * @since 2.0.0
      */
     private $temporaryFile;
 
     /**
      * @param Repository $assetRepository
      * @param Temporary $temporaryFile
-     * @since 2.0.0
      */
     public function __construct(
         Repository $assetRepository,
@@ -47,7 +43,6 @@ class RelatedGenerator
      * @param Import $importGenerator
      *
      * @return void
-     * @since 2.0.0
      */
     public function generate(Import $importGenerator)
     {
@@ -68,7 +63,6 @@ class RelatedGenerator
      * @param string $relatedFileId
      * @param LocalInterface $asset
      * @return \Magento\Framework\View\Asset\File
-     * @since 2.0.0
      */
     protected function generateRelatedFile($relatedFileId, LocalInterface $asset)
     {

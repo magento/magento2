@@ -33,7 +33,6 @@ use Magento\Framework\DB\Select;
 /**
  * Class \Magento\CatalogRule\Model\Rule\Product\Price
  *
- * @since 2.0.0
  */
 class Price extends \Magento\Framework\Model\AbstractModel
 {
@@ -41,7 +40,6 @@ class Price extends \Magento\Framework\Model\AbstractModel
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -59,7 +57,6 @@ class Price extends \Magento\Framework\Model\AbstractModel
      * @param array $updateFields       the array fields for compare with rule price and update
      * @param string $websiteDate
      * @return $this
-     * @since 2.0.0
      */
     public function applyPriceRuleToIndexTable(
         Select $select,

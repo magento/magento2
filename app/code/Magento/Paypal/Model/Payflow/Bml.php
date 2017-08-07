@@ -11,21 +11,18 @@ use Magento\Paypal\Model;
 /**
  * Class \Magento\Paypal\Model\Payflow\Bml
  *
- * @since 2.0.0
  */
 class Bml extends Model\Express
 {
     /**
      * Payment method code
      * @var string
-     * @since 2.0.0
      */
     protected $_code  = Model\Config::METHOD_WPP_PE_BML;
 
     /**
      * Checkout payment form
      * @var string
-     * @since 2.0.0
      */
     protected $_formBlockType = \Magento\Paypal\Block\Payflow\Bml\Form::class;
 
@@ -33,7 +30,6 @@ class Bml extends Model\Express
      * Checkout redirect URL getter for onepage checkout
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCheckoutRedirectUrl()
     {

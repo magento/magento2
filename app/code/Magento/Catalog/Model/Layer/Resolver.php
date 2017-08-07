@@ -9,7 +9,6 @@ namespace Magento\Catalog\Model\Layer;
 /**
  * Class \Magento\Catalog\Model\Layer\Resolver
  *
- * @since 2.0.0
  */
 class Resolver
 {
@@ -20,7 +19,6 @@ class Resolver
      * Catalog view layer models list
      *
      * @var array
-     * @since 2.0.0
      */
     protected $layersPool;
 
@@ -28,20 +26,17 @@ class Resolver
      * Filter factory
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var \Magento\Catalog\Model\Layer
-     * @since 2.0.0
      */
     protected $layer = null;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $layersPool
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -56,7 +51,6 @@ class Resolver
      *
      * @param string $layerType
      * @return void
-     * @since 2.0.0
      */
     public function create($layerType)
     {
@@ -73,7 +67,6 @@ class Resolver
      * Get current Catalog Layer
      *
      * @return \Magento\Catalog\Model\Layer
-     * @since 2.0.0
      */
     public function get()
     {

@@ -28,13 +28,13 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * @var CcConfig
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $ccConfig;
 
     /**
      * @var array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $icon = [];
 
@@ -45,7 +45,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param CcConfig $ccConfig
      * @param null $methodCode
      * @param string $pathPattern
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -124,7 +124,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Is need to skip order review
      * @return bool
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function isSkipOrderReview()
     {
@@ -134,7 +134,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Get PayPal icon
      * @return array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function getPayPalIcon()
     {

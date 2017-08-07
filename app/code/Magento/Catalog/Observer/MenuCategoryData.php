@@ -8,7 +8,6 @@ namespace Magento\Catalog\Observer;
 /**
  * Class \Magento\Catalog\Observer\MenuCategoryData
  *
- * @since 2.0.0
  */
 class MenuCategoryData
 {
@@ -16,7 +15,6 @@ class MenuCategoryData
      * Catalog category
      *
      * @var \Magento\Catalog\Helper\Category
-     * @since 2.0.0
      */
     protected $catalogCategory;
 
@@ -24,7 +22,6 @@ class MenuCategoryData
      * Catalog layer
      *
      * @var \Magento\Catalog\Model\Layer
-     * @since 2.0.0
      */
     private $catalogLayer = null;
 
@@ -32,13 +29,11 @@ class MenuCategoryData
      * Catalog layer resolver
      *
      * @var \Magento\Catalog\Model\Layer\Resolver
-     * @since 2.0.0
      */
     protected $layerResolver;
 
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $registry;
 
@@ -46,7 +41,6 @@ class MenuCategoryData
      * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param \Magento\Framework\Registry $registry
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Helper\Category $catalogCategory,
@@ -63,7 +57,6 @@ class MenuCategoryData
      *
      * @param \Magento\Framework\Data\Tree\Node $category
      * @return array
-     * @since 2.0.0
      */
     public function getMenuCategoryData($category)
     {
@@ -92,7 +85,6 @@ class MenuCategoryData
      *
      * @param \Magento\Framework\Data\Tree\Node $category
      * @return bool
-     * @since 2.0.0
      */
     protected function hasActive($category)
     {
@@ -113,7 +105,6 @@ class MenuCategoryData
     /**
      * Get catalog layer
      * @return \Magento\Catalog\Model\Layer
-     * @since 2.0.0
      */
     private function getCatalogLayer()
     {

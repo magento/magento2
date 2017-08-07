@@ -15,7 +15,6 @@ use Magento\Catalog\Model\Product\Edit\WeightResolver;
 /**
  * Class \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight
  *
- * @since 2.0.0
  */
 class Weight extends \Magento\Framework\Data\Form\Element\Text
 {
@@ -23,19 +22,16 @@ class Weight extends \Magento\Framework\Data\Form\Element\Text
      * Weight switcher radio-button element
      *
      * @var \Magento\Framework\Data\Form\Element\Checkbox
-     * @since 2.0.0
      */
     protected $weightSwitcher;
 
     /**
      * @var \Magento\Framework\Locale\Format
-     * @since 2.0.0
      */
     protected $localeFormat;
 
     /**
      * @var \Magento\Directory\Helper\Data
-     * @since 2.0.0
      */
     protected $directoryHelper;
 
@@ -46,7 +42,6 @@ class Weight extends \Magento\Framework\Data\Form\Element\Text
      * @param \Magento\Framework\Locale\Format $localeFormat
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
@@ -81,7 +76,6 @@ class Weight extends \Magento\Framework\Data\Form\Element\Text
      * Add Weight Switcher radio-button element html to weight field
      *
      * @return string
-     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -114,7 +108,6 @@ class Weight extends \Magento\Framework\Data\Form\Element\Text
      *
      * @param Form $form
      * @return $this
-     * @since 2.0.0
      */
     public function setForm($form)
     {
@@ -126,7 +119,6 @@ class Weight extends \Magento\Framework\Data\Form\Element\Text
      * @param null|int|string $index
      * @return null|string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getEscapedValue($index = null)
     {

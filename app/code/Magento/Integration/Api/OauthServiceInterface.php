@@ -11,7 +11,6 @@ use Magento\Integration\Model\Oauth\Token as OauthTokenModel;
  * Integration oAuth Service Interface
  *
  * @api
- * @since 2.0.0
  */
 interface OauthServiceInterface
 {
@@ -28,7 +27,6 @@ interface OauthServiceInterface
      * @return \Magento\Integration\Model\Oauth\Consumer
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Oauth\Exception
-     * @since 2.0.0
      */
     public function createConsumer($consumerData);
 
@@ -38,7 +36,6 @@ interface OauthServiceInterface
      * @param int $consumerId
      * @param bool $clearExistingToken
      * @return bool If token was created
-     * @since 2.0.0
      */
     public function createAccessToken($consumerId, $clearExistingToken = false);
 
@@ -47,7 +44,6 @@ interface OauthServiceInterface
      *
      * @param int $consumerId
      * @return OauthTokenModel|bool Return false if no access token is available.
-     * @since 2.0.0
      */
     public function getAccessToken($consumerId);
 
@@ -58,7 +54,6 @@ interface OauthServiceInterface
      * @return \Magento\Integration\Model\Oauth\Consumer
      * @throws \Magento\Framework\Oauth\Exception
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function loadConsumer($consumerId);
 
@@ -69,7 +64,6 @@ interface OauthServiceInterface
      * @return \Magento\Integration\Model\Oauth\Consumer
      * @throws \Magento\Framework\Oauth\Exception
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function loadConsumerByKey($key);
 
@@ -81,7 +75,6 @@ interface OauthServiceInterface
      * @return string - The oauth_verifier.
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Oauth\Exception
-     * @since 2.0.0
      */
     public function postToConsumer($consumerId, $endpointUrl);
 
@@ -90,7 +83,6 @@ interface OauthServiceInterface
      *
      * @param int $consumerId
      * @return array Consumer data array
-     * @since 2.0.0
      */
     public function deleteConsumer($consumerId);
 
@@ -99,7 +91,6 @@ interface OauthServiceInterface
      *
      * @param int $consumerId
      * @return bool If token was deleted
-     * @since 2.0.0
      */
     public function deleteIntegrationToken($consumerId);
 }

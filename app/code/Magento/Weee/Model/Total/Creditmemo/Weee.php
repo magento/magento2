@@ -14,7 +14,6 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class \Magento\Weee\Model\Total\Creditmemo\Weee
  *
- * @since 2.0.0
  */
 class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
 {
@@ -22,7 +21,6 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
      * Weee data
      *
      * @var WeeeHelper
-     * @since 2.0.0
      */
     protected $_weeeData = null;
 
@@ -43,7 +41,6 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
      * @param WeeeHelper $weeeData
      * @param array $data
      * @param Json|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         WeeeHelper $weeeData,
@@ -64,7 +61,6 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function collect(Creditmemo $creditmemo)
     {

@@ -11,7 +11,6 @@ namespace Magento\Wishlist\Block\Customer\Wishlist\Item;
  *
  * @api
  * @method \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface getItem()
- * @since 2.0.0
  */
 class Column extends \Magento\Wishlist\Block\AbstractBlock
 {
@@ -19,7 +18,6 @@ class Column extends \Magento\Wishlist\Block\AbstractBlock
      * Checks whether column should be shown in table
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isEnabled()
     {
@@ -30,7 +28,6 @@ class Column extends \Magento\Wishlist\Block\AbstractBlock
      * Retrieve block html
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -52,7 +49,6 @@ class Column extends \Magento\Wishlist\Block\AbstractBlock
      * Retrieve column related javascript code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getJs()
     {

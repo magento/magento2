@@ -11,7 +11,6 @@ use Magento\Downloadable\Helper\Download as DownloadHelper;
  * Download controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 abstract class Download extends \Magento\Framework\App\Action\Action
 {
@@ -21,7 +20,6 @@ abstract class Download extends \Magento\Framework\App\Action\Action
      * @param string $path         Path to resource
      * @param string $resourceType Type of resource (see Magento\Downloadable\Helper\Download::LINK_TYPE_* constants)
      * @return void
-     * @since 2.0.0
      */
     protected function _processDownload($path, $resourceType)
     {
@@ -66,7 +64,6 @@ abstract class Download extends \Magento\Framework\App\Action\Action
      * Get link model
      *
      * @return \Magento\Downloadable\Model\Link
-     * @since 2.0.0
      */
     protected function _getLink()
     {

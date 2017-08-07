@@ -14,25 +14,21 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Pr
 /**
  * Class \Magento\ConfigurableProduct\Model\ConfigurableProductManagement
  *
- * @since 2.0.0
  */
 class ConfigurableProductManagement implements \Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
-     * @since 2.0.0
      */
     private $attributeRepository;
 
     /**
      * @var ProductVariationsBuilder
-     * @since 2.0.0
      */
     private $productVariationBuilder;
 
     /**
      * @var CollectionFactory
-     * @since 2.0.0
      */
     protected $productsFactory;
 
@@ -40,7 +36,6 @@ class ConfigurableProductManagement implements \Magento\ConfigurableProduct\Api\
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param ProductVariationsBuilder $productVariationBuilder
      * @param CollectionFactory $productsFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
@@ -54,7 +49,6 @@ class ConfigurableProductManagement implements \Magento\ConfigurableProduct\Api\
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function generateVariation(ProductInterface $product, $options)
     {
@@ -65,7 +59,6 @@ class ConfigurableProductManagement implements \Magento\ConfigurableProduct\Api\
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCount($status = null)
     {
@@ -89,7 +82,6 @@ class ConfigurableProductManagement implements \Magento\ConfigurableProduct\Api\
      *
      * @param \Magento\ConfigurableProduct\Api\Data\OptionInterface[] $options
      * @return array
-     * @since 2.0.0
      */
     private function getAttributesForMatrix($options)
     {
@@ -115,7 +107,6 @@ class ConfigurableProductManagement implements \Magento\ConfigurableProduct\Api\
      *
      * @param \Magento\Framework\DataObject $object
      * @return array
-     * @since 2.0.0
      */
     private function objectToArray(\Magento\Framework\DataObject $object)
     {

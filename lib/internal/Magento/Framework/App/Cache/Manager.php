@@ -12,7 +12,6 @@ use Magento\Framework\App;
  * Cache status manager
  *
  * @api
- * @since 2.0.0
  */
 class Manager
 {
@@ -20,7 +19,6 @@ class Manager
      * Cache types list
      *
      * @var TypeListInterface
-     * @since 2.0.0
      */
     private $cacheTypeList;
 
@@ -28,7 +26,6 @@ class Manager
      * Cache state service
      *
      * @var StateInterface
-     * @since 2.0.0
      */
     private $cacheState;
 
@@ -36,7 +33,6 @@ class Manager
      * Cache types pool
      *
      * @var Type\FrontendPool
-     * @since 2.0.0
      */
     private $pool;
 
@@ -46,7 +42,6 @@ class Manager
      * @param TypeListInterface $cacheTypeList
      * @param StateInterface $cacheState
      * @param Type\FrontendPool $pool
-     * @since 2.0.0
      */
     public function __construct(
         TypeListInterface $cacheTypeList,
@@ -64,7 +59,6 @@ class Manager
      * @param string[] $types
      * @param bool $isEnabled
      * @return array List of types with changed status
-     * @since 2.0.0
      */
     public function setEnabled(array $types, $isEnabled)
     {
@@ -89,7 +83,6 @@ class Manager
      *
      * @param array $types
      * @return void
-     * @since 2.0.0
      */
     public function clean(array $types)
     {
@@ -103,7 +96,6 @@ class Manager
      *
      * @param string[] $types
      * @return void
-     * @since 2.0.0
      */
     public function flush(array $types)
     {
@@ -122,7 +114,6 @@ class Manager
      * Presents summary about cache status
      *
      * @return array
-     * @since 2.0.0
      */
     public function getStatus()
     {
@@ -135,7 +126,6 @@ class Manager
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getAvailableTypes()
     {

@@ -13,7 +13,6 @@ use \Magento\Framework\Api\AttributeValueFactory;
  * TODO: This class can be split into Custom attribute and Extension attribute implementation classes
  *
  * @api
- * @since 2.0.0
  */
 abstract class AbstractExtensibleObject extends AbstractSimpleObject implements CustomAttributesDataInterface
 {
@@ -24,19 +23,16 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttributesFactory
-     * @since 2.0.0
      */
     protected $extensionFactory;
 
     /**
      * @var AttributeValueFactory
-     * @since 2.0.0
      */
     protected $attributeValueFactory;
 
     /**
      * @var string[]
-     * @since 2.0.0
      */
     protected $customAttributesCodes;
 
@@ -46,7 +42,6 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $attributeValueFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
@@ -63,7 +58,6 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
      *
      * @param string $attributeCode
      * @return \Magento\Framework\Api\AttributeInterface|null null if the attribute has not been set
-     * @since 2.0.0
      */
     public function getCustomAttribute($attributeCode)
     {
@@ -77,7 +71,6 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
      * Retrieve custom attributes values.
      *
      * @return \Magento\Framework\Api\AttributeInterface[]|null
-     * @since 2.0.0
      */
     public function getCustomAttributes()
     {
@@ -90,7 +83,6 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
      * @param \Magento\Framework\Api\AttributeInterface[] $attributes
      * @return $this
      * @throws \LogicException
-     * @since 2.0.0
      */
     public function setCustomAttributes(array $attributes)
     {
@@ -113,7 +105,6 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
      * @param string $attributeCode
      * @param mixed $attributeValue
      * @return $this
-     * @since 2.0.0
      */
     public function setCustomAttribute($attributeCode, $attributeValue)
     {
@@ -135,7 +126,6 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
      * By default, entity can be extended only using extension attributes functionality.
      *
      * @return string[]
-     * @since 2.0.0
      */
     protected function getCustomAttributesCodes()
     {
@@ -149,7 +139,6 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
      *
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
      * @return string[]
-     * @since 2.0.0
      */
     protected function getEavAttributesCodes(\Magento\Framework\Api\MetadataServiceInterface $metadataService)
     {
@@ -168,7 +157,6 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Framework\Api\ExtensionAttributesInterface
-     * @since 2.0.0
      */
     protected function _getExtensionAttributes()
     {
@@ -180,7 +168,6 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
      *
      * @param \Magento\Framework\Api\ExtensionAttributesInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     protected function _setExtensionAttributes(\Magento\Framework\Api\ExtensionAttributesInterface $extensionAttributes)
     {

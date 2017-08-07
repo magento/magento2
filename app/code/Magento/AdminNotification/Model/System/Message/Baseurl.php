@@ -10,31 +10,26 @@ use Magento\Store\Model\Store;
 
 /**
  * @deprecated 2.1.0
- * @since 2.0.0
  */
 class Baseurl implements \Magento\Framework\Notification\MessageInterface
 {
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $_urlBuilder;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\App\Config\ValueFactory
-     * @since 2.0.0
      */
     protected $_configValueFactory;
 
@@ -43,7 +38,6 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
@@ -61,7 +55,6 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
      * Get url for config settings where base url option can be changed
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getConfigUrl()
     {
@@ -105,7 +98,6 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
      * Retrieve unique message identity
      *
      * @return string
-     * @since 2.0.0
      */
     public function getIdentity()
     {
@@ -116,7 +108,6 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
      * Check whether
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isDisplayed()
     {
@@ -127,7 +118,6 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
      * Retrieve message text
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getText()
     {
@@ -143,7 +133,6 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
      * Retrieve message severity
      *
      * @return int
-     * @since 2.0.0
      */
     public function getSeverity()
     {

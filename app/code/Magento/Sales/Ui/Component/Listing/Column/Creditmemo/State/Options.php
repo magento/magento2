@@ -10,19 +10,16 @@ use Magento\Sales\Api\CreditmemoRepositoryInterface;
 
 /**
  * Class Options
- * @since 2.0.0
  */
 class Options implements OptionSourceInterface
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $options;
 
     /**
      * @var CreditmemoRepositoryInterface
-     * @since 2.0.0
      */
     protected $creditmemoRepository;
 
@@ -30,7 +27,6 @@ class Options implements OptionSourceInterface
      * Constructor
      *
      * @param CreditmemoRepositoryInterface $creditmemoRepository
-     * @since 2.0.0
      */
     public function __construct(CreditmemoRepositoryInterface $creditmemoRepository)
     {
@@ -41,7 +37,6 @@ class Options implements OptionSourceInterface
      * Get options
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

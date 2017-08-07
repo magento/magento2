@@ -13,7 +13,6 @@ namespace Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts;
 
 /**
  * @api
- * @since 2.0.0
  */
 class ListAssociatedProducts extends \Magento\Backend\Block\Template
 {
@@ -21,13 +20,11 @@ class ListAssociatedProducts extends \Magento\Backend\Block\Template
      * Registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_registry;
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
@@ -36,7 +33,6 @@ class ListAssociatedProducts extends \Magento\Backend\Block\Template
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -53,7 +49,6 @@ class ListAssociatedProducts extends \Magento\Backend\Block\Template
      * Retrieve grouped products
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAssociatedProducts()
     {

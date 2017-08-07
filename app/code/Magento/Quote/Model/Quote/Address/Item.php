@@ -86,7 +86,6 @@ use Magento\Quote\Model\Quote;
  * @method \Magento\Quote\Model\Quote\Address\Item setBaseDiscountTaxCompensationAmount(float $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
 {
@@ -94,19 +93,16 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
      * Quote address model object
      *
      * @var \Magento\Quote\Model\Quote\Address
-     * @since 2.0.0
      */
     protected $_address;
 
     /**
      * @var Quote
-     * @since 2.0.0
      */
     protected $_quote;
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -115,7 +111,6 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
 
     /**
      * @return $this|\Magento\Quote\Model\Quote\Item\AbstractItem
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -131,7 +126,6 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
      *
      * @param \Magento\Quote\Model\Quote\Address $address
      * @return $this
-     * @since 2.0.0
      */
     public function setAddress(\Magento\Quote\Model\Quote\Address $address)
     {
@@ -144,7 +138,6 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
      * Retrieve address model
      *
      * @return \Magento\Quote\Model\Quote\Address
-     * @since 2.0.0
      */
     public function getAddress()
     {
@@ -155,7 +148,6 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
      * Retrieve quote model instance
      *
      * @return Quote
-     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -165,7 +157,6 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
     /**
      * @param \Magento\Quote\Model\Quote\Item $quoteItem
      * @return $this
-     * @since 2.0.0
      */
     public function importQuoteItem(\Magento\Quote\Model\Quote\Item $quoteItem)
     {
@@ -202,7 +193,6 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
     /**
      * @param string $code
      * @return \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface|null
-     * @since 2.0.0
      */
     public function getOptionBycode($code)
     {

@@ -10,7 +10,6 @@ namespace Magento\Directory\Api\Data;
  * Region Information interface.
  *
  * @api
- * @since 2.0.0
  */
 interface RegionInformationInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -18,7 +17,6 @@ interface RegionInformationInterface extends \Magento\Framework\Api\ExtensibleDa
      * Get region id
      *
      * @return string
-     * @since 2.0.0
      */
     public function getId();
 
@@ -27,7 +25,6 @@ interface RegionInformationInterface extends \Magento\Framework\Api\ExtensibleDa
      *
      * @param string $regionId
      * @return $this
-     * @since 2.0.0
      */
     public function setId($regionId);
 
@@ -35,7 +32,6 @@ interface RegionInformationInterface extends \Magento\Framework\Api\ExtensibleDa
      * Get region code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCode();
 
@@ -44,7 +40,6 @@ interface RegionInformationInterface extends \Magento\Framework\Api\ExtensibleDa
      *
      * @param string $regionCode
      * @return $this
-     * @since 2.0.0
      */
     public function setCode($regionCode);
 
@@ -52,7 +47,6 @@ interface RegionInformationInterface extends \Magento\Framework\Api\ExtensibleDa
      * Get region name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName();
 
@@ -61,7 +55,6 @@ interface RegionInformationInterface extends \Magento\Framework\Api\ExtensibleDa
      *
      * @param string $region
      * @return $this
-     * @since 2.0.0
      */
     public function setName($regionName);
 
@@ -69,7 +62,6 @@ interface RegionInformationInterface extends \Magento\Framework\Api\ExtensibleDa
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Directory\Api\Data\RegionInformationExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -78,7 +70,6 @@ interface RegionInformationInterface extends \Magento\Framework\Api\ExtensibleDa
      *
      * @param \Magento\Directory\Api\Data\RegionInformationExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Directory\Api\Data\RegionInformationExtensionInterface $extensionAttributes

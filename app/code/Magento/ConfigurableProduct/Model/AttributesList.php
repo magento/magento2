@@ -8,19 +8,16 @@ namespace Magento\ConfigurableProduct\Model;
 /**
  * Class \Magento\ConfigurableProduct\Model\AttributesList
  *
- * @since 2.0.0
  */
 class AttributesList implements AttributesListInterface
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
-     * @since 2.0.0
      */
     protected $collectionFactory;
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory
@@ -33,7 +30,6 @@ class AttributesList implements AttributesListInterface
      *
      * @param array $ids
      * @return array
-     * @since 2.0.0
      */
     public function getAttributes($ids)
     {

@@ -11,7 +11,6 @@ namespace Magento\Framework\Translate;
 /**
  * Class \Magento\Framework\Translate\Inline
  *
- * @since 2.0.0
  */
 class Inline implements \Magento\Framework\Translate\InlineInterface
 {
@@ -19,13 +18,11 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
      * Indicator to hold state of whether inline translation is allowed
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $isAllowed;
 
     /**
      * @var \Magento\Framework\Translate\Inline\ParserInterface
-     * @since 2.0.0
      */
     protected $parser;
 
@@ -33,55 +30,46 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
      * Flag about inserted styles and scripts for inline translates
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $isScriptInserted = false;
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $url;
 
     /**
      * @var \Magento\Framework\View\LayoutInterface
-     * @since 2.0.0
      */
     protected $layout;
 
     /**
      * @var \Magento\Framework\Translate\Inline\ConfigInterface
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Framework\App\ScopeResolverInterface
-     * @since 2.0.0
      */
     protected $scopeResolver;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $templateFileName;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $translatorRoute;
 
     /**
      * @var null|string
-     * @since 2.0.0
      */
     protected $scope;
 
     /**
      * @var Inline\StateInterface
-     * @since 2.0.0
      */
     protected $state;
 
@@ -97,7 +85,6 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
      * @param string $templateFileName
      * @param string $translatorRoute
      * @param null $scope
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
@@ -125,7 +112,6 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
      * Check if Inline Translates is allowed
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isAllowed()
     {
@@ -143,7 +129,6 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
      * Retrieve Inline Parser instance
      *
      * @return Inline\ParserInterface
-     * @since 2.0.0
      */
     public function getParser()
     {
@@ -156,7 +141,6 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
      * @param array|string &$body
      * @param bool $isJson
      * @return $this
-     * @since 2.0.0
      */
     public function processResponseBody(&$body, $isJson = false)
     {
@@ -188,7 +172,6 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
      * @param mixed|string|null $tagName
      * @return null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getAdditionalHtmlAttribute($tagName = null)
     {
@@ -202,7 +185,6 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
      * added inline translation content.
      *
      * @return void
-     * @since 2.0.0
      */
     protected function addInlineScript()
     {
@@ -223,7 +205,6 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
      * added inline translation content.
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getInlineScript()
     {
@@ -240,7 +221,6 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
      * Return URL for ajax requests
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getAjaxUrl()
     {
@@ -255,7 +235,6 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
      *
      * @param array|string &$body
      * @return $this
-     * @since 2.0.0
      */
     protected function stripInlineTranslations(&$body)
     {

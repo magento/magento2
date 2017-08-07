@@ -23,49 +23,41 @@ use Magento\Framework\Controller\ResultFactory;
  * Class Confirm
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Confirm extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Customer\Api\AccountManagementInterface
-     * @since 2.0.0
      */
     protected $customerAccountManagement;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Customer\Helper\Address
-     * @since 2.0.0
      */
     protected $addressHelper;
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $urlModel;
 
     /**
      * @var Session
-     * @since 2.0.0
      */
     protected $session;
 
@@ -90,7 +82,6 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
      * @param CustomerRepositoryInterface $customerRepository
      * @param Address $addressHelper
      * @param UrlFactory $urlFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -150,7 +141,6 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
      * Confirm customer account by id and confirmation key
      *
      * @return \Magento\Framework\Controller\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -194,7 +184,6 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
      * Retrieve success message
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getSuccessMessage()
     {
@@ -224,7 +213,6 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
      * Retrieve success redirect URL
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getSuccessRedirect()
     {

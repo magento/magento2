@@ -9,7 +9,6 @@ namespace Magento\Sales\Block\Adminhtml;
  * Adminhtml sales invoices block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Invoice extends \Magento\Backend\Block\Widget\Grid\Container
 {
@@ -17,7 +16,6 @@ class Invoice extends \Magento\Backend\Block\Widget\Grid\Container
      * Constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -32,7 +30,6 @@ class Invoice extends \Magento\Backend\Block\Widget\Grid\Container
      * Get payment info html
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPaymentInfoHtml()
     {

@@ -11,7 +11,6 @@ use Magento\Integration\Model\Integration as IntegrationModel;
  * Integration Service Interface
  *
  * @api
- * @since 2.0.0
  */
 interface IntegrationServiceInterface
 {
@@ -21,7 +20,6 @@ interface IntegrationServiceInterface
      * @param array $integrationData
      * @return IntegrationModel
      * @throws \Magento\Framework\Exception\IntegrationException
-     * @since 2.0.0
      */
     public function create(array $integrationData);
 
@@ -31,7 +29,6 @@ interface IntegrationServiceInterface
      * @param int $integrationId
      * @return IntegrationModel
      * @throws \Magento\Framework\Exception\IntegrationException
-     * @since 2.0.0
      */
     public function get($integrationId);
 
@@ -40,7 +37,6 @@ interface IntegrationServiceInterface
      *
      * @param string $integrationName
      * @return IntegrationModel
-     * @since 2.0.0
      */
     public function findByName($integrationName);
 
@@ -49,7 +45,6 @@ interface IntegrationServiceInterface
      *
      * @param int $consumerId
      * @return IntegrationModel
-     * @since 2.0.0
      */
     public function findByConsumerId($consumerId);
 
@@ -58,7 +53,6 @@ interface IntegrationServiceInterface
      *
      * @param int $consumerId
      * @return IntegrationModel
-     * @since 2.0.0
      */
     public function findActiveIntegrationByConsumerId($consumerId);
 
@@ -68,7 +62,6 @@ interface IntegrationServiceInterface
      * @param array $integrationData
      * @return IntegrationModel
      * @throws \Magento\Framework\Exception\IntegrationException
-     * @since 2.0.0
      */
     public function update(array $integrationData);
 
@@ -78,7 +71,6 @@ interface IntegrationServiceInterface
      * @param int $integrationId
      * @return array Integration data
      * @throws \Magento\Framework\Exception\IntegrationException
-     * @since 2.0.0
      */
     public function delete($integrationId);
 
@@ -87,7 +79,6 @@ interface IntegrationServiceInterface
      *
      * @param int $integrationId
      * @return array
-     * @since 2.0.0
      */
     public function getSelectedResources($integrationId);
 }

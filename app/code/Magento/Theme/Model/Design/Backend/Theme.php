@@ -10,7 +10,6 @@ use Magento\Framework\App\Config\Value;
 /**
  * Class \Magento\Theme\Model\Design\Backend\Theme
  *
- * @since 2.0.0
  */
 class Theme extends Value
 {
@@ -18,7 +17,6 @@ class Theme extends Value
      * Design package instance
      *
      * @var \Magento\Framework\View\DesignInterface
-     * @since 2.0.0
      */
     protected $_design = null;
 
@@ -40,7 +38,6 @@ class Theme extends Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -60,7 +57,6 @@ class Theme extends Value
      * Validate specified value against frontend area
      *
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -106,7 +102,6 @@ class Theme extends Value
      * {@inheritdoc}. In addition, it sets status 'invalidate' for blocks and other output caches
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {

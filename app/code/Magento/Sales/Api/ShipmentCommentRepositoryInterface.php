@@ -11,7 +11,6 @@ namespace Magento\Sales\Api;
  * A shipment is a delivery package that contains products. A shipment document accompanies the shipment. This
  * document lists the products and their quantities in the delivery package. A shipment document can contain comments.
  * @api
- * @since 2.0.0
  */
 interface ShipmentCommentRepositoryInterface
 {
@@ -20,7 +19,6 @@ interface ShipmentCommentRepositoryInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
      * @return \Magento\Sales\Api\Data\ShipmentCommentSearchResultInterface Shipment comment search result interface.
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -29,7 +27,6 @@ interface ShipmentCommentRepositoryInterface
      *
      * @param int $id The shipment comment ID.
      * @return \Magento\Sales\Api\Data\ShipmentCommentInterface Shipment comment interface.
-     * @since 2.0.0
      */
     public function get($id);
 
@@ -38,7 +35,6 @@ interface ShipmentCommentRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\ShipmentCommentInterface $entity The shipment comment.
      * @return bool
-     * @since 2.0.0
      */
     public function delete(\Magento\Sales\Api\Data\ShipmentCommentInterface $entity);
 
@@ -47,7 +43,6 @@ interface ShipmentCommentRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\ShipmentCommentInterface $entity The shipment comment.
      * @return \Magento\Sales\Api\Data\ShipmentCommentInterface Shipment comment interface.
-     * @since 2.0.0
      */
     public function save(\Magento\Sales\Api\Data\ShipmentCommentInterface $entity);
 }

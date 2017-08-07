@@ -11,19 +11,17 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 
 /**
  * Upgrade the Catalog module DB scheme
- * @since 2.0.0
  */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
      * @var string
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private static $connectionName = 'checkout';
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {

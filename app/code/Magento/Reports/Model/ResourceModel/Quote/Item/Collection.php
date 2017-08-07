@@ -13,7 +13,6 @@ use Magento\Framework\App\ResourceConnection;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -21,7 +20,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Join fields
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_joinedFields = [];
 
@@ -29,25 +27,21 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Fields map for correlation names & real selected fields
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_map = ['fields' => ['store_id' => 'main_table.store_id']];
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
-     * @since 2.0.0
      */
     protected $productResource;
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\Customer
-     * @since 2.0.0
      */
     protected $customerResource;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Collection
-     * @since 2.0.0
      */
     protected $orderResource;
 
@@ -61,7 +55,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Sales\Model\ResourceModel\Order\Collection $orderResource
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -91,7 +84,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -102,7 +94,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Prepare select query for products in carts report
      *
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     public function prepareActiveCartItems()
     {
@@ -131,7 +122,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param array $productIds
      * @return array
-     * @since 2.0.0
      */
     protected function getOrdersData(array $productIds)
     {
@@ -151,7 +141,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param array $storeIds
      * @return $this
-     * @since 2.0.0
      */
     public function addStoreFilter($storeIds)
     {
@@ -163,7 +152,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Get select count sql
      *
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     public function getSelectCountSql()
     {
@@ -180,7 +168,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param array $productIds
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function getProductData(array $productIds)
     {
@@ -219,7 +206,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add data fetched from another database
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterLoad()
     {

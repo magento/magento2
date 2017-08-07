@@ -9,7 +9,6 @@ namespace Magento\Checkout\Helper;
  * Shopping cart helper
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Cart extends \Magento\Framework\Url\Helper\Data
 {
@@ -30,13 +29,11 @@ class Cart extends \Magento\Framework\Url\Helper\Data
 
     /**
      * @var \Magento\Checkout\Model\Cart
-     * @since 2.0.0
      */
     protected $_checkoutCart;
 
     /**
      * @var \Magento\Checkout\Model\Session
-     * @since 2.0.0
      */
     protected $_checkoutSession;
 
@@ -45,7 +42,6 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      * @param \Magento\Checkout\Model\Cart $checkoutCart
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -62,7 +58,6 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      *
      * @return \Magento\Checkout\Model\Cart
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getCart()
     {
@@ -75,7 +70,6 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      * @param \Magento\Catalog\Model\Product $product
      * @param array $additional
      * @return  string
-     * @since 2.0.0
      */
     public function getAddUrl($product, $additional = [])
     {
@@ -117,7 +111,6 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      *
      * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return  string
-     * @since 2.0.0
      */
     public function getRemoveUrl($item)
     {
@@ -133,7 +126,6 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return string
-     * @since 2.0.0
      */
     public function getDeletePostJson($item)
     {
@@ -151,7 +143,6 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getCartUrl()
     {
@@ -163,7 +154,6 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      *
      * @return \Magento\Quote\Model\Quote
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -175,7 +165,6 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      *
      * @return int
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getItemsCount()
     {
@@ -187,7 +176,6 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      *
      * @return int|float
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getItemsQty()
     {
@@ -199,7 +187,6 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      *
      * @return int|float
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getSummaryCount()
     {
@@ -212,7 +199,6 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getIsVirtualQuote()
     {
@@ -226,7 +212,6 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getShouldRedirectToCart($store = null)
     {

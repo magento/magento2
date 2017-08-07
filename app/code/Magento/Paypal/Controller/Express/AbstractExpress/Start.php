@@ -9,7 +9,6 @@ use Magento\Paypal\Controller\Express\GetToken;
 
 /**
  * Class Start
- * @since 2.0.0
  */
 class Start extends GetToken
 {
@@ -18,7 +17,6 @@ class Start extends GetToken
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -9,25 +9,21 @@ namespace Magento\Cms\Controller\Adminhtml\Page;
 /**
  * Class \Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor
  *
- * @since 2.0.0
  */
 class PostDataProcessor
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
-     * @since 2.0.0
      */
     protected $dateFilter;
 
     /**
      * @var \Magento\Framework\View\Model\Layout\Update\ValidatorFactory
-     * @since 2.0.0
      */
     protected $validatorFactory;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
-     * @since 2.0.0
      */
     protected $messageManager;
 
@@ -35,7 +31,6 @@ class PostDataProcessor
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\View\Model\Layout\Update\ValidatorFactory $validatorFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
@@ -52,7 +47,6 @@ class PostDataProcessor
      *
      * @param array $data
      * @return array
-     * @since 2.0.0
      */
     public function filter($data)
     {
@@ -72,7 +66,6 @@ class PostDataProcessor
      *
      * @param array $data
      * @return bool     Return FALSE if someone item is invalid
-     * @since 2.0.0
      */
     public function validate($data)
     {
@@ -100,7 +93,6 @@ class PostDataProcessor
      *
      * @param array $data
      * @return bool
-     * @since 2.0.0
      */
     public function validateRequireEntry(array $data)
     {

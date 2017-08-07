@@ -9,7 +9,6 @@ namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 /**
  * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\Edit
  *
- * @since 2.0.0
  */
 class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
@@ -46,7 +45,6 @@ class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
      *
      * @return void
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

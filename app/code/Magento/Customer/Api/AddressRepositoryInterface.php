@@ -9,7 +9,6 @@ namespace Magento\Customer\Api;
 /**
  * Customer address CRUD interface.
  * @api
- * @since 2.0.0
  */
 interface AddressRepositoryInterface
 {
@@ -19,7 +18,6 @@ interface AddressRepositoryInterface
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return \Magento\Customer\Api\Data\AddressInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function save(\Magento\Customer\Api\Data\AddressInterface $address);
 
@@ -29,7 +27,6 @@ interface AddressRepositoryInterface
      * @param int $addressId
      * @return \Magento\Customer\Api\Data\AddressInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getById($addressId);
 
@@ -39,7 +36,6 @@ interface AddressRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Customer\Api\Data\AddressSearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -49,7 +45,6 @@ interface AddressRepositoryInterface
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function delete(\Magento\Customer\Api\Data\AddressInterface $address);
 
@@ -60,7 +55,6 @@ interface AddressRepositoryInterface
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function deleteById($addressId);
 }

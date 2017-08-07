@@ -24,7 +24,7 @@ use \Magento\SalesRule\Model\Rule\Condition\Product as SalesRuleProduct;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /** @var SalesRuleProduct */
     protected $model;
@@ -147,7 +147,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function testGetValueElementChooserUrlDataProvider()
+    public function getValueElementChooserUrlDataProvider()
     {
         return [
             'category_ids_without_js_object' => [
@@ -180,7 +180,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @param string $attribute
      * @param string $url
      * @param string $jsObject
-     * @dataProvider testGetValueElementChooserUrlDataProvider
+     * @dataProvider getValueElementChooserUrlDataProvider
      */
     public function testGetValueElementChooserUrl($attribute, $url, $jsObject = '')
     {

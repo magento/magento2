@@ -14,19 +14,16 @@ namespace Magento\OfflineShipping\Model\Plugin\Checkout\Block\Cart;
 /**
  * Class \Magento\OfflineShipping\Model\Plugin\Checkout\Block\Cart\Shipping
  *
- * @since 2.0.0
  */
 class Shipping
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
     {
@@ -38,7 +35,6 @@ class Shipping
      * @param  bool $result
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterIsStateActive(\Magento\Checkout\Block\Cart\LayoutProcessor $subject, $result)
     {

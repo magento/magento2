@@ -8,7 +8,6 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter\Select;
 /**
  * Class \Magento\Backend\Block\Widget\Grid\Column\Filter\Select\Extended
  *
- * @since 2.0.0
  */
 class Extended extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
@@ -16,7 +15,6 @@ class Extended extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
      * Get options for filter value
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getOptions()
     {

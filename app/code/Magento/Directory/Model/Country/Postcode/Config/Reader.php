@@ -8,7 +8,6 @@ namespace Magento\Directory\Model\Country\Postcode\Config;
 /**
  * Class \Magento\Directory\Model\Country\Postcode\Config\Reader
  *
- * @since 2.0.0
  */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
@@ -16,7 +15,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * List of id attributes for merge
      *
      * @var array
-     * @since 2.1.0
+     * @since 2.0.11
      */
     protected $_idAttributes = [
         '/config/zip' => 'countryCode',
@@ -34,7 +33,6 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,

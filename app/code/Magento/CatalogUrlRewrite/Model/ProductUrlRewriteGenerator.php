@@ -17,7 +17,6 @@ use Magento\Catalog\Model\Product\Visibility;
  * Class ProductUrlRewriteGenerator
  * @package Magento\CatalogUrlRewrite\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class ProductUrlRewriteGenerator
 {
@@ -29,56 +28,48 @@ class ProductUrlRewriteGenerator
     /**
      * @deprecated 2.2.0
      * @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService
-     * @since 2.0.0
      */
     protected $storeViewService;
 
     /**
      * @var \Magento\Catalog\Model\Product
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     protected $product;
 
     /**
      * @deprecated 2.2.0
      * @var \Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator
-     * @since 2.0.0
      */
     protected $currentUrlRewritesRegenerator;
 
     /**
      * @deprecated 2.2.0
      * @var \Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator
-     * @since 2.0.0
      */
     protected $categoriesUrlRewriteGenerator;
 
     /**
      * @deprecated 2.2.0
      * @var \Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator
-     * @since 2.0.0
      */
     protected $canonicalUrlRewriteGenerator;
 
     /**
      * @deprecated 2.2.0
      * @var \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory
-     * @since 2.0.0
      */
     protected $objectRegistryFactory;
 
     /**
      * @deprecated 2.2.0
      * @var \Magento\CatalogUrlRewrite\Model\ObjectRegistry
-     * @since 2.0.0
      */
     protected $productCategories;
 
     /**
      * @deprecated 2.2.0
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -95,7 +86,6 @@ class ProductUrlRewriteGenerator
      * @param \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory $objectRegistryFactory
      * @param \Magento\CatalogUrlRewrite\Service\V1\StoreViewService $storeViewService
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @since 2.0.0
      */
     public function __construct(
         CanonicalUrlRewriteGenerator $canonicalUrlRewriteGenerator,
@@ -136,7 +126,6 @@ class ProductUrlRewriteGenerator
      * @param \Magento\Catalog\Model\Product $product
      * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
-     * @since 2.0.0
      */
     public function generate(Product $product, $rootCategoryId = null)
     {
@@ -163,7 +152,6 @@ class ProductUrlRewriteGenerator
      * @deprecated 2.2.0
      * @param int|null $storeId
      * @return bool
-     * @since 2.0.0
      */
     protected function isGlobalScope($storeId)
     {
@@ -178,7 +166,6 @@ class ProductUrlRewriteGenerator
      * @param \Magento\Catalog\Model\Product|null $product
      * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
-     * @since 2.0.0
      */
     protected function generateForGlobalScope($productCategories, $product = null, $rootCategoryId = null)
     {
@@ -198,7 +185,6 @@ class ProductUrlRewriteGenerator
      * @param Product|null $product
      * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
-     * @since 2.0.0
      */
     protected function generateForSpecificStoreView(
         $storeId,
@@ -215,7 +201,6 @@ class ProductUrlRewriteGenerator
      * @param \Magento\Catalog\Model\Category $category
      * @param int $storeId
      * @return bool
-     * @since 2.0.0
      */
     protected function isCategoryProperForGenerating($category, $storeId)
     {

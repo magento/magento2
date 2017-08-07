@@ -10,7 +10,6 @@ namespace Magento\Sales\Block\Adminhtml\Order;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Totalbar extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 {
@@ -18,7 +17,6 @@ class Totalbar extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Totals
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_totals = [];
 
@@ -27,7 +25,6 @@ class Totalbar extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -51,7 +48,6 @@ class Totalbar extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Get totals
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getTotals()
     {
@@ -65,7 +61,6 @@ class Totalbar extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * @param float $value
      * @param bool $grand
      * @return $this
-     * @since 2.0.0
      */
     public function addTotal($label, $value, $grand = false)
     {

@@ -11,13 +11,11 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 /**
  * Class SaveButton
  * @package Magento\Customer\Block\Adminhtml\Edit
- * @since 2.0.0
  */
 class SaveButton extends GenericButton implements ButtonProviderInterface
 {
     /**
      * @var AccountManagementInterface
-     * @since 2.0.0
      */
     protected $customerAccountManagement;
 
@@ -27,7 +25,6 @@ class SaveButton extends GenericButton implements ButtonProviderInterface
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param AccountManagementInterface $customerAccountManagement
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -40,7 +37,6 @@ class SaveButton extends GenericButton implements ButtonProviderInterface
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getButtonData()
     {

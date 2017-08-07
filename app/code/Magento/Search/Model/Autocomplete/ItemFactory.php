@@ -11,19 +11,16 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Class \Magento\Search\Model\Autocomplete\ItemFactory
  *
- * @since 2.0.0
  */
 class ItemFactory
 {
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager
@@ -34,7 +31,6 @@ class ItemFactory
     /**
      * @param array $data
      * @return Item
-     * @since 2.0.0
      */
     public function create(array $data)
     {

@@ -16,7 +16,6 @@ use Magento\Framework\Module\Status;
 /**
  * Class \Magento\Setup\Console\Command\AbstractModuleManageCommand
  *
- * @since 2.0.0
  */
 abstract class AbstractModuleManageCommand extends AbstractModuleCommand
 {
@@ -34,13 +33,12 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
 
     /**
      * @var DeploymentConfig
-     * @since 2.1.0
+     * @since 2.0.6
      */
     protected $deploymentConfig;
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -62,7 +60,6 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function isModuleRequired()
     {
@@ -71,7 +68,6 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -130,7 +126,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      * @param string[] $modulesToChange
      * @param OutputInterface $output
      * @return void
-     * @since 2.1.0
+     * @since 2.0.6
      */
     private function setIsEnabled($isEnable, $modulesToChange, $output)
     {
@@ -156,7 +152,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      * Get module status
      *
      * @return Status
-     * @since 2.1.0
+     * @since 2.0.6
      */
     private function getStatus()
     {
@@ -168,7 +164,6 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      *
      * @param string[] $modules
      * @return string[]
-     * @since 2.0.0
      */
     protected function validate(array $modules)
     {
@@ -184,7 +179,6 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      * Is it "enable" or "disable" command
      *
      * @return bool
-     * @since 2.0.0
      */
     abstract protected function isEnable();
 
@@ -192,8 +186,8 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      * Get deployment config
      *
      * @return DeploymentConfig
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 2.0.6
+     * @since 2.0.6
      */
     private function getDeploymentConfig()
     {

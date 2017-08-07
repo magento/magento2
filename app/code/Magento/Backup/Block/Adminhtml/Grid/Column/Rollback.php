@@ -13,13 +13,11 @@ namespace Magento\Backup\Block\Adminhtml\Grid\Column;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Rollback extends \Magento\Backend\Block\Widget\Grid\Column
 {
     /**
      * @var \Magento\Backup\Helper\Data
-     * @since 2.0.0
      */
     protected $_backupHelper;
 
@@ -27,7 +25,6 @@ class Rollback extends \Magento\Backend\Block\Widget\Grid\Column
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backup\Helper\Data $backupHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -42,7 +39,6 @@ class Rollback extends \Magento\Backend\Block\Widget\Grid\Column
      * Check permission for rollback
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isDisplayed()
     {

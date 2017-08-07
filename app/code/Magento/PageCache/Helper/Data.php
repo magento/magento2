@@ -12,7 +12,6 @@ namespace Magento\PageCache\Helper;
 
 /**
  * Helper for Page Cache module
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -42,7 +41,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $route
      * @param array $params
      * @return string
-     * @since 2.0.0
      */
     public function getUrl($route, array $params = [])
     {

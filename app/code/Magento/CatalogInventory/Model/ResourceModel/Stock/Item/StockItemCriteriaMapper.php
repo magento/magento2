@@ -19,7 +19,6 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
  * Interface StockItemCriteriaMapper
  * @package Magento\CatalogInventory\Model\ResourceModel\Stock\Status
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class StockItemCriteriaMapper extends GenericMapper
 {
@@ -43,7 +42,6 @@ class StockItemCriteriaMapper extends GenericMapper
      * @param StoreManagerInterface $storeManager
      * @param MapperFactory $mapperFactory
      * @param Select $select
-     * @since 2.0.0
      */
     public function __construct(
         Logger $logger,
@@ -59,7 +57,6 @@ class StockItemCriteriaMapper extends GenericMapper
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     protected function init()
     {
@@ -69,7 +66,6 @@ class StockItemCriteriaMapper extends GenericMapper
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function mapInitialCondition()
     {
@@ -82,7 +78,6 @@ class StockItemCriteriaMapper extends GenericMapper
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function mapStockFilter($stock)
     {
@@ -94,7 +89,6 @@ class StockItemCriteriaMapper extends GenericMapper
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function mapWebsiteFilter($website)
     {
@@ -106,7 +100,6 @@ class StockItemCriteriaMapper extends GenericMapper
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function mapProductsFilter($products)
     {
@@ -130,7 +123,6 @@ class StockItemCriteriaMapper extends GenericMapper
     /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function mapStockStatus($storeId = null)
     {
@@ -149,7 +141,6 @@ class StockItemCriteriaMapper extends GenericMapper
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function mapManagedFilter($isStockManagedInConfig)
     {
@@ -163,7 +154,6 @@ class StockItemCriteriaMapper extends GenericMapper
     /**
      * @inheritdoc
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function mapQtyFilter($comparisonMethod, $qty)
     {

@@ -10,19 +10,16 @@ use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection;
 /**
  * Sales Order Invoice PDF model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Invoice extends AbstractPdf
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $_localeResolver;
 
@@ -42,7 +39,6 @@ class Invoice extends AbstractPdf
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Payment\Helper\Data $paymentData,
@@ -81,7 +77,6 @@ class Invoice extends AbstractPdf
      *
      * @param \Zend_Pdf_Page $page
      * @return void
-     * @since 2.0.0
      */
     protected function _drawHeader(\Zend_Pdf_Page $page)
     {
@@ -119,7 +114,6 @@ class Invoice extends AbstractPdf
      *
      * @param array|Collection $invoices
      * @return \Zend_Pdf
-     * @since 2.0.0
      */
     public function getPdf($invoices = [])
     {
@@ -180,7 +174,6 @@ class Invoice extends AbstractPdf
      *
      * @param  array $settings
      * @return \Zend_Pdf_Page
-     * @since 2.0.0
      */
     public function newPage(array $settings = [])
     {

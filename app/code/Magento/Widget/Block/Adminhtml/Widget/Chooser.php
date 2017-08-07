@@ -14,19 +14,16 @@ namespace Magento\Widget\Block\Adminhtml\Widget;
 /**
  * Class \Magento\Widget\Block\Adminhtml\Widget\Chooser
  *
- * @since 2.0.0
  */
 class Chooser extends \Magento\Backend\Block\Template
 {
     /**
      * @var \Magento\Framework\Data\Form\Element\Factory
-     * @since 2.0.0
      */
     protected $_elementFactory;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
@@ -35,7 +32,6 @@ class Chooser extends \Magento\Backend\Block\Template
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Data\Form\Element\Factory $elementFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -52,7 +48,6 @@ class Chooser extends \Magento\Backend\Block\Template
      * Chooser source URL getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSourceUrl()
     {
@@ -63,7 +58,6 @@ class Chooser extends \Magento\Backend\Block\Template
      * Chooser form element getter
      *
      * @return \Magento\Framework\Data\Form\Element\AbstractElement
-     * @since 2.0.0
      */
     public function getElement()
     {
@@ -74,7 +68,6 @@ class Chooser extends \Magento\Backend\Block\Template
      * Convert Array config to Object
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -110,7 +103,6 @@ class Chooser extends \Magento\Backend\Block\Template
      * Unique identifier for block that uses Chooser
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUniqId()
     {
@@ -121,7 +113,6 @@ class Chooser extends \Magento\Backend\Block\Template
      * Form element fieldset id getter for working with form in chooser
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFieldsetId()
     {
@@ -133,7 +124,6 @@ class Chooser extends \Magento\Backend\Block\Template
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getHiddenEnabled()
     {
@@ -144,7 +134,6 @@ class Chooser extends \Magento\Backend\Block\Template
      * Return chooser HTML and init scripts
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

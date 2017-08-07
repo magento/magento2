@@ -13,13 +13,11 @@ use Magento\Framework\View\Result\PageFactory;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Status\Edit
  *
- * @since 2.0.0
  */
 class Edit extends \Magento\Sales\Controller\Adminhtml\Order\Status
 {
     /**
      * @var PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -27,7 +25,6 @@ class Edit extends \Magento\Sales\Controller\Adminhtml\Order\Status
      * @param Context $context
      * @param Registry $coreRegistry
      * @param PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -42,7 +39,6 @@ class Edit extends \Magento\Sales\Controller\Adminhtml\Order\Status
      * Editing existing status form
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -7,7 +7,6 @@ namespace Magento\AdminNotification\Model\ResourceModel;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Inbox extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -15,7 +14,6 @@ class Inbox extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * AdminNotification Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -27,7 +25,6 @@ class Inbox extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\AdminNotification\Model\Inbox $object
      * @return $this
-     * @since 2.0.0
      */
     public function loadLatestNotice(\Magento\AdminNotification\Model\Inbox $object)
     {
@@ -60,7 +57,6 @@ class Inbox extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\AdminNotification\Model\Inbox $object
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getNoticeStatus(\Magento\AdminNotification\Model\Inbox $object)
     {
@@ -91,7 +87,6 @@ class Inbox extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $data
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function parse(\Magento\AdminNotification\Model\Inbox $object, array $data)
     {

@@ -9,7 +9,6 @@ namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 /**
  * Class Grid
  * @deprecated 2.2.0
- * @since 2.0.0
  */
 class Grid extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {
@@ -17,7 +16,6 @@ class Grid extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
      * Grid ajax action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

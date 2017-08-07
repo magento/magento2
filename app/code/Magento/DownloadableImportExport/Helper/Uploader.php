@@ -9,7 +9,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class Uploader
- * @since 2.0.0
  */
 class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -17,7 +16,6 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
      * Media files uploader
      *
      * @var \Magento\CatalogImportExport\Model\Import\Uploader
-     * @since 2.0.0
      */
     protected $fileUploader;
 
@@ -25,13 +23,11 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
      * File helper downloadable product
      *
      * @var \Magento\Downloadable\Helper\File
-     * @since 2.0.0
      */
     protected $fileHelper;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     * @since 2.0.0
      */
     protected $mediaDirectory;
 
@@ -39,7 +35,6 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
      * Entity model parameters.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $parameters = [];
 
@@ -51,7 +46,6 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\CatalogImportExport\Model\Import\UploaderFactory $uploaderFactory
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Framework\Filesystem $filesystem
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -77,7 +71,6 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
      * @param array $parameters
      * @return \Magento\CatalogImportExport\Model\Import\Uploader
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getUploader($type, $parameters)
     {
@@ -113,7 +106,6 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
      * Get all allowed extensions
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getAllowedExtensions()
     {

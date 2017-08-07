@@ -11,7 +11,6 @@ use Magento\Search\Model\QueryFactory;
  * Search model for backend search
  *
  * @deprecated 2.2.0
- * @since 2.0.0
  */
 class Catalog extends \Magento\Framework\DataObject
 {
@@ -19,7 +18,6 @@ class Catalog extends \Magento\Framework\DataObject
      * Catalog search data
      *
      * @var \Magento\Search\Model\QueryFactory
-     * @since 2.0.0
      */
     protected $queryFactory = null;
 
@@ -27,7 +25,6 @@ class Catalog extends \Magento\Framework\DataObject
      * Magento string lib
      *
      * @var \Magento\Framework\Stdlib\StringUtils
-     * @since 2.0.0
      */
     protected $string;
 
@@ -35,7 +32,6 @@ class Catalog extends \Magento\Framework\DataObject
      * Adminhtml data
      *
      * @var \Magento\Backend\Helper\Data
-     * @since 2.0.0
      */
     protected $_adminhtmlData = null;
 
@@ -43,7 +39,6 @@ class Catalog extends \Magento\Framework\DataObject
      * @param \Magento\Backend\Helper\Data $adminhtmlData
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param QueryFactory $queryFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Helper\Data $adminhtmlData,
@@ -59,7 +54,6 @@ class Catalog extends \Magento\Framework\DataObject
      * Load search results
      *
      * @return $this
-     * @since 2.0.0
      */
     public function load()
     {

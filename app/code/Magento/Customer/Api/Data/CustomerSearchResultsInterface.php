@@ -9,7 +9,6 @@ namespace Magento\Customer\Api\Data;
 /**
  * Interface for customer search results.
  * @api
- * @since 2.0.0
  */
 interface CustomerSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
@@ -17,7 +16,6 @@ interface CustomerSearchResultsInterface extends \Magento\Framework\Api\SearchRe
      * Get customers list.
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface[]
-     * @since 2.0.0
      */
     public function getItems();
 
@@ -26,7 +24,6 @@ interface CustomerSearchResultsInterface extends \Magento\Framework\Api\SearchRe
      *
      * @param \Magento\Customer\Api\Data\CustomerInterface[] $items
      * @return $this
-     * @since 2.0.0
      */
     public function setItems(array $items);
 }

@@ -10,13 +10,11 @@ use Magento\Framework\App\Rss\DataProviderInterface;
 /**
  * Class NewOrder
  * @package Magento\Sales\Model\Rss
- * @since 2.0.0
  */
 class NewOrder implements DataProviderInterface
 {
     /**
      * @var \Magento\Sales\Model\OrderFactory
-     * @since 2.0.0
      */
     protected $orderFactory;
 
@@ -24,26 +22,22 @@ class NewOrder implements DataProviderInterface
      * Url Builder
      *
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $localeDate;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
     /**
      * System event manager
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $eventManager;
 
@@ -51,13 +45,11 @@ class NewOrder implements DataProviderInterface
      * Parent layout of the block
      *
      * @var \Magento\Framework\View\LayoutInterface
-     * @since 2.0.0
      */
     protected $layout;
 
     /**
      * @var \Magento\Framework\App\Rss\UrlBuilderInterface
-     * @since 2.0.0
      */
     protected $rssUrlBuilder;
 
@@ -69,7 +61,6 @@ class NewOrder implements DataProviderInterface
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\View\LayoutInterface $layout
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Model\OrderFactory $orderFactory,
@@ -93,7 +84,6 @@ class NewOrder implements DataProviderInterface
      * Check if RSS feed allowed
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function isAllowed()
     {
@@ -104,7 +94,6 @@ class NewOrder implements DataProviderInterface
      * Get RSS feed items
      *
      * @return array
-     * @since 2.0.0
      */
     public function getRssData()
     {
@@ -143,7 +132,6 @@ class NewOrder implements DataProviderInterface
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getCacheKey()
     {
@@ -152,7 +140,6 @@ class NewOrder implements DataProviderInterface
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getCacheLifetime()
     {
@@ -161,7 +148,6 @@ class NewOrder implements DataProviderInterface
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getFeeds()
     {
@@ -170,7 +156,6 @@ class NewOrder implements DataProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function isAuthRequired()
     {

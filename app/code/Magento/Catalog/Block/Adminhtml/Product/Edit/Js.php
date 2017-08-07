@@ -13,7 +13,6 @@ use Magento\Tax\Model\TaxClass\Source\Product as ProductTaxClassSource;
 /**
  * Class \Magento\Catalog\Block\Adminhtml\Product\Edit\Js
  *
- * @since 2.0.0
  */
 class Js extends \Magento\Backend\Block\Template
 {
@@ -21,19 +20,16 @@ class Js extends \Magento\Backend\Block\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $coreRegistry = null;
 
     /**
      * @var TaxCalculationInterface
-     * @since 2.0.0
      */
     protected $calculationService;
 
     /**
      * @var ProductTaxClassSource
-     * @since 2.0.0
      */
     protected $productTaxClassSource;
 
@@ -41,7 +37,6 @@ class Js extends \Magento\Backend\Block\Template
      * Current customer
      *
      * @var CurrentCustomer
-     * @since 2.0.0
      */
     protected $currentCustomer;
 
@@ -49,7 +44,6 @@ class Js extends \Magento\Backend\Block\Template
      * Json helper
      *
      * @var \Magento\Framework\Json\Helper\Data
-     * @since 2.0.0
      */
     protected $jsonHelper;
 
@@ -61,7 +55,6 @@ class Js extends \Magento\Backend\Block\Template
      * @param TaxCalculationInterface $calculationService
      * @param ProductTaxClassSource $productTaxClassSource
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -84,7 +77,6 @@ class Js extends \Magento\Backend\Block\Template
      * Get currently edited product
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -95,7 +87,6 @@ class Js extends \Magento\Backend\Block\Template
      * Get store object of curently edited product
      *
      * @return \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     public function getStore()
     {
@@ -110,7 +101,6 @@ class Js extends \Magento\Backend\Block\Template
      * Get all tax rates JSON for all product tax classes.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAllRatesByProductClassJson()
     {

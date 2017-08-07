@@ -9,7 +9,6 @@ namespace Magento\Shipping\Block\Adminhtml\Create;
  * Adminhtml shipment items grid
  *
  * @api
- * @since 2.0.0
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
@@ -17,13 +16,11 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Sales data
      *
      * @var \Magento\Sales\Helper\Data
-     * @since 2.0.0
      */
     protected $_salesData;
 
     /**
      * @var \Magento\Shipping\Model\CarrierFactory
-     * @since 2.0.0
      */
     protected $_carrierFactory;
 
@@ -35,7 +32,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * @param \Magento\Sales\Helper\Data $salesData
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -55,7 +51,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve invoice order
      *
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -66,7 +61,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve source
      *
      * @return \Magento\Sales\Model\Order\Shipment
-     * @since 2.0.0
      */
     public function getSource()
     {
@@ -77,7 +71,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve shipment model instance
      *
      * @return \Magento\Sales\Model\Order\Shipment
-     * @since 2.0.0
      */
     public function getShipment()
     {
@@ -88,7 +81,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Prepare child blocks
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -110,7 +102,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      *
      * @param float $price
      * @return string
-     * @since 2.0.0
      */
     public function formatPrice($price)
     {
@@ -121,7 +112,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve HTML of update button
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUpdateButtonHtml()
     {
@@ -132,7 +122,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Get url for update
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUpdateUrl()
     {
@@ -143,7 +132,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Check possibility to send shipment email
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canSendShipmentEmail()
     {
@@ -154,7 +142,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Checks the possibility of creating shipping label by current carrier
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canCreateShippingLabel()
     {

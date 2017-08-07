@@ -7,7 +7,6 @@ namespace Magento\Framework\DB;
 
 /**
  * Class QueryInterface
- * @since 2.0.0
  */
 interface QueryInterface
 {
@@ -15,7 +14,6 @@ interface QueryInterface
      * Retrieve source Criteria object
      *
      * @return \Magento\Framework\Api\CriteriaInterface
-     * @since 2.0.0
      */
     public function getCriteria();
 
@@ -23,7 +21,6 @@ interface QueryInterface
      * Retrieve all ids for query
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllIds();
 
@@ -33,7 +30,6 @@ interface QueryInterface
      * @param string $name
      * @param mixed $value
      * @return void
-     * @since 2.0.0
      */
     public function addBindParam($name, $value);
 
@@ -41,7 +37,6 @@ interface QueryInterface
      * Get collection size
      *
      * @return int
-     * @since 2.0.0
      */
     public function getSize();
 
@@ -50,7 +45,6 @@ interface QueryInterface
      *
      * @param bool $stringMode
      * @return string || Select
-     * @since 2.0.0
      */
     public function getSelectSql($stringMode = false);
 
@@ -58,7 +52,6 @@ interface QueryInterface
      * Reset Statement object
      *
      * @return void
-     * @since 2.0.0
      */
     public function reset();
 
@@ -66,7 +59,6 @@ interface QueryInterface
      * Fetch all statement
      *
      * @return array
-     * @since 2.0.0
      */
     public function fetchAll();
 
@@ -74,7 +66,6 @@ interface QueryInterface
      * Fetch statement
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function fetchItem();
 
@@ -82,7 +73,6 @@ interface QueryInterface
      * Get Identity Field Name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getIdFieldName();
 
@@ -90,7 +80,6 @@ interface QueryInterface
      * Retrieve connection object
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function getConnection();
 
@@ -98,7 +87,6 @@ interface QueryInterface
      * Get resource instance
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @since 2.0.0
      */
     public function getResource();
 
@@ -108,7 +96,6 @@ interface QueryInterface
      * @param string $name
      * @param bool $toSkip
      * @return void
-     * @since 2.0.0
      */
     public function addCountSqlSkipPart($name, $toSkip = true);
 }

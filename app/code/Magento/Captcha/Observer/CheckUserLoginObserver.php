@@ -12,37 +12,31 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class CheckUserLoginObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Captcha\Helper\Data
-     * @since 2.0.0
      */
     protected $_helper;
 
     /**
      * @var \Magento\Framework\App\ActionFlag
-     * @since 2.0.0
      */
     protected $_actionFlag;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
-     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var \Magento\Framework\Session\SessionManagerInterface
-     * @since 2.0.0
      */
     protected $_session;
 
     /**
      * @var CaptchaStringResolver
-     * @since 2.0.0
      */
     protected $captchaStringResolver;
 
@@ -50,7 +44,6 @@ class CheckUserLoginObserver implements ObserverInterface
      * Customer data
      *
      * @var \Magento\Customer\Model\Url
-     * @since 2.0.0
      */
     protected $_customerUrl;
 
@@ -75,7 +68,6 @@ class CheckUserLoginObserver implements ObserverInterface
      * @param \Magento\Framework\Session\SessionManagerInterface $customerSession
      * @param CaptchaStringResolver $captchaStringResolver
      * @param \Magento\Customer\Model\Url $customerUrl
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Captcha\Helper\Data $helper,
@@ -135,7 +127,6 @@ class CheckUserLoginObserver implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @throws NoSuchEntityException
      * @return $this
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

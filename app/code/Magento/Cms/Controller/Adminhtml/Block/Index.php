@@ -9,13 +9,11 @@ namespace Magento\Cms\Controller\Adminhtml\Block;
 /**
  * Class \Magento\Cms\Controller\Adminhtml\Block\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -23,7 +21,6 @@ class Index extends \Magento\Cms\Controller\Adminhtml\Block
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -38,7 +35,6 @@ class Index extends \Magento\Cms\Controller\Adminhtml\Block
      * Index action
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

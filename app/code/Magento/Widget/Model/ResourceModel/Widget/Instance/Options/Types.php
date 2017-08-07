@@ -8,19 +8,16 @@ namespace Magento\Widget\Model\ResourceModel\Widget\Instance\Options;
 
 /**
  * Widget Instance Types Options
- * @since 2.0.0
  */
 class Types implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\Widget\Model\Widget\Instance
-     * @since 2.0.0
      */
     protected $_model;
 
     /**
      * @param \Magento\Widget\Model\Widget\Instance $widgetInstanceModel
-     * @since 2.0.0
      */
     public function __construct(\Magento\Widget\Model\Widget\Instance $widgetInstanceModel)
     {
@@ -29,7 +26,6 @@ class Types implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

@@ -15,19 +15,16 @@ namespace Magento\Sales\Model\AdminOrder\Product\Quote;
 /**
  * Class \Magento\Sales\Model\AdminOrder\Product\Quote\Initializer
  *
- * @since 2.0.0
  */
 class Initializer
 {
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
-     * @since 2.0.0
      */
     protected $stockRegistry;
 
     /**
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
@@ -40,7 +37,6 @@ class Initializer
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Framework\DataObject $config
      * @return \Magento\Quote\Model\Quote\Item|string
-     * @since 2.0.0
      */
     public function init(
         \Magento\Quote\Model\Quote $quote,

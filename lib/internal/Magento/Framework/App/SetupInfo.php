@@ -10,7 +10,6 @@ use Magento\Framework\Setup\BackendFrontnameGenerator;
 
 /**
  * A model for determining information about setup application
- * @since 2.0.0
  */
 class SetupInfo
 {
@@ -30,7 +29,6 @@ class SetupInfo
      * Environment variables
      *
      * @var array
-     * @since 2.0.0
      */
     private $server;
 
@@ -38,7 +36,6 @@ class SetupInfo
      * Current document root directory
      *
      * @var string
-     * @since 2.0.0
      */
     private $docRoot;
 
@@ -46,7 +43,6 @@ class SetupInfo
      * Project root directory
      *
      * @var string
-     * @since 2.0.0
      */
     private $projectRoot;
 
@@ -56,7 +52,6 @@ class SetupInfo
      * @param array $server
      * @param string $projectRoot
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function __construct($server, $projectRoot = '')
     {
@@ -78,7 +73,6 @@ class SetupInfo
      *
      * @return mixed
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     private function detectProjectRoot()
     {
@@ -98,7 +92,6 @@ class SetupInfo
      * Gets setup application URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUrl()
     {
@@ -112,7 +105,6 @@ class SetupInfo
      * Gets the "main" application URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getProjectUrl()
     {
@@ -129,7 +121,6 @@ class SetupInfo
      * Get the admin area path
      *
      * @return string
-     * @since 2.0.0
      */
     public function getProjectAdminPath()
     {
@@ -141,7 +132,6 @@ class SetupInfo
      *
      * @param string $projectRoot
      * @return string
-     * @since 2.0.0
      */
     public function getDir($projectRoot)
     {
@@ -152,7 +142,6 @@ class SetupInfo
      * Checks if the setup application is available in current document root
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isAvailable()
     {
@@ -173,7 +162,6 @@ class SetupInfo
      * Gets relative path to setup application
      *
      * @return string
-     * @since 2.0.0
      */
     private function getPath()
     {

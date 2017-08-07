@@ -17,19 +17,16 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
  * A service for preprocessing content of assets
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Source
 {
     /**
      * @var \Magento\Framework\Filesystem
-     * @since 2.0.0
      */
     private $filesystem;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
-     * @since 2.0.0
      */
     protected $rootDir;
 
@@ -41,26 +38,22 @@ class Source
 
     /**
      * @var \Magento\Framework\View\Asset\PreProcessor\Pool
-     * @since 2.0.0
      */
     private $preProcessorPool;
 
     /**
      * @var \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile
-     * @since 2.0.0
      */
     protected $fallback;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ListInterface
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 2.1.1
      */
     private $themeList;
 
     /**
      * @var ChainFactoryInterface
-     * @since 2.0.0
      */
     private $chainFactory;
 
@@ -72,7 +65,7 @@ class Source
 
     /**
      * @var ThemeProviderInterface
-     * @since 2.2.0
+     * @since 2.1.1
      */
     private $themeProvider;
 
@@ -85,7 +78,6 @@ class Source
      * @param \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile $fallback
      * @param \Magento\Framework\View\Design\Theme\ListInterface $themeList
      * @param ChainFactoryInterface $chainFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -110,7 +102,6 @@ class Source
      *
      * @param LocalInterface $asset
      * @return bool|string
-     * @since 2.0.0
      */
     public function getFile(LocalInterface $asset)
     {
@@ -127,7 +118,6 @@ class Source
      *
      * @param LocalInterface $asset
      * @return bool|string
-     * @since 2.0.0
      */
     public function getContent(LocalInterface $asset)
     {
@@ -150,7 +140,6 @@ class Source
      *
      * @param LocalInterface $asset
      * @return array|bool
-     * @since 2.0.0
      */
     private function preProcess(LocalInterface $asset)
     {
@@ -192,7 +181,6 @@ class Source
     /**
      * @param LocalInterface $asset
      * @return bool|string
-     * @since 2.0.0
      */
     public function findSource(LocalInterface $asset)
     {
@@ -204,7 +192,6 @@ class Source
      *
      * @param string $path
      * @return string
-     * @since 2.0.0
      */
     public function getContentType($path)
     {
@@ -217,7 +204,6 @@ class Source
      * @param LocalInterface $asset
      * @return bool|string
      * @throws \LogicException
-     * @since 2.0.0
      */
     private function findSourceFile(LocalInterface $asset)
     {
@@ -239,7 +225,6 @@ class Source
      * @param LocalInterface $asset
      * @param \Magento\Framework\View\Asset\File\FallbackContext $context
      * @return bool|string
-     * @since 2.0.0
      */
     private function findFileThroughFallback(
         LocalInterface $asset,
@@ -260,7 +245,7 @@ class Source
 
     /**
      * @return ThemeProviderInterface
-     * @since 2.2.0
+     * @since 2.1.1
      */
     private function getThemeProvider()
     {
@@ -277,7 +262,6 @@ class Source
      * @param LocalInterface $asset
      * @param \Magento\Framework\View\Asset\File\Context $context
      * @return string
-     * @since 2.0.0
      */
     private function findFile(LocalInterface $asset, \Magento\Framework\View\Asset\File\Context $context)
     {
@@ -290,8 +274,8 @@ class Source
      * @param \Magento\Framework\View\Asset\LocalInterface $asset
      *
      * @return bool|string
-     * @deprecated 2.1.0 If custom vendor directory is outside Magento root, then this method will return unexpected result
-     * @since 2.0.0
+     * @deprecated 2.1.0 If custom vendor directory is outside Magento root,
+     * then this method will return unexpected result.
      */
     public function findRelativeSourceFilePath(LocalInterface $asset)
     {
@@ -309,7 +293,6 @@ class Source
      * @param string|bool $dir
      * @param string|bool $path
      * @return PreProcessor\Chain
-     * @since 2.0.0
      */
     private function createChain(LocalInterface $asset, $dir, $path)
     {

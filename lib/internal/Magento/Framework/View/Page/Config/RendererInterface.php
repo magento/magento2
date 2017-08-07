@@ -10,7 +10,6 @@ namespace Magento\Framework\View\Page\Config;
  * Interface RendererInterface
  *
  * @package Magento\Framework\View\Page\Config
- * @since 2.0.0
  */
 interface RendererInterface
 {
@@ -20,7 +19,6 @@ interface RendererInterface
      * @param string $elementType
      *
      * @return string
-     * @since 2.0.0
      */
     public function renderElementAttributes($elementType);
 
@@ -28,7 +26,6 @@ interface RendererInterface
      * Render Head Content
      *
      * @return string
-     * @since 2.0.0
      */
     public function renderHeadContent();
 
@@ -36,7 +33,6 @@ interface RendererInterface
      * Render Title
      *
      * @return string
-     * @since 2.0.0
      */
     public function renderTitle();
 
@@ -44,7 +40,6 @@ interface RendererInterface
      * Render Metadata
      *
      * @return string
-     * @since 2.0.0
      */
     public function renderMetadata();
 
@@ -52,7 +47,6 @@ interface RendererInterface
      * Prepare Favicon
      *
      * @return void
-     * @since 2.0.0
      */
     public function prepareFavicon();
 
@@ -62,7 +56,6 @@ interface RendererInterface
      * @param array $resultGroups
      *
      * @return string
-     * @since 2.0.0
      */
     public function renderAssets($resultGroups = []);
 }

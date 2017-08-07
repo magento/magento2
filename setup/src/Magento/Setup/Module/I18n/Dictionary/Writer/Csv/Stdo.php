@@ -11,13 +11,11 @@ use Magento\Setup\Module\I18n\Dictionary\Writer\Csv;
  * Stdout writer
  *
  * Output csv format to stdout
- * @since 2.0.0
  */
 class Stdo extends Csv
 {
     /**
      * Writer construct
-     * @since 2.0.0
      */
     public function __construct()
     {

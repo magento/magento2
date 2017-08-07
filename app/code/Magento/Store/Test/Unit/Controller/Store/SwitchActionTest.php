@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Test class for \Magento\Store\Controller\Store\SwitchAction
  */
-class SwitchActionTest extends \PHPUnit_Framework_TestCase
+class SwitchActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Controller\Store\SwitchAction

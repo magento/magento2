@@ -10,7 +10,6 @@ use Magento\Paypal\Model\Config\StructurePlugin as ConfigStructurePlugin;
 
 /**
  * Plugin for \Magento\Backend\Block\Store\Switcher
- * @since 2.0.0
  */
 class SwitcherPlugin
 {

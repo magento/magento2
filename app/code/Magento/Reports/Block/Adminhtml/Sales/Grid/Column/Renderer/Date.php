@@ -10,7 +10,6 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
  * Adminhtml grid item renderer date
- * @since 2.0.0
  */
 class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
 {
@@ -28,7 +27,6 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
      * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -44,7 +42,6 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
      * Retrieve date format
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getFormat()
     {
@@ -73,7 +70,6 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

@@ -10,7 +10,6 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\TaxImportExport\Controller\Adminhtml\Rate\ImportPost
  *
- * @since 2.0.0
  */
 class ImportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
 {
@@ -18,7 +17,6 @@ class ImportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
      * import action from import/export tax
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -47,7 +45,6 @@ class ImportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     protected function _isAllowed()
     {

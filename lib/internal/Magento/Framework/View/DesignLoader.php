@@ -8,7 +8,6 @@ namespace Magento\Framework\View;
 /**
  * Class \Magento\Framework\View\DesignLoader
  *
- * @since 2.0.0
  */
 class DesignLoader
 {
@@ -16,7 +15,6 @@ class DesignLoader
      * Request
      *
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $_request;
 
@@ -24,7 +22,6 @@ class DesignLoader
      * Application
      *
      * @var \Magento\Framework\App\AreaList
-     * @since 2.0.0
      */
     protected $_areaList;
 
@@ -32,7 +29,6 @@ class DesignLoader
      * Layout
      *
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     protected $appState;
 
@@ -40,7 +36,6 @@ class DesignLoader
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\App\AreaList $areaList
      * @param \Magento\Framework\App\State $appState
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -56,7 +51,6 @@ class DesignLoader
      * Load design
      *
      * @return void
-     * @since 2.0.0
      */
     public function load()
     {

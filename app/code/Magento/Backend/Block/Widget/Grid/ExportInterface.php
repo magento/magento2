@@ -10,7 +10,6 @@ namespace Magento\Backend\Block\Widget\Grid;
  *
  * @api
  * @deprecated 2.2.0 in favour of UI component implementation
- * @since 2.0.0
  */
 interface ExportInterface
 {
@@ -19,7 +18,6 @@ interface ExportInterface
      *
      * @return array|bool
      * @api
-     * @since 2.0.0
      */
     public function getExportTypes();
 
@@ -28,7 +26,6 @@ interface ExportInterface
      *
      * @return string
      * @api
-     * @since 2.0.0
      */
     public function getId();
 
@@ -36,7 +33,6 @@ interface ExportInterface
      * Render export button
      *
      * @return string
-     * @since 2.0.0
      */
     public function getExportButtonHtml();
 
@@ -46,7 +42,6 @@ interface ExportInterface
      * @param   string $url
      * @param   string $label
      * @return  \Magento\Backend\Block\Widget\Grid
-     * @since 2.0.0
      */
     public function addExportType($url, $label);
 
@@ -57,7 +52,6 @@ interface ExportInterface
      *
      * @return array
      * @api
-     * @since 2.0.0
      */
     public function getCsvFile();
 
@@ -66,7 +60,6 @@ interface ExportInterface
      *
      * @return string
      * @api
-     * @since 2.0.0
      */
     public function getCsv();
 
@@ -75,7 +68,6 @@ interface ExportInterface
      *
      * @return string
      * @api
-     * @since 2.0.0
      */
     public function getXml();
 
@@ -87,7 +79,6 @@ interface ExportInterface
      * @param string $sheetName
      * @return array
      * @api
-     * @since 2.0.0
      */
     public function getExcelFile($sheetName = '');
 
@@ -96,7 +87,6 @@ interface ExportInterface
      *
      * @return string
      * @api
-     * @since 2.0.0
      */
     public function getExcel();
 }

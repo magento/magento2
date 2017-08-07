@@ -7,13 +7,11 @@ namespace Magento\Config\Model\Config\Backend;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Secure extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Framework\View\Asset\MergeService
-     * @since 2.0.0
      */
     protected $_mergeService;
 
@@ -26,7 +24,6 @@ class Secure extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -46,7 +43,6 @@ class Secure extends \Magento\Framework\App\Config\Value
      * Clean compiled JS/CSS when updating configuration settings
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {

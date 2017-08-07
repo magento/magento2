@@ -10,7 +10,6 @@ use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Class to work with remote FTP server
- * @since 2.0.0
  */
 class Ftp
 {
@@ -18,7 +17,6 @@ class Ftp
      * Connection object
      *
      * @var resource
-     * @since 2.0.0
      */
     protected $_conn = false;
 
@@ -27,7 +25,6 @@ class Ftp
      *
      * @throws \Exception
      * @return void
-     * @since 2.0.0
      */
     protected function checkConnected()
     {
@@ -41,7 +38,6 @@ class Ftp
      *
      * @param string $name
      * @return string the newly created directory name on success or <b>FALSE</b> on error.
-     * @since 2.0.0
      */
     public function mdkir($name)
     {
@@ -55,7 +51,6 @@ class Ftp
      * @param string $path
      * @param int $mode
      * @return bool
-     * @since 2.0.0
      */
     public function mkdirRecursive($path, $mode = 0777)
     {
@@ -85,7 +80,6 @@ class Ftp
      * @param string $password
      * @return bool
      * @throws \Exception on invalid login credentials
-     * @since 2.0.0
      */
     public function login($login = "anonymous", $password = "test@gmail.com")
     {
@@ -103,7 +97,6 @@ class Ftp
      * @param string $string
      * @throws \Exception
      * @return string
-     * @since 2.0.0
      */
     public function validateConnectionString($string)
     {
@@ -126,7 +119,6 @@ class Ftp
      * @param int $timeout
      * @return void
      * @throws \Exception
-     * @since 2.0.0
      */
     public function connect($string, $timeout = 900)
     {
@@ -158,7 +150,6 @@ class Ftp
      * @param int $mode  FTP_BINARY | FTP_ASCII
      * @param int $startPos
      * @return bool
-     * @since 2.0.0
      */
     public function fput($remoteFile, $handle, $mode = FTP_BINARY, $startPos = 0)
     {
@@ -174,7 +165,6 @@ class Ftp
      * @param int $mode FTP_BINARY | FTP_ASCII
      * @param int $startPos
      * @return bool
-     * @since 2.0.0
      */
     public function put($remoteFile, $localFile, $mode = FTP_BINARY, $startPos = 0)
     {
@@ -186,7 +176,6 @@ class Ftp
      * Get current working directory
      *
      * @return false|string
-     * @since 2.0.0
      */
     public function getcwd()
     {
@@ -210,7 +199,6 @@ class Ftp
      *
      * @param string $cmd
      * @return array The server's response as an array of strings.
-     * @since 2.0.0
      */
     public function raw($cmd)
     {
@@ -230,7 +218,6 @@ class Ftp
      * @param int $ftpMode
      * @return bool
      * @throws \Exception
-     * @since 2.0.0
      */
     public function upload($remote, $local, $dirMode = 0777, $ftpMode = FTP_BINARY)
     {
@@ -273,7 +260,6 @@ class Ftp
      * @param string $local
      * @param int $ftpMode  FTP_BINARY|FTP_ASCII
      * @return bool
-     * @since 2.0.0
      */
     public function download($remote, $local, $ftpMode = FTP_BINARY)
     {
@@ -286,7 +272,6 @@ class Ftp
      *
      * @param bool $pasv
      * @return bool
-     * @since 2.0.0
      */
     public function pasv($pasv)
     {
@@ -298,7 +283,6 @@ class Ftp
      * Close FTP connection
      *
      * @return void
-     * @since 2.0.0
      */
     public function close()
     {
@@ -313,7 +297,6 @@ class Ftp
      * @param int $mode
      * @param string $remoteFile
      * @return int The new file permissions on success or <b>FALSE</b> on error.
-     * @since 2.0.0
      */
     public function chmod($mode, $remoteFile)
     {
@@ -326,7 +309,6 @@ class Ftp
      *
      * @param string $dir
      * @return bool
-     * @since 2.0.0
      */
     public function chdir($dir)
     {
@@ -338,7 +320,6 @@ class Ftp
      * ftp_cdup wrapper
      *
      * @return bool
-     * @since 2.0.0
      */
     public function cdup()
     {
@@ -355,7 +336,6 @@ class Ftp
      * @param int $resumeOffset
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function get($localFile, $remoteFile, $fileMode = FTP_BINARY, $resumeOffset = 0)
     {
@@ -369,7 +349,6 @@ class Ftp
      *
      * @param string $dir
      * @return bool
-     * @since 2.0.0
      */
     public function nlist($dir = "/")
     {
@@ -384,7 +363,6 @@ class Ftp
      * @param string $dir
      * @param bool $recursive
      * @return array an array where each element corresponds to one line of text.
-     * @since 2.0.0
      */
     public function rawlist($dir = "/", $recursive = false)
     {
@@ -398,7 +376,6 @@ class Ftp
      *
      * @param int $bytes
      * @return string
-     * @since 2.0.0
      */
     public static function byteconvert($bytes)
     {
@@ -412,7 +389,6 @@ class Ftp
      *
      * @param string $chmod
      * @return string
-     * @since 2.0.0
      */
     public static function chmodnum($chmod)
     {
@@ -428,7 +404,6 @@ class Ftp
      * @param string $path
      * @param bool $excludeIfIsDir
      * @return bool
-     * @since 2.0.0
      */
     public function fileExists($path, $excludeIfIsDir = true)
     {
@@ -456,7 +431,6 @@ class Ftp
      * @param bool $recursive
      * @return array
      * @SuppressWarnings(PHPMD.ShortMethodName)
-     * @since 2.0.0
      */
     public function ls($dir = "/", $recursive = false)
     {
@@ -496,7 +470,6 @@ class Ftp
      *
      * @param string $str
      * @return string
-     * @since 2.0.0
      */
     public function correctFilePath($str)
     {
@@ -510,7 +483,6 @@ class Ftp
      *
      * @param string $file
      * @return bool
-     * @since 2.0.0
      */
     public function delete($file)
     {

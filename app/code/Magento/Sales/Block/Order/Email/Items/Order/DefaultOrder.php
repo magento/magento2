@@ -12,7 +12,6 @@ use Magento\Sales\Model\Order\Item as OrderItem;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class DefaultOrder extends \Magento\Framework\View\Element\Template
 {
@@ -20,7 +19,6 @@ class DefaultOrder extends \Magento\Framework\View\Element\Template
      * Retrieve current order model instance
      *
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -29,7 +27,6 @@ class DefaultOrder extends \Magento\Framework\View\Element\Template
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getItemOptions()
     {
@@ -52,7 +49,6 @@ class DefaultOrder extends \Magento\Framework\View\Element\Template
     /**
      * @param string|array $value
      * @return string
-     * @since 2.0.0
      */
     public function getValueHtml($value)
     {
@@ -73,7 +69,6 @@ class DefaultOrder extends \Magento\Framework\View\Element\Template
     /**
      * @param mixed $item
      * @return mixed
-     * @since 2.0.0
      */
     public function getSku($item)
     {
@@ -88,7 +83,6 @@ class DefaultOrder extends \Magento\Framework\View\Element\Template
      * Return product additional information block
      *
      * @return \Magento\Framework\View\Element\AbstractBlock
-     * @since 2.0.0
      */
     public function getProductAdditionalInformationBlock()
     {
@@ -100,7 +94,6 @@ class DefaultOrder extends \Magento\Framework\View\Element\Template
      *
      * @param OrderItem $item
      * @return string
-     * @since 2.0.0
      */
     public function getItemPrice(OrderItem $item)
     {

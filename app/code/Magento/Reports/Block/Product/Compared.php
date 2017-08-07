@@ -11,7 +11,6 @@ namespace Magento\Reports\Block\Product;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @deprecated 2.2.0
- * @since 2.0.0
  */
 class Compared extends \Magento\Reports\Block\Product\AbstractProduct
 {
@@ -24,7 +23,6 @@ class Compared extends \Magento\Reports\Block\Product\AbstractProduct
      * Compared Product Index type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_indexType = \Magento\Reports\Model\Product\Index\Factory::TYPE_COMPARED;
 
@@ -32,7 +30,6 @@ class Compared extends \Magento\Reports\Block\Product\AbstractProduct
      * Retrieve page size (count)
      *
      * @return int
-     * @since 2.0.0
      */
     public function getPageSize()
     {
@@ -50,7 +47,6 @@ class Compared extends \Magento\Reports\Block\Product\AbstractProduct
      * Check has compared products
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

@@ -16,7 +16,6 @@ use Magento\Framework\Pricing\SaleableInterface;
  * Price info model factory
  *
  * @api
- * @since 2.0.0
  */
 class Factory
 {
@@ -24,7 +23,6 @@ class Factory
      * List of Price Info classes by product types
      *
      * @var array
-     * @since 2.0.0
      */
     protected $types = [];
 
@@ -32,7 +30,6 @@ class Factory
      * Object Manager
      *
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -41,7 +38,6 @@ class Factory
      *
      * @param array $types
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(
         array $types,
@@ -58,7 +54,6 @@ class Factory
      * @param array $arguments
      * @return \Magento\Framework\Pricing\PriceInfoInterface
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function create(SaleableInterface $saleableItem, array $arguments = [])
     {

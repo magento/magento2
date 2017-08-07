@@ -15,26 +15,22 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 /**
  * Class \Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator
  *
- * @since 2.0.0
  */
 class CategoriesUrlRewriteGenerator
 {
     /**
      * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
-     * @since 2.0.0
      */
     protected $productUrlPathGenerator;
 
     /**
      * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory
-     * @since 2.0.0
      */
     protected $urlRewriteFactory;
 
     /**
      * @param ProductUrlPathGenerator $productUrlPathGenerator
      * @param UrlRewriteFactory $urlRewriteFactory
-     * @since 2.0.0
      */
     public function __construct(ProductUrlPathGenerator $productUrlPathGenerator, UrlRewriteFactory $urlRewriteFactory)
     {
@@ -49,7 +45,6 @@ class CategoriesUrlRewriteGenerator
      * @param Product $product
      * @param ObjectRegistry $productCategories
      * @return UrlRewrite[]
-     * @since 2.0.0
      */
     public function generate($storeId, Product $product, ObjectRegistry $productCategories)
     {

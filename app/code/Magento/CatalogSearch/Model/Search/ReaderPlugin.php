@@ -8,19 +8,16 @@ namespace Magento\CatalogSearch\Model\Search;
 /**
  * Class \Magento\CatalogSearch\Model\Search\ReaderPlugin
  *
- * @since 2.0.0
  */
 class ReaderPlugin
 {
     /**
      * @var \Magento\CatalogSearch\Model\Search\RequestGenerator
-     * @since 2.0.0
      */
     private $requestGenerator;
 
     /**
      * @param \Magento\CatalogSearch\Model\Search\RequestGenerator $requestGenerator
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\CatalogSearch\Model\Search\RequestGenerator $requestGenerator

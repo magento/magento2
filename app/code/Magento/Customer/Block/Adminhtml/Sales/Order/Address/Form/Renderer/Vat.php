@@ -11,7 +11,6 @@ use Magento\Framework\View\Element\Template;
  * VAT ID element renderer
  *
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Vat extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
 {
@@ -19,19 +18,16 @@ class Vat extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
      * Validate button block
      *
      * @var null|\Magento\Backend\Block\Widget\Button
-     * @since 2.0.0
      */
     protected $_validateButton = null;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'sales/order/create/address/form/renderer/vat.phtml';
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
@@ -39,7 +35,6 @@ class Vat extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -54,7 +49,6 @@ class Vat extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
      * Retrieve validate button block
      *
      * @return \Magento\Backend\Block\Widget\Button
-     * @since 2.0.0
      */
     public function getValidateButton()
     {

@@ -18,7 +18,6 @@ use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 /**
  * Class \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator
  *
- * @since 2.0.0
  */
 class CategoryUrlRewriteGenerator
 {
@@ -27,32 +26,27 @@ class CategoryUrlRewriteGenerator
 
     /**
      * @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService
-     * @since 2.0.0
      */
     protected $storeViewService;
 
     /**
      * @var \Magento\Catalog\Model\Category
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     protected $category;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\Category\CanonicalUrlRewriteGenerator
-     * @since 2.0.0
      */
     protected $canonicalUrlRewriteGenerator;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\Category\CurrentUrlRewritesRegenerator
-     * @since 2.0.0
      */
     protected $currentUrlRewritesRegenerator;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenUrlRewriteGenerator
-     * @since 2.0.0
      */
     protected $childrenUrlRewriteGenerator;
 
@@ -64,7 +58,6 @@ class CategoryUrlRewriteGenerator
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $overrideStoreUrls;
 
@@ -75,7 +68,6 @@ class CategoryUrlRewriteGenerator
      * @param \Magento\CatalogUrlRewrite\Service\V1\StoreViewService $storeViewService
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
-     * @since 2.0.0
      */
     public function __construct(
         CanonicalUrlRewriteGenerator $canonicalUrlRewriteGenerator,
@@ -101,7 +93,6 @@ class CategoryUrlRewriteGenerator
      * @param bool $overrideStoreUrls
      * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
-     * @since 2.0.0
      */
     public function generate($category, $overrideStoreUrls = false, $rootCategoryId = null)
     {
@@ -124,7 +115,6 @@ class CategoryUrlRewriteGenerator
      * @param bool $overrideStoreUrls
      * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
-     * @since 2.0.0
      */
     protected function generateForGlobalScope(
         Category $category = null,
@@ -150,7 +140,6 @@ class CategoryUrlRewriteGenerator
      * @param int $categoryId
      * @param bool $overrideStoreUrls
      * @return bool
-     * @since 2.0.0
      */
     protected function isOverrideUrlsForStore($storeId, $categoryId, $overrideStoreUrls = false)
     {
@@ -167,7 +156,6 @@ class CategoryUrlRewriteGenerator
      * @param int $storeId
      * @param \Magento\Catalog\Model\Category|null $category
      * @return void
-     * @since 2.0.0
      */
     protected function updateCategoryUrlForStore($storeId, Category $category = null)
     {
@@ -185,7 +173,6 @@ class CategoryUrlRewriteGenerator
      *
      * @param int|null $storeId
      * @return bool
-     * @since 2.0.0
      */
     protected function isGlobalScope($storeId)
     {
@@ -199,7 +186,6 @@ class CategoryUrlRewriteGenerator
      * @param \Magento\Catalog\Model\Category|null $category
      * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
-     * @since 2.0.0
      */
     protected function generateForSpecificStoreView($storeId, Category $category = null, $rootCategoryId = null)
     {

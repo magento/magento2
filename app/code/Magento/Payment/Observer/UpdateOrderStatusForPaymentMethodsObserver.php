@@ -11,25 +11,21 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\Payment\Observer\UpdateOrderStatusForPaymentMethodsObserver
  *
- * @since 2.0.0
  */
 class UpdateOrderStatusForPaymentMethodsObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Sales\Model\Order\Config
-     * @since 2.0.0
      */
     protected $_salesOrderConfig;
 
     /**
      * @var \Magento\Payment\Model\Config
-     * @since 2.0.0
      */
     protected $_paymentConfig;
 
     /**
      * @var \Magento\Config\Model\ResourceModel\Config
-     * @since 2.0.0
      */
     protected $_resourceConfig;
 
@@ -39,7 +35,6 @@ class UpdateOrderStatusForPaymentMethodsObserver implements ObserverInterface
      * @param \Magento\Sales\Model\Order\Config $salesOrderConfig
      * @param \Magento\Payment\Model\Config $paymentConfig
      * @param \Magento\Config\Model\ResourceModel\Config $resourceConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Model\Order\Config $salesOrderConfig,
@@ -54,7 +49,6 @@ class UpdateOrderStatusForPaymentMethodsObserver implements ObserverInterface
     /**
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

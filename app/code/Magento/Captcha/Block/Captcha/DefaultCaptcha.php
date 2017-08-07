@@ -7,25 +7,21 @@ namespace Magento\Captcha\Block\Captcha;
 
 /**
  * Captcha block
- * @since 2.0.0
  */
 class DefaultCaptcha extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'default.phtml';
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_captcha;
 
     /**
      * @var \Magento\Captcha\Helper\Data
-     * @since 2.0.0
      */
     protected $_captchaData;
 
@@ -33,7 +29,6 @@ class DefaultCaptcha extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Captcha\Helper\Data $captchaData
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -48,7 +43,6 @@ class DefaultCaptcha extends \Magento\Framework\View\Element\Template
      * Returns template path
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTemplate()
     {
@@ -59,7 +53,6 @@ class DefaultCaptcha extends \Magento\Framework\View\Element\Template
      * Returns URL to controller action which returns new captcha image
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRefreshUrl()
     {
@@ -71,7 +64,6 @@ class DefaultCaptcha extends \Magento\Framework\View\Element\Template
      * Renders captcha HTML (if required)
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -86,7 +78,6 @@ class DefaultCaptcha extends \Magento\Framework\View\Element\Template
      * Returns captcha model
      *
      * @return \Magento\Captcha\Model\CaptchaInterface
-     * @since 2.0.0
      */
     public function getCaptchaModel()
     {

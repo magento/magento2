@@ -30,97 +30,81 @@ use Magento\Framework\Exception\InputException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class CreatePost extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
      * @var \Magento\Customer\Api\AccountManagementInterface
-     * @since 2.0.0
      */
     protected $accountManagement;
 
     /**
      * @var \Magento\Customer\Helper\Address
-     * @since 2.0.0
      */
     protected $addressHelper;
 
     /**
      * @var \Magento\Customer\Model\Metadata\FormFactory
-     * @since 2.0.0
      */
     protected $formFactory;
 
     /**
      * @var \Magento\Newsletter\Model\SubscriberFactory
-     * @since 2.0.0
      */
     protected $subscriberFactory;
 
     /**
      * @var \Magento\Customer\Api\Data\RegionInterfaceFactory
-     * @since 2.0.0
      */
     protected $regionDataFactory;
 
     /**
      * @var \Magento\Customer\Api\Data\AddressInterfaceFactory
-     * @since 2.0.0
      */
     protected $addressDataFactory;
 
     /**
      * @var \Magento\Customer\Model\Registration
-     * @since 2.0.0
      */
     protected $registration;
 
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
-     * @since 2.0.0
      */
     protected $customerDataFactory;
 
     /**
      * @var \Magento\Customer\Model\Url
-     * @since 2.0.0
      */
     protected $customerUrl;
 
     /**
      * @var \Magento\Framework\Escaper
-     * @since 2.0.0
      */
     protected $escaper;
 
     /**
      * @var \Magento\Customer\Model\CustomerExtractor
-     * @since 2.0.0
      */
     protected $customerExtractor;
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $urlModel;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
-     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
     /**
      * @var Session
-     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var AccountRedirect
-     * @since 2.0.0
      */
     private $accountRedirect;
 
@@ -157,7 +141,6 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      * @param AccountRedirect $accountRedirect
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -237,7 +220,6 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      * Add address to customer during create account
      *
      * @return AddressInterface|null
-     * @since 2.0.0
      */
     protected function extractAddress()
     {
@@ -290,7 +272,6 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -398,7 +379,6 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      * @param string $confirmation
      * @return void
      * @throws InputException
-     * @since 2.0.0
      */
     protected function checkPasswordConfirmation($password, $confirmation)
     {
@@ -411,7 +391,6 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      * Retrieve success message
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getSuccessMessage()
     {

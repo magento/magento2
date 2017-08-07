@@ -15,7 +15,6 @@ use Magento\Framework\Serialize\SerializerInterface;
  * This class gives access to consolidated web API configuration from <Module_Name>/etc/webapi.xml files.
  *
  * @api
- * @since 2.0.0
  */
 class Config
 {
@@ -30,19 +29,16 @@ class Config
 
     /**
      * @var WebapiCache
-     * @since 2.0.0
      */
     protected $cache;
 
     /**
      * @var Reader
-     * @since 2.0.0
      */
     protected $configReader;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $services;
 
@@ -58,7 +54,6 @@ class Config
      * @param WebapiCache $cache
      * @param Reader $configReader
      * @param SerializerInterface|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         WebapiCache $cache,
@@ -74,7 +69,6 @@ class Config
      * Return services loaded from cache if enabled or from files merged previously
      *
      * @return array
-     * @since 2.0.0
      */
     public function getServices()
     {

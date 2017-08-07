@@ -9,7 +9,6 @@ use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Abstract Option class in deployment configuration tool
- * @since 2.0.0
  */
 abstract class AbstractConfigOption extends InputOption
 {
@@ -17,7 +16,6 @@ abstract class AbstractConfigOption extends InputOption
      * Frontend input type
      *
      * @var string
-     * @since 2.0.0
      */
     private $frontendType;
 
@@ -25,7 +23,6 @@ abstract class AbstractConfigOption extends InputOption
      * Config path
      *
      * @var string
-     * @since 2.0.0
      */
     private $configPath;
 
@@ -39,7 +36,6 @@ abstract class AbstractConfigOption extends InputOption
      * @param string $description
      * @param string|array|null $defaultValue
      * @param string|array|null $shortcut
-     * @since 2.0.0
      */
     public function __construct(
         $name,
@@ -59,7 +55,6 @@ abstract class AbstractConfigOption extends InputOption
      * Get frontend input type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFrontendType()
     {
@@ -70,7 +65,6 @@ abstract class AbstractConfigOption extends InputOption
      * Get config path
      *
      * @return string
-     * @since 2.0.0
      */
     public function getConfigPath()
     {
@@ -82,7 +76,6 @@ abstract class AbstractConfigOption extends InputOption
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param mixed $data
      * @return void
-     * @since 2.0.0
      */
     public function validate($data)
     {

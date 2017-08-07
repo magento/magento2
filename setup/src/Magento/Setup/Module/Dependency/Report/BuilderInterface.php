@@ -7,7 +7,6 @@ namespace Magento\Setup\Module\Dependency\Report;
 
 /**
  *  Builder Interface
- * @since 2.0.0
  */
 interface BuilderInterface
 {
@@ -16,7 +15,6 @@ interface BuilderInterface
      *
      * @param array $options
      * @return void
-     * @since 2.0.0
      */
     public function build(array $options);
 }

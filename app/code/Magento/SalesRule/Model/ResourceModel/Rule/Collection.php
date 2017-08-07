@@ -14,7 +14,6 @@ use Magento\Quote\Model\Quote\Address;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection
 {
@@ -22,7 +21,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * Store associated with rule entities information map
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_associatedEntitiesMap;
 
@@ -34,7 +32,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $_date;
 
@@ -53,7 +50,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @param Json $serializer Optional parameter for backward compatibility
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -75,7 +71,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * Set resource model and determine field mapping
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -144,7 +139,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @use $this->addWebsiteGroupDateFilter()
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return $this
-     * @since 2.0.0
      */
     public function setValidationFilter(
         $websiteId,
@@ -240,7 +234,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @param string|null $now
      * @use $this->addWebsiteFilter()
      * @return $this
-     * @since 2.0.0
      */
     public function addWebsiteGroupDateFilter($websiteId, $customerGroupId, $now = null)
     {
@@ -282,7 +275,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * Add primary coupon to collection
      *
      * @return $this
-     * @since 2.0.0
      */
     public function _initSelect()
     {
@@ -300,7 +292,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      *
      * @param string $attributeCode
      * @return $this
-     * @since 2.0.0
      */
     public function addAttributeInConditionFilter($attributeCode)
     {
@@ -339,7 +330,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * Excludes price rules with generated specific coupon codes from collection
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addAllowedSalesRulesFilter()
     {

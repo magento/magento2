@@ -11,7 +11,6 @@ namespace Magento\Framework\File;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Size
 {
@@ -28,7 +27,6 @@ class Size
      *
      * @link http://www.php.net/manual/en/features.file-upload.post-method.php
      * @var integer
-     * @since 2.0.0
      */
     protected static $_maxFileSize = -1;
 
@@ -36,7 +34,6 @@ class Size
      * Get post max size
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPostMaxSize()
     {
@@ -47,7 +44,6 @@ class Size
      * Get upload max size
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUploadMaxSize()
     {
@@ -60,7 +56,6 @@ class Size
      * @param int $precision
      * @param int $mode
      * @return float
-     * @since 2.0.0
      */
     public function getMaxFileSizeInMb($precision = 0, $mode = PHP_ROUND_HALF_DOWN)
     {
@@ -74,7 +69,6 @@ class Size
      * @param int $precision
      * @param int $mode
      * @return float
-     * @since 2.0.0
      */
     public function getFileSizeInMb($fileSize, $precision = 0, $mode = PHP_ROUND_HALF_DOWN)
     {
@@ -85,7 +79,6 @@ class Size
      * Get the maximum file size of the a form in bytes
      *
      * @return integer
-     * @since 2.0.0
      */
     public function getMaxFileSize()
     {
@@ -115,7 +108,6 @@ class Size
      *
      * @param string $size
      * @return integer
-     * @since 2.0.0
      */
     public function convertSizeToInteger($size)
     {
@@ -128,7 +120,6 @@ class Size
      * @link http://php.net/manual/en/function.ini-get.php
      * @param string $param The configuration option name
      * @return string
-     * @since 2.0.0
      */
     protected function _iniGet($param)
     {

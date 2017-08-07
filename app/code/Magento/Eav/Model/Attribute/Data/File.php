@@ -12,7 +12,6 @@ use Magento\Framework\App\RequestInterface;
  * EAV Entity Attribute File Data Model
  *
  * @api
- * @since 2.0.0
  */
 class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
 {
@@ -20,25 +19,21 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
      * Validator for check not protected extensions
      *
      * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension
-     * @since 2.0.0
      */
     protected $_validatorNotProtectedExtensions;
 
     /**
      * @var \Magento\Framework\Url\EncoderInterface
-     * @since 2.0.0
      */
     protected $urlEncoder;
 
     /**
      * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension
-     * @since 2.0.0
      */
     protected $_fileValidator;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\Write
-     * @since 2.0.0
      */
     protected $_directory;
 
@@ -50,7 +45,6 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
      * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator
      * @param \Magento\Framework\Filesystem $filesystem
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -72,7 +66,6 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
      * @param RequestInterface $request
      * @return array|string|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function extractValue(RequestInterface $request)
     {
@@ -131,7 +124,6 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param array $value
      * @return string[]
-     * @since 2.0.0
      */
     protected function _validateByRules($value)
     {
@@ -175,7 +167,6 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function validateValue($value)
     {
@@ -219,7 +210,6 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
      * @param array|string $value
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function compactValue($value)
     {
@@ -275,7 +265,6 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function restoreValue($value)
     {
@@ -287,7 +276,6 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param string $format
      * @return string|array
-     * @since 2.0.0
      */
     public function outputValue($format = \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT)
     {

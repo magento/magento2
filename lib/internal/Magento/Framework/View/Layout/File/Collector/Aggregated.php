@@ -12,7 +12,6 @@ use Magento\Framework\View\File\FileList\Factory;
 
 /**
  * Source of layout files aggregated from a theme and its parents according to merging and overriding conventions
- * @since 2.0.0
  */
 class Aggregated implements CollectorInterface
 {
@@ -20,7 +19,6 @@ class Aggregated implements CollectorInterface
      * File list factory
      *
      * @var Factory
-     * @since 2.0.0
      */
     protected $fileListFactory;
 
@@ -28,7 +26,6 @@ class Aggregated implements CollectorInterface
      * Base files
      *
      * @var CollectorInterface
-     * @since 2.0.0
      */
     protected $baseFiles;
 
@@ -36,7 +33,6 @@ class Aggregated implements CollectorInterface
      * Theme files
      *
      * @var CollectorInterface
-     * @since 2.0.0
      */
     protected $themeFiles;
 
@@ -44,7 +40,6 @@ class Aggregated implements CollectorInterface
      * Overridden base files
      *
      * @var CollectorInterface
-     * @since 2.0.0
      */
     protected $overrideBaseFiles;
 
@@ -52,7 +47,6 @@ class Aggregated implements CollectorInterface
      * Overridden theme files
      *
      * @var \Magento\Framework\View\File\CollectorInterface
-     * @since 2.0.0
      */
     protected $overrideThemeFiles;
 
@@ -64,7 +58,6 @@ class Aggregated implements CollectorInterface
      * @param CollectorInterface $themeFiles
      * @param \Magento\Framework\View\File\CollectorInterface $overrideBaseFiles
      * @param CollectorInterface $overrideThemeFiles
-     * @since 2.0.0
      */
     public function __construct(
         Factory $fileListFactory,
@@ -88,7 +81,6 @@ class Aggregated implements CollectorInterface
      * @param ThemeInterface $theme
      * @param string $filePath
      * @return \Magento\Framework\View\File[]
-     * @since 2.0.0
      */
     public function getFiles(ThemeInterface $theme, $filePath)
     {

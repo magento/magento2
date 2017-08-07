@@ -9,7 +9,6 @@ namespace Magento\Paypal\Model\Payflow;
  * PayPal Website Payments Pro (Payflow Edition) implementation for payment method instances
  * This model was created because right now PayPal Direct and PayPal Express payment
  * (Payflow Edition) methods cannot have same abstract
- * @since 2.0.0
  */
 class Pro extends \Magento\Paypal\Model\Pro
 {
@@ -17,7 +16,6 @@ class Pro extends \Magento\Paypal\Model\Pro
      * Api model type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_apiType = \Magento\Paypal\Model\Api\PayflowNvp::class;
 
@@ -25,7 +23,6 @@ class Pro extends \Magento\Paypal\Model\Pro
      * Config model type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_configType = \Magento\Paypal\Model\Config::class;
 
@@ -40,7 +37,6 @@ class Pro extends \Magento\Paypal\Model\Pro
      * @param \Magento\Framework\DataObject $payment
      * @param float $amount
      * @return void
-     * @since 2.0.0
      */
     public function refund(\Magento\Framework\DataObject $payment, $amount)
     {
@@ -56,7 +52,6 @@ class Pro extends \Magento\Paypal\Model\Pro
      * Is capture request needed on this transaction
      *
      * @return true
-     * @since 2.0.0
      */
     protected function _isCaptureNeeded()
     {
@@ -68,7 +63,6 @@ class Pro extends \Magento\Paypal\Model\Pro
      *
      * @param \Magento\Framework\DataObject $payment
      * @return string
-     * @since 2.0.0
      */
     protected function _getParentTransactionId(\Magento\Framework\DataObject $payment)
     {
@@ -90,7 +84,6 @@ class Pro extends \Magento\Paypal\Model\Pro
      * @param \Magento\Paypal\Model\Api\Nvp $api
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @return void
-     * @since 2.0.0
      */
     protected function _importCaptureResultToPayment($api, $payment)
     {
@@ -114,7 +107,6 @@ class Pro extends \Magento\Paypal\Model\Pro
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function fetchTransactionInfo(\Magento\Payment\Model\InfoInterface $payment, $transactionId)
     {
@@ -130,7 +122,6 @@ class Pro extends \Magento\Paypal\Model\Pro
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @param bool $canRefundMore
      * @return void
-     * @since 2.0.0
      */
     protected function _importRefundResultToPayment($api, $payment, $canRefundMore)
     {

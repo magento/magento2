@@ -7,7 +7,6 @@ namespace Magento\Catalog\Api;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface ProductMediaAttributeManagementInterface
 {
@@ -16,7 +15,6 @@ interface ProductMediaAttributeManagementInterface
      *
      * @param string $attributeSetName
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface[] list of media attributes
-     * @since 2.0.0
      */
     public function getList($attributeSetName);
 }

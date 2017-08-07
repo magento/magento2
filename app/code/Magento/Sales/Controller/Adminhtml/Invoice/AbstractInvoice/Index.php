@@ -9,7 +9,6 @@ namespace Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\Index
  *
- * @since 2.0.0
  */
 abstract class Index extends \Magento\Backend\App\Action
 {
@@ -22,14 +21,12 @@ abstract class Index extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -43,7 +40,6 @@ abstract class Index extends \Magento\Backend\App\Action
      * Init layout, menu and breadcrumb
      *
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.0.0
      */
     protected function _initAction()
     {
@@ -59,7 +55,6 @@ abstract class Index extends \Magento\Backend\App\Action
      * Invoices grid
      *
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

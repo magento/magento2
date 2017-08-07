@@ -11,7 +11,6 @@ use Magento\Framework\Data\Collection;
 
 /**
  * Interface FilterApplierInterface
- * @since 2.0.0
  */
 interface FilterApplierInterface
 {
@@ -21,7 +20,6 @@ interface FilterApplierInterface
      * @param Collection $collection
      * @param Filter $filter
      * @return void
-     * @since 2.0.0
      */
     public function apply(Collection $collection, Filter $filter);
 }

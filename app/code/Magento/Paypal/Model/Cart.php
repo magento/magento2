@@ -8,13 +8,11 @@ namespace Magento\Paypal\Model;
 /**
  * PayPal-specific model for shopping cart items and totals
  * The main idea is to accommodate all possible totals into PayPal-compatible 4 totals and line items
- * @since 2.0.0
  */
 class Cart extends \Magento\Payment\Model\Cart
 {
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_areAmountsValid = false;
 
@@ -22,7 +20,6 @@ class Cart extends \Magento\Payment\Model\Cart
      * Get shipping, tax, subtotal and discount amounts all together
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAmounts()
     {
@@ -49,7 +46,6 @@ class Cart extends \Magento\Payment\Model\Cart
      * Calculate subtotal from custom items
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _calculateCustomItemsSubtotal()
     {
@@ -63,7 +59,6 @@ class Cart extends \Magento\Payment\Model\Cart
      * Check the line items and totals according to PayPal business logic limitations
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _validate()
     {
@@ -112,7 +107,6 @@ class Cart extends \Magento\Payment\Model\Cart
      * Import items from sales model with workarounds for PayPal
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _importItemsFromSalesModel()
     {
@@ -177,7 +171,6 @@ class Cart extends \Magento\Payment\Model\Cart
      *
      * @param \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface $salesEntity
      * @return void
-     * @since 2.0.0
      */
     protected function _applyDiscountTaxCompensationWorkaround(
         \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface $salesEntity
@@ -191,7 +184,6 @@ class Cart extends \Magento\Payment\Model\Cart
      * Check whether any item has negative amount
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasNegativeItemAmount()
     {

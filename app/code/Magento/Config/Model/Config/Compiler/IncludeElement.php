@@ -16,7 +16,6 @@ use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Element\ElementInterfac
 /**
  * Class IncludeElement
  * @api
- * @since 2.0.0
  */
 class IncludeElement implements ElementInterface
 {
@@ -24,13 +23,11 @@ class IncludeElement implements ElementInterface
 
     /**
      * @var Reader
-     * @since 2.0.0
      */
     protected $moduleReader;
 
     /**
      * @var Filesystem\Directory\ReadFactory
-     * @since 2.0.0
      */
     protected $readFactory;
 
@@ -39,7 +36,6 @@ class IncludeElement implements ElementInterface
      *
      * @param Reader $moduleReader
      * @param Filesystem\Directory\ReadFactory $readFactory
-     * @since 2.0.0
      */
     public function __construct(Reader $moduleReader, Filesystem\Directory\ReadFactory $readFactory)
     {
@@ -55,7 +51,6 @@ class IncludeElement implements ElementInterface
      * @param DataObject $processedObject
      * @param DataObject $context
      * @return void
-     * @since 2.0.0
      */
     public function compile(
         CompilerInterface $compiler,
@@ -86,7 +81,6 @@ class IncludeElement implements ElementInterface
      *
      * @param \DOMElement $node
      * @return \DOMElement[]
-     * @since 2.0.0
      */
     protected function getChildNodes(\DOMElement $node)
     {
@@ -104,7 +98,6 @@ class IncludeElement implements ElementInterface
      * @param string $includePath
      * @return string
      * @throws LocalizedException
-     * @since 2.0.0
      */
     protected function getContent($includePath)
     {

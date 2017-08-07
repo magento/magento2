@@ -10,13 +10,11 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Class \Magento\Rule\Model\ConditionFactory
  *
- * @since 2.0.0
  */
 class ConditionFactory
 {
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
@@ -24,13 +22,11 @@ class ConditionFactory
      * Store all used condition models
      *
      * @var array
-     * @since 2.0.0
      */
     private $conditionModels = [];
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -48,7 +44,6 @@ class ConditionFactory
      *
      * @throws \LogicException
      * @throws \BadMethodCallException
-     * @since 2.0.0
      */
     public function create($type)
     {

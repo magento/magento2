@@ -9,7 +9,6 @@ use Magento\Sales\Api\ShipmentManagementInterface;
 
 /**
  * Class ShipmentService
- * @since 2.0.0
  */
 class ShipmentService implements ShipmentManagementInterface
 {
@@ -17,7 +16,6 @@ class ShipmentService implements ShipmentManagementInterface
      * Repository
      *
      * @var \Magento\Sales\Api\ShipmentCommentRepositoryInterface
-     * @since 2.0.0
      */
     protected $commentRepository;
 
@@ -25,7 +23,6 @@ class ShipmentService implements ShipmentManagementInterface
      * Search Criteria Builder
      *
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     * @since 2.0.0
      */
     protected $criteriaBuilder;
 
@@ -33,7 +30,6 @@ class ShipmentService implements ShipmentManagementInterface
      * Filter Builder
      *
      * @var \Magento\Framework\Api\FilterBuilder
-     * @since 2.0.0
      */
     protected $filterBuilder;
 
@@ -41,7 +37,6 @@ class ShipmentService implements ShipmentManagementInterface
      * Repository
      *
      * @var \Magento\Sales\Api\ShipmentRepositoryInterface
-     * @since 2.0.0
      */
     protected $repository;
 
@@ -49,7 +44,6 @@ class ShipmentService implements ShipmentManagementInterface
      * Shipment Notifier
      *
      * @var \Magento\Shipping\Model\ShipmentNotifier
-     * @since 2.0.0
      */
     protected $notifier;
 
@@ -61,7 +55,6 @@ class ShipmentService implements ShipmentManagementInterface
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Sales\Api\ShipmentRepositoryInterface $repository
      * @param \Magento\Shipping\Model\ShipmentNotifier $notifier
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Api\ShipmentCommentRepositoryInterface $commentRepository,
@@ -82,7 +75,6 @@ class ShipmentService implements ShipmentManagementInterface
      *
      * @param int $id
      * @return string
-     * @since 2.0.0
      */
     public function getLabel($id)
     {
@@ -93,7 +85,6 @@ class ShipmentService implements ShipmentManagementInterface
      * Returns list of comments attached to shipment
      * @param int $id
      * @return \Magento\Sales\Api\Data\ShipmentCommentSearchResultInterface
-     * @since 2.0.0
      */
     public function getCommentsList($id)
     {
@@ -109,7 +100,6 @@ class ShipmentService implements ShipmentManagementInterface
      *
      * @param int $id
      * @return bool
-     * @since 2.0.0
      */
     public function notify($id)
     {

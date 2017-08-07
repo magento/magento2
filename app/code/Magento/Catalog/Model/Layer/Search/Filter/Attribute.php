@@ -13,7 +13,6 @@ namespace Magento\Catalog\Model\Layer\Search\Filter;
 /**
  * Class \Magento\Catalog\Model\Layer\Search\Filter\Attribute
  *
- * @since 2.0.0
  */
 class Attribute extends \Magento\Catalog\Model\Layer\Filter\Attribute
 {
@@ -22,7 +21,6 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\Attribute
      *
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute  $attribute
      * @return int
-     * @since 2.0.0
      */
     protected function getAttributeIsFilterable($attribute)
     {

@@ -10,20 +10,20 @@ use Magento\Framework\Exception\InputException;
 
 /**
  * Class CompositeBaseSelectProcessor
- * @since 2.2.0
+ * @since 2.1.3
  */
 class CompositeBaseSelectProcessor implements BaseSelectProcessorInterface
 {
     /**
      * @var BaseSelectProcessorInterface[]
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $baseSelectProcessors;
 
     /**
      * @param BaseSelectProcessorInterface[] $baseSelectProcessors
      * @throws InputException
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(
         array $baseSelectProcessors
@@ -41,7 +41,7 @@ class CompositeBaseSelectProcessor implements BaseSelectProcessorInterface
     /**
      * @param Select $select
      * @return Select
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function process(Select $select)
     {

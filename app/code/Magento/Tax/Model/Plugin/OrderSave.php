@@ -10,26 +10,22 @@ namespace Magento\Tax\Model\Plugin;
 /**
  * Class \Magento\Tax\Model\Plugin\OrderSave
  *
- * @since 2.0.0
  */
 class OrderSave
 {
     /**
      * @var \Magento\Tax\Model\Sales\Order\TaxFactory
-     * @since 2.0.0
      */
     protected $orderTaxFactory;
 
     /**
      * @var \Magento\Sales\Model\Order\Tax\ItemFactory
-     * @since 2.0.0
      */
     protected $taxItemFactory;
 
     /**
      * @param \Magento\Tax\Model\Sales\Order\TaxFactory $orderTaxFactory
      * @param \Magento\Sales\Model\Order\Tax\ItemFactory $taxItemFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Tax\Model\Sales\Order\TaxFactory $orderTaxFactory,
@@ -46,7 +42,6 @@ class OrderSave
      * @param \Magento\Sales\Api\Data\OrderInterface $order
      * @return \Magento\Sales\Api\Data\OrderInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterSave(
         \Magento\Sales\Api\OrderRepositoryInterface $subject,
@@ -62,7 +57,6 @@ class OrderSave
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function saveOrderTax(\Magento\Sales\Api\Data\OrderInterface $order)
     {

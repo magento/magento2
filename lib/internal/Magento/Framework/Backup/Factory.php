@@ -11,7 +11,6 @@ namespace Magento\Framework\Backup;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Factory
 {
@@ -19,7 +18,6 @@ class Factory
      * Object manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     private $_objectManager;
 
@@ -52,13 +50,11 @@ class Factory
      * List of supported a backup types
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_allowedTypes;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -78,7 +74,6 @@ class Factory
      * @param string $type
      * @return BackupInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function create($type)
     {

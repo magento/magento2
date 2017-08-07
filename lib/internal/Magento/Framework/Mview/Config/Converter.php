@@ -11,7 +11,6 @@ use Magento\Framework\Mview\View\SubscriptionInterface;
 /**
  * Class \Magento\Framework\Mview\Config\Converter
  *
- * @since 2.0.0
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
@@ -21,7 +20,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param \DOMDocument $source
      * @return array
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function convert($source)
     {
@@ -57,7 +55,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param string $attributeName
      * @param mixed $default
      * @return null|string
-     * @since 2.0.0
      */
     protected function getAttributeValue(\DOMNode $input, $attributeName, $default = null)
     {
@@ -71,7 +68,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param \DOMNode $childNode
      * @param array $data
      * @return array
-     * @since 2.0.0
      */
     protected function convertChild(\DOMNode $childNode, $data)
     {

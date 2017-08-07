@@ -23,7 +23,7 @@ use Magento\Deploy\Console\ConsoleLogger;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
+class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface

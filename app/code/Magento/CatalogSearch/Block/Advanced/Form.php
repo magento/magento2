@@ -22,7 +22,6 @@ use Magento\Framework\View\Element\Template\Context;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Form extends Template
 {
@@ -30,7 +29,6 @@ class Form extends Template
      * Currency factory
      *
      * @var CurrencyFactory
-     * @since 2.0.0
      */
     protected $_currencyFactory;
 
@@ -38,7 +36,6 @@ class Form extends Template
      * Catalog search advanced
      *
      * @var Advanced
-     * @since 2.0.0
      */
     protected $_catalogSearchAdvanced;
 
@@ -47,7 +44,6 @@ class Form extends Template
      * @param Advanced $catalogSearchAdvanced
      * @param CurrencyFactory $currencyFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -62,7 +58,6 @@ class Form extends Template
 
     /**
      * @return AbstractBlock
-     * @since 2.0.0
      */
     public function _prepareLayout()
     {
@@ -87,7 +82,6 @@ class Form extends Template
      * Retrieve collection of product searchable attributes
      *
      * @return DbCollection
-     * @since 2.0.0
      */
     public function getSearchableAttributes()
     {
@@ -100,7 +94,6 @@ class Form extends Template
      *
      * @param AbstractAttribute $attribute
      * @return string
-     * @since 2.0.0
      */
     public function getAttributeLabel($attribute)
     {
@@ -112,7 +105,6 @@ class Form extends Template
      *
      * @param AbstractAttribute $attribute
      * @return string
-     * @since 2.0.0
      */
     public function getAttributeValidationClass($attribute)
     {
@@ -125,7 +117,6 @@ class Form extends Template
      * @param AbstractAttribute $attribute
      * @param string|null $part
      * @return mixed|string
-     * @since 2.0.0
      */
     public function getAttributeValue($attribute, $part = null)
     {
@@ -145,7 +136,6 @@ class Form extends Template
      * Retrieve the list of available currencies
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAvailableCurrencies()
     {
@@ -175,7 +165,6 @@ class Form extends Template
      * Count available currencies
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCurrencyCount()
     {
@@ -187,7 +176,6 @@ class Form extends Template
      *
      * @param AbstractAttribute $attribute
      * @return string
-     * @since 2.0.0
      */
     public function getCurrency($attribute)
     {
@@ -208,7 +196,6 @@ class Form extends Template
      *
      * @param AbstractAttribute $attribute
      * @return  string
-     * @since 2.0.0
      */
     public function getAttributeInputType($attribute)
     {
@@ -242,7 +229,6 @@ class Form extends Template
      *
      * @param AbstractAttribute $attribute
      * @return string
-     * @since 2.0.0
      */
     public function getAttributeSelectElement($attribute)
     {
@@ -281,7 +267,6 @@ class Form extends Template
      *
      * @param AbstractAttribute $attribute
      * @return string
-     * @since 2.0.0
      */
     public function getAttributeYesNoElement($attribute)
     {
@@ -309,7 +294,6 @@ class Form extends Template
 
     /**
      * @return BlockInterface
-     * @since 2.0.0
      */
     protected function _getSelectBlock()
     {
@@ -323,7 +307,6 @@ class Form extends Template
 
     /**
      * @return BlockInterface|mixed
-     * @since 2.0.0
      */
     protected function _getDateBlock()
     {
@@ -339,7 +322,6 @@ class Form extends Template
      * Retrieve search form action url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSearchPostUrl()
     {
@@ -352,7 +334,6 @@ class Form extends Template
      * @param AbstractAttribute $attribute
      * @param string $part
      * @return string
-     * @since 2.0.0
      */
     public function getDateInput($attribute, $part = 'from')
     {

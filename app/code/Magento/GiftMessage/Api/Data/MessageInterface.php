@@ -8,7 +8,6 @@ namespace Magento\GiftMessage\Api\Data;
 /**
  * Interface MessageInterface
  * @api
- * @since 2.0.0
  */
 interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -26,7 +25,6 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Return the gift message ID.
      *
      * @return int|null Gift message ID. Otherwise, null.
-     * @since 2.0.0
      */
     public function getGiftMessageId();
 
@@ -35,7 +33,6 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param int|null $id
      * @return $this
-     * @since 2.0.0
      */
     public function setGiftMessageId($id);
 
@@ -43,7 +40,6 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Return the customer ID.
      *
      * @return int|null Customer ID. Otherwise, null.
-     * @since 2.0.0
      */
     public function getCustomerId();
 
@@ -52,7 +48,6 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param int|null $id
      * @return $this
-     * @since 2.0.0
      */
     public function setCustomerId($id);
 
@@ -60,7 +55,6 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Return the sender name.
      *
      * @return string Sender name.
-     * @since 2.0.0
      */
     public function getSender();
 
@@ -69,7 +63,6 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param string $sender
      * @return $this
-     * @since 2.0.0
      */
     public function setSender($sender);
 
@@ -77,7 +70,6 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Return the recipient name.
      *
      * @return string Recipient name.
-     * @since 2.0.0
      */
     public function getRecipient();
 
@@ -86,7 +78,6 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param string $recipient
      * @return $this
-     * @since 2.0.0
      */
     public function setRecipient($recipient);
 
@@ -94,7 +85,6 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Return the message text.
      *
      * @return string Message text.
-     * @since 2.0.0
      */
     public function getMessage();
 
@@ -103,7 +93,6 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param string $message
      * @return $this
-     * @since 2.0.0
      */
     public function setMessage($message);
 
@@ -111,7 +100,6 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\GiftMessage\Api\Data\MessageExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -120,7 +108,6 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param \Magento\GiftMessage\Api\Data\MessageExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\GiftMessage\Api\Data\MessageExtensionInterface $extensionAttributes

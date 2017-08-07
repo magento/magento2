@@ -8,7 +8,7 @@ namespace Magento\GroupedImportExport\Model\Import\Product\Type;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import;
 
-class GroupedTest extends \PHPUnit_Framework_TestCase
+class GroupedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configurable product test Name

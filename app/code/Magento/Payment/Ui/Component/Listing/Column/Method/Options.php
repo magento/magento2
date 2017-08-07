@@ -7,19 +7,16 @@ namespace Magento\Payment\Ui\Component\Listing\Column\Method;
 
 /**
  * Class Options
- * @since 2.0.0
  */
 class Options implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $options;
 
     /**
      * @var \Magento\Payment\Helper\Data
-     * @since 2.0.0
      */
     protected $paymentHelper;
 
@@ -27,7 +24,6 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
      * Constructor
      *
      * @param \Magento\Payment\Helper\Data $paymentHelper
-     * @since 2.0.0
      */
     public function __construct(\Magento\Payment\Helper\Data $paymentHelper)
     {
@@ -38,7 +34,6 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
      * Get options
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

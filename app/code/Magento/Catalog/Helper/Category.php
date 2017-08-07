@@ -15,7 +15,6 @@ use Magento\Store\Model\Store;
  * Catalog category helper
  *
  * @SuppressWarnings(PHPMD.LongVariable)
- * @since 2.0.0
  */
 class Category extends AbstractHelper
 {
@@ -27,7 +26,6 @@ class Category extends AbstractHelper
      * Store categories cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_storeCategories = [];
 
@@ -35,7 +33,6 @@ class Category extends AbstractHelper
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -43,7 +40,6 @@ class Category extends AbstractHelper
      * Category factory
      *
      * @var \Magento\Catalog\Model\CategoryFactory
-     * @since 2.0.0
      */
     protected $_categoryFactory;
 
@@ -51,13 +47,11 @@ class Category extends AbstractHelper
      * Lib data collection factory
      *
      * @var \Magento\Framework\Data\CollectionFactory
-     * @since 2.0.0
      */
     protected $_dataCollectionFactory;
 
     /**
      * @var CategoryRepositoryInterface
-     * @since 2.0.0
      */
     protected $categoryRepository;
 
@@ -67,7 +61,6 @@ class Category extends AbstractHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Data\CollectionFactory $dataCollectionFactory
      * @param CategoryRepositoryInterface $categoryRepository
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -91,7 +84,6 @@ class Category extends AbstractHelper
      * @param bool $toLoad
      * @return \Magento\Framework\Data\Tree\Node\Collection or
      * \Magento\Catalog\Model\ResourceModel\Category\Collection or array
-     * @since 2.0.0
      */
     public function getStoreCategories($sorted = false, $asCollection = false, $toLoad = true)
     {
@@ -131,7 +123,6 @@ class Category extends AbstractHelper
      *
      * @param ModelCategory $category
      * @return string
-     * @since 2.0.0
      */
     public function getCategoryUrl($category)
     {
@@ -146,7 +137,6 @@ class Category extends AbstractHelper
      *
      * @param ModelCategory|int $category
      * @return bool
-     * @since 2.0.0
      */
     public function canShow($category)
     {
@@ -177,7 +167,6 @@ class Category extends AbstractHelper
      *
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function canUseCanonicalTag($store = null)
     {

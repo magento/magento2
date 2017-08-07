@@ -9,7 +9,6 @@ namespace Magento\SalesRule\Model\ResourceModel\Report\Rule;
  * Rule report resource model with aggregation by updated at
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Updatedat extends \Magento\SalesRule\Model\ResourceModel\Report\Rule\Createdat
 {
@@ -17,7 +16,6 @@ class Updatedat extends \Magento\SalesRule\Model\ResourceModel\Report\Rule\Creat
      * Resource Report Rule constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -30,7 +28,6 @@ class Updatedat extends \Magento\SalesRule\Model\ResourceModel\Report\Rule\Creat
      * @param mixed|null $from
      * @param mixed|null $to
      * @return $this
-     * @since 2.0.0
      */
     public function aggregate($from = null, $to = null)
     {

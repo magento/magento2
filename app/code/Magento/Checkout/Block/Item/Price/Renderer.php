@@ -12,13 +12,11 @@ use Magento\Quote\Model\Quote\Item\AbstractItem;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Renderer extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var AbstractItem
-     * @since 2.0.0
      */
     protected $item;
 
@@ -27,7 +25,6 @@ class Renderer extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return $this
-     * @since 2.0.0
      */
     public function setItem(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
     {
@@ -39,7 +36,6 @@ class Renderer extends \Magento\Framework\View\Element\Template
      * Get quote item
      *
      * @return AbstractItem
-     * @since 2.0.0
      */
     public function getItem()
     {

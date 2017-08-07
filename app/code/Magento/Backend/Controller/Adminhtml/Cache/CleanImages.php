@@ -12,7 +12,6 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Backend\Controller\Adminhtml\Cache\CleanImages
  *
- * @since 2.0.0
  */
 class CleanImages extends \Magento\Backend\Controller\Adminhtml\Cache
 {
@@ -20,7 +19,6 @@ class CleanImages extends \Magento\Backend\Controller\Adminhtml\Cache
      * Clean JS/css files cache
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

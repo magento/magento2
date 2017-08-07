@@ -11,7 +11,6 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\ImportExport\Controller\Adminhtml\Export\GetFilter
  *
- * @since 2.0.0
  */
 class GetFilter extends ExportController
 {
@@ -19,7 +18,6 @@ class GetFilter extends ExportController
      * Get grid-filter of entity attributes action.
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

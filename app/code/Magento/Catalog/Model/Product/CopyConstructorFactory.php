@@ -8,19 +8,16 @@ namespace Magento\Catalog\Model\Product;
 /**
  * Class \Magento\Catalog\Model\Product\CopyConstructorFactory
  *
- * @since 2.0.0
  */
 class CopyConstructorFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -34,7 +31,6 @@ class CopyConstructorFactory
      * @param array $arguments
      * @return CopyConstructorInterface
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function create($instance, array $arguments = [])
     {

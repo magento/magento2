@@ -13,37 +13,31 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Source of layout files aggregated from a theme and its parents according to merging and overriding conventions
- * @since 2.0.0
  */
 class Aggregated implements CollectorInterface
 {
     /**
      * @var Factory
-     * @since 2.0.0
      */
     protected $fileListFactory;
 
     /**
      * @var \Magento\Framework\View\File\CollectorInterface
-     * @since 2.0.0
      */
     protected $libraryFiles;
 
     /**
      * @var \Magento\Framework\View\File\CollectorInterface
-     * @since 2.0.0
      */
     protected $baseFiles;
 
     /**
      * @var \Magento\Framework\View\File\CollectorInterface
-     * @since 2.0.0
      */
     protected $overriddenBaseFiles;
 
     /**
      * @var LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
@@ -53,7 +47,6 @@ class Aggregated implements CollectorInterface
      * @param CollectorInterface $baseFiles
      * @param CollectorInterface $overriddenBaseFiles
      * @param LoggerInterface $logger
-     * @since 2.0.0
      */
     public function __construct(
         Factory $fileListFactory,
@@ -78,7 +71,6 @@ class Aggregated implements CollectorInterface
      * @param string $filePath
      * @return \Magento\Framework\View\File[]
      * @throws \LogicException
-     * @since 2.0.0
      */
     public function getFiles(ThemeInterface $theme, $filePath)
     {

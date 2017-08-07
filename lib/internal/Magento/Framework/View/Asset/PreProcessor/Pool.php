@@ -11,7 +11,6 @@ use Magento\Framework\View\Asset\PreProcessorInterface;
 
 /**
  * A registry of asset preprocessors (not to confuse with the "Registry" pattern)
- * @since 2.0.0
  */
 class Pool
 {
@@ -22,31 +21,26 @@ class Pool
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $preprocessors;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $instances;
 
     /**
      * @var Helper\SortInterface
-     * @since 2.0.0
      */
     private $sorter;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $defaultPreprocessor;
 
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
@@ -57,7 +51,6 @@ class Pool
      * @param Helper\SortInterface $sorter
      * @param string $defaultPreprocessor
      * @param array $preprocessors
-     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -76,7 +69,6 @@ class Pool
      *
      * @param Chain $chain
      * @return void
-     * @since 2.0.0
      */
     public function process(Chain $chain)
     {
@@ -92,7 +84,6 @@ class Pool
      * @param string $type
      * @return PreProcessorInterface[]
      * @throws \UnexpectedValueException
-     * @since 2.0.0
      */
     private function getPreProcessors($type)
     {

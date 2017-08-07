@@ -7,7 +7,7 @@ namespace Magento\Sales\Model\Order\Shipment;
 
 /**
  * Interface for notification sender for Shipment.
- * @since 2.2.0
+ * @since 2.1.2
  */
 interface SenderInterface
 {
@@ -20,7 +20,7 @@ interface SenderInterface
      * @param bool $forceSyncMode
      *
      * @return bool
-     * @since 2.2.0
+     * @since 2.1.2
      */
     public function send(
         \Magento\Sales\Api\Data\OrderInterface $order,

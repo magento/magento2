@@ -13,7 +13,6 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Review\Controller\Product\ListAction
  *
- * @since 2.0.0
  */
 class ListAction extends ProductController
 {
@@ -22,7 +21,6 @@ class ListAction extends ProductController
      *
      * @param CatalogProduct $product
      * @return \Magento\Framework\View\Result\Page
-     * @since 2.0.0
      */
     protected function getProductPage($product)
     {
@@ -42,7 +40,6 @@ class ListAction extends ProductController
      * Show list of product's reviews
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

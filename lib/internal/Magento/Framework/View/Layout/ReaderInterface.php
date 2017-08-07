@@ -8,7 +8,6 @@ namespace Magento\Framework\View\Layout;
 /**
  * Interface \Magento\Framework\View\Layout\ReaderInterface
  *
- * @since 2.0.0
  */
 interface ReaderInterface
 {
@@ -18,7 +17,6 @@ interface ReaderInterface
      * @param Reader\Context $readerContext
      * @param Element $element
      * @return $this
-     * @since 2.0.0
      */
     public function interpret(Reader\Context $readerContext, Element $element);
 
@@ -26,7 +24,6 @@ interface ReaderInterface
      * Get nodes types that current reader is support
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getSupportedNodes();
 }

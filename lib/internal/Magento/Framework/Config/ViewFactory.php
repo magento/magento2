@@ -11,13 +11,11 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Class \Magento\Framework\Config\ViewFactory
  *
- * @since 2.0.0
  */
 class ViewFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
@@ -25,7 +23,6 @@ class ViewFactory
      * Constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -38,7 +35,6 @@ class ViewFactory
      * @param array $arguments
      * @return \Magento\Framework\Config\View
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function create(array $arguments = [])
     {

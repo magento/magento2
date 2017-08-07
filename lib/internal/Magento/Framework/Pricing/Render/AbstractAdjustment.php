@@ -15,19 +15,16 @@ use Magento\Framework\View\Element\Template;
  * Adjustment render abstract
  *
  * @method string getZone()
- * @since 2.0.0
  */
 abstract class AbstractAdjustment extends Template implements AdjustmentRenderInterface
 {
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var AmountRenderInterface
-     * @since 2.0.0
      */
     protected $amountRender;
 
@@ -35,7 +32,6 @@ abstract class AbstractAdjustment extends Template implements AdjustmentRenderIn
      * @param Template\Context $context
      * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Template\Context $context,
@@ -50,7 +46,6 @@ abstract class AbstractAdjustment extends Template implements AdjustmentRenderIn
      * @param AmountRenderInterface $amountRender
      * @param array $arguments
      * @return string
-     * @since 2.0.0
      */
     public function render(AmountRenderInterface $amountRender, array $arguments = [])
     {
@@ -68,7 +63,6 @@ abstract class AbstractAdjustment extends Template implements AdjustmentRenderIn
 
     /**
      * @return AmountRenderInterface
-     * @since 2.0.0
      */
     public function getAmountRender()
     {
@@ -78,7 +72,6 @@ abstract class AbstractAdjustment extends Template implements AdjustmentRenderIn
     /**
      * @param string $priceCode
      * @return PriceInterface
-     * @since 2.0.0
      */
     public function getPriceType($priceCode)
     {
@@ -87,7 +80,6 @@ abstract class AbstractAdjustment extends Template implements AdjustmentRenderIn
 
     /**
      * @return \Magento\Framework\Pricing\Price\PriceInterface
-     * @since 2.0.0
      */
     public function getPrice()
     {
@@ -96,7 +88,6 @@ abstract class AbstractAdjustment extends Template implements AdjustmentRenderIn
 
     /**
      * @return SaleableInterface
-     * @since 2.0.0
      */
     public function getSaleableItem()
     {
@@ -110,7 +101,6 @@ abstract class AbstractAdjustment extends Template implements AdjustmentRenderIn
      * @param bool $includeContainer
      * @param int $precision
      * @return string
-     * @since 2.0.0
      */
     public function formatCurrency(
         $amount,
@@ -127,7 +117,6 @@ abstract class AbstractAdjustment extends Template implements AdjustmentRenderIn
      * @param bool $includeContainer
      * @param int $precision
      * @return string
-     * @since 2.0.0
      */
     public function convertAndFormatCurrency(
         $amount,
@@ -139,7 +128,6 @@ abstract class AbstractAdjustment extends Template implements AdjustmentRenderIn
 
     /**
      * @return \Magento\Framework\Pricing\Adjustment\AdjustmentInterface
-     * @since 2.0.0
      */
     public function getAdjustment()
     {
@@ -148,7 +136,6 @@ abstract class AbstractAdjustment extends Template implements AdjustmentRenderIn
 
     /**
      * @return string
-     * @since 2.0.0
      */
     abstract protected function apply();
 }

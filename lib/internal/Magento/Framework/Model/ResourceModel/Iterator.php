@@ -16,7 +16,6 @@ use Magento\Framework\Phrase;
 /**
  * Class \Magento\Framework\Model\ResourceModel\Iterator
  *
- * @since 2.0.0
  */
 class Iterator extends \Magento\Framework\DataObject
 {
@@ -28,7 +27,6 @@ class Iterator extends \Magento\Framework\DataObject
      * @param array $args
      * @param AdapterInterface $connection
      * @return \Magento\Framework\Model\ResourceModel\Iterator
-     * @since 2.0.0
      */
     public function walk($query, array $callbacks, array $args = [], $connection = null)
     {
@@ -55,7 +53,6 @@ class Iterator extends \Magento\Framework\DataObject
      * @param AdapterInterface $connection
      * @return \Zend_Db_Statement_Interface
      * @throws LocalizedException
-     * @since 2.0.0
      */
     protected function _getStatement($query, AdapterInterface $connection = null)
     {

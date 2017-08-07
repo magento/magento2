@@ -11,7 +11,6 @@ namespace Magento\Config\Model\Config\Backend;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Translate extends \Magento\Framework\App\Config\Value
 {
@@ -26,7 +25,6 @@ class Translate extends \Magento\Framework\App\Config\Value
      * Set status 'invalidate' for blocks and other output caches
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {

@@ -14,7 +14,6 @@ namespace Magento\Customer\Model\ResourceModel\Attribute;
 /**
  * Class \Magento\Customer\Model\ResourceModel\Attribute\Collection
  *
- * @since 2.0.0
  */
 class Collection extends \Magento\Eav\Model\ResourceModel\Attribute\Collection
 {
@@ -22,7 +21,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Attribute\Collection
      * Default attribute entity type code
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_entityTypeCode = 'customer';
 
@@ -30,7 +28,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Attribute\Collection
      * Default attribute entity type code
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getEntityTypeCode()
     {
@@ -44,7 +41,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Attribute\Collection
      * If realization doesn't demand this functionality, let this function just return null
      *
      * @return string|null
-     * @since 2.0.0
      */
     protected function _getEavWebsiteTable()
     {

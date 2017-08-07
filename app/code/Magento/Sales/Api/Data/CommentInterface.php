@@ -9,7 +9,7 @@ namespace Magento\Sales\Api\Data;
  * Interface CommentInterface
  *
  * @api
- * @since 2.2.0
+ * @since 2.1.2
  */
 interface CommentInterface
 {
@@ -27,7 +27,7 @@ interface CommentInterface
      * Gets the comment text.
      *
      * @return string Comment.
-     * @since 2.2.0
+     * @since 2.1.2
      */
     public function getComment();
 
@@ -36,7 +36,7 @@ interface CommentInterface
      *
      * @param string $comment
      * @return $this
-     * @since 2.2.0
+     * @since 2.1.2
      */
     public function setComment($comment);
 
@@ -44,7 +44,7 @@ interface CommentInterface
      * Gets the is-visible-on-storefront flag value for the comment.
      *
      * @return int Is-visible-on-storefront flag value.
-     * @since 2.2.0
+     * @since 2.1.2
      */
     public function getIsVisibleOnFront();
 
@@ -53,7 +53,7 @@ interface CommentInterface
      *
      * @param int $isVisibleOnFront
      * @return $this
-     * @since 2.2.0
+     * @since 2.1.2
      */
     public function setIsVisibleOnFront($isVisibleOnFront);
 }

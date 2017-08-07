@@ -10,7 +10,6 @@ namespace Magento\UrlRewrite\Block\Catalog\Product;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
 {
@@ -18,7 +17,6 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      * Disable massaction
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareMassaction()
     {
@@ -29,7 +27,6 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      * Prepare columns layout
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -63,7 +60,6 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      * Get URL for dispatching grid ajax requests
      *
      * @return string
-     * @since 2.0.0
      */
     public function getGridUrl()
     {
@@ -75,7 +71,6 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      *
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\DataObject $row
      * @return string
-     * @since 2.0.0
      */
     public function getRowUrl($row)
     {

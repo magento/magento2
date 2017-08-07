@@ -13,7 +13,6 @@ use Magento\Framework\Archive\Tar;
  * Class to work with archives
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Archive
 {
@@ -31,7 +30,6 @@ class Archive
      * Current archiver is used for compress.
      *
      * @var \Magento\Framework\Archive\Tar|\Magento\Framework\Archive\Gz|\Magento\Framework\Archive\Bz
-     * @since 2.0.0
      */
     protected $_archiver = null;
 
@@ -39,7 +37,6 @@ class Archive
      * Accessible formats for compress.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_formats = [
         'tar' => 'tar',
@@ -62,7 +59,6 @@ class Archive
      *
      * @param string $extension
      * @return Tar|Gz|Bz
-     * @since 2.0.0
      */
     protected function _getArchiver($extension)
     {
@@ -78,7 +74,6 @@ class Archive
      *
      * @param string $source
      * @return string[]|string
-     * @since 2.0.0
      */
     protected function _getArchivers($source)
     {
@@ -96,7 +91,6 @@ class Archive
      * @param string $destination
      * @param boolean $skipRoot skip first level parent
      * @return string Path to file
-     * @since 2.0.0
      */
     public function pack($source, $destination = 'packed.tgz', $skipRoot = false)
     {
@@ -127,7 +121,6 @@ class Archive
      * @param bool $tillTar
      * @param bool $clearInterm
      * @return string Path to file
-     * @since 2.0.0
      */
     public function unpack($source, $destination = '.', $tillTar = false, $clearInterm = true)
     {
@@ -164,7 +157,6 @@ class Archive
      * @param string $source
      * @param string $destination
      * @return string Path to file
-     * @since 2.0.0
      */
     public function extract($file, $source, $destination = '.')
     {
@@ -181,7 +173,6 @@ class Archive
      *
      * @param string $file
      * @return boolean
-     * @since 2.0.0
      */
     public function isArchive($file)
     {
@@ -197,7 +188,6 @@ class Archive
      *
      * @param string $file
      * @return boolean
-     * @since 2.0.0
      */
     public function isTar($file)
     {

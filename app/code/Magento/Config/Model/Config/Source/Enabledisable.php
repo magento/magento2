@@ -8,7 +8,6 @@ namespace Magento\Config\Model\Config\Source;
 /**
  * Source model for element with enable and disable variants.
  * @api
- * @since 2.0.0
  */
 class Enabledisable implements \Magento\Framework\Option\ArrayInterface
 {
@@ -24,7 +23,6 @@ class Enabledisable implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

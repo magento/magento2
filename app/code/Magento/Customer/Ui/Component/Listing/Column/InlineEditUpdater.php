@@ -10,13 +10,11 @@ use Magento\Framework\View\Element\UiComponentInterface;
 /**
  * Class \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater
  *
- * @since 2.0.0
  */
 class InlineEditUpdater
 {
     /**
      * @var \Magento\Customer\Ui\Component\Listing\Column\ValidationRules
-     * @since 2.0.0
      */
     protected $validationRules;
 
@@ -24,7 +22,6 @@ class InlineEditUpdater
      * List of frontend inputs that should be editable in grid
      *
      * @var array
-     * @since 2.0.0
      */
     protected $editableFields = [
         'text',
@@ -35,7 +32,6 @@ class InlineEditUpdater
 
     /**
      * @param ValidationRules $validationRules
-     * @since 2.0.0
      */
     public function __construct(
         ValidationRules $validationRules
@@ -51,7 +47,6 @@ class InlineEditUpdater
      * @param array $validationRules
      * @param bool|false $isRequired
      * @return UiComponentInterface
-     * @since 2.0.0
      */
     public function applyEditing(
         UiComponentInterface $column,

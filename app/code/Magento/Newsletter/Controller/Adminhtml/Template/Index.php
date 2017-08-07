@@ -9,7 +9,6 @@ namespace Magento\Newsletter\Controller\Adminhtml\Template;
 /**
  * Class \Magento\Newsletter\Controller\Adminhtml\Template\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Newsletter\Controller\Adminhtml\Template
 {
@@ -17,7 +16,6 @@ class Index extends \Magento\Newsletter\Controller\Adminhtml\Template
      * View Templates list
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

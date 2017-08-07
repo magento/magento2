@@ -13,7 +13,6 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 /**
  * Class \Magento\MediaStorage\Model\File\Storage\Response
  *
- * @since 2.0.0
  */
 class Response extends Http implements
     \Magento\Framework\App\Response\FileInterface,
@@ -21,7 +20,6 @@ class Response extends Http implements
 {
     /**
      * @var \Magento\Framework\File\Transfer\Adapter\Http
-     * @since 2.0.0
      */
     protected $_transferAdapter;
 
@@ -29,7 +27,6 @@ class Response extends Http implements
      * Full path to file
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_filePath;
 
@@ -42,7 +39,6 @@ class Response extends Http implements
      * @param \Magento\Framework\App\Http\Context $context
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\File\Transfer\Adapter\Http $transferAdapter
-     * @since 2.0.0
      */
     public function __construct(
         HttpRequest $request,
@@ -60,7 +56,6 @@ class Response extends Http implements
      * Send response
      *
      * @return void
-     * @since 2.0.0
      */
     public function sendResponse()
     {
@@ -74,7 +69,6 @@ class Response extends Http implements
     /**
      * @param string $path
      * @return void
-     * @since 2.0.0
      */
     public function setFilePath($path)
     {

@@ -10,7 +10,6 @@ namespace Magento\GiftMessage\Block\Adminhtml\Product\Helper\Form;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class Config extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config
 {
@@ -18,7 +17,6 @@ class Config extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -28,7 +26,6 @@ class Config extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
@@ -45,7 +42,6 @@ class Config extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config
      * Get config value data
      *
      * @return string|null
-     * @since 2.0.0
      */
     protected function _getValueFromConfig()
     {

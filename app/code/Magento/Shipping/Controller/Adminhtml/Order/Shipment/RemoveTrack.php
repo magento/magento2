@@ -11,7 +11,6 @@ use Magento\Backend\App\Action;
 /**
  * Class \Magento\Shipping\Controller\Adminhtml\Order\Shipment\RemoveTrack
  *
- * @since 2.0.0
  */
 class RemoveTrack extends \Magento\Backend\App\Action
 {
@@ -24,14 +23,12 @@ class RemoveTrack extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
-     * @since 2.0.0
      */
     protected $shipmentLoader;
 
     /**
      * @param Action\Context $context
      * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -45,7 +42,6 @@ class RemoveTrack extends \Magento\Backend\App\Action
      * Remove tracking number from shipment
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

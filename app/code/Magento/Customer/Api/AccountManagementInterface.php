@@ -10,7 +10,6 @@ namespace Magento\Customer\Api;
 /**
  * Interface for managing customers accounts.
  * @api
- * @since 2.0.0
  */
 interface AccountManagementInterface
 {
@@ -31,7 +30,6 @@ interface AccountManagementInterface
      * @param string $redirectUrl
      * @return \Magento\Customer\Api\Data\CustomerInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function createAccount(
         \Magento\Customer\Api\Data\CustomerInterface $customer,
@@ -51,7 +49,6 @@ interface AccountManagementInterface
      * @throws \Magento\Framework\Exception\InputException If bad input is provided
      * @throws \Magento\Framework\Exception\State\InputMismatchException If the provided email is already used
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function createAccountWithPasswordHash(
         \Magento\Customer\Api\Data\CustomerInterface $customer,
@@ -65,7 +62,6 @@ interface AccountManagementInterface
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return \Magento\Customer\Api\Data\ValidationResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function validate(\Magento\Customer\Api\Data\CustomerInterface $customer);
 
@@ -77,7 +73,6 @@ interface AccountManagementInterface
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException If group is not found
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function isReadonly($customerId);
 
@@ -88,7 +83,6 @@ interface AccountManagementInterface
      * @param string $confirmationKey
      * @return \Magento\Customer\Api\Data\CustomerInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function activate($email, $confirmationKey);
 
@@ -100,7 +94,6 @@ interface AccountManagementInterface
      * @param string $confirmationKey
      * @return \Magento\Customer\Api\Data\CustomerInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function activateById($customerId, $confirmationKey);
 
@@ -111,7 +104,6 @@ interface AccountManagementInterface
      * @param string $password
      * @return \Magento\Customer\Api\Data\CustomerInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function authenticate($email, $password);
 
@@ -123,7 +115,6 @@ interface AccountManagementInterface
      * @param string $newPassword
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function changePassword($email, $currentPassword, $newPassword);
 
@@ -135,7 +126,6 @@ interface AccountManagementInterface
      * @param string $newPassword
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function changePasswordById($customerId, $currentPassword, $newPassword);
 
@@ -147,7 +137,6 @@ interface AccountManagementInterface
      * @param int $websiteId
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function initiatePasswordReset($email, $template, $websiteId = null);
 
@@ -159,7 +148,6 @@ interface AccountManagementInterface
      * @param string $newPassword
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function resetPassword($email, $resetToken, $newPassword);
 
@@ -174,7 +162,6 @@ interface AccountManagementInterface
      * @throws \Magento\Framework\Exception\InputException If token or customer id is invalid
      * @throws \Magento\Framework\Exception\NoSuchEntityException If customer doesn't exist
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function validateResetPasswordLinkToken($customerId, $resetPasswordLinkToken);
 
@@ -184,7 +171,6 @@ interface AccountManagementInterface
      * @param int $customerId
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getConfirmationStatus($customerId);
 
@@ -196,7 +182,6 @@ interface AccountManagementInterface
      * @param string $redirectUrl
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function resendConfirmation($email, $websiteId, $redirectUrl = '');
 
@@ -207,7 +192,6 @@ interface AccountManagementInterface
      * @param int $websiteId If not set, will use the current websiteId
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function isEmailAvailable($customerEmail, $websiteId = null);
 
@@ -218,7 +202,6 @@ interface AccountManagementInterface
      * @param int $storeId
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function isCustomerInStore($customerWebsiteId, $storeId);
 
@@ -229,7 +212,6 @@ interface AccountManagementInterface
      * @return \Magento\Customer\Api\Data\AddressInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If the customer Id is invalid
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getDefaultBillingAddress($customerId);
 
@@ -240,7 +222,6 @@ interface AccountManagementInterface
      * @return \Magento\Customer\Api\Data\AddressInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If the customer Id is invalid
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getDefaultShippingAddress($customerId);
 
@@ -249,7 +230,6 @@ interface AccountManagementInterface
      *
      * @param string $password
      * @return string
-     * @since 2.0.0
      */
     public function getPasswordHash($password);
 }

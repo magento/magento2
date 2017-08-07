@@ -7,7 +7,6 @@ namespace Magento\Authorizenet\Model\ResourceModel\Debug;
 
 /**
  * Resource Authorize.net debug collection model
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -15,7 +14,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

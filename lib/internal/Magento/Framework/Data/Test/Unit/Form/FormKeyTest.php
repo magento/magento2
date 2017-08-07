@@ -10,7 +10,7 @@ use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Session\SessionManager;
 
-class FormKeyTest extends \PHPUnit_Framework_TestCase
+class FormKeyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Random|\PHPUnit_Framework_MockObject_MockObject
@@ -34,10 +34,10 @@ class FormKeyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mathRandomMock = $this->getMock(\Magento\Framework\Math\Random::class, [], [], '', false);
+        $this->mathRandomMock = $this->createMock(\Magento\Framework\Math\Random::class);
         $methods = ['setData', 'getData'];
-        $this->sessionMock = $this->getMock(\Magento\Framework\Session\SessionManager::class, $methods, [], '', false);
-        $this->escaperMock = $this->getMock(\Magento\Framework\Escaper::class, [], [], '', false);
+        $this->sessionMock = $this->createPartialMock(\Magento\Framework\Session\SessionManager::class, $methods);
+        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
         $this->escaperMock->expects($this->any())->method('escapeHtmlAttr')->willReturnArgument(0);
         $this->formKey = new FormKey(
             $this->mathRandomMock,

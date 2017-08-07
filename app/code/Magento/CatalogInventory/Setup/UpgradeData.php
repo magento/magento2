@@ -18,25 +18,25 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Upgrade Data script
  * @codeCoverageIgnore
- * @since 2.2.0
+ * @since 2.1.3
  */
 class UpgradeData implements UpgradeDataInterface
 {
     /**
      * @var StockConfigurationInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $configuration;
 
     /**
      * @var AbstractProcessor
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $indexerProcessor;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $storeManager;
 
@@ -58,7 +58,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param AbstractProcessor $indexerProcessor
      * @param FieldDataConverterFactory $fieldDataConverterFactory
      * @param QueryModifierFactory $queryModifierFactory
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(
         StockConfigurationInterface $configuration,
@@ -76,7 +76,7 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -94,7 +94,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @param ModuleDataSetupInterface $setup
      * @return void
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function upgradeCatalogInventoryStockItem($setup)
     {

@@ -9,7 +9,6 @@ namespace Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
  * Class Email
  *
  * @package Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo
- * @since 2.0.0
  */
 class Email extends \Magento\Backend\App\Action
 {
@@ -24,7 +23,6 @@ class Email extends \Magento\Backend\App\Action
      * Notify user
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

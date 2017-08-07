@@ -9,7 +9,6 @@ namespace Magento\Email\Controller\Adminhtml\Email\Template;
 /**
  * Class \Magento\Email\Controller\Adminhtml\Email\Template\Edit
  *
- * @since 2.0.0
  */
 class Edit extends \Magento\Email\Controller\Adminhtml\Email\Template
 {
@@ -17,7 +16,6 @@ class Edit extends \Magento\Email\Controller\Adminhtml\Email\Template
      * Edit transactional email action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

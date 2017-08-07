@@ -13,7 +13,6 @@ use Magento\Framework\View\Asset\PreProcessorInterface;
 
 /**
  * PreProcessor responsible for replacing translation calls in js files to translated strings
- * @since 2.0.0
  */
 class PreProcessor implements PreProcessorInterface
 {
@@ -21,19 +20,16 @@ class PreProcessor implements PreProcessorInterface
      * Javascript translation configuration
      *
      * @var Config
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var AreaList
-     * @since 2.0.0
      */
     protected $areaList;
 
     /**
      * @var TranslateInterface
-     * @since 2.0.0
      */
     protected $translate;
 
@@ -41,7 +37,6 @@ class PreProcessor implements PreProcessorInterface
      * @param Config $config
      * @param AreaList $areaList
      * @param TranslateInterface $translate
-     * @since 2.0.0
      */
     public function __construct(Config $config, AreaList $areaList, TranslateInterface $translate)
     {
@@ -55,7 +50,6 @@ class PreProcessor implements PreProcessorInterface
      *
      * @param Chain $chain
      * @return void
-     * @since 2.0.0
      */
     public function process(Chain $chain)
     {
@@ -81,7 +75,6 @@ class PreProcessor implements PreProcessorInterface
      *
      * @param string $content
      * @return string
-     * @since 2.0.0
      */
     public function translate($content)
     {
@@ -96,7 +89,6 @@ class PreProcessor implements PreProcessorInterface
      *
      * @param array $matches
      * @return string
-     * @since 2.0.0
      */
     protected function replaceCallback($matches)
     {

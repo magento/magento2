@@ -7,7 +7,6 @@ namespace Magento\Dhl\Model\Source\Method;
 
 /**
  * Source model for DHL shipping methods
- * @since 2.0.0
  */
 abstract class AbstractMethod extends \Magento\Dhl\Model\Source\Method\Generic
 {
@@ -15,7 +14,6 @@ abstract class AbstractMethod extends \Magento\Dhl\Model\Source\Method\Generic
      * Carrier Product Type Indicator
      *
      * @var string $_contentType
-     * @since 2.0.0
      */
     protected $_contentType;
 
@@ -23,13 +21,11 @@ abstract class AbstractMethod extends \Magento\Dhl\Model\Source\Method\Generic
      * Show 'none' in methods list or not;
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_noneMethod = false;
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

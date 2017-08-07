@@ -8,19 +8,16 @@ namespace Magento\Search\Model;
 /**
  * Class \Magento\Search\Model\Autocomplete
  *
- * @since 2.0.0
  */
 class Autocomplete implements AutocompleteInterface
 {
     /**
      * @var Autocomplete\DataProviderInterface[]
-     * @since 2.0.0
      */
     private $dataProviders;
 
     /**
      * @param array $dataProviders
-     * @since 2.0.0
      */
     public function __construct(
         array $dataProviders
@@ -31,7 +28,6 @@ class Autocomplete implements AutocompleteInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getItems()
     {

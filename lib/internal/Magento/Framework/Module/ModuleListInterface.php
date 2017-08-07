@@ -10,7 +10,6 @@ namespace Magento\Framework\Module;
 /**
  * Interface \Magento\Framework\Module\ModuleListInterface
  *
- * @since 2.0.0
  */
 interface ModuleListInterface
 {
@@ -20,7 +19,6 @@ interface ModuleListInterface
      * Returns an array where key is module name and value is an array with module meta-information
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAll();
 
@@ -31,7 +29,6 @@ interface ModuleListInterface
      *
      * @param string $name
      * @return array|null
-     * @since 2.0.0
      */
     public function getOne($name);
 
@@ -39,7 +36,6 @@ interface ModuleListInterface
      * Enumerates the list of names of modules
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getNames();
 
@@ -48,7 +44,6 @@ interface ModuleListInterface
      *
      * @param string $name
      * @return bool
-     * @since 2.0.0
      */
     public function has($name);
 }

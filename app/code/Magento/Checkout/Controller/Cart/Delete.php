@@ -9,7 +9,6 @@ namespace Magento\Checkout\Controller\Cart;
 /**
  * Class \Magento\Checkout\Controller\Cart\Delete
  *
- * @since 2.0.0
  */
 class Delete extends \Magento\Checkout\Controller\Cart
 {
@@ -17,7 +16,6 @@ class Delete extends \Magento\Checkout\Controller\Cart
      * Delete shopping cart item action
      *
      * @return \Magento\Framework\Controller\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

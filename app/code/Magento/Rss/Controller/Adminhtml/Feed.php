@@ -8,25 +8,21 @@ namespace Magento\Rss\Controller\Adminhtml;
 /**
  * Class Feed
  * @package Magento\Rss\Controller
- * @since 2.0.0
  */
 abstract class Feed extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Rss\Model\RssManager
-     * @since 2.0.0
      */
     protected $rssManager;
 
     /**
      * @var \Magento\Rss\Model\RssFactory
-     * @since 2.0.0
      */
     protected $rssFactory;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
@@ -35,7 +31,6 @@ abstract class Feed extends \Magento\Backend\App\Action
      * @param \Magento\Rss\Model\RssManager $rssManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Rss\Model\RssFactory $rssFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,

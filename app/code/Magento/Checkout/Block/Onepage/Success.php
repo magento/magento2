@@ -12,25 +12,21 @@ use Magento\Sales\Model\Order;
  * One page checkout success page
  *
  * @api
- * @since 2.0.0
  */
 class Success extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Checkout\Model\Session
-     * @since 2.0.0
      */
     protected $_checkoutSession;
 
     /**
      * @var \Magento\Sales\Model\Order\Config
-     * @since 2.0.0
      */
     protected $_orderConfig;
 
     /**
      * @var \Magento\Framework\App\Http\Context
-     * @since 2.0.0
      */
     protected $httpContext;
 
@@ -40,7 +36,6 @@ class Success extends \Magento\Framework\View\Element\Template
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -60,7 +55,6 @@ class Success extends \Magento\Framework\View\Element\Template
      * Render additional order information lines and return result html
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAdditionalInfoHtml()
     {
@@ -71,7 +65,6 @@ class Success extends \Magento\Framework\View\Element\Template
      * Initialize data and prepare it for output
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -83,7 +76,6 @@ class Success extends \Magento\Framework\View\Element\Template
      * Prepares block data
      *
      * @return void
-     * @since 2.0.0
      */
     protected function prepareBlockData()
     {
@@ -112,7 +104,6 @@ class Success extends \Magento\Framework\View\Element\Template
      *
      * @param Order $order
      * @return bool
-     * @since 2.0.0
      */
     protected function isVisible(Order $order)
     {
@@ -127,7 +118,6 @@ class Success extends \Magento\Framework\View\Element\Template
      *
      * @param Order $order
      * @return bool
-     * @since 2.0.0
      */
     protected function canViewOrder(Order $order)
     {

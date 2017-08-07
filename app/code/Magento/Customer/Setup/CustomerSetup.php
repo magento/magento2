@@ -17,7 +17,6 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 /**
  * @codeCoverageIgnore
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class CustomerSetup extends EavSetup
 {
@@ -25,7 +24,6 @@ class CustomerSetup extends EavSetup
      * EAV configuration
      *
      * @var Config
-     * @since 2.0.0
      */
     protected $eavConfig;
 
@@ -37,7 +35,6 @@ class CustomerSetup extends EavSetup
      * @param CacheInterface $cache
      * @param CollectionFactory $attrGroupCollectionFactory
      * @param Config $eavConfig
-     * @since 2.0.0
      */
     public function __construct(
         ModuleDataSetupInterface $setup,
@@ -56,7 +53,6 @@ class CustomerSetup extends EavSetup
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function installCustomerForms()
     {
@@ -126,7 +122,6 @@ class CustomerSetup extends EavSetup
      *
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function getDefaultEntities()
     {
@@ -489,7 +484,6 @@ class CustomerSetup extends EavSetup
      * Gets EAV configuration
      *
      * @return Config
-     * @since 2.0.0
      */
     public function getEavConfig()
     {

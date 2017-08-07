@@ -7,7 +7,7 @@
  */
 namespace Magento\Test\Integrity\Layout;
 
-class HandlesTest extends \PHPUnit_Framework_TestCase
+class HandlesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)

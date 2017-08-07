@@ -7,7 +7,6 @@ namespace Magento\Directory\Model\Currency\Import;
 
 /**
  * Currency rate import model (From www.webservicex.net)
- * @since 2.0.0
  */
 class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImport
 {
@@ -39,7 +38,6 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\HTTP\ZendClientFactory|null $zendClientFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
@@ -57,7 +55,6 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
      * @param string $currencyTo
      * @param int $retry
      * @return float|null
-     * @since 2.0.0
      */
     protected function _convert($currencyFrom, $currencyTo, $retry = 0)
     {

@@ -14,7 +14,6 @@ namespace Magento\Backend\Block\Widget;
  * @method string getRowClickCallback() getRowClickCallback()
  * @method \Magento\Backend\Block\Widget\Grid setRowClickCallback() setRowClickCallback(string $value)
  * @SuppressWarnings(PHPMD.TooManyFields)
- * @since 2.0.0
  */
 class Grid extends \Magento\Backend\Block\Widget
 {
@@ -22,61 +21,51 @@ class Grid extends \Magento\Backend\Block\Widget
      * Page and sorting var names
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_varNameLimit = 'limit';
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_varNamePage = 'page';
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_varNameSort = 'sort';
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_varNameDir = 'dir';
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_varNameFilter = 'filter';
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_defaultLimit = 20;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_defaultPage = 1;
 
     /**
      * @var bool|string
-     * @since 2.0.0
      */
     protected $_defaultSort = false;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_defaultDir = 'desc';
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_defaultFilter = [];
 
@@ -84,7 +73,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Empty grid text
      *
      * @var string|null
-     * @since 2.0.0
      */
     protected $_emptyText;
 
@@ -92,7 +80,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Empty grid text CSS class
      *
      * @var string|null
-     * @since 2.0.0
      */
     protected $_emptyTextCss = 'empty-text';
 
@@ -100,7 +87,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Pager visibility
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_pagerVisibility = true;
 
@@ -108,7 +94,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Massage block visibility
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_messageBlockVisibility = false;
 
@@ -116,7 +101,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Should parameters be saved in session
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_saveParametersInSession = false;
 
@@ -124,7 +108,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Count totals
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_countTotals = false;
 
@@ -132,25 +115,21 @@ class Grid extends \Magento\Backend\Block\Widget
      * Totals
      *
      * @var \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     protected $_varTotals;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Backend::widget/grid.phtml';
 
     /**
      * @var \Magento\Backend\Model\Session
-     * @since 2.0.0
      */
     protected $_backendSession;
 
     /**
      * @var \Magento\Backend\Helper\Data
-     * @since 2.0.0
      */
     protected $_backendHelper;
 
@@ -158,7 +137,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -173,7 +151,6 @@ class Grid extends \Magento\Backend\Block\Widget
     /**
      * @return void
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -211,7 +188,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @param \Magento\Framework\Data\Collection $collection
      * @return void
-     * @since 2.0.0
      */
     public function setCollection($collection)
     {
@@ -222,7 +198,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Get collection object
      *
      * @return \Magento\Framework\Data\Collection
-     * @since 2.0.0
      */
     public function getCollection()
     {
@@ -233,7 +208,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Retrieve column set block
      *
      * @return \Magento\Backend\Block\Widget\Grid\ColumnSet
-     * @since 2.0.0
      */
     public function getColumnSet()
     {
@@ -245,7 +219,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\View\Element\AbstractBlock|bool
-     * @since 2.0.0
      */
     public function getExportBlock()
     {
@@ -261,7 +234,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Retrieve list of grid columns
      *
      * @return array
-     * @since 2.0.0
      */
     public function getColumns()
     {
@@ -272,7 +244,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Count grid columns
      *
      * @return int
-     * @since 2.0.0
      */
     public function getColumnCount()
     {
@@ -284,7 +255,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @param string $columnId
      * @return \Magento\Framework\View\Element\AbstractBlock|bool
-     * @since 2.0.0
      */
     public function getColumn($columnId)
     {
@@ -296,7 +266,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @param mixed $data
      * @return $this
-     * @since 2.0.0
      */
     protected function _setFilterValues($data)
     {
@@ -321,7 +290,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return $this
-     * @since 2.0.0
      */
     protected function _addColumnFilterToCollection($column)
     {
@@ -344,7 +312,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return $this
-     * @since 2.0.0
      */
     protected function _setCollectionOrder($column)
     {
@@ -360,7 +327,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Get prepared collection
      *
      * @return \Magento\Framework\Data\Collection
-     * @since 2.0.0
      */
     public function getPreparedCollection()
     {
@@ -373,7 +339,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -412,7 +377,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Apply pagination to collection
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _preparePage()
     {
@@ -424,7 +388,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Initialize grid
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareGrid()
     {
@@ -455,7 +418,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Get massaction block
      *
      * @return bool|\Magento\Framework\View\Element\AbstractBlock
-     * @since 2.0.0
      */
     public function getMassactionBlock()
     {
@@ -466,7 +428,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Prepare grid filter buttons
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareFilterButtons()
     {
@@ -500,7 +461,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Initialize grid before rendering
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -512,7 +472,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Retrieve limit request key
      *
      * @return string
-     * @since 2.0.0
      */
     public function getVarNameLimit()
     {
@@ -523,7 +482,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Retrieve page request key
      *
      * @return string
-     * @since 2.0.0
      */
     public function getVarNamePage()
     {
@@ -534,7 +492,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Retrieve sort request key
      *
      * @return string
-     * @since 2.0.0
      */
     public function getVarNameSort()
     {
@@ -545,7 +502,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Retrieve sort direction request key
      *
      * @return string
-     * @since 2.0.0
      */
     public function getVarNameDir()
     {
@@ -556,7 +512,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Retrieve filter request key
      *
      * @return string
-     * @since 2.0.0
      */
     public function getVarNameFilter()
     {
@@ -568,7 +523,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setVarNameLimit($name)
     {
@@ -581,7 +535,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setVarNamePage($name)
     {
@@ -594,7 +547,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setVarNameSort($name)
     {
@@ -607,7 +559,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setVarNameDir($name)
     {
@@ -620,7 +571,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setVarNameFilter($name)
     {
@@ -633,7 +583,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @param bool $visible
      * @return $this
-     * @since 2.0.0
      */
     public function setPagerVisibility($visible = true)
     {
@@ -646,7 +595,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getPagerVisibility()
     {
@@ -658,7 +606,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @param bool $visible
      * @return void
-     * @since 2.0.0
      */
     public function setMessageBlockVisibility($visible = true)
     {
@@ -670,7 +617,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getMessageBlockVisibility()
     {
@@ -682,7 +628,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @param int $limit
      * @return $this
-     * @since 2.0.0
      */
     public function setDefaultLimit($limit)
     {
@@ -695,7 +640,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @param int $page
      * @return $this
-     * @since 2.0.0
      */
     public function setDefaultPage($page)
     {
@@ -708,7 +652,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @param string $sort
      * @return $this
-     * @since 2.0.0
      */
     public function setDefaultSort($sort)
     {
@@ -721,7 +664,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @param string $dir
      * @return $this
-     * @since 2.0.0
      */
     public function setDefaultDir($dir)
     {
@@ -734,7 +676,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @param string $filter
      * @return $this
-     * @since 2.0.0
      */
     public function setDefaultFilter($filter)
     {
@@ -746,7 +687,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Check whether grid container should be displayed
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canDisplayContainer()
     {
@@ -760,7 +700,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Retrieve grid reload url
      *
      * @return string;
-     * @since 2.0.0
      */
     public function getGridUrl()
     {
@@ -773,7 +712,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @param array $params url parameters
      * @return string current grid url
-     * @since 2.0.0
      */
     public function getAbsoluteGridUrl($params = [])
     {
@@ -786,7 +724,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * @param string $paramName
      * @param mixed $default
      * @return mixed
-     * @since 2.0.0
      */
     public function getParam($paramName, $default = null)
     {
@@ -809,7 +746,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @param bool $flag
      * @return $this
-     * @since 2.0.0
      */
     public function setSaveParametersInSession($flag)
     {
@@ -821,7 +757,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Retrieve grid javascript object name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getJsObjectName()
     {
@@ -833,7 +768,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @param bool $count
      * @return $this
-     * @since 2.0.0
      */
     public function setCountTotals($count = true)
     {
@@ -846,7 +780,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getCountTotals()
     {
@@ -858,7 +791,6 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @param \Magento\Framework\DataObject $totals
      * @return void
-     * @since 2.0.0
      */
     public function setTotals(\Magento\Framework\DataObject $totals)
     {
@@ -869,7 +801,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Retrieve totals
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getTotals()
     {
@@ -880,7 +811,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Generate list of grid buttons
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMainButtonsHtml()
     {
@@ -896,7 +826,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Generate reset button
      *
      * @return string
-     * @since 2.0.0
      */
     public function getResetFilterButtonHtml()
     {
@@ -907,7 +836,6 @@ class Grid extends \Magento\Backend\Block\Widget
      * Generate search button
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSearchButtonHtml()
     {

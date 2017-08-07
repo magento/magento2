@@ -10,20 +10,17 @@ use Magento\Sales\Model\Order\Status\History;
 /**
  * Class Validator
  * @package Magento\Sales\Model\Order\Status\History
- * @since 2.0.0
  */
 class Validator
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $requiredFields = ['parent_id' => 'Order Id'];
 
     /**
      * @param History $history
      * @return array
-     * @since 2.0.0
      */
     public function validate(History $history)
     {

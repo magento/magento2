@@ -9,7 +9,6 @@ namespace Magento\Sales\Model\ResourceModel\Report\Order;
  * Order entity resource model with aggregation by created at
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Createdat extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
 {
@@ -17,7 +16,6 @@ class Createdat extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
      * Model initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -30,7 +28,6 @@ class Createdat extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
      * @param string|int|\DateTime|array|null $from
      * @param string|int|\DateTime|array|null $to
      * @return $this
-     * @since 2.0.0
      */
     public function aggregate($from = null, $to = null)
     {
@@ -47,7 +44,6 @@ class Createdat extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
      * @throws \Exception
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     protected function _aggregateByField($aggregationField, $from, $to)
     {

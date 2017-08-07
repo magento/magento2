@@ -11,19 +11,16 @@ use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 /**
  * Class \Magento\CatalogImportExport\Model\Import\Product\Validator\Website
  *
- * @since 2.0.0
  */
 class Website extends AbstractImportValidator implements RowValidatorInterface
 {
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
-     * @since 2.0.0
      */
     protected $storeResolver;
 
     /**
      * @param \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver
-     * @since 2.0.0
      */
     public function __construct(\Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver)
     {
@@ -32,7 +29,6 @@ class Website extends AbstractImportValidator implements RowValidatorInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function isValid($value)
     {

@@ -14,31 +14,26 @@ use Magento\Framework\View\ConfigInterface;
 /**
  * Class \Magento\Catalog\Model\Product\Image\Cache
  *
- * @since 2.0.0
  */
 class Cache
 {
     /**
      * @var ConfigInterface
-     * @since 2.0.0
      */
     protected $viewConfig;
 
     /**
      * @var ThemeCollection
-     * @since 2.0.0
      */
     protected $themeCollection;
 
     /**
      * @var ImageHelper
-     * @since 2.0.0
      */
     protected $imageHelper;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $data = [];
 
@@ -46,7 +41,6 @@ class Cache
      * @param ConfigInterface $viewConfig
      * @param ThemeCollection $themeCollection
      * @param ImageHelper $imageHelper
-     * @since 2.0.0
      */
     public function __construct(
         ConfigInterface $viewConfig,
@@ -64,7 +58,6 @@ class Cache
      * Collect data for 'Magento_Catalog' module from /etc/view.xml files.
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getData()
     {
@@ -89,7 +82,6 @@ class Cache
      *
      * @param Product $product
      * @return $this
-     * @since 2.0.0
      */
     public function generate(Product $product)
     {
@@ -113,7 +105,6 @@ class Cache
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function processImageData(Product $product, array $imageData, $file)
     {

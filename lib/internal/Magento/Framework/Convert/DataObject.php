@@ -14,7 +14,6 @@ namespace Magento\Framework\Convert;
 /**
  * Class \Magento\Framework\Convert\DataObject
  *
- * @since 2.0.0
  */
 class DataObject
 {
@@ -27,7 +26,6 @@ class DataObject
      *
      * @param array $data input data
      * @return array Data converted to an array
-     * @since 2.0.0
      */
     public function convertDataToArray($data)
     {
@@ -48,7 +46,6 @@ class DataObject
      * @param mixed $obj array or object to convert
      * @param array $objects array of object hashes used for cycle detection
      * @return array|string Converted object or CYCLE_DETECTED_MARK
-     * @since 2.0.0
      */
     protected function _convertObjectToArray($obj, &$objects = [])
     {
@@ -92,7 +89,6 @@ class DataObject
      * @param string|callable $idField
      * @param string|callable $valueField
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray(array $items, $idField, $valueField)
     {
@@ -117,7 +113,6 @@ class DataObject
      * @param string|callable $idField
      * @param string|callable $valueField
      * @return array
-     * @since 2.0.0
      */
     public function toOptionHash(array $items, $idField, $valueField)
     {
@@ -138,7 +133,6 @@ class DataObject
      * @param mixed $item
      * @param string|callable $field
      * @return mixed
-     * @since 2.0.0
      */
     protected function _invokeGetter($item, $field)
     {

@@ -11,13 +11,11 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Cache helper
- * @since 2.0.0
  */
 class Cache extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $pathToCacheFile = 'partners';
 
@@ -25,7 +23,6 @@ class Cache extends \Magento\Framework\App\Helper\AbstractHelper
      * Configuration cache model
      *
      * @var \Magento\Framework\Config\CacheInterface
-     * @since 2.0.0
      */
     protected $cache;
 
@@ -39,7 +36,6 @@ class Cache extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param SerializerInterface $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -55,7 +51,6 @@ class Cache extends \Magento\Framework\App\Helper\AbstractHelper
      * Load partners from cache
      *
      * @return array
-     * @since 2.0.0
      */
     public function loadPartnersFromCache()
     {
@@ -71,7 +66,6 @@ class Cache extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $partners
      * @return bool
-     * @since 2.0.0
      */
     public function savePartnersToCache($partners)
     {
@@ -80,7 +74,6 @@ class Cache extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @return \Magento\Framework\Config\CacheInterface
-     * @since 2.0.0
      */
     public function getCache()
     {

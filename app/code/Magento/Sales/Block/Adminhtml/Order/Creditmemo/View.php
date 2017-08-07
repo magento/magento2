@@ -10,7 +10,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class View extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -18,7 +17,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -26,7 +24,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -41,7 +38,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Add & remove control buttons
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -121,7 +117,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve creditmemo model instance
      *
      * @return \Magento\Sales\Model\Order\Creditmemo
-     * @since 2.0.0
      */
     public function getCreditmemo()
     {
@@ -132,7 +127,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve text for header
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -158,7 +152,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve back url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -175,7 +168,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve capture url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCaptureUrl()
     {
@@ -186,7 +178,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve void url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getVoidUrl()
     {
@@ -197,7 +188,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve cancel url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCancelUrl()
     {
@@ -208,7 +198,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve email url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getEmailUrl()
     {
@@ -225,7 +214,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve print url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPrintUrl()
     {
@@ -237,7 +225,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      *
      * @param bool $flag
      * @return \Magento\Backend\Block\Widget\Container|$this
-     * @since 2.0.0
      */
     public function updateBackButtonUrl($flag)
     {
@@ -264,7 +251,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      *
      * @param string $resourceId
      * @return bool
-     * @since 2.0.0
      */
     public function _isAllowedAction($resourceId)
     {

@@ -10,7 +10,6 @@ use Magento\Framework\Phrase;
 
 /**
  * Session Validator
- * @since 2.0.0
  */
 class Validator implements ValidatorInterface
 {
@@ -34,25 +33,21 @@ class Validator implements ValidatorInterface
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress
-     * @since 2.0.0
      */
     protected $_remoteAddress;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_skippedAgentList;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_scopeType;
 
@@ -61,7 +56,6 @@ class Validator implements ValidatorInterface
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param string $scopeType
      * @param array $skippedUserAgentList
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -81,7 +75,6 @@ class Validator implements ValidatorInterface
      * @param SessionManagerInterface $session
      * @return void
      * @throws SessionException
-     * @since 2.0.0
      */
     public function validate(SessionManagerInterface $session)
     {
@@ -104,7 +97,6 @@ class Validator implements ValidatorInterface
      * @return bool
      * @throws SessionException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _validate()
     {
@@ -175,7 +167,6 @@ class Validator implements ValidatorInterface
      * Prepare session environment data for validation
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getSessionEnvironment()
     {

@@ -16,7 +16,6 @@ use Magento\Framework\View\Helper\PathPattern;
 
 /**
  * Source of view files that explicitly override base files introduced by modules
- * @since 2.0.0
  */
 class Base implements CollectorInterface
 {
@@ -24,7 +23,6 @@ class Base implements CollectorInterface
      * Pattern helper
      *
      * @var PathPattern
-     * @since 2.0.0
      */
     private $pathPatternHelper;
 
@@ -32,7 +30,6 @@ class Base implements CollectorInterface
      * File factory
      *
      * @var FileFactory
-     * @since 2.0.0
      */
     private $fileFactory;
 
@@ -40,7 +37,6 @@ class Base implements CollectorInterface
      * Directory factory
      *
      * @var ReadFactory
-     * @since 2.0.0
      */
     private $readDirFactory;
 
@@ -48,7 +44,6 @@ class Base implements CollectorInterface
      * Component registrar
      *
      * @var ComponentRegistrarInterface
-     * @since 2.0.0
      */
     private $componentRegistrar;
 
@@ -56,7 +51,6 @@ class Base implements CollectorInterface
      * Sub-directory path
      *
      * @var string
-     * @since 2.0.0
      */
     private $subDir;
 
@@ -68,7 +62,6 @@ class Base implements CollectorInterface
      * @param ComponentRegistrarInterface $componentRegistrar
      * @param PathPattern $pathPatternHelper
      * @param string $subDir
-     * @since 2.0.0
      */
     public function __construct(
         FileFactory $fileFactory,
@@ -90,7 +83,6 @@ class Base implements CollectorInterface
      * @param ThemeInterface $theme
      * @param string $filePath
      * @return \Magento\Framework\View\File[]
-     * @since 2.0.0
      */
     public function getFiles(ThemeInterface $theme, $filePath)
     {

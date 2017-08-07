@@ -13,7 +13,6 @@ namespace Magento\Config\Model\Config\Backend\Admin\Password\Link;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Expirationperiod extends \Magento\Framework\App\Config\Value
 {
@@ -21,7 +20,6 @@ class Expirationperiod extends \Magento\Framework\App\Config\Value
      * Validate expiration period value before saving
      *
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {

@@ -12,7 +12,6 @@ use Magento\Framework\Exception\LocalizedException;
  * Catalog composite product configuration controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 abstract class Cart extends \Magento\Backend\App\Action
 {
@@ -27,7 +26,6 @@ abstract class Cart extends \Magento\Backend\App\Action
      * Customer we're working with
      *
      * @var int id of the customer
-     * @since 2.0.0
      */
     protected $_customerId;
 
@@ -35,7 +33,6 @@ abstract class Cart extends \Magento\Backend\App\Action
      * Quote we're working with
      *
      * @var \Magento\Quote\Model\Quote
-     * @since 2.0.0
      */
     protected $_quote = null;
 
@@ -43,19 +40,16 @@ abstract class Cart extends \Magento\Backend\App\Action
      * Quote item we're working with
      *
      * @var \Magento\Quote\Model\Quote\Item
-     * @since 2.0.0
      */
     protected $_quoteItem = null;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
     /**
      * @var \Magento\Quote\Model\QuoteFactory
-     * @since 2.0.0
      */
     protected $quoteFactory;
 
@@ -63,7 +57,6 @@ abstract class Cart extends \Magento\Backend\App\Action
      * @param Action\Context $context
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -80,7 +73,6 @@ abstract class Cart extends \Magento\Backend\App\Action
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _initData()
     {

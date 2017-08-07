@@ -12,7 +12,6 @@ use Magento\Framework\App\DeploymentConfig;
 /**
  * Class \Magento\Setup\Model\Navigation
  *
- * @since 2.0.0
  */
 class Navigation
 {
@@ -23,28 +22,22 @@ class Navigation
     const NAV_UPDATER = 'navUpdater';
     /**#@- */
 
-    /**
-     * @var array
-     * @since 2.0.0
-     */
+    /**#@- */
     private $navStates;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $navType;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $titles;
 
     /**
      * @param ServiceLocatorInterface $serviceLocator
      * @param DeploymentConfig $deploymentConfig
-     * @since 2.0.0
      */
     public function __construct(ServiceLocatorInterface $serviceLocator, DeploymentConfig $deploymentConfig)
     {
@@ -61,7 +54,6 @@ class Navigation
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -70,7 +62,6 @@ class Navigation
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getData()
     {
@@ -83,7 +74,6 @@ class Navigation
      * Returns only items with 'nav' equal to TRUE
      *
      * @return array
-     * @since 2.0.0
      */
     public function getMenuItems()
     {
@@ -101,7 +91,6 @@ class Navigation
      * Returns only items with 'main' equal to TRUE
      *
      * @return array
-     * @since 2.0.0
      */
     public function getMainItems()
     {
@@ -118,7 +107,6 @@ class Navigation
      * Returns titles of the navigation pages
      *
      * @return array
-     * @since 2.0.0
      */
     public function getTitles()
     {

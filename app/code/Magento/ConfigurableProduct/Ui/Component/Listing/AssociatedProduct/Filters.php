@@ -12,26 +12,22 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Filters implements ObserverInterface
 {
     /**
      * @var FilterFactory
-     * @since 2.0.0
      */
     protected $filterFactory;
 
     /**
      * @var CollectionFactory
-     * @since 2.0.0
      */
     protected $attributeCollectionFactory;
 
     /**
      * @param FilterFactory $filterFactory
      * @param CollectionFactory $attributeCollectionFactory
-     * @since 2.0.0
      */
     public function __construct(
         FilterFactory $filterFactory,
@@ -43,7 +39,6 @@ class Filters implements ObserverInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function update(UiComponentInterface $component)
     {
@@ -64,7 +59,6 @@ class Filters implements ObserverInterface
     /**
      * @param array $attributeCodes
      * @return mixed
-     * @since 2.0.0
      */
     protected function getAttributes($attributeCodes)
     {

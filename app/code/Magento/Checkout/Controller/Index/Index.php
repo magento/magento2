@@ -9,7 +9,6 @@ namespace Magento\Checkout\Controller\Index;
 /**
  * Class \Magento\Checkout\Controller\Index\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Checkout\Controller\Onepage
 {
@@ -17,7 +16,6 @@ class Index extends \Magento\Checkout\Controller\Onepage
      * Checkout page
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

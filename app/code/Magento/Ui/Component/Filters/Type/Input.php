@@ -9,7 +9,6 @@ use Magento\Ui\Component\Form\Element\Input as ElementInput;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Input extends AbstractFilter
 {
@@ -21,7 +20,6 @@ class Input extends AbstractFilter
      * Wrapped component
      *
      * @var ElementInput
-     * @since 2.0.0
      */
     protected $wrappedComponent;
 
@@ -29,7 +27,6 @@ class Input extends AbstractFilter
      * Prepare component configuration
      *
      * @return void
-     * @since 2.0.0
      */
     public function prepare()
     {
@@ -63,7 +60,6 @@ class Input extends AbstractFilter
      * Apply filter
      *
      * @return void
-     * @since 2.0.0
      */
     protected function applyFilter()
     {

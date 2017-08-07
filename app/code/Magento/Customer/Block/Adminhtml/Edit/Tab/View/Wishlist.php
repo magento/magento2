@@ -11,7 +11,6 @@ use Magento\Customer\Controller\RegistryConstants;
  * Adminhtml customer view wishlist block
  *
  * @api
- * @since 2.0.0
  */
 class Wishlist extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -19,7 +18,6 @@ class Wishlist extends \Magento\Backend\Block\Widget\Grid\Extended
      * Core registry.
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -27,7 +25,6 @@ class Wishlist extends \Magento\Backend\Block\Widget\Grid\Extended
      * Wishlist item collection factory.
      *
      * @var \Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory
-     * @since 2.0.0
      */
     protected $_collectionFactory;
 
@@ -39,7 +36,6 @@ class Wishlist extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -57,7 +53,6 @@ class Wishlist extends \Magento\Backend\Block\Widget\Grid\Extended
      * Initial settings.
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -73,7 +68,6 @@ class Wishlist extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare collection.
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -92,7 +86,6 @@ class Wishlist extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare columns.
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -141,7 +134,6 @@ class Wishlist extends \Magento\Backend\Block\Widget\Grid\Extended
      * @return bool
      *
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getHeadersVisibility()
     {
@@ -150,7 +142,6 @@ class Wishlist extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getRowUrl($row)
     {

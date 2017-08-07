@@ -9,7 +9,6 @@ namespace Magento\Backend\Model;
  * Backend user session
  *
  * @api
- * @since 2.0.0
  */
 class Session extends \Magento\Framework\Session\SessionManager
 {
@@ -19,7 +18,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param string $path
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function isValidForPath($path)
     {
