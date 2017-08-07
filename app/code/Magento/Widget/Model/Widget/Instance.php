@@ -115,6 +115,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * Instance of serializer interface.
      *
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 

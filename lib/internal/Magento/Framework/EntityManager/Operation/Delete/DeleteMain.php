@@ -11,21 +11,25 @@ use Magento\Framework\EntityManager\Db\DeleteRow;
 
 /**
  * Class DeleteMain
+ * @since 2.1.0
  */
 class DeleteMain
 {
     /**
      * @var TypeResolver
+     * @since 2.1.0
      */
     private $typeResolver;
 
     /**
      * @var HydratorPool
+     * @since 2.1.0
      */
     private $hydratorPool;
 
     /**
      * @var DeleteRow
+     * @since 2.1.0
      */
     private $deleteRow;
 
@@ -33,6 +37,7 @@ class DeleteMain
      * @param TypeResolver $typeResolver
      * @param HydratorPool $hydratorPool
      * @param DeleteRow $deleteRow
+     * @since 2.1.0
      */
     public function __construct(
         TypeResolver $typeResolver,
@@ -49,6 +54,7 @@ class DeleteMain
      * @param array $arguments
      * @return object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function execute($entity, $arguments = [])
     {

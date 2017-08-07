@@ -18,6 +18,7 @@ use Magento\Framework\EntityManager\EntityManager;
 /**
  * Service which allows to sync product widget information, such as product id with db. In order to reuse this info
  * on different devices
+ * @since 2.2.0
  */
 class Synchronizer
 {
@@ -32,31 +33,37 @@ class Synchronizer
 
     /**
      * @var Session
+     * @since 2.2.0
      */
     private $session;
 
     /**
      * @var Visitor
+     * @since 2.2.0
      */
     private $visitor;
 
     /**
      * @var ProductFrontendActionFactory
+     * @since 2.2.0
      */
     private $productFrontendActionFactory;
 
     /**
      * @var EntityManager
+     * @since 2.2.0
      */
     private $entityManager;
 
     /**
      * @var CollectionFactory
+     * @since 2.2.0
      */
     private $collectionFactory;
 
     /**
      * @var FrontendStorageConfigurationPool
+     * @since 2.2.0
      */
     private $frontendStorageConfigurationPool;
 
@@ -67,6 +74,7 @@ class Synchronizer
      * @param EntityManager $entityManager
      * @param CollectionFactory $collectionFactory
      * @param FrontendStorageConfigurationPool $frontendStorageConfigurationPool
+     * @since 2.2.0
      */
     public function __construct(
         Session $session,
@@ -91,6 +99,7 @@ class Synchronizer
      *
      * @param string $namespace
      * @return int
+     * @since 2.2.0
      */
     private function getLifeTimeByNamespace($namespace)
     {
@@ -114,6 +123,7 @@ class Synchronizer
      * @param array $productsData (product action data, that came from frontend)
      * @param string $typeId namespace (type of action)
      * @return array
+     * @since 2.2.0
      */
     private function filterNewestActions(array $productsData, $typeId)
     {
@@ -132,6 +142,7 @@ class Synchronizer
      *
      * @param array $actions
      * @return array
+     * @since 2.2.0
      */
     private function getProductIdsByActions(array $actions)
     {
@@ -152,6 +163,7 @@ class Synchronizer
      * @param array $productsData
      * @param string $typeId
      * @return void
+     * @since 2.2.0
      */
     public function syncActions(array $productsData, $typeId)
     {
@@ -194,6 +206,7 @@ class Synchronizer
      *
      * @param string $typeId
      * @return Collection
+     * @since 2.2.0
      */
     public function getActionsByType($typeId)
     {
@@ -207,6 +220,7 @@ class Synchronizer
      * Find and fetch product actions (id and timestamp)  (recently_viewed or recently_compared)
      *
      * @return Collection
+     * @since 2.2.0
      */
     public function getAllActions()
     {

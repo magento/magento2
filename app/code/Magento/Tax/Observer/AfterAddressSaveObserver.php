@@ -13,6 +13,10 @@ use Magento\Framework\Module\Manager;
 use Magento\PageCache\Model\Config;
 use Magento\Tax\Helper\Data;
 
+/**
+ * Class \Magento\Tax\Observer\AfterAddressSaveObserver
+ *
+ */
 class AfterAddressSaveObserver implements ObserverInterface
 {
     /**
@@ -97,6 +101,7 @@ class AfterAddressSaveObserver implements ObserverInterface
      *
      * @param Address $address
      * @return bool
+     * @since 2.1.0
      */
     protected function isDefaultBilling($address)
     {
@@ -110,6 +115,7 @@ class AfterAddressSaveObserver implements ObserverInterface
      *
      * @param Address $address
      * @return bool
+     * @since 2.1.0
      */
     protected function isDefaultShipping($address)
     {

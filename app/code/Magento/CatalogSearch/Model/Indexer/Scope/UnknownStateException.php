@@ -12,6 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
  * Exception for situation where used state which is not defined in configuration
  *
  * @api
+ * @since 2.2.0
  */
 class UnknownStateException extends LocalizedException
 {

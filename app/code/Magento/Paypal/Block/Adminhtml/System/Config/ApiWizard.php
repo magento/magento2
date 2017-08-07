@@ -81,6 +81,7 @@ class ApiWizard extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @param array $requestData
      * @return string
+     * @since 2.1.0
      */
     private function createQuery(array $requestData)
     {

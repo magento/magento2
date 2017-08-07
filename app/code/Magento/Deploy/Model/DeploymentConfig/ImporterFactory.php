@@ -12,6 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
  * Factory for importers.
  *
  * Creates object instance that implements Magento\Framework\App\DeploymentConfig\ImporterInterface interface.
+ * @since 2.2.0
  */
 class ImporterFactory
 {
@@ -19,11 +20,13 @@ class ImporterFactory
      * Magento object manager.
      *
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager the magento object manager
+     * @since 2.2.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -37,6 +40,7 @@ class ImporterFactory
      * @param array $data the array with some additional configuration data for creation of object instance
      * @return ImporterInterface the created object instance
      * @throws \InvalidArgumentException is thrown when object instance does not implement ImporterInterface
+     * @since 2.2.0
      */
     public function create($className, array $data = [])
     {

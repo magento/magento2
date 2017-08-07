@@ -12,6 +12,7 @@ use Magento\Sales\Model\ValidatorResultInterface;
 
 /**
  * Interface ShipmentValidatorInterface
+ * @since 2.1.2
  */
 interface ShipmentValidatorInterface
 {
@@ -20,6 +21,7 @@ interface ShipmentValidatorInterface
      * @param ValidatorInterface[] $validators
      * @return ValidatorResultInterface
      * @throws DocumentValidationException
+     * @since 2.1.2
      */
     public function validate(ShipmentInterface $shipment, array $validators);
 }

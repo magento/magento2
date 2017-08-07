@@ -8,15 +8,22 @@ namespace Magento\Theme\Model\Indexer\Design\Config;
 use Magento\Framework\Indexer\FieldsetInterface;
 use Magento\Theme\Model\Design\Config\MetadataProviderInterface;
 
+/**
+ * Class \Magento\Theme\Model\Indexer\Design\Config\FieldsProvider
+ *
+ * @since 2.1.0
+ */
 class FieldsProvider implements FieldsetInterface
 {
     /**
      * @var MetadataProviderInterface
+     * @since 2.1.0
      */
     protected $metadataProvider;
 
     /**
      * @param MetadataProviderInterface $metadataProvider
+     * @since 2.1.0
      */
     public function __construct(
         MetadataProviderInterface $metadataProvider
@@ -29,6 +36,7 @@ class FieldsProvider implements FieldsetInterface
      *
      * @param array $data
      * @return array
+     * @since 2.1.0
      */
     public function addDynamicData(array $data)
     {
@@ -43,6 +51,7 @@ class FieldsProvider implements FieldsetInterface
      *
      * @param array $metadata
      * @return array
+     * @since 2.1.0
      */
     protected function convert(array $metadata)
     {
@@ -67,6 +76,7 @@ class FieldsProvider implements FieldsetInterface
      * @param array $dataFields
      * @param array $searchableFields
      * @return array
+     * @since 2.1.0
      */
     protected function merge(array $dataFields, array $searchableFields)
     {

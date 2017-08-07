@@ -13,6 +13,11 @@ use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\PageCache\Model\VclTemplateLocatorInterface;
 use Magento\PageCache\Exception\UnsupportedVarnishVersion;
 
+/**
+ * Class \Magento\PageCache\Model\Varnish\VclTemplateLocator
+ *
+ * @since 2.2.0
+ */
 class VclTemplateLocator implements VclTemplateLocatorInterface
 {
     /**
@@ -37,6 +42,7 @@ class VclTemplateLocator implements VclTemplateLocatorInterface
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $supportedVarnishVersions = [
         self::VARNISH_SUPPORTED_VERSION_4 => self::VARNISH_4_CONFIGURATION_PATH,
@@ -45,16 +51,19 @@ class VclTemplateLocator implements VclTemplateLocatorInterface
 
     /**
      * @var Reader
+     * @since 2.2.0
      */
     private $reader;
 
     /**
      * @var ReadFactory
+     * @since 2.2.0
      */
     private $readFactory;
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.2.0
      */
     private $scopeConfig;
 
@@ -64,6 +73,7 @@ class VclTemplateLocator implements VclTemplateLocatorInterface
      * @param Reader $reader
      * @param ReadFactory $readFactory
      * @param ScopeConfigInterface $scopeConfig
+     * @since 2.2.0
      */
     public function __construct(Reader $reader, ReadFactory $readFactory, ScopeConfigInterface $scopeConfig)
     {
@@ -74,6 +84,7 @@ class VclTemplateLocator implements VclTemplateLocatorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getTemplate($version)
     {
@@ -91,6 +102,7 @@ class VclTemplateLocator implements VclTemplateLocatorInterface
      * @param int $version Varnish version
      * @return string
      * @throws UnsupportedVarnishVersion
+     * @since 2.2.0
      */
     private function getVclTemplatePath($version)
     {

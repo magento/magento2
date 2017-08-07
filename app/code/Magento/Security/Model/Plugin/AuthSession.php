@@ -10,26 +10,31 @@ use Magento\Security\Model\AdminSessionsManager;
 
 /**
  * Magento\Backend\Model\Auth\Session decorator
+ * @since 2.1.0
  */
 class AuthSession
 {
     /**
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.1.0
      */
     private $request;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.1.0
      */
     private $messageManager;
 
     /**
      * @var AdminSessionsManager
+     * @since 2.1.0
      */
     private $sessionsManager;
 
     /**
      * @var \Magento\Security\Model\SecurityCookie
+     * @since 2.1.0
      */
     protected $securityCookie;
 
@@ -38,6 +43,7 @@ class AuthSession
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param AdminSessionsManager $sessionsManager
      * @param \Magento\Security\Model\SecurityCookie $securityCookie
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -57,6 +63,7 @@ class AuthSession
      * @param Session $session
      * @param \Closure $proceed
      * @return mixed
+     * @since 2.1.0
      */
     public function aroundProlong(Session $session, \Closure $proceed)
     {
@@ -74,6 +81,7 @@ class AuthSession
      * Add user logout notification
      *
      * @return $this
+     * @since 2.1.0
      */
     private function addUserLogoutNotification()
     {
@@ -92,6 +100,7 @@ class AuthSession
      * Check if a request is AJAX request
      *
      * @return bool
+     * @since 2.1.0
      */
     private function isAjaxRequest()
     {

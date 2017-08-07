@@ -92,6 +92,7 @@ class Page extends Layout
 
     /**
      * @var View\EntitySpecificHandlesList
+     * @since 2.2.0
      */
     private $entitySpecificHandlesList;
 

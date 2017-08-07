@@ -17,31 +17,37 @@ use Magento\Store\Model\StoreManagerInterface;
  * This strategy handles attributes which comply with two criteria:
  *   - The filter for dropdown or multi-select attribute
  *   - The filter is Term filter
+ * @since 2.2.0
  */
 class TermDropdownStrategy implements FilterStrategyInterface
 {
     /**
      * @var AliasResolver
+     * @since 2.2.0
      */
     private $aliasResolver;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var EavConfig
+     * @since 2.2.0
      */
     private $eavConfig;
 
     /**
      * @var ResourceConnection
+     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.2.0
      */
     private $scopeConfig;
 
@@ -52,6 +58,7 @@ class TermDropdownStrategy implements FilterStrategyInterface
      * @param ScopeConfigInterface $scopeConfig
      * @param AliasResolver $aliasResolver
      * @SuppressWarnings(Magento.TypeDuplication)
+     * @since 2.2.0
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -70,6 +77,7 @@ class TermDropdownStrategy implements FilterStrategyInterface
     /**
      * {@inheritDoc}
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.2.0
      */
     public function apply(
         \Magento\Framework\Search\Request\FilterInterface $filter,
@@ -106,6 +114,7 @@ class TermDropdownStrategy implements FilterStrategyInterface
      * @param string $field
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.2.0
      */
     private function getAttributeByCode($field)
     {
@@ -114,6 +123,7 @@ class TermDropdownStrategy implements FilterStrategyInterface
 
     /**
      * @return bool
+     * @since 2.2.0
      */
     private function isAddStockFilter()
     {

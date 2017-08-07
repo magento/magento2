@@ -8,6 +8,11 @@ namespace Magento\Framework\Message;
 
 use Magento\Framework\Exception\RuntimeException;
 
+/**
+ * Interface \Magento\Framework\Message\ExceptionMessageFactoryInterface
+ *
+ * @since 2.2.0
+ */
 interface ExceptionMessageFactoryInterface
 {
     /**
@@ -17,6 +22,7 @@ interface ExceptionMessageFactoryInterface
      * @param string $type
      * @return MessageInterface
      * @throws RuntimeException
+     * @since 2.2.0
      */
     public function createMessage(\Exception $exception, $type = MessageInterface::TYPE_ERROR);
 }

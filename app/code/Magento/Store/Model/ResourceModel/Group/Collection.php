@@ -69,6 +69,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Filter to discard default group and groups with assigned category
      *
      * @return $this
+     * @since 2.2.0
      */
     public function setWithoutAssignedCategoryFilter()
     {

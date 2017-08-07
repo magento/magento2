@@ -5,6 +5,10 @@
  */
 namespace Magento\Checkout\Block\Cart;
 
+/**
+ * Class \Magento\Checkout\Block\Cart\LayoutProcessor
+ *
+ */
 class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcessorInterface
 {
     /**
@@ -29,6 +33,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
 
     /**
      * @var \Magento\Directory\Model\TopDestinationCountries
+     * @since 2.2.0
      */
     private $topDestinationCountries;
 

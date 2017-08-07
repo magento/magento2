@@ -11,28 +11,33 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 
 /**
  * Provide list of swatch attributes for product.
+ * @since 2.1.6
  */
 class SwatchAttributesProvider
 {
     /**
      * @var Configurable
+     * @since 2.1.6
      */
     private $typeConfigurable;
 
     /**
      * @var SwatchAttributeCodes
+     * @since 2.1.6
      */
     private $swatchAttributeCodes;
 
     /**
      * Key is productId, value is list of attributes
      * @var Attribute[]
+     * @since 2.1.6
      */
     private $attributesPerProduct;
 
     /**
      * @param Configurable $typeConfigurable
      * @param SwatchAttributeCodes $swatchAttributeCodes
+     * @since 2.1.6
      */
     public function __construct(
         Configurable $typeConfigurable,
@@ -48,6 +53,7 @@ class SwatchAttributesProvider
      *
      * @param Product $product
      * @return Attribute[]
+     * @since 2.1.6
      */
     public function provide(Product $product)
     {

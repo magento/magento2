@@ -7,7 +7,7 @@ namespace Magento\Catalog\Model\ResourceModel\Category\Collection;
 
 /**
  * Class Factory
- * @deprecated
+ * @deprecated 2.1.0
  */
 class Factory
 {

@@ -13,6 +13,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Generates Product Frontend Action Section in Customer Data
+ * @since 2.2.0
  */
 class ProductFrontendActionSection implements SectionSourceInterface
 {
@@ -20,21 +21,25 @@ class ProductFrontendActionSection implements SectionSourceInterface
      * Identification of Type of a Product Frontend Action
      *
      * @var string
+     * @since 2.2.0
      */
     private $typeId;
 
     /**
      * @var Synchronizer
+     * @since 2.2.0
      */
     private $synchronizer;
 
     /**
      * @var LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 
     /**
      * @var Config
+     * @since 2.2.0
      */
     private $appConfig;
 
@@ -43,6 +48,7 @@ class ProductFrontendActionSection implements SectionSourceInterface
      * @param string $typeId Identification of Type of a Product Frontend Action
      * @param LoggerInterface $logger
      * @param Config $appConfig
+     * @since 2.2.0
      */
     public function __construct(
         Synchronizer $synchronizer,
@@ -60,6 +66,7 @@ class ProductFrontendActionSection implements SectionSourceInterface
      * Post Process collection data in order to eject all customer sensitive information
      *
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getSectionData()
     {

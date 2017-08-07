@@ -14,6 +14,7 @@ class Renderer extends Config\Renderer
 {
     /**
      * @var array
+     * @since 2.2.0
      */
     private static $processingTypes = ['css', 'less'];
 
@@ -110,6 +111,7 @@ class Renderer extends Config\Renderer
      *
      * @param \Magento\Framework\View\Asset\AssetInterface|\Magento\Framework\View\Asset\File $asset
      * @return string
+     * @since 2.2.0
      */
     protected function getAssetContentType(\Magento\Framework\View\Asset\AssetInterface $asset)
     {

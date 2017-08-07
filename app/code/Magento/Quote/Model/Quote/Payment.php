@@ -61,16 +61,19 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $additionalChecks;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var \Magento\Framework\Serialize\JsonValidator
+     * @since 2.2.0
      */
     private $jsonValidator;
 
@@ -209,6 +212,7 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      *
      * @param array $rawData
      * @return array
+     * @since 2.0.6
      */
     private function convertPaymentData(array $rawData)
     {

@@ -23,6 +23,7 @@ use Magento\Deploy\Service\DeployStaticContent;
  * Deploy static content command
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.2.0
  */
 class DeployStaticContentCommand extends Command
 {
@@ -33,16 +34,19 @@ class DeployStaticContentCommand extends Command
 
     /**
      * @var InputValidator
+     * @since 2.2.0
      */
     private $inputValidator;
 
     /**
      * @var ConsoleLoggerFactory
+     * @since 2.2.0
      */
     private $consoleLoggerFactory;
 
     /**
      * @var Options
+     * @since 2.2.0
      */
     private $options;
 
@@ -51,11 +55,13 @@ class DeployStaticContentCommand extends Command
      *
      * @var ObjectManagerInterface
      *
+     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @var \Magento\Framework\App\State
+     * @since 2.2.0
      */
     private $appState;
 
@@ -66,6 +72,7 @@ class DeployStaticContentCommand extends Command
      * @param ConsoleLoggerFactory  $consoleLoggerFactory
      * @param Options               $options
      * @param ObjectManagerProvider $objectManagerProvider
+     * @since 2.2.0
      */
     public function __construct(
         InputValidator $inputValidator,
@@ -85,6 +92,7 @@ class DeployStaticContentCommand extends Command
      * {@inheritdoc}
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.2.0
      */
     protected function configure()
     {
@@ -99,6 +107,7 @@ class DeployStaticContentCommand extends Command
      * {@inheritdoc}
      * @throws \InvalidArgumentException
      * @throws LocalizedException
+     * @since 2.2.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -150,6 +159,7 @@ class DeployStaticContentCommand extends Command
      * Mock Cache class with dummy implementation
      *
      * @return void
+     * @since 2.2.0
      */
     private function mockCache()
     {
@@ -162,6 +172,7 @@ class DeployStaticContentCommand extends Command
 
     /**
      * @return State
+     * @since 2.2.0
      */
     private function getAppState()
     {

@@ -12,6 +12,7 @@ use Magento\Store\Model\ResourceModel\Group\Collection as GroupCollection;
 
 /**
  * System message about not filled required root category for store group
+ * @since 2.2.0
  */
 class EmptyGroupCategory implements \Magento\Framework\Notification\MessageInterface
 {
@@ -19,6 +20,7 @@ class EmptyGroupCategory implements \Magento\Framework\Notification\MessageInter
      * Store group collection.
      *
      * @var GroupCollection
+     * @since 2.2.0
      */
     private $collection;
 
@@ -26,6 +28,7 @@ class EmptyGroupCategory implements \Magento\Framework\Notification\MessageInter
      * URL builder.
      *
      * @var UrlInterface
+     * @since 2.2.0
      */
     private $urlBuilder;
 
@@ -33,12 +36,14 @@ class EmptyGroupCategory implements \Magento\Framework\Notification\MessageInter
      * List of store groups with unassigned root categories.
      *
      * @var GroupInterface[]
+     * @since 2.2.0
      */
     private $items = null;
 
     /**
      * @param GroupCollection $collection Store group collection
      * @param UrlInterface $urlBuilder URL builder
+     * @since 2.2.0
      */
     public function __construct(
         GroupCollection $collection,
@@ -54,6 +59,7 @@ class EmptyGroupCategory implements \Magento\Framework\Notification\MessageInter
      * Check whether all store groups has assigned root category.
      *
      * @return bool - true if at least one group does not have category
+     * @since 2.2.0
      */
     public function isDisplayed()
     {
@@ -62,6 +68,7 @@ class EmptyGroupCategory implements \Magento\Framework\Notification\MessageInter
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getIdentity()
     {
@@ -70,6 +77,7 @@ class EmptyGroupCategory implements \Magento\Framework\Notification\MessageInter
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getText()
     {
@@ -88,6 +96,7 @@ class EmptyGroupCategory implements \Magento\Framework\Notification\MessageInter
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getSeverity()
     {
@@ -98,6 +107,7 @@ class EmptyGroupCategory implements \Magento\Framework\Notification\MessageInter
      * Retrieves store groups which do not have assigned categories.
      *
      * @return GroupInterface[]
+     * @since 2.2.0
      */
     private function getItems()
     {

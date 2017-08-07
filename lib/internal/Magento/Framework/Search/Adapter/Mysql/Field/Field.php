@@ -6,6 +6,10 @@
 
 namespace Magento\Framework\Search\Adapter\Mysql\Field;
 
+/**
+ * Class \Magento\Framework\Search\Adapter\Mysql\Field\Field
+ *
+ */
 class Field implements FieldInterface
 {
     /**

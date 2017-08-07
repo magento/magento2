@@ -11,6 +11,7 @@ use Magento\Payment\Gateway\Response\HandlerInterface;
 
 /**
  * Class RiskDataHandler
+ * @since 2.1.0
  */
 class RiskDataHandler implements HandlerInterface
 {
@@ -26,11 +27,13 @@ class RiskDataHandler implements HandlerInterface
 
     /**
      * Risk data Review status
+     * @since 2.1.3
      */
     private static $statusReview = 'Review';
 
     /**
      * @var SubjectReader
+     * @since 2.1.0
      */
     private $subjectReader;
 
@@ -38,6 +41,7 @@ class RiskDataHandler implements HandlerInterface
      * Constructor
      *
      * @param SubjectReader $subjectReader
+     * @since 2.1.0
      */
     public function __construct(SubjectReader $subjectReader)
     {
@@ -50,6 +54,7 @@ class RiskDataHandler implements HandlerInterface
      * @param array $handlingSubject
      * @param array $response
      * @return void
+     * @since 2.1.0
      */
     public function handle(array $handlingSubject, array $response)
     {

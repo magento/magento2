@@ -9,6 +9,7 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
  * Vault Data Builder
+ * @since 2.1.0
  */
 class VaultDataBuilder implements BuilderInterface
 {
@@ -25,6 +26,7 @@ class VaultDataBuilder implements BuilderInterface
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     public function build(array $buildSubject)
     {

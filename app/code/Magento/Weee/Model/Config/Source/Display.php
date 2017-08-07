@@ -5,6 +5,10 @@
  */
 namespace Magento\Weee\Model\Config\Source;
 
+/**
+ * Class \Magento\Weee\Model\Config\Source\Display
+ *
+ */
 class Display implements \Magento\Framework\Option\ArrayInterface
 {
     /**

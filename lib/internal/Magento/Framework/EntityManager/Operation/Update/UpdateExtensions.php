@@ -10,22 +10,26 @@ use Magento\Framework\EntityManager\Operation\ExtensionPool;
 
 /**
  * Class UpdateExtensions
+ * @since 2.1.0
  */
 class UpdateExtensions
 {
     /**
      * @var TypeResolver
+     * @since 2.1.0
      */
     private $typeResolver;
 
     /**
      * @var ExtensionPool
+     * @since 2.1.0
      */
     private $extensionPool;
 
     /**
      * @param TypeResolver $typeResolver
      * @param ExtensionPool $extensionPool
+     * @since 2.1.0
      */
     public function __construct(
         TypeResolver $typeResolver,
@@ -40,6 +44,7 @@ class UpdateExtensions
      * @param array $arguments
      * @return object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function execute($entity, $arguments = [])
     {

@@ -9,17 +9,20 @@ use Magento\Sales\Api\Data\ShipmentInterface;
 
 /**
  * Class ShipmentValidator
+ * @since 2.1.2
  */
 class ShipmentValidator implements ShipmentValidatorInterface
 {
     /**
      * @var \Magento\Sales\Model\Validator
+     * @since 2.1.2
      */
     private $validator;
 
     /**
      * ShipmentValidator constructor.
      * @param \Magento\Sales\Model\Validator $validator
+     * @since 2.1.2
      */
     public function __construct(\Magento\Sales\Model\Validator $validator)
     {
@@ -28,6 +31,7 @@ class ShipmentValidator implements ShipmentValidatorInterface
 
     /**
      * @inheritdoc
+     * @since 2.1.2
      */
     public function validate(ShipmentInterface $entity, array $validators)
     {

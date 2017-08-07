@@ -9,6 +9,10 @@ namespace Magento\Framework\App\Route;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Class \Magento\Framework\App\Route\Config
+ *
+ */
 class Config implements ConfigInterface
 {
     /**
@@ -43,6 +47,7 @@ class Config implements ConfigInterface
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -149,7 +154,8 @@ class Config implements ConfigInterface
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getSerializer()
     {

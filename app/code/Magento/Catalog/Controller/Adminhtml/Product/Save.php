@@ -34,6 +34,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @var \Magento\Catalog\Api\CategoryLinkManagementInterface
+     * @since 2.1.0
      */
     protected $categoryLinkManagement;
 
@@ -44,11 +45,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @var DataPersistorInterface
+     * @since 2.1.0
      */
     protected $dataPersistor;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.1.0
      */
     private $storeManager;
 
@@ -216,6 +219,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param array $data
      * @param int $productId
      * @return void
+     * @since 2.1.0
      */
     protected function copyToStores($data, $productId)
     {
@@ -242,6 +246,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @return \Magento\Catalog\Api\CategoryLinkManagementInterface
+     * @since 2.1.0
      */
     private function getCategoryLinkManagement()
     {
@@ -254,7 +259,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @return StoreManagerInterface
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getStoreManager()
     {
@@ -269,7 +275,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * Retrieve data persistor
      *
      * @return DataPersistorInterface|mixed
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     protected function getDataPersistor()
     {

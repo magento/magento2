@@ -45,6 +45,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 {
     /**
      * @var ProductLinkRepositoryInterface
+     * @since 2.1.0
      */
     protected $linkRepository;
 
@@ -226,7 +227,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected $_filesystem;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
     protected $indexerRegistry;
 
     /**
@@ -271,22 +274,22 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected $metadataService;
 
-    /*
+    /**
      * @param \Magento\Catalog\Model\ProductLink\CollectionProvider
      */
     protected $entityCollectionProvider;
 
-    /*
+    /**
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider
      */
     protected $linkProvider;
 
-    /*
+    /**
      * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory
      */
     protected $productLinkFactory;
 
-    /*
+    /**
      * @param \Magento\Catalog\Api\Data\ProductLinkExtensionFactory
      */
     protected $productLinkExtensionFactory;
@@ -334,11 +337,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @var \Magento\Catalog\Model\Product\Gallery\Processor
+     * @since 2.1.0
      */
     protected $mediaGalleryProcessor;
 
     /**
      * @var Product\LinkTypeProvider
+     * @since 2.1.0
      */
     protected $linkTypeProvider;
 
@@ -1490,6 +1495,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Checks whether product has Media Gallery attribute.
      *
      * @return bool
+     * @since 2.1.0
      */
     public function hasGalleryAttribute()
     {
@@ -2304,6 +2310,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Check whether stock status changed
      *
      * @return bool
+     * @since 2.1.0
      */
     private function isStockStatusChanged()
     {
@@ -2589,6 +2596,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Identifier getter
      *
      * @return int
+     * @since 2.1.0
      */
     public function getId()
     {
@@ -2600,6 +2608,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param int $value
      * @return $this
+     * @since 2.1.0
      */
     public function setId($value)
     {
@@ -2608,6 +2617,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @return ProductLinkRepositoryInterface
+     * @since 2.1.0
      */
     private function getLinkRepository()
     {
@@ -2620,6 +2630,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @return Product\Gallery\Processor
+     * @since 2.1.0
      */
     private function getMediaGalleryProcessor()
     {
@@ -2635,6 +2646,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param array $productIds
      * @return $this
+     * @since 2.1.2
      */
     public function setAssociatedProductIds(array $productIds)
     {
@@ -2647,10 +2659,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @return array|null
      *
-     * @deprecated as Product model shouldn't be responsible for stock status
+     * @deprecated 2.2.0 as Product model shouldn't be responsible for stock status
      * @see StockItemInterface when you want to change the stock data
      * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
      * @see StockItemRepositoryInterface::save as extension point for customization of saving process
+     * @since 2.2.0
      */
     public function getQuantityAndStockStatus()
     {
@@ -2663,10 +2676,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param array $quantityAndStockStatusData
      * @return $this
      *
-     * @deprecated as Product model shouldn't be responsible for stock status
+     * @deprecated 2.2.0 as Product model shouldn't be responsible for stock status
      * @see StockItemInterface when you want to change the stock data
      * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
      * @see StockItemRepositoryInterface::save as extension point for customization of saving process
+     * @since 2.2.0
      */
     public function setQuantityAndStockStatus($quantityAndStockStatusData)
     {
@@ -2679,10 +2693,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @return array|null
      *
-     * @deprecated as Product model shouldn't be responsible for stock status
+     * @deprecated 2.2.0 as Product model shouldn't be responsible for stock status
      * @see StockItemInterface when you want to change the stock data
      * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
      * @see StockItemRepositoryInterface::save as extension point for customization of saving process
+     * @since 2.2.0
      */
     public function getStockData()
     {
@@ -2695,10 +2710,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param array $stockData
      * @return $this
      *
-     * @deprecated as Product model shouldn't be responsible for stock status
+     * @deprecated 2.2.0 as Product model shouldn't be responsible for stock status
      * @see StockItemInterface when you want to change the stock data
      * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
      * @see StockItemRepositoryInterface::save as extension point for customization of saving process
+     * @since 2.2.0
      */
     public function setStockData($stockData)
     {

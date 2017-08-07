@@ -871,6 +871,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param \Magento\Framework\DataObject $object
      * @return void
+     * @since 2.1.0
      */
     public function beforeSave(\Magento\Framework\DataObject $object)
     {
@@ -882,6 +883,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param \Magento\Framework\DataObject $object
      * @return void
+     * @since 2.1.0
      */
     public function afterSave(\Magento\Framework\DataObject $object)
     {
@@ -893,6 +895,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param \Magento\Framework\DataObject $object
      * @return void
+     * @since 2.1.0
      */
     public function beforeDelete(\Magento\Framework\DataObject $object)
     {
@@ -904,6 +907,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param \Magento\Framework\DataObject $object
      * @return void
+     * @since 2.1.0
      */
     public function afterDelete(\Magento\Framework\DataObject $object)
     {
@@ -915,6 +919,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\Model\AbstractModel|void
+     * @since 2.1.0
      */
     public function serializeFields(\Magento\Framework\Model\AbstractModel $object)
     {

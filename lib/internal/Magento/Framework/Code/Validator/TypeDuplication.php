@@ -9,6 +9,10 @@ namespace Magento\Framework\Code\Validator;
 
 use Magento\Framework\Code\ValidatorInterface;
 
+/**
+ * Class \Magento\Framework\Code\Validator\TypeDuplication
+ *
+ */
 class TypeDuplication implements ValidatorInterface
 {
     /**
@@ -25,6 +29,7 @@ class TypeDuplication implements ValidatorInterface
 
     /**
      * @var \Magento\Framework\Code\Reader\ScalarTypesProvider
+     * @since 2.2.0
      */
     private $scalarTypesProvider;
 

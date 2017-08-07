@@ -51,13 +51,19 @@ class Config implements ConfigInterface
      */
     protected $options = [];
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     protected $_scopeConfig;
 
-    /** @var \Magento\Framework\Stdlib\StringUtils */
+    /**
+     * @var \Magento\Framework\Stdlib\StringUtils
+     */
     protected $_stringHelper;
 
-    /** @var \Magento\Framework\App\RequestInterface */
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
     protected $_httpRequest;
 
     /**
@@ -72,13 +78,20 @@ class Config implements ConfigInterface
         'session.cookie_httponly',
     ];
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $_scopeType;
 
-    /** @var string */
+    /**
+     * @var string
+     * @since 2.1.0
+     */
     protected $lifetimePath;
 
-    /** @var \Magento\Framework\ValidatorFactory */
+    /**
+     * @var \Magento\Framework\ValidatorFactory
+     */
     protected $_validatorFactory;
 
     /**

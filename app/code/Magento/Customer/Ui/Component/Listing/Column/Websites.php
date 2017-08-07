@@ -12,6 +12,7 @@ use Magento\Store\Model\StoreManagerInterface as StoreManager;
 
 /**
  * Class Websites
+ * @since 2.1.0
  */
 class Websites extends Column
 {
@@ -19,6 +20,7 @@ class Websites extends Column
      * Store manager
      *
      * @var StoreManager
+     * @since 2.1.0
      */
     protected $storeManager;
 
@@ -28,6 +30,7 @@ class Websites extends Column
      * @param StoreManager $storeManager
      * @param array $components
      * @param array $data
+     * @since 2.1.0
      */
     public function __construct(
         ContextInterface $context,
@@ -43,6 +46,7 @@ class Websites extends Column
     /**
      * Prepare component configuration
      * @return void
+     * @since 2.1.0
      */
     public function prepare()
     {

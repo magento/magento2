@@ -11,6 +11,10 @@ namespace Magento\Catalog\Model\Indexer\Category\Flat;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 
+/**
+ * Class \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
+ *
+ */
 class AbstractAction
 {
     /**
@@ -56,6 +60,7 @@ class AbstractAction
 
     /**
      * @var \Magento\Framework\EntityManager\EntityMetadata
+     * @since 2.1.0
      */
     protected $categoryMetadata;
 
@@ -63,6 +68,7 @@ class AbstractAction
      * Static columns to skip
      *
      * @var array
+     * @since 2.1.0
      */
     protected $skipStaticColumns = [];
 
@@ -468,6 +474,7 @@ class AbstractAction
 
     /**
      * @return \Magento\Framework\EntityManager\EntityMetadata
+     * @since 2.1.0
      */
     private function getCategoryMetadata()
     {
@@ -481,6 +488,7 @@ class AbstractAction
 
     /**
      * @return array
+     * @since 2.1.0
      */
     private function getSkipStaticColumns()
     {

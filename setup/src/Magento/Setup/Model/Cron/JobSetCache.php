@@ -10,20 +10,28 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * Class \Magento\Setup\Model\Cron\JobSetCache
+ *
+ * @since 2.1.0
+ */
 class JobSetCache extends AbstractJob
 {
     /**
      * @var \Magento\Backend\Console\Command\AbstractCacheSetCommand
+     * @since 2.1.0
      */
     protected $command;
 
     /**
      * @var \Symfony\Component\Console\Output\OutputInterface
+     * @since 2.1.0
      */
     protected $output;
 
     /**
      * @var Status
+     * @since 2.1.0
      */
     protected $status;
 
@@ -34,6 +42,7 @@ class JobSetCache extends AbstractJob
      * @param Status $status
      * @param string $name
      * @param array $params
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Backend\Console\Command\AbstractCacheSetCommand $command,
@@ -51,6 +60,7 @@ class JobSetCache extends AbstractJob
      * Execute set cache command
      *
      * @return void
+     * @since 2.1.0
      */
     public function execute()
     {

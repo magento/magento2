@@ -7,15 +7,18 @@ namespace Magento\Directory\Model\Currency\Import;
 
 /**
  * Currency rate import model (From http://query.yahooapis.com/)
+ * @since 2.1.0
  */
 class YahooFinance extends \Magento\Directory\Model\Currency\Import\AbstractImport
 {
+    // @codingStandardsIgnoreStart
+
     /**
      * Currency converter url string
      *
      * @var string
+     * @since 2.1.0
      */
-    // @codingStandardsIgnoreStart
     private $currencyConverterUrl = 'http://query.yahooapis.com/v1/public/yql?format=json&q={{YQL_STRING}}&env=store://datatables.org/alltableswithkeys';
     // @codingStandardsIgnoreEnd
 
@@ -23,6 +26,7 @@ class YahooFinance extends \Magento\Directory\Model\Currency\Import\AbstractImpo
      * Config path for service timeout
      *
      * @var string
+     * @since 2.1.0
      */
     private $timeoutConfigPath = 'currency/yahoofinance/timeout';
 
@@ -30,6 +34,7 @@ class YahooFinance extends \Magento\Directory\Model\Currency\Import\AbstractImpo
      * Http Client Factory
      *
      * @var \Magento\Framework\HTTP\ZendClientFactory
+     * @since 2.1.0
      */
     protected $httpClientFactory;
 
@@ -37,6 +42,7 @@ class YahooFinance extends \Magento\Directory\Model\Currency\Import\AbstractImpo
      * Core scope config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.1.0
      */
     private $scopeConfig;
 
@@ -46,6 +52,7 @@ class YahooFinance extends \Magento\Directory\Model\Currency\Import\AbstractImpo
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
@@ -59,6 +66,7 @@ class YahooFinance extends \Magento\Directory\Model\Currency\Import\AbstractImpo
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function fetchRates()
     {
@@ -83,6 +91,7 @@ class YahooFinance extends \Magento\Directory\Model\Currency\Import\AbstractImpo
      * @param string $currencyFrom
      * @param array $currenciesTo
      * @return array
+     * @since 2.1.0
      */
     private function convertBatch($data, $currencyFrom, $currenciesTo)
     {
@@ -117,6 +126,7 @@ class YahooFinance extends \Magento\Directory\Model\Currency\Import\AbstractImpo
      * @param string $url
      * @param int $retry
      * @return array
+     * @since 2.1.0
      */
     private function getServiceResponse($url, $retry = 0)
     {
@@ -151,6 +161,7 @@ class YahooFinance extends \Magento\Directory\Model\Currency\Import\AbstractImpo
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     protected function _convert($currencyFrom, $currencyTo)
     {
@@ -162,6 +173,7 @@ class YahooFinance extends \Magento\Directory\Model\Currency\Import\AbstractImpo
      * @param string $currencyFrom
      * @param string[] $currenciesTo
      * @return string
+     * @since 2.1.0
      */
     private function buildUrl($currencyFrom, $currenciesTo)
     {

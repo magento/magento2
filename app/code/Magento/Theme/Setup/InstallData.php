@@ -18,6 +18,7 @@ class InstallData implements InstallDataInterface
 {
     /**
      * @var Registration
+     * @since 2.1.0
      */
     private $themeRegistration;
 

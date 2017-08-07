@@ -9,11 +9,13 @@ use Magento\Framework\App\Cache\Tag\StrategyInterface;
 
 /**
  * Produce cache tags using IdentityInterface
+ * @since 2.1.3
  */
 class Identifier implements StrategyInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.1.3
      */
     public function getTags($object)
     {

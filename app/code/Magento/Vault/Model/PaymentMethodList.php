@@ -13,16 +13,19 @@ use Magento\Vault\Api\PaymentMethodListInterface as VaultPaymentMethodListInterf
 
 /**
  * Contains methods to retrieve configured vault payments
+ * @since 2.1.3
  */
 class PaymentMethodList implements VaultPaymentMethodListInterface
 {
     /**
      * @var InstanceFactory
+     * @since 2.1.3
      */
     private $instanceFactory;
 
     /**
      * @var PaymentMethodListInterface
+     * @since 2.1.3
      */
     private $paymentMethodList;
 
@@ -30,6 +33,7 @@ class PaymentMethodList implements VaultPaymentMethodListInterface
      * PaymentMethodList constructor.
      * @param PaymentMethodListInterface $paymentMethodList
      * @param InstanceFactory $instanceFactory
+     * @since 2.1.3
      */
     public function __construct(PaymentMethodListInterface $paymentMethodList, InstanceFactory $instanceFactory)
     {
@@ -39,6 +43,7 @@ class PaymentMethodList implements VaultPaymentMethodListInterface
 
     /**
      * @inheritdoc
+     * @since 2.1.3
      */
     public function getList($storeId)
     {
@@ -47,6 +52,7 @@ class PaymentMethodList implements VaultPaymentMethodListInterface
 
     /**
      * @inheritdoc
+     * @since 2.1.3
      */
     public function getActiveList($storeId)
     {
@@ -57,6 +63,7 @@ class PaymentMethodList implements VaultPaymentMethodListInterface
      * Filter vault methods from payments
      * @param PaymentMethodInterface[] $list
      * @return VaultPaymentInterface[]
+     * @since 2.1.3
      */
     private function filterList(array $list)
     {

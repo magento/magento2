@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Order\Creditmemo;
 
 /**
  * Interface for notification sender for CreditMemo.
+ * @since 2.1.3
  */
 interface SenderInterface
 {
@@ -19,6 +20,7 @@ interface SenderInterface
      * @param bool $forceSyncMode
      *
      * @return bool
+     * @since 2.1.3
      */
     public function send(
         \Magento\Sales\Api\Data\OrderInterface $order,

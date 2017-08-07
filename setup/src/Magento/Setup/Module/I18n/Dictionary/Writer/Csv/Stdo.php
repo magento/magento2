@@ -26,6 +26,7 @@ class Stdo extends Csv
      * Overriding parent as we can not close globally used resource
      *
      * @return void
+     * @since 2.2.0
      */
     public function __destruct()
     {

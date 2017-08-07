@@ -16,6 +16,7 @@ use Magento\Ui\Component\Container;
  * Class Attributes
  *
  * @api
+ * @since 2.1.0
  */
 class Attributes extends AbstractModifier
 {
@@ -25,21 +26,25 @@ class Attributes extends AbstractModifier
 
     /**
      * @var UrlInterface
+     * @since 2.1.0
      */
     protected $urlBuilder;
 
     /**
      * @var Registry
+     * @since 2.1.0
      */
     protected $registry;
 
     /**
      * @var LocatorInterface
+     * @since 2.1.0
      */
     protected $locator;
 
     /**
      * @var AuthorizationInterface
+     * @since 2.1.0
      */
     protected $authorization;
 
@@ -48,6 +53,7 @@ class Attributes extends AbstractModifier
      * @param Registry $registry
      * @param AuthorizationInterface $authorization
      * @param LocatorInterface $locator
+     * @since 2.1.0
      */
     public function __construct(
         UrlInterface $urlBuilder,
@@ -63,6 +69,7 @@ class Attributes extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -71,6 +78,7 @@ class Attributes extends AbstractModifier
 
     /**
      * @return boolean
+     * @since 2.1.0
      */
     private function canAddAttributes()
     {
@@ -84,6 +92,7 @@ class Attributes extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -106,6 +115,7 @@ class Attributes extends AbstractModifier
     /**
      * @param array $meta
      * @return array
+     * @since 2.1.0
      */
     private function customizeAddAttributeModal(array $meta)
     {
@@ -197,6 +207,7 @@ class Attributes extends AbstractModifier
     /**
      * @param array $meta
      * @return array
+     * @since 2.1.0
      */
     private function customizeCreateAttributeModal(array $meta)
     {
@@ -279,6 +290,7 @@ class Attributes extends AbstractModifier
     /**
      * @param array $meta
      * @return array
+     * @since 2.1.0
      */
     private function customizeAttributesGrid(array $meta)
     {

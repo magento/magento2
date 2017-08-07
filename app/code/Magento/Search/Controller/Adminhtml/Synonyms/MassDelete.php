@@ -10,6 +10,7 @@ namespace Magento\Search\Controller\Adminhtml\Synonyms;
  * Mass-Delete Controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.1.0
  */
 class MassDelete extends \Magento\Backend\App\Action
 {
@@ -22,16 +23,19 @@ class MassDelete extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Ui\Component\MassAction\Filter
+     * @since 2.1.0
      */
     private $filter;
 
     /**
      * @var \Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory
+     * @since 2.1.0
      */
     private $collectionFactory;
 
     /**
      * @var \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
+     * @since 2.1.0
      */
     private $synGroupRepository;
 
@@ -42,6 +46,7 @@ class MassDelete extends \Magento\Backend\App\Action
      * @param \Magento\Ui\Component\MassAction\Filter $filter
      * @param \Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory $collectionFactory
      * @param \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -60,6 +65,7 @@ class MassDelete extends \Magento\Backend\App\Action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @throws \Magento\Framework\Exception\LocalizedException|\Exception
+     * @since 2.1.0
      */
     public function execute()
     {

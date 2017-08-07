@@ -17,7 +17,7 @@ use Magento\Backend\Block\Widget\Form\Generic;
 /**
  * Class Content
  *
- * @deprecated
+ * @deprecated 2.2.0
  * @see \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav
  */
 class Content extends Generic

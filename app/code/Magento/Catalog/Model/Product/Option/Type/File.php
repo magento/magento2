@@ -33,13 +33,14 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
-     * @deprecated
+     * @deprecated 2.2.0
      * @see $mediaDirectory
      */
     protected $_rootDirectory;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @since 2.2.0
      */
     private $mediaDirectory;
 
@@ -81,11 +82,13 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var Filesystem
+     * @since 2.1.4
      */
     private $filesystem;
 
@@ -405,7 +408,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param string $optionValue Prepared for cart option value
      * @return string
      *
-     * @deprecated
+     * @deprecated 2.2.0
      */
     public function getEditableOptionValue($optionValue)
     {
@@ -429,7 +432,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @deprecated
+     * @deprecated 2.2.0
      */
     public function parseOptionValue($optionValue, $productOptionValues)
     {

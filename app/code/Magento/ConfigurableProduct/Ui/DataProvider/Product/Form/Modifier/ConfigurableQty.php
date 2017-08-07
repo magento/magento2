@@ -9,6 +9,7 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 
 /**
  * Data provider for quantity in the Configurable products
+ * @since 2.1.0
  */
 class ConfigurableQty extends AbstractModifier
 {
@@ -17,6 +18,7 @@ class ConfigurableQty extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -25,6 +27,7 @@ class ConfigurableQty extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {

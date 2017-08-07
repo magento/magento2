@@ -20,16 +20,20 @@ use Magento\Framework\View\Element\Template\Context;
  */
 class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
 {
-    /** @var Image */
+    /**
+     * @var \Magento\Catalog\Helper\Image
+     */
     protected $image;
 
     /**
      * @var ProductFactory
+     * @since 2.0.3
      */
     private $productFactory;
 
     /**
      * @var Config
+     * @since 2.0.3
      */
     private $catalogProductMediaConfig;
 

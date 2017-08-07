@@ -48,12 +48,13 @@ class MagentoImport implements PreProcessorInterface
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ListInterface
-     * @deprecated
+     * @deprecated 2.1.1
      */
     protected $themeList;
 
     /**
      * @var ThemeProviderInterface
+     * @since 2.1.1
      */
     private $themeProvider;
 
@@ -138,7 +139,8 @@ class MagentoImport implements PreProcessorInterface
 
     /**
      * @return ThemeProviderInterface
-     * @deprecated
+     * @deprecated 2.1.1
+     * @since 2.1.1
      */
     private function getThemeProvider()
     {

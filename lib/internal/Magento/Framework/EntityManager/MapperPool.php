@@ -9,22 +9,26 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class MapperPool
+ * @since 2.1.0
  */
 class MapperPool
 {
     /**
      * @var string[]
+     * @since 2.1.0
      */
     private $mappers;
 
     /**
      * @var ObjectManagerInterface
+     * @since 2.1.0
      */
     protected $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param string[] $mappers
+     * @since 2.1.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -38,6 +42,7 @@ class MapperPool
      * Get mapper for entity type
      * @param string $entityType
      * @return MapperInterface
+     * @since 2.1.0
      */
     public function getMapper($entityType)
     {

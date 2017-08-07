@@ -7,6 +7,7 @@ namespace Magento\Setup\Model;
 
 /**
  * Generate description for product
+ * @since 2.2.0
  */
 interface DescriptionGeneratorInterface
 {
@@ -15,6 +16,7 @@ interface DescriptionGeneratorInterface
      *
      * @param int $entityIndex
      * @return string
+     * @since 2.2.0
      */
     public function generate($entityIndex);
 }

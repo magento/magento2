@@ -9,6 +9,7 @@ use Magento\Framework\Option\ArrayInterface;
 
 /**
  * Class Environment
+ * @since 2.1.0
  */
 class Environment implements ArrayInterface
 {
@@ -19,6 +20,7 @@ class Environment implements ArrayInterface
      * Possible environment types
      *
      * @return array
+     * @since 2.1.0
      */
     public function toOptionArray()
     {

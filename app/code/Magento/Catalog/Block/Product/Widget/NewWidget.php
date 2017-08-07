@@ -46,6 +46,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -58,6 +59,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,

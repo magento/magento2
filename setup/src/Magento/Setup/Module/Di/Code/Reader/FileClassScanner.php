@@ -6,12 +6,18 @@
 
 namespace Magento\Setup\Module\Di\Code\Reader;
 
+/**
+ * Class \Magento\Setup\Module\Di\Code\Reader\FileClassScanner
+ *
+ * @since 2.2.0
+ */
 class FileClassScanner
 {
     /**
      * The filename of the file to introspect
      *
      * @var string
+     * @since 2.2.0
      */
     private $filename;
 
@@ -19,11 +25,13 @@ class FileClassScanner
      * The list of classes found in the file.
      *
      * @var bool
+     * @since 2.2.0
      */
     private $classNames = false;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $tokens;
 
@@ -31,6 +39,7 @@ class FileClassScanner
      * Constructor for the file class scanner.  Requires the filename
      *
      * @param string $filename
+     * @since 2.2.0
      */
     public function __construct($filename)
     {
@@ -50,6 +59,7 @@ class FileClassScanner
      * Retrieves the contents of a file.  Mostly here for Mock injection
      *
      * @return string
+     * @since 2.2.0
      */
     public function getFileContents()
     {
@@ -66,6 +76,7 @@ class FileClassScanner
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @return array
+     * @since 2.2.0
      */
     private function extract()
     {
@@ -133,6 +144,7 @@ class FileClassScanner
      *
      * @param integer $index
      * @return bool
+     * @since 2.2.0
      */
     private function isBracedNamespace($index)
     {
@@ -159,6 +171,7 @@ class FileClassScanner
      * same usage as the FileScanner.
      *
      * @return array
+     * @since 2.2.0
      */
     public function getClassNames()
     {

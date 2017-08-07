@@ -7,6 +7,7 @@ namespace Magento\Framework\DB\Adapter;
 
 /**
  * Database connection exception
+ * @since 2.2.0
  */
 class ConnectionException extends \Zend_Db_Adapter_Exception
 {

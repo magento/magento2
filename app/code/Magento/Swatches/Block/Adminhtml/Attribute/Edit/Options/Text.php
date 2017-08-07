@@ -21,6 +21,7 @@ class Text extends AbstractSwatch
      * Return json config for text option JS initialization
      *
      * @return array
+     * @since 2.1.0
      */
     public function getJsonConfig()
     {

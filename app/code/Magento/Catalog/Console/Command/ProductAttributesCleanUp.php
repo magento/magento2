@@ -13,31 +13,37 @@ use Magento\Catalog\Api\Data\ProductInterface;
 /**
  * Class ProductAttributesCleanUp
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.1.0
  */
 class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Command
 {
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     * @since 2.1.0
      */
     protected $productAttributeRepository;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @since 2.1.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Attribute
+     * @since 2.1.0
      */
     protected $attributeResource;
 
     /**
      * @var \Magento\Framework\App\State
+     * @since 2.1.0
      */
     protected $appState;
 
     /**
      * @var \Magento\Framework\EntityManager\EntityMetadata
+     * @since 2.1.0
      */
     protected $metadata;
 
@@ -47,6 +53,7 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository,
@@ -65,6 +72,7 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     protected function configure()
     {
@@ -74,6 +82,7 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -115,6 +124,7 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
     /**
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.1.0
      */
     private function getAttributeTables()
     {
@@ -138,6 +148,7 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
      * @param string $attributeTableName
      * @return array
      * @throws \Zend_Db_Statement_Exception
+     * @since 2.1.0
      */
     private function getAffectedAttributeIds(AdapterInterface $connection, $attributeTableName)
     {

@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\App\Config;
 
+/**
+ * Class \Magento\Framework\App\Config\Data
+ *
+ */
 class Data implements DataInterface
 {
     /**
@@ -84,6 +88,7 @@ class Data implements DataInterface
      *
      * @param array $data
      * @return array
+     * @since 2.1.0
      */
     private function arrayClone(array $data)
     {

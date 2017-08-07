@@ -43,6 +43,7 @@ class Advanced extends Generic
 
     /**
      * @var PropertyLocker
+     * @since 2.1.0
      */
     private $propertyLocker;
 
@@ -280,6 +281,7 @@ class Advanced extends Generic
      * Get property locker
      *
      * @return PropertyLocker
+     * @since 2.1.0
      */
     private function getPropertyLocker()
     {

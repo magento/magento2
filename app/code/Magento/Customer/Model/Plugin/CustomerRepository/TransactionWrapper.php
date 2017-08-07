@@ -7,15 +7,22 @@
  */
 namespace Magento\Customer\Model\Plugin\CustomerRepository;
 
+/**
+ * Class \Magento\Customer\Model\Plugin\CustomerRepository\TransactionWrapper
+ *
+ * @since 2.1.0
+ */
 class TransactionWrapper
 {
     /**
      * @var \Magento\Customer\Model\ResourceModel\Customer
+     * @since 2.1.0
      */
     protected $resourceModel;
 
     /**
      * @param \Magento\Customer\Model\ResourceModel\Customer $resourceModel
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Customer\Model\ResourceModel\Customer $resourceModel
@@ -31,6 +38,7 @@ class TransactionWrapper
      * @return \Magento\Customer\Api\Data\CustomerInterface
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function aroundSave(
         \Magento\Customer\Api\CustomerRepositoryInterface $subject,

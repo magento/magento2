@@ -14,21 +14,25 @@ use Magento\Theme\Model\Data\Design\ConfigFactory;
 
 /**
  * Save action controller
+ * @since 2.1.0
  */
 class Save extends Action
 {
     /**
      * @var DesignConfigRepository
+     * @since 2.1.0
      */
     protected $designConfigRepository;
 
     /**
      * @var ConfigFactory
+     * @since 2.1.0
      */
     protected $configFactory;
 
     /**
      * @var DataPersistorInterface
+     * @since 2.1.0
      */
     protected $dataPersistor;
 
@@ -37,6 +41,7 @@ class Save extends Action
      * @param DesignConfigRepository $designConfigRepository
      * @param ConfigFactory $configFactory
      * @param DataPersistorInterface $dataPersistor
+     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -54,6 +59,7 @@ class Save extends Action
      * Check the permission to manage themes
      *
      * @return bool
+     * @since 2.1.0
      */
     protected function _isAllowed()
     {
@@ -62,6 +68,7 @@ class Save extends Action
 
     /**
      * @return \Magento\Framework\Controller\Result\Redirect
+     * @since 2.1.0
      */
     public function execute()
     {
@@ -105,6 +112,7 @@ class Save extends Action
      * Extract data from request
      *
      * @return array
+     * @since 2.1.0
      */
     protected function getRequestData()
     {

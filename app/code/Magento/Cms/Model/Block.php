@@ -33,9 +33,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
 
     /**#@-*/
 
-    /**
-     * @var string
-     */
+    /**#@-*/
     protected $_cacheTag = self::CACHE_TAG;
 
     /**
@@ -241,6 +239,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      * Prepare block's statuses.
      *
      * @return array
+     * @since 2.1.0
      */
     public function getAvailableStatuses()
     {

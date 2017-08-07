@@ -25,6 +25,7 @@ class InstallData implements InstallDataInterface
 
     /**
      * @var RegionFactory
+     * @since 2.2.0
      */
     private $directoryRegionFactory;
 

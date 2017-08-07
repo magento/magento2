@@ -11,6 +11,10 @@ use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Class \Magento\Framework\App\ObjectManager\ConfigLoader
+ *
+ */
 class ConfigLoader implements ConfigLoaderInterface
 {
     /**
@@ -36,6 +40,7 @@ class ConfigLoader implements ConfigLoaderInterface
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -86,7 +91,8 @@ class ConfigLoader implements ConfigLoaderInterface
      * Get serializer
      *
      * @return SerializerInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getSerializer()
     {

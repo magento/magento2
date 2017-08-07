@@ -5,6 +5,10 @@
  */
 namespace Magento\Store\App\FrontController\Plugin;
 
+/**
+ * Class \Magento\Store\App\FrontController\Plugin\RequestPreprocessor
+ *
+ */
 class RequestPreprocessor
 {
     /**
@@ -29,6 +33,7 @@ class RequestPreprocessor
 
     /**
      * @var \Magento\Store\Model\BaseUrlChecker
+     * @since 2.1.0
      */
     private $baseUrlChecker;
 
@@ -98,7 +103,8 @@ class RequestPreprocessor
      * Gets base URL checker.
      *
      * @return \Magento\Store\Model\BaseUrlChecker
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getBaseUrlChecker()
     {

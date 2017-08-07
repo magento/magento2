@@ -11,6 +11,10 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * Class \Magento\Wishlist\Controller\Index\DownloadCustomOption
+ *
+ */
 class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
@@ -22,6 +26,7 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex
      * Json Serializer Instance
      *
      * @var Json
+     * @since 2.2.0
      */
     private $json;
 

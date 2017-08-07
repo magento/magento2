@@ -29,6 +29,7 @@ class Button extends Template implements ControlInterface
      * Retrieve template path
      *
      * @return string
+     * @since 2.1.0
      */
     protected function getTemplatePath()
     {

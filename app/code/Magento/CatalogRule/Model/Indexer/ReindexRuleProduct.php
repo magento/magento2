@@ -8,22 +8,26 @@ namespace Magento\CatalogRule\Model\Indexer;
 
 /**
  * Reindex rule relations with products.
+ * @since 2.2.0
  */
 class ReindexRuleProduct
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.2.0
      */
     private $resource;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
+     * @since 2.2.0
      */
     private $activeTableSwitcher;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -42,6 +46,7 @@ class ReindexRuleProduct
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.2.0
      */
     public function execute(
         \Magento\CatalogRule\Model\Rule $rule,

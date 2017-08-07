@@ -5,6 +5,11 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Widget;
 
+/**
+ * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Widget\Chooser
+ *
+ * @since 2.2.0
+ */
 class Chooser extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Widget\Chooser
 {
     /**

@@ -13,29 +13,46 @@ use Magento\Framework\App\Config\ValueInterface;
 use Magento\Theme\Model\Data\Design\ConfigFactory;
 use Magento\Theme\Model\Design\BackendModelFactory;
 
+/**
+ * Class \Magento\Theme\Model\Design\Config\Storage
+ *
+ * @since 2.1.0
+ */
 class Storage
 {
-    /** @var TransactionFactory */
+    /**
+     * @var \Magento\Framework\DB\TransactionFactory
+     * @since 2.1.0
+     */
     protected $transactionFactory;
 
-    /** @var BackendModelFactory */
+    /**
+     * @var \Magento\Theme\Model\Design\BackendModelFactory
+     * @since 2.1.0
+     */
     protected $backendModelFactory;
 
-    /** @var ValueChecker */
+    /**
+     * @var \Magento\Theme\Model\Design\Config\ValueChecker
+     * @since 2.1.0
+     */
     protected $valueChecker;
 
     /**
      * @var ConfigFactory
+     * @since 2.1.0
      */
     protected $configFactory;
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.1.0
      */
     protected $scopeConfig;
 
     /**
      * @var ValueProcessor
+     * @since 2.1.0
      */
     protected $valueProcessor;
 
@@ -46,6 +63,7 @@ class Storage
      * @param ConfigFactory $configFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param ValueProcessor $valueProcessor
+     * @since 2.1.0
      */
     public function __construct(
         TransactionFactory $transactionFactory,
@@ -69,6 +87,7 @@ class Storage
      * @param string $scope
      * @param mixed $scopeId
      * @return DesignConfigInterface
+     * @since 2.1.0
      */
     public function load($scope, $scopeId)
     {
@@ -93,6 +112,7 @@ class Storage
      *
      * @param DesignConfigInterface $designConfig
      * @return void
+     * @since 2.1.0
      */
     public function save(DesignConfigInterface $designConfig)
     {
@@ -132,6 +152,7 @@ class Storage
      *
      * @param DesignConfigInterface $designConfig
      * @return void
+     * @since 2.1.0
      */
     public function delete(DesignConfigInterface $designConfig)
     {

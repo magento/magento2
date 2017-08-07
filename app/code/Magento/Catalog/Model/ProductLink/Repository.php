@@ -22,21 +22,25 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 {
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Relation
+     * @since 2.1.0
      */
     protected $catalogProductRelation;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Link
+     * @since 2.1.0
      */
     protected $linkResource;
 
     /**
      * @var LinkTypeProvider
+     * @since 2.1.0
      */
     protected $linkTypeProvider;
 
@@ -67,11 +71,13 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 
     /**
      * @var ProductLinkInterfaceFactory
+     * @since 2.1.0
      */
     protected $productLinkFactory;
 
     /**
      * @var ProductLinkExtensionFactory
+     * @since 2.1.0
      */
     protected $productLinkExtensionFactory;
 
@@ -147,6 +153,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
      *
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return \Magento\Catalog\Api\Data\ProductLinkInterface[]
+     * @since 2.1.0
      */
     public function getList(\Magento\Catalog\Api\Data\ProductInterface $product)
     {
@@ -243,6 +250,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 
     /**
      * @return \Magento\Catalog\Model\ResourceModel\Product\Link
+     * @since 2.1.0
      */
     private function getLinkResource()
     {
@@ -255,6 +263,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 
     /**
      * @return LinkTypeProvider
+     * @since 2.1.0
      */
     private function getLinkTypeProvider()
     {
@@ -267,6 +276,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {

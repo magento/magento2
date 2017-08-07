@@ -10,6 +10,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 /**
  * Class DeleteRelation
  * @package Magento\Customer\Model\ResourceModel\Address
+ * @since 2.2.0
  */
 class DeleteRelation
 {
@@ -19,6 +20,7 @@ class DeleteRelation
      * @param \Magento\Framework\Model\AbstractModel $address
      * @param \Magento\Customer\Model\Customer $customer
      * @return void
+     * @since 2.2.0
      */
     public function deleteRelation(
         \Magento\Framework\Model\AbstractModel $address,
@@ -41,6 +43,7 @@ class DeleteRelation
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return array
+     * @since 2.2.0
      */
     private function getDataToUpdate(
         \Magento\Framework\Model\AbstractModel $address,

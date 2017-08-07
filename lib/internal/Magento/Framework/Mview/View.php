@@ -53,6 +53,7 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $changelogBatchSize;
 

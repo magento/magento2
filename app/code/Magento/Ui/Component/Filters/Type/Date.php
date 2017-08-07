@@ -28,6 +28,7 @@ class Date extends AbstractFilter
      * Date format
      *
      * @var string
+     * @since 2.1.3
      */
     protected static $dateFormat = 'Y-m-d H:i:s';
 

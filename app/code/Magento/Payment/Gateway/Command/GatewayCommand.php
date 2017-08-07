@@ -50,6 +50,7 @@ class GatewayCommand implements CommandInterface
 
     /**
      * @var LoggerInterface
+     * @since 2.1.0
      */
     private $logger;
 
@@ -115,6 +116,7 @@ class GatewayCommand implements CommandInterface
     /**
      * @param Phrase[] $fails
      * @return void
+     * @since 2.1.0
      */
     private function logExceptions(array $fails)
     {

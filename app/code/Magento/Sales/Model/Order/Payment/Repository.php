@@ -34,7 +34,10 @@ class Repository implements OrderPaymentRepositoryInterface
      */
     protected $searchResultFactory;
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     * @since 2.2.0
+     */
     private $collectionProcessor;
 
     /**
@@ -127,8 +130,9 @@ class Repository implements OrderPaymentRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return CollectionProcessorInterface
+     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

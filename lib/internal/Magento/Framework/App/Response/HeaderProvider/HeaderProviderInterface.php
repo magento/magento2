@@ -6,12 +6,18 @@
 
 namespace Magento\Framework\App\Response\HeaderProvider;
 
+/**
+ * Interface \Magento\Framework\App\Response\HeaderProvider\HeaderProviderInterface
+ *
+ * @since 2.1.0
+ */
 interface HeaderProviderInterface
 {
     /**
      * Whether the header should be attached to the response
      *
      * @return bool
+     * @since 2.1.0
      */
     public function canApply();
 
@@ -19,6 +25,7 @@ interface HeaderProviderInterface
      * Header name
      *
      * @return string
+     * @since 2.1.0
      */
     public function getName();
 
@@ -26,6 +33,7 @@ interface HeaderProviderInterface
      * Header value
      *
      * @return string
+     * @since 2.1.0
      */
     public function getValue();
 }

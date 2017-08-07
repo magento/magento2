@@ -16,16 +16,19 @@ use Magento\Store\Model\Store;
 
 /**
  * Data provider for the form of adding new product attribute.
+ * @since 2.1.0
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
     /**
      * @var StoreRepositoryInterface
+     * @since 2.1.0
      */
     private $storeRepository;
 
     /**
      * @var ArrayManager
+     * @since 2.1.0
      */
     private $arrayManager;
 
@@ -38,6 +41,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param ArrayManager $arrayManager
      * @param array $meta
      * @param array $data
+     * @since 2.1.0
      */
     public function __construct(
         $name,
@@ -59,6 +63,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Get data
      *
      * @return array
+     * @since 2.1.0
      */
     public function getData()
     {
@@ -69,6 +74,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Get meta information
      *
      * @return array
+     * @since 2.1.0
      */
     public function getMeta()
     {
@@ -86,6 +92,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param array $meta
      * @return array
+     * @since 2.1.0
      */
     private function customizeAttributeCode($meta)
     {
@@ -110,6 +117,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param array $meta
      * @return array
+     * @since 2.1.0
      */
     private function customizeFrontendLabels($meta)
     {
@@ -142,6 +150,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param array $meta
      * @return array
+     * @since 2.1.0
      */
     private function customizeOptions($meta)
     {

@@ -10,6 +10,7 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Class CustomerLoginSuccessObserver
+ * @since 2.1.0
  */
 class CustomerLoginSuccessObserver implements ObserverInterface
 {
@@ -17,11 +18,13 @@ class CustomerLoginSuccessObserver implements ObserverInterface
      * Authentication
      *
      * @var AuthenticationInterface
+     * @since 2.1.0
      */
     protected $authentication;
 
     /**
      * @param AuthenticationInterface $authentication
+     * @since 2.1.0
      */
     public function __construct(
         AuthenticationInterface $authentication
@@ -33,6 +36,7 @@ class CustomerLoginSuccessObserver implements ObserverInterface
      * Unlock customer on success login attempt.
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @since 2.1.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

@@ -8,6 +8,10 @@ namespace Magento\Catalog\Plugin\Model\ResourceModel;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Class \Magento\Catalog\Plugin\Model\ResourceModel\Config
+ *
+ */
 class Config
 {
     /**#@+
@@ -17,14 +21,17 @@ class Config
     const PRODUCT_LISTING_SORT_BY_ATTRIBUTES_CACHE_ID = 'PRODUCT_LISTING_SORT_BY_ATTRIBUTES';
     /**#@-*/
 
-    /** @var \Magento\Framework\App\CacheInterface */
+    /**#@-*/
     protected $cache;
 
-    /** @var bool|null */
+    /**
+     * @var bool|null
+     */
     protected $isCacheEnabled = null;
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 

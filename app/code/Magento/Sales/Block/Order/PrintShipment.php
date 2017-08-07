@@ -81,6 +81,7 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
      * Disable pager for printing page
      *
      * @return bool
+     * @since 2.2.0
      */
     public function isPagerDisplayed()
     {
@@ -91,6 +92,7 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
      * Get order items
      *
      * @return \Magento\Framework\DataObject[]
+     * @since 2.2.0
      */
     public function getItems()
     {

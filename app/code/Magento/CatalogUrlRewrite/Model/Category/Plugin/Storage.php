@@ -11,12 +11,21 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Model\Category\Plugin\Storage
+ *
+ */
 class Storage
 {
-    /** @var UrlFinderInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     */
     private $urlFinder;
 
-    /** @var Product */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product
+     * @since 2.2.0
+     */
     private $productResource;
 
     /**
@@ -37,6 +46,7 @@ class Storage
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urls
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterReplace(StorageInterface $object, array $result, array $urls)
     {

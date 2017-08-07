@@ -11,7 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class DownloadCss
- * @deprecated
+ * @deprecated 2.2.0
  */
 class DownloadCss extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {

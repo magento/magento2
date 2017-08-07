@@ -11,6 +11,7 @@ use Magento\Framework\Model\EntitySnapshot\AttributeProvider;
 
 /**
  * Class EntitySnapshot
+ * @since 2.1.0
  */
 class EntitySnapshot
 {
@@ -18,22 +19,26 @@ class EntitySnapshot
      * Array of snapshots of entities data
      *
      * @var array
+     * @since 2.1.0
      */
     protected $snapshotData = [];
 
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @var AttributeProvider
+     * @since 2.1.0
      */
     protected $attributeProvider;
 
     /**
      * @param MetadataPool $metadataPool
      * @param AttributeProvider $attributeProvider
+     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -47,6 +52,7 @@ class EntitySnapshot
      * @param string $entityType
      * @param object $entity
      * @return void
+     * @since 2.1.0
      */
     public function registerSnapshot($entityType, $entity)
     {
@@ -64,6 +70,7 @@ class EntitySnapshot
      * @param string $entityType
      * @param object $entity
      * @return bool
+     * @since 2.1.0
      */
     public function isModified($entityType, $entity)
     {

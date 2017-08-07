@@ -30,6 +30,7 @@ class Flag extends Model\AbstractModel
      * Serializer for encode/decode string/data.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $json;
 
@@ -37,6 +38,7 @@ class Flag extends Model\AbstractModel
      * Serializer for encode/decode string/data.
      *
      * @var \Magento\Framework\Serialize\Serializer\Serialize
+     * @since 2.2.0
      */
     private $serialize;
 
@@ -48,6 +50,7 @@ class Flag extends Model\AbstractModel
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json $json
      * @param \Magento\Framework\Serialize\Serializer\Serialize $serialize
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

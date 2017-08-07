@@ -7,6 +7,7 @@ namespace Magento\Ui\Component\Form\Element;
 
 /**
  * @api
+ * @since 2.1.0
  */
 class RadioSet extends AbstractOptionsField
 {
@@ -14,6 +15,7 @@ class RadioSet extends AbstractOptionsField
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getComponentName()
     {
@@ -22,6 +24,7 @@ class RadioSet extends AbstractOptionsField
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getIsSelected($optionValue)
     {

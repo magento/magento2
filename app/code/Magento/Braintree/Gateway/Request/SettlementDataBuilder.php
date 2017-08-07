@@ -9,6 +9,7 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
  * Class SettlementDataBuilder
+ * @since 2.1.0
  */
 class SettlementDataBuilder implements BuilderInterface
 {
@@ -16,6 +17,7 @@ class SettlementDataBuilder implements BuilderInterface
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     public function build(array $buildSubject)
     {

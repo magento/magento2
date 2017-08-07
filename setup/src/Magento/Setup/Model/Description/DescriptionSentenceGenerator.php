@@ -7,22 +7,26 @@ namespace Magento\Setup\Model\Description;
 
 /**
  * Generate random sentence for description based on configuration
+ * @since 2.2.0
  */
 class DescriptionSentenceGenerator
 {
     /**
      * @var \Magento\Setup\Model\Dictionary
+     * @since 2.2.0
      */
     private $dictionary;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $sentenceConfig;
 
     /**
      * @param \Magento\Setup\Model\Dictionary $dictionary
      * @param array $sentenceConfig
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Setup\Model\Dictionary $dictionary,
@@ -36,6 +40,7 @@ class DescriptionSentenceGenerator
      * Generate sentence for description
      *
      * @return string
+     * @since 2.2.0
      */
     public function generate()
     {

@@ -32,6 +32,7 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * @var AggregatedFieldDataConverter
+     * @since 2.2.0
      */
     private $aggregatedFieldConverter;
 
@@ -73,6 +74,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param string $setupVersion
      * @param SalesSetup $salesSetup
      * @return void
+     * @since 2.2.0
      */
     private function convertSerializedDataToJson($setupVersion, SalesSetup $salesSetup)
     {

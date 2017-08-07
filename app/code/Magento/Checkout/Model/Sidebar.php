@@ -13,7 +13,7 @@ use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Model\Quote\Address\Total;
 
 /**
- * @deprecated
+ * @deprecated 2.1.0
  */
 class Sidebar
 {

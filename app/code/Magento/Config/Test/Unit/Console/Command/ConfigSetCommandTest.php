@@ -21,7 +21,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  *
  * @see ConfigSetCommand
  */
-class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
+class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigSetCommand

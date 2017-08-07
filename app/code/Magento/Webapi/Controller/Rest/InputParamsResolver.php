@@ -13,36 +13,43 @@ use Magento\Webapi\Controller\Rest\Router\Route;
 
 /**
  * This class is responsible for retrieving resolved input data
+ * @since 2.1.0
  */
 class InputParamsResolver
 {
     /**
      * @var RestRequest
+     * @since 2.1.0
      */
     private $request;
 
     /**
      * @var ParamsOverrider
+     * @since 2.1.0
      */
     private $paramsOverrider;
 
     /**
      * @var ServiceInputProcessor
+     * @since 2.1.0
      */
     private $serviceInputProcessor;
 
     /**
      * @var Router
+     * @since 2.1.0
      */
     private $router;
 
     /**
      * @var Route
+     * @since 2.1.0
      */
     private $route;
 
     /**
      * @var RequestValidator
+     * @since 2.1.0
      */
     private $requestValidator;
 
@@ -54,6 +61,7 @@ class InputParamsResolver
      * @param ServiceInputProcessor $serviceInputProcessor
      * @param Router $router
      * @param RequestValidator $requestValidator
+     * @since 2.1.0
      */
     public function __construct(
         RestRequest $request,
@@ -74,6 +82,7 @@ class InputParamsResolver
      *
      * @return array
      * @throws \Magento\Framework\Webapi\Exception
+     * @since 2.1.0
      */
     public function resolve()
     {
@@ -106,6 +115,7 @@ class InputParamsResolver
      * Retrieve current route.
      *
      * @return Route
+     * @since 2.1.0
      */
     public function getRoute()
     {

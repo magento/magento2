@@ -10,6 +10,10 @@ use Magento\Paypal\Controller\Payflow;
 use Magento\Paypal\Model\Config;
 use Magento\Sales\Model\Order;
 
+/**
+ * Class \Magento\Paypal\Controller\Payflow\ReturnUrl
+ *
+ */
 class ReturnUrl extends Payflow
 {
     /**
@@ -24,6 +28,7 @@ class ReturnUrl extends Payflow
     /**
      * Payment method code
      * @var string
+     * @since 2.0.1
      */
     protected $allowedPaymentMethodCodes = [
         Config::METHOD_PAYFLOWPRO,
@@ -69,6 +74,7 @@ class ReturnUrl extends Payflow
      *
      * @param Order $order
      * @return bool
+     * @since 2.0.1
      */
     protected function checkOrderState(Order $order)
     {
@@ -80,6 +86,7 @@ class ReturnUrl extends Payflow
      *
      * @param Order $order
      * @return bool
+     * @since 2.0.1
      */
     protected function checkPaymentMethod(Order $order)
     {

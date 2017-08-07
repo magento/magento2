@@ -29,6 +29,7 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $filters = [];
 

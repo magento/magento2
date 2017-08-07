@@ -26,6 +26,7 @@ class SaveHandler implements SaveHandlerInterface
      * Config
      *
      * @var ConfigInterface
+     * @since 2.0.6
      */
     private $config;
 
@@ -133,7 +134,8 @@ class SaveHandler implements SaveHandlerInterface
      * Get config
      *
      * @return ConfigInterface
-     * @deprecated
+     * @deprecated 2.0.6
+     * @since 2.0.6
      */
     private function getConfig()
     {
@@ -148,6 +150,7 @@ class SaveHandler implements SaveHandlerInterface
      *
      * @param string $saveHandler
      * @return $this
+     * @since 2.0.6
      */
     private function setSaveHandler($saveHandler)
     {

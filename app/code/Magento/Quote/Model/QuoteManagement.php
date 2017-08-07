@@ -132,16 +132,19 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
     /**
      * @var \Magento\Quote\Model\QuoteIdMaskFactory
+     * @since 2.0.6
      */
     private $quoteIdMaskFactory;
 
     /**
      * @var \Magento\Customer\Api\AddressRepositoryInterface
+     * @since 2.2.0
      */
     private $addressRepository;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $addressesToSync = [];
 

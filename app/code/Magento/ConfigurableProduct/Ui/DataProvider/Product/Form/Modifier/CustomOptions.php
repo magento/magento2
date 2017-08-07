@@ -14,6 +14,7 @@ use Magento\Ui\Component\Container;
 
 /**
  * Data provider that customizes Customizable Options for Configurable product
+ * @since 2.1.0
  */
 class CustomOptions extends AbstractModifier
 {
@@ -21,17 +22,20 @@ class CustomOptions extends AbstractModifier
 
     /**
      * @var LocatorInterface
+     * @since 2.1.0
      */
     private $locator;
 
     /**
      * @var ArrayManager
+     * @since 2.1.0
      */
     private $arrayManager;
 
     /**
      * @param LocatorInterface $locator
      * @param ArrayManager $arrayManager
+     * @since 2.1.0
      */
     public function __construct(LocatorInterface $locator, ArrayManager $arrayManager)
     {
@@ -41,6 +45,7 @@ class CustomOptions extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -49,6 +54,7 @@ class CustomOptions extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -63,6 +69,7 @@ class CustomOptions extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @since 2.1.0
      */
     private function addPriceTypeWarning(array $meta)
     {
@@ -106,6 +113,7 @@ class CustomOptions extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @since 2.1.0
      */
     private function modifyPriceTypeFields(array $meta)
     {

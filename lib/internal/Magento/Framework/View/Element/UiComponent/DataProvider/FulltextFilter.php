@@ -40,6 +40,7 @@ class FulltextFilter implements FilterApplierInterface
      * @param AbstractDb $collection
      * @param string $indexTable
      * @return array
+     * @since 2.1.0
      */
     protected function addTableAliasToColumns(array $columns, AbstractDb $collection, $indexTable)
     {

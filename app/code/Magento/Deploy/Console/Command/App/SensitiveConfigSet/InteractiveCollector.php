@@ -12,22 +12,26 @@ use Symfony\Component\Console\Helper\QuestionHelper;
 
 /**
  * Class InteractiveCollector collects configuration values from user input
+ * @since 2.2.0
  */
 class InteractiveCollector implements CollectorInterface
 {
     /**
      * @var QuestionFactory
+     * @since 2.2.0
      */
     private $questionFactory;
 
     /**
      * @var QuestionHelper
+     * @since 2.2.0
      */
     private $questionHelper;
 
     /**
      * @param QuestionFactory $questionFactory
      * @param QuestionHelper $questionHelper
+     * @since 2.2.0
      */
     public function __construct(
         QuestionFactory $questionFactory,
@@ -50,6 +54,7 @@ class InteractiveCollector implements CollectorInterface
      * ]
      * ```
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getValues(InputInterface $input, OutputInterface $output, array $configPaths)
     {

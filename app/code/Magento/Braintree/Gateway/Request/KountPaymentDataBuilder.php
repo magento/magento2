@@ -12,6 +12,7 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
  * Class KountPaymentDataBuilder
+ * @since 2.1.0
  */
 class KountPaymentDataBuilder implements BuilderInterface
 {
@@ -22,11 +23,13 @@ class KountPaymentDataBuilder implements BuilderInterface
 
     /**
      * @var Config
+     * @since 2.1.0
      */
     private $config;
 
     /**
      * @var SubjectReader
+     * @since 2.1.0
      */
     private $subjectReader;
 
@@ -35,6 +38,7 @@ class KountPaymentDataBuilder implements BuilderInterface
      *
      * @param Config $config
      * @param SubjectReader $subjectReader
+     * @since 2.1.0
      */
     public function __construct(Config $config, SubjectReader $subjectReader)
     {
@@ -44,6 +48,7 @@ class KountPaymentDataBuilder implements BuilderInterface
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     public function build(array $buildSubject)
     {

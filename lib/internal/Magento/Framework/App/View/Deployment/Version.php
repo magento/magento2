@@ -30,6 +30,7 @@ class Version
 
     /**
      * @var LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 
@@ -84,6 +85,7 @@ class Version
      * Generate version of static content
      *
      * @return int
+     * @since 2.2.0
      */
     private function generateVersion()
     {
@@ -94,7 +96,8 @@ class Version
      * Get logger
      *
      * @return LoggerInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getLogger()
     {

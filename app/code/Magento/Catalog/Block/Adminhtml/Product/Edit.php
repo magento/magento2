@@ -12,6 +12,10 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Edit
+ *
+ */
 class Edit extends \Magento\Backend\Block\Widget
 {
     /**
@@ -249,7 +253,7 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.2.0
      * @return string
      */
     public function getHeader()

@@ -11,6 +11,7 @@ use Magento\Ui\Config\ConverterInterface;
  * Composite converter
  *
  * Identify required converter
+ * @since 2.2.0
  */
 class Composite implements ConverterInterface
 {
@@ -18,6 +19,7 @@ class Composite implements ConverterInterface
      * Format: array('<name>' => <instance>, ...)
      *
      * @var ConverterInterface[]
+     * @since 2.2.0
      */
     private $converters;
 
@@ -25,6 +27,7 @@ class Composite implements ConverterInterface
      * Data key that holds name of an converter to be used for that data
      *
      * @var string
+     * @since 2.2.0
      */
     private $discriminator;
 
@@ -32,6 +35,7 @@ class Composite implements ConverterInterface
      * @param ConverterInterface[] $converters
      * @param string $discriminator
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     public function __construct(array $converters, $discriminator)
     {
@@ -49,6 +53,7 @@ class Composite implements ConverterInterface
     /**
      * @inheritdoc
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     public function convert(\DOMNode $node, array $data)
     {
@@ -70,6 +75,7 @@ class Composite implements ConverterInterface
      * @param ConverterInterface $instance
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     public function addConverter($name, ConverterInterface $instance)
     {
@@ -85,6 +91,7 @@ class Composite implements ConverterInterface
      * @param string $name
      * @return ConverterInterface
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     private function getConverter($name)
     {

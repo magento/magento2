@@ -7,15 +7,22 @@ namespace Magento\Framework\App;
 
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Class \Magento\Framework\App\ScopeResolver
+ *
+ * @since 2.2.0
+ */
 class ScopeResolver implements ScopeResolverInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.2.0
      */
     protected $objectManager;
 
     /**
      * @var ScopeInterface
+     * @since 2.2.0
      */
     private $defaultScope;
 
@@ -23,6 +30,7 @@ class ScopeResolver implements ScopeResolverInterface
      * ScopeResolver constructor
      *
      * @param ObjectManagerInterface $objectManager
+     * @since 2.2.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -32,6 +40,7 @@ class ScopeResolver implements ScopeResolverInterface
     /**
      * {@inheritdoc}
      * @return ScopeDefault
+     * @since 2.2.0
      */
     public function getScope($scopeId = null)
     {
@@ -46,6 +55,7 @@ class ScopeResolver implements ScopeResolverInterface
      * Retrieve a list of available scopes
      *
      * @return ScopeInterface[]
+     * @since 2.2.0
      */
     public function getScopes()
     {

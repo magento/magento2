@@ -10,6 +10,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Configurate all storages that needed for recently viewed widgets
+ * @since 2.2.0
  */
 class RecentlyViewedStorageConfiguration implements FrontendStorageConfigurationInterface
 {
@@ -18,12 +19,14 @@ class RecentlyViewedStorageConfiguration implements FrontendStorageConfiguration
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.2.0
      */
     private $scopeConfig;
 
     /**
      * RecentlyViewedStorageConfiguration constructor.
      * @param ScopeConfigInterface $scopeConfig
+     * @since 2.2.0
      */
     public function __construct(ScopeConfigInterface $scopeConfig)
     {
@@ -34,6 +37,7 @@ class RecentlyViewedStorageConfiguration implements FrontendStorageConfiguration
      * Parse lifetime of recently viewed products in widget
      *
      * @inheritdoc
+     * @since 2.2.0
      */
     public function get()
     {

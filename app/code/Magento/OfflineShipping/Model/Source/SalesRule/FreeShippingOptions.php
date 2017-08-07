@@ -10,12 +10,14 @@ use Magento\OfflineShipping\Model\SalesRule\Rule;
 
 /**
  * @api
+ * @since 2.1.0
  */
 class FreeShippingOptions implements OptionSourceInterface
 {
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.1.0
      */
     public function toOptionArray()
     {

@@ -9,6 +9,10 @@ use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
 
+/**
+ * Class \Magento\Newsletter\Model\Plugin\CustomerPlugin
+ *
+ */
 class CustomerPlugin
 {
     /**
@@ -84,6 +88,7 @@ class CustomerPlugin
      * @param CustomerInterface $customer
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterDelete(CustomerRepository $subject, $result, CustomerInterface $customer)
     {

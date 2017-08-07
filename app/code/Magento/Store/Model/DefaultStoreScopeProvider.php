@@ -12,12 +12,14 @@ use Magento\Framework\Model\Entity\ScopeFactory;
 
 /**
  * Class StoreScope
+ * @since 2.1.0
  */
 class DefaultStoreScopeProvider implements ScopeProviderInterface
 {
 
     /**
      * @var ScopeFactory
+     * @since 2.1.0
      */
     private $scopeFactory;
 
@@ -25,6 +27,7 @@ class DefaultStoreScopeProvider implements ScopeProviderInterface
      * StoreScopeProvider constructor.
      *
      * @param ScopeFactory $scopeFactory
+     * @since 2.1.0
      */
     public function __construct(
         ScopeFactory $scopeFactory
@@ -37,6 +40,7 @@ class DefaultStoreScopeProvider implements ScopeProviderInterface
      * @param array $entityData
      * @return \Magento\Framework\Model\Entity\ScopeInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function getContext($entityType, $entityData = [])
     {

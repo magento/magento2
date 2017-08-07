@@ -161,6 +161,7 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Read information about all stores
      *
      * @return array
+     * @since 2.1.3
      */
     public function readAllStores()
     {

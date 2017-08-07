@@ -87,11 +87,13 @@ class StockItemRepository implements StockItemRepositoryInterface
 
     /**
      * @var StockRegistryStorage
+     * @since 2.1.0
      */
     protected $stockRegistryStorage;
 
     /**
      * @var  \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @since 2.1.3
      */
     protected $productCollectionFactory;
 
@@ -252,6 +254,7 @@ class StockItemRepository implements StockItemRepositoryInterface
 
     /**
      * @return StockRegistryStorage
+     * @since 2.1.0
      */
     private function getStockRegistryStorage()
     {

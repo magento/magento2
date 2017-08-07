@@ -21,6 +21,7 @@ class Customer implements SectionSourceInterface
 
     /**
      * @var View
+     * @since 2.2.0
      */
     private $customerViewHelper;
 

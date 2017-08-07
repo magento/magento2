@@ -37,6 +37,7 @@ abstract class Index extends \Magento\Framework\App\Action\Action
 
     /**
      * @var ConfigInterface
+     * @since 2.2.0
      */
     private $contactsConfig;
 

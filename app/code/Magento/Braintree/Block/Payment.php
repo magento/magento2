@@ -14,11 +14,13 @@ use Magento\Framework\View\Element\Template\Context;
  * Class Payment
  *
  * @api
+ * @since 2.1.0
  */
 class Payment extends Template
 {
     /**
      * @var ConfigProviderInterface
+     * @since 2.1.0
      */
     private $config;
 
@@ -28,6 +30,7 @@ class Payment extends Template
      * @param Context $context
      * @param ConfigProviderInterface $config
      * @param array $data
+     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -40,6 +43,7 @@ class Payment extends Template
 
     /**
      * @return string
+     * @since 2.1.0
      */
     public function getPaymentConfig()
     {
@@ -51,6 +55,7 @@ class Payment extends Template
 
     /**
      * @return string
+     * @since 2.1.0
      */
     public function getCode()
     {

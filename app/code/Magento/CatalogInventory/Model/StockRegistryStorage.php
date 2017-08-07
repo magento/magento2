@@ -11,27 +11,32 @@ use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 
 /**
  * Class StockRegistryStorage
+ * @since 2.1.0
  */
 class StockRegistryStorage
 {
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $stocks = [];
 
     /**
      * @var array
+     * @since 2.1.0
      */
     private $stockItems = [];
 
     /**
      * @var array
+     * @since 2.1.0
      */
     private $stockStatuses = [];
 
     /**
      * @param int $scopeId
      * @return StockInterface
+     * @since 2.1.0
      */
     public function getStock($scopeId)
     {
@@ -42,6 +47,7 @@ class StockRegistryStorage
      * @param int $scopeId
      * @param StockInterface $value
      * @return void
+     * @since 2.1.0
      */
     public function setStock($scopeId, StockInterface $value)
     {
@@ -51,6 +57,7 @@ class StockRegistryStorage
     /**
      * @param int|null $scopeId
      * @return void
+     * @since 2.1.0
      */
     public function removeStock($scopeId = null)
     {
@@ -65,6 +72,7 @@ class StockRegistryStorage
      * @param int $productId
      * @param int $scopeId
      * @return StockItemInterface
+     * @since 2.1.0
      */
     public function getStockItem($productId, $scopeId)
     {
@@ -76,6 +84,7 @@ class StockRegistryStorage
      * @param int $scopeId
      * @param StockItemInterface $value
      * @return void
+     * @since 2.1.0
      */
     public function setStockItem($productId, $scopeId, StockItemInterface $value)
     {
@@ -86,6 +95,7 @@ class StockRegistryStorage
      * @param int $productId
      * @param int|null $scopeId
      * @return void
+     * @since 2.1.0
      */
     public function removeStockItem($productId, $scopeId = null)
     {
@@ -100,6 +110,7 @@ class StockRegistryStorage
      * @param int $productId
      * @param int $scopeId
      * @return StockStatusInterface
+     * @since 2.1.0
      */
     public function getStockStatus($productId, $scopeId)
     {
@@ -111,6 +122,7 @@ class StockRegistryStorage
      * @param int $scopeId
      * @param StockStatusInterface $value
      * @return void
+     * @since 2.1.0
      */
     public function setStockStatus($productId, $scopeId, StockStatusInterface $value)
     {
@@ -121,6 +133,7 @@ class StockRegistryStorage
      * @param int $productId
      * @param int|null $scopeId
      * @return void
+     * @since 2.1.0
      */
     public function removeStockStatus($productId, $scopeId = null)
     {

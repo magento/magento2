@@ -16,12 +16,13 @@ use Magento\Framework\Api\DataObjectHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated
+ * @deprecated 2.2.0
  */
 class Cart extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**
      * @var \Magento\Quote\Model\QuoteFactory
+     * @since 2.2.0
      */
     private $quoteFactory;
 
@@ -55,6 +56,7 @@ class Cart extends \Magento\Customer\Controller\Adminhtml\Index
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Quote\Model\QuoteFactory|null $quoteFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,

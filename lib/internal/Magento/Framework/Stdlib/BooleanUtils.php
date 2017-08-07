@@ -71,6 +71,7 @@ class BooleanUtils
      *
      * @param mixed $value
      * @return mixed
+     * @since 2.2.0
      */
     public function convert($value)
     {

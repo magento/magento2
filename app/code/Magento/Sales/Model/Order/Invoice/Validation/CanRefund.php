@@ -15,16 +15,19 @@ use Magento\Sales\Model\ValidatorInterface;
 
 /**
  * Class CanRefund
+ * @since 2.1.3
  */
 class CanRefund implements ValidatorInterface
 {
     /**
      * @var OrderPaymentRepositoryInterface
+     * @since 2.1.3
      */
     private $paymentRepository;
 
     /**
      * @var OrderRepositoryInterface
+     * @since 2.1.3
      */
     private $orderRepository;
 
@@ -33,6 +36,7 @@ class CanRefund implements ValidatorInterface
      *
      * @param OrderPaymentRepositoryInterface $paymentRepository
      * @param OrderRepositoryInterface $orderRepository
+     * @since 2.1.3
      */
     public function __construct(
         OrderPaymentRepositoryInterface $paymentRepository,
@@ -44,6 +48,7 @@ class CanRefund implements ValidatorInterface
 
     /**
      * @inheritdoc
+     * @since 2.1.3
      */
     public function validate($entity)
     {
@@ -60,6 +65,7 @@ class CanRefund implements ValidatorInterface
     /**
      * @param InvoiceInterface $invoice
      * @return bool
+     * @since 2.1.3
      */
     private function isPaymentAllowRefund(InvoiceInterface $invoice)
     {
@@ -75,6 +81,7 @@ class CanRefund implements ValidatorInterface
     /**
      * @param InvoiceInterface $entity
      * @return bool
+     * @since 2.1.3
      */
     private function isGrandTotalEnoughToRefund(InvoiceInterface $entity)
     {
@@ -85,6 +92,7 @@ class CanRefund implements ValidatorInterface
      * @param MethodInterface $method
      * @param InfoInterface $payment
      * @return bool
+     * @since 2.1.3
      */
     private function canPartialRefund(MethodInterface $method, InfoInterface $payment)
     {
@@ -97,6 +105,7 @@ class CanRefund implements ValidatorInterface
      * @param InvoiceInterface $invoice
      * @param MethodInterface $method
      * @return bool
+     * @since 2.1.3
      */
     private function canFullRefund(InvoiceInterface $invoice, MethodInterface $method)
     {

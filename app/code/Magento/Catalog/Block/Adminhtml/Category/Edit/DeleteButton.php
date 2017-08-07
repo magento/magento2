@@ -10,6 +10,7 @@ use Magento\Catalog\Block\Adminhtml\Category\AbstractCategory;
 
 /**
  * Class DeleteButton
+ * @since 2.1.0
  */
 class DeleteButton extends AbstractCategory implements ButtonProviderInterface
 {
@@ -17,6 +18,7 @@ class DeleteButton extends AbstractCategory implements ButtonProviderInterface
      * Delete button
      *
      * @return array
+     * @since 2.1.0
      */
     public function getButtonData()
     {
@@ -39,6 +41,7 @@ class DeleteButton extends AbstractCategory implements ButtonProviderInterface
     /**
      * @param array $args
      * @return string
+     * @since 2.1.0
      */
     public function getDeleteUrl(array $args = [])
     {
@@ -48,6 +51,7 @@ class DeleteButton extends AbstractCategory implements ButtonProviderInterface
 
     /**
      * @return array
+     * @since 2.1.0
      */
     protected function getDefaultUrlParams()
     {

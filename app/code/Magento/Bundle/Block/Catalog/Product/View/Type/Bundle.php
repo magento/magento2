@@ -52,6 +52,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 
     /**
      * @var \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
+     * @since 2.2.0
      */
     private $catalogRuleProcessor;
 
@@ -85,8 +86,9 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.2.0
      * @return \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
+     * @since 2.2.0
      */
     private function getCatalogRuleProcessor()
     {

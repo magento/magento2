@@ -83,6 +83,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
 
     /**
      * @var Config
+     * @since 2.1.0
      */
     private $config;
 
@@ -187,6 +188,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
 
     /**
      * @return bool
+     * @since 2.1.0
      */
     protected function shouldRender()
     {

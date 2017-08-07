@@ -12,16 +12,19 @@ use Magento\Framework\Search\RequestInterface;
  * Request checker for advanced search.
  *
  * Checks advanced search query whether required to collect all attributes for entity.
+ * @since 2.2.0
  */
 class AdvancedSearch implements RequestCheckerInterface
 {
     /**
      * Identifier for query name
+     * @since 2.2.0
      */
     private $name;
 
     /**
      * @param string $name
+     * @since 2.2.0
      */
     public function __construct($name)
     {
@@ -30,6 +33,7 @@ class AdvancedSearch implements RequestCheckerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function isApplicable(RequestInterface $request)
     {

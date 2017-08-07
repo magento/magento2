@@ -6,7 +6,7 @@
 namespace Magento\Framework\Json;
 
 /**
- * @deprecated @see \Magento\Framework\Serialize\Serializer\Json::serialize
+ * @deprecated 2.2.0 @see \Magento\Framework\Serialize\Serializer\Json::serialize
  */
 class Encoder implements EncoderInterface
 {

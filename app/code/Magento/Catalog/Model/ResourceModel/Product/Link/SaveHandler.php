@@ -16,31 +16,37 @@ use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
  * Class SaveHandler
+ * @since 2.1.0
  */
 class SaveHandler
 {
     /**
      * @var LinkTypeProvider
+     * @since 2.1.0
      */
     protected $linkTypeProvider;
 
     /**
      * @var DataObjectProcessor
+     * @since 2.1.0
      */
     protected $dataObjectProcessor;
 
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @var ProductRepositoryInterface
+     * @since 2.1.0
      */
     protected $productRepository;
 
     /**
      * @var Link
+     * @since 2.1.0
      */
     protected $linkResource;
 
@@ -52,6 +58,7 @@ class SaveHandler
      * @param Link $linkResource
      * @param DataObjectProcessor $dataObjectProcessor
      * @param LinkTypeProvider $linkTypeProvider
+     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -73,6 +80,7 @@ class SaveHandler
      * @return object
      * @throws CouldNotSaveException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function execute($entityType, $entity)
     {

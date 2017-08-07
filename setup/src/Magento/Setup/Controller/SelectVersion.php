@@ -66,6 +66,7 @@ class SelectVersion extends AbstractActionController
      * Gets installed system package
      *
      * @return JsonModel
+     * @since 2.0.11
      */
     public function installedSystemPackageAction()
     {

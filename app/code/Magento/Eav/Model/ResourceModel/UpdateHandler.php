@@ -16,46 +16,55 @@ use Magento\Framework\EntityManager\Operation\AttributeInterface;
  * Class UpdateHandler
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.1.0
  */
 class UpdateHandler implements AttributeInterface
 {
     /**
      * @var AttributeRepository
+     * @since 2.1.0
      */
     private $attributeRepository;
 
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     private $metadataPool;
 
     /**
      * @var SearchCriteriaBuilder
+     * @since 2.1.0
      */
     private $searchCriteriaBuilder;
 
     /**
      * @var AttributePersistor
+     * @since 2.1.0
      */
     private $attributePersistor;
 
     /**
      * @var ReadSnapshot
+     * @since 2.1.0
      */
     private $readSnapshot;
 
     /**
      * @var ScopeResolver
+     * @since 2.1.0
      */
     private $scopeResolver;
 
     /**
      * @var ReadHandler
+     * @since 2.1.0
      */
     private $readHandler;
 
     /**
      * @var AttributeLoader
+     * @since 2.1.3
      */
     private $attributeLoader;
 
@@ -68,6 +77,7 @@ class UpdateHandler implements AttributeInterface
      * @param ReadSnapshot $readSnapshot
      * @param ScopeResolver $scopeResolver
      * @param AttributeLoader $attributeLoader
+     * @since 2.1.0
      */
     public function __construct(
         AttributeRepository $attributeRepository,
@@ -91,6 +101,7 @@ class UpdateHandler implements AttributeInterface
      * @param string $entityType
      * @param int $attributeSetId
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
+     * @since 2.1.0
      */
     protected function getAttributes($entityType, $attributeSetId = null)
     {
@@ -107,6 +118,7 @@ class UpdateHandler implements AttributeInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function execute($entityType, $entityData, $arguments = [])
     {
@@ -190,9 +202,10 @@ class UpdateHandler implements AttributeInterface
     /**
      * Get read handler
      *
-     * @deprecated
+     * @deprecated 2.1.0
      *
      * @return ReadHandler
+     * @since 2.1.0
      */
     protected function getReadHandler()
     {

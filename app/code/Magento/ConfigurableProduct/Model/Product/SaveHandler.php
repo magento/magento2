@@ -13,16 +13,19 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class SaveHandler
+ * @since 2.1.0
  */
 class SaveHandler implements ExtensionInterface
 {
     /**
      * @var OptionRepositoryInterface
+     * @since 2.1.0
      */
     private $optionRepository;
 
     /**
      * @var ResourceModelConfigurable
+     * @since 2.1.0
      */
     private $resourceModel;
 
@@ -31,6 +34,7 @@ class SaveHandler implements ExtensionInterface
      *
      * @param ResourceModelConfigurable $resourceModel
      * @param OptionRepositoryInterface $optionRepository
+     * @since 2.1.0
      */
     public function __construct(
         ResourceModelConfigurable $resourceModel,
@@ -45,6 +49,7 @@ class SaveHandler implements ExtensionInterface
      * @param array $arguments
      * @return ProductInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function execute($entity, $arguments = [])
     {
@@ -78,6 +83,7 @@ class SaveHandler implements ExtensionInterface
      * @param ProductInterface $product
      * @param array $attributes
      * @return array
+     * @since 2.1.0
      */
     private function saveConfigurableProductAttributes(ProductInterface $product, array $attributes)
     {
@@ -96,6 +102,7 @@ class SaveHandler implements ExtensionInterface
      *
      * @param ProductInterface $product
      * @return void
+     * @since 2.1.0
      */
     private function deleteConfigurableProductAttributes(ProductInterface $product)
     {

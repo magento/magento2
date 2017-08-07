@@ -12,26 +12,31 @@ use Magento\Sales\Model\OrderFactory;
 /**
  * Class ShippingAssignmentBuilder
  * @package Magento\Sales\Model\Order
+ * @since 2.0.3
  */
 class ShippingAssignmentBuilder
 {
     /**
      * @var OrderFactory
+     * @since 2.0.3
      */
     private $orderFactory;
 
     /**
      * @var ShippingAssignmentInterfaceFactory
+     * @since 2.0.3
      */
     private $shippingAssignmentFactory;
 
     /**
      * @var ShippingBuilderFactory
+     * @since 2.0.3
      */
     private $shippingBuilderFactory;
 
     /**
      * @var int|null
+     * @since 2.0.3
      */
     private $orderId = null;
 
@@ -41,6 +46,7 @@ class ShippingAssignmentBuilder
      * @param OrderFactory $orderFactory
      * @param ShippingAssignmentInterfaceFactory $shippingAssignmentFactory
      * @param ShippingBuilderFactory $shippingBuilderFactory
+     * @since 2.0.3
      */
     public function __construct(
         OrderFactory $orderFactory,
@@ -55,6 +61,7 @@ class ShippingAssignmentBuilder
     /**
      * @param int $orderId
      * @return void
+     * @since 2.0.3
      */
     public function setOrderId($orderId)
     {
@@ -63,6 +70,7 @@ class ShippingAssignmentBuilder
 
     /**
      * @return int|null
+     * @since 2.0.3
      */
     private function getOrderId()
     {
@@ -71,6 +79,7 @@ class ShippingAssignmentBuilder
 
     /**
      * @return ShippingAssignmentInterface[]|null
+     * @since 2.0.3
      */
     public function create()
     {

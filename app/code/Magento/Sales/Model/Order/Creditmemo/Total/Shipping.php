@@ -21,6 +21,7 @@ class Shipping extends AbstractTotal
      * Tax config
      *
      * @var \Magento\Tax\Model\Config
+     * @since 2.1.0
      */
     private $taxConfig;
 
@@ -119,6 +120,7 @@ class Shipping extends AbstractTotal
      *
      * @param \Magento\Sales\Model\Order $order
      * @return bool
+     * @since 2.1.0
      */
     private function isSuppliedShippingAmountInclTax($order)
     {
@@ -132,7 +134,8 @@ class Shipping extends AbstractTotal
      *
      * @return \Magento\Tax\Model\Config
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getTaxConfig()
     {

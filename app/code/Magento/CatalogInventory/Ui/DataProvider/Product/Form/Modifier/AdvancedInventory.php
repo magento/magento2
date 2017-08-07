@@ -18,6 +18,7 @@ use Magento\Framework\Serialize\JsonValidator;
 
 /**
  * Data provider for advanced inventory form
+ * @since 2.1.0
  */
 class AdvancedInventory extends AbstractModifier
 {
@@ -25,36 +26,43 @@ class AdvancedInventory extends AbstractModifier
 
     /**
      * @var LocatorInterface
+     * @since 2.1.0
      */
     private $locator;
 
     /**
      * @var StockRegistryInterface
+     * @since 2.1.0
      */
     private $stockRegistry;
 
     /**
      * @var ArrayManager
+     * @since 2.1.0
      */
     private $arrayManager;
 
     /**
      * @var StockConfigurationInterface
+     * @since 2.1.0
      */
     private $stockConfiguration;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     private $meta = [];
 
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var JsonValidator
+     * @since 2.2.0
      */
     private $jsonValidator;
 
@@ -67,6 +75,7 @@ class AdvancedInventory extends AbstractModifier
      * @param StockConfigurationInterface $stockConfiguration
      * @param Json|null $serializer
      * @param JsonValidator|null $jsonValidator
+     * @since 2.1.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -86,6 +95,7 @@ class AdvancedInventory extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -141,6 +151,7 @@ class AdvancedInventory extends AbstractModifier
      *
      * @param StockItemInterface $stockItem
      * @return array
+     * @since 2.1.0
      */
     private function getData(StockItemInterface $stockItem)
     {
@@ -164,6 +175,7 @@ class AdvancedInventory extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -176,6 +188,7 @@ class AdvancedInventory extends AbstractModifier
 
     /**
      * @return void
+     * @since 2.1.0
      */
     private function prepareMeta()
     {

@@ -124,6 +124,7 @@ class ActionPool implements ActionPoolInterface
      * @param  string $name
      * @param  array $arguments
      * @return void
+     * @since 2.1.0
      */
     public function addHtmlBlock($type, $name = '', array $arguments = [])
     {

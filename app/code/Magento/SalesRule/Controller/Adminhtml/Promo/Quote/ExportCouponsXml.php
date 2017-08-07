@@ -8,6 +8,10 @@ namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\ExportCouponsXml
+ *
+ */
 class ExportCouponsXml extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
     /**

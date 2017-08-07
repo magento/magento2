@@ -77,6 +77,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      *
      * @param \Magento\Eav\Model\Entity\AbstractEntity $entity
      * @return string
+     * @since 2.1.0
      */
     protected function getEntityPkName(\Magento\Eav\Model\Entity\AbstractEntity $entity)
     {

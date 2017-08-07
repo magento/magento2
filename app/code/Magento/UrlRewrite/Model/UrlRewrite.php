@@ -27,6 +27,7 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -38,6 +39,7 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param Json $serializer
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -78,6 +80,7 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
      * @param array|string $metadata
      *
      * @return $this
+     * @since 2.2.0
      */
     public function setMetadata($metadata)
     {

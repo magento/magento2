@@ -10,6 +10,11 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface as AttributeRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
+/**
+ * Class \Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns\Attributes
+ *
+ * @since 2.1.0
+ */
 class Attributes extends \Magento\Ui\Component\Listing\Columns\Column
 {
     /**
@@ -19,11 +24,13 @@ class Attributes extends \Magento\Ui\Component\Listing\Columns\Column
 
     /**
      * @var AttributeRepository
+     * @since 2.1.0
      */
     protected $attributeRepository;
 
     /**
      * @var SearchCriteriaBuilder
+     * @since 2.1.0
      */
     protected $searchCriteriaBuilder;
 
@@ -34,6 +41,7 @@ class Attributes extends \Magento\Ui\Component\Listing\Columns\Column
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param array $components
      * @param array $data
+     * @since 2.1.0
      */
     public function __construct(
         ContextInterface $context,
@@ -53,6 +61,7 @@ class Attributes extends \Magento\Ui\Component\Listing\Columns\Column
      *
      * @param array $dataSource
      * @return array
+     * @since 2.1.0
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -80,6 +89,7 @@ class Attributes extends \Magento\Ui\Component\Listing\Columns\Column
      * Array contains attribute label and options labels
      *
      * @return array
+     * @since 2.1.0
      */
     private function getAttributes()
     {
@@ -106,6 +116,7 @@ class Attributes extends \Magento\Ui\Component\Listing\Columns\Column
      * Get SearchCriteria for attributeRepository
      *
      * @return \Magento\Framework\Api\SearchCriteria
+     * @since 2.1.0
      */
     private function getSearchCriteria()
     {

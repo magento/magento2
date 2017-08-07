@@ -11,6 +11,11 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 
+/**
+ * Class \Magento\Store\Setup\UpgradeSchema
+ *
+ * @since 2.2.0
+ */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
@@ -19,6 +24,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * @param SchemaSetupInterface $setup
      * @param ModuleContextInterface $context
      * @return void
+     * @since 2.2.0
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -36,6 +42,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
      *
      * @param SchemaSetupInterface $setup
      * @return void
+     * @since 2.2.0
      */
     private function addCodeColumnToStoreGroupTable(SchemaSetupInterface $setup)
     {

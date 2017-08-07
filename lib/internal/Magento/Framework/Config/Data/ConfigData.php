@@ -30,6 +30,7 @@ class ConfigData
      * Override previous config options when save
      *
      * @var bool
+     * @since 2.0.3
      */
     private $overrideWhenSave = false;
 
@@ -68,6 +69,7 @@ class ConfigData
      *
      * @param bool $overrideWhenSave
      * @return void
+     * @since 2.0.3
      */
     public function setOverrideWhenSave($overrideWhenSave)
     {
@@ -78,6 +80,7 @@ class ConfigData
      * Gets override when save flag
      *
      * @return bool
+     * @since 2.0.3
      */
     public function isOverrideWhenSave()
     {

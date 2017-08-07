@@ -12,27 +12,32 @@ use Magento\Catalog\Model\Product;
  * Read handler for catalog product gallery.
  *
  * @api
+ * @since 2.1.0
  */
 class ReadHandler implements ExtensionInterface
 {
     /**
      * @var \Magento\Catalog\Api\Data\ProductAttributeInterface
+     * @since 2.1.0
      */
     protected $attribute;
 
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     * @since 2.1.0
      */
     protected $attributeRepository;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery
+     * @since 2.1.0
      */
     protected $resourceModel;
 
     /**
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
@@ -47,6 +52,7 @@ class ReadHandler implements ExtensionInterface
      * @param array $arguments
      * @return object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function execute($entity, $arguments = [])
     {
@@ -70,6 +76,7 @@ class ReadHandler implements ExtensionInterface
      * @param Product $product
      * @param array $mediaEntries
      * @return void
+     * @since 2.1.1
      */
     public function addMediaDataToProduct(Product $product, array $mediaEntries)
     {
@@ -88,6 +95,7 @@ class ReadHandler implements ExtensionInterface
     /**
      * @param array $rawData
      * @return array
+     * @since 2.1.1
      */
     private function substituteNullsWithDefaultValues(array $rawData)
     {
@@ -108,6 +116,7 @@ class ReadHandler implements ExtensionInterface
 
     /**
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface
+     * @since 2.1.0
      */
     public function getAttribute()
     {
@@ -122,7 +131,8 @@ class ReadHandler implements ExtensionInterface
      * @param string $key
      * @param string[] &$image
      * @return string
-     * @deprecated
+     * @deprecated 2.1.1
+     * @since 2.1.0
      */
     protected function findDefaultValue($key, &$image)
     {

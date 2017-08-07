@@ -84,6 +84,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
 
     /**
      * @var PriceCurrencyInterface
+     * @since 2.2.0
      */
     private $priceCurrency;
 
@@ -91,6 +92,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * Json Serializer Instance
      *
      * @var Json
+     * @since 2.2.0
      */
     private $json;
 
@@ -378,7 +380,8 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     /**
      * @return PriceCurrencyInterface
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getPriceCurrency()
     {

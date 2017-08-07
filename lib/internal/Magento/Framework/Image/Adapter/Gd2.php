@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Image\Adapter;
 
+/**
+ * Class \Magento\Framework\Image\Adapter\Gd2
+ *
+ */
 class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
 {
     /**
@@ -649,6 +653,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * Helper function to free up memory associated with _imageHandler resource
      *
      * @return void
+     * @since 2.1.0
      */
     private function imageDestroy()
     {

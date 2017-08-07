@@ -13,21 +13,25 @@ use Magento\Tax\Model\Calculation\Rate;
 /**
  * Provides filtered tax rates models
  * as options for select element.
+ * @since 2.2.0
  */
 class Provider
 {
     /**
      * @var TaxRateRepositoryInterface
+     * @since 2.2.0
      */
     private $taxRateRepository;
 
     /**
      * @var Converter
+     * @since 2.2.0
      */
     private $converter;
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $pageSize = 100;
 
@@ -36,6 +40,7 @@ class Provider
      *
      * @param TaxRateRepositoryInterface $taxRateRepository
      * @param Converter $converter
+     * @since 2.2.0
      */
     public function __construct(
         TaxRateRepositoryInterface $taxRateRepository,
@@ -50,6 +55,7 @@ class Provider
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @return array
+     * @since 2.2.0
      */
     public function toOptionArray(SearchCriteriaInterface $searchCriteria)
     {
@@ -66,6 +72,7 @@ class Provider
      * Returns predefined size of tax rates list
      *
      * @return int
+     * @since 2.2.0
      */
     public function getPageSize()
     {

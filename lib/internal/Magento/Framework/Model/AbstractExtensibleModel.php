@@ -338,6 +338,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
 
     /**
      * @inheritdoc
+     * @since 2.0.9
      */
     public function __sleep()
     {
@@ -346,6 +347,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
 
     /**
      * @inheritdoc
+     * @since 2.0.9
      */
     public function __wakeup()
     {

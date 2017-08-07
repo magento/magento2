@@ -14,11 +14,13 @@ class TypeCaster
 {
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @param Json $serializer
+     * @since 2.2.0
      */
     public function __construct(Json $serializer)
     {

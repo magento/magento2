@@ -16,6 +16,7 @@ use Magento\Review\Block\Product\ReviewRenderer;
 /**
  * Collect enough information for rendering reviews, ratings, etc...
  * Can be used on product page, on product listing page
+ * @since 2.2.0
  */
 class Review implements ProductRenderCollectorInterface
 {
@@ -24,21 +25,25 @@ class Review implements ProductRenderCollectorInterface
 
     /**
      * @var ReviewRenderer
+     * @since 2.2.0
      */
     private $reviewRenderer;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $reviewType;
 
     /**
      * @var ProductRenderExtensionFactory
+     * @since 2.2.0
      */
     private $productRenderExtensionFactory;
 
     /**
      * @var State
+     * @since 2.2.0
      */
     private $appState;
 
@@ -47,6 +52,7 @@ class Review implements ProductRenderCollectorInterface
      * @param ProductRenderExtensionFactory $productRenderExtensionFactory
      * @param State $appState
      * @param string $reviewType
+     * @since 2.2.0
      */
     public function __construct(
         ReviewRenderer $reviewRenderer,
@@ -62,6 +68,7 @@ class Review implements ProductRenderCollectorInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function collect(ProductInterface $product, ProductRenderInterface $productRender)
     {

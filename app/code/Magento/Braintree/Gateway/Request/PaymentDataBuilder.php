@@ -13,6 +13,7 @@ use Magento\Payment\Helper\Formatter;
 
 /**
  * Payment Data Builder
+ * @since 2.1.0
  */
 class PaymentDataBuilder implements BuilderInterface
 {
@@ -49,11 +50,13 @@ class PaymentDataBuilder implements BuilderInterface
 
     /**
      * @var Config
+     * @since 2.1.0
      */
     private $config;
 
     /**
      * @var SubjectReader
+     * @since 2.1.0
      */
     private $subjectReader;
 
@@ -62,6 +65,7 @@ class PaymentDataBuilder implements BuilderInterface
      *
      * @param Config $config
      * @param SubjectReader $subjectReader
+     * @since 2.1.0
      */
     public function __construct(Config $config, SubjectReader $subjectReader)
     {
@@ -71,6 +75,7 @@ class PaymentDataBuilder implements BuilderInterface
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     public function build(array $buildSubject)
     {

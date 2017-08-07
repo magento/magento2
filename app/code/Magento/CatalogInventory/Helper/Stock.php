@@ -51,6 +51,7 @@ class Stock
 
     /**
      * @var StockConfigurationInterface
+     * @since 2.1.0
      */
     private $stockConfiguration;
 
@@ -93,7 +94,7 @@ class Stock
      * Add stock status information to products
      *
      * @param AbstractCollection $productCollection
-     * @deprecated Use Stock::addIsInStockFilterToCollection instead
+     * @deprecated 2.1.0 Use Stock::addIsInStockFilterToCollection instead
      * @return void
      */
     public function addStockStatusToProducts(AbstractCollection $productCollection)
@@ -176,7 +177,8 @@ class Stock
     /**
      * @return StockConfigurationInterface
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getStockConfiguration()
     {

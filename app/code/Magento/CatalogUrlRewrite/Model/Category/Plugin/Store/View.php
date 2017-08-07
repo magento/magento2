@@ -23,23 +23,34 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  */
 class View
 {
-    /** @var UrlPersistInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlPersistInterface
+     */
     protected $urlPersist;
 
-    /** @var CategoryFactory */
+    /**
+     * @var \Magento\Catalog\Model\CategoryFactory
+     */
     protected $categoryFactory;
 
-    /** @var ProductFactory */
+    /**
+     * @var \Magento\Catalog\Model\ProductFactory
+     */
     protected $productFactory;
 
-    /** @var CategoryUrlRewriteGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator
+     */
     protected $categoryUrlRewriteGenerator;
 
-    /** @var ProductUrlRewriteGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator
+     */
     protected $productUrlRewriteGenerator;
 
     /**
      * @var AbstractModel
+     * @since 2.1.3
      */
     private $origStore;
 
@@ -69,6 +80,7 @@ class View
      * @param AbstractModel $store
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.3
      */
     public function beforeSave(
         \Magento\Store\Model\ResourceModel\Store $object,
@@ -84,6 +96,7 @@ class View
      * @param \Magento\Store\Model\ResourceModel\Store $store
      * @return \Magento\Store\Model\ResourceModel\Store
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.3
      */
     public function afterSave(
         \Magento\Store\Model\ResourceModel\Store $object,
@@ -167,6 +180,7 @@ class View
      * @param AbstractModel $store
      * @return \Magento\Store\Model\ResourceModel\Store
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterDelete(
         \Magento\Store\Model\ResourceModel\Store $subject,

@@ -21,6 +21,7 @@ use Magento\Framework\Stdlib\ArrayManager;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.1.0
  */
 class Categories extends AbstractModifier
 {
@@ -32,42 +33,50 @@ class Categories extends AbstractModifier
 
     /**
      * @var CategoryCollectionFactory
+     * @since 2.1.0
      */
     protected $categoryCollectionFactory;
 
     /**
      * @var DbHelper
+     * @since 2.1.0
      */
     protected $dbHelper;
 
     /**
      * @var array
-     * @deprecated
+     * @deprecated 2.1.3
+     * @since 2.1.0
      */
     protected $categoriesTrees = [];
 
     /**
      * @var LocatorInterface
+     * @since 2.1.0
      */
     protected $locator;
 
     /**
      * @var UrlInterface
+     * @since 2.1.0
      */
     protected $urlBuilder;
 
     /**
      * @var ArrayManager
+     * @since 2.1.0
      */
     protected $arrayManager;
 
     /**
      * @var CacheInterface
+     * @since 2.1.3
      */
     private $cacheManager;
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -78,6 +87,7 @@ class Categories extends AbstractModifier
      * @param UrlInterface $urlBuilder
      * @param ArrayManager $arrayManager
      * @param SerializerInterface $serializer
+     * @since 2.1.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -99,7 +109,8 @@ class Categories extends AbstractModifier
      * Retrieve cache interface
      *
      * @return CacheInterface
-     * @deprecated
+     * @deprecated 2.1.3
+     * @since 2.1.3
      */
     private function getCacheManager()
     {
@@ -112,6 +123,7 @@ class Categories extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -123,6 +135,7 @@ class Categories extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -134,6 +147,7 @@ class Categories extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @since 2.1.0
      */
     protected function createNewCategoryModal(array $meta)
     {
@@ -192,6 +206,7 @@ class Categories extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @since 2.1.0
      */
     protected function customizeCategoriesField(array $meta)
     {
@@ -293,6 +308,7 @@ class Categories extends AbstractModifier
      *
      * @param string|null $filter
      * @return array
+     * @since 2.1.0
      */
     protected function getCategoriesTree($filter = null)
     {

@@ -9,11 +9,13 @@ use Magento\Downloadable\Model\Link;
 
 /**
  * Shareable source class
+ * @since 2.1.0
  */
 class Shareable implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function toOptionArray()
     {

@@ -15,6 +15,7 @@ class Notification extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var string
+     * @since 2.2.0
      */
     protected $_eventPrefix = 'tax_config_notification';
 

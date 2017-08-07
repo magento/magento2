@@ -12,10 +12,15 @@ use Magento\Framework\ObjectManager\DefinitionInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
 use Magento\Framework\ObjectManager\InterceptableValidator;
 
+/**
+ * Class \Magento\Framework\Interception\ObjectManager\Config\Developer
+ *
+ */
 class Developer extends \Magento\Framework\ObjectManager\Config\Config implements ConfigInterface
 {
     /**
      * @var InterceptableValidator
+     * @since 2.0.1
      */
     private $interceptableValidator;
 
@@ -23,6 +28,7 @@ class Developer extends \Magento\Framework\ObjectManager\Config\Config implement
      * @param RelationsInterface $relations
      * @param DefinitionInterface $definitions
      * @param InterceptableValidator $interceptableValidator
+     * @since 2.0.1
      */
     public function __construct(
         RelationsInterface $relations = null,

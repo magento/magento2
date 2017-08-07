@@ -18,6 +18,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Processes the sensitive:config:set command.
+ * @since 2.2.0
  */
 class SensitiveConfigSetFacade
 {
@@ -25,6 +26,7 @@ class SensitiveConfigSetFacade
      * The parser for config comments.
      *
      * @var CommentParserInterface
+     * @since 2.2.0
      */
     private $commentParser;
 
@@ -32,6 +34,7 @@ class SensitiveConfigSetFacade
      * The pool of configs.
      *
      * @var ConfigFilePool
+     * @since 2.2.0
      */
     private $configFilePool;
 
@@ -39,6 +42,7 @@ class SensitiveConfigSetFacade
      * The config writer.
      *
      * @var ConfigWriter
+     * @since 2.2.0
      */
     private $configWriter;
 
@@ -46,6 +50,7 @@ class SensitiveConfigSetFacade
      * The validator for scopes.
      *
      * @var ValidatorInterface
+     * @since 2.2.0
      */
     private $scopeValidator;
 
@@ -53,6 +58,7 @@ class SensitiveConfigSetFacade
      * The factory of config collectors.
      *
      * @var CollectorFactory
+     * @since 2.2.0
      */
     private $collectorFactory;
 
@@ -62,6 +68,7 @@ class SensitiveConfigSetFacade
      * @param ConfigWriter $configWriter The config writer
      * @param ValidatorInterface $scopeValidator The validator for scopes
      * @param CollectorFactory $collectorFactory The factory of config collectors
+     * @since 2.2.0
      */
     public function __construct(
         ConfigFilePool $configFilePool,
@@ -85,6 +92,7 @@ class SensitiveConfigSetFacade
      * @return void
      * @throws LocalizedException If scope or scope code is not valid
      * @throws RuntimeException If sensitive config can not be filled
+     * @since 2.2.0
      */
     public function process(InputInterface $input, OutputInterface $output)
     {
@@ -113,6 +121,7 @@ class SensitiveConfigSetFacade
      *
      * @return array
      * @throws LocalizedException if configuration file not exists or sensitive configuration is empty
+     * @since 2.2.0
      */
     private function getConfigPaths()
     {

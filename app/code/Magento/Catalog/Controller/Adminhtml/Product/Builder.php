@@ -12,6 +12,10 @@ use Magento\Store\Model\StoreFactory;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Registry;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\Builder
+ *
+ */
 class Builder
 {
     /**
@@ -36,6 +40,7 @@ class Builder
 
     /**
      * @var StoreFactory
+     * @since 2.1.0
      */
     protected $storeFactory;
 

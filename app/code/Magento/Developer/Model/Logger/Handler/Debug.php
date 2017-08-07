@@ -13,21 +13,25 @@ use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Enable/disable debug logging based on the store config setting
+ * @since 2.2.0
  */
 class Debug extends \Magento\Framework\Logger\Handler\Debug
 {
     /**
      * @var State
+     * @since 2.2.0
      */
     private $state;
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.2.0
      */
     private $scopeConfig;
 
     /**
      * @var DeploymentConfig
+     * @since 2.2.0
      */
     private $deploymentConfig;
 
@@ -37,6 +41,7 @@ class Debug extends \Magento\Framework\Logger\Handler\Debug
      * @param ScopeConfigInterface $scopeConfig
      * @param DeploymentConfig $deploymentConfig
      * @param string $filePath
+     * @since 2.2.0
      */
     public function __construct(
         DriverInterface $filesystem,
@@ -54,6 +59,7 @@ class Debug extends \Magento\Framework\Logger\Handler\Debug
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function isHandling(array $record)
     {

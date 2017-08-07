@@ -13,6 +13,7 @@ use Magento\Framework\DB\Select;
  * Use this class to create an index with that that you want to query later for quick data access
  *
  * @api
+ * @since 2.2.0
  */
 class TemporaryTableService
 {
@@ -21,21 +22,25 @@ class TemporaryTableService
 
     /**
      * @var string[]
+     * @since 2.2.0
      */
     private $allowedIndexMethods;
 
     /**
      * @var string[]
+     * @since 2.2.0
      */
     private $allowedEngines;
 
     /**
      * @var \Magento\Framework\Math\Random
+     * @since 2.2.0
      */
     private $random;
 
     /**
      * @var AdapterInterface[]
+     * @since 2.2.0
      */
     private $createdTableAdapters = [];
 
@@ -43,6 +48,7 @@ class TemporaryTableService
      * @param \Magento\Framework\Math\Random $random
      * @param string[] $allowedIndexMethods
      * @param string[] $allowedEngines
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Math\Random $random,
@@ -78,6 +84,7 @@ class TemporaryTableService
      * @param string $dbEngine
      * @return string
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     public function createFromSelect(
         Select $select,
@@ -148,6 +155,7 @@ class TemporaryTableService
      *
      * @param string $name
      * @return bool
+     * @since 2.2.0
      */
     public function dropTable($name)
     {

@@ -13,6 +13,7 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
  * Class ThreeDSecureDetailsHandler
+ * @since 2.1.0
  */
 class ThreeDSecureDetailsHandler implements HandlerInterface
 {
@@ -22,6 +23,7 @@ class ThreeDSecureDetailsHandler implements HandlerInterface
 
     /**
      * @var SubjectReader
+     * @since 2.1.0
      */
     private $subjectReader;
 
@@ -29,6 +31,7 @@ class ThreeDSecureDetailsHandler implements HandlerInterface
      * Constructor
      *
      * @param SubjectReader $subjectReader
+     * @since 2.1.0
      */
     public function __construct(SubjectReader $subjectReader)
     {
@@ -37,6 +40,7 @@ class ThreeDSecureDetailsHandler implements HandlerInterface
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     public function handle(array $handlingSubject, array $response)
     {

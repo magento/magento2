@@ -7,6 +7,10 @@
  */
 namespace Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin;
 
+/**
+ * Class \Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin\ConfigurableProduct
+ *
+ */
 class ConfigurableProduct
 {
     /**
@@ -19,6 +23,7 @@ class ConfigurableProduct
      *
      * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterGetStockItem(
         \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option $subject,

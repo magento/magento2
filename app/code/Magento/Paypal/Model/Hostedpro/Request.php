@@ -26,6 +26,7 @@ class Request extends DataObject
      * Request's order model
      *
      * @var \Magento\Sales\Model\Order
+     * @since 2.1.0
      */
     protected $order;
 
@@ -33,6 +34,7 @@ class Request extends DataObject
      * Request's Hosted Pro payment method model
      *
      * @var \Magento\Paypal\Model\Hostedpro
+     * @since 2.1.0
      */
     protected $paymentMethod;
 
@@ -40,6 +42,7 @@ class Request extends DataObject
      * Name format for button variables
      *
      * @var string
+     * @since 2.1.0
      */
     protected $buttonVarFormat = 'L_BUTTONVAR%d';
 
@@ -47,6 +50,7 @@ class Request extends DataObject
      * Request Parameters which dont have to wrap as button vars
      *
      * @var string[]
+     * @since 2.1.0
      */
     protected $notButtonVars = ['METHOD', 'BUTTONCODE', 'BUTTONTYPE'];
 
@@ -54,6 +58,7 @@ class Request extends DataObject
      * Customer address
      *
      * @var \Magento\Customer\Helper\Address
+     * @since 2.1.0
      */
     protected $customerAddress = null;
 
@@ -61,6 +66,7 @@ class Request extends DataObject
      * Tax data
      *
      * @var \Magento\Tax\Helper\Data
+     * @since 2.1.0
      */
     protected $taxData;
 
@@ -163,6 +169,7 @@ class Request extends DataObject
      * @param \Magento\Sales\Model\Order $order
      * @return array
      * @throws \Exception
+     * @since 2.1.0
      */
     protected function getAmountData(Order $order)
     {
@@ -213,6 +220,7 @@ class Request extends DataObject
      *
      * @param \Magento\Paypal\Model\Hostedpro $paymentMethod
      * @return array
+     * @since 2.1.0
      */
     protected function getPaymentData(Hostedpro $paymentMethod)
     {
@@ -240,6 +248,7 @@ class Request extends DataObject
      *
      * @param \Magento\Sales\Model\Order $order
      * @return array
+     * @since 2.1.0
      */
     protected function getOrderData(Order $order)
     {
@@ -269,6 +278,7 @@ class Request extends DataObject
      * @param DataObject $address
      * @param string $type
      * @return array
+     * @since 2.1.0
      */
     protected function getAddress(DataObject $address, $type = '')
     {
@@ -294,6 +304,7 @@ class Request extends DataObject
      *
      * @param DataObject $address
      * @return string
+     * @since 2.1.0
      */
     protected function getRegion(DataObject $address)
     {
@@ -306,6 +317,7 @@ class Request extends DataObject
      *
      * @param DataObject $address
      * @return array
+     * @since 2.1.0
      */
     protected function getAddressStreets(DataObject $address)
     {

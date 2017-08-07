@@ -11,11 +11,13 @@ use Magento\Ui\Component\Listing\Columns\Column;
  * Class ReviewActions
  *
  * @api
+ * @since 2.1.0
  */
 class ReviewActions extends Column
 {
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function prepareDataSource(array $dataSource)
     {

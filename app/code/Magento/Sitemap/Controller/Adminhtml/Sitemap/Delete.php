@@ -8,15 +8,21 @@ namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\Sitemap\Controller\Adminhtml\Sitemap\Delete
+ *
+ */
 class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
 {
     /**
      * @var \Magento\Framework\Filesystem
+     * @since 2.2.0
      */
     private $filesystem;
 
     /**
      * @var \Magento\Sitemap\Model\SitemapFactory
+     * @since 2.2.0
      */
     private $sitemapFactory;
 
@@ -25,6 +31,7 @@ class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Sitemap\Model\SitemapFactory|null $sitemapFactory
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -83,7 +90,8 @@ class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      * The getter function to get Filesystem object for real application code
      *
      * @return \Magento\Framework\Filesystem
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getFilesystem()
     {

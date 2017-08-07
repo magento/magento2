@@ -133,6 +133,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
 
     /**
      * @var Bundle\RelationsDataSaver
+     * @since 2.2.0
      */
     private $relationsDataSaver;
 

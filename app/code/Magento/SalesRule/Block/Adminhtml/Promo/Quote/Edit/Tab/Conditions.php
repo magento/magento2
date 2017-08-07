@@ -7,6 +7,10 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Conditions
+ *
+ */
 class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Ui\Component\Layout\Tabs\TabInterface
 {
@@ -24,11 +28,13 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * @var string
+     * @since 2.1.0
      */
     protected $_nameInLayout = 'conditions_apply_to';
 
     /**
      * @var \Magento\SalesRule\Model\RuleFactory
+     * @since 2.1.0
      */
     private $ruleFactory;
 
@@ -62,6 +68,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.1.0
      */
     public function getTabClass()
     {
@@ -70,6 +77,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getTabUrl()
     {
@@ -78,6 +86,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function isAjaxLoaded()
     {
@@ -138,6 +147,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param string $formName
      * @return \Magento\Framework\Data\Form
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.1.0
      */
     protected function addTabToForm($model, $fieldsetId = 'conditions_fieldset', $formName = 'sales_rule_form')
     {
@@ -200,6 +210,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Rule\Model\Condition\AbstractCondition $conditions
      * @param string $formName
      * @return void
+     * @since 2.1.0
      */
     private function setConditionFormName(\Magento\Rule\Model\Condition\AbstractCondition $conditions, $formName)
     {

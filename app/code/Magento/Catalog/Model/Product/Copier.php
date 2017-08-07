@@ -9,10 +9,15 @@ namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Copier
+ *
+ */
 class Copier
 {
     /**
      * @var Option\Repository
+     * @since 2.1.0
      */
     protected $optionRepository;
 
@@ -28,6 +33,7 @@ class Copier
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
@@ -95,7 +101,8 @@ class Copier
 
     /**
      * @return Option\Repository
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getOptionRepository()
     {
@@ -108,7 +115,8 @@ class Copier
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {
@@ -124,6 +132,7 @@ class Copier
      *
      * @param array $productData
      * @return array
+     * @since 2.2.0
      */
     private function removeStockItem(array $productData)
     {

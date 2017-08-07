@@ -33,6 +33,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     /**
      * The list of inputs that need to convert from string to boolean
      * @var array
+     * @since 2.1.0
      */
     protected $stringToBoolInputs = [
         'custom_use_parent_settings',
@@ -46,11 +47,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
     /**
      * @var StoreManagerInterface
+     * @since 2.0.12
      */
     private $storeManager;
 
     /**
      * @var \Magento\Eav\Model\Config
+     * @since 2.2.0
      */
     private $eavConfig;
 
@@ -84,7 +87,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     /**
      * Filter category data
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @param array $rawData
      * @return array
      */
@@ -258,6 +261,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      *
      * @param array $data
      * @return array
+     * @since 2.1.0
      */
     public function imagePreprocessing($data)
     {
@@ -288,6 +292,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * @param array $stringToBoolInputs
      *
      * @return array
+     * @since 2.1.0
      */
     public function stringToBoolConverting($data, $stringToBoolInputs = null)
     {
@@ -320,6 +325,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * @param int $storeId
      *
      * @return \Magento\Catalog\Model\Category
+     * @since 2.1.0
      */
     protected function getParentCategory($parentId, $storeId)
     {
@@ -347,6 +353,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * @param int $storeId
      *
      * @return array
+     * @since 2.1.0
      */
     protected function getRedirectParams($isNewCategory, $hasError, $categoryId, $parentId, $storeId)
     {

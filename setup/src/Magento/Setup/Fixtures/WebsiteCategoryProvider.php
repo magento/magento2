@@ -10,42 +10,50 @@ use Magento\Framework\App\ResourceConnection;
 
 /**
  * Website and category provider
+ * @since 2.2.0
  */
 class WebsiteCategoryProvider
 {
     /**
      * @var array
+     * @since 2.2.0
      */
     private $categoriesPerWebsite;
 
     /**
      * @var FixtureConfig
+     * @since 2.2.0
      */
     private $fixtureConfig;
 
     /**
      * @var ResourceConnection
+     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.2.0
      */
     private $connection;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $websites;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $categories;
 
     /**
      * @param FixtureConfig $fixtureConfig
      * @param ResourceConnection $resourceConnection
+     * @since 2.2.0
      */
     public function __construct(
         FixtureConfig $fixtureConfig,
@@ -61,6 +69,7 @@ class WebsiteCategoryProvider
      * @param int $productIndex Index of generated product
      * @return array
      * @throws \Exception
+     * @since 2.2.0
      */
     public function getWebsiteIds($productIndex)
     {
@@ -80,6 +89,7 @@ class WebsiteCategoryProvider
      *
      * @param int $productIndex
      * @return int
+     * @since 2.2.0
      */
     public function getCategoryId($productIndex)
     {
@@ -94,6 +104,7 @@ class WebsiteCategoryProvider
 
     /**
      * @return array
+     * @since 2.2.0
      */
     private function getCategoriesAndWebsites()
     {
@@ -115,6 +126,7 @@ class WebsiteCategoryProvider
 
     /**
      * @return bool
+     * @since 2.2.0
      */
     private function isAssignToAllWebsites()
     {
@@ -123,6 +135,7 @@ class WebsiteCategoryProvider
 
     /**
      * @return array
+     * @since 2.2.0
      */
     private function getAllWebsites()
     {
@@ -135,6 +148,7 @@ class WebsiteCategoryProvider
 
     /**
      * @return array
+     * @since 2.2.0
      */
     private function getAllCategories()
     {
@@ -147,6 +161,7 @@ class WebsiteCategoryProvider
 
     /**
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.2.0
      */
     private function getConnection()
     {

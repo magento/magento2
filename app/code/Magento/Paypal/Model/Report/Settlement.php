@@ -167,6 +167,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      * Columns with DateTime data type
      *
      * @var array
+     * @since 2.1.0
      */
     private $dateTimeColumns = ['transaction_initiation_date', 'transaction_completion_date'];
 
@@ -174,11 +175,13 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      * Columns with amount type
      *
      * @var array
+     * @since 2.1.0
      */
     private $amountColumns = ['gross_transaction_amount', 'fee_amount'];
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -413,6 +416,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      * @param array $sectionColumns
      * @param array $rowMap
      * @return array
+     * @since 2.1.0
      */
     private function getBodyItems(array $line, array $sectionColumns, array $rowMap)
     {
@@ -436,6 +440,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $lineItem
      * @return string
+     * @since 2.1.0
      */
     private function formatDateTimeColumns($lineItem)
     {
@@ -451,6 +456,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $lineItem
      * @return float
+     * @since 2.1.0
      */
     private function formatAmountColumn($lineItem)
     {

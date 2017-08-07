@@ -41,9 +41,7 @@ class PhpCookieManager implements CookieManagerInterface
     const KEY_EXPIRE_TIME = 'expiry';
     /**#@-*/
 
-    /**
-     * @var CookieScopeInterface
-     */
+    /**#@-*/
     private $scope;
 
     /**
@@ -55,6 +53,7 @@ class PhpCookieManager implements CookieManagerInterface
      * Logger for warning details.
      *
      * @var LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 
@@ -62,6 +61,7 @@ class PhpCookieManager implements CookieManagerInterface
      * Object that provides access to HTTP headers.
      *
      * @var HttpHeader
+     * @since 2.2.0
      */
     private $httpHeader;
 

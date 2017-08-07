@@ -37,6 +37,7 @@ class StoreCookie
 
     /**
      * @var StoreResolverInterface
+     * @since 2.2.0
      */
     private $storeResolver;
 
@@ -65,6 +66,7 @@ class StoreCookie
      * @param \Magento\Framework\App\RequestInterface $request
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.1
      */
     public function beforeDispatch(
         \Magento\Framework\App\FrontController $subject,

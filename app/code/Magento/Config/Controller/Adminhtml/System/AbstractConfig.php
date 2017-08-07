@@ -27,7 +27,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
     protected $_configStructure;
 
     /**
-     * @deprecated
+     * @deprecated 2.2.0
      */
     protected $_sectionChecker;
 
@@ -109,6 +109,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
      * @param array $configState
      * @return array
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.1.0
      */
     protected function sanitizeConfigState($configState)
     {

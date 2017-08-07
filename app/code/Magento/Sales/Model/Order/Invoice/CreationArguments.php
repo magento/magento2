@@ -9,16 +9,19 @@ namespace Magento\Sales\Model\Order\Invoice;
  * Creation arguments for Invoice.
  *
  * @api
+ * @since 2.1.2
  */
 class CreationArguments implements \Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface
 {
     /**
      * @var \Magento\Sales\Api\Data\InvoiceCreationArgumentsExtensionInterface
+     * @since 2.1.2
      */
     private $extensionAttributes;
 
     /**
      * {@inheritdoc}
+     * @since 2.1.2
      */
     public function getExtensionAttributes()
     {
@@ -27,6 +30,7 @@ class CreationArguments implements \Magento\Sales\Api\Data\InvoiceCreationArgume
 
     /**
      * {@inheritdoc}
+     * @since 2.1.2
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\InvoiceCreationArgumentsExtensionInterface $extensionAttributes

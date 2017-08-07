@@ -7,6 +7,10 @@ namespace Magento\CatalogRule\Plugin\Indexer\Product\Save;
 
 use Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor;
 
+/**
+ * Class \Magento\CatalogRule\Plugin\Indexer\Product\Save\ApplyRules
+ *
+ */
 class ApplyRules
 {
     /**
@@ -30,6 +34,7 @@ class ApplyRules
      * @param \Magento\Framework\Model\AbstractModel $product
      * @return \Magento\Catalog\Model\ResourceModel\Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterSave(
         \Magento\Catalog\Model\ResourceModel\Product $subject,

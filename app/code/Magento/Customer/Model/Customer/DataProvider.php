@@ -63,11 +63,13 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
     /**
      * @var CountryWithWebsites
+     * @since 2.2.0
      */
     private $countryWithWebsiteSource;
 
     /**
      * @var \Magento\Customer\Model\Config\Share
+     * @since 2.1.3
      */
     private $shareConfig;
 
@@ -104,11 +106,13 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
     /**
      * @var SessionManagerInterface
+     * @since 2.1.0
      */
     protected $session;
 
     /**
      * @var FileProcessorFactory
+     * @since 2.1.3
      */
     private $fileProcessorFactory;
 
@@ -116,6 +120,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * File types allowed for file_uploader UI component
      *
      * @var array
+     * @since 2.1.3
      */
     private $fileUploaderTypes = [
         'image',
@@ -124,6 +129,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
     /**
      * @var ContextInterface
+     * @since 2.2.0
      */
     private $context;
 
@@ -131,6 +137,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Allow to manage attributes, even they are hidden on storefront
      *
      * @var bool
+     * @since 2.2.0
      */
     private $allowToShowHiddenAttributes;
 
@@ -185,7 +192,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @return SessionManagerInterface
      *
-     * @deprecated
+     * @deprecated 2.1.3
+     * @since 2.1.0
      */
     protected function getSession()
     {
@@ -246,6 +254,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param Customer|Address $entity
      * @param array $entityData
      * @return void
+     * @since 2.1.3
      */
     private function overrideFileUploaderData($entity, array &$entityData)
     {
@@ -270,6 +279,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param array $customerData
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.1.3
      */
     private function getFileUploaderData(
         Type $entityType,
@@ -364,6 +374,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param Attribute $customerAttribute
      * @return bool
+     * @since 2.2.0
      */
     private function canShowAttributeInForm(AbstractAttribute $customerAttribute)
     {
@@ -386,6 +397,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param Attribute $customerAttribute
      * @return bool
+     * @since 2.2.0
      */
     private function canShowAttribute(AbstractAttribute $customerAttribute)
     {
@@ -403,8 +415,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Retrieve Country With Websites Source
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return CountryWithWebsites
+     * @since 2.2.0
      */
     private function getCountryWithWebsiteSource()
     {
@@ -418,8 +431,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Retrieve Customer Config Share
      *
-     * @deprecated
+     * @deprecated 2.1.3
      * @return \Magento\Customer\Model\Config\Share
+     * @since 2.1.3
      */
     private function getShareConfig()
     {
@@ -435,6 +449,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param array $meta
      * @return void
+     * @since 2.1.3
      */
     private function processWebsiteMeta(&$meta)
     {
@@ -459,6 +474,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param AbstractAttribute $attribute
      * @param array $config
      * @return void
+     * @since 2.1.3
      */
     private function overrideFileUploaderMetadata(
         Type $entityType,
@@ -510,6 +526,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param string $name
      * @param mixed $default
      * @return mixed
+     * @since 2.1.3
      */
     private function getMetadataValue($config, $name, $default = null)
     {
@@ -522,6 +539,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param string $entityTypeCode
      * @return string
+     * @since 2.1.3
      */
     private function getFileUploadUrl($entityTypeCode)
     {
@@ -547,6 +565,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param AttributeInterface $attribute
      * @param array $meta
      * @return array
+     * @since 2.1.0
      */
     private function processFrontendInput(AttributeInterface $attribute, array &$meta)
     {
@@ -590,7 +609,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @return FileProcessorFactory
      *
-     * @deprecated
+     * @deprecated 2.1.3
+     * @since 2.1.3
      */
     private function getFileProcessorFactory()
     {

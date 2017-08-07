@@ -68,11 +68,13 @@ class Data
      * Product metadata pool
      *
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var SwatchAttributesProvider
+     * @since 2.1.6
      */
     private $swatchAttributesProvider;
 
@@ -91,6 +93,7 @@ class Data
      * Serializer to/from JSON.
      *
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -174,6 +177,7 @@ class Data
      * @param ModelProduct $configurableProduct
      * @param array $requiredAttributes
      * @return bool|Product
+     * @since 2.0.3
      */
     private function loadFirstVariation($attributeCode, ModelProduct $configurableProduct, array $requiredAttributes)
     {
@@ -423,6 +427,7 @@ class Data
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $swatchesCache = [];
 
@@ -468,6 +473,7 @@ class Data
      *
      * @param array $optionIds
      * @return array
+     * @since 2.2.0
      */
     private function getCachedSwatches(array $optionIds)
     {
@@ -480,6 +486,7 @@ class Data
      * @param array $optionIds
      * @param array $swatches
      * @return void
+     * @since 2.2.0
      */
     private function setCachedSwatches(array $optionIds, array $swatches)
     {
@@ -564,6 +571,7 @@ class Data
      *
      * @return \Magento\Framework\EntityManager\MetadataPool
      * @deprecared
+     * @since 2.2.0
      */
     protected function getMetadataPool()
     {

@@ -28,7 +28,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**
      * @var  QueryResponse
-     * @deprecated
+     * @deprecated 2.1.0
      */
     protected $queryResponse;
 
@@ -36,19 +36,19 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Catalog search data
      *
      * @var \Magento\Search\Model\QueryFactory
-     * @deprecated
+     * @deprecated 2.1.0
      */
     protected $queryFactory = null;
 
     /**
      * @var \Magento\Framework\Search\Request\Builder
-     * @deprecated
+     * @deprecated 2.1.0
      */
     private $requestBuilder;
 
     /**
      * @var \Magento\Search\Model\SearchEngine
-     * @deprecated
+     * @deprecated 2.1.0
      */
     private $searchEngine;
 
@@ -74,26 +74,31 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @var \Magento\Search\Api\SearchInterface
+     * @since 2.1.0
      */
     private $search;
 
     /**
      * @var \Magento\Framework\Api\Search\SearchCriteriaBuilder
+     * @since 2.1.0
      */
     private $searchCriteriaBuilder;
 
     /**
      * @var \Magento\Framework\Api\Search\SearchResultInterface
+     * @since 2.1.0
      */
     private $searchResult;
 
     /**
      * @var SearchResultFactory
+     * @since 2.1.0
      */
     private $searchResultFactory;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
+     * @since 2.1.0
      */
     private $filterBuilder;
 
@@ -197,8 +202,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.1.0
      * @return \Magento\Search\Api\SearchInterface
+     * @since 2.1.0
      */
     private function getSearch()
     {
@@ -209,9 +215,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.1.0
      * @param \Magento\Search\Api\SearchInterface $object
      * @return void
+     * @since 2.1.0
      */
     public function setSearch(\Magento\Search\Api\SearchInterface $object)
     {
@@ -219,8 +226,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.1.0
      * @return \Magento\Framework\Api\Search\SearchCriteriaBuilder
+     * @since 2.1.0
      */
     private function getSearchCriteriaBuilder()
     {
@@ -232,9 +240,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.1.0
      * @param \Magento\Framework\Api\Search\SearchCriteriaBuilder $object
      * @return void
+     * @since 2.1.0
      */
     public function setSearchCriteriaBuilder(\Magento\Framework\Api\Search\SearchCriteriaBuilder $object)
     {
@@ -242,8 +251,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.1.0
      * @return \Magento\Framework\Api\FilterBuilder
+     * @since 2.1.0
      */
     private function getFilterBuilder()
     {
@@ -254,9 +264,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.1.0
      * @param \Magento\Framework\Api\FilterBuilder $object
      * @return void
+     * @since 2.1.0
      */
     public function setFilterBuilder(\Magento\Framework\Api\FilterBuilder $object)
     {

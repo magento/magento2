@@ -541,6 +541,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
 
     /**
      * @return string
+     * @since 2.1.0
      */
     public function getFromDate()
     {
@@ -549,6 +550,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
 
     /**
      * @return string
+     * @since 2.1.0
      */
     public function getToDate()
     {
@@ -611,6 +613,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * @param string $formName
      * @return string
+     * @since 2.1.0
      */
     public function getConditionsFieldSetId($formName = '')
     {
@@ -620,6 +623,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * @param string $formName
      * @return string
+     * @since 2.1.0
      */
     public function getActionsFieldSetId($formName = '')
     {

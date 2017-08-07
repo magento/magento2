@@ -14,21 +14,25 @@ use Magento\Setup\Model\Grid;
 
 /**
  * Controller for extension grid tasks
+ * @since 2.2.0
  */
 class ExtensionGrid extends AbstractActionController
 {
     /**
      * @var PackagesData
+     * @since 2.2.0
      */
     private $packagesData;
 
     /**
      * @var PackagesAuth
+     * @since 2.2.0
      */
     private $packagesAuth;
 
     /**
      * @var Grid\Extension
+     * @since 2.2.0
      */
     private $gridExtension;
 
@@ -36,6 +40,7 @@ class ExtensionGrid extends AbstractActionController
      * @param PackagesData $packagesData
      * @param PackagesAuth $packagesAuth
      * @param Grid\Extension $gridExtension
+     * @since 2.2.0
      */
     public function __construct(
         PackagesData $packagesData,
@@ -51,6 +56,7 @@ class ExtensionGrid extends AbstractActionController
      * Index page action
      *
      * @return \Zend\View\Model\ViewModel
+     * @since 2.2.0
      */
     public function indexAction()
     {
@@ -64,6 +70,7 @@ class ExtensionGrid extends AbstractActionController
      *
      * @return JsonModel
      * @throws \RuntimeException
+     * @since 2.2.0
      */
     public function extensionsAction()
     {
@@ -95,6 +102,7 @@ class ExtensionGrid extends AbstractActionController
      * Sync action
      *
      * @return JsonModel
+     * @since 2.2.0
      */
     public function syncAction()
     {

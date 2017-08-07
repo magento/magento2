@@ -21,7 +21,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
      *
-     * @deprecated
+     * @deprecated 2.1.0
      */
     protected $_dateFilter;
 
@@ -40,16 +40,20 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
      */
     protected $layoutFactory;
 
-    /** @var \Magento\Catalog\Model\ProductFactory */
+    /**
+     * @var \Magento\Catalog\Model\ProductFactory
+     */
     protected $productFactory;
 
     /**
      * @var Initialization\Helper
+     * @since 2.1.0
      */
     protected $initializationHelper;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.1.0
      */
     private $storeManager;
 
@@ -147,7 +151,8 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @return StoreManagerInterface
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getStoreManager()
     {
@@ -160,7 +165,8 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @return Initialization\Helper
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     protected function getInitializationHelper()
     {

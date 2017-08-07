@@ -49,6 +49,7 @@ class ExternalVideoResourceBackend
      * @param Gallery $originalResourceModel
      * @param Select $select
      * @return Select
+     * @since 2.1.1
      */
     public function afterCreateBatchBaseSelect(Gallery $originalResourceModel, Select $select)
     {

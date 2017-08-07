@@ -9,6 +9,11 @@ namespace Magento\Catalog\Model;
 use Magento\Catalog\Api\Data\ProductRenderSearchResultsInterface;
 use Magento\Framework\Api\SearchResults;
 
+/**
+ * Class \Magento\Catalog\Model\ProductRenderInfoSearchResults
+ *
+ * @since 2.2.0
+ */
 class ProductRenderInfoSearchResults extends SearchResults implements ProductRenderSearchResultsInterface
 {
 }

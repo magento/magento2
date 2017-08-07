@@ -42,6 +42,7 @@ class Grid extends AbstractGrid
 
     /**
      * @var NotSyncedDataProviderInterface
+     * @since 2.2.0
      */
     private $notSyncedDataProvider;
 

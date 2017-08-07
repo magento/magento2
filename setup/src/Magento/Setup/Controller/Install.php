@@ -48,11 +48,13 @@ class Install extends AbstractActionController
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig
+     * @since 2.0.6
      */
     private $deploymentConfig;
 
     /**
      * @var RequestDataConverter
+     * @since 2.1.0
      */
     private $requestDataConverter;
 
@@ -163,6 +165,7 @@ class Install extends AbstractActionController
      *
      * @return void
      * @throws \Magento\Setup\Exception
+     * @since 2.0.6
      */
     private function checkForPriorInstall()
     {

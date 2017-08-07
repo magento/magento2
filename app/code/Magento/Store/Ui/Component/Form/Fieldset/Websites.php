@@ -12,6 +12,7 @@ use Magento\Ui\Component\Form\Fieldset;
 
 /**
  * Class Websites Fieldset
+ * @since 2.1.0
  */
 class Websites extends Fieldset
 {
@@ -19,6 +20,7 @@ class Websites extends Fieldset
      * Store manager
      *
      * @var StoreManager
+     * @since 2.1.0
      */
     protected $storeManager;
 
@@ -29,6 +31,7 @@ class Websites extends Fieldset
      * @param StoreManager $storeManager
      * @param UiComponentInterface[] $components
      * @param array $data
+     * @since 2.1.0
      */
     public function __construct(
         ContextInterface $context,
@@ -44,6 +47,7 @@ class Websites extends Fieldset
      * Prepare component configuration
      *
      * @return void
+     * @since 2.1.0
      */
     public function prepare()
     {

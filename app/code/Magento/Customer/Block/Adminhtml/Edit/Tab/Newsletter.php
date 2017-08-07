@@ -192,6 +192,7 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
      * @param \Magento\Framework\Data\Form $form
      * @param int $customerId
      * @return void
+     * @since 2.1.0
      */
     protected function updateFromSession(\Magento\Framework\Data\Form $form, $customerId)
     {

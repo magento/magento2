@@ -9,21 +9,29 @@ use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor;
 use Magento\Quote\Api\Data\CartExtensionFactory;
 
+/**
+ * Class \Magento\Quote\Model\QuoteRepository\LoadHandler
+ *
+ * @since 2.1.0
+ */
 class LoadHandler
 {
     /**
      * @var ShippingAssignmentProcessor
+     * @since 2.1.0
      */
     private $shippingAssignmentProcessor;
 
     /**
      * @var CartExtensionFactory
+     * @since 2.1.0
      */
     private $cartExtensionFactory;
 
     /**
      * @param ShippingAssignmentProcessor $shippingAssignmentProcessor
      * @param CartExtensionFactory $cartExtensionFactory
+     * @since 2.1.0
      */
     public function __construct(
         ShippingAssignmentProcessor $shippingAssignmentProcessor,
@@ -36,6 +44,7 @@ class LoadHandler
     /**
      * @param CartInterface $quote
      * @return CartInterface
+     * @since 2.1.0
      */
     public function load(CartInterface $quote)
     {

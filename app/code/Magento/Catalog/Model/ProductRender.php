@@ -13,11 +13,13 @@ use Magento\Catalog\Api\Data\ProductRenderInterface;
 
 /**
  * DTO which represents structure for product render information
+ * @since 2.2.0
  */
 class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel implements ProductRenderInterface
 {
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getAddToCartButton()
     {
@@ -26,6 +28,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setAddToCartButton(ButtonInterface $addToCartButton)
     {
@@ -34,6 +37,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getAddToCompareButton()
     {
@@ -42,6 +46,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setAddToCompareButton(ButtonInterface $compareButton)
     {
@@ -50,6 +55,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getPriceInfo()
     {
@@ -58,6 +64,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setPriceInfo(PriceInfoInterface $priceInfo)
     {
@@ -66,6 +73,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getImages()
     {
@@ -74,6 +82,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setImages(array $images)
     {
@@ -82,6 +91,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getUrl()
     {
@@ -90,6 +100,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setUrl($url)
     {
@@ -98,6 +109,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getId()
     {
@@ -106,6 +118,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setId($id)
     {
@@ -114,6 +127,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getName()
     {
@@ -122,6 +136,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setName($name)
     {
@@ -130,6 +145,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setType($productType)
     {
@@ -138,6 +154,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getType()
     {
@@ -146,6 +163,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getIsSalable()
     {
@@ -154,6 +172,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setIsSalable($isSalable)
     {
@@ -162,6 +181,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setStoreId($storeId)
     {
@@ -170,6 +190,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getStoreId()
     {
@@ -178,6 +199,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getCurrencyCode()
     {
@@ -186,6 +208,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setCurrencyCode($currencyCode)
     {
@@ -196,6 +219,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Catalog\Api\Data\ProductRenderExtensionInterface
+     * @since 2.2.0
      */
     public function getExtensionAttributes()
     {
@@ -207,6 +231,7 @@ class ProductRender extends \Magento\Framework\Model\AbstractExtensibleModel imp
      *
      * @param \Magento\Catalog\Api\Data\ProductRenderExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.2.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductRenderExtensionInterface $extensionAttributes

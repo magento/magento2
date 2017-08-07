@@ -19,6 +19,7 @@ abstract class Category extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\DateTime
+     * @since 2.1.0
      */
     private $dateTimeFilter;
 
@@ -66,6 +67,7 @@ abstract class Category extends \Magento\Backend\App\Action
      * Resolve Category Id (from get or from post)
      *
      * @return int
+     * @since 2.2.0
      */
     private function resolveCategoryId()
     {
@@ -82,7 +84,8 @@ abstract class Category extends \Magento\Backend\App\Action
      *
      * @return \Magento\Framework\Controller\Result\Json
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     protected function ajaxRequestResponse($category, $resultPage)
     {
@@ -128,7 +131,8 @@ abstract class Category extends \Magento\Backend\App\Action
     /**
      * @return \Magento\Framework\Stdlib\DateTime\Filter\DateTime
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getDateTimeFilter()
     {
@@ -146,6 +150,7 @@ abstract class Category extends \Magento\Backend\App\Action
      * @param array $postData
      *
      * @return array
+     * @since 2.1.0
      */
     protected function dateTimePreprocessing($category, $postData)
     {

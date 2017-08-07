@@ -8,6 +8,10 @@ namespace Magento\ImportExport\Controller\Adminhtml\Import;
 use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\ImportExport\Controller\Adminhtml\Import\Start
+ *
+ */
 class Start extends ImportResultController
 {
     /**
@@ -17,6 +21,7 @@ class Start extends ImportResultController
 
     /**
      * @var \Magento\Framework\Message\ExceptionMessageFactoryInterface
+     * @since 2.2.0
      */
     private $exceptionMessageFactory;
 

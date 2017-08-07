@@ -12,26 +12,31 @@ use Magento\Framework\EntityManager\TypeResolver;
 
 /**
  * Class Hydrator
+ * @since 2.1.0
  */
 class Hydrator implements HydratorInterface
 {
     /**
      * @var DataObjectProcessor
+     * @since 2.1.0
      */
     private $dataObjectProcessor;
 
     /**
      * @var DataObjectHelper
+     * @since 2.1.0
      */
     private $dataObjectHelper;
 
     /**
      * @var TypeResolver
+     * @since 2.1.0
      */
     private $typeResolver;
 
     /**
      * @var MapperPool
+     * @since 2.1.0
      */
     private $mapperPool;
 
@@ -40,6 +45,7 @@ class Hydrator implements HydratorInterface
      * @param DataObjectHelper $dataObjectHelper
      * @param TypeResolver $typeResolver
      * @param MapperPool $mapperPool
+     * @since 2.1.0
      */
     public function __construct(
         DataObjectProcessor $dataObjectProcessor,
@@ -55,6 +61,7 @@ class Hydrator implements HydratorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function extract($entity)
     {
@@ -66,6 +73,7 @@ class Hydrator implements HydratorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function hydrate($entity, array $data)
     {

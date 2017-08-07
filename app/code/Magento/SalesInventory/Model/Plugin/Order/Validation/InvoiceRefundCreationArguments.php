@@ -15,17 +15,20 @@ use Magento\Sales\Model\ValidatorResultInterface;
 
 /**
  * Class CreditmemoCreationArguments
+ * @since 2.1.3
  */
 class InvoiceRefundCreationArguments
 {
     /**
      * @var ReturnValidator
+     * @since 2.1.3
      */
     private $returnValidator;
 
     /**
      * InvoiceRefundCreationArguments constructor.
      * @param ReturnValidator $returnValidator
+     * @since 2.1.3
      */
     public function __construct(
         ReturnValidator $returnValidator
@@ -48,6 +51,7 @@ class InvoiceRefundCreationArguments
      * @return ValidatorResultInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.2.0
      */
     public function afterValidate(
         RefundInvoiceInterface $refundInvoiceValidator,
@@ -79,6 +83,7 @@ class InvoiceRefundCreationArguments
     /**
      * @param CreditmemoCreationArgumentsInterface|null $arguments
      * @return bool
+     * @since 2.1.3
      */
     private function isReturnToStockItems($arguments)
     {

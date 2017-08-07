@@ -10,6 +10,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Class Config
+ * @since 2.1.0
  */
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
@@ -35,6 +36,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -45,6 +47,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param null|string $methodCode
      * @param string $pathPattern
      * @param Json|null $serializer
+     * @since 2.2.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -60,6 +63,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Get list of available dynamic descriptors keys
      * @var array
+     * @since 2.1.3
      */
     private static $dynamicDescriptorKeys = [
         'name', 'phone', 'url'
@@ -69,6 +73,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Return the country specific card type config
      *
      * @return array
+     * @since 2.1.0
      */
     public function getCountrySpecificCardTypeConfig()
     {
@@ -84,6 +89,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Retrieve available credit card types
      *
      * @return array
+     * @since 2.1.0
      */
     public function getAvailableCardTypes()
     {
@@ -96,6 +102,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Retrieve mapper between Magento and Braintree card types
      *
      * @return array
+     * @since 2.1.0
      */
     public function getCcTypesMapper()
     {
@@ -111,6 +118,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get list of card types available for country
      * @param string $country
      * @return array
+     * @since 2.1.0
      */
     public function getCountryAvailableCardTypes($country)
     {
@@ -122,6 +130,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Check if cvv field is enabled
      * @return boolean
+     * @since 2.1.0
      */
     public function isCvvEnabled()
     {
@@ -131,6 +140,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Check if 3d secure verification enabled
      * @return bool
+     * @since 2.1.0
      */
     public function isVerify3DSecure()
     {
@@ -140,6 +150,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Get threshold amount for 3d secure
      * @return float
+     * @since 2.1.0
      */
     public function getThresholdAmount()
     {
@@ -149,6 +160,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Get list of specific countries for 3d secure
      * @return array
+     * @since 2.1.0
      */
     public function get3DSecureSpecificCountries()
     {
@@ -161,6 +173,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * @return string
+     * @since 2.1.0
      */
     public function getEnvironment()
     {
@@ -169,6 +182,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * @return string
+     * @since 2.1.0
      */
     public function getKountMerchantId()
     {
@@ -177,6 +191,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * @return string
+     * @since 2.1.0
      */
     public function getMerchantId()
     {
@@ -185,6 +200,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * @return string
+     * @since 2.1.0
      */
     public function getSdkUrl()
     {
@@ -193,6 +209,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * @return bool
+     * @since 2.1.0
      */
     public function hasFraudProtection()
     {
@@ -202,6 +219,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Get Payment configuration status
      * @return bool
+     * @since 2.1.0
      */
     public function isActive()
     {
@@ -211,6 +229,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Get list of configured dynamic descriptors
      * @return array
+     * @since 2.1.3
      */
     public function getDynamicDescriptors()
     {
@@ -228,6 +247,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get Merchant account ID
      *
      * @return string
+     * @since 2.1.3
      */
     public function getMerchantAccountId()
     {

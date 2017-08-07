@@ -15,11 +15,13 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 /**
  * Class StockStatusFilter
  * Adds filter by stock status to base select
+ * @since 2.2.0
  */
 class StockStatusFilter
 {
     /**
      * @var ResourceConnection
+     * @since 2.2.0
      */
     private $resourceConnection;
 
@@ -41,16 +43,19 @@ class StockStatusFilter
 
     /**
      * @var ConditionManager
+     * @since 2.2.0
      */
     private $conditionManager;
 
     /**
      * @var StockConfigurationInterface
+     * @since 2.2.0
      */
     private $stockConfiguration;
 
     /**
      * @var StockRegistryInterface
+     * @since 2.2.0
      */
     private $stockRegistry;
 
@@ -59,6 +64,7 @@ class StockStatusFilter
      * @param ConditionManager $conditionManager
      * @param StockConfigurationInterface $stockConfiguration
      * @param StockRegistryInterface $stockRegistry
+     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -81,6 +87,7 @@ class StockStatusFilter
      * @param bool $showOutOfStockFlag
      * @return Select
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     public function apply(Select $select, $stockValues, $type, $showOutOfStockFlag)
     {
@@ -109,6 +116,7 @@ class StockStatusFilter
      * @param string $mainTableAlias
      * @param bool $showOutOfStockFlag
      * @return void
+     * @since 2.2.0
      */
     private function addMainStockStatusJoin(Select $select, $stockValues, $mainTableAlias, $showOutOfStockFlag)
     {
@@ -151,6 +159,7 @@ class StockStatusFilter
      * @param string $mainTableAlias
      * @param bool $showOutOfStockFlag
      * @return void
+     * @since 2.2.0
      */
     private function addSubProductsStockStatusJoin(Select $select, $stockValues, $mainTableAlias, $showOutOfStockFlag)
     {
@@ -189,6 +198,7 @@ class StockStatusFilter
      *
      * @param Select $select
      * @return string|null
+     * @since 2.2.0
      */
     private function extractTableAliasFromSelect(Select $select)
     {

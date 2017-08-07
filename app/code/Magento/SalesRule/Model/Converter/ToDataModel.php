@@ -13,6 +13,10 @@ use Magento\SalesRule\Model\Data\Rule as RuleDataModel;
 use Magento\SalesRule\Model\Rule;
 use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * Class \Magento\SalesRule\Model\Converter\ToDataModel
+ *
+ */
 class ToDataModel
 {
     /**
@@ -42,11 +46,13 @@ class ToDataModel
 
     /**
      * @var Json $serializer
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var RuleExtensionFactory
+     * @since 2.2.0
      */
     private $extensionFactory;
 
@@ -183,6 +189,7 @@ class ToDataModel
      *
      * @param array $data
      * @return array
+     * @since 2.2.0
      */
     private function convertExtensionAttributesToObject(array $data)
     {

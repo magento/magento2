@@ -178,6 +178,7 @@ class Quote extends AbstractDb
      *
      * @param int $orderIncrementId
      * @return bool
+     * @since 2.2.0
      */
     public function isOrderIncrementIdUsed($orderIncrementId)
     {

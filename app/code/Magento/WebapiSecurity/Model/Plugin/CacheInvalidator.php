@@ -5,10 +5,16 @@
  */
 namespace Magento\WebapiSecurity\Model\Plugin;
 
+/**
+ * Class \Magento\WebapiSecurity\Model\Plugin\CacheInvalidator
+ *
+ * @since 2.0.3
+ */
 class CacheInvalidator
 {
     /**
      * @var \Magento\Framework\App\Cache\TypeListInterface
+     * @since 2.0.3
      */
     protected $cacheTypeList;
 
@@ -16,6 +22,7 @@ class CacheInvalidator
      * CacheInvalidator constructor.
      *
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @since 2.0.3
      */
     public function __construct(\Magento\Framework\App\Cache\TypeListInterface $cacheTypeList)
     {
@@ -29,6 +36,7 @@ class CacheInvalidator
      * @param \Magento\Framework\App\Config\Value $result
      * @return \Magento\Framework\App\Config\Value
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.3
      */
     public function afterAfterSave(
         \Magento\Framework\App\Config\Value $subject,

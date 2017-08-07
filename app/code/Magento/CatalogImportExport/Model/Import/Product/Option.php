@@ -58,6 +58,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @var string
+     * @since 2.1.0
      */
     private $columnMaxCharacters = '_custom_option_max_characters';
 
@@ -247,11 +248,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**#@-*/
 
-    /**
-     * Collection by pages iterator
-     *
-     * @var \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator
-     */
+    /**#@-*/
     protected $_byPagesIterator;
 
     /**
@@ -314,6 +311,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Product entity link field
      *
      * @var string
+     * @since 2.1.0
      */
     private $productEntityLinkField;
 
@@ -321,6 +319,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Product entity identifier field
      *
      * @var string
+     * @since 2.1.0
      */
     private $productEntityIdentifierField;
 
@@ -1106,6 +1105,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param string $name
      * @param array $optionRow
      * @return array
+     * @since 2.1.0
      */
     private function processOptionRow($name, $optionRow)
     {
@@ -1147,6 +1147,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $result
      * @param array $optionRow
      * @return array
+     * @since 2.2.0
      */
     private function addFileOptions($result, $optionRow)
     {
@@ -1877,6 +1878,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Get product entity link field
      *
      * @return string
+     * @since 2.1.0
      */
     private function getProductEntityLinkField()
     {
@@ -1892,6 +1894,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Get product entity identifier field
      *
      * @return string
+     * @since 2.1.0
      */
     private function getProductIdentifierField()
     {

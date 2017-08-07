@@ -8,16 +8,19 @@ namespace Magento\CatalogRule\Model\Indexer;
 
 /**
  * Product price calculation according rules settings.
+ * @since 2.2.0
  */
 class ProductPriceCalculator
 {
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
+     * @since 2.2.0
      */
     private $priceCurrency;
 
     /**
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @since 2.2.0
      */
     public function __construct(\Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency)
     {
@@ -30,6 +33,7 @@ class ProductPriceCalculator
      * @param array $ruleData
      * @param null $productData
      * @return float
+     * @since 2.2.0
      */
     public function calculate($ruleData, $productData = null)
     {

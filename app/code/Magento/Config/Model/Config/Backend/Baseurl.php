@@ -20,6 +20,7 @@ class Baseurl extends \Magento\Framework\App\Config\Value
 
     /**
      * @var UrlValidator
+     * @since 2.2.0
      */
     private $urlValidator;
 
@@ -230,8 +231,9 @@ class Baseurl extends \Magento\Framework\App\Config\Value
     /**
      * Get URL Validator
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return UrlValidator
+     * @since 2.2.0
      */
     private function getUrlValidator()
     {

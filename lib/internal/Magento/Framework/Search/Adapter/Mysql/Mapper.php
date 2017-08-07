@@ -74,11 +74,13 @@ class Mapper
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $relevanceCalculationMethod;
 
     /**
      * @var TemporaryStorageFactory
+     * @since 2.2.0
      */
     private $temporaryStorageFactory;
 

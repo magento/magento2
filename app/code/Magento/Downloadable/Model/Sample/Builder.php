@@ -16,36 +16,43 @@ use Magento\Framework\DataObject\Copy;
 /**
  * Class Builder
  * @api
+ * @since 2.1.0
  */
 class Builder
 {
     /**
      * @var Sample
+     * @since 2.1.0
      */
     private $component;
     
     /**
      * @var File
+     * @since 2.1.0
      */
     private $downloadableFile;
 
     /**
      * @var Copy
+     * @since 2.1.0
      */
     private $objectCopyService;
 
     /**
      * @var DataObjectHelper
+     * @since 2.1.0
      */
     private $dataObjectHelper;
 
     /**
      * @var SampleFactory
+     * @since 2.1.0
      */
     private $componentFactory;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     private $data = [];
 
@@ -56,6 +63,7 @@ class Builder
      * @param Copy $objectCopyService
      * @param DataObjectHelper $dataObjectHelper
      * @param SampleFactory $componentFactory
+     * @since 2.1.0
      */
     public function __construct(
         File $downloadableFile,
@@ -72,6 +80,7 @@ class Builder
     /**
      * @param array $data
      * @return $this;
+     * @since 2.1.0
      */
     public function setData(array $data)
     {
@@ -83,6 +92,7 @@ class Builder
      * @param SampleInterface $sample
      * @return SampleInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.1.0
      */
     public function build(SampleInterface $sample)
     {
@@ -120,6 +130,7 @@ class Builder
 
     /**
      * @return void
+     * @since 2.1.0
      */
     private function resetData()
     {
@@ -128,6 +139,7 @@ class Builder
 
     /**
      * @return Sample
+     * @since 2.1.0
      */
     private function getComponent()
     {

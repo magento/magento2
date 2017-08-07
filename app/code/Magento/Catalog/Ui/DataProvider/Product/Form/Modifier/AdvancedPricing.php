@@ -31,61 +31,73 @@ use Magento\Framework\Stdlib\ArrayManager;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.1.0
  */
 class AdvancedPricing extends AbstractModifier
 {
     /**
      * @var LocatorInterface
+     * @since 2.1.0
      */
     protected $locator;
 
     /**
      * @var ModuleManager
+     * @since 2.1.0
      */
     protected $moduleManager;
 
     /**
      * @var GroupManagementInterface
+     * @since 2.1.0
      */
     protected $groupManagement;
 
     /**
      * @var SearchCriteriaBuilder
+     * @since 2.1.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var GroupRepositoryInterface
+     * @since 2.1.0
      */
     protected $groupRepository;
 
     /**
      * @var Data
+     * @since 2.1.0
      */
     protected $directoryHelper;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.1.0
      */
     protected $storeManager;
 
     /**
      * @var ArrayManager
+     * @since 2.1.0
      */
     protected $arrayManager;
 
     /**
      * @var string
+     * @since 2.1.0
      */
     protected $scopeName;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $meta = [];
 
     /**
      * @var GroupSourceInterface
+     * @since 2.2.0
      */
     private $customerGroupSource;
 
@@ -101,6 +113,7 @@ class AdvancedPricing extends AbstractModifier
      * @param string $scopeName
      * @param GroupSourceInterface $customerGroupSource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.1.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -129,6 +142,7 @@ class AdvancedPricing extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -147,6 +161,7 @@ class AdvancedPricing extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -160,6 +175,7 @@ class AdvancedPricing extends AbstractModifier
      *
      * @param string $fieldCode
      * @return $this
+     * @since 2.1.0
      */
     protected function preparePriceFields($fieldCode)
     {
@@ -185,6 +201,7 @@ class AdvancedPricing extends AbstractModifier
      * Customize tier price field
      *
      * @return $this
+     * @since 2.1.0
      */
     private function customizeTierPrice()
     {
@@ -220,6 +237,7 @@ class AdvancedPricing extends AbstractModifier
      * Retrieve allowed customer groups
      *
      * @return array
+     * @since 2.1.0
      */
     private function getCustomerGroups()
     {
@@ -234,6 +252,7 @@ class AdvancedPricing extends AbstractModifier
      * Check tier_price attribute scope is global
      *
      * @return bool
+     * @since 2.1.0
      */
     private function isScopeGlobal()
     {
@@ -247,6 +266,7 @@ class AdvancedPricing extends AbstractModifier
      * Get websites list
      *
      * @return array
+     * @since 2.1.0
      */
     private function getWebsites()
     {
@@ -288,6 +308,7 @@ class AdvancedPricing extends AbstractModifier
      * Retrieve default value for customer group
      *
      * @return int
+     * @since 2.1.0
      */
     private function getDefaultCustomerGroup()
     {
@@ -298,6 +319,7 @@ class AdvancedPricing extends AbstractModifier
      * Retrieve default value for website
      *
      * @return int
+     * @since 2.1.0
      */
     public function getDefaultWebsite()
     {
@@ -312,6 +334,7 @@ class AdvancedPricing extends AbstractModifier
      * Show group prices grid website column
      *
      * @return bool
+     * @since 2.1.0
      */
     private function isShowWebsiteColumn()
     {
@@ -325,6 +348,7 @@ class AdvancedPricing extends AbstractModifier
      * Show website column and switcher for group price table
      *
      * @return bool
+     * @since 2.1.0
      */
     private function isMultiWebsites()
     {
@@ -335,6 +359,7 @@ class AdvancedPricing extends AbstractModifier
      * Check is allow change website value for combination
      *
      * @return bool
+     * @since 2.1.0
      */
     private function isAllowChangeWebsite()
     {
@@ -348,6 +373,7 @@ class AdvancedPricing extends AbstractModifier
      * Add link to open Advanced Pricing Panel
      *
      * @return $this
+     * @since 2.1.0
      */
     private function addAdvancedPriceLink()
     {
@@ -401,6 +427,7 @@ class AdvancedPricing extends AbstractModifier
      * @param string $tierPricePath
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.1.0
      */
     private function getTierPriceStructure($tierPricePath)
     {
@@ -539,6 +566,7 @@ class AdvancedPricing extends AbstractModifier
      * Special price data move to inline group
      *
      * @return $this
+     * @since 2.1.0
      */
     private function specialPriceDataToInline()
     {
@@ -595,6 +623,7 @@ class AdvancedPricing extends AbstractModifier
      * Customize Advanced Pricing Panel
      *
      * @return $this
+     * @since 2.1.0
      */
     private function customizeAdvancedPricing()
     {
@@ -654,6 +683,7 @@ class AdvancedPricing extends AbstractModifier
      * Retrieve store
      *
      * @return \Magento\Store\Api\Data\StoreInterface
+     * @since 2.1.0
      */
     private function getStore()
     {

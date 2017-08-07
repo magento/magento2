@@ -123,18 +123,21 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
 
     /**
      * @var \Magento\Translation\Model\Inline\CacheManager
+     * @since 2.1.0
      */
     private $cacheManager;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $relatedCacheTypes;
 
     /**
      * @return \Magento\Translation\Model\Inline\CacheManager
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getCacheManger()
     {

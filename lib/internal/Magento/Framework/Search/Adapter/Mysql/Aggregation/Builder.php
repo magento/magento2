@@ -41,6 +41,7 @@ class Builder
 
     /**
      * @var AggregationResolverInterface
+     * @since 2.1.0
      */
     private $aggregationResolver;
 
@@ -106,6 +107,7 @@ class Builder
      *
      * @param array $documents
      * @return array
+     * @since 2.1.0
      */
     private function extractDocumentIds(array $documents)
     {
@@ -117,7 +119,8 @@ class Builder
      *
      * @param Table $documentsTable
      * @return array
-     * @deprecated Added for backward compatibility
+     * @deprecated 2.1.0 Added for backward compatibility
+     * @since 2.1.0
      */
     private function getDocumentIds(Table $documentsTable)
     {
@@ -131,6 +134,7 @@ class Builder
      * Get Connection
      *
      * @return AdapterInterface
+     * @since 2.1.0
      */
     private function getConnection()
     {

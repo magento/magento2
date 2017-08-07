@@ -23,16 +23,19 @@ use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.1.0
  */
 class File extends BackendFile
 {
     /**
      * @var UrlInterface
+     * @since 2.1.0
      */
     protected $urlBuilder;
 
     /**
      * @var Mime
+     * @since 2.2.0
      */
     private $mime;
 
@@ -49,6 +52,7 @@ class File extends BackendFile
      * @param AbstractDb|null $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -83,6 +87,7 @@ class File extends BackendFile
      *
      * @return $this
      * @throws LocalizedException
+     * @since 2.1.0
      */
     public function beforeSave()
     {
@@ -117,6 +122,7 @@ class File extends BackendFile
 
     /**
      * @return array
+     * @since 2.1.0
      */
     public function afterLoad()
     {
@@ -147,6 +153,7 @@ class File extends BackendFile
      * Getter for allowed extensions of uploaded files
      *
      * @return array
+     * @since 2.1.0
      */
     public function getAllowedExtensions()
     {
@@ -158,6 +165,7 @@ class File extends BackendFile
      *
      * @param string $uploadDir
      * @return string
+     * @since 2.1.0
      */
     protected function getUploadDirPath($uploadDir)
     {
@@ -166,6 +174,7 @@ class File extends BackendFile
 
     /**
      * @return array
+     * @since 2.1.0
      */
     public function getValue()
     {
@@ -177,6 +186,7 @@ class File extends BackendFile
      *
      * @param string $fileName
      * @return mixed
+     * @since 2.1.0
      */
     protected function getStoreMediaUrl($fileName)
     {
@@ -196,6 +206,7 @@ class File extends BackendFile
      *
      * @param string $filename
      * @return string
+     * @since 2.1.0
      */
     protected function getTmpMediaPath($filename)
     {
@@ -207,6 +218,7 @@ class File extends BackendFile
      *
      * @param string $fileName
      * @return string
+     * @since 2.2.0
      */
     private function getMimeType($fileName)
     {
@@ -221,7 +233,8 @@ class File extends BackendFile
      *
      * @return Mime
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getMime()
     {

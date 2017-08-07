@@ -13,6 +13,10 @@ use Magento\Framework\Module\Manager;
 use Magento\PageCache\Model\Config;
 use Magento\Weee\Helper\Data;
 
+/**
+ * Class \Magento\Weee\Observer\AfterAddressSave
+ *
+ */
 class AfterAddressSave implements ObserverInterface
 {
     /**
@@ -97,6 +101,7 @@ class AfterAddressSave implements ObserverInterface
      *
      * @param Address $address
      * @return bool
+     * @since 2.1.0
      */
     protected function isDefaultBilling($address)
     {
@@ -110,6 +115,7 @@ class AfterAddressSave implements ObserverInterface
      *
      * @param Address $address
      * @return bool
+     * @since 2.1.0
      */
     protected function isDefaultShipping($address)
     {

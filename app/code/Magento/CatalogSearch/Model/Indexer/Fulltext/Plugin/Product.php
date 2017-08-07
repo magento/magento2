@@ -9,6 +9,10 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin;
 use Magento\Catalog\Model\ResourceModel\Product as ResourceProduct;
 use Magento\Framework\Model\AbstractModel;
 
+/**
+ * Class \Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product
+ *
+ */
 class Product extends AbstractPlugin
 {
     /**
@@ -43,6 +47,7 @@ class Product extends AbstractPlugin
      * @param AbstractModel $product
      * @return ResourceProduct
      * @throws \Exception
+     * @since 2.1.0
      */
     private function addCommitCallback(ResourceProduct $productResource, \Closure $proceed, AbstractModel $product)
     {

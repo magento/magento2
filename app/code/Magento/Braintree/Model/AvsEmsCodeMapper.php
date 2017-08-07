@@ -16,6 +16,7 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  *
  * @see https://developers.braintreepayments.com/reference/response/transaction
  * @see http://www.emsecommerce.net/avs_cvv2_response_codes.htm
+ * @since 2.2.0
  */
 class AvsEmsCodeMapper implements PaymentVerificationInterface
 {
@@ -23,6 +24,7 @@ class AvsEmsCodeMapper implements PaymentVerificationInterface
      * Default code for mismatching mapping.
      *
      * @var string
+     * @since 2.2.0
      */
     private static $unavailableCode = 'U';
 
@@ -30,6 +32,7 @@ class AvsEmsCodeMapper implements PaymentVerificationInterface
      * List of mapping AVS codes
      *
      * @var array
+     * @since 2.2.0
      */
     private static $avsMap = [
         'MM' => 'Y',
@@ -47,6 +50,7 @@ class AvsEmsCodeMapper implements PaymentVerificationInterface
      * @param OrderPaymentInterface $orderPayment
      * @return string
      * @throws \InvalidArgumentException If specified order payment has different payment method code.
+     * @since 2.2.0
      */
     public function getCode(OrderPaymentInterface $orderPayment)
     {

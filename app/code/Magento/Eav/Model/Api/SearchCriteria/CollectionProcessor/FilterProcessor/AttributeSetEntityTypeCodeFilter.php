@@ -10,15 +10,22 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\CustomFilterInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 
+/**
+ * Class \Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\AttributeSetEntityTypeCodeFilter
+ *
+ * @since 2.2.0
+ */
 class AttributeSetEntityTypeCodeFilter implements CustomFilterInterface
 {
     /**
      * @var Config
+     * @since 2.2.0
      */
     private $eavConfig;
 
     /**
      * @param Config $eavConfig
+     * @since 2.2.0
      */
     public function __construct(
         Config $eavConfig
@@ -32,6 +39,7 @@ class AttributeSetEntityTypeCodeFilter implements CustomFilterInterface
      * @param Filter $filter
      * @param AbstractDb $collection
      * @return bool
+     * @since 2.2.0
      */
     public function apply(Filter $filter, AbstractDb $collection)
     {

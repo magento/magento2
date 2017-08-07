@@ -18,19 +18,32 @@ use Magento\Framework\Event\ObserverInterface;
  */
 class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
 {
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator
+     */
     private $categoryUrlRewriteGenerator;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer
+     * @since 2.2.0
+     */
     private $urlRewriteBunchReplacer;
 
-    /** @var \Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler
+     */
     private $urlRewriteHandler;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool
+     * @since 2.2.0
+     */
     private $databaseMapPool;
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     * @since 2.2.0
+     */
     private $dataUrlRewriteClassNames;
 
     /**
@@ -97,6 +110,7 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
      *
      * @param Category $category
      * @return void
+     * @since 2.2.0
      */
     private function resetUrlRewritesDataMaps($category)
     {

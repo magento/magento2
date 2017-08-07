@@ -12,11 +12,13 @@ use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * @api
+ * @since 2.1.0
  */
 class StatusText extends \Magento\Ui\Component\Listing\Columns\Column
 {
     /**
      * @var \Magento\Catalog\Model\Product\Attribute\Source\Status
+     * @since 2.1.0
      */
     protected $status;
 
@@ -26,6 +28,7 @@ class StatusText extends \Magento\Ui\Component\Listing\Columns\Column
      * @param Status $status
      * @param array $components
      * @param array $data
+     * @since 2.1.0
      */
     public function __construct(
         ContextInterface $context,
@@ -44,6 +47,7 @@ class StatusText extends \Magento\Ui\Component\Listing\Columns\Column
      *
      * @param array $dataSource
      * @return array
+     * @since 2.1.0
      */
     public function prepareDataSource(array $dataSource)
     {

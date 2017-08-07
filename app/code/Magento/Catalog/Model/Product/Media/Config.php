@@ -29,6 +29,7 @@ class Config implements ConfigInterface
 
     /**
      * @var Attribute
+     * @since 2.0.3
      */
     private $attributeHelper;
 
@@ -169,6 +170,7 @@ class Config implements ConfigInterface
 
     /**
      * @return array
+     * @since 2.0.3
      */
     public function getMediaAttributeCodes()
     {
@@ -177,6 +179,7 @@ class Config implements ConfigInterface
 
     /**
      * @return Attribute
+     * @since 2.0.3
      */
     private function getAttributeHelper()
     {

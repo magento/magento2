@@ -22,10 +22,14 @@ class PageActions extends Column
     const CMS_URL_PATH_EDIT = 'cms/page/edit';
     const CMS_URL_PATH_DELETE = 'cms/page/delete';
 
-    /** @var UrlBuilder */
+    /**
+     * @var \Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action\UrlBuilder
+     */
     protected $actionUrlBuilder;
 
-    /** @var UrlInterface */
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
     protected $urlBuilder;
 
     /**
@@ -35,6 +39,7 @@ class PageActions extends Column
 
     /**
      * @var Escaper
+     * @since 2.2.0
      */
     private $escaper;
 
@@ -107,7 +112,8 @@ class PageActions extends Column
     /**
      * Get instance of escaper
      * @return Escaper
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getEscaper()
     {

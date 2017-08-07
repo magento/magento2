@@ -7,6 +7,7 @@ namespace Magento\Setup\Model\Description\Mixin;
 
 /**
  * Add brake html tag to each new line to description
+ * @since 2.2.0
  */
 class BrakeMixin implements DescriptionMixinInterface
 {
@@ -15,6 +16,7 @@ class BrakeMixin implements DescriptionMixinInterface
      *
      * @param string $text
      * @return string
+     * @since 2.2.0
      */
     public function apply($text)
     {

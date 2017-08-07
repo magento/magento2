@@ -51,6 +51,7 @@ class LastOrderedItems implements SectionSourceInterface
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.2.0
      */
     private $_storeManager;
 

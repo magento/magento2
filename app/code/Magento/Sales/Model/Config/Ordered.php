@@ -75,6 +75,7 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 

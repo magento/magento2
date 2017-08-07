@@ -9,7 +9,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
  * Country column type renderer
  *
  * @api
- * @deprecated in favour of UI component implementation
+ * @deprecated 2.2.0 in favour of UI component implementation
  */
 class Country extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {

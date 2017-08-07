@@ -12,16 +12,19 @@ use Magento\Ui\Config\ConverterUtils;
 
 /**
  * Converter for 'settings/deps' configuration settings
+ * @since 2.2.0
  */
 class Deps implements ConverterInterface
 {
     /**
      * @var ConverterUtils
+     * @since 2.2.0
      */
     private $converterUtils;
 
     /**
      * @param ConverterUtils $converterUtils
+     * @since 2.2.0
      */
     public function __construct(ConverterUtils $converterUtils)
     {
@@ -30,6 +33,7 @@ class Deps implements ConverterInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function convert(\DOMNode $node, array $data = [])
     {
@@ -44,6 +48,7 @@ class Deps implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return array
+     * @since 2.2.0
      */
     private function toArray(\DOMNode $node)
     {
@@ -79,6 +84,7 @@ class Deps implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return bool
+     * @since 2.2.0
      */
     private function hasChildNodes(\DOMNode $node)
     {

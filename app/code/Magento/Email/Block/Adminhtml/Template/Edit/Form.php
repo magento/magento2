@@ -9,6 +9,10 @@
  */
 namespace Magento\Email\Block\Adminhtml\Template\Edit;
 
+/**
+ * Class \Magento\Email\Block\Adminhtml\Template\Edit\Form
+ *
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -23,6 +27,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 

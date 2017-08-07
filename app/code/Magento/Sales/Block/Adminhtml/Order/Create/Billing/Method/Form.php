@@ -104,7 +104,7 @@ class Form extends \Magento\Payment\Block\Form\Container
      * Whether switch/solo card type available
      *
      * @return true
-     * @deprecated unused
+     * @deprecated 2.1.0 unused
      */
     public function hasSsCardType()
     {

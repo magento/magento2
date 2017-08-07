@@ -13,6 +13,10 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Psr\Log\LoggerInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteData;
 
+/**
+ * Class \Magento\UrlRewrite\Model\Storage\DbStorage
+ *
+ */
 class DbStorage extends AbstractStorage
 {
     /**
@@ -37,6 +41,7 @@ class DbStorage extends AbstractStorage
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 

@@ -30,6 +30,7 @@ interface AssetInterface
      * Retrieve source content type
      *
      * @return string
+     * @since 2.2.0
      */
     public function getSourceContentType();
 }

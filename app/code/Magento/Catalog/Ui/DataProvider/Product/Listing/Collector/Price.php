@@ -19,6 +19,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * Base price contains: final_price, min, max and regular prices.
  * Base price can be applied for all types of products
  * Base price fully describe simple product
+ * @since 2.2.0
  */
 class Price implements ProductRenderCollectorInterface
 {
@@ -36,21 +37,25 @@ class Price implements ProductRenderCollectorInterface
 
     /**
      * @var PriceCurrencyInterface
+     * @since 2.2.0
      */
     private $priceCurrency;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $excludeAdjustments;
 
     /**
      * @var PriceInfoInterfaceFactory
+     * @since 2.2.0
      */
     private $priceInfoFactory;
 
     /**
      * @var FormattedPriceInfoBuilder
+     * @since 2.2.0
      */
     private $formattedPriceInfoBuilder;
 
@@ -59,6 +64,7 @@ class Price implements ProductRenderCollectorInterface
      * @param PriceInfoInterfaceFactory $priceInfoFactory
      * @param FormattedPriceInfoBuilder $formattedPriceInfoBuilder
      * @param array $excludeAdjustments
+     * @since 2.2.0
      */
     public function __construct(
         PriceCurrencyInterface $priceCurrency,
@@ -74,6 +80,7 @@ class Price implements ProductRenderCollectorInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function collect(ProductInterface $product, ProductRenderInterface $productRender)
     {

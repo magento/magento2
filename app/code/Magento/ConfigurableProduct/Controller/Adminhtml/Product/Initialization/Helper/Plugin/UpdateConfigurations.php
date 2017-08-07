@@ -7,19 +7,30 @@
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
+/**
+ * Class \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\UpdateConfigurations
+ *
+ */
 class UpdateConfigurations
 {
-    /** @var \Magento\Catalog\Api\ProductRepositoryInterface  */
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
     protected $productRepository;
 
-    /** @var \Magento\Framework\App\RequestInterface */
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
     protected $request;
 
-    /** @var \Magento\ConfigurableProduct\Model\Product\VariationHandler */
+    /**
+     * @var \Magento\ConfigurableProduct\Model\Product\VariationHandler
+     */
     protected $variationHandler;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     private $keysPost = [
         'status',
@@ -83,6 +94,7 @@ class UpdateConfigurations
      * Get configurations from request
      *
      * @return array
+     * @since 2.1.0
      */
     protected function getConfigurations()
     {
@@ -116,6 +128,7 @@ class UpdateConfigurations
      *
      * @param array $item
      * @return array
+     * @since 2.1.0
      */
     private function mapData(array $item)
     {

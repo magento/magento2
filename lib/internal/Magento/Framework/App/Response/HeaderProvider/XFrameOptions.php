@@ -9,6 +9,7 @@ use \Magento\Framework\App\Response\Http;
 
 /**
  * Adds an X-FRAME-OPTIONS header to HTTP responses to safeguard against click-jacking.
+ * @since 2.1.0
  */
 class XFrameOptions extends \Magento\Framework\App\Response\HeaderProvider\AbstractHeaderProvider
 {
@@ -22,6 +23,7 @@ class XFrameOptions extends \Magento\Framework\App\Response\HeaderProvider\Abstr
      * x-frame-options Header name
      *
      * @var string
+     * @since 2.1.0
      */
     protected $headerName = Http::HEADER_X_FRAME_OPT;
 
@@ -29,11 +31,13 @@ class XFrameOptions extends \Magento\Framework\App\Response\HeaderProvider\Abstr
      * x-frame-options header value
      *
      * @var string
+     * @since 2.1.0
      */
     protected $headerValue;
 
     /**
      * @param string $xFrameOpt
+     * @since 2.1.0
      */
     public function __construct($xFrameOpt = 'SAMEORIGIN')
     {

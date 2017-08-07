@@ -6,6 +6,10 @@
  */
 namespace Magento\Authorizenet\Controller\Directpost\Payment;
 
+/**
+ * Class \Magento\Authorizenet\Controller\Directpost\Payment\BackendResponse
+ *
+ */
 class BackendResponse extends \Magento\Authorizenet\Controller\Directpost\Payment
 {
     /**
@@ -13,6 +17,7 @@ class BackendResponse extends \Magento\Authorizenet\Controller\Directpost\Paymen
      * Action for Authorize.net SIM Relay Request.
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.1.0
      */
     public function execute()
     {

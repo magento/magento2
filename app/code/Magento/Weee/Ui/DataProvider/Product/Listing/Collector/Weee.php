@@ -19,6 +19,7 @@ use Magento\Weee\Helper\Data;
  * Collect information about weee attributes of specific product and add this information
  * into \Magento\Catalog\Api\Data\ProductRenderInterface
  * Calculate weee taxes for each weee attribute
+ * @since 2.2.0
  */
 class Weee implements ProductRenderCollectorInterface
 {
@@ -30,26 +31,31 @@ class Weee implements ProductRenderCollectorInterface
 
     /**
      * @var Data
+     * @since 2.2.0
      */
     private $weeeHelper;
 
     /**
      * @var PriceCurrencyInterface
+     * @since 2.2.0
      */
     private $priceCurrency;
 
     /**
      * @var WeeeAdjustmentAttributeInterfaceFactory
+     * @since 2.2.0
      */
     private $weeeAdjustmentAttributeFactory;
 
     /**
      * @var FormattedPriceInfoBuilder
+     * @since 2.2.0
      */
     private $formattedPriceInfoBuilder;
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterfaceFactory
+     * @since 2.2.0
      */
     private $priceInfoExtensionFactory;
 
@@ -59,6 +65,7 @@ class Weee implements ProductRenderCollectorInterface
      * @param WeeeAdjustmentAttributeInterfaceFactory $weeeAdjustmentAttributeFactory
      * @param \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterfaceFactory $priceInfoExtensionFactory
      * @param FormattedPriceInfoBuilder $formattedPriceInfoBuilder
+     * @since 2.2.0
      */
     public function __construct(
         Data $weeeHelper,
@@ -79,6 +86,7 @@ class Weee implements ProductRenderCollectorInterface
      * @param int $storeId
      * @param string $currencyCode
      * @return float
+     * @since 2.2.0
      */
     private function format($value, $storeId, $currencyCode)
     {
@@ -94,6 +102,7 @@ class Weee implements ProductRenderCollectorInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function collect(ProductInterface $product, ProductRenderInterface $productRender)
     {

@@ -6,6 +6,10 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Category\Edit
+ *
+ */
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**
@@ -20,6 +24,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.1.0
      */
     protected $storeManager;
 
@@ -115,6 +120,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
 
     /**
      * @return \Magento\Store\Model\StoreManagerInterface
+     * @since 2.1.0
      */
     private function getStoreManager()
     {

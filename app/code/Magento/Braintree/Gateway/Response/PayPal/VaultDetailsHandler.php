@@ -17,26 +17,31 @@ use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
 
 /**
  * Vault Details Handler
+ * @since 2.1.3
  */
 class VaultDetailsHandler implements HandlerInterface
 {
     /**
      * @var PaymentTokenInterfaceFactory
+     * @since 2.1.3
      */
     private $paymentTokenFactory;
 
     /**
      * @var OrderPaymentExtensionInterfaceFactory
+     * @since 2.1.3
      */
     private $paymentExtensionFactory;
 
     /**
      * @var SubjectReader
+     * @since 2.1.3
      */
     private $subjectReader;
 
     /**
      * @var DateTimeFactory
+     * @since 2.1.3
      */
     private $dateTimeFactory;
 
@@ -47,6 +52,7 @@ class VaultDetailsHandler implements HandlerInterface
      * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
      * @param SubjectReader $subjectReader
      * @param DateTimeFactory $dateTimeFactory
+     * @since 2.1.3
      */
     public function __construct(
         PaymentTokenInterfaceFactory $paymentTokenFactory,
@@ -62,6 +68,7 @@ class VaultDetailsHandler implements HandlerInterface
 
     /**
      * @inheritdoc
+     * @since 2.1.3
      */
     public function handle(array $handlingSubject, array $response)
     {
@@ -82,6 +89,7 @@ class VaultDetailsHandler implements HandlerInterface
      *
      * @param \Braintree\Transaction $transaction
      * @return PaymentTokenInterface|null
+     * @since 2.1.3
      */
     private function getVaultPaymentToken(Transaction $transaction)
     {
@@ -105,6 +113,7 @@ class VaultDetailsHandler implements HandlerInterface
 
     /**
      * @return string
+     * @since 2.1.3
      */
     private function getExpirationDate()
     {
@@ -117,6 +126,7 @@ class VaultDetailsHandler implements HandlerInterface
      * Get payment extension attributes
      * @param InfoInterface $payment
      * @return OrderPaymentExtensionInterface
+     * @since 2.1.3
      */
     private function getExtensionAttributes(InfoInterface $payment)
     {

@@ -91,6 +91,7 @@ class Result extends Template
      * Get page title
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.2.0
      */
     private function getPageTitle()
     {

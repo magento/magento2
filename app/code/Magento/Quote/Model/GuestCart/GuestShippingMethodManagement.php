@@ -34,6 +34,7 @@ class GuestShippingMethodManagement implements
 
     /**
      * @var ShipmentEstimationInterface
+     * @since 2.0.10
      */
     private $shipmentEstimationManagement;
 
@@ -93,6 +94,7 @@ class GuestShippingMethodManagement implements
 
     /**
      * @inheritdoc
+     * @since 2.0.10
      */
     public function estimateByExtendedAddress($cartId, AddressInterface $address)
     {
@@ -106,7 +108,8 @@ class GuestShippingMethodManagement implements
     /**
      * Get shipment estimation management service
      * @return ShipmentEstimationInterface
-     * @deprecated
+     * @deprecated 2.0.10
+     * @since 2.0.10
      */
     private function getShipmentEstimationManagement()
     {

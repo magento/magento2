@@ -50,6 +50,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
 
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     private $metadataPool;
 
@@ -384,6 +385,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     /**
      * Get MetadataPool instance
      * @return MetadataPool
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {

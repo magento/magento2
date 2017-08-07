@@ -13,6 +13,10 @@ use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 
+/**
+ * Class \Magento\Setup\Controller\BackupActionItems
+ *
+ */
 class BackupActionItems extends AbstractActionController
 {
 
@@ -64,6 +68,7 @@ class BackupActionItems extends AbstractActionController
      * No index action, return 404 error page
      *
      * @return \Zend\View\Model\ViewModel
+     * @since 2.1.0
      */
     public function indexAction()
     {

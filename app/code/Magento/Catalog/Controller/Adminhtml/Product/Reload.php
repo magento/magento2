@@ -9,11 +9,13 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Backend reload of product create/edit form
+ * @since 2.1.0
  */
 class Reload extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function execute()
     {

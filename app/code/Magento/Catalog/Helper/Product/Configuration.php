@@ -40,6 +40,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
 
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 

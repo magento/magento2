@@ -15,6 +15,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Deploy package service
+ * @since 2.2.0
  */
 class DeployPackage
 {
@@ -24,6 +25,7 @@ class DeployPackage
      * Allows to switch between different application areas
      *
      * @var AppState
+     * @since 2.2.0
      */
     private $appState;
 
@@ -33,6 +35,7 @@ class DeployPackage
      * Check if given locale code is a valid one
      *
      * @var LocaleResolver
+     * @since 2.2.0
      */
     private $localeResolver;
 
@@ -40,6 +43,7 @@ class DeployPackage
      * Service for deploying static files
      *
      * @var DeployStaticFile
+     * @since 2.2.0
      */
     private $deployStaticFile;
 
@@ -47,6 +51,7 @@ class DeployPackage
      * Logger interface
      *
      * @var LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 
@@ -54,6 +59,7 @@ class DeployPackage
      * Total count of processed files
      *
      * @var int
+     * @since 2.2.0
      */
     private $count = 0;
 
@@ -61,6 +67,7 @@ class DeployPackage
      * Total count of the errors
      *
      * @var int
+     * @since 2.2.0
      */
     private $errorsCount = 0;
 
@@ -71,6 +78,7 @@ class DeployPackage
      * @param LocaleResolver $localeResolver
      * @param DeployStaticFile $deployStaticFile
      * @param LoggerInterface $logger
+     * @since 2.2.0
      */
     public function __construct(
         AppState $appState,
@@ -91,6 +99,7 @@ class DeployPackage
      * @param array $options
      * @param bool $skipLogging
      * @return bool true on success
+     * @since 2.2.0
      */
     public function deploy(Package $package, array $options, $skipLogging = false)
     {
@@ -112,6 +121,7 @@ class DeployPackage
      * @param array $options
      * @param bool $skipLogging
      * @return int
+     * @since 2.2.0
      */
     public function deployEmulated(Package $package, array $options, $skipLogging = false)
     {
@@ -158,6 +168,7 @@ class DeployPackage
      * @param PackageFile $file
      * @param Package $package
      * @return void
+     * @since 2.2.0
      */
     private function processFile(PackageFile $file, Package $package)
     {
@@ -196,6 +207,7 @@ class DeployPackage
      * @param Package $package
      * @param Package $parentPackage
      * @return bool
+     * @since 2.2.0
      */
     private function checkIfCanCopy(PackageFile $file, Package $package, Package $parentPackage = null)
     {
@@ -216,6 +228,7 @@ class DeployPackage
      * @param string $filePath
      * @param array $options
      * @return boolean
+     * @since 2.2.0
      */
     private function checkFileSkip($filePath, array $options)
     {
@@ -240,6 +253,7 @@ class DeployPackage
      * @param PackageFile|null $file
      * @param bool $skipLogging
      * @return void
+     * @since 2.2.0
      */
     private function register(Package $package, PackageFile $file = null, $skipLogging = false)
     {

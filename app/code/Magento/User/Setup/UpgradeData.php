@@ -12,10 +12,15 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 
+/**
+ * Class \Magento\User\Setup\UpgradeData
+ *
+ */
 class UpgradeData implements UpgradeDataInterface
 {
     /**
      * @var FieldDataConverterFactory
+     * @since 2.2.0
      */
     private $fieldDataConverterFactory;
 
@@ -23,6 +28,7 @@ class UpgradeData implements UpgradeDataInterface
      * UpgradeData constructor.
      *
      * @param FieldDataConverterFactory $fieldDataConverterFactory
+     * @since 2.2.0
      */
     public function __construct(
         FieldDataConverterFactory $fieldDataConverterFactory
@@ -84,6 +90,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param ModuleDataSetupInterface $setup
      *
      * @return void
+     * @since 2.2.0
      */
     private function upgradeSerializedFields($setup)
     {

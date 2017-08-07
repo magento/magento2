@@ -8,7 +8,7 @@ namespace Magento\Catalog\Block\Product;
 /**
  * Class AbstractProduct
  * @api
- * @deprecated
+ * @deprecated 2.2.0
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -98,6 +98,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
 
     /**
      * @var ImageBuilder
+     * @since 2.2.0
      */
     protected $imageBuilder;
 

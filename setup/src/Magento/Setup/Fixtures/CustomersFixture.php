@@ -47,16 +47,19 @@ class CustomersFixture extends Fixture
 
     /**
      * @var CustomerGenerator
+     * @since 2.2.0
      */
     private $customerGenerator;
 
     /**
      * @var CustomerDataGeneratorFactory
+     * @since 2.2.0
      */
     private $customerDataGeneratorFactory;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $defaultCustomerConfig = [
         'addresses-count' => 2
@@ -64,6 +67,7 @@ class CustomersFixture extends Fixture
 
     /**
      * @var CollectionFactory
+     * @since 2.2.0
      */
     private $collectionFactory;
 
@@ -72,6 +76,7 @@ class CustomersFixture extends Fixture
      * @param CustomerGenerator $customerGenerator
      * @param CustomerDataGeneratorFactory $customerDataGeneratorFactory
      * @param CollectionFactory $collectionFactory
+     * @since 2.2.0
      */
     public function __construct(
         FixtureModel $fixtureModel,
@@ -112,6 +117,7 @@ class CustomersFixture extends Fixture
 
     /**
      * @return int
+     * @since 2.2.0
      */
     private function getCustomersAmount()
     {
@@ -138,6 +144,7 @@ class CustomersFixture extends Fixture
 
     /**
      * @return array
+     * @since 2.2.0
      */
     private function getCustomersConfig()
     {

@@ -9,6 +9,10 @@ namespace Magento\CatalogSearch\Model\Layer\Search\Plugin;
 use Magento\Catalog\Model\Category;
 use Magento\Search\Model\QueryFactory;
 
+/**
+ * Class \Magento\CatalogSearch\Model\Layer\Search\Plugin\CollectionFilter
+ *
+ */
 class CollectionFilter
 {
     /**
@@ -33,6 +37,7 @@ class CollectionFilter
      * @param Category $category
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterFilter(
         \Magento\Catalog\Model\Layer\Search\CollectionFilter $subject,

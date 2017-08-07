@@ -13,26 +13,31 @@ use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFac
 
 /**
  * Checker by frequency requests
+ * @since 2.1.0
  */
 class Frequency implements SecurityCheckerInterface
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.1.0
      */
     private $dateTime;
 
     /**
      * @var \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory
+     * @since 2.1.0
      */
     private $collectionFactory;
 
     /**
      * @var ConfigInterface
+     * @since 2.1.0
      */
     private $securityConfig;
 
     /**
      * @var RemoteAddress
+     * @since 2.1.0
      */
     private $remoteAddress;
 
@@ -41,6 +46,7 @@ class Frequency implements SecurityCheckerInterface
      * @param CollectionFactory $collectionFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param RemoteAddress $remoteAddress
+     * @since 2.1.0
      */
     public function __construct(
         ConfigInterface $securityConfig,
@@ -56,6 +62,7 @@ class Frequency implements SecurityCheckerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function check($securityEventType, $accountReference = null, $longIp = null)
     {
@@ -91,6 +98,7 @@ class Frequency implements SecurityCheckerInterface
      * @param string $accountReference
      * @param int $longIp
      * @return int
+     * @since 2.1.0
      */
     private function loadLastRecordCreationTimestamp($securityEventType, $accountReference, $longIp)
     {

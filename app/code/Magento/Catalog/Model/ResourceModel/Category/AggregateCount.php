@@ -9,12 +9,14 @@ use Magento\Catalog\Model\Category;
 
 /**
  * Class AggregateCount
+ * @since 2.1.0
  */
 class AggregateCount
 {
     /**
      * @param Category $category
      * @return void
+     * @since 2.1.0
      */
     public function processDelete(Category $category)
     {

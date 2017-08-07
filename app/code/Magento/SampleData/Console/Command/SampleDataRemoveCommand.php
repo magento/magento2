@@ -34,7 +34,7 @@ class SampleDataRemoveCommand extends Command
 
     /**
      * @var ArrayInputFactory
-     * @deprecated
+     * @deprecated 2.1.0
      */
     private $arrayInputFactory;
 

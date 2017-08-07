@@ -13,6 +13,7 @@ use Magento\Framework\Phrase;
  * Factory class for Package object
  *
  * @see Package
+ * @since 2.2.0
  */
 class PackageFactory
 {
@@ -20,6 +21,7 @@ class PackageFactory
      * Object Manager instance
      *
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
@@ -28,6 +30,7 @@ class PackageFactory
      *
      * @param ObjectManagerInterface $objectManager
      * @param string $type
+     * @since 2.2.0
      */
     public function __construct(ObjectManagerInterface $objectManager, $type = Package::class)
     {
@@ -44,6 +47,7 @@ class PackageFactory
      * @param array $arguments
      * @return Package
      * @throws LocalizedException
+     * @since 2.2.0
      */
     public function create(array $arguments)
     {

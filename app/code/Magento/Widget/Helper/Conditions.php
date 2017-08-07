@@ -16,17 +16,20 @@ class Conditions
 {
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var Normalizer
+     * @since 2.2.0
      */
     private $normalizer;
 
     /**
      * @param Json $serializer
      * @param Normalizer $normalizer
+     * @since 2.2.0
      */
     public function __construct(
         Json $serializer = null,

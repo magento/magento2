@@ -190,6 +190,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      *
      * @param string $errorMessage
      * @return void
+     * @since 2.1.0
      */
     private function redirectToOrderReviewPageAndShowError($errorMessage)
     {

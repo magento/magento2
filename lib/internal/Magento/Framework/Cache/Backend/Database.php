@@ -32,6 +32,10 @@
  */
 namespace Magento\Framework\Cache\Backend;
 
+/**
+ * Class \Magento\Framework\Cache\Backend\Database
+ *
+ */
 class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {
     /**
@@ -559,6 +563,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return bool
+     * @since 2.1.0
      */
     private function cleanAll(\Magento\Framework\DB\Adapter\AdapterInterface $connection)
     {
@@ -576,6 +581,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return bool
+     * @since 2.1.0
      */
     private function cleanOld(\Magento\Framework\DB\Adapter\AdapterInterface $connection)
     {

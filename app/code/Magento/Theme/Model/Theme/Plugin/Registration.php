@@ -20,19 +20,31 @@ use Magento\Framework\Config\Theme;
  */
 class Registration
 {
-    /** @var ThemeRegistration */
+    /**
+     * @var \Magento\Theme\Model\Theme\Registration
+     */
     protected $themeRegistration;
 
-    /** @var ThemeCollection */
+    /**
+     * @var \Magento\Theme\Model\Theme\Collection
+     * @since 2.1.0
+     */
     protected $themeCollection;
 
-    /** @var ThemeLoader */
+    /**
+     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection
+     * @since 2.1.0
+     */
     protected $themeLoader;
 
-    /** @var LoggerInterface */
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
     protected $logger;
 
-    /** @var AppState */
+    /**
+     * @var \Magento\Framework\App\State
+     */
     protected $appState;
 
     /**
@@ -83,6 +95,7 @@ class Registration
      * Update theme data
      *
      * @return void
+     * @since 2.1.0
      */
     protected function updateThemeData()
     {

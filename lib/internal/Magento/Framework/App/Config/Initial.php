@@ -10,6 +10,10 @@ namespace Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Class \Magento\Framework\App\Config\Initial
+ *
+ */
 class Initial
 {
     /**
@@ -33,6 +37,7 @@ class Initial
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 

@@ -7,6 +7,7 @@ namespace Magento\Ui\Component\Form\Element;
 
 /**
  * @api
+ * @since 2.1.0
  */
 class Hidden extends AbstractElement
 {
@@ -14,6 +15,7 @@ class Hidden extends AbstractElement
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getComponentName()
     {

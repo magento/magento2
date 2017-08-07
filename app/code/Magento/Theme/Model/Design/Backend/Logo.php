@@ -5,6 +5,11 @@
  */
 namespace Magento\Theme\Model\Design\Backend;
 
+/**
+ * Class \Magento\Theme\Model\Design\Backend\Logo
+ *
+ * @since 2.1.0
+ */
 class Logo extends Image
 {
     /**
@@ -18,6 +23,7 @@ class Logo extends Image
      *
      * @return string
      * @throw \Magento\Framework\Exception\LocalizedException
+     * @since 2.1.0
      */
     protected function _getUploadDir()
     {
@@ -28,6 +34,7 @@ class Logo extends Image
      * Makes a decision about whether to add info about the scope.
      *
      * @return boolean
+     * @since 2.1.0
      */
     protected function _addWhetherScopeInfo()
     {
@@ -38,6 +45,7 @@ class Logo extends Image
      * Getter for allowed extensions of uploaded files.
      *
      * @return string[]
+     * @since 2.1.0
      */
     public function getAllowedExtensions()
     {

@@ -16,6 +16,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
     /**
      * @return array
+     * @since 2.1.0
      */
     public function getColumns()
     {

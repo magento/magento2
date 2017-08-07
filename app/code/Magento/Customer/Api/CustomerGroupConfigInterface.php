@@ -9,6 +9,7 @@ namespace Magento\Customer\Api;
  * Interface for system configuration operations for customer groups.
  *
  * @api
+ * @since 2.2.0
  */
 interface CustomerGroupConfigInterface
 {
@@ -21,6 +22,7 @@ interface CustomerGroupConfigInterface
      * @throws \Exception
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.2.0
      */
     public function setDefaultCustomerGroup($id);
 }

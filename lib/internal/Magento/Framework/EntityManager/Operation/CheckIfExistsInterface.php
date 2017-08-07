@@ -9,6 +9,7 @@ use Magento\Framework\EntityManager\OperationInterface;
 
 /**
  * Interface for checking if entity exists
+ * @since 2.1.0
  */
 interface CheckIfExistsInterface extends OperationInterface
 {
@@ -18,6 +19,7 @@ interface CheckIfExistsInterface extends OperationInterface
      * @param object $entity
      * @return bool
      * @throws \Exception
+     * @since 2.1.0
      */
     public function execute($entity);
 }

@@ -11,6 +11,10 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
 
+/**
+ * Class \Magento\Sales\Model\ResourceModel\Order\Plugin\Authorization
+ *
+ */
 class Authorization
 {
     /**
@@ -34,6 +38,7 @@ class Authorization
      * @return ResourceOrder
      * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterLoad(
         ResourceOrder $subject,

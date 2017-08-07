@@ -11,6 +11,7 @@ use Magento\Deploy\Process\Queue;
 
 /**
  * Standard deployment strategy implementation
+ * @since 2.2.0
  */
 class StandardDeploy implements StrategyInterface
 {
@@ -18,6 +19,7 @@ class StandardDeploy implements StrategyInterface
      * Package pool object
      *
      * @var PackagePool
+     * @since 2.2.0
      */
     private $packagePool;
 
@@ -25,6 +27,7 @@ class StandardDeploy implements StrategyInterface
      * Deployment queue
      *
      * @var Queue
+     * @since 2.2.0
      */
     private $queue;
 
@@ -33,6 +36,7 @@ class StandardDeploy implements StrategyInterface
      *
      * @param PackagePool $packagePool
      * @param Queue $queue
+     * @since 2.2.0
      */
     public function __construct(
         PackagePool $packagePool,
@@ -44,6 +48,7 @@ class StandardDeploy implements StrategyInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function deploy(array $options)
     {

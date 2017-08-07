@@ -8,26 +8,31 @@ namespace Magento\CatalogRule\Model\Indexer;
 
 /**
  * Reindex information about rule relations with customer groups and websites.
+ * @since 2.2.0
  */
 class ReindexRuleGroupWebsite
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.2.0
      */
     private $dateTime;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.2.0
      */
     private $resource;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $catalogRuleGroupWebsiteColumnsList = ['rule_id', 'customer_group_id', 'website_id'];
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
+     * @since 2.2.0
      */
     private $activeTableSwitcher;
 
@@ -35,6 +40,7 @@ class ReindexRuleGroupWebsite
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
@@ -51,6 +57,7 @@ class ReindexRuleGroupWebsite
      *
      * @param bool $useAdditionalTable
      * @return bool
+     * @since 2.2.0
      */
     public function execute($useAdditionalTable = false)
     {

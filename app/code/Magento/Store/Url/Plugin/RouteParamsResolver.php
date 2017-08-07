@@ -52,6 +52,7 @@ class RouteParamsResolver
      * @param array $data
      * @param bool $unsetOldParams
      * @return array
+     * @since 2.2.0
      */
     public function beforeSetRouteParams(
         \Magento\Framework\Url\RouteParamsResolver $subject,

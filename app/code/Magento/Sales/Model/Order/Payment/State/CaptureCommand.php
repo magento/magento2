@@ -11,15 +11,21 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\StatusResolver;
 
+/**
+ * Class \Magento\Sales\Model\Order\Payment\State\CaptureCommand
+ *
+ */
 class CaptureCommand implements CommandInterface
 {
     /**
      * @var StatusResolver
+     * @since 2.2.0
      */
     private $statusResolver;
 
     /**
      * @param StatusResolver|null $statusResolver
+     * @since 2.2.0
      */
     public function __construct(StatusResolver $statusResolver = null)
     {
@@ -61,7 +67,7 @@ class CaptureCommand implements CommandInterface
     }
 
     /**
-     * @deprecated Replaced by a StatusResolver class call.
+     * @deprecated 2.2.0 Replaced by a StatusResolver class call.
      *
      * @param Order $order
      * @param string $status

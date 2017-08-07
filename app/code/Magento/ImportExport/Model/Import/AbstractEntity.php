@@ -62,6 +62,9 @@ abstract class AbstractEntity
     const ERROR_INVALID_ATTRIBUTE_TYPE = 'invalidAttributeType';
     const ERROR_INVALID_ATTRIBUTE_OPTION = 'absentAttributeOption';
 
+    /**
+     * @var array
+     */
     protected $errorMessageTemplates = [
         self::ERROR_CODE_SYSTEM_EXCEPTION => 'General system exception happened',
         self::ERROR_CODE_COLUMN_NOT_FOUND => 'We can\'t find required columns: %s.',
@@ -81,11 +84,7 @@ abstract class AbstractEntity
 
     /**#@-*/
 
-    /**
-     * DB connection
-     *
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     */
+    /**#@-*/
     protected $_connection;
 
     /**
@@ -280,6 +279,7 @@ abstract class AbstractEntity
      * Json Serializer Instance
      *
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -491,7 +491,8 @@ abstract class AbstractEntity
      * Workaround. Only way to implement dependency and not to break inherited child classes
      *
      * @return Json
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getSerializer()
     {

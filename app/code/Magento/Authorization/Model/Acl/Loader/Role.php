@@ -10,6 +10,10 @@ use Magento\Authorization\Model\Acl\Role\User as RoleUser;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * Class \Magento\Authorization\Model\Acl\Loader\Role
+ *
+ */
 class Role implements \Magento\Framework\Acl\LoaderInterface
 {
     /**
@@ -34,16 +38,19 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
 
     /**
      * @var \Magento\Framework\Acl\Data\CacheInterface
+     * @since 2.2.0
      */
     private $aclDataCache;
 
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $cacheKey;
 
@@ -103,6 +110,7 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
      * Get application ACL roles array
      *
      * @return array
+     * @since 2.2.0
      */
     private function getRolesArray()
     {

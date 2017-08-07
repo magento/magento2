@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Acl\AclResource\Config\Converter;
 
+/**
+ * Class \Magento\Framework\Acl\AclResource\Config\Converter\Dom
+ *
+ */
 class Dom implements \Magento\Framework\Config\ConverterInterface
 {
     /**

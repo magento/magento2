@@ -10,11 +10,13 @@ use Magento\Framework\Option\ArrayInterface;
 
 /**
  * Class Country
+ * @since 2.1.0
  */
 class Country implements ArrayInterface
 {
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $options;
 
@@ -22,11 +24,13 @@ class Country implements ArrayInterface
      * Countries
      *
      * @var \Magento\Directory\Model\ResourceModel\Country\Collection
+     * @since 2.1.0
      */
     protected $countryCollection;
 
     /**
      * Countries not supported by Braintree
+     * @since 2.1.0
      */
     protected $excludedCountries = [
         'MM',
@@ -52,6 +56,7 @@ class Country implements ArrayInterface
 
     /**
      * @param \Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection
+     * @since 2.1.0
      */
     public function __construct(Collection $countryCollection)
     {
@@ -61,6 +66,7 @@ class Country implements ArrayInterface
     /**
      * @param bool $isMultiselect
      * @return array
+     * @since 2.1.0
      */
     public function toOptionArray($isMultiselect = false)
     {
@@ -84,6 +90,7 @@ class Country implements ArrayInterface
      *
      * @param string $countryId
      * @return boolean
+     * @since 2.1.0
      */
     public function isCountryRestricted($countryId)
     {
@@ -93,6 +100,7 @@ class Country implements ArrayInterface
     /**
      * Return list of excluded countries
      * @return array
+     * @since 2.1.0
      */
     public function getExcludedCountries()
     {

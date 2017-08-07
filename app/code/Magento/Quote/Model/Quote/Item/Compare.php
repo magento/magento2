@@ -17,11 +17,13 @@ class Compare
 {
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var JsonValidator
+     * @since 2.2.0
      */
     private $jsonValidator;
 
@@ -30,6 +32,7 @@ class Compare
      *
      * @param Json|null $serializer
      * @param JsonValidator|null $jsonValidator
+     * @since 2.2.0
      */
     public function __construct(
         Json $serializer = null,

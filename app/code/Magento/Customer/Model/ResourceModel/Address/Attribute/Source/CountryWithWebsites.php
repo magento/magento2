@@ -15,30 +15,40 @@ use Magento\Customer\Model\Config\Share;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class \Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites
+ *
+ * @since 2.1.3
+ */
 class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
     /**
      * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
+     * @since 2.1.3
      */
     private $countriesFactory;
 
     /**
      * @var \Magento\Directory\Model\AllowedCountries
+     * @since 2.1.3
      */
     private $allowedCountriesReader;
 
     /**
      * @var array
+     * @since 2.1.3
      */
     private $options;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.1.3
      */
     private $storeManager;
 
     /**
      * @var Share
+     * @since 2.1.3
      */
     private $shareConfig;
 
@@ -50,6 +60,7 @@ class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Tab
      * @param AllowedCountries $allowedCountriesReader
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Share $shareConfig
+     * @since 2.1.3
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
@@ -70,6 +81,7 @@ class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Tab
      * Retrieve all options
      *
      * @return array
+     * @since 2.1.3
      */
     public function getAllOptions()
     {
@@ -109,6 +121,7 @@ class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Tab
      * Create Countries Collection with all countries
      *
      * @return \Magento\Directory\Model\ResourceModel\Country\Collection
+     * @since 2.1.3
      */
     private function createCountriesCollection()
     {

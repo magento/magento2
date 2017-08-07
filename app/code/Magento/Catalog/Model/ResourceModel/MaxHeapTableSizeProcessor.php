@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\ResourceModel;
 use Magento\Framework\App\ResourceConnection;
 
 /**
- * @deprecated
+ * @deprecated 2.1.3
  */
 class MaxHeapTableSizeProcessor
 {

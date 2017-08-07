@@ -11,16 +11,19 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class ReadEntityRow
+ * @since 2.1.0
  */
 class UpdateEntityRow
 {
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @param MetadataPool $metadataPool
+     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool
@@ -32,6 +35,7 @@ class UpdateEntityRow
      * @param EntityMetadata $metadata
      * @param array $data
      * @return array
+     * @since 2.1.0
      */
     protected function prepareData(EntityMetadata $metadata, $data)
     {
@@ -52,6 +56,7 @@ class UpdateEntityRow
      * @param array $data
      * @return bool
      * @throws \Exception
+     * @since 2.1.0
      */
     public function execute($entityType, $data)
     {

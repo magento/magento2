@@ -18,6 +18,10 @@ use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content
+ *
+ */
 class Content extends \Magento\Backend\Block\Widget
 {
     /**
@@ -37,6 +41,7 @@ class Content extends \Magento\Backend\Block\Widget
 
     /**
      * @var \Magento\Catalog\Helper\Image
+     * @since 2.1.3
      */
     private $imageHelper;
 
@@ -157,6 +162,7 @@ class Content extends \Magento\Backend\Block\Widget
      *
      * @param array $images
      * @return array
+     * @since 2.1.0
      */
     private function sortImagesByPosition($images)
     {
@@ -242,7 +248,8 @@ class Content extends \Magento\Backend\Block\Widget
 
     /**
      * @return \Magento\Catalog\Helper\Image
-     * @deprecated
+     * @deprecated 2.1.3
+     * @since 2.1.3
      */
     private function getImageHelper()
     {

@@ -11,6 +11,7 @@ use Magento\Sales\Model\ValidatorResultInterface;
 
 /**
  * Interface ItemCreationValidatorInterface
+ * @since 2.1.3
  */
 interface ItemCreationValidatorInterface
 {
@@ -19,6 +20,7 @@ interface ItemCreationValidatorInterface
      * @param array $validators
      * @param OrderInterface|null $context
      * @return ValidatorResultInterface
+     * @since 2.1.3
      */
     public function validate(CreditmemoItemCreationInterface $item, array $validators, OrderInterface $context = null);
 }

@@ -12,7 +12,7 @@ use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\InstallerFactory;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class UpgradeCommandTest extends \PHPUnit_Framework_TestCase
+class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject

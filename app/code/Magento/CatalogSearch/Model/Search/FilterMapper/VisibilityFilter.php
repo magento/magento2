@@ -16,6 +16,7 @@ use Magento\Eav\Model\Config as EavConfig;
 /**
  * Class VisibilityFilter
  * Applies filter by visibility to base select
+ * @since 2.2.0
  */
 class VisibilityFilter
 {
@@ -42,21 +43,25 @@ class VisibilityFilter
 
     /**
      * @var ResourceConnection
+     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var ConditionManager
+     * @since 2.2.0
      */
     private $conditionManager;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var EavConfig
+     * @since 2.2.0
      */
     private $eavConfig;
 
@@ -65,6 +70,7 @@ class VisibilityFilter
      * @param ConditionManager $conditionManager
      * @param StoreManagerInterface $storeManager
      * @param EavConfig $eavConfig
+     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -87,6 +93,7 @@ class VisibilityFilter
      * @return Select
      * @throws \InvalidArgumentException
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.2.0
      */
     public function apply(Select $select, FilterInterface $filter, $type)
     {
@@ -111,6 +118,7 @@ class VisibilityFilter
      * @return void
      * @throws \InvalidArgumentException
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.2.0
      */
     private function applyFilterByJoin(FilterInterface $filter, Select $select)
     {
@@ -151,6 +159,7 @@ class VisibilityFilter
      * @return void
      * @throws \InvalidArgumentException
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.2.0
      */
     private function applyFilterByWhere(FilterInterface $filter, Select $select)
     {
@@ -185,6 +194,7 @@ class VisibilityFilter
      *
      * @return int
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.2.0
      */
     private function getVisibilityAttributeId()
     {
@@ -201,6 +211,7 @@ class VisibilityFilter
      *
      * @param Select $select
      * @return string|null
+     * @since 2.2.0
      */
     private function extractTableAliasFromSelect(Select $select)
     {

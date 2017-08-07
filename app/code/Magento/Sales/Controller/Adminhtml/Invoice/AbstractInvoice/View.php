@@ -12,6 +12,10 @@ use Magento\Framework\Registry;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Model\Order\InvoiceRepository;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
+ *
+ */
 abstract class View extends \Magento\Backend\App\Action
 {
     /**
@@ -33,6 +37,7 @@ abstract class View extends \Magento\Backend\App\Action
 
     /**
      * @var InvoiceRepositoryInterface
+     * @since 2.1.0
      */
     protected $invoiceRepository;
 
@@ -89,7 +94,8 @@ abstract class View extends \Magento\Backend\App\Action
     /**
      * @return InvoiceRepository
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getInvoiceRepository()
     {

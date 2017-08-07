@@ -12,6 +12,7 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * Class AfterEntityDelete
+ * @since 2.1.0
  */
 class AfterEntityDelete implements ObserverInterface
 {
@@ -21,6 +22,7 @@ class AfterEntityDelete implements ObserverInterface
      * @param Observer $observer
      * @throws \Magento\Framework\Validator\Exception
      * @return void
+     * @since 2.1.0
      */
     public function execute(Observer $observer)
     {

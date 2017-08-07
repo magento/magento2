@@ -7,6 +7,7 @@ namespace Magento\PageCache\Block\System\Config\Form\Field\Export;
 
 /**
  * Class Export
+ * @since 2.2.0
  */
 class Varnish5 extends \Magento\PageCache\Block\System\Config\Form\Field\Export
 {
@@ -14,6 +15,7 @@ class Varnish5 extends \Magento\PageCache\Block\System\Config\Form\Field\Export
      * Return Varnish version to this class
      *
      * @return int
+     * @since 2.2.0
      */
     public function getVarnishVersion()
     {

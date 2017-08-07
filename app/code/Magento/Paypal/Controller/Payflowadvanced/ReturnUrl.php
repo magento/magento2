@@ -8,6 +8,10 @@ namespace Magento\Paypal\Controller\Payflowadvanced;
 
 use Magento\Paypal\Model\Config;
 
+/**
+ * Class \Magento\Paypal\Controller\Payflowadvanced\ReturnUrl
+ *
+ */
 class ReturnUrl extends \Magento\Paypal\Controller\Payflow\ReturnUrl
 {
     /**
@@ -19,6 +23,7 @@ class ReturnUrl extends \Magento\Paypal\Controller\Payflow\ReturnUrl
     /**
      * Payment method code
      * @var string
+     * @since 2.0.1
      */
     protected $allowedPaymentMethodCodes = [
         Config::METHOD_PAYFLOWADVANCED

@@ -9,7 +9,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column;
  * Grid column block that is displayed only in multistore mode
  *
  * @api
- * @deprecated in favour of UI component implementation
+ * @deprecated 2.2.0 in favour of UI component implementation
  */
 class Multistore extends \Magento\Backend\Block\Widget\Grid\Column
 {

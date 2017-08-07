@@ -7,11 +7,13 @@ namespace Magento\ProductVideo\Model\Plugin\Catalog\Product\Gallery;
 
 /**
  * Abstract class for catalog product gallery handlers plugins.
+ * @since 2.1.0
  */
 abstract class AbstractHandler
 {
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $videoPropertiesDbMapping = [
         'value_id' => 'value_id',
@@ -25,11 +27,13 @@ abstract class AbstractHandler
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery
+     * @since 2.1.0
      */
     protected $resourceModel;
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel
@@ -41,6 +45,7 @@ abstract class AbstractHandler
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @return array
+     * @since 2.1.0
      */
     protected function getMediaEntriesDataCollection(
         \Magento\Catalog\Model\Product $product,

@@ -27,21 +27,25 @@ class CartPriceRulesFixture extends Fixture
 
     /**
      * @var float
+     * @since 2.1.0
      */
     protected $cartPriceRulesCount = 0;
 
     /**
      * @var float
+     * @since 2.1.0
      */
     protected $cartPriceRulesProductsFloor = 3;
 
     /**
      * @var bool
+     * @since 2.1.0
      */
     protected $cartRulesAdvancedType = false;
 
     /**
      * @var \Magento\SalesRule\Model\RuleFactory
+     * @since 2.2.0
      */
     private $ruleFactory;
 
@@ -50,6 +54,7 @@ class CartPriceRulesFixture extends Fixture
      *
      * @param FixtureModel $fixtureModel
      * @param \Magento\SalesRule\Model\RuleFactory|null $ruleFactory
+     * @since 2.2.0
      */
     public function __construct(
         FixtureModel $fixtureModel,
@@ -118,6 +123,7 @@ class CartPriceRulesFixture extends Fixture
      * @param int $ruleId
      * @param array $categoriesArray
      * @return array
+     * @since 2.1.0
      */
     public function generateCondition($ruleId, $categoriesArray)
     {
@@ -163,6 +169,7 @@ class CartPriceRulesFixture extends Fixture
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param array $categoriesArray
      * @return void
+     * @since 2.1.0
      */
     public function generateRules($ruleFactory, $categoriesArray)
     {
@@ -248,6 +255,7 @@ class CartPriceRulesFixture extends Fixture
      * @param int $ruleId
      * @param array $categoriesArray
      * @return array
+     * @since 2.1.0
      */
     public function generateAdvancedCondition($ruleId, $categoriesArray)
     {
@@ -348,6 +356,7 @@ class CartPriceRulesFixture extends Fixture
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param array $categoriesArray
      * @return void
+     * @since 2.1.0
      */
     public function generateAdvancedRules($ruleFactory, $categoriesArray)
     {

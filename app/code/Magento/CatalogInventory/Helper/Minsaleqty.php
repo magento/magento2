@@ -35,11 +35,13 @@ class Minsaleqty
 
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $minSaleQtyCache = [];
 

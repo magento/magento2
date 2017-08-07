@@ -10,6 +10,10 @@ namespace Magento\Framework\Interception\Config;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
 
+/**
+ * Class \Magento\Framework\Interception\Config\Config
+ *
+ */
 class Config implements \Magento\Framework\Interception\ConfigInterface
 {
     /**
@@ -75,6 +79,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 

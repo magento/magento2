@@ -11,7 +11,7 @@ use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\App\Config\Type\Scopes;
 
-class ScopesTest extends \PHPUnit_Framework_TestCase
+class ScopesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Scopes

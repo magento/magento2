@@ -158,16 +158,19 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var \Magento\Catalog\Model\View\Asset\ImageFactory
+     * @since 2.2.0
      */
     private $viewAssetImageFactory;
 
     /**
      * @var \Magento\Catalog\Model\View\Asset\PlaceholderFactory
+     * @since 2.2.0
      */
     private $viewAssetPlaceholderFactory;
 
     /**
      * @var \Magento\Framework\View\Asset\LocalInterface
+     * @since 2.2.0
      */
     private $imageAsset;
 
@@ -496,7 +499,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.2.0
      * @return bool|string
      */
     public function getNewFile()
@@ -895,6 +898,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.2.0
      */
     private function getMiscParams()
     {

@@ -40,6 +40,7 @@ abstract class AbstractDataAssignObserver implements ObserverInterface
      *
      * @param Observer $observer
      * @return InfoInterface
+     * @since 2.1.0
      */
     protected function readPaymentModelArgument(Observer $observer)
     {

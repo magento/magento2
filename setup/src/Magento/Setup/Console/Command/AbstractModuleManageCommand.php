@@ -13,6 +13,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Module\Status;
 
+/**
+ * Class \Magento\Setup\Console\Command\AbstractModuleManageCommand
+ *
+ */
 abstract class AbstractModuleManageCommand extends AbstractModuleCommand
 {
     /**
@@ -23,11 +27,13 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
 
     /**
      * @var GeneratedFiles
+     * @since 2.1.0
      */
     protected $generatedFiles;
 
     /**
      * @var DeploymentConfig
+     * @since 2.0.6
      */
     protected $deploymentConfig;
 
@@ -120,6 +126,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      * @param string[] $modulesToChange
      * @param OutputInterface $output
      * @return void
+     * @since 2.0.6
      */
     private function setIsEnabled($isEnable, $modulesToChange, $output)
     {
@@ -145,6 +152,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      * Get module status
      *
      * @return Status
+     * @since 2.0.6
      */
     private function getStatus()
     {
@@ -178,7 +186,8 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      * Get deployment config
      *
      * @return DeploymentConfig
-     * @deprecated
+     * @deprecated 2.0.6
+     * @since 2.0.6
      */
     private function getDeploymentConfig()
     {
@@ -192,7 +201,8 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      * Get deployment config
      *
      * @return GeneratedFiles
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getGeneratedFiles()
     {

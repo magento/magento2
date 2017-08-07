@@ -7,6 +7,7 @@ namespace Magento\Catalog\Api;
 
 /**
  * @api
+ * @since 2.2.0
  */
 interface CategoryListInterface
 {
@@ -15,6 +16,7 @@ interface CategoryListInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Catalog\Api\Data\CategorySearchResultsInterface
+     * @since 2.2.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 }

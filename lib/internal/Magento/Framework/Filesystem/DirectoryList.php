@@ -126,6 +126,7 @@ class DirectoryList
      *
      * @param string $path
      * @return string
+     * @since 2.1.0
      */
     private function normalizePath($path)
     {

@@ -11,6 +11,7 @@ use Magento\Framework\Phrase;
 
 /**
  * Factory class for @see \Magento\Deploy\Process\Queue
+ * @since 2.2.0
  */
 class QueueFactory
 {
@@ -18,6 +19,7 @@ class QueueFactory
      * Object Manager instance
      *
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
@@ -25,6 +27,7 @@ class QueueFactory
      * Instance type to create
      *
      * @var string
+     * @since 2.2.0
      */
     private $type;
 
@@ -33,6 +36,7 @@ class QueueFactory
      *
      * @param ObjectManagerInterface $objectManager
      * @param string $type
+     * @since 2.2.0
      */
     public function __construct(ObjectManagerInterface $objectManager, $type = Queue::class)
     {
@@ -46,6 +50,7 @@ class QueueFactory
      * @param array $arguments
      * @return Queue
      * @throws LocalizedException
+     * @since 2.2.0
      */
     public function create(array $arguments = [])
     {

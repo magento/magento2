@@ -7,6 +7,10 @@ namespace Magento\Store\Model;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Class \Magento\Store\Model\StoreResolver
+ *
+ */
 class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
 {
     /**
@@ -46,11 +50,13 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
 
     /**
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.1
      */
     protected $request;
 
     /**
      * @var \Magento\Framework\Serialize\SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -180,7 +186,8 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getSerializer()
     {

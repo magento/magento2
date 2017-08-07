@@ -7,10 +7,14 @@ namespace Magento\Setup\Fixtures\AttributeSet;
 
 /**
  * Generate Data for Fixture to create an Attribute Set with specified pattern.
+ * @since 2.2.0
  */
 class Pattern
 {
-    /** @var array */
+    /**
+     * @var array
+     * @since 2.2.0
+     */
     private $attributePattern = [
         'is_required' => 1,
         'is_visible_on_front' => 1,
@@ -32,6 +36,7 @@ class Pattern
      * @param int $optionsPerAttribute
      * @param callable $attributePattern  callback in f($index, $attributeData) format
      * @return array
+     * @since 2.2.0
      */
     public function generateAttributeSet(
         $name,
@@ -63,6 +68,7 @@ class Pattern
      * @param int $index
      * @param int $optionsPerAttribute
      * @return array
+     * @since 2.2.0
      */
     private function generateAttribute($index, $optionsPerAttribute)
     {
@@ -79,6 +85,7 @@ class Pattern
      *
      * @param int $optionsPerAttribute
      * @return array
+     * @since 2.2.0
      */
     private function generateOptions($optionsPerAttribute)
     {

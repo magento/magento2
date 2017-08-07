@@ -27,25 +27,35 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  */
 class Suffix extends \Magento\Framework\App\Config\Value
 {
-    /** @var \Magento\UrlRewrite\Helper\UrlRewrite */
+    /**
+     * @var \Magento\UrlRewrite\Helper\UrlRewrite
+     */
     protected $urlRewriteHelper;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $storeManager;
 
-    /** @var \Magento\UrlRewrite\Model\UrlFinderInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     */
     protected $urlFinder;
 
-    /** @var \Magento\Framework\DB\Adapter\AdapterInterface */
+    /**
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     */
     protected $connection;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.1.0
      */
     protected $resource;
 
     /**
      * @var \Magento\Framework\App\Config
+     * @since 2.2.0
      */
     private $appConfig;
 
@@ -88,7 +98,8 @@ class Suffix extends \Magento\Framework\App\Config\Value
      * Get instance of ScopePool
      *
      * @return \Magento\Framework\App\Config
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getAppConfig()
     {
@@ -130,6 +141,7 @@ class Suffix extends \Magento\Framework\App\Config\Value
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function afterDeleteCommit()
     {
@@ -150,6 +162,7 @@ class Suffix extends \Magento\Framework\App\Config\Value
      * Check is category suffix changed
      *
      * @return bool
+     * @since 2.2.0
      */
     private function isCategorySuffixChanged()
     {

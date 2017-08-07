@@ -14,21 +14,25 @@ use Magento\Framework\App\RouterInterface;
 
 /**
  * Matches applicaton action in case when robots.txt file was requested
+ * @since 2.2.0
  */
 class Router implements RouterInterface
 {
     /**
      * @var ActionFactory
+     * @since 2.2.0
      */
     private $actionFactory;
 
     /**
      * @var ActionList
+     * @since 2.2.0
      */
     private $actionList;
 
     /**
      * @var ConfigInterface
+     * @since 2.2.0
      */
     private $routeConfig;
 
@@ -36,6 +40,7 @@ class Router implements RouterInterface
      * @param ActionFactory $actionFactory
      * @param ActionList $actionList
      * @param ConfigInterface $routeConfig
+     * @since 2.2.0
      */
     public function __construct(
         ActionFactory $actionFactory,
@@ -52,6 +57,7 @@ class Router implements RouterInterface
      *
      * @param RequestInterface $request
      * @return ActionInterface|null
+     * @since 2.2.0
      */
     public function match(RequestInterface $request)
     {

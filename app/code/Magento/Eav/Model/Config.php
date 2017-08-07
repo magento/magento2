@@ -24,11 +24,7 @@ class Config
     const ATTRIBUTES_CODES_CACHE_ID = 'EAV_ENTITY_ATTRIBUTES_CODES';
     /**#@-*/
 
-    /**
-     * Entity types data
-     *
-     * @var array
-     */
+    /**#@-*/
     protected $_entityTypeData;
 
     /**
@@ -62,6 +58,7 @@ class Config
      *       )
      *
      * @var AbstractAttribute[][]
+     * @since 2.2.0
      */
     private $attributes;
 
@@ -89,7 +86,9 @@ class Config
      */
     protected $_cache;
 
-    /** @var \Magento\Framework\App\Cache\StateInterface */
+    /**
+     * @var \Magento\Framework\App\Cache\StateInterface
+     */
     protected $_cacheState;
 
     /**
@@ -109,11 +108,13 @@ class Config
 
     /**
      * @var AbstractAttribute[]
+     * @since 2.2.0
      */
     private $attributeProto = [];
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -121,6 +122,7 @@ class Config
      * Cache of attributes per set
      *
      * @var array
+     * @since 2.2.0
      */
     private $attributesPerSet = [];
 
@@ -199,6 +201,7 @@ class Config
      *
      * @param   string $entityTypeCode
      * @return  AbstractAttribute[]
+     * @since 2.2.0
      */
     private function loadAttributes($entityTypeCode)
     {
@@ -225,6 +228,7 @@ class Config
      * @param string $entityTypeCode
      * @param string $attributeCode
      * @return void
+     * @since 2.2.0
      */
     private function saveAttribute(AbstractAttribute $attribute, $entityTypeCode, $attributeCode)
     {
@@ -470,11 +474,12 @@ class Config
     /**
      * Get attributes by entity type
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @see \Magento\Eav\Model\Config::getEntityAttributes
      *
      * @param string $entityType
      * @return AbstractAttribute[]
+     * @since 2.2.0
      */
     public function getAttributes($entityType)
     {
@@ -526,6 +531,7 @@ class Config
      *
      * @param string $model
      * @return Entity\Attribute\AbstractAttribute
+     * @since 2.2.0
      */
     private function createAttribute($model)
     {
@@ -539,7 +545,7 @@ class Config
     /**
      * Get codes of all entity type attributes
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @see \Magento\Eav\Model\Config::getEntityAttributes
      *
      * @param mixed $entityType
@@ -560,6 +566,7 @@ class Config
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.2.0
      */
     public function getEntityAttributes($entityType, $object = null)
     {
@@ -706,6 +713,7 @@ class Config
      * @param string $entityType
      * @param string $attributeCode
      * @return AbstractAttribute
+     * @since 2.2.0
      */
     private function createAttributeByAttributeCode($entityType, $attributeCode)
     {
@@ -736,6 +744,7 @@ class Config
      *
      * @param Type $entityType
      * @return bool
+     * @since 2.2.0
      */
     private function initAttributesFromCache(Type $entityType)
     {

@@ -11,6 +11,7 @@ use Magento\Checkout\Model\Session;
 
 /**
  * Plugin to convert shopping cart from persistent cart to guest cart before order save when customer not logged in
+ * @since 2.2.0
  */
 class GuestPaymentInformationManagementPlugin
 {
@@ -18,6 +19,7 @@ class GuestPaymentInformationManagementPlugin
      * Persistence Session Helper
      *
      * @var \Magento\Persistent\Helper\Session
+     * @since 2.2.0
      */
     private $persistenceSessionHelper;
 
@@ -25,6 +27,7 @@ class GuestPaymentInformationManagementPlugin
      * Persistence Data Helper
      *
      * @var \Magento\Persistent\Helper\Data
+     * @since 2.2.0
      */
     private $persistenceDataHelper;
 
@@ -32,6 +35,7 @@ class GuestPaymentInformationManagementPlugin
      * Customer Session
      *
      * @var \Magento\Customer\Model\Session
+     * @since 2.2.0
      */
     private $customerSession;
 
@@ -39,6 +43,7 @@ class GuestPaymentInformationManagementPlugin
      * Checkout Session
      *
      * @var \Magento\Checkout\Model\Session
+     * @since 2.2.0
      */
     private $checkoutSession;
 
@@ -46,6 +51,7 @@ class GuestPaymentInformationManagementPlugin
      * Quote Manager
      *
      * @var \Magento\Persistent\Model\QuoteManager
+     * @since 2.2.0
      */
     private $quoteManager;
 
@@ -53,6 +59,7 @@ class GuestPaymentInformationManagementPlugin
      * Cart Repository
      *
      * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @since 2.2.0
      */
     private $cartRepository;
 
@@ -65,6 +72,7 @@ class GuestPaymentInformationManagementPlugin
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Persistent\Model\QuoteManager $quoteManager
      * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepository
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Persistent\Helper\Data $persistenceDataHelper,
@@ -92,6 +100,7 @@ class GuestPaymentInformationManagementPlugin
      * @param \Magento\Quote\Api\Data\AddressInterface|null $billingAddress
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function beforeSavePaymentInformationAndPlaceOrder(
         GuestPaymentInformationManagement $subject,

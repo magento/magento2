@@ -22,11 +22,13 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     private $metadataPool;
 
     /**
      * @var EntityManager
+     * @since 2.2.0
      */
     private $entityManager;
 
@@ -62,6 +64,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @param int $optionId
      * @return int
+     * @since 2.1.0
      */
     public function removeOptionSelections($optionId)
     {
@@ -192,6 +195,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Get MetadataPool instance
      * @return MetadataPool
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {
@@ -203,6 +207,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {

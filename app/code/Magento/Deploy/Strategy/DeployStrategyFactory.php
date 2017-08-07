@@ -10,6 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Abstract factory class for instances of @see \Magento\Deploy\Strategy\StrategyInterface
+ * @since 2.2.0
  */
 class DeployStrategyFactory
 {
@@ -30,6 +31,7 @@ class DeployStrategyFactory
 
     /**
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
@@ -37,6 +39,7 @@ class DeployStrategyFactory
      * Deployment strategies
      *
      * @var array
+     * @since 2.2.0
      */
     private $strategies = [];
 
@@ -45,6 +48,7 @@ class DeployStrategyFactory
      *
      * @param ObjectManagerInterface $objectManager
      * @param array $strategies
+     * @since 2.2.0
      */
     public function __construct(ObjectManagerInterface $objectManager, array $strategies = [])
     {
@@ -64,6 +68,7 @@ class DeployStrategyFactory
      * @param array $arguments
      * @return StrategyInterface
      * @throws InputException
+     * @since 2.2.0
      */
     public function create($type, array $arguments = [])
     {

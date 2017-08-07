@@ -10,6 +10,10 @@ namespace Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
 
+/**
+ * Class \Magento\Framework\App\ObjectManager\ConfigCache
+ *
+ */
 class ConfigCache implements \Magento\Framework\ObjectManager\ConfigCacheInterface
 {
     /**
@@ -26,6 +30,7 @@ class ConfigCache implements \Magento\Framework\ObjectManager\ConfigCacheInterfa
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -68,7 +73,8 @@ class ConfigCache implements \Magento\Framework\ObjectManager\ConfigCacheInterfa
      * Get serializer
      *
      * @return SerializerInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getSerializer()
     {

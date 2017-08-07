@@ -20,22 +20,34 @@ use Magento\Framework\Model\AbstractModel;
  */
 class Group
 {
-    /** @var UrlPersistInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlPersistInterface
+     */
     protected $urlPersist;
 
-    /** @var CategoryFactory */
+    /**
+     * @var \Magento\Catalog\Model\CategoryFactory
+     */
     protected $categoryFactory;
 
-    /** @var ProductFactory */
+    /**
+     * @var \Magento\Catalog\Model\ProductFactory
+     */
     protected $productFactory;
 
-    /** @var CategoryUrlRewriteGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator
+     */
     protected $categoryUrlRewriteGenerator;
 
-    /** @var ProductUrlRewriteGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator
+     */
     protected $productUrlRewriteGenerator;
 
-    /** @var StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $storeManager;
 
     /**
@@ -70,6 +82,7 @@ class Group
      * @param AbstractModel $group
      * @return \Magento\Store\Model\ResourceModel\Group
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterSave(
         \Magento\Store\Model\ResourceModel\Group $subject,

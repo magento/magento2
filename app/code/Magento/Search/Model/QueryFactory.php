@@ -48,6 +48,7 @@ class QueryFactory implements QueryFactoryInterface
 
     /**
      * @var Data
+     * @since 2.1.0
      */
     private $queryHelper;
 
@@ -142,6 +143,7 @@ class QueryFactory implements QueryFactoryInterface
      * @param string $queryText
      * @param int|string $minQueryLength
      * @return bool
+     * @since 2.1.0
      */
     private function isQueryTooShort($queryText, $minQueryLength)
     {

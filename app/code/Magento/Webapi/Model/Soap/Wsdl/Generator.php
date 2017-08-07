@@ -368,6 +368,7 @@ class Generator extends AbstractSchemaGenerator
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     protected function getAllowedServicesMetadata($requestedServices)
     {

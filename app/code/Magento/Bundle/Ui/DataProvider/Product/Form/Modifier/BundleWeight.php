@@ -11,6 +11,7 @@ use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Customize Weight field
+ * @since 2.1.0
  */
 class BundleWeight extends AbstractModifier
 {
@@ -18,11 +19,13 @@ class BundleWeight extends AbstractModifier
 
     /**
      * @var ArrayManager
+     * @since 2.1.0
      */
     protected $arrayManager;
 
     /**
      * @param ArrayManager $arrayManager
+     * @since 2.1.0
      */
     public function __construct(ArrayManager $arrayManager)
     {
@@ -31,6 +34,7 @@ class BundleWeight extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -82,6 +86,7 @@ class BundleWeight extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyData(array $data)
     {

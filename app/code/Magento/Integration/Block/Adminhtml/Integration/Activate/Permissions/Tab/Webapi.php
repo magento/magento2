@@ -18,22 +18,34 @@ use Magento\Integration\Model\Integration as IntegrationModel;
 class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     protected $_selectedResources;
 
-    /** @var \Magento\Framework\Acl\RootResource */
+    /**
+     * @var \Magento\Framework\Acl\RootResource
+     */
     protected $_rootResource;
 
-    /** @var \Magento\Framework\Acl\AclResource\ProviderInterface */
+    /**
+     * @var \Magento\Framework\Acl\AclResource\ProviderInterface
+     */
     protected $_resourceProvider;
 
-    /** @var \Magento\Integration\Helper\Data */
+    /**
+     * @var \Magento\Integration\Helper\Data
+     */
     protected $_integrationData;
 
-    /** @var \Magento\Framework\Json\Encoder */
+    /**
+     * @var \Magento\Framework\Json\Encoder
+     */
     protected $encoder;
 
-    /** @var \Magento\Integration\Api\IntegrationServiceInterface */
+    /**
+     * @var \Magento\Integration\Api\IntegrationServiceInterface
+     */
     protected $integrationService;
 
     /**
@@ -176,6 +188,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Get lit of all ACL resources declared in the system.
      *
      * @return array
+     * @since 2.2.0
      */
     private function getAclResources()
     {

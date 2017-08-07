@@ -8,6 +8,7 @@ namespace Magento\Setup\Model;
 /**
  * Class PackagesData returns system packages and available for update versions
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.1.0
  */
 class PackagesData
 {
@@ -22,41 +23,49 @@ class PackagesData
 
     /**
      * @var \Magento\Framework\Composer\ComposerInformation
+     * @since 2.1.0
      */
     private $composerInformation;
 
     /**
      * @var string
+     * @since 2.1.0
      */
     protected $urlPrefix = 'https://';
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $packagesJson;
 
     /**
      * @var \Magento\Framework\Filesystem
+     * @since 2.1.0
      */
     private $filesystem;
 
     /**
      * @var \Magento\Setup\Model\PackagesAuth
+     * @since 2.1.0
      */
     private $packagesAuth;
 
     /**
      * @var \Magento\Setup\Model\DateTime\TimeZoneProvider
+     * @since 2.1.0
      */
     private $timeZoneProvider;
 
     /**
      * @var  \Magento\Setup\Model\ObjectManagerProvider
+     * @since 2.1.0
      */
     private $objectManagerProvider;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $metapackagesMap;
 
@@ -69,6 +78,7 @@ class PackagesData
      * @param \Magento\Framework\Filesystem $filesystem ,
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
      * @param TypeMapper $typeMapper
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\Composer\ComposerInformation $composerInformation,
@@ -89,6 +99,7 @@ class PackagesData
     /**
      * @return array|bool|mixed
      * @throws \RuntimeException
+     * @since 2.1.0
      */
     public function syncPackagesData()
     {
@@ -108,6 +119,7 @@ class PackagesData
      * Gets last sync date
      *
      * @return string
+     * @since 2.1.0
      */
     private function getLastSyncDate()
     {
@@ -127,6 +139,7 @@ class PackagesData
      * @param array $packagesForInstall
      * @param array $lastSyncData
      * @return mixed
+     * @since 2.1.0
      */
     private function formatLastSyncData($packagesForInstall, $lastSyncData)
     {
@@ -145,6 +158,7 @@ class PackagesData
      *
      * @param string $syncDate seconds since epoch
      * @return array
+     * @since 2.1.0
      */
     private function formatSyncDate($syncDate)
     {
@@ -173,6 +187,7 @@ class PackagesData
      * Get list of manually installed package
      *
      * @return array
+     * @since 2.2.0
      */
     public function getInstalledPackages()
     {
@@ -192,6 +207,7 @@ class PackagesData
      * Get packages that need updates
      *
      * @return array
+     * @since 2.2.0
      */
     public function getPackagesForUpdate()
     {
@@ -218,6 +234,7 @@ class PackagesData
      *
      * @param string $package
      * @return string
+     * @since 2.1.0
      */
     private function getLatestNonDevVersion($package)
     {
@@ -235,6 +252,7 @@ class PackagesData
      *
      * @return array
      * @throws \RuntimeException
+     * @since 2.1.0
      */
     private function getPackagesJson()
     {
@@ -267,6 +285,7 @@ class PackagesData
      *
      * @return array
      * @throws \RuntimeException
+     * @since 2.1.0
      */
     private function syncPackagesForInstall()
     {
@@ -303,6 +322,7 @@ class PackagesData
      * @param string $packageName
      * @param string $packageVersion
      * @return array
+     * @since 2.2.0
      */
     private function getPackageExtraInfo($packageName, $packageVersion)
     {
@@ -317,6 +337,7 @@ class PackagesData
      *
      * @param array $package
      * @return array
+     * @since 2.2.0
      */
     public function addPackageExtraInfo(array $package)
     {
@@ -338,6 +359,7 @@ class PackagesData
      * @param array $package
      * @param array $packageNames
      * @return bool
+     * @since 2.1.0
      */
     protected function isNewUserPackage($package, $packageNames)
     {
@@ -356,6 +378,7 @@ class PackagesData
      *
      * @param array $package
      * @return array
+     * @since 2.1.0
      */
     protected function unsetDevVersions($package)
     {
@@ -374,6 +397,7 @@ class PackagesData
      *
      * @return array
      * @throws \RuntimeException
+     * @since 2.1.0
      */
     public function getPackagesForInstall()
     {
@@ -400,6 +424,7 @@ class PackagesData
      *
      * @param array $packages
      * @return array
+     * @since 2.2.0
      */
     private function filterPackagesList(array $packages)
     {
@@ -425,6 +450,7 @@ class PackagesData
      *
      * @param array $packages
      * @return array
+     * @since 2.1.0
      */
     private function getMetaPackageForPackage($packages)
     {
@@ -447,6 +473,7 @@ class PackagesData
      * Get all metapackages
      *
      * @return array
+     * @since 2.2.0
      */
     public function getMetaPackagesMap()
     {
@@ -473,6 +500,7 @@ class PackagesData
      * @param string $package
      * @return array
      * @throws \RuntimeException
+     * @since 2.1.0
      */
     private function getPackageAvailableVersions($package)
     {
@@ -502,6 +530,7 @@ class PackagesData
      * @param string $package
      * @return array
      * @exception \RuntimeException
+     * @since 2.2.0
      */
     private function getAvailableVersionsFromAllRepositories($package)
     {

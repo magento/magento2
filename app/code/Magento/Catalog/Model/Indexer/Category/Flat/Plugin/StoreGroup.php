@@ -10,10 +10,15 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Catalog\Model\Indexer\Category\Flat\State;
 
+/**
+ * Class \Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreGroup
+ *
+ */
 class StoreGroup
 {
     /**
      * @var bool
+     * @since 2.2.0
      */
     private $needInvalidating;
 
@@ -56,6 +61,7 @@ class StoreGroup
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function beforeSave(AbstractDb $subject, AbstractModel $group)
     {
@@ -70,6 +76,7 @@ class StoreGroup
      *
      * @return AbstractDb
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterSave(AbstractDb $subject, AbstractDb $objectResource)
     {

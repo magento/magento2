@@ -34,11 +34,13 @@ class Topmenu extends Template implements IdentityInterface
 
     /**
      * @var NodeFactory
+     * @since 2.2.0
      */
     private $nodeFactory;
 
     /**
      * @var TreeFactory
+     * @since 2.2.0
      */
     private $treeFactory;
 
@@ -63,6 +65,7 @@ class Topmenu extends Template implements IdentityInterface
      * Get block cache life time
      *
      * @return int
+     * @since 2.1.0
      */
     protected function getCacheLifetime()
     {
@@ -349,6 +352,7 @@ class Topmenu extends Template implements IdentityInterface
      * Get cache key informative items
      *
      * @return array
+     * @since 2.1.0
      */
     public function getCacheKeyInfo()
     {
@@ -361,6 +365,7 @@ class Topmenu extends Template implements IdentityInterface
      * Get tags array for saving cache
      *
      * @return array
+     * @since 2.1.0
      */
     protected function getCacheTags()
     {
@@ -374,6 +379,7 @@ class Topmenu extends Template implements IdentityInterface
      * The creation logic was moved from class constructor into separate method.
      *
      * @return Node
+     * @since 2.1.0
      */
     public function getMenu()
     {

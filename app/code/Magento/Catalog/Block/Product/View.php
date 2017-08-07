@@ -29,7 +29,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     * @deprecated
+     * @deprecated 2.2.0
      */
     protected $priceCurrency;
 
@@ -112,7 +112,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * Return wishlist widget options
      *
      * @return array
-     * @deprecated
+     * @deprecated 2.1.1
      */
     public function getWishlistOptions()
     {

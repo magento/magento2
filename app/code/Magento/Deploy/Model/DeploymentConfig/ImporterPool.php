@@ -13,6 +13,7 @@ use Magento\Framework\ObjectManagerInterface;
  * Pool of all deployment configuration importers.
  *
  * All importers should implement Magento\Framework\App\DeploymentConfig\ImporterInterface interface.
+ * @since 2.2.0
  */
 class ImporterPool
 {
@@ -58,6 +59,7 @@ class ImporterPool
      * ```
      *
      * @var array
+     * @since 2.2.0
      */
     private $importers = [];
 
@@ -75,6 +77,7 @@ class ImporterPool
      * ```
      *
      * @var array
+     * @since 2.2.0
      */
     private $sortedImporters = [];
 
@@ -82,6 +85,7 @@ class ImporterPool
      * Magento object manager.
      *
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
@@ -90,6 +94,7 @@ class ImporterPool
      * Validators should be instances of Magento\Framework\App\DeploymentConfig\ValidatorInterface
      *
      * @var ValidatorFactory
+     * @since 2.2.0
      */
     private $validatorFactory;
 
@@ -97,6 +102,7 @@ class ImporterPool
      * @param ObjectManagerInterface $objectManager the Magento object manager
      * @param ValidatorFactory $validatorFactory the validator factory
      * @param array $importers the list of sections and their importers
+     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -121,6 +127,7 @@ class ImporterPool
      *     ...
      * ]
      * ```
+     * @since 2.2.0
      */
     public function getSections()
     {
@@ -140,6 +147,7 @@ class ImporterPool
      *
      * @return array the list of all sections with their importer class names
      * @throws ConfigurationMismatchException is thrown when parameter class is empty
+     * @since 2.2.0
      */
     public function getImporters()
     {
@@ -166,6 +174,7 @@ class ImporterPool
      * @param string $section Section name
      * @return ValidatorInterface|null
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     public function getValidator($section)
     {
@@ -180,6 +189,7 @@ class ImporterPool
      *
      * @param array $data
      * @return array
+     * @since 2.2.0
      */
     private function sort(array $data)
     {
@@ -202,6 +212,7 @@ class ImporterPool
      *
      * @param array $variable
      * @return int
+     * @since 2.2.0
      */
     private function getSortOrder(array $variable)
     {

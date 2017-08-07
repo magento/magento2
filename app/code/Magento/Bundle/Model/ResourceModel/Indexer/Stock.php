@@ -17,16 +17,19 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
+     * @since 2.2.0
      */
     private $activeTableSwitcher;
 
     /**
      * @var \Magento\Bundle\Model\ResourceModel\Indexer\StockStatusSelectBuilder
+     * @since 2.2.0
      */
     private $stockStatusSelectBuilder;
 
     /**
      * @var \Magento\Bundle\Model\ResourceModel\Indexer\BundleOptionStockDataSelectBuilder
+     * @since 2.2.0
      */
     private $bundleOptionStockDataSelectBuilder;
 
@@ -41,6 +44,7 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
      * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
      * @param StockStatusSelectBuilder|null $stockStatusSelectBuilder
      * @param BundleOptionStockDataSelectBuilder|null $bundleOptionStockDataSelectBuilder
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,

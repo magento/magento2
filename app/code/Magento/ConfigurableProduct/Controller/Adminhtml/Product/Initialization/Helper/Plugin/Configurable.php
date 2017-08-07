@@ -34,11 +34,13 @@ class Configurable
 
     /**
      * @var Factory
+     * @since 2.1.0
      */
     private $optionsFactory;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     private $keysPost = [
         'status',
@@ -124,6 +126,7 @@ class Configurable
      * @param ProductExtensionInterface $extensionAttributes
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.1.0
      */
     private function setLinkedProducts(ProductInterface $product, ProductExtensionInterface $extensionAttributes)
     {
@@ -149,6 +152,7 @@ class Configurable
      * Get variation-matrix from request
      *
      * @return array
+     * @since 2.1.0
      */
     protected function getVariationMatrix()
     {
@@ -176,6 +180,7 @@ class Configurable
      *
      * @param array $item
      * @return array
+     * @since 2.1.0
      */
     private function mapData(array $item)
     {

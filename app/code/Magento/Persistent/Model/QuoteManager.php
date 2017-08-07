@@ -105,6 +105,7 @@ class QuoteManager
      * checkout
      *
      * @return void
+     * @since 2.2.0
      */
     public function convertCustomerCartToGuest()
     {

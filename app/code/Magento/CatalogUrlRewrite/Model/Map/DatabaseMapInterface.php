@@ -11,6 +11,7 @@ namespace Magento\CatalogUrlRewrite\Model\Map;
  * Is used to get data by a unique key from a temporary table in mysql to prevent memory usage
  * It internally holds the knowledge the creation of the actual data and it initializes itself when we call getData
  * We should always call destroyTableAdapter when we don't need anymore the temporary tables
+ * @since 2.2.0
  */
 interface DatabaseMapInterface
 {
@@ -24,6 +25,7 @@ interface DatabaseMapInterface
      * @param int $categoryId
      * @param string $key
      * @return array
+     * @since 2.2.0
      */
     public function getData($categoryId, $key);
 
@@ -33,6 +35,7 @@ interface DatabaseMapInterface
      *
      * @param int $categoryId
      * @return void
+     * @since 2.2.0
      */
     public function destroyTableAdapter($categoryId);
 }

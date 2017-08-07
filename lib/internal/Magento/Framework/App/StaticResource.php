@@ -17,34 +17,56 @@ use Psr\Log\LoggerInterface;
  */
 class StaticResource implements \Magento\Framework\AppInterface
 {
-    /** @var State */
+    /**
+     * @var \Magento\Framework\App\State
+     */
     private $state;
 
-    /** @var \Magento\Framework\App\Response\FileInterface */
+    /**
+     * @var \Magento\Framework\App\Response\FileInterface
+     */
     private $response;
 
-    /** @var Request\Http */
+    /**
+     * @var \Magento\Framework\App\Request\Http
+     */
     private $request;
 
-    /** @var View\Asset\Publisher */
+    /**
+     * @var \Magento\Framework\App\View\Asset\Publisher
+     */
     private $publisher;
 
-    /** @var \Magento\Framework\View\Asset\Repository */
+    /**
+     * @var \Magento\Framework\View\Asset\Repository
+     */
     private $assetRepo;
 
-    /** @var \Magento\Framework\Module\ModuleList */
+    /**
+     * @var \Magento\Framework\Module\ModuleList
+     */
     private $moduleList;
 
-    /** @var \Magento\Framework\ObjectManagerInterface */
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     private $objectManager;
 
-    /** @var ConfigLoaderInterface */
+    /**
+     * @var \Magento\Framework\ObjectManager\ConfigLoaderInterface
+     */
     private $configLoader;
 
-    /** @var Filesystem */
+    /**
+     * @var \Magento\Framework\Filesystem
+     * @since 2.1.0
+     */
     private $filesystem;
 
-    /** @var LoggerInterface */
+    /**
+     * @var \Psr\Log\LoggerInterface
+     * @since 2.2.0
+     */
     private $logger;
 
     /**
@@ -156,8 +178,9 @@ class StaticResource implements \Magento\Framework\AppInterface
     /**
      * Lazyload filesystem driver
      *
-     * @deprecated
+     * @deprecated 2.1.0
      * @return Filesystem
+     * @since 2.1.0
      */
     private function getFilesystem()
     {
@@ -171,7 +194,8 @@ class StaticResource implements \Magento\Framework\AppInterface
      * Retrieves LoggerInterface instance
      *
      * @return LoggerInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getLogger()
     {

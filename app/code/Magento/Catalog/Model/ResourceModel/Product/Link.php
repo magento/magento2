@@ -58,6 +58,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $linkId
      * @return int
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.1.0
      */
     public function deleteProductLink($linkId)
     {
@@ -72,6 +73,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $typeId
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.1.0
      */
     public function getProductLinkId($parentId, $linkedProductId, $typeId)
     {
@@ -101,6 +103,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $parentId ID of product
      * @return bool
+     * @since 2.1.3
      */
     public function hasProductLinks($parentId)
     {

@@ -37,6 +37,7 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
 
     /**
      * @var \Magento\Framework\Url
+     * @since 2.1.0
      */
     protected $frontendUrlBuilder;
 

@@ -113,6 +113,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $productLinkFieldValue
      *
      * @return $this
+     * @since 2.1.0
      */
     public function setProductLinkFilter($productLinkFieldValue)
     {

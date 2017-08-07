@@ -91,21 +91,25 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.1.0
      */
     protected $coreConfig;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.1.0
      */
     protected $logger;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.1.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate
+     * @since 2.1.0
      */
     protected $carrierTablerate;
 
@@ -113,16 +117,19 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Filesystem instance
      *
      * @var \Magento\Framework\Filesystem
+     * @since 2.1.0
      */
     protected $filesystem;
 
     /**
      * @var Import
+     * @since 2.1.0
      */
     private $import;
 
     /**
      * @var RateQueryFactory
+     * @since 2.1.0
      */
     private $rateQueryFactory;
 
@@ -199,6 +206,7 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $condition
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.1.0
      */
     private function deleteByCondition(array $condition)
     {
@@ -214,6 +222,7 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $values
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
+     * @since 2.1.0
      */
     private function importData(array $fields, array $values)
     {
@@ -297,6 +306,7 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @param \Magento\Framework\DataObject $object
      * @return mixed|string
+     * @since 2.1.0
      */
     public function getConditionName(\Magento\Framework\DataObject $object)
     {
@@ -311,6 +321,7 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @param string $filePath
      * @return \Magento\Framework\Filesystem\File\ReadInterface
+     * @since 2.1.0
      */
     private function getCsvFile($filePath)
     {

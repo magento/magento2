@@ -19,7 +19,7 @@ use Magento\Framework\Message\ExceptionMessageLookupFactory;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ManagerTest extends \PHPUnit_Framework_TestCase
+class ManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -86,8 +86,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
                 ['getData', 'setData']
             )
             ->getMock();
-        $this->eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
-        $this->logger = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
 
         $this->exceptionMessageFactory = $this->getMockBuilder(
             \Magento\Framework\Message\ExceptionMessageLookupFactory::class
@@ -95,7 +95,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->messageMock = $this->getMock(\Magento\Framework\Message\MessageInterface::class);
+        $this->messageMock = $this->createMock(\Magento\Framework\Message\MessageInterface::class);
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = new Manager(
             $this->session,
@@ -248,7 +248,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             'critical'
         );
 
-        $message = $this->getMock(\Magento\Framework\Message\MessageInterface::class);
+        $message = $this->createMock(\Magento\Framework\Message\MessageInterface::class);
 
         $this->messageFactory->expects(
             $this->never()
@@ -295,13 +295,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertFalse($this->model->hasMessages());
         $message = 'Message';
-        $messageCollection = $this->getMock(
-            \Magento\Framework\Message\Collection::class,
-            ['addMessage'],
-            [],
-            '',
-            false
-        );
+        $messageCollection = $this->createPartialMock(\Magento\Framework\Message\Collection::class, ['addMessage']);
         $this->session->expects($this->any())
             ->method('getData')
             ->will($this->returnValue($messageCollection));
@@ -332,7 +326,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     public function testAddUniqueMessagesWhenMessagesImplementMessageInterface($messages, $expectation)
     {
         $messageCollection =
-            $this->getMock(\Magento\Framework\Message\Collection::class, ['getItems', 'addMessage'], [], '', false);
+            $this->createPartialMock(\Magento\Framework\Message\Collection::class, ['getItems', 'addMessage']);
         $this->session->expects($this->any())
             ->method('getData')
             ->will($this->returnValue($messageCollection));
@@ -365,7 +359,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     public function testAddUniqueMessages($messages)
     {
         $messageCollection =
-            $this->getMock(\Magento\Framework\Message\Collection::class, ['getItems', 'addMessage'], [], '', false);
+            $this->createPartialMock(\Magento\Framework\Message\Collection::class, ['getItems', 'addMessage']);
         $this->session->expects($this->any())
             ->method('getData')
             ->will($this->returnValue($messageCollection));
@@ -387,13 +381,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testAddMessages()
     {
-        $messageCollection = $this->getMock(
-            \Magento\Framework\Message\Collection::class,
-            ['getItems', 'addMessage'],
-            [],
-            '',
-            false
-        );
+        $messageCollection =
+            $this->createPartialMock(\Magento\Framework\Message\Collection::class, ['getItems', 'addMessage']);
         $this->session->expects($this->any())
             ->method('getData')
             ->will($this->returnValue($messageCollection));

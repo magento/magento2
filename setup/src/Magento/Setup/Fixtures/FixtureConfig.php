@@ -10,21 +10,25 @@ use Magento\Framework\Xml\Parser;
 
 /**
  * Config data for fixtures
+ * @since 2.2.0
  */
 class FixtureConfig
 {
     /**
      * @var array
+     * @since 2.2.0
      */
     private $config;
 
     /**
      * @var Parser
+     * @since 2.2.0
      */
     private $parser;
 
     /**
      * @param Parser $parser
+     * @since 2.2.0
      */
     public function __construct(Parser $parser)
     {
@@ -38,6 +42,7 @@ class FixtureConfig
      * @throws \Exception
      *
      * @return void
+     * @since 2.2.0
      */
     public function loadConfig($filename)
     {
@@ -61,6 +66,7 @@ class FixtureConfig
      * @param null|mixed $default
      *
      * @return mixed
+     * @since 2.2.0
      */
     public function getValue($key, $default = null)
     {

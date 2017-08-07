@@ -18,26 +18,31 @@ use Magento\Store\Model\StoreResolver;
  * Prepares sitemap links to add to the robots.txt file
  *
  * @api
+ * @since 2.2.0
  */
 class Robots extends AbstractBlock implements IdentityInterface
 {
     /**
      * @var StoreResolver
+     * @since 2.2.0
      */
     private $storeResolver;
 
     /**
      * @var CollectionFactory
+     * @since 2.2.0
      */
     private $sitemapCollectionFactory;
 
     /**
      * @var SitemapHelper
+     * @since 2.2.0
      */
     private $sitemapHelper;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.2.0
      */
     private $storeManager;
 
@@ -48,6 +53,7 @@ class Robots extends AbstractBlock implements IdentityInterface
      * @param SitemapHelper $sitemapHelper
      * @param StoreManagerInterface $storeManager
      * @param array $data
+     * @since 2.2.0
      */
     public function __construct(
         Context $context,
@@ -73,6 +79,7 @@ class Robots extends AbstractBlock implements IdentityInterface
      * and adds links for this sitemap files into result data.
      *
      * @return string
+     * @since 2.2.0
      */
     protected function _toHtml()
     {
@@ -105,6 +112,7 @@ class Robots extends AbstractBlock implements IdentityInterface
      *
      * @param int[] $storeIds
      * @return array
+     * @since 2.2.0
      */
     protected function getSitemapLinks(array $storeIds)
     {
@@ -130,6 +138,7 @@ class Robots extends AbstractBlock implements IdentityInterface
      * Get unique page cache identities
      *
      * @return array
+     * @since 2.2.0
      */
     public function getIdentities()
     {

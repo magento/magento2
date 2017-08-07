@@ -454,6 +454,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.1.0
      */
     public function getDefaultSuccessPageUrl()
     {

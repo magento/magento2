@@ -8,6 +8,11 @@ namespace Magento\Framework\Reflection;
 
 use Zend\Code\Reflection\ClassReflection;
 
+/**
+ * Class \Magento\Framework\Reflection\NameFinder
+ *
+ * @since 2.1.0
+ */
 class NameFinder
 {
     /**
@@ -15,6 +20,7 @@ class NameFinder
      *
      * @param string $getterName
      * @return string
+     * @since 2.1.0
      */
     public function getFieldNameFromGetterName($getterName)
     {
@@ -38,6 +44,7 @@ class NameFinder
      *
      * @param string $shortDescription
      * @return string
+     * @since 2.1.0
      */
     public function getFieldDescriptionFromGetterDescription($shortDescription)
     {
@@ -51,6 +58,7 @@ class NameFinder
      * @param string $camelCaseProperty
      * @return string processed method name
      * @throws \LogicException If $camelCaseProperty has no corresponding getter method
+     * @since 2.1.0
      */
     public function getGetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -66,6 +74,7 @@ class NameFinder
      * @param string $camelCaseProperty
      * @return string processed method name
      * @throws \LogicException If $camelCaseProperty has no corresponding setter method
+     * @since 2.1.0
      */
     public function getSetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -83,6 +92,7 @@ class NameFinder
      * @param bool $boolAccessorName
      * @return string processed method name
      * @throws \LogicException If $camelCaseProperty has no corresponding setter method
+     * @since 2.1.0
      */
     public function findAccessorMethodName(
         ClassReflection $class,
@@ -115,6 +125,7 @@ class NameFinder
      * @param ClassReflection $class
      * @param string $methodName
      * @return bool
+     * @since 2.1.0
      */
     public function hasMethod(ClassReflection $class, $methodName)
     {

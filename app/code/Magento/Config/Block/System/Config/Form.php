@@ -107,11 +107,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @var SettingChecker
+     * @since 2.1.3
      */
     private $settingChecker;
 
     /**
      * @var DeploymentConfig
+     * @since 2.1.3
      */
     private $appConfig;
 
@@ -120,6 +122,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * by their paths in the system.xml structure.
      *
      * @var ElementVisibilityInterface
+     * @since 2.2.0
      */
     private $elementVisibility;
 
@@ -157,8 +160,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.1.3
      * @return SettingChecker
+     * @since 2.1.3
      */
     private function getSettingChecker()
     {
@@ -410,6 +414,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Config\Model\Config\Structure\Element\Field $field
      * @param string $path
      * @return mixed|null|string
+     * @since 2.2.0
      */
     private function getFieldData(\Magento\Config\Model\Config\Structure\Element\Field $field, $path)
     {
@@ -451,6 +456,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Retrieve Scope string code
      *
      * @return string
+     * @since 2.1.3
      */
     private function getStringScopeCode()
     {
@@ -600,6 +606,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param int $fieldValue
      * @return bool
+     * @since 2.1.0
      */
     public function isCanRestoreToDefault($fieldValue)
     {
@@ -785,8 +792,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Retrieve Deployment Configuration object.
      *
-     * @deprecated
+     * @deprecated 2.1.3
      * @return DeploymentConfig
+     * @since 2.1.3
      */
     private function getAppConfig()
     {
@@ -801,6 +809,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param string $path
      * @return null|string
+     * @since 2.1.3
      */
     private function getAppConfigDataValue($path)
     {
@@ -820,9 +829,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Gets instance of ElementVisibilityInterface.
      *
      * @return ElementVisibilityInterface
-     * @deprecated Added to not break backward compatibility of the constructor signature
+     * @deprecated 2.2.0 Added to not break backward compatibility of the constructor signature
      *             by injecting the new dependency directly.
      *             The method can be removed in a future major release, when constructor signature can be changed.
+     * @since 2.2.0
      */
     public function getElementVisibility()
     {

@@ -22,7 +22,7 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
-     * @deprecated please use instead \Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory
+     * @deprecated 2.2.0 please use instead \Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory
      */
     protected $attributeCollection;
 
@@ -53,6 +53,7 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory
+     * @since 2.2.0
      */
     private $attributeCollectionFactory;
 

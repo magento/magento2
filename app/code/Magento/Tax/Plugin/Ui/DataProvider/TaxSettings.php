@@ -12,17 +12,20 @@ use Magento\Framework\App\Config;
  * Plugin on Data Provider for frontend ui components (Components are responsible
  * for rendering product on front)
  * This plugin provides displayTaxes setting
+ * @since 2.2.0
  */
 class TaxSettings
 {
     /**
      * @var Config
+     * @since 2.2.0
      */
     private $config;
 
     /**
      * TaxSettings constructor.
      * @param Config $config
+     * @since 2.2.0
      */
     public function __construct(Config $config)
     {
@@ -36,6 +39,7 @@ class TaxSettings
      * @param array $result
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterGetData(\Magento\Catalog\Ui\DataProvider\Product\Listing\DataProvider $subject, $result)
     {

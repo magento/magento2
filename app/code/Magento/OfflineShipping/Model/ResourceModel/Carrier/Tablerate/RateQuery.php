@@ -6,16 +6,23 @@
 
 namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate;
 
+/**
+ * Class \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\RateQuery
+ *
+ * @since 2.1.0
+ */
 class RateQuery
 {
     /**
      * @var \Magento\Quote\Model\Quote\Address\RateRequest
+     * @since 2.1.0
      */
     private $request;
 
     /**
      * RateQuery constructor.
      * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Quote\Model\Quote\Address\RateRequest $request
@@ -26,6 +33,7 @@ class RateQuery
     /**
      * @param \Magento\Framework\DB\Select $select
      * @return \Magento\Framework\DB\Select
+     * @since 2.1.0
      */
     public function prepareSelect(\Magento\Framework\DB\Select $select)
     {
@@ -77,6 +85,7 @@ class RateQuery
 
     /**
      * @return array
+     * @since 2.1.0
      */
     public function getBindings()
     {
@@ -107,6 +116,7 @@ class RateQuery
 
     /**
      * @return \Magento\Quote\Model\Quote\Address\RateRequest
+     * @since 2.1.0
      */
     public function getRequest()
     {

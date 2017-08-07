@@ -85,11 +85,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     const KEY_CHILDREN_DATA = 'children_data';
     /**#@-*/
 
-    /**
-     * Prefix of model events names
-     *
-     * @var string
-     */
+    /**#@-*/
     protected $_eventPrefix = 'catalog_category';
 
     /**
@@ -117,7 +113,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * URL rewrite model
      *
      * @var \Magento\UrlRewrite\Model\UrlRewrite
-     * @deprecated since 2.2.0
+     * @deprecated 2.2.0 since 2.2.0
      */
     protected $_urlRewrite;
 
@@ -208,13 +204,19 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected $flatState;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
+     */
     protected $categoryUrlPathGenerator;
 
-    /** @var UrlFinderInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     */
     protected $urlFinder;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
     protected $indexerRegistry;
 
     /**

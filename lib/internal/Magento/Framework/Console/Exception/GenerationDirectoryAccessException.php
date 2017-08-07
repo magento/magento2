@@ -11,11 +11,13 @@ use Magento\Framework\Phrase;
 
 /**
  * The default exception for missing write permissions on compilation generated folder.
+ * @since 2.2.0
  */
 class GenerationDirectoryAccessException extends FileSystemException
 {
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function __construct(Phrase $phrase = null, \Exception $cause = null, $code = 0)
     {
@@ -33,6 +35,7 @@ class GenerationDirectoryAccessException extends FileSystemException
      *
      * @param string $code
      * @return string
+     * @since 2.2.0
      */
     private function getDefaultDirectoryPath($code)
     {

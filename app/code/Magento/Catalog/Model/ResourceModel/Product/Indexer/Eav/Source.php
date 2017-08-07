@@ -333,6 +333,7 @@ class Source extends AbstractEav
      * @param \Magento\Framework\DB\Select $select
      * @param array $options
      * @return void
+     * @since 2.2.0
      */
     private function saveDataFromSelect(\Magento\Framework\DB\Select $select, array $options)
     {
@@ -361,6 +362,7 @@ class Source extends AbstractEav
      *
      * @param array $parentIds the parent entity ids limitation
      * @return $this
+     * @since 2.2.0
      */
     protected function _prepareRelationIndex($parentIds = null)
     {

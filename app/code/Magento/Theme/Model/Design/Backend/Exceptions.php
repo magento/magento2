@@ -8,6 +8,10 @@ namespace Magento\Theme\Model\Design\Backend;
 use Magento\Config\Model\Config\Backend\Serialized\ArraySerialized;
 use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * Class \Magento\Theme\Model\Design\Backend\Exceptions
+ *
+ */
 class Exceptions extends ArraySerialized
 {
     /**
@@ -148,6 +152,7 @@ class Exceptions extends ArraySerialized
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function afterLoad()
     {
@@ -164,6 +169,7 @@ class Exceptions extends ArraySerialized
 
     /**
      * @return array
+     * @since 2.1.0
      */
     public function getValue()
     {

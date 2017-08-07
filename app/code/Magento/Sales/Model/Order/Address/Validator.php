@@ -43,6 +43,7 @@ class Validator
 
     /**
      * @var EavConfig
+     * @since 2.2.0
      */
     protected $eavConfig;
 
@@ -195,6 +196,7 @@ class Validator
 
     /**
      * @return bool
+     * @since 2.2.0
      */
     protected function isTelephoneRequired()
     {
@@ -203,6 +205,7 @@ class Validator
 
     /**
      * @return bool
+     * @since 2.2.0
      */
     protected function isCompanyRequired()
     {
@@ -211,6 +214,7 @@ class Validator
 
     /**
      * @return bool
+     * @since 2.2.0
      */
     protected function isFaxRequired()
     {

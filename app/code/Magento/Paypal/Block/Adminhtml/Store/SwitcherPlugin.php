@@ -20,6 +20,7 @@ class SwitcherPlugin
      * @param string $route
      * @param array $params
      * @return array
+     * @since 2.2.0
      */
     public function beforeGetUrl(StoreSwitcherBlock $subject, $route = '', $params = [])
     {

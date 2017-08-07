@@ -7,6 +7,7 @@ namespace Magento\Setup\Model\Description\Mixin;
 
 /**
  * Add header html tag to description
+ * @since 2.2.0
  */
 class HeaderMixin implements DescriptionMixinInterface
 {
@@ -15,6 +16,7 @@ class HeaderMixin implements DescriptionMixinInterface
      *
      * @param string $text
      * @return string
+     * @since 2.2.0
      */
     public function apply($text)
     {

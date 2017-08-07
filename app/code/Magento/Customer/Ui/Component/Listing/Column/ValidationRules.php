@@ -7,6 +7,10 @@ namespace Magento\Customer\Ui\Component\Listing\Column;
 
 use Magento\Customer\Api\Data\ValidationRuleInterface;
 
+/**
+ * Class \Magento\Customer\Ui\Component\Listing\Column\ValidationRules
+ *
+ */
 class ValidationRules
 {
     /**

@@ -26,6 +26,7 @@ class Media extends AbstractDataType
      * Prepare component configuration
      *
      * @return void
+     * @since 2.0.11
      */
     public function prepare()
     {

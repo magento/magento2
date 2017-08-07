@@ -43,6 +43,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * [website_code => [website_data (website_id, code, name, etc...)]]
      *
      * @return array
+     * @since 2.1.3
      */
     public function readAllWebsites()
     {

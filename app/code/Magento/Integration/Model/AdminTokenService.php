@@ -48,6 +48,7 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
 
     /**
      * @var RequestThrottler
+     * @since 2.0.3
      */
     private $requestThrottler;
 
@@ -95,7 +96,13 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
     }
 
     /**
-     * {@inheritdoc}
+     * Revoke token by admin id.
+     *
+     * The function will delete the token from the oauth_token table.
+     *
+     * @param int $adminId
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function revokeAdminAccessToken($adminId)
     {
@@ -105,7 +112,7 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
         }
         try {
             foreach ($tokenCollection as $token) {
-                $token->setRevoked(1)->save();
+                $token->delete();
             }
         } catch (\Exception $e) {
             throw new LocalizedException(__('The tokens could not be revoked.'));
@@ -117,7 +124,8 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
      * Get request throttler instance
      *
      * @return RequestThrottler
-     * @deprecated
+     * @deprecated 2.0.3
+     * @since 2.0.3
      */
     private function getRequestThrottler()
     {

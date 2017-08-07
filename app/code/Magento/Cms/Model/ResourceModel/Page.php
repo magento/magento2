@@ -46,11 +46,13 @@ class Page extends AbstractDb
 
     /**
      * @var EntityManager
+     * @since 2.1.0
      */
     protected $entityManager;
 
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
@@ -89,6 +91,7 @@ class Page extends AbstractDb
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function getConnection()
     {
@@ -136,6 +139,7 @@ class Page extends AbstractDb
      * @return bool|int|string
      * @throws LocalizedException
      * @throws \Exception
+     * @since 2.1.0
      */
     private function getPageId(AbstractModel $object, $value, $field = null)
     {
@@ -391,6 +395,7 @@ class Page extends AbstractDb
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function save(AbstractModel $object)
     {
@@ -400,6 +405,7 @@ class Page extends AbstractDb
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function delete(AbstractModel $object)
     {

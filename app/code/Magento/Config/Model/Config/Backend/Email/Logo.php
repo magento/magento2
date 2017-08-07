@@ -12,7 +12,7 @@
 namespace Magento\Config\Model\Config\Backend\Email;
 
 /**
- * @deprecated
+ * @deprecated 2.2.0
  */
 class Logo extends \Magento\Config\Model\Config\Backend\Image
 {
@@ -50,6 +50,7 @@ class Logo extends \Magento\Config\Model\Config\Backend\Image
 
     /**
      * @return string|null
+     * @since 2.1.0
      */
     protected function getTmpFileName()
     {

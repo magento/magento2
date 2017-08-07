@@ -27,6 +27,7 @@ class FormKey
 
     /**
      * @var \Magento\Framework\Escaper
+     * @since 2.0.1
      */
     protected $escaper;
 

@@ -7,6 +7,11 @@ namespace Magento\Framework\Crontab;
 
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Interface \Magento\Framework\Crontab\CrontabManagerInterface
+ *
+ * @since 2.2.0
+ */
 interface CrontabManagerInterface
 {
     /**#@+
@@ -21,6 +26,7 @@ interface CrontabManagerInterface
      *
      * @return array
      * @throws LocalizedException
+     * @since 2.2.0
      */
     public function getTasks();
 
@@ -30,6 +36,7 @@ interface CrontabManagerInterface
      * @param array $tasks
      * @return void
      * @throws LocalizedException
+     * @since 2.2.0
      */
     public function saveTasks(array $tasks);
 
@@ -38,6 +45,7 @@ interface CrontabManagerInterface
      *
      * @return void
      * @throws LocalizedException
+     * @since 2.2.0
      */
     public function removeTasks();
 }

@@ -11,21 +11,25 @@ use Magento\Framework\Controller\Result\JsonFactory;
 
 /**
  * Synchronizes Product Frontend Actions with database
+ * @since 2.2.0
  */
 class Synchronize extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var Context
+     * @since 2.2.0
      */
     private $context;
 
     /**
      * @var Synchronizer
+     * @since 2.2.0
      */
     private $synchronizer;
 
     /**
      * @var JsonFactory
+     * @since 2.2.0
      */
     private $jsonFactory;
 
@@ -33,6 +37,7 @@ class Synchronize extends \Magento\Framework\App\Action\Action
      * @param Context $context
      * @param Synchronizer $synchronizer
      * @param JsonFactory $jsonFactory
+     * @since 2.2.0
      */
     public function __construct(
         Context $context,
@@ -60,6 +65,7 @@ class Synchronize extends \Magento\Framework\App\Action\Action
      *
      *
      * @inheritdoc
+     * @since 2.2.0
      */
     public function execute()
     {

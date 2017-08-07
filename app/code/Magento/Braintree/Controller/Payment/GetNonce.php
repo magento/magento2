@@ -16,21 +16,25 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class GetNonce
+ * @since 2.1.0
  */
 class GetNonce extends Action
 {
     /**
      * @var LoggerInterface
+     * @since 2.1.0
      */
     private $logger;
 
     /**
      * @var SessionManagerInterface
+     * @since 2.1.0
      */
     private $session;
 
     /**
      * @var GetPaymentNonceCommand
+     * @since 2.1.0
      */
     private $command;
 
@@ -39,6 +43,7 @@ class GetNonce extends Action
      * @param LoggerInterface $logger
      * @param SessionManagerInterface $session
      * @param GetPaymentNonceCommand $command
+     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -54,6 +59,7 @@ class GetNonce extends Action
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     public function execute()
     {
@@ -76,6 +82,7 @@ class GetNonce extends Action
      * Return response for bad request
      * @param ResultInterface $response
      * @return ResultInterface
+     * @since 2.1.0
      */
     private function processBadRequest(ResultInterface $response)
     {

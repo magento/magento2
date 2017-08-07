@@ -28,6 +28,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      * Produce and return block's html output
      *
      * @return string
+     * @since 2.1.6
      */
     protected function _toHtml()
     {
@@ -69,6 +70,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      * Do not load images for Configurable product with swatches due to its loaded by request
      *
      * @return array
+     * @since 2.2.0
      */
     protected function getOptionImages()
     {
@@ -79,6 +81,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      * Add images to result json config in case of Layered Navigation is used
      *
      * @return array
+     * @since 2.2.0
      */
     protected function _getAdditionalConfig()
     {
@@ -99,6 +102,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      * @param Product $configurableProduct
      * @param array $additionalAttributes
      * @return array
+     * @since 2.2.0
      */
     private function getProductVariationWithMedia(
         Product $configurableProduct,
@@ -120,6 +124,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      * @param Product $configurableProduct
      * @param array $additionalAttributes
      * @return array
+     * @since 2.2.0
      */
     private function getLayeredAttributesIfExists(Product $configurableProduct, array $additionalAttributes)
     {

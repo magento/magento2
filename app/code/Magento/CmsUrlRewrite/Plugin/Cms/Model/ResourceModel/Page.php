@@ -69,6 +69,7 @@ class Page
      * @param AbstractModel $page
      * @return AbstractDb
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterDelete(
         \Magento\Cms\Model\ResourceModel\Page $subject,

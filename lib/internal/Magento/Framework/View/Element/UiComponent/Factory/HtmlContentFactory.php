@@ -7,10 +7,16 @@ namespace Magento\Framework\View\Element\UiComponent\Factory;
 
 use Magento\Framework\View\Layout;
 
+/**
+ * Class \Magento\Framework\View\Element\UiComponent\Factory\HtmlContentFactory
+ *
+ * @since 2.2.0
+ */
 class HtmlContentFactory implements ComponentFactoryInterface
 {
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function create(array &$bundleComponents, array $arguments = [])
     {

@@ -16,6 +16,7 @@ class Countries extends Select
 {
     /**
      * @var Country
+     * @since 2.1.0
      */
     private $countryHelper;
 

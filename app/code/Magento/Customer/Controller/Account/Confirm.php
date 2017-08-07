@@ -26,22 +26,34 @@ use Magento\Framework\Controller\ResultFactory;
  */
 class Confirm extends \Magento\Customer\Controller\AbstractAccount
 {
-    /** @var ScopeConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     protected $scopeConfig;
 
-    /** @var StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $storeManager;
 
-    /** @var AccountManagementInterface  */
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     */
     protected $customerAccountManagement;
 
-    /** @var CustomerRepositoryInterface  */
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
     protected $customerRepository;
 
-    /** @var Address */
+    /**
+     * @var \Magento\Customer\Helper\Address
+     */
     protected $addressHelper;
 
-    /** @var \Magento\Framework\UrlInterface */
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
     protected $urlModel;
 
     /**
@@ -51,11 +63,13 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     * @since 2.2.0
      */
     private $cookieMetadataFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     * @since 2.2.0
      */
     private $cookieMetadataManager;
 
@@ -92,8 +106,9 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie manager
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     * @since 2.2.0
      */
     private function getCookieManager()
     {
@@ -108,8 +123,9 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie metadata factory
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     * @since 2.2.0
      */
     private function getCookieMetadataFactory()
     {

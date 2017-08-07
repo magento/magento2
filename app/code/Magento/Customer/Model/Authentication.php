@@ -16,6 +16,7 @@ use Magento\Framework\Exception\State\UserLockedException;
 /**
  * Class Authentication
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.1.0
  */
 class Authentication implements AuthenticationInterface
 {
@@ -31,6 +32,7 @@ class Authentication implements AuthenticationInterface
 
     /**
      * @var CustomerRegistry
+     * @since 2.1.0
      */
     protected $customerRegistry;
 
@@ -38,26 +40,31 @@ class Authentication implements AuthenticationInterface
      * Backend configuration interface
      *
      * @var \Magento\Backend\App\ConfigInterface
+     * @since 2.1.0
      */
     protected $backendConfig;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
+     * @since 2.1.0
      */
     protected $dateTime;
 
     /**
      * @var Encryptor
+     * @since 2.1.0
      */
     protected $encryptor;
 
     /**
      * @var CustomerRepositoryInterface
+     * @since 2.1.0
      */
     protected $customerRepository;
 
     /**
      * @var CustomerAuthUpdate
+     * @since 2.1.1
      */
     private $customerAuthUpdate;
 
@@ -67,6 +74,7 @@ class Authentication implements AuthenticationInterface
      * @param ConfigInterface $backendConfig
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param Encryptor $encryptor
+     * @since 2.1.0
      */
     public function __construct(
         CustomerRepositoryInterface $customerRepository,
@@ -84,6 +92,7 @@ class Authentication implements AuthenticationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function processAuthenticationFailure($customerId)
     {
@@ -121,6 +130,7 @@ class Authentication implements AuthenticationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function unlock($customerId)
     {
@@ -135,6 +145,7 @@ class Authentication implements AuthenticationInterface
      * Get lock threshold
      *
      * @return int
+     * @since 2.1.0
      */
     protected function getLockThreshold()
     {
@@ -145,6 +156,7 @@ class Authentication implements AuthenticationInterface
      * Get max failures
      *
      * @return int
+     * @since 2.1.0
      */
     protected function getMaxFailures()
     {
@@ -153,6 +165,7 @@ class Authentication implements AuthenticationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function isLocked($customerId)
     {
@@ -162,6 +175,7 @@ class Authentication implements AuthenticationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function authenticate($customerId, $password)
     {
@@ -181,7 +195,8 @@ class Authentication implements AuthenticationInterface
      * Get customer authentication update model
      *
      * @return \Magento\Customer\Model\CustomerAuthUpdate
-     * @deprecated
+     * @deprecated 2.1.1
+     * @since 2.1.1
      */
     private function getCustomerAuthUpdate()
     {

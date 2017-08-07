@@ -12,10 +12,16 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Eav\Setup\EavSetup;
 
+/**
+ * Class \Magento\Bundle\Setup\UpgradeData
+ *
+ * @since 2.1.0
+ */
 class UpgradeData implements UpgradeDataInterface
 {
     /**
      * @var EavSetupFactory
+     * @since 2.1.0
      */
     protected $eavSetupFactory;
 
@@ -23,6 +29,7 @@ class UpgradeData implements UpgradeDataInterface
      * UpgradeData constructor
      *
      * @param EavSetupFactory $eavSetupFactory
+     * @since 2.1.0
      */
     public function __construct(EavSetupFactory $eavSetupFactory)
     {
@@ -33,6 +40,7 @@ class UpgradeData implements UpgradeDataInterface
      * {@inheritdoc}
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.1.0
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -146,6 +154,7 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param EavSetup $eavSetup
      * @return void
+     * @since 2.1.0
      */
     private function upgradePriceType(EavSetup $eavSetup)
     {
@@ -170,6 +179,7 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param EavSetup $eavSetup
      * @return void
+     * @since 2.1.0
      */
     private function upgradeSkuType(EavSetup $eavSetup)
     {
@@ -195,6 +205,7 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param EavSetup $eavSetup
      * @return void
+     * @since 2.1.0
      */
     private function upgradeWeightType(EavSetup $eavSetup)
     {
@@ -220,6 +231,7 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param EavSetup $eavSetup
      * @return void
+     * @since 2.1.0
      */
     private function upgradeShipmentType(EavSetup $eavSetup)
     {

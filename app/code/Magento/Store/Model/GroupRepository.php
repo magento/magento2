@@ -38,6 +38,7 @@ class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
 
     /**
      * @var Config
+     * @since 2.1.3
      */
     private $appConfig;
 
@@ -104,8 +105,9 @@ class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
     /**
      * Retrieve application config.
      *
-     * @deprecated
+     * @deprecated 2.1.3
      * @return Config
+     * @since 2.1.3
      */
     private function getAppConfig()
     {

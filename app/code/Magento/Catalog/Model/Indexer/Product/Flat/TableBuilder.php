@@ -7,6 +7,10 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
 use Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterfaceFactory;
 
+/**
+ * Class \Magento\Catalog\Model\Indexer\Product\Flat\TableBuilder
+ *
+ */
 class TableBuilder
 {
     /**
@@ -21,16 +25,19 @@ class TableBuilder
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.1.0
      */
     protected $resource;
 
     /**
      * @var BuilderInterfaceFactory
+     * @since 2.1.4
      */
     private $tableBuilderFactory;
 
@@ -357,7 +364,8 @@ class TableBuilder
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {

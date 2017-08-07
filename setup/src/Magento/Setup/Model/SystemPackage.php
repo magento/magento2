@@ -207,6 +207,7 @@ class SystemPackage
      *
      * @param array $packages
      * @return array
+     * @since 2.1.0
      */
     private function formatPackages($packages)
     {

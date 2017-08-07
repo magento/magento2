@@ -16,6 +16,7 @@ class IndexerConfigData
 {
     /**
      * @var ProductFlatIndexerState
+     * @since 2.2.0
      */
     protected $state;
 
@@ -38,6 +39,7 @@ class IndexerConfigData
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
+     * @since 2.2.0
      */
     public function afterGet(ConfigData $subject, $data, $path = null, $default = null)
     {

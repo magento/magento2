@@ -7,6 +7,7 @@ namespace Magento\Paypal\Model\Config\Structure;
 
 /**
  * PayPal change structure of payment methods configuration in admin panel.
+ * @since 2.1.4
  */
 class PaymentSectionModifier
 {
@@ -14,6 +15,7 @@ class PaymentSectionModifier
      * Identifiers of special payment method configuration groups
      *
      * @var array
+     * @since 2.1.4
      */
     private static $specialGroups = [
         'account',
@@ -37,6 +39,7 @@ class PaymentSectionModifier
      *
      * @param array $initialStructure
      * @return array
+     * @since 2.1.4
      */
     public function modify(array $initialStructure)
     {
@@ -80,6 +83,7 @@ class PaymentSectionModifier
      * @param string $section
      * @param array $data
      * @return array
+     * @since 2.1.4
      */
     private function getMoveInstructions($section, $data)
     {

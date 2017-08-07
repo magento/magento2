@@ -53,6 +53,7 @@ class Reader
      * Found configuration files grouped by configuration types (filename).
      *
      * @var array
+     * @since 2.1.3
      */
     private $fileIterators = [];
 
@@ -102,6 +103,7 @@ class Reader
      * @param string $subDir
      *
      * @return FileIterator
+     * @since 2.1.3
      */
     private function getFilesIterator($filename, $subDir = '')
     {

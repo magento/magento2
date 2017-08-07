@@ -11,6 +11,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 
 /**
  * Class AccountLock
+ * @since 2.1.0
  */
 class AccountLock extends Column
 {
@@ -21,6 +22,7 @@ class AccountLock extends Column
      * @param UiComponentFactory $uiComponentFactory
      * @param array $components
      * @param array $data
+     * @since 2.1.0
      */
     public function __construct(
         ContextInterface $context,
@@ -36,6 +38,7 @@ class AccountLock extends Column
      *
      * @param array $dataSource
      * @return array
+     * @since 2.1.0
      */
     public function prepareDataSource(array $dataSource)
     {

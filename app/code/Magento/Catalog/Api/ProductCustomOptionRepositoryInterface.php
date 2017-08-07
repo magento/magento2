@@ -23,6 +23,7 @@ interface ProductCustomOptionRepositoryInterface
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param bool $requiredOnly
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface[]
+     * @since 2.1.0
      */
     public function getProductOptions(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -52,6 +53,7 @@ interface ProductCustomOptionRepositoryInterface
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param \Magento\Catalog\Api\Data\ProductInterface $duplicate
      * @return mixed
+     * @since 2.1.0
      */
     public function duplicate(
         \Magento\Catalog\Api\Data\ProductInterface $product,

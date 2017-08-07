@@ -12,6 +12,11 @@ use Magento\Framework\DB\Adapter\Pdo\MysqlFactory;
 use Magento\Framework\DB\SelectFactory;
 
 // @codingStandardsIgnoreStart
+
+/**
+ * Class \Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql
+ *
+ */
 class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements
     ConnectionAdapterInterface
 // @codingStandardsIgnoreEnd
@@ -23,6 +28,7 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements
 
     /**
      * @var MysqlFactory
+     * @since 2.2.0
      */
     private $mysqlFactory;
 

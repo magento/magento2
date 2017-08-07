@@ -25,6 +25,7 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
 
     /**
      * @var IndexerFactory
+     * @since 2.2.0
      */
     private $indexerFactory;
 
@@ -33,6 +34,7 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
      *
      * @param ObjectManagerFactory $objectManagerFactory
      * @param IndexerFactory|null $indexerFactory
+     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
@@ -105,7 +107,8 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
      * Get indexer factory
      *
      * @return IndexerFactory
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getIndexerFactory()
     {

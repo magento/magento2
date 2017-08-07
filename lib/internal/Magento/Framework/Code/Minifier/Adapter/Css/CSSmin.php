@@ -36,6 +36,7 @@ class CSSmin implements AdapterInterface
      * Get CSS Minifier
      *
      * @return CssMinLibrary
+     * @since 2.1.0
      */
     private function getCssMin()
     {

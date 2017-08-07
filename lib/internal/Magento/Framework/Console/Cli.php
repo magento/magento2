@@ -42,11 +42,7 @@ class Cli extends Console\Application
     const RETURN_FAILURE = 1;
     /**#@-*/
 
-    /**
-     * Service Manager.
-     *
-     * @var ServiceManager
-     */
+    /**#@-*/
     private $serviceManager;
 
     /**
@@ -60,6 +56,7 @@ class Cli extends Console\Application
      * Object Manager.
      *
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
@@ -157,6 +154,7 @@ class Cli extends Console\Application
      * Object Manager initialization.
      *
      * @return void
+     * @since 2.2.0
      */
     private function initObjectManager()
     {
@@ -179,6 +177,7 @@ class Cli extends Console\Application
      *
      * @return void
      * @throws GenerationDirectoryAccessException If generation directory is read-only in developer mode
+     * @since 2.2.0
      */
     private function assertGenerationPermissions()
     {
@@ -202,6 +201,7 @@ class Cli extends Console\Application
      *
      * @return void
      * @throws GenerationDirectoryAccessException If generation directory is read-only
+     * @since 2.2.0
      */
     private function assertCompilerPreparation()
     {

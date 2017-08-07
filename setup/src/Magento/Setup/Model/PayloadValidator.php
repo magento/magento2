@@ -8,16 +8,19 @@ namespace Magento\Setup\Model;
 
 /**
  * Validates payloads for updater tasks
+ * @since 2.1.0
  */
 class PayloadValidator
 {
     /**
      * @var \Magento\Framework\Module\FullModuleList
+     * @since 2.1.0
      */
     private $moduleList;
 
     /**
      * @param \Magento\Framework\Module\FullModuleList $moduleList
+     * @since 2.1.0
      */
     public function __construct(\Magento\Framework\Module\FullModuleList $moduleList)
     {
@@ -29,6 +32,7 @@ class PayloadValidator
      *
      * @param array $postPayload
      * @return string
+     * @since 2.1.0
      */
     public function validatePayload(array $postPayload)
     {
@@ -56,6 +60,7 @@ class PayloadValidator
      *
      * @param array $postPayload
      * @return string
+     * @since 2.1.0
      */
     private function validateUninstallPayload(array $postPayload)
     {
@@ -71,6 +76,7 @@ class PayloadValidator
      *
      * @param array $postPayload
      * @return string
+     * @since 2.1.0
      */
     private function validateUpdatePayload(array $postPayload)
     {
@@ -96,6 +102,7 @@ class PayloadValidator
      *
      * @param array $postPayload
      * @return string
+     * @since 2.1.0
      */
     private function validateEnableDisablePayload(array $postPayload)
     {

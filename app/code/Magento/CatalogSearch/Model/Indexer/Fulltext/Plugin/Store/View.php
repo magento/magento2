@@ -17,6 +17,7 @@ class View extends AbstractIndexerPlugin
 {
     /**
      * @var bool
+     * @since 2.2.0
      */
     private $needInvalidation;
 
@@ -28,6 +29,7 @@ class View extends AbstractIndexerPlugin
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function beforeSave(StoreResourceModel $subject, AbstractModel $store)
     {
@@ -42,6 +44,7 @@ class View extends AbstractIndexerPlugin
      * @return StoreResourceModel
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterSave(StoreResourceModel $subject, StoreResourceModel $result)
     {

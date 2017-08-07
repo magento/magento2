@@ -11,21 +11,25 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class SequenceFactory
+ * @since 2.1.0
  */
 class SequenceFactory
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.1.0
      */
     protected $objectManager;
 
     /**
      * @var SequenceRegistry
+     * @since 2.1.0
      */
     protected $sequenceRegistry;
 
     /**
      * @var string
+     * @since 2.1.0
      */
     protected $instanceName;
 
@@ -33,6 +37,7 @@ class SequenceFactory
      * @param SequenceRegistry $sequenceRegistry
      * @param ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.1.0
      */
     public function __construct(
         SequenceRegistry $sequenceRegistry,
@@ -50,6 +55,7 @@ class SequenceFactory
      * @param string $entityType
      * @param array $config
      * @return SequenceInterface
+     * @since 2.1.0
      */
     public function create($entityType, $config)
     {

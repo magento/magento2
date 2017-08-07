@@ -12,16 +12,19 @@ use Magento\Vault\Block\Customer\IconInterface;
 /**
  * Class AbstractTokenRenderer
  * @api
+ * @since 2.1.3
  */
 abstract class AbstractTokenRenderer extends Template implements TokenRendererInterface, IconInterface
 {
     /**
      * @var PaymentTokenInterface|null
+     * @since 2.1.3
      */
     private $token;
 
     /**
      * @var array|null
+     * @since 2.1.3
      */
     private $tokenDetails;
 
@@ -30,6 +33,7 @@ abstract class AbstractTokenRenderer extends Template implements TokenRendererIn
      *
      * @param PaymentTokenInterface $token
      * @return string
+     * @since 2.1.3
      */
     public function render(PaymentTokenInterface $token)
     {
@@ -40,6 +44,7 @@ abstract class AbstractTokenRenderer extends Template implements TokenRendererIn
 
     /**
      * @return PaymentTokenInterface|null
+     * @since 2.1.3
      */
     public function getToken()
     {
@@ -48,6 +53,7 @@ abstract class AbstractTokenRenderer extends Template implements TokenRendererIn
 
     /**
      * @return array|null
+     * @since 2.1.3
      */
     protected function getTokenDetails()
     {

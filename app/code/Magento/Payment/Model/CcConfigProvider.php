@@ -17,6 +17,7 @@ class CcConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var array
+     * @since 2.1.0
      */
     private $icons = [];
 

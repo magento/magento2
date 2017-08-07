@@ -10,16 +10,19 @@ namespace Magento\Setup\Module\Di\Code\Reader;
 
 /**
  * @SuppressWarnings(PHPMD)
+ * @since 2.0.8
  */
 class FileScanner extends \Zend\Code\Scanner\FileScanner
 {
     /**
      * @var int
+     * @since 2.0.8
      */
     private $tokenType;
 
     /**
      * {@inheritdoc}
+     * @since 2.0.8
      */
     protected function scan()
     {

@@ -111,6 +111,7 @@ class OrdersFixture extends Fixture
      * INSERT query templates.
      *
      * @var array
+     * @since 2.2.0
      */
     private $queryTemplates;
 
@@ -118,36 +119,43 @@ class OrdersFixture extends Fixture
      * Array of resource connections ordered by tables.
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface[]
+     * @since 2.2.0
      */
     private $resourceConnections;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @since 2.2.0
      */
     private $productCollectionFactory;
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @since 2.2.0
      */
     private $productRepository;
 
     /**
      * @var \Magento\ConfigurableProduct\Api\OptionRepositoryInterface
+     * @since 2.2.0
      */
     private $optionRepository;
 
     /**
      * @var \Magento\ConfigurableProduct\Api\LinkManagementInterface
+     * @since 2.2.0
      */
     private $linkManagement;
 
     /**
      * @var \Magento\Framework\Serialize\SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -155,6 +163,7 @@ class OrdersFixture extends Fixture
      * Flag specifies if inactive quotes should be generated for orders.
      *
      * @var bool
+     * @since 2.2.0
      */
     private $orderQuotesEnable = true;
 
@@ -166,6 +175,7 @@ class OrdersFixture extends Fixture
      * @param \Magento\ConfigurableProduct\Api\LinkManagementInterface $linkManagement
      * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @param FixtureModel $fixtureModel
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -462,6 +472,7 @@ class OrdersFixture extends Fixture
      * Additionally, in case if multiple DB connections are set up, transaction is started for each connection.
      *
      * @return void
+     * @since 2.2.0
      */
     private function prepareQueryTemplates()
     {
@@ -518,6 +529,7 @@ class OrdersFixture extends Fixture
      * @param string $table
      * @param array ...$replacements
      * @return void
+     * @since 2.2.0
      */
     protected function query($table, ... $replacements)
     {
@@ -542,6 +554,7 @@ class OrdersFixture extends Fixture
      * @param string $resourceName
      * @param string $column
      * @return int
+     * @since 2.2.0
      */
     private function getMaxEntityId($tableName, $resourceName, $column = 'entity_id')
     {
@@ -564,6 +577,7 @@ class OrdersFixture extends Fixture
      * @param int $limit
      * @return array
      * @throws \Exception
+     * @since 2.2.0
      */
     private function getProductIds(\Magento\Store\Api\Data\StoreInterface $store, $typeId, $limit = null)
     {
@@ -595,6 +609,7 @@ class OrdersFixture extends Fixture
      *
      * @param array $productIds
      * @return array
+     * @since 2.2.0
      */
     private function prepareSimpleProducts(array $productIds = [])
     {
@@ -623,6 +638,7 @@ class OrdersFixture extends Fixture
      *
      * @param array $productIds
      * @return array
+     * @since 2.2.0
      */
     private function prepareConfigurableProducts(array $productIds = [])
     {
@@ -699,6 +715,7 @@ class OrdersFixture extends Fixture
      * Many transactions may exist, since generation process creates a transaction per each available DB connection.
      *
      * @return void
+     * @since 2.2.0
      */
     private function commitBatch()
     {
@@ -750,6 +767,7 @@ class OrdersFixture extends Fixture
      * @param int $requestedOrders
      * @param int $maxItemsPerOrder
      * @return \Generator
+     * @since 2.2.0
      */
     private function getItemIdSequence($maxItemId, $requestedOrders, $maxItemsPerOrder)
     {

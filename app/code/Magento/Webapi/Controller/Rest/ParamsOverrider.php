@@ -23,6 +23,7 @@ class ParamsOverrider
 
     /**
      * @var MethodsMap
+     * @since 2.1.0
      */
     private $methodsMap;
 
@@ -121,6 +122,7 @@ class ParamsOverrider
      * @param string $serviceClassName name of the service class that we are trying to call
      * @param string $serviceMethodName name of the method that we are trying to call
      * @return array
+     * @since 2.1.0
      */
     public function overrideRequestBodyIdWithPathParam(
         array $urlPathParams,
@@ -164,6 +166,7 @@ class ParamsOverrider
      * @param string $key
      * @param string $value
      * @return void
+     * @since 2.1.0
      */
     private function substituteParameters(array &$requestData, $key, $value)
     {
@@ -185,6 +188,7 @@ class ParamsOverrider
      * @param string $serviceMethodParamName
      * @param string $objectProperty
      * @return bool
+     * @since 2.1.0
      */
     private function isPropertyDeclaredInDataObject(
         $serviceClassName,
@@ -214,7 +218,8 @@ class ParamsOverrider
      *
      * @return \Magento\Framework\Reflection\MethodsMap
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getMethodsMap()
     {

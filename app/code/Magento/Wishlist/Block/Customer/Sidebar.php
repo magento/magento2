@@ -35,6 +35,7 @@ class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
      * @param string $renderZone
      * @param array $arguments
      * @return string
+     * @since 2.1.0
      */
     public function getProductPriceHtml(
         Product $product,
@@ -60,6 +61,7 @@ class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
      * Get price render block
      *
      * @return Render
+     * @since 2.1.0
      */
     private function getPriceRender()
     {

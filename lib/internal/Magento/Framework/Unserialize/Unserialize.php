@@ -10,7 +10,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Serialize;
 
 /**
- * @deprecated
+ * @deprecated 2.2.0
  */
 class Unserialize
 {
@@ -18,11 +18,13 @@ class Unserialize
      * Serializer for safe string unserialization.
      *
      * @var Serialize
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @param Serialize|null $serializer Optional parameter for backward compatibility.
+     * @since 2.2.0
      */
     public function __construct(Serialize $serializer = null)
     {

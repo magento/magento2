@@ -10,26 +10,31 @@ use Magento\Sales\Api\Data\InvoiceItemCreationInterface;
 
 /**
  * Class LineItem
+ * @since 2.1.2
  */
 class ItemCreation implements InvoiceItemCreationInterface
 {
     /**
      * @var int
+     * @since 2.1.2
      */
     private $orderItemId;
 
     /**
      * @var float
+     * @since 2.1.2
      */
     private $qty;
 
     /**
      * @var \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface
+     * @since 2.1.2
      */
     private $extensionAttributes;
 
     /**
      * {@inheritdoc}
+     * @since 2.1.2
      */
     public function getOrderItemId()
     {
@@ -38,6 +43,7 @@ class ItemCreation implements InvoiceItemCreationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.2
      */
     public function setOrderItemId($orderItemId)
     {
@@ -46,6 +52,7 @@ class ItemCreation implements InvoiceItemCreationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.2
      */
     public function getQty()
     {
@@ -54,6 +61,7 @@ class ItemCreation implements InvoiceItemCreationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.2
      */
     public function setQty($qty)
     {
@@ -64,6 +72,7 @@ class ItemCreation implements InvoiceItemCreationInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface|null
+     * @since 2.1.2
      */
     public function getExtensionAttributes()
     {
@@ -75,6 +84,7 @@ class ItemCreation implements InvoiceItemCreationInterface
      *
      * @param \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.1.2
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface $extensionAttributes

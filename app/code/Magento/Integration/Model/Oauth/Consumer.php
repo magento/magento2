@@ -46,6 +46,7 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.0.6
      */
     private $_dateHelper;
 
@@ -91,7 +92,8 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
      *
      * @return \Magento\Framework\Stdlib\DateTime\DateTime
      *
-     * @deprecated
+     * @deprecated 2.0.6
+     * @since 2.0.6
      */
     private function getDateHelper()
     {

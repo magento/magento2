@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Mview\View;
 
+/**
+ * Class \Magento\Framework\Mview\View\SubscriptionFactory
+ *
+ */
 class SubscriptionFactory extends AbstractFactory
 {
     /**
@@ -15,6 +19,7 @@ class SubscriptionFactory extends AbstractFactory
     /**
      * @param array $data
      * @return SubscriptionInterface
+     * @since 2.1.0
      */
     public function create(array $data = [])
     {

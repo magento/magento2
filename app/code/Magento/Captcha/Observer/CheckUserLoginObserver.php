@@ -49,6 +49,7 @@ class CheckUserLoginObserver implements ObserverInterface
 
     /**
      * @var CustomerRepositoryInterface
+     * @since 2.1.0
      */
     protected $customerRepository;
 
@@ -56,6 +57,7 @@ class CheckUserLoginObserver implements ObserverInterface
      * Authentication
      *
      * @var AuthenticationInterface
+     * @since 2.1.0
      */
     protected $authentication;
 
@@ -87,6 +89,7 @@ class CheckUserLoginObserver implements ObserverInterface
      * Get customer repository
      *
      * @return \Magento\Customer\Api\CustomerRepositoryInterface
+     * @since 2.1.0
      */
     private function getCustomerRepository()
     {
@@ -104,6 +107,7 @@ class CheckUserLoginObserver implements ObserverInterface
      * Get authentication
      *
      * @return AuthenticationInterface
+     * @since 2.1.0
      */
     private function getAuthentication()
     {

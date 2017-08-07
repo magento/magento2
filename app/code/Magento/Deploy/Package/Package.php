@@ -11,76 +11,91 @@ use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
 
 /**
  * Deployment Package
+ * @since 2.2.0
  */
 class Package
 {
     /**
      * @var PackagePool
+     * @since 2.2.0
      */
     private $packagePool;
 
     /**
      * @var FileNameResolver
+     * @since 2.2.0
      */
     private $fileNameResolver;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $area;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $theme;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $locale;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $isVirtual;
 
     /**
      * @var ProcessorInterface[]
+     * @since 2.2.0
      */
     private $preProcessors;
 
     /**
      * @var ProcessorInterface[]
+     * @since 2.2.0
      */
     private $postProcessors;
 
     /**
      * @var PackageFile[]
+     * @since 2.2.0
      */
     private $files = [];
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $map = [];
 
     /**
      * @var Package
+     * @since 2.2.0
      */
     private $parent;
 
     /**
      * @var Package[]
+     * @since 2.2.0
      */
     private $parentPackages;
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $state;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $params = [];
 
@@ -111,6 +126,7 @@ class Package
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $packageDefaultValues = [
         'area' => self::BASE_AREA,
@@ -128,6 +144,7 @@ class Package
      * @param ProcessorInterface[] $preProcessors
      * @param ProcessorInterface[] $postProcessors
      * @internal param string $type
+     * @since 2.2.0
      */
     public function __construct(
         PackagePool $packagePool,
@@ -151,6 +168,7 @@ class Package
 
     /**
      * @return string
+     * @since 2.2.0
      */
     public function getArea()
     {
@@ -159,6 +177,7 @@ class Package
 
     /**
      * @return Package
+     * @since 2.2.0
      */
     public function getParent()
     {
@@ -167,6 +186,7 @@ class Package
 
     /**
      * @return string
+     * @since 2.2.0
      */
     public function getTheme()
     {
@@ -175,6 +195,7 @@ class Package
 
     /**
      * @return string
+     * @since 2.2.0
      */
     public function getLocale()
     {
@@ -185,6 +206,7 @@ class Package
      * Retrieve package path
      *
      * @return string
+     * @since 2.2.0
      */
     public function getPath()
     {
@@ -197,6 +219,7 @@ class Package
      * Package considered as "virtual" when not all of the scope identifiers defined (area, theme, locale)
      *
      * @return string
+     * @since 2.2.0
      */
     public function isVirtual()
     {
@@ -206,6 +229,7 @@ class Package
     /**
      * @param string $name
      * @return mixed|null
+     * @since 2.2.0
      */
     public function getParam($name)
     {
@@ -216,6 +240,7 @@ class Package
      * @param string $name
      * @param mixed $value
      * @return bool
+     * @since 2.2.0
      */
     public function setParam($name, $value)
     {
@@ -227,6 +252,7 @@ class Package
      * Retrieve theme model
      *
      * @return ThemeInterface|null
+     * @since 2.2.0
      */
     public function getThemeModel()
     {
@@ -238,6 +264,7 @@ class Package
      *
      * @param string $fileId
      * @return bool|PackageFile
+     * @since 2.2.0
      */
     public function getFile($fileId)
     {
@@ -249,6 +276,7 @@ class Package
      *
      * @param PackageFile $file
      * @return string
+     * @since 2.2.0
      */
     public function addFile(PackageFile $file)
     {
@@ -270,6 +298,7 @@ class Package
      *
      * @param PackageFile $file
      * @return void
+     * @since 2.2.0
      */
     public function addFileToMap(PackageFile $file)
     {
@@ -285,6 +314,7 @@ class Package
      * Retrieve all files
      *
      * @return PackageFile[]
+     * @since 2.2.0
      */
     public function getFiles()
     {
@@ -296,6 +326,7 @@ class Package
      *
      * @param string $type
      * @return array
+     * @since 2.2.0
      */
     public function getFilesByType($type)
     {
@@ -317,6 +348,7 @@ class Package
      *
      * @param string $fileId
      * @return void
+     * @since 2.2.0
      */
     public function deleteFile($fileId)
     {
@@ -330,6 +362,7 @@ class Package
      *
      * @param Package $parentPackage
      * @return bool true on success
+     * @since 2.2.0
      */
     public function aggregate(Package $parentPackage = null)
     {
@@ -350,6 +383,7 @@ class Package
     /**
      * @param Package $parent
      * @return bool
+     * @since 2.2.0
      */
     public function setParent($parent)
     {
@@ -361,6 +395,7 @@ class Package
      * Retrieve map
      *
      * @return array
+     * @since 2.2.0
      */
     public function getMap()
     {
@@ -369,6 +404,7 @@ class Package
 
     /**
      * @return int
+     * @since 2.2.0
      */
     public function getState()
     {
@@ -378,6 +414,7 @@ class Package
     /**
      * @param int $state
      * @return bool
+     * @since 2.2.0
      */
     public function setState($state)
     {
@@ -387,6 +424,7 @@ class Package
 
     /**
      * @return int
+     * @since 2.2.0
      */
     public function getInheritanceLevel()
     {
@@ -405,6 +443,7 @@ class Package
      * Retrieve inherited package map
      *
      * @return array
+     * @since 2.2.0
      */
     public function getResultMap()
     {
@@ -417,6 +456,7 @@ class Package
      * Retrieve parent map
      *
      * @return array
+     * @since 2.2.0
      */
     public function getParentMap()
     {
@@ -432,6 +472,7 @@ class Package
      *
      * @param string|null $type
      * @return PackageFile[]
+     * @since 2.2.0
      */
     public function getParentFiles($type = null)
     {
@@ -450,6 +491,7 @@ class Package
      * Retrieve parent packages list
      *
      * @return Package[]
+     * @since 2.2.0
      */
     public function getParentPackages()
     {
@@ -478,6 +520,7 @@ class Package
 
     /**
      * @return Processor\ProcessorInterface[]
+     * @since 2.2.0
      */
     public function getPreProcessors()
     {
@@ -486,6 +529,7 @@ class Package
 
     /**
      * @return Processor\ProcessorInterface[]
+     * @since 2.2.0
      */
     public function getPostProcessors()
     {
@@ -502,6 +546,7 @@ class Package
      * @param array $result
      * @param ThemeInterface|null $themeModel
      * @return void
+     * @since 2.2.0
      */
     private function collectParentPaths(
         Package $package,

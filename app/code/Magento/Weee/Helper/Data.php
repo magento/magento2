@@ -40,9 +40,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**#@-*/
 
-    /**
-     * @var array
-     */
+    /**#@-*/
     protected $_storeDisplayConfig = [];
 
     /**
@@ -81,6 +79,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -725,6 +724,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  \Magento\Quote\Model\Quote\Item\AbstractItem[] $items
      * @param  null|string|bool|int|Store $store
      * @return float
+     * @since 2.1.0
      */
     public function getBaseTotalAmounts($items, $store = null)
     {

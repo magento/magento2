@@ -14,21 +14,25 @@ use Magento\Store\Model\ScopeInterface;
  * Plugin that checks if checkout agreement enabled and validates all agreements.
  * Current plugin is duplicate from Magento\CheckoutAgreements\Model\Checkout\Plugin\Validation due to different
  * interfaces of payment information and makes check before processing of payment information.
+ * @since 2.2.0
  */
 class GuestValidation
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.2.0
      */
     private $scopeConfiguration;
 
     /**
      * @var \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface
+     * @since 2.2.0
      */
     private $checkoutAgreementsRepository;
 
     /**
      * @var \Magento\Checkout\Api\AgreementsValidatorInterface
+     * @since 2.2.0
      */
     private $agreementsValidator;
 
@@ -36,6 +40,7 @@ class GuestValidation
      * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementsValidator
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration
      * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Checkout\Api\AgreementsValidatorInterface $agreementsValidator,
@@ -55,6 +60,7 @@ class GuestValidation
      * @param \Magento\Quote\Api\Data\AddressInterface|null $billingAddress
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function beforeSavePaymentInformationAndPlaceOrder(
         \Magento\Checkout\Api\GuestPaymentInformationManagementInterface $subject,
@@ -76,6 +82,7 @@ class GuestValidation
      * @param \Magento\Quote\Api\Data\AddressInterface|null $billingAddress
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function beforeSavePaymentInformation(
         \Magento\Checkout\Api\GuestPaymentInformationManagementInterface $subject,
@@ -93,6 +100,7 @@ class GuestValidation
      * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return void
+     * @since 2.2.0
      */
     private function validateAgreements(\Magento\Quote\Api\Data\PaymentInterface $paymentMethod)
     {
@@ -110,6 +118,7 @@ class GuestValidation
     /**
      * Verify if agreement validation needed
      * @return bool
+     * @since 2.2.0
      */
     private function isAgreementEnabled()
     {

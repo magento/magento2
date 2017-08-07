@@ -50,6 +50,7 @@ abstract class Fixture
      *
      * @param OutputInterface $output
      * @return void
+     * @since 2.2.0
      */
     public function printInfo(OutputInterface $output)
     {

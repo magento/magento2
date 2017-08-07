@@ -140,6 +140,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      *
      * @return \Magento\Tax\Api\Data\AppliedTaxRateInterface[]
+     * @since 2.1.0
      */
     public function getRates()
     {
@@ -150,6 +151,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param \Magento\Tax\Api\Data\AppliedTaxRateInterface[] $rates
      * @return $this
+     * @since 2.1.0
      */
     public function setRates($rates)
     {

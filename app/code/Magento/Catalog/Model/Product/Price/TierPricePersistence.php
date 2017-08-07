@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\Product\Price;
 
 /**
  * Persists tier prices.
+ * @since 2.2.0
  */
 class TierPricePersistence
 {
@@ -15,6 +16,7 @@ class TierPricePersistence
      * Number or items per each operation.
      *
      * @var int
+     * @since 2.2.0
      */
     private $itemsPerOperation = 500;
 
@@ -22,6 +24,7 @@ class TierPricePersistence
      * Tier price resource model.
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice
+     * @since 2.2.0
      */
     private $tierpriceResource;
 
@@ -29,6 +32,7 @@ class TierPricePersistence
      * Metadata pool.
      *
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.2.0
      */
     private $metadataPool;
 
@@ -37,6 +41,7 @@ class TierPricePersistence
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice $tierpriceResource
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice $tierpriceResource,
@@ -51,6 +56,7 @@ class TierPricePersistence
      *
      * @param array $ids
      * @return array
+     * @since 2.2.0
      */
     public function get(array $ids)
     {
@@ -66,6 +72,7 @@ class TierPricePersistence
      * @param array $prices
      * @return void
      * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @since 2.2.0
      */
     public function update(array $prices)
     {
@@ -96,6 +103,7 @@ class TierPricePersistence
      * @param array $ids
      * @return void
      * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @since 2.2.0
      */
     public function replace(array $prices, array $ids)
     {
@@ -131,6 +139,7 @@ class TierPricePersistence
      * @param array $ids
      * @return void
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @since 2.2.0
      */
     public function delete(array $ids)
     {
@@ -157,6 +166,7 @@ class TierPricePersistence
      * Get link field.
      *
      * @return string
+     * @since 2.2.0
      */
     public function getEntityLinkField()
     {

@@ -9,6 +9,10 @@ use Magento\Quote\Api\Data\TotalSegmentExtensionFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\Tax\Model\Quote\GrandTotalDetailsPlugin
+ *
+ */
 class GrandTotalDetailsPlugin
 {
     /**
@@ -38,6 +42,7 @@ class GrandTotalDetailsPlugin
 
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -88,6 +93,7 @@ class GrandTotalDetailsPlugin
      * @return \Magento\Quote\Api\Data\TotalSegmentInterface[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.2.0
      */
     public function afterProcess(
         \Magento\Quote\Model\Cart\TotalsConverter $subject,

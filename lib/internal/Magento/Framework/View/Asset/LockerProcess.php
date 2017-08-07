@@ -44,6 +44,7 @@ class LockerProcess implements LockerProcessInterface
 
     /**
      * @var State
+     * @since 2.1.1
      */
     private $state;
 
@@ -127,7 +128,8 @@ class LockerProcess implements LockerProcessInterface
 
     /**
      * @return State
-     * @deprecated
+     * @deprecated 2.1.1
+     * @since 2.1.1
      */
     private function getState()
     {

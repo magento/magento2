@@ -9,6 +9,7 @@ use Magento\Framework\DataObject;
 
 /**
  * Encapsulates output of shell command
+ * @since 2.1.0
  */
 class Response extends DataObject
 {
@@ -17,6 +18,7 @@ class Response extends DataObject
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.1.0
      */
     public function getOutput()
     {
@@ -28,6 +30,7 @@ class Response extends DataObject
      *
      * @return int
      * @codeCoverageIgnore
+     * @since 2.1.0
      */
     public function getExitCode()
     {
@@ -39,6 +42,7 @@ class Response extends DataObject
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.1.0
      */
     public function getEscapedCommand()
     {

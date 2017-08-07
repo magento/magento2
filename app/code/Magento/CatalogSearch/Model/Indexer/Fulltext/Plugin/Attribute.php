@@ -7,6 +7,10 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 
+/**
+ * Class \Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute
+ *
+ */
 class Attribute extends AbstractPlugin
 {
     /**
@@ -16,16 +20,19 @@ class Attribute extends AbstractPlugin
 
     /**
      * @var boolean
+     * @since 2.2.0
      */
     private $deleteNeedInvalidation;
 
     /**
      * @var boolean
+     * @since 2.2.0
      */
     private $saveNeedInvalidation;
 
     /**
      * @var boolean
+     * @since 2.2.0
      */
     private $saveIsNew;
 
@@ -49,6 +56,7 @@ class Attribute extends AbstractPlugin
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function beforeSave(
         \Magento\Catalog\Model\ResourceModel\Attribute $subject,
@@ -70,6 +78,7 @@ class Attribute extends AbstractPlugin
      *
      * @return \Magento\Catalog\Model\ResourceModel\Attribute
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterSave(
         \Magento\Catalog\Model\ResourceModel\Attribute $subject,
@@ -93,6 +102,7 @@ class Attribute extends AbstractPlugin
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function beforeDelete(
         \Magento\Catalog\Model\ResourceModel\Attribute $subject,
@@ -109,6 +119,7 @@ class Attribute extends AbstractPlugin
      *
      * @return \Magento\Catalog\Model\ResourceModel\Attribute
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterDelete(
         \Magento\Catalog\Model\ResourceModel\Attribute $subject,

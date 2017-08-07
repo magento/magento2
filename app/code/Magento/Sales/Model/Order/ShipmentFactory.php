@@ -40,6 +40,7 @@ class ShipmentFactory
      * Serializer
      *
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -232,6 +233,7 @@ class ShipmentFactory
      * @param Item $item
      * @param string|int|float $qty
      * @return float|int
+     * @since 2.1.2
      */
     private function castQty(\Magento\Sales\Model\Order\Item $item, $qty)
     {

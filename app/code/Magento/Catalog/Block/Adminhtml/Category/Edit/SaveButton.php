@@ -10,6 +10,7 @@ use Magento\Catalog\Block\Adminhtml\Category\AbstractCategory;
 
 /**
  * Class SaveButton
+ * @since 2.1.0
  */
 class SaveButton extends AbstractCategory implements ButtonProviderInterface
 {
@@ -17,6 +18,7 @@ class SaveButton extends AbstractCategory implements ButtonProviderInterface
      * Save button
      *
      * @return array
+     * @since 2.1.0
      */
     public function getButtonData()
     {

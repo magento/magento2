@@ -10,6 +10,10 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 
+/**
+ * Class \Magento\Catalog\Cron\RefreshSpecialPrices
+ *
+ */
 class RefreshSpecialPrices
 {
     /**
@@ -49,6 +53,7 @@ class RefreshSpecialPrices
 
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     private $metadataPool;
 
@@ -175,7 +180,8 @@ class RefreshSpecialPrices
      * Get MetadataPool instance
      * @return MetadataPool
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {

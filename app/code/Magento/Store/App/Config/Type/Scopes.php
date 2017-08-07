@@ -12,6 +12,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Merge and hold scopes data from different sources
+ * @since 2.1.3
  */
 class Scopes implements ConfigTypeInterface
 {
@@ -19,11 +20,13 @@ class Scopes implements ConfigTypeInterface
 
     /**
      * @var ConfigSourceInterface
+     * @since 2.1.3
      */
     private $source;
 
     /**
      * @var DataObject[]
+     * @since 2.1.3
      */
     private $data;
 
@@ -31,6 +34,7 @@ class Scopes implements ConfigTypeInterface
      * Map between scope id and scope code
      *
      * @var array
+     * @since 2.2.0
      */
     private $idCodeMap = [];
 
@@ -39,6 +43,7 @@ class Scopes implements ConfigTypeInterface
      * Used for map id to code, e.g. websites/0 to websites/admin
      *
      * @var array
+     * @since 2.2.0
      */
     private $scopeIdField = [
         ScopeInterface::SCOPE_WEBSITES => 'website_id',
@@ -47,6 +52,7 @@ class Scopes implements ConfigTypeInterface
 
     /**
      * @param ConfigSourceInterface $source
+     * @since 2.1.3
      */
     public function __construct(
         ConfigSourceInterface $source
@@ -56,6 +62,7 @@ class Scopes implements ConfigTypeInterface
 
     /**
      * @inheritdoc
+     * @since 2.1.3
      */
     public function get($path = '')
     {
@@ -81,6 +88,7 @@ class Scopes implements ConfigTypeInterface
      *
      * @param array $patchChunks
      * @return string
+     * @since 2.2.0
      */
     private function convertIdPathToCodePath(array $patchChunks)
     {
@@ -110,6 +118,7 @@ class Scopes implements ConfigTypeInterface
      * Clean cache
      *
      * @return void
+     * @since 2.1.3
      */
     public function clean()
     {

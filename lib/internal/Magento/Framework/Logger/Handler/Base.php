@@ -11,6 +11,10 @@ use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
+/**
+ * Class \Magento\Framework\Logger\Handler\Base
+ *
+ */
 class Base extends StreamHandler
 {
     /**
@@ -55,6 +59,7 @@ class Base extends StreamHandler
      *
      * @return string
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     private function sanitizeFileName($fileName)
     {
@@ -71,7 +76,7 @@ class Base extends StreamHandler
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritDoc}
      *
      * @param $record array
      *

@@ -10,6 +10,7 @@ use \Magento\Store\Model\Store;
 
 /**
  * Adds an Strict-Transport-Security (HSTS) header to HTTP responses.
+ * @since 2.1.0
  */
 class Hsts extends \Magento\Framework\App\Response\HeaderProvider\AbstractHeaderProvider
 {
@@ -17,6 +18,7 @@ class Hsts extends \Magento\Framework\App\Response\HeaderProvider\AbstractHeader
      * Strict-Transport-Security (HSTS) Header name
      *
      * @var string
+     * @since 2.1.0
      */
     protected $headerName = 'Strict-Transport-Security';
 
@@ -24,16 +26,19 @@ class Hsts extends \Magento\Framework\App\Response\HeaderProvider\AbstractHeader
      * Strict-Transport-Security (HSTS) header value
      *
      * @var string
+     * @since 2.1.0
      */
     protected $headerValue = 'max-age=31536000';
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.1.0
      */
     protected $scopeConfig;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @since 2.1.0
      */
     public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
     {
@@ -42,6 +47,7 @@ class Hsts extends \Magento\Framework\App\Response\HeaderProvider\AbstractHeader
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function canApply()
     {

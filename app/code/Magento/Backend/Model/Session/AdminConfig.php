@@ -111,6 +111,7 @@ class AdminConfig extends Config
      * Set session cookie lifetime to session duration
      *
      * @return $this
+     * @since 2.1.0
      */
     protected function configureCookieLifetime()
     {

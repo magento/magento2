@@ -41,6 +41,7 @@ class Definition
 
     /**
      * @var \Magento\Framework\Serialize\SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -114,7 +115,8 @@ class Definition
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getSerializer()
     {

@@ -38,6 +38,7 @@ class Minification
 
     /**
      * @var array
+     * @since 2.1.1
      */
     private $configCache = [];
 

@@ -9,6 +9,10 @@ namespace Magento\Framework\Acl\AclResource;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * Class \Magento\Framework\Acl\AclResource\Provider
+ *
+ */
 class Provider implements ProviderInterface
 {
     /**
@@ -28,16 +32,19 @@ class Provider implements ProviderInterface
 
     /**
      * @var \Magento\Framework\Acl\Data\CacheInterface
+     * @since 2.2.0
      */
     private $aclDataCache;
 
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $cacheKey;
 

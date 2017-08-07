@@ -18,6 +18,7 @@ class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
 {
     /**
      * @var State
+     * @since 2.2.0
      */
     private $state;
 
@@ -41,6 +42,7 @@ class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
      * Enable cache
      *
      * @return void
+     * @since 2.2.0
      */
     private function enableCache()
     {
@@ -72,7 +74,8 @@ class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
      * Get State Instance
      *
      * @return State
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getState()
     {

@@ -7,6 +7,7 @@ namespace Magento\Framework\DB\Query;
 
 /**
  * Batch Iterator interface
+ * @since 2.2.0
  */
 interface BatchIteratorInterface extends \Iterator
 {
@@ -28,6 +29,7 @@ interface BatchIteratorInterface extends \Iterator
      * If we don't have sub-select we should create and remember it.
      *
      * @return \Magento\Framework\DB\Select
+     * @since 2.2.0
      */
     public function current();
 
@@ -37,6 +39,7 @@ interface BatchIteratorInterface extends \Iterator
      * Сan return the number of the current sub-select in the iteration.
      *
      * @return int
+     * @since 2.2.0
      */
     public function key();
 
@@ -47,6 +50,7 @@ interface BatchIteratorInterface extends \Iterator
      * Checks that the count of elements more than the sum of limit and offset.
      *
      * @return \Magento\Framework\DB\Select
+     * @since 2.2.0
      */
     public function next();
 
@@ -56,6 +60,7 @@ interface BatchIteratorInterface extends \Iterator
      * Allows to start iteration from the beginning.
      *
      * @return void
+     * @since 2.2.0
      */
     public function rewind();
 
@@ -63,6 +68,7 @@ interface BatchIteratorInterface extends \Iterator
      * Checks if current position is valid
      *
      * @return bool
+     * @since 2.2.0
      */
     public function valid();
 }

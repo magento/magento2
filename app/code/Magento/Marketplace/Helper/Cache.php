@@ -28,6 +28,7 @@ class Cache extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 

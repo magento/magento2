@@ -9,6 +9,10 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\Captcha\Observer\CheckContactUsFormObserver
+ *
+ */
 class CheckContactUsFormObserver implements ObserverInterface
 {
     /**
@@ -38,6 +42,7 @@ class CheckContactUsFormObserver implements ObserverInterface
 
     /**
      * @var DataPersistorInterface
+     * @since 2.1.0
      */
     private $dataPersistor;
 
@@ -88,6 +93,7 @@ class CheckContactUsFormObserver implements ObserverInterface
      * Get Data Persistor
      *
      * @return DataPersistorInterface
+     * @since 2.1.0
      */
     private function getDataPersistor()
     {

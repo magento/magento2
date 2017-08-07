@@ -141,7 +141,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Instance of database adapter.
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @deprecated
+     * @deprecated 2.2.0
      */
     protected $_connection;
 
@@ -191,6 +191,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Product entity identifier field
      *
      * @var string
+     * @since 2.1.0
      */
     private $productEntityIdentifierField;
 
@@ -848,6 +849,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Get product entity identifier field
      *
      * @return string
+     * @since 2.1.0
      */
     private function getProductEntityIdentifierField()
     {

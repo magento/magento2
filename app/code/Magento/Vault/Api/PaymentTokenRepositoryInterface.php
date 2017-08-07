@@ -9,6 +9,7 @@ namespace Magento\Vault\Api;
  * Gateway vault payment token repository interface.
  *
  * @api
+ * @since 2.1.0
  */
 interface PaymentTokenRepositoryInterface
 {
@@ -17,6 +18,7 @@ interface PaymentTokenRepositoryInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
      * @return \Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface Payment token search result interface.
+     * @since 2.1.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -25,6 +27,7 @@ interface PaymentTokenRepositoryInterface
      *
      * @param int $entityId The payment token entity ID.
      * @return \Magento\Vault\Api\Data\PaymentTokenInterface Payment token interface.
+     * @since 2.1.0
      */
     public function getById($entityId);
 
@@ -33,6 +36,7 @@ interface PaymentTokenRepositoryInterface
      *
      * @param \Magento\Vault\Api\Data\PaymentTokenInterface $paymentToken The invoice.
      * @return bool
+     * @since 2.1.0
      */
     public function delete(Data\PaymentTokenInterface $paymentToken);
 
@@ -41,6 +45,7 @@ interface PaymentTokenRepositoryInterface
      *
      * @param \Magento\Vault\Api\Data\PaymentTokenInterface $paymentToken The payment token.
      * @return \Magento\Vault\Api\Data\PaymentTokenInterface Payment token interface.
+     * @since 2.1.0
      */
     public function save(Data\PaymentTokenInterface $paymentToken);
 }

@@ -637,6 +637,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * @param string|int|float|\Magento\Framework\Phrase $value
      * @param string $publicKey
      * @return string
+     * @since 2.2.0
      */
     private function formatValue($value, $publicKey)
     {

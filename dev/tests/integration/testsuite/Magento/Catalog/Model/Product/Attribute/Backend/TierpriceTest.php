@@ -12,7 +12,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
  *
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
  */
-class TierpriceTest extends \PHPUnit_Framework_TestCase
+class TierpriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool

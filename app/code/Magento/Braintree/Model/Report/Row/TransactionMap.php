@@ -12,6 +12,7 @@ use Magento\Framework\Api\Search\DocumentInterface;
 
 /**
  * Class TransactionMap
+ * @since 2.1.0
  */
 class TransactionMap implements DocumentInterface
 {
@@ -19,16 +20,19 @@ class TransactionMap implements DocumentInterface
 
     /**
      * @var AttributeValueFactory
+     * @since 2.1.0
      */
     private $attributeValueFactory;
 
     /**
      * @var Transaction
+     * @since 2.1.0
      */
     private $transaction;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     public static $simpleFieldsMap = [
         'id',
@@ -50,6 +54,7 @@ class TransactionMap implements DocumentInterface
     /**
      * @param AttributeValueFactory $attributeValueFactory
      * @param Transaction $transaction
+     * @since 2.1.0
      */
     public function __construct(
         AttributeValueFactory $attributeValueFactory,
@@ -63,6 +68,7 @@ class TransactionMap implements DocumentInterface
      * Get Id
      *
      * @return string
+     * @since 2.1.0
      */
     public function getId()
     {
@@ -75,6 +81,7 @@ class TransactionMap implements DocumentInterface
      * @param int $id
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function setId($id)
     {
@@ -85,6 +92,7 @@ class TransactionMap implements DocumentInterface
      *
      * @param string $attributeCode
      * @return \Magento\Framework\Api\AttributeInterface|null
+     * @since 2.1.0
      */
     public function getCustomAttribute($attributeCode)
     {
@@ -102,6 +110,7 @@ class TransactionMap implements DocumentInterface
      * @param mixed $attributeValue
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function setCustomAttribute($attributeCode, $attributeValue)
     {
@@ -112,6 +121,7 @@ class TransactionMap implements DocumentInterface
      * Retrieve custom attributes values.
      *
      * @return \Magento\Framework\Api\AttributeInterface[]|null
+     * @since 2.1.0
      */
     public function getCustomAttributes()
     {
@@ -134,6 +144,7 @@ class TransactionMap implements DocumentInterface
      * @return $this
      * @throws \LogicException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function setCustomAttributes(array $attributes)
     {
@@ -145,6 +156,7 @@ class TransactionMap implements DocumentInterface
      *
      * @param string $key
      * @return mixed
+     * @since 2.1.0
      */
     private function getMappedValue($key)
     {
@@ -159,6 +171,7 @@ class TransactionMap implements DocumentInterface
 
     /**
      * @return array
+     * @since 2.1.0
      */
     private function getMappedValues()
     {
@@ -178,6 +191,7 @@ class TransactionMap implements DocumentInterface
      *
      * @param string $key
      * @return Transaction|mixed|null
+     * @since 2.1.0
      */
     private function getTransactionFieldValue($key)
     {
@@ -198,6 +212,7 @@ class TransactionMap implements DocumentInterface
      *
      * @param string $val
      * @return string
+     * @since 2.1.0
      */
     private function convertToText($val)
     {

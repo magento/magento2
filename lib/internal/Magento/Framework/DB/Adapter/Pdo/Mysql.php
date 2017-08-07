@@ -27,6 +27,7 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils;
 
 // @codingStandardsIgnoreStart
+
 /**
  * MySQL database adapter
  *
@@ -189,6 +190,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
     /**
      * @var SelectFactory
+     * @since 2.1.0
      */
     protected $selectFactory;
 
@@ -201,16 +203,19 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Map that links database error code to corresponding Magento exception
      *
      * @var \Zend_Db_Adapter_Exception[]
+     * @since 2.2.0
      */
     private $exceptionMap;
 
     /**
      * @var QueryGenerator
+     * @since 2.1.3
      */
     private $queryGenerator;
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -591,7 +596,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
      * @throws LocalizedException In case multiple queries are attempted at once, to protect from SQL injection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @deprecated
+     * @deprecated 2.2.0
      */
     public function multiQuery($sql, $bind = [])
     {
@@ -758,7 +763,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @deprecated
+     * @deprecated 2.1.2
      */
     protected function _splitMultiQuery($sql)
     {
@@ -3394,6 +3399,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $table
      * @param array $fields
      * @return string
+     * @since 2.2.0
      */
     private function renderOnDuplicate($table, array $fields)
     {
@@ -3421,7 +3427,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param int $stepCount
      * @return \Magento\Framework\DB\Select[]
      * @throws LocalizedException
-     * @deprecated
+     * @deprecated 2.1.3
      */
     public function selectsByRange($rangeField, \Magento\Framework\DB\Select $select, $stepCount = 100)
     {
@@ -3437,7 +3443,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Get query generator
      *
      * @return QueryGenerator
-     * @deprecated
+     * @deprecated 2.1.3
+     * @since 2.1.3
      */
     private function getQueryGenerator()
     {
@@ -3660,6 +3667,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param array $columns
      * @param array $values
      * @return string
+     * @since 2.2.0
      */
     protected function _getReplaceSqlQuery($tableName, array $columns, array $values)
     {
@@ -3885,6 +3893,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName
      * @param string|null $schemaName
      * @return string|bool
+     * @since 2.1.0
      */
     public function getAutoIncrementField($tableName, $schemaName = null)
     {

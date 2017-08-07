@@ -7,6 +7,10 @@ namespace Magento\MediaStorage\Model\Asset\Plugin;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\MediaStorage\Model\Asset\Plugin\CleanMergedJsCss
+ *
+ */
 class CleanMergedJsCss
 {
     /**
@@ -39,6 +43,7 @@ class CleanMergedJsCss
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterCleanMergedJsCss(\Magento\Framework\View\Asset\MergeService $subject, $result)
     {

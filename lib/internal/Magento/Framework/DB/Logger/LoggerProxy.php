@@ -7,6 +7,11 @@ namespace Magento\Framework\DB\Logger;
 
 use Magento\Framework\DB\LoggerInterface;
 
+/**
+ * Class \Magento\Framework\DB\Logger\LoggerProxy
+ *
+ * @since 2.2.0
+ */
 class LoggerProxy implements LoggerInterface
 {
     /**
@@ -46,36 +51,43 @@ class LoggerProxy implements LoggerInterface
 
     /**
      * @var LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 
     /**
      * @var FileFactory
+     * @since 2.2.0
      */
     private $fileFactory;
 
     /**
      * @var QuietFactory
+     * @since 2.2.0
      */
     private $quietFactory;
 
     /**
      * @var bool
+     * @since 2.2.0
      */
     private $loggerAlias;
 
     /**
      * @var bool
+     * @since 2.2.0
      */
     private $logAllQueries;
 
     /**
      * @var float
+     * @since 2.2.0
      */
     private $logQueryTime;
 
     /**
      * @var bool
+     * @since 2.2.0
      */
     private $logCallStack;
 
@@ -87,6 +99,7 @@ class LoggerProxy implements LoggerInterface
      * @param bool $logAllQueries
      * @param float $logQueryTime
      * @param bool $logCallStack
+     * @since 2.2.0
      */
     public function __construct(
         FileFactory $fileFactory,
@@ -107,6 +120,7 @@ class LoggerProxy implements LoggerInterface
     /**
      * Get logger object. Initialize if needed.
      * @return LoggerInterface
+     * @since 2.2.0
      */
     private function getLogger()
     {
@@ -134,6 +148,7 @@ class LoggerProxy implements LoggerInterface
      *
      * @param string $str
      * @return void
+     * @since 2.2.0
      */
     public function log($str)
     {
@@ -146,6 +161,7 @@ class LoggerProxy implements LoggerInterface
      * @param array $bind
      * @param \Zend_Db_Statement_Pdo|null $result
      * @return void
+     * @since 2.2.0
      */
     public function logStats($type, $sql, $bind = [], $result = null)
     {
@@ -155,6 +171,7 @@ class LoggerProxy implements LoggerInterface
     /**
      * @param \Exception $exception
      * @return void
+     * @since 2.2.0
      */
     public function critical(\Exception $exception)
     {
@@ -163,6 +180,7 @@ class LoggerProxy implements LoggerInterface
 
     /**
      * @return void
+     * @since 2.2.0
      */
     public function startTimer()
     {

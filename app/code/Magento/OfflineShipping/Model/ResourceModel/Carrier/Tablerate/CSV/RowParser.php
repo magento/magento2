@@ -9,16 +9,23 @@ namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV;
 use Magento\Framework\Phrase;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\LocationDirectory;
 
+/**
+ * Class \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowParser
+ *
+ * @since 2.1.0
+ */
 class RowParser
 {
     /**
      * @var LocationDirectory
+     * @since 2.1.0
      */
     private $locationDirectory;
 
     /**
      * RowParser constructor.
      * @param LocationDirectory $locationDirectory
+     * @since 2.1.0
      */
     public function __construct(LocationDirectory $locationDirectory)
     {
@@ -27,6 +34,7 @@ class RowParser
 
     /**
      * @return array
+     * @since 2.1.0
      */
     public function getColumns()
     {
@@ -51,6 +59,7 @@ class RowParser
      * @return array
      * @throws ColumnNotFoundException
      * @throws RowException
+     * @since 2.1.0
      */
     public function parse(
         array $rowData,
@@ -89,6 +98,7 @@ class RowParser
      * @return null|string
      * @throws ColumnNotFoundException
      * @throws RowException
+     * @since 2.1.0
      */
     private function getCountryId(array $rowData, $rowNumber, ColumnResolver $columnResolver)
     {
@@ -112,6 +122,7 @@ class RowParser
      * @return int|string
      * @throws ColumnNotFoundException
      * @throws RowException
+     * @since 2.1.0
      */
     private function getRegionId(array $rowData, $rowNumber, ColumnResolver $columnResolver, $countryId)
     {
@@ -131,6 +142,7 @@ class RowParser
      * @param ColumnResolver $columnResolver
      * @return float|int|null|string
      * @throws ColumnNotFoundException
+     * @since 2.1.0
      */
     private function getZipCode(array $rowData, ColumnResolver $columnResolver)
     {
@@ -149,6 +161,7 @@ class RowParser
      * @return bool|float
      * @throws ColumnNotFoundException
      * @throws RowException
+     * @since 2.1.0
      */
     private function getConditionValue(array $rowData, $rowNumber, $conditionFullName, ColumnResolver $columnResolver)
     {
@@ -175,6 +188,7 @@ class RowParser
      * @return bool|float
      * @throws ColumnNotFoundException
      * @throws RowException
+     * @since 2.1.0
      */
     private function getPrice(array $rowData, $rowNumber, ColumnResolver $columnResolver)
     {
@@ -192,6 +206,7 @@ class RowParser
      *
      * @param string $value
      * @return bool|float
+     * @since 2.1.0
      */
     private function _parseDecimalValue($value)
     {

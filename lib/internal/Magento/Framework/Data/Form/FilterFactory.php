@@ -9,15 +9,22 @@ use Magento\Framework\Data\Form\Filter\FilterInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 
+/**
+ * Class \Magento\Framework\Data\Form\FilterFactory
+ *
+ * @since 2.1.0
+ */
 class FilterFactory
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.1.0
      */
     protected $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
+     * @since 2.1.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager
@@ -31,6 +38,7 @@ class FilterFactory
      * @param string $filterCode
      * @param array $data
      * @return FilterInterface
+     * @since 2.1.0
      */
     public function create($filterCode, array $data = [])
     {

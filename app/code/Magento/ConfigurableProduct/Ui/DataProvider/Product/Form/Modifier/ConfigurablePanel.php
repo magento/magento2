@@ -16,6 +16,7 @@ use Magento\Catalog\Model\Locator\LocatorInterface;
 /**
  * Data provider for Configurable panel
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.1.0
  */
 class ConfigurablePanel extends AbstractModifier
 {
@@ -26,41 +27,49 @@ class ConfigurablePanel extends AbstractModifier
 
     /**
      * @var string
+     * @since 2.1.0
      */
     private static $groupContent = 'content';
 
     /**
      * @var int
+     * @since 2.1.0
      */
     private static $sortOrder = 30;
 
     /**
      * @var UrlInterface
+     * @since 2.1.0
      */
     private $urlBuilder;
 
     /**
      * @var string
+     * @since 2.1.0
      */
     private $formName;
 
     /**
      * @var string
+     * @since 2.1.0
      */
     private $dataScopeName;
 
     /**
      * @var string
+     * @since 2.1.0
      */
     private $dataSourceName;
 
     /**
      * @var string
+     * @since 2.1.0
      */
     private $associatedListingPrefix;
 
     /**
      * @var LocatorInterface
+     * @since 2.1.0
      */
     private $locator;
 
@@ -71,6 +80,7 @@ class ConfigurablePanel extends AbstractModifier
      * @param string $dataScopeName
      * @param string $dataSourceName
      * @param string $associatedListingPrefix
+     * @since 2.1.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -90,6 +100,7 @@ class ConfigurablePanel extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -99,6 +110,7 @@ class ConfigurablePanel extends AbstractModifier
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -248,6 +260,7 @@ class ConfigurablePanel extends AbstractModifier
      * Prepares panel children configuration
      *
      * @return array
+     * @since 2.1.0
      */
     protected function getPanelChildren()
     {
@@ -261,6 +274,7 @@ class ConfigurablePanel extends AbstractModifier
      * Returns Buttons Set configuration
      *
      * @return array
+     * @since 2.1.0
      */
     protected function getButtonSet()
     {
@@ -352,6 +366,7 @@ class ConfigurablePanel extends AbstractModifier
      * Returns dynamic rows configuration
      *
      * @return array
+     * @since 2.1.0
      */
     protected function getGrid()
     {
@@ -414,6 +429,7 @@ class ConfigurablePanel extends AbstractModifier
      *
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.1.0
      */
     protected function getRows()
     {
@@ -538,6 +554,7 @@ class ConfigurablePanel extends AbstractModifier
      * @param array $editConfig
      * @param array $textConfig
      * @return array
+     * @since 2.1.0
      */
     protected function getColumn(
         $name,

@@ -12,7 +12,7 @@ namespace Magento\PageCache\Test\Unit\Controller\Block;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RenderTest extends \PHPUnit_Framework_TestCase
+class RenderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
@@ -69,7 +69,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
         $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
 
-        $this->translateInline = $this->getMock(\Magento\Framework\Translate\InlineInterface::class);
+        $this->translateInline = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
 
         $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->action = $helperObjectManager->getObject(
@@ -115,22 +115,10 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $originalRequest = '{"route":"route","controller":"controller","action":"action","uri":"uri"}';
         $expectedData = ['block1' => 'data1', 'block2' => 'data2'];
 
-        $blockInstance1 = $this->getMock(
-            \Magento\PageCache\Test\Unit\Block\Controller\StubBlock::class,
-            ['toHtml'],
-            [],
-            '',
-            false
-        );
+        $blockInstance1 = $this->createPartialMock(\Magento\PageCache\Test\Unit\Block\Controller\StubBlock::class, ['toHtml']);
         $blockInstance1->expects($this->once())->method('toHtml')->will($this->returnValue($expectedData['block1']));
 
-        $blockInstance2 = $this->getMock(
-            \Magento\PageCache\Test\Unit\Block\Controller\StubBlock::class,
-            ['toHtml'],
-            [],
-            '',
-            false
-        );
+        $blockInstance2 = $this->createPartialMock(\Magento\PageCache\Test\Unit\Block\Controller\StubBlock::class, ['toHtml']);
         $blockInstance2->expects($this->once())->method('toHtml')->will($this->returnValue($expectedData['block2']));
 
         $this->requestMock->expects($this->once())->method('isAjax')->will($this->returnValue(true));

@@ -81,6 +81,7 @@ class Action extends \Magento\Catalog\Model\ResourceModel\AbstractResource
      * @param AbstractAttribute $attribute
      * @param mixed $value
      * @return $this
+     * @since 2.1.0
      */
     protected function _saveAttributeValue($object, $attribute, $value)
     {
@@ -145,6 +146,7 @@ class Action extends \Magento\Catalog\Model\ResourceModel\AbstractResource
     /**
      * @param int $entityId
      * @return int
+     * @since 2.1.0
      */
     protected function resolveEntityId($entityId)
     {

@@ -26,6 +26,7 @@ class MultiSelect extends AbstractOptionsField
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getComponentName()
     {
@@ -34,6 +35,7 @@ class MultiSelect extends AbstractOptionsField
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getIsSelected($optionValue)
     {

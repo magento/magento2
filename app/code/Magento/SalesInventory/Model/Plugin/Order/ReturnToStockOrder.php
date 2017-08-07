@@ -13,26 +13,31 @@ use Magento\Sales\Api\RefundOrderInterface;
 
 /**
  * Class ReturnToStock
+ * @since 2.1.3
  */
 class ReturnToStockOrder
 {
     /**
      * @var ReturnProcessor
+     * @since 2.1.3
      */
     private $returnProcessor;
 
     /**
      * @var CreditmemoRepositoryInterface
+     * @since 2.1.3
      */
     private $creditmemoRepository;
 
     /**
      * @var OrderRepositoryInterface
+     * @since 2.1.3
      */
     private $orderRepository;
 
     /**
      * @var StockConfigurationInterface
+     * @since 2.1.3
      */
     private $stockConfiguration;
 
@@ -43,6 +48,7 @@ class ReturnToStockOrder
      * @param CreditmemoRepositoryInterface $creditmemoRepository
      * @param OrderRepositoryInterface $orderRepository
      * @param StockConfigurationInterface $stockConfiguration
+     * @since 2.1.3
      */
     public function __construct(
         ReturnProcessor $returnProcessor,
@@ -67,6 +73,7 @@ class ReturnToStockOrder
      * @param \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface|null $arguments
      * @return int
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterExecute(
         RefundOrderInterface $refundService,

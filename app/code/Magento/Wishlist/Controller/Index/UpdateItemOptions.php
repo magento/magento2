@@ -35,6 +35,7 @@ class UpdateItemOptions extends \Magento\Wishlist\Controller\AbstractIndex
 
     /**
      * @var Validator
+     * @since 2.1.0
      */
     protected $formKeyValidator;
 

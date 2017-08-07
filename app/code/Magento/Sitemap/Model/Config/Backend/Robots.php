@@ -19,6 +19,7 @@ use Magento\Store\Model\StoreResolver;
 /**
  * Backend model for sitemap/search_engines/submission_robots configuration value.
  * Required to implement Page Cache functionality.
+ * @since 2.2.0
  */
 class Robots extends Value implements IdentityInterface
 {
@@ -26,11 +27,13 @@ class Robots extends Value implements IdentityInterface
      * Model cache tag for clear cache in after save and after delete
      *
      * @var string
+     * @since 2.2.0
      */
     protected $_cacheTag = true;
 
     /**
      * @var StoreResolver
+     * @since 2.2.0
      */
     private $storeResolver;
 
@@ -43,6 +46,7 @@ class Robots extends Value implements IdentityInterface
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
+     * @since 2.2.0
      */
     public function __construct(
         Context $context,
@@ -71,6 +75,7 @@ class Robots extends Value implements IdentityInterface
      * Get unique page cache identities
      *
      * @return array
+     * @since 2.2.0
      */
     public function getIdentities()
     {

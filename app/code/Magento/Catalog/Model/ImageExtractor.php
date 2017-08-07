@@ -8,6 +8,10 @@ namespace Magento\Catalog\Model;
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
 use Magento\Catalog\Helper\Image;
 
+/**
+ * Class \Magento\Catalog\Model\ImageExtractor
+ *
+ */
 class ImageExtractor implements \Magento\Framework\View\Xsd\Media\TypeDataExtractorInterface
 {
     /**
@@ -48,6 +52,7 @@ class ImageExtractor implements \Magento\Framework\View\Xsd\Media\TypeDataExtrac
      *
      * @param string $backgroundString
      * @return int[]
+     * @since 2.1.0
      */
     private function processImageBackground($backgroundString)
     {

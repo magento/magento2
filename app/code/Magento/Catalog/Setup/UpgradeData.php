@@ -28,16 +28,19 @@ class UpgradeData implements UpgradeDataInterface
      * EAV setup factory
      *
      * @var \Magento\Eav\Setup\EavSetupFactory
+     * @since 2.1.0
      */
     private $eavSetupFactory;
 
     /**
      * @var UpgradeWidgetData
+     * @since 2.2.0
      */
     private $upgradeWidgetData;
 
     /**
      * @var UpgradeWebsiteAttributes
+     * @since 2.2.0
      */
     private $upgradeWebsiteAttributes;
 
@@ -401,6 +404,7 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param ModuleDataSetupInterface $setup
      * @return void
+     * @since 2.2.0
      */
     private function disallowUsingHtmlForProductName(ModuleDataSetupInterface $setup)
     {
@@ -420,6 +424,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @param CategorySetup $categorySetup
      * @return void
+     * @since 2.1.3
      */
     private function changePriceAttributeDefaultScope($categorySetup)
     {

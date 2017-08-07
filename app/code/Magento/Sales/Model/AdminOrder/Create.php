@@ -229,6 +229,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Serializer interface instance.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -1117,7 +1118,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      *
-     * @deprecated
+     * @deprecated 2.2.0
      */
     protected function _parseOptions(\Magento\Quote\Model\Quote\Item $item, $additionalOptions)
     {
@@ -1183,7 +1184,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param array $options
      * @return $this
      *
-     * @deprecated
+     * @deprecated 2.2.0
      */
     protected function _assignOptionsToItem(\Magento\Quote\Model\Quote\Item $item, $options)
     {

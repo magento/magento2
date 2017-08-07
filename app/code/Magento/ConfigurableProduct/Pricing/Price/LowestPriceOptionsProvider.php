@@ -12,21 +12,25 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 /**
  * Retrieve list of products where each product contains lower price than others at least for one possible price type
+ * @since 2.1.3
  */
 class LowestPriceOptionsProvider implements LowestPriceOptionsProviderInterface
 {
     /**
      * @var ResourceConnection
+     * @since 2.1.3
      */
     private $resource;
 
     /**
      * @var LinkedProductSelectBuilderInterface
+     * @since 2.1.3
      */
     private $linkedProductSelectBuilder;
 
     /**
      * @var CollectionFactory
+     * @since 2.1.3
      */
     private $collectionFactory;
 
@@ -34,6 +38,7 @@ class LowestPriceOptionsProvider implements LowestPriceOptionsProviderInterface
      * Key is product id. Value is array of prepared linked products
      *
      * @var array
+     * @since 2.2.0
      */
     private $linkedProductMap;
 
@@ -41,6 +46,7 @@ class LowestPriceOptionsProvider implements LowestPriceOptionsProviderInterface
      * @param ResourceConnection $resourceConnection
      * @param LinkedProductSelectBuilderInterface $linkedProductSelectBuilder
      * @param CollectionFactory $collectionFactory
+     * @since 2.1.3
      */
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -54,6 +60,7 @@ class LowestPriceOptionsProvider implements LowestPriceOptionsProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.3
      */
     public function getProducts(ProductInterface $product)
     {

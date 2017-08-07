@@ -16,6 +16,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
 {
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     protected function reindex($entityIds = null)
     {

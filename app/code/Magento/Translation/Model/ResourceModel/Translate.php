@@ -10,6 +10,10 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Config;
 use Magento\Translation\App\Config\Type\Translation;
 
+/**
+ * Class \Magento\Translation\Model\ResourceModel\Translate
+ *
+ */
 class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements
     \Magento\Framework\Translate\ResourceInterface
 {
@@ -25,11 +29,13 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
 
     /**
      * @var Config
+     * @since 2.1.3
      */
     private $appConfig;
 
     /**
      * @var DeploymentConfig
+     * @since 2.1.3
      */
     private $deployedConfig;
 
@@ -138,6 +144,7 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
      * Get connection
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
+     * @since 2.1.3
      */
     public function getConnection()
     {
@@ -162,6 +169,7 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
      *
      * @param int $storeId
      * @return string
+     * @since 2.1.3
      */
     private function getStoreCode($storeId)
     {
@@ -169,8 +177,9 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.1.3
      * @return DeploymentConfig
+     * @since 2.1.3
      */
     private function getDeployedConfig()
     {
@@ -181,8 +190,9 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.1.3
      * @return Config
+     * @since 2.1.3
      */
     private function getAppConfig()
     {

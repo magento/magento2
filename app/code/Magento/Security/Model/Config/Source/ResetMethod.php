@@ -9,6 +9,7 @@ namespace Magento\Security\Model\Config\Source;
 /**
  * Source model for setting "Limit Password Reset Requests Method"
  *
+ * @since 2.1.0
  */
 class ResetMethod implements \Magento\Framework\Option\ArrayInterface
 {
@@ -21,6 +22,7 @@ class ResetMethod implements \Magento\Framework\Option\ArrayInterface
      * Options getter
      *
      * @return array
+     * @since 2.1.0
      */
     public function toOptionArray()
     {
@@ -36,6 +38,7 @@ class ResetMethod implements \Magento\Framework\Option\ArrayInterface
      * Get options in "key-value" format
      *
      * @return array
+     * @since 2.1.0
      */
     public function toArray()
     {

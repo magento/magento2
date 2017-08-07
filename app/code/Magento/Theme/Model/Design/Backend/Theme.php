@@ -7,6 +7,10 @@ namespace Magento\Theme\Model\Design\Backend;
 
 use Magento\Framework\App\Config\Value;
 
+/**
+ * Class \Magento\Theme\Model\Design\Backend\Theme
+ *
+ */
 class Theme extends Value
 {
     /**
@@ -68,6 +72,7 @@ class Theme extends Value
      *
      * @param bool $forceInvalidate
      * @return void
+     * @since 2.1.0
      */
     protected function invalidateCache($forceInvalidate = false)
     {
@@ -84,6 +89,7 @@ class Theme extends Value
 
     /**
      * @return array
+     * @since 2.1.0
      */
     public function getValue()
     {
@@ -105,6 +111,7 @@ class Theme extends Value
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function afterDelete()
     {

@@ -22,27 +22,32 @@ class Generic implements LayoutInterface
 
     /**
      * @var UiComponentInterface
+     * @since 2.1.0
      */
     protected $component;
 
     /**
      * @var string
+     * @since 2.1.0
      */
     protected $namespace;
 
     /**
      * @var UiComponentFactory
+     * @since 2.1.0
      */
     protected $uiComponentFactory;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $data;
 
     /**
      * @param UiComponentFactory $uiComponentFactory
      * @param array $data
+     * @since 2.1.0
      */
     public function __construct(UiComponentFactory $uiComponentFactory, $data = [])
     {
@@ -141,6 +146,7 @@ class Generic implements LayoutInterface
      * @param BlockWrapperInterface $childComponent
      * @param array $childrenNode
      * @return $this
+     * @since 2.1.0
      */
     protected function addWrappedBlock(BlockWrapperInterface $childComponent, array &$childrenNode)
     {
@@ -175,6 +181,7 @@ class Generic implements LayoutInterface
      * @param string $name
      * @return UiComponentInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.1.0
      */
     protected function createChildFormComponent(UiComponentInterface $childComponent, $name)
     {
@@ -197,6 +204,7 @@ class Generic implements LayoutInterface
      *
      * @param string $name
      * @return mixed
+     * @since 2.1.0
      */
     protected function getConfig($name)
     {

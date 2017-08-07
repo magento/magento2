@@ -12,7 +12,7 @@ use Magento\Quote\Model\Quote\Payment;
 /**
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated
+ * @deprecated 2.0.11
  */
 class Cc extends \Magento\Payment\Model\Method\AbstractMethod
 {

@@ -123,6 +123,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
     /**
      * @inheritdoc
+     * @since 2.0.10
      */
     protected $_debugReplacePrivateDataKeys = [
         'Key', 'Password', 'MeterNumber',
@@ -131,17 +132,20 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Version of tracking service
      * @var int
+     * @since 2.1.2
      */
     private static $trackServiceVersion = 10;
 
     /**
      * List of TrackReply errors
      * @var array
+     * @since 2.1.2
      */
     private static $trackingErrors = ['FAILURE', 'ERROR'];
 
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -1549,6 +1553,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Recursive replace sensitive fields in debug data by the mask
      * @param string $data
      * @return string
+     * @since 2.0.10
      */
     protected function filterDebugData($data)
     {
@@ -1568,6 +1573,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.1.2
      */
     private function processTrackingDetails(\stdClass $trackInfo)
     {
@@ -1636,6 +1642,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Parse delivery datetime from tracking details
      * @param \stdClass $trackInfo
      * @return \Datetime|null
+     * @since 2.1.2
      */
     private function getDeliveryDateTime(\stdClass $trackInfo)
     {
@@ -1655,6 +1662,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param \stdClass $address
      * @return \Magento\Framework\Phrase|string
+     * @since 2.1.2
      */
     private function getDeliveryAddress(\stdClass $address)
     {
@@ -1682,6 +1690,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param array $events
      * @return array
+     * @since 2.1.2
      */
     private function processTrackDetailsEvents(array $events)
     {
@@ -1715,6 +1724,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Append error message to rate result instance
      * @param string $trackingValue
      * @param string $errorMessage
+     * @since 2.1.2
      */
     private function appendTrackingError($trackingValue, $errorMessage)
     {
@@ -1734,6 +1744,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param string $timestamp
      * @return bool|\DateTime
+     * @since 2.2.0
      */
     private function parseDate($timestamp)
     {

@@ -9,6 +9,7 @@ use Magento\Ui\Component\Control\Action;
 
 /**
  * Class PdfAction
+ * @since 2.1.0
  */
 class PdfAction extends Action
 {
@@ -16,6 +17,7 @@ class PdfAction extends Action
      * Prepare
      *
      * @return void
+     * @since 2.1.0
      */
     public function prepare()
     {

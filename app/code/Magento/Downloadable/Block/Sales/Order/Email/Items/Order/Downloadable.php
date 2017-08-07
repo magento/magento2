@@ -37,6 +37,7 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultO
 
     /**
      * @var \Magento\Framework\UrlInterface
+     * @since 2.1.0
      */
     private $frontendUrlBuilder;
 
@@ -107,7 +108,8 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultO
      * Get frontend URL builder
      *
      * @return \Magento\Framework\UrlInterface
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getFrontendUrlBuilder()
     {

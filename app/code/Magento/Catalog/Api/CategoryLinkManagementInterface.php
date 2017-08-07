@@ -25,6 +25,7 @@ interface CategoryLinkManagementInterface
      * @param string $productSku
      * @param int[] $categoryIds
      * @return bool
+     * @since 2.1.0
      */
     public function assignProductToCategories($productSku, array $categoryIds);
 }

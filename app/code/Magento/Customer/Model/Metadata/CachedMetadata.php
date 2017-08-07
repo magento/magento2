@@ -17,11 +17,13 @@ class CachedMetadata implements MetadataInterface
 
     /**
      * @var string
+     * @since 2.0.9
      */
     protected $entityType = 'none';
 
     /**
      * @var AttributeMetadataCache
+     * @since 2.2.0
      */
     private $attributeMetadataCache;
 

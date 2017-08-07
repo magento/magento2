@@ -10,16 +10,19 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class ReadEntityRow
+ * @since 2.1.0
  */
 class ReadEntityRow
 {
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @param MetadataPool $metadataPool
+     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool
@@ -33,6 +36,7 @@ class ReadEntityRow
      * @param array $context
      * @return array
      * @throws \Exception
+     * @since 2.1.0
      */
     public function execute($entityType, $identifier, $context = [])
     {

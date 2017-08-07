@@ -73,6 +73,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Weight precision
      *
      * @var int
+     * @since 2.1.0
      */
     private static $weightPrecision = 10;
 
@@ -123,6 +124,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     protected $_debugReplacePrivateDataKeys = [
         'USERID'
@@ -130,6 +132,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
     /**
      * @var DataHelper
+     * @since 2.2.0
      */
     private $dataHelper;
 
@@ -1432,7 +1435,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::OUNCE) {
             $packageWeight = round(
                 $this->_carrierHelper->convertMeasureWeight(
-                    $request->getPackageWeight(),
+                    (float)$request->getPackageWeight(),
                     $packageParams->getWeightUnits(),
                     \Zend_Measure_Weight::OUNCE
                 )
@@ -1526,7 +1529,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::OUNCE) {
             $packageWeight = round(
                 $this->_carrierHelper->convertMeasureWeight(
-                    $request->getPackageWeight(),
+                    (float)$request->getPackageWeight(),
                     $packageParams->getWeightUnits(),
                     \Zend_Measure_Weight::OUNCE
                 )
@@ -1609,7 +1612,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $packageWeight = $request->getPackageWeight();
         if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::POUND) {
             $packageWeight = $this->_carrierHelper->convertMeasureWeight(
-                $request->getPackageWeight(),
+                (float)$request->getPackageWeight(),
                 $packageParams->getWeightUnits(),
                 \Zend_Measure_Weight::POUND
             );
@@ -1617,21 +1620,21 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if ($packageParams->getDimensionUnits() != \Zend_Measure_Length::INCH) {
             $length = round(
                 $this->_carrierHelper->convertMeasureDimension(
-                    $packageParams->getLength(),
+                    (float)$packageParams->getLength(),
                     $packageParams->getDimensionUnits(),
                     \Zend_Measure_Length::INCH
                 )
             );
             $width = round(
                 $this->_carrierHelper->convertMeasureDimension(
-                    $packageParams->getWidth(),
+                    (float)$packageParams->getWidth(),
                     $packageParams->getDimensionUnits(),
                     \Zend_Measure_Length::INCH
                 )
             );
             $height = round(
                 $this->_carrierHelper->convertMeasureDimension(
-                    $packageParams->getHeight(),
+                    (float)$packageParams->getHeight(),
                     $packageParams->getDimensionUnits(),
                     \Zend_Measure_Length::INCH
                 )
@@ -1640,7 +1643,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if ($packageParams->getGirthDimensionUnits() != \Zend_Measure_Length::INCH) {
             $girth = round(
                 $this->_carrierHelper->convertMeasureDimension(
-                    $packageParams->getGirth(),
+                    (float)$packageParams->getGirth(),
                     $packageParams->getGirthDimensionUnits(),
                     \Zend_Measure_Length::INCH
                 )
@@ -2058,6 +2061,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param \SimpleXMLElement $service
      * @return boolean
+     * @since 2.1.0
      */
     private function isServiceAvailable(\SimpleXMLElement $service)
     {
@@ -2089,6 +2093,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string $data
      * @return string
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.1.0
      */
     protected function filterDebugData($data)
     {
@@ -2112,7 +2117,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Gets Data helper object
      *
      * @return DataHelper
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getDataHelper()
     {

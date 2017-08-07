@@ -35,11 +35,14 @@ class History extends \Magento\Framework\View\Element\Template
      */
     protected $_orderConfig;
 
-    /** @var \Magento\Sales\Model\ResourceModel\Order\Collection */
+    /**
+     * @var \Magento\Sales\Model\ResourceModel\Order\Collection
+     */
     protected $orders;
 
     /**
      * @var CollectionFactoryInterface
+     * @since 2.1.1
      */
     private $orderCollectionFactory;
 
@@ -75,7 +78,8 @@ class History extends \Magento\Framework\View\Element\Template
     /**
      * @return CollectionFactoryInterface
      *
-     * @deprecated
+     * @deprecated 2.1.1
+     * @since 2.1.1
      */
     private function getOrderCollectionFactory()
     {

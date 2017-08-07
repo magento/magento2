@@ -17,6 +17,7 @@ class Editor extends Textarea
 {
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -66,6 +67,7 @@ class Editor extends Textarea
     /**
      * @return bool|string
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     private function getJsonConfig()
     {
@@ -482,6 +484,7 @@ class Editor extends Textarea
 
     /**
      * @return bool
+     * @since 2.1.0
      */
     protected function isToggleButtonVisible()
     {

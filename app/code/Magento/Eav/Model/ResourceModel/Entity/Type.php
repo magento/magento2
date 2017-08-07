@@ -16,6 +16,7 @@ class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Additional attribute tables data
      *
      * @var array
+     * @since 2.2.0
      */
     private $additionalAttributeTables = [];
 

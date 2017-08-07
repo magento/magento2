@@ -21,6 +21,7 @@ use Magento\Framework\View\Asset\Repository;
  *
  * LESS-to-CSS compilation should happen only when it is really needed. If in some package there is no LESS files
  * overridden which used for generating some CSS file, then such CSS file can be copied from ancestor package as is
+ * @since 2.2.0
  */
 class Less implements ProcessorInterface
 {
@@ -28,21 +29,25 @@ class Less implements ProcessorInterface
      * Resolver allows to distinguish "root" LESS files from "imported" LESS files
      *
      * @var FileNameResolver
+     * @since 2.2.0
      */
     private $fileNameResolver;
 
     /**
      * @var \Magento\Framework\View\Asset\NotationResolver\Module
+     * @since 2.2.0
      */
     private $notationResolver;
 
     /**
      * @var DeployStaticFile
+     * @since 2.2.0
      */
     private $deployStaticFile;
 
     /**
      * @var Minification
+     * @since 2.2.0
      */
     private $minification;
 
@@ -50,11 +55,13 @@ class Less implements ProcessorInterface
      * Deployment procedure options
      *
      * @var array
+     * @since 2.2.0
      */
     private $options = [];
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $map = [];
 
@@ -65,6 +72,7 @@ class Less implements ProcessorInterface
      * @param NotationResolver\Module $notationResolver
      * @param DeployStaticFile $deployStaticFile
      * @param Minification $minification
+     * @since 2.2.0
      */
     public function __construct(
         FileNameResolver $fileNameResolver,
@@ -80,6 +88,7 @@ class Less implements ProcessorInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function process(Package $package, array $options)
     {
@@ -119,6 +128,7 @@ class Less implements ProcessorInterface
      * @param PackageFile $parentFile
      * @param Package $package
      * @return bool
+     * @since 2.2.0
      */
     private function hasOverrides(PackageFile $parentFile, Package $package)
     {
@@ -143,6 +153,7 @@ class Less implements ProcessorInterface
      * @param string  $parentFile
      * @param array $map
      * @return bool
+     * @since 2.2.0
      */
     private function inParentFiles($fileName, $parentFile, $map)
     {
@@ -165,6 +176,7 @@ class Less implements ProcessorInterface
      * @param string $packagePath
      * @param string $contentType
      * @return array
+     * @since 2.2.0
      */
     private function buildMap($filePath, $packagePath, $contentType)
     {
@@ -202,6 +214,7 @@ class Less implements ProcessorInterface
      *
      * @param string $path
      * @return string
+     * @since 2.2.0
      */
     private function normalizePath($path)
     {

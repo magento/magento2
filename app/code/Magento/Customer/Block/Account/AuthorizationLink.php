@@ -93,6 +93,7 @@ class AuthorizationLink extends \Magento\Framework\View\Element\Html\Link implem
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getSortOrder()
     {

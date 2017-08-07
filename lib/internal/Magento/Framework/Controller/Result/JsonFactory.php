@@ -8,6 +8,7 @@ namespace Magento\Framework\Controller\Result;
 
 /**
  * Factory class for @see \Magento\Framework\Controller\Result\Json
+ * @since 2.1.0
  */
 class JsonFactory
 {
@@ -15,6 +16,7 @@ class JsonFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.1.0
      */
     protected $objectManager = null;
 
@@ -22,6 +24,7 @@ class JsonFactory
      * Instance name to create
      *
      * @var string
+     * @since 2.1.0
      */
     protected $instanceName = null;
 
@@ -30,6 +33,7 @@ class JsonFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -44,6 +48,7 @@ class JsonFactory
      *
      * @param array $data
      * @return \Magento\Framework\Controller\Result\Json
+     * @since 2.1.0
      */
     public function create(array $data = [])
     {

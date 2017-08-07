@@ -9,17 +9,20 @@ use Magento\Framework\ObjectManager\TMapFactory;
 
 /**
  * Implements NotSyncedDataProviderInterface as composite
+ * @since 2.2.0
  */
 class NotSyncedDataProvider implements NotSyncedDataProviderInterface
 {
     /**
      * @var NotSyncedDataProviderInterface[]
+     * @since 2.2.0
      */
     private $providers;
 
     /**
      * @param TMapFactory $tmapFactory
      * @param array $providers
+     * @since 2.2.0
      */
     public function __construct(
         TMapFactory $tmapFactory,
@@ -35,6 +38,7 @@ class NotSyncedDataProvider implements NotSyncedDataProviderInterface
 
     /**
      * @inheritDoc
+     * @since 2.2.0
      */
     public function getIds($mainTableName, $gridTableName)
     {

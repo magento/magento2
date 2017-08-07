@@ -14,21 +14,25 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Filter products that belongs to current website
+ * @since 2.2.0
  */
 class SelectProcessor implements BaseSelectProcessorInterface
 {
     /**
      * @var ResourceConnection
+     * @since 2.2.0
      */
     private $resource;
 
     /**
      * @var MetadataPool
+     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.2.0
      */
     private $storeManager;
 
@@ -36,6 +40,7 @@ class SelectProcessor implements BaseSelectProcessorInterface
      * @param MetadataPool $metadataPool
      * @param ResourceConnection $resource
      * @param StoreManagerInterface $storeManager
+     * @since 2.2.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -51,6 +56,7 @@ class SelectProcessor implements BaseSelectProcessorInterface
      * Joins website-product relation table to filter products that are only in current website
      *
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function process(Select $select)
     {

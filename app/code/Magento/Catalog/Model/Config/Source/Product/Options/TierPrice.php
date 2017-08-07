@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
 
 /**
  * TierPrice types mode source.
+ * @since 2.2.0
  */
 class TierPrice implements ProductPriceOptionsInterface
 {
@@ -16,6 +17,7 @@ class TierPrice implements ProductPriceOptionsInterface
      * {@inheritdoc}
      *
      * @codeCoverageIgnore
+     * @since 2.2.0
      */
     public function toOptionArray()
     {

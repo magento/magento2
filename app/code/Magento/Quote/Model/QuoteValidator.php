@@ -24,11 +24,13 @@ class QuoteValidator
 
     /**
      * @var AllowedCountries
+     * @since 2.2.0
      */
     private $allowedCountryReader;
 
     /**
      * @var OrderAmountValidationMessage
+     * @since 2.2.0
      */
     private $minimumAmountMessage;
 
@@ -37,6 +39,7 @@ class QuoteValidator
      *
      * @param AllowedCountries|null $allowedCountryReader
      * @param OrderAmountValidationMessage|null $minimumAmountMessage
+     * @since 2.2.0
      */
     public function __construct(
         AllowedCountries $allowedCountryReader = null,

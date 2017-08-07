@@ -10,16 +10,19 @@ use Magento\Framework\DataObject;
 
 /**
  * Class CountryCreditCard
+ * @since 2.1.0
  */
 class CountryCreditCard extends AbstractFieldArray
 {
     /**
      * @var Countries
+     * @since 2.1.0
      */
     protected $countryRenderer = null;
 
     /**
      * @var CcTypes
+     * @since 2.1.0
      */
     protected $ccTypesRenderer = null;
 
@@ -27,6 +30,7 @@ class CountryCreditCard extends AbstractFieldArray
      * Returns renderer for country element
      *
      * @return Countries
+     * @since 2.1.0
      */
     protected function getCountryRenderer()
     {
@@ -44,6 +48,7 @@ class CountryCreditCard extends AbstractFieldArray
      * Returns renderer for country element
      *
      * @return CcTypes
+     * @since 2.1.0
      */
     protected function getCcTypesRenderer()
     {
@@ -60,6 +65,7 @@ class CountryCreditCard extends AbstractFieldArray
     /**
      * Prepare to render
      * @return void
+     * @since 2.1.0
      */
     protected function _prepareToRender()
     {
@@ -86,6 +92,7 @@ class CountryCreditCard extends AbstractFieldArray
      *
      * @param DataObject $row
      * @return void
+     * @since 2.1.0
      */
     protected function _prepareArrayRow(DataObject $row)
     {

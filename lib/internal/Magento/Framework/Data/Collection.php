@@ -880,6 +880,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
 
     /**
      * @return string[]
+     * @since 2.0.9
      */
     public function __sleep()
     {
@@ -897,6 +898,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Init not serializable fields
      *
      * @return void
+     * @since 2.0.9
      */
     public function __wakeup()
     {

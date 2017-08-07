@@ -329,6 +329,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      *
      * @param string $tierPricePercentage
      * @return string
+     * @since 2.2.0
      */
     private function tierPriceTypeValue($tierPricePercentage)
     {

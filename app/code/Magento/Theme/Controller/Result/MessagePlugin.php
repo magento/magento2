@@ -11,6 +11,7 @@ use Magento\Framework\Message\MessageInterface;
 
 /**
  * Plugin for putting messages to cookies
+ * @since 2.0.8
  */
 class MessagePlugin
 {
@@ -21,26 +22,31 @@ class MessagePlugin
 
     /**
      * @var \Magento\Framework\Stdlib\CookieManagerInterface
+     * @since 2.0.8
      */
     private $cookieManager;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     * @since 2.0.8
      */
     private $cookieMetadataFactory;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.8
      */
     private $messageManager;
 
     /**
      * @var \Magento\Framework\View\Element\Message\InterpretationStrategyInterface
+     * @since 2.0.8
      */
     private $interpretationStrategy;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -50,6 +56,7 @@ class MessagePlugin
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @since 2.0.8
      */
     public function __construct(
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
@@ -75,6 +82,7 @@ class MessagePlugin
      * @param ResultInterface $subject
      * @param ResultInterface $result
      * @return ResultInterface
+     * @since 2.0.8
      */
     public function afterRenderResult(
         ResultInterface $subject,
@@ -108,6 +116,7 @@ class MessagePlugin
      *
      * @param array $messages List of Magento messages that must be set as 'mage-messages' cookie.
      * @return void
+     * @since 2.2.0
      */
     private function setCookie(array $messages)
     {
@@ -129,6 +138,7 @@ class MessagePlugin
      * Return messages array and clean message manager messages
      *
      * @return array
+     * @since 2.0.8
      */
     protected function getMessages()
     {
@@ -147,6 +157,7 @@ class MessagePlugin
      * Return messages stored in cookies
      *
      * @return array
+     * @since 2.0.8
      */
     protected function getCookiesMessages()
     {

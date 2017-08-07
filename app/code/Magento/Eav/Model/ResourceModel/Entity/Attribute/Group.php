@@ -18,11 +18,13 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var Attribute
+     * @since 2.2.0
      */
     private $attributeResource;
 
     /**
      * @inheritDoc
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -157,6 +159,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     protected function saveNewObject(AbstractModel $object)
     {
@@ -174,6 +177,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     protected function updateObject(AbstractModel $object)
     {

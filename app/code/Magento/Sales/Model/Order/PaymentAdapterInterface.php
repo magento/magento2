@@ -13,6 +13,7 @@ use Magento\Sales\Api\Data\OrderInterface;
  * Can be used as extension point.
  *
  * @api
+ * @since 2.1.2
  */
 interface PaymentAdapterInterface
 {
@@ -21,6 +22,7 @@ interface PaymentAdapterInterface
      * @param InvoiceInterface $invoice
      * @param bool $capture
      * @return OrderInterface
+     * @since 2.1.2
      */
     public function pay(OrderInterface $order, InvoiceInterface $invoice, $capture);
 }

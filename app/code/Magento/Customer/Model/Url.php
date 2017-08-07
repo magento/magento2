@@ -58,11 +58,13 @@ class Url
 
     /**
      * @var \Magento\Framework\Url\DecoderInterface
+     * @since 2.2.0
      */
     private $urlDecoder;
 
     /**
      * @var \Magento\Framework\Url\HostChecker
+     * @since 2.2.0
      */
     private $hostChecker;
 
@@ -242,6 +244,7 @@ class Url
 
     /**
      * @return mixed|null
+     * @since 2.2.0
      */
     private function getRequestReferrer()
     {

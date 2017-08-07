@@ -6,6 +6,10 @@
  */
 namespace Magento\Quote\Model\Quote\Item;
 
+/**
+ * Class \Magento\Quote\Model\Quote\Item\RelatedProducts
+ *
+ */
 class RelatedProducts
 {
     /**

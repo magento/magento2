@@ -11,16 +11,19 @@ use Magento\Catalog\Block\Product\AwareInterface as ProductAwareInterface;
 
 /**
  * Class List Item Block
+ * @since 2.1.1
  */
 class Block extends AbstractProduct implements ProductAwareInterface
 {
     /**
      * @var ProductInterface
+     * @since 2.1.1
      */
     private $product;
 
     /**
      * {@inheritdoc}
+     * @since 2.1.1
      */
     public function setProduct(ProductInterface $product)
     {
@@ -30,6 +33,7 @@ class Block extends AbstractProduct implements ProductAwareInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.1
      */
     public function getProduct()
     {

@@ -98,6 +98,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
@@ -699,6 +700,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {

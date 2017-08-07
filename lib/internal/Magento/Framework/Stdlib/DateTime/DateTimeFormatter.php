@@ -20,6 +20,7 @@ class DateTimeFormatter implements DateTimeFormatterInterface
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
+     * @since 2.1.0
      */
     private $localeResolver;
 
@@ -38,6 +39,7 @@ class DateTimeFormatter implements DateTimeFormatterInterface
      * Get locale resolver
      *
      * @return \Magento\Framework\Locale\ResolverInterface|mixed
+     * @since 2.1.0
      */
     private function getLocaleResolver()
     {

@@ -17,6 +17,7 @@ use Magento\Vault\Model\Ui\VaultConfigProvider;
 
 /**
  * Order payment after save observer for storing payment vault record in db
+ * @since 2.1.0
  */
 class AfterPaymentSaveObserver implements ObserverInterface
 {
@@ -24,17 +25,20 @@ class AfterPaymentSaveObserver implements ObserverInterface
 
     /**
      * @var PaymentTokenManagementInterface
+     * @since 2.1.0
      */
     protected $paymentTokenManagement;
 
     /**
      * @var EncryptorInterface
+     * @since 2.1.0
      */
     protected $encryptor;
 
     /**
      * @param PaymentTokenManagementInterface $paymentTokenManagement
      * @param EncryptorInterface $encryptor
+     * @since 2.1.0
      */
     public function __construct(
         PaymentTokenManagementInterface $paymentTokenManagement,
@@ -49,6 +53,7 @@ class AfterPaymentSaveObserver implements ObserverInterface
      *
      * @param Observer $observer
      * @return $this
+     * @since 2.1.0
      */
     public function execute(Observer $observer)
     {
@@ -97,6 +102,7 @@ class AfterPaymentSaveObserver implements ObserverInterface
      *
      * @param PaymentTokenInterface $paymentToken
      * @return string
+     * @since 2.1.0
      */
     protected function generatePublicHash(PaymentTokenInterface $paymentToken)
     {
@@ -117,6 +123,7 @@ class AfterPaymentSaveObserver implements ObserverInterface
      *
      * @param OrderPaymentExtensionInterface | null $extensionAttributes
      * @return PaymentTokenInterface | null
+     * @since 2.1.0
      */
     protected function getPaymentToken(OrderPaymentExtensionInterface $extensionAttributes = null)
     {

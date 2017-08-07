@@ -64,6 +64,7 @@ class Context
      * @param RequestInterface $request
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function beforeDispatch(AbstractAction $subject, RequestInterface $request)
     {

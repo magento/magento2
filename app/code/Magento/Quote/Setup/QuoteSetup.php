@@ -32,6 +32,7 @@ class QuoteSetup extends EavSetup
 
     /**
      * @var string
+     * @since 2.1.3
      */
     private static $connectionName = 'checkout';
 
@@ -200,6 +201,7 @@ class QuoteSetup extends EavSetup
      * Get quote connection
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.2.0
      */
     public function getConnection()
     {
@@ -211,6 +213,7 @@ class QuoteSetup extends EavSetup
      *
      * @param string $table
      * @return string
+     * @since 2.2.0
      */
     public function getTable($table)
     {

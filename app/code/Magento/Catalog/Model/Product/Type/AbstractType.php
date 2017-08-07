@@ -165,6 +165,7 @@ abstract class AbstractType
      * Serializer interface instance.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     protected $serializer;
 
@@ -1107,6 +1108,7 @@ abstract class AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
+     * @since 2.2.0
      */
     public function isPossibleBuyFromList($product)
     {

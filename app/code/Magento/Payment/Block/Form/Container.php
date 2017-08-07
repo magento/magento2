@@ -22,21 +22,26 @@ class Container extends \Magento\Framework\View\Element\Template
      */
     protected $_paymentHelper;
 
-    /** @var  \Magento\Payment\Model\Checks\SpecificationFactory */
+    /**
+     * @var \Magento\Payment\Model\Checks\SpecificationFactory
+     */
     protected $methodSpecificationFactory;
 
     /**
      * @var \Magento\Payment\Api\PaymentMethodListInterface
+     * @since 2.1.3
      */
     private $paymentMethodList;
 
     /**
      * @var \Magento\Payment\Model\Method\InstanceFactory
+     * @since 2.1.3
      */
     private $paymentMethodInstanceFactory;
 
     /**
      * @var array
+     * @since 2.1.3
      */
     protected $additionalChecks;
 
@@ -178,7 +183,8 @@ class Container extends \Magento\Framework\View\Element\Template
      * Get payment method list.
      *
      * @return \Magento\Payment\Api\PaymentMethodListInterface
-     * @deprecated
+     * @deprecated 2.1.3
+     * @since 2.1.3
      */
     private function getPaymentMethodList()
     {
@@ -194,7 +200,8 @@ class Container extends \Magento\Framework\View\Element\Template
      * Get payment method instance factory.
      *
      * @return \Magento\Payment\Model\Method\InstanceFactory
-     * @deprecated
+     * @deprecated 2.1.3
+     * @since 2.1.3
      */
     private function getPaymentMethodInstanceFactory()
     {

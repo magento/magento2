@@ -49,40 +49,43 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
 
     /**
      * @var QuoteAddressValidator
-     * @deprecated
+     * @deprecated 2.2.0
      */
     protected $addressValidator;
 
     /**
      * @var \Magento\Customer\Api\AddressRepositoryInterface
-     * @deprecated
+     * @deprecated 2.2.0
      */
     protected $addressRepository;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @deprecated
+     * @deprecated 2.2.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\Quote\Model\Quote\TotalsCollector
-     * @deprecated
+     * @deprecated 2.2.0
      */
     protected $totalsCollector;
 
     /**
      * @var \Magento\Quote\Api\Data\CartExtensionFactory
+     * @since 2.1.0
      */
     private $cartExtensionFactory;
 
     /**
      * @var \Magento\Quote\Model\ShippingAssignmentFactory
+     * @since 2.1.0
      */
     protected $shippingAssignmentFactory;
 
     /**
      * @var \Magento\Quote\Model\ShippingFactory
+     * @since 2.1.0
      */
     private $shippingFactory;
 
@@ -207,6 +210,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
      * @param AddressInterface $address
      * @param string $method
      * @return CartInterface
+     * @since 2.1.0
      */
     private function prepareShippingAssignment(CartInterface $quote, AddressInterface $address, $method)
     {

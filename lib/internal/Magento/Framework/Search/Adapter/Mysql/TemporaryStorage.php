@@ -38,7 +38,7 @@ class TemporaryStorage
      *
      * @param \Magento\Framework\Api\Search\DocumentInterface[] $documents
      * @return Table
-     * @deprecated
+     * @deprecated 2.1.0
      */
     public function storeDocuments($documents)
     {
@@ -50,6 +50,7 @@ class TemporaryStorage
      *
      * @param \Magento\Framework\Api\Search\DocumentInterface[] $documents
      * @return Table
+     * @since 2.1.0
      */
     public function storeApiDocuments($documents)
     {
@@ -71,6 +72,7 @@ class TemporaryStorage
      * @param array $data
      * @return Table
      * @throws \Zend_Db_Exception
+     * @since 2.1.0
      */
     private function populateTemporaryTable(Table $table, $data)
     {

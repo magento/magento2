@@ -12,16 +12,19 @@ use Magento\Framework\Pricing\Amount\AmountInterface;
 
 /**
  * As Low As shows minimal value of Tier Prices
+ * @since 2.2.0
  */
 class MinimalTierPriceCalculator implements MinimalPriceCalculatorInterface
 {
     /**
      * @var CalculatorInterface
+     * @since 2.2.0
      */
     private $calculator;
 
     /**
      * @param CalculatorInterface $calculator
+     * @since 2.2.0
      */
     public function __construct(CalculatorInterface $calculator)
     {
@@ -31,6 +34,7 @@ class MinimalTierPriceCalculator implements MinimalPriceCalculatorInterface
     /**
      * Get raw value of "as low as" as a minimal among tier prices
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getValue(SaleableInterface $saleableItem)
     {
@@ -51,6 +55,7 @@ class MinimalTierPriceCalculator implements MinimalPriceCalculatorInterface
     /**
      * Return calculated amount object that keeps "as low as" value
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getAmount(SaleableInterface $saleableItem)
     {

@@ -34,6 +34,7 @@ class UpgradeCommand extends AbstractSetupCommand
 
     /**
      * @var DeploymentConfig
+     * @since 2.2.0
      */
     private $deploymentConfig;
 

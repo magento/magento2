@@ -10,15 +10,21 @@ use Magento\Catalog\Model\Indexer\Product\Eav\Processor;
 use Magento\Eav\Model\Entity\Attribute\SetFactory;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\Catalog\Model\Indexer\Product\Eav\Plugin\AttributeSet
+ *
+ */
 class AttributeSet
 {
     /**
      * @var bool
+     * @since 2.2.0
      */
     private $requiresReindex;
 
     /**
      * @var SetFactory
+     * @since 2.2.0
      */
     private $attributeSetFactory;
 
@@ -55,6 +61,7 @@ class AttributeSet
      * @param EavAttributeSet $subject
      *
      * @return void
+     * @since 2.2.0
      */
     public function beforeSave(EavAttributeSet $subject)
     {
@@ -82,6 +89,7 @@ class AttributeSet
      * @return EavAttributeSet
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterSave(EavAttributeSet $subject, EavAttributeSet $result)
     {

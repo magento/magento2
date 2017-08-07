@@ -11,6 +11,10 @@ use Magento\Downloadable\Model\Sample\Builder as SampleBuilder;
 use Magento\Downloadable\Api\Data\SampleInterfaceFactory;
 use Magento\Downloadable\Api\Data\LinkInterfaceFactory;
 
+/**
+ * Class \Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Downloadable
+ *
+ */
 class Downloadable
 {
     /**
@@ -20,21 +24,25 @@ class Downloadable
 
     /**
      * @var SampleInterfaceFactory
+     * @since 2.1.0
      */
     private $sampleFactory;
 
     /**
      * @var LinkInterfaceFactory
+     * @since 2.1.0
      */
     private $linkFactory;
 
     /**
      * @var SampleBuilder
+     * @since 2.1.0
      */
     private $sampleBuilder;
 
     /**
      * @var LinkBuilder
+     * @since 2.1.0
      */
     private $linkBuilder;
 

@@ -132,6 +132,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Attributes defined by user
      *
      * @var array
+     * @since 2.1.3
      */
     private $userDefinedAttributes = [];
 
@@ -266,6 +267,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Attributes codes which shows as date
      *
      * @var array
+     * @since 2.1.3
      */
     protected $dateAttrCodes = [
         'special_from_date',
@@ -333,6 +335,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
@@ -340,6 +343,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Product entity link field
      *
      * @var string
+     * @since 2.1.0
      */
     private $productEntityLinkField;
 
@@ -853,6 +857,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     protected function _prepareEntityCollection(\Magento\Eav\Model\Entity\Collection\AbstractCollection $collection)
     {
@@ -1018,6 +1023,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      *
      * @param string|array $value
      * @return string|array
+     * @since 2.1.3
      */
     private function wrapValue($value)
     {
@@ -1134,6 +1140,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.1.0
      */
     private function appendMultirowData(&$dataRow, &$multiRawData)
     {
@@ -1236,7 +1243,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.1.0
      * @param array $dataRow
      * @param array $multiRawData
      * @return array
@@ -1445,6 +1452,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Get product metadata pool
      *
      * @return \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {
@@ -1459,6 +1467,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Get product entity link field
      *
      * @return string
+     * @since 2.1.0
      */
     protected function getProductEntityLinkField()
     {

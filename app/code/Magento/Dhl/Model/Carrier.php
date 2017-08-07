@@ -192,6 +192,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     protected $_debugReplacePrivateDataKeys = [
         'SiteID', 'Password'
@@ -670,7 +671,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         if ($configWeightUnit != $countryWeightUnit) {
             $weight = $this->_carrierHelper->convertMeasureWeight(
-                sprintf('%.3f', $weight),
+                (float)$weight,
                 $configWeightUnit,
                 $countryWeightUnit
             );
@@ -870,7 +871,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         if ($configDimensionUnit != $countryDimensionUnit) {
             $dimension = $this->_carrierHelper->convertMeasureDimension(
-                sprintf('%.3f', $dimension),
+                (float)$dimension,
                 $configDimensionUnit,
                 $countryDimensionUnit
             );
@@ -889,9 +890,9 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     {
         $sizeChecker = (string)$this->getConfigData('size');
 
-        $height = $this->_getDimension((string)$this->getConfigData('height'));
-        $depth = $this->_getDimension((string)$this->getConfigData('depth'));
-        $width = $this->_getDimension((string)$this->getConfigData('width'));
+        $height = $this->_getDimension((float)$this->getConfigData('height'));
+        $depth = $this->_getDimension((float)$this->getConfigData('depth'));
+        $width = $this->_getDimension((float)$this->getConfigData('width'));
 
         if ($sizeChecker && $height && $depth && $width) {
             $nodePiece->addChild('Height', $height);

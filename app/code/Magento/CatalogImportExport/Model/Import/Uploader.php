@@ -20,6 +20,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * HTTP scheme
      * used to compare against the filename and select the proper DriverPool adapter
      * @var string
+     * @since 2.2.0
      */
     private $httpScheme = 'http://';
 

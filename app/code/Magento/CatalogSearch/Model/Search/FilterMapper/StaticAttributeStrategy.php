@@ -12,21 +12,25 @@ use Magento\Framework\DB\Select;
 
 /**
  * This strategy handles static attributes
+ * @since 2.2.0
  */
 class StaticAttributeStrategy implements FilterStrategyInterface
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var AliasResolver
+     * @since 2.2.0
      */
     private $aliasResolver;
 
     /**
      * @var EavConfig
+     * @since 2.2.0
      */
     private $eavConfig;
 
@@ -34,6 +38,7 @@ class StaticAttributeStrategy implements FilterStrategyInterface
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param EavConfig $eavConfig
      * @param AliasResolver $aliasResolver
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resourceConnection,
@@ -47,6 +52,7 @@ class StaticAttributeStrategy implements FilterStrategyInterface
 
     /**
      * {@inheritDoc}
+     * @since 2.2.0
      */
     public function apply(
         \Magento\Framework\Search\Request\FilterInterface $filter,
@@ -70,6 +76,7 @@ class StaticAttributeStrategy implements FilterStrategyInterface
      * @param string $field
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.2.0
      */
     private function getAttributeByCode($field)
     {
@@ -81,6 +88,7 @@ class StaticAttributeStrategy implements FilterStrategyInterface
      *
      * @param Select $select
      * @return string|null
+     * @since 2.2.0
      */
     private function extractTableAliasFromSelect(Select $select)
     {

@@ -32,6 +32,7 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var \Magento\Framework\Acl\Data\CacheInterface
+     * @since 2.2.0
      */
     private $aclDataCache;
 

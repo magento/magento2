@@ -22,6 +22,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $excludedAttributes;
 

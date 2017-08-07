@@ -12,6 +12,10 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Controller\Adminhtml\Product\Builder as CatalogProductBuilder;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * Class \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Builder\Plugin
+ *
+ */
 class Plugin
 {
     /**
@@ -43,6 +47,7 @@ class Plugin
      * @return Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.2.0
      */
     public function afterBuild(CatalogProductBuilder $subject, Product $product, RequestInterface $request)
     {

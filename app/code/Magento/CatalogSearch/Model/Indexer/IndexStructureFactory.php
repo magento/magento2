@@ -12,6 +12,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * @api
+ * @since 2.1.0
  */
 class IndexStructureFactory
 {
@@ -19,6 +20,7 @@ class IndexStructureFactory
      * Object Manager instance
      *
      * @var ObjectManagerInterface
+     * @since 2.1.0
      */
     protected $objectManager = null;
 
@@ -26,11 +28,13 @@ class IndexStructureFactory
      * Instance name to create
      *
      * @var string
+     * @since 2.1.0
      */
     protected $structures = null;
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.1.0
      */
     private $scopeConfig;
 
@@ -38,6 +42,7 @@ class IndexStructureFactory
      * Configuration path by which current indexer handler stored
      *
      * @var string
+     * @since 2.1.0
      */
     private $configPath;
 
@@ -48,6 +53,7 @@ class IndexStructureFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param string $configPath
      * @param string[] $structures
+     * @since 2.1.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -66,6 +72,7 @@ class IndexStructureFactory
      *
      * @param array $data
      * @return IndexStructureInterface
+     * @since 2.1.0
      */
     public function create(array $data = [])
     {

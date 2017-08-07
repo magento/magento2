@@ -13,21 +13,36 @@ use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Theme\Model\Data\Design\Config as DesignConfig;
 use Magento\Theme\Model\Design\Config\Storage as ConfigStorage;
 
+/**
+ * Class \Magento\Theme\Model\DesignConfigRepository
+ *
+ * @since 2.1.0
+ */
 class DesignConfigRepository implements DesignConfigRepositoryInterface
 {
-    /** @var ReinitableConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ReinitableConfigInterface
+     * @since 2.1.0
+     */
     protected $reinitableConfig;
 
-    /** @var IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     * @since 2.1.0
+     */
     protected $indexerRegistry;
 
-    /** @var ConfigStorage */
+    /**
+     * @var \Magento\Theme\Model\Design\Config\Storage
+     * @since 2.1.0
+     */
     protected $configStorage;
 
     /**
      * Design config validator
      *
      * @var \Magento\Theme\Model\Design\Config\Validator
+     * @since 2.1.0
      */
     private $validator;
 
@@ -35,6 +50,7 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
      * @param ConfigStorage $configStorage
      * @param ReinitableConfigInterface $reinitableConfig
      * @param IndexerRegistry $indexerRegistry
+     * @since 2.1.0
      */
     public function __construct(
         ConfigStorage $configStorage,
@@ -51,7 +67,8 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
      *
      * @return Design\Config\Validator
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getValidator()
     {
@@ -65,6 +82,7 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function getByScope($scope, $scopeId)
     {
@@ -73,6 +91,7 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function save(DesignConfigInterface $designConfig)
     {
@@ -93,6 +112,7 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function delete(DesignConfigInterface $designConfig)
     {
@@ -113,6 +133,7 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
      * Synchronize design config grid
      *
      * @return void
+     * @since 2.1.0
      */
     protected function reindexGrid()
     {

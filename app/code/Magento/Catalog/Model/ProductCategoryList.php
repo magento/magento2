@@ -11,27 +11,32 @@ use Magento\Framework\DB\Sql\UnionExpression;
 
 /**
  * Provides info about product categories.
+ * @since 2.2.0
  */
 class ProductCategoryList
 {
     /**
      * @var array
+     * @since 2.2.0
      */
     private $categoryIdList = [];
 
     /**
      * @var ResourceModel\Product
+     * @since 2.2.0
      */
     private $productResource;
 
     /**
      * @var ResourceModel\Category
+     * @since 2.2.0
      */
     private $category;
 
     /**
      * @param ResourceModel\Product $productResource
      * @param ResourceModel\Category $category
+     * @since 2.2.0
      */
     public function __construct(
         ResourceModel\Product $productResource,
@@ -46,6 +51,7 @@ class ProductCategoryList
      *
      * @param int $productId
      * @return array
+     * @since 2.2.0
      */
     public function getCategoryIds($productId)
     {
@@ -73,6 +79,7 @@ class ProductCategoryList
      * @param int $productId
      * @param string $tableName
      * @return Select
+     * @since 2.2.0
      */
     public function getCategorySelect($productId, $tableName)
     {

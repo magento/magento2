@@ -79,11 +79,13 @@ class PluginList extends Scoped implements InterceptionPluginList
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -374,6 +376,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      *
      * @param array $plugins
      * @return void
+     * @since 2.2.0
      */
     private function filterPlugins(array &$plugins)
     {
@@ -389,7 +392,8 @@ class PluginList extends Scoped implements InterceptionPluginList
      * Get logger
      *
      * @return \Psr\Log\LoggerInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getLogger()
     {

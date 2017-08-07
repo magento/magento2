@@ -9,22 +9,26 @@ use Magento\Payment\Api\Data\PaymentMethodInterface;
 
 /**
  * Payment method list class.
+ * @since 2.1.3
  */
 class PaymentMethodList implements \Magento\Payment\Api\PaymentMethodListInterface
 {
     /**
      * @var \Magento\Payment\Api\Data\PaymentMethodInterfaceFactory
+     * @since 2.1.3
      */
     private $methodFactory;
 
     /**
      * @var \Magento\Payment\Helper\Data
+     * @since 2.1.3
      */
     private $helper;
 
     /**
      * @param \Magento\Payment\Api\Data\PaymentMethodInterfaceFactory $methodFactory
      * @param \Magento\Payment\Helper\Data $helper
+     * @since 2.1.3
      */
     public function __construct(
         \Magento\Payment\Api\Data\PaymentMethodInterfaceFactory $methodFactory,
@@ -36,6 +40,7 @@ class PaymentMethodList implements \Magento\Payment\Api\PaymentMethodListInterfa
 
     /**
      * {@inheritdoc}
+     * @since 2.1.3
      */
     public function getList($storeId)
     {
@@ -77,6 +82,7 @@ class PaymentMethodList implements \Magento\Payment\Api\PaymentMethodListInterfa
 
     /**
      * {@inheritdoc}
+     * @since 2.1.3
      */
     public function getActiveList($storeId)
     {

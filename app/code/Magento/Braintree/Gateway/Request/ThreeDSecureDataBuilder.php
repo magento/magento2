@@ -13,6 +13,7 @@ use Magento\Payment\Helper\Formatter;
 
 /**
  * Class ThreeDSecureDataBuilder
+ * @since 2.1.0
  */
 class ThreeDSecureDataBuilder implements BuilderInterface
 {
@@ -20,11 +21,13 @@ class ThreeDSecureDataBuilder implements BuilderInterface
 
     /**
      * @var Config
+     * @since 2.1.0
      */
     private $config;
 
     /**
      * @var SubjectReader
+     * @since 2.1.0
      */
     private $subjectReader;
 
@@ -33,6 +36,7 @@ class ThreeDSecureDataBuilder implements BuilderInterface
      *
      * @param Config $config
      * @param SubjectReader $subjectReader
+     * @since 2.1.0
      */
     public function __construct(Config $config, SubjectReader $subjectReader)
     {
@@ -42,6 +46,7 @@ class ThreeDSecureDataBuilder implements BuilderInterface
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     public function build(array $buildSubject)
     {
@@ -61,6 +66,7 @@ class ThreeDSecureDataBuilder implements BuilderInterface
      * @param OrderAdapterInterface $order
      * @param float $amount
      * @return bool
+     * @since 2.1.0
      */
     private function is3DSecureEnabled(OrderAdapterInterface $order, $amount)
     {

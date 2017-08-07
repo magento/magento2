@@ -9,6 +9,7 @@ use Magento\Framework\Search\RequestInterface;
 
 /**
  * RequestCheckerInterface provides the interface to work with query checkers.
+ * @since 2.2.0
  */
 interface RequestCheckerInterface
 {
@@ -19,6 +20,7 @@ interface RequestCheckerInterface
      *
      * @param RequestInterface $request
      * @return bool
+     * @since 2.2.0
      */
     public function isApplicable(RequestInterface $request);
 }

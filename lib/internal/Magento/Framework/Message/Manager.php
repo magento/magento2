@@ -57,6 +57,7 @@ class Manager implements ManagerInterface
 
     /**
      * @var ExceptionMessageFactoryInterface
+     * @since 2.2.0
      */
     private $exceptionMessageFactory;
 

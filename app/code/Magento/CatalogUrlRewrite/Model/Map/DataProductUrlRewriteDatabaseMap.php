@@ -12,27 +12,41 @@ use Magento\UrlRewrite\Model\MergeDataProvider;
 
 /**
  * Map that holds data for category url rewrites entity
+ * @since 2.2.0
  */
 class DataProductUrlRewriteDatabaseMap implements DatabaseMapInterface
 {
     const ENTITY_TYPE = 'product';
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     * @since 2.2.0
+     */
     private $createdTableAdapters = [];
 
-    /** @var HashMapPool */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Map\HashMapPool
+     * @since 2.2.0
+     */
     private $hashMapPool;
 
-    /** @var ResourceConnection */
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.2.0
+     */
     private $connection;
 
-    /** @var TemporaryTableService */
+    /**
+     * @var \Magento\Framework\DB\TemporaryTableService
+     * @since 2.2.0
+     */
     private $temporaryTableService;
 
     /**
      * @param ResourceConnection $connection
      * @param HashMapPool $hashMapPool,
      * @param TemporaryTableService $temporaryTableService
+     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $connection,
@@ -49,6 +63,7 @@ class DataProductUrlRewriteDatabaseMap implements DatabaseMapInterface
      *
      * @param int $categoryId
      * @return void
+     * @since 2.2.0
      */
     private function generateTableAdapter($categoryId)
     {
@@ -59,6 +74,7 @@ class DataProductUrlRewriteDatabaseMap implements DatabaseMapInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getData($categoryId, $key)
     {
@@ -76,6 +92,7 @@ class DataProductUrlRewriteDatabaseMap implements DatabaseMapInterface
      *
      * @param int $categoryId
      * @return string
+     * @since 2.2.0
      */
     private function generateData($categoryId)
     {
@@ -112,6 +129,7 @@ class DataProductUrlRewriteDatabaseMap implements DatabaseMapInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function destroyTableAdapter($categoryId)
     {

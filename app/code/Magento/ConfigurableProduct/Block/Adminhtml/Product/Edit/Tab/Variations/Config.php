@@ -29,6 +29,7 @@ class Config extends Widget implements TabInterface
 
     /**
      * @var Configurable
+     * @since 2.1.0
      */
     protected $configurableType;
 
@@ -136,6 +137,7 @@ class Config extends Widget implements TabInterface
 
     /**
      * @return bool
+     * @since 2.1.0
      */
     public function isHasVariations()
     {

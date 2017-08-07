@@ -39,6 +39,7 @@ class CompilerPreparation
 
     /**
      * @var GenerationDirectoryAccess
+     * @since 2.2.0
      */
     private $generationDirectoryAccess;
 
@@ -97,6 +98,7 @@ class CompilerPreparation
      * Retrieves command list with commands which invalidates compiler
      *
      * @return array
+     * @since 2.2.0
      */
     private function getCompilerInvalidationCommands()
     {
@@ -113,6 +115,7 @@ class CompilerPreparation
      * Retrieves generation directory access checker.
      *
      * @return GenerationDirectoryAccess the generation directory access checker
+     * @since 2.2.0
      */
     private function getGenerationDirectoryAccess()
     {

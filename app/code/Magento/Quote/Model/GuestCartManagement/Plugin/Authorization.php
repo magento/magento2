@@ -7,15 +7,22 @@ namespace Magento\Quote\Model\GuestCartManagement\Plugin;
 
 use Magento\Framework\Exception\StateException;
 
+/**
+ * Class \Magento\Quote\Model\GuestCartManagement\Plugin\Authorization
+ *
+ * @since 2.1.0
+ */
 class Authorization
 {
     /**
      * @var \Magento\Authorization\Model\UserContextInterface
+     * @since 2.1.0
      */
     protected $userContext;
 
     /**
      * @param \Magento\Authorization\Model\UserContextInterface $userContext
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Authorization\Model\UserContextInterface $userContext
@@ -31,6 +38,7 @@ class Authorization
      * @throws StateException
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function beforeAssignCustomer(
         \Magento\Quote\Model\GuestCart\GuestCartManagement $subject,

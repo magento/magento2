@@ -24,6 +24,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -145,6 +146,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Get data for store edit
      *
      * @return string
+     * @since 2.2.0
      */
     public function getStoreData()
     {

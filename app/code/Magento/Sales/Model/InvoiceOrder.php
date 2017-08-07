@@ -23,56 +23,67 @@ use Psr\Log\LoggerInterface;
 /**
  * Class InvoiceOrder
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.1.2
  */
 class InvoiceOrder implements InvoiceOrderInterface
 {
     /**
      * @var ResourceConnection
+     * @since 2.1.2
      */
     private $resourceConnection;
 
     /**
      * @var OrderRepositoryInterface
+     * @since 2.1.2
      */
     private $orderRepository;
 
     /**
      * @var InvoiceDocumentFactory
+     * @since 2.1.2
      */
     private $invoiceDocumentFactory;
 
     /**
      * @var PaymentAdapterInterface
+     * @since 2.1.2
      */
     private $paymentAdapter;
 
     /**
      * @var OrderStateResolverInterface
+     * @since 2.1.2
      */
     private $orderStateResolver;
 
     /**
      * @var OrderConfig
+     * @since 2.1.2
      */
     private $config;
 
     /**
      * @var InvoiceRepository
+     * @since 2.1.2
      */
     private $invoiceRepository;
 
     /**
      * @var InvoiceOrderValidator
+     * @since 2.1.3
      */
     private $invoiceOrderValidator;
 
     /**
      * @var NotifierInterface
+     * @since 2.1.2
      */
     private $notifierInterface;
 
     /**
      * @var LoggerInterface
+     * @since 2.1.2
      */
     private $logger;
 
@@ -89,6 +100,7 @@ class InvoiceOrder implements InvoiceOrderInterface
      * @param NotifierInterface $notifierInterface
      * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.1.2
      */
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -128,6 +140,7 @@ class InvoiceOrder implements InvoiceOrderInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \DomainException
+     * @since 2.1.2
      */
     public function execute(
         $orderId,

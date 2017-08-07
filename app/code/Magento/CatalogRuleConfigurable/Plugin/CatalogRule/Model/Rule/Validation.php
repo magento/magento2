@@ -36,6 +36,7 @@ class Validation
      * @param bool $validateResult
      * @param DataObject|Product $product
      * @return bool
+     * @since 2.2.0
      */
     public function afterValidate(Rule $rule, $validateResult, DataObject $product)
     {

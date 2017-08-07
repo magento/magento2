@@ -14,21 +14,25 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
  * FilterContext represents a Context of the Strategy pattern
  * Its responsibility is to choose appropriate strategy to apply passed filter to the Select
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.2.0
  */
 class FilterContext implements FilterStrategyInterface
 {
     /**
      * @var ExclusionStrategy
+     * @since 2.2.0
      */
     private $exclusionStrategy;
 
     /**
      * @var EavConfig
+     * @since 2.2.0
      */
     private $eavConfig;
 
     /**
      * @var StaticAttributeStrategy
+     * @since 2.2.0
      */
     private $staticAttributeStrategy;
 
@@ -39,6 +43,7 @@ class FilterContext implements FilterStrategyInterface
      * @param TermDropdownStrategy $termDropdownStrategy
      * @param StaticAttributeStrategy $staticAttributeStrategy
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function __construct(
         EavConfig $eavConfig,
@@ -54,6 +59,7 @@ class FilterContext implements FilterStrategyInterface
 
     /**
      * {@inheritDoc}
+     * @since 2.2.0
      */
     public function apply(
         \Magento\Framework\Search\Request\FilterInterface $filter,
@@ -81,6 +87,7 @@ class FilterContext implements FilterStrategyInterface
      * @param string $field
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.2.0
      */
     private function getAttributeByCode($field)
     {

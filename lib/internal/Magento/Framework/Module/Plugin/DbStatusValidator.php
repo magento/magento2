@@ -46,6 +46,7 @@ class DbStatusValidator
      * @throws LocalizedException
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function beforeDispatch(FrontController $subject, RequestInterface $request)
     {

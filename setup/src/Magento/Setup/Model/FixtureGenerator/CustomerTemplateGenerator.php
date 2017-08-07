@@ -14,21 +14,25 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Product template generator
+ * @since 2.2.0
  */
 class CustomerTemplateGenerator implements TemplateEntityGeneratorInterface
 {
     /**
      * @var CustomerFactory
+     * @since 2.2.0
      */
     private $customerFactory;
 
     /**
      * @var AddressFactory
+     * @since 2.2.0
      */
     private $addressFactory;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.2.0
      */
     private $storeManager;
 
@@ -36,6 +40,7 @@ class CustomerTemplateGenerator implements TemplateEntityGeneratorInterface
      * @param CustomerFactory $customerFactory
      * @param AddressFactory $addressFactory
      * @param StoreManagerInterface $storeManager
+     * @since 2.2.0
      */
     public function __construct(
         CustomerFactory $customerFactory,
@@ -49,6 +54,7 @@ class CustomerTemplateGenerator implements TemplateEntityGeneratorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function generateEntity()
     {
@@ -64,6 +70,7 @@ class CustomerTemplateGenerator implements TemplateEntityGeneratorInterface
      * Get customer template
      *
      * @return Customer
+     * @since 2.2.0
      */
     private function getCustomerTemplate()
     {
@@ -102,6 +109,7 @@ class CustomerTemplateGenerator implements TemplateEntityGeneratorInterface
     /**
      * @param int $customerId
      * @return Address
+     * @since 2.2.0
      */
     private function getAddressTemplate($customerId)
     {

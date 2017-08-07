@@ -13,6 +13,10 @@ namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 
+/**
+ * Class \Magento\Framework\Data\Form\Element\Multiline
+ *
+ */
 class Multiline extends AbstractElement
 {
     /**
@@ -153,6 +157,7 @@ class Multiline extends AbstractElement
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getEscapedValue($index = null)
     {

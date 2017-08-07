@@ -11,6 +11,10 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\SetupInterface;
 use Magento\Framework\App\ResourceConnection;
 
+/**
+ * Class \Magento\Framework\Module\Setup
+ *
+ */
 class Setup implements SetupInterface
 {
     /**
@@ -77,6 +81,7 @@ class Setup implements SetupInterface
      * Returns default setup connection instance
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.1.3
      */
     private function getDefaultConnection()
     {
@@ -104,6 +109,7 @@ class Setup implements SetupInterface
      *
      * @param string $tableName
      * @return string
+     * @since 2.1.0
      */
     public function getTablePlaceholder($tableName)
     {

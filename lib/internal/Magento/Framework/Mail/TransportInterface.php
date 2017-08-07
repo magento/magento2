@@ -24,6 +24,7 @@ interface TransportInterface
      * Get message
      *
      * @return string
+     * @since 2.2.0
      */
     public function getMessage();
 }

@@ -9,11 +9,13 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Related;
  * Class UpSellDataProvider
  *
  * @api
+ * @since 2.1.0
  */
 class UpSellDataProvider extends AbstractDataProvider
 {
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     protected function getLinkType()
     {

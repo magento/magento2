@@ -48,6 +48,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
      * URI validator
      *
      * @var \Magento\Framework\Validator\ValidatorInterface
+     * @since 2.2.0
      */
     private $protocolValidator;
 
@@ -119,6 +120,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
      * @throws LocalizedException
      *
      * @return $this
+     * @since 2.1.2
      */
     private function validateRemoteFile($remoteFileUrl)
     {

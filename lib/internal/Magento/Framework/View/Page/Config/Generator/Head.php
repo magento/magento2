@@ -9,6 +9,10 @@ use Magento\Framework\View\Layout;
 use Magento\Framework\View\Page\Config\Structure;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\Framework\View\Page\Config\Generator\Head
+ *
+ */
 class Head implements Layout\GeneratorInterface
 {
     /**#@+
@@ -60,6 +64,7 @@ class Head implements Layout\GeneratorInterface
 
     /**
      * @var \Magento\Framework\UrlInterface
+     * @since 2.2.0
      */
     private $url;
 

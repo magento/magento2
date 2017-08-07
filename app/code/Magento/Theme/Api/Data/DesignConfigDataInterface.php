@@ -10,6 +10,7 @@ use Magento\Theme\Api\Data\DesignConfigDataExtensionInterface;
 /**
  * Interface DesignConfigDataInterface
  * @api
+ * @since 2.1.0
  */
 interface DesignConfigDataInterface
 {
@@ -23,34 +24,40 @@ interface DesignConfigDataInterface
 
     /**
      * @return string
+     * @since 2.1.0
      */
     public function getPath();
 
     /**
      * @return string
+     * @since 2.1.0
      */
     public function getValue();
 
     /**
      * @return array
+     * @since 2.1.0
      */
     public function getFieldConfig();
 
     /**
      * @param string $path
      * @return $this
+     * @since 2.1.0
      */
     public function setPath($path);
 
     /**
      * @param string $value
      * @return $this
+     * @since 2.1.0
      */
     public function setValue($value);
 
     /**
      * @param array $config
      * @return $this
+     * @since 2.1.0
      */
     public function setFieldConfig(array $config);
 
@@ -58,6 +65,7 @@ interface DesignConfigDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return DesignConfigDataExtensionInterface|null
+     * @since 2.1.0
      */
     public function getExtensionAttributes();
 
@@ -66,6 +74,7 @@ interface DesignConfigDataInterface
      *
      * @param DesignConfigDataExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.1.0
      */
     public function setExtensionAttributes(DesignConfigDataExtensionInterface $extensionAttributes);
 }

@@ -7,6 +7,7 @@ namespace Magento\Framework\Validator;
 
 /**
  * Class Url validates URL and checks that it has allowed scheme
+ * @since 2.2.0
  */
 class Url
 {
@@ -16,6 +17,7 @@ class Url
      * @param string $value
      * @param array $allowedSchemes
      * @return bool
+     * @since 2.2.0
      */
     public function isValid($value, array $allowedSchemes = [])
     {

@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model;
 /**
  * @api
  * Storage, which provide information for frontend storages, as priduct-storage, ids-storag
+ * @since 2.2.0
  */
 interface FrontendStorageConfigurationInterface
 {
@@ -22,6 +23,7 @@ interface FrontendStorageConfigurationInterface
      * Prepare dynamic data which will be used in Storage Configuration (e.g. data from App/Config)
      *
      * @return array
+     * @since 2.2.0
      */
     public function get();
 }

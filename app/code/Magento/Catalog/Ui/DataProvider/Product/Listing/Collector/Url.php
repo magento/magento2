@@ -17,6 +17,7 @@ use Magento\Framework\Data\Helper\PostHelper;
 /**
  * Collect information about all urls, that needed to render product on front
  * Also collect information about add-to-cart, add-to-compare, add-to-wishlist buttons
+ * @since 2.2.0
  */
 class Url implements ProductRenderCollectorInterface
 {
@@ -37,21 +38,25 @@ class Url implements ProductRenderCollectorInterface
 
     /**
      * @var AbstractProduct
+     * @since 2.2.0
      */
     private $abstractProduct;
 
     /**
      * @var Compare
+     * @since 2.2.0
      */
     private $compare;
 
     /**
      * @var PostHelper
+     * @since 2.2.0
      */
     private $postHelper;
 
     /**
      * @var ButtonInterfaceFactory
+     * @since 2.2.0
      */
     private $buttonFactory;
 
@@ -60,6 +65,7 @@ class Url implements ProductRenderCollectorInterface
      * @param Compare $compare
      * @param PostHelper $postHelper
      * @param ButtonInterfaceFactory $buttonFactory
+     * @since 2.2.0
      */
     public function __construct(
         AbstractProduct $abstractProduct,
@@ -75,6 +81,7 @@ class Url implements ProductRenderCollectorInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function collect(ProductInterface $product, ProductRenderInterface $productRender)
     {

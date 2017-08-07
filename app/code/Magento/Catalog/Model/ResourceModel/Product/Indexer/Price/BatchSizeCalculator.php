@@ -8,16 +8,19 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
 /**
  * Ensure that size of index MEMORY table is enough for configured rows count in batch.
+ * @since 2.2.0
  */
 class BatchSizeCalculator
 {
     /**
      * @var array
+     * @since 2.2.0
      */
     private $batchRowsCount;
 
     /**
      * @var \Magento\Framework\Indexer\BatchSizeManagementInterface[]
+     * @since 2.2.0
      */
     private $estimators;
 
@@ -25,6 +28,7 @@ class BatchSizeCalculator
      * BatchSizeCalculator constructor.
      * @param array $batchRowsCount
      * @param array $estimators
+     * @since 2.2.0
      */
     public function __construct(array $batchRowsCount, array $estimators)
     {
@@ -40,6 +44,7 @@ class BatchSizeCalculator
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param string $indexerTypeId
      * @return int
+     * @since 2.2.0
      */
     public function estimateBatchSize(\Magento\Framework\DB\Adapter\AdapterInterface $connection, $indexerTypeId)
     {

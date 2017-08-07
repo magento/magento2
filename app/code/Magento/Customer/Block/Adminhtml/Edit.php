@@ -10,7 +10,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Controller\RegistryConstants;
 
 /**
- * @deprecated for UiComponent replacement
+ * @deprecated 2.2.0 for UiComponent replacement
  * @see app/code/Magento/Customer/view/base/ui_component/customer_form.xml
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container

@@ -18,6 +18,7 @@ use Magento\Deploy\Console\Command\App\ConfigImport\Processor;
  * We have configuration files that are shared between environments, but some of the configurations are read only
  * from DB (e.g., themes, scopes and etc). This command is used to import such configurations from the file to
  * appropriate application sources
+ * @since 2.2.0
  */
 class ConfigImportCommand extends Command
 {
@@ -30,11 +31,13 @@ class ConfigImportCommand extends Command
      * Configuration importer.
      *
      * @var Processor
+     * @since 2.2.0
      */
     private $processor;
 
     /**
      * @param Processor $processor the configuration importer
+     * @since 2.2.0
      */
     public function __construct(Processor $processor)
     {
@@ -45,6 +48,7 @@ class ConfigImportCommand extends Command
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     protected function configure()
     {
@@ -56,6 +60,7 @@ class ConfigImportCommand extends Command
 
     /**
      * Imports data from deployment configuration files to the DB. {@inheritdoc}
+     * @since 2.2.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

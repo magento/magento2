@@ -11,7 +11,7 @@ use Magento\Ui\Component\AbstractComponent;
 use Magento\Framework\View\Element\UiComponent\BlockWrapperInterface;
 
 /**
- * @deprecated
+ * @deprecated 2.2.0
  */
 class Block extends AbstractComponent implements BlockWrapperInterface
 {
@@ -70,6 +70,7 @@ class Block extends AbstractComponent implements BlockWrapperInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getConfiguration()
     {

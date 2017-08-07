@@ -9,6 +9,7 @@ use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
 
 /**
  * Check that user is allowed to watch resource with given acl resource..
+ * @since 2.2.0
  */
 class AclCondition implements VisibilityConditionInterface
 {
@@ -19,11 +20,13 @@ class AclCondition implements VisibilityConditionInterface
 
     /**
      * @var \Magento\Framework\AuthorizationInterface
+     * @since 2.2.0
      */
     private $authorization;
 
     /**
      * @param \Magento\Framework\AuthorizationInterface $authorization
+     * @since 2.2.0
      */
     public function __construct(\Magento\Framework\AuthorizationInterface $authorization)
     {
@@ -32,6 +35,7 @@ class AclCondition implements VisibilityConditionInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function isVisible(array $arguments)
     {
@@ -40,6 +44,7 @@ class AclCondition implements VisibilityConditionInterface
 
     /**
      * @return string
+     * @since 2.2.0
      */
     public function getName()
     {

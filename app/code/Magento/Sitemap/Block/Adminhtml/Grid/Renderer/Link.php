@@ -14,6 +14,10 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\Sitemap\Block\Adminhtml\Grid\Renderer\Link
+ *
+ */
 class Link extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
@@ -28,6 +32,7 @@ class Link extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
 
     /**
      * @var DocumentRoot
+     * @since 2.2.0
      */
     protected $documentRoot;
 

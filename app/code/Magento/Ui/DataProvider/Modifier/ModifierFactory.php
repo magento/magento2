@@ -9,6 +9,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class Factory
+ * @since 2.1.0
  */
 class ModifierFactory
 {
@@ -16,6 +17,7 @@ class ModifierFactory
      * Object Manager
      *
      * @var ObjectManagerInterface
+     * @since 2.1.0
      */
     protected $objectManager;
 
@@ -23,6 +25,7 @@ class ModifierFactory
      * Construct
      *
      * @param ObjectManagerInterface $objectManager
+     * @since 2.1.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -36,6 +39,7 @@ class ModifierFactory
      * @param array $data
      * @return ModifierInterface
      * @throws \InvalidArgumentException
+     * @since 2.1.0
      */
     public function create($className, array $data = [])
     {

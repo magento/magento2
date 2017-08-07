@@ -47,6 +47,7 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
 
     /**
      * @var Config
+     * @since 2.1.3
      */
     private $appConfig;
 
@@ -162,8 +163,9 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
     /**
      * Retrieve application config.
      *
-     * @deprecated
+     * @deprecated 2.1.3
      * @return Config
+     * @since 2.1.3
      */
     private function getAppConfig()
     {
@@ -176,6 +178,7 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
     /**
      * Initialize default website.
      * @return void
+     * @since 2.1.3
      */
     private function initDefaultWebsite()
     {

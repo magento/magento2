@@ -7,6 +7,7 @@ namespace Magento\Ui\Config;
 
 /**
  * Utility methods for converters
+ * @since 2.2.0
  */
 class ConverterUtils
 {
@@ -15,6 +16,7 @@ class ConverterUtils
      *
      * @param \DOMNode $node
      * @return string
+     * @since 2.2.0
      */
     public function getComponentName(\DOMNode $node)
     {
@@ -39,6 +41,7 @@ class ConverterUtils
      *
      * @param \DOMNode $node
      * @return boolean
+     * @since 2.2.0
      */
     public function isUiComponent(\DOMNode $node)
     {

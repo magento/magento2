@@ -10,11 +10,13 @@ namespace Magento\Framework\Serialize\Serializer;
  *
  * May be used for cases when json encoding results with a string,
  * which contains characters, which are unacceptable by client.
+ * @since 2.2.0
  */
 class Base64Json implements \Magento\Framework\Serialize\SerializerInterface
 {
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function serialize($data)
     {
@@ -27,6 +29,7 @@ class Base64Json implements \Magento\Framework\Serialize\SerializerInterface
      *
      * @param string $string
      * @return string|int|float|bool|array|null
+     * @since 2.2.0
      */
     public function unserialize($string)
     {

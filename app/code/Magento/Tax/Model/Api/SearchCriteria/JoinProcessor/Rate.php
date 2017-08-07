@@ -11,12 +11,14 @@ use Magento\Framework\Data\Collection\AbstractDb;
 /**
  * Class Rate
  * @package Magento\Tax\Model\Api\SearchCriteria\JoinProcessor
+ * @since 2.2.0
  */
 class Rate implements CustomJoinInterface
 {
     /**
      * @param \Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection $collection
      * @return true
+     * @since 2.2.0
      */
     public function apply(AbstractDb $collection)
     {

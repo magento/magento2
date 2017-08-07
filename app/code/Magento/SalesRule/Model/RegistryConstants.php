@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Model;
 /**
  * Declarations of core registry keys used by the SalesRule module
  *
+ * @since 2.1.0
  */
 class RegistryConstants
 {

@@ -7,6 +7,7 @@ namespace Magento\Framework\Locale;
 
 /**
  * Interface for classes that return array of locales.
+ * @since 2.2.0
  */
 interface OptionInterface
 {
@@ -28,6 +29,7 @@ interface OptionInterface
      * ```
      *
      * @return array
+     * @since 2.2.0
      */
     public function getOptionLocales();
 
@@ -49,6 +51,7 @@ interface OptionInterface
      * ```
      *
      * @return array
+     * @since 2.2.0
      */
     public function getTranslatedOptionLocales();
 }

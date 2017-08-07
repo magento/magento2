@@ -17,6 +17,7 @@ class FlatTableBuilder
 {
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
@@ -52,6 +53,7 @@ class FlatTableBuilder
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.1.0
      */
     protected $resource;
 
@@ -370,6 +372,7 @@ class FlatTableBuilder
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {

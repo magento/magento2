@@ -10,6 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * @api
+ * @since 2.1.3
  */
 class PlaceholderFactory
 {
@@ -20,17 +21,20 @@ class PlaceholderFactory
 
     /**
      * @var ObjectManagerInterface
+     * @since 2.1.3
      */
     private $objectManager;
 
     /**
      * @var array
+     * @since 2.1.3
      */
     private $types;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param array $types
+     * @since 2.1.3
      */
     public function __construct(ObjectManagerInterface $objectManager, array $types = [])
     {
@@ -44,6 +48,7 @@ class PlaceholderFactory
      * @param string $type
      * @return PlaceholderInterface
      * @throws LocalizedException
+     * @since 2.1.3
      */
     public function create($type)
     {

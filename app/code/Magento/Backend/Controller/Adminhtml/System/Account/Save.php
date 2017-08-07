@@ -19,6 +19,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
 {
     /**
      * @var SecurityCookie
+     * @since 2.1.0
      */
     private $securityCookie;
 
@@ -26,7 +27,8 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
      * Get security cookie
      *
      * @return SecurityCookie
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getSecurityCookie()
     {

@@ -8,10 +8,16 @@ namespace Magento\Sales\Model\Order;
 use Magento\Sales\Api\Data\TotalInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
+/**
+ * Class \Magento\Sales\Model\Order\ShippingTotal
+ *
+ * @since 2.0.3
+ */
 class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function getBaseShippingAmount()
     {
@@ -20,6 +26,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function getBaseShippingCanceled()
     {
@@ -28,6 +35,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function getBaseShippingDiscountAmount()
     {
@@ -36,6 +44,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function getBaseShippingDiscountTaxCompensationAmnt()
     {
@@ -44,6 +53,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function getBaseShippingInclTax()
     {
@@ -52,6 +62,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function getBaseShippingInvoiced()
     {
@@ -60,6 +71,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function getBaseShippingRefunded()
     {
@@ -68,6 +80,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function getBaseShippingTaxAmount()
     {
@@ -76,6 +89,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function getBaseShippingTaxRefunded()
     {
@@ -84,6 +98,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function getShippingAmount()
     {
@@ -92,6 +107,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function getShippingCanceled()
     {
@@ -100,6 +116,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function getShippingDiscountAmount()
     {
@@ -108,6 +125,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function getShippingDiscountTaxCompensationAmount()
     {
@@ -116,6 +134,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function getShippingInclTax()
     {
@@ -124,6 +143,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function getShippingInvoiced()
     {
@@ -132,6 +152,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function getShippingRefunded()
     {
@@ -140,6 +161,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function getShippingTaxAmount()
     {
@@ -148,6 +170,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function getShippingTaxRefunded()
     {
@@ -156,6 +179,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function setBaseShippingAmount($amount)
     {
@@ -164,6 +188,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function setBaseShippingCanceled($baseShippingCanceled)
     {
@@ -172,6 +197,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function setBaseShippingDiscountAmount($amount)
     {
@@ -180,6 +206,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function setBaseShippingDiscountTaxCompensationAmnt($amnt)
     {
@@ -188,6 +215,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function setBaseShippingInclTax($amount)
     {
@@ -196,6 +224,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function setBaseShippingInvoiced($baseShippingInvoiced)
     {
@@ -204,6 +233,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function setBaseShippingRefunded($baseShippingRefunded)
     {
@@ -212,6 +242,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function setBaseShippingTaxAmount($amount)
     {
@@ -220,6 +251,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function setBaseShippingTaxRefunded($baseShippingTaxRefunded)
     {
@@ -228,6 +260,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function setShippingAmount($amount)
     {
@@ -236,6 +269,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function setShippingCanceled($shippingCanceled)
     {
@@ -244,6 +278,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function setShippingDiscountAmount($amount)
     {
@@ -252,6 +287,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function setShippingDiscountTaxCompensationAmount($amount)
     {
@@ -260,6 +296,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function setShippingInclTax($amount)
     {
@@ -268,6 +305,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function setShippingInvoiced($shippingInvoiced)
     {
@@ -276,6 +314,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function setShippingRefunded($shippingRefunded)
     {
@@ -284,6 +323,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function setShippingTaxAmount($amount)
     {
@@ -292,6 +332,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function setShippingTaxRefunded($shippingTaxRefunded)
     {
@@ -300,6 +341,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function getExtensionAttributes()
     {
@@ -308,6 +350,7 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\TotalExtensionInterface $extensionAttributes

@@ -22,6 +22,7 @@ class Form extends \Magento\Framework\Data\Form
      * Serializer that allow convert arrays to string.
      *
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -33,6 +34,7 @@ class Form extends \Magento\Framework\Data\Form
      * @param FormKey $formKey
      * @param array $data
      * @param Json|null $serializer
+     * @since 2.2.0
      */
     public function __construct(
         Factory $factoryElement,

@@ -5,6 +5,10 @@
  */
 namespace Magento\OfflinePayments\Block\Info;
 
+/**
+ * Class \Magento\OfflinePayments\Block\Info\Checkmo
+ *
+ */
 class Checkmo extends \Magento\Payment\Block\Info
 {
     /**
@@ -49,7 +53,7 @@ class Checkmo extends \Magento\Payment\Block\Info
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.1.2
      * @return $this
      */
     protected function _convertAdditionalData()

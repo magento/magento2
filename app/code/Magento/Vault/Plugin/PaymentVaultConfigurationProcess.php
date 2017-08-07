@@ -9,21 +9,25 @@ namespace Magento\Vault\Plugin;
  * Class PaymentVaultConfigurationProcess
  *
  * Checks if vault group have active vaults.
+ * @since 2.2.0
  */
 class PaymentVaultConfigurationProcess
 {
     /**
      * @var \Magento\Vault\Api\PaymentMethodListInterface
+     * @since 2.2.0
      */
     private $vaultPaymentList;
 
     /**
      * @var \Magento\Vault\Api\PaymentMethodListInterface
+     * @since 2.2.0
      */
     private $paymentMethodList;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.2.0
      */
     private $storeManager;
 
@@ -31,6 +35,7 @@ class PaymentVaultConfigurationProcess
      * @param \Magento\Vault\Api\PaymentMethodListInterface $vaultPaymentList
      * @param \Magento\Payment\Api\PaymentMethodListInterface $paymentMethodList
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Vault\Api\PaymentMethodListInterface $vaultPaymentList,
@@ -49,6 +54,7 @@ class PaymentVaultConfigurationProcess
      * @param array $jsLayout
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function beforeProcess(\Magento\Checkout\Block\Checkout\LayoutProcessor $processor, $jsLayout)
     {

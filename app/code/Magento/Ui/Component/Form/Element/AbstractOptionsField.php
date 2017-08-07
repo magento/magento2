@@ -10,11 +10,13 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
  * @api
+ * @since 2.1.0
  */
 abstract class AbstractOptionsField extends AbstractElement
 {
     /**
      * @var array|OptionSourceInterface|null
+     * @since 2.1.0
      */
     protected $options;
 
@@ -25,6 +27,7 @@ abstract class AbstractOptionsField extends AbstractElement
      * @param array|OptionSourceInterface|null $options
      * @param array $components
      * @param array $data
+     * @since 2.1.0
      */
     public function __construct(
         ContextInterface $context,
@@ -40,6 +43,7 @@ abstract class AbstractOptionsField extends AbstractElement
      * Prepare component configuration
      *
      * @return void
+     * @since 2.1.0
      */
     public function prepare()
     {
@@ -68,6 +72,7 @@ abstract class AbstractOptionsField extends AbstractElement
      * @param string $optionValue
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.1.0
      */
     abstract public function getIsSelected($optionValue);
 
@@ -76,6 +81,7 @@ abstract class AbstractOptionsField extends AbstractElement
      *
      * @param array $options
      * @return array
+     * @since 2.1.0
      */
     protected function convertOptionsValueToString(array $options)
     {

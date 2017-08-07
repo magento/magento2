@@ -20,6 +20,7 @@ use Magento\Msrp\Model\Config;
 /**
  * Collects all information about Manufacture Advertise Price of product
  * This price will be used on front and will be rendered by JS.
+ * @since 2.2.0
  */
 class MsrpPrice implements ProductRenderCollectorInterface
 {
@@ -28,31 +29,37 @@ class MsrpPrice implements ProductRenderCollectorInterface
 
     /**
      * @var PriceCurrencyInterface
+     * @since 2.2.0
      */
     private $priceCurrency;
 
     /**
      * @var Data
+     * @since 2.2.0
      */
     private $msrpHelper;
 
     /**
      * @var Config
+     * @since 2.2.0
      */
     private $config;
 
     /**
      * @var PriceInfoExtensionFactory
+     * @since 2.2.0
      */
     private $priceInfoExtensionFactory;
 
     /**
      * @var MsrpPriceInfoInterfaceFactory
+     * @since 2.2.0
      */
     private $msrpPriceInfoFactory;
 
     /**
      * @var CalculatorInterface
+     * @since 2.2.0
      */
     private $adjustmentCalculator;
 
@@ -63,6 +70,7 @@ class MsrpPrice implements ProductRenderCollectorInterface
      * @param PriceInfoExtensionFactory $priceInfoExtensionFactory
      * @param MsrpPriceInfoInterfaceFactory $msrpPriceInfoFactory
      * @param CalculatorInterface $adjustmentCalculator
+     * @since 2.2.0
      */
     public function __construct(
         PriceCurrencyInterface $priceCurrency,
@@ -82,6 +90,7 @@ class MsrpPrice implements ProductRenderCollectorInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function collect(ProductInterface $product, ProductRenderInterface $productRender)
     {

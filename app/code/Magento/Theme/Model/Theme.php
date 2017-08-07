@@ -81,6 +81,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
 
     /**
      * @var ThemeFactory
+     * @since 2.2.0
      */
     private $themeModelFactory;
 
@@ -386,6 +387,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function toArray(array $keys = [])
     {
@@ -408,6 +410,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      *
      * @param array $data
      * @return Theme
+     * @since 2.2.0
      */
     public function populateFromArray(array $data)
     {
@@ -430,6 +433,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * Create Theme instance
      *
      * @return \Magento\Theme\Model\Theme
+     * @since 2.2.0
      */
     private function createThemeInstance()
     {

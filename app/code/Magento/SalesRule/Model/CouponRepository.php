@@ -48,7 +48,10 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
      */
     protected $extensionAttributesJoinProcessor;
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     * @since 2.2.0
+     */
     private $collectionProcessor;
 
     /**
@@ -197,7 +200,7 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
      *
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param Collection $collection
-     * @deprecated
+     * @deprecated 2.2.0
      * @return void
      */
     protected function addFilterGroupToCollection(
@@ -219,8 +222,9 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return CollectionProcessorInterface
+     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

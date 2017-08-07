@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Order\Invoice;
 
 /**
  * Interface for notification sender for Invoice.
+ * @since 2.1.2
  */
 interface SenderInterface
 {
@@ -19,6 +20,7 @@ interface SenderInterface
      * @param bool $forceSyncMode
      *
      * @return bool
+     * @since 2.1.2
      */
     public function send(
         \Magento\Sales\Api\Data\OrderInterface $order,

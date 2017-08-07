@@ -7,15 +7,20 @@ namespace Magento\Braintree\Model\Report\ConditionAppliers;
 
 /**
  * Class AppliersPool
+ * @since 2.1.0
  */
 class AppliersPool
 {
-    /** @var ApplierInterface[] */
+    /**
+     * @var \Magento\Braintree\Model\Report\ConditionAppliers\ApplierInterface[]
+     * @since 2.1.0
+     */
     private $appliersPool = [];
 
     /**
      * AppliersPool constructor.
      * @param ApplierInterface[] $appliers
+     * @since 2.1.0
      */
     public function __construct(array $appliers)
     {
@@ -27,6 +32,7 @@ class AppliersPool
      * Check appliers's types
      *
      * @return bool
+     * @since 2.1.0
      */
     private function checkAppliers()
     {
@@ -42,6 +48,7 @@ class AppliersPool
      * Get condition applier for filter
      * @param object $filter
      * @return null|ApplierInterface
+     * @since 2.1.0
      */
     public function getApplier($filter)
     {

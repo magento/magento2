@@ -44,6 +44,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * Serializer interface instance.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 

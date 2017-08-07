@@ -50,6 +50,7 @@ class Timezone implements TimezoneInterface
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
+     * @since 2.1.0
      */
     protected $_localeResolver;
 
@@ -298,6 +299,7 @@ class Timezone implements TimezoneInterface
      * @param string $format
      * @throws LocalizedException
      * @return string
+     * @since 2.1.0
      */
     public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s')
     {

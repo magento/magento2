@@ -18,27 +18,35 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
+ *
+ */
 class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Catalog product relation
      *
      * @var ProductRelation
+     * @since 2.1.0
      */
     protected $catalogProductRelation;
 
     /**
      * @var AttributeOptionProviderInterface
+     * @since 2.2.0
      */
     private $attributeOptionProvider;
 
     /**
      * @var ScopeResolverInterface
+     * @since 2.1.1
      */
     private $scopeResolver;
 
     /**
      * @var OptionProvider
+     * @since 2.2.0
      */
     private $optionProvider;
 
@@ -81,6 +89,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param OptionInterface $option
      * @return int
+     * @since 2.1.0
      */
     public function getEntityIdByAttribute(OptionInterface $option)
     {
@@ -222,6 +231,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param AbstractAttribute $superAttribute
      * @param int $productId
      * @return array
+     * @since 2.1.1
      */
     public function getAttributeOptions(AbstractAttribute $superAttribute, $productId)
     {

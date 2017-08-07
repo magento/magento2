@@ -5,30 +5,40 @@
  */
 namespace Magento\Developer\Model\Di;
 
+/**
+ * Class \Magento\Developer\Model\Di\Information
+ *
+ * @since 2.2.0
+ */
 class Information
 {
     /**
      * @var \Magento\Framework\ObjectManager\ConfigInterface
+     * @since 2.2.0
      */
     private $objectManagerConfig;
 
     /**
      * @var \Magento\Developer\Model\Di\PluginList
+     * @since 2.2.0
      */
     private $pluginList;
 
     /**
      * @var string[]
+     * @since 2.2.0
      */
     private $preferences = [];
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $virtualTypes = [];
 
     /**
      * @var \Magento\Framework\ObjectManager\DefinitionInterface
+     * @since 2.2.0
      */
     private $definitions;
 
@@ -36,6 +46,7 @@ class Information
      * @param \Magento\Framework\ObjectManager\ConfigInterface $objectManagerConfig
      * @param \Magento\Framework\ObjectManager\DefinitionInterface $definitions
      * @param \Magento\Developer\Model\Di\PluginList $pluginList
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\ObjectManager\ConfigInterface $objectManagerConfig,
@@ -52,6 +63,7 @@ class Information
      *
      * @param string $className
      * @return string
+     * @since 2.2.0
      */
     public function getPreference($className)
     {
@@ -66,6 +78,7 @@ class Information
      *
      * @param string $className
      * @return array|null
+     * @since 2.2.0
      */
     private function getConstructorParameters($className)
     {
@@ -78,6 +91,7 @@ class Information
      *
      * @param string $className
      * @return array
+     * @since 2.2.0
      */
     public function getParameters($className)
     {
@@ -106,6 +120,7 @@ class Information
      *
      * @param string $configuredParameter
      * @return array|null
+     * @since 2.2.0
      */
     private function renderParameters($configuredParameter)
     {
@@ -129,6 +144,7 @@ class Information
      *
      * @param string $className
      * @return array|null
+     * @since 2.2.0
      */
     private function getConfiguredConstructorParameters($className)
     {
@@ -140,6 +156,7 @@ class Information
      *
      * @param string $className
      * @return array
+     * @since 2.2.0
      */
     public function getVirtualTypes($className)
     {
@@ -158,6 +175,7 @@ class Information
     /**
      * @param string $className
      * @return array
+     * @since 2.2.0
      */
     public function getPlugins($className)
     {
@@ -169,6 +187,7 @@ class Information
      *
      * @param string $className
      * @return boolean
+     * @since 2.2.0
      */
     public function isVirtualType($className)
     {
@@ -181,6 +200,7 @@ class Information
      *
      * @param string $className
      * @return string|boolean
+     * @since 2.2.0
      */
     public function getVirtualTypeBase($className)
     {

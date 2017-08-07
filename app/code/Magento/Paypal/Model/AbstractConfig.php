@@ -53,11 +53,13 @@ abstract class AbstractConfig implements ConfigInterface
 
     /**
      * @var ProductMetadataInterface
+     * @since 2.1.0
      */
     protected $productMetadata;
 
     /**
      * @var string
+     * @since 2.1.0
      */
     private static $bnCode = 'Magento_Cart_%s';
 
@@ -343,7 +345,8 @@ abstract class AbstractConfig implements ConfigInterface
      * The getter function to get the ProductMetadata
      *
      * @return ProductMetadataInterface
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     protected function getProductMetadata()
     {

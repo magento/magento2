@@ -7,21 +7,25 @@ namespace Magento\Framework\DB\Sql;
 
 /**
  * Class LimitExpression
+ * @since 2.1.0
  */
 class LimitExpression extends Expression
 {
     /**
      * @var string
+     * @since 2.1.0
      */
     protected $sql;
 
     /**
      * @var int
+     * @since 2.1.0
      */
     protected $count;
 
     /**
      * @var int
+     * @since 2.1.0
      */
     protected $offset;
 
@@ -29,6 +33,7 @@ class LimitExpression extends Expression
      * @param string $sql
      * @param int $count
      * @param int $offset
+     * @since 2.1.0
      */
     public function __construct(
         $sql,
@@ -42,6 +47,7 @@ class LimitExpression extends Expression
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function __toString()
     {

@@ -120,6 +120,7 @@ class CronRunCommand extends AbstractSetupCommand
      * Executes setup jobs from the queue
      *
      * @return int
+     * @since 2.1.0
      */
     private function executeJobsFromQueue()
     {

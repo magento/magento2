@@ -8,6 +8,10 @@ namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\Product\SkuProcessor;
 
+/**
+ * Class \Magento\CatalogImportExport\Model\Import\Product\Validator\SuperProductsSku
+ *
+ */
 class SuperProductsSku extends AbstractImportValidator implements RowValidatorInterface
 {
     /**

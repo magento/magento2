@@ -9,6 +9,10 @@
  */
 namespace Magento\Framework\View\Design\Theme;
 
+/**
+ * Class \Magento\Framework\View\Design\Theme\Label
+ *
+ */
 class Label implements \Magento\Framework\Option\ArrayInterface
 {
     /**
@@ -55,6 +59,7 @@ class Label implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function toOptionArray()
     {

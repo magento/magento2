@@ -8,22 +8,26 @@ namespace Magento\CatalogSearch\Model\Search\RequestGenerator;
 
 /**
  * @api
+ * @since 2.2.0
  */
 class GeneratorResolver
 {
     /**
      * @var GeneratorInterface[]
+     * @since 2.2.0
      */
     private $generators;
 
     /**
      * @var GeneratorInterface
+     * @since 2.2.0
      */
     private $defaultGenerator;
 
     /**
      * @param GeneratorInterface $defaultGenerator
      * @param GeneratorInterface[] $generators
+     * @since 2.2.0
      */
     public function __construct(GeneratorInterface $defaultGenerator, array $generators)
     {
@@ -35,6 +39,7 @@ class GeneratorResolver
      * @param string $type
      * @return GeneratorInterface
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     public function getGeneratorForType($type)
     {

@@ -9,6 +9,10 @@ use Magento\Customer\Model\Customer\Attribute\Source\GroupSourceLoggedInOnlyInte
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\Customer\Model\Config\Source\Group\Multiselect
+ *
+ */
 class Multiselect implements \Magento\Framework\Option\ArrayInterface
 {
     /**
@@ -19,19 +23,20 @@ class Multiselect implements \Magento\Framework\Option\ArrayInterface
     protected $_options;
 
     /**
-     * @deprecated
+     * @deprecated 2.2.0
      * @var GroupManagementInterface
      */
     protected $_groupManagement;
 
     /**
-     * @deprecated
+     * @deprecated 2.2.0
      * @var \Magento\Framework\Convert\DataObject
      */
     protected $_converter;
 
     /**
      * @var GroupSourceLoggedInOnlyInterface
+     * @since 2.2.0
      */
     private $groupSourceLoggedInOnly;
 

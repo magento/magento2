@@ -9,30 +9,40 @@ use Magento\Catalog\Api\Data\ProductTierPriceInterface;
 use Magento\Catalog\Api\ScopedProductTierPriceManagementInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class \Magento\Catalog\Model\Product\ScopedTierPriceManagement
+ *
+ * @since 2.2.0
+ */
 class ScopedTierPriceManagement implements ScopedProductTierPriceManagementInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @since 2.2.0
      */
     private $productRepository;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.2.0
      */
     private $config;
 
     /**
      * @var PriceModifier
+     * @since 2.2.0
      */
     private $priceModifier;
 
     /**
      * @var TierPriceManagement
+     * @since 2.2.0
      */
     private $tierPriceManagement;
 
@@ -42,6 +52,7 @@ class ScopedTierPriceManagement implements ScopedProductTierPriceManagementInter
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param PriceModifier $priceModifier
      * @param TierPriceManagement $tierPriceManagement
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -59,6 +70,7 @@ class ScopedTierPriceManagement implements ScopedProductTierPriceManagementInter
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function add($sku, ProductTierPriceInterface $tierPrice)
     {
@@ -78,6 +90,7 @@ class ScopedTierPriceManagement implements ScopedProductTierPriceManagementInter
      * @param array $tierPrices
      * @param ProductTierPriceInterface $tierPrice
      * @return ProductTierPriceInterface[]|null
+     * @since 2.2.0
      */
     private function prepareTierPrices(array $tierPrices, ProductTierPriceInterface $tierPrice)
     {
@@ -104,6 +117,7 @@ class ScopedTierPriceManagement implements ScopedProductTierPriceManagementInter
 
     /**
      * @return int
+     * @since 2.2.0
      */
     private function getWebsiteId()
     {
@@ -120,6 +134,7 @@ class ScopedTierPriceManagement implements ScopedProductTierPriceManagementInter
      * @param ProductTierPriceInterface $tierPrice
      * @throws \Magento\Framework\Exception\InputException
      * @return void
+     * @since 2.2.0
      */
     private function validate(ProductTierPriceInterface $tierPrice)
     {
@@ -133,6 +148,7 @@ class ScopedTierPriceManagement implements ScopedProductTierPriceManagementInter
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function remove($sku, ProductTierPriceInterface $tierPrice)
     {
@@ -148,6 +164,7 @@ class ScopedTierPriceManagement implements ScopedProductTierPriceManagementInter
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getList($sku, $customerGroupId)
     {

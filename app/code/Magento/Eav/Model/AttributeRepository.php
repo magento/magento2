@@ -48,6 +48,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
 
     /**
      * @var CollectionProcessorInterface
+     * @since 2.2.0
      */
     private $collectionProcessor;
 
@@ -193,8 +194,9 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return CollectionProcessorInterface
+     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

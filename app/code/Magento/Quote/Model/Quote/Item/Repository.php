@@ -10,6 +10,10 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class \Magento\Quote\Model\Quote\Item\Repository
+ *
+ */
 class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
 {
     /**
@@ -38,6 +42,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
 
     /**
      * @var CartItemOptionsProcessor
+     * @since 2.1.0
      */
     private $cartItemOptionsProcessor;
 
@@ -118,7 +123,8 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
 
     /**
      * @return CartItemOptionsProcessor
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getCartItemOptionsProcessor()
     {

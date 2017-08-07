@@ -131,6 +131,7 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $valuesCollection
      * @param int $storeId
      * @return void
+     * @since 2.1.0
      */
     private function addCollectionStoreFilter($valuesCollection, $storeId)
     {

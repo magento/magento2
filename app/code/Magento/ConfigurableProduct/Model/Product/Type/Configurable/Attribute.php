@@ -33,6 +33,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     private $metadataPool;
 
@@ -45,6 +46,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -271,6 +273,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     public function __sleep()
     {
@@ -282,6 +285,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     public function __wakeup()
     {

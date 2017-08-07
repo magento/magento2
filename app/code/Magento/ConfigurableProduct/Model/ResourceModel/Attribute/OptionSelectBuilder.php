@@ -12,6 +12,7 @@ use Magento\Framework\DB\Select;
 
 /**
  * Build select object for retrieving configurable options.
+ * @since 2.2.0
  */
 class OptionSelectBuilder implements OptionSelectBuilderInterface
 {
@@ -19,6 +20,7 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
      * Configurable Attribute Resource Model.
      *
      * @var Attribute
+     * @since 2.2.0
      */
     private $attributeResource;
 
@@ -26,12 +28,14 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
      * Option Provider.
      *
      * @var OptionProvider
+     * @since 2.2.0
      */
     private $attributeOptionProvider;
 
     /**
      * @param Attribute $attributeResource
      * @param OptionProvider $attributeOptionProvider
+     * @since 2.2.0
      */
     public function __construct(Attribute $attributeResource, OptionProvider $attributeOptionProvider)
     {
@@ -41,6 +45,7 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getSelect(AbstractAttribute $superAttribute, int $productId, ScopeInterface $scope)
     {

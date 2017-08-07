@@ -9,6 +9,7 @@ use Magento\Setup\Model\ObjectManagerProvider;
 
 /**
  * Provider of DateTime instance
+ * @since 2.0.6
  */
 class DateTimeProvider
 {
@@ -16,6 +17,7 @@ class DateTimeProvider
      * Timezone provider
      *
      * @var TimeZoneProvider
+     * @since 2.0.6
      */
     private $tzProvider;
 
@@ -23,6 +25,7 @@ class DateTimeProvider
      * Object Manager provider
      *
      * @var ObjectManagerProvider
+     * @since 2.0.6
      */
     private $objectManagerProvider;
 
@@ -30,6 +33,7 @@ class DateTimeProvider
      * DateTime instance
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.0.6
      */
     private $dateTime;
 
@@ -38,6 +42,7 @@ class DateTimeProvider
      *
      * @param TimeZoneProvider $tzProvider
      * @param ObjectManagerProvider $objectManagerProvider
+     * @since 2.0.6
      */
     public function __construct(TimeZoneProvider $tzProvider, ObjectManagerProvider $objectManagerProvider)
     {
@@ -49,6 +54,7 @@ class DateTimeProvider
      * Get instance of DateTime
      *
      * @return \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.0.6
      */
     public function get()
     {

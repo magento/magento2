@@ -15,22 +15,26 @@ use Magento\Catalog\Model\ProductFactory;
 /**
  * Simple product template generator. Return newly created simple product for specified attribute set
  * with default values for product attributes
+ * @since 2.2.0
  */
 class SimpleProductTemplateGenerator implements TemplateEntityGeneratorInterface
 {
     /**
      * @var array
+     * @since 2.2.0
      */
     private $fixture;
 
     /**
      * @var ProductFactory
+     * @since 2.2.0
      */
     private $productFactory;
 
     /**
      * @param ProductFactory $productFactory
      * @param array $fixture
+     * @since 2.2.0
      */
     public function __construct(ProductFactory $productFactory, array $fixture)
     {
@@ -40,6 +44,7 @@ class SimpleProductTemplateGenerator implements TemplateEntityGeneratorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function generateEntity()
     {
@@ -59,6 +64,7 @@ class SimpleProductTemplateGenerator implements TemplateEntityGeneratorInterface
      * @param int $attributeSet
      * @param array $additionalAttributes
      * @return ProductInterface
+     * @since 2.2.0
      */
     private function getProductTemplate($attributeSet, $additionalAttributes = [])
     {

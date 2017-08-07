@@ -9,6 +9,10 @@ namespace Magento\Framework\View\Template\Html;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
+/**
+ * Class \Magento\Framework\View\Template\Html\Minifier
+ *
+ */
 class Minifier implements MinifierInterface
 {
     /**
@@ -62,6 +66,7 @@ class Minifier implements MinifierInterface
 
     /**
      * @var Filesystem\Directory\ReadFactory
+     * @since 2.1.0
      */
     protected $readFactory;
 
@@ -156,6 +161,7 @@ class Minifier implements MinifierInterface
      *
      * @param string $sourcePath
      * @return string
+     * @since 2.1.0
      */
     private function getRelativeGeneratedPath($sourcePath)
     {

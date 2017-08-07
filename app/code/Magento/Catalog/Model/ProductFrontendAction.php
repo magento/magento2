@@ -9,6 +9,7 @@ use Magento\Catalog\Api\Data\ProductFrontendActionInterface;
 
 /**
  * @inheritdoc
+ * @since 2.2.0
  */
 class ProductFrontendAction extends AbstractModel implements ProductFrontendActionInterface
 {
@@ -16,6 +17,7 @@ class ProductFrontendAction extends AbstractModel implements ProductFrontendActi
      * Initialize resource model
      *
      * @return void
+     * @since 2.2.0
      */
     protected function _construct()
     {
@@ -24,6 +26,7 @@ class ProductFrontendAction extends AbstractModel implements ProductFrontendActi
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getActionId()
     {
@@ -32,6 +35,7 @@ class ProductFrontendAction extends AbstractModel implements ProductFrontendActi
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setActionId($actionId)
     {
@@ -40,6 +44,7 @@ class ProductFrontendAction extends AbstractModel implements ProductFrontendActi
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getVisitorId()
     {
@@ -48,6 +53,7 @@ class ProductFrontendAction extends AbstractModel implements ProductFrontendActi
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setVisitorId($visitorId)
     {
@@ -56,6 +62,7 @@ class ProductFrontendAction extends AbstractModel implements ProductFrontendActi
 
     /**
      * @return mixed
+     * @since 2.2.0
      */
     public function getCustomerId()
     {
@@ -64,6 +71,7 @@ class ProductFrontendAction extends AbstractModel implements ProductFrontendActi
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setCustomerId($customerId)
     {
@@ -72,6 +80,7 @@ class ProductFrontendAction extends AbstractModel implements ProductFrontendActi
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getProductId()
     {
@@ -80,6 +89,7 @@ class ProductFrontendAction extends AbstractModel implements ProductFrontendActi
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setProductId($productId)
     {
@@ -88,6 +98,7 @@ class ProductFrontendAction extends AbstractModel implements ProductFrontendActi
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getAddedAt()
     {
@@ -96,6 +107,7 @@ class ProductFrontendAction extends AbstractModel implements ProductFrontendActi
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setAddedAt($addedAt)
     {
@@ -104,6 +116,7 @@ class ProductFrontendAction extends AbstractModel implements ProductFrontendActi
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getTypeId()
     {
@@ -112,6 +125,7 @@ class ProductFrontendAction extends AbstractModel implements ProductFrontendActi
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setTypeId($typeId)
     {

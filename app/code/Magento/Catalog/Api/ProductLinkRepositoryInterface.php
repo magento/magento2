@@ -17,6 +17,7 @@ interface ProductLinkRepositoryInterface
      *
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return \Magento\Catalog\Api\Data\ProductLinkInterface[]
+     * @since 2.1.0
      */
     public function getList(\Magento\Catalog\Api\Data\ProductInterface $product);
 

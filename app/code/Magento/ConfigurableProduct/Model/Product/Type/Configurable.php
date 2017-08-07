@@ -36,6 +36,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Cache key for Used Product Attribute Ids
      *
      * @var string
+     * @since 2.1.0
      */
     protected $usedProductAttributeIds = '_cache_instance_used_product_attribute_ids';
 
@@ -43,6 +44,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Cache key for Used Product Attributes
      *
      * @var string
+     * @since 2.1.0
      */
     protected $usedProductAttributes = '_cache_instance_used_product_attributes';
 
@@ -78,6 +80,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Cache key for salable used products
      *
      * @var string
+     * @since 2.2.0
      */
     private $usedSalableProducts = '_cache_instance_salable_products';
 
@@ -126,6 +129,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Configurable attribute factory
      *
      * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\AttributeFactory
+     * @since 2.1.0
      */
     protected $configurableAttributeFactory;
 
@@ -140,6 +144,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Type configurable factory
      *
      * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFactory
+     * @since 2.1.0
      */
     protected $typeConfigurableFactory;
 
@@ -150,26 +155,31 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * @var \Magento\Framework\Cache\FrontendInterface
+     * @since 2.0.9
      */
     private $cache;
 
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     private $metadataPool;
 
     /**
      * @var GalleryReadHandler
+     * @since 2.1.0
      */
     private $productGalleryReadHandler;
 
     /**
      * @var Config
+     * @since 2.1.0
      */
     private $catalogConfig;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.1.1
      */
     private $customerSession;
 
@@ -177,6 +187,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Product factory
      *
      * @var ProductInterfaceFactory
+     * @since 2.1.6
      */
     private $productFactory;
 
@@ -184,6 +195,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Collection salable processor
      *
      * @var SalableProcessor
+     * @since 2.1.6
      */
     private $salableProcessor;
 
@@ -265,8 +277,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.1.1
      * @return \Magento\Framework\Cache\FrontendInterface
+     * @since 2.1.1
      */
     private function getCache()
     {
@@ -277,8 +290,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.1.1
      * @return \Magento\Customer\Model\Session
+     * @since 2.1.1
      */
     private function getCustomerSession()
     {
@@ -352,7 +366,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param   array $ids
      * @param   \Magento\Catalog\Model\Product $product
      * @return  \Magento\ConfigurableProduct\Model\Product\Type\Configurable
-     * @deprecated use \Magento\ConfigurableProduct\Model\Product\Type\Configurable::setUsedProductAttributes instead
+     * @deprecated 2.1.0 use \Magento\ConfigurableProduct\Model\Product\Type\Configurable::setUsedProductAttributes instead
      */
     public function setUsedProductAttributeIds($ids, $product)
     {
@@ -378,6 +392,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param ProductInterface $product
      * @param array $ids
      * @return $this
+     * @since 2.0.9
      */
     public function setUsedProductAttributes(ProductInterface $product, array $ids)
     {
@@ -515,7 +530,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Retrieve subproducts identifiers
      *
-     * @deprecated
+     * @deprecated 2.1.1
      * @param  \Magento\Catalog\Model\Product $product
      * @return array
      */
@@ -535,7 +550,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Retrieve GalleryReadHandler
      *
      * @return GalleryReadHandler
-     * @deprecated
+     * @deprecated 2.1.1
+     * @since 2.1.0
      */
     protected function getGalleryReadHandler()
     {
@@ -609,7 +625,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      * @throws \InvalidArgumentException
-     * @deprecated the \Magento\ConfigurableProduct\Model\Product\SaveHandler::execute should be used instead
+     * @deprecated 2.1.0 the \Magento\ConfigurableProduct\Model\Product\SaveHandler::execute should be used instead
      */
     public function save($product)
     {
@@ -637,7 +653,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param ProductInterface $product
      * @return void
      * @throws \Exception
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function saveConfigurableOptions(ProductInterface $product)
     {
@@ -690,7 +707,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param ProductInterface $product
      * @return void
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function saveRelatedProducts(ProductInterface $product)
     {
@@ -1177,6 +1195,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Get MetadataPool instance
      * @return MetadataPool
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {
@@ -1189,7 +1208,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Get Config instance
      * @return Config
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getCatalogConfig()
     {
@@ -1201,6 +1221,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function isPossibleBuyFromList($product)
     {
@@ -1242,12 +1263,13 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * Result array contains only those children for specified configurable product which are salable on store front
      *
-     * @deprecated Not used anymore. Keep it for backward compatibility.
+     * @deprecated 2.2.0 Not used anymore. Keep it for backward compatibility.
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param array|null $requiredAttributeIds
      * @return ProductInterface[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.3
      */
     public function getSalableUsedProducts(\Magento\Catalog\Model\Product $product, $requiredAttributeIds = null)
     {
@@ -1276,6 +1298,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param string $cacheKey
      * @param bool $salableOnly
      * @return ProductInterface[]
+     * @since 2.2.0
      */
     private function loadUsedProducts(\Magento\Catalog\Model\Product $product, $cacheKey, $salableOnly = false)
     {
@@ -1304,6 +1327,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param string $cacheKey
      * @return ProductInterface[]|null
+     * @since 2.2.0
      */
     private function readUsedProductsCacheData($cacheKey)
     {
@@ -1334,6 +1358,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param ProductInterface[] $subProducts
      * @param string $cacheKey
      * @return bool
+     * @since 2.2.0
      */
     private function saveUsedProductsCacheData(\Magento\Catalog\Model\Product $product, array $subProducts, $cacheKey)
     {
@@ -1365,6 +1390,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param array $keyParts
      * @return string
+     * @since 2.2.0
      */
     private function getUsedProductsCacheKey($keyParts)
     {
@@ -1378,6 +1404,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection
+     * @since 2.2.0
      */
     private function getConfiguredUsedProductCollection(\Magento\Catalog\Model\Product $product)
     {

@@ -93,6 +93,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
 
     /**
      * @var \Magento\Framework\App\Config
+     * @since 2.1.0
      */
     protected $appConfig;
 
@@ -100,6 +101,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Name of http header to check for ssl offloading default value is X-Forwarded-Proto
      *
      * @var string
+     * @since 2.1.0
      */
     protected $sslOffloadHeader;
 
@@ -425,6 +427,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Get value of SSL offload http header from configuration - defaults to X-Forwarded-Proto
      *
      * @return string
+     * @since 2.2.0
      */
     private function getSslOffloadHeader()
     {
@@ -448,7 +451,8 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Create an instance of Magento\Framework\App\Config
      *
      * @return \Magento\Framework\App\Config
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getAppConfig()
     {
@@ -463,6 +467,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Checks if the immediate request is delivered over HTTPS
      *
      * @return bool
+     * @since 2.1.0
      */
     protected function immediateRequestSecure()
     {
@@ -476,6 +481,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      *
      * @param string $offLoaderHeader
      * @return bool
+     * @since 2.1.0
      */
     protected function initialRequestSecure($offLoaderHeader)
     {

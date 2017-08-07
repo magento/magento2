@@ -12,6 +12,10 @@ use Magento\Catalog\Model\CustomOptions\CustomOptionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 
+/**
+ * Class \Magento\Catalog\Model\ProductOptionProcessor
+ *
+ */
 class ProductOptionProcessor implements ProductOptionProcessorInterface
 {
     /**
@@ -26,6 +30,7 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
 
     /**
      * @var \Magento\Catalog\Model\Product\Option\UrlBuilder
+     * @since 2.1.0
      */
     private $urlBuilder;
 
@@ -110,6 +115,7 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
      *
      * @param array $optionValue
      * @return array
+     * @since 2.1.0
      */
     private function processFileOptionValue(array $optionValue)
     {
@@ -128,7 +134,8 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
     /**
      * @return \Magento\Catalog\Model\Product\Option\UrlBuilder
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getUrlBuilder()
     {

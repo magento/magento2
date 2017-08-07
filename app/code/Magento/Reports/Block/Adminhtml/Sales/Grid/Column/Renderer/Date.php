@@ -16,6 +16,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
+     * @since 2.1.0
      */
     private $localeResolver;
 

@@ -20,6 +20,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
 {
     /**
      * @var StoreResolverInterface
+     * @since 2.1.3
      */
     private $storeResolver;
 
@@ -33,6 +34,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param string|null $connectionName
      * @param StoreResolverInterface|null $storeResolver
+     * @since 2.1.3
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,

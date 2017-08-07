@@ -64,6 +64,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
 
     /**
      * @var CollectionProcessorInterface
+     * @since 2.2.0
      */
     private $collectionProcessor;
 
@@ -147,6 +148,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * @param Address $address
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
+     * @since 2.2.0
      */
     private function updateAddressCollection(CustomerModel $customer, CustomerAddressModel $address)
     {
@@ -203,7 +205,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
@@ -262,8 +264,9 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return CollectionProcessorInterface
+     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

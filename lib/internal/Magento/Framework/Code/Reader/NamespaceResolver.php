@@ -8,6 +8,7 @@ namespace Magento\Framework\Code\Reader;
 
 /**
  * Class resolve short namespaces to fully qualified namespaces.
+ * @since 2.2.0
  */
 class NamespaceResolver
 {
@@ -18,17 +19,20 @@ class NamespaceResolver
 
     /**
      * @var ScalarTypesProvider
+     * @since 2.2.0
      */
     private $scalarTypesProvider;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $namespaces = [];
 
     /**
      * NamespaceResolver constructor.
      * @param ScalarTypesProvider $scalarTypesProvider
+     * @since 2.2.0
      */
     public function __construct(ScalarTypesProvider $scalarTypesProvider = null)
     {
@@ -41,6 +45,7 @@ class NamespaceResolver
      * @param string $type
      * @param array $availableNamespaces
      * @return string
+     * @since 2.2.0
      */
     public function resolveNamespace($type, array $availableNamespaces)
     {
@@ -71,6 +76,7 @@ class NamespaceResolver
      * @param array $fileContent
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.2.0
      */
     public function getImportedNamespaces(array $fileContent)
     {

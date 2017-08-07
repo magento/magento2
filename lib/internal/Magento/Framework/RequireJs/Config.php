@@ -116,6 +116,7 @@ config;
 
     /**
      * @var RepositoryMap
+     * @since 2.2.0
      */
     private $repositoryMap;
 
@@ -251,6 +252,7 @@ config;
      * Get path to URL map resover file
      *
      * @return string
+     * @since 2.2.0
      */
     public function getUrlResolverFileRelativePath()
     {
@@ -271,6 +273,7 @@ config;
      * Get path to map file
      *
      * @return string
+     * @since 2.2.0
      */
     public function getMapFileRelativePath()
     {
@@ -320,6 +323,7 @@ code;
      * @param string $fileId
      * @param array $params
      * @return array
+     * @since 2.2.0
      */
     private function getRepositoryFilesMap($fileId, array $params)
     {

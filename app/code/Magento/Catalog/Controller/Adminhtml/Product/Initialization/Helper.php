@@ -8,6 +8,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory as CustomOptionFactory;
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory as ProductLinkFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface\Proxy as ProductRepository;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
 use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
 use Magento\Framework\App\ObjectManager;
@@ -40,22 +41,25 @@ class Helper
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
-     * @deprecated
+     * @deprecated 2.1.0
      */
     protected $dateFilter;
 
     /**
      * @var CustomOptionFactory
+     * @since 2.1.0
      */
     protected $customOptionFactory;
 
     /**
      * @var ProductLinkFactory
+     * @since 2.1.0
      */
     protected $productLinkFactory;
 
     /**
      * @var ProductRepository
+     * @since 2.1.0
      */
     protected $productRepository;
 
@@ -66,16 +70,19 @@ class Helper
 
     /**
      * @var LinkResolver
+     * @since 2.1.0
      */
     private $linkResolver;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\DateTime
+     * @since 2.1.0
      */
     private $dateTimeFilter;
 
     /**
      * @var \Magento\Catalog\Model\Product\LinkTypeProvider
+     * @since 2.2.0
      */
     private $linkTypeProvider;
 
@@ -131,6 +138,7 @@ class Helper
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.1.0
      */
     public function initializeFromData(\Magento\Catalog\Model\Product $product, array $productData)
     {
@@ -203,34 +211,7 @@ class Helper
         }
 
         $product = $this->setProductLinks($product);
-
-        /**
-         * Initialize product options
-         */
-        if ($productOptions && !$product->getOptionsReadonly()) {
-            // mark custom options that should to fall back to default value
-            $options = $this->mergeProductOptions(
-                $productOptions,
-                $this->request->getPost('options_use_default')
-            );
-            $customOptions = [];
-            foreach ($options as $customOptionData) {
-                if (empty($customOptionData['is_delete'])) {
-                    if (empty($customOptionData['option_id'])) {
-                        $customOptionData['option_id'] = null;
-                    }
-                    if (isset($customOptionData['values'])) {
-                        $customOptionData['values'] = array_filter($customOptionData['values'], function ($valueData) {
-                            return empty($valueData['is_delete']);
-                        });
-                    }
-                    $customOption = $this->customOptionFactory->create(['data' => $customOptionData]);
-                    $customOption->setProductSku($product->getSku());
-                    $customOptions[] = $customOption;
-                }
-            }
-            $product->setOptions($customOptions);
-        }
+        $product = $this->fillProductOptions($product, $productOptions);
 
         $product->setCanSaveCustomOptions(
             !empty($productData['affect_product_custom_options']) && !$product->getOptionsReadonly()
@@ -257,6 +238,7 @@ class Helper
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.1.0
      */
     protected function setProductLinks(\Magento\Catalog\Model\Product $product)
     {
@@ -305,6 +287,7 @@ class Helper
      * @param array $productData
      * @return array
      * @todo Remove this method
+     * @since 2.1.0
      */
     protected function normalize(array $productData)
     {
@@ -367,6 +350,7 @@ class Helper
      * @param array $option
      * @param array $overwriteOptions
      * @return array
+     * @since 2.2.0
      */
     private function overwriteValue($optionId, $option, $overwriteOptions)
     {
@@ -386,7 +370,8 @@ class Helper
 
     /**
      * @return LinkResolver
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getLinkResolver()
     {
@@ -398,7 +383,8 @@ class Helper
 
     /**
      * @return \Magento\Framework\Stdlib\DateTime\Filter\DateTime
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getDateTimeFilter()
     {
@@ -416,6 +402,7 @@ class Helper
      *
      * @param array $websiteIds
      * @return array
+     * @since 2.2.0
      */
     private function filterWebsiteIds($websiteIds)
     {
@@ -426,5 +413,52 @@ class Helper
         }
 
         return $websiteIds;
+    }
+
+    /**
+     * Fills $product with options from $productOptions array
+     *
+     * @param Product $product
+     * @param array $productOptions
+     * @return Product
+     * @since 2.2.0
+     */
+    private function fillProductOptions(Product $product, array $productOptions)
+    {
+        if ($product->getOptionsReadonly()) {
+            return $product;
+        }
+
+        if (empty($productOptions)) {
+            return $product->setOptions([]);
+        }
+
+        // mark custom options that should to fall back to default value
+        $options = $this->mergeProductOptions(
+            $productOptions,
+            $this->request->getPost('options_use_default')
+        );
+        $customOptions = [];
+        foreach ($options as $customOptionData) {
+            if (!empty($customOptionData['is_delete'])) {
+                continue;
+            }
+
+            if (empty($customOptionData['option_id'])) {
+                $customOptionData['option_id'] = null;
+            }
+
+            if (isset($customOptionData['values'])) {
+                $customOptionData['values'] = array_filter($customOptionData['values'], function ($valueData) {
+                    return empty($valueData['is_delete']);
+                });
+            }
+
+            $customOption = $this->customOptionFactory->create(['data' => $customOptionData]);
+            $customOption->setProductSku($product->getSku());
+            $customOptions[] = $customOption;
+        }
+
+        return $product->setOptions($customOptions);
     }
 }

@@ -13,7 +13,7 @@ use Magento\Framework\View\Asset\File\FallbackContext;
 
 /**
  * Bundle model
- * @deprecated since 2.2.0
+ * @deprecated 2.2.0 since 2.2.0
  * @see \Magento\Deploy\Package\Bundle
  */
 class Bundle
@@ -28,7 +28,9 @@ class Bundle
      */
     protected $assetsContent = [];
 
-    /** @var Bundle\ConfigInterface */
+    /**
+     * @var \Magento\Framework\View\Asset\Bundle\ConfigInterface
+     */
     protected $bundleConfig;
 
     /**

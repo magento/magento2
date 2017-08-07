@@ -7,6 +7,7 @@ namespace Magento\Setup\Model\Description\Mixin;
 
 /**
  * Interface for Description mixin
+ * @since 2.2.0
  */
 interface DescriptionMixinInterface
 {
@@ -15,6 +16,7 @@ interface DescriptionMixinInterface
      *
      * @param string $text
      * @return string
+     * @since 2.2.0
      */
     public function apply($text);
 }

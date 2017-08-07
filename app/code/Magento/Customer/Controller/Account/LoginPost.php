@@ -22,10 +22,14 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  */
 class LoginPost extends \Magento\Customer\Controller\AbstractAccount
 {
-    /** @var AccountManagementInterface */
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     */
     protected $customerAccountManagement;
 
-    /** @var Validator */
+    /**
+     * @var \Magento\Framework\Data\Form\FormKey\Validator
+     */
     protected $formKeyValidator;
 
     /**
@@ -40,16 +44,19 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.0.11
      */
     private $scopeConfig;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     * @since 2.1.0
      */
     private $cookieMetadataFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     * @since 2.1.0
      */
     private $cookieMetadataManager;
 
@@ -81,7 +88,8 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
      * Get scope config
      *
      * @return ScopeConfigInterface
-     * @deprecated
+     * @deprecated 2.0.11
+     * @since 2.0.11
      */
     private function getScopeConfig()
     {
@@ -97,8 +105,9 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie manager
      *
-     * @deprecated
+     * @deprecated 2.1.0
      * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     * @since 2.1.0
      */
     private function getCookieManager()
     {
@@ -113,8 +122,9 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie metadata factory
      *
-     * @deprecated
+     * @deprecated 2.1.0
      * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     * @since 2.1.0
      */
     private function getCookieMetadataFactory()
     {

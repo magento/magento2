@@ -11,6 +11,7 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext;
 /**
  * Class Processor
  * @api
+ * @since 2.1.0
  */
 class Processor extends AbstractProcessor
 {

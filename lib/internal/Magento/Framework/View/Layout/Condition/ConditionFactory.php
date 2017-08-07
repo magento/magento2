@@ -9,16 +9,19 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Factory for composite.
+ * @since 2.2.0
  */
 class ConditionFactory
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
+     * @since 2.2.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -29,6 +32,7 @@ class ConditionFactory
      * @param array $elementVisibilityConditions
      *
      * @return Condition
+     * @since 2.2.0
      */
     public function create(array $elementVisibilityConditions)
     {

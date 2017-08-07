@@ -110,6 +110,7 @@ class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $hours token lifetime
      * @param int[] $userTypes @see \Magento\Authorization\Model\UserContextInterface
      * @return int number of deleted tokens
+     * @since 2.2.0
      */
     public function deleteExpiredTokens($hours, $userTypes)
     {

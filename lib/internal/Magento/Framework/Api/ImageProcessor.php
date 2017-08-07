@@ -179,6 +179,7 @@ class ImageProcessor implements ImageProcessorInterface
      * @param ImageContentInterface $imageContent
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.11
      */
     private function getFileName($imageContent)
     {

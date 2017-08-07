@@ -26,6 +26,7 @@ class Db
 
     /**
      * @var Config
+     * @since 2.2.0
      */
     private $config;
 

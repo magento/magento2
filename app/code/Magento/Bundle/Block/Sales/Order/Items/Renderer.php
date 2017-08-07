@@ -18,6 +18,7 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
      * Serializer
      *
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -27,6 +28,7 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,

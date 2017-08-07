@@ -10,6 +10,7 @@ use Magento\Framework\FileSystem\Directory\ReadFactory;
 /**
  * Information about the Magento base package.
  *
+ * @since 2.1.0
  */
 class BasePackageInfo
 {
@@ -21,6 +22,7 @@ class BasePackageInfo
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface $reader
+     * @since 2.1.0
      */
     private $reader;
 
@@ -28,6 +30,7 @@ class BasePackageInfo
      * Constructor
      *
      * @param ReadFactory $readFactory
+     * @since 2.1.0
      */
     public function __construct(ReadFactory $readFactory)
     {
@@ -39,6 +42,7 @@ class BasePackageInfo
      *
      * @return string []
      * @throws \Magento\Setup\Exception
+     * @since 2.1.0
      */
     public function getPaths()
     {

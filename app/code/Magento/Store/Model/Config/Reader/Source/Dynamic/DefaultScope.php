@@ -12,22 +12,26 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Class for retrieving configuration from DB by default scope
+ * @since 2.1.3
  */
 class DefaultScope implements SourceInterface
 {
     /**
      * @var ScopedFactory
+     * @since 2.1.3
      */
     private $collectionFactory;
 
     /**
      * @var Converter
+     * @since 2.1.3
      */
     private $converter;
 
     /**
      * @param ScopedFactory $collectionFactory
      * @param Converter $converter
+     * @since 2.1.3
      */
     public function __construct(
         ScopedFactory $collectionFactory,
@@ -42,6 +46,7 @@ class DefaultScope implements SourceInterface
      *
      * @param string|null $scopeCode
      * @return array
+     * @since 2.1.3
      */
     public function get($scopeCode = null)
     {

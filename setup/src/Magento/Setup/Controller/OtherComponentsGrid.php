@@ -41,6 +41,7 @@ class OtherComponentsGrid extends AbstractActionController
      * No index action, return 404 error page
      *
      * @return \Zend\View\Model\ViewModel
+     * @since 2.1.0
      */
     public function indexAction()
     {

@@ -5,15 +5,22 @@
  */
 namespace Magento\Quote\Model\Product\Plugin;
 
+/**
+ * Class \Magento\Quote\Model\Product\Plugin\UpdateQuoteItems
+ *
+ * @since 2.2.0
+ */
 class UpdateQuoteItems
 {
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote
+     * @since 2.2.0
      */
     private $resource;
 
     /**
      * @param \Magento\Quote\Model\ResourceModel\Quote $resource
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Quote\Model\ResourceModel\Quote $resource
@@ -27,6 +34,7 @@ class UpdateQuoteItems
      * @param \Magento\Framework\Model\AbstractModel $product
      * @return \Magento\Catalog\Model\ResourceModel\Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterSave(
         \Magento\Catalog\Model\ResourceModel\Product $subject,

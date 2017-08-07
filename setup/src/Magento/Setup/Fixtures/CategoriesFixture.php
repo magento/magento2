@@ -24,36 +24,43 @@ class CategoriesFixture extends Fixture
 {
     /**
      * @var StoreManager
+     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var CategoryFactory
+     * @since 2.2.0
      */
     private $categoryFactory;
 
     /**
      * @var CollectionFactory
+     * @since 2.2.0
      */
     private $collectionFactory;
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $firstLevelCategoryIndex;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $rootCategoriesIds;
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $categoriesNumber;
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $maxNestingLevel;
 
@@ -63,6 +70,7 @@ class CategoriesFixture extends Fixture
      * @param StoreManager $storeManager
      * @param CategoryFactory $categoryFactory
      * @param CollectionFactory $collectionFactory
+     * @since 2.2.0
      */
     public function __construct(
         FixtureModel $fixtureModel,
@@ -116,6 +124,7 @@ class CategoriesFixture extends Fixture
      * @param int $nestingLevel
      * @param int $categoryIndex
      * @return void
+     * @since 2.2.0
      */
     private function generateCategories(
         Category $parentCategory,
@@ -164,6 +173,7 @@ class CategoriesFixture extends Fixture
      * @param int $nestingLevel
      * @param int $index
      * @return string
+     * @since 2.2.0
      */
     private function getCategoryName($parentCategory, $nestingLevel, $index)
     {
@@ -176,6 +186,7 @@ class CategoriesFixture extends Fixture
      * Get ids of root categories
      *
      * @return int[]
+     * @since 2.2.0
      */
     private function getRootCategoriesIds()
     {
@@ -197,6 +208,7 @@ class CategoriesFixture extends Fixture
      * Get categories amount for generation
      *
      * @return int
+     * @since 2.2.0
      */
     private function getCategoriesAmount()
     {
@@ -214,6 +226,7 @@ class CategoriesFixture extends Fixture
      * Get next category index, which will be used as index of first-level category
      *
      * @return int
+     * @since 2.2.0
      */
     private function getFirstLevelCategoryIndex()
     {
@@ -230,6 +243,7 @@ class CategoriesFixture extends Fixture
      * Get Category name prefix
      *
      * @return string
+     * @since 2.2.0
      */
     private function getCategoryPrefix()
     {

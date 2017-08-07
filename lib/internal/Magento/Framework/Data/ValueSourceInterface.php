@@ -7,6 +7,7 @@ namespace Magento\Framework\Data;
 
 /**
  * Interface ValueSourceInterface
+ * @since 2.1.0
  */
 interface ValueSourceInterface
 {
@@ -15,6 +16,7 @@ interface ValueSourceInterface
      *
      * @param string $name
      * @return mixed
+     * @since 2.1.0
      */
     public function getValue($name);
 }

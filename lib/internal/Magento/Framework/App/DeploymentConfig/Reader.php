@@ -127,8 +127,9 @@ class Reader
      * @param string $pathConfig The path config
      * @param bool $ignoreInitialConfigFiles Whether ignore custom pools
      * @return array
-     * @deprecated Magento does not support custom config file pools since 2.2.0 version
+     * @deprecated 2.2.0 Magento does not support custom config file pools since 2.2.0 version
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.3
      */
     public function loadConfigFile($fileKey, $pathConfig, $ignoreInitialConfigFiles = false)
     {

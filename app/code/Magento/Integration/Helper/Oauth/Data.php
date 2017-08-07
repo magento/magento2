@@ -10,7 +10,9 @@ namespace Magento\Integration\Helper\Oauth;
  */
 class Data
 {
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     protected $_scopeConfig;
 
     /**
@@ -115,6 +117,7 @@ class Data
      * Get customer token lifetime from config.
      *
      * @return int hours
+     * @since 2.2.0
      */
     public function getCustomerTokenLifetime()
     {
@@ -126,6 +129,7 @@ class Data
      * Get customer token lifetime from config.
      *
      * @return int hours
+     * @since 2.2.0
      */
     public function getAdminTokenLifetime()
     {

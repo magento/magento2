@@ -26,38 +26,54 @@ class CurrentUrlRewritesRegenerator
 {
     /**
      * @var Product
-     * @deprecated
+     * @deprecated 2.2.0
      */
     protected $product;
 
     /**
      * @var ObjectRegistry
-     * @deprecated
+     * @deprecated 2.2.0
      */
     protected $productCategories;
 
     /**
      * @var UrlFinderInterface
-     * @deprecated
+     * @deprecated 2.2.0
      */
     protected $urlFinder;
 
-    /** @var ProductUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
+     */
     protected $productUrlPathGenerator;
 
-    /** @var UrlRewriteFactory */
+    /**
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory
+     */
     protected $urlRewriteFactory;
 
-    /** @var UrlRewrite */
+    /**
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite
+     * @since 2.2.0
+     */
     private $urlRewritePrototype;
 
-    /** @var UrlRewriteFinder */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder
+     * @since 2.2.0
+     */
     private $urlRewriteFinder;
 
-    /** @var \Magento\UrlRewrite\Model\MergeDataProvider */
+    /**
+     * @var \Magento\UrlRewrite\Model\MergeDataProvider
+     * @since 2.2.0
+     */
     private $mergeDataProviderPrototype;
 
-    /** @var CategoryRepository */
+    /**
+     * @var \Magento\Catalog\Model\CategoryRepository
+     * @since 2.2.0
+     */
     private $categoryRepository;
 
     /**
@@ -130,6 +146,7 @@ class CurrentUrlRewritesRegenerator
      * @param ObjectRegistry $productCategories
      * @param int|null $rootCategoryId
      * @return UrlRewrite[]
+     * @since 2.2.0
      */
     public function generateAnchor(
         $storeId,

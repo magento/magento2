@@ -11,7 +11,7 @@ use Magento\Catalog\Model\ResourceModel\MaxHeapTableSizeProcessor;
 use Psr\Log\LoggerInterface;
 
 /**
- * @deprecated
+ * @deprecated 2.1.3
  */
 class MaxHeapTableSizeProcessorOnFullReindex
 {

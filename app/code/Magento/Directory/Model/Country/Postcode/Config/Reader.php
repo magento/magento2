@@ -5,12 +5,17 @@
  */
 namespace Magento\Directory\Model\Country\Postcode\Config;
 
+/**
+ * Class \Magento\Directory\Model\Country\Postcode\Config\Reader
+ *
+ */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
      * List of id attributes for merge
      *
      * @var array
+     * @since 2.0.11
      */
     protected $_idAttributes = [
         '/config/zip' => 'countryCode',

@@ -10,25 +10,34 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Translate\Inline\StateInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Class \Magento\Contact\Model\Mail
+ *
+ * @since 2.2.0
+ */
 class Mail implements MailInterface
 {
     /**
      * @var ConfigInterface
+     * @since 2.2.0
      */
     private $contactsConfig;
 
     /**
      * @var TransportBuilder
+     * @since 2.2.0
      */
     private $transportBuilder;
 
     /**
      * @var StateInterface
+     * @since 2.2.0
      */
     private $inlineTranslation;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.2.0
      */
     private $storeManager;
 
@@ -39,6 +48,7 @@ class Mail implements MailInterface
      * @param TransportBuilder $transportBuilder
      * @param StateInterface $inlineTranslation
      * @param StoreManagerInterface|null $storeManager
+     * @since 2.2.0
      */
     public function __construct(
         ConfigInterface $contactsConfig,
@@ -59,6 +69,7 @@ class Mail implements MailInterface
      * @param string $replyTo
      * @param array $variables
      * @return void
+     * @since 2.2.0
      */
     public function send($replyTo, array $variables)
     {

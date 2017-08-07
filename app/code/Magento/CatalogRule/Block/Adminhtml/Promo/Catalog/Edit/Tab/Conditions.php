@@ -10,6 +10,10 @@ use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Ui\Component\Layout\Tabs\TabInterface;
 use Magento\Rule\Model\Condition\AbstractCondition;
 
+/**
+ * Class \Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Conditions
+ *
+ */
 class Conditions extends Generic implements TabInterface
 {
     /**
@@ -92,6 +96,7 @@ class Conditions extends Generic implements TabInterface
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.1.0
      */
     public function getTabClass()
     {
@@ -103,6 +108,7 @@ class Conditions extends Generic implements TabInterface
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.1.0
      */
     public function getTabUrl()
     {
@@ -114,6 +120,7 @@ class Conditions extends Generic implements TabInterface
      *
      * @return bool
      * @codeCoverageIgnore
+     * @since 2.1.0
      */
     public function isAjaxLoaded()
     {
@@ -140,6 +147,7 @@ class Conditions extends Generic implements TabInterface
      * @param string $formName
      * @return \Magento\Framework\Data\Form
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.1.0
      */
     protected function addTabToForm($model, $fieldsetId = 'conditions_fieldset', $formName = 'catalog_rule_form')
     {
@@ -187,6 +195,7 @@ class Conditions extends Generic implements TabInterface
      * @param string $formName
      * @param string $jsFormName
      * @return void
+     * @since 2.1.0
      */
     private function setConditionFormName(AbstractCondition $conditions, $formName, $jsFormName)
     {

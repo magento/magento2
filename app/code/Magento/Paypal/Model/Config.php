@@ -935,6 +935,7 @@ class Config extends AbstractConfig
      * PayPal web URL for IPN
      *
      * @return string
+     * @since 2.0.15
      */
     public function getPayPalIpnUrl()
     {
@@ -981,6 +982,7 @@ class Config extends AbstractConfig
      *
      * @param string $localeCode
      * @return string
+     * @since 2.1.0
      */
     public function getExpressCheckoutInContextImageUrl($localeCode)
     {

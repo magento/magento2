@@ -59,12 +59,13 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
 
     /**
      * @var \Magento\Framework\DB\QueryInterface
+     * @since 2.2.0
      */
     protected $query;
     
     /**
      * @var \Magento\Framework\DB\Select
-     * @deprecated
+     * @deprecated 2.2.0
      */
     protected $select;
 

@@ -41,9 +41,7 @@ class Block implements Layout\ReaderInterface
     const ATTRIBUTE_ACL = 'aclResource';
     /**#@-*/
 
-    /**
-     * @var array
-     */
+    /**#@-*/
     protected $attributes = [
         self::ATTRIBUTE_GROUP,
         self::ATTRIBUTE_CLASS,
@@ -79,12 +77,14 @@ class Block implements Layout\ReaderInterface
 
     /**
      * @var Condition
+     * @since 2.2.0
      */
     private $conditionReader;
 
     /**
-     * @deprecated
+     * @deprecated 2.2.0
      * @var string
+     * @since 2.2.0
      */
     private $deprecatedAttributeAcl = 'acl';
 
@@ -213,6 +213,7 @@ class Block implements Layout\ReaderInterface
      * @param array|Element $data
      *
      * @return array|Element
+     * @since 2.2.0
      */
     private function replaceDeprecatedAclKey($data)
     {

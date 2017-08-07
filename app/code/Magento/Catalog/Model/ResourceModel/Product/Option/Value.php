@@ -35,6 +35,7 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var \Magento\Framework\Locale\FormatInterface
+     * @since 2.2.0
      */
     private $localeFormat;
 
@@ -426,7 +427,8 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Get FormatInterface to convert price from string to number format
      *
      * @return \Magento\Framework\Locale\FormatInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getLocaleFormatter()
     {

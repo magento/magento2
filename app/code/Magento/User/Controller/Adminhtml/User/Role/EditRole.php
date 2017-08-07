@@ -56,6 +56,7 @@ class EditRole extends \Magento\User\Controller\Adminhtml\User\Role
      * Restore Users Form Data from Session and save one in Registry
      *
      * @return void
+     * @since 2.1.0
      */
     protected function restoreUsersDataFromSession()
     {
@@ -73,6 +74,7 @@ class EditRole extends \Magento\User\Controller\Adminhtml\User\Role
      * Restore Resources Form Data from Session and save one in Registry
      *
      * @return void
+     * @since 2.1.0
      */
     protected function restoreResourcesDataFromSession()
     {
@@ -91,6 +93,7 @@ class EditRole extends \Magento\User\Controller\Adminhtml\User\Role
      *
      * @param \Magento\Authorization\Model\Role $role
      * @return $this
+     * @since 2.1.0
      */
     protected function restoreFormDataFromSession(\Magento\Authorization\Model\Role $role)
     {

@@ -14,31 +14,37 @@ use Magento\Framework\Convert\DataObject;
 
 /**
  * Metadata provider for sales rule edit form.
+ * @since 2.1.0
  */
 class ValueProvider
 {
     /**
      * @var Store
+     * @since 2.1.0
      */
     protected $store;
 
     /**
      * @var GroupRepositoryInterface
+     * @since 2.1.0
      */
     protected $groupRepository;
 
     /**
      * @var SearchCriteriaBuilder
+     * @since 2.1.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var DataObject
+     * @since 2.1.0
      */
     protected $objectConverter;
 
     /**
      * @var \Magento\SalesRule\Model\RuleFactory
+     * @since 2.1.0
      */
     protected $salesRuleFactory;
 
@@ -50,6 +56,7 @@ class ValueProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param DataObject $objectConverter
      * @param \Magento\SalesRule\Model\RuleFactory $salesRuleFactory
+     * @since 2.1.0
      */
     public function __construct(
         Store $store,
@@ -71,6 +78,7 @@ class ValueProvider
      * @param Rule $rule
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.1.0
      */
     public function getMetadataValues(\Magento\SalesRule\Model\Rule $rule)
     {

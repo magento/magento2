@@ -7,11 +7,13 @@ namespace Magento\Braintree\Gateway\Validator;
 
 /**
  * Class PaymentNonceResponseValidator
+ * @since 2.1.0
  */
 class PaymentNonceResponseValidator extends GeneralResponseValidator
 {
     /**
      * @return array
+     * @since 2.1.0
      */
     protected function getResponseValidators()
     {

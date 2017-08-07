@@ -9,18 +9,30 @@ namespace Magento\GiftMessage\Model\Plugin;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class \Magento\GiftMessage\Model\Plugin\OrderGet
+ *
+ */
 class OrderGet
 {
-    /** @var \Magento\GiftMessage\Api\OrderRepositoryInterface */
+    /**
+     * @var \Magento\GiftMessage\Api\OrderRepositoryInterface
+     */
     protected $giftMessageOrderRepository;
 
-    /** @var \Magento\GiftMessage\Api\OrderItemRepositoryInterface */
+    /**
+     * @var \Magento\GiftMessage\Api\OrderItemRepositoryInterface
+     */
     protected $giftMessageOrderItemRepository;
 
-    /** @var \Magento\Sales\Api\Data\OrderExtensionFactory */
+    /**
+     * @var \Magento\Sales\Api\Data\OrderExtensionFactory
+     */
     protected $orderExtensionFactory;
 
-    /** @var \Magento\Sales\Api\Data\OrderItemExtensionFactory */
+    /**
+     * @var \Magento\Sales\Api\Data\OrderItemExtensionFactory
+     */
     protected $orderItemExtensionFactory;
 
     /**
@@ -50,6 +62,7 @@ class OrderGet
      * @param \Magento\Sales\Api\Data\OrderInterface $resultOrder
      * @return \Magento\Sales\Api\Data\OrderInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.11
      */
     public function afterGet(
         \Magento\Sales\Api\OrderRepositoryInterface $subject,
@@ -132,6 +145,7 @@ class OrderGet
      * @param \Magento\Sales\Model\ResourceModel\Order\Collection $resultOrder
      * @return \Magento\Sales\Model\ResourceModel\Order\Collection
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function afterGetList(
         \Magento\Sales\Api\OrderRepositoryInterface $subject,

@@ -9,16 +9,19 @@ namespace Magento\Checkout\Model\Cart;
 /**
  * Class RequestInfoFilterComposite
  * @api
+ * @since 2.1.2
  */
 class RequestInfoFilterComposite implements RequestInfoFilterInterface
 {
     /**
      * @var RequestInfoFilter[] $params
+     * @since 2.1.2
      */
     private $filters = [];
 
     /**
      * @param RequestInfoFilter[] $filters
+     * @since 2.1.2
      */
     public function __construct(
         $filters = []
@@ -31,6 +34,7 @@ class RequestInfoFilterComposite implements RequestInfoFilterInterface
      *
      * @param \Magento\Framework\DataObject $params
      * @return $this
+     * @since 2.1.2
      */
     public function filter(\Magento\Framework\DataObject $params)
     {

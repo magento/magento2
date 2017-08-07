@@ -10,22 +10,26 @@ use Magento\Setup\Model\PackagesData;
 
 /**
  * Extension Grid
+ * @since 2.2.0
  */
 class Extension
 {
     /**
      * @var ComposerInformation
+     * @since 2.2.0
      */
     private $composerInformation;
 
     /**
      * @var PackagesData
+     * @since 2.2.0
      */
     private $packagesData;
 
     /**
      * @param ComposerInformation $composerInformation
      * @param PackagesData $packagesData
+     * @since 2.2.0
      */
     public function __construct(
         ComposerInformation $composerInformation,
@@ -39,6 +43,7 @@ class Extension
      * Get formatted list of installed extensions
      *
      * @return array
+     * @since 2.2.0
      */
     public function getList()
     {
@@ -62,6 +67,7 @@ class Extension
      * Get formatted list of extensions that have new version
      *
      * @return array
+     * @since 2.2.0
      */
     public function getListForUpdate()
     {
@@ -75,6 +81,7 @@ class Extension
      *
      * @param array $extensions
      * @return array
+     * @since 2.2.0
      */
     private function formatExtensions(array $extensions)
     {

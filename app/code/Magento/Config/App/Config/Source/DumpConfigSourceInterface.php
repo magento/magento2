@@ -10,6 +10,7 @@ use Magento\Framework\App\Config\ConfigSourceInterface;
 /**
  * Interface DumpConfigSourceInterface
  * @api
+ * @since 2.1.3
  */
 interface DumpConfigSourceInterface extends ConfigSourceInterface
 {
@@ -17,6 +18,7 @@ interface DumpConfigSourceInterface extends ConfigSourceInterface
      * Retrieves list of field paths were excluded from config dump
      *
      * @return array
+     * @since 2.1.3
      */
     public function getExcludedFields();
 }

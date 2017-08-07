@@ -31,25 +31,39 @@ class DiCompileCommand extends Command
     /** Command name */
     const NAME = 'setup:di:compile';
 
-    /** @var DeploymentConfig */
+    /**
+     * @var \Magento\Framework\App\DeploymentConfig
+     */
     private $deploymentConfig;
 
-    /** @var ObjectManagerInterface */
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     private $objectManager;
 
-    /** @var Manager */
+    /**
+     * @var \Magento\Setup\Module\Di\App\Task\Manager
+     */
     private $taskManager;
 
-    /** @var DirectoryList */
+    /**
+     * @var \Magento\Framework\App\Filesystem\DirectoryList
+     */
     private $directoryList;
 
-    /** @var Filesystem */
+    /**
+     * @var \Magento\Framework\Filesystem
+     */
     private $filesystem;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     private $excludedPathsList;
 
-    /** @var DriverInterface */
+    /**
+     * @var \Magento\Framework\Filesystem\DriverInterface
+     */
     private $fileDriver;
 
     /**
@@ -206,6 +220,7 @@ class DiCompileCommand extends Command
      *
      * @param string[] $modulePaths
      * @return string[]
+     * @since 2.1.3
      */
     private function getExcludedModulePaths(array $modulePaths)
     {
@@ -241,6 +256,7 @@ class DiCompileCommand extends Command
      *
      * @param string[] $libraryPaths
      * @return string[]
+     * @since 2.1.3
      */
     private function getExcludedLibraryPaths(array $libraryPaths)
     {
@@ -256,6 +272,7 @@ class DiCompileCommand extends Command
      *
      * @param string $setupPath
      * @return string[]
+     * @since 2.2.0
      */
     private function getExcludedSetupPaths($setupPath)
     {

@@ -11,25 +11,34 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Framework\EntityManager\Db\ReadRow;
 
+/**
+ * Class \Magento\Framework\EntityManager\Operation\Read\ReadMain
+ *
+ * @since 2.1.0
+ */
 class ReadMain
 {
     /**
      * @var TypeResolver
+     * @since 2.1.0
      */
     private $typeResolver;
 
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     private $metadataPool;
 
     /**
      * @var HydratorPool
+     * @since 2.1.0
      */
     private $hydratorPool;
 
     /**
      * @var ReadRow
+     * @since 2.1.0
      */
     private $readRow;
 
@@ -38,6 +47,7 @@ class ReadMain
      * @param MetadataPool $metadataPool
      * @param HydratorPool $hydratorPool
      * @param ReadRow $readRow
+     * @since 2.1.0
      */
     public function __construct(
         TypeResolver $typeResolver,
@@ -55,6 +65,7 @@ class ReadMain
      * @param object $entity
      * @param string $identifier
      * @return object
+     * @since 2.1.0
      */
     public function execute($entity, $identifier)
     {

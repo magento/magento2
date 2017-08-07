@@ -13,6 +13,7 @@ use Magento\Framework\UrlInterface;
 
 /**
  * Data provider for Attribute Set handler in the Configurable products
+ * @since 2.1.0
  */
 class ConfigurableAttributeSetHandler extends AbstractModifier
 {
@@ -20,11 +21,13 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
 
     /**
      * @var UrlInterface
+     * @since 2.1.0
      */
     private $urlBuilder;
 
     /**
      * @param UrlInterface $urlBuilder
+     * @since 2.1.0
      */
     public function __construct(
         UrlInterface $urlBuilder
@@ -34,6 +37,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -42,6 +46,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -142,6 +147,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
      * Returns confirm button configuration
      *
      * @return array
+     * @since 2.1.0
      */
     protected function getConfirmButton()
     {
@@ -185,6 +191,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
      * Returns new attribute set input configuration
      *
      * @return array
+     * @since 2.1.0
      */
     protected function getNewAttributeSet()
     {
@@ -216,6 +223,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
      *
      * @param array $meta
      * @return null|array
+     * @since 2.1.0
      */
     protected function getExistingAttributeSet($meta)
     {
@@ -258,6 +266,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
      * Returns configurations for the messages container
      *
      * @return array
+     * @since 2.1.0
      */
     protected function getAttributeSetErrorContainer()
     {

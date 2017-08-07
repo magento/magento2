@@ -5,11 +5,17 @@
  */
 namespace Magento\Framework\ObjectManager;
 
+/**
+ * Class \Magento\Framework\ObjectManager\InterceptableValidator
+ *
+ * @since 2.0.1
+ */
 class InterceptableValidator
 {
     /**
      * @param string $className
      * @return bool
+     * @since 2.0.1
      */
     public function validate($className)
     {
@@ -22,6 +28,7 @@ class InterceptableValidator
      *
      * @param string $instanceName
      * @return bool
+     * @since 2.0.1
      */
     private function isInterceptor($instanceName)
     {
@@ -34,6 +41,7 @@ class InterceptableValidator
      *
      * @param string $instanceName
      * @return bool
+     * @since 2.0.1
      */
     private function isInterceptable($instanceName)
     {
@@ -49,6 +57,7 @@ class InterceptableValidator
      * @param string $haystack
      * @param string $needle
      * @return bool
+     * @since 2.0.1
      */
     private function endsWith($haystack, $needle)
     {

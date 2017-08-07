@@ -9,21 +9,29 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProductType;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection;
 
+/**
+ * Class \Magento\Swatches\Model\Plugin\Configurable
+ *
+ * @since 2.1.0
+ */
 class Configurable
 {
     /**
      * @var \Magento\Eav\Model\Config|\Magento\Swatches\Model\SwatchFactory
+     * @since 2.1.0
      */
     private $eavConfig;
 
     /**
      * @var \Magento\Swatches\Helper\Data
+     * @since 2.1.0
      */
     private $swatchHelper;
 
     /**
      * @param \Magento\Swatches\Model\SwatchFactory $eavConfig
      * @param \Magento\Swatches\Helper\Data $swatchHelper
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Eav\Model\Config $eavConfig,
@@ -40,6 +48,7 @@ class Configurable
      * @param Collection $result
      * @param ProductInterface $product
      * @return Collection
+     * @since 2.1.0
      */
     public function afterGetUsedProductCollection(
         ConfigurableProductType $subject,

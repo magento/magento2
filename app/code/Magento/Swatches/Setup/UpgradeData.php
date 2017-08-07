@@ -21,6 +21,7 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Upgrade Data script
  * @codeCoverageIgnore
+ * @since 2.1.0
  */
 class UpgradeData implements UpgradeDataInterface
 {
@@ -28,11 +29,13 @@ class UpgradeData implements UpgradeDataInterface
      * EAV setup factory
      *
      * @var EavSetupFactory
+     * @since 2.1.0
      */
     private $eavSetupFactory;
 
     /**
      * @var FieldDataConverterFactory
+     * @since 2.2.0
      */
     private $fieldDataConverterFactory;
 
@@ -40,6 +43,7 @@ class UpgradeData implements UpgradeDataInterface
      * Init
      * @param EavSetupFactory $eavSetupFactory
      * @param FieldDataConverterFactory|null $fieldDataConverterFactory
+     * @since 2.1.0
      */
     public function __construct(
         EavSetupFactory $eavSetupFactory,
@@ -52,6 +56,7 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -86,6 +91,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param ModuleDataSetupInterface $setup
      *
      * @return void
+     * @since 2.2.0
      */
     private function updateAdminTextSwatchValues(ModuleDataSetupInterface $setup)
     {
@@ -135,6 +141,7 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param ModuleDataSetupInterface $setup
      * @return void
+     * @since 2.2.0
      */
     private function convertAddDataToJson(ModuleDataSetupInterface $setup)
     {

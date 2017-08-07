@@ -7,6 +7,7 @@ namespace Magento\Framework\Url;
 
 /**
  * URL modifier interface.
+ * @since 2.1.0
  */
 interface ModifierInterface
 {
@@ -23,6 +24,7 @@ interface ModifierInterface
      * @param string $url
      * @param string $mode
      * @return string
+     * @since 2.1.0
      */
     public function execute($url, $mode = self::MODE_ENTIRE);
 }

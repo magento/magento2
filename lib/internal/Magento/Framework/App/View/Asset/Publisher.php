@@ -29,6 +29,7 @@ class Publisher
 
     /**
      * @var WriteFactory
+     * @since 2.1.0
      */
     private $writeFactory;
 

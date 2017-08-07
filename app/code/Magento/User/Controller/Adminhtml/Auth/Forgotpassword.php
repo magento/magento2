@@ -8,10 +8,15 @@ namespace Magento\User\Controller\Adminhtml\Auth;
 
 use Magento\Security\Model\SecurityManager;
 
+/**
+ * Class \Magento\User\Controller\Adminhtml\Auth\Forgotpassword
+ *
+ */
 class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
 {
     /**
      * @var SecurityManager
+     * @since 2.1.0
      */
     protected $securityManager;
 
@@ -19,6 +24,7 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\User\Model\UserFactory $userFactory
      * @param \Magento\Security\Model\SecurityManager $securityManager
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -44,7 +50,7 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
         $resultRedirect = $this->resultRedirectFactory->create();
         if (!empty($email) && !empty($params)) {
             // Validate received data to be an email address
-            if (\Zend_Validate::is($email, 'EmailAddress')) {
+            if (\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
                 try {
                     $this->securityManager->performSecurityCheck(
                         \Magento\Security\Model\PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST,

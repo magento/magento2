@@ -7,12 +7,17 @@ namespace Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
 
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 
+/**
+ * Class \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Metrics
+ *
+ */
 class Metrics
 {
     /**
      * Available metrics
      *
      * @var string[]
+     * @since 2.2.0
      */
     private $allowedMetrics = ['count', 'sum', 'min', 'max', 'avg'];
 

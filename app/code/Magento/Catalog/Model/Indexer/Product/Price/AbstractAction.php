@@ -72,6 +72,7 @@ abstract class AbstractAction
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product
+     * @since 2.2.0
      */
     private $productResource;
 
@@ -507,6 +508,7 @@ abstract class AbstractAction
      * This method is used during both partial and full reindex to identify the table.
      *
      * @return string
+     * @since 2.2.0
      */
     protected function getIndexTargetTable()
     {
@@ -515,6 +517,7 @@ abstract class AbstractAction
 
     /**
      * @return string
+     * @since 2.1.0
      */
     protected function getProductIdFieldName()
     {
@@ -525,7 +528,8 @@ abstract class AbstractAction
 
     /**
      * @return \Magento\Catalog\Model\ResourceModel\Product
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getProductResource()
     {

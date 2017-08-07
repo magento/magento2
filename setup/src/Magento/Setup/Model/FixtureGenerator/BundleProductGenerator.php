@@ -20,11 +20,13 @@ use Magento\Framework\App\ResourceConnection;
  * ]
  * @see ProductGenerator
  * @see BundleProductTemplateGenerator
+ * @since 2.2.0
  */
 class BundleProductGenerator
 {
     /**
      * @var array
+     * @since 2.2.0
      */
     private $sequenceValues = [
         'sequence_product_bundle_option' => null,
@@ -33,17 +35,20 @@ class BundleProductGenerator
 
     /**
      * @var ProductGeneratorFactory
+     * @since 2.2.0
      */
     private $productGeneratorFactory;
 
     /**
      * @var ResourceConnection
+     * @since 2.2.0
      */
     private $resource;
 
     /**
      * @param ProductGeneratorFactory $productGeneratorFactory
      * @param ResourceConnection $resource|null
+     * @since 2.2.0
      */
     public function __construct(
         ProductGeneratorFactory $productGeneratorFactory,
@@ -65,6 +70,7 @@ class BundleProductGenerator
      * @return void
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.2.0
      */
     public function generate($products, $fixtureMap)
     {
@@ -183,6 +189,7 @@ class BundleProductGenerator
      * @param array $fixture
      *
      * @return int|null
+     * @since 2.2.0
      */
     private function generateOptionId($entityNumber, $originalOptionId, array $fixture)
     {
@@ -201,6 +208,7 @@ class BundleProductGenerator
      * @param array $fixture
      *
      * @return int|null
+     * @since 2.2.0
      */
     private function generateSelectionId($entityNumber, $originalSelectionId, array $fixture)
     {
@@ -219,6 +227,7 @@ class BundleProductGenerator
      * @param string $tableName
      *
      * @return int
+     * @since 2.2.0
      */
     private function generateSequenceId($tableName)
     {
@@ -243,6 +252,7 @@ class BundleProductGenerator
      * @param int $entityNumber
      * @param array $fixture
      * @return mixed
+     * @since 2.2.0
      */
     private function generateSimpleProductId($previousProductId, $entityNumber, array $fixture)
     {

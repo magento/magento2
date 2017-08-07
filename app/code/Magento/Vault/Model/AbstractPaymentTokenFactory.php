@@ -12,18 +12,21 @@ use Magento\Vault\Api\Data\PaymentTokenFactoryInterface;
 
 /**
  * Class AbstractPaymentTokenFactory
- * @deprecated
+ * @deprecated 2.2.0
  * @see PaymentTokenFactoryInterface
+ * @since 2.1.3
  */
 abstract class AbstractPaymentTokenFactory implements PaymentTokenInterfaceFactory
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.1.3
      */
     private $objectManager;
 
     /**
      * @var PaymentTokenFactoryInterface
+     * @since 2.2.0
      */
     private $paymentTokenFactory;
 
@@ -31,6 +34,7 @@ abstract class AbstractPaymentTokenFactory implements PaymentTokenInterfaceFacto
      * AccountPaymentTokenFactory constructor.
      * @param ObjectManagerInterface $objectManager
      * @param PaymentTokenFactoryInterface $paymentTokenFactory
+     * @since 2.1.3
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -47,6 +51,7 @@ abstract class AbstractPaymentTokenFactory implements PaymentTokenInterfaceFacto
     /**
      * Create payment token entity
      * @return PaymentTokenInterface
+     * @since 2.1.3
      */
     public function create()
     {

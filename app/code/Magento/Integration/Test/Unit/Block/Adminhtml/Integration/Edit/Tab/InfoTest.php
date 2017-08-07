@@ -9,7 +9,7 @@ namespace Magento\Integration\Test\Unit\Block\Adminhtml\Integration\Edit\Tab;
 /**
  * Test class for \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info
  */
-class InfoTest extends \PHPUnit_Framework_TestCase
+class InfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

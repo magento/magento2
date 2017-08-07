@@ -12,6 +12,7 @@ use Magento\Setup\Console\Command\InstallCommand;
 
 /**
  * Converter of request data into format compatible with models.
+ * @since 2.1.0
  */
 class RequestDataConverter
 {
@@ -20,6 +21,7 @@ class RequestDataConverter
      *
      * @param array $source
      * @return array
+     * @since 2.1.0
      */
     public function convert(array $source)
     {
@@ -38,6 +40,7 @@ class RequestDataConverter
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.1.0
      */
     private function convertDeploymentConfigForm(array $source)
     {
@@ -69,6 +72,7 @@ class RequestDataConverter
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.1.0
      */
     private function convertUserConfigForm(array $source)
     {
@@ -103,6 +107,7 @@ class RequestDataConverter
      *
      * @param array $source
      * @return array
+     * @since 2.1.0
      */
     private function convertAdminUserForm(array $source)
     {

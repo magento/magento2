@@ -31,7 +31,7 @@ class SampleDataDeployCommand extends Command
 
     /**
      * @var \Symfony\Component\Console\Input\ArrayInputFactory
-     * @deprecated
+     * @deprecated 2.1.0
      */
     private $arrayInputFactory;
 
@@ -111,6 +111,7 @@ class SampleDataDeployCommand extends Command
      *
      * @return void
      * @throws \Exception
+     * @since 2.1.3
      */
     private function createAuthFile()
     {
@@ -130,6 +131,7 @@ class SampleDataDeployCommand extends Command
 
     /**
      * @return void
+     * @since 2.1.0
      */
     private function updateMemoryLimit()
     {
@@ -145,6 +147,7 @@ class SampleDataDeployCommand extends Command
     /**
      * @param string $value
      * @return int
+     * @since 2.1.0
      */
     private function getMemoryInBytes($value)
     {

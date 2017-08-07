@@ -49,6 +49,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
+     * @since 2.1.0
      */
     private $layoutFactory;
 
@@ -282,6 +283,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @param array $params
      * @param array $response
      * @return \Magento\Framework\Controller\Result\Json|\Magento\Backend\Model\View\Result\Redirect
+     * @since 2.1.0
      */
     private function returnResult($path = '', array $params = [], array $response = [])
     {
@@ -300,6 +302,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * Define whether request is Ajax
      *
      * @return boolean
+     * @since 2.1.0
      */
     private function isAjax()
     {

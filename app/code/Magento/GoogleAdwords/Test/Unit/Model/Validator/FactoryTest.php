@@ -6,11 +6,11 @@
  */
 namespace Magento\GoogleAdwords\Test\Unit\Model\Validator;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Validator\IntUtils;
 use Magento\Framework\Validator\Regex;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -44,21 +44,12 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_vbFactoryMock = $this->getMock(
+        $this->_vbFactoryMock = $this->createPartialMock(
             \Magento\Framework\Validator\UniversalFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->_vbMock = $this->getMock(\Magento\Framework\Validator\Builder::class, [], [], '', false);
-        $this->_validatorMock = $this->getMock(
-            \Magento\Framework\Validator\ValidatorInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_vbMock = $this->createMock(\Magento\Framework\Validator\Builder::class);
+        $this->_validatorMock = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->_factory = $objectManager->getObject(

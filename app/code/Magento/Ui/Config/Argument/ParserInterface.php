@@ -7,6 +7,7 @@ namespace Magento\Ui\Config\Argument;
 
 /**
  * Convert node to array
+ * @since 2.2.0
  */
 interface ParserInterface
 {
@@ -16,6 +17,7 @@ interface ParserInterface
      * @param array $data
      * @param \DOMNode $node
      * @return array
+     * @since 2.2.0
      */
     public function parse(array $data, \DOMNode $node);
 }

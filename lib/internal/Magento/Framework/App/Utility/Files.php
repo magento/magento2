@@ -92,11 +92,13 @@ class Files
 
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var RegexIteratorFactory
+     * @since 2.2.0
      */
     private $regexIteratorFactory;
 
@@ -1615,6 +1617,7 @@ class Files
      *
      * @param int $flags
      * @return array
+     * @since 2.2.0
      */
     private function getSetupPhpFiles($flags = null)
     {

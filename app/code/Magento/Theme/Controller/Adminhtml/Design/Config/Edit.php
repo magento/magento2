@@ -16,21 +16,25 @@ use Magento\Framework\App\ScopeResolverPool;
 
 /**
  * Edit action controller
+ * @since 2.1.0
  */
 class Edit extends Action
 {
     /**
      * @var ResultPageFactory
+     * @since 2.1.0
      */
     protected $resultPageFactory;
 
     /**
      * @var ScopeValidator
+     * @since 2.1.0
      */
     protected $scopeValidator;
 
     /**
      * @var ScopeResolverPool
+     * @since 2.1.0
      */
     protected $scopeResolverPool;
 
@@ -39,6 +43,7 @@ class Edit extends Action
      * @param ResultPageFactory $resultPageFactory
      * @param ScopeValidator $scopeValidator
      * @param ScopeResolverPool $scopeResolverPool
+     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -54,6 +59,7 @@ class Edit extends Action
 
     /**
      * @return ResultPage|ResultRedirect
+     * @since 2.1.0
      */
     public function execute()
     {
@@ -78,6 +84,7 @@ class Edit extends Action
      * Retrieve scope title
      *
      * @return string
+     * @since 2.1.0
      */
     protected function getScopeTitle()
     {
@@ -97,6 +104,7 @@ class Edit extends Action
      * Check the permission to run it
      *
      * @return boolean
+     * @since 2.1.0
      */
     protected function _isAllowed()
     {

@@ -100,6 +100,7 @@ class FileManager
      * Create a view asset representing the theme fallback mapping resolver file.
      *
      * @return \Magento\Framework\View\Asset\File
+     * @since 2.2.0
      */
     public function createUrlResolverAsset()
     {
@@ -110,6 +111,7 @@ class FileManager
      * Create a view asset representing the theme fallback mapping configuration file.
      *
      * @return \Magento\Framework\View\Asset\File|null
+     * @since 2.2.0
      */
     public function createRequireJsMapConfigAsset()
     {
@@ -193,7 +195,7 @@ class FileManager
 
     /**
      * Remove all bundles from pool
-     * @deprecated
+     * @deprecated 2.1.1
      *
      * @return bool
      */
@@ -211,6 +213,7 @@ class FileManager
      *
      * @param string $relPath
      * @return bool
+     * @since 2.2.0
      */
     private function checkIfExist($relPath)
     {

@@ -92,6 +92,7 @@ class RowCustomizer implements RowCustomizerInterface
      * Column name for shipment_type attribute
      *
      * @var string
+     * @since 2.1.0
      */
     private $shipmentTypeColumn = 'bundle_shipment_type';
 
@@ -99,6 +100,7 @@ class RowCustomizer implements RowCustomizerInterface
      * Mapping for shipment type
      *
      * @var array
+     * @since 2.1.0
      */
     private $shipmentTypeMapping = [
         AbstractType::SHIPMENT_TOGETHER => 'together',
@@ -108,6 +110,7 @@ class RowCustomizer implements RowCustomizerInterface
     /**
      * Retrieve list of bundle specific columns
      * @return array
+     * @since 2.1.0
      */
     private function getBundleColumns()
     {
@@ -316,6 +319,7 @@ class RowCustomizer implements RowCustomizerInterface
      *
      * @param string $type
      * @return string
+     * @since 2.1.0
      */
     private function getShipmentTypeValue($type)
     {
@@ -360,6 +364,7 @@ class RowCustomizer implements RowCustomizerInterface
      *
      * @param string $additionalAttributes
      * @return array
+     * @since 2.1.3
      */
     private function parseAdditionalAttributes($additionalAttributes)
     {

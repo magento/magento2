@@ -13,6 +13,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Attribute loader
+ * @since 2.1.0
  */
 class AttributeLoader implements AttributeLoaderInterface
 {
@@ -20,16 +21,19 @@ class AttributeLoader implements AttributeLoaderInterface
      * Default attributes
      *
      * @var array
+     * @since 2.1.0
      */
     private $defaultAttributes = [];
 
     /**
      * @var ObjectManagerInterface
+     * @since 2.1.0
      */
     protected $objectManager;
 
     /**
      * @var Config
+     * @since 2.1.0
      */
     private $config;
 
@@ -38,6 +42,7 @@ class AttributeLoader implements AttributeLoaderInterface
      *
      * @param Config $config
      * @param ObjectManagerInterface $objectManager
+     * @since 2.1.0
      */
     public function __construct(
         Config $config,
@@ -54,6 +59,7 @@ class AttributeLoader implements AttributeLoaderInterface
      * @param DataObject|null $object
      * @return AbstractEntity
      * @throws LocalizedException
+     * @since 2.1.0
      */
     public function loadAllAttributes(AbstractEntity $resource, DataObject $object = null)
     {
@@ -63,6 +69,9 @@ class AttributeLoader implements AttributeLoaderInterface
          * Check and init default attributes
          */
         $defaultAttributesCodes = array_diff($resource->getDefaultAttributes(), $attributeCodes);
+
+        $resource->unsetAttributes();
+
         foreach ($defaultAttributesCodes as $attributeCode) {
             $resource->addAttribute($this->_getDefaultAttribute($resource, $attributeCode));
         }
@@ -78,6 +87,7 @@ class AttributeLoader implements AttributeLoaderInterface
      * @param AbstractEntity $resource
      * @param string $attributeCode
      * @return Attribute
+     * @since 2.1.0
      */
     protected function _getDefaultAttribute(AbstractEntity $resource, $attributeCode)
     {

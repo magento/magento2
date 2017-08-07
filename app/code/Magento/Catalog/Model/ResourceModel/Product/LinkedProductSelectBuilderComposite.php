@@ -6,15 +6,22 @@
 
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+/**
+ * Class \Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderComposite
+ *
+ * @since 2.1.1
+ */
 class LinkedProductSelectBuilderComposite implements LinkedProductSelectBuilderInterface
 {
     /**
      * @var LinkedProductSelectBuilderInterface[]
+     * @since 2.1.1
      */
     private $linkedProductSelectBuilder;
 
     /**
      * @param LinkedProductSelectBuilderInterface[] $linkedProductSelectBuilder
+     * @since 2.1.1
      */
     public function __construct($linkedProductSelectBuilder)
     {
@@ -23,6 +30,7 @@ class LinkedProductSelectBuilderComposite implements LinkedProductSelectBuilderI
 
     /**
      * {@inheritdoc}
+     * @since 2.1.1
      */
     public function build($productId)
     {

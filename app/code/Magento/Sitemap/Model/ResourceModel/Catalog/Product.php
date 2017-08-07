@@ -35,6 +35,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var \Magento\Catalog\Model\Product\Gallery\ReadHandler
+     * @since 2.1.0
      */
     protected $mediaGalleryReadHandler;
 
@@ -67,22 +68,25 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery
+     * @since 2.1.0
      */
     protected $mediaGalleryResourceModel;
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
-     * @deprecated unused
+     * @deprecated 2.2.0 unused
      */
     protected $_mediaConfig;
 
     /**
      * @var \Magento\Catalog\Model\Product
+     * @since 2.2.0
      */
     private $productModel;
 
     /**
      * @var \Magento\Catalog\Helper\Image
+     * @since 2.2.0
      */
     private $catalogImageHelper;
 
@@ -414,7 +418,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Get media config
      *
      * @return \Magento\Catalog\Model\Product\Media\Config
-     * @deprecated No longer used, as we're getting full image URL from getProductImageUrl method
+     * @deprecated 2.2.0 No longer used, as we're getting full image URL from getProductImageUrl method
      * @see getProductImageUrl()
      */
     protected function _getMediaConfig()
@@ -427,6 +431,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $image
      * @return string
+     * @since 2.2.0
      */
     private function getProductImageUrl($image)
     {

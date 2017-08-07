@@ -347,6 +347,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Join Product To Links
      * @return void
+     * @since 2.1.0
      */
     private function joinProductsToLinks()
     {

@@ -10,6 +10,7 @@ use Magento\Swatches\Model\Swatch;
 
 /**
  * Generates data for creating Visual Swatch attributes of "image" and "color" types.
+ * @since 2.2.0
  */
 class SwatchesGenerator
 {
@@ -36,22 +37,26 @@ class SwatchesGenerator
 
     /**
      * @var \Magento\Swatches\Helper\Media
+     * @since 2.2.0
      */
     private $swatchHelper;
 
     /**
      * @var \Magento\Setup\Fixtures\ImagesGenerator\ImagesGeneratorFactory
+     * @since 2.2.0
      */
     private $imagesGeneratorFactory;
 
     /**
      * @var \Magento\Setup\Fixtures\ImagesGenerator\ImagesGenerator
+     * @since 2.2.0
      */
     private $imagesGenerator;
 
     /**
      * @param \Magento\Swatches\Helper\Media $swatchHelper
      * @param \Magento\Setup\Fixtures\ImagesGenerator\ImagesGeneratorFactory $imagesGeneratorFactory
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Swatches\Helper\Media $swatchHelper,
@@ -68,6 +73,7 @@ class SwatchesGenerator
      * @param string $data
      * @param string $type
      * @return array
+     * @since 2.2.0
      */
     public function generateSwatchData($optionCount, $data, $type)
     {
@@ -108,6 +114,7 @@ class SwatchesGenerator
      *
      * @param int $index
      * @return string
+     * @since 2.2.0
      */
     private function generateSwatchColor($index)
     {
@@ -122,6 +129,7 @@ class SwatchesGenerator
      *
      * @param string $data String value to be used for generation.
      * @return string Path to the image file.
+     * @since 2.2.0
      */
     private function generateSwatchImage($data)
     {

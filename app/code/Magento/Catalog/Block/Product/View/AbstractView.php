@@ -9,7 +9,7 @@ namespace Magento\Catalog\Block\Product\View;
  * Product view abstract block
  *
  * @api
- * @deprecated
+ * @deprecated 2.2.0
  */
 abstract class AbstractView extends \Magento\Catalog\Block\Product\AbstractProduct
 {

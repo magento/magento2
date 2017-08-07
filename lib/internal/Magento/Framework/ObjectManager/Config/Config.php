@@ -10,6 +10,10 @@ use Magento\Framework\ObjectManager\ConfigCacheInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
 
+/**
+ * Class \Magento\Framework\ObjectManager\Config\Config
+ *
+ */
 class Config implements \Magento\Framework\ObjectManager\ConfigInterface
 {
     /**
@@ -77,6 +81,7 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
 
     /**
      * @var \Magento\Framework\Serialize\SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -336,7 +341,8 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getSerializer()
     {

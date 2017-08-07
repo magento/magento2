@@ -110,6 +110,7 @@ class Attribute extends AbstractFilter
      * @param array $optionsFacetedData
      * @param int $productSize
      * @return void
+     * @since 2.2.0
      */
     private function buildOptionData($option, $isAttributeFilterable, $optionsFacetedData, $productSize)
     {
@@ -134,6 +135,7 @@ class Attribute extends AbstractFilter
      *
      * @param array $option
      * @return bool|string
+     * @since 2.2.0
      */
     private function getOptionValue($option)
     {
@@ -149,6 +151,7 @@ class Attribute extends AbstractFilter
      * @param int|string $value
      * @param array $optionsFacetedData
      * @return int
+     * @since 2.2.0
      */
     private function getOptionCount($value, $optionsFacetedData)
     {

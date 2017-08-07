@@ -9,6 +9,11 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 
+/**
+ * Class \Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderByTierPrice
+ *
+ * @since 2.1.1
+ */
 class LinkedProductSelectBuilderByTierPrice implements LinkedProductSelectBuilderInterface
 {
     /**
@@ -18,31 +23,37 @@ class LinkedProductSelectBuilderByTierPrice implements LinkedProductSelectBuilde
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.1.1
      */
     private $storeManager;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.1.1
      */
     private $resource;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.1.1
      */
     private $customerSession;
 
     /**
      * @var \Magento\Catalog\Helper\Data
+     * @since 2.1.1
      */
     private $catalogHelper;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.1
      */
     private $metadataPool;
 
     /**
      * @var BaseSelectProcessorInterface
+     * @since 2.1.3
      */
     private $baseSelectProcessor;
 
@@ -53,6 +64,7 @@ class LinkedProductSelectBuilderByTierPrice implements LinkedProductSelectBuilde
      * @param \Magento\Catalog\Helper\Data $catalogHelper
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param BaseSelectProcessorInterface $baseSelectProcessor
+     * @since 2.1.1
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -73,6 +85,7 @@ class LinkedProductSelectBuilderByTierPrice implements LinkedProductSelectBuilde
 
     /**
      * {@inheritdoc}
+     * @since 2.1.1
      */
     public function build($productId)
     {

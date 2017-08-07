@@ -52,6 +52,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
     /**
      * @var \Magento\Catalog\Model\Attribute\ScopeOverriddenValue
+     * @since 2.2.0
      */
     private $scopeOverriddenValue;
 
@@ -146,6 +147,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Check whether product uses default attribute's value in selected scope
      * @param \Magento\Catalog\Model\Product $object
      * @return bool
+     * @since 2.2.0
      */
     private function isUseDefault($object)
     {

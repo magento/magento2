@@ -95,6 +95,7 @@ class Preview extends \Magento\Backend\Block\Widget
      * Return template preview data
      *
      * @return array
+     * @since 2.1.0
      */
     private function getPreviewData()
     {

@@ -8,6 +8,11 @@ namespace Magento\Theme\Model\Data\Design;
 use Magento\Framework\Api\AbstractExtensibleObject;
 use Magento\Theme\Api\Data\DesignConfigInterface;
 
+/**
+ * Class \Magento\Theme\Model\Data\Design\Config
+ *
+ * @since 2.1.0
+ */
 class Config extends AbstractExtensibleObject implements DesignConfigInterface
 {
     /**
@@ -17,6 +22,7 @@ class Config extends AbstractExtensibleObject implements DesignConfigInterface
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function getScope()
     {
@@ -25,6 +31,7 @@ class Config extends AbstractExtensibleObject implements DesignConfigInterface
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function getScopeId()
     {
@@ -33,6 +40,7 @@ class Config extends AbstractExtensibleObject implements DesignConfigInterface
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function setScope($scope)
     {
@@ -41,6 +49,7 @@ class Config extends AbstractExtensibleObject implements DesignConfigInterface
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function setScopeId($scopeId = null)
     {
@@ -49,6 +58,7 @@ class Config extends AbstractExtensibleObject implements DesignConfigInterface
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function getExtensionAttributes()
     {
@@ -57,6 +67,7 @@ class Config extends AbstractExtensibleObject implements DesignConfigInterface
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function setExtensionAttributes(\Magento\Theme\Api\Data\DesignConfigExtensionInterface $extensionAttributes)
     {

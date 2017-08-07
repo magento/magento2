@@ -35,11 +35,13 @@ class Store extends Column
      * Store manager
      *
      * @var StoreManager
+     * @since 2.1.0
      */
     protected $storeManager;
 
     /**
      * @var string
+     * @since 2.1.0
      */
     protected $storeKey;
 
@@ -126,6 +128,7 @@ class Store extends Column
      * Prepare component configuration
      *
      * @return void
+     * @since 2.1.0
      */
     public function prepare()
     {
@@ -140,7 +143,8 @@ class Store extends Column
      *
      * @return StoreManager
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getStoreManager()
     {

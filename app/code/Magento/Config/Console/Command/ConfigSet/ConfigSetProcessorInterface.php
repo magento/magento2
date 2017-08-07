@@ -14,6 +14,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
  * @see ConfigSetCommand
  *
  * @api
+ * @since 2.2.0
  */
 interface ConfigSetProcessorInterface
 {
@@ -26,6 +27,7 @@ interface ConfigSetProcessorInterface
      * @param string $scopeCode The scope code
      * @return void
      * @throws CouldNotSaveException An exception on processing error
+     * @since 2.2.0
      */
     public function process($path, $value, $scope, $scopeCode);
 }

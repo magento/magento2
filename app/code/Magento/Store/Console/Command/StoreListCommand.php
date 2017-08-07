@@ -14,12 +14,19 @@ use Symfony\Component\Console\Command\Command;
  * Class StoreListCommand
  *
  * Command for listing the configured stores
+ * @since 2.2.0
  */
 class StoreListCommand extends Command
 {
-    /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.2.0
+     */
     private $storeManager;
 
+    /**
+     * @since 2.2.0
+     */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
@@ -29,6 +36,7 @@ class StoreListCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     protected function configure()
     {
@@ -40,6 +48,7 @@ class StoreListCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

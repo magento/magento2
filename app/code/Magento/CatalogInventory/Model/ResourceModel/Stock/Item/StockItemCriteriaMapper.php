@@ -24,12 +24,14 @@ class StockItemCriteriaMapper extends GenericMapper
 {
     /**
      * @var StockConfigurationInterface
+     * @since 2.1.0
      */
     private $stockConfiguration;
 
     /**
      * @var StoreManagerInterface
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private $storeManager;
 
@@ -167,7 +169,8 @@ class StockItemCriteriaMapper extends GenericMapper
     /**
      * @return StockConfigurationInterface
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getStockConfiguration()
     {

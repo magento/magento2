@@ -10,11 +10,13 @@ namespace Magento\Security\Model\ResourceModel;
  * Admin Session Info mysql resource
  *
  * @api
+ * @since 2.1.0
  */
 class AdminSessionInfo extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime
+     * @since 2.1.0
      */
     protected $dateTime;
 
@@ -22,6 +24,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param null $connectionName
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -36,6 +39,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
      * Initialize resource model
      *
      * @return void
+     * @since 2.1.0
      */
     protected function _construct()
     {
@@ -48,6 +52,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
      * @param int $timestamp
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.1.0
      */
     public function deleteSessionsOlderThen($timestamp)
     {
@@ -69,6 +74,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
      * @param int|null $updateOlderThen
      * @return int The number of affected rows.
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.1.0
      */
     public function updateStatusByUserId(
         $status,

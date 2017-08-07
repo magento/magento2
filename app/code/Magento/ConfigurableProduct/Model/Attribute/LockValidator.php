@@ -23,6 +23,7 @@ class LockValidator implements LockValidatorInterface
 
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     private $metadataPool;
 
@@ -79,6 +80,7 @@ class LockValidator implements LockValidatorInterface
     /**
      * Get MetadataPool instance
      * @return MetadataPool
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {

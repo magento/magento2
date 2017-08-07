@@ -12,6 +12,10 @@ use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Class \Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute
+ *
+ */
 class Attribute
 {
     /**
@@ -26,11 +30,13 @@ class Attribute
 
     /**
      * @var StateInterface
+     * @since 2.2.0
      */
     private $cacheState;
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -84,6 +90,7 @@ class Attribute
      * Check if cache is enabled
      *
      * @return bool
+     * @since 2.2.0
      */
     private function isCacheEnabled()
     {

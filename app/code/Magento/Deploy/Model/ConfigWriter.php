@@ -16,16 +16,19 @@ use Magento\Config\Model\PreparedValueFactory;
 
 /**
  * Class ConfigWriter. Save configuration values into config file.
+ * @since 2.2.0
  */
 class ConfigWriter
 {
     /**
      * @var Writer
+     * @since 2.2.0
      */
     private $writer;
 
     /**
      * @var ArrayManager
+     * @since 2.2.0
      */
     private $arrayManager;
 
@@ -33,6 +36,7 @@ class ConfigWriter
      * Creates a prepared instance of Value.
      *
      * @var PreparedValueFactory
+     * @since 2.2.0
      */
     private $preparedValueFactory;
 
@@ -40,6 +44,7 @@ class ConfigWriter
      * @param Writer $writer
      * @param ArrayManager $arrayManager
      * @param PreparedValueFactory|null $valueFactory Creates a prepared instance of Value
+     * @since 2.2.0
      */
     public function __construct(
         Writer $writer,
@@ -58,6 +63,7 @@ class ConfigWriter
      * @param string $scope scope in which configuration would be saved.
      * @param string|null $scopeCode
      * @return void
+     * @since 2.2.0
      */
     public function save(array $values, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null)
     {
@@ -90,6 +96,7 @@ class ConfigWriter
      * @param string $configPath
      * @param string $configValue
      * @return array
+     * @since 2.2.0
      */
     private function setConfig(array $config, $configPath, $configValue)
     {
@@ -114,6 +121,7 @@ class ConfigWriter
      * @param string $scope
      * @param string $scopeCode
      * @return string
+     * @since 2.2.0
      */
     private function getPathPrefix($scope, $scopeCode)
     {

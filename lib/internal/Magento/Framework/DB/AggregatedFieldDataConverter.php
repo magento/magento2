@@ -10,16 +10,19 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Date converter for multiple fields in different tables using different field converters
+ * @since 2.2.0
  */
 class AggregatedFieldDataConverter
 {
     /**
      * @var FieldDataConverterFactory
+     * @since 2.2.0
      */
     private $fieldDataConverterFactory;
 
     /**
      * @var FieldDataConverter[]
+     * @since 2.2.0
      */
     private $fieldDataConverters = [];
 
@@ -27,6 +30,7 @@ class AggregatedFieldDataConverter
      * Constructor
      *
      * @param FieldDataConverterFactory $fieldDataConverterFactory
+     * @since 2.2.0
      */
     public function __construct(
         FieldDataConverterFactory $fieldDataConverterFactory
@@ -41,6 +45,7 @@ class AggregatedFieldDataConverter
      * @param AdapterInterface $connection
      * @throws FieldDataConversionException
      * @return void
+     * @since 2.2.0
      */
     public function convert(array $fieldsToUpdate, AdapterInterface $connection)
     {
@@ -61,6 +66,7 @@ class AggregatedFieldDataConverter
      *
      * @param string $dataConverterClassName
      * @return FieldDataConverter
+     * @since 2.2.0
      */
     private function getFieldDataConverter($dataConverterClassName)
     {

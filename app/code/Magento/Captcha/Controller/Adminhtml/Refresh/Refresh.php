@@ -8,15 +8,21 @@
  */
 namespace Magento\Captcha\Controller\Adminhtml\Refresh;
 
+/**
+ * Class \Magento\Captcha\Controller\Adminhtml\Refresh\Refresh
+ *
+ */
 class Refresh extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     protected $serializer;
 
     /**
      * @var \Magento\Captcha\Helper\Data
+     * @since 2.2.0
      */
     protected $captchaHelper;
 
@@ -25,6 +31,7 @@ class Refresh extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Captcha\Helper\Data $captchaHelper
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,

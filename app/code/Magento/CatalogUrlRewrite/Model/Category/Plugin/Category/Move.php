@@ -9,13 +9,20 @@ use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Move
+ *
+ */
 class Move
 {
-    /** @var CategoryUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
+     */
     protected $categoryUrlPathGenerator;
 
     /**
      * @var ChildrenCategoriesProvider
+     * @since 2.2.0
      */
     private $childrenCategoriesProvider;
 
@@ -41,6 +48,7 @@ class Move
      * @param null|int $afterCategoryId
      * @return \Magento\Catalog\Model\ResourceModel\Category
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterChangeParent(
         \Magento\Catalog\Model\ResourceModel\Category $subject,

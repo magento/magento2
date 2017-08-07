@@ -7,6 +7,10 @@ namespace Magento\Framework\ObjectManager\Factory;
 
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Class \Magento\Framework\ObjectManager\Factory\AbstractFactory
+ *
+ */
 abstract class AbstractFactory implements \Magento\Framework\ObjectManager\FactoryInterface
 {
     /**
@@ -41,6 +45,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      * Object creation stack
      *
      * @var array
+     * @since 2.2.0
      */
     protected $creationStack = [];
 
@@ -88,6 +93,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
 
     /**
      * @return \Magento\Framework\ObjectManager\DefinitionInterface
+     * @since 2.2.0
      */
     public function getDefinitions()
     {
@@ -205,6 +211,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      *
      * @throws \UnexpectedValueException
      * @throws \BadMethodCallException
+     * @since 2.2.0
      */
     protected function resolveArgumentsInRuntime($requestedType, array $parameters, array $arguments = [])
     {

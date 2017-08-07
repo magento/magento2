@@ -12,16 +12,19 @@ use Magento\Theme\Model\ResourceModel\Theme\CollectionFactory as ThemeCollection
  * Option source of the widget theme property.
  *
  * Can be used as a data provider for UI components that shows possible themes as a list.
+ * @since 2.2.0
  */
 class Themes implements OptionSourceInterface
 {
     /**
      * @var ThemeCollectionFactory
+     * @since 2.2.0
      */
     private $themeCollectionFactory;
 
     /**
      * @param ThemeCollectionFactory $themeCollectionFactory
+     * @since 2.2.0
      */
     public function __construct(ThemeCollectionFactory $themeCollectionFactory)
     {
@@ -32,6 +35,7 @@ class Themes implements OptionSourceInterface
      * Return array of options as value-label pairs
      *
      * @return array Format: array('<theme ID>' => '<theme label>', ...)
+     * @since 2.2.0
      */
     public function toOptionArray()
     {

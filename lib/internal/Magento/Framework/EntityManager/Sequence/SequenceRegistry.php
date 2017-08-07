@@ -10,11 +10,13 @@ use Magento\Framework\DB\Sequence\SequenceInterface;
 
 /**
  * Class SequenceRegistry
+ * @since 2.1.0
  */
 class SequenceRegistry
 {
     /**
      * @var array
+     * @since 2.1.0
      */
     private $registry;
 
@@ -25,6 +27,7 @@ class SequenceRegistry
      * @param SequenceInterface|null $sequence
      * @param string|null $sequenceTable
      * @return void
+     * @since 2.1.0
      */
     public function register($entityType, $sequence = null, $sequenceTable = null)
     {
@@ -37,6 +40,7 @@ class SequenceRegistry
      *
      * @param string $entityType
      * @return bool|array
+     * @since 2.1.0
      */
     public function retrieve($entityType)
     {

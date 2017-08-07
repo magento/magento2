@@ -29,6 +29,7 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
@@ -165,6 +166,7 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {

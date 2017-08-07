@@ -17,6 +17,7 @@ class Placeholder implements PostProcessorInterface
 {
     /**
      * @var ConfigPlaceholder
+     * @since 2.1.3
      */
     private $configPlaceholder;
 

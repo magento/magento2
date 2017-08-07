@@ -18,23 +18,25 @@ class MethodList
 {
     /**
      * @var \Magento\Payment\Helper\Data
-     * @deprecated Do not use this property in case of inheritance.
+     * @deprecated 2.1.3 Do not use this property in case of inheritance.
      */
     protected $paymentHelper;
 
     /**
      * @var \Magento\Payment\Model\Checks\SpecificationFactory
-     * @deprecated Do not use this property in case of inheritance.
+     * @deprecated 2.2.0 Do not use this property in case of inheritance.
      */
     protected $methodSpecificationFactory;
 
     /**
      * @var \Magento\Payment\Api\PaymentMethodListInterface
+     * @since 2.1.3
      */
     private $paymentMethodList;
 
     /**
      * @var \Magento\Payment\Model\Method\InstanceFactory
+     * @since 2.1.3
      */
     private $paymentMethodInstanceFactory;
 
@@ -95,6 +97,7 @@ class MethodList
      * Get payment method list.
      *
      * @return \Magento\Payment\Api\PaymentMethodListInterface
+     * @since 2.1.3
      */
     private function getPaymentMethodList()
     {
@@ -110,6 +113,7 @@ class MethodList
      * Get payment method instance factory.
      *
      * @return \Magento\Payment\Model\Method\InstanceFactory
+     * @since 2.1.3
      */
     private function getPaymentMethodInstanceFactory()
     {

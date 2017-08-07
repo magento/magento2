@@ -16,16 +16,19 @@ use Magento\Tax\Model\Calculation\Rate;
 /**
  * Class AjaxLoadRates is intended to load existing
  * Tax rates as options for a select element.
+ * @since 2.2.0
  */
 class AjaxLoadRates extends Action
 {
     /**
      * @var RatesProvider
+     * @since 2.2.0
      */
     private $ratesProvider;
 
     /**
      * @var SearchCriteriaBuilder
+     * @since 2.2.0
      */
     private $searchCriteriaBuilder;
 
@@ -33,6 +36,7 @@ class AjaxLoadRates extends Action
      * @param Context $context
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param RatesProvider $ratesProvider
+     * @since 2.2.0
      */
     public function __construct(
         Context $context,
@@ -48,6 +52,7 @@ class AjaxLoadRates extends Action
      * Get rates page via AJAX
      *
      * @return Json
+     * @since 2.2.0
      */
     public function execute()
     {

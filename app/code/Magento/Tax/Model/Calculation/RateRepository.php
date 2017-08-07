@@ -67,7 +67,10 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
      */
     protected $joinProcessor;
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     * @since 2.2.0
+     */
     private $collectionProcessor;
 
     /**
@@ -180,7 +183,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
-     * @deprecated
+     * @deprecated 2.2.0
      * @throws \Magento\Framework\Exception\InputException
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
@@ -200,7 +203,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     /**
      * Translates a field name to a DB column name for use in collection queries.
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @param string $field a field name that should be translated to a DB column name.
      * @return string
      */
@@ -302,8 +305,9 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return CollectionProcessorInterface
+     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

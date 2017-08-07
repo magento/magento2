@@ -24,7 +24,9 @@ class Action extends \Magento\Framework\Model\AbstractModel
      */
     protected $_productWebsiteFactory;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
     protected $indexerRegistry;
 
     /**

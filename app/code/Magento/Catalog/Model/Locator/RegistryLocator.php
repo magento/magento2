@@ -12,26 +12,31 @@ use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Class RegistryLocator
+ * @since 2.1.0
  */
 class RegistryLocator implements LocatorInterface
 {
     /**
      * @var Registry
+     * @since 2.1.0
      */
     private $registry;
 
     /**
      * @var ProductInterface
+     * @since 2.1.0
      */
     private $product;
 
     /**
      * @var StoreInterface
+     * @since 2.1.0
      */
     private $store;
 
     /**
      * @param Registry $registry
+     * @since 2.1.0
      */
     public function __construct(Registry $registry)
     {
@@ -41,6 +46,7 @@ class RegistryLocator implements LocatorInterface
     /**
      * {@inheritdoc}
      * @throws NotFoundException
+     * @since 2.1.0
      */
     public function getProduct()
     {
@@ -58,6 +64,7 @@ class RegistryLocator implements LocatorInterface
     /**
      * {@inheritdoc}
      * @throws NotFoundException
+     * @since 2.1.0
      */
     public function getStore()
     {
@@ -74,6 +81,7 @@ class RegistryLocator implements LocatorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getWebsiteIds()
     {
@@ -82,6 +90,7 @@ class RegistryLocator implements LocatorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getBaseCurrencyCode()
     {

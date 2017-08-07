@@ -75,6 +75,7 @@ abstract class AbstractAction
 
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     private $metadataPool;
 
@@ -336,6 +337,7 @@ abstract class AbstractAction
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {

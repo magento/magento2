@@ -9,36 +9,43 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * @codeCoverageIgnore
+ * @since 2.1.0
  */
 class ExternalFKSetup
 {
     /**
      * @var SchemaSetupInterface
+     * @since 2.1.0
      */
     protected $setup;
 
     /**
      * @var string
+     * @since 2.1.0
      */
     protected $entityTable;
 
     /**
      * @var string
+     * @since 2.1.0
      */
     protected $entityColumn;
 
     /**
      * @var string
+     * @since 2.1.0
      */
     protected $externalTable;
 
     /**
      * @var string
+     * @since 2.1.0
      */
     protected $externalColumn;
 
     /**
      * @var string
+     * @since 2.1.0
      */
     protected $onDelete;
 
@@ -52,6 +59,7 @@ class ExternalFKSetup
      * @param string $externalColumn
      * @param string $onDelete
      * @return void
+     * @since 2.1.0
      */
     public function install(
         SchemaSetupInterface $setup,
@@ -75,6 +83,7 @@ class ExternalFKSetup
      * Set external foreign key
      *
      * @return void
+     * @since 2.1.0
      */
     protected function execute()
     {
@@ -98,6 +107,7 @@ class ExternalFKSetup
      * @param string $targetColumn
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     protected function getForeignKeys(
         $targetTable,
@@ -126,6 +136,7 @@ class ExternalFKSetup
      * @param string $refTable
      * @param string $refColumn
      * @return void
+     * @since 2.1.0
      */
     protected function clearForeignKey(
         $targetTable,
@@ -146,6 +157,7 @@ class ExternalFKSetup
      * Add default foreign key
      *
      * @return void
+     * @since 2.1.0
      */
     protected function addDefaultForeignKey()
     {
@@ -175,6 +187,7 @@ class ExternalFKSetup
      * Add foreign keys to entity table
      *
      * @return void
+     * @since 2.1.0
      */
     protected function addForeignKeys()
     {
@@ -215,6 +228,7 @@ class ExternalFKSetup
      * Drop old foreign key
      *
      * @return void
+     * @since 2.1.0
      */
     protected function dropOldForeignKey()
     {

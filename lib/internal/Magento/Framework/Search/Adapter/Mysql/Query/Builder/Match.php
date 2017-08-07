@@ -45,6 +45,7 @@ class Match implements QueryInterface
 
     /**
      * @var PreprocessorInterface[]
+     * @since 2.1.0
      */
     protected $preprocessors;
 

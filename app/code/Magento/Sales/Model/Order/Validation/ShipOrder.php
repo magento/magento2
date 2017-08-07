@@ -15,21 +15,25 @@ use Magento\Sales\Model\ValidatorResultMerger;
 
 /**
  * Class ShipOrder
+ * @since 2.1.3
  */
 class ShipOrder implements ShipOrderInterface
 {
     /**
      * @var OrderValidatorInterface
+     * @since 2.1.3
      */
     private $orderValidator;
 
     /**
      * @var ShipmentValidatorInterface
+     * @since 2.1.3
      */
     private $shipmentValidator;
 
     /**
      * @var ValidatorResultMerger
+     * @since 2.1.3
      */
     private $validatorResultMerger;
 
@@ -39,6 +43,7 @@ class ShipOrder implements ShipOrderInterface
      * @param OrderValidatorInterface $orderValidator
      * @param ShipmentValidatorInterface $shipmentValidator
      * @param ValidatorResultMerger $validatorResultMerger
+     * @since 2.1.3
      */
     public function __construct(
         OrderValidatorInterface $orderValidator,
@@ -61,6 +66,7 @@ class ShipOrder implements ShipOrderInterface
      * @param array $packages
      * @param \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface|null $arguments
      * @return \Magento\Sales\Model\ValidatorResultInterface
+     * @since 2.1.3
      */
     public function validate(
         $order,

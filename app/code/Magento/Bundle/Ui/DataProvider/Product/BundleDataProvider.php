@@ -9,10 +9,16 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider;
 use Magento\Bundle\Helper\Data;
 
+/**
+ * Class \Magento\Bundle\Ui\DataProvider\Product\BundleDataProvider
+ *
+ * @since 2.1.0
+ */
 class BundleDataProvider extends ProductDataProvider
 {
     /**
      * @var Data
+     * @since 2.1.0
      */
     protected $dataHelper;
 
@@ -28,6 +34,7 @@ class BundleDataProvider extends ProductDataProvider
      * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
      * @param array $meta
      * @param array $data
+     * @since 2.1.0
      */
     public function __construct(
         $name,
@@ -58,6 +65,7 @@ class BundleDataProvider extends ProductDataProvider
      * Get data
      *
      * @return array
+     * @since 2.1.0
      */
     public function getData()
     {

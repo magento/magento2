@@ -11,21 +11,29 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 
+/**
+ * Class \Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor
+ *
+ * @since 2.2.0
+ */
 class FilterProcessor implements CollectionProcessorInterface
 {
     /**
      * @var CustomFilterInterface[]
+     * @since 2.2.0
      */
     private $customFilters;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $fieldMapping;
 
     /**
      * @param CustomFilterInterface[] $customFilters
      * @param array $fieldMapping
+     * @since 2.2.0
      */
     public function __construct(
         array $customFilters = [],
@@ -41,6 +49,7 @@ class FilterProcessor implements CollectionProcessorInterface
      * @param SearchCriteriaInterface $searchCriteria
      * @param AbstractDb $collection
      * @return void
+     * @since 2.2.0
      */
     public function process(SearchCriteriaInterface $searchCriteria, AbstractDb $collection)
     {
@@ -55,6 +64,7 @@ class FilterProcessor implements CollectionProcessorInterface
      * @param FilterGroup $filterGroup
      * @param AbstractDb $collection
      * @return void
+     * @since 2.2.0
      */
     private function addFilterGroupToCollection(
         FilterGroup $filterGroup,
@@ -87,6 +97,7 @@ class FilterProcessor implements CollectionProcessorInterface
      * @param string $field
      * @return CustomFilterInterface|null
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     private function getCustomFilterForField($field)
     {
@@ -111,6 +122,7 @@ class FilterProcessor implements CollectionProcessorInterface
      *
      * @param string $field
      * @return string
+     * @since 2.2.0
      */
     private function getFieldMapping($field)
     {

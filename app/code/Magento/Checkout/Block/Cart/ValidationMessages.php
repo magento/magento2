@@ -15,14 +15,19 @@ use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
  */
 class ValidationMessages extends \Magento\Framework\View\Element\Messages
 {
-    /** @var \Magento\Checkout\Helper\Cart */
+    /**
+     * @var \Magento\Checkout\Helper\Cart
+     */
     protected $cartHelper;
 
-    /** @var \Magento\Framework\Locale\CurrencyInterface */
+    /**
+     * @var \Magento\Framework\Locale\CurrencyInterface
+     */
     protected $currency;
 
     /**
      * @var \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
+     * @since 2.1.0
      */
     private $minimumAmountErrorMessage;
 
@@ -86,7 +91,8 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
 
     /**
      * @return \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getMinimumAmountErrorMessage()
     {

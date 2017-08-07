@@ -11,6 +11,7 @@ use Magento\Framework\App\ScopeResolverInterface;
 
 /**
  * Check that config flag is set to true,
+ * @since 2.2.0
  */
 class ConfigCondition implements VisibilityConditionInterface
 {
@@ -21,16 +22,19 @@ class ConfigCondition implements VisibilityConditionInterface
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.2.0
      */
     protected $scopeConfig;
 
     /**
      * @var ScopeResolverInterface
+     * @since 2.2.0
      */
     protected $scopeResolver;
 
     /**
      * @var string|null
+     * @since 2.2.0
      */
     private $scopeType;
 
@@ -40,6 +44,7 @@ class ConfigCondition implements VisibilityConditionInterface
      * @param ScopeConfigInterface $scopeConfig
      * @param ScopeResolverInterface $scopeResolver
      * @param string|null $scopeType
+     * @since 2.2.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -53,6 +58,7 @@ class ConfigCondition implements VisibilityConditionInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function isVisible(array $arguments)
     {
@@ -65,6 +71,7 @@ class ConfigCondition implements VisibilityConditionInterface
 
     /**
      * @return string
+     * @since 2.2.0
      */
     public function getName()
     {

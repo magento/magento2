@@ -12,27 +12,32 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Config source. Retrieve all configuration for scopes from db
+ * @since 2.1.3
  */
 class RuntimeConfigSource implements ConfigSourceInterface
 {
     /**
      * @var DeploymentConfig
+     * @since 2.1.3
      */
     private $deploymentConfig;
 
     /**
      * @var ResourceConnection
+     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var AdapterInterface
+     * @since 2.2.0
      */
     private $connection;
 
     /**
      * @param DeploymentConfig $deploymentConfig
      * @param ResourceConnection $resourceConnection
+     * @since 2.1.3
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
@@ -49,6 +54,7 @@ class RuntimeConfigSource implements ConfigSourceInterface
      * @param string $path
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.3
      */
     public function get($path = '')
     {
@@ -65,6 +71,7 @@ class RuntimeConfigSource implements ConfigSourceInterface
 
     /**
      * @return AdapterInterface
+     * @since 2.2.0
      */
     private function getConnection()
     {
@@ -80,6 +87,7 @@ class RuntimeConfigSource implements ConfigSourceInterface
      * @param string $table
      * @param string $keyField
      * @return array
+     * @since 2.2.0
      */
     private function getEntities($table, $keyField)
     {
@@ -98,6 +106,7 @@ class RuntimeConfigSource implements ConfigSourceInterface
      * Check whether db connection is available and can be used
      *
      * @return bool
+     * @since 2.1.3
      */
     private function canUseDatabase()
     {

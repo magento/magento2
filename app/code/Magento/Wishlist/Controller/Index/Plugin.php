@@ -12,6 +12,10 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\RedirectInterface;
 
+/**
+ * Class \Magento\Wishlist\Controller\Index\Plugin
+ *
+ */
 class Plugin
 {
     /**

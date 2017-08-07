@@ -68,6 +68,7 @@ class QuantityValidator
      * @param \Magento\Quote\Model\Quote\Item $quoteItem
      * @param bool $removeError
      * @return void
+     * @since 2.2.0
      */
     private function addErrorInfoToQuote($result, $quoteItem)
     {

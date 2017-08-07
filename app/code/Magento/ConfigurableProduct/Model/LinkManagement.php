@@ -10,6 +10,10 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 
+/**
+ * Class \Magento\ConfigurableProduct\Model\LinkManagement
+ *
+ */
 class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementInterface
 {
     /**
@@ -34,11 +38,13 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
 
     /**
      * @var \Magento\ConfigurableProduct\Helper\Product\Options\Factory;
+     * @since 2.1.2
      */
     private $optionsFactory;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
+     * @since 2.1.2
      */
     private $attributeFactory;
 
@@ -177,7 +183,8 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
      *
      * @return \Magento\ConfigurableProduct\Helper\Product\Options\Factory
      *
-     * @deprecated
+     * @deprecated 2.1.2
+     * @since 2.1.2
      */
     private function getOptionsFactory()
     {
@@ -193,6 +200,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
      *
      * @param int[] $attributeIds
      * @return array
+     * @since 2.1.2
      */
     private function getConfigurableAttributesData($attributeIds)
     {

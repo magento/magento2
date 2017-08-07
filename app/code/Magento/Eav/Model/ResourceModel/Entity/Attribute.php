@@ -39,6 +39,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var Config
+     * @since 2.0.9
      */
     private $config;
 
@@ -214,6 +215,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.9
      */
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -223,7 +225,8 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @return Config
-     * @deprecated
+     * @deprecated 2.0.9
+     * @since 2.0.9
      */
     private function getConfig()
     {
@@ -524,6 +527,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int|string $entityAttributeId
      * @return array
+     * @since 2.1.0
      */
     public function getEntityAttribute($entityAttributeId)
     {
@@ -665,6 +669,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $storeLabelsCache = [];
 
@@ -715,6 +720,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Provide variables to serialize
      *
      * @return array
+     * @since 2.0.9
      */
     public function __sleep()
     {
@@ -727,6 +733,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Restore global dependencies
      *
      * @return void
+     * @since 2.0.9
      */
     public function __wakeup()
     {

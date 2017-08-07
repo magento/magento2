@@ -176,20 +176,24 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @var string
+     * @since 2.0.3
      */
     protected $mediaGalleryTableName;
 
     /**
      * @var string
+     * @since 2.0.3
      */
     protected $mediaGalleryValueTableName;
     /**
      * @var string
+     * @since 2.0.3
      */
     protected $mediaGalleryEntityToValueTableName;
 
     /**
      * @var string
+     * @since 2.0.3
      */
     protected $productEntityTableName;
 
@@ -218,6 +222,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Attributes codes which shows as date
      *
      * @var array
+     * @since 2.1.3
      */
     protected $dateAttrCodes = [
         'special_from_date',
@@ -557,24 +562,38 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected $categoryProcessor;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.1
+     */
     protected $scopeConfig;
 
-    /** @var \Magento\Catalog\Model\Product\Url */
+    /**
+     * @var \Magento\Catalog\Model\Product\Url
+     * @since 2.0.1
+     */
     protected $productUrl;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $websitesCache = [];
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $categoriesCache = [];
 
-    /** @var array */
+    /**
+     * @var array
+     * @since 2.0.1
+     */
     protected $productUrlSuffix = [];
 
     /**
      * @var array
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.1
      */
     protected $productUrlKeys = [];
 
@@ -631,16 +650,23 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected $cachedImages = null;
 
-    /** @var array */
+    /**
+     * @var array
+     * @since 2.0.1
+     */
     protected $urlKeys = [];
 
-    /** @var array */
+    /**
+     * @var array
+     * @since 2.0.1
+     */
     protected $rowNumbers = [];
 
     /**
      * Product entity link field
      *
      * @var string
+     * @since 2.1.0
      */
     private $productEntityLinkField;
 
@@ -648,6 +674,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Product entity identifier field
      *
      * @var string
+     * @since 2.1.0
      */
     private $productEntityIdentifierField;
 
@@ -655,6 +682,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Escaped separator value for regular expression.
      * The value is based on PSEUDO_MULTI_LINE_SEPARATOR constant.
      * @var string
+     * @since 2.1.3
      */
     private $multiLineSeparatorForRegexp;
 
@@ -662,6 +690,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Container for filesystem object.
      *
      * @var Filesystem
+     * @since 2.2.0
      */
     private $filesystem;
 
@@ -669,6 +698,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Catalog config.
      *
      * @var CatalogConfig
+     * @since 2.2.0
      */
     private $catalogConfig;
 
@@ -1337,6 +1367,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $entityRowsIn Row for insert
      * @param array $entityRowsUp Row for update
      * @return $this
+     * @since 2.1.0
      */
     public function saveProductEntity(array $entityRowsIn, array $entityRowsUp)
     {
@@ -1377,6 +1408,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Return additional data, needed to select.
      * @return array
+     * @since 2.1.3
      */
     private function getOldSkuFieldsForSelect()
     {
@@ -1387,6 +1419,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Adds newly created products to _oldSku
      * @param array $newProducts
      * @return void
+     * @since 2.1.3
      */
     private function updateOldSku(array $newProducts)
     {
@@ -1410,6 +1443,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Get new SKU fields for select
      *
      * @return array
+     * @since 2.1.0
      */
     private function getNewSkuFieldsForSelect()
     {
@@ -1423,6 +1457,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Init media gallery resources
      * @return void
+     * @since 2.0.3
      */
     protected function initMediaGalleryResources()
     {
@@ -2023,6 +2058,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param string $fileName
      * @return string
+     * @since 2.2.0
      */
     private function getSystemFile($fileName)
     {
@@ -2245,6 +2281,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param array $productIdsToReindex
      * @return void
+     * @since 2.2.0
      */
     private function reindexProducts($productIdsToReindex = [])
     {
@@ -2507,6 +2544,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * @param array $rowData
      * @return bool
+     * @since 2.0.8
      */
     private function isNeedToValidateUrlKey($rowData)
     {
@@ -2521,6 +2559,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param string $sku
      * @return array
+     * @since 2.1.0
      */
     private function prepareNewSkuData($sku)
     {
@@ -2561,6 +2600,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param string $additionalAttributes Attributes data that will be parsed
      * @return array
+     * @since 2.1.3
      */
     private function parseAdditionalAttributes($additionalAttributes)
     {
@@ -2581,6 +2621,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param string $attributesData Attributes data that will be parsed. It keeps data in format:
      *      code=value,code2=value2...,codeN=valueN
      * @return array
+     * @since 2.1.3
      */
     private function parseAttributesWithoutWrappedValues($attributesData)
     {
@@ -2620,6 +2661,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *  E.g. attribute with code 'attr_code' has value 'my"value'. This data should be stored as attr_code="my""value"
      *
      * @return array
+     * @since 2.1.3
      */
     private function parseAttributesWithWrappedValues($attributesData)
     {
@@ -2644,6 +2686,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param string $values
      * @param string $delimiter
      * @return array
+     * @since 2.1.3
      */
     public function parseMultiselectValues($values, $delimiter = self::PSEUDO_MULTI_LINE_SEPARATOR)
     {
@@ -2662,6 +2705,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Retrieves escaped PSEUDO_MULTI_LINE_SEPARATOR if it is metacharacter for regular expression
      *
      * @return string
+     * @since 2.1.3
      */
     private function getMultiLineSeparatorForRegexp()
     {
@@ -2762,6 +2806,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Check that url_keys are not assigned to other products in DB
      *
      * @return void
+     * @since 2.0.1
      */
     protected function checkUrlKeyDuplicates()
     {
@@ -2790,6 +2835,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param int $storeId
      * @return string
+     * @since 2.0.1
      */
     protected function getProductUrlSuffix($storeId = null)
     {
@@ -2806,6 +2852,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * @param array $rowData
      * @return string
+     * @since 2.0.1
      */
     protected function getUrlKey($rowData)
     {
@@ -2822,6 +2869,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @return Proxy\Product\ResourceModel
+     * @since 2.0.1
      */
     protected function getResource()
     {
@@ -2835,6 +2883,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Get product entity link field
      *
      * @return string
+     * @since 2.1.0
      */
     private function getProductEntityLinkField()
     {
@@ -2850,6 +2899,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Get product entity identifier field
      *
      * @return string
+     * @since 2.1.0
      */
     private function getProductIdentifierField()
     {
@@ -2866,6 +2916,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param array $labels
      * @return void
+     * @since 2.2.0
      */
     private function updateMediaGalleryLabels(array $labels)
     {
@@ -2912,6 +2963,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param string $labelRow
      * @return array
+     * @since 2.2.0
      */
     private function parseMultipleValues($labelRow)
     {
@@ -2926,6 +2978,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param string $sku
      * @return bool
+     * @since 2.2.0
      */
     private function isSkuExist($sku)
     {
@@ -2938,6 +2991,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param string $sku
      * @return array
+     * @since 2.2.0
      */
     private function getExistingSku($sku)
     {

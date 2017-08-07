@@ -5,6 +5,10 @@
  */
 namespace Magento\CatalogSearch\Model\Search;
 
+/**
+ * Class \Magento\CatalogSearch\Model\Search\ReaderPlugin
+ *
+ */
 class ReaderPlugin
 {
     /**
@@ -29,6 +33,7 @@ class ReaderPlugin
      * @param string|null $scope
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterRead(
         \Magento\Framework\Config\ReaderInterface $subject,

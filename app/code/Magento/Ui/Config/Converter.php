@@ -12,6 +12,7 @@ use Magento\Ui\Config\Argument\ParserInterface;
 
 /**
  * Converter for UI Component instances configuration files
+ * @since 2.2.0
  */
 class Converter implements ConfigConverterInterface
 {
@@ -52,26 +53,31 @@ class Converter implements ConfigConverterInterface
 
     /**
      * @var Parser
+     * @since 2.2.0
      */
     private $argumentParser;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $schemaMap = [];
 
     /**
      * @var ReaderInterface
+     * @since 2.2.0
      */
     private $reader;
 
     /**
      * @var ParserInterface
+     * @since 2.2.0
      */
     private $parser;
 
     /**
      * @var ConverterUtils
+     * @since 2.2.0
      */
     private $converterUtils;
 
@@ -80,6 +86,7 @@ class Converter implements ConfigConverterInterface
      * @param ParserInterface $parser
      * @param ReaderInterface $reader
      * @param ConverterUtils $converterUtils
+     * @since 2.2.0
      */
     public function __construct(
         Parser $argumentParser,
@@ -98,6 +105,7 @@ class Converter implements ConfigConverterInterface
      *
      * @param \DOMNode $node
      * @return array|string
+     * @since 2.2.0
      */
     private function toArray(\DOMNode $node)
     {
@@ -148,6 +156,7 @@ class Converter implements ConfigConverterInterface
      *
      * @param \DOMDocument|null $source
      * @return array
+     * @since 2.2.0
      */
     public function convert($source)
     {
@@ -167,6 +176,7 @@ class Converter implements ConfigConverterInterface
      *
      * @param \DOMNode $node
      * @return array
+     * @since 2.2.0
      */
     private function convertNode(\DOMNode $node)
     {
@@ -198,6 +208,7 @@ class Converter implements ConfigConverterInterface
      * @param array $arguments
      * @param array $resultComponent
      * @return array
+     * @since 2.2.0
      */
     private function processArguments(array $arguments, array $resultComponent)
     {
@@ -213,6 +224,7 @@ class Converter implements ConfigConverterInterface
      *
      * @param array $attributes
      * @return array
+     * @since 2.2.0
      */
     private function processAttributes(array $attributes)
     {
@@ -227,6 +239,7 @@ class Converter implements ConfigConverterInterface
      * @param \DOMNode $node
      * @param array $childResult
      * @return array
+     * @since 2.2.0
      */
     private function processChildResult(\DOMNode $node, array $childResult)
     {
@@ -245,6 +258,7 @@ class Converter implements ConfigConverterInterface
      *
      * @param \DOMNode $node
      * @return array
+     * @since 2.2.0
      */
     private function convertChildNodes(\DOMNode $node)
     {

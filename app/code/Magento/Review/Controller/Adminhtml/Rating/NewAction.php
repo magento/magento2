@@ -8,6 +8,10 @@ namespace Magento\Review\Controller\Adminhtml\Rating;
 use Magento\Review\Controller\Adminhtml\Rating as RatingController;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Review\Controller\Adminhtml\Rating\NewAction
+ *
+ */
 class NewAction extends RatingController
 {
     /**

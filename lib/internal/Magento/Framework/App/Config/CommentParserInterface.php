@@ -9,6 +9,7 @@ use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Interface for parsing comments in the configuration file.
+ * @since 2.2.0
  */
 interface CommentParserInterface
 {
@@ -18,6 +19,7 @@ interface CommentParserInterface
      * @param string $fileName
      * @return array
      * @throws FileSystemException
+     * @since 2.2.0
      */
     public function execute($fileName);
 }

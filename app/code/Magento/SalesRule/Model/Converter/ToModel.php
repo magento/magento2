@@ -10,6 +10,10 @@ use Magento\SalesRule\Api\Data\RuleInterface;
 use Magento\SalesRule\Model\Data\Rule as RuleDataModel;
 use Magento\SalesRule\Model\Rule;
 
+/**
+ * Class \Magento\SalesRule\Model\Converter\ToModel
+ *
+ */
 class ToModel
 {
     /**
@@ -209,6 +213,7 @@ class ToModel
      *
      * @param string|null $date
      * @return string|null
+     * @since 2.1.0
      */
     private function formattingDate($date)
     {

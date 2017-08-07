@@ -62,6 +62,7 @@ class ExpressConfigProvider implements ConfigProviderInterface
 
     /**
      * @var UrlInterface
+     * @since 2.1.0
      */
     protected $urlBuilder;
 
@@ -147,6 +148,7 @@ class ExpressConfigProvider implements ConfigProviderInterface
 
     /**
      * @return bool
+     * @since 2.1.0
      */
     protected function isInContextCheckout()
     {

@@ -10,6 +10,10 @@ use Magento\GiftMessage\Helper\Message as MessageHelper;
 use Magento\Quote\Model\Quote\Item\ToOrderItem;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 
+/**
+ * Class \Magento\GiftMessage\Model\Plugin\QuoteItem
+ *
+ */
 class QuoteItem
 {
     /**
@@ -34,6 +38,7 @@ class QuoteItem
      * @param array $additional
      * @return OrderItemInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterConvert(
         ToOrderItem $subject,

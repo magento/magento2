@@ -15,19 +15,27 @@ use Psr\Log\LoggerInterface;
 /**
  * Class is separate from \Magento|Framework\Shell because logging behavior is different, and relies on ObjectManager
  * being available.
+ * @since 2.1.0
  */
 class Shell implements ShellInterface
 {
-    /** @var Driver */
+    /**
+     * @var \Magento\Framework\Shell\Driver
+     * @since 2.1.0
+     */
     private $driver;
 
-    /** @var LoggerInterface */
+    /**
+     * @var \Psr\Log\LoggerInterface
+     * @since 2.1.0
+     */
     private $logger;
 
     /**
      * @param Driver $driver
      * @param CommandRendererInterface $commandRenderer
      * @param LoggerInterface $logger
+     * @since 2.1.0
      */
     public function __construct(
         Driver $driver,
@@ -44,6 +52,7 @@ class Shell implements ShellInterface
      * @param string[] $arguments Argument values to substitute markers with
      * @throws \Magento\Framework\Exception\LocalizedException If a command returns non-zero exit code
      * @return string
+     * @since 2.1.0
      */
     public function execute($command, array $arguments = [])
     {

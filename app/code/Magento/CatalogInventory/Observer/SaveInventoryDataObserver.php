@@ -17,7 +17,7 @@ use Magento\Framework\Event\Observer as EventObserver;
 /**
  * Saves stock data from a product to the Stock Item
  *
- * @deprecated Stock data should be processed using the module API
+ * @deprecated 2.2.0 Stock data should be processed using the module API
  * @see StockItemInterface when you want to change the stock data
  * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
  * @see StockItemRepositoryInterface::save as extension point for customization of saving process
@@ -36,6 +36,7 @@ class SaveInventoryDataObserver implements ObserverInterface
 
     /**
      * @var StockItemValidator
+     * @since 2.2.0
      */
     private $stockItemValidator;
 
@@ -115,6 +116,7 @@ class SaveInventoryDataObserver implements ObserverInterface
      *
      * @param Product $product
      * @return Item
+     * @since 2.2.0
      */
     private function getStockItemToBeUpdated(Product $product)
     {
@@ -132,6 +134,7 @@ class SaveInventoryDataObserver implements ObserverInterface
      *
      * @param Product $product
      * @return array
+     * @since 2.2.0
      */
     private function getStockData(Product $product)
     {

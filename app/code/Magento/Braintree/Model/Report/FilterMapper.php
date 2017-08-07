@@ -10,20 +10,31 @@ use Magento\Braintree\Model\Report\ConditionAppliers\AppliersPool;
 
 /**
  * Class FilterMapper
+ * @since 2.1.0
  */
 class FilterMapper
 {
     /**
      * @var array
+     * @since 2.1.0
      */
     private $searchFieldsToFiltersMap = [];
 
-    /** @var AppliersPool */
+    /**
+     * @var \Magento\Braintree\Model\Report\ConditionAppliers\AppliersPool
+     * @since 2.1.0
+     */
     private $appliersPool;
 
-    /** @var BraintreeSearchAdapter */
+    /**
+     * @var \Magento\Braintree\Model\Adapter\BraintreeSearchAdapter
+     * @since 2.1.0
+     */
     private $braintreeSearchAdapter;
 
+    /**
+     * @since 2.1.0
+     */
     public function __construct(
         AppliersPool $appliersPool,
         BraintreeSearchAdapter $braintreeSearchAdapter
@@ -36,6 +47,7 @@ class FilterMapper
     /**
      * Init fields map with Braintree filters
      * @return void
+     * @since 2.1.0
      */
     private function initFieldsToFiltersMap()
     {
@@ -59,6 +71,7 @@ class FilterMapper
      * @param string $field
      * @param array $conditionMap
      * @return null|object
+     * @since 2.1.0
      */
     public function getFilter($field, array $conditionMap)
     {
@@ -80,6 +93,7 @@ class FilterMapper
      * @param object $fieldFilter
      * @param array $conditionMap
      * @return bool
+     * @since 2.1.0
      */
     private function applyConditions($fieldFilter, array $conditionMap)
     {

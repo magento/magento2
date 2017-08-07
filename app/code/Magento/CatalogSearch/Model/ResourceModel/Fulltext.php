@@ -27,6 +27,7 @@ class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Holder for MetadataPool instance.
      *
      * @var MetadataPool
+     * @since 2.2.0
      */
     private $metadataPool;
 
@@ -75,6 +76,7 @@ class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int|array $childIds
      * @return array
+     * @since 2.2.0
      */
     public function getRelationsByChild($childIds)
     {

@@ -8,12 +8,18 @@ namespace Magento\Search\Ui\Component\Listing\Column\Store;
 
 use Magento\Store\Ui\Component\Listing\Column\Store\Options as StoreOptions;
 
+/**
+ * Class \Magento\Search\Ui\Component\Listing\Column\Store\Options
+ *
+ * @since 2.1.0
+ */
 class Options extends StoreOptions
 {
     /**
      * Get options
      *
      * @return array
+     * @since 2.1.0
      */
     public function toOptionArray()
     {

@@ -31,6 +31,7 @@ class RequestGenerator
 
     /**
      * @var GeneratorResolver
+     * @since 2.2.0
      */
     private $generatorResolver;
 
@@ -237,6 +238,7 @@ class RequestGenerator
      * @param Attribute $attribute
      * @param array $request
      * @return array
+     * @since 2.2.0
      */
     private function processPriceAttribute($useFulltext, $attribute, $request)
     {

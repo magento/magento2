@@ -132,6 +132,7 @@ class GenerateFixturesCommand extends Command
      * Clear changelog after generation
      *
      * @return void
+     * @since 2.2.0
      */
     private function clearChangelog()
     {

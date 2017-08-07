@@ -51,7 +51,7 @@ class FixtureModel
      * Parameters labels
      *
      * @var array
-     * @deprecated
+     * @deprecated 2.2.0
      */
     protected $paramLabels = [];
 
@@ -109,6 +109,11 @@ class FixtureModel
                     'fixtureModel' => $this,
                 ]
             );
+            if (isset($this->fixtures[$fixture->getPriority()])) {
+                throw new \InvalidArgumentException(
+                    sprintf('Duplicate priority %d in fixture %s', $fixture->getPriority(), $type)
+                );
+            }
             $this->fixtures[$fixture->getPriority()] = $fixture;
         }
 
@@ -120,7 +125,7 @@ class FixtureModel
      * Get param labels
      *
      * @return array
-     * @deprecated
+     * @deprecated 2.2.0
      */
     public function getParamLabels()
     {
@@ -191,7 +196,7 @@ class FixtureModel
      * Reset object manager
      *
      * @return \Magento\Framework\ObjectManagerInterface
-     * @deprecated
+     * @deprecated 2.2.0
      */
     public function resetObjectManager()
     {
@@ -200,6 +205,7 @@ class FixtureModel
 
     /**
      * @return FixtureConfig
+     * @since 2.2.0
      */
     private function getConfig()
     {

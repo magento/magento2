@@ -18,11 +18,13 @@ namespace Magento\Ui\Component\Control;
  * @method string getDisabled
  * @method array getOptions
  * @method string getIdHard
+ * @since 2.1.0
  */
 class SplitButton extends Button
 {
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     protected function getTemplatePath()
     {
@@ -33,6 +35,7 @@ class SplitButton extends Button
      * Retrieve <div> wrapper attributes html
      *
      * @return string
+     * @since 2.1.0
      */
     public function getAttributesHtml()
     {
@@ -57,6 +60,7 @@ class SplitButton extends Button
      * Retrieve button attributes html
      *
      * @return string
+     * @since 2.1.0
      */
     public function getButtonAttributesHtml()
     {
@@ -102,6 +106,7 @@ class SplitButton extends Button
      * Retrieve toggle button attributes html
      *
      * @return string
+     * @since 2.1.0
      */
     public function getToggleAttributesHtml()
     {
@@ -136,6 +141,7 @@ class SplitButton extends Button
      * @param array $option
      * @return string
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.1.0
      */
     public function getOptionAttributesHtml($key, $option)
     {
@@ -167,6 +173,7 @@ class SplitButton extends Button
      * @param string $disabled
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.1.0
      */
     protected function prepareOptionAttributes($option, $title, $classes, $disabled)
     {
@@ -196,6 +203,7 @@ class SplitButton extends Button
      * If this function returns false then split button will be rendered as simple button
      *
      * @return bool
+     * @since 2.1.0
      */
     public function hasSplit()
     {
@@ -208,6 +216,7 @@ class SplitButton extends Button
      * @param array $data
      * @param array &$attributes
      * @return void
+     * @since 2.1.0
      */
     protected function getDataAttributes($data, &$attributes)
     {

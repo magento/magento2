@@ -9,6 +9,10 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
+/**
+ * Class \Magento\Backend\Block\Widget\Grid\Column\Filter\Store
+ *
+ */
 class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     const ALL_STORE_VIEWS = '0';

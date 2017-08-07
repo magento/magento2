@@ -13,6 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @api
+ * @since 2.2.0
  */
 class ValidationSchemaException extends LocalizedException
 {

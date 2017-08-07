@@ -11,16 +11,19 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class DeleteRow
+ * @since 2.1.0
  */
 class ReadRow
 {
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     private $metadataPool;
 
     /**
      * @var ResourceConnection
+     * @since 2.1.0
      */
     private $resourceConnection;
 
@@ -29,6 +32,7 @@ class ReadRow
      *
      * @param MetadataPool $metadataPool
      * @param ResourceConnection $resourceConnection
+     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -44,6 +48,7 @@ class ReadRow
      * @param array $context
      * @return array
      * @throws \Exception
+     * @since 2.1.0
      */
     public function execute($entityType, $identifier, $context = [])
     {

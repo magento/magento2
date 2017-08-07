@@ -26,6 +26,7 @@ class Total extends \Magento\Framework\DataObject
      * Serializer interface instance.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -34,6 +35,7 @@ class Total extends \Magento\Framework\DataObject
      *
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @since 2.2.0
      */
     public function __construct(
         array $data = [],
@@ -170,6 +172,7 @@ class Total extends \Magento\Framework\DataObject
      *
      * @param array|string $info
      * @return $this
+     * @since 2.1.0
      */
     public function setFullInfo($info)
     {
@@ -181,6 +184,7 @@ class Total extends \Magento\Framework\DataObject
      * Returns the full info, which is used to capture tax related information.
      *
      * @return array
+     * @since 2.1.0
      */
     public function getFullInfo()
     {

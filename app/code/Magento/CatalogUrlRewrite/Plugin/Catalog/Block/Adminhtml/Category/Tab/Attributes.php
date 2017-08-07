@@ -15,6 +15,7 @@ class Attributes
      * @param array $result
      *
      * @return array
+     * @since 2.1.0
      */
     public function afterGetAttributesMeta(
         \Magento\Catalog\Model\Category\DataProvider $subject,

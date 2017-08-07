@@ -9,6 +9,10 @@ namespace Magento\Framework\Indexer\ScopeResolver;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
+/**
+ * Class \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver
+ *
+ */
 class FlatScopeResolver implements IndexScopeResolverInterface
 {
     const SUFFIX_FLAT = '_flat';

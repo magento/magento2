@@ -129,6 +129,7 @@ class Head implements Layout\ReaderInterface
      * @param \Magento\Framework\View\Page\Config\Structure $pageConfigStructure
      * @param \Magento\Framework\View\Layout\Element $node
      * @return void
+     * @since 2.1.0
      */
     private function setMetadata($pageConfigStructure, $node)
     {

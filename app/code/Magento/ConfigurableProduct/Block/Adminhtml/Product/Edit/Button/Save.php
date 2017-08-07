@@ -12,11 +12,13 @@ use Magento\Catalog\Model\Product\Type;
 
 /**
  * Class Save
+ * @since 2.1.0
  */
 class Save extends Generic
 {
     /**
      * @var array
+     * @since 2.1.0
      */
     private static $availableProductTypes = [
         ConfigurableType::TYPE_CODE,
@@ -26,6 +28,7 @@ class Save extends Generic
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getButtonData()
     {
@@ -60,6 +63,7 @@ class Save extends Generic
      * Retrieve options
      *
      * @return array
+     * @since 2.1.0
      */
     protected function getOptions()
     {
@@ -137,6 +141,7 @@ class Save extends Generic
     /**
      * Retrieve target for button
      * @return string
+     * @since 2.1.0
      */
     protected function getSaveTarget()
     {
@@ -150,6 +155,7 @@ class Save extends Generic
     /**
      * Retrieve action for button
      * @return string
+     * @since 2.1.0
      */
     protected function getSaveAction()
     {
@@ -162,6 +168,7 @@ class Save extends Generic
 
     /**
      * @return boolean
+     * @since 2.1.0
      */
     protected function isConfigurableProduct()
     {

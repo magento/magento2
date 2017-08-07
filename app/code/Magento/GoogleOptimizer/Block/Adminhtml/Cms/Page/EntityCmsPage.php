@@ -9,15 +9,22 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\GoogleOptimizer\Model\Code as GoogleOptimizerCode;
 
+/**
+ * Class \Magento\GoogleOptimizer\Block\Adminhtml\Cms\Page\EntityCmsPage
+ *
+ * @since 2.1.0
+ */
 class EntityCmsPage extends DataObject
 {
     /**
      * @var \Magento\Framework\Registry
+     * @since 2.1.0
      */
     private $coreRegistry;
 
     /**
      * @var GoogleOptimizerCode
+     * @since 2.1.0
      */
     private $codeModel;
 
@@ -25,6 +32,7 @@ class EntityCmsPage extends DataObject
      * Google Optimizer binded entity
      *
      * @var \Magento\Cms\Model\Page
+     * @since 2.1.0
      */
     private $entity;
 
@@ -32,6 +40,7 @@ class EntityCmsPage extends DataObject
      * @param \Magento\Framework\Registry $registry
      * @param GoogleOptimizerCode $code
      * @param array $data
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\Registry $registry,
@@ -48,6 +57,7 @@ class EntityCmsPage extends DataObject
      *
      * @return GoogleOptimizerCode|null
      * @throws NoSuchEntityException
+     * @since 2.1.0
      */
     public function getCode()
     {
@@ -65,6 +75,7 @@ class EntityCmsPage extends DataObject
      *
      * @return \Magento\Cms\Model\Page|mixed
      * @throws NoSuchEntityException
+     * @since 2.1.0
      */
     private function getEntity()
     {

@@ -49,11 +49,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @var PaymentMethodListInterface
+     * @since 2.2.0
      */
     private $paymentMethodList;
 
     /**
      * @var InstanceFactory
+     * @since 2.2.0
      */
     private $paymentMethodInstanceFactory;
 
@@ -146,7 +148,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get payment method list.
      *
      * @return PaymentMethodListInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getPaymentMethodList()
     {
@@ -162,7 +165,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get payment method instance factory.
      *
      * @return InstanceFactory
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getPaymentMethodInstanceFactory()
     {

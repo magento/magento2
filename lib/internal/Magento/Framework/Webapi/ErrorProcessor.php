@@ -42,9 +42,7 @@ class ErrorProcessor
 
     /**#@-*/
 
-    /**
-     * @var \Magento\Framework\Json\Encoder
-     */
+    /**#@-*/
     protected $encoder;
 
     /**
@@ -73,6 +71,7 @@ class ErrorProcessor
      * Instance of serializer.
      *
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 

@@ -36,16 +36,19 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
 
     /**
      * @var OrderExtensionFactory
+     * @since 2.1.0
      */
     private $orderExtensionFactory;
 
     /**
      * @var ShippingAssignmentBuilder
+     * @since 2.0.3
      */
     private $shippingAssignmentBuilder;
 
     /**
      * @var CollectionProcessorInterface
+     * @since 2.2.0
      */
     private $collectionProcessor;
 
@@ -170,6 +173,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     /**
      * @param OrderInterface $order
      * @return void
+     * @since 2.0.3
      */
     private function setShippingAssignments(OrderInterface $order)
     {
@@ -192,7 +196,8 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * Get the new ShippingAssignmentBuilder dependency for application code
      *
      * @return ShippingAssignmentBuilder
-     * @deprecated
+     * @deprecated 2.0.3
+     * @since 2.0.3
      */
     private function getShippingAssignmentBuilderDependency()
     {
@@ -210,8 +215,9 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param \Magento\Sales\Api\Data\OrderSearchResultInterface $searchResult
      * @return void
-     * @deprecated
+     * @deprecated 2.2.0
      * @throws \Magento\Framework\Exception\InputException
+     * @since 2.0.8
      */
     protected function addFilterGroupToCollection(
         \Magento\Framework\Api\Search\FilterGroup $filterGroup,

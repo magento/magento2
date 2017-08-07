@@ -7,31 +7,37 @@ namespace Magento\Framework\EntityManager\Sequence;
 
 /**
  * Applier of sequence identifier.
+ * @since 2.2.0
  */
 class SequenceApplier
 {
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var \Magento\Framework\EntityManager\TypeResolver
+     * @since 2.2.0
      */
     private $typeResolver;
 
     /**
      * @var \Magento\Framework\EntityManager\Sequence\SequenceManager
+     * @since 2.2.0
      */
     private $sequenceManager;
 
     /**
      * @var \Magento\Framework\EntityManager\Sequence\SequenceRegistry
+     * @since 2.2.0
      */
     private $sequenceRegistry;
 
     /**
      * @var \Magento\Framework\EntityManager\HydratorPool
+     * @since 2.2.0
      */
     private $hydratorPool;
 
@@ -41,6 +47,7 @@ class SequenceApplier
      * @param \Magento\Framework\EntityManager\Sequence\SequenceManager $sequenceManager
      * @param \Magento\Framework\EntityManager\Sequence\SequenceRegistry $sequenceRegistry
      * @param \Magento\Framework\EntityManager\HydratorPool $hydratorPool
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
@@ -65,6 +72,7 @@ class SequenceApplier
      * @param object $entity
      *
      * @return object
+     * @since 2.2.0
      */
     public function apply($entity)
     {

@@ -250,26 +250,31 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
     /**
      * @var Gallery
+     * @since 2.1.1
      */
     private $mediaGalleryResource;
 
     /**
      * @var GalleryReadHandler
+     * @since 2.1.1
      */
     private $productGalleryReadHandler;
 
     /**
      * @var MetadataPool
+     * @since 2.1.1
      */
     private $metadataPool;
 
     /**
      * @var bool|string
+     * @since 2.2.0
      */
     private $linkField;
 
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @since 2.2.0
      */
     private $backend;
 
@@ -1553,6 +1558,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     protected function getEntityPkName(\Magento\Eav\Model\Entity\AbstractEntity $entity)
     {
@@ -2090,6 +2096,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param int $customerGroupId
      * @return $this
+     * @since 2.2.0
      */
     public function addTierPriceDataByGroupId($customerGroupId)
     {
@@ -2120,6 +2127,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param array $productIds
      * @return \Magento\Framework\DB\Select
+     * @since 2.2.0
      */
     private function getTierPriceSelect(array $productIds)
     {
@@ -2146,6 +2154,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param Select $select
      * @return void
+     * @since 2.2.0
      */
     private function fillTierPriceData(\Magento\Framework\DB\Select $select)
     {
@@ -2163,6 +2172,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Retrieve link field and cache it.
      *
      * @return bool|string
+     * @since 2.2.0
      */
     private function getLinkField()
     {
@@ -2176,6 +2186,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Retrieve backend model and cache it.
      *
      * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @since 2.2.0
      */
     private function getBackend()
     {
@@ -2216,6 +2227,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.1.1
      */
     public function addMediaGalleryData()
     {
@@ -2265,6 +2277,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get product entity metadata
      *
      * @return \Magento\Framework\EntityManager\EntityMetadataInterface
+     * @since 2.2.0
      */
     public function getProductEntityMetadata()
     {
@@ -2275,7 +2288,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Retrieve GalleryReadHandler
      *
      * @return GalleryReadHandler
-     * @deprecated
+     * @deprecated 2.1.1
+     * @since 2.1.1
      */
     private function getGalleryReadHandler()
     {
@@ -2286,8 +2300,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.1.1
      * @return \Magento\Catalog\Model\ResourceModel\Product\Gallery
+     * @since 2.1.1
      */
     private function getMediaGalleryResource()
     {

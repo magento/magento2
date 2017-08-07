@@ -17,11 +17,13 @@ class InstallSchema implements InstallSchemaInterface
 {
     /**
      * @var string
+     * @since 2.1.3
      */
     private static $quoteConnectionName = 'checkout';
 
     /**
      * @var string
+     * @since 2.1.3
      */
     private static $salesConnectionName = 'sales';
 

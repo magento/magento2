@@ -132,7 +132,7 @@ class Item
      * Serialized submenu string
      *
      * @var string
-     * @deprecated
+     * @deprecated 2.2.0
      */
     protected $_serializedSubmenu;
 
@@ -152,6 +152,7 @@ class Item
      * Menu item target
      *
      * @var string|null
+     * @since 2.2.0
      */
     private $target;
 
@@ -213,6 +214,7 @@ class Item
      * Retrieve item target
      *
      * @return string|null
+     * @since 2.2.0
      */
     public function getTarget()
     {
@@ -459,6 +461,7 @@ class Item
      * Get menu item data represented as an array
      *
      * @return array
+     * @since 2.2.0
      */
     public function toArray()
     {
@@ -484,6 +487,7 @@ class Item
      *
      * @param array $data
      * @return void
+     * @since 2.2.0
      */
     public function populateFromArray(array $data)
     {

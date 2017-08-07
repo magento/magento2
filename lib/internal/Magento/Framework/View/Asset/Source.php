@@ -32,6 +32,7 @@ class Source
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @since 2.2.0
      */
     protected $tmpDir;
 
@@ -47,7 +48,7 @@ class Source
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ListInterface
-     * @deprecated
+     * @deprecated 2.1.1
      */
     private $themeList;
 
@@ -58,11 +59,13 @@ class Source
 
     /**
      * @var ReadFactory
+     * @since 2.1.0
      */
     private $readFactory;
 
     /**
      * @var ThemeProviderInterface
+     * @since 2.1.1
      */
     private $themeProvider;
 
@@ -167,6 +170,7 @@ class Source
     /**
      * @param LocalInterface $asset
      * @return string
+     * @since 2.2.0
      */
     public function getSourceContentType(LocalInterface $asset)
     {
@@ -241,6 +245,7 @@ class Source
 
     /**
      * @return ThemeProviderInterface
+     * @since 2.1.1
      */
     private function getThemeProvider()
     {
@@ -269,7 +274,8 @@ class Source
      * @param \Magento\Framework\View\Asset\LocalInterface $asset
      *
      * @return bool|string
-     * @deprecated If custom vendor directory is outside Magento root, then this method will return unexpected result
+     * @deprecated 2.1.0 If custom vendor directory is outside Magento root,
+     * then this method will return unexpected result.
      */
     public function findRelativeSourceFilePath(LocalInterface $asset)
     {

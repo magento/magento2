@@ -35,9 +35,7 @@ class ReadinessCheck
     const KEY_LAST_TIMESTAMP = 'last_timestamp';
     /**#@-*/
 
-    /**
-     * @var \Magento\Setup\Validator\DbValidator
-     */
+    /**#@-*/
     private $dbValidator;
 
     /**
@@ -57,11 +55,13 @@ class ReadinessCheck
 
     /**
      * @var BasePackageInfo
+     * @since 2.1.0
      */
     private $basePackageInfo;
 
     /**
      * @var Status
+     * @since 2.1.0
      */
     private $status;
 
@@ -175,6 +175,7 @@ class ReadinessCheck
      *
      * @param array $phpVersionCheckResult
      * @return string
+     * @since 2.1.0
      */
     private function getPhpVersionCheckErrorLogMessage($phpVersionCheckResult)
     {
@@ -199,6 +200,7 @@ class ReadinessCheck
      *
      * @param array $phpExtensionsCheckResult
      * @return string
+     * @since 2.1.0
      */
     private function getPhpExtensionsCheckErrorLogMessage($phpExtensionsCheckResult)
     {
@@ -222,6 +224,7 @@ class ReadinessCheck
      *
      * @param array $phpSettingsCheckResult
      * @return string
+     * @since 2.1.0
      */
     private function getPhpSettingsCheckErrorLogMessage($phpSettingsCheckResult)
     {
@@ -241,6 +244,7 @@ class ReadinessCheck
      * A private function to check database access and return appropriate error message in case of error
      *
      * @return string
+     * @since 2.1.0
      */
     private function performDBCheck()
     {

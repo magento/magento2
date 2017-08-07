@@ -82,6 +82,7 @@ class Adapter implements MethodInterface
 
     /**
      * @var \Magento\Payment\Gateway\Command\CommandManagerInterface
+     * @since 2.1.0
      */
     private $commandExecutor;
 
@@ -89,6 +90,7 @@ class Adapter implements MethodInterface
      * Logger for exception details
      *
      * @var LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 

@@ -9,16 +9,19 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Pool for hash maps
+ * @since 2.2.0
  */
 class HashMapPool
 {
     /**
      * @var HashMapInterface[]
+     * @since 2.2.0
      */
     private $dataArray = [];
 
     /**
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
@@ -26,6 +29,7 @@ class HashMapPool
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
+     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager
@@ -40,6 +44,7 @@ class HashMapPool
      * @param int $categoryId
      * @return HashMapInterface
      * @throws \Exception
+     * @since 2.2.0
      */
     public function getDataMap($instanceName, $categoryId)
     {
@@ -67,6 +72,7 @@ class HashMapPool
      * @param string $instanceName
      * @param int $categoryId
      * @return void
+     * @since 2.2.0
      */
     public function resetMap($instanceName, $categoryId)
     {

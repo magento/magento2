@@ -6,6 +6,10 @@
  */
 namespace Magento\Email\Controller\Adminhtml\Email\Template;
 
+/**
+ * Class \Magento\Email\Controller\Adminhtml\Email\Template\Delete
+ *
+ */
 class Delete extends \Magento\Email\Controller\Adminhtml\Email\Template
 {
     /**

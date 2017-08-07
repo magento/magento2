@@ -12,6 +12,7 @@ use Magento\Framework\App\State;
 
 /**
  * Redis session save handler
+ * @since 2.0.6
  */
 class Config implements \Cm\RedisSession\Handler\ConfigInterface
 {
@@ -119,11 +120,13 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
      * Deployment config
      *
      * @var DeploymentConfig $deploymentConfig
+     * @since 2.0.6
      */
     private $deploymentConfig;
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.0.6
      */
     private $scopeConfig;
 
@@ -131,6 +134,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
      * @param DeploymentConfig $deploymentConfig
      * @param State $appState
      * @param ScopeConfigInterface $scopeConfig
+     * @since 2.0.6
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
@@ -144,6 +148,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.6
      */
     public function getLogLevel()
     {
@@ -152,6 +157,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.6
      */
     public function getHost()
     {
@@ -160,6 +166,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.6
      */
     public function getPort()
     {
@@ -168,6 +175,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.6
      */
     public function getDatabase()
     {
@@ -176,6 +184,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.6
      */
     public function getPassword()
     {
@@ -184,6 +193,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.6
      */
     public function getTimeout()
     {
@@ -192,6 +202,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.6
      */
     public function getPersistentIdentifier()
     {
@@ -200,6 +211,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.6
      */
     public function getCompressionThreshold()
     {
@@ -208,6 +220,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.6
      */
     public function getCompressionLibrary()
     {
@@ -216,6 +229,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.6
      */
     public function getMaxConcurrency()
     {
@@ -224,6 +238,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.6
      */
     public function getMaxLifetime()
     {
@@ -232,6 +247,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.6
      */
     public function getMinLifetime()
     {
@@ -240,6 +256,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.6
      */
     public function getDisableLocking()
     {
@@ -248,6 +265,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.6
      */
     public function getBotLifetime()
     {
@@ -256,6 +274,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.6
      */
     public function getBotFirstLifetime()
     {
@@ -264,6 +283,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.6
      */
     public function getFirstLifetime()
     {
@@ -272,6 +292,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.6
      */
     public function getBreakAfter()
     {
@@ -280,6 +301,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.6
      */
     public function getLifetime()
     {

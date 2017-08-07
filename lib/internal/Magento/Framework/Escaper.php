@@ -14,26 +14,31 @@ class Escaper
 {
     /**
      * @var \Magento\Framework\ZendEscaper
+     * @since 2.2.0
      */
     private $escaper;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 
     /**
      * @var string[]
+     * @since 2.2.0
      */
     private $notAllowedTags = ['script', 'img', 'embed', 'iframe', 'video', 'source', 'object', 'audio'];
 
     /**
      * @var string[]
+     * @since 2.2.0
      */
     private $allowedAttributes = ['id', 'class', 'href', 'target', 'title', 'style'];
 
     /**
      * @var string[]
+     * @since 2.2.0
      */
     private $escapeAsUrlAttributes = ['href'];
 
@@ -105,6 +110,7 @@ class Escaper
      * @param \DOMDocument $domDocument
      * @param string[] $allowedTags
      * @return void
+     * @since 2.2.0
      */
     private function removeNotAllowedTags(\DOMDocument $domDocument, array $allowedTags)
     {
@@ -126,6 +132,7 @@ class Escaper
      *
      * @param \DOMDocument $domDocument
      * @return void
+     * @since 2.2.0
      */
     private function removeNotAllowedAttributes(\DOMDocument $domDocument)
     {
@@ -143,6 +150,7 @@ class Escaper
      *
      * @param \DOMDocument $domDocument
      * @return void
+     * @since 2.2.0
      */
     private function escapeText(\DOMDocument $domDocument)
     {
@@ -158,6 +166,7 @@ class Escaper
      *
      * @param \DOMDocument $domDocument
      * @return void
+     * @since 2.2.0
      */
     private function escapeAttributeValues(\DOMDocument $domDocument)
     {
@@ -178,6 +187,7 @@ class Escaper
      * @param string $name
      * @param string $value
      * @return string
+     * @since 2.2.0
      */
     private function escapeAttributeValue($name, $value)
     {
@@ -190,6 +200,7 @@ class Escaper
      * @param string $string
      * @param boolean $escapeSingleQuote
      * @return string
+     * @since 2.2.0
      */
     public function escapeHtmlAttr($string, $escapeSingleQuote = true)
     {
@@ -215,6 +226,7 @@ class Escaper
      *
      * @param string $string
      * @return string
+     * @since 2.2.0
      */
     public function encodeUrlParam($string)
     {
@@ -226,6 +238,7 @@ class Escaper
      *
      * @param string $string
      * @return string
+     * @since 2.2.0
      */
     public function escapeJs($string)
     {
@@ -252,6 +265,7 @@ class Escaper
      *
      * @param string $string
      * @return string
+     * @since 2.2.0
      */
     public function escapeCss($string)
     {
@@ -264,7 +278,7 @@ class Escaper
      * @param string|array $data
      * @param string $quote
      * @return string|array
-     * @deprecated
+     * @deprecated 2.2.0
      */
     public function escapeJsQuote($data, $quote = '\'')
     {
@@ -285,7 +299,7 @@ class Escaper
      *
      * @param string $data
      * @return string
-     * @deprecated
+     * @deprecated 2.2.0
      */
     public function escapeXssInUrl($data)
     {
@@ -303,7 +317,7 @@ class Escaper
      * @param string $data
      * @param bool $addSlashes
      * @return string
-     * @deprecated
+     * @deprecated 2.2.0
      */
     public function escapeQuote($data, $addSlashes = false)
     {
@@ -317,7 +331,8 @@ class Escaper
      * Get escaper
      *
      * @return \Magento\Framework\ZendEscaper
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getEscaper()
     {
@@ -332,7 +347,8 @@ class Escaper
      * Get logger
      *
      * @return \Psr\Log\LoggerInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getLogger()
     {

@@ -7,21 +7,25 @@ namespace Magento\Setup\Model\Description;
 
 /**
  * Generate random description based on configuration
+ * @since 2.2.0
  */
 class DescriptionGenerator
 {
     /**
      * @var \Magento\Setup\Model\Description\DescriptionParagraphGenerator
+     * @since 2.2.0
      */
     private $paragraphGenerator;
 
     /**
      * @var \Magento\Setup\Model\Description\MixinManager
+     * @since 2.2.0
      */
     private $mixinManager;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $descriptionConfig;
 
@@ -29,6 +33,7 @@ class DescriptionGenerator
      * @param \Magento\Setup\Model\Description\DescriptionParagraphGenerator $paragraphGenerator
      * @param \Magento\Setup\Model\Description\MixinManager $mixinManager
      * @param array $descriptionConfig
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Setup\Model\Description\DescriptionParagraphGenerator $paragraphGenerator,
@@ -44,6 +49,7 @@ class DescriptionGenerator
      * Generate description and apply mixin to it
      *
      * @return string
+     * @since 2.2.0
      */
     public function generate()
     {
@@ -60,6 +66,7 @@ class DescriptionGenerator
      * Generate raw description without mixin
      *
      * @return string
+     * @since 2.2.0
      */
     private function generateRawDescription()
     {

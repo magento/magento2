@@ -11,27 +11,43 @@ use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
 use Magento\Quote\Api\Data\ProductOptionExtensionFactory;
 use Magento\Quote\Model\Quote\ProductOptionFactory;
 
+/**
+ * Class \Magento\Catalog\Model\CustomOptions\CustomOptionProcessor
+ *
+ */
 class CustomOptionProcessor implements CartItemProcessorInterface
 {
-    /** @var DataObject\Factory  */
+    /**
+     * @var \Magento\Framework\DataObject\Factory
+     */
     protected $objectFactory;
 
-    /** @var \Magento\Quote\Model\Quote\ProductOptionFactory  */
+    /**
+     * @var \Magento\Quote\Model\Quote\ProductOptionFactory
+     */
     protected $productOptionFactory;
 
-    /** @var \Magento\Quote\Api\Data\ProductOptionExtensionFactory  */
+    /**
+     * @var \Magento\Quote\Api\Data\ProductOptionExtensionFactory
+     */
     protected $extensionFactory;
 
-    /** @var CustomOptionFactory  */
+    /**
+     * @var \Magento\Catalog\Model\CustomOptions\CustomOptionFactory
+     */
     protected $customOptionFactory;
 
-    /** @var \Magento\Catalog\Model\Product\Option\UrlBuilder */
+    /**
+     * @var \Magento\Catalog\Model\Product\Option\UrlBuilder
+     * @since 2.1.0
+     */
     private $urlBuilder;
 
     /**
      * Serializer interface instance.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -144,6 +160,7 @@ class CustomOptionProcessor implements CartItemProcessorInterface
      *
      * @param array $optionValue
      * @return array
+     * @since 2.1.0
      */
     private function processFileOptionValue(array $optionValue)
     {
@@ -164,6 +181,7 @@ class CustomOptionProcessor implements CartItemProcessorInterface
      *
      * @param array $optionValue
      * @return array
+     * @since 2.2.0
      */
     private function processDateOptionValue(array $optionValue)
     {
@@ -180,7 +198,8 @@ class CustomOptionProcessor implements CartItemProcessorInterface
     /**
      * @return \Magento\Catalog\Model\Product\Option\UrlBuilder
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getUrlBuilder()
     {

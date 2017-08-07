@@ -95,6 +95,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 

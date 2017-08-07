@@ -50,11 +50,13 @@ class Login extends \Magento\Framework\App\Action\Action
 
     /**
      * @var AccountRedirect
+     * @since 2.0.11
      */
     protected $accountRedirect;
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.0.11
      */
     protected $scopeConfig;
 
@@ -88,8 +90,9 @@ class Login extends \Magento\Framework\App\Action\Action
      * Get account redirect.
      * For release backward compatibility.
      *
-     * @deprecated
+     * @deprecated 2.0.11
      * @return AccountRedirect
+     * @since 2.0.11
      */
     protected function getAccountRedirect()
     {
@@ -102,9 +105,10 @@ class Login extends \Magento\Framework\App\Action\Action
     /**
      * Account redirect setter for unit tests.
      *
-     * @deprecated
+     * @deprecated 2.0.11
      * @param AccountRedirect $value
      * @return void
+     * @since 2.0.11
      */
     public function setAccountRedirect($value)
     {
@@ -112,8 +116,9 @@ class Login extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.0.11
      * @return ScopeConfigInterface
+     * @since 2.0.11
      */
     protected function getScopeConfig()
     {
@@ -124,9 +129,10 @@ class Login extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.0.11
      * @param ScopeConfigInterface $value
      * @return void
+     * @since 2.0.11
      */
     public function setScopeConfig($value)
     {

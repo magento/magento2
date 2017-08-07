@@ -9,6 +9,7 @@ namespace Magento\Payment\Api\Data;
  * Payment method interface.
  *
  * @api
+ * @since 2.1.3
  */
 interface PaymentMethodInterface
 {
@@ -16,6 +17,7 @@ interface PaymentMethodInterface
      * Get code.
      *
      * @return string
+     * @since 2.1.3
      */
     public function getCode();
 
@@ -23,6 +25,7 @@ interface PaymentMethodInterface
      * Get title.
      *
      * @return string
+     * @since 2.1.3
      */
     public function getTitle();
 
@@ -30,6 +33,7 @@ interface PaymentMethodInterface
      * Get store id.
      *
      * @return int
+     * @since 2.1.3
      */
     public function getStoreId();
 
@@ -38,6 +42,7 @@ interface PaymentMethodInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.1.3
      */
     public function getIsActive();
 }

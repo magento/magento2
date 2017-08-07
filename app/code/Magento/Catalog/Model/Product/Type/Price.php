@@ -85,6 +85,7 @@ class Price
 
     /**
      * @var ProductTierPriceExtensionFactory
+     * @since 2.2.0
      */
     private $tierPriceExtensionFactory;
 

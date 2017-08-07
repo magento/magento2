@@ -135,6 +135,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
     /**
      * @param Product $product
      * @return string
+     * @since 2.2.0
      */
     public function getItemPrice(Product $product)
     {

@@ -7,6 +7,10 @@ namespace Magento\CatalogUrlRewrite\Model;
 
 use Magento\Store\Model\Store;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
+ *
+ */
 class ProductUrlPathGenerator
 {
     const XML_PATH_PRODUCT_URL_SUFFIX = 'catalog/seo/product_url_suffix';
@@ -18,16 +22,24 @@ class ProductUrlPathGenerator
      */
     protected $productUrlSuffix = [];
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $storeManager;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     protected $scopeConfig;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
+     */
     protected $categoryUrlPathGenerator;
 
-    /** @var \Magento\Catalog\Api\ProductRepositoryInterface */
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
     protected $productRepository;
 
     /**

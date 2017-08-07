@@ -49,6 +49,12 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             $model->getBaseRowTotal()
         );
 
+        $attrCode = $this->getAttribute();
+
+        if ('category_ids' == $attrCode) {
+            return $this->validateAttribute($this->_getAvailableInCategories($product->getId()));
+        }
+
         return parent::validate($product);
     }
 
@@ -56,6 +62,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * Retrieve value element chooser URL
      *
      * @return string
+     * @since 2.2.0
      */
     public function getValueElementChooserUrl()
     {

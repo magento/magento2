@@ -12,6 +12,7 @@ use Magento\Search\Model\ResourceModel\SynonymGroup as SynonymGroupResourceModel
 
 /**
  * Synonym Group repository, provides implementation of saving and deleting synonym groups
+ * @since 2.1.0
  */
 class SynonymGroupRepository implements SynonymGroupRepositoryInterface
 {
@@ -19,6 +20,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * SynonymGroup Factory
      *
      * @var SynonymGroupFactory
+     * @since 2.1.0
      */
     protected $synonymGroupFactory;
 
@@ -26,6 +28,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * SynonymGroup resource model
      *
      * @var SynonymGroupResourceModel
+     * @since 2.1.0
      */
     protected $resourceModel;
 
@@ -34,6 +37,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      *
      * @param SynonymGroupFactory $synonymGroupFactory
      * @param SynonymGroupResourceModel $resourceModel
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Search\Model\SynonymGroupFactory $synonymGroupFactory,
@@ -45,6 +49,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function save(SynonymGroupInterface $synonymGroup, $errorOnMergeConflict = false)
     {
@@ -65,6 +70,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * @param SynonymGroupInterface $synonymGroup
      * @throws CouldNotDeleteException
      * @return bool
+     * @since 2.1.0
      */
     public function delete(SynonymGroupInterface $synonymGroup)
     {
@@ -87,6 +93,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      *
      * @param int $synonymGroupId
      * @return \Magento\Search\Api\Data\SynonymGroupInterface
+     * @since 2.1.0
      */
     public function get($synonymGroupId)
     {
@@ -105,6 +112,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * @param bool $errorOnMergeConflict
      * @return SynonymGroupInterface
      * @throws Synonym\MergeConflictException
+     * @since 2.1.0
      */
     private function create(SynonymGroupInterface $synonymGroup, $errorOnMergeConflict)
     {
@@ -143,6 +151,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * @param SynonymGroupInterface $synonymGroupToMerge
      * @param array $matchingGroupIds
      * @return array
+     * @since 2.1.0
      */
     private function merge(SynonymGroupInterface $synonymGroupToMerge, array $matchingGroupIds)
     {
@@ -165,6 +174,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * @param SynonymGroup $modelToPopulate
      * @param SynonymGroupInterface $synonymGroupData
      * @return void
+     * @since 2.1.0
      */
     private function populateSynonymGroupModel(SynonymGroup $modelToPopulate, SynonymGroupInterface $synonymGroupData)
     {
@@ -181,6 +191,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * @param bool $errorOnMergeConflict
      * @return SynonymGroupInterface
      * @throws Synonym\MergeConflictException
+     * @since 2.1.0
      */
     private function update(
         SynonymGroup $oldSynonymGroup,
@@ -219,6 +230,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      *
      * @param string[] $matchingSynonymGroups
      * @return \Magento\Framework\Phrase
+     * @since 2.1.0
      */
     private function getExceptionMessage($matchingSynonymGroups)
     {
@@ -233,6 +245,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      *
      * @param string[] $matchingSynonymGroups
      * @return array
+     * @since 2.1.0
      */
     private function parseToArray($matchingSynonymGroups)
     {
@@ -248,6 +261,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      *
      * @param SynonymGroupInterface $synonymGroup
      * @return string[]
+     * @since 2.1.0
      */
     private function getMatchingSynonymGroups(SynonymGroupInterface $synonymGroup)
     {

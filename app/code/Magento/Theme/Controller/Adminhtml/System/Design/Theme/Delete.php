@@ -10,7 +10,7 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class Delete
- * @deprecated
+ * @deprecated 2.2.0
  */
 class Delete extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {

@@ -42,6 +42,7 @@ class EmulateCustomerObserver implements ObserverInterface
 
     /**
      * @var \Magento\Customer\Api\AddressRepositoryInterface
+     * @since 2.1.0
      */
     protected $addressRepository;
 

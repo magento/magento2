@@ -20,7 +20,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CheckoutTest extends \PHPUnit_Framework_TestCase
+class CheckoutTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface

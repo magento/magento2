@@ -19,6 +19,7 @@ use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
  * Class processes values using backend model which declared in system.xml.
  *
  * @api
+ * @since 2.2.0
  */
 class ValueProcessor
 {
@@ -31,6 +32,7 @@ class ValueProcessor
      * System configuration structure factory.
      *
      * @var StructureFactory
+     * @since 2.2.0
      */
     private $configStructureFactory;
 
@@ -38,6 +40,7 @@ class ValueProcessor
      * Factory of object that implement \Magento\Framework\App\Config\ValueInterface.
      *
      * @var ValueFactory
+     * @since 2.2.0
      */
     private $configValueFactory;
 
@@ -45,6 +48,7 @@ class ValueProcessor
      * Object for managing configuration scope.
      *
      * @var ScopeInterface
+     * @since 2.2.0
      */
     private $scope;
 
@@ -52,6 +56,7 @@ class ValueProcessor
      * The json serializer.
      *
      * @var JsonSerializer
+     * @since 2.2.0
      */
     private $jsonSerializer;
 
@@ -61,6 +66,7 @@ class ValueProcessor
      * @param ValueFactory $valueFactory The factory of object that
      *        implement \Magento\Framework\App\Config\ValueInterface
      * @param JsonSerializer $jsonSerializer The json serializer
+     * @since 2.2.0
      */
     public function __construct(
         ScopeInterface $scope,
@@ -82,6 +88,7 @@ class ValueProcessor
      * @param string $value The value to process
      * @param string $path The configuration path for getting backend model. E.g. scope_id/group_id/field_id
      * @return string processed value result
+     * @since 2.2.0
      */
     public function process($scope, $scopeCode, $value, $path)
     {

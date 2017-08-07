@@ -58,6 +58,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
 
     /**
      * @var CollectionProcessorInterface
+     * @since 2.2.0
      */
     private $collectionProcessor;
 
@@ -161,7 +162,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
-     * @deprecated
+     * @deprecated 2.2.0
      * @throws \Magento\Framework\Exception\InputException
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
@@ -196,7 +197,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
      * Translates a field name to a DB column name for use in collection queries.
      *
      * @param string $field a field name that should be translated to a DB column name.
-     * @deprecated
+     * @deprecated 2.2.0
      * @return string
      */
     protected function translateField($field)
@@ -220,8 +221,9 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return CollectionProcessorInterface
+     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

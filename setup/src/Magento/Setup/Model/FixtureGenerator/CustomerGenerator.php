@@ -10,26 +10,31 @@ use Magento\Customer\Api\Data\CustomerInterface;
 
 /**
  * Customer generator
+ * @since 2.2.0
  */
 class CustomerGenerator
 {
     /**
      * @var EntityGeneratorFactory
+     * @since 2.2.0
      */
     private $entityGeneratorFactory;
 
     /**
      * @var CustomerTemplateGenerator
+     * @since 2.2.0
      */
     private $customerTemplateGenerator;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.2.0
      */
     private $connection;
 
@@ -37,6 +42,7 @@ class CustomerGenerator
      * @param EntityGeneratorFactory $entityGeneratorFactory
      * @param CustomerTemplateGenerator $customerTemplateGenerator
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
+     * @since 2.2.0
      */
     public function __construct(
         EntityGeneratorFactory $entityGeneratorFactory,
@@ -54,6 +60,7 @@ class CustomerGenerator
      * @param int $customers
      * @param array $fixtureMap
      * @return void
+     * @since 2.2.0
      */
     public function generate($customers, array $fixtureMap)
     {
@@ -87,6 +94,7 @@ class CustomerGenerator
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @return \Closure
+     * @since 2.2.0
      */
     private function getCustomerEntityHandler()
     {
@@ -105,6 +113,7 @@ class CustomerGenerator
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @return \Closure
+     * @since 2.2.0
      */
     private function getCustomerAddressEntityHandler()
     {
@@ -121,6 +130,7 @@ class CustomerGenerator
      * Set default billing and shipping addresses for customer
      *
      * @return void
+     * @since 2.2.0
      */
     private function addDefaultAddresses()
     {
@@ -146,6 +156,7 @@ class CustomerGenerator
 
     /**
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.2.0
      */
     private function getConnection()
     {

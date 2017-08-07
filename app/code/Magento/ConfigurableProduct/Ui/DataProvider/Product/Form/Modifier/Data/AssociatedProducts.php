@@ -20,66 +20,79 @@ use Magento\Framework\UrlInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.1.0
  */
 class AssociatedProducts
 {
     /**
      * @var LocatorInterface
+     * @since 2.1.0
      */
     protected $locator;
 
     /**
      * @var ConfigurableType
+     * @since 2.1.0
      */
     protected $configurableType;
 
     /**
      * @var ProductRepositoryInterface
+     * @since 2.1.0
      */
     protected $productRepository;
 
     /**
      * @var StockRegistryInterface
+     * @since 2.1.0
      */
     protected $stockRegistry;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $productMatrix = [];
 
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $productAttributes = [];
 
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $productIds = [];
 
     /**
      * @var VariationMatrix
+     * @since 2.1.0
      */
     protected $variationMatrix;
 
     /**
      * @var UrlInterface
+     * @since 2.1.0
      */
     protected $urlBuilder;
 
     /**
      * @var CurrencyInterface
+     * @since 2.1.0
      */
     protected $localeCurrency;
 
     /**
      * @var JsonHelper
+     * @since 2.1.0
      */
     protected $jsonHelper;
 
     /**
      * @var ImageHelper
+     * @since 2.1.0
      */
     protected $imageHelper;
 
@@ -93,6 +106,7 @@ class AssociatedProducts
      * @param CurrencyInterface $localeCurrency
      * @param JsonHelper $jsonHelper
      * @param ImageHelper $imageHelper
+     * @since 2.1.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -120,6 +134,7 @@ class AssociatedProducts
      * Get variations product matrix
      *
      * @return array
+     * @since 2.1.0
      */
     public function getProductMatrix()
     {
@@ -133,6 +148,7 @@ class AssociatedProducts
      * Get product attributes
      *
      * @return array
+     * @since 2.1.0
      */
     public function getProductAttributes()
     {
@@ -146,6 +162,7 @@ class AssociatedProducts
      * Get ids of associated products
      *
      * @return array
+     * @since 2.1.0
      */
     public function getProductIds()
     {
@@ -159,6 +176,7 @@ class AssociatedProducts
      * Get ids of product attributes
      *
      * @return array
+     * @since 2.1.0
      */
     public function getProductAttributesIds()
     {
@@ -175,6 +193,7 @@ class AssociatedProducts
      * Get codes of product attributes
      *
      * @return array
+     * @since 2.1.0
      */
     public function getProductAttributesCodes()
     {
@@ -191,6 +210,7 @@ class AssociatedProducts
      * Get full data of configurable product attributes
      *
      * @return array
+     * @since 2.1.0
      */
     public function getConfigurableAttributesData()
     {
@@ -220,6 +240,7 @@ class AssociatedProducts
      *
      * @return void
      * @throws \Zend_Currency_Exception
+     * @since 2.1.0
      */
     protected function prepareVariations()
     {
@@ -311,6 +332,7 @@ class AssociatedProducts
      *
      * @param array $options
      * @return string
+     * @since 2.1.0
      */
     protected function getJsonConfigurableAttributes(array $options = [])
     {
@@ -328,6 +350,7 @@ class AssociatedProducts
      *
      * @param array $options
      * @return string
+     * @since 2.1.0
      */
     protected function getTextAttributes(array $options = [])
     {
@@ -347,6 +370,7 @@ class AssociatedProducts
      *
      * @param array $options
      * @return string
+     * @since 2.1.0
      */
     protected function getVariationKey(array $options = [])
     {
@@ -365,6 +389,7 @@ class AssociatedProducts
      * Retrieve actual list of associated products, array key is obtained from varying attributes values
      *
      * @return Product[]
+     * @since 2.1.0
      */
     protected function getAssociatedProducts()
     {
@@ -385,6 +410,7 @@ class AssociatedProducts
      * - previously saved in database relations are not considered)
      *
      * @return Product[]
+     * @since 2.1.0
      */
     protected function _getAssociatedProducts()
     {
@@ -409,6 +435,7 @@ class AssociatedProducts
      * Get used product attributes
      *
      * @return array
+     * @since 2.1.0
      */
     protected function getUsedAttributes()
     {
@@ -420,6 +447,7 @@ class AssociatedProducts
      *
      * @param Product $product
      * @return float
+     * @since 2.1.0
      */
     protected function getProductStockQty(Product $product)
     {
@@ -430,6 +458,7 @@ class AssociatedProducts
      * Retrieve all possible attribute values combinations
      *
      * @return array
+     * @since 2.1.0
      */
     protected function getVariations()
     {
@@ -440,6 +469,7 @@ class AssociatedProducts
      * Retrieve attributes data
      *
      * @return array
+     * @since 2.1.0
      */
     protected function getAttributes()
     {

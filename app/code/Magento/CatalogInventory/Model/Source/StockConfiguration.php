@@ -10,16 +10,19 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 
 /**
  * Class StockConfiguration
+ * @since 2.1.0
  */
 class StockConfiguration implements ValueSourceInterface
 {
     /**
      * @var StockConfigurationInterface
+     * @since 2.1.0
      */
     protected $stockConfiguration;
 
     /**
      * @param StockConfigurationInterface $stockConfiguration
+     * @since 2.1.0
      */
     public function __construct(StockConfigurationInterface $stockConfiguration)
     {
@@ -28,6 +31,7 @@ class StockConfiguration implements ValueSourceInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getValue($name)
     {

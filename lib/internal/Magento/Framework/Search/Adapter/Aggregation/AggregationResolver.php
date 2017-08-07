@@ -7,15 +7,22 @@ namespace Magento\Framework\Search\Adapter\Aggregation;
 
 use Magento\Framework\Search\RequestInterface;
 
+/**
+ * Class \Magento\Framework\Search\Adapter\Aggregation\AggregationResolver
+ *
+ * @since 2.1.0
+ */
 class AggregationResolver implements AggregationResolverInterface
 {
     /**
      * @var AggregationResolverInterface[]
+     * @since 2.1.0
      */
     private $resolvers;
 
     /**
      * @param AggregationResolverInterface[] $resolvers
+     * @since 2.1.0
      */
     public function __construct(array $resolvers = [])
     {
@@ -24,6 +31,7 @@ class AggregationResolver implements AggregationResolverInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function resolve(RequestInterface $request, array $documentIds)
     {

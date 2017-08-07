@@ -12,7 +12,7 @@ use Magento\Framework\Controller\ResultFactory;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigureTest extends \PHPUnit_Framework_TestCase
+class ConfigureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -61,11 +61,11 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMock(\Magento\Framework\App\Action\Context::class, [], [], '', false);
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->responseMock = $this->getMock(\Magento\Framework\App\ResponseInterface::class);
-        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
-        $this->messageManagerMock = $this->getMock(\Magento\Framework\Message\ManagerInterface::class);
+        $this->contextMock = $this->createMock(\Magento\Framework\App\Action\Context::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->responseMock = $this->createMock(\Magento\Framework\App\ResponseInterface::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
         $this->cartMock = $this->getMockBuilder(\Magento\Checkout\Model\Cart::class)
             ->disableOriginalConstructor()
             ->getMock();

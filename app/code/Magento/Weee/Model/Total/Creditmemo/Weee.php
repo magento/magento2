@@ -11,6 +11,10 @@ use Magento\Weee\Helper\Data as WeeeHelper;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\Weee\Model\Total\Creditmemo\Weee
+ *
+ */
 class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
 {
     /**
@@ -24,6 +28,7 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
      * Instance of serializer.
      *
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 

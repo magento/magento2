@@ -38,6 +38,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
 
     /**
      * @var \Magento\Framework\View\Asset\ConfigInterface
+     * @since 2.2.0
      */
     private $bundleConfig;
 

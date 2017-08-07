@@ -18,6 +18,7 @@ class MassDisable extends \Magento\Backend\Controller\Adminhtml\Cache
 {
     /**
      * @var State
+     * @since 2.2.0
      */
     private $state;
 
@@ -41,6 +42,7 @@ class MassDisable extends \Magento\Backend\Controller\Adminhtml\Cache
      * Disable cache
      *
      * @return void
+     * @since 2.2.0
      */
     private function disableCache()
     {
@@ -73,7 +75,8 @@ class MassDisable extends \Magento\Backend\Controller\Adminhtml\Cache
      * Get State Instance
      *
      * @return State
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getState()
     {

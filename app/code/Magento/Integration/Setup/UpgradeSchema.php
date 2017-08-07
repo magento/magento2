@@ -11,11 +11,13 @@ use Magento\Framework\Setup\UpgradeSchemaInterface;
 
 /**
  * Class for integration tables schema upgrades
+ * @since 2.0.3
  */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.3
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {

@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.1.0
  */
 class CheckUserEditObserver implements ObserverInterface
 {
@@ -22,26 +23,31 @@ class CheckUserEditObserver implements ObserverInterface
 
     /**
      * @var \Magento\Captcha\Helper\Data
+     * @since 2.1.0
      */
     protected $helper;
 
     /**
      * @var \Magento\Framework\App\ActionFlag
+     * @since 2.1.0
      */
     protected $actionFlag;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.1.0
      */
     protected $messageManager;
 
     /**
      * @var \Magento\Framework\App\Response\RedirectInterface
+     * @since 2.1.0
      */
     protected $redirect;
 
     /**
      * @var CaptchaStringResolver
+     * @since 2.1.0
      */
     protected $captchaStringResolver;
 
@@ -49,16 +55,19 @@ class CheckUserEditObserver implements ObserverInterface
      * Authentication
      *
      * @var AuthenticationInterface
+     * @since 2.1.0
      */
     protected $authentication;
 
     /**
      * @var Session
+     * @since 2.1.0
      */
     protected $customerSession;
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.1.0
      */
     protected $scopeConfig;
 
@@ -71,6 +80,7 @@ class CheckUserEditObserver implements ObserverInterface
      * @param AuthenticationInterface $authentication
      * @param Session $customerSession
      * @param ScopeConfigInterface $scopeConfig
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Captcha\Helper\Data $helper,
@@ -97,6 +107,7 @@ class CheckUserEditObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @since 2.1.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

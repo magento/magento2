@@ -8,6 +8,10 @@ namespace Magento\Framework\Validator;
 
 use Magento\Framework\Cache\FrontendInterface;
 
+/**
+ * Class \Magento\Framework\Validator\Factory
+ *
+ */
 class Factory
 {
     /** cache key */
@@ -32,21 +36,25 @@ class Factory
 
     /**
      * @var \Magento\Framework\Module\Dir\Reader
+     * @since 2.1.0
      */
     private $moduleReader;
 
     /**
      * @var FrontendInterface
+     * @since 2.1.0
      */
     private $cache;
 
     /**
      * @var \Magento\Framework\Serialize\SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var \Magento\Framework\Config\FileIteratorFactory
+     * @since 2.2.0
      */
     private $fileIteratorFactory;
 
@@ -71,6 +79,7 @@ class Factory
      * Init cached list of validation files
      *
      * @return void
+     * @since 2.1.0
      */
     protected function _initializeConfigList()
     {
@@ -159,7 +168,8 @@ class Factory
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getSerializer()
     {
@@ -175,7 +185,8 @@ class Factory
      * Get file iterator factory
      *
      * @return \Magento\Framework\Config\FileIteratorFactory
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getFileIteratorFactory()
     {

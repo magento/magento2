@@ -10,6 +10,7 @@ use Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Sync
 
 /**
  * @api
+ * @since 2.2.0
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
@@ -21,6 +22,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param SynchronizedFactory $messageCollectionFactory
      * @param array $meta
      * @param array $data
+     * @since 2.2.0
      */
     public function __construct(
         $name,

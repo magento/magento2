@@ -10,11 +10,15 @@ use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\NewAction
+ *
+ */
 class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var Initialization\StockDataFilter
-     * @deprecated
+     * @deprecated 2.1.0
      */
     protected $stockFilter;
 

@@ -55,6 +55,7 @@ class DataProvider implements DataProviderInterface
 
     /**
      * @var StoreManager
+     * @since 2.2.0
      */
     private $storeManager;
 

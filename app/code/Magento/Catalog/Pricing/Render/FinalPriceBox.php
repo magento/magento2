@@ -27,11 +27,13 @@ class FinalPriceBox extends BasePriceBox
 {
     /**
      * @var SalableResolverInterface
+     * @since 2.1.3
      */
     private $salableResolver;
 
     /**
      * @var MinimalPriceCalculatorInterface
+     * @since 2.2.0
      */
     private $minimalPriceCalculator;
 
@@ -43,6 +45,7 @@ class FinalPriceBox extends BasePriceBox
      * @param array $data
      * @param SalableResolverInterface $salableResolver
      * @param MinimalPriceCalculatorInterface $minimalPriceCalculator
+     * @since 2.1.3
      */
     public function __construct(
         Context $context,
@@ -90,6 +93,7 @@ class FinalPriceBox extends BasePriceBox
      * Check is MSRP applicable for the current product.
      *
      * @return bool
+     * @since 2.1.4
      */
     protected function isMsrpPriceApplicable()
     {
@@ -178,6 +182,7 @@ class FinalPriceBox extends BasePriceBox
      * Get Key for caching block content
      *
      * @return string
+     * @since 2.1.1
      */
     public function getCacheKey()
     {
@@ -188,6 +193,7 @@ class FinalPriceBox extends BasePriceBox
      * {@inheritdoc}
      *
      * @return array
+     * @since 2.1.1
      */
     public function getCacheKeyInfo()
     {
@@ -202,6 +208,7 @@ class FinalPriceBox extends BasePriceBox
      * By default (if flag is not set) is false
      *
      * @return bool
+     * @since 2.1.6
      */
     public function isProductList()
     {

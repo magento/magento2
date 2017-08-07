@@ -9,17 +9,20 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  *  Set value for Special Price start date
+ * @since 2.2.0
  */
 class SetSpecialPriceStartDate implements ObserverInterface
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @since 2.2.0
      */
     private $localeDate;
 
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @codeCoverageIgnore
+     * @since 2.2.0
      */
     public function __construct(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate)
     {
@@ -31,6 +34,7 @@ class SetSpecialPriceStartDate implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @since 2.2.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

@@ -18,6 +18,7 @@ class Size
      * Data size converter
      *
      * @var \Magento\Framework\Convert\DataSize
+     * @since 2.1.0
      */
     private $dataSize;
 
@@ -103,7 +104,7 @@ class Size
     /**
      * Converts a ini setting to a integer value
      *
-     * @deprecated Please use \Magento\Framework\Convert\DataSize
+     * @deprecated 2.1.0 Please use \Magento\Framework\Convert\DataSize
      *
      * @param string $size
      * @return integer
@@ -130,7 +131,8 @@ class Size
      *
      * @return \Magento\Framework\Convert\DataSize
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getDataSize()
     {

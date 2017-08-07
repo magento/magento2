@@ -10,6 +10,10 @@ use Magento\Customer\Helper\Address as AddressHelper;
 use Magento\Customer\Model\Session;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 
+/**
+ * Class \Magento\Checkout\Block\Checkout\AttributeMerger
+ *
+ */
 class AttributeMerger
 {
     /**
@@ -379,7 +383,7 @@ class AttributeMerger
      *
      * @param array $countryOptions
      * @return array
-     * @deprecated
+     * @deprecated 2.2.0
      */
     protected function orderCountryOptions(array $countryOptions)
     {

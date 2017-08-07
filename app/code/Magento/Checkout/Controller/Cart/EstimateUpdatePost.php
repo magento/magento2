@@ -6,6 +6,10 @@
  */
 namespace Magento\Checkout\Controller\Cart;
 
+/**
+ * Class \Magento\Checkout\Controller\Cart\EstimateUpdatePost
+ *
+ */
 class EstimateUpdatePost extends \Magento\Checkout\Controller\Cart
 {
     /**

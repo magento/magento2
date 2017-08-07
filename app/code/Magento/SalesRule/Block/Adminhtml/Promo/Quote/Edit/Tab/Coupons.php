@@ -47,6 +47,7 @@ class Coupons extends \Magento\Framework\View\Element\Template implements \Magen
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.1.0
      */
     public function setCanSHow($canShow)
     {

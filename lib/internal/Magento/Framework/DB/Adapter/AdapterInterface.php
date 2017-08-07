@@ -1123,6 +1123,7 @@ interface AdapterInterface
      * @param string $tableName
      * @param string|null $schemaName
      * @return string|bool
+     * @since 2.1.0
      */
     public function getAutoIncrementField($tableName, $schemaName = null);
 }

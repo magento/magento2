@@ -15,7 +15,7 @@ use Magento\Integration\Model\Config\Integration\Reader;
  * Integration Api Config Model.
  *
  * This is a parent class for storing information about Integrations.
- * @deprecated
+ * @deprecated 2.1.0
  */
 class IntegrationConfig
 {
@@ -40,6 +40,7 @@ class IntegrationConfig
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 

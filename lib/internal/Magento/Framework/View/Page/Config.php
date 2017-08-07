@@ -121,11 +121,13 @@ class Config
 
     /**
      * @var \Magento\Framework\App\State
+     * @since 2.0.5
      */
     private $areaResolver;
 
     /**
      * @var bool
+     * @since 2.1.0
      */
     private $isIncludesAvailable;
 
@@ -134,7 +136,8 @@ class Config
      *
      * @return \Magento\Framework\App\State
      *
-     * @deprecated
+     * @deprecated 2.0.5
+     * @since 2.0.5
      */
     private function getAreaResolver()
     {
