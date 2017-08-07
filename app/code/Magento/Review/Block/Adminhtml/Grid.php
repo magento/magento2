@@ -22,7 +22,6 @@ namespace Magento\Review\Block\Adminhtml;
 /**
  * Class \Magento\Review\Block\Adminhtml\Grid
  *
- * @since 2.0.0
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -30,7 +29,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Review action pager
      *
      * @var \Magento\Review\Helper\Action\Pager
-     * @since 2.0.0
      */
     protected $_reviewActionPager = null;
 
@@ -38,7 +36,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Review data
      *
      * @var \Magento\Review\Helper\Data
-     * @since 2.0.0
      */
     protected $_reviewData = null;
 
@@ -46,7 +43,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -54,7 +50,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Review collection model factory
      *
      * @var \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory
-     * @since 2.0.0
      */
     protected $_productsFactory;
 
@@ -62,7 +57,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Review model factory
      *
      * @var \Magento\Review\Model\ReviewFactory
-     * @since 2.0.0
      */
     protected $_reviewFactory;
 
@@ -75,7 +69,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Review\Helper\Action\Pager $reviewActionPager
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -99,7 +92,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Initialize grid
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -112,7 +104,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Save search results
      *
      * @return \Magento\Backend\Block\Widget\Grid
-     * @since 2.0.0
      */
     protected function _afterLoadCollection()
     {
@@ -128,7 +119,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare collection
      *
      * @return \Magento\Review\Block\Adminhtml\Grid
-     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -170,7 +160,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @return \Magento\Backend\Block\Widget\Grid
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -322,7 +311,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare grid mass actions
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareMassaction()
     {
@@ -371,7 +359,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param \Magento\Review\Model\Review|\Magento\Framework\DataObject $row
      * @return string
-     * @since 2.0.0
      */
     public function getRowUrl($row)
     {
@@ -390,7 +377,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Get grid url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getGridUrl()
     {

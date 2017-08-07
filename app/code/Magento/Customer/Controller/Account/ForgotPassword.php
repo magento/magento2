@@ -13,19 +13,16 @@ use Magento\Framework\View\Result\PageFactory;
 /**
  * Class \Magento\Customer\Controller\Account\ForgotPassword
  *
- * @since 2.0.0
  */
 class ForgotPassword extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
      * @var PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @var Session
-     * @since 2.0.0
      */
     protected $session;
 
@@ -33,7 +30,6 @@ class ForgotPassword extends \Magento\Customer\Controller\AbstractAccount
      * @param Context $context
      * @param Session $customerSession
      * @param PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -49,7 +45,6 @@ class ForgotPassword extends \Magento\Customer\Controller\AbstractAccount
      * Forgot customer password page
      *
      * @return \Magento\Framework\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

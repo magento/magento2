@@ -11,7 +11,6 @@ namespace Magento\Directory\Model\Data;
  * Class Currency Information
  *
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\Directory\Api\Data\CurrencyInformationInterface
@@ -25,7 +24,6 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function getBaseCurrencyCode()
     {
@@ -34,7 +32,6 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function setBaseCurrencyCode($code)
     {
@@ -43,7 +40,6 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function getBaseCurrencySymbol()
     {
@@ -52,7 +48,6 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function setBaseCurrencySymbol($symbol)
     {
@@ -61,7 +56,6 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function getDefaultDisplayCurrencyCode()
     {
@@ -70,7 +64,6 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function setDefaultDisplayCurrencyCode($code)
     {
@@ -79,7 +72,6 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function getDefaultDisplayCurrencySymbol()
     {
@@ -88,7 +80,6 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function setDefaultDisplayCurrencySymbol($symbol)
     {
@@ -97,7 +88,6 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function getAvailableCurrencyCodes()
     {
@@ -106,7 +96,6 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function setAvailableCurrencyCodes(array $codes = null)
     {
@@ -115,7 +104,6 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function getExchangeRates()
     {
@@ -124,7 +112,6 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function setExchangeRates(array $exchangeRates = null)
     {
@@ -133,7 +120,6 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -142,7 +128,6 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Directory\Api\Data\CurrencyInformationExtensionInterface $extensionAttributes

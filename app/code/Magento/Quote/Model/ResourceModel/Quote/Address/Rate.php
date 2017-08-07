@@ -11,7 +11,6 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;
  * Quote address shipping rate resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Rate extends AbstractDb
 {
@@ -19,7 +18,6 @@ class Rate extends AbstractDb
      * Main table and field initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

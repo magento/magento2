@@ -10,13 +10,11 @@ use Magento\Framework\Option\ArrayInterface;
 /**
  *
  * Authorize.net Payment Action Dropdown source
- * @since 2.0.0
  */
 class PaymentAction implements ArrayInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

@@ -14,26 +14,22 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
  * Class PhpStorm generates URN catalog for PhpStorm 9
- * @since 2.0.0
  */
 class PhpStorm implements FormatInterface
 {
     /**
      * @var ReadInterface
-     * @since 2.0.0
      */
     private $currentDirRead;
 
     /**
      * @var \Magento\Framework\Filesystem\File\WriteFactory
-     * @since 2.0.0
      */
     private $fileWriteFactory;
 
     /**
      * @param ReadFactory $readFactory
      * @param \Magento\Framework\Filesystem\File\WriteFactory $fileWriteFactory
-     * @since 2.0.0
      */
     public function __construct(
         ReadFactory $readFactory,
@@ -49,7 +45,6 @@ class PhpStorm implements FormatInterface
      * @param string[] $dictionary
      * @param string $configFilePath relative path to the PhpStorm misc.xml
      * @return void
-     * @since 2.0.0
      */
     public function generateCatalog(array $dictionary, $configFilePath)
     {

@@ -13,7 +13,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Customer\ExportAccountsCsv
  *
- * @since 2.0.0
  */
 class ExportAccountsCsv extends \Magento\Reports\Controller\Adminhtml\Report\Customer
 {
@@ -21,7 +20,6 @@ class ExportAccountsCsv extends \Magento\Reports\Controller\Adminhtml\Report\Cus
      * Export new accounts report grid to CSV format
      *
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

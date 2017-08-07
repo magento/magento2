@@ -64,7 +64,7 @@ class UpdateHandler implements AttributeInterface
 
     /**
      * @var AttributeLoader
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $attributeLoader;
 

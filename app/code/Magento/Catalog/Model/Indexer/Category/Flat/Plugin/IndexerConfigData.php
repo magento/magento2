@@ -11,19 +11,16 @@ use Magento\Catalog\Model\Indexer\Category\Flat\State;
 /**
  * Class \Magento\Catalog\Model\Indexer\Category\Flat\Plugin\IndexerConfigData
  *
- * @since 2.0.0
  */
 class IndexerConfigData
 {
     /**
      * @var State
-     * @since 2.0.0
      */
     protected $state;
 
     /**
      * @param State $state
-     * @since 2.0.0
      */
     public function __construct(State $state)
     {

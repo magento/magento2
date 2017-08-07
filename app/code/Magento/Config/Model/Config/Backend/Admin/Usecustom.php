@@ -11,7 +11,6 @@ namespace Magento\Config\Model\Config\Backend\Admin;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Usecustom extends \Magento\Framework\App\Config\Value
 {
@@ -19,7 +18,6 @@ class Usecustom extends \Magento\Framework\App\Config\Value
      * Writer of configuration storage
      *
      * @var \Magento\Framework\App\Config\Storage\WriterInterface
-     * @since 2.0.0
      */
     protected $_configWriter;
 
@@ -32,7 +30,6 @@ class Usecustom extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -53,7 +50,6 @@ class Usecustom extends \Magento\Framework\App\Config\Value
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -72,7 +68,6 @@ class Usecustom extends \Magento\Framework\App\Config\Value
      * Delete custom admin url from configuration if "Use Custom Admin Url" option disabled
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {

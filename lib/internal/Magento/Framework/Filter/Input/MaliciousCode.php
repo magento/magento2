@@ -11,7 +11,6 @@ namespace Magento\Framework\Filter\Input;
 /**
  * Class \Magento\Framework\Filter\Input\MaliciousCode
  *
- * @since 2.0.0
  */
 class MaliciousCode implements \Zend_Filter_Interface
 {
@@ -19,7 +18,6 @@ class MaliciousCode implements \Zend_Filter_Interface
      * Regular expressions for cutting malicious code
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_expressions = [
         //comments, must be first
@@ -46,7 +44,6 @@ class MaliciousCode implements \Zend_Filter_Interface
      *
      * @param string|array $value
      * @return string|array Filtered value
-     * @since 2.0.0
      */
     public function filter($value)
     {
@@ -62,7 +59,6 @@ class MaliciousCode implements \Zend_Filter_Interface
      *
      * @param string $expression
      * @return $this
-     * @since 2.0.0
      */
     public function addExpression($expression)
     {
@@ -77,7 +73,6 @@ class MaliciousCode implements \Zend_Filter_Interface
      *
      * @param array $expressions
      * @return $this
-     * @since 2.0.0
      */
     public function setExpressions(array $expressions)
     {

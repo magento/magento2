@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\Indexer\Category\Flat\Action;
 /**
  * Class \Magento\Catalog\Model\Indexer\Category\Flat\Action\Full
  *
- * @since 2.0.0
  */
 class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
 {
@@ -21,7 +20,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      * Whether table changes are allowed
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $allowTableChanges = true;
 
@@ -30,7 +28,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      *
      * @param string $tableName
      * @return string
-     * @since 2.0.0
      */
     protected function addOldTableSuffix($tableName)
     {
@@ -42,7 +39,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      *
      * @param \Magento\Store\Model\Store[] $stores
      * @return Full
-     * @since 2.0.0
      */
     protected function populateFlatTables(array $stores)
     {
@@ -100,7 +96,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      *
      * @param int $store
      * @return Full
-     * @since 2.0.0
      */
     protected function createTable($store)
     {
@@ -118,7 +113,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      *
      * @param \Magento\Store\Model\Store[] $stores if empty, create tables for all stores of the application
      * @return Full
-     * @since 2.0.0
      */
     protected function createTables(array $stores = [])
     {
@@ -141,7 +135,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      *
      * @param \Magento\Store\Model\Store[] $stores
      * @return Full
-     * @since 2.0.0
      */
     protected function switchTables(array $stores = [])
     {
@@ -178,7 +171,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      * Transactional rebuild flat data from eav
      *
      * @return Full
-     * @since 2.0.0
      */
     public function reindexAll()
     {

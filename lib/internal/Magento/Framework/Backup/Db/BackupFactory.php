@@ -8,7 +8,6 @@ namespace Magento\Framework\Backup\Db;
 
 /**
  * @api
- * @since 2.0.0
  */
 class BackupFactory
 {
@@ -16,19 +15,16 @@ class BackupFactory
      * Object manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     private $_objectManager;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $_backupInstanceName;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $_backupDbInstanceName;
 
@@ -36,7 +32,6 @@ class BackupFactory
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $backupInstanceName
      * @param string $backupDbInstanceName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -53,7 +48,6 @@ class BackupFactory
      *
      * @param array $arguments
      * @return \Magento\Framework\Backup\Db\BackupInterface
-     * @since 2.0.0
      */
     public function createBackupModel(array $arguments = [])
     {
@@ -65,7 +59,6 @@ class BackupFactory
      *
      * @param array $arguments
      * @return \Magento\Framework\Backup\Db\BackupDbInterface
-     * @since 2.0.0
      */
     public function createBackupDbModel(array $arguments = [])
     {

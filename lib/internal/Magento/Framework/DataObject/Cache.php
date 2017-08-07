@@ -11,7 +11,6 @@ namespace Magento\Framework\DataObject;
  * Stores objects for reuse, cleanup and to avoid circular references
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Cache
 {
@@ -19,7 +18,6 @@ class Cache
      * Singleton instance
      *
      * @var \Magento\Framework\DataObject\Cache
-     * @since 2.0.0
      */
     protected static $_instance;
 
@@ -27,7 +25,6 @@ class Cache
      * Running object index for anonymous objects
      *
      * @var integer
-     * @since 2.0.0
      */
     protected $_idx = 0;
 
@@ -35,7 +32,6 @@ class Cache
      * Array of objects
      *
      * @var array of objects
-     * @since 2.0.0
      */
     protected $_objects = [];
 
@@ -43,7 +39,6 @@ class Cache
      * SPL object hashes
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_hashes = [];
 
@@ -51,7 +46,6 @@ class Cache
      * SPL hashes by object
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_objectHashes = [];
 
@@ -59,7 +53,6 @@ class Cache
      * Objects by tags for cleanup
      *
      * @var array 2D
-     * @since 2.0.0
      */
     protected $_tags = [];
 
@@ -67,7 +60,6 @@ class Cache
      * Tags by objects
      *
      * @var array 2D
-     * @since 2.0.0
      */
     protected $_objectTags = [];
 
@@ -75,7 +67,6 @@ class Cache
      * References to objects
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_references = [];
 
@@ -83,7 +74,6 @@ class Cache
      * References by object
      *
      * @var array 2D
-     * @since 2.0.0
      */
     protected $_objectReferences = [];
 
@@ -91,7 +81,6 @@ class Cache
      * Debug data such as backtrace per class
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_debug = [];
 
@@ -99,7 +88,6 @@ class Cache
      * Singleton factory
      *
      * @return \Magento\Framework\DataObject\Cache
-     * @since 2.0.0
      */
     public static function singleton()
     {
@@ -115,7 +103,6 @@ class Cache
      * @param string|object $idx
      * @param object $default
      * @return object
-     * @since 2.0.0
      */
     public function load($idx, $default = null)
     {
@@ -138,7 +125,6 @@ class Cache
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function save($object, $idx = null, $tags = null)
     {
@@ -198,7 +184,6 @@ class Cache
      * @param string $idx
      * @return bool|void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function reference($refName, $idx)
     {
@@ -228,7 +213,6 @@ class Cache
      *
      * @param string|object $idx
      * @return boolean
-     * @since 2.0.0
      */
     public function delete($idx)
     {
@@ -274,7 +258,6 @@ class Cache
      *
      * @param string $class
      * @return void
-     * @since 2.0.0
      */
     public function deleteByClass($class)
     {
@@ -291,7 +274,6 @@ class Cache
      * @param array|string $tags
      * @return true
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function deleteByTags($tags)
     {
@@ -311,7 +293,6 @@ class Cache
      *
      * @param string $idx
      * @return boolean
-     * @since 2.0.0
      */
     public function has($idx)
     {
@@ -323,7 +304,6 @@ class Cache
      *
      * @param object $object
      * @return string|boolean
-     * @since 2.0.0
      */
     public function find($object)
     {
@@ -340,7 +320,6 @@ class Cache
      *
      * @param string[] $ids
      * @return array
-     * @since 2.0.0
      */
     public function findByIds($ids)
     {
@@ -358,7 +337,6 @@ class Cache
      *
      * @param string $hash
      * @return object
-     * @since 2.0.0
      */
     public function findByHash($hash)
     {
@@ -371,7 +349,6 @@ class Cache
      * @param array|string $tags
      * @return array
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function findByTags($tags)
     {
@@ -395,7 +372,6 @@ class Cache
      *
      * @param string $class
      * @return array
-     * @since 2.0.0
      */
     public function findByClass($class)
     {
@@ -415,7 +391,6 @@ class Cache
      * @param object|null $object
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function debug($idx, $object = null)
     {
@@ -436,7 +411,6 @@ class Cache
      *
      * @param array|string $ids
      * @return array
-     * @since 2.0.0
      */
     public function debugByIds($ids)
     {
@@ -454,7 +428,6 @@ class Cache
      * Get all objects
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllObjects()
     {
@@ -465,7 +438,6 @@ class Cache
      * Get all tags
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllTags()
     {
@@ -476,7 +448,6 @@ class Cache
      * Get all tags by object
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllTagsByObject()
     {
@@ -487,7 +458,6 @@ class Cache
      * Get all references
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllReferences()
     {
@@ -498,7 +468,6 @@ class Cache
      * Get all references by object
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllReferencesByObject()
     {

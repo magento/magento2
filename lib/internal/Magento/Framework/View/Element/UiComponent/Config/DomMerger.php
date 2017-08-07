@@ -10,7 +10,6 @@ use Magento\Framework\Config\ValidationStateInterface;
 
 /**
  * Class DomMerger
- * @since 2.0.0
  */
 class DomMerger implements DomMergerInterface
 {
@@ -21,7 +20,6 @@ class DomMerger implements DomMergerInterface
 
     /**
      * @var \Magento\Framework\Config\ValidationStateInterface
-     * @since 2.0.0
      */
     private $validationState;
 
@@ -29,7 +27,6 @@ class DomMerger implements DomMergerInterface
      * Location schema file
      *
      * @var string
-     * @since 2.0.0
      */
     protected $schemaFilePath;
 
@@ -37,7 +34,6 @@ class DomMerger implements DomMergerInterface
      * Result DOM document
      *
      * @var \DOMDocument
-     * @since 2.0.0
      */
     protected $domDocument;
 
@@ -45,7 +41,6 @@ class DomMerger implements DomMergerInterface
      * Id attribute list
      *
      * @var array
-     * @since 2.0.0
      */
     protected $idAttributes = [];
 
@@ -53,7 +48,6 @@ class DomMerger implements DomMergerInterface
      * Context XPath
      *
      * @var array
-     * @since 2.0.0
      */
     protected $contextXPath = [];
 
@@ -61,7 +55,6 @@ class DomMerger implements DomMergerInterface
      * Is merge simple XML Element
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $isMergeSimpleXMLElement;
 
@@ -78,7 +71,6 @@ class DomMerger implements DomMergerInterface
      * @param bool $isMergeSimpleXMLElement
      * @param array $contextXPath
      * @param array $idAttributes
-     * @since 2.0.0
      */
     public function __construct(
         ValidationStateInterface $validationState,
@@ -99,7 +91,6 @@ class DomMerger implements DomMergerInterface
      *
      * @param string $attributeName
      * @return bool
-     * @since 2.0.0
      */
     protected function isIdAttribute($attributeName)
     {
@@ -111,7 +102,6 @@ class DomMerger implements DomMergerInterface
      *
      * @param string $xPath
      * @return bool
-     * @since 2.0.0
      */
     protected function isMergeContext($xPath)
     {
@@ -128,7 +118,6 @@ class DomMerger implements DomMergerInterface
      *
      * @param array $xPath
      * @return bool
-     * @since 2.0.0
      */
     protected function isContextXPath(array $xPath)
     {
@@ -141,7 +130,6 @@ class DomMerger implements DomMergerInterface
      * @param \DOMElement $baseNode
      * @param \DOMNode $mergeNode
      * @return void
-     * @since 2.0.0
      */
     protected function mergeAttributes(\DOMElement $baseNode, \DOMNode $mergeNode)
     {
@@ -155,7 +143,6 @@ class DomMerger implements DomMergerInterface
      *
      * @param \DOMNode $node
      * @return string
-     * @since 2.0.0
      */
     protected function createXPath(\DOMNode $node)
     {
@@ -195,7 +182,6 @@ class DomMerger implements DomMergerInterface
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function nestedMerge(\DOMXPath $rootDomXPath, \DOMNodeList $insertedNodes, \DOMNode $contextNode)
     {
@@ -252,7 +238,6 @@ class DomMerger implements DomMergerInterface
      * @param \DOMNode $parentNode
      * @param \DOMNode $childNode
      * @return void
-     * @since 2.0.0
      */
     protected function appendChild(\DOMNode $parentNode, \DOMNode $childNode)
     {
@@ -266,7 +251,6 @@ class DomMerger implements DomMergerInterface
      * @param \DOMNode $parentNode
      * @param \DOMNode $childNode
      * @return void
-     * @since 2.0.0
      */
     protected function insertBefore(\DOMNode $parentNode, \DOMNode $childNode)
     {
@@ -279,7 +263,6 @@ class DomMerger implements DomMergerInterface
      *
      * @param \DOMNode $node
      * @return bool
-     * @since 2.0.0
      */
     protected function isTextNode(\DOMNode $node)
     {
@@ -292,7 +275,6 @@ class DomMerger implements DomMergerInterface
      * @param \DOMNode $node
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     protected function hasIdAttribute(\DOMNode $node)
     {
@@ -320,7 +302,6 @@ class DomMerger implements DomMergerInterface
      * @param \DOMElement $node
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
-     * @since 2.0.0
      */
     public function mergeNode(\DOMElement $node)
     {
@@ -334,7 +315,6 @@ class DomMerger implements DomMergerInterface
      * @param string $xml
      * @return \DOMDocument
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function createDomDocument($xml)
     {
@@ -359,7 +339,6 @@ class DomMerger implements DomMergerInterface
      * @param string|null $schemaFilePath
      * @return array of errors
      * @throws \Exception
-     * @since 2.0.0
      */
     protected function validateDomDocument(\DOMDocument $domDocument, $schema = null)
     {
@@ -382,7 +361,6 @@ class DomMerger implements DomMergerInterface
      * @param \LibXMLError $errorInfo
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function renderErrorMessage(\LibXMLError $errorInfo)
     {
@@ -406,7 +384,6 @@ class DomMerger implements DomMergerInterface
      *
      * @param string $xml
      * @return void
-     * @since 2.0.0
      */
     public function merge($xml)
     {
@@ -422,7 +399,6 @@ class DomMerger implements DomMergerInterface
      *
      * @return \DOMDocument
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getDom()
     {
@@ -440,7 +416,6 @@ class DomMerger implements DomMergerInterface
      *
      * @param \DOMDocument $domDocument
      * @return void
-     * @since 2.0.0
      */
     public function setDom(\DOMDocument $domDocument)
     {
@@ -451,7 +426,6 @@ class DomMerger implements DomMergerInterface
      * Unset DOM document
      *
      * @return void
-     * @since 2.0.0
      */
     public function unsetDom()
     {
@@ -463,7 +437,6 @@ class DomMerger implements DomMergerInterface
      *
      * @param string|null $schemaFilePath
      * @return array
-     * @since 2.0.0
      */
     public function validate($schemaFilePath = null)
     {

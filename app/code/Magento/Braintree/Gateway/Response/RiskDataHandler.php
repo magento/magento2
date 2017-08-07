@@ -27,7 +27,7 @@ class RiskDataHandler implements HandlerInterface
 
     /**
      * Risk data Review status
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private static $statusReview = 'Review';
 

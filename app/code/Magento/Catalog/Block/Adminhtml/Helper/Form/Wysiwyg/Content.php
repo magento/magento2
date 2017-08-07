@@ -19,13 +19,11 @@ use Magento\Backend\Block\Widget\Form\Generic;
  *
  * @deprecated 2.2.0
  * @see \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav
- * @since 2.0.0
  */
 class Content extends Generic
 {
     /**
      * @var \Magento\Cms\Model\Wysiwyg\Config
-     * @since 2.0.0
      */
     protected $_wysiwygConfig;
 
@@ -35,7 +33,6 @@ class Content extends Generic
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -53,7 +50,6 @@ class Content extends Generic
      * Adding editor field to render
      *
      * @return Form
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {

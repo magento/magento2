@@ -12,7 +12,6 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Multiline extends AbstractElement
 {
@@ -26,7 +25,6 @@ class Multiline extends AbstractElement
      * UI component factory
      *
      * @var UiComponentFactory
-     * @since 2.0.0
      */
     protected $uiComponentFactory;
 
@@ -37,7 +35,6 @@ class Multiline extends AbstractElement
      * @param UiComponentFactory $uiComponentFactory
      * @param UiComponentInterface[] $components
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -53,7 +50,6 @@ class Multiline extends AbstractElement
      * Get component name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getComponentName()
     {
@@ -64,7 +60,6 @@ class Multiline extends AbstractElement
      * Prepare component configuration
      *
      * @return void
-     * @since 2.0.0
      */
     public function prepare()
     {

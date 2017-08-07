@@ -7,7 +7,6 @@ namespace Magento\Tax\Model\System\Message;
 
 /**
  * Notifications class
- * @since 2.0.0
  */
 class Notifications implements \Magento\Framework\Notification\MessageInterface
 {
@@ -16,13 +15,11 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      *
      * @var \Magento\Store\Model\StoreManagerInterface
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $urlBuilder;
 
@@ -30,7 +27,6 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * Tax configuration object
      *
      * @var \Magento\Tax\Model\Config
-     * @since 2.0.0
      */
     protected $taxConfig;
 
@@ -40,7 +36,6 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * @var array
      * @deprecated 2.2.0
      * @see \Magento\Tax\Model\System\Message\Notification\RoundingErrors
-     * @since 2.0.0
      */
     protected $storesWithInvalidDisplaySettings;
 
@@ -50,7 +45,6 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * @var array
      * @deprecated 2.2.0
      * @see \Magento\Tax\Model\System\Message\Notification\DiscountErrors
-     * @since 2.0.0
      */
     protected $storesWithInvalidDiscountSettings;
 
@@ -65,7 +59,6 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param NotificationInterface[] $notifications
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -84,7 +77,6 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getIdentity()
     {
@@ -93,7 +85,6 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function isDisplayed()
     {
@@ -107,7 +98,6 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getText()
     {
@@ -133,7 +123,6 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      *
      * @return int
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getSeverity()
     {
@@ -144,7 +133,6 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * Get URL for the tax notification documentation
      *
      * @return string
-     * @since 2.0.0
      */
     public function getInfoUrl()
     {
@@ -155,7 +143,6 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * Get URL to the admin tax configuration page
      *
      * @return string
-     * @since 2.0.0
      */
     public function getManageUrl()
     {
@@ -173,7 +160,6 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * @return bool
      * @deprecated 2.2.0
      * @see \Magento\Tax\Model\System\Message\Notification\RoundingErrors::checkSettings
-     * @since 2.0.0
      */
     public function checkDisplaySettings($store = null)
     {
@@ -201,7 +187,6 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * @return bool
      * @deprecated 2.2.0
      * @see \Magento\Tax\Model\System\Message\Notification\DiscountErrors::checkSettings
-     * @since 2.0.0
      */
     public function checkDiscountSettings($store = null)
     {
@@ -214,7 +199,6 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * @param string $section
      * @return string
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     public function getIgnoreTaxNotificationUrl($section)
     {
@@ -228,7 +212,6 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * @return array
      * @deprecated 2.2.0
      * @see \Magento\Tax\Model\System\Message\Notification\RoundingErrors::getStoresWithWrongSettings
-     * @since 2.0.0
      */
     public function getStoresWithWrongDisplaySettings()
     {
@@ -250,7 +233,6 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * @return array
      * @deprecated 2.2.0
      * @see \Magento\Tax\Model\System\Message\Notification\DiscountErrors::getStoresWithWrongSettings
-     * @since 2.0.0
      */
     public function getStoresWithWrongDiscountSettings()
     {

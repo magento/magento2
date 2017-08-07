@@ -15,43 +15,36 @@ use Magento\SalesRule\Model\ResourceModel\Coupon\Collection;
  * Coupon CRUD class
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterface
 {
     /**
      * @var \Magento\SalesRule\Model\CouponFactory
-     * @since 2.0.0
      */
     protected $couponFactory;
 
     /**
      * @var \Magento\SalesRule\Model\RuleFactory
-     * @since 2.0.0
      */
     protected $ruleFactory;
 
     /**
      * @var \Magento\SalesRule\Api\Data\CouponSearchResultInterfaceFactory
-     * @since 2.0.0
      */
     protected $searchResultFactory;
 
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory
-     * @since 2.0.0
      */
     protected $collectionFactory;
 
     /**
      * @var \Magento\SalesRule\Model\Spi\CouponResourceInterface
-     * @since 2.0.0
      */
     protected $resourceModel;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
-     * @since 2.0.0
      */
     protected $extensionAttributesJoinProcessor;
 
@@ -70,7 +63,6 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
      * @param Spi\CouponResourceInterface $resourceModel
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param CollectionProcessorInterface|null $collectionProcessor
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
@@ -98,7 +90,6 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
      * @throws \Magento\Framework\Exception\InputException If there is a problem with the input
      * @throws \Magento\Framework\Exception\NoSuchEntityException If a coupon ID is sent but the coupon does not exist
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function save(\Magento\SalesRule\Api\Data\CouponInterface $coupon)
     {
@@ -149,7 +140,6 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
      * @return \Magento\SalesRule\Api\Data\CouponInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If $couponId is not found
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getById($couponId)
     {
@@ -167,7 +157,6 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\SalesRule\Api\Data\CouponSearchResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -191,7 +180,6 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function deleteById($couponId)
     {
@@ -214,7 +202,6 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
      * @param Collection $collection
      * @deprecated 2.2.0
      * @return void
-     * @since 2.0.0
      */
     protected function addFilterGroupToCollection(
         \Magento\Framework\Api\Search\FilterGroup $filterGroup,

@@ -17,7 +17,6 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class AbstractCollection extends AbstractDb implements SourceProviderInterface
 {
@@ -30,7 +29,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Array of items with item id key
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_itemsById = [];
 
@@ -38,7 +36,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Entity static fields
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_staticFields = [];
 
@@ -46,7 +43,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Entity object to define collection's attributes
      *
      * @var \Magento\Eav\Model\Entity\AbstractEntity
-     * @since 2.0.0
      */
     protected $_entity;
 
@@ -54,7 +50,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Entity types to be fetched for objects in collection
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_selectEntityTypes = [];
 
@@ -62,7 +57,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Attributes to be fetched for objects in collection
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_selectAttributes = [];
 
@@ -70,7 +64,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Attributes to be filtered order sorted by
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_filterAttributes = [];
 
@@ -78,7 +71,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Joined entities
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_joinEntities = [];
 
@@ -86,7 +78,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Joined attributes
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_joinAttributes = [];
 
@@ -94,7 +85,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Joined fields data
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_joinFields = [];
 
@@ -102,7 +92,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Cast map for attribute order
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_castToIntMap = ['validate-digits'];
 
@@ -110,37 +99,31 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager = null;
 
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $_eavConfig;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.0.0
      */
     protected $_resource;
 
     /**
      * @var \Magento\Eav\Model\EntityFactory
-     * @since 2.0.0
      */
     protected $_eavEntityFactory;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Helper
-     * @since 2.0.0
      */
     protected $_resourceHelper;
 
     /**
      * @var \Magento\Framework\Validator\UniversalFactory
-     * @since 2.0.0
      */
     protected $_universalFactory;
 
@@ -157,7 +140,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param mixed $connection
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -188,7 +170,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Initialize collection
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -200,7 +181,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string $table
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getTable($table)
     {
@@ -211,7 +191,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Prepare static entity fields
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareStaticFields()
     {
@@ -225,7 +204,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Init select
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initSelect()
     {
@@ -243,7 +221,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string $model
      * @param string $entityModel
      * @return $this
-     * @since 2.0.0
      */
     protected function _init($model, $entityModel)
     {
@@ -260,7 +237,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param \Magento\Eav\Model\Entity\AbstractEntity $entity
      * @return $this
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function setEntity($entity)
     {
@@ -279,7 +255,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @return \Magento\Eav\Model\Entity\AbstractEntity
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function getEntity()
     {
@@ -294,7 +269,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getResource()
     {
@@ -306,7 +280,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param   \Magento\Framework\DataObject $object
      * @return $this
-     * @since 2.0.0
      */
     public function setObject($object = null)
     {
@@ -324,7 +297,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param \Magento\Framework\DataObject $object
      * @return $this
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function addItem(\Magento\Framework\DataObject $object)
     {
@@ -339,7 +311,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param   string $attributeCode
      * @return  \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
-     * @since 2.0.0
      */
     public function getAttribute($attributeCode)
     {
@@ -367,7 +338,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @see self::_getConditionSql for $condition
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function addAttributeToFilter($attribute, $condition = null, $joinType = 'inner')
     {
@@ -419,7 +389,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param mixed $condition
      * @return $this|AbstractDb
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function addFieldToFilter($attribute, $condition = null)
     {
@@ -432,7 +401,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string $attribute
      * @param string $dir
      * @return $this
-     * @since 2.0.0
      */
     public function addAttributeToSort($attribute, $dir = self::SORT_ORDER_ASC)
     {
@@ -479,7 +447,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param string $field
      * @return string|Zend_Db_Expr
-     * @since 2.0.0
      */
     protected function _prepareOrderExpression($field)
     {
@@ -503,7 +470,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param bool|string $joinType flag for joining attribute
      * @return $this
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function addAttributeToSelect($attribute, $joinType = false)
     {
@@ -542,7 +508,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string $prefix
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function addEntityTypeToSelect($entityType, $prefix)
     {
@@ -555,7 +520,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param string $field
      * @return $this
-     * @since 2.0.0
      */
     public function addStaticField($field)
     {
@@ -578,7 +542,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string $attribute
      * @return $this
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function addExpressionAttributeToSelect($alias, $expression, $attribute)
     {
@@ -622,7 +585,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param string|array $attribute
      * @return $this
-     * @since 2.0.0
      */
     public function groupByAttribute($attribute)
     {
@@ -684,7 +646,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function joinAttribute($alias, $attribute, $bind, $filter = null, $joinType = 'inner', $storeId = null)
     {
@@ -773,7 +734,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string $joinType 'left'
      * @return $this
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function joinField($alias, $table, $field, $bind, $cond = null, $joinType = 'inner')
     {
@@ -837,7 +797,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @return $this
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function joinTable($table, $bind, $fields = null, $cond = null, $joinType = 'inner')
     {
@@ -902,7 +861,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param string $attribute
      * @return $this
-     * @since 2.0.0
      */
     public function removeAttributeToSelect($attribute = null)
     {
@@ -921,7 +879,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param integer $pageSize
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setPage($pageNum, $pageSize)
     {
@@ -935,7 +892,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
-     * @since 2.0.0
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -981,7 +937,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param null $limit
      * @param null $offset
      * @return Select
-     * @since 2.0.0
      */
     protected function _getAllIdsSelect($limit = null, $offset = null)
     {
@@ -1002,7 +957,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param null|int|string $limit
      * @param null|int|string $offset
      * @return array
-     * @since 2.0.0
      */
     public function getAllIds($limit = null, $offset = null)
     {
@@ -1013,7 +967,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Retrieve all ids sql
      *
      * @return Select
-     * @since 2.0.0
      */
     public function getAllIdsSql()
     {
@@ -1034,7 +987,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @todo make batch save directly from collection
      *
      * @return $this
-     * @since 2.0.0
      */
     public function save()
     {
@@ -1050,7 +1002,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @todo make batch delete directly from collection
      *
      * @return $this
-     * @since 2.0.0
      */
     public function delete()
     {
@@ -1068,7 +1019,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param array $arr
      * @return $this
-     * @since 2.0.0
      */
     public function importFromArray($arr)
     {
@@ -1089,7 +1039,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Get collection data as a 2D array
      *
      * @return array
-     * @since 2.0.0
      */
     public function exportToArray()
     {
@@ -1106,7 +1055,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getRowIdFieldName()
     {
@@ -1117,7 +1065,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Id field name getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getIdFieldName()
     {
@@ -1133,7 +1080,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param string $fieldName
      * @return $this
-     * @since 2.0.0
      */
     public function setRowIdFieldName($fieldName)
     {
@@ -1147,7 +1093,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param bool $logQuery
      * @return $this
      * @throws \Exception
-     * @since 2.0.0
      */
     public function _loadEntities($printQuery = false, $logQuery = false)
     {
@@ -1195,7 +1140,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function _loadAttributes($printQuery = false, $logQuery = false)
     {
@@ -1259,7 +1203,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string $table
      * @param string[] $attributeIds
      * @return Select
-     * @since 2.0.0
      */
     protected function _getLoadAttributesSelect($table, $attributeIds = [])
     {
@@ -1303,7 +1246,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @return Select
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _addLoadAttributesSelectValues($select, $table, $type)
     {
@@ -1319,7 +1261,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param array $valueInfo
      * @return $this
      * @throws LocalizedException
-     * @since 2.0.0
      */
     protected function _setItemAttributeValue($valueInfo)
     {
@@ -1349,7 +1290,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param string $attributeCode
      * @return string
-     * @since 2.0.0
      */
     protected function _getAttributeTableAlias($attributeCode)
     {
@@ -1362,7 +1302,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string $attributeCode
      * @return string
      * @throws LocalizedException
-     * @since 2.0.0
      */
     protected function _getAttributeFieldName($attributeCode)
     {
@@ -1404,7 +1343,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @return $this
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _addAttributeJoin($attributeCode, $joinType = 'inner')
     {
@@ -1500,7 +1438,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param   string $fieldCode
      * @param   string $fieldAlias
      * @return $this
-     * @since 2.0.0
      */
     protected function _joinAttributeToSelect($method, $attribute, $tableAlias, $condition, $fieldCode, $fieldAlias)
     {
@@ -1521,7 +1458,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @return string
      *
      * @see self::_getConditionSql
-     * @since 2.0.0
      */
     protected function _getAttributeConditionSql($attribute, $condition, $joinType = 'inner')
     {
@@ -1564,7 +1500,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string|array $attribute
      * @param string $dir
      * @return $this
-     * @since 2.0.0
      */
     public function setOrder($attribute, $dir = self::SORT_ORDER_ASC)
     {
@@ -1582,7 +1517,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param array $arrAttributes
      * @return array
-     * @since 2.0.0
      */
     public function toArray($arrAttributes = [])
     {
@@ -1597,7 +1531,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Treat "order by" items as attributes to sort
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _renderOrders()
     {
@@ -1615,7 +1548,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -1626,7 +1558,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Reset collection
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _reset()
     {
@@ -1647,7 +1578,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @return array
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getLoadedIds()
     {
@@ -1657,7 +1587,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * Clear collection
      * @return $this
-     * @since 2.0.0
      */
     public function clear()
     {
@@ -1668,7 +1597,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * Remove all items from collection
      * @return $this
-     * @since 2.0.0
      */
     public function removeAllItems()
     {
@@ -1681,7 +1609,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param mixed $key
      * @return $this
-     * @since 2.0.0
      */
     public function removeItemByKey($key)
     {
@@ -1696,7 +1623,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * validated by db adapter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMainTable()
     {
@@ -1712,7 +1638,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @return $this|\Magento\Framework\Data\Collection\AbstractDb
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function addFieldToSelect($field, $alias = null)
     {
@@ -1725,7 +1650,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string $field
      * @return $this|\Magento\Framework\Data\Collection\AbstractDb
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function removeFieldFromSelect($field)
     {
@@ -1737,7 +1661,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @return $this|\Magento\Framework\Data\Collection\AbstractDb
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function removeAllFieldsFromSelect()
     {

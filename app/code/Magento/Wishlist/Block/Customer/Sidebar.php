@@ -14,7 +14,6 @@ use Magento\Framework\Pricing\Render;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
 {
@@ -22,7 +21,6 @@ class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
      * Retrieve block title
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTitle()
     {

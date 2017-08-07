@@ -12,13 +12,11 @@ use Magento\Ui\DataProvider\AddFieldToCollectionInterface;
  * Class AddWebsitesFieldToCollection
  *
  * @api
- * @since 2.0.0
  */
 class AddWebsitesFieldToCollection implements AddFieldToCollectionInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function addField(Collection $collection, $field, $alias = null)
     {

@@ -13,7 +13,6 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Controller enables some types of cache
- * @since 2.0.0
  */
 class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
 {
@@ -27,7 +26,6 @@ class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
      * Mass action for cache enabling
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -10,25 +10,21 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
  *
  * @api
  * @deprecated 2.2.0 in favour of UI component implementation
- * @since 2.0.0
  */
 class Radio extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_defaultWidth = 55;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_values;
 
     /**
      * @var \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter
-     * @since 2.0.0
      */
     protected $_converter;
 
@@ -36,7 +32,6 @@ class Radio extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter $converter
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -51,7 +46,6 @@ class Radio extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      * Prepare data for renderer
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getValues()
     {
@@ -63,7 +57,6 @@ class Radio extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      * Returns all values for the column
      *
      * @return array
-     * @since 2.0.0
      */
     public function getValues()
     {
@@ -78,7 +71,6 @@ class Radio extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      *
      * @param   \Magento\Framework\DataObject $row
      * @return  string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

@@ -27,73 +27,61 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class StockItemRepository implements StockItemRepositoryInterface
 {
     /**
      * @var StockConfigurationInterface
-     * @since 2.0.0
      */
     protected $stockConfiguration;
 
     /**
      * @var StockStateProviderInterface
-     * @since 2.0.0
      */
     protected $stockStateProvider;
 
     /**
      * @var StockItemResource
-     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var StockItemInterfaceFactory
-     * @since 2.0.0
      */
     protected $stockItemFactory;
 
     /**
      * @var StockItemCollectionInterfaceFactory
-     * @since 2.0.0
      */
     protected $stockItemCollectionFactory;
 
     /**
      * @var ProductFactory
-     * @since 2.0.0
      */
     protected $productFactory;
 
     /**
      * @var QueryBuilderFactory
-     * @since 2.0.0
      */
     protected $queryBuilderFactory;
 
     /**
      * @var MapperFactory
-     * @since 2.0.0
      */
     protected $mapperFactory;
 
     /**
      * @var TimezoneInterface
-     * @since 2.0.0
      */
     protected $localeDate;
 
     /**
      * @var Processor
-     * @since 2.0.0
      */
     protected $indexProcessor;
 
     /**
      * @var DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
@@ -105,7 +93,7 @@ class StockItemRepository implements StockItemRepositoryInterface
 
     /**
      * @var  \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     * @since 2.2.0
+     * @since 2.1.3
      */
     protected $productCollectionFactory;
 
@@ -125,7 +113,6 @@ class StockItemRepository implements StockItemRepositoryInterface
      * @param DateTime $dateTime
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|null $collectionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         StockConfigurationInterface $stockConfiguration,
@@ -158,7 +145,6 @@ class StockItemRepository implements StockItemRepositoryInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function save(\Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem)
     {
@@ -207,7 +193,6 @@ class StockItemRepository implements StockItemRepositoryInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function get($stockItemId)
     {
@@ -221,7 +206,6 @@ class StockItemRepository implements StockItemRepositoryInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function getList(\Magento\CatalogInventory\Api\StockItemCriteriaInterface $criteria)
     {
@@ -235,7 +219,6 @@ class StockItemRepository implements StockItemRepositoryInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function delete(StockItemInterface $stockItem)
     {
@@ -254,7 +237,6 @@ class StockItemRepository implements StockItemRepositoryInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function deleteById($id)
     {

@@ -9,19 +9,16 @@ namespace Magento\Checkout\Block;
  * "Checkout" link
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Link extends \Magento\Framework\View\Element\Html\Link
 {
     /**
      * @var \Magento\Framework\Module\Manager
-     * @since 2.0.0
      */
     protected $_moduleManager;
 
     /**
      * @var \Magento\Checkout\Helper\Data
-     * @since 2.0.0
      */
     protected $_checkoutHelper;
 
@@ -31,7 +28,6 @@ class Link extends \Magento\Framework\View\Element\Html\Link
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param array $data
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -47,7 +43,6 @@ class Link extends \Magento\Framework\View\Element\Html\Link
     /**
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getHref()
     {
@@ -58,7 +53,6 @@ class Link extends \Magento\Framework\View\Element\Html\Link
      * Render block HTML
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

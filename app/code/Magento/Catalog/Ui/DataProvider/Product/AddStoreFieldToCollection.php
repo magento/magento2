@@ -11,7 +11,6 @@ use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class AddStoreFieldToCollection implements AddFilterToCollectionInterface
 {
@@ -19,7 +18,6 @@ class AddStoreFieldToCollection implements AddFilterToCollectionInterface
      * Store manager
      *
      * @var StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -27,7 +25,6 @@ class AddStoreFieldToCollection implements AddFilterToCollectionInterface
      * Construct
      *
      * @param StoreManagerInterface $storeManager
-     * @since 2.0.0
      */
     public function __construct(StoreManagerInterface $storeManager)
     {
@@ -36,7 +33,6 @@ class AddStoreFieldToCollection implements AddFilterToCollectionInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function addFilter(Collection $collection, $field, $condition = null)
     {

@@ -12,7 +12,6 @@ use Magento\Framework\DataObject;
  *
  * @api
  * @deprecated 2.2.0 in favour of UI component implementation
- * @since 2.0.0
  */
 class Text extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -20,7 +19,6 @@ class Text extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      * Format variables pattern
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_variablePattern = '/\\$([a-z0-9_]+)/i';
 
@@ -29,7 +27,6 @@ class Text extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      *
      * @param DataObject $row
      * @return string
-     * @since 2.0.0
      */
     public function _getValue(DataObject $row)
     {

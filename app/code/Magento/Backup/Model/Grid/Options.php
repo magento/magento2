@@ -13,19 +13,16 @@ namespace Magento\Backup\Model\Grid;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Options implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\Backup\Helper\Data
-     * @since 2.0.0
      */
     protected $_helper;
 
     /**
      * @param \Magento\Backup\Helper\Data $backupHelper
-     * @since 2.0.0
      */
     public function __construct(\Magento\Backup\Helper\Data $backupHelper)
     {
@@ -35,7 +32,6 @@ class Options implements \Magento\Framework\Option\ArrayInterface
     /**
      * Return backup types array
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

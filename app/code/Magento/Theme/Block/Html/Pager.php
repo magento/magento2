@@ -10,7 +10,6 @@ namespace Magento\Theme\Block\Html;
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @api
- * @since 2.0.0
  */
 class Pager extends \Magento\Framework\View\Element\Template
 {
@@ -18,25 +17,21 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Current template name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Theme::html/pager.phtml';
 
     /**
      * @var \Magento\Framework\Data\Collection
-     * @since 2.0.0
      */
     protected $_collection;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_pageVarName = 'p';
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_limitVarName = 'limit';
 
@@ -44,31 +39,26 @@ class Pager extends \Magento\Framework\View\Element\Template
      * The list of available pager limits
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_availableLimit = [10 => 10, 20 => 20, 50 => 50];
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_displayPages = 5;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_showPerPage = true;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_limit;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_outputRequired = true;
 
@@ -76,7 +66,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Pages quantity per frame
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_frameLength = 5;
 
@@ -84,7 +73,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Next/previous page position relatively to the current frame
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_jump = 5;
 
@@ -92,7 +80,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Frame initialization flag
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_frameInitialized = false;
 
@@ -100,7 +87,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Start page position in frame
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_frameStart;
 
@@ -108,7 +94,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Finish page position in frame
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_frameEnd;
 
@@ -116,7 +101,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Url Fragment for pagination
      *
      * @var string|null
-     * @since 2.0.0
      */
     protected $_fragment = null;
 
@@ -124,7 +108,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Set pager data
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -137,7 +120,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Return current page
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCurrentPage()
     {
@@ -151,7 +133,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Return current page limit
      *
      * @return int
-     * @since 2.0.0
      */
     public function getLimit()
     {
@@ -175,7 +156,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      *
      * @param int $limit
      * @return $this
-     * @since 2.0.0
      */
     public function setLimit($limit)
     {
@@ -188,7 +168,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      *
      * @param  \Magento\Framework\Data\Collection $collection
      * @return $this
-     * @since 2.0.0
      */
     public function setCollection($collection)
     {
@@ -205,7 +184,6 @@ class Pager extends \Magento\Framework\View\Element\Template
 
     /**
      * @return \Magento\Framework\Data\Collection
-     * @since 2.0.0
      */
     public function getCollection()
     {
@@ -215,7 +193,6 @@ class Pager extends \Magento\Framework\View\Element\Template
     /**
      * @param string $varName
      * @return $this
-     * @since 2.0.0
      */
     public function setPageVarName($varName)
     {
@@ -225,7 +202,6 @@ class Pager extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getPageVarName()
     {
@@ -235,7 +211,6 @@ class Pager extends \Magento\Framework\View\Element\Template
     /**
      * @param bool $varName
      * @return $this
-     * @since 2.0.0
      */
     public function setShowPerPage($varName)
     {
@@ -245,7 +220,6 @@ class Pager extends \Magento\Framework\View\Element\Template
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isShowPerPage()
     {
@@ -260,7 +234,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      *
      * @param string $varName
      * @return $this
-     * @since 2.0.0
      */
     public function setLimitVarName($varName)
     {
@@ -272,7 +245,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Retrieve name for pager limit data
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLimitVarName()
     {
@@ -284,7 +256,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      *
      * @param array $limits
      * @return $this
-     * @since 2.0.0
      */
     public function setAvailableLimit(array $limits)
     {
@@ -296,7 +267,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Retrieve pager limit
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAvailableLimit()
     {
@@ -305,7 +275,6 @@ class Pager extends \Magento\Framework\View\Element\Template
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getFirstNum()
     {
@@ -315,7 +284,6 @@ class Pager extends \Magento\Framework\View\Element\Template
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getLastNum()
     {
@@ -327,7 +295,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Retrieve total number of pages
      *
      * @return int
-     * @since 2.0.0
      */
     public function getTotalNum()
     {
@@ -338,7 +305,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Check if current page is a first page in collection
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isFirstPage()
     {
@@ -349,7 +315,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Retrieve number of last page
      *
      * @return int
-     * @since 2.0.0
      */
     public function getLastPageNum()
     {
@@ -360,7 +325,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Check if current page is a last page in collection
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isLastPage()
     {
@@ -370,7 +334,6 @@ class Pager extends \Magento\Framework\View\Element\Template
     /**
      * @param int $limit
      * @return bool
-     * @since 2.0.0
      */
     public function isLimitCurrent($limit)
     {
@@ -380,7 +343,6 @@ class Pager extends \Magento\Framework\View\Element\Template
     /**
      * @param int $page
      * @return bool
-     * @since 2.0.0
      */
     public function isPageCurrent($page)
     {
@@ -389,7 +351,6 @@ class Pager extends \Magento\Framework\View\Element\Template
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getPages()
     {
@@ -416,7 +377,6 @@ class Pager extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getFirstPageUrl()
     {
@@ -427,7 +387,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Retrieve previous page URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPreviousPageUrl()
     {
@@ -438,7 +397,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Retrieve next page URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getNextPageUrl()
     {
@@ -449,7 +407,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Retrieve last page URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLastPageUrl()
     {
@@ -461,7 +418,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      *
      * @param string $page
      * @return string
-     * @since 2.0.0
      */
     public function getPageUrl($page)
     {
@@ -471,7 +427,6 @@ class Pager extends \Magento\Framework\View\Element\Template
     /**
      * @param int $limit
      * @return string
-     * @since 2.0.0
      */
     public function getLimitUrl($limit)
     {
@@ -483,7 +438,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      *
      * @param array $params
      * @return string
-     * @since 2.0.0
      */
     public function getPagerUrl($params = [])
     {
@@ -499,7 +453,6 @@ class Pager extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     protected function getPath()
     {
@@ -510,7 +463,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Getter for $_frameStart
      *
      * @return int
-     * @since 2.0.0
      */
     public function getFrameStart()
     {
@@ -522,7 +474,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Getter for $_frameEnd
      *
      * @return int
-     * @since 2.0.0
      */
     public function getFrameEnd()
     {
@@ -534,7 +485,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Return array of pages in frame
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFramePages()
     {
@@ -547,7 +497,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Return page number of Previous jump
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getPreviousJumpPage()
     {
@@ -567,7 +516,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Prepare URL for Previous Jump
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPreviousJumpUrl()
     {
@@ -578,7 +526,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Return page number of Next jump
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getNextJumpPage()
     {
@@ -598,7 +545,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Prepare URL for Next Jump
      *
      * @return string
-     * @since 2.0.0
      */
     public function getNextJumpUrl()
     {
@@ -609,7 +555,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Getter for $_frameLength
      *
      * @return int
-     * @since 2.0.0
      */
     public function getFrameLength()
     {
@@ -620,7 +565,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Getter for $_jump
      *
      * @return int
-     * @since 2.0.0
      */
     public function getJump()
     {
@@ -632,7 +576,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      *
      * @param int $frame
      * @return $this
-     * @since 2.0.0
      */
     public function setFrameLength($frame)
     {
@@ -653,7 +596,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      *
      * @param int $jump
      * @return $this
-     * @since 2.0.0
      */
     public function setJump($jump)
     {
@@ -670,7 +612,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Whether to show first page in pagination or not
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canShowFirst()
     {
@@ -681,7 +622,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Whether to show last page in pagination or not
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canShowLast()
     {
@@ -692,7 +632,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Whether to show link to Previous Jump
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canShowPreviousJump()
     {
@@ -703,7 +642,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Whether to show link to Next Jump
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canShowNextJump()
     {
@@ -714,7 +652,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Initialize frame data, such as frame start, frame start etc.
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initFrame()
     {
@@ -755,7 +692,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      *
      * @param bool $flag
      * @return $this
-     * @since 2.0.0
      */
     protected function _setFrameInitialized($flag)
     {
@@ -767,7 +703,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Check if frame data was initialized
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isFrameInitialized()
     {
@@ -778,7 +713,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Getter for alternative text for Previous link in pagination frame
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAnchorTextForPrevious()
     {
@@ -792,7 +726,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Getter for alternative text for Next link in pagination frame
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAnchorTextForNext()
     {
@@ -807,7 +740,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      *
      * @param bool $isRequired
      * @return $this
-     * @since 2.0.0
      */
     public function setIsOutputRequired($isRequired)
     {
@@ -819,7 +751,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Determine whether the pagination should be eventually rendered
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -833,7 +764,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Get the URL fragment
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getFragment()
     {
@@ -845,7 +775,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      *
      * @param string|null $fragment
      * @return $this
-     * @since 2.0.0
      */
     public function setFragment($fragment)
     {

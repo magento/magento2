@@ -12,20 +12,17 @@ use Magento\Framework\Controller\AbstractResult;
 /**
  * A result that contains raw response - may be good for passing through files,
  * returning result of downloads or some other binary contents
- * @since 2.0.0
  */
 class Raw extends AbstractResult
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $contents;
 
     /**
      * @param string $contents
      * @return $this
-     * @since 2.0.0
      */
     public function setContents($contents)
     {
@@ -35,7 +32,6 @@ class Raw extends AbstractResult
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function render(HttpResponseInterface $response)
     {

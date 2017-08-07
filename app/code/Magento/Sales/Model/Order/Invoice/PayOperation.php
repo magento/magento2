@@ -7,19 +7,19 @@ namespace Magento\Sales\Model\Order\Invoice;
 
 /**
  * Invoice pay operation.
- * @since 2.2.0
+ * @since 2.1.2
  */
 class PayOperation
 {
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private $eventManager;
 
     /**
      * @param \Magento\Framework\Model\Context $context
-     * @since 2.2.0
+     * @since 2.1.2
      */
     public function __construct(
         \Magento\Framework\Model\Context $context
@@ -33,7 +33,7 @@ class PayOperation
      * @param bool $capture
      *
      * @return \Magento\Sales\Api\Data\OrderInterface
-     * @since 2.2.0
+     * @since 2.1.2
      */
     public function execute(
         \Magento\Sales\Api\Data\OrderInterface $order,
@@ -80,7 +80,7 @@ class PayOperation
      * @param \Magento\Sales\Api\Data\InvoiceItemInterface[] $items
      *
      * @return void
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private function calculateOrderItemsTotals($items)
     {
@@ -104,7 +104,7 @@ class PayOperation
      * @param \Magento\Sales\Api\Data\InvoiceInterface $invoice
      *
      * @return bool
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private function canCapture(
         \Magento\Sales\Api\Data\OrderInterface $order,
@@ -122,7 +122,7 @@ class PayOperation
      * @param \Magento\Sales\Api\Data\InvoiceInterface $invoice
      *
      * @return void
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private function calculateOrderTotals(
         \Magento\Sales\Api\Data\OrderInterface $order,

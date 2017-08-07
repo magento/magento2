@@ -11,37 +11,31 @@ use Magento\GiftMessage\Model\CompositeConfigProvider;
 
 /**
  * @api
- * @since 2.0.0
  */
 class GiftOptions extends \Magento\Backend\Block\Template
 {
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_isScopePrivate = false;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $jsLayout;
 
     /**
      * @var \Magento\Checkout\Model\CompositeConfigProvider
-     * @since 2.0.0
      */
     protected $configProvider;
 
     /**
      * @var array|\Magento\Checkout\Block\Checkout\LayoutProcessorInterface[]
-     * @since 2.0.0
      */
     protected $layoutProcessors;
 
     /**
      * @var Encoder
-     * @since 2.0.0
      */
     protected $jsonEncoder;
 
@@ -51,7 +45,6 @@ class GiftOptions extends \Magento\Backend\Block\Template
      * @param CompositeConfigProvider $configProvider
      * @param array $layoutProcessors
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -70,7 +63,6 @@ class GiftOptions extends \Magento\Backend\Block\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getJsLayout()
     {
@@ -84,7 +76,6 @@ class GiftOptions extends \Magento\Backend\Block\Template
      * Retrieve gift message configuration
      *
      * @return array
-     * @since 2.0.0
      */
     public function getGiftOptionsConfigJson()
     {

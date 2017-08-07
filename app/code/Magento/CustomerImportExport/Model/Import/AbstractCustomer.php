@@ -14,7 +14,6 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entity\AbstractEav
 {
@@ -51,14 +50,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
 
     /**#@-*/
 
-    /**
-     * Array of attribute codes which will be ignored in validation and import procedures.
-     * For example, when entity attribute has own validation and import procedures
-     * or just to deny this attribute processing.
-     *
-     * @var string[]
-     * @since 2.0.0
-     */
+    /**#@-*/
     protected $_ignoredAttributes = ['website_id', 'store_id',
         self::COLUMN_DEFAULT_BILLING, self::COLUMN_DEFAULT_SHIPPING];
 
@@ -66,13 +58,11 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * Customer collection wrapper
      *
      * @var Storage
-     * @since 2.0.0
      */
     protected $_customerStorage;
 
     /**
      * @var \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory
-     * @since 2.0.0
      */
     protected $_storageFactory;
 
@@ -80,13 +70,11 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * If we should check column names
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $needColumnCheck = true;
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected $masterAttributeCode = '_email';
 
@@ -103,7 +91,6 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * @param \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\StringUtils $string,
@@ -150,7 +137,6 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      *
      * @param array $data
      * @return $this
-     * @since 2.0.0
      */
     protected function _initCustomers(array $data)
     {
@@ -172,7 +158,6 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * @param string $email
      * @param string $websiteCode
      * @return bool|int
-     * @since 2.0.0
      */
     protected function _getCustomerId($email, $websiteCode)
     {
@@ -191,7 +176,6 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * @param array $rowData
      * @param int $rowNumber
      * @return bool
-     * @since 2.0.0
      */
     public function validateRow(array $rowData, $rowNumber)
     {
@@ -216,7 +200,6 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * @param array $rowData
      * @param int $rowNumber
      * @return null
-     * @since 2.0.0
      */
     abstract protected function _validateRowForUpdate(array $rowData, $rowNumber);
 
@@ -226,7 +209,6 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * @param array $rowData
      * @param int $rowNumber
      * @return null
-     * @since 2.0.0
      */
     abstract protected function _validateRowForDelete(array $rowData, $rowNumber);
 
@@ -236,7 +218,6 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * @param array $rowData
      * @param int $rowNumber
      * @return bool
-     * @since 2.0.0
      */
     protected function _checkUniqueKey(array $rowData, $rowNumber)
     {
@@ -261,7 +242,6 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * Get customer storage
      *
      * @return Storage
-     * @since 2.0.0
      */
     public function getCustomerStorage()
     {

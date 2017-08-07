@@ -12,13 +12,11 @@ use Magento\Framework\Filesystem;
 /**
  * Class \Magento\Framework\View\Template\Html\Minifier
  *
- * @since 2.0.0
  */
 class Minifier implements MinifierInterface
 {
     /**
      * @var Filesystem
-     * @since 2.0.0
      */
     protected $filesystem;
 
@@ -26,7 +24,6 @@ class Minifier implements MinifierInterface
      * All inline HTML tags
      *
      * @var array
-     * @since 2.0.0
      */
     protected $inlineHtmlTags = [
         'b',
@@ -64,7 +61,6 @@ class Minifier implements MinifierInterface
 
     /**
      * @var Filesystem\Directory\WriteInterface
-     * @since 2.0.0
      */
     protected $htmlDirectory;
 
@@ -77,7 +73,6 @@ class Minifier implements MinifierInterface
     /**
      * @param Filesystem $filesystem
      * @param Filesystem\Directory\ReadFactory $readFactory
-     * @since 2.0.0
      */
     public function __construct(
         Filesystem $filesystem,
@@ -93,7 +88,6 @@ class Minifier implements MinifierInterface
      *
      * @param string $file
      * @return string
-     * @since 2.0.0
      */
     public function getMinified($file)
     {
@@ -109,7 +103,6 @@ class Minifier implements MinifierInterface
      *
      * @param string $file
      * @return string
-     * @since 2.0.0
      */
     public function getPathToMinified($file)
     {
@@ -121,7 +114,6 @@ class Minifier implements MinifierInterface
      *
      * @param string $file
      * @return void
-     * @since 2.0.0
      */
     public function minify($file)
     {

@@ -11,13 +11,11 @@ use Magento\Ui\Component\AbstractComponent;
  * Class AbstractElement
  *
  * @api
- * @since 2.0.0
  */
 abstract class AbstractElement extends AbstractComponent implements ElementInterface
 {
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getHtmlId()
     {
@@ -26,7 +24,6 @@ abstract class AbstractElement extends AbstractComponent implements ElementInter
 
     /**
      * @return string|int
-     * @since 2.0.0
      */
     public function getValue()
     {
@@ -35,7 +32,6 @@ abstract class AbstractElement extends AbstractComponent implements ElementInter
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getFormInputName()
     {
@@ -44,7 +40,6 @@ abstract class AbstractElement extends AbstractComponent implements ElementInter
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isReadonly()
     {
@@ -53,7 +48,6 @@ abstract class AbstractElement extends AbstractComponent implements ElementInter
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getCssClasses()
     {

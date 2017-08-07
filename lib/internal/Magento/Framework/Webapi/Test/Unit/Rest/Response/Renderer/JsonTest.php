@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Webapi\Test\Unit\Rest\Response\Renderer;
 
-class JsonTest extends \PHPUnit_Framework_TestCase
+class JsonTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Webapi\Rest\Response\Renderer\Json */
     protected $_restJsonRenderer;

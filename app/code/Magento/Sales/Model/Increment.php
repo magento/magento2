@@ -10,25 +10,21 @@ use Magento\Eav\Model\Config as EavConfig;
 /**
  * Class Increment
  * @deprecated 2.2.0
- * @since 2.0.0
  */
 class Increment
 {
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $eavConfig;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $incrementValue;
 
     /**
      * @param EavConfig $eavConfig
-     * @since 2.0.0
      */
     public function __construct(
         EavConfig $eavConfig
@@ -40,7 +36,6 @@ class Increment
      * Returns current increment id
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCurrentValue()
     {
@@ -54,7 +49,6 @@ class Increment
      * @return string
      * @throws \Exception
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getNextValue($storeId)
     {

@@ -10,13 +10,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for displaying information related to indexers.
- * @since 2.0.0
  */
 class IndexerInfoCommand extends AbstractIndexerCommand
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -25,7 +23,6 @@ class IndexerInfoCommand extends AbstractIndexerCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

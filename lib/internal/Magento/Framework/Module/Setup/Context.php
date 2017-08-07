@@ -15,61 +15,51 @@ namespace Magento\Framework\Module\Setup;
  *
  * As Magento moves from inheritance-based APIs all such classes will be deprecated together with
  * the classes they were introduced for.
- * @since 2.0.0
  */
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $_logger;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.0.0
      */
     protected $_resourceModel;
 
     /**
      * @var \Magento\Framework\Module\Dir\Reader
-     * @since 2.0.0
      */
     protected $_modulesReader;
 
     /**
      * @var \Magento\Framework\Module\ModuleListInterface
-     * @since 2.0.0
      */
     protected $_moduleList;
 
     /**
      * @var \Magento\Framework\Module\ResourceInterface
-     * @since 2.0.0
      */
     protected $_resource;
 
     /**
      * @var \Magento\Framework\Module\Setup\MigrationFactory
-     * @since 2.0.0
      */
     protected $_migrationFactory;
 
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
-     * @since 2.0.0
      */
     protected $_encryptor;
 
     /**
      * @var \Magento\Framework\Filesystem
-     * @since 2.0.0
      */
     protected $filesystem;
 
@@ -85,7 +75,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @param \Magento\Framework\Module\Setup\MigrationFactory $migrationFactory
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Filesystem $filesystem
-     * @since 2.0.0
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -111,7 +100,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     public function getEventManager()
     {
@@ -120,7 +108,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Psr\Log\LoggerInterface $logger
-     * @since 2.0.0
      */
     public function getLogger()
     {
@@ -129,7 +116,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\Module\ModuleListInterface
-     * @since 2.0.0
      */
     public function getModuleList()
     {
@@ -138,7 +124,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\Module\Dir\Reader
-     * @since 2.0.0
      */
     public function getModulesReader()
     {
@@ -147,7 +132,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\App\ResourceConnection
-     * @since 2.0.0
      */
     public function getResourceModel()
     {
@@ -156,7 +140,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\Module\Setup\MigrationFactory
-     * @since 2.0.0
      */
     public function getMigrationFactory()
     {
@@ -165,7 +148,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\Module\ResourceInterface
-     * @since 2.0.0
      */
     public function getResource()
     {
@@ -174,7 +156,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\Encryption\EncryptorInterface
-     * @since 2.0.0
      */
     public function getEncryptor()
     {
@@ -183,7 +164,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\Filesystem
-     * @since 2.0.0
      */
     public function getFilesystem()
     {

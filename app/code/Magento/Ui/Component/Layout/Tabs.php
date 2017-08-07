@@ -15,25 +15,21 @@ use Magento\Ui\Component\Layout\Tabs\TabInterface;
 
 /**
  * Class Tabs
- * @since 2.0.0
  */
 class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $navContainerName;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $structure = [];
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $sortIncrement = 10;
 
@@ -43,7 +39,6 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
      * @param UiComponentFactory $uiComponentFactory
      * @param null|string $navContainerName
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(UiComponentFactory $uiComponentFactory, $navContainerName = null, $data = [])
     {
@@ -56,7 +51,6 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
      *
      * @param UiComponentInterface $component
      * @return array
-     * @since 2.0.0
      */
     public function build(UiComponentInterface $component)
     {
@@ -81,7 +75,6 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function addChildren(array &$topNode, UiComponentInterface $component, $componentType)
     {
@@ -181,7 +174,6 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
      * @param BlockWrapperInterface $childComponent
      * @param array $areas
      * @return void
-     * @since 2.0.0
      */
     protected function addWrappedBlock(BlockWrapperInterface $childComponent, array &$areas)
     {
@@ -232,7 +224,6 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
      * @param string $name
      * @return UiComponentInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function createTabComponent(UiComponentInterface $childComponent, $name)
     {
@@ -256,7 +247,6 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
      * @param UiComponentInterface $component
      * @param string $parentName
      * @return array
-     * @since 2.0.0
      */
     protected function prepareChildComponents(UiComponentInterface $component, $parentName)
     {
@@ -303,7 +293,6 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
      * @param string $name
      * @param string $parentName
      * @return array
-     * @since 2.0.0
      */
     protected function prepareConfig(array $config, $name, $parentName)
     {
@@ -325,7 +314,6 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
      * Prepare initial structure for sections
      *
      * @return void
-     * @since 2.0.0
      */
     protected function initSections()
     {
@@ -342,7 +330,6 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
      * Prepare initial structure for areas
      *
      * @return void
-     * @since 2.0.0
      */
     protected function initAreas()
     {
@@ -359,7 +346,6 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
      * Add navigation block
      *
      * @return void
-     * @since 2.0.0
      */
     protected function addNavigationBlock()
     {
@@ -393,7 +379,6 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
      * Get next sort increment
      *
      * @return int
-     * @since 2.0.0
      */
     protected function getNextSortIncrement()
     {

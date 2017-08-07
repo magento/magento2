@@ -13,19 +13,19 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 
 /**
  * @codeCoverageIgnore
- * @since 2.2.0
+ * @since 2.1.3
  */
 class UpgradeData implements UpgradeDataInterface
 {
     /**
      * @var CategorySetupFactory
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $categorySetupFactory;
 
     /**
      * @param CategorySetupFactory $categorySetupFactory
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(
         CategorySetupFactory $categorySetupFactory
@@ -35,7 +35,7 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -53,7 +53,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param \Magento\Catalog\Setup\CategorySetup $categorySetup
      * @param int $entityTypeId
      * @return void
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function changePriceAttributeDefaultScope($categorySetup, $entityTypeId)
     {

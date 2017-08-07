@@ -13,20 +13,17 @@ use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
  * Class CountryValidator
  * @package Magento\Payment\Gateway\Validator
  * @api
- * @since 2.0.0
  */
 class CountryValidator extends AbstractValidator
 {
     /**
      * @var \Magento\Payment\Gateway\ConfigInterface
-     * @since 2.0.0
      */
     private $config;
 
     /**
      * @param ResultInterfaceFactory $resultFactory
      * @param \Magento\Payment\Gateway\ConfigInterface $config
-     * @since 2.0.0
      */
     public function __construct(
         ResultInterfaceFactory $resultFactory,
@@ -41,7 +38,6 @@ class CountryValidator extends AbstractValidator
      * @return bool
      * @throws NotFoundException
      * @throws \Exception
-     * @since 2.0.0
      */
     public function validate(array $validationSubject)
     {

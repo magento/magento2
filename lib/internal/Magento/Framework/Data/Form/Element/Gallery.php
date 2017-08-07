@@ -16,7 +16,6 @@ use Magento\Framework\Escaper;
 /**
  * Class \Magento\Framework\Data\Form\Element\Gallery
  *
- * @since 2.0.0
  */
 class Gallery extends AbstractElement
 {
@@ -25,7 +24,6 @@ class Gallery extends AbstractElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -41,7 +39,6 @@ class Gallery extends AbstractElement
      * @return string
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -234,7 +231,6 @@ EndSCRIPT;
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -243,7 +239,6 @@ EndSCRIPT;
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getParentName()
     {

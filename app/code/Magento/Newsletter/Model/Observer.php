@@ -9,7 +9,6 @@ namespace Magento\Newsletter\Model;
  * Newsletter module observer
  *
  * @SuppressWarnings(PHPMD.LongVariable)
- * @since 2.0.0
  */
 class Observer
 {
@@ -17,7 +16,6 @@ class Observer
      * Queue collection factory
      *
      * @var \Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory
-     * @since 2.0.0
      */
     protected $_queueCollectionFactory;
 
@@ -25,7 +23,6 @@ class Observer
      * Construct
      *
      * @param \Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory $queueCollectionFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory $queueCollectionFactory
@@ -37,7 +34,6 @@ class Observer
      * Scheduled send handler
      *
      * @return void
-     * @since 2.0.0
      */
     public function scheduledSend()
     {

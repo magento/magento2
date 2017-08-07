@@ -14,20 +14,17 @@ namespace Magento\Setup\Fixtures;
  * <catalog_price_rules>{int}</catalog_price_rules>
  *
  * @see setup/performance-toolkit/profiles/ce/small.xml
- * @since 2.0.0
  */
 class CatalogPriceRulesFixture extends Fixture
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $priority = 90;
 
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD)
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -145,7 +142,6 @@ class CatalogPriceRulesFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getActionTitle()
     {
@@ -154,7 +150,6 @@ class CatalogPriceRulesFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function introduceParamLabels()
     {

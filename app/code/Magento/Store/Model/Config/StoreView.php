@@ -11,25 +11,21 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Retrieves theme and locale info associated with store-views
- * @since 2.0.0
  */
 class StoreView
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     private $scopeConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     private $storeManager;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ThemeProviderInterface
-     * @since 2.0.0
      */
     private $themeProvider;
 
@@ -37,7 +33,6 @@ class StoreView
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\Design\Theme\ThemeProviderInterface $themeProvider
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -53,7 +48,6 @@ class StoreView
      * Retrieves a unique list of pairs representing the theme/locale for each store view
      *
      * @return array
-     * @since 2.0.0
      */
     public function retrieveThemeLocalePairs()
     {
@@ -85,7 +79,6 @@ class StoreView
      * Retrieves a unique list of locales that are used by store views
      *
      * @return array
-     * @since 2.0.0
      */
     public function retrieveLocales()
     {
@@ -109,7 +102,6 @@ class StoreView
      *
      * @param array $arr
      * @return array
-     * @since 2.0.0
      */
     private function removeDuplicates($arr)
     {

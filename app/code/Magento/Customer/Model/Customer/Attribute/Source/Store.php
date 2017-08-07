@@ -9,19 +9,16 @@ namespace Magento\Customer\Model\Customer\Attribute\Source;
  * Customer store attribute source
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Store extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
     /**
      * @var \Magento\Store\Model\System\Store
-     * @since 2.0.0
      */
     protected $_store;
 
     /**
      * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory
-     * @since 2.0.0
      */
     protected $_storesFactory;
 
@@ -30,7 +27,6 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Source\Table
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
      * @param \Magento\Store\Model\System\Store $store
      * @param \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storesFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
@@ -45,7 +41,6 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getAllOptions()
     {
@@ -65,7 +60,6 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     /**
      * @param string $value
      * @return array|string
-     * @since 2.0.0
      */
     public function getOptionText($value)
     {
@@ -102,7 +96,6 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 
     /**
      * @return \Magento\Store\Model\ResourceModel\Store\Collection
-     * @since 2.0.0
      */
     protected function _createStoresCollection()
     {

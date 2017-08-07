@@ -9,7 +9,6 @@ namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Paym
 /**
  * Class \Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment\ReturnQuote
  *
- * @since 2.0.0
  */
 class ReturnQuote extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
@@ -17,7 +16,6 @@ class ReturnQuote extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * Return quote
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _returnQuote()
     {
@@ -36,7 +34,6 @@ class ReturnQuote extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * Return order quote by ajax
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

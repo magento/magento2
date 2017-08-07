@@ -12,7 +12,6 @@ use Magento\Sales\Model\Order\Creditmemo;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Totals extends \Magento\Sales\Block\Adminhtml\Totals
 {
@@ -20,7 +19,6 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Totals
      * Creditmemo
      *
      * @var Creditmemo|null
-     * @since 2.0.0
      */
     protected $_creditmemo;
 
@@ -28,7 +26,6 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Totals
      * Retrieve creditmemo model instance
      *
      * @return Creditmemo
-     * @since 2.0.0
      */
     public function getCreditmemo()
     {
@@ -48,7 +45,6 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Totals
      * Get source
      *
      * @return Creditmemo|null
-     * @since 2.0.0
      */
     public function getSource()
     {
@@ -59,7 +55,6 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Totals
      * Initialize creditmemo totals array
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initTotals()
     {

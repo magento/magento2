@@ -10,7 +10,6 @@ namespace Magento\Shipping\Block\Adminhtml;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class View extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -18,7 +17,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -26,7 +24,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -39,7 +36,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -81,7 +77,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve shipment model instance
      *
      * @return \Magento\Sales\Model\Order\Shipment
-     * @since 2.0.0
      */
     public function getShipment()
     {
@@ -90,7 +85,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -113,7 +107,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -128,7 +121,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getEmailUrl()
     {
@@ -137,7 +129,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getPrintUrl()
     {
@@ -147,7 +138,6 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * @param bool $flag
      * @return $this
-     * @since 2.0.0
      */
     public function updateBackButtonUrl($flag)
     {

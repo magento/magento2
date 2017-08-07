@@ -76,7 +76,7 @@ class ReadHandler implements ExtensionInterface
      * @param Product $product
      * @param array $mediaEntries
      * @return void
-     * @since 2.2.0
+     * @since 2.1.1
      */
     public function addMediaDataToProduct(Product $product, array $mediaEntries)
     {
@@ -95,7 +95,7 @@ class ReadHandler implements ExtensionInterface
     /**
      * @param array $rawData
      * @return array
-     * @since 2.2.0
+     * @since 2.1.1
      */
     private function substituteNullsWithDefaultValues(array $rawData)
     {
@@ -131,7 +131,7 @@ class ReadHandler implements ExtensionInterface
      * @param string $key
      * @param string[] &$image
      * @return string
-     * @deprecated 2.2.0
+     * @deprecated 2.1.1
      * @since 2.1.0
      */
     protected function findDefaultValue($key, &$image)

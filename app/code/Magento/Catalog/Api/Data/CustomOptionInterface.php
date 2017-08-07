@@ -8,7 +8,6 @@ namespace Magento\Catalog\Api\Data;
 /**
  * Interface CustomOptionInterface
  * @api
- * @since 2.0.0
  */
 interface CustomOptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -23,7 +22,6 @@ interface CustomOptionInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Get option id
      *
      * @return string
-     * @since 2.0.0
      */
     public function getOptionId();
 
@@ -32,7 +30,6 @@ interface CustomOptionInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $value
      * @return bool
-     * @since 2.0.0
      */
     public function setOptionId($value);
 
@@ -40,7 +37,6 @@ interface CustomOptionInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Get option value
      *
      * @return string
-     * @since 2.0.0
      */
     public function getOptionValue();
 
@@ -49,7 +45,6 @@ interface CustomOptionInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $value
      * @return bool
-     * @since 2.0.0
      */
     public function setOptionValue($value);
 
@@ -57,7 +52,6 @@ interface CustomOptionInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Catalog\Api\Data\CustomOptionExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -66,7 +60,6 @@ interface CustomOptionInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param \Magento\Catalog\Api\Data\CustomOptionExtensionInterface|null $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\CustomOptionExtensionInterface $extensionAttributes

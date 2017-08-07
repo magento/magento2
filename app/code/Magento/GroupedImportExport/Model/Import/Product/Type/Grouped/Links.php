@@ -9,25 +9,21 @@ use Magento\Framework\App\ResourceConnection;
 
 /**
  * Processing db operations for import entity of grouped product type
- * @since 2.0.0
  */
 class Links
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Link
-     * @since 2.0.0
      */
     protected $productLink;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected $connection;
 
     /**
      * @var \Magento\ImportExport\Model\ImportFactory
-     * @since 2.0.0
      */
     protected $importFactory;
 
@@ -35,13 +31,11 @@ class Links
      * Import model behavior
      *
      * @var string
-     * @since 2.0.0
      */
     protected $behavior;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $attributes;
 
@@ -49,7 +43,6 @@ class Links
      * @param \Magento\Catalog\Model\ResourceModel\Product\Link $productLink
      * @param ResourceConnection $resource
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\Link $productLink,
@@ -64,7 +57,6 @@ class Links
     /**
      * @param array $linksData
      * @return void
-     * @since 2.0.0
      */
     public function saveLinksData($linksData)
     {
@@ -118,7 +110,6 @@ class Links
      * @param array $productIds
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
-     * @since 2.0.0
      */
     protected function deleteOldLinks($productIds)
     {
@@ -135,7 +126,6 @@ class Links
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getAttributes()
     {
@@ -156,7 +146,6 @@ class Links
 
     /**
      * @return int
-     * @since 2.0.0
      */
     protected function getLinkTypeId()
     {
@@ -167,7 +156,6 @@ class Links
      * Retrieve model behavior
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getBehavior()
     {

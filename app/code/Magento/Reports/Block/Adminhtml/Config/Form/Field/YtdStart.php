@@ -11,7 +11,6 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  * Dashboard Year-To-Date Month and Day starts Field Renderer
  *
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class YtdStart extends \Magento\Config\Block\System\Config\Form\Field
 {
@@ -19,7 +18,6 @@ class YtdStart extends \Magento\Config\Block\System\Config\Form\Field
      * @param AbstractElement $element
      * @return string
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _getElementHtml(AbstractElement $element)
     {

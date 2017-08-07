@@ -10,7 +10,6 @@ use Magento\Framework\Serialize\SerializerInterface;
 /**
  * Class \Magento\Store\Model\StoreResolver
  *
- * @since 2.0.0
  */
 class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
 {
@@ -21,43 +20,37 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
 
     /**
      * @var \Magento\Store\Api\StoreRepositoryInterface
-     * @since 2.0.0
      */
     protected $storeRepository;
 
     /**
      * @var \Magento\Store\Api\StoreCookieManagerInterface
-     * @since 2.0.0
      */
     protected $storeCookieManager;
 
     /**
      * @var \Magento\Framework\Cache\FrontendInterface
-     * @since 2.0.0
      */
     protected $cache;
 
     /**
      * @var \Magento\Store\Model\StoreResolver\ReaderList
-     * @since 2.0.0
      */
     protected $readerList;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $runMode;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $scopeCode;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.1.0
+     * @since 2.0.1
      */
     protected $request;
 
@@ -75,7 +68,6 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      * @param \Magento\Store\Model\StoreResolver\ReaderList $readerList
      * @param string $runMode
      * @param null $scopeCode
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
@@ -97,7 +89,6 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCurrentStoreId()
     {
@@ -130,7 +121,6 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      * Get stores data
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getStoresData()
     {
@@ -149,7 +139,6 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      * Read stores data. First element is allowed store ids, second is default store id
      *
      * @return array
-     * @since 2.0.0
      */
     protected function readStoresData()
     {
@@ -163,7 +152,6 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      * @param string $storeCode
      * @return \Magento\Store\Api\Data\StoreInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @since 2.0.0
      */
     protected function getRequestedStoreByCode($storeCode)
     {
@@ -182,7 +170,6 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      * @param int $id
      * @return \Magento\Store\Api\Data\StoreInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @since 2.0.0
      */
     protected function getDefaultStoreById($id)
     {

@@ -9,7 +9,6 @@ namespace Magento\Catalog\Controller\Adminhtml\Category\Widget;
 /**
  * Class \Magento\Catalog\Controller\Adminhtml\Category\Widget\CategoriesJson
  *
- * @since 2.0.0
  */
 class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category\Widget
 {
@@ -17,13 +16,11 @@ class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category\Widg
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
@@ -32,7 +29,6 @@ class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category\Widg
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\Registry $coreRegistry
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -49,7 +45,6 @@ class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category\Widg
      * Categories tree node (Ajax version)
      *
      * @return \Magento\Framework\Controller\Result\Json
-     * @since 2.0.0
      */
     public function execute()
     {

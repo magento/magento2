@@ -13,7 +13,6 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Fieldset extends AbstractComponent
 {
@@ -21,7 +20,6 @@ class Fieldset extends AbstractComponent
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $collapsible = false;
 
@@ -29,7 +27,6 @@ class Fieldset extends AbstractComponent
      * Get component name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getComponentName()
     {

@@ -9,13 +9,11 @@ namespace Magento\User\Controller\Adminhtml\User;
 /**
  * Class \Magento\User\Controller\Adminhtml\User\RoleGrid
  *
- * @since 2.0.0
  */
 class RoleGrid extends \Magento\User\Controller\Adminhtml\User
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

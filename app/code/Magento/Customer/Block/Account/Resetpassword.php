@@ -11,7 +11,6 @@ use Magento\Customer\Model\AccountManagement;
  * Customer reset password form
  *
  * @api
- * @since 2.0.0
  */
 class Resetpassword extends \Magento\Framework\View\Element\Template
 {
@@ -19,7 +18,6 @@ class Resetpassword extends \Magento\Framework\View\Element\Template
      * Check if autocomplete is disabled on storefront
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isAutocompleteDisabled()
     {

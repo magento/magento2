@@ -10,7 +10,6 @@ namespace Magento\GroupedProduct\Model\Product\Cart\Configuration\Plugin;
 /**
  * Class \Magento\GroupedProduct\Model\Product\Cart\Configuration\Plugin\Grouped
  *
- * @since 2.0.0
  */
 class Grouped
 {
@@ -24,7 +23,6 @@ class Grouped
      *
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function aroundIsProductConfigured(
         \Magento\Catalog\Model\Product\CartConfiguration $subject,

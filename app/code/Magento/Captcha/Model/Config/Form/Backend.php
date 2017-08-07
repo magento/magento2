@@ -14,13 +14,11 @@ namespace Magento\Captcha\Model\Config\Form;
 /**
  * Class \Magento\Captcha\Model\Config\Form\Backend
  *
- * @since 2.0.0
  */
 class Backend extends \Magento\Captcha\Model\Config\Form\AbstractForm
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_configPath = 'captcha/backend/areas';
 }

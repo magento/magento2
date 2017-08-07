@@ -11,13 +11,11 @@ use Magento\Customer\Model\Session as CustomerSession;
 
 /**
  * Session-based customer user context
- * @since 2.0.0
  */
 class CustomerSessionUserContext implements UserContextInterface
 {
     /**
      * @var CustomerSession
-     * @since 2.0.0
      */
     protected $_customerSession;
 
@@ -25,7 +23,6 @@ class CustomerSessionUserContext implements UserContextInterface
      * Initialize dependencies.
      *
      * @param CustomerSession $customerSession
-     * @since 2.0.0
      */
     public function __construct(
         CustomerSession $customerSession
@@ -35,7 +32,6 @@ class CustomerSessionUserContext implements UserContextInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getUserId()
     {
@@ -44,7 +40,6 @@ class CustomerSessionUserContext implements UserContextInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getUserType()
     {

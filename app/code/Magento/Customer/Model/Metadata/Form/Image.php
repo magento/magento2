@@ -17,13 +17,12 @@ use Magento\Framework\Filesystem;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Image extends File
 {
     /**
      * @var ImageContentInterfaceFactory
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $imageContentFactory;
 
@@ -87,7 +86,6 @@ class Image extends File
      * @return string[]
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _validateByRules($value)
     {
@@ -154,7 +152,7 @@ class Image extends File
      *
      * @param array $value
      * @return bool|int|ImageContentInterface|string
-     * @since 2.2.0
+     * @since 2.1.3
      */
     protected function processUiComponentValue(array $value)
     {
@@ -176,7 +174,7 @@ class Image extends File
      *
      * @param array $value
      * @return string
-     * @since 2.2.0
+     * @since 2.1.3
      */
     protected function processCustomerAddressValue(array $value)
     {
@@ -189,7 +187,7 @@ class Image extends File
      *
      * @param array $value
      * @return bool|int|ImageContentInterface|string
-     * @since 2.2.0
+     * @since 2.1.3
      */
     protected function processCustomerValue(array $value)
     {

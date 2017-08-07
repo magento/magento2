@@ -8,7 +8,6 @@ namespace Magento\Widget\Model;
 /**
  * Class \Magento\Widget\Model\NamespaceResolver
  *
- * @since 2.0.0
  */
 class NamespaceResolver
 {
@@ -16,19 +15,16 @@ class NamespaceResolver
      * List of module namespaces
      *
      * @var array
-     * @since 2.0.0
      */
     protected $moduleNamespaces;
 
     /**
      * @var \Magento\Framework\Module\ModuleListInterface
-     * @since 2.0.0
      */
     protected $moduleList;
 
     /**
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Module\ModuleListInterface $moduleList)
     {
@@ -42,7 +38,6 @@ class NamespaceResolver
      * @param string $name
      * @param bool $asFullModuleName
      * @return string
-     * @since 2.0.0
      */
     public function determineOmittedNamespace($name, $asFullModuleName = false)
     {
@@ -75,7 +70,6 @@ class NamespaceResolver
      * Prepare module namespaces
      *
      * @return void
-     * @since 2.0.0
      */
     protected function prepareModuleNamespaces()
     {
@@ -93,7 +87,6 @@ class NamespaceResolver
      *
      * @param string $name
      * @return array
-     * @since 2.0.0
      */
     protected function prepareName($name)
     {

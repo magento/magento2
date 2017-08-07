@@ -8,7 +8,6 @@ namespace Magento\Framework\Search\Adapter\Mysql\Field;
 /**
  * Interface \Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface
  *
- * @since 2.0.0
  */
 interface ResolverInterface
 {
@@ -17,7 +16,6 @@ interface ResolverInterface
      *
      * @param array $fields
      * @return FieldInterface[]
-     * @since 2.0.0
      */
     public function resolve(array $fields);
 }

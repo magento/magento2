@@ -9,19 +9,16 @@ use Magento\Framework\Api\SimpleDataObjectConverter;
 
 /**
  * Product inventory data
- * @since 2.0.0
  */
 class Inventory extends \Magento\Backend\Block\Widget
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'catalog/product/tab/inventory.phtml';
 
     /**
      * @var \Magento\Framework\Module\Manager
-     * @since 2.0.0
      */
     protected $moduleManager;
 
@@ -29,31 +26,26 @@ class Inventory extends \Magento\Backend\Block\Widget
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $coreRegistry;
 
     /**
      * @var \Magento\CatalogInventory\Model\Source\Stock
-     * @since 2.0.0
      */
     protected $stock;
 
     /**
      * @var \Magento\CatalogInventory\Model\Source\Backorders
-     * @since 2.0.0
      */
     protected $backorders;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
-     * @since 2.0.0
      */
     protected $stockRegistry;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
-     * @since 2.0.0
      */
     protected $stockConfiguration;
 
@@ -66,7 +58,6 @@ class Inventory extends \Magento\Backend\Block\Widget
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -89,7 +80,6 @@ class Inventory extends \Magento\Backend\Block\Widget
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getBackordersOption()
     {
@@ -104,7 +94,6 @@ class Inventory extends \Magento\Backend\Block\Widget
      * Retrieve stock option array
      *
      * @return array
-     * @since 2.0.0
      */
     public function getStockOption()
     {
@@ -119,7 +108,6 @@ class Inventory extends \Magento\Backend\Block\Widget
      * Return current product instance
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -130,7 +118,6 @@ class Inventory extends \Magento\Backend\Block\Widget
      * Retrieve Catalog Inventory  Stock Item Model
      *
      * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
-     * @since 2.0.0
      */
     public function getStockItem()
     {
@@ -143,7 +130,6 @@ class Inventory extends \Magento\Backend\Block\Widget
     /**
      * @param string $field
      * @return string|null
-     * @since 2.0.0
      */
     public function getFieldValue($field)
     {
@@ -161,7 +147,6 @@ class Inventory extends \Magento\Backend\Block\Widget
     /**
      * @param string $field
      * @return string|null
-     * @since 2.0.0
      */
     public function getConfigFieldValue($field)
     {
@@ -180,7 +165,6 @@ class Inventory extends \Magento\Backend\Block\Widget
     /**
      * @param string $field
      * @return string|null
-     * @since 2.0.0
      */
     public function getDefaultConfigValue($field)
     {
@@ -191,7 +175,6 @@ class Inventory extends \Magento\Backend\Block\Widget
      * Is readonly stock
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isReadonly()
     {
@@ -200,7 +183,6 @@ class Inventory extends \Magento\Backend\Block\Widget
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isNew()
     {
@@ -212,7 +194,6 @@ class Inventory extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getFieldSuffix()
     {
@@ -223,7 +204,6 @@ class Inventory extends \Magento\Backend\Block\Widget
      * Check Whether product type can have fractional quantity or not
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canUseQtyDecimals()
     {
@@ -234,7 +214,6 @@ class Inventory extends \Magento\Backend\Block\Widget
      * Check if product type is virtual
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isVirtual()
     {
@@ -243,7 +222,6 @@ class Inventory extends \Magento\Backend\Block\Widget
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isSingleStoreMode()
     {

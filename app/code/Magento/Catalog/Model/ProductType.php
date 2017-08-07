@@ -11,7 +11,6 @@ use Magento\Catalog\Api\Data\ProductTypeInterface;
 
 /**
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class ProductType extends \Magento\Framework\Api\AbstractExtensibleObject implements ProductTypeInterface
 {
@@ -24,7 +23,6 @@ class ProductType extends \Magento\Framework\Api\AbstractExtensibleObject implem
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -33,7 +31,6 @@ class ProductType extends \Magento\Framework\Api\AbstractExtensibleObject implem
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getLabel()
     {
@@ -45,7 +42,6 @@ class ProductType extends \Magento\Framework\Api\AbstractExtensibleObject implem
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -57,7 +53,6 @@ class ProductType extends \Magento\Framework\Api\AbstractExtensibleObject implem
      *
      * @param string $label
      * @return $this
-     * @since 2.0.0
      */
     public function setLabel($label)
     {
@@ -68,7 +63,6 @@ class ProductType extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * {@inheritdoc}
      *
      * @return \Magento\Catalog\Api\Data\ProductTypeExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -80,7 +74,6 @@ class ProductType extends \Magento\Framework\Api\AbstractExtensibleObject implem
      *
      * @param \Magento\Catalog\Api\Data\ProductTypeExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductTypeExtensionInterface $extensionAttributes

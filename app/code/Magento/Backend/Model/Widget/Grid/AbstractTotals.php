@@ -8,7 +8,6 @@ namespace Magento\Backend\Model\Widget\Grid;
 
 /**
  * @api
- * @since 2.0.0
  */
 abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\TotalsInterface
 {
@@ -18,7 +17,6 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
      * 'value' => column expression
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_columns = [];
 
@@ -28,7 +26,6 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
      * 'value' => counted total
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_totals = [];
 
@@ -36,7 +33,6 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
      * Factory model
      *
      * @var \Magento\Framework\DataObject\Factory
-     * @since 2.0.0
      */
     protected $_factory;
 
@@ -44,14 +40,12 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
      * Parser for expressions like operand operation operand
      *
      * @var \Magento\Backend\Model\Widget\Grid\Parser
-     * @since 2.0.0
      */
     protected $_parser;
 
     /**
      * @param \Magento\Framework\DataObject\Factory $factory
      * @param \Magento\Backend\Model\Widget\Grid\Parser $parser
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\DataObject\Factory $factory,
@@ -68,7 +62,6 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
      * @param \Magento\Framework\Data\Collection $collection
      * @return float|int
      * @abstract
-     * @since 2.0.0
      */
     abstract protected function _countSum($index, $collection);
 
@@ -79,7 +72,6 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
      * @param \Magento\Framework\Data\Collection $collection
      * @return float|int
      * @abstract
-     * @since 2.0.0
      */
     abstract protected function _countAverage($index, $collection);
 
@@ -90,7 +82,6 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
      * @param string $expr
      * @param \Magento\Framework\Data\Collection $collection
      * @return float|int
-     * @since 2.0.0
      */
     protected function _count($index, $expr, $collection)
     {
@@ -116,7 +107,6 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
      * @param string $expr
      * @param \Magento\Framework\Data\Collection $collection
      * @return float|int
-     * @since 2.0.0
      */
     protected function _countExpr($expr, $collection)
     {
@@ -147,7 +137,6 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
      * @param float|int &$tmpResult
      * @param float|int $result
      * @return void
-     * @since 2.0.0
      */
     protected function _checkOperandsSet(&$firstOperand, &$secondOperand, &$tmpResult, $result)
     {
@@ -168,7 +157,6 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
      * @param float|int $secondOperand
      * @param string $operation
      * @return float|int
-     * @since 2.0.0
      */
     protected function _operate($firstOperand, $secondOperand, $operation)
     {
@@ -196,7 +184,6 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
      * @param string $operand
      * @param \Magento\Framework\Data\Collection $collection
      * @return float|int
-     * @since 2.0.0
      */
     protected function _checkOperand($operand, $collection)
     {
@@ -218,7 +205,6 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
      * @param string $index
      * @param string $totalExpr
      * @return $this
-     * @since 2.0.0
      */
     public function setColumn($index, $totalExpr)
     {
@@ -230,7 +216,6 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
      * Return columns set
      *
      * @return array
-     * @since 2.0.0
      */
     public function getColumns()
     {
@@ -242,7 +227,6 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
      *
      * @param \Magento\Framework\Data\Collection $collection
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function countTotals($collection)
     {
@@ -257,7 +241,6 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
      * Get totals as object
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getTotals()
     {
@@ -269,7 +252,6 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
      *
      * @param bool $isFullReset
      * @return void
-     * @since 2.0.0
      */
     public function reset($isFullReset = false)
     {

@@ -10,7 +10,6 @@ use Magento\CustomerImportExport\Model\Import\CustomerComposite;
 /**
  * Class \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\Data
  *
- * @since 2.0.0
  */
 class Data extends \Magento\ImportExport\Model\ResourceModel\Import\Data
 {
@@ -18,7 +17,6 @@ class Data extends \Magento\ImportExport\Model\ResourceModel\Import\Data
      * Entity type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_entityType = CustomerComposite::COMPONENT_ENTITY_CUSTOMER;
 
@@ -26,7 +24,6 @@ class Data extends \Magento\ImportExport\Model\ResourceModel\Import\Data
      * Customer attributes
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_customerAttributes = [];
 
@@ -37,7 +34,6 @@ class Data extends \Magento\ImportExport\Model\ResourceModel\Import\Data
      * @param \Magento\Framework\Json\Helper\Data $coreHelper
      * @param string $connectionName
      * @param array $arguments
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -59,7 +55,6 @@ class Data extends \Magento\ImportExport\Model\ResourceModel\Import\Data
      * Get next bunch of validated rows.
      *
      * @return array|null
-     * @since 2.0.0
      */
     public function getNextBunch()
     {
@@ -84,7 +79,6 @@ class Data extends \Magento\ImportExport\Model\ResourceModel\Import\Data
      *
      * @param array $rowData
      * @return array|null
-     * @since 2.0.0
      */
     protected function _prepareRow(array $rowData)
     {
@@ -105,7 +99,6 @@ class Data extends \Magento\ImportExport\Model\ResourceModel\Import\Data
      *
      * @param array $rowData
      * @return array
-     * @since 2.0.0
      */
     protected function _prepareAddressRowData(array $rowData)
     {

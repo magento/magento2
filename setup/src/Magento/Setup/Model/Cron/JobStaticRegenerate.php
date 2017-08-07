@@ -7,25 +7,21 @@ namespace Magento\Setup\Model\Cron;
 
 /**
  * Static regenerate job
- * @since 2.0.0
  */
 class JobStaticRegenerate extends AbstractJob
 {
     /**
      * @var \Magento\Framework\App\Cache
-     * @since 2.0.0
      */
     protected $cache;
 
     /**
      * @var \Magento\Framework\App\State\CleanupFiles
-     * @since 2.0.0
      */
     protected $cleanupFiles;
 
     /**
      * @var \Magento\Setup\Model\Cron\Status
-     * @since 2.0.0
      */
     protected $status;
 
@@ -37,7 +33,6 @@ class JobStaticRegenerate extends AbstractJob
      * @param \Magento\Setup\Model\Cron\Status $status
      * @param array $name
      * @param array $params
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
@@ -57,7 +52,6 @@ class JobStaticRegenerate extends AbstractJob
      *
      * @throws \RuntimeException
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -90,7 +84,6 @@ class JobStaticRegenerate extends AbstractJob
      * Returns cache object
      *
      * @return \Magento\Framework\App\Cache
-     * @since 2.0.0
      */
     public function getCacheObject()
     {
@@ -101,7 +94,6 @@ class JobStaticRegenerate extends AbstractJob
      * Returns CleanFiles object
      *
      * @return \Magento\Framework\App\State\CleanupFiles
-     * @since 2.0.0
      */
     public function getCleanFilesObject()
     {
@@ -112,7 +104,6 @@ class JobStaticRegenerate extends AbstractJob
      * Returns Status object
      *
      * @return \Magento\Setup\Model\Cron\Status
-     * @since 2.0.0
      */
     public function getStatusObject()
     {
@@ -123,7 +114,6 @@ class JobStaticRegenerate extends AbstractJob
      * Returns output object
      *
      * @return \Symfony\Component\Console\Output\OutputInterface
-     * @since 2.0.0
      */
     public function getOutputObject()
     {
@@ -134,7 +124,6 @@ class JobStaticRegenerate extends AbstractJob
      * Returns filesystem object
      *
      * @return \Magento\Deploy\Model\Filesystem
-     * @since 2.0.0
      */
     public function getFilesystem()
     {
@@ -145,7 +134,6 @@ class JobStaticRegenerate extends AbstractJob
      * Returns mode object
      *
      * @return \Magento\Deploy\Model\Mode
-     * @since 2.0.0
      */
     public function getModeObject()
     {

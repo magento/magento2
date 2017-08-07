@@ -9,19 +9,16 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab;
  * Adminhtml catalog product bundle items tab block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * @var mixed
-     * @since 2.0.0
      */
     protected $_product = null;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'product/edit/bundle.phtml';
 
@@ -29,7 +26,6 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -37,7 +33,6 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -50,7 +45,6 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getTabUrl()
     {
@@ -59,7 +53,6 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getTabClass()
     {
@@ -70,7 +63,6 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Prepare layout
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -101,7 +93,6 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Check block readonly
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isReadonly()
     {
@@ -110,7 +101,6 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getAddButtonHtml()
     {
@@ -119,7 +109,6 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getOptionsBoxHtml()
     {
@@ -128,7 +117,6 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getFieldSuffix()
     {
@@ -137,7 +125,6 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -146,7 +133,6 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
 
     /**
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -155,7 +141,6 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
 
     /**
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -164,7 +149,6 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -173,7 +157,6 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -184,7 +167,6 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Get parent tab code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getParentTab()
     {

@@ -7,7 +7,6 @@ namespace Magento\Framework\Filter\Template\Tokenizer;
 
 /**
  * Template constructions variables tokenizer
- * @since 2.0.0
  */
 class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractTokenizer
 {
@@ -15,7 +14,6 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      * Internal counter used to keep track of how deep in array parsing we are
      *
      * @var int
-     * @since 2.0.0
      */
     protected $arrayDepth = 0;
 
@@ -24,7 +22,6 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      *
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function tokenize()
     {
@@ -70,7 +67,6 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      * Get string value for method args
      *
      * @return string
-     * @since 2.0.0
      */
     public function getString()
     {
@@ -107,7 +103,6 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      * Get array member key or return false if none present
      *
      * @return bool|string
-     * @since 2.0.0
      */
     public function getMemberKey()
     {
@@ -162,7 +157,6 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      * ]]
      *
      * @return array
-     * @since 2.0.0
      */
     public function getArray()
     {
@@ -205,7 +199,6 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      * Return the internal array depth counter
      *
      * @return int
-     * @since 2.0.0
      */
     protected function getArrayDepth()
     {
@@ -216,7 +209,6 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      * Increment the internal array depth counter
      *
      * @return void
-     * @since 2.0.0
      */
     protected function incArrayDepth()
     {
@@ -229,7 +221,6 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      * If depth is already 0 do nothing
      *
      * @return void
-     * @since 2.0.0
      */
     protected function decArrayDepth()
     {
@@ -243,7 +234,6 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      * Return true if current char is a number
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isNumeric()
     {
@@ -254,7 +244,6 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      * Return true if current char is quote or apostrophe
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isQuote()
     {
@@ -265,7 +254,6 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      * Retrun true if current char is opening boundary for an array
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isArray()
     {
@@ -276,7 +264,6 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      * Return true if current char is closing boundary for string
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isStringBreak()
     {
@@ -292,7 +279,6 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      * Return array of arguments for method
      *
      * @return array
-     * @since 2.0.0
      */
     public function getMethodArgs()
     {
@@ -316,7 +302,6 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      * Return number value for method args
      *
      * @return float
-     * @since 2.0.0
      */
     public function getNumber()
     {

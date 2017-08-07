@@ -12,19 +12,16 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
  * Adminhtml dashboard tab abstract
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
 {
     /**
      * @var \Magento\Backend\Helper\Dashboard\AbstractDashboard
-     * @since 2.0.0
      */
     protected $_dataHelper = null;
 
     /**
      * @var \Magento\Reports\Model\ResourceModel\Order\CollectionFactory
-     * @since 2.0.0
      */
     protected $_collectionFactory;
 
@@ -32,7 +29,6 @@ abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -45,7 +41,6 @@ abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
 
     /**
      * @return array|AbstractCollection|\Magento\Eav\Model\Entity\Collection\Abstract
-     * @since 2.0.0
      */
     public function getCollection()
     {
@@ -54,7 +49,6 @@ abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getCount()
     {
@@ -65,7 +59,6 @@ abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
      * Get data helper
      *
      * @return \Magento\Backend\Helper\Dashboard\AbstractDashboard
-     * @since 2.0.0
      */
     public function getDataHelper()
     {
@@ -74,7 +67,6 @@ abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareData()
     {
@@ -83,7 +75,6 @@ abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {

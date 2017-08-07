@@ -18,14 +18,12 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 /**
  * Class \Magento\Catalog\Block\Widget\Link
  *
- * @since 2.0.0
  */
 class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento\Widget\Block\BlockInterface
 {
     /**
      * Entity model name which must be used to retrieve entity specific data.
      * @var null|\Magento\Catalog\Model\ResourceModel\AbstractResource
-     * @since 2.0.0
      */
     protected $_entityResource = null;
 
@@ -33,7 +31,6 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
      * Prepared href attribute
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_href;
 
@@ -41,7 +38,6 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
      * Prepared anchor text
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_anchorText;
 
@@ -49,7 +45,6 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
      * Url finder for category
      *
      * @var UrlFinderInterface
-     * @since 2.0.0
      */
     protected $urlFinder;
 
@@ -58,7 +53,6 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
      * @param UrlFinderInterface $urlFinder
      * @param \Magento\Catalog\Model\ResourceModel\AbstractResource $entityResource
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -78,7 +72,6 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
      * @throws \RuntimeException
      * @return string|false
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function getHref()
     {
@@ -119,7 +112,6 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
      * @param string $idPath
      * @throws \RuntimeException
      * @return array
-     * @since 2.0.0
      */
     protected function parseIdPath($idPath)
     {
@@ -136,7 +128,6 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
      * If anchor text was not specified get entity name from DB.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLabel()
     {
@@ -166,7 +157,6 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
      * or return empty string if url can't be prepared
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

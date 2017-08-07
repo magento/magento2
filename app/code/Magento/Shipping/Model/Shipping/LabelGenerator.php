@@ -11,37 +11,31 @@ use Magento\Framework\App\RequestInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class LabelGenerator
 {
     /**
      * @var \Magento\Shipping\Model\CarrierFactory
-     * @since 2.0.0
      */
     protected $carrierFactory;
 
     /**
      * @var \Magento\Shipping\Model\Shipping\LabelsFactory
-     * @since 2.0.0
      */
     protected $labelFactory;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\Sales\Model\Order\Shipment\TrackFactory
-     * @since 2.0.0
      */
     protected $trackFactory;
 
     /**
      * @var \Magento\Framework\Filesystem
-     * @since 2.0.0
      */
     protected $filesystem;
 
@@ -51,7 +45,6 @@ class LabelGenerator
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory
      * @param \Magento\Framework\Filesystem $filesystem
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
@@ -72,7 +65,6 @@ class LabelGenerator
      * @param RequestInterface $request
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function create(\Magento\Sales\Model\Order\Shipment $shipment, RequestInterface $request)
     {
@@ -118,7 +110,6 @@ class LabelGenerator
      * @param string $carrierTitle
      *
      * @return void
-     * @since 2.0.0
      */
     private function addTrackingNumbersToShipment(
         \Magento\Sales\Model\Order\Shipment $shipment,
@@ -145,7 +136,6 @@ class LabelGenerator
      *
      * @param array $labelsContent
      * @return \Zend_Pdf
-     * @since 2.0.0
      */
     public function combineLabelsPdf(array $labelsContent)
     {
@@ -171,7 +161,6 @@ class LabelGenerator
      *
      * @param string $imageString
      * @return \Zend_Pdf_Page|false
-     * @since 2.0.0
      */
     public function createPdfPageFromImageString($imageString)
     {

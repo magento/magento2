@@ -12,25 +12,21 @@ use Magento\Framework\Phrase;
 /**
  * Class \Magento\Framework\Webapi\Rest\Response\RendererFactory
  *
- * @since 2.0.0
  */
 class RendererFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var \Magento\Framework\Webapi\Rest\Request
-     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_renders;
 
@@ -38,7 +34,6 @@ class RendererFactory
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Webapi\Rest\Request $request
      * @param array $renders
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -56,7 +51,6 @@ class RendererFactory
      * @return \Magento\Framework\Webapi\Rest\Response\RendererInterface
      * @throws \Magento\Framework\Webapi\Exception
      * @throws \LogicException
-     * @since 2.0.0
      */
     public function get()
     {
@@ -74,7 +68,6 @@ class RendererFactory
      *
      * @return string
      * @throws \Magento\Framework\Webapi\Exception
-     * @since 2.0.0
      */
     protected function _getRendererClass()
     {

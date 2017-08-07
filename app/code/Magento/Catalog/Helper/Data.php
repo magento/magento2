@@ -20,7 +20,6 @@ use Magento\Tax\Model\Config;
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -51,7 +50,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Breadcrumb Path cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_categoryPath;
 
@@ -59,7 +57,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Currently selected store ID if applicable
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_storeId;
 
@@ -67,7 +64,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
@@ -75,7 +71,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Catalog product
      *
      * @var Product
-     * @since 2.0.0
      */
     protected $_catalogProduct;
 
@@ -83,19 +78,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Catalog category
      *
      * @var Category
-     * @since 2.0.0
      */
     protected $_catalogCategory;
 
     /**
      * @var \Magento\Framework\Stdlib\StringUtils
-     * @since 2.0.0
      */
     protected $string;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_templateFilterModel;
 
@@ -103,7 +95,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Catalog session
      *
      * @var \Magento\Catalog\Model\Session
-     * @since 2.0.0
      */
     protected $_catalogSession;
 
@@ -111,7 +102,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -119,7 +109,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Template filter factory
      *
      * @var \Magento\Catalog\Model\Template\Filter\Factory
-     * @since 2.0.0
      */
     protected $_templateFilterFactory;
 
@@ -127,7 +116,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Tax class key factory
      *
      * @var \Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory
-     * @since 2.0.0
      */
     protected $_taxClassKeyFactory;
 
@@ -135,7 +123,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Tax helper
      *
      * @var \Magento\Tax\Model\Config
-     * @since 2.0.0
      */
     protected $_taxConfig;
 
@@ -143,7 +130,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Quote details factory
      *
      * @var \Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory
-     * @since 2.0.0
      */
     protected $_quoteDetailsFactory;
 
@@ -151,13 +137,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Quote details item factory
      *
      * @var \Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory
-     * @since 2.0.0
      */
     protected $_quoteDetailsItemFactory;
 
     /**
      * @var CustomerSession
-     * @since 2.0.0
      */
     protected $_customerSession;
 
@@ -165,7 +149,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Tax calculation service interface
      *
      * @var \Magento\Tax\Api\TaxCalculationInterface
-     * @since 2.0.0
      */
     protected $_taxCalculationService;
 
@@ -173,37 +156,31 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Price currency
      *
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var CategoryRepositoryInterface
-     * @since 2.0.0
      */
     protected $categoryRepository;
 
     /**
      * @var \Magento\Customer\Api\GroupRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerGroupRepository;
 
     /**
      * @var \Magento\Customer\Api\Data\AddressInterfaceFactory
-     * @since 2.0.0
      */
     protected $addressFactory;
 
     /**
      * @var \Magento\Customer\Api\Data\RegionInterfaceFactory
-     * @since 2.0.0
      */
     protected $regionFactory;
 
@@ -230,7 +207,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Customer\Api\Data\AddressInterfaceFactory $addressFactory
      * @param \Magento\Customer\Api\Data\RegionInterfaceFactory $regionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -283,7 +259,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $store
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreId($store)
     {
@@ -296,7 +271,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * and creating array of categories|product paths for breadcrumbs
      *
      * @return array
-     * @since 2.0.0
      */
     public function getBreadcrumbPath()
     {
@@ -334,7 +308,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $categoryId
      * @return bool
-     * @since 2.0.0
      */
     protected function _isCategoryLink($categoryId)
     {
@@ -351,7 +324,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Return current category object
      *
      * @return \Magento\Catalog\Model\Category|null
-     * @since 2.0.0
      */
     public function getCategory()
     {
@@ -362,7 +334,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve current Product object
      *
      * @return \Magento\Catalog\Model\Product|null
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -373,7 +344,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve Visitor/Customer Last Viewed URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLastViewedUrl()
     {
@@ -412,7 +382,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $sku
      * @param int $length
      * @return string[]
-     * @since 2.0.0
      */
     public function splitSku($sku, $length = 30)
     {
@@ -423,7 +392,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve attribute hidden fields
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAttributeHiddenFields()
     {
@@ -438,7 +406,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve Catalog Price Scope
      *
      * @return int
-     * @since 2.0.0
      */
     public function getPriceScope()
     {
@@ -452,7 +419,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Is Global Price
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isPriceGlobal()
     {
@@ -463,7 +429,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if the store is configured to use static URLs for media
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isUsingStaticUrlsAllowed()
     {
@@ -478,7 +443,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if the parsing of URL directives is allowed for the catalog
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isUrlDirectivesParsingAllowed()
     {
@@ -493,7 +457,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve template processor for catalog content
      *
      * @return \Magento\Framework\Filter\Template
-     * @since 2.0.0
      */
     public function getPageTemplateProcessor()
     {
@@ -504,7 +467,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Whether to display items count for each filter option
      * @param int $storeId Store view ID
      * @return bool
-     * @since 2.0.0
      */
     public function shouldDisplayProductCountOnLayer($storeId = null)
     {
@@ -518,7 +480,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param array $taxAddress
      * @return \Magento\Customer\Api\Data\AddressInterface|null
-     * @since 2.0.0
      */
     private function convertDefaultTaxAddress(array $taxAddress = null)
     {
@@ -552,7 +513,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function getTaxPrice(
         $product,

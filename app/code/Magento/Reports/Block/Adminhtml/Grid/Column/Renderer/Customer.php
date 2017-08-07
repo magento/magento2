@@ -9,7 +9,6 @@ namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
  * Adminhtml Report Customers Reviews renderer
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Customer extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -18,7 +17,6 @@ class Customer extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      *
      * @param \Magento\Framework\DataObject $row
      * @return \Magento\Framework\Phrase|string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

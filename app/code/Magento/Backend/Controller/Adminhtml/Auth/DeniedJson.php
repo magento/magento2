@@ -9,20 +9,17 @@ namespace Magento\Backend\Controller\Adminhtml\Auth;
 /**
  * Class \Magento\Backend\Controller\Adminhtml\Auth\DeniedJson
  *
- * @since 2.0.0
  */
 class DeniedJson extends \Magento\Backend\Controller\Adminhtml\Auth
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -36,7 +33,6 @@ class DeniedJson extends \Magento\Backend\Controller\Adminhtml\Auth
      * Retrieve response for deniedJsonAction()
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getDeniedJson()
     {
@@ -50,7 +46,6 @@ class DeniedJson extends \Magento\Backend\Controller\Adminhtml\Auth
      * Denied JSON action
      *
      * @return \Magento\Framework\Controller\Result\Json
-     * @since 2.0.0
      */
     public function execute()
     {

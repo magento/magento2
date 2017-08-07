@@ -12,7 +12,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Sales\ExportInvoicedExcel
  *
- * @since 2.0.0
  */
 class ExportInvoicedExcel extends \Magento\Reports\Controller\Adminhtml\Report\Sales
 {
@@ -20,7 +19,6 @@ class ExportInvoicedExcel extends \Magento\Reports\Controller\Adminhtml\Report\S
      * Export invoiced report grid to Excel XML format
      *
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -10,7 +10,6 @@ use Magento\Framework\Phrase;
 
 /**
  * @api
- * @since 2.0.0
  */
 abstract class AbstractAggregateException extends LocalizedException
 {
@@ -18,7 +17,6 @@ abstract class AbstractAggregateException extends LocalizedException
      * The array of errors that have been added via the addError() method
      *
      * @var \Magento\Framework\Exception\LocalizedException[]
-     * @since 2.0.0
      */
     protected $errors = [];
 
@@ -26,7 +24,6 @@ abstract class AbstractAggregateException extends LocalizedException
      * The original phrase
      *
      * @var \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     protected $originalPhrase;
 
@@ -34,7 +31,6 @@ abstract class AbstractAggregateException extends LocalizedException
      * An internal variable indicating how many time addError has been called
      *
      * @var int
-     * @since 2.0.0
      */
     private $addErrorCalls = 0;
 
@@ -44,7 +40,6 @@ abstract class AbstractAggregateException extends LocalizedException
      * @param \Magento\Framework\Phrase $phrase
      * @param \Exception $cause
      * @param int $code
-     * @since 2.0.0
      */
     public function __construct(Phrase $phrase, \Exception $cause = null, $code = 0)
     {
@@ -57,7 +52,6 @@ abstract class AbstractAggregateException extends LocalizedException
      *
      * @param \Magento\Framework\Phrase $phrase
      * @return $this
-     * @since 2.0.0
      */
     public function addError(Phrase $phrase)
     {
@@ -88,7 +82,6 @@ abstract class AbstractAggregateException extends LocalizedException
      * Should return true if someone has added different errors to this exception after construction
      *
      * @return bool
-     * @since 2.0.0
      */
     public function wasErrorAdded()
     {
@@ -99,7 +92,6 @@ abstract class AbstractAggregateException extends LocalizedException
      * Get the array of LocalizedException objects. Get an empty array if no errors were added.
      *
      * @return \Magento\Framework\Exception\LocalizedException[]
-     * @since 2.0.0
      */
     public function getErrors()
     {

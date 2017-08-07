@@ -9,13 +9,11 @@ use Magento\Setup\Module\I18n\Dictionary;
 
 /**
  *  Dictionary loader from csv
- * @since 2.0.0
  */
 class Csv extends AbstractFile
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _readFile()
     {

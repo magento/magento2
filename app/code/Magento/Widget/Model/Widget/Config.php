@@ -7,43 +7,36 @@ namespace Magento\Widget\Model\Widget;
 
 /**
  * Widgets Insertion Plugin Config for Editor HTML Element
- * @since 2.0.0
  */
 class Config
 {
     /**
      * @var \Magento\Framework\View\Asset\Repository
-     * @since 2.0.0
      */
     protected $_assetRepo;
 
     /**
      * @var \Magento\Widget\Model\Widget
-     * @since 2.0.0
      */
     protected $_widget;
 
     /**
      * @var \Magento\Backend\Model\UrlInterface
-     * @since 2.0.0
      */
     protected $_backendUrl;
 
     /**
      * @var \Magento\Framework\Url\DecoderInterface
-     * @since 2.0.0
      */
     protected $urlDecoder;
 
     /**
      * @var \Magento\Widget\Model\WidgetFactory
-     * @since 2.0.0
      */
     protected $_widgetFactory;
 
     /**
      * @var \Magento\Framework\Url\EncoderInterface
-     * @since 2.0.0
      */
     protected $urlEncoder;
 
@@ -53,7 +46,6 @@ class Config
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Widget\Model\WidgetFactory $widgetFactory
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Model\UrlInterface $backendUrl,
@@ -74,7 +66,6 @@ class Config
      *
      * @param \Magento\Framework\DataObject $config
      * @return array
-     * @since 2.0.0
      */
     public function getPluginSettings($config)
     {
@@ -95,7 +86,6 @@ class Config
      *
      * @param \Magento\Framework\DataObject $config Editor element config
      * @return string
-     * @since 2.0.0
      */
     public function getWidgetWindowUrl($config)
     {
@@ -123,7 +113,6 @@ class Config
      *
      * @param string[]|string $widgets List of widgets
      * @return string Query param value
-     * @since 2.0.0
      */
     public function encodeWidgetsToQuery($widgets)
     {
@@ -137,7 +126,6 @@ class Config
      *
      * @param string $queryParam Query param value to decode
      * @return string[] Array of widget types
-     * @since 2.0.0
      */
     public function decodeWidgetsFromQuery($queryParam)
     {

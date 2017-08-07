@@ -12,7 +12,6 @@ namespace Magento\Directory\Model\ResourceModel;
  * Region Resource Model
  *
  * @api
- * @since 2.0.0
  */
 class Region extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -20,13 +19,11 @@ class Region extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Table with localized region names
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_regionNameTable;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $_localeResolver;
 
@@ -34,7 +31,6 @@ class Region extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -49,7 +45,6 @@ class Region extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main and locale region name tables
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -64,7 +59,6 @@ class Region extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param mixed $value
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -106,7 +100,6 @@ class Region extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $value
      * @param string $field
      * @return $this
-     * @since 2.0.0
      */
     protected function _loadByCountry($object, $countryId, $value, $field)
     {
@@ -145,7 +138,6 @@ class Region extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $countryId
      *
      * @return $this
-     * @since 2.0.0
      */
     public function loadByCode(\Magento\Directory\Model\Region $region, $regionCode, $countryId)
     {
@@ -159,7 +151,6 @@ class Region extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $regionName
      * @param string $countryId
      * @return $this
-     * @since 2.0.0
      */
     public function loadByName(\Magento\Directory\Model\Region $region, $regionName, $countryId)
     {

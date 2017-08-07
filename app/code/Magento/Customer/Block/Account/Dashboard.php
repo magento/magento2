@@ -12,37 +12,31 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
  * Customer dashboard block
  *
  * @api
- * @since 2.0.0
  */
 class Dashboard extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Newsletter\Model\Subscriber
-     * @since 2.0.0
      */
     protected $subscription;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var \Magento\Newsletter\Model\SubscriberFactory
-     * @since 2.0.0
      */
     protected $subscriberFactory;
 
     /**
      * @var CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var AccountManagementInterface
-     * @since 2.0.0
      */
     protected $customerAccountManagement;
 
@@ -55,7 +49,6 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $customerAccountManagement
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -76,7 +69,6 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      * Return the Customer given the customer Id stored in the session.
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface
-     * @since 2.0.0
      */
     public function getCustomer()
     {
@@ -87,7 +79,6 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      * Retrieve the Url for editing the customer's account.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAccountUrl()
     {
@@ -98,7 +89,6 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      * Retrieve the Url for customer addresses.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAddressesUrl()
     {
@@ -110,7 +100,6 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return string
-     * @since 2.0.0
      */
     public function getAddressEditUrl($address)
     {
@@ -124,7 +113,6 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      * Retrieve the Url for customer orders.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getOrdersUrl()
     {
@@ -135,7 +123,6 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      * Retrieve the Url for customer reviews.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getReviewsUrl()
     {
@@ -146,7 +133,6 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      * Retrieve the Url for managing customer wishlist.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getWishlistUrl()
     {
@@ -157,7 +143,6 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      * Retrieve the subscription object (i.e. the subscriber).
      *
      * @return \Magento\Newsletter\Model\Subscriber
-     * @since 2.0.0
      */
     public function getSubscriptionObject()
     {
@@ -173,7 +158,6 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      * Retrieve the Url for managing newsletter subscriptions.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getManageNewsletterUrl()
     {
@@ -184,7 +168,6 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      * Retrieve subscription text, either subscribed or not.
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getSubscriptionText()
     {
@@ -199,7 +182,6 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      * Retrieve the customer's primary addresses (i.e. default billing and shipping).
      *
      * @return \Magento\Customer\Api\Data\AddressInterface[]|bool
-     * @since 2.0.0
      */
     public function getPrimaryAddresses()
     {
@@ -231,7 +213,6 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      * \Magento\Customer\Block\Address\Book - Because of secure Url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -246,7 +227,6 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      * Create an instance of a subscriber.
      *
      * @return \Magento\Newsletter\Model\Subscriber
-     * @since 2.0.0
      */
     protected function _createSubscriber()
     {

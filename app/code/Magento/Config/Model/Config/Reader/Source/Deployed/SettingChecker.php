@@ -15,25 +15,25 @@ use Magento\Framework\App\Config\ScopeCodeResolver;
 /**
  * Class for checking settings that defined in config file
  * @api
- * @since 2.2.0
+ * @since 2.1.3
  */
 class SettingChecker
 {
     /**
      * @var DeploymentConfig
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $config;
 
     /**
      * @var PlaceholderInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $placeholder;
 
     /**
      * @var ScopeCodeResolver
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $scopeCodeResolver;
 
@@ -41,7 +41,7 @@ class SettingChecker
      * @param DeploymentConfig $config
      * @param PlaceholderFactory $placeholderFactory
      * @param ScopeCodeResolver $scopeCodeResolver
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(
         DeploymentConfig $config,
@@ -60,7 +60,7 @@ class SettingChecker
      * @param string $scope
      * @param string|null $scopeCode
      * @return boolean
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function isReadOnly($path, $scope, $scopeCode = null)
     {
@@ -85,7 +85,7 @@ class SettingChecker
      * @param string $scopeCode
      * @param string|null $scopeCode
      * @return string|null
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function getPlaceholderValue($path, $scope, $scopeCode = null)
     {
@@ -97,7 +97,7 @@ class SettingChecker
      *
      * @param string $placeholder
      * @return string|null
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function getEnvValue($placeholder)
     {
@@ -114,7 +114,7 @@ class SettingChecker
      * @param string $scope
      * @param string $scopeCode
      * @return string
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function resolvePath($scope, $scopeCode)
     {

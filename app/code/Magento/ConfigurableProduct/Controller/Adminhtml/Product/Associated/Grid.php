@@ -13,20 +13,17 @@ use Magento\Framework\View\Result\LayoutFactory;
 /**
  * Class \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Associated\Grid
  *
- * @since 2.0.0
  */
 class Grid extends Action
 {
     /**
      * @var LayoutFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @param Context $context
      * @param LayoutFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -40,7 +37,6 @@ class Grid extends Action
      * Index action
      *
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

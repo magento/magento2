@@ -10,19 +10,16 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Labels extends \Magento\Backend\Block\Template
 {
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_registry;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Catalog::catalog/product/attribute/labels.phtml';
 
@@ -31,7 +28,6 @@ class Labels extends \Magento\Backend\Block\Template
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -46,7 +42,6 @@ class Labels extends \Magento\Backend\Block\Template
      * Retrieve stores collection with default store
      *
      * @return \Magento\Store\Model\ResourceModel\Store\Collection
-     * @since 2.0.0
      */
     public function getStores()
     {
@@ -60,7 +55,6 @@ class Labels extends \Magento\Backend\Block\Template
      * Retrieve frontend labels of attribute for each store
      *
      * @return array
-     * @since 2.0.0
      */
     public function getLabelValues()
     {
@@ -79,7 +73,6 @@ class Labels extends \Magento\Backend\Block\Template
      *
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     private function getAttributeObject()
     {

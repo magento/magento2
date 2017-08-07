@@ -9,7 +9,6 @@ namespace Magento\Framework\Setup;
  * DB resource interface
  *
  * @api
- * @since 2.0.0
  */
 interface SetupInterface
 {
@@ -17,7 +16,6 @@ interface SetupInterface
      * Gets connection object
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function getConnection();
 
@@ -27,7 +25,6 @@ interface SetupInterface
      * @param string $tableName
      * @param string $realTableName
      * @return $this
-     * @since 2.0.0
      */
     public function setTable($tableName, $realTableName);
 
@@ -36,7 +33,6 @@ interface SetupInterface
      *
      * @param string|array $tableName
      * @return string
-     * @since 2.0.0
      */
     public function getTable($tableName);
 
@@ -54,7 +50,6 @@ interface SetupInterface
      *
      * @param string $table
      * @return bool
-     * @since 2.0.0
      */
     public function tableExists($table);
 
@@ -63,7 +58,6 @@ interface SetupInterface
      *
      * @param string $sql
      * @return $this
-     * @since 2.0.0
      */
     public function run($sql);
 
@@ -71,7 +65,6 @@ interface SetupInterface
      * Prepares database before install/upgrade
      *
      * @return $this
-     * @since 2.0.0
      */
     public function startSetup();
 
@@ -79,7 +72,6 @@ interface SetupInterface
      * Prepares database after install/upgrade
      *
      * @return $this
-     * @since 2.0.0
      */
     public function endSetup();
 }

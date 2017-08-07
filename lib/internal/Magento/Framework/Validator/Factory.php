@@ -11,7 +11,6 @@ use Magento\Framework\Cache\FrontendInterface;
 /**
  * Class \Magento\Framework\Validator\Factory
  *
- * @since 2.0.0
  */
 class Factory
 {
@@ -20,7 +19,6 @@ class Factory
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -28,13 +26,11 @@ class Factory
      * Validator config files
      *
      * @var array|null
-     * @since 2.0.0
      */
     protected $_configFiles = null;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     private $isDefaultTranslatorInitialized = false;
 
@@ -68,7 +64,6 @@ class Factory
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      * @param FrontendInterface $cache
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -107,7 +102,6 @@ class Factory
      * Create and set default translator to \Magento\Framework\Validator\AbstractValidator.
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _initializeDefaultTranslator()
     {
@@ -131,7 +125,6 @@ class Factory
      * Will instantiate \Magento\Framework\Validator\Config
      *
      * @return \Magento\Framework\Validator\Config
-     * @since 2.0.0
      */
     public function getValidatorConfig()
     {
@@ -150,7 +143,6 @@ class Factory
      * @param string $groupName
      * @param array|null $builderConfig
      * @return \Magento\Framework\Validator\Builder
-     * @since 2.0.0
      */
     public function createValidatorBuilder($entityName, $groupName, array $builderConfig = null)
     {
@@ -165,7 +157,6 @@ class Factory
      * @param string $groupName
      * @param array|null $builderConfig
      * @return \Magento\Framework\Validator
-     * @since 2.0.0
      */
     public function createValidator($entityName, $groupName, array $builderConfig = null)
     {

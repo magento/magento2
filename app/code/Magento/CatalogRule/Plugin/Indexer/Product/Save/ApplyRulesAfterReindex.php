@@ -10,19 +10,19 @@ use Magento\Catalog\Model\Product;
 
 /**
  * Plugin for Magento\Catalog\Model\Product
- * @since 2.1.0
+ * @since 2.0.1
  */
 class ApplyRulesAfterReindex
 {
     /**
      * @var ProductRuleProcessor
-     * @since 2.1.0
+     * @since 2.0.1
      */
     protected $productRuleProcessor;
 
     /**
      * @param ProductRuleProcessor $productRuleProcessor
-     * @since 2.1.0
+     * @since 2.0.1
      */
     public function __construct(ProductRuleProcessor $productRuleProcessor)
     {

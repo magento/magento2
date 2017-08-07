@@ -23,7 +23,6 @@ use Magento\Framework\Data\Collection;
  * At least one target directory must be set
  *
  * @api
- * @since 2.0.0
  */
 class Filesystem extends \Magento\Framework\Data\Collection
 {
@@ -31,7 +30,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * Target directory
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_targetDirs = [];
 
@@ -39,7 +37,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * Whether to collect files
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_collectFiles = true;
 
@@ -47,7 +44,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * Whether to collect directories before files
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_dirsFirst = true;
 
@@ -55,7 +51,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * Whether to collect recursively
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_collectRecursively = true;
 
@@ -63,7 +58,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * Whether to collect dirs
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_collectDirs = false;
 
@@ -71,7 +65,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * \Directory names regex pre-filter
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_allowedDirsMask = '/^[a-z0-9\.\-\_]+$/i';
 
@@ -79,7 +72,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * Filenames regex pre-filter
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_allowedFilesMask = '/^[a-z0-9\.\-\_]+\.[a-z0-9]+$/i';
 
@@ -87,7 +79,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * Disallowed filenames regex pre-filter match for better versatility
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_disallowedFilesMask = '';
 
@@ -97,7 +88,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @var int
      * @see Collection::$_filter
      * @see Collection::$_isFiltersRendered
-     * @since 2.0.0
      */
     private $_filterIncrement = 0;
 
@@ -107,7 +97,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @var array
      * @see Collection::$_filter
      * @see Collection::$_isFiltersRendered
-     * @since 2.0.0
      */
     private $_filterBrackets = [];
 
@@ -117,7 +106,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @var string
      * @see Collection::$_filter
      * @see Collection::$_isFiltersRendered
-     * @since 2.0.0
      */
     private $_filterEvalRendered = '';
 
@@ -125,7 +113,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * Collecting items helper variable
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_collectedDirs = [];
 
@@ -133,7 +120,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * Collecting items helper variable
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_collectedFiles = [];
 
@@ -143,7 +129,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      *
      * @param string $regex
      * @return $this
-     * @since 2.0.0
      */
     public function setDirsFilter($regex)
     {
@@ -157,7 +142,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      *
      * @param string $regex
      * @return $this
-     * @since 2.0.0
      */
     public function setFilesFilter($regex)
     {
@@ -171,7 +155,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      *
      * @param string $regex
      * @return $this
-     * @since 2.0.0
      */
     public function setDisallowedFilesFilter($regex)
     {
@@ -184,7 +167,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      *
      * @param bool $value
      * @return $this
-     * @since 2.0.0
      */
     public function setCollectDirs($value)
     {
@@ -197,7 +179,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      *
      * @param bool $value
      * @return $this
-     * @since 2.0.0
      */
     public function setCollectFiles($value)
     {
@@ -210,7 +191,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      *
      * @param bool $value
      * @return $this
-     * @since 2.0.0
      */
     public function setCollectRecursively($value)
     {
@@ -224,7 +204,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @param string $value
      * @return $this
      * @throws \Exception
-     * @since 2.0.0
      */
     public function addTargetDir($value)
     {
@@ -242,7 +221,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      *
      * @param bool $value
      * @return $this
-     * @since 2.0.0
      */
     public function setDirsFirst($value)
     {
@@ -257,7 +235,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _collectRecursive($dir)
     {
@@ -311,7 +288,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws \Exception
-     * @since 2.0.0
      */
     public function loadData($printQuery = false, $logQuery = false)
     {
@@ -364,7 +340,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      *
      * @param string $attributeName '_collectedFiles' | '_collectedDirs'
      * @return void
-     * @since 2.0.0
      */
     private function _generateAndFilterAndSort($attributeName)
     {
@@ -395,7 +370,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @param array $a
      * @param array $b
      * @return int|void
-     * @since 2.0.0
      */
     protected function _usort($a, $b)
     {
@@ -413,7 +387,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @param   string $field
      * @param   string $direction
      * @return  Collection
-     * @since 2.0.0
      */
     public function setOrder($field, $direction = self::SORT_ORDER_DESC)
     {
@@ -426,7 +399,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      *
      * @param string $filename
      * @return array
-     * @since 2.0.0
      */
     protected function _generateRow($filename)
     {
@@ -446,7 +418,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @param callback $callback
      * @param bool $isInverted
      * @return $this
-     * @since 2.0.0
      */
     public function addCallbackFilter($field, $value, $type, $callback, $isInverted = false)
     {
@@ -469,7 +440,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.EvalExpression)
-     * @since 2.0.0
      */
     protected function _filterRow($row)
     {
@@ -512,7 +482,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @param array $callbackParams
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     protected function _invokeFilter($callback, $callbackParams)
     {
@@ -534,7 +503,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function addFieldToFilter($field, $cond, $type = 'and')
     {
@@ -663,7 +631,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @param string $bracket
      * @param bool $isAnd
      * @return $this
-     * @since 2.0.0
      */
     protected function _addFilterBracket($bracket = '(', $isAnd = true)
     {
@@ -681,7 +648,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @param int $increment
      * @param bool $isAnd
      * @return string
-     * @since 2.0.0
      */
     protected function _renderConditionBeforeFilterElement($increment, $isAnd)
     {
@@ -706,7 +672,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @param string $type
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function addFilter($field, $value, $type = 'and')
     {
@@ -717,7 +682,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * Get all ids of collected items
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllIds()
     {
@@ -733,7 +697,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @return bool
      * @see addFieldToFilter()
      * @see addCallbackFilter()
-     * @since 2.0.0
      */
     public function filterCallbackLike($field, $filterValue, $row)
     {
@@ -753,7 +716,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @return bool
      * @see addFieldToFilter()
      * @see addCallbackFilter()
-     * @since 2.0.0
      */
     public function filterCallbackEq($field, $filterValue, $row)
     {
@@ -769,7 +731,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @return bool
      * @see addFieldToFilter()
      * @see addCallbackFilter()
-     * @since 2.0.0
      */
     public function filterCallbackInArray($field, $filterValue, $row)
     {
@@ -786,7 +747,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @see addFieldToFilter()
      * @see addCallbackFilter()
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function filterCallbackIsNull($field, $filterValue, $row)
     {
@@ -802,7 +762,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @return bool
      * @see addFieldToFilter()
      * @see addCallbackFilter()
-     * @since 2.0.0
      */
     public function filterCallbackIsMoreThan($field, $filterValue, $row)
     {
@@ -818,7 +777,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @return bool
      * @see addFieldToFilter()
      * @see addCallbackFilter()
-     * @since 2.0.0
      */
     public function filterCallbackIsLessThan($field, $filterValue, $row)
     {

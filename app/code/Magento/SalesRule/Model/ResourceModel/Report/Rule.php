@@ -9,19 +9,16 @@ namespace Magento\SalesRule\Model\ResourceModel\Report;
  * Rule report resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Rule extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
 {
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Report\Rule\CreatedatFactory
-     * @since 2.0.0
      */
     protected $_createdatFactory;
 
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Report\Rule\UpdatedatFactory
-     * @since 2.0.0
      */
     protected $_updatedatFactory;
 
@@ -35,7 +32,6 @@ class Rule extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
      * @param \Magento\SalesRule\Model\ResourceModel\Report\Rule\CreatedatFactory $createdatFactory
      * @param \Magento\SalesRule\Model\ResourceModel\Report\Rule\UpdatedatFactory $updatedatFactory
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -65,7 +61,6 @@ class Rule extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
      * Resource Report Rule constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -78,7 +73,6 @@ class Rule extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
      * @param mixed|null $from
      * @param mixed|null $to
      * @return $this
-     * @since 2.0.0
      */
     public function aggregate($from = null, $to = null)
     {
@@ -93,7 +87,6 @@ class Rule extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
      * Get all unique Rule Names from aggregated coupons usage data
      *
      * @return array
-     * @since 2.0.0
      */
     public function getUniqRulesNamesList()
     {

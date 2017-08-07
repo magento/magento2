@@ -7,7 +7,6 @@ namespace Magento\CatalogInventory\Model\System\Config\Backend;
 
 /**
  * Backend for serialized array data
- * @since 2.0.0
  */
 class Minsaleqty extends \Magento\Framework\App\Config\Value
 {
@@ -15,7 +14,6 @@ class Minsaleqty extends \Magento\Framework\App\Config\Value
      * Catalog inventory minsaleqty
      *
      * @var \Magento\CatalogInventory\Helper\Minsaleqty
-     * @since 2.0.0
      */
     protected $_catalogInventoryMinsaleqty = null;
 
@@ -28,7 +26,6 @@ class Minsaleqty extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -48,7 +45,6 @@ class Minsaleqty extends \Magento\Framework\App\Config\Value
      * Process data after load
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -61,7 +57,6 @@ class Minsaleqty extends \Magento\Framework\App\Config\Value
      * Prepare data before save
      *
      * @return void
-     * @since 2.0.0
      */
     public function beforeSave()
     {

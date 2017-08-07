@@ -12,32 +12,28 @@ use Magento\Framework\Controller\Result\JsonFactory;
 
 /**
  * Customer section controller
- * @since 2.0.0
  */
 class Load extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var Identifier
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     protected $sectionIdentifier;
 
     /**
      * @var SectionPoolInterface
-     * @since 2.0.0
      */
     protected $sectionPool;
 
     /**
      * @var \Magento\Framework\Escaper
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private $escaper;
 
@@ -47,7 +43,6 @@ class Load extends \Magento\Framework\App\Action\Action
      * @param Identifier $sectionIdentifier
      * @param SectionPoolInterface $sectionPool
      * @param Escaper $escaper
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -65,7 +60,6 @@ class Load extends \Magento\Framework\App\Action\Action
 
     /**
      * @return \Magento\Framework\Controller\Result\Json
-     * @since 2.0.0
      */
     public function execute()
     {

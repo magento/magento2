@@ -9,7 +9,6 @@ use Magento\Framework\Api\CriteriaInterface;
 
 /**
  * Class GenericMapper
- * @since 2.0.0
  */
 class GenericMapper extends AbstractMapper
 {
@@ -17,7 +16,6 @@ class GenericMapper extends AbstractMapper
      * Set initial conditions
      *
      * @return void
-     * @since 2.0.0
      */
     protected function init()
     {
@@ -29,7 +27,6 @@ class GenericMapper extends AbstractMapper
      *
      * @param \Magento\Framework\Api\CriteriaInterface[] $criteriaList
      * @return void
-     * @since 2.0.0
      */
     public function mapCriteriaList(array $criteriaList)
     {
@@ -46,7 +43,6 @@ class GenericMapper extends AbstractMapper
      *
      * @param array $filters
      * @return void
-     * @since 2.0.0
      */
     public function mapFilters(array $filters)
     {
@@ -77,7 +73,6 @@ class GenericMapper extends AbstractMapper
      *
      * @param array $orders
      * @return void
-     * @since 2.0.0
      */
     public function mapOrders(array $orders)
     {
@@ -93,7 +88,6 @@ class GenericMapper extends AbstractMapper
      * @throws \Zend_Db_Select_Exception
      * @return void
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function mapFields(array $fields)
     {
@@ -127,7 +121,6 @@ class GenericMapper extends AbstractMapper
      * @param int $offset
      * @param int $size
      * @return void
-     * @since 2.0.0
      */
     public function mapLimit($offset, $size)
     {
@@ -139,7 +132,6 @@ class GenericMapper extends AbstractMapper
      *
      * @param bool $flag
      * @return void
-     * @since 2.0.0
      */
     public function mapDistinct($flag)
     {

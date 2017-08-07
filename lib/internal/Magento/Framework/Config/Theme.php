@@ -11,7 +11,6 @@ namespace Magento\Framework\Config;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Theme
 {
@@ -24,13 +23,11 @@ class Theme
      * Data extracted from the configuration file
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_data;
 
     /**
      * @var \Magento\Framework\Config\Dom\UrnResolver
-     * @since 2.0.0
      */
     protected $urnResolver;
 
@@ -39,7 +36,6 @@ class Theme
      *
      * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
      * @param string $configContent
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\Dom\UrnResolver $urnResolver,
@@ -53,7 +49,6 @@ class Theme
      * Get absolute path to theme.xsd
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSchemaFile()
     {
@@ -66,7 +61,6 @@ class Theme
      * @param string $configContent
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _extractData($configContent)
     {
@@ -99,7 +93,6 @@ class Theme
      * Get title for specified theme and package code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getThemeTitle()
     {
@@ -110,7 +103,6 @@ class Theme
      * Get theme media data
      *
      * @return array
-     * @since 2.0.0
      */
     public function getMedia()
     {
@@ -121,7 +113,6 @@ class Theme
      * Retrieve a parent theme code
      *
      * @return array|null
-     * @since 2.0.0
      */
     public function getParentTheme()
     {

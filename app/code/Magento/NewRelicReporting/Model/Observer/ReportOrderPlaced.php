@@ -11,26 +11,22 @@ use Magento\NewRelicReporting\Model\Config;
 
 /**
  * Class ReportOrderPlaced
- * @since 2.0.0
  */
 class ReportOrderPlaced implements ObserverInterface
 {
     /**
      * @var Config
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\NewRelicReporting\Model\OrdersFactory
-     * @since 2.0.0
      */
     protected $ordersFactory;
 
     /**
      * @param Config $config
      * @param \Magento\NewRelicReporting\Model\OrdersFactory $ordersFactory
-     * @since 2.0.0
      */
     public function __construct(
         Config $config,
@@ -45,7 +41,6 @@ class ReportOrderPlaced implements ObserverInterface
      *
      * @param Observer $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

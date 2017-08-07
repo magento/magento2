@@ -14,7 +14,6 @@ use Magento\Framework\App\ObjectManager;
  * GoogleAnalytics Page Block
  *
  * @api
- * @since 2.0.0
  */
 class Ga extends \Magento\Framework\View\Element\Template
 {
@@ -22,13 +21,11 @@ class Ga extends \Magento\Framework\View\Element\Template
      * Google analytics data
      *
      * @var \Magento\GoogleAnalytics\Helper\Data
-     * @since 2.0.0
      */
     protected $_googleAnalyticsData = null;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
-     * @since 2.0.0
      */
     protected $_salesOrderCollection;
 
@@ -44,7 +41,6 @@ class Ga extends \Magento\Framework\View\Element\Template
      * @param \Magento\GoogleAnalytics\Helper\Data $googleAnalyticsData
      * @param array $data
      * @param \Magento\Cookie\Helper\Cookie|null $cookieHelper
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -64,7 +60,6 @@ class Ga extends \Magento\Framework\View\Element\Template
      *
      * @param string $path
      * @return mixed
-     * @since 2.0.0
      */
     public function getConfig($path)
     {
@@ -75,7 +70,6 @@ class Ga extends \Magento\Framework\View\Element\Template
      * Get a specific page name (may be customized via layout)
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getPageName()
     {
@@ -91,7 +85,6 @@ class Ga extends \Magento\Framework\View\Element\Template
      * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/method-reference#set
      * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/method-reference#gaObjectMethods
      * @deprecated 2.2.0 please use getPageTrackingData method
-     * @since 2.0.0
      */
     public function getPageTrackingCode($accountId)
     {
@@ -113,7 +106,6 @@ class Ga extends \Magento\Framework\View\Element\Template
      *
      * @return string|void
      * @deprecated 2.2.0 please use getOrdersTrackingData method
-     * @since 2.0.0
      */
     public function getOrdersTrackingCode()
     {
@@ -168,7 +160,6 @@ class Ga extends \Magento\Framework\View\Element\Template
      * Render GA tracking scripts
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

@@ -10,7 +10,6 @@ use Magento\Framework\Api\SearchResultsInterface;
 /**
  * Interface for cms page search results.
  * @api
- * @since 2.0.0
  */
 interface PageSearchResultsInterface extends SearchResultsInterface
 {
@@ -18,7 +17,6 @@ interface PageSearchResultsInterface extends SearchResultsInterface
      * Get pages list.
      *
      * @return \Magento\Cms\Api\Data\PageInterface[]
-     * @since 2.0.0
      */
     public function getItems();
 
@@ -27,7 +25,6 @@ interface PageSearchResultsInterface extends SearchResultsInterface
      *
      * @param \Magento\Cms\Api\Data\PageInterface[] $items
      * @return $this
-     * @since 2.0.0
      */
     public function setItems(array $items);
 }

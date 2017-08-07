@@ -14,25 +14,21 @@ use Magento\Downloadable\Model\Link\Purchased\Item;
  * Block to display downloadable links bought by customer
  *
  * @api
- * @since 2.0.0
  */
 class ListProducts extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Customer\Helper\Session\CurrentCustomer
-     * @since 2.0.0
      */
     protected $currentCustomer;
 
     /**
      * @var \Magento\Downloadable\Model\ResourceModel\Link\Purchased\CollectionFactory
-     * @since 2.0.0
      */
     protected $_linksFactory;
 
     /**
      * @var \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory
-     * @since 2.0.0
      */
     protected $_itemsFactory;
 
@@ -42,7 +38,6 @@ class ListProducts extends \Magento\Framework\View\Element\Template
      * @param \Magento\Downloadable\Model\ResourceModel\Link\Purchased\CollectionFactory $linksFactory
      * @param \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -61,7 +56,6 @@ class ListProducts extends \Magento\Framework\View\Element\Template
      * Class constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -94,7 +88,6 @@ class ListProducts extends \Magento\Framework\View\Element\Template
      * Enter description here...
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -119,7 +112,6 @@ class ListProducts extends \Magento\Framework\View\Element\Template
      *
      * @param integer $orderId
      * @return string
-     * @since 2.0.0
      */
     public function getOrderViewUrl($orderId)
     {
@@ -130,7 +122,6 @@ class ListProducts extends \Magento\Framework\View\Element\Template
      * Enter description here...
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -145,7 +136,6 @@ class ListProducts extends \Magento\Framework\View\Element\Template
      *
      * @param Item $item
      * @return \Magento\Framework\Phrase|int
-     * @since 2.0.0
      */
     public function getRemainingDownloads($item)
     {
@@ -161,7 +151,6 @@ class ListProducts extends \Magento\Framework\View\Element\Template
      *
      * @param Item $item
      * @return string
-     * @since 2.0.0
      */
     public function getDownloadUrl($item)
     {
@@ -173,7 +162,6 @@ class ListProducts extends \Magento\Framework\View\Element\Template
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsOpenInNewWindow()
     {

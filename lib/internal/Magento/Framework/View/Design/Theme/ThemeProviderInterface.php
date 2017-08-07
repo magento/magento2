@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Design\Theme;
 
 /**
  * Interface ThemeProviderInterface
- * @since 2.0.0
  */
 interface ThemeProviderInterface
 {
@@ -16,7 +15,6 @@ interface ThemeProviderInterface
      *
      * @param string $fullPath
      * @return \Magento\Framework\View\Design\ThemeInterface
-     * @since 2.0.0
      */
     public function getThemeByFullPath($fullPath);
 
@@ -26,7 +24,6 @@ interface ThemeProviderInterface
      * @param string $area
      * @param int $type
      * @return array
-     * @since 2.0.0
      */
     public function getThemeCustomizations($area, $type = \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL);
 
@@ -35,7 +32,6 @@ interface ThemeProviderInterface
      *
      * @param int $themeId
      * @return \Magento\Framework\View\Design\ThemeInterface
-     * @since 2.0.0
      */
     public function getThemeById($themeId);
 }

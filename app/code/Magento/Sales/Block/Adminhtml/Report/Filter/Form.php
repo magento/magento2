@@ -11,7 +11,6 @@ namespace Magento\Sales\Block\Adminhtml\Report\Filter;
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
 {
@@ -19,7 +18,6 @@ class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
      * Order config
      *
      * @var \Magento\Sales\Model\Order\ConfigFactory
-     * @since 2.0.0
      */
     protected $_orderConfig;
 
@@ -29,7 +27,6 @@ class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Sales\Model\Order\ConfigFactory $orderConfig
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -46,7 +43,6 @@ class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
      * Add fields to base fieldset which are general to sales reports
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {

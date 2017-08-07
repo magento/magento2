@@ -12,7 +12,6 @@ use Magento\Framework\Component\ComponentRegistrarInterface;
  * Fallback Rule Module
  *
  * Propagates all parameters necessary for modular rule
- * @since 2.0.0
  */
 class Module implements RuleInterface
 {
@@ -20,7 +19,6 @@ class Module implements RuleInterface
      * Rule
      *
      * @var RuleInterface
-     * @since 2.0.0
      */
     protected $rule;
 
@@ -28,7 +26,6 @@ class Module implements RuleInterface
      * Component registrar
      *
      * @var ComponentRegistrarInterface
-     * @since 2.0.0
      */
     private $componentRegistrar;
 
@@ -37,7 +34,6 @@ class Module implements RuleInterface
      *
      * @param RuleInterface $rule
      * @param ComponentRegistrarInterface $componentRegistrar
-     * @since 2.0.0
      */
     public function __construct(RuleInterface $rule, ComponentRegistrarInterface $componentRegistrar)
     {
@@ -51,7 +47,6 @@ class Module implements RuleInterface
      * @param array $params
      * @return array
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function getPatternDirs(array $params)
     {

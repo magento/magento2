@@ -29,7 +29,6 @@ use Magento\Framework\Filesystem\DirectoryList;
  * @method string getLastModified()
  * @method \Magento\Paypal\Model\Report\Settlement setLastModified(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Settlement extends \Magento\Framework\Model\AbstractModel
 {
@@ -62,13 +61,11 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      * Reports rows storage
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_rows = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_csvColumns = [
         'old' => [
@@ -153,19 +150,16 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     * @since 2.0.0
      */
     protected $_tmpDirectory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -201,7 +195,6 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -226,7 +219,6 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -237,7 +229,6 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      * Stop saving process if file with same report date, account ID and last modified date was already ferched
      *
      * @return \Magento\Framework\Model\AbstractModel
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -258,7 +249,6 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Filesystem\Io\Sftp $connection
      * @return int Number of report rows that were fetched and saved successfully
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function fetchAndSave(\Magento\Framework\Filesystem\Io\Sftp $connection)
     {
@@ -323,7 +313,6 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      * @param array $config
      * @return \Magento\Framework\Filesystem\Io\Sftp
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public static function createConnection(array $config)
     {
@@ -354,7 +343,6 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      * @param string $format CSV format(column names)
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function parseCsv($localCsv, $format = 'new')
     {
@@ -479,7 +467,6 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      * Load report by unique key (accoutn + report date)
      *
      * @return $this
-     * @since 2.0.0
      */
     public function loadByAccountAndDate()
     {
@@ -491,7 +478,6 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      * Return collected rows for further processing.
      *
      * @return array
-     * @since 2.0.0
      */
     public function getRows()
     {
@@ -504,7 +490,6 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      * @param string $field Field name in row model
      * @return \Magento\Framework\Phrase|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function getFieldLabel($field)
     {
@@ -552,7 +537,6 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function getSftpCredentials($automaticMode = false)
     {
@@ -619,7 +603,6 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $filename
      * @return string
-     * @since 2.0.0
      */
     protected function _fileNameToDate($filename)
     {
@@ -634,7 +617,6 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      *
      * @param array $list List of files as per $connection->rawls()
      * @return array Trimmed down list of files
-     * @since 2.0.0
      */
     protected function _filterReportsList($list)
     {

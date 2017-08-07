@@ -12,19 +12,16 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Class \Magento\Quote\Model\QuoteRepository\Plugin\Authorization
  *
- * @since 2.0.0
  */
 class Authorization
 {
     /**
      * @var \Magento\Authorization\Model\UserContextInterface
-     * @since 2.0.0
      */
     protected $userContext;
 
     /**
      * @param \Magento\Authorization\Model\UserContextInterface $userContext
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Authorization\Model\UserContextInterface $userContext
@@ -40,7 +37,6 @@ class Authorization
      * @return \Magento\Quote\Model\Quote
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterGetActive(
         \Magento\Quote\Api\CartRepositoryInterface $subject,
@@ -60,7 +56,6 @@ class Authorization
      * @return \Magento\Quote\Model\Quote
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterGetActiveForCustomer(
         \Magento\Quote\Api\CartRepositoryInterface $subject,
@@ -77,7 +72,6 @@ class Authorization
      *
      * @param \Magento\Quote\Model\Quote $quote
      * @return bool
-     * @since 2.0.0
      */
     protected function isAllowed(\Magento\Quote\Model\Quote $quote)
     {

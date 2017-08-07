@@ -9,13 +9,11 @@ namespace Magento\Review\Block\Adminhtml\Rating\Edit;
  * Admin rating left menu
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -27,7 +25,6 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {

@@ -10,7 +10,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Class DesignExceptions
- * @since 2.0.0
  */
 class DesignExceptions
 {
@@ -18,7 +17,6 @@ class DesignExceptions
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
@@ -26,7 +24,6 @@ class DesignExceptions
      * Exception config path
      *
      * @var string
-     * @since 2.0.0
      */
     protected $exceptionConfigPath;
 
@@ -34,7 +31,6 @@ class DesignExceptions
      * Scope Type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $scopeType;
 
@@ -51,7 +47,6 @@ class DesignExceptions
      * @param string $exceptionConfigPath
      * @param string $scopeType
      * @param Json|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -70,7 +65,6 @@ class DesignExceptions
      *
      * @param \Magento\Framework\App\Request\Http $request
      * @return string|bool
-     * @since 2.0.0
      */
     public function getThemeByRequest(\Magento\Framework\App\Request\Http $request)
     {

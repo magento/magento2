@@ -16,6 +16,7 @@ class InstallData implements InstallDataInterface
 {
     /**
      * @var SequenceCreator
+     * @since 2.2.0
      */
     private $sequenceCreator;
 

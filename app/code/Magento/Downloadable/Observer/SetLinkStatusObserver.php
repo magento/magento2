@@ -11,7 +11,6 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Class \Magento\Downloadable\Observer\SetLinkStatusObserver
  *
- * @since 2.0.0
  */
 class SetLinkStatusObserver implements ObserverInterface
 {
@@ -19,20 +18,17 @@ class SetLinkStatusObserver implements ObserverInterface
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory
-     * @since 2.0.0
      */
     protected $_itemsFactory;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -50,7 +46,6 @@ class SetLinkStatusObserver implements ObserverInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
@@ -155,7 +150,6 @@ class SetLinkStatusObserver implements ObserverInterface
 
     /**
      * @return \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection
-     * @since 2.0.0
      */
     protected function _createItemsCollection()
     {

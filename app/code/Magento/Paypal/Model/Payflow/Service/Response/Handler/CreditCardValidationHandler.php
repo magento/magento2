@@ -12,13 +12,11 @@ use Magento\Paypal\Model\Info;
 /**
  * Class \Magento\Paypal\Model\Payflow\Service\Response\Handler\CreditCardValidationHandler
  *
- * @since 2.0.0
  */
 class CreditCardValidationHandler implements HandlerInterface
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     private $fieldsToHandle = [
         Info::PAYPAL_CVV2MATCH,
@@ -29,13 +27,11 @@ class CreditCardValidationHandler implements HandlerInterface
 
     /**
      * @var Info
-     * @since 2.0.0
      */
     private $paypalInfoManager;
 
     /**
      * @param Info $paypalInfoManager
-     * @since 2.0.0
      */
     public function __construct(Info $paypalInfoManager)
     {
@@ -44,7 +40,6 @@ class CreditCardValidationHandler implements HandlerInterface
 
     /**
      * {inheritdoc}
-     * @since 2.0.0
      */
     public function handle(InfoInterface $payment, DataObject $response)
     {

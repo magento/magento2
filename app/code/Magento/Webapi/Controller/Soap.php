@@ -16,7 +16,6 @@ use Magento\Framework\Webapi\Response;
  * SOAP Web API entry point.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Soap implements \Magento\Framework\App\FrontControllerInterface
 {
@@ -29,57 +28,46 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
 
     /**#@-*/
 
-    /**
-     * @var \Magento\Webapi\Model\Soap\Server
-     * @since 2.0.0
-     */
+    /**#@-*/
     protected $_soapServer;
 
     /**
      * @var \Magento\Webapi\Model\Soap\Wsdl\Generator
-     * @since 2.0.0
      */
     protected $_wsdlGenerator;
 
     /**
      * @var Request
-     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @var Response
-     * @since 2.0.0
      */
     protected $_response;
 
     /**
      * @var ErrorProcessor
-     * @since 2.0.0
      */
     protected $_errorProcessor;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $_localeResolver;
 
     /**
      * @var PathProcessor
-     * @since 2.0.0
      */
     protected $_pathProcessor;
 
     /**
      * @var \Magento\Framework\App\AreaList
-     * @since 2.0.0
      */
     protected $areaList;
 
     /**
      * @var \Magento\Framework\Webapi\Rest\Response\RendererFactory
-     * @since 2.0.0
      */
     protected $rendererFactory;
 
@@ -95,7 +83,6 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
      * @param \Magento\Framework\Webapi\Rest\Response\RendererFactory $rendererFactory
      * @param \Magento\Framework\App\AreaList $areaList
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         Request $request,
@@ -126,7 +113,6 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
-     * @since 2.0.0
      */
     public function dispatch(\Magento\Framework\App\RequestInterface $request)
     {
@@ -166,7 +152,6 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
      * Check if current request is WSDL request. SOAP operation execution request is another type of requests.
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _isWsdlRequest()
     {
@@ -177,7 +162,6 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
      * Check if current request is WSDL request. SOAP operation execution request is another type of requests.
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _isWsdlListRequest()
     {
@@ -189,7 +173,6 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
      *
      * @param \Exception $exception
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareErrorResponse($exception)
     {
@@ -218,7 +201,6 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
      *
      * @param string $contentType
      * @return $this
-     * @since 2.0.0
      */
     protected function _setResponseContentType($contentType = 'text/xml')
     {
@@ -234,7 +216,6 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
      *
      * @param string $responseBody
      * @return $this
-     * @since 2.0.0
      */
     protected function _setResponseBody($responseBody)
     {
@@ -253,7 +234,6 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
      *
      * @return void
      * @throws \Magento\Framework\Webapi\Exception
-     * @since 2.0.0
      */
     protected function validateWsdlRequest()
     {

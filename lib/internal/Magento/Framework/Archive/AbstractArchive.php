@@ -14,7 +14,6 @@ namespace Magento\Framework\Archive;
 /**
  * Class \Magento\Framework\Archive\AbstractArchive
  *
- * @since 2.0.0
  */
 class AbstractArchive
 {
@@ -25,7 +24,6 @@ class AbstractArchive
      * @param string $data
      * @return true
      * @throws \Exception
-     * @since 2.0.0
      */
     protected function _writeFile($destination, $data)
     {
@@ -42,7 +40,6 @@ class AbstractArchive
      * @param string $source
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _readFile($source)
     {
@@ -64,7 +61,6 @@ class AbstractArchive
      * @param string $source
      * @param bool $withExtension
      * @return string
-     * @since 2.0.0
      */
     public function getFilename($source, $withExtension = false)
     {

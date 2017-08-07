@@ -12,7 +12,6 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 /**
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Session extends \Magento\Framework\Session\SessionManager
 {
@@ -25,7 +24,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Quote instance
      *
      * @var Quote
-     * @since 2.0.0
      */
     protected $_quote;
 
@@ -33,7 +31,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Customer Data Object
      *
      * @var CustomerInterface|null
-     * @since 2.0.0
      */
     protected $_customer;
 
@@ -41,7 +38,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Whether load only active quote
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_loadInactive = false;
 
@@ -49,67 +45,56 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Loaded order instance
      *
      * @var \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     protected $_order;
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
-     * @since 2.0.0
      */
     protected $_orderFactory;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
     /**
      * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress
-     * @since 2.0.0
      */
     protected $_remoteAddress;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @param QuoteIdMaskFactory
-     * @since 2.0.0
      */
     protected $quoteIdMaskFactory;
 
     /**
      * @param bool
-     * @since 2.0.0
      */
     protected $isQuoteMasked;
 
     /**
      * @var \Magento\Quote\Model\QuoteFactory
-     * @since 2.0.0
      */
     protected $quoteFactory;
 
@@ -133,7 +118,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
@@ -183,7 +167,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param CustomerInterface|null $customer
      * @return \Magento\Checkout\Model\Session
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setCustomerData($customer)
     {
@@ -196,7 +179,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @return bool
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function hasQuote()
     {
@@ -209,7 +191,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param bool $load
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setLoadInactive($load = true)
     {
@@ -223,7 +204,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @return Quote
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -307,7 +287,6 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _getQuoteIdKey()
     {
@@ -318,7 +297,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param int $quoteId
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setQuoteId($quoteId)
     {
@@ -328,7 +306,6 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * @return int
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getQuoteId()
     {
@@ -339,7 +316,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Load data for customer quote and merge with current quote
      *
      * @return $this
-     * @since 2.0.0
      */
     public function loadCustomerQuote()
     {
@@ -385,7 +361,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param array|string $data
      * @param bool|string|null $value
      * @return $this
-     * @since 2.0.0
      */
     public function setStepData($step, $data, $value = null)
     {
@@ -411,7 +386,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param string|null $step
      * @param string|null $data
      * @return array|string|bool
-     * @since 2.0.0
      */
     public function getStepData($step = null, $data = null)
     {
@@ -436,7 +410,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Unset all data associated with object
      *
      * @return $this
-     * @since 2.0.0
      */
     public function clearQuote()
     {
@@ -451,7 +424,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Unset all session data and quote
      *
      * @return $this
-     * @since 2.0.0
      */
     public function clearStorage()
     {
@@ -464,7 +436,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Clear misc checkout parameters
      *
      * @return void
-     * @since 2.0.0
      */
     public function clearHelperData()
     {
@@ -474,7 +445,6 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function resetCheckout()
     {
@@ -485,7 +455,6 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * @param Quote $quote
      * @return $this
-     * @since 2.0.0
      */
     public function replaceQuote($quote)
     {
@@ -498,7 +467,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Get order instance based on last order ID
      *
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     public function getLastRealOrder()
     {
@@ -517,7 +485,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Restore last active quote
      *
      * @return bool True if quote restored successfully, false otherwise
-     * @since 2.0.0
      */
     public function restoreQuote()
     {
@@ -541,7 +508,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param $isQuoteMasked bool
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function setIsQuoteMasked($isQuoteMasked)
     {
@@ -551,7 +517,6 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * @return bool|null
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function isQuoteMasked()
     {

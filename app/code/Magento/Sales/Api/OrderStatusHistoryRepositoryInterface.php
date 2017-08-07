@@ -15,7 +15,6 @@ namespace Magento\Sales\Api;
  * items, billing and shipping addresses, and shipping and payment methods. A corresponding external document, known as
  * a purchase order, is emailed to the customer.
  * @api
- * @since 2.0.0
  */
 interface OrderStatusHistoryRepositoryInterface
 {
@@ -24,7 +23,6 @@ interface OrderStatusHistoryRepositoryInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
      * @return \Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface Order status history search result interface.
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -33,7 +31,6 @@ interface OrderStatusHistoryRepositoryInterface
      *
      * @param int $id The order status comment ID.
      * @return \Magento\Sales\Api\Data\OrderStatusHistoryInterface Order status history interface.
-     * @since 2.0.0
      */
     public function get($id);
 
@@ -42,7 +39,6 @@ interface OrderStatusHistoryRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\OrderStatusHistoryInterface $entity The order status comment.
      * @return bool
-     * @since 2.0.0
      */
     public function delete(\Magento\Sales\Api\Data\OrderStatusHistoryInterface $entity);
 
@@ -51,7 +47,6 @@ interface OrderStatusHistoryRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\OrderStatusHistoryInterface $entity The order status comment.
      * @return \Magento\Sales\Api\Data\OrderStatusHistoryInterface Order status history interface.
-     * @since 2.0.0
      */
     public function save(\Magento\Sales\Api\Data\OrderStatusHistoryInterface $entity);
 }

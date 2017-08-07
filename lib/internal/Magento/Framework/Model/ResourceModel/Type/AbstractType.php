@@ -8,7 +8,6 @@ namespace Magento\Framework\Model\ResourceModel\Type;
 /**
  * Class \Magento\Framework\Model\ResourceModel\Type\AbstractType
  *
- * @since 2.0.0
  */
 abstract class AbstractType
 {
@@ -16,7 +15,6 @@ abstract class AbstractType
      * Name
      *
      * @var String
-     * @since 2.0.0
      */
     protected $_name = '';
 
@@ -24,7 +22,6 @@ abstract class AbstractType
      * Entity class
      *
      * @var String
-     * @since 2.0.0
      */
     protected $_entityClass = \Magento\Framework\Model\ResourceModel\Entity\AbstractEntity::class;
 
@@ -32,7 +29,6 @@ abstract class AbstractType
      * Retrieve entity type
      *
      * @return String
-     * @since 2.0.0
      */
     public function getEntityClass()
     {
@@ -44,7 +40,6 @@ abstract class AbstractType
      *
      * @param String $name
      * @return void
-     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -55,7 +50,6 @@ abstract class AbstractType
      * Retrieve name
      *
      * @return String
-     * @since 2.0.0
      */
     public function getName()
     {

@@ -13,7 +13,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  *
  * @deprecated 2.2.0
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Reset extends \Magento\Config\Block\System\Config\Form\Field
 {
@@ -25,7 +24,6 @@ class Reset extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -38,7 +36,6 @@ class Reset extends \Magento\Config\Block\System\Config\Form\Field
      * Set template
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -50,7 +47,6 @@ class Reset extends \Magento\Config\Block\System\Config\Form\Field
      * Get robots.txt custom instruction default value
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRobotsDefaultCustomInstructions()
     {
@@ -64,7 +60,6 @@ class Reset extends \Magento\Config\Block\System\Config\Form\Field
      * Generate button html
      *
      * @return string
-     * @since 2.0.0
      */
     public function getButtonHtml()
     {
@@ -86,7 +81,6 @@ class Reset extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -101,7 +95,6 @@ class Reset extends \Magento\Config\Block\System\Config\Form\Field
      * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {

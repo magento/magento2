@@ -10,7 +10,6 @@ namespace Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Product\Edit\Tab;
 /**
  * Class \Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Product\Edit\Tab\Googleoptimizer
  *
- * @since 2.0.0
  */
 class Googleoptimizer extends \Magento\GoogleOptimizer\Block\Adminhtml\AbstractTab
 {
@@ -19,7 +18,6 @@ class Googleoptimizer extends \Magento\GoogleOptimizer\Block\Adminhtml\AbstractT
      *
      * @return \Magento\Catalog\Model\Product
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     protected function _getEntity()
     {
@@ -34,7 +32,6 @@ class Googleoptimizer extends \Magento\GoogleOptimizer\Block\Adminhtml\AbstractT
      * Return Tab label
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -45,7 +42,6 @@ class Googleoptimizer extends \Magento\GoogleOptimizer\Block\Adminhtml\AbstractT
      * Return Tab title
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getTabTitle()
     {

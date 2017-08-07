@@ -21,7 +21,6 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
  *
- * @since 2.0.0
  */
 class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -41,7 +40,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var ScopeResolverInterface
-     * @since 2.2.0
+     * @since 2.1.1
      */
     private $scopeResolver;
 
@@ -58,7 +57,6 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param ScopeResolverInterface $scopeResolver
      * @param AttributeOptionProviderInterface $attributeOptionProvider
      * @param OptionProvider $optionProvider
-     * @since 2.0.0
      */
     public function __construct(
         DbContext $context,
@@ -80,7 +78,6 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Init resource
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -113,7 +110,6 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param ProductModel $mainProduct the parent id
      * @param array $productIds the children id array
      * @return $this
-     * @since 2.0.0
      */
     public function saveProducts($mainProduct, array $productIds)
     {
@@ -159,7 +155,6 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param bool $required
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getChildrenIds($parentId, $required = true)
     {
@@ -192,7 +187,6 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int|array $childId
      * @return string[]
-     * @since 2.0.0
      */
     public function getParentIdsByChild($childId)
     {
@@ -219,7 +213,6 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param ProductModel $product
      * @param array $attributes
      * @return array
-     * @since 2.0.0
      */
     public function getConfigurableOptions($product, $attributes)
     {
@@ -238,7 +231,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param AbstractAttribute $superAttribute
      * @param int $productId
      * @return array
-     * @since 2.2.0
+     * @since 2.1.1
      */
     public function getAttributeOptions(AbstractAttribute $superAttribute, $productId)
     {

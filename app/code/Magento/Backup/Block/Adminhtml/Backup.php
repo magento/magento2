@@ -12,7 +12,6 @@ use Magento\Framework\View\Element\AbstractBlock;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Backup extends \Magento\Backend\Block\Template
 {
@@ -20,13 +19,11 @@ class Backup extends \Magento\Backend\Block\Template
      * Block's template
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Backup::backup/list.phtml';
 
     /**
      * @return AbstractBlock|void
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -65,7 +62,6 @@ class Backup extends \Magento\Backend\Block\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getGridHtml()
     {
@@ -76,7 +72,6 @@ class Backup extends \Magento\Backend\Block\Template
      * Generate html code for pop-up messages that will appear when user click on "Rollback" link
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDialogsHtml()
     {

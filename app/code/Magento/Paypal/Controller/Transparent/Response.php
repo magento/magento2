@@ -17,7 +17,6 @@ use Magento\Paypal\Model\Payflow\Transparent;
 
 /**
  * Class Response
- * @since 2.0.0
  */
 class Response extends \Magento\Framework\App\Action\Action
 {
@@ -25,19 +24,16 @@ class Response extends \Magento\Framework\App\Action\Action
      * Core registry
      *
      * @var Registry
-     * @since 2.0.0
      */
     private $coreRegistry;
 
     /**
      * @var Transaction
-     * @since 2.0.0
      */
     private $transaction;
 
     /**
      * @var ResponseValidator
-     * @since 2.0.0
      */
     private $responseValidator;
 
@@ -62,7 +58,6 @@ class Response extends \Magento\Framework\App\Action\Action
      * @param ResponseValidator $responseValidator
      * @param LayoutFactory $resultLayoutFactory
      * @param Transparent $transparent
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -82,7 +77,6 @@ class Response extends \Magento\Framework\App\Action\Action
 
     /**
      * @return ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

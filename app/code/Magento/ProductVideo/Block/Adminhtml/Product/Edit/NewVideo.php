@@ -9,7 +9,6 @@ use Magento\Framework\Data\Form\Element\Fieldset;
 
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -20,19 +19,16 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @var \Magento\ProductVideo\Helper\Media
-     * @since 2.0.0
      */
     protected $mediaHelper;
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $jsonEncoder;
 
@@ -49,7 +45,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\ProductVideo\Helper\Media $mediaHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -71,7 +66,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -191,7 +185,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
      * Get html id
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getHtmlId()
     {
@@ -205,7 +198,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
      * Get widget options
      *
      * @return string
-     * @since 2.0.0
      */
     public function getWidgetOptions()
     {
@@ -224,7 +216,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
      * Retrieve currently viewed product object
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     protected function getProduct()
     {
@@ -239,7 +230,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param Fieldset $fieldset
      * @return $this
-     * @since 2.0.0
      */
     protected function addMediaRoleAttributes(Fieldset $fieldset)
     {
@@ -266,7 +256,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
      * Get note for video url
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     protected function getNoteVideoUrl()
     {
@@ -285,7 +274,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
      * Get url for config params
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getConfigApiKeyUrl()
     {

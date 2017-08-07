@@ -9,19 +9,16 @@ namespace Magento\Framework\Json\Helper;
  * Json data helper
  *
  * @deprecated 2.2.0 @see \Magento\Framework\Serialize\Serializer\Json
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * @var \Magento\Framework\Json\DecoderInterface
-     * @since 2.0.0
      */
     protected $jsonDecoder;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $jsonEncoder;
 
@@ -29,7 +26,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Json\DecoderInterface $jsonDecoder
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -46,7 +42,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param mixed $valueToEncode
      * @return string
-     * @since 2.0.0
      */
     public function jsonEncode($valueToEncode)
     {
@@ -59,7 +54,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $encodedValue
      * @return mixed
-     * @since 2.0.0
      */
     public function jsonDecode($encodedValue)
     {

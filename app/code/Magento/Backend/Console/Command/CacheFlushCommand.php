@@ -10,13 +10,11 @@ namespace Magento\Backend\Console\Command;
  * Command for flushing cache
  *
  * @api
- * @since 2.0.0
  */
 class CacheFlushCommand extends AbstractCacheTypeManageCommand
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -30,7 +28,6 @@ class CacheFlushCommand extends AbstractCacheTypeManageCommand
      *
      * @param array $cacheTypes
      * @return void
-     * @since 2.0.0
      */
     protected function performAction(array $cacheTypes)
     {
@@ -40,7 +37,6 @@ class CacheFlushCommand extends AbstractCacheTypeManageCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function getDisplayMessage()
     {

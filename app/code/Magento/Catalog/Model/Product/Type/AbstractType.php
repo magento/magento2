@@ -16,7 +16,6 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class AbstractType
 {
@@ -24,13 +23,11 @@ abstract class AbstractType
      * Product type instance id
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_typeId;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_editableAttributes;
 
@@ -38,7 +35,6 @@ abstract class AbstractType
      * Is a composite product type
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isComposite = false;
 
@@ -46,7 +42,6 @@ abstract class AbstractType
      * If product can be configured
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_canConfigure = false;
 
@@ -54,7 +49,6 @@ abstract class AbstractType
      * Whether product quantity is fractional number or not
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_canUseQtyDecimals = true;
 
@@ -62,7 +56,6 @@ abstract class AbstractType
      * File queue array
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_fileQueue = [];
 
@@ -100,13 +93,11 @@ abstract class AbstractType
 
     /**
      * @var \Magento\Framework\Filesystem
-     * @since 2.0.0
      */
     protected $_filesystem;
 
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
-     * @since 2.0.0
      */
     protected $_fileStorageDb;
 
@@ -114,7 +105,6 @@ abstract class AbstractType
      * Cache key for Product Attributes
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_cacheProductSetAttributes = '_cache_instance_product_set_attributes';
 
@@ -123,7 +113,6 @@ abstract class AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return void
-     * @since 2.0.0
      */
     abstract public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product);
 
@@ -131,7 +120,6 @@ abstract class AbstractType
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
@@ -139,13 +127,11 @@ abstract class AbstractType
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $_logger;
 
@@ -153,7 +139,6 @@ abstract class AbstractType
      * Catalog product type
      *
      * @var \Magento\Catalog\Model\Product\Type
-     * @since 2.0.0
      */
     protected $_catalogProductType;
 
@@ -161,7 +146,6 @@ abstract class AbstractType
      * Eav config
      *
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $_eavConfig;
 
@@ -169,13 +153,11 @@ abstract class AbstractType
      * Catalog product option
      *
      * @var \Magento\Catalog\Model\Product\Option
-     * @since 2.0.0
      */
     protected $_catalogProductOption;
 
     /**
      * @var ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
@@ -201,7 +183,6 @@ abstract class AbstractType
      * @param ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Option $catalogProductOption,
@@ -233,7 +214,6 @@ abstract class AbstractType
      *
      * @param   string $typeId
      * @return  \Magento\Catalog\Model\Product\Type\AbstractType
-     * @since 2.0.0
      */
     public function setTypeId($typeId)
     {
@@ -245,7 +225,6 @@ abstract class AbstractType
      * Return relation info about used products for specific type instance
      *
      * @return \Magento\Framework\DataObject Object with information data
-     * @since 2.0.0
      */
     public function getRelationInfo()
     {
@@ -264,7 +243,6 @@ abstract class AbstractType
      * @param bool $required
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getChildrenIds($parentId, $required = true)
     {
@@ -277,7 +255,6 @@ abstract class AbstractType
      * @param int|array $childId
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getParentIdsByChild($childId)
     {
@@ -289,7 +266,6 @@ abstract class AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
-     * @since 2.0.0
      */
     public function getSetAttributes($product)
     {
@@ -308,7 +284,6 @@ abstract class AbstractType
      * @param \Magento\Catalog\Model\Entity\Attribute $attributeOne
      * @param \Magento\Catalog\Model\Entity\Attribute $attributeTwo
      * @return int
-     * @since 2.0.0
      */
     public function attributesCompare($attributeOne, $attributeTwo)
     {
@@ -329,7 +304,6 @@ abstract class AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
-     * @since 2.0.0
      */
     public function getEditableAttributes($product)
     {
@@ -342,7 +316,6 @@ abstract class AbstractType
      * @param  int $attributeId
      * @param  \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute|null
-     * @since 2.0.0
      */
     public function getAttributeById($attributeId, $product)
     {
@@ -362,7 +335,6 @@ abstract class AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function isVirtual($product)
     {
@@ -374,7 +346,6 @@ abstract class AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
-     * @since 2.0.0
      */
     public function isSalable($product)
     {
@@ -395,7 +366,6 @@ abstract class AbstractType
      * @param  string $processMode
      * @return array|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _prepareProduct(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
@@ -461,7 +431,6 @@ abstract class AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @param string $processMode
      * @return array|string
-     * @since 2.0.0
      */
     public function processConfiguration(
         \Magento\Framework\DataObject $buyRequest,
@@ -481,7 +450,6 @@ abstract class AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @param null|string $processMode
      * @return array|string
-     * @since 2.0.0
      */
     public function prepareForCartAdvanced(\Magento\Framework\DataObject $buyRequest, $product, $processMode = null)
     {
@@ -499,7 +467,6 @@ abstract class AbstractType
      * @param \Magento\Framework\DataObject $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @return array|string
-     * @since 2.0.0
      */
     public function prepareForCart(\Magento\Framework\DataObject $buyRequest, $product)
     {
@@ -513,7 +480,6 @@ abstract class AbstractType
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function processFileQueue()
     {
@@ -573,7 +539,6 @@ abstract class AbstractType
      *                                    'src_name'=>'filename',
      *                                    'dst_name'=>'filename2'])
      * @return void
-     * @since 2.0.0
      */
     public function addFileQueue($queueOptions)
     {
@@ -585,7 +550,6 @@ abstract class AbstractType
      *
      * @param string $processMode
      * @return bool
-     * @since 2.0.0
      */
     protected function _isStrictProcessMode($processMode)
     {
@@ -596,7 +560,6 @@ abstract class AbstractType
      * Retrieve message for specify option(s)
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getSpecifyOptionMessage()
     {
@@ -611,7 +574,6 @@ abstract class AbstractType
      * @param string $processMode
      * @return array
      * @throws LocalizedException
-     * @since 2.0.0
      */
     protected function _prepareOptions(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
@@ -661,7 +623,6 @@ abstract class AbstractType
      * @param  \Magento\Catalog\Model\Product $product
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function checkProductBuyState($product)
     {
@@ -689,7 +650,6 @@ abstract class AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
-     * @since 2.0.0
      */
     public function getOrderOptions($product)
     {
@@ -741,7 +701,6 @@ abstract class AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
-     * @since 2.0.0
      */
     public function save($product)
     {
@@ -761,7 +720,6 @@ abstract class AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return void
-     * @since 2.0.0
      */
     protected function _removeNotApplicableAttributes($product)
     {
@@ -779,7 +737,6 @@ abstract class AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave($product)
     {
@@ -794,7 +751,6 @@ abstract class AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function isComposite($product)
     {
@@ -807,7 +763,6 @@ abstract class AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function canConfigure($product)
     {
@@ -818,7 +773,6 @@ abstract class AbstractType
      * Check if product qty is fractional number
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canUseQtyDecimals()
     {
@@ -830,7 +784,6 @@ abstract class AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return string
-     * @since 2.0.0
      */
     public function getSku($product)
     {
@@ -847,7 +800,6 @@ abstract class AbstractType
      * @param \Magento\Catalog\Model\Product $product Product with Custom Options
      * @param string $sku Product SKU without option
      * @return string
-     * @since 2.0.0
      */
     public function getOptionSku($product, $sku = '')
     {
@@ -885,7 +837,6 @@ abstract class AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return float
-     * @since 2.0.0
      */
     public function getWeight($product)
     {
@@ -897,7 +848,6 @@ abstract class AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
-     * @since 2.0.0
      */
     public function hasOptions($product)
     {
@@ -917,7 +867,6 @@ abstract class AbstractType
      *
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function updateQtyOption($options, \Magento\Framework\DataObject $option, $value, $product)
     {
@@ -929,7 +878,6 @@ abstract class AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
-     * @since 2.0.0
      */
     public function hasRequiredOptions($product)
     {
@@ -944,7 +892,6 @@ abstract class AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return int|\Magento\Store\Model\Store
-     * @since 2.0.0
      */
     public function getStoreFilter($product)
     {
@@ -958,7 +905,6 @@ abstract class AbstractType
      * @param $store int|\Magento\Store\Model\Store
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreFilter($store, $product)
     {
@@ -975,7 +921,6 @@ abstract class AbstractType
      * @return boolean false
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getForceChildItemQtyChanges($product)
     {
@@ -989,7 +934,6 @@ abstract class AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @return float
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function prepareQuoteItemQty($qty, $product)
     {
@@ -1004,7 +948,6 @@ abstract class AbstractType
      * @param \Magento\Quote\Model\Quote\Item\Option $option
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
-     * @since 2.0.0
      */
     public function assignProductToOption($optionProduct, $option, $product)
     {
@@ -1022,7 +965,6 @@ abstract class AbstractType
      *
      * @param array $config
      * @return $this
-     * @since 2.0.0
      */
     public function setConfig($config)
     {
@@ -1043,7 +985,6 @@ abstract class AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
-     * @since 2.0.0
      */
     public function getSearchableData($product)
     {
@@ -1064,7 +1005,6 @@ abstract class AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
-     * @since 2.0.0
      */
     public function getProductsToPurchaseByReqGroups($product)
     {
@@ -1081,7 +1021,6 @@ abstract class AbstractType
      * @param  \Magento\Framework\DataObject $buyRequest
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function processBuyRequest($product, $buyRequest)
     {
@@ -1094,7 +1033,6 @@ abstract class AbstractType
      * @param  \Magento\Catalog\Model\Product $product
      * @param  \Magento\Framework\DataObject $buyRequest
      * @return array
-     * @since 2.0.0
      */
     public function checkProductConfiguration($product, $buyRequest)
     {
@@ -1125,7 +1063,6 @@ abstract class AbstractType
      * Determine presence of weight for product type
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasWeight()
     {
@@ -1138,7 +1075,6 @@ abstract class AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function setImageFromChildProduct(\Magento\Catalog\Model\Product $product)
     {
@@ -1151,7 +1087,6 @@ abstract class AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getIdentities(\Magento\Catalog\Model\Product $product)
     {
@@ -1162,7 +1097,6 @@ abstract class AbstractType
      * @param \Magento\Catalog\Model\Product\Type\AbstractType $product
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getAssociatedProducts($product)
     {

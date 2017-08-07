@@ -10,7 +10,6 @@ use Zend\Soap\Wsdl\ComplexTypeStrategy\AbstractComplexTypeStrategy;
 
 /**
  * Magento-specific Complex type strategy for WSDL auto discovery.
- * @since 2.0.0
  */
 class ComplexTypeStrategy extends AbstractComplexTypeStrategy
 {
@@ -26,7 +25,6 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
 
     /**
      * @var \Magento\Framework\Reflection\TypeProcessor
-     * @since 2.0.0
      */
     protected $_typeProcessor;
 
@@ -34,7 +32,6 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * Resources configuration data.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_data;
 
@@ -42,7 +39,6 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * Construct strategy with config helper.
      *
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Reflection\TypeProcessor $typeProcessor)
     {
@@ -53,7 +49,6 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * Return DOM Document
      *
      * @return \DomDocument
-     * @since 2.0.0
      */
     protected function _getDom()
     {
@@ -67,7 +62,6 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * @param array $parentCallInfo array of callInfo from parent complex type
      * @return string
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function addComplexType($type, $parentCallInfo = [])
     {
@@ -100,7 +94,6 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * @param array $parameters
      * @param array $callInfo
      * @return \DOMElement
-     * @since 2.0.0
      */
     protected function _processParameters($parameters, $callInfo)
     {
@@ -142,7 +135,6 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * @param string $parameterType
      * @param array $callInfo
      * @return void
-     * @since 2.0.0
      */
     protected function _processParameter(\DOMElement $element, $isRequired, $parameterData, $parameterType, $callInfo)
     {
@@ -164,7 +156,6 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * @param string $type
      * @param array $callInfo
      * @return void
-     * @since 2.0.0
      */
     protected function _processArrayParameter($type, $callInfo = [])
     {
@@ -195,7 +186,6 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * @param bool $isRequired
      * @param array &$callInfo
      * @return void
-     * @since 2.0.0
      */
     protected function _revertRequiredCallInfo($isRequired, &$callInfo)
     {
@@ -222,7 +212,6 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * @param string|null $default
      * @param array $callInfo
      * @return void
-     * @since 2.0.0
      */
     public function addAnnotation(\DOMElement $element, $documentation, $default = null, $callInfo = [])
     {
@@ -292,7 +281,6 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * @param string $documentation
      * @param \DOMElement $appInfoNode
      * @return void
-     * @since 2.0.0
      */
     protected function _processElementType($elementType, $documentation, \DOMElement $appInfoNode)
     {
@@ -318,7 +306,6 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * @param string $default
      * @param \DOMElement $appInfoNode
      * @return void
-     * @since 2.0.0
      */
     protected function _processDefaultValueAnnotation($elementType, $default, \DOMElement $appInfoNode)
     {
@@ -338,7 +325,6 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * @param \DOMElement $element
      * @return string|null
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     protected function _getElementType(\DOMElement $element)
     {
@@ -356,7 +342,6 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * @param string $documentation
      * @param \DOMElement $appInfoNode
      * @return void
-     * @since 2.0.0
      */
     protected function _processRequiredAnnotation($annotation, $documentation, \DOMElement $appInfoNode)
     {
@@ -372,7 +357,6 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * @param \DOMElement $appInfoNode
      * @param array $callInfo
      * @return void
-     * @since 2.0.0
      */
     protected function _processCallInfo(\DOMElement $appInfoNode, $callInfo)
     {
@@ -406,7 +390,6 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * @param \DOMElement $appInfoNode
      * @param string $tagValue
      * @return void
-     * @since 2.0.0
      */
     protected function _processDocInstructions(\DOMElement $appInfoNode, $tagValue)
     {
@@ -426,7 +409,6 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * @param \DOMElement $appInfoNode
      * @param string $tagValue
      * @return void
-     * @since 2.0.0
      */
     protected function _processSeeLink(\DOMElement $appInfoNode, $tagValue)
     {
@@ -450,7 +432,6 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * @param array &$callInfo
      * @param string $callName
      * @return void
-     * @since 2.0.0
      */
     protected function _overrideCallInfoName(&$callInfo, $callName)
     {

@@ -10,7 +10,6 @@ use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
 /**
  * Class \Magento\AdvancedPricingImportExport\Model\Indexer\Product\Price\Plugin\Import
  *
- * @since 2.0.0
  */
 class Import extends \Magento\Catalog\Model\Indexer\Product\Price\Plugin\AbstractPlugin
 {
@@ -20,7 +19,6 @@ class Import extends \Magento\Catalog\Model\Indexer\Product\Price\Plugin\Abstrac
      * @param AdvancedPricing $subject
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterSaveAdvancedPricing(AdvancedPricing $subject)
     {
@@ -35,7 +33,6 @@ class Import extends \Magento\Catalog\Model\Indexer\Product\Price\Plugin\Abstrac
      * @param AdvancedPricing $subject
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterDeleteAdvancedPricing(AdvancedPricing $subject)
     {
@@ -48,7 +45,6 @@ class Import extends \Magento\Catalog\Model\Indexer\Product\Price\Plugin\Abstrac
      * Get price indexer
      *
      * @return \Magento\Framework\Indexer\IndexerInterface
-     * @since 2.0.0
      */
     protected function getPriceIndexer()
     {

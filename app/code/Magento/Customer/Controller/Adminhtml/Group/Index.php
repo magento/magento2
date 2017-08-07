@@ -9,7 +9,6 @@ namespace Magento\Customer\Controller\Adminhtml\Group;
 /**
  * Class \Magento\Customer\Controller\Adminhtml\Group\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Customer\Controller\Adminhtml\Group
 {
@@ -17,7 +16,6 @@ class Index extends \Magento\Customer\Controller\Adminhtml\Group
      * Customer groups list.
      *
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

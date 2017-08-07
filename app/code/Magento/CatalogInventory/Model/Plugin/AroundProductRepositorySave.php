@@ -17,7 +17,6 @@ use Magento\Framework\Exception\CouldNotSaveException;
  * @see StockItemInterface when you want to change the stock data
  * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
  * @see StockItemRepositoryInterface::save as extension point for customization of saving process
- * @since 2.0.0
  */
 class AroundProductRepositorySave
 {

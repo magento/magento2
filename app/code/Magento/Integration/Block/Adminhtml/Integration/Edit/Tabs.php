@@ -7,7 +7,6 @@ namespace Magento\Integration\Block\Adminhtml\Integration\Edit;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
@@ -16,7 +15,6 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      *
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _construct()
     {

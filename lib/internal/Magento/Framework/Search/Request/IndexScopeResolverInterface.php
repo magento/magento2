@@ -8,7 +8,6 @@ namespace Magento\Framework\Search\Request;
 /**
  * Interface \Magento\Framework\Search\Request\IndexScopeResolverInterface
  *
- * @since 2.0.0
  */
 interface IndexScopeResolverInterface
 {
@@ -16,7 +15,6 @@ interface IndexScopeResolverInterface
      * @param string $index
      * @param Dimension[] $dimensions
      * @return string
-     * @since 2.0.0
      */
     public function resolve($index, array $dimensions);
 }

@@ -10,13 +10,11 @@ use Magento\Framework\Message\MessageInterface;
 /**
  * Class \Magento\Framework\App\Action\Plugin\Design
  *
- * @since 2.0.0
  */
 class Design
 {
     /**
      * @var \Magento\Framework\View\DesignLoader
-     * @since 2.0.0
      */
     protected $_designLoader;
 
@@ -29,7 +27,6 @@ class Design
     /**
      * @param \Magento\Framework\View\DesignLoader $designLoader
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\DesignLoader $designLoader,

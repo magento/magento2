@@ -13,7 +13,6 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Feed extends \Magento\Framework\Model\AbstractModel
 {
@@ -29,26 +28,22 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * Feed url
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_feedUrl;
 
     /**
      * @var \Magento\Backend\App\ConfigInterface
-     * @since 2.0.0
      */
     protected $_backendConfig;
 
     /**
      * @var \Magento\AdminNotification\Model\InboxFactory
-     * @since 2.0.0
      */
     protected $_inboxFactory;
 
     /**
      * @var \Magento\Framework\HTTP\Adapter\CurlFactory
      *
-     * @since 2.0.0
      */
     protected $curlFactory;
 
@@ -56,19 +51,16 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * Deployment configuration
      *
      * @var \Magento\Framework\App\DeploymentConfig
-     * @since 2.0.0
      */
     protected $_deploymentConfig;
 
     /**
      * @var \Magento\Framework\App\ProductMetadataInterface
-     * @since 2.0.0
      */
     protected $productMetadata;
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $urlBuilder;
 
@@ -85,7 +77,6 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -113,7 +104,6 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * Init model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -123,7 +113,6 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * Retrieve feed url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFeedUrl()
     {
@@ -138,7 +127,6 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * Check feed for modification
      *
      * @return $this
-     * @since 2.0.0
      */
     public function checkUpdate()
     {
@@ -179,7 +167,6 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * Retrieve Update Frequency
      *
      * @return int
-     * @since 2.0.0
      */
     public function getFrequency()
     {
@@ -190,7 +177,6 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * Retrieve Last update time
      *
      * @return int
-     * @since 2.0.0
      */
     public function getLastUpdate()
     {
@@ -201,7 +187,6 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * Set last update time (now)
      *
      * @return $this
-     * @since 2.0.0
      */
     public function setLastUpdate()
     {
@@ -213,7 +198,6 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * Retrieve feed data as XML element
      *
      * @return \SimpleXMLElement
-     * @since 2.0.0
      */
     public function getFeedData()
     {
@@ -249,7 +233,6 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * Retrieve feed as XML element
      *
      * @return \SimpleXMLElement
-     * @since 2.0.0
      */
     public function getFeedXml()
     {

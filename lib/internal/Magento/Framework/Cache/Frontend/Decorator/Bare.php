@@ -13,7 +13,6 @@ namespace Magento\Framework\Cache\Frontend\Decorator;
 /**
  * Class \Magento\Framework\Cache\Frontend\Decorator\Bare
  *
- * @since 2.0.0
  */
 class Bare implements \Magento\Framework\Cache\FrontendInterface
 {
@@ -21,13 +20,11 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
      * Cache frontend instance to delegate actual cache operations to
      *
      * @var \Magento\Framework\Cache\FrontendInterface
-     * @since 2.0.0
      */
     private $_frontend;
 
     /**
      * @param \Magento\Framework\Cache\FrontendInterface $frontend
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Cache\FrontendInterface $frontend)
     {
@@ -39,7 +36,6 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
      *
      * @param \Magento\Framework\Cache\FrontendInterface $frontend
      * @return $this
-     * @since 2.0.0
      */
     protected function setFrontend(\Magento\Framework\Cache\FrontendInterface $frontend)
     {
@@ -51,7 +47,6 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
      * Retrieve cache frontend instance being decorated
      *
      * @return \Magento\Framework\Cache\FrontendInterface
-     * @since 2.0.0
      */
     protected function _getFrontend()
     {
@@ -60,7 +55,6 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function test($identifier)
     {
@@ -69,7 +63,6 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function load($identifier)
     {
@@ -80,7 +73,6 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
      * Enforce marking with a tag
      *
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
@@ -89,7 +81,6 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function remove($identifier)
     {
@@ -98,7 +89,6 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
     {
@@ -107,7 +97,6 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getBackend()
     {
@@ -116,7 +105,6 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getLowLevelFrontend()
     {

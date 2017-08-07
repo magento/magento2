@@ -9,7 +9,6 @@ use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Manages generated code.
- * @since 2.0.0
  */
 class Io
 {
@@ -23,20 +22,17 @@ class Io
      * Path to directory where new file must be created
      *
      * @var string
-     * @since 2.0.0
      */
     private $_generationDirectory;
 
     /**
      * @var \Magento\Framework\Filesystem\Driver\File
-     * @since 2.0.0
      */
     private $filesystemDriver;
 
     /**
      * @param \Magento\Framework\Filesystem\Driver\File $filesystemDriver
      * @param null|string $generationDirectory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem\Driver\File $filesystemDriver,
@@ -51,7 +47,6 @@ class Io
      *
      * @param null|string $directory
      * @return string
-     * @since 2.0.0
      */
     protected function initGeneratorDirectory($directory = null)
     {
@@ -65,7 +60,6 @@ class Io
     /**
      * @param string $className
      * @return string
-     * @since 2.0.0
      */
     public function getResultFileDirectory($className)
     {
@@ -79,7 +73,6 @@ class Io
     /**
      * @param string $className
      * @return string
-     * @since 2.0.0
      */
     public function generateResultFileName($className)
     {
@@ -91,7 +84,6 @@ class Io
      * @param string $content
      * @throws FileSystemException
      * @return bool
-     * @since 2.0.0
      */
     public function writeResultFile($fileName, $content)
     {
@@ -124,7 +116,6 @@ class Io
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function makeGenerationDirectory()
     {
@@ -134,7 +125,6 @@ class Io
     /**
      * @param string $className
      * @return bool
-     * @since 2.0.0
      */
     public function makeResultFileDirectory($className)
     {
@@ -143,7 +133,6 @@ class Io
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getGenerationDirectory()
     {
@@ -153,7 +142,6 @@ class Io
     /**
      * @param string $fileName
      * @return bool
-     * @since 2.0.0
      */
     public function fileExists($fileName)
     {
@@ -166,7 +154,6 @@ class Io
      * @param string $fileName
      * @return mixed
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function includeFile($fileName)
     {
@@ -176,7 +163,6 @@ class Io
     /**
      * @param string $directory
      * @return bool
-     * @since 2.0.0
      */
     private function _makeDirectory($directory)
     {

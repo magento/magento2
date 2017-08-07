@@ -11,7 +11,6 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat\Plugin;
 /**
  * Class \Magento\Catalog\Model\Indexer\Product\Flat\Plugin\Store
  *
- * @since 2.0.0
  */
 class Store
 {
@@ -19,13 +18,11 @@ class Store
      * Product flat indexer processor
      *
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor
-     * @since 2.0.0
      */
     protected $_productFlatIndexerProcessor;
 
     /**
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
-     * @since 2.0.0
      */
     public function __construct(\Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor)
     {
@@ -40,7 +37,6 @@ class Store
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function beforeSave(\Magento\Store\Model\ResourceModel\Store $subject, \Magento\Framework\Model\AbstractModel $object)
     {

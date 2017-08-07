@@ -10,7 +10,6 @@ use Magento\Downloadable\Api\Data\File\ContentInterface;
 /**
  * @codeCoverageIgnore
  * @api
- * @since 2.0.0
  */
 interface SampleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -18,7 +17,6 @@ interface SampleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Product sample id
      *
      * @return int|null Sample(or link) id
-     * @since 2.0.0
      */
     public function getId();
 
@@ -27,7 +25,6 @@ interface SampleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setId($id);
 
@@ -35,7 +32,6 @@ interface SampleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Sample title
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTitle();
 
@@ -44,7 +40,6 @@ interface SampleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $title
      * @return $this
-     * @since 2.0.0
      */
     public function setTitle($title);
 
@@ -52,7 +47,6 @@ interface SampleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Sort order index for sample
      *
      * @return int
-     * @since 2.0.0
      */
     public function getSortOrder();
 
@@ -61,20 +55,17 @@ interface SampleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $sortOrder
      * @return $this
-     * @since 2.0.0
      */
     public function setSortOrder($sortOrder);
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getSampleType();
 
     /**
      * @param string $sampleType
      * @return $this
-     * @since 2.0.0
      */
     public function setSampleType($sampleType);
 
@@ -82,7 +73,6 @@ interface SampleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Return file path or null when type is 'url'
      *
      * @return string|null relative file path
-     * @since 2.0.0
      */
     public function getSampleFile();
 
@@ -91,7 +81,6 @@ interface SampleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $sampleFile
      * @return $this
-     * @since 2.0.0
      */
     public function setSampleFile($sampleFile);
 
@@ -99,7 +88,6 @@ interface SampleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Retrieve sample file content
      *
      * @return \Magento\Downloadable\Api\Data\File\ContentInterface|null
-     * @since 2.0.0
      */
     public function getSampleFileContent();
 
@@ -108,7 +96,6 @@ interface SampleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\Downloadable\Api\Data\File\ContentInterface $sampleFileContent
      * @return $this
-     * @since 2.0.0
      */
     public function setSampleFileContent(ContentInterface $sampleFileContent = null);
 
@@ -116,7 +103,6 @@ interface SampleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Return URL or NULL when type is 'file'
      *
      * @return string|null file URL
-     * @since 2.0.0
      */
     public function getSampleUrl();
 
@@ -125,7 +111,6 @@ interface SampleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $sampleUrl
      * @return $this
-     * @since 2.0.0
      */
     public function setSampleUrl($sampleUrl);
 
@@ -133,7 +118,6 @@ interface SampleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Downloadable\Api\Data\SampleExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -142,7 +126,6 @@ interface SampleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\Downloadable\Api\Data\SampleExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Downloadable\Api\Data\SampleExtensionInterface $extensionAttributes

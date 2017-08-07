@@ -73,13 +73,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @see setup/performance-toolkit/profiles/ce/small.xml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
- * @since 2.0.0
  */
 class ConfigurableProductsFixture extends Fixture
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $priority = 50;
 
@@ -223,7 +221,6 @@ class ConfigurableProductsFixture extends Fixture
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD)
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -425,7 +422,6 @@ class ConfigurableProductsFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getActionTitle()
     {
@@ -434,7 +430,6 @@ class ConfigurableProductsFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function introduceParamLabels()
     {

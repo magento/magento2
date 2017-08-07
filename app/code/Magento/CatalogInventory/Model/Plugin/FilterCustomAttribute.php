@@ -12,19 +12,16 @@ use Magento\Catalog\Model\Product\Attribute\Repository;
 /**
  * Class \Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute
  *
- * @since 2.0.0
  */
 class FilterCustomAttribute
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     private $blackList;
 
     /**
      * @param array $blackList
-     * @since 2.0.0
      */
     public function __construct(array $blackList = [])
     {
@@ -39,7 +36,6 @@ class FilterCustomAttribute
      * @return \Magento\Eav\Model\AttributeRepository
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterGetCustomAttributesMetadata(Repository $repository, array $attributes)
     {

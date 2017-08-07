@@ -13,13 +13,11 @@ use Magento\Store\Model\StoreManagerInterface;
  * Class Container
  *
  * @api
- * @since 2.0.0
  */
 abstract class Container implements IdentityInterface
 {
     /**
      * @var StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -27,32 +25,27 @@ abstract class Container implements IdentityInterface
      * Core store config
      *
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var Store
-     * @since 2.0.0
      */
     protected $store;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $customerName;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $customerEmail;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
-     * @since 2.0.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -68,7 +61,6 @@ abstract class Container implements IdentityInterface
      * @param string $path
      * @param int $storeId
      * @return mixed
-     * @since 2.0.0
      */
     protected function getConfigValue($path, $storeId)
     {
@@ -84,7 +76,6 @@ abstract class Container implements IdentityInterface
      *
      * @param Store $store
      * @return void
-     * @since 2.0.0
      */
     public function setStore(Store $store)
     {
@@ -95,7 +86,6 @@ abstract class Container implements IdentityInterface
      * Return store
      *
      * @return Store
-     * @since 2.0.0
      */
     public function getStore()
     {
@@ -111,7 +101,6 @@ abstract class Container implements IdentityInterface
      *
      * @param string $name
      * @return void
-     * @since 2.0.0
      */
     public function setCustomerName($name)
     {
@@ -123,7 +112,6 @@ abstract class Container implements IdentityInterface
      *
      * @param string $email
      * @return void
-     * @since 2.0.0
      */
     public function setCustomerEmail($email)
     {
@@ -134,7 +122,6 @@ abstract class Container implements IdentityInterface
      * Return customer name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCustomerName()
     {
@@ -145,7 +132,6 @@ abstract class Container implements IdentityInterface
      * Return customer email
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCustomerEmail()
     {

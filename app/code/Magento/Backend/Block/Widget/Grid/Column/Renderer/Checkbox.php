@@ -10,25 +10,21 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
  *
  * @api
  * @deprecated 2.2.0 in favour of UI component implementation
- * @since 2.0.0
  */
 class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_defaultWidth = 55;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_values;
 
     /**
      * @var \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter
-     * @since 2.0.0
      */
     protected $_converter;
 
@@ -36,7 +32,6 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter $converter
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -51,7 +46,6 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      * Returns values of the column
      *
      * @return array
-     * @since 2.0.0
      */
     public function getValues()
     {
@@ -65,7 +59,6 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      * Prepare data for renderer
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getValues()
     {
@@ -80,7 +73,6 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      * @return  string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {
@@ -122,7 +114,6 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      * @param string $value   Value of the element
      * @param bool   $checked Whether it is checked
      * @return string
-     * @since 2.0.0
      */
     protected function _getCheckboxHtml($value, $checked)
     {
@@ -146,7 +137,6 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      * Renders header of the column
      *
      * @return string
-     * @since 2.0.0
      */
     public function renderHeader()
     {

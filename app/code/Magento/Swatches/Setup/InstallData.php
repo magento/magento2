@@ -13,7 +13,6 @@ use Magento\Eav\Setup\EavSetup;
 
 /**
  * Class InstallData
- * @since 2.0.0
  */
 class InstallData implements InstallDataInterface
 {
@@ -21,7 +20,6 @@ class InstallData implements InstallDataInterface
      * EAV setup factory
      *
      * @var EavSetupFactory
-     * @since 2.0.0
      */
     private $eavSetupFactory;
 
@@ -29,7 +27,6 @@ class InstallData implements InstallDataInterface
      * Init
      *
      * @param EavSetupFactory $eavSetupFactory
-     * @since 2.0.0
      */
     public function __construct(EavSetupFactory $eavSetupFactory)
     {
@@ -43,7 +40,6 @@ class InstallData implements InstallDataInterface
      * @param ModuleDataSetupInterface $setup
      * @param ModuleContextInterface $context
      * @return void
-     * @since 2.0.0
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

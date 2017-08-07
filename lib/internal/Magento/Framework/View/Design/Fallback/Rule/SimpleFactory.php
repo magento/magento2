@@ -10,19 +10,16 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Class \Magento\Framework\View\Design\Fallback\Rule\SimpleFactory
  *
- * @since 2.0.0
  */
 class SimpleFactory
 {
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -34,7 +31,6 @@ class SimpleFactory
      *
      * @param array $data
      * @return \Magento\Framework\View\Design\Fallback\Rule\Simple
-     * @since 2.0.0
      */
     public function create(array $data = [])
     {

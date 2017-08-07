@@ -7,7 +7,6 @@ namespace Magento\Framework\Search;
 
 /**
  * Search Engine interface
- * @since 2.0.0
  */
 interface SearchEngineInterface
 {
@@ -16,7 +15,6 @@ interface SearchEngineInterface
      *
      * @param RequestInterface $request
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function search(RequestInterface $request);
 }

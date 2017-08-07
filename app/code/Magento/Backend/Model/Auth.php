@@ -13,19 +13,16 @@ use Magento\Framework\Phrase;
  * Backend Auth model
  *
  * @api
- * @since 2.0.0
  */
 class Auth
 {
     /**
      * @var \Magento\Backend\Model\Auth\StorageInterface
-     * @since 2.0.0
      */
     protected $_authStorage;
 
     /**
      * @var \Magento\Backend\Model\Auth\Credential\StorageInterface
-     * @since 2.0.0
      */
     protected $_credentialStorage;
 
@@ -33,7 +30,6 @@ class Auth
      * Backend data
      *
      * @var \Magento\Backend\Helper\Data
-     * @since 2.0.0
      */
     protected $_backendData;
 
@@ -41,19 +37,16 @@ class Auth
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_coreConfig;
 
     /**
      * @var \Magento\Framework\Data\Collection\ModelFactory
-     * @since 2.0.0
      */
     protected $_modelFactory;
 
@@ -64,7 +57,6 @@ class Auth
      * @param \Magento\Backend\Model\Auth\Credential\StorageInterface $credentialStorage
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Framework\Data\Collection\ModelFactory $modelFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -88,7 +80,6 @@ class Auth
      * @param \Magento\Backend\Model\Auth\StorageInterface $storage
      * @return $this
      * @throws \Magento\Framework\Exception\AuthenticationException
-     * @since 2.0.0
      */
     public function setAuthStorage($storage)
     {
@@ -105,7 +96,6 @@ class Auth
      *
      * @return \Magento\Backend\Model\Auth\StorageInterface
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getAuthStorage()
     {
@@ -117,7 +107,6 @@ class Auth
      * an instance of \Magento\Backend\Model\Auth\Credential\StorageInterface
      *
      * @return \Magento\Backend\Model\Auth\Credential\StorageInterface
-     * @since 2.0.0
      */
     public function getUser()
     {
@@ -128,7 +117,6 @@ class Auth
      * Initialize credential storage from configuration
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _initCredentialStorage()
     {
@@ -142,7 +130,6 @@ class Auth
      *
      * @return null|\Magento\Backend\Model\Auth\Credential\StorageInterface
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getCredentialStorage()
     {
@@ -156,7 +143,6 @@ class Auth
      * @param string $password
      * @return void
      * @throws \Magento\Framework\Exception\AuthenticationException
-     * @since 2.0.0
      */
     public function login($username, $password)
     {
@@ -201,7 +187,6 @@ class Auth
      * Perform logout process
      *
      * @return void
-     * @since 2.0.0
      */
     public function logout()
     {
@@ -212,7 +197,6 @@ class Auth
      * Check if current user is logged in
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isLoggedIn()
     {
@@ -226,7 +210,6 @@ class Auth
      * @return void
      * @throws \Magento\Framework\Exception\AuthenticationException
      * @static
-     * @since 2.0.0
      */
     public static function throwException(Phrase $msg = null)
     {

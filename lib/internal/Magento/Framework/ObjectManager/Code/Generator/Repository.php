@@ -16,7 +16,6 @@ use Zend\Code\Reflection\ParameterReflection;
 
 /**
  * Class Repository
- * @since 2.0.0
  */
 class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
 {
@@ -44,7 +43,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * Retrieve class properties
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getClassProperties()
     {
@@ -123,7 +121,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns source factory property name
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getSourcePersistorPropertyName()
     {
@@ -133,7 +130,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     /**
      * Returns source collection factory property name
      * @return string
-     * @since 2.0.0
      */
     protected function _getSourceCollectionFactoryPropertyName()
     {
@@ -144,7 +140,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns collection factory class name
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getCollectionFactoryClassName()
     {
@@ -156,7 +151,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns source persistor class name
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getPersistorClassName()
     {
@@ -171,7 +165,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * Get default constructor definition for generated class
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getDefaultConstructorDefinition()
     {
@@ -224,7 +217,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns get() method
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getGetMethod()
     {
@@ -282,7 +274,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns register() method
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getCreateFromArrayMethod()
     {
@@ -316,7 +307,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns register() method
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getCreateMethod()
     {
@@ -350,7 +340,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns register() method
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getFlushMethod()
     {
@@ -373,7 +362,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns persist() method
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getSaveMethod()
     {
@@ -410,7 +398,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * Return remove() method
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getDeleteMethod()
     {
@@ -447,7 +434,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * Return remove() method
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getDeleteByIdMethod()
     {
@@ -485,7 +471,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * Return remove() method
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getRemoveMethod()
     {
@@ -515,7 +500,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns getList() method
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getGetListMethod()
     {
@@ -586,7 +570,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns list of methods for class generator
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getClassMethods()
     {
@@ -607,7 +590,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _validateData()
     {
@@ -631,7 +613,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * Generate code
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _generateCode()
     {
@@ -647,7 +628,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * Get source class name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSourceClassName()
     {

@@ -11,7 +11,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\ExportCouponsXml
  *
- * @since 2.0.0
  */
 class ExportCouponsXml extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
@@ -19,7 +18,6 @@ class ExportCouponsXml extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quo
      * Export coupon codes as excel xml file
      *
      * @return \Magento\Framework\App\ResponseInterface|null
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -9,7 +9,6 @@ use Magento\Framework\View\Layout;
 
 /**
  * Class Container
- * @since 2.0.0
  */
 class Container implements Layout\ReaderInterface
 {
@@ -30,15 +29,11 @@ class Container implements Layout\ReaderInterface
     const CONTAINER_OPT_DISPLAY = 'display';
     /**#@-*/
 
-    /**
-     * @var \Magento\Framework\View\Layout\ScheduledStructure\Helper
-     * @since 2.0.0
-     */
+    /**#@-*/
     protected $helper;
 
     /**
      * @var \Magento\Framework\View\Layout\ReaderPool
-     * @since 2.0.0
      */
     protected $readerPool;
 
@@ -47,7 +42,6 @@ class Container implements Layout\ReaderInterface
      *
      * @param Layout\ScheduledStructure\Helper $helper
      * @param Layout\ReaderPool $readerPool
-     * @since 2.0.0
      */
     public function __construct(
         Layout\ScheduledStructure\Helper $helper,
@@ -59,7 +53,6 @@ class Container implements Layout\ReaderInterface
 
     /**
      * @return string[]
-     * @since 2.0.0
      */
     public function getSupportedNodes()
     {
@@ -73,7 +66,6 @@ class Container implements Layout\ReaderInterface
      * @param Layout\Element $currentElement
      * @param Layout\Element $parentElement
      * @return $this
-     * @since 2.0.0
      */
     public function interpret(Context $readerContext, Layout\Element $currentElement)
     {
@@ -104,7 +96,6 @@ class Container implements Layout\ReaderInterface
      * @param \Magento\Framework\View\Layout\ScheduledStructure $scheduledStructure
      * @param \Magento\Framework\View\Layout\Element $currentElement
      * @return void
-     * @since 2.0.0
      */
     protected function mergeContainerAttributes(
         Layout\ScheduledStructure $scheduledStructure,
@@ -141,7 +132,6 @@ class Container implements Layout\ReaderInterface
      * @param Layout\ScheduledStructure $scheduledStructure
      * @param Layout\Element $currentElement
      * @return void
-     * @since 2.0.0
      */
     protected function containerReference(
         Layout\ScheduledStructure $scheduledStructure,

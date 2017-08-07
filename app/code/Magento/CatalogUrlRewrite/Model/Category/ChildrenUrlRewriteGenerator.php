@@ -14,19 +14,16 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class \Magento\CatalogUrlRewrite\Model\Category\ChildrenUrlRewriteGenerator
  *
- * @since 2.0.0
  */
 class ChildrenUrlRewriteGenerator
 {
     /**
      * @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider
-     * @since 2.0.0
      */
     protected $childrenCategoriesProvider;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGeneratorFactory
-     * @since 2.0.0
      */
     protected $categoryUrlRewriteGeneratorFactory;
 
@@ -40,7 +37,6 @@ class ChildrenUrlRewriteGenerator
      * @param \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider $childrenCategoriesProvider
      * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGeneratorFactory $categoryUrlRewriteGeneratorFactory
      * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
-     * @since 2.0.0
      */
     public function __construct(
         ChildrenCategoriesProvider $childrenCategoriesProvider,
@@ -62,7 +58,6 @@ class ChildrenUrlRewriteGenerator
      * @param \Magento\Catalog\Model\Category $category
      * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
-     * @since 2.0.0
      */
     public function generate($storeId, Category $category, $rootCategoryId = null)
     {

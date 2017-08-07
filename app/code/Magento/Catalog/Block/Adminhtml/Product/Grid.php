@@ -9,49 +9,41 @@ use Magento\Store\Model\Store;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * @var \Magento\Framework\Module\Manager
-     * @since 2.0.0
      */
     protected $moduleManager;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory]
-     * @since 2.0.0
      */
     protected $_setsFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $_productFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product\Type
-     * @since 2.0.0
      */
     protected $_type;
 
     /**
      * @var \Magento\Catalog\Model\Product\Attribute\Source\Status
-     * @since 2.0.0
      */
     protected $_status;
 
     /**
      * @var \Magento\Catalog\Model\Product\Visibility
-     * @since 2.0.0
      */
     protected $_visibility;
 
     /**
      * @var \Magento\Store\Model\WebsiteFactory
-     * @since 2.0.0
      */
     protected $_websiteFactory;
 
@@ -68,7 +60,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -94,7 +85,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -109,7 +99,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return Store
-     * @since 2.0.0
      */
     protected function _getStore()
     {
@@ -119,7 +108,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -200,7 +188,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return $this
-     * @since 2.0.0
      */
     protected function _addColumnFilterToCollection($column)
     {
@@ -222,7 +209,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -387,7 +373,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareMassaction()
     {
@@ -440,7 +425,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getGridUrl()
     {
@@ -450,7 +434,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\DataObject $row
      * @return string
-     * @since 2.0.0
      */
     public function getRowUrl($row)
     {

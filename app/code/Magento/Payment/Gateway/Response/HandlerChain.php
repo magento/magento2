@@ -12,20 +12,17 @@ use Magento\Framework\ObjectManager\TMapFactory;
  * Class HandlerChain
  * @package Magento\Payment\Gateway\Response
  * @api
- * @since 2.0.0
  */
 class HandlerChain implements HandlerInterface
 {
     /**
      * @var HandlerInterface[] | TMap
-     * @since 2.0.0
      */
     private $handlers;
 
     /**
      * @param TMapFactory $tmapFactory
      * @param array $handlers
-     * @since 2.0.0
      */
     public function __construct(
         TMapFactory $tmapFactory,
@@ -45,7 +42,6 @@ class HandlerChain implements HandlerInterface
      * @param array $handlingSubject
      * @param array $response
      * @return void
-     * @since 2.0.0
      */
     public function handle(array $handlingSubject, array $response)
     {

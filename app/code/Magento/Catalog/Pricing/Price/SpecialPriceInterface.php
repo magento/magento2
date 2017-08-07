@@ -8,7 +8,6 @@ namespace Magento\Catalog\Pricing\Price;
 
 /**
  * Special price interface
- * @since 2.0.0
  */
 interface SpecialPriceInterface
 {
@@ -16,7 +15,6 @@ interface SpecialPriceInterface
      * Returns special price
      *
      * @return float
-     * @since 2.0.0
      */
     public function getSpecialPrice();
 
@@ -24,7 +22,6 @@ interface SpecialPriceInterface
      * Returns starting date of the special price
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getSpecialFromDate();
 
@@ -32,19 +29,16 @@ interface SpecialPriceInterface
      * Returns end date of the special price
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getSpecialToDate();
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isScopeDateInInterval();
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isPercentageDiscount();
 }

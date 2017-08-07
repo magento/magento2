@@ -24,31 +24,26 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Suffix extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\UrlRewrite\Helper\UrlRewrite
-     * @since 2.0.0
      */
     protected $urlRewriteHelper;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\UrlRewrite\Model\UrlFinderInterface
-     * @since 2.0.0
      */
     protected $urlFinder;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected $connection;
 
@@ -77,7 +72,6 @@ class Suffix extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -121,7 +115,6 @@ class Suffix extends \Magento\Framework\App\Config\Value
      * Check url rewrite suffix - whether we can support it
      *
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -131,7 +124,6 @@ class Suffix extends \Magento\Framework\App\Config\Value
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -182,7 +174,6 @@ class Suffix extends \Magento\Framework\App\Config\Value
      * Update suffix for url rewrites
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function updateSuffixForUrlRewrites()
     {
@@ -221,7 +212,6 @@ class Suffix extends \Magento\Framework\App\Config\Value
 
     /**
      * @return array|null
-     * @since 2.0.0
      */
     protected function getStoreIds()
     {
@@ -241,7 +231,6 @@ class Suffix extends \Magento\Framework\App\Config\Value
     /**
      * @param array $storeIds
      * @return array
-     * @since 2.0.0
      */
     protected function getOverrideStoreIds($storeIds)
     {

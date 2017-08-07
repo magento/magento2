@@ -19,25 +19,25 @@ use Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface;
  * Class ShipmentDocumentFactory
  *
  * @api
- * @since 2.2.0
+ * @since 2.1.2
  */
 class ShipmentDocumentFactory
 {
     /**
      * @var ShipmentFactory
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private $shipmentFactory;
 
     /**
      * @var TrackFactory
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private $trackFactory;
 
     /**
      * @var HydratorPool
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private $hydratorPool;
 
@@ -47,7 +47,7 @@ class ShipmentDocumentFactory
      * @param ShipmentFactory $shipmentFactory
      * @param HydratorPool $hydratorPool
      * @param TrackFactory $trackFactory
-     * @since 2.2.0
+     * @since 2.1.2
      */
     public function __construct(
         ShipmentFactory $shipmentFactory,
@@ -70,7 +70,7 @@ class ShipmentDocumentFactory
      * @param ShipmentPackageCreationInterface[] $packages
      * @param ShipmentCreationArgumentsInterface|null $arguments
      * @return ShipmentInterface
-     * @since 2.2.0
+     * @since 2.1.2
      */
     public function create(
         OrderInterface $order,
@@ -105,7 +105,7 @@ class ShipmentDocumentFactory
      * @param ShipmentInterface $shipment
      * @param ShipmentTrackCreationInterface[] $tracks
      * @return ShipmentInterface
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private function prepareTracks(\Magento\Sales\Api\Data\ShipmentInterface $shipment, array $tracks)
     {
@@ -123,7 +123,7 @@ class ShipmentDocumentFactory
      *
      * @param ShipmentItemCreationInterface[] $items
      * @return array
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private function itemsToArray(array $items = [])
     {

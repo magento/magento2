@@ -15,13 +15,11 @@ namespace Magento\Review\Model\Rating;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class Entity extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -31,7 +29,6 @@ class Entity extends \Magento\Framework\Model\AbstractModel
     /**
      * @param string $entityCode
      * @return int
-     * @since 2.0.0
      */
     public function getIdByCode($entityCode)
     {

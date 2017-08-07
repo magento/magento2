@@ -19,25 +19,21 @@ use Zend\ServiceManager\ServiceManager;
 
 /**
  * Class prepares folders for code generation
- * @since 2.0.0
  */
 class CompilerPreparation
 {
     /**
      * @var ServiceManager
-     * @since 2.0.0
      */
     private $serviceManager;
 
     /**
      * @var ArgvInput
-     * @since 2.0.0
      */
     private $input;
 
     /**
      * @var File
-     * @since 2.0.0
      */
     private $filesystemDriver;
 
@@ -51,7 +47,6 @@ class CompilerPreparation
      * @param ServiceManager $serviceManager
      * @param ArgvInput $input
      * @param File $filesystemDriver
-     * @since 2.0.0
      */
     public function __construct(
         ServiceManager $serviceManager,
@@ -68,7 +63,6 @@ class CompilerPreparation
      *
      * @throws GenerationDirectoryAccessException If generation directory is read-only
      * @return void
-     * @since 2.0.0
      */
     public function handleCompilerEnvironment()
     {

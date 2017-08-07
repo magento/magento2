@@ -12,43 +12,37 @@ use \Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
  * Sales order history block
  *
  * @api
- * @since 2.0.0
  */
 class History extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'order/history.phtml';
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
-     * @since 2.0.0
      */
     protected $_orderCollectionFactory;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Sales\Model\Order\Config
-     * @since 2.0.0
      */
     protected $_orderConfig;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Collection
-     * @since 2.0.0
      */
     protected $orders;
 
     /**
      * @var CollectionFactoryInterface
-     * @since 2.2.0
+     * @since 2.1.1
      */
     private $orderCollectionFactory;
 
@@ -58,7 +52,6 @@ class History extends \Magento\Framework\View\Element\Template
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -75,7 +68,6 @@ class History extends \Magento\Framework\View\Element\Template
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -86,8 +78,8 @@ class History extends \Magento\Framework\View\Element\Template
     /**
      * @return CollectionFactoryInterface
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 2.1.1
+     * @since 2.1.1
      */
     private function getOrderCollectionFactory()
     {
@@ -99,7 +91,6 @@ class History extends \Magento\Framework\View\Element\Template
 
     /**
      * @return bool|\Magento\Sales\Model\ResourceModel\Order\Collection
-     * @since 2.0.0
      */
     public function getOrders()
     {
@@ -122,7 +113,6 @@ class History extends \Magento\Framework\View\Element\Template
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -142,7 +132,6 @@ class History extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getPagerHtml()
     {
@@ -152,7 +141,6 @@ class History extends \Magento\Framework\View\Element\Template
     /**
      * @param object $order
      * @return string
-     * @since 2.0.0
      */
     public function getViewUrl($order)
     {
@@ -162,7 +150,6 @@ class History extends \Magento\Framework\View\Element\Template
     /**
      * @param object $order
      * @return string
-     * @since 2.0.0
      */
     public function getTrackUrl($order)
     {
@@ -172,7 +159,6 @@ class History extends \Magento\Framework\View\Element\Template
     /**
      * @param object $order
      * @return string
-     * @since 2.0.0
      */
     public function getReorderUrl($order)
     {
@@ -181,7 +167,6 @@ class History extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getBackUrl()
     {

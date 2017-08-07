@@ -13,7 +13,6 @@ use Psr\Log\LoggerInterface;
  * @author     Magento Core Team <core@magentocommerce.com>
  *
  * @api
- * @since 2.0.0
  */
 class Logger
 {
@@ -21,20 +20,17 @@ class Logger
 
     /**
      * @var LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var \Magento\Payment\Gateway\ConfigInterface
-     * @since 2.0.0
      */
     private $config;
 
     /**
      * @param LoggerInterface $logger
      * @param \Magento\Payment\Gateway\ConfigInterface $config
-     * @since 2.0.0
      */
     public function __construct(
         LoggerInterface $logger,
@@ -51,7 +47,6 @@ class Logger
      * @param array|null $maskKeys
      * @param bool|null $forceDebug
      * @return void
-     * @since 2.0.0
      */
     public function debug(array $data, array $maskKeys = null, $forceDebug = null)
     {
@@ -70,7 +65,6 @@ class Logger
      * Returns configured keys to be replaced with mask
      *
      * @return array
-     * @since 2.0.0
      */
     private function getDebugReplaceFields()
     {
@@ -84,7 +78,6 @@ class Logger
      * Whether debug is enabled in configuration
      *
      * @return bool
-     * @since 2.0.0
      */
     private function isDebugOn()
     {
@@ -97,7 +90,6 @@ class Logger
      * @param array $debugData
      * @param array $debugReplacePrivateDataKeys
      * @return array
-     * @since 2.0.0
      */
     protected function filterDebugData(array $debugData, array $debugReplacePrivateDataKeys)
     {

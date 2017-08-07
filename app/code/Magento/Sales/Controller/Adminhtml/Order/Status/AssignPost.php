@@ -9,7 +9,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Status;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Status\AssignPost
  *
- * @since 2.0.0
  */
 class AssignPost extends \Magento\Sales\Controller\Adminhtml\Order\Status
 {
@@ -17,7 +16,6 @@ class AssignPost extends \Magento\Sales\Controller\Adminhtml\Order\Status
      * Save status assignment to state
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

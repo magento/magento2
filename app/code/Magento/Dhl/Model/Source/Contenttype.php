@@ -7,13 +7,11 @@ namespace Magento\Dhl\Model\Source;
 
 /**
  * Source model for DHL Content Type
- * @since 2.0.0
  */
 class Contenttype implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

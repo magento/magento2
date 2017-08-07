@@ -9,7 +9,6 @@ use Magento\Framework\View\Page\Config;
 
 /**
  * Page config Renderer model
- * @since 2.0.0
  */
 class Renderer extends Config\Renderer
 {
@@ -21,7 +20,6 @@ class Renderer extends Config\Renderer
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
-     * @since 2.0.0
      */
     private $assetRepo;
 
@@ -33,7 +31,6 @@ class Renderer extends Config\Renderer
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @since 2.0.0
      */
     public function __construct(
         Config $pageConfig,
@@ -60,7 +57,6 @@ class Renderer extends Config\Renderer
      * @param string $contentType
      * @param string $attributes
      * @return string
-     * @since 2.0.0
      */
     protected function addDefaultAttributes($contentType, $attributes)
     {
@@ -86,7 +82,6 @@ class Renderer extends Config\Renderer
      * @param array $resultGroups
      *
      * @return string
-     * @since 2.0.0
      */
     public function renderAssets($resultGroups = [])
     {
@@ -99,7 +94,6 @@ class Renderer extends Config\Renderer
      * @param array $resultGroups
      *
      * @return mixed
-     * @since 2.0.0
      */
     private function renderLessJsScripts($resultGroups)
     {

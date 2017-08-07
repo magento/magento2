@@ -18,7 +18,6 @@ use Magento\Framework\Escaper;
 /**
  * Class \Magento\Framework\Data\Form\Element\Editablemultiselect
  *
- * @since 2.0.0
  */
 class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multiselect
 {
@@ -62,7 +61,6 @@ class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multisele
      *
      * @return string
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -124,7 +122,6 @@ class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multisele
      * @param array $option
      * @param string[] $selected
      * @return string
-     * @since 2.0.0
      */
     protected function _optionToHtml($option, $selected)
     {

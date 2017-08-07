@@ -14,26 +14,22 @@ use Magento\Framework\Search\Request\BucketInterface;
 /**
  * Class \Magento\Framework\Search\Dynamic\Algorithm\Auto
  *
- * @since 2.0.0
  */
 class Auto implements AlgorithmInterface
 {
     /**
      * @var DataProviderInterface
-     * @since 2.0.0
      */
     private $dataProvider;
 
     /**
      * @var OptionsInterface
-     * @since 2.0.0
      */
     private $options;
 
     /**
      * @param DataProviderInterface $dataProvider
      * @param OptionsInterface $options
-     * @since 2.0.0
      */
     public function __construct(DataProviderInterface $dataProvider, OptionsInterface $options)
     {
@@ -43,7 +39,6 @@ class Auto implements AlgorithmInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getItems(
         BucketInterface $bucket,
@@ -66,7 +61,6 @@ class Auto implements AlgorithmInterface
      * @param array $dimensions
      * @param EntityStorage $entityStorage
      * @return number
-     * @since 2.0.0
      */
     private function getRange($bucket, array $dimensions, EntityStorage $entityStorage)
     {
@@ -86,7 +80,6 @@ class Auto implements AlgorithmInterface
      *
      * @param EntityStorage $entityStorage
      * @return float
-     * @since 2.0.0
      */
     private function getMaxPriceInt(EntityStorage $entityStorage)
     {
@@ -99,7 +92,6 @@ class Auto implements AlgorithmInterface
 
     /**
      * @return int
-     * @since 2.0.0
      */
     private function getMinRangePower()
     {

@@ -9,7 +9,6 @@ use Magento\Framework\App\Helper\AbstractHelper;
 
 /**
  * Usps data helper
- * @since 2.0.0
  */
 class Data extends AbstractHelper
 {
@@ -17,7 +16,6 @@ class Data extends AbstractHelper
      * Available shipping methods
      *
      * @var array
-     * @since 2.0.0
      */
     protected $availableShippingMethods = [
         'usps_0_FCLE', // First-Class Mail Large Envelope
@@ -45,7 +43,6 @@ class Data extends AbstractHelper
      *
      * @param string $shippingMethod
      * @return bool
-     * @since 2.0.0
      */
     public function displayGirthValue($shippingMethod)
     {

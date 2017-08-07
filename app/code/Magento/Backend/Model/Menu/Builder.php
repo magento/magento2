@@ -9,25 +9,21 @@ namespace Magento\Backend\Model\Menu;
  * Menu builder object. Retrieves commands (\Magento\Backend\Model\Menu\Builder\AbstractCommand)
  * to build menu (\Magento\Backend\Model\Menu)
  * @api
- * @since 2.0.0
  */
 class Builder
 {
     /**
      * @var \Magento\Backend\Model\Menu\Builder\AbstractCommand[]
-     * @since 2.0.0
      */
     protected $_commands = [];
 
     /**
      * @var \Magento\Backend\Model\Menu\Item\Factory
-     * @since 2.0.0
      */
     protected $_itemFactory;
 
     /**
      * @param \Magento\Backend\Model\Menu\Item\Factory $menuItemFactory
-     * @since 2.0.0
      */
     public function __construct(\Magento\Backend\Model\Menu\Item\Factory $menuItemFactory)
     {
@@ -39,7 +35,6 @@ class Builder
      *
      * @param \Magento\Backend\Model\Menu\Builder\AbstractCommand $command
      * @return $this
-     * @since 2.0.0
      */
     public function processCommand(\Magento\Backend\Model\Menu\Builder\AbstractCommand $command)
     {
@@ -57,7 +52,6 @@ class Builder
      * @param \Magento\Backend\Model\Menu $menu
      * @return \Magento\Backend\Model\Menu
      * @throws \OutOfRangeException in case given parent id does not exists
-     * @since 2.0.0
      */
     public function getResult(\Magento\Backend\Model\Menu $menu)
     {
@@ -104,7 +98,6 @@ class Builder
      * @param string $paramName
      * @param mixed $defaultValue
      * @return mixed
-     * @since 2.0.0
      */
     protected function _getParam($params, $paramName, $defaultValue = null)
     {

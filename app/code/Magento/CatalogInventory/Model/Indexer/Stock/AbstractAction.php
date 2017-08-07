@@ -15,7 +15,6 @@ use Magento\Framework\App\ResourceConnection;
  * Abstract action reindex class
  *
  * @package Magento\CatalogInventory\Model\Indexer\Stock
- * @since 2.0.0
  */
 abstract class AbstractAction
 {
@@ -23,25 +22,21 @@ abstract class AbstractAction
      * Resource instance
      *
      * @var Resource
-     * @since 2.0.0
      */
     protected $_resource;
 
     /**
      * @var \Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory
-     * @since 2.0.0
      */
     protected $_indexerFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product\Type
-     * @since 2.0.0
      */
     protected $_catalogProductType;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected $_connection;
 
@@ -50,7 +45,6 @@ abstract class AbstractAction
      * Sorted by priority
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_indexers = [];
 
@@ -58,19 +52,16 @@ abstract class AbstractAction
      * Flag that defines if need to use "_idx" index table suffix instead of "_tmp"
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isNeedUseIdxTable = false;
 
     /**
      * @var \Magento\Framework\Indexer\CacheContext
-     * @since 2.0.0
      */
     private $cacheContext;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     private $eventManager;
 
@@ -86,7 +77,6 @@ abstract class AbstractAction
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Framework\Indexer\CacheContext $cacheContext
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @since 2.0.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -108,7 +98,6 @@ abstract class AbstractAction
      * @param array|int $ids
      *
      * @return void
-     * @since 2.0.0
      */
     abstract public function execute($ids);
 
@@ -116,7 +105,6 @@ abstract class AbstractAction
      * Retrieve connection instance
      *
      * @return bool|\Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected function _getConnection()
     {
@@ -130,7 +118,6 @@ abstract class AbstractAction
      * Retrieve Stock Indexer Models per Product Type
      *
      * @return \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\StockInterface[]
-     * @since 2.0.0
      */
     protected function _getTypeIndexers()
     {
@@ -153,7 +140,6 @@ abstract class AbstractAction
      *
      * @param string $entityName
      * @return string
-     * @since 2.0.0
      */
     protected function _getTable($entityName)
     {
@@ -165,7 +151,6 @@ abstract class AbstractAction
      *
      * @param int|array $childIds
      * @return array
-     * @since 2.0.0
      */
     public function getRelationsByChild($childIds)
     {
@@ -181,7 +166,6 @@ abstract class AbstractAction
      * Reindex all
      *
      * @return void
-     * @since 2.0.0
      */
     public function reindexAll()
     {
@@ -199,7 +183,6 @@ abstract class AbstractAction
      * Synchronize data between index storage and original storage
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _syncData()
     {
@@ -221,7 +204,6 @@ abstract class AbstractAction
      * @param string $tableName
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _deleteOldRelations($tableName)
     {
@@ -243,7 +225,6 @@ abstract class AbstractAction
      *
      * @param array $productIds
      * @return $this
-     * @since 2.0.0
      */
     protected function _reindexRows($productIds = [])
     {
@@ -308,7 +289,6 @@ abstract class AbstractAction
      *
      * @param bool|null $value
      * @return bool
-     * @since 2.0.0
      */
     public function useIdxTable($value = null)
     {
@@ -322,7 +302,6 @@ abstract class AbstractAction
      * Retrieve temporary index table name
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getIdxTable()
     {
@@ -336,7 +315,6 @@ abstract class AbstractAction
      * Clean up temporary index table
      *
      * @return void
-     * @since 2.0.0
      */
     public function clearTemporaryIndexTable()
     {

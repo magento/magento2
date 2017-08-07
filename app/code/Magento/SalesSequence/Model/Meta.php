@@ -11,13 +11,11 @@ use Magento\Framework\Model\AbstractModel;
  * Class Meta
  *
  * @api
- * @since 2.0.0
  */
 class Meta extends AbstractModel
 {
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     protected function _construct()
     {

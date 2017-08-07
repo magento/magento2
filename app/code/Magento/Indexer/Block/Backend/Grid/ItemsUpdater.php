@@ -8,19 +8,16 @@ namespace Magento\Indexer\Block\Backend\Grid;
 /**
  * Class \Magento\Indexer\Block\Backend\Grid\ItemsUpdater
  *
- * @since 2.0.0
  */
 class ItemsUpdater implements \Magento\Framework\View\Layout\Argument\UpdaterInterface
 {
     /**
      * @var \Magento\Framework\AuthorizationInterface
-     * @since 2.0.0
      */
     protected $authorization;
 
     /**
      * @param \Magento\Framework\AuthorizationInterface $authorization
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\AuthorizationInterface $authorization)
     {
@@ -31,7 +28,6 @@ class ItemsUpdater implements \Magento\Framework\View\Layout\Argument\UpdaterInt
      * Remove massaction items in case they disallowed for user
      * @param mixed $argument
      * @return mixed
-     * @since 2.0.0
      */
     public function update($argument)
     {

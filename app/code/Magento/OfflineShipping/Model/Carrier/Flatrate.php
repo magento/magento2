@@ -15,31 +15,26 @@ use Magento\Shipping\Model\Rate\Result;
  * Flat rate shipping model
  *
  * @api
- * @since 2.0.0
  */
 class Flatrate extends AbstractCarrier implements CarrierInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_code = 'flatrate';
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_isFixed = true;
 
     /**
      * @var \Magento\Shipping\Model\Rate\ResultFactory
-     * @since 2.0.0
      */
     protected $_rateResultFactory;
 
     /**
      * @var \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory
-     * @since 2.0.0
      */
     protected $_rateMethodFactory;
 
@@ -57,7 +52,6 @@ class Flatrate extends AbstractCarrier implements CarrierInterface
      * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
      * @param ItemPriceCalculator $itemPriceCalculator
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -79,7 +73,6 @@ class Flatrate extends AbstractCarrier implements CarrierInterface
      * @return Result|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function collectRates(RateRequest $request)
     {
@@ -129,7 +122,6 @@ class Flatrate extends AbstractCarrier implements CarrierInterface
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getAllowedMethods()
     {

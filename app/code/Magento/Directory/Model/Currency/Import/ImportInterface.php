@@ -10,7 +10,6 @@ namespace Magento\Directory\Model\Currency\Import;
  * Import currency model interface
  *
  * @api
- * @since 2.0.0
  */
 interface ImportInterface
 {
@@ -18,7 +17,6 @@ interface ImportInterface
      * Import rates
      *
      * @return \Magento\Directory\Model\Currency\Import\AbstractImport
-     * @since 2.0.0
      */
     public function importRates();
 
@@ -26,7 +24,6 @@ interface ImportInterface
      * Fetch rates
      *
      * @return array
-     * @since 2.0.0
      */
     public function fetchRates();
 
@@ -34,7 +31,6 @@ interface ImportInterface
      * Return messages
      *
      * @return array
-     * @since 2.0.0
      */
     public function getMessages();
 }

@@ -9,7 +9,6 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
  * Class CategoryProcessor
  *
  * @api
- * @since 2.0.0
  */
 class CategoryProcessor
 {
@@ -20,7 +19,6 @@ class CategoryProcessor
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
-     * @since 2.0.0
      */
     protected $categoryColFactory;
 
@@ -28,7 +26,6 @@ class CategoryProcessor
      * Categories text-path to ID hash.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $categories = [];
 
@@ -36,7 +33,6 @@ class CategoryProcessor
      * Categories id to object cache.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $categoriesCache = [];
 
@@ -44,7 +40,6 @@ class CategoryProcessor
      * Instance of catalog category factory.
      *
      * @var \Magento\Catalog\Model\CategoryFactory
-     * @since 2.0.0
      */
     protected $categoryFactory;
 
@@ -59,7 +54,6 @@ class CategoryProcessor
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryColFactory
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryColFactory,
@@ -72,7 +66,6 @@ class CategoryProcessor
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function initCategories()
     {
@@ -110,7 +103,6 @@ class CategoryProcessor
      * @param int $parentId
      *
      * @return int
-     * @since 2.0.0
      */
     protected function createCategory($name, $parentId)
     {
@@ -137,7 +129,6 @@ class CategoryProcessor
      * @param string $categoryPath
      *
      * @return int
-     * @since 2.0.0
      */
     protected function upsertCategory($categoryPath)
     {
@@ -169,7 +160,6 @@ class CategoryProcessor
      * @param string $categoriesSeparator
      *
      * @return array
-     * @since 2.0.0
      */
     public function upsertCategories($categoriesString, $categoriesSeparator)
     {
@@ -235,7 +225,6 @@ class CategoryProcessor
      * @param int $categoryId
      *
      * @return \Magento\Catalog\Model\Category|null
-     * @since 2.0.0
      */
     public function getCategoryById($categoryId)
     {

@@ -14,7 +14,6 @@ use Magento\Paypal\Model\Billing\Agreement\MethodInterface as BillingAgreementMe
 
 /**
  * Paypal Data helper
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -25,31 +24,26 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Cache for shouldAskToCreateBillingAgreement()
      *
      * @var bool
-     * @since 2.0.0
      */
     protected static $_shouldAskToCreateBillingAgreement = null;
 
     /**
      * @var \Magento\Payment\Helper\Data
-     * @since 2.0.0
      */
     protected $_paymentData;
 
     /**
      * @var \Magento\Paypal\Model\Billing\AgreementFactory
-     * @since 2.0.0
      */
     protected $_agreementFactory;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $methodCodes;
 
     /**
      * @var \Magento\Paypal\Model\ConfigFactory
-     * @since 2.0.0
      */
     private $configFactory;
 
@@ -71,7 +65,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
      * @param \Magento\Paypal\Model\ConfigFactory $configFactory
      * @param array $methodCodes
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -93,7 +86,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Paypal\Model\Config $config
      * @param int $customerId
      * @return bool
-     * @since 2.0.0
      */
     public function shouldAskToCreateBillingAgreement(\Magento\Paypal\Model\Config $config, $customerId)
     {
@@ -114,7 +106,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @param \Magento\Quote\Model\Quote|null $quote
      * @return BillingAgreementMethodInterface[]
-     * @since 2.0.0
      */
     public function getBillingAgreementMethods($store = null, $quote = null)
     {
@@ -141,7 +132,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $methodCode
      * @param string $txnId
      * @return string
-     * @since 2.0.0
      */
     public function getHtmlTransactionId($methodCode, $txnId)
     {

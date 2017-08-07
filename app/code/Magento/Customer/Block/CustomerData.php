@@ -7,7 +7,6 @@ namespace Magento\Customer\Block;
 
 /**
  * @api
- * @since 2.0.0
  */
 class CustomerData extends \Magento\Framework\View\Element\Template
 {
@@ -21,7 +20,6 @@ class CustomerData extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param array $data
      * @param array $expirableSectionNames
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -35,7 +33,6 @@ class CustomerData extends \Magento\Framework\View\Element\Template
     /**
      * Get CookieLifeTime
      * @return null|string scopeCode
-     * @since 2.0.0
      */
     public function getCookieLifeTime()
     {
@@ -50,7 +47,6 @@ class CustomerData extends \Magento\Framework\View\Element\Template
      *
      * @param string $route
      * @return string Customer data url.
-     * @since 2.0.0
      */
     public function getCustomerDataUrl($route)
     {

@@ -12,7 +12,6 @@ use Symfony\Component\Console\Input\InputOption;
 
 /**
  * @api
- * @since 2.0.0
  */
 abstract class AbstractCacheCommand extends Command
 {
@@ -25,7 +24,6 @@ abstract class AbstractCacheCommand extends Command
      * CacheManager
      *
      * @var Manager
-     * @since 2.0.0
      */
     protected $cacheManager;
 
@@ -33,7 +31,6 @@ abstract class AbstractCacheCommand extends Command
      * Constructor
      *
      * @param Manager $cacheManager
-     * @since 2.0.0
      */
     public function __construct(Manager $cacheManager)
     {
@@ -43,7 +40,6 @@ abstract class AbstractCacheCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {

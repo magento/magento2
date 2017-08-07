@@ -10,7 +10,6 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\Bundle\Observer\AppendUpsellProductsObserver
  *
- * @since 2.0.0
  */
 class AppendUpsellProductsObserver implements ObserverInterface
 {
@@ -18,25 +17,21 @@ class AppendUpsellProductsObserver implements ObserverInterface
      * Bundle data
      *
      * @var \Magento\Bundle\Helper\Data
-     * @since 2.0.0
      */
     protected $bundleData;
 
     /**
      * @var \Magento\Bundle\Model\ResourceModel\Selection
-     * @since 2.0.0
      */
     protected $bundleSelection;
 
     /**
      * @var \Magento\Catalog\Model\Config
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Catalog\Model\Product\Visibility
-     * @since 2.0.0
      */
     protected $productVisibility;
 
@@ -45,7 +40,6 @@ class AppendUpsellProductsObserver implements ObserverInterface
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Catalog\Model\Config $config
      * @param \Magento\Bundle\Model\ResourceModel\Selection $bundleSelection
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Bundle\Helper\Data $bundleData,
@@ -66,7 +60,6 @@ class AppendUpsellProductsObserver implements ObserverInterface
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

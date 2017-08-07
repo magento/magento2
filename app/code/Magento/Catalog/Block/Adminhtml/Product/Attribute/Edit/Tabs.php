@@ -13,13 +13,11 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -31,7 +29,6 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {

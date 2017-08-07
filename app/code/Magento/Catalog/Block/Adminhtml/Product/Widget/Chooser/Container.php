@@ -16,13 +16,11 @@ use Magento\Backend\Block\Template;
 /**
  * Class \Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser\Container
  *
- * @since 2.0.0
  */
 class Container extends Template
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'catalog/product/widget/chooser/container.phtml';
 }

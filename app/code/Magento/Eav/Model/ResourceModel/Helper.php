@@ -9,7 +9,6 @@ namespace Magento\Eav\Model\ResourceModel;
  * Eav Mysql resource helper model
  *
  * @api
- * @since 2.0.0
  */
 class Helper extends \Magento\Framework\DB\Helper
 {
@@ -19,7 +18,6 @@ class Helper extends \Magento\Framework\DB\Helper
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param string $modulePrefix
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\ResourceConnection $resource, $modulePrefix = 'Magento_Eav')
     {
@@ -30,7 +28,6 @@ class Helper extends \Magento\Framework\DB\Helper
      * Mysql column - Table DDL type pairs
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_ddlColumnTypes = [
         \Magento\Framework\DB\Ddl\Table::TYPE_BOOLEAN => 'bool',
@@ -53,7 +50,6 @@ class Helper extends \Magento\Framework\DB\Helper
      *
      * @param string $columnType
      * @return string
-     * @since 2.0.0
      */
     public function getDdlTypeByColumnType($columnType)
     {
@@ -77,7 +73,6 @@ class Helper extends \Magento\Framework\DB\Helper
      *
      * @param array $selects
      * @return array
-     * @since 2.0.0
      */
     public function getLoadAttributesSelectGroups($selects)
     {

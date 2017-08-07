@@ -10,7 +10,6 @@ use Zend\View\Model\ViewModel;
 
 /**
  * Controller for Updater Landing page
- * @since 2.0.0
  */
 class LandingUpdater extends AbstractActionController
 {
@@ -31,7 +30,6 @@ class LandingUpdater extends AbstractActionController
 
     /**
      * @return array|ViewModel
-     * @since 2.0.0
      */
     public function indexAction()
     {

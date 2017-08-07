@@ -11,7 +11,6 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Provides scoped configuration
  * @api
- * @since 2.0.0
  */
 class Scoped extends \Magento\Framework\Config\Data
 {
@@ -19,7 +18,6 @@ class Scoped extends \Magento\Framework\Config\Data
      * Configuration scope resolver
      *
      * @var \Magento\Framework\Config\ScopeInterface
-     * @since 2.0.0
      */
     protected $_configScope;
 
@@ -27,7 +25,6 @@ class Scoped extends \Magento\Framework\Config\Data
      * Configuration reader
      *
      * @var \Magento\Framework\Config\ReaderInterface
-     * @since 2.0.0
      */
     protected $_reader;
 
@@ -35,7 +32,6 @@ class Scoped extends \Magento\Framework\Config\Data
      * Configuration cache
      *
      * @var \Magento\Framework\Config\CacheInterface
-     * @since 2.0.0
      */
     protected $_cache;
 
@@ -43,7 +39,6 @@ class Scoped extends \Magento\Framework\Config\Data
      * Cache tag
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_cacheId;
 
@@ -51,7 +46,6 @@ class Scoped extends \Magento\Framework\Config\Data
      * Scope priority loading scheme
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_scopePriorityScheme = [];
 
@@ -59,7 +53,6 @@ class Scoped extends \Magento\Framework\Config\Data
      * Loaded scopes
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_loadedScopes = [];
 
@@ -77,7 +70,6 @@ class Scoped extends \Magento\Framework\Config\Data
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string $cacheId
      * @param SerializerInterface|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\ReaderInterface $reader,
@@ -99,7 +91,6 @@ class Scoped extends \Magento\Framework\Config\Data
      * @param string $path
      * @param mixed $default
      * @return array|mixed|null
-     * @since 2.0.0
      */
     public function get($path = null, $default = null)
     {
@@ -111,7 +102,6 @@ class Scoped extends \Magento\Framework\Config\Data
      * Load data for current scope
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _loadScopedData()
     {

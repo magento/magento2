@@ -15,7 +15,6 @@ use Magento\Framework\App\RequestInterface;
 /**
  * Class Bundle
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Bundle
 {
@@ -27,7 +26,6 @@ class Bundle
 
     /**
      * @var RequestInterface
-     * @since 2.0.0
      */
     protected $request;
 
@@ -62,7 +60,6 @@ class Bundle
      * @param ProductRepository $productRepository
      * @param StoreManager $storeManager
      * @param ProductCustomOptionInterfaceFactory $customOptionFactory
-     * @since 2.0.0
      */
     public function __construct(
         RequestInterface $request,
@@ -90,7 +87,6 @@ class Bundle
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function afterInitialize(
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject,

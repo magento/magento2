@@ -9,7 +9,6 @@ namespace Magento\NewRelicReporting\Model;
 /**
  * Class \Magento\NewRelicReporting\Model\Users
  *
- * @since 2.0.0
  */
 class Users extends \Magento\Framework\Model\AbstractModel
 {
@@ -17,7 +16,6 @@ class Users extends \Magento\Framework\Model\AbstractModel
      * Initialize users model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

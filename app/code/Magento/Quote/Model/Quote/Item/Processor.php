@@ -17,25 +17,21 @@ use Magento\Quote\Api\Data\CartItemInterface;
  * Class Processor
  *  - initializes quote item with store_id and qty data
  *  - updates quote item qty and custom price data
- * @since 2.0.0
  */
 class Processor
 {
     /**
      * @var \Magento\Quote\Model\Quote\ItemFactory
-     * @since 2.0.0
      */
     protected $quoteItemFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     protected $appState;
 
@@ -43,7 +39,6 @@ class Processor
      * @param ItemFactory $quoteItemFactory
      * @param StoreManagerInterface $storeManager
      * @param State $appState
-     * @since 2.0.0
      */
     public function __construct(
         ItemFactory $quoteItemFactory,
@@ -62,7 +57,6 @@ class Processor
      * @param Product $product
      *
      * @return \Magento\Quote\Model\Quote\Item
-     * @since 2.0.0
      */
     public function init(Product $product, $request)
     {
@@ -94,7 +88,6 @@ class Processor
      * @param \Magento\Framework\DataObject $request
      * @param Product $candidate
      * @return void
-     * @since 2.0.0
      */
     public function prepare(Item $item, DataObject $request, Product $candidate)
     {
@@ -118,7 +111,6 @@ class Processor
      *
      * @param Item $item
      * @return void
-     * @since 2.0.0
      */
     protected function setItemStoreId(Item $item)
     {

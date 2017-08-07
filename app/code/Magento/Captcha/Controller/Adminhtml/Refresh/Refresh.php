@@ -11,7 +11,6 @@ namespace Magento\Captcha\Controller\Adminhtml\Refresh;
 /**
  * Class \Magento\Captcha\Controller\Adminhtml\Refresh\Refresh
  *
- * @since 2.0.0
  */
 class Refresh extends \Magento\Backend\App\Action
 {
@@ -46,7 +45,6 @@ class Refresh extends \Magento\Backend\App\Action
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -67,7 +65,6 @@ class Refresh extends \Magento\Backend\App\Action
      * Check if user has permissions to access this controller
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _isAllowed()
     {

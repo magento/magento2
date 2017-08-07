@@ -9,7 +9,6 @@ namespace Magento\Paypal\Block\Adminhtml\Settlement;
  * Settlement reports transaction details
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Details extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -18,7 +17,6 @@ class Details extends \Magento\Backend\Block\Widget\Form\Container
      * Initialize titles, buttons
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -34,7 +32,6 @@ class Details extends \Magento\Backend\Block\Widget\Form\Container
      * Initialize form
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {

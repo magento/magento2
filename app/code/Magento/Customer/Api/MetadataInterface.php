@@ -9,7 +9,6 @@ namespace Magento\Customer\Api;
 /**
  * Interface for getting attributes metadata. Note that this interface should not be used directly, use its children.
  * @api
- * @since 2.0.0
  */
 interface MetadataInterface extends \Magento\Framework\Api\MetadataServiceInterface
 {
@@ -19,7 +18,6 @@ interface MetadataInterface extends \Magento\Framework\Api\MetadataServiceInterf
      * @param string $formCode
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface[]
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getAttributes($formCode);
 
@@ -30,7 +28,6 @@ interface MetadataInterface extends \Magento\Framework\Api\MetadataServiceInterf
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getAttributeMetadata($attributeCode);
 
@@ -39,7 +36,6 @@ interface MetadataInterface extends \Magento\Framework\Api\MetadataServiceInterf
      *
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface[]
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getAllAttributesMetadata();
 
@@ -49,7 +45,6 @@ interface MetadataInterface extends \Magento\Framework\Api\MetadataServiceInterf
      * @param string $dataInterfaceName
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface[]
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getCustomAttributesMetadata($dataInterfaceName = '');
 }

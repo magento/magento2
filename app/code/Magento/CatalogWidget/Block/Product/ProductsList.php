@@ -16,7 +16,6 @@ use Magento\Widget\Block\BlockInterface;
  * Catalog Products List widget block
  * Class ProductsList
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implements BlockInterface, IdentityInterface
 {
@@ -46,13 +45,11 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * Instance of pager block
      *
      * @var \Magento\Catalog\Block\Product\Widget\Html\Pager
-     * @since 2.0.0
      */
     protected $pager;
 
     /**
      * @var \Magento\Framework\App\Http\Context
-     * @since 2.0.0
      */
     protected $httpContext;
 
@@ -60,7 +57,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * Catalog product visibility
      *
      * @var \Magento\Catalog\Model\Product\Visibility
-     * @since 2.0.0
      */
     protected $catalogProductVisibility;
 
@@ -68,25 +64,21 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * Product collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     * @since 2.0.0
      */
     protected $productCollectionFactory;
 
     /**
      * @var \Magento\Rule\Model\Condition\Sql\Builder
-     * @since 2.0.0
      */
     protected $sqlBuilder;
 
     /**
      * @var \Magento\CatalogWidget\Model\Rule
-     * @since 2.0.0
      */
     protected $rule;
 
     /**
      * @var \Magento\Widget\Helper\Conditions
-     * @since 2.0.0
      */
     protected $conditionsHelper;
 
@@ -114,7 +106,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * @param \Magento\Widget\Helper\Conditions $conditionsHelper
      * @param array $data
      * @param Json|null $json
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -142,7 +133,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -163,7 +153,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * Get key pieces for caching block content
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCacheKeyInfo()
     {
@@ -187,7 +176,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function getProductPriceHtml(
         \Magento\Catalog\Model\Product $product,
@@ -224,7 +212,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -236,7 +223,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * Prepare and return product collection
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
-     * @since 2.0.0
      */
     public function createCollection()
     {
@@ -264,7 +250,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
 
     /**
      * @return \Magento\Rule\Model\Condition\Combine
-     * @since 2.0.0
      */
     protected function getConditions()
     {
@@ -284,7 +269,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * Retrieve how many products should be displayed
      *
      * @return int
-     * @since 2.0.0
      */
     public function getProductsCount()
     {
@@ -303,7 +287,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * Retrieve how many products should be displayed
      *
      * @return int
-     * @since 2.0.0
      */
     public function getProductsPerPage()
     {
@@ -317,7 +300,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * Return flag whether pager need to be shown or not
      *
      * @return bool
-     * @since 2.0.0
      */
     public function showPager()
     {
@@ -331,7 +313,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * Retrieve how many products should be displayed on page
      *
      * @return int
-     * @since 2.0.0
      */
     protected function getPageSize()
     {
@@ -342,7 +323,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * Render pagination HTML
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPagerHtml()
     {
@@ -372,7 +352,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * Return identifiers for produced content
      *
      * @return array
-     * @since 2.0.0
      */
     public function getIdentities()
     {
@@ -392,7 +371,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * Get value of widgets' title parameter
      *
      * @return mixed|string
-     * @since 2.0.0
      */
     public function getTitle()
     {

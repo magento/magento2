@@ -7,7 +7,6 @@ namespace Magento\Sales\Block\Status\Grid\Column;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Unassign extends \Magento\Backend\Block\Widget\Grid\Column
 {
@@ -15,7 +14,6 @@ class Unassign extends \Magento\Backend\Block\Widget\Grid\Column
      * Add decorated action to column
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFrameCallback()
     {
@@ -31,7 +29,6 @@ class Unassign extends \Magento\Backend\Block\Widget\Grid\Column
      * @param bool $isExport
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function decorateAction($value, $row, $column, $isExport)
     {

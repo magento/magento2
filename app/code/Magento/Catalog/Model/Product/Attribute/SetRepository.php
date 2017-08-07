@@ -11,31 +11,26 @@ use Magento\Framework\Exception\InputException;
 /**
  * Class \Magento\Catalog\Model\Product\Attribute\SetRepository
  *
- * @since 2.0.0
  */
 class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterface
 {
     /**
      * @var \Magento\Eav\Api\AttributeSetRepositoryInterface
-     * @since 2.0.0
      */
     protected $attributeSetRepository;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
-     * @since 2.0.0
      */
     protected $filterBuilder;
 
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $eavConfig;
 
@@ -44,7 +39,6 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Api\AttributeSetRepositoryInterface $attributeSetRepository,
@@ -60,7 +54,6 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function save(\Magento\Eav\Api\Data\AttributeSetInterface $attributeSet)
     {
@@ -70,7 +63,6 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -90,7 +82,6 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function get($attributeSetId)
     {
@@ -101,7 +92,6 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function delete(\Magento\Eav\Api\Data\AttributeSetInterface $attributeSet)
     {
@@ -111,7 +101,6 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function deleteById($attributeSetId)
     {
@@ -125,7 +114,6 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
      * @param  \Magento\Eav\Api\Data\AttributeSetInterface $attributeSet
      * @return void
      * @throws \Magento\Framework\Exception\InputException
-     * @since 2.0.0
      */
     protected function validate(\Magento\Eav\Api\Data\AttributeSetInterface $attributeSet)
     {

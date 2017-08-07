@@ -8,14 +8,12 @@ namespace Magento\Eav\Model\Entity\Attribute;
 
 /**
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class ValidationRule extends \Magento\Framework\Model\AbstractModel implements
     \Magento\Eav\Api\Data\AttributeValidationRuleInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getKey()
     {
@@ -24,7 +22,6 @@ class ValidationRule extends \Magento\Framework\Model\AbstractModel implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getValue()
     {
@@ -36,7 +33,6 @@ class ValidationRule extends \Magento\Framework\Model\AbstractModel implements
      *
      * @param string $key
      * @return $this
-     * @since 2.0.0
      */
     public function setKey($key)
     {
@@ -48,7 +44,6 @@ class ValidationRule extends \Magento\Framework\Model\AbstractModel implements
      *
      * @param string $value
      * @return $this
-     * @since 2.0.0
      */
     public function setValue($value)
     {

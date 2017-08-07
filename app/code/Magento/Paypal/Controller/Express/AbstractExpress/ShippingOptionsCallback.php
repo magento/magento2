@@ -9,13 +9,11 @@ namespace Magento\Paypal\Controller\Express\AbstractExpress;
 /**
  * Class \Magento\Paypal\Controller\Express\AbstractExpress\ShippingOptionsCallback
  *
- * @since 2.0.0
  */
 class ShippingOptionsCallback extends \Magento\Paypal\Controller\Express\AbstractExpress
 {
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
@@ -29,7 +27,6 @@ class ShippingOptionsCallback extends \Magento\Paypal\Controller\Express\Abstrac
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -59,7 +56,6 @@ class ShippingOptionsCallback extends \Magento\Paypal\Controller\Express\Abstrac
      * Return shipping options items for shipping address from request
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

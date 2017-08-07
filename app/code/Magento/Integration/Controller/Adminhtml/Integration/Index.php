@@ -9,7 +9,6 @@ namespace Magento\Integration\Controller\Adminhtml\Integration;
 /**
  * Class \Magento\Integration\Controller\Adminhtml\Integration\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Integration\Controller\Adminhtml\Integration
 {
@@ -17,7 +16,6 @@ class Index extends \Magento\Integration\Controller\Adminhtml\Integration
      * Integrations grid.
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

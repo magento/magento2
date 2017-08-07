@@ -7,7 +7,6 @@ namespace Magento\Catalog\Controller\Adminhtml;
 
 /**
  * Catalog category controller
- * @since 2.0.0
  */
 abstract class Category extends \Magento\Backend\App\Action
 {
@@ -30,7 +29,6 @@ abstract class Category extends \Magento\Backend\App\Action
      *
      * @param bool $getRootInstead
      * @return \Magento\Catalog\Model\Category|false
-     * @since 2.0.0
      */
     protected function _initCategory($getRootInstead = false)
     {

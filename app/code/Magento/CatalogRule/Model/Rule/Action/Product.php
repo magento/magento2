@@ -8,13 +8,11 @@ namespace Magento\CatalogRule\Model\Rule\Action;
 /**
  * Class \Magento\CatalogRule\Model\Rule\Action\Product
  *
- * @since 2.0.0
  */
 class Product extends \Magento\Rule\Model\Action\AbstractAction
 {
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function loadAttributeOptions()
     {
@@ -24,7 +22,6 @@ class Product extends \Magento\Rule\Model\Action\AbstractAction
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function loadOperatorOptions()
     {
@@ -41,7 +38,6 @@ class Product extends \Magento\Rule\Model\Action\AbstractAction
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function asHtml()
     {

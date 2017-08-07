@@ -15,37 +15,31 @@ use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 /**
  * Class \Magento\Setup\Module\Di\App\Task\Operation\Interception
  *
- * @since 2.0.0
  */
 class Interception implements OperationInterface
 {
     /**
      * @var App\AreaList
-     * @since 2.0.0
      */
     private $areaList;
 
     /**
      * @var InterceptionConfigurationBuilder
-     * @since 2.0.0
      */
     private $interceptionConfigurationBuilder;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $data = [];
 
     /**
      * @var ClassesScanner
-     * @since 2.0.0
      */
     private $classesScanner;
 
     /**
      * @var GeneratorFactory
-     * @since 2.0.0
      */
     private $generatorFactory;
 
@@ -55,7 +49,6 @@ class Interception implements OperationInterface
      * @param ClassesScanner $classesScanner
      * @param GeneratorFactory $generatorFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         InterceptionConfigurationBuilder $interceptionConfigurationBuilder,
@@ -73,7 +66,6 @@ class Interception implements OperationInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function doOperation()
     {
@@ -116,7 +108,6 @@ class Interception implements OperationInterface
      * Returns operation name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName()
     {

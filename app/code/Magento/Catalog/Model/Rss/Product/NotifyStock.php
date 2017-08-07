@@ -8,25 +8,21 @@ namespace Magento\Catalog\Model\Rss\Product;
 /**
  * Class NotifyStock
  * @package Magento\Catalog\Model\Rss\Product
- * @since 2.0.0
  */
 class NotifyStock extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $productFactory;
 
     /**
      * @var \Magento\CatalogInventory\Model\ResourceModel\StockFactory
-     * @since 2.0.0
      */
     protected $stockFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product\Attribute\Source\Status
-     * @since 2.0.0
      */
     protected $productStatus;
 
@@ -34,7 +30,6 @@ class NotifyStock extends \Magento\Framework\Model\AbstractModel
      * Application Event Dispatcher
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $eventManager;
 
@@ -43,7 +38,6 @@ class NotifyStock extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\CatalogInventory\Model\ResourceModel\StockFactory $stockFactory
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ProductFactory $productFactory,
@@ -59,7 +53,6 @@ class NotifyStock extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
-     * @since 2.0.0
      */
     public function getProductsCollection()
     {

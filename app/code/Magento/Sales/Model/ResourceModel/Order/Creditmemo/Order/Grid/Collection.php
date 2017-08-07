@@ -14,7 +14,7 @@ use Psr\Log\LoggerInterface as Logger;
 /**
  * Class \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Order\Grid\Collection
  *
- * @since 2.1.0
+ * @since 2.0.12
  */
 class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult
 {
@@ -27,7 +27,7 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
      * @param EventManager $eventManager
      * @param string $mainTable
      * @param string $resourceModel
-     * @since 2.1.0
+     * @since 2.0.12
      */
     public function __construct(
         EntityFactory $entityFactory,

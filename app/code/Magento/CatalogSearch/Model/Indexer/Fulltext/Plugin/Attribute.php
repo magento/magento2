@@ -10,13 +10,11 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext;
 /**
  * Class \Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute
  *
- * @since 2.0.0
  */
 class Attribute extends AbstractPlugin
 {
     /**
      * @var \Magento\Framework\Search\Request\Config
-     * @since 2.0.0
      */
     private $config;
 
@@ -41,7 +39,6 @@ class Attribute extends AbstractPlugin
     /**
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param \Magento\Framework\Search\Request\Config $config
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,

@@ -16,7 +16,6 @@ use Magento\Framework\Stdlib\DateTime;
 /**
  * Class \Magento\Framework\Data\Form\Filter\Date
  *
- * @since 2.0.0
  */
 class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
 {
@@ -24,7 +23,6 @@ class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
      * Date format
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_dateFormat;
 
@@ -32,7 +30,6 @@ class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
      * Local
      *
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $localeResolver;
 
@@ -41,7 +38,6 @@ class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
      *
      * @param string $format \DateTime input/output format
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @since 2.0.0
      */
     public function __construct(
         $format = null,
@@ -59,7 +55,6 @@ class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
      *
      * @param string $value
      * @return string
-     * @since 2.0.0
      */
     public function inputFilter($value)
     {
@@ -80,7 +75,6 @@ class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
      *
      * @param string $value
      * @return string
-     * @since 2.0.0
      */
     public function outputFilter($value)
     {

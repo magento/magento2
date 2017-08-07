@@ -11,7 +11,6 @@ namespace Magento\Captcha\Model;
  * Captcha Model Interface
  *
  * @api
- * @since 2.0.0
  */
 interface CaptchaInterface
 {
@@ -20,7 +19,6 @@ interface CaptchaInterface
      *
      * @abstract
      * @return void
-     * @since 2.0.0
      */
     public function generate();
 
@@ -30,14 +28,12 @@ interface CaptchaInterface
      * @param string $word
      * @return bool
      * @abstract
-     * @since 2.0.0
      */
     public function isCorrect($word);
 
     /**
      * Get Block Name
      * @return string
-     * @since 2.0.0
      */
     public function getBlockName();
 }

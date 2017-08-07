@@ -9,7 +9,6 @@ namespace Magento\Reports\Model\ResourceModel\Report\Collection;
  * Report collection abstract model
  *
  * @api
- * @since 2.0.0
  */
 class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -17,7 +16,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      * From date
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_from = null;
 
@@ -25,7 +23,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      * To date
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_to = null;
 
@@ -33,7 +30,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      * Period
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_period = null;
 
@@ -41,7 +37,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      * Store ids
      *
      * @var int|array
-     * @since 2.0.0
      */
     protected $_storesIds = 0;
 
@@ -49,7 +44,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      * Is totals
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isTotals = false;
 
@@ -57,7 +51,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      * Is subtotals
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isSubTotals = false;
 
@@ -65,7 +58,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      * Aggregated columns
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_aggregatedColumns = [];
 
@@ -75,7 +67,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      *
      * @param array $columns
      * @return $this
-     * @since 2.0.0
      */
     public function setAggregatedColumns(array $columns)
     {
@@ -88,7 +79,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      * @codeCoverageIgnore
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAggregatedColumns()
     {
@@ -102,7 +92,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      * @param mixed $from
      * @param mixed $to
      * @return $this
-     * @since 2.0.0
      */
     public function setDateRange($from = null, $to = null)
     {
@@ -117,7 +106,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      *
      * @param string $period
      * @return $this
-     * @since 2.0.0
      */
     public function setPeriod($period)
     {
@@ -129,7 +117,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      * Apply needed aggregated table
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _applyAggregatedTable()
     {
@@ -140,7 +127,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      * Apply date range filter
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _applyDateRangeFilter()
     {
@@ -160,7 +146,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      *
      * @param mixed $storeIds (null, int|string, array, array may contain null)
      * @return $this
-     * @since 2.0.0
      */
     public function addStoreFilter($storeIds)
     {
@@ -173,7 +158,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      *
      * @param \Magento\Framework\DB\Select $select
      * @return $this
-     * @since 2.0.0
      */
     protected function _applyStoresFilterToSelect(\Magento\Framework\DB\Select $select)
     {
@@ -204,7 +188,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      * Apply stores filter
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _applyStoresFilter()
     {
@@ -216,7 +199,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      *
      * @param null|bool $flag
      * @return $this
-     * @since 2.0.0
      */
     public function isTotals($flag = null)
     {
@@ -231,7 +213,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      * Getter for isSubTotals
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isSubTotals()
     {
@@ -244,7 +225,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      *
      * @param bool $flag
      * @return $this
-     * @since 2.0.0
      */
     public function setIsSubTotals($flag)
     {
@@ -256,7 +236,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      * Custom filters application ability
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _applyCustomFilter()
     {
@@ -265,7 +244,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _initSelect()
     {
@@ -276,7 +254,6 @@ class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Colle
      * Apply filters common to reports
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeLoad()
     {

@@ -12,7 +12,6 @@ use Magento\Eav\Model\Entity\Type;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -20,13 +19,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add attribute set info flag
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_addSetInfoFlag = false;
 
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $eavConfig;
 
@@ -39,7 +36,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
@@ -59,7 +55,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -74,7 +69,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return string[]
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _getLoadDataFields()
     {
@@ -95,7 +89,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Specify select columns which are used for load arrtibute values
      *
      * @return $this
-     * @since 2.0.0
      */
     public function useLoadDataFields()
     {
@@ -110,7 +103,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param  Type|int $type
      * @return $this
-     * @since 2.0.0
      */
     public function setEntityTypeFilter($type)
     {
@@ -137,7 +129,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $setId
      * @return $this
-     * @since 2.0.0
      */
     public function setAttributeSetFilter($setId)
     {
@@ -169,7 +160,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $attributeSetName
      * @param string $entityTypeCode
      * @return void
-     * @since 2.0.0
      */
     public function setAttributeSetFilterBySetName($attributeSetName, $entityTypeCode)
     {
@@ -196,7 +186,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param array $setIds
      * @return $this
-     * @since 2.0.0
      */
     public function setAttributeSetsFilter(array $setIds)
     {
@@ -217,7 +206,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int[] $setIds
      * @return $this
-     * @since 2.0.0
      */
     public function setInAllAttributeSetsFilter(array $setIds)
     {
@@ -245,7 +233,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param array $attributes
      * @return $this
-     * @since 2.0.0
      */
     public function setAttributesExcludeFilter($attributes)
     {
@@ -257,7 +244,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $setId
      * @return $this
-     * @since 2.0.0
      */
     public function setExcludeSetFilter($setId)
     {
@@ -278,7 +264,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $groupId
      * @return $this
-     * @since 2.0.0
      */
     public function setAttributeGroupFilter($groupId)
     {
@@ -297,7 +282,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function addAttributeGrouping()
     {
@@ -310,7 +294,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function addIsUniqueFilter()
     {
@@ -322,7 +305,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function addIsNotUniqueFilter()
     {
@@ -333,7 +315,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Specify filter to select just attributes with options
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addHasOptionsFilter()
     {
@@ -365,7 +346,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $frontendInputType
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setFrontendInputTypeFilter($frontendInputType)
     {
@@ -378,7 +358,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param bool $flag
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function addSetInfo($flag = true)
     {
@@ -390,7 +369,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Ad information about attribute sets to collection result data
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _addSetInfo()
     {
@@ -445,7 +423,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Ad information about attribute sets to collection result data
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
-     * @since 2.0.0
      */
     protected function _afterLoadData()
     {
@@ -459,7 +436,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string|array $code
      * @return $this
-     * @since 2.0.0
      */
     public function setCodeFilter($code)
     {
@@ -478,7 +454,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function addStoreLabel($storeId)
     {
@@ -498,7 +473,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getSelectCountSql()
     {

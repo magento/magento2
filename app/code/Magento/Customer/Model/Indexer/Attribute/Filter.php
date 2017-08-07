@@ -14,25 +14,21 @@ use Magento\Framework\Indexer\StateInterface;
 /**
  * Class \Magento\Customer\Model\Indexer\Attribute\Filter
  *
- * @since 2.0.0
  */
 class Filter
 {
     /**
      * @var resource
-     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver
-     * @since 2.0.0
      */
     protected $flatScopeResolver;
 
     /**
      * @var \Magento\Framework\Indexer\IndexerRegistry
-     * @since 2.0.0
      */
     protected $indexerRegistry;
 
@@ -40,7 +36,6 @@ class Filter
      * @param ResourceConnection $resource
      * @param FlatScopeResolver $flatScopeResolver
      * @param IndexerRegistry $indexerRegistry
-     * @since 2.0.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -55,7 +50,6 @@ class Filter
     /**
      * @param array $attributes
      * @return array
-     * @since 2.0.0
      */
     public function filter(array $attributes)
     {

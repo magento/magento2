@@ -10,31 +10,27 @@ use Magento\Framework\Indexer\CacheContext;
 /**
  * Class \Magento\CatalogInventory\Model\Indexer\Stock
  *
- * @since 2.0.0
  */
 class Stock implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Action\Row
-     * @since 2.0.0
      */
     protected $_productStockIndexerRow;
 
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Action\Rows
-     * @since 2.0.0
      */
     protected $_productStockIndexerRows;
 
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Action\Full
-     * @since 2.0.0
      */
     protected $_productStockIndexerFull;
 
     /**
      * @var \Magento\Framework\Indexer\CacheContext
-     * @since 2.1.0
+     * @since 2.0.11
      */
     private $cacheContext;
 
@@ -42,7 +38,6 @@ class Stock implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fram
      * @param Stock\Action\Row $productStockIndexerRow
      * @param Stock\Action\Rows $productStockIndexerRows
      * @param Stock\Action\Full $productStockIndexerFull
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\CatalogInventory\Model\Indexer\Stock\Action\Row $productStockIndexerRow,
@@ -60,7 +55,6 @@ class Stock implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fram
      * @param int[] $ids
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute($ids)
     {
@@ -72,7 +66,6 @@ class Stock implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fram
      * Execute full indexation
      *
      * @return void
-     * @since 2.0.0
      */
     public function executeFull()
     {
@@ -91,7 +84,6 @@ class Stock implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fram
      * @param int[] $ids
      *
      * @return void
-     * @since 2.0.0
      */
     public function executeList(array $ids)
     {
@@ -104,7 +96,6 @@ class Stock implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fram
      * @param int $id
      *
      * @return void
-     * @since 2.0.0
      */
     public function executeRow($id)
     {
@@ -115,8 +106,8 @@ class Stock implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fram
      * Get cache context
      *
      * @return \Magento\Framework\Indexer\CacheContext
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 2.0.11
+     * @since 2.0.11
      */
     protected function getCacheContext()
     {

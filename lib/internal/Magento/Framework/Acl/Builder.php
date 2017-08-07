@@ -11,7 +11,6 @@ namespace Magento\Framework\Acl;
  * On consequent requests, ACL object is deserialized from cache.
  *
  * @api
- * @since 2.0.0
  */
 class Builder
 {
@@ -19,7 +18,6 @@ class Builder
      * Acl object
      *
      * @var \Magento\Framework\Acl
-     * @since 2.0.0
      */
     protected $_acl;
 
@@ -27,13 +25,11 @@ class Builder
      * Acl loader list
      *
      * @var \Magento\Framework\Acl\LoaderInterface[]
-     * @since 2.0.0
      */
     protected $_loaderPool;
 
     /**
      * @var \Magento\Framework\AclFactory
-     * @since 2.0.0
      */
     protected $_aclFactory;
 
@@ -42,7 +38,6 @@ class Builder
      * @param \Magento\Framework\Acl\LoaderInterface $roleLoader
      * @param \Magento\Framework\Acl\LoaderInterface $resourceLoader
      * @param \Magento\Framework\Acl\LoaderInterface $ruleLoader
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\AclFactory $aclFactory,
@@ -59,7 +54,6 @@ class Builder
      *
      * @return \Magento\Framework\Acl
      * @throws \LogicException
-     * @since 2.0.0
      */
     public function getAcl()
     {

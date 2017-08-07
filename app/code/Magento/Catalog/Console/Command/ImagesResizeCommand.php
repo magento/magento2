@@ -8,31 +8,26 @@ namespace Magento\Catalog\Console\Command;
 /**
  * Class \Magento\Catalog\Console\Command\ImagesResizeCommand
  *
- * @since 2.0.0
  */
 class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
 {
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     protected $appState;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     * @since 2.0.0
      */
     protected $productCollectionFactory;
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var \Magento\Catalog\Model\Product\Image\CacheFactory
-     * @since 2.0.0
      */
     protected $imageCacheFactory;
 
@@ -41,7 +36,6 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Model\Product\Image\CacheFactory $imageCacheFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\State $appState,
@@ -58,7 +52,6 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -68,7 +61,6 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(
         \Symfony\Component\Console\Input\InputInterface $input,

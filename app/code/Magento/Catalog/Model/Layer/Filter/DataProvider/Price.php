@@ -13,7 +13,6 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Class \Magento\Catalog\Model\Layer\Filter\DataProvider\Price
  *
- * @since 2.0.0
  */
 class Price
 {
@@ -46,55 +45,46 @@ class Price
 
     /**
      * @var Layer
-     * @since 2.0.0
      */
     private $layer;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     private $maxPrice;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $rangeItemCounts = [];
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
-     * @since 2.0.0
      */
     private $resource;
 
     /**
      * @var Registry
-     * @since 2.0.0
      */
     private $coreRegistry;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     private $scopeConfig;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     private $priceRange;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $priorIntervals;
 
     /**
      * @var int[]
-     * @since 2.0.0
      */
     private $interval = [];
 
@@ -103,7 +93,6 @@ class Price
      * @param Registry $coreRegistry
      * @param ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price $resource
-     * @since 2.0.0
      */
     public function __construct(
         Layer $layer,
@@ -119,7 +108,6 @@ class Price
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getInterval()
     {
@@ -129,7 +117,6 @@ class Price
     /**
      * @param array $interval
      * @return void
-     * @since 2.0.0
      */
     public function setInterval($interval)
     {
@@ -138,7 +125,6 @@ class Price
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getRangeCalculationValue()
     {
@@ -150,7 +136,6 @@ class Price
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getRangeStepValue()
     {
@@ -162,7 +147,6 @@ class Price
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getOnePriceIntervalValue()
     {
@@ -176,7 +160,6 @@ class Price
      * Get interval division limit
      *
      * @return int
-     * @since 2.0.0
      */
     public function getIntervalDivisionLimitValue()
     {
@@ -190,7 +173,6 @@ class Price
      * Get maximum number of intervals
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getRangeMaxIntervalsValue()
     {
@@ -202,7 +184,6 @@ class Price
 
     /**
      * @return Layer
-     * @since 2.0.0
      */
     public function getLayer()
     {
@@ -213,7 +194,6 @@ class Price
      * Get price range for building filter steps
      *
      * @return int
-     * @since 2.0.0
      */
     public function getPriceRange()
     {
@@ -254,7 +234,6 @@ class Price
      *
      * @param   int $range
      * @return  int
-     * @since 2.0.0
      */
     public function getRangeItemCounts($range)
     {
@@ -285,7 +264,6 @@ class Price
      * Get maximum price from layer products set
      *
      * @return float
-     * @since 2.0.0
      */
     public function getMaxPrice()
     {
@@ -304,7 +282,6 @@ class Price
     /**
      * @param string $filterParams
      * @return array
-     * @since 2.0.0
      */
     public function getPriorFilters($filterParams)
     {
@@ -328,7 +305,6 @@ class Price
      *
      * @param string $filter
      * @return array|bool
-     * @since 2.0.0
      */
     public function validateFilter($filter)
     {
@@ -349,7 +325,6 @@ class Price
      * Get filter value for reset current filter state
      *
      * @return null|string
-     * @since 2.0.0
      */
     public function getResetValue()
     {
@@ -368,7 +343,6 @@ class Price
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getPriorIntervals()
     {
@@ -378,7 +352,6 @@ class Price
     /**
      * @param array $priorInterval
      * @return void
-     * @since 2.0.0
      */
     public function setPriorIntervals($priorInterval)
     {
@@ -387,7 +360,6 @@ class Price
 
     /**
      * @return \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
-     * @since 2.0.0
      */
     public function getResource()
     {
@@ -396,7 +368,6 @@ class Price
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getAdditionalRequestData()
     {

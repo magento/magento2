@@ -11,7 +11,6 @@ use Magento\Wishlist\Controller\IndexInterface;
 /**
  * Class AbstractIndex
  * @package Magento\Wishlist\Controller\Index
- * @since 2.0.0
  */
 abstract class AbstractIndex extends Action\Action implements IndexInterface
 {

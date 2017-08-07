@@ -13,7 +13,6 @@ use Magento\Framework\Filesystem;
  * License file reader
  *
  * @package Magento\Setup\Model
- * @since 2.0.0
  */
 class License
 {
@@ -35,7 +34,6 @@ class License
      * Directory that contains license file
      *
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
-     * @since 2.0.0
      */
     private $dir;
 
@@ -43,7 +41,6 @@ class License
      * Constructor
      *
      * @param Filesystem $filesystem
-     * @since 2.0.0
      */
     public function __construct(Filesystem $filesystem)
     {
@@ -54,7 +51,6 @@ class License
      * Returns contents of License file.
      *
      * @return string|boolean
-     * @since 2.0.0
      */
     public function getContents()
     {

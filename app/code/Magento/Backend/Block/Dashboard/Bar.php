@@ -9,25 +9,21 @@ namespace Magento\Backend\Block\Dashboard;
  * Adminhtml dashboard bar block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_totals = [];
 
     /**
      * @var \Magento\Directory\Model\Currency|null
-     * @since 2.0.0
      */
     protected $_currentCurrencyCode = null;
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getTotals()
     {
@@ -39,7 +35,6 @@ class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * @param float $value
      * @param bool $isQuantity
      * @return $this
-     * @since 2.0.0
      */
     public function addTotal($label, $value, $isQuantity = false)
     {
@@ -65,7 +60,6 @@ class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      *
      * @param float $price
      * @return string
-     * @since 2.0.0
      */
     public function format($price)
     {
@@ -77,7 +71,6 @@ class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      *
      * @param \Magento\Directory\Model\Currency $currency
      * @return void
-     * @since 2.0.0
      */
     public function setCurrency($currency)
     {
@@ -88,7 +81,6 @@ class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Retrieve currency model if not set then return currency model for current store
      *
      * @return \Magento\Directory\Model\Currency
-     * @since 2.0.0
      */
     public function getCurrency()
     {

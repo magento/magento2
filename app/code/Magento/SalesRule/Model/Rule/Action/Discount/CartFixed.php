@@ -8,7 +8,6 @@ namespace Magento\SalesRule\Model\Rule\Action\Discount;
 /**
  * Class \Magento\SalesRule\Model\Rule\Action\Discount\CartFixed
  *
- * @since 2.0.0
  */
 class CartFixed extends AbstractDiscount
 {
@@ -16,7 +15,6 @@ class CartFixed extends AbstractDiscount
      * Store information about addresses which cart fixed rule applied for
      *
      * @var int[]
-     * @since 2.0.0
      */
     protected $_cartFixedRuleUsedForAddress = [];
 
@@ -25,7 +23,6 @@ class CartFixed extends AbstractDiscount
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param float $qty
      * @return \Magento\SalesRule\Model\Rule\Action\Discount\Data
-     * @since 2.0.0
      */
     public function calculate($rule, $item, $qty)
     {
@@ -92,7 +89,6 @@ class CartFixed extends AbstractDiscount
      * @param int $ruleId
      * @param int $itemId
      * @return void
-     * @since 2.0.0
      */
     protected function setCartFixedRuleUsedForAddress($ruleId, $itemId)
     {
@@ -104,7 +100,6 @@ class CartFixed extends AbstractDiscount
      *
      * @param int $ruleId
      * @return int|null
-     * @since 2.0.0
      */
     protected function getCartFixedRuleUsedForAddress($ruleId)
     {

@@ -13,7 +13,6 @@ namespace Magento\Sales\Block\Order;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Items extends \Magento\Sales\Block\Items\AbstractItems
 {
@@ -21,7 +20,6 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -50,7 +48,6 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      * @param \Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory|null $itemCollectionFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -134,7 +131,6 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * Retrieve current order model instance
      *
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     public function getOrder()
     {

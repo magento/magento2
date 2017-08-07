@@ -8,7 +8,6 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 /**
  * Class \Magento\Customer\Controller\Adminhtml\Index\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Customer\Controller\Adminhtml\Index
 {
@@ -16,7 +15,6 @@ class Index extends \Magento\Customer\Controller\Adminhtml\Index
      * Customers list action
      *
      * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Forward
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -7,7 +7,6 @@ namespace Magento\CatalogUrlRewrite\Plugin\Catalog\Block\Adminhtml\Category\Tab;
 
 /**
  * Class Attributes
- * @since 2.0.0
  */
 class Attributes
 {

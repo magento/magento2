@@ -16,38 +16,32 @@ use Magento\Framework\App\ObjectManager;
 /**
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Helper
 {
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var StockDataFilter
-     * @since 2.0.0
      */
     protected $stockFilter;
 
     /**
      * @var \Magento\Backend\Helper\Js
-     * @since 2.0.0
      */
     protected $jsHelper;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     protected $dateFilter;
 
@@ -71,7 +65,6 @@ class Helper
 
     /**
      * @var ProductLinks
-     * @since 2.0.0
      */
     protected $productLinks;
 
@@ -107,7 +100,6 @@ class Helper
      * @param \Magento\Catalog\Api\ProductRepositoryInterface|null $productRepository
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider|null $linkTypeProvider
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -233,7 +225,6 @@ class Helper
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function initialize(\Magento\Catalog\Model\Product $product)
     {
@@ -321,7 +312,6 @@ class Helper
      * @param array $productOptions product options
      * @param array $overwriteOptions default value options
      * @return array
-     * @since 2.0.0
      */
     public function mergeProductOptions($productOptions, $overwriteOptions)
     {

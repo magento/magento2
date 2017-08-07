@@ -14,49 +14,49 @@ use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterf
 /**
  * Class \Magento\CatalogRule\Model\ResourceModel\Product\LinkedProductSelectBuilderByCatalogRulePrice
  *
- * @since 2.2.0
+ * @since 2.1.1
  */
 class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelectBuilderInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.2.0
+     * @since 2.1.1
      */
     private $storeManager;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.2.0
+     * @since 2.1.1
      */
     private $resource;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.2.0
+     * @since 2.1.1
      */
     private $customerSession;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
-     * @since 2.2.0
+     * @since 2.1.1
      */
     private $dateTime;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.2.0
+     * @since 2.1.1
      */
     private $localeDate;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.2.0
+     * @since 2.1.1
      */
     private $metadataPool;
 
     /**
      * @var BaseSelectProcessorInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $baseSelectProcessor;
 
@@ -68,7 +68,7 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param BaseSelectProcessorInterface $baseSelectProcessor
-     * @since 2.2.0
+     * @since 2.1.1
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -91,7 +91,7 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 2.1.1
      */
     public function build($productId)
     {

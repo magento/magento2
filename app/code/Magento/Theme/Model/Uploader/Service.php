@@ -14,7 +14,6 @@ use Magento\Framework\Filesystem\DirectoryList;
 /**
  * Class \Magento\Theme\Model\Uploader\Service
  *
- * @since 2.0.0
  */
 class Service
 {
@@ -22,13 +21,11 @@ class Service
      * Uploaded file path
      *
      * @var string|null
-     * @since 2.0.0
      */
     protected $_filePath;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
-     * @since 2.0.0
      */
     protected $_tmpDirectory;
 
@@ -36,7 +33,6 @@ class Service
      * File size
      *
      * @var \Magento\Framework\File\Size
-     * @since 2.0.0
      */
     protected $_fileSize;
 
@@ -52,25 +48,21 @@ class Service
      * File uploader
      *
      * @var \Magento\MediaStorage\Model\File\Uploader
-     * @since 2.0.0
      */
     protected $_uploader;
 
     /**
      * @var \Magento\MediaStorage\Model\File\Uploader
-     * @since 2.0.0
      */
     protected $_uploaderFactory;
 
     /**
      * @var  string|null
-     * @since 2.0.0
      */
     protected $_cssUploadLimit;
 
     /**
      * @var  string|null
-     * @since 2.0.0
      */
     protected $_jsUploadLimit;
 
@@ -82,7 +74,6 @@ class Service
      * @param \Magento\Framework\Convert\DataSize $dataSize
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
      * @param array $uploadLimits keys are 'css' and 'js' for file type, values defines maximum file size, example: 2M
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -109,7 +100,6 @@ class Service
      * @param string $file - Key in the $_FILES array
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function uploadCssFile($file)
     {
@@ -136,7 +126,6 @@ class Service
      * @param string $file - Key in the $_FILES array
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function uploadJsFile($file)
     {
@@ -162,7 +151,6 @@ class Service
      *
      * @param string $filePath
      * @return string
-     * @since 2.0.0
      */
     public function getFileContent($filePath)
     {
@@ -173,7 +161,6 @@ class Service
      * Get css upload max size
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCssUploadMaxSize()
     {
@@ -184,7 +171,6 @@ class Service
      * Get js upload max size
      *
      * @return int
-     * @since 2.0.0
      */
     public function getJsUploadMaxSize()
     {
@@ -196,7 +182,6 @@ class Service
      *
      * @param string $configuredLimit
      * @return int
-     * @since 2.0.0
      */
     private function _getMaxUploadSize($configuredLimit)
     {
@@ -212,7 +197,6 @@ class Service
      * Get css upload max size in megabytes
      *
      * @return float
-     * @since 2.0.0
      */
     public function getCssUploadMaxSizeInMb()
     {
@@ -223,7 +207,6 @@ class Service
      * Get js upload max size in megabytes
      *
      * @return float
-     * @since 2.0.0
      */
     public function getJsUploadMaxSizeInMb()
     {
@@ -236,7 +219,6 @@ class Service
      * @param int $fileSize
      * @param int $maxFileSize
      * @return bool
-     * @since 2.0.0
      */
     protected function _validateFileSize($fileSize, $maxFileSize)
     {

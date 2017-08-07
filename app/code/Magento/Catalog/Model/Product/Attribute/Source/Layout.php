@@ -9,19 +9,16 @@ namespace Magento\Catalog\Model\Product\Attribute\Source;
  * Catalog product landing page attribute source
  *
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
      * @var \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface
-     * @since 2.0.0
      */
     protected $pageLayoutBuilder;
 
     /**
      * @param \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface $pageLayoutBuilder
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\View\Model\PageLayout\Config\BuilderInterface $pageLayoutBuilder)
     {
@@ -30,7 +27,6 @@ class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getAllOptions()
     {

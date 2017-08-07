@@ -18,7 +18,6 @@ use Psr\Log\LoggerInterface;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class Order extends \Magento\Backend\App\Action
 {
@@ -33,7 +32,6 @@ abstract class Order extends \Magento\Backend\App\Action
      * Array of actions which can be processed without secret key validation
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_publicActions = ['view', 'index'];
 
@@ -41,61 +39,51 @@ abstract class Order extends \Magento\Backend\App\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
-     * @since 2.0.0
      */
     protected $_fileFactory;
 
     /**
      * @var \Magento\Framework\Translate\InlineInterface
-     * @since 2.0.0
      */
     protected $_translateInline;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var \Magento\Framework\View\Result\LayoutFactory
-     * @since 2.0.0
      */
     protected $resultLayoutFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
-     * @since 2.0.0
      */
     protected $resultRawFactory;
 
     /**
      * @var OrderManagementInterface
-     * @since 2.0.0
      */
     protected $orderManagement;
 
     /**
      * @var OrderRepositoryInterface
-     * @since 2.0.0
      */
     protected $orderRepository;
 
     /**
      * @var LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
@@ -114,7 +102,6 @@ abstract class Order extends \Magento\Backend\App\Action
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -146,7 +133,6 @@ abstract class Order extends \Magento\Backend\App\Action
      * Init layout, menu and breadcrumb
      *
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.0.0
      */
     protected function _initAction()
     {
@@ -161,7 +147,6 @@ abstract class Order extends \Magento\Backend\App\Action
      * Initialize order model instance
      *
      * @return \Magento\Sales\Api\Data\OrderInterface|false
-     * @since 2.0.0
      */
     protected function _initOrder()
     {
@@ -184,7 +169,6 @@ abstract class Order extends \Magento\Backend\App\Action
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     protected function isValidPostRequest()
     {

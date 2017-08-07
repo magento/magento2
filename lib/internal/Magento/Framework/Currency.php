@@ -10,7 +10,6 @@ use Magento\Framework\App\CacheInterface;
 /**
  * Class \Magento\Framework\Currency
  *
- * @since 2.0.0
  */
 class Currency extends \Zend_Currency implements CurrencyInterface
 {

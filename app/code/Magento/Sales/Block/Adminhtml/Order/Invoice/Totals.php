@@ -12,7 +12,6 @@ use Magento\Sales\Model\Order\Invoice;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Totals extends \Magento\Sales\Block\Adminhtml\Totals
 {
@@ -20,7 +19,6 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Totals
      * Order invoice
      *
      * @var Invoice|null
-     * @since 2.0.0
      */
     protected $_invoice = null;
 
@@ -28,7 +26,6 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Totals
      * Get invoice
      *
      * @return Invoice|null
-     * @since 2.0.0
      */
     public function getInvoice()
     {
@@ -48,7 +45,6 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Totals
      * Get source
      *
      * @return Invoice|null
-     * @since 2.0.0
      */
     public function getSource()
     {
@@ -59,7 +55,6 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Totals
      * Initialize order totals array
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initTotals()
     {

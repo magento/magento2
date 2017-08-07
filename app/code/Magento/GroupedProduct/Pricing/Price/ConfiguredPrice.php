@@ -15,7 +15,6 @@ use Magento\Framework\Pricing\Amount\AmountInterface;
 /**
  * Class \Magento\GroupedProduct\Pricing\Price\ConfiguredPrice
  *
- * @since 2.0.0
  */
 class ConfiguredPrice extends CatalogFinalPrice implements ConfiguredPriceInterface
 {
@@ -26,14 +25,12 @@ class ConfiguredPrice extends CatalogFinalPrice implements ConfiguredPriceInterf
 
     /**
      * @var null|ItemInterface
-     * @since 2.0.0
      */
     protected $item;
 
     /**
      * @param ItemInterface $item
      * @return $this
-     * @since 2.0.0
      */
     public function setItem(ItemInterface $item)
     {
@@ -45,7 +42,6 @@ class ConfiguredPrice extends CatalogFinalPrice implements ConfiguredPriceInterf
      * Calculate configured price
      *
      * @return float
-     * @since 2.0.0
      */
     protected function calculatePrice()
     {
@@ -76,7 +72,6 @@ class ConfiguredPrice extends CatalogFinalPrice implements ConfiguredPriceInterf
      * Price value of product with configured options
      *
      * @return bool|float
-     * @since 2.0.0
      */
     public function getValue()
     {

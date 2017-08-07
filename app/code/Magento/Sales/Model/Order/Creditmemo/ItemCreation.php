@@ -9,31 +9,31 @@ use Magento\Sales\Api\Data\CreditmemoItemCreationInterface;
 
 /**
  * Class LineItem
- * @since 2.2.0
+ * @since 2.1.3
  */
 class ItemCreation implements CreditmemoItemCreationInterface
 {
     /**
      * @var int
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $orderItemId;
 
     /**
      * @var float
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $qty;
 
     /**
      * @var \Magento\Sales\Api\Data\CreditmemoItemCreationExtensionInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $extensionAttributes;
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function getOrderItemId()
     {
@@ -42,7 +42,7 @@ class ItemCreation implements CreditmemoItemCreationInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function setOrderItemId($orderItemId)
     {
@@ -52,7 +52,7 @@ class ItemCreation implements CreditmemoItemCreationInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function getQty()
     {
@@ -61,7 +61,7 @@ class ItemCreation implements CreditmemoItemCreationInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function setQty($qty)
     {
@@ -73,7 +73,7 @@ class ItemCreation implements CreditmemoItemCreationInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\CreditmemoItemCreationExtensionInterface|null
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function getExtensionAttributes()
     {
@@ -85,7 +85,7 @@ class ItemCreation implements CreditmemoItemCreationInterface
      *
      * @param \Magento\Sales\Api\Data\CreditmemoItemCreationExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\CreditmemoItemCreationExtensionInterface $extensionAttributes

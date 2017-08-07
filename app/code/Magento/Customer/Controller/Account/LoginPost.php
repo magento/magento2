@@ -19,37 +19,32 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class LoginPost extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
      * @var \Magento\Customer\Api\AccountManagementInterface
-     * @since 2.0.0
      */
     protected $customerAccountManagement;
 
     /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator
-     * @since 2.0.0
      */
     protected $formKeyValidator;
 
     /**
      * @var AccountRedirect
-     * @since 2.0.0
      */
     protected $accountRedirect;
 
     /**
      * @var Session
-     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.1.0
+     * @since 2.0.11
      */
     private $scopeConfig;
 
@@ -72,7 +67,6 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
      * @param CustomerUrl $customerHelperData
      * @param Validator $formKeyValidator
      * @param AccountRedirect $accountRedirect
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -94,8 +88,8 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
      * Get scope config
      *
      * @return ScopeConfigInterface
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 2.0.11
+     * @since 2.0.11
      */
     private function getScopeConfig()
     {
@@ -147,7 +141,6 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

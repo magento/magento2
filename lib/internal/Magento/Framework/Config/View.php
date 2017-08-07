@@ -9,13 +9,11 @@ namespace Magento\Framework\Config;
  * View configuration files handler
  *
  * @api
- * @since 2.0.0
  */
 class View extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $xpath;
 
@@ -23,7 +21,6 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      * View config data
      *
      * @var array
-     * @since 2.0.0
      */
     protected $data;
 
@@ -37,7 +34,6 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      * @param string $domDocumentClass
      * @param string $defaultScope
      * @param array $xpath
-     * @since 2.0.0
      */
     public function __construct(
         FileResolverInterface $fileResolver,
@@ -71,7 +67,6 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      *
      * @param string $module
      * @return array
-     * @since 2.0.0
      */
     public function getVars($module)
     {
@@ -85,7 +80,6 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      * @param string $module
      * @param string $var
      * @return string|false|array
-     * @since 2.0.0
      */
     public function getVarValue($module, $var)
     {
@@ -112,7 +106,6 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      * @param string $module
      * @param string $mediaType
      * @return array
-     * @since 2.0.0
      */
     public function getMediaEntities($module, $mediaType)
     {
@@ -127,7 +120,6 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      * @param string $mediaType
      * @param string $mediaId
      * @return array
-     * @since 2.0.0
      */
     public function getMediaAttributes($module, $mediaType, $mediaId)
     {
@@ -141,7 +133,6 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      * Variables are identified by module and name
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getIdAttributes()
     {
@@ -168,7 +159,6 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      * Get excluded file list
      *
      * @return array
-     * @since 2.0.0
      */
     public function getExcludedFiles()
     {
@@ -180,7 +170,6 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      * Get excluded directory list
      *
      * @return array
-     * @since 2.0.0
      */
     public function getExcludedDir()
     {
@@ -192,7 +181,6 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      * Get a list of excludes
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getItems()
     {
@@ -204,7 +192,6 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      * Initialize data array
      *
      * @return void
-     * @since 2.0.0
      */
     protected function initData()
     {

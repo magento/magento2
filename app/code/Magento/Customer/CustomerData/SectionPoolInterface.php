@@ -7,7 +7,6 @@ namespace Magento\Customer\CustomerData;
 
 /**
  * Section pool interface
- * @since 2.0.0
  */
 interface SectionPoolInterface
 {
@@ -17,7 +16,6 @@ interface SectionPoolInterface
      * @param array $sectionNames
      * @param bool $updateIds
      * @return array
-     * @since 2.0.0
      */
     public function getSectionsData(array $sectionNames = null, $updateIds = false);
 }

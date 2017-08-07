@@ -19,7 +19,6 @@ use Magento\Framework\Stdlib\DateTime\Filter\Date;
 /**
  * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
  *
- * @since 2.0.0
  */
 abstract class Catalog extends Action
 {
@@ -35,7 +34,6 @@ abstract class Catalog extends Action
      *
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_dirtyRulesNoticeMessage;
 
@@ -43,7 +41,6 @@ abstract class Catalog extends Action
      * Core registry
      *
      * @var Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -51,7 +48,6 @@ abstract class Catalog extends Action
      * Date filter instance
      *
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
-     * @since 2.0.0
      */
     protected $_dateFilter;
 
@@ -61,7 +57,6 @@ abstract class Catalog extends Action
      * @param Context $context
      * @param Registry $coreRegistry
      * @param Date $dateFilter
-     * @since 2.0.0
      */
     public function __construct(Context $context, Registry $coreRegistry, Date $dateFilter)
     {
@@ -74,7 +69,6 @@ abstract class Catalog extends Action
      * Init action
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initAction()
     {
@@ -94,7 +88,6 @@ abstract class Catalog extends Action
      * @param string $dirtyRulesNoticeMessage
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setDirtyRulesNoticeMessage($dirtyRulesNoticeMessage)
     {
@@ -105,7 +98,6 @@ abstract class Catalog extends Action
      * Get dirty rules notice message
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDirtyRulesNoticeMessage()
     {

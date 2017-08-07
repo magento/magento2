@@ -7,7 +7,6 @@ namespace Magento\Sales\Model\Order\Pdf\Items\Invoice;
 
 /**
  * Sales Order Invoice Pdf default items renderer
- * @since 2.0.0
  */
 class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
 {
@@ -15,7 +14,6 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
      * Core string
      *
      * @var \Magento\Framework\Stdlib\StringUtils
-     * @since 2.0.0
      */
     protected $string;
 
@@ -29,7 +27,6 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -59,7 +56,6 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
      * Draw item line
      *
      * @return void
-     * @since 2.0.0
      */
     public function draw()
     {

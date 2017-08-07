@@ -14,7 +14,6 @@ use Magento\Framework\App\Area;
 /**
  * Class \Magento\Framework\App\ObjectManager\Environment\Developer
  *
- * @since 2.0.0
  */
 class Developer extends AbstractEnvironment implements EnvironmentInterface
 {
@@ -24,21 +23,16 @@ class Developer extends AbstractEnvironment implements EnvironmentInterface
     const MODE = 'developer';
     /**#@- */
 
-    /**
-     * @var string
-     * @since 2.0.0
-     */
+    /**#@- */
     protected $mode = self::MODE;
 
     /**
      * @var ConfigInterface
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $configPreference = \Magento\Framework\ObjectManager\Factory\Dynamic\Developer::class;
 
@@ -46,7 +40,6 @@ class Developer extends AbstractEnvironment implements EnvironmentInterface
      * Returns initialized di config entity
      *
      * @return ConfigInterface
-     * @since 2.0.0
      */
     public function getDiConfig()
     {
@@ -64,7 +57,6 @@ class Developer extends AbstractEnvironment implements EnvironmentInterface
      * As developer environment does not have config loader, we return null
      *
      * @return null
-     * @since 2.0.0
      */
     public function getObjectManagerConfigLoader()
     {
@@ -73,7 +65,6 @@ class Developer extends AbstractEnvironment implements EnvironmentInterface
 
     /**
      * {inheritdoc}
-     * @since 2.0.0
      */
     public function configureObjectManager(ConfigInterface $diConfig, &$sharedInstances)
     {

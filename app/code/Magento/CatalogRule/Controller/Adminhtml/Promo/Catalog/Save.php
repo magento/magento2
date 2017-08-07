@@ -14,7 +14,6 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
@@ -44,7 +43,6 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
     /**
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

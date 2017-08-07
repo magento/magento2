@@ -9,7 +9,6 @@ namespace Magento\Catalog\Api;
 /**
  * Interface ProductWebsiteLinkRepositoryInterface
  * @api
- * @since 2.0.0
  */
 interface ProductWebsiteLinkRepositoryInterface
 {
@@ -21,7 +20,6 @@ interface ProductWebsiteLinkRepositoryInterface
      *
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
-     * @since 2.0.0
      */
     public function save(Data\ProductWebsiteLinkInterface $productWebsiteLink);
 
@@ -32,7 +30,6 @@ interface ProductWebsiteLinkRepositoryInterface
      * @return bool will returned True if website successfully unassigned from product
      *
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @since 2.0.0
      */
     public function delete(Data\ProductWebsiteLinkInterface $productWebsiteLink);
 
@@ -44,7 +41,6 @@ interface ProductWebsiteLinkRepositoryInterface
      * @return bool will returned True if website successfully unassigned from product
      *
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @since 2.0.0
      */
     public function deleteById($sku, $websiteId);
 }

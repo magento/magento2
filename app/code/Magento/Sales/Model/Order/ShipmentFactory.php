@@ -12,7 +12,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Factory class for @see \Magento\Sales\Api\Data\ShipmentInterface
- * @since 2.0.0
  */
 class ShipmentFactory
 {
@@ -20,7 +19,6 @@ class ShipmentFactory
      * Order converter.
      *
      * @var \Magento\Sales\Model\Convert\Order
-     * @since 2.0.0
      */
     protected $converter;
 
@@ -28,7 +26,6 @@ class ShipmentFactory
      * Shipment track factory.
      *
      * @var \Magento\Sales\Model\Order\Shipment\TrackFactory
-     * @since 2.0.0
      */
     protected $trackFactory;
 
@@ -36,7 +33,6 @@ class ShipmentFactory
      * Instance name to create.
      *
      * @var string
-     * @since 2.0.0
      */
     protected $instanceName;
 
@@ -54,7 +50,6 @@ class ShipmentFactory
      * @param \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory
      * @param \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory,
@@ -75,7 +70,6 @@ class ShipmentFactory
      * @param array $items
      * @param array|null $tracks
      * @return \Magento\Sales\Api\Data\ShipmentInterface
-     * @since 2.0.0
      */
     public function create(\Magento\Sales\Model\Order $order, array $items = [], $tracks = null)
     {
@@ -97,7 +91,6 @@ class ShipmentFactory
      * @return \Magento\Sales\Api\Data\ShipmentInterface
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function prepareItems(
         \Magento\Sales\Api\Data\ShipmentInterface $shipment,
@@ -164,7 +157,6 @@ class ShipmentFactory
      * @param array $tracks
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Sales\Api\Data\ShipmentInterface
-     * @since 2.0.0
      */
     protected function prepareTracks(\Magento\Sales\Api\Data\ShipmentInterface $shipment, array $tracks)
     {
@@ -193,7 +185,6 @@ class ShipmentFactory
      * @param array $items
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function canShipItem($item, array $items = [])
     {
@@ -242,7 +233,7 @@ class ShipmentFactory
      * @param Item $item
      * @param string|int|float $qty
      * @return float|int
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private function castQty(\Magento\Sales\Model\Order\Item $item, $qty)
     {

@@ -8,7 +8,6 @@ namespace Magento\Paypal\Model;
 /**
  * Class \Magento\Paypal\Model\IpnFactory
  *
- * @since 2.0.0
  */
 class IpnFactory
 {
@@ -16,13 +15,11 @@ class IpnFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager = null;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $mapping = [];
 
@@ -31,7 +28,6 @@ class IpnFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $mapping
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, array $mapping = [])
     {
@@ -44,7 +40,6 @@ class IpnFactory
      *
      * @param array $data
      * @return \Magento\Paypal\Model\IpnInterface
-     * @since 2.0.0
      */
     public function create(array $data = [])
     {

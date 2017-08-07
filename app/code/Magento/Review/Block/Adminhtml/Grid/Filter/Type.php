@@ -9,7 +9,6 @@ namespace Magento\Review\Block\Adminhtml\Grid\Filter;
  * Adminhtml review grid filter by type
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Type extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
@@ -17,7 +16,6 @@ class Type extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
      * Get grid options
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getOptions()
     {
@@ -33,7 +31,6 @@ class Type extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
      * Get condition
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCondition()
     {

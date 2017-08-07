@@ -13,7 +13,6 @@ namespace Magento\Framework\Backup;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface BackupInterface
 {
@@ -21,7 +20,6 @@ interface BackupInterface
      * Create Backup
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function create();
 
@@ -29,7 +27,6 @@ interface BackupInterface
      * Rollback Backup
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function rollback();
 
@@ -38,7 +35,6 @@ interface BackupInterface
      *
      * @param string $backupExtension
      * @return $this
-     * @since 2.0.0
      */
     public function setBackupExtension($backupExtension);
 
@@ -47,7 +43,6 @@ interface BackupInterface
      *
      * @param object $resourceModel
      * @return $this
-     * @since 2.0.0
      */
     public function setResourceModel($resourceModel);
 
@@ -56,7 +51,6 @@ interface BackupInterface
      *
      * @param int $time
      * @return $this
-     * @since 2.0.0
      */
     public function setTime($time);
 
@@ -64,7 +58,6 @@ interface BackupInterface
      * Get Backup Type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getType();
 
@@ -73,7 +66,6 @@ interface BackupInterface
      *
      * @param string $backupsDir
      * @return $this
-     * @since 2.0.0
      */
     public function setBackupsDir($backupsDir);
 }

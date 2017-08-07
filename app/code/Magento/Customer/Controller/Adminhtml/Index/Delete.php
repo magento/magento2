@@ -10,7 +10,6 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Customer\Controller\Adminhtml\Index\Delete
  *
- * @since 2.0.0
  */
 class Delete extends \Magento\Customer\Controller\Adminhtml\Index
 {
@@ -18,7 +17,6 @@ class Delete extends \Magento\Customer\Controller\Adminhtml\Index
      * Delete customer action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

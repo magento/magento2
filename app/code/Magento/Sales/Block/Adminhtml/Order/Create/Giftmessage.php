@@ -12,7 +12,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
@@ -20,7 +19,6 @@ class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCr
      * Gift message save
      *
      * @var \Magento\GiftMessage\Model\Save
-     * @since 2.0.0
      */
     protected $_giftMessageSave;
 
@@ -28,7 +26,6 @@ class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCr
      * Message helper
      *
      * @var \Magento\GiftMessage\Helper\Message
-     * @since 2.0.0
      */
     protected $_messageHelper;
 
@@ -40,7 +37,6 @@ class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCr
      * @param \Magento\GiftMessage\Model\Save $giftMessageSave
      * @param \Magento\GiftMessage\Helper\Message $messageHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -62,7 +58,6 @@ class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCr
      * @param \Magento\Framework\DataObject $entity
      * @param string $entityType
      * @return string
-     * @since 2.0.0
      */
     public function getFormHtml(\Magento\Framework\DataObject $entity, $entityType = 'quote')
     {
@@ -81,7 +76,6 @@ class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCr
      * If no items available return false.
      *
      * @return array|false
-     * @since 2.0.0
      */
     public function getItems()
     {
@@ -113,7 +107,6 @@ class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCr
      * Retrieve gift message save model
      *
      * @return \Magento\GiftMessage\Model\Save
-     * @since 2.0.0
      */
     protected function _getGiftmessageSaveModel()
     {

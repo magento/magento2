@@ -12,19 +12,16 @@ use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 
 /**
  * Class Options
- * @since 2.0.0
  */
 class Options implements JsonSerializable
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $options;
 
     /**
      * @var CollectionFactory
-     * @since 2.0.0
      */
     protected $collectionFactory;
 
@@ -32,13 +29,11 @@ class Options implements JsonSerializable
      * Additional options params
      *
      * @var array
-     * @since 2.0.0
      */
     protected $data;
 
     /**
      * @var UrlInterface
-     * @since 2.0.0
      */
     protected $urlBuilder;
 
@@ -46,7 +41,6 @@ class Options implements JsonSerializable
      * Base URL for subactions
      *
      * @var string
-     * @since 2.0.0
      */
     protected $urlPath;
 
@@ -54,7 +48,6 @@ class Options implements JsonSerializable
      * Param name for subactions
      *
      * @var string
-     * @since 2.0.0
      */
     protected $paramName;
 
@@ -62,7 +55,6 @@ class Options implements JsonSerializable
      * Additional params for subactions
      *
      * @var array
-     * @since 2.0.0
      */
     protected $additionalData = [];
 
@@ -72,7 +64,6 @@ class Options implements JsonSerializable
      * @param CollectionFactory $collectionFactory
      * @param UrlInterface $urlBuilder
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         CollectionFactory $collectionFactory,
@@ -88,7 +79,6 @@ class Options implements JsonSerializable
      * Get action options
      *
      * @return array
-     * @since 2.0.0
      */
     public function jsonSerialize()
     {
@@ -124,7 +114,6 @@ class Options implements JsonSerializable
      * Prepare addition data for subactions
      *
      * @return void
-     * @since 2.0.0
      */
     protected function prepareData()
     {

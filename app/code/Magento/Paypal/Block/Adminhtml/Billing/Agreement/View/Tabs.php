@@ -11,7 +11,6 @@ namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement\View;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
@@ -19,7 +18,6 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      * Initialize tab
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

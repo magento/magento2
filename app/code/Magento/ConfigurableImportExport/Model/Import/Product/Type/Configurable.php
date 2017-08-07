@@ -20,7 +20,6 @@ use Magento\Framework\EntityManager\MetadataPool;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
@@ -39,7 +38,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Validation failure message template definitions
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_messageTemplates = [
         self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER => 'Attribute with code "%s" is not super',
@@ -52,7 +50,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Column names that holds values with particular meaning.
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_specialAttributes = [
         '_super_products_sku',
@@ -70,7 +67,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * product_n (underscore) attribute_id_n => product_super_attr_id_n
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_productSuperAttrs = [];
 
@@ -90,7 +86,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * )
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_skuSuperAttributeValues = [];
 
@@ -110,7 +105,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * )
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_skuSuperData = [];
 
@@ -118,7 +112,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Super attributes codes in a form of code => TRUE array pairs.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_superAttributes = [];
 
@@ -126,25 +119,21 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * All super attributes values combinations for each attribute set.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_superAttrValuesCombs = null;
 
     /**
      * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
-     * @since 2.0.0
      */
     protected $_productTypesConfig;
 
     /**
      * @var \Magento\ImportExport\Model\ResourceModel\Helper
-     * @since 2.0.0
      */
     protected $_resourceHelper;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.0.0
      */
     protected $_resource;
 
@@ -153,7 +142,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     protected $_connection;
 
@@ -161,7 +149,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Instance of product collection factory.
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     * @since 2.0.0
      */
     protected $_productColFac;
 
@@ -169,7 +156,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Product data.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_productData;
 
@@ -177,7 +163,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Product super data.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_productSuperData;
 
@@ -185,7 +170,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Simple product ids to delete.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_simpleIdsToDelete;
 
@@ -193,7 +177,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Super attributes data.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_superAttributesData;
 
@@ -201,7 +184,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Next attribute id.
      *
      * @var null|int
-     * @since 2.0.0
      */
     protected $_nextAttrId;
 
@@ -222,7 +204,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $_productColFac
      * @param MetadataPool $metadataPool
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
@@ -248,7 +229,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $attrParams Refined attribute parameters.
      * @param mixed $attribute
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
-     * @since 2.0.0
      */
     protected function _addAttributeParams($attrSetName, array $attrParams, $attribute)
     {
@@ -265,7 +245,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param int $productId
      * @param int $attributeId
      * @return array|null
-     * @since 2.0.0
      */
     protected function _getSuperAttributeId($productId, $attributeId)
     {
@@ -281,7 +260,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param string $attrCode
      * @return bool
-     * @since 2.0.0
      */
     protected function _isAttributeRequiredCheckNeeded($attrCode)
     {
@@ -294,7 +272,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param string $attrCode
      * @return bool
-     * @since 2.0.0
      */
     protected function _isAttributeSuper($attrCode)
     {
@@ -307,7 +284,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $rowData
      * @param int $rowNum
      * @return bool
-     * @since 2.0.0
      */
     protected function _isParticularAttributesValid(array $rowData, $rowNum)
     {
@@ -337,7 +313,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $oldSku - present variations list
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _loadSkuSuperAttributeValues($bunch, $newSku, $oldSku)
     {
@@ -391,7 +366,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param array $bunch
      * @return $this
-     * @since 2.0.0
      */
     protected function _loadSkuSuperDataForBunch(array $bunch)
     {
@@ -442,7 +416,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _processSuperData()
     {
@@ -501,7 +474,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _parseVariations($rowData)
     {
@@ -553,7 +525,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $rowData
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _parseVariationLabels($rowData)
     {
@@ -583,7 +554,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Delete unnecessary links.
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _deleteData()
     {
@@ -607,7 +577,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @return $this
      * @throws \Zend_Db_Exception
-     * @since 2.0.0
      */
     protected function _insertData()
     {
@@ -643,7 +612,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Get new supper attribute id.
      *
      * @return int
-     * @since 2.0.0
      */
     protected function _getNextAttrId()
     {
@@ -660,7 +628,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param array $rowData
      * @return $this
-     * @since 2.0.0
      */
     protected function _collectSuperData($rowData)
     {
@@ -710,7 +677,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param array $data
      * @return $this
-     * @since 2.0.0
      */
     protected function _collectAssocIds($data)
     {
@@ -744,7 +710,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param integer|string $productId
      * @param array $variationLabels
      * @return $this
-     * @since 2.0.0
      */
     protected function _collectSuperDataLabels($data, $productSuperAttrId, $productId, $variationLabels)
     {
@@ -771,7 +736,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @throws \Exception
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function saveData()
     {
@@ -833,7 +797,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param array $bunch
      * @return bool
-     * @since 2.0.0
      */
     protected function configurableInBunch($bunch)
     {
@@ -857,7 +820,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param bool $isNewProduct Optional
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isRowValid(array $rowData, $rowNum, $isNewProduct = true)
     {

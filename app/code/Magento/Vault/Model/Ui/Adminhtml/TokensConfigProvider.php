@@ -82,13 +82,13 @@ class TokensConfigProvider
 
     /**
      * @var OrderRepositoryInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $orderRepository;
 
     /**
      * @var PaymentTokenManagementInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $paymentTokenManagement;
 
@@ -235,7 +235,7 @@ class TokensConfigProvider
     /**
      * Returns payment token entity id by order payment id
      * @return int|null
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function getPaymentTokenEntityId()
     {
@@ -251,7 +251,7 @@ class TokensConfigProvider
      * Using 'getReordered' for Reorder action
      * Using 'getOrder' for Edit action
      * @return int
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function getOrderPaymentEntityId()
     {
@@ -279,8 +279,8 @@ class TokensConfigProvider
     /**
      * Returns order repository instance
      * @return OrderRepositoryInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 2.1.3
+     * @since 2.1.3
      */
     private function getOrderRepository()
     {
@@ -295,8 +295,8 @@ class TokensConfigProvider
     /**
      * Returns payment token management instance
      * @return PaymentTokenManagementInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 2.1.3
+     * @since 2.1.3
      */
     private function getPaymentTokenManagement()
     {

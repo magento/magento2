@@ -8,7 +8,6 @@ namespace Magento\Framework\View\Element\Message\Renderer;
 /**
  * Interface \Magento\Framework\View\Element\Message\Renderer\PoolInterface
  *
- * @since 2.0.0
  */
 interface PoolInterface
 {
@@ -17,7 +16,6 @@ interface PoolInterface
      *
      * @param string $rendererCode
      * @return RendererInterface | null
-     * @since 2.0.0
      */
     public function get($rendererCode);
 }

@@ -12,7 +12,6 @@ use Magento\Sales\Model\Spi\TransactionResourceInterface;
  * Sales transaction resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Transaction extends EntityAbstract implements TransactionResourceInterface
 {
@@ -20,7 +19,6 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
      * Serializeable field: additional_information
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_serializableFields = ['additional_information' => [null, []]];
 
@@ -28,7 +26,6 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
      * Initialize main table and the primary key field name
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -41,7 +38,6 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
      *
      * @param \Magento\Sales\Model\Order\Payment\Transaction $transaction
      * @return void
-     * @since 2.0.0
      */
     public function injectAsParent(\Magento\Sales\Model\Order\Payment\Transaction $transaction)
     {
@@ -87,7 +83,6 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
      * @param int $paymentId
      * @param string $txnId
      * @return \Magento\Sales\Model\Order\Payment\Transaction
-     * @since 2.0.0
      */
     public function loadObjectByTxnId(
         \Magento\Sales\Model\Order\Payment\Transaction $transaction,
@@ -112,7 +107,6 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
      *
      * @param int $orderId
      * @return string
-     * @since 2.0.0
      */
     public function getOrderWebsiteId($orderId)
     {
@@ -137,7 +131,6 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Sales\Model\Order\Payment\Transaction $transaction
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $transaction)
     {
@@ -180,7 +173,6 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
      * @param bool $isRow
      * @param string $txnType
      * @return array|string
-     * @since 2.0.0
      */
     private function _lookupByTxnId($orderId, $paymentId, $txnId, $columns, $isRow = false, $txnType = null)
     {
@@ -202,7 +194,6 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
      * @param string $txnId
      * @param string|array|\Zend_Db_Expr $columns
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     private function _getLoadByUniqueKeySelect($orderId, $paymentId, $txnId, $columns = '*')
     {

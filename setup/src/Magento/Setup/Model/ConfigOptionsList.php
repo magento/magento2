@@ -18,7 +18,6 @@ use Magento\Setup\Validator\DbValidator;
  * Deployment configuration options needed for Setup application
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class ConfigOptionsList implements ConfigOptionsListInterface
 {
@@ -26,19 +25,16 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      * Generate config data for individual segments
      *
      * @var  ConfigGenerator
-     * @since 2.0.0
      */
     private $configGenerator;
 
     /**
      * @var \Magento\Setup\Validator\DbValidator
-     * @since 2.0.0
      */
     private $dbValidator;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $validSaveHandlers = [
         ConfigOptionsListConstants::SESSION_SAVE_FILES,
@@ -50,7 +46,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      *
      * @param ConfigGenerator $configGenerator
      * @param DbValidator $dbValidator
-     * @since 2.0.0
      */
     public function __construct(ConfigGenerator $configGenerator, DbValidator $dbValidator)
     {
@@ -61,7 +56,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -160,7 +154,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function createConfig(array $data, DeploymentConfig $deploymentConfig)
     {
@@ -181,7 +174,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function validate(array $options, DeploymentConfig $deploymentConfig)
     {
@@ -221,7 +213,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      * @param DeploymentConfig $deploymentConfig
      *
      * @return array
-     * @since 2.0.0
      */
     private function getDbSettings(array $options, DeploymentConfig $deploymentConfig)
     {
@@ -265,7 +256,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      *
      * @param array $options
      * @return string[]
-     * @since 2.0.0
      */
     private function validateSessionSave(array $options)
     {
@@ -284,7 +274,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      *
      * @param array $options
      * @return string[]
-     * @since 2.0.0
      */
     private function validateEncryptionKey(array $options)
     {
@@ -303,7 +292,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      *
      * @param string $option
      * @return string[]
-     * @since 2.0.0
      */
     private function validateHttpCacheHosts($option)
     {
@@ -320,7 +308,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      *
      * @param string $option
      * @return string[]
-     * @since 2.0.0
      */
     private function validateDbPrefix($option)
     {
@@ -339,7 +326,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      * @param array $options
      * @param DeploymentConfig $deploymentConfig
      * @return string[]
-     * @since 2.0.0
      */
     private function validateDbSettings(array $options, DeploymentConfig $deploymentConfig)
     {

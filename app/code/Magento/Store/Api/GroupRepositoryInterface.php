@@ -11,7 +11,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Group repository interface
  *
  * @api
- * @since 2.0.0
  */
 interface GroupRepositoryInterface
 {
@@ -21,7 +20,6 @@ interface GroupRepositoryInterface
      * @param int $id
      * @return \Magento\Store\Api\Data\GroupInterface
      * @throws NoSuchEntityException
-     * @since 2.0.0
      */
     public function get($id);
 
@@ -29,7 +27,6 @@ interface GroupRepositoryInterface
      * Retrieve list of all groups
      *
      * @return \Magento\Store\Api\Data\GroupInterface[]
-     * @since 2.0.0
      */
     public function getList();
 
@@ -37,7 +34,6 @@ interface GroupRepositoryInterface
      * Clear cached entities
      *
      * @return void
-     * @since 2.0.0
      */
     public function clean();
 }

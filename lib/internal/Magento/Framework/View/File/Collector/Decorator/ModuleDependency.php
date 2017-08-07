@@ -13,7 +13,6 @@ use Magento\Framework\View\File\CollectorInterface;
 
 /**
  * Decorator that sorts view files according to dependencies between modules they belong to
- * @since 2.0.0
  */
 class ModuleDependency implements CollectorInterface
 {
@@ -21,7 +20,6 @@ class ModuleDependency implements CollectorInterface
      * Subject
      *
      * @var CollectorInterface
-     * @since 2.0.0
      */
     private $subject;
 
@@ -29,7 +27,6 @@ class ModuleDependency implements CollectorInterface
      * Module list
      *
      * @var ModuleListInterface
-     * @since 2.0.0
      */
     private $moduleList;
 
@@ -37,7 +34,6 @@ class ModuleDependency implements CollectorInterface
      * Fully-qualified names of modules, ordered by their priority in the system
      *
      * @var array|null
-     * @since 2.0.0
      */
     private $orderedModules;
 
@@ -46,7 +42,6 @@ class ModuleDependency implements CollectorInterface
      *
      * @param CollectorInterface $subject
      * @param ModuleListInterface $listInterface
-     * @since 2.0.0
      */
     public function __construct(
         CollectorInterface $subject,
@@ -62,7 +57,6 @@ class ModuleDependency implements CollectorInterface
      * @param ThemeInterface $theme
      * @param string $filePath
      * @return \Magento\Framework\View\File[]
-     * @since 2.0.0
      */
     public function getFiles(ThemeInterface $theme, $filePath)
     {
@@ -77,7 +71,6 @@ class ModuleDependency implements CollectorInterface
      * @param File $fileOne
      * @param File $fileTwo
      * @return int
-     * @since 2.0.0
      */
     public function compareFiles(File $fileOne, File $fileTwo)
     {
@@ -97,7 +90,6 @@ class ModuleDependency implements CollectorInterface
      *
      * @param string $moduleName
      * @return int
-     * @since 2.0.0
      */
     protected function getModulePriority($moduleName)
     {

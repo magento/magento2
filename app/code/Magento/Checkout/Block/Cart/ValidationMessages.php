@@ -12,19 +12,16 @@ use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
  * Shopping cart validation messages block
  *
  * @api
- * @since 2.0.0
  */
 class ValidationMessages extends \Magento\Framework\View\Element\Messages
 {
     /**
      * @var \Magento\Checkout\Helper\Cart
-     * @since 2.0.0
      */
     protected $cartHelper;
 
     /**
      * @var \Magento\Framework\Locale\CurrencyInterface
-     * @since 2.0.0
      */
     protected $currency;
 
@@ -44,7 +41,6 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
      * @param \Magento\Framework\Locale\CurrencyInterface $currency
      * @param array $data
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -70,7 +66,6 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -86,7 +81,6 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
      * Validate minimum amount and display notice in error
      *
      * @return void
-     * @since 2.0.0
      */
     protected function validateMinimumAmount()
     {
@@ -115,7 +109,6 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
      * Add quote messages
      *
      * @return void
-     * @since 2.0.0
      */
     protected function addQuoteMessages()
     {

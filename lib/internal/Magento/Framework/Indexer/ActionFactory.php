@@ -8,19 +8,16 @@ namespace Magento\Framework\Indexer;
 /**
  * Class \Magento\Framework\Indexer\ActionFactory
  *
- * @since 2.0.0
  */
 class ActionFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -34,7 +31,6 @@ class ActionFactory
      * @param [] $arguments
      * @throws \InvalidArgumentException
      * @return ActionInterface
-     * @since 2.0.0
      */
     public function create($className, $arguments = [])
     {

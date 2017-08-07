@@ -16,19 +16,16 @@ use Magento\Framework\Search\Request\Dimension;
 /**
  * Class \Magento\CatalogSearch\Model\Adapter\Mysql\Plugin\Aggregation\Category\DataProvider
  *
- * @since 2.0.0
  */
 class DataProvider
 {
     /**
      * @var Resource
-     * @since 2.0.0
      */
     private $resource;
 
     /**
      * @var ScopeResolverInterface
-     * @since 2.0.0
      */
     private $scopeResolver;
 
@@ -36,7 +33,6 @@ class DataProvider
      * Category factory
      *
      * @var \Magento\Catalog\Model\CategoryFactory
-     * @since 2.0.0
      */
     protected $categoryFactory;
 
@@ -45,7 +41,6 @@ class DataProvider
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
      * @param Resolver $layerResolver
-     * @since 2.0.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -66,7 +61,6 @@ class DataProvider
      * @param Table $entityIdsTable
      * @return Select
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function aroundGetDataSet(
         \Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider $subject,

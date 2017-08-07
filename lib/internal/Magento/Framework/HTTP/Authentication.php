@@ -7,7 +7,6 @@ namespace Magento\Framework\HTTP;
 
 /**
  * Library for working with HTTP authentication
- * @since 2.0.0
  */
 class Authentication
 {
@@ -15,7 +14,6 @@ class Authentication
      * Request object
      *
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $request;
 
@@ -23,14 +21,12 @@ class Authentication
      * Response object
      *
      * @var \Magento\Framework\App\ResponseInterface
-     * @since 2.0.0
      */
     protected $response;
 
     /**
      * @param \Magento\Framework\App\RequestInterface $httpRequest
      * @param \Magento\Framework\App\ResponseInterface $httpResponse
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $httpRequest,
@@ -46,7 +42,6 @@ class Authentication
      * Returns plain array with 2 items: login and password respectively
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCredentials()
     {
@@ -86,7 +81,6 @@ class Authentication
      *
      * @param string $realm
      * @return void
-     * @since 2.0.0
      */
     public function setAuthenticationFailed($realm)
     {

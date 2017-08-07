@@ -7,13 +7,11 @@ namespace Magento\Usps\Model\Source;
 
 /**
  * Freemethod source
- * @since 2.0.0
  */
 class Freemethod extends Method
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

@@ -10,7 +10,6 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 /**
  * QuoteIdMask Resource model
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class QuoteIdMask extends AbstractDb
 {
@@ -18,7 +17,6 @@ class QuoteIdMask extends AbstractDb
      * Main table and field initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

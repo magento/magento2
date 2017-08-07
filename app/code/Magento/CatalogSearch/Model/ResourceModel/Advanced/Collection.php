@@ -22,14 +22,12 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFact
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**
      * List Of filters
      * @var array
-     * @since 2.0.0
      */
     private $filters = [];
 
@@ -41,7 +39,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory
-     * @since 2.0.0
      */
     private $temporaryStorageFactory;
 
@@ -94,7 +91,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param MetadataPool|null $metadataPool
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -163,7 +159,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param array $fields
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function addFieldsToFilter($fields)
     {
@@ -175,7 +170,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     protected function _renderFiltersBefore()
     {
@@ -216,7 +210,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * @param string $attributeCode
      * @return string
-     * @since 2.0.0
      */
     private function getAttributeCode($attributeCode)
     {

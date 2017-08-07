@@ -12,25 +12,21 @@ use Magento\Setup\Controller\ResponseTypeInterface;
 
 /**
  * Checks for PHP readiness. It is used by both Cron and Setup wizard.
- * @since 2.0.0
  */
 class PhpReadinessCheck
 {
     /**
      * @var ComposerInformation
-     * @since 2.0.0
      */
     private $composerInformation;
 
     /**
      * @var PhpInformation
-     * @since 2.0.0
      */
     private $phpInformation;
 
     /**
      * @var VersionParser
-     * @since 2.0.0
      */
     private $versionParser;
 
@@ -49,7 +45,6 @@ class PhpReadinessCheck
      * @param PhpInformation $phpInformation
      * @param VersionParser $versionParser
      * @param DataSize $dataSize
-     * @since 2.0.0
      */
     public function __construct(
         ComposerInformation $composerInformation,
@@ -67,7 +62,6 @@ class PhpReadinessCheck
      * Checks PHP version
      *
      * @return array
-     * @since 2.0.0
      */
     public function checkPhpVersion()
     {
@@ -102,7 +96,6 @@ class PhpReadinessCheck
      * Checks PHP settings
      *
      * @return array
-     * @since 2.0.0
      */
     public function checkPhpSettings()
     {
@@ -157,7 +150,6 @@ class PhpReadinessCheck
      * Checks PHP extensions
      *
      * @return array
-     * @since 2.0.0
      */
     public function checkPhpExtensions()
     {
@@ -247,7 +239,6 @@ class PhpReadinessCheck
     /**
      * Checks if xdebug.max_nesting_level is set 200 or more
      * @return array
-     * @since 2.0.0
      */
     private function checkXDebugNestedLevel()
     {
@@ -288,7 +279,6 @@ class PhpReadinessCheck
      * is set to a value other than -1.
      *
      * @return array
-     * @since 2.0.0
      */
     private function checkPopulateRawPostSetting()
     {
@@ -360,7 +350,6 @@ class PhpReadinessCheck
      *
      * @param string $version
      * @return string
-     * @since 2.0.0
      */
     private function getNormalizedCurrentPhpVersion($version)
     {

@@ -22,7 +22,6 @@ use Magento\Framework\Serialize\Serializer\Json;
  * @method UrlRewrite setRedirectType($value)
  * @method UrlRewrite setStoreId($value)
  * @method UrlRewrite setDescription($value)
- * @since 2.0.0
  */
 class UrlRewrite extends \Magento\Framework\Model\AbstractModel
 {
@@ -58,7 +57,6 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
      * Initialize corresponding resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -69,7 +67,6 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
     /**
      * @return array
      * @api
-     * @since 2.0.0
      */
     public function getMetadata()
     {

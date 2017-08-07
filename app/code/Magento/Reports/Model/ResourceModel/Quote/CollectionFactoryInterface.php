@@ -7,7 +7,6 @@ namespace Magento\Reports\Model\ResourceModel\Quote;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface CollectionFactoryInterface
 {
@@ -16,7 +15,6 @@ interface CollectionFactoryInterface
      *
      * @param array $data
      * @return \Magento\Reports\Model\ResourceModel\Quote\Collection
-     * @since 2.0.0
      */
     public function create(array $data = []);
 }

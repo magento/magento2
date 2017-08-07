@@ -9,7 +9,6 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Provides cron configuration
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\Config\Data
 {
@@ -21,7 +20,6 @@ class Data extends \Magento\Framework\Config\Data
      * @param Reader\Db $dbReader
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Cron\Model\Config\Reader\Xml $reader,
@@ -38,7 +36,6 @@ class Data extends \Magento\Framework\Config\Data
      * Merge cron jobs and return
      *
      * @return array
-     * @since 2.0.0
      */
     public function getJobs()
     {

@@ -21,7 +21,6 @@ use Magento\Framework\Registry;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Composite extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -29,7 +28,6 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
      * Core registry
      *
      * @var Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -37,25 +35,21 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
      * Catalog product
      *
      * @var Product
-     * @since 2.0.0
      */
     protected $_catalogProduct = null;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\View\Result\LayoutFactory
-     * @since 2.0.0
      */
     protected $resultLayoutFactory;
 
     /**
      * @var ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
@@ -66,7 +60,6 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
      * @param Registry $coreRegistry
      * @param LayoutFactory $resultLayoutFactory
      * @param ProductRepositoryInterface $productRepository
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -88,7 +81,6 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
      * Init layout of product configuration update result
      *
      * @return \Magento\Framework\View\Result\Layout
-     * @since 2.0.0
      */
     protected function _initUpdateResultLayout()
     {
@@ -103,7 +95,6 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Framework\DataObject $updateResult
      * @return \Magento\Framework\View\Result\Layout
-     * @since 2.0.0
      */
     public function renderUpdateResult(\Magento\Framework\DataObject $updateResult)
     {
@@ -120,7 +111,6 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
      * @param bool $isOk
      * @param string $productType
      * @return \Magento\Framework\View\Result\Layout
-     * @since 2.0.0
      */
     protected function _initConfigureResultLayout($isOk, $productType)
     {
@@ -143,7 +133,6 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Framework\DataObject $configureResult
      * @return \Magento\Framework\View\Result\Layout
-     * @since 2.0.0
      */
     public function renderConfigureResult(\Magento\Framework\DataObject $configureResult)
     {

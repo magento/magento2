@@ -11,19 +11,19 @@ namespace Magento\Config\Model\Config\Export;
  * @deprecated 2.2.0 because in Magento since version 2.2.0 there are several
  * types for configuration fields that require special processing.
  * @see \Magento\Config\Model\Config\TypePool
- * @since 2.2.0
+ * @since 2.1.3
  */
 class ExcludeList
 {
     /**
      * @var array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $configs;
 
     /**
      * @param array $configs
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(array $configs = [])
     {
@@ -36,7 +36,7 @@ class ExcludeList
      * @param string $path
      * @return bool
      * @deprecated 2.2.0
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function isPresent($path)
     {
@@ -48,7 +48,7 @@ class ExcludeList
      *
      * @return array
      * @deprecated 2.2.0
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function get()
     {

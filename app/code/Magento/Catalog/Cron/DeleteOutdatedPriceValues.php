@@ -14,25 +14,25 @@ use Magento\Store\Model\Store;
 /**
  * Cron operation is responsible for deleting all product prices on WEBSITE level
  * in case 'Catalog Price Scope' configuratoin parameter is set to GLOBAL.
- * @since 2.2.0
+ * @since 2.1.3
  */
 class DeleteOutdatedPriceValues
 {
     /**
      * @var ResourceConnection
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $resource;
 
     /**
      * @var AttributeRepository
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $attributeRepository;
 
     /**
      * @var ScopeConfig
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $scopeConfig;
 
@@ -40,7 +40,7 @@ class DeleteOutdatedPriceValues
      * @param ResourceConnection $resource
      * @param AttributeRepository $attributeRepository
      * @param ScopeConfig $scopeConfig
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(
         ResourceConnection $resource,
@@ -56,7 +56,7 @@ class DeleteOutdatedPriceValues
      * Delete all price values for non-admin stores if PRICE_SCOPE is global
      *
      * @return void
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function execute()
     {

@@ -12,43 +12,36 @@ use Magento\Framework\Exception\NoSuchEntityException;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Edit extends \Magento\Directory\Block\Data
 {
     /**
      * @var \Magento\Customer\Api\Data\AddressInterface|null
-     * @since 2.0.0
      */
     protected $_address = null;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Customer\Api\AddressRepositoryInterface
-     * @since 2.0.0
      */
     protected $_addressRepository;
 
     /**
      * @var \Magento\Customer\Api\Data\AddressInterfaceFactory
-     * @since 2.0.0
      */
     protected $addressDataFactory;
 
     /**
      * @var \Magento\Customer\Helper\Session\CurrentCustomer
-     * @since 2.0.0
      */
     protected $currentCustomer;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
-     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
@@ -69,7 +62,6 @@ class Edit extends \Magento\Directory\Block\Data
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -105,7 +97,6 @@ class Edit extends \Magento\Directory\Block\Data
      * Prepare the layout of the address edit block.
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -154,7 +145,6 @@ class Edit extends \Magento\Directory\Block\Data
      * Generate name block html.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getNameBlockHtml()
     {
@@ -169,7 +159,6 @@ class Edit extends \Magento\Directory\Block\Data
      * Return the title, either editing an existing address, or adding a new one.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -188,7 +177,6 @@ class Edit extends \Magento\Directory\Block\Data
      * Return the Url to go back.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -207,7 +195,6 @@ class Edit extends \Magento\Directory\Block\Data
      * Return the Url for saving.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSaveUrl()
     {
@@ -221,7 +208,6 @@ class Edit extends \Magento\Directory\Block\Data
      * Return the associated address.
      *
      * @return \Magento\Customer\Api\Data\AddressInterface
-     * @since 2.0.0
      */
     public function getAddress()
     {
@@ -233,7 +219,6 @@ class Edit extends \Magento\Directory\Block\Data
      *
      * @param int $lineNumber
      * @return string
-     * @since 2.0.0
      */
     public function getStreetLine($lineNumber)
     {
@@ -245,7 +230,6 @@ class Edit extends \Magento\Directory\Block\Data
      * Return the country Id.
      *
      * @return int|null|string
-     * @since 2.0.0
      */
     public function getCountryId()
     {
@@ -259,7 +243,6 @@ class Edit extends \Magento\Directory\Block\Data
      * Return the name of the region for the address being edited.
      *
      * @return string region name
-     * @since 2.0.0
      */
     public function getRegion()
     {
@@ -271,7 +254,6 @@ class Edit extends \Magento\Directory\Block\Data
      * Return the id of the region being edited.
      *
      * @return int region id
-     * @since 2.0.0
      */
     public function getRegionId()
     {
@@ -283,7 +265,6 @@ class Edit extends \Magento\Directory\Block\Data
      * Retrieve the number of addresses associated with the customer given a customer Id.
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCustomerAddressCount()
     {
@@ -294,7 +275,6 @@ class Edit extends \Magento\Directory\Block\Data
      * Determine if the address can be set as the default billing address.
      *
      * @return bool|int
-     * @since 2.0.0
      */
     public function canSetAsDefaultBilling()
     {
@@ -308,7 +288,6 @@ class Edit extends \Magento\Directory\Block\Data
      * Determine if the address can be set as the default shipping address.
      *
      * @return bool|int
-     * @since 2.0.0
      */
     public function canSetAsDefaultShipping()
     {
@@ -322,7 +301,6 @@ class Edit extends \Magento\Directory\Block\Data
      * Is the address the default billing address?
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isDefaultBilling()
     {
@@ -333,7 +311,6 @@ class Edit extends \Magento\Directory\Block\Data
      * Is the address the default shipping address?
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isDefaultShipping()
     {
@@ -344,7 +321,6 @@ class Edit extends \Magento\Directory\Block\Data
      * Retrieve the Customer Data using the customer Id from the customer session.
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface
-     * @since 2.0.0
      */
     public function getCustomer()
     {
@@ -355,7 +331,6 @@ class Edit extends \Magento\Directory\Block\Data
      * Return back button Url, either to customer address or account.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBackButtonUrl()
     {
@@ -371,7 +346,6 @@ class Edit extends \Magento\Directory\Block\Data
      *
      * @param string $path
      * @return string|null
-     * @since 2.0.0
      */
     public function getConfig($path)
     {

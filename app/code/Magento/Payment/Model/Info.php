@@ -11,7 +11,6 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * Payment information model
  *
  * @api
- * @since 2.0.0
  */
 class Info extends AbstractExtensibleModel implements InfoInterface
 {
@@ -19,7 +18,6 @@ class Info extends AbstractExtensibleModel implements InfoInterface
      * Additional information container
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_additionalInformation = [];
 
@@ -27,13 +25,11 @@ class Info extends AbstractExtensibleModel implements InfoInterface
      * Payment data
      *
      * @var \Magento\Payment\Helper\Data
-     * @since 2.0.0
      */
     protected $_paymentData;
 
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
-     * @since 2.0.0
      */
     protected $_encryptor;
 
@@ -47,7 +43,6 @@ class Info extends AbstractExtensibleModel implements InfoInterface
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -79,7 +74,6 @@ class Info extends AbstractExtensibleModel implements InfoInterface
      * @param string $key
      * @param mixed $index
      * @return mixed
-     * @since 2.0.0
      */
     public function getData($key = '', $index = null)
     {
@@ -101,7 +95,6 @@ class Info extends AbstractExtensibleModel implements InfoInterface
      *
      * @return \Magento\Payment\Model\MethodInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getMethodInstance()
     {
@@ -130,7 +123,6 @@ class Info extends AbstractExtensibleModel implements InfoInterface
      *
      * @param string $data
      * @return string
-     * @since 2.0.0
      */
     public function encrypt($data)
     {
@@ -142,7 +134,6 @@ class Info extends AbstractExtensibleModel implements InfoInterface
      *
      * @param string $data
      * @return string
-     * @since 2.0.0
      */
     public function decrypt($data)
     {
@@ -158,7 +149,6 @@ class Info extends AbstractExtensibleModel implements InfoInterface
      * @param mixed $value
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function setAdditionalInformation($key, $value = null)
     {
@@ -179,7 +169,6 @@ class Info extends AbstractExtensibleModel implements InfoInterface
      *
      * @param string $key
      * @return array|null|mixed
-     * @since 2.0.0
      */
     public function getAdditionalInformation($key = null)
     {
@@ -195,7 +184,6 @@ class Info extends AbstractExtensibleModel implements InfoInterface
      *
      * @param string $key
      * @return $this
-     * @since 2.0.0
      */
     public function unsAdditionalInformation($key = null)
     {
@@ -215,7 +203,6 @@ class Info extends AbstractExtensibleModel implements InfoInterface
      *
      * @param mixed|null $key
      * @return bool
-     * @since 2.0.0
      */
     public function hasAdditionalInformation($key = null)
     {
@@ -230,7 +217,6 @@ class Info extends AbstractExtensibleModel implements InfoInterface
      * Initialize _additionalInformation with $this->_data['additional_information'] if empty
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _initAdditionalInformation()
     {

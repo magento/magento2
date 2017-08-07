@@ -11,19 +11,16 @@ use Magento\Persistent\Helper\Data as PersistentHelper;
 /**
  * Class \Magento\Persistent\Model\CheckoutConfigProvider
  *
- * @since 2.0.0
  */
 class CheckoutConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var PersistentHelper
-     * @since 2.0.0
      */
     private $persistentHelper;
 
     /**
      * @param PersistentHelper $persistentHelper
-     * @since 2.0.0
      */
     public function __construct(PersistentHelper $persistentHelper)
     {
@@ -32,7 +29,6 @@ class CheckoutConfigProvider implements ConfigProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getConfig()
     {

@@ -14,20 +14,17 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\Framework\Composer\MagentoComposerApplicationFactory
  *
- * @since 2.0.0
  */
 class MagentoComposerApplicationFactory
 {
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $pathToComposerHome;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $pathToComposerJson;
 
@@ -36,7 +33,6 @@ class MagentoComposerApplicationFactory
      *
      * @param ComposerJsonFinder $composerJsonFinder
      * @param DirectoryList $directoryList
-     * @since 2.0.0
      */
     public function __construct(ComposerJsonFinder $composerJsonFinder, DirectoryList $directoryList)
     {
@@ -48,7 +44,6 @@ class MagentoComposerApplicationFactory
      * Creates MagentoComposerApplication instance
      *
      * @return MagentoComposerApplication
-     * @since 2.0.0
      */
     public function create()
     {
@@ -59,7 +54,6 @@ class MagentoComposerApplicationFactory
      * Creates InfoCommand instance
      *
      * @return InfoCommand
-     * @since 2.0.0
      */
     public function createInfoCommand()
     {
@@ -70,7 +64,6 @@ class MagentoComposerApplicationFactory
      * Creates RequireUpdateDryRunCommand instance
      *
      * @return RequireUpdateDryRunCommand
-     * @since 2.0.0
      */
     public function createRequireUpdateDryRunCommand()
     {

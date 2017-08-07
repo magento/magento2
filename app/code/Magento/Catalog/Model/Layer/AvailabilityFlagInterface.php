@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\Layer;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface AvailabilityFlagInterface
 {
@@ -18,7 +17,6 @@ interface AvailabilityFlagInterface
      * @param \Magento\Catalog\Model\Layer $layer
      * @param array $filters
      * @return bool
-     * @since 2.0.0
      */
     public function isEnabled($layer, array $filters = []);
 }

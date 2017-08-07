@@ -19,25 +19,21 @@ use Magento\Tax\Helper\Data as TaxHelper;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Renderer extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Tax\Helper\Data
-     * @since 2.0.0
      */
     protected $taxHelper;
 
     /**
      * @var QuoteItem|OrderItem|InvoiceItem|CreditMemoItem
-     * @since 2.0.0
      */
     protected $item;
 
     /**
      * @var string|int|null
-     * @since 2.0.0
      */
     protected $storeId = null;
 
@@ -45,13 +41,11 @@ class Renderer extends \Magento\Framework\View\Element\Template
      * Set the display area, e.g., cart, sales, etc.
      *
      * @var string
-     * @since 2.0.0
      */
     protected $zone = null;
 
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
@@ -60,7 +54,6 @@ class Renderer extends \Magento\Framework\View\Element\Template
      * @param TaxHelper $taxHelper
      * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -81,7 +74,6 @@ class Renderer extends \Magento\Framework\View\Element\Template
      *
      * @param QuoteItem|OrderItem|InvoiceItem|CreditMemoItem $item
      * @return $this
-     * @since 2.0.0
      */
     public function setItem($item)
     {
@@ -94,7 +86,6 @@ class Renderer extends \Magento\Framework\View\Element\Template
      * Get display zone
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getZone()
     {
@@ -106,7 +97,6 @@ class Renderer extends \Magento\Framework\View\Element\Template
      *
      * @param string $zone
      * @return $this
-     * @since 2.0.0
      */
     public function setZone($zone)
     {
@@ -116,7 +106,6 @@ class Renderer extends \Magento\Framework\View\Element\Template
 
     /**
      * @return int|null|string
-     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -127,7 +116,6 @@ class Renderer extends \Magento\Framework\View\Element\Template
      * Get quote or order item
      *
      * @return CreditMemoItem|InvoiceItem|OrderItem|QuoteItem
-     * @since 2.0.0
      */
     public function getItem()
     {
@@ -138,7 +126,6 @@ class Renderer extends \Magento\Framework\View\Element\Template
      * Return whether display setting is to display price including tax
      *
      * @return bool
-     * @since 2.0.0
      */
     public function displayPriceInclTax()
     {
@@ -157,7 +144,6 @@ class Renderer extends \Magento\Framework\View\Element\Template
      * Return whether display setting is to display price excluding tax
      *
      * @return bool
-     * @since 2.0.0
      */
     public function displayPriceExclTax()
     {
@@ -176,7 +162,6 @@ class Renderer extends \Magento\Framework\View\Element\Template
      * Return whether display setting is to display both price including tax and price excluding tax
      *
      * @return bool
-     * @since 2.0.0
      */
     public function displayBothPrices()
     {
@@ -196,7 +181,6 @@ class Renderer extends \Magento\Framework\View\Element\Template
      *
      * @param float $price
      * @return string
-     * @since 2.0.0
      */
     public function formatPrice($price)
     {
@@ -220,7 +204,6 @@ class Renderer extends \Magento\Framework\View\Element\Template
      * on item type
      *
      * @return float
-     * @since 2.0.0
      */
     public function getItemDisplayPriceExclTax()
     {
@@ -237,7 +220,6 @@ class Renderer extends \Magento\Framework\View\Element\Template
      *
      * @param OrderItem|InvoiceItem|CreditmemoItem $item
      * @return mixed
-     * @since 2.0.0
      */
     public function getTotalAmount($item)
     {
@@ -254,7 +236,6 @@ class Renderer extends \Magento\Framework\View\Element\Template
      *
      * @param OrderItem|InvoiceItem|CreditmemoItem $item
      * @return mixed
-     * @since 2.0.0
      */
     public function getBaseTotalAmount($item)
     {

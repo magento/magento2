@@ -8,13 +8,11 @@ namespace Magento\Catalog\Model;
 
 /**
  * Class CategoryLinkManagement
- * @since 2.0.0
  */
 class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagementInterface
 {
     /**
      * @var \Magento\Catalog\Api\CategoryRepositoryInterface
-     * @since 2.0.0
      */
     protected $categoryRepository;
 
@@ -38,7 +36,6 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
 
     /**
      * @var \Magento\Catalog\Api\Data\CategoryProductLinkInterfaceFactory
-     * @since 2.0.0
      */
     protected $productLinkFactory;
 
@@ -53,7 +50,6 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
      *
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Catalog\Api\Data\CategoryProductLinkInterfaceFactory $productLinkFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
@@ -65,7 +61,6 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAssignedProducts($categoryId)
     {

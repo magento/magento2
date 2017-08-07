@@ -11,7 +11,6 @@ use Magento\Framework\Filesystem;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
 {
@@ -22,7 +21,6 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function execute()
     {

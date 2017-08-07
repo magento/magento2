@@ -10,7 +10,6 @@ namespace Magento\Framework\Notification;
  * List of registered system notifiers
  * @api
  *
- * @since 2.0.0
  */
 class NotifierList
 {
@@ -18,7 +17,6 @@ class NotifierList
      * Object manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -26,7 +24,6 @@ class NotifierList
      * List of notifiers
      *
      * @var NotifierInterface[]|string[]
-     * @since 2.0.0
      */
     protected $notifiers;
 
@@ -34,14 +31,12 @@ class NotifierList
      * Whether the list of notifiers is verified (all notifiers should implement NotifierInterface  interface)
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $isNotifiersVerified;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param NotifierInterface[]|string[] $notifiers
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $notifiers = [])
     {
@@ -55,7 +50,6 @@ class NotifierList
      *
      * @return NotifierInterface[]
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function asArray()
     {

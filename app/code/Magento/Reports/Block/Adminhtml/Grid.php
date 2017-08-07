@@ -11,7 +11,6 @@ namespace Magento\Reports\Block\Adminhtml;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
@@ -19,7 +18,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Should Store Switcher block be visible
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_storeSwitcherVisibility = true;
 
@@ -27,7 +25,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Should Date Filter block be visible
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_dateFilterVisibility = true;
 
@@ -35,7 +32,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Filters array
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_filters = [];
 
@@ -43,7 +39,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Default filters values
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_defaultFilters = ['report_from' => '', 'report_to' => '', 'report_period' => 'day'];
 
@@ -51,7 +46,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Sub-report rows count
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_subReportSize = 5;
 
@@ -59,7 +53,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Errors messages aggregated array
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_errors = [];
 
@@ -67,7 +60,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Block template file name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Reports::grid.phtml';
 
@@ -75,7 +67,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Filter values array
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_filterValues;
 
@@ -84,7 +75,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      *
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -164,7 +154,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Get allowed stores
      *
      * @return array|\int[]
-     * @since 2.0.0
      */
     protected function _getAllowedStoreIds()
     {
@@ -202,7 +191,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * @param array $data
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     protected function _setFilterValues($data)
     {
@@ -218,7 +206,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * @param bool $visible
      * @codeCoverageIgnore
      * @return void
-     * @since 2.0.0
      */
     public function setStoreSwitcherVisibility($visible = true)
     {
@@ -231,7 +218,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getStoreSwitcherVisibility()
     {
@@ -243,7 +229,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * @codeCoverageIgnore
      *
      * @return string
-     * @since 2.0.0
      */
     public function getStoreSwitcherHtml()
     {
@@ -256,7 +241,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * @param bool $visible
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setDateFilterVisibility($visible = true)
     {
@@ -269,7 +253,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getDateFilterVisibility()
     {
@@ -281,7 +264,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * @codeCoverageIgnore
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDateFilterHtml()
     {
@@ -292,7 +274,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Get periods
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getPeriods()
     {
@@ -303,7 +284,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Get date format according the locale
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDateFormat()
     {
@@ -315,7 +295,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * @codeCoverageIgnore
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRefreshButtonHtml()
     {
@@ -329,7 +308,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * @param string $value
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setFilter($name, $value)
     {
@@ -343,7 +321,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      *
      * @param string $name
      * @return string
-     * @since 2.0.0
      */
     public function getFilter($name)
     {
@@ -360,7 +337,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * @param int $size
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setSubReportSize($size)
     {
@@ -372,7 +348,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * @codeCoverageIgnore
      *
      * @return int
-     * @since 2.0.0
      */
     public function getSubReportSize()
     {
@@ -384,7 +359,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      *
      * @return array
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getErrors()
     {
@@ -395,7 +369,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Prepare grid filter buttons
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareFilterButtons()
     {

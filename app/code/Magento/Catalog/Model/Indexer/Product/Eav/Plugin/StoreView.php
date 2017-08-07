@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\Indexer\Product\Eav\Plugin;
 /**
  * Class \Magento\Catalog\Model\Indexer\Product\Eav\Plugin\StoreView
  *
- * @since 2.0.0
  */
 class StoreView
 {
@@ -16,13 +15,11 @@ class StoreView
      * Product attribute indexer processor
      *
      * @var \Magento\Catalog\Model\Indexer\Product\Eav\Processor
-     * @since 2.0.0
      */
     protected $_indexerEavProcessor;
 
     /**
      * @param \Magento\Catalog\Model\Indexer\Product\Eav\Processor $indexerEavProcessor
-     * @since 2.0.0
      */
     public function __construct(\Magento\Catalog\Model\Indexer\Product\Eav\Processor $indexerEavProcessor)
     {
@@ -37,7 +34,6 @@ class StoreView
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function beforeSave(
         \Magento\Store\Model\ResourceModel\Store $subject,

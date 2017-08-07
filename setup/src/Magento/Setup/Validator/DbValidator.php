@@ -12,7 +12,6 @@ use Magento\Setup\Module\ConnectionFactory;
 
 /**
  * Class DbValidator - validates DB related settings
- * @since 2.0.0
  */
 class DbValidator
 {
@@ -26,7 +25,6 @@ class DbValidator
      * DB connection factory
      *
      * @var ConnectionFactory
-     * @since 2.0.0
      */
     private $connectionFactory;
 
@@ -34,7 +32,6 @@ class DbValidator
      * Constructor
      *
      * @param ConnectionFactory $connectionFactory
-     * @since 2.0.0
      */
     public function __construct(ConnectionFactory $connectionFactory)
     {
@@ -47,7 +44,6 @@ class DbValidator
      * @param string $prefix
      * @return boolean
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function checkDatabaseTablePrefix($prefix)
     {
@@ -78,7 +74,6 @@ class DbValidator
      * @param string $dbPass
      * @return boolean
      * @throws \Magento\Setup\Exception
-     * @since 2.0.0
      */
     public function checkDatabaseConnection($dbName, $dbHost, $dbUser, $dbPass = '')
     {
@@ -118,7 +113,6 @@ class DbValidator
      * @param string $dbName
      * @return bool
      * @throws \Magento\Setup\Exception
-     * @since 2.0.0
      */
     private function checkDatabaseName(\Magento\Framework\DB\Adapter\AdapterInterface $connection, $dbName)
     {
@@ -142,7 +136,6 @@ class DbValidator
      * @param string $dbName
      * @return bool
      * @throws \Magento\Setup\Exception
-     * @since 2.0.0
      */
     private function checkDatabasePrivileges(\Magento\Framework\DB\Adapter\AdapterInterface $connection, $dbName)
     {
@@ -191,7 +184,6 @@ class DbValidator
      *
      * @param array $grantInfo
      * @return array
-     * @since 2.0.0
      */
     private function parseGrantInfo(array $grantInfo)
     {

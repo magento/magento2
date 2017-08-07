@@ -156,7 +156,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $attributeId
      * @return \Magento\Framework\DB\Select
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.2.0
+     * @since 2.1.1
      */
     public function createBatchBaseSelect($storeId, $attributeId)
     {

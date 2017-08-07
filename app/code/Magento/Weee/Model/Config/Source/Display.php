@@ -8,7 +8,6 @@ namespace Magento\Weee\Model\Config\Source;
 /**
  * Class \Magento\Weee\Model\Config\Source\Display
  *
- * @since 2.0.0
  */
 class Display implements \Magento\Framework\Option\ArrayInterface
 {
@@ -16,7 +15,6 @@ class Display implements \Magento\Framework\Option\ArrayInterface
      * Retrieve list of available options to display FPT
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

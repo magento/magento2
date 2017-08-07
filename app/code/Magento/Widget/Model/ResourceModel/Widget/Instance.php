@@ -12,7 +12,6 @@ use Magento\Framework\Model\AbstractModel;
  * Widget Instance Resource Model
  *
  * @api
- * @since 2.0.0
  */
 class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -20,7 +19,6 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -32,7 +30,6 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Widget\Model\Widget\Instance $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterLoad(AbstractModel $object)
     {
@@ -53,7 +50,6 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Widget\Model\Widget\Instance $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterSave(AbstractModel $object)
     {
@@ -112,7 +108,6 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Widget\Model\Widget\Instance $widgetInstance
      * @param array $pageGroupData
      * @return string[] of inserted layout updates ids
-     * @since 2.0.0
      */
     protected function _saveLayoutUpdates($widgetInstance, $pageGroupData)
     {
@@ -155,7 +150,6 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param array $storeIds
      * @return array
-     * @since 2.0.0
      */
     protected function _prepareStoreIds($storeIds)
     {
@@ -171,7 +165,6 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeDelete(AbstractModel $object)
     {
@@ -198,7 +191,6 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Widget\Model\Widget\Instance $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterDelete(AbstractModel $object)
     {
@@ -211,7 +203,6 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param array $pageIds
      * @return $this
-     * @since 2.0.0
      */
     protected function _deleteWidgetInstancePages($pageIds)
     {
@@ -228,7 +219,6 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param array $layoutUpdateIds
      * @return $this
-     * @since 2.0.0
      */
     protected function _deleteLayoutUpdates($layoutUpdateIds)
     {
@@ -245,7 +235,6 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $id
      * @return string[]
-     * @since 2.0.0
      */
     public function lookupStoreIds($id)
     {

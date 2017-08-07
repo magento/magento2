@@ -9,7 +9,6 @@ use Magento\Quote\Api\Data\TotalsAdditionalDataInterface;
 
 /**
  * Processes additional data for cart totals.
- * @since 2.0.0
  */
 class TotalsAdditionalDataProcessor
 {
@@ -20,7 +19,6 @@ class TotalsAdditionalDataProcessor
      * @param int $cartId
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function process(TotalsAdditionalDataInterface $additionalData, $cartId)
     {

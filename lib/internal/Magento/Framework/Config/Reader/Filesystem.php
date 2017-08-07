@@ -11,7 +11,6 @@ namespace Magento\Framework\Config\Reader;
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @api
- * @since 2.0.0
  */
 class Filesystem implements \Magento\Framework\Config\ReaderInterface
 {
@@ -19,7 +18,6 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
      * File locator
      *
      * @var \Magento\Framework\Config\FileResolverInterface
-     * @since 2.0.0
      */
     protected $_fileResolver;
 
@@ -27,7 +25,6 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
      * Config converter
      *
      * @var \Magento\Framework\Config\ConverterInterface
-     * @since 2.0.0
      */
     protected $_converter;
 
@@ -35,7 +32,6 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
      * The name of file that stores configuration
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_fileName;
 
@@ -43,7 +39,6 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
      * Path to corresponding XSD file with validation rules for merged config
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_schema;
 
@@ -51,7 +46,6 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
      * Path to corresponding XSD file with validation rules for separate config files
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_perFileSchema;
 
@@ -59,7 +53,6 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
      * List of id attributes for merge
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_idAttributes = [];
 
@@ -67,25 +60,23 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
      * Class of dom configuration document used for merge
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_domDocumentClass;
 
     /**
      * @var \Magento\Framework\Config\ValidationStateInterface
-     * @since 2.0.0
      */
     protected $validationState;
 
     /**
      * @var string
-     * @since 2.1.0
+     * @since 2.0.1
      */
     protected $_defaultScope;
 
     /**
      * @var string
-     * @since 2.1.0
+     * @since 2.0.1
      */
     protected $_schemaFile;
 
@@ -100,7 +91,6 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,
@@ -129,7 +119,6 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
      *
      * @param string|null $scope
      * @return array
-     * @since 2.0.0
      */
     public function read($scope = null)
     {
@@ -149,7 +138,6 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
      * @param array $fileList
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _readFiles($fileList)
     {
@@ -192,7 +180,6 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
      * @param string $initialContents
      * @return \Magento\Framework\Config\Dom
      * @throws \UnexpectedValueException
-     * @since 2.0.0
      */
     protected function _createConfigMerger($mergerClass, $initialContents)
     {

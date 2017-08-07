@@ -13,7 +13,6 @@ use Magento\Catalog\Model\Indexer\Category\Product;
 /**
  * Class \Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreGroup
  *
- * @since 2.0.0
  */
 class StoreGroup
 {
@@ -25,13 +24,11 @@ class StoreGroup
 
     /**
      * @var IndexerRegistry
-     * @since 2.0.0
      */
     protected $indexerRegistry;
 
     /**
      * @param IndexerRegistry $indexerRegistry
-     * @since 2.0.0
      */
     public function __construct(IndexerRegistry $indexerRegistry)
     {
@@ -77,7 +74,6 @@ class StoreGroup
      *
      * @param AbstractModel $group
      * @return bool
-     * @since 2.0.0
      */
     protected function validate(AbstractModel $group)
     {

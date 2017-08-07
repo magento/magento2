@@ -11,13 +11,11 @@ use Magento\Framework\Config\Dom\ArrayNodeConfig;
  * Universal converter of any XML data to an array representation with no data loss
  *
  * @api
- * @since 2.0.0
  */
 class Flat
 {
     /**
      * @var ArrayNodeConfig
-     * @since 2.0.0
      */
     protected $arrayNodeConfig;
 
@@ -25,7 +23,6 @@ class Flat
      * Constructor
      *
      * @param ArrayNodeConfig $arrayNodeConfig
-     * @since 2.0.0
      */
     public function __construct(ArrayNodeConfig $arrayNodeConfig)
     {
@@ -54,7 +51,6 @@ class Flat
      * @return string|array
      * @throws \UnexpectedValueException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function convert(\DOMNode $source, $basePath = '')
     {
@@ -119,7 +115,6 @@ class Flat
      *
      * @param \DOMNode $node
      * @return array
-     * @since 2.0.0
      */
     protected function getNodeAttributes(\DOMNode $node)
     {

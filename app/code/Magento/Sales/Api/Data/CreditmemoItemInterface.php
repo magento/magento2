@@ -13,7 +13,6 @@ namespace Magento\Sales\Api\Data;
  * customer account so that the customer can make future purchases. A credit memo item is an invoiced item for which
  * a merchant creates a credit memo.
  * @api
- * @since 2.0.0
  */
 interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -157,7 +156,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the additional data for a credit memo item.
      *
      * @return string|null Additional data.
-     * @since 2.0.0
      */
     public function getAdditionalData();
 
@@ -165,7 +163,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the base cost for a credit memo item.
      *
      * @return float
-     * @since 2.0.0
      */
     public function getBaseCost();
 
@@ -173,7 +170,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the base discount amount for a credit memo item.
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseDiscountAmount();
 
@@ -181,7 +177,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the base discount tax compensation amount for a credit memo item.
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseDiscountTaxCompensationAmount();
 
@@ -189,7 +184,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the base price for a credit memo item.
      *
      * @return float
-     * @since 2.0.0
      */
     public function getBasePrice();
 
@@ -197,7 +191,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the base price including tax for a credit memo item.
      *
      * @return float|null Base price including tax.
-     * @since 2.0.0
      */
     public function getBasePriceInclTax();
 
@@ -205,7 +198,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the base row total for a credit memo item.
      *
      * @return float|null Base row total.
-     * @since 2.0.0
      */
     public function getBaseRowTotal();
 
@@ -213,7 +205,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the base row total including tax for a credit memo item.
      *
      * @return float|null Base row total including tax.
-     * @since 2.0.0
      */
     public function getBaseRowTotalInclTax();
 
@@ -221,7 +212,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the base tax amount for a credit memo item.
      *
      * @return float|null Base tax amount.
-     * @since 2.0.0
      */
     public function getBaseTaxAmount();
 
@@ -229,7 +219,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the base WEEE tax applied amount for a credit memo item.
      *
      * @return float|null Base WEEE tax applied amount.
-     * @since 2.0.0
      */
     public function getBaseWeeeTaxAppliedAmount();
 
@@ -237,7 +226,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the base WEEE tax applied row amount for a credit memo item.
      *
      * @return float|null Base WEEE tax applied row amount.
-     * @since 2.0.0
      */
     public function getBaseWeeeTaxAppliedRowAmnt();
 
@@ -245,7 +233,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the base WEEE tax disposition for a credit memo item.
      *
      * @return float|null Base WEEE tax disposition.
-     * @since 2.0.0
      */
     public function getBaseWeeeTaxDisposition();
 
@@ -253,7 +240,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the base WEEE tax row disposition for a credit memo item.
      *
      * @return float|null Base WEEE tax row disposition.
-     * @since 2.0.0
      */
     public function getBaseWeeeTaxRowDisposition();
 
@@ -261,7 +247,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the description for a credit memo item.
      *
      * @return string|null Description.
-     * @since 2.0.0
      */
     public function getDescription();
 
@@ -269,7 +254,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the discount amount for a credit memo item.
      *
      * @return float|null Discount amount.
-     * @since 2.0.0
      */
     public function getDiscountAmount();
 
@@ -277,7 +261,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the ID for a credit memo item.
      *
      * @return int Credit memo item ID.
-     * @since 2.0.0
      */
     public function getEntityId();
 
@@ -286,7 +269,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param int $entityId
      * @return $this
-     * @since 2.0.0
      */
     public function setEntityId($entityId);
 
@@ -294,7 +276,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the discount tax compensation amount for a credit memo item.
      *
      * @return float|null Discount tax compensation amount.
-     * @since 2.0.0
      */
     public function getDiscountTaxCompensationAmount();
 
@@ -302,7 +283,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the name for a credit memo item.
      *
      * @return string|null Name.
-     * @since 2.0.0
      */
     public function getName();
 
@@ -310,7 +290,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the order item ID for a credit memo item.
      *
      * @return int Order item ID.
-     * @since 2.0.0
      */
     public function getOrderItemId();
 
@@ -318,7 +297,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the parent ID for a credit memo item.
      *
      * @return int|null Parent ID.
-     * @since 2.0.0
      */
     public function getParentId();
 
@@ -326,7 +304,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the price for a credit memo item.
      *
      * @return float|null Price.
-     * @since 2.0.0
      */
     public function getPrice();
 
@@ -334,7 +311,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the price including tax for a credit memo item.
      *
      * @return float|null Price including tax.
-     * @since 2.0.0
      */
     public function getPriceInclTax();
 
@@ -342,7 +318,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the product ID for a credit memo item.
      *
      * @return int|null Product ID.
-     * @since 2.0.0
      */
     public function getProductId();
 
@@ -350,7 +325,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the quantity for a credit memo item.
      *
      * @return float Quantity.
-     * @since 2.0.0
      */
     public function getQty();
 
@@ -358,7 +332,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the row total for a credit memo item.
      *
      * @return float|null Row total.
-     * @since 2.0.0
      */
     public function getRowTotal();
 
@@ -366,7 +339,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the row total including tax for a credit memo item.
      *
      * @return float|null Row total including tax.
-     * @since 2.0.0
      */
     public function getRowTotalInclTax();
 
@@ -374,7 +346,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the SKU for a credit memo item.
      *
      * @return string|null SKU.
-     * @since 2.0.0
      */
     public function getSku();
 
@@ -382,7 +353,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the tax amount for a credit memo item.
      *
      * @return float|null Tax amount.
-     * @since 2.0.0
      */
     public function getTaxAmount();
 
@@ -390,7 +360,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the WEEE tax applied for a credit memo item.
      *
      * @return string|null WEEE tax applied.
-     * @since 2.0.0
      */
     public function getWeeeTaxApplied();
 
@@ -398,7 +367,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the WEEE tax applied amount for a credit memo item.
      *
      * @return float|null WEEE tax applied amount.
-     * @since 2.0.0
      */
     public function getWeeeTaxAppliedAmount();
 
@@ -406,7 +374,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the WEEE tax applied row amount for a credit memo item.
      *
      * @return float|null WEEE tax applied row amount.
-     * @since 2.0.0
      */
     public function getWeeeTaxAppliedRowAmount();
 
@@ -414,7 +381,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the WEEE tax disposition for a credit memo item.
      *
      * @return float|null WEEE tax disposition.
-     * @since 2.0.0
      */
     public function getWeeeTaxDisposition();
 
@@ -422,7 +388,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Gets the WEEE tax row disposition for a credit memo item.
      *
      * @return float|null WEEE tax row disposition.
-     * @since 2.0.0
      */
     public function getWeeeTaxRowDisposition();
 
@@ -431,7 +396,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setParentId($id);
 
@@ -440,7 +404,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $price
      * @return $this
-     * @since 2.0.0
      */
     public function setBasePrice($price);
 
@@ -449,7 +412,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function setTaxAmount($amount);
 
@@ -458,7 +420,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseRowTotal($amount);
 
@@ -467,7 +428,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function setDiscountAmount($amount);
 
@@ -476,7 +436,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function setRowTotal($amount);
 
@@ -485,7 +444,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseDiscountAmount($amount);
 
@@ -494,7 +452,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function setPriceInclTax($amount);
 
@@ -503,7 +460,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseTaxAmount($amount);
 
@@ -512,7 +468,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function setBasePriceInclTax($amount);
 
@@ -521,7 +476,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $qty
      * @return $this
-     * @since 2.0.0
      */
     public function setQty($qty);
 
@@ -530,7 +484,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $baseCost
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseCost($baseCost);
 
@@ -539,7 +492,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $price
      * @return $this
-     * @since 2.0.0
      */
     public function setPrice($price);
 
@@ -548,7 +500,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseRowTotalInclTax($amount);
 
@@ -557,7 +508,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function setRowTotalInclTax($amount);
 
@@ -566,7 +516,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setProductId($id);
 
@@ -575,7 +524,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setOrderItemId($id);
 
@@ -584,7 +532,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param string $additionalData
      * @return $this
-     * @since 2.0.0
      */
     public function setAdditionalData($additionalData);
 
@@ -593,7 +540,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param string $description
      * @return $this
-     * @since 2.0.0
      */
     public function setDescription($description);
 
@@ -602,7 +548,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param string $sku
      * @return $this
-     * @since 2.0.0
      */
     public function setSku($sku);
 
@@ -611,7 +556,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setName($name);
 
@@ -620,7 +564,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function setDiscountTaxCompensationAmount($amount);
 
@@ -629,7 +572,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseDiscountTaxCompensationAmount($amount);
 
@@ -638,7 +580,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $weeeTaxDisposition
      * @return $this
-     * @since 2.0.0
      */
     public function setWeeeTaxDisposition($weeeTaxDisposition);
 
@@ -647,7 +588,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $weeeTaxRowDisposition
      * @return $this
-     * @since 2.0.0
      */
     public function setWeeeTaxRowDisposition($weeeTaxRowDisposition);
 
@@ -656,7 +596,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $baseWeeeTaxDisposition
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseWeeeTaxDisposition($baseWeeeTaxDisposition);
 
@@ -665,7 +604,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $baseWeeeTaxRowDisposition
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseWeeeTaxRowDisposition($baseWeeeTaxRowDisposition);
 
@@ -674,7 +612,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param string $weeeTaxApplied
      * @return $this
-     * @since 2.0.0
      */
     public function setWeeeTaxApplied($weeeTaxApplied);
 
@@ -683,7 +620,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseWeeeTaxAppliedAmount($amount);
 
@@ -692,7 +628,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $amnt
      * @return $this
-     * @since 2.0.0
      */
     public function setBaseWeeeTaxAppliedRowAmnt($amnt);
 
@@ -701,7 +636,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function setWeeeTaxAppliedAmount($amount);
 
@@ -710,7 +644,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function setWeeeTaxAppliedRowAmount($amount);
 
@@ -718,7 +651,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\CreditmemoItemExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -727,7 +659,6 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param \Magento\Sales\Api\Data\CreditmemoItemExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\CreditmemoItemExtensionInterface $extensionAttributes

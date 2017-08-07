@@ -9,7 +9,6 @@ namespace Magento\User\Model\ResourceModel\User\Locked;
  * Admin user collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Collection extends \Magento\User\Model\ResourceModel\User\Collection
 {
@@ -18,7 +17,6 @@ class Collection extends \Magento\User\Model\ResourceModel\User\Collection
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @return $this
-     * @since 2.0.0
      */
     protected function _initSelect()
     {

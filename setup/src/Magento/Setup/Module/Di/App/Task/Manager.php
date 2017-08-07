@@ -8,25 +8,21 @@ namespace Magento\Setup\Module\Di\App\Task;
 /**
  * Class \Magento\Setup\Module\Di\App\Task\Manager
  *
- * @since 2.0.0
  */
 class Manager
 {
     /**
      * @var OperationFactory
-     * @since 2.0.0
      */
     private $operationFactory;
 
     /**
      * @var OperationInterface[]
-     * @since 2.0.0
      */
     private $operationsList = [];
 
     /**
      * @param OperationFactory $operationFactory
-     * @since 2.0.0
      */
     public function __construct(
         OperationFactory $operationFactory
@@ -40,7 +36,6 @@ class Manager
      * @param string $operationCode
      * @param mixed $arguments
      * @return void
-     * @since 2.0.0
      */
     public function addOperation($operationCode, $arguments = null)
     {
@@ -53,7 +48,6 @@ class Manager
      * @param callable $beforeCallback
      * @param callable $afterCallback
      * @return void
-     * @since 2.0.0
      */
     public function process(\Closure $beforeCallback = null, \Closure $afterCallback = null)
     {

@@ -13,19 +13,19 @@ use Magento\Framework\App\Config\Initial\Reader;
  * Class for retrieving initial configuration from modules
  *
  * @api
- * @since 2.2.0
+ * @since 2.1.3
  */
 class ModularConfigSource implements ConfigSourceInterface
 {
     /**
      * @var Reader
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $reader;
 
     /**
      * @param Reader $reader
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(Reader $reader)
     {
@@ -37,7 +37,7 @@ class ModularConfigSource implements ConfigSourceInterface
      *
      * @param string $path Format is scope type and scope code separated by slash: e.g. "type/code"
      * @return array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function get($path = '')
     {

@@ -12,7 +12,6 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  * Video Content data interface
  *
  * @api
- * @since 2.0.0
  */
 interface VideoContentInterface extends ExtensibleDataInterface
 {
@@ -27,7 +26,6 @@ interface VideoContentInterface extends ExtensibleDataInterface
      * Retrieve MIME type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMediaType();
 
@@ -36,7 +34,6 @@ interface VideoContentInterface extends ExtensibleDataInterface
      *
      * @param string $mimeType
      * @return $this
-     * @since 2.0.0
      */
     public function setMediaType($mimeType);
 
@@ -44,7 +41,6 @@ interface VideoContentInterface extends ExtensibleDataInterface
      * Get provider
      *
      * @return string
-     * @since 2.0.0
      */
     public function getVideoProvider();
 
@@ -53,7 +49,6 @@ interface VideoContentInterface extends ExtensibleDataInterface
      *
      * @param string $data
      * @return $this
-     * @since 2.0.0
      */
     public function setVideoProvider($data);
 
@@ -61,7 +56,6 @@ interface VideoContentInterface extends ExtensibleDataInterface
      * Get video URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getVideoUrl();
 
@@ -70,7 +64,6 @@ interface VideoContentInterface extends ExtensibleDataInterface
      *
      * @param string $data
      * @return $this
-     * @since 2.0.0
      */
     public function setVideoUrl($data);
 
@@ -78,7 +71,6 @@ interface VideoContentInterface extends ExtensibleDataInterface
      * Get Title
      *
      * @return string
-     * @since 2.0.0
      */
     public function getVideoTitle();
 
@@ -87,7 +79,6 @@ interface VideoContentInterface extends ExtensibleDataInterface
      *
      * @param string $data
      * @return $this
-     * @since 2.0.0
      */
     public function setVideoTitle($data);
 
@@ -95,7 +86,6 @@ interface VideoContentInterface extends ExtensibleDataInterface
      * Get video Description
      *
      * @return string
-     * @since 2.0.0
      */
     public function getVideoDescription();
 
@@ -104,7 +94,6 @@ interface VideoContentInterface extends ExtensibleDataInterface
      *
      * @param string $data
      * @return $this
-     * @since 2.0.0
      */
     public function setVideoDescription($data);
 
@@ -112,7 +101,6 @@ interface VideoContentInterface extends ExtensibleDataInterface
      * Get Metadata
      *
      * @return string
-     * @since 2.0.0
      */
     public function getVideoMetadata();
 
@@ -121,7 +109,6 @@ interface VideoContentInterface extends ExtensibleDataInterface
      *
      * @param string $data
      * @return $this
-     * @since 2.0.0
      */
     public function setVideoMetadata($data);
 }

@@ -12,25 +12,21 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Helper class for JobComponentUninstall to uninstall a module component
- * @since 2.0.0
  */
 class ModuleUninstall
 {
     /**
      * @var ModuleUninstaller
-     * @since 2.0.0
      */
     private $moduleUninstaller;
 
     /**
      * @var ModuleRegistryUninstaller
-     * @since 2.0.0
      */
     private $moduleRegistryUninstaller;
 
     /**
      * @var PackageInfoFactory
-     * @since 2.0.0
      */
     private $packageInfoFactory;
 
@@ -40,7 +36,6 @@ class ModuleUninstall
      * @param ModuleUninstaller $moduleUninstaller
      * @param ModuleRegistryUninstaller $moduleRegistryUninstaller
      * @param PackageInfoFactory $packageInfoFactory
-     * @since 2.0.0
      */
     public function __construct(
         ModuleUninstaller $moduleUninstaller,
@@ -59,7 +54,6 @@ class ModuleUninstall
      * @param string $componentName
      * @param bool $dataOption
      * @return void
-     * @since 2.0.0
      */
     public function uninstall(OutputInterface $output, $componentName, $dataOption)
     {

@@ -13,19 +13,16 @@ use Magento\Quote\Model\Quote;
  * Use this class to register own specifications.
  *
  * @api
- * @since 2.0.0
  */
 class Composite implements SpecificationInterface
 {
     /**
      * @var \Magento\Payment\Model\Checks\SpecificationInterface[]
-     * @since 2.0.0
      */
     protected $list = [];
 
     /**
      * @param SpecificationInterface[] $list
-     * @since 2.0.0
      */
     public function __construct(array $list)
     {
@@ -38,7 +35,6 @@ class Composite implements SpecificationInterface
      * @param MethodInterface $paymentMethod
      * @param \Magento\Quote\Model\Quote $quote
      * @return bool
-     * @since 2.0.0
      */
     public function isApplicable(MethodInterface $paymentMethod, Quote $quote)
     {

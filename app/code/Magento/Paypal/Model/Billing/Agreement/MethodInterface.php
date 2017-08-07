@@ -7,7 +7,6 @@ namespace Magento\Paypal\Model\Billing\Agreement;
 
 /**
  * Interface for payment methods that support billing agreements management
- * @since 2.0.0
  */
 interface MethodInterface
 {
@@ -16,7 +15,6 @@ interface MethodInterface
      *
      * @param \Magento\Paypal\Model\Billing\AbstractAgreement $agreement
      * @return $this
-     * @since 2.0.0
      */
     public function initBillingAgreementToken(\Magento\Paypal\Model\Billing\AbstractAgreement $agreement);
 
@@ -25,7 +23,6 @@ interface MethodInterface
      *
      * @param \Magento\Paypal\Model\Billing\AbstractAgreement $agreement
      * @return array
-     * @since 2.0.0
      */
     public function getBillingAgreementTokenInfo(\Magento\Paypal\Model\Billing\AbstractAgreement $agreement);
 
@@ -34,7 +31,6 @@ interface MethodInterface
      *
      * @param \Magento\Paypal\Model\Billing\AbstractAgreement $agreement
      * @return $this
-     * @since 2.0.0
      */
     public function placeBillingAgreement(\Magento\Paypal\Model\Billing\AbstractAgreement $agreement);
 
@@ -43,7 +39,6 @@ interface MethodInterface
      *
      * @param \Magento\Paypal\Model\Billing\AbstractAgreement $agreement
      * @return $this
-     * @since 2.0.0
      */
     public function updateBillingAgreementStatus(\Magento\Paypal\Model\Billing\AbstractAgreement $agreement);
 }

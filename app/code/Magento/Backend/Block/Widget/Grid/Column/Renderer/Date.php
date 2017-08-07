@@ -11,13 +11,11 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  * Backend grid item renderer date
  * @api
  * @deprecated 2.2.0 in favour of UI component implementation
- * @since 2.0.0
  */
 class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_defaultWidth = 160;
 
@@ -25,13 +23,11 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      * Date format string
      *
      * @var string
-     * @since 2.0.0
      */
     protected static $_format = null;
 
     /**
      * @var DateTimeFormatterInterface
-     * @since 2.0.0
      */
     protected $dateTimeFormatter;
 
@@ -39,7 +35,6 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      * @param \Magento\Backend\Block\Context $context
      * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -55,7 +50,6 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      *
      * @return string
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     protected function _getFormat()
     {
@@ -80,7 +74,6 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      *
      * @param   \Magento\Framework\DataObject $row
      * @return  string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

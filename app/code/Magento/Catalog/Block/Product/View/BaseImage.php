@@ -9,7 +9,6 @@ namespace Magento\Catalog\Block\Product\View;
  * Simple product data view
  *
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class BaseImage extends \Magento\Catalog\Block\Product\View\AbstractView
 {

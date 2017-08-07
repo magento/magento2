@@ -18,19 +18,16 @@ use Magento\Framework\Exception\CouldNotSaveException;
 /**
  * Repository class for @see \Magento\Sales\Api\Data\CreditmemoInterface
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInterface
 {
     /**
      * @var Metadata
-     * @since 2.0.0
      */
     protected $metadata;
 
     /**
      * @var SearchResultFactory
-     * @since 2.0.0
      */
     protected $searchResultFactory = null;
 
@@ -38,7 +35,6 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
      * \Magento\Sales\Api\Data\CreditmemoInterface[]
      *
      * @var array
-     * @since 2.0.0
      */
     protected $registry = [];
 
@@ -53,7 +49,6 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
      * @param Metadata $metadata
      * @param SearchResultFactory $searchResultFactory
      * @param CollectionProcessorInterface|null $collectionProcessor
-     * @since 2.0.0
      */
     public function __construct(
         Metadata $metadata,
@@ -72,7 +67,6 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
      * @return \Magento\Sales\Api\Data\CreditmemoInterface Credit memo interface.
      * @throws InputException
      * @throws NoSuchEntityException
-     * @since 2.0.0
      */
     public function get($id)
     {
@@ -94,7 +88,6 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
      * Create credit memo instance
      *
      * @return \Magento\Sales\Api\Data\CreditmemoInterface
-     * @since 2.0.0
      */
     public function create()
     {
@@ -106,7 +99,6 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
      * @return \Magento\Sales\Api\Data\CreditmemoSearchResultInterface Credit memo search result interface.
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -123,7 +115,6 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
      * @param \Magento\Sales\Api\Data\CreditmemoInterface $entity The credit memo.
      * @return bool
      * @throws CouldNotDeleteException
-     * @since 2.0.0
      */
     public function delete(\Magento\Sales\Api\Data\CreditmemoInterface $entity)
     {
@@ -142,7 +133,6 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
      * @param \Magento\Sales\Api\Data\CreditmemoInterface $entity The credit memo.
      * @return \Magento\Sales\Api\Data\CreditmemoInterface Credit memo interface.
      * @throws CouldNotSaveException
-     * @since 2.0.0
      */
     public function save(\Magento\Sales\Api\Data\CreditmemoInterface $entity)
     {

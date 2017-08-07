@@ -9,13 +9,11 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 /**
  * Class \Magento\Catalog\Controller\Adminhtml\Product\Grid
  *
- * @since 2.0.0
  */
 class Grid extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -23,7 +21,6 @@ class Grid extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -38,7 +35,6 @@ class Grid extends \Magento\Catalog\Controller\Adminhtml\Product
      * Product grid for AJAX request
      *
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

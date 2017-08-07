@@ -12,14 +12,12 @@ use Magento\Store\Model\System\Store;
  *
  * This class is needed until the layout file supports supplying arguments to an option model.
  * @api
- * @since 2.0.0
  */
 class AdminOptionHash extends OptionHash
 {
     /**
      * @param Store $systemStore
      * @param bool $withDefaultWebsite
-     * @since 2.0.0
      */
     public function __construct(Store $systemStore, $withDefaultWebsite = true)
     {

@@ -7,7 +7,6 @@ namespace Magento\Catalog\Block\Adminhtml\Category;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Edit extends \Magento\Framework\View\Element\Template
 {

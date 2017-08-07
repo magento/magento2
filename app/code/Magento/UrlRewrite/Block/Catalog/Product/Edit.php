@@ -7,19 +7,16 @@ namespace Magento\UrlRewrite\Block\Catalog\Product;
 
 /**
  * Block for Catalog Category URL rewrites editing
- * @since 2.0.0
  */
 class Edit extends \Magento\UrlRewrite\Block\Edit
 {
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $_productFactory;
 
     /**
      * @var \Magento\Catalog\Model\CategoryFactory
-     * @since 2.0.0
      */
     protected $_categoryFactory;
 
@@ -30,7 +27,6 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -49,7 +45,6 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * Prepare layout for URL rewrite creating for product
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareLayoutFeatures()
     {
@@ -94,7 +89,6 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * Get or create new instance of product
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     private function _getProduct()
     {
@@ -108,7 +102,6 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * Get or create new instance of category
      *
      * @return \Magento\Catalog\Model\Category
-     * @since 2.0.0
      */
     private function _getCategory()
     {
@@ -122,7 +115,6 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * Add child product link block
      *
      * @return void
-     * @since 2.0.0
      */
     private function _addProductLinkBlock()
     {
@@ -141,7 +133,6 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * Add child category link block
      *
      * @return void
-     * @since 2.0.0
      */
     private function _addCategoryLinkBlock()
     {
@@ -163,7 +154,6 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * Add child products grid block
      *
      * @return void
-     * @since 2.0.0
      */
     private function _addProductsGridBlock()
     {
@@ -174,7 +164,6 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * Add child Categories Tree block
      *
      * @return void
-     * @since 2.0.0
      */
     private function _addCategoriesTreeBlock()
     {
@@ -185,7 +174,6 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * Add child Skip Categories block
      *
      * @return void
-     * @since 2.0.0
      */
     private function _addSkipCategoriesBlock()
     {
@@ -208,7 +196,6 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * Creates edit form block
      *
      * @return \Magento\UrlRewrite\Block\Catalog\Edit\Form
-     * @since 2.0.0
      */
     protected function _createEditFormBlock()
     {

@@ -11,25 +11,21 @@ use Magento\Framework\Exception\Plugin\AuthenticationException as PluginAuthenti
 /**
  * Class \Magento\Captcha\Observer\CheckUserLoginBackendObserver
  *
- * @since 2.0.0
  */
 class CheckUserLoginBackendObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Captcha\Helper\Data
-     * @since 2.0.0
      */
     protected $_helper;
 
     /**
      * @var CaptchaStringResolver
-     * @since 2.0.0
      */
     protected $captchaStringResolver;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $_request;
 
@@ -37,7 +33,6 @@ class CheckUserLoginBackendObserver implements ObserverInterface
      * @param \Magento\Captcha\Helper\Data $helper
      * @param CaptchaStringResolver $captchaStringResolver
      * @param \Magento\Framework\App\RequestInterface $request
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Captcha\Helper\Data $helper,
@@ -55,7 +50,6 @@ class CheckUserLoginBackendObserver implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @throws \Magento\Framework\Exception\Plugin\AuthenticationException
      * @return $this
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

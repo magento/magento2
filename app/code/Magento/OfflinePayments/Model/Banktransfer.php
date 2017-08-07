@@ -11,7 +11,6 @@ namespace Magento\OfflinePayments\Model;
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
  *
  * @api
- * @since 2.0.0
  */
 class Banktransfer extends \Magento\Payment\Model\Method\AbstractMethod
 {
@@ -21,7 +20,6 @@ class Banktransfer extends \Magento\Payment\Model\Method\AbstractMethod
      * Payment method code
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_code = self::PAYMENT_METHOD_BANKTRANSFER_CODE;
 
@@ -29,7 +27,6 @@ class Banktransfer extends \Magento\Payment\Model\Method\AbstractMethod
      * Bank Transfer payment block paths
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_formBlockType = \Magento\OfflinePayments\Block\Form\Banktransfer::class;
 
@@ -37,7 +34,6 @@ class Banktransfer extends \Magento\Payment\Model\Method\AbstractMethod
      * Instructions block path
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_infoBlockType = \Magento\Payment\Block\Info\Instructions::class;
 
@@ -45,7 +41,6 @@ class Banktransfer extends \Magento\Payment\Model\Method\AbstractMethod
      * Availability option
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isOffline = true;
 
@@ -53,7 +48,6 @@ class Banktransfer extends \Magento\Payment\Model\Method\AbstractMethod
      * Get instructions text from config
      *
      * @return string
-     * @since 2.0.0
      */
     public function getInstructions()
     {

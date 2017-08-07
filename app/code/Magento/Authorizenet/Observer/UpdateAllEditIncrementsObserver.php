@@ -11,20 +11,17 @@ use Magento\Sales\Model\Order;
 /**
  * Class \Magento\Authorizenet\Observer\UpdateAllEditIncrementsObserver
  *
- * @since 2.0.0
  */
 class UpdateAllEditIncrementsObserver implements ObserverInterface
 {
     /**
      *
      * @var \Magento\Authorizenet\Helper\Data
-     * @since 2.0.0
      */
     protected $authorizenetData;
 
     /**
      * @param \Magento\Authorizenet\Helper\Data $authorizenetData
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Authorizenet\Helper\Data $authorizenetData
@@ -37,7 +34,6 @@ class UpdateAllEditIncrementsObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

@@ -7,7 +7,6 @@ namespace Magento\Framework\Api;
 
 /**
  * Interface CriteriaInterface
- * @since 2.0.0
  */
 interface CriteriaInterface
 {
@@ -24,7 +23,6 @@ interface CriteriaInterface
      * Get associated Mapper Interface name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMapperInterfaceName();
 
@@ -34,7 +32,6 @@ interface CriteriaInterface
      * @param string|array $field
      * @param string|null $alias
      * @return void
-     * @since 2.0.0
      */
     public function addField($field, $alias = null);
 
@@ -78,7 +75,6 @@ interface CriteriaInterface
      * @param string $type
      * @throws \Magento\Framework\Exception\LocalizedException if some error in the input could be detected.
      * @return void
-     * @since 2.0.0
      */
     public function addFilter($name, $field, $condition = null, $type = 'and');
 
@@ -89,7 +85,6 @@ interface CriteriaInterface
      * @param string $direction
      * @param bool $unShift
      * @return void
-     * @since 2.0.0
      */
     public function addOrder($field, $direction = self::SORT_ORDER_DESC, $unShift = false);
 
@@ -99,7 +94,6 @@ interface CriteriaInterface
      * @param int $offset
      * @param int $size
      * @return void
-     * @since 2.0.0
      */
     public function setLimit($offset, $size);
 
@@ -109,7 +103,6 @@ interface CriteriaInterface
      * @param string|null $field
      * @param bool $isAlias Alias identifier
      * @return void
-     * @since 2.0.0
      */
     public function removeField($field, $isAlias = false);
 
@@ -117,7 +110,6 @@ interface CriteriaInterface
      * Removes all fields from select
      *
      * @return void
-     * @since 2.0.0
      */
     public function removeAllFields();
 
@@ -126,7 +118,6 @@ interface CriteriaInterface
      *
      * @param string $name
      * @return void
-     * @since 2.0.0
      */
     public function removeFilter($name);
 
@@ -134,7 +125,6 @@ interface CriteriaInterface
      * Removes all filters
      *
      * @return void
-     * @since 2.0.0
      */
     public function removeAllFilters();
 
@@ -142,7 +132,6 @@ interface CriteriaInterface
      * Get Criteria objects added to current Composite Criteria
      *
      * @return \Magento\Framework\Api\CriteriaInterface[]
-     * @since 2.0.0
      */
     public function getCriteriaList();
 
@@ -150,7 +139,6 @@ interface CriteriaInterface
      * Get list of filters
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getFilters();
 
@@ -158,7 +146,6 @@ interface CriteriaInterface
      * Get ordering criteria
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getOrders();
 
@@ -167,7 +154,6 @@ interface CriteriaInterface
      * (['offset', 'page'])
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getLimit();
 
@@ -177,7 +163,6 @@ interface CriteriaInterface
      * @param string $name
      * @param mixed $default
      * @return mixed
-     * @since 2.0.0
      */
     public function getPart($name, $default = null);
 
@@ -185,7 +170,6 @@ interface CriteriaInterface
      * Return all criteria parts as array
      *
      * @return array
-     * @since 2.0.0
      */
     public function toArray();
 
@@ -193,7 +177,6 @@ interface CriteriaInterface
      * Reset criteria
      *
      * @return void
-     * @since 2.0.0
      */
     public function reset();
 }

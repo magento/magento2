@@ -7,7 +7,6 @@ namespace Magento\Framework\Module;
 
 /**
  * Factory to create PackageInfo class
- * @since 2.0.0
  */
 class PackageInfoFactory
 {
@@ -15,7 +14,6 @@ class PackageInfoFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager = null;
 
@@ -23,7 +21,6 @@ class PackageInfoFactory
      * Factory constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -34,7 +31,6 @@ class PackageInfoFactory
      * Create class instance with specified parameters
      *
      * @return \Magento\Framework\Module\PackageInfo
-     * @since 2.0.0
      */
     public function create()
     {

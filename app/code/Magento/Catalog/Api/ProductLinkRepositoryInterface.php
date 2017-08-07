@@ -9,7 +9,6 @@ namespace Magento\Catalog\Api;
 /**
  * Interface Product links handling interface
  * @api
- * @since 2.0.0
  */
 interface ProductLinkRepositoryInterface
 {
@@ -29,7 +28,6 @@ interface ProductLinkRepositoryInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return bool
-     * @since 2.0.0
      */
     public function save(\Magento\Catalog\Api\Data\ProductLinkInterface $entity);
 
@@ -40,7 +38,6 @@ interface ProductLinkRepositoryInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return bool
-     * @since 2.0.0
      */
     public function delete(\Magento\Catalog\Api\Data\ProductLinkInterface $entity);
 
@@ -51,7 +48,6 @@ interface ProductLinkRepositoryInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return bool
-     * @since 2.0.0
      */
     public function deleteById($sku, $type, $linkedProductSku);
 }

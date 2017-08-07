@@ -12,7 +12,6 @@ namespace Magento\Framework\DataObject;
 /**
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  * @SuppressWarnings(PHPMD.NPathComplexity)
- * @since 2.0.0
  */
 class Mapper
 {
@@ -42,7 +41,6 @@ class Mapper
      * @param array $map
      * @param array $defaults
      * @return array|object
-     * @since 2.0.0
      */
     public static function &accumulateByMap($from, $to, array $map, array $defaults = [])
     {

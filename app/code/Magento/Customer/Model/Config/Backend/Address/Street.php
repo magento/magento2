@@ -11,19 +11,16 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  * Line count config model for customer address street attribute
  *
  * @method string getWebsiteCode()
- * @since 2.0.0
  */
 class Street extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $_eavConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -37,7 +34,6 @@ class Street extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -59,7 +55,6 @@ class Street extends \Magento\Framework\App\Config\Value
      * Actions after save
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -87,7 +82,6 @@ class Street extends \Magento\Framework\App\Config\Value
      * Processing object after delete data
      *
      * @return \Magento\Framework\Model\AbstractModel
-     * @since 2.0.0
      */
     public function afterDelete()
     {

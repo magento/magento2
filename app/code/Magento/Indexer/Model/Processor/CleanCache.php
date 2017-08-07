@@ -10,32 +10,32 @@ use \Magento\Framework\App\CacheInterface;
 /**
  * Class \Magento\Indexer\Model\Processor\CleanCache
  *
- * @since 2.1.0
+ * @since 2.0.11
  */
 class CleanCache
 {
     /**
      * @var \Magento\Framework\Indexer\CacheContext
-     * @since 2.1.0
+     * @since 2.0.11
      */
     protected $context;
 
     /**
      * @var \Magento\Framework\Event\Manager
-     * @since 2.1.0
+     * @since 2.0.11
      */
     protected $eventManager;
 
     /**
      * @var \Magento\Framework\App\CacheInterface
-     * @since 2.2.0
+     * @since 2.1.1
      */
     private $cache;
 
     /**
      * @param \Magento\Framework\Indexer\CacheContext $context
      * @param \Magento\Framework\Event\Manager $eventManager
-     * @since 2.1.0
+     * @since 2.0.11
      */
     public function __construct(
         \Magento\Framework\Indexer\CacheContext $context,
@@ -51,7 +51,7 @@ class CleanCache
      * @param \Magento\Indexer\Model\Processor $subject
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
+     * @since 2.0.11
      */
     public function afterUpdateMview(\Magento\Indexer\Model\Processor $subject)
     {
@@ -67,7 +67,7 @@ class CleanCache
      * @param \Magento\Indexer\Model\Processor $subject
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
+     * @since 2.0.11
      */
     public function afterReindexAllInvalid(\Magento\Indexer\Model\Processor $subject)
     {
@@ -81,8 +81,8 @@ class CleanCache
      * Get cache interface
      *
      * @return \Magento\Framework\App\CacheInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 2.1.1
+     * @since 2.1.1
      */
     private function getCache()
     {

@@ -9,13 +9,11 @@ namespace Magento\Bundle\Controller\Adminhtml\Bundle\Selection;
 /**
  * Class \Magento\Bundle\Controller\Adminhtml\Bundle\Selection\Grid
  *
- * @since 2.0.0
  */
 class Grid extends \Magento\Backend\App\Action
 {
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function execute()
     {

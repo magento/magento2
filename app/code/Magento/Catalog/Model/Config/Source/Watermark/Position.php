@@ -14,7 +14,6 @@ namespace Magento\Catalog\Model\Config\Source\Watermark;
 /**
  * Class \Magento\Catalog\Model\Config\Source\Watermark\Position
  *
- * @since 2.0.0
  */
 class Position implements \Magento\Framework\Option\ArrayInterface
 {
@@ -23,7 +22,6 @@ class Position implements \Magento\Framework\Option\ArrayInterface
      *
      * @codeCoverageIgnore
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

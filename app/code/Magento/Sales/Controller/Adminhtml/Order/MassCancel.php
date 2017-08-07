@@ -13,7 +13,6 @@ use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\MassCancel
  *
- * @since 2.0.0
  */
 class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
@@ -21,7 +20,6 @@ class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassA
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
-     * @since 2.0.0
      */
     public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
     {
@@ -34,7 +32,6 @@ class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassA
      *
      * @param AbstractCollection $collection
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     protected function massAction(AbstractCollection $collection)
     {

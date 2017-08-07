@@ -16,7 +16,6 @@ use Magento\SalesRule\Api\Data\RuleInterface;
 /**
  * Sales Rule resource model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Rule extends AbstractResource
 {
@@ -24,19 +23,16 @@ class Rule extends AbstractResource
      * Store associated with rule entities information map
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_associatedEntitiesMap = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $customerGroupIds = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $websiteIds = [];
 
@@ -44,13 +40,11 @@ class Rule extends AbstractResource
      * Magento string lib
      *
      * @var \Magento\Framework\Stdlib\StringUtils
-     * @since 2.0.0
      */
     protected $string;
 
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Coupon
-     * @since 2.0.0
      */
     protected $_resourceCoupon;
 
@@ -74,7 +68,6 @@ class Rule extends AbstractResource
      * @param \Magento\Framework\DataObject|null $associatedEntityMapInstance
      * @param Json $serializer Optional parameter for backward compatibility
      * @param MetadataPool $metadataPool Optional parameter for backward compatibility
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -100,7 +93,6 @@ class Rule extends AbstractResource
      * Initialize main table and table id field
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -111,7 +103,6 @@ class Rule extends AbstractResource
      * @param AbstractModel $object
      * @return void
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     public function loadCustomerGroupIds(AbstractModel $object)
     {
@@ -125,7 +116,6 @@ class Rule extends AbstractResource
      * @param AbstractModel $object
      * @return void
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     public function loadWebsiteIds(AbstractModel $object)
     {
@@ -141,7 +131,6 @@ class Rule extends AbstractResource
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     public function _beforeSave(AbstractModel $object)
     {
@@ -176,7 +165,6 @@ class Rule extends AbstractResource
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterSave(AbstractModel $object)
     {
@@ -206,7 +194,6 @@ class Rule extends AbstractResource
      * @param \Magento\SalesRule\Model\Rule $rule
      * @param int $customerId
      * @return string
-     * @since 2.0.0
      */
     public function getCustomerUses($rule, $customerId)
     {
@@ -229,7 +216,6 @@ class Rule extends AbstractResource
      * @param array $labels
      * @throws \Exception
      * @return $this
-     * @since 2.0.0
      */
     public function saveStoreLabels($ruleId, $labels)
     {
@@ -269,7 +255,6 @@ class Rule extends AbstractResource
      *
      * @param int $ruleId
      * @return array
-     * @since 2.0.0
      */
     public function getStoreLabels($ruleId)
     {
@@ -288,7 +273,6 @@ class Rule extends AbstractResource
      * @param int $ruleId
      * @param int $storeId
      * @return string
-     * @since 2.0.0
      */
     public function getStoreLabel($ruleId, $storeId)
     {
@@ -309,7 +293,6 @@ class Rule extends AbstractResource
      * Return codes of all product attributes currently used in promo rules
      *
      * @return array
-     * @since 2.0.0
      */
     public function getActiveAttributes()
     {
@@ -331,7 +314,6 @@ class Rule extends AbstractResource
      * @param \Magento\SalesRule\Model\Rule $rule
      * @param mixed $attributes
      * @return $this
-     * @since 2.0.0
      */
     public function setActualProductAttributes($rule, $attributes)
     {
@@ -381,7 +363,6 @@ class Rule extends AbstractResource
      *
      * @param string $serializedString
      * @return array
-     * @since 2.0.0
      */
     public function getProductAttributes($serializedString)
     {

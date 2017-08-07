@@ -16,7 +16,6 @@ use Magento\PageCache\Model\Varnish\VclGeneratorFactory;
  * file configuration with user-defined from configuration
  *
  * @api
- * @since 2.0.0
  */
 class Config
 {
@@ -46,7 +45,6 @@ class Config
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -62,19 +60,16 @@ class Config
 
     /**
      * @var \Magento\Framework\App\Cache\StateInterface $_cacheState
-     * @since 2.0.0
      */
     protected $_cacheState;
 
     /**
      * @var Filesystem\Directory\ReadFactory
-     * @since 2.0.0
      */
     protected $readFactory;
 
     /**
      * @var \Magento\Framework\Module\Dir\Reader
-     * @since 2.0.0
      */
     protected $reader;
 
@@ -97,7 +92,6 @@ class Config
      * @param Dir\Reader $reader
      * @param VclGeneratorFactory $vclGeneratorFactory
      * @param Json|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
@@ -121,7 +115,6 @@ class Config
      * @return int
      * @api
      * @deprecated 2.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -134,7 +127,6 @@ class Config
      * @return int
      * @api
      * @deprecated 2.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
-     * @since 2.0.0
      */
     public function getTtl()
     {
@@ -148,7 +140,6 @@ class Config
      * @return string
      * @deprecated 2.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      * @api
-     * @since 2.0.0
      */
     public function getVclFile($vclTemplatePath)
     {
@@ -178,7 +169,6 @@ class Config
      *
      * @return array
      * @deprecated 2.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
-     * @since 2.0.0
      */
     protected function _getReplacements()
     {
@@ -209,7 +199,6 @@ class Config
      *
      * @return mixed|null|string
      * @deprecated 2.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
-     * @since 2.0.0
      */
     protected function _getAccessList()
     {
@@ -235,7 +224,6 @@ class Config
      *
      * @return string
      * @deprecated 2.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
-     * @since 2.0.0
      */
     protected function _getDesignExceptions()
     {
@@ -269,7 +257,6 @@ class Config
      * @return bool
      * @api
      * @deprecated 2.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
-     * @since 2.0.0
      */
     public function isEnabled()
     {

@@ -11,13 +11,11 @@ use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Theme registration model class
- * @since 2.0.0
  */
 class Registration
 {
     /**
      * @var \Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory
-     * @since 2.0.0
      */
     protected $_collectionFactory;
 
@@ -25,7 +23,6 @@ class Registration
      * Collection of themes in file-system
      *
      * @var Collection
-     * @since 2.0.0
      */
     protected $_themeCollection;
 
@@ -33,7 +30,6 @@ class Registration
      * Allowed sequence relation by type, array(parent theme, child theme)
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_allowedRelations = [
         [ThemeInterface::TYPE_PHYSICAL, ThemeInterface::TYPE_VIRTUAL],
@@ -44,7 +40,6 @@ class Registration
      * Forbidden sequence relation by type
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_forbiddenRelations = [
         [ThemeInterface::TYPE_VIRTUAL, ThemeInterface::TYPE_VIRTUAL],
@@ -56,7 +51,6 @@ class Registration
      *
      * @param \Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory $collectionFactory
      * @param \Magento\Theme\Model\Theme\Data\Collection $filesystemCollection
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory $collectionFactory,
@@ -70,7 +64,6 @@ class Registration
      * Theme registration
      *
      * @return $this
-     * @since 2.0.0
      */
     public function register()
     {
@@ -93,7 +86,6 @@ class Registration
      * @param array $inheritanceChain
      * @return $this
      * @throws LocalizedException
-     * @since 2.0.0
      */
     protected function _registerThemeRecursively(&$theme, $inheritanceChain = [])
     {
@@ -129,7 +121,6 @@ class Registration
      *
      * @param ThemeInterface $theme
      * @return $this
-     * @since 2.0.0
      */
     protected function _savePreviewImage(ThemeInterface $theme)
     {
@@ -149,7 +140,6 @@ class Registration
      *
      * @param string $fullPath
      * @return ThemeInterface
-     * @since 2.0.0
      */
     public function getThemeFromDb($fullPath)
     {
@@ -160,7 +150,6 @@ class Registration
      * Checks all physical themes that they were not deleted
      *
      * @return $this
-     * @since 2.0.0
      */
     public function checkPhysicalThemes()
     {
@@ -178,7 +167,6 @@ class Registration
      * Check whether all themes have correct parent theme by type
      *
      * @return $this
-     * @since 2.0.0
      */
     public function checkAllowedThemeRelations()
     {
@@ -202,7 +190,6 @@ class Registration
      *
      * @param ThemeInterface $theme
      * @return int|null
-     * @since 2.0.0
      */
     protected function _getResetParentId(ThemeInterface $theme)
     {

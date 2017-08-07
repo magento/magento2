@@ -11,7 +11,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * Adminhtml sales order create form block
  *
  * @api
- * @since 2.0.0
  */
 class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
@@ -19,7 +18,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Customer form factory
      *
      * @var \Magento\Customer\Model\Metadata\FormFactory
-     * @since 2.0.0
      */
     protected $_customerFormFactory;
 
@@ -27,7 +25,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Json encoder
      *
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
@@ -35,19 +32,16 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Address service
      *
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Framework\Locale\CurrencyInterface
-     * @since 2.0.0
      */
     protected $_localeCurrency;
 
     /**
      * @var \Magento\Customer\Model\Address\Mapper
-     * @since 2.0.0
      */
     protected $addressMapper;
 
@@ -65,7 +59,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param \Magento\Customer\Model\Address\Mapper $addressMapper
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -91,7 +84,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -103,7 +95,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Retrieve url for loading blocks
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLoadBlockUrl()
     {
@@ -114,7 +105,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Retrieve url for form submiting
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSaveUrl()
     {
@@ -125,7 +115,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get customer selector display
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCustomerSelectorDisplay()
     {
@@ -140,7 +129,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get store selector display
      *
      * @return string
-     * @since 2.0.0
      */
     public function getStoreSelectorDisplay()
     {
@@ -156,7 +144,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get data selector display
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDataSelectorDisplay()
     {
@@ -172,7 +159,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get order data jason
      *
      * @return string
-     * @since 2.0.0
      */
     public function getOrderDataJson()
     {

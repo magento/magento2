@@ -12,7 +12,6 @@ use Magento\Framework\Profiler;
 /**
  * Class \Magento\Framework\Profiler\Driver\Standard\Stat
  *
- * @since 2.0.0
  */
 class Stat
 {
@@ -30,12 +29,7 @@ class Stat
     const EMALLOC_START = 'emalloc_start';
     /**#@-*/
 
-    /**
-     * Array of timers statistics data
-     *
-     * @var array
-     * @since 2.0.0
-     */
+    /**#@-*/
     protected $_timers = [];
 
     /**
@@ -46,7 +40,6 @@ class Stat
      * @param int $realMemory Real size of memory allocated from system
      * @param int $emallocMemory Memory used by emalloc()
      * @return void
-     * @since 2.0.0
      */
     public function start($timerId, $time, $realMemory, $emallocMemory)
     {
@@ -75,7 +68,6 @@ class Stat
      * @param int $emallocMemory Memory used by emalloc()
      * @return void
      * @throws \InvalidArgumentException if timer doesn't exist
-     * @since 2.0.0
      */
     public function stop($timerId, $time, $realMemory, $emallocMemory)
     {
@@ -97,7 +89,6 @@ class Stat
      * @param string $timerId
      * @return array
      * @throws \InvalidArgumentException if timer doesn't exist
-     * @since 2.0.0
      */
     public function get($timerId)
     {
@@ -114,7 +105,6 @@ class Stat
      * @param string $key Information to return
      * @return string|bool|int|float
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function fetch($timerId, $key)
     {
@@ -150,7 +140,6 @@ class Stat
      *
      * @param string|null $timerId
      * @return void
-     * @since 2.0.0
      */
     public function clear($timerId = null)
     {
@@ -167,7 +156,6 @@ class Stat
      * @param array|null $thresholds
      * @param string|null $filterPattern
      * @return array
-     * @since 2.0.0
      */
     public function getFilteredTimerIds(array $thresholds = null, $filterPattern = null)
     {
@@ -201,7 +189,6 @@ class Stat
      * Get ordered list of timer ids
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getOrderedTimerIds()
     {

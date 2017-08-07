@@ -9,7 +9,6 @@ namespace Magento\Framework\Mail\Template;
  * High-level interface for mail templates data that hides format from the client code
  *
  * @api
- * @since 2.0.0
  */
 interface ConfigInterface
 {
@@ -17,7 +16,6 @@ interface ConfigInterface
      * Retrieve unique identifiers of all available email templates
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getAvailableTemplates();
 
@@ -26,7 +24,6 @@ interface ConfigInterface
      *
      * @param string $templateId
      * @return string
-     * @since 2.0.0
      */
     public function getTemplateLabel($templateId);
 
@@ -35,7 +32,6 @@ interface ConfigInterface
      *
      * @param string $templateId
      * @return string
-     * @since 2.0.0
      */
     public function getTemplateType($templateId);
 
@@ -44,7 +40,6 @@ interface ConfigInterface
      *
      * @param string $templateId
      * @return string
-     * @since 2.0.0
      */
     public function getTemplateModule($templateId);
 
@@ -53,7 +48,6 @@ interface ConfigInterface
      *
      * @param string $templateId
      * @return string
-     * @since 2.0.0
      */
     public function getTemplateArea($templateId);
 
@@ -63,7 +57,6 @@ interface ConfigInterface
      * @param string $templateId
      * @param array|null $designParams
      * @return string
-     * @since 2.0.0
      */
     public function getTemplateFilename($templateId, $designParams = []);
 }
