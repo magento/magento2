@@ -40,7 +40,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     }
 
     /**
-     * Modify free_shipping columns added incorrectly in InstallSchema.
+     * Modify 'free_shipping' and 'simple_free_shipping' columns added incorrectly in InstallSchema.
      *
      * @param SchemaSetupInterface $setup
      * @return void
@@ -57,7 +57,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'default' => '0',
                 'comment' => 'Simple Free Shipping',
             ]
-
         );
         $setup->getConnection(self::$salesConnectionName)->modifyColumn(
             $setup->getTable('sales_order_item', self::$salesConnectionName),
@@ -69,7 +68,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'default' => '0',
                 'comment' => 'Free Shipping',
             ]
-
         );
         $setup->getConnection(self::$quoteConnectionName)->modifyColumn(
             $setup->getTable('quote_address', self::$quoteConnectionName),
@@ -81,7 +79,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'default' => '0',
                 'comment' => 'Free Shipping',
             ]
-
         );
         $setup->getConnection(self::$quoteConnectionName)->modifyColumn(
             $setup->getTable('quote_item', self::$quoteConnectionName),
