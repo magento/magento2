@@ -12,6 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Dhl\Model\Validator\XmlValidator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -54,12 +55,41 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     private $httpClient;
 
     /**
+     * @var XmlValidator|MockObject
+     */
+    private $xmlValidator;
+
+    /**
+     * @var \Magento\Shipping\Model\Shipment\Request|MockObject
+     */
+    private $request;
+
+    /**
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
+
+        $this->request = $this->getMockBuilder(\Magento\Shipping\Model\Shipment\Request::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'getPackages',
+                    'getOrigCountryId',
+                    'setPackages',
+                    'setPackageWeight',
+                    'setPackageValue',
+                    'setValueWithDiscount',
+                    'setPackageCustomsValue',
+                    'setFreeMethodWeight',
+                    'getPackageWeight',
+                    'getFreeMethodWeight',
+                    'getOrderShipment',
+                ]
+            )
+            ->getMock();
 
         $this->scope = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->scope->method('getValue')
@@ -109,26 +139,31 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ['setPrice']
         )->getMock();
         $rateMethod->expects($this->any())->method('setPrice')->will($this->returnSelf());
-
         $rateMethodFactory->expects($this->any())->method('create')->will($this->returnValue($rateMethod));
 
+        // Http mocks
         $this->httpResponse = $this->getMockBuilder(\Zend_Http_Response::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->httpClient = $this->getMockBuilder(ZendClient::class)
             ->disableOriginalConstructor()
             ->setMethods(['request'])
             ->getMock();
         $this->httpClient->method('request')
             ->willReturn($this->httpResponse);
-
         $httpClientFactory = $this->getMockBuilder(ZendClientFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $httpClientFactory->method('create')
             ->willReturn($this->httpClient);
 
+        // Config reader mock
+        $configReader = $this->getMockBuilder(\Magento\Framework\Module\Dir\Reader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $configReader->method('getModuleDir')->willReturn('/etc/path');
+
+        // XML Reader mock to retrieve list of acceptable countries
         $modulesDirectory = $this->getMockBuilder(
             \Magento\Framework\Filesystem\Directory\Read::class
         )->disableOriginalConstructor()->setMethods(
@@ -143,6 +178,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         );
         $readFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         $readFactory->expects($this->any())->method('create')->willReturn($modulesDirectory);
+
+        // Website Mock
         $storeManager = $this->getMockBuilder(
             \Magento\Store\Model\StoreManager::class
         )->disableOriginalConstructor()->setMethods(
@@ -156,26 +193,31 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $website->expects($this->any())->method('getBaseCurrencyCode')->will($this->returnValue('USD'));
         $storeManager->expects($this->any())->method('getWebsite')->will($this->returnValue($website));
 
+        // Error Mock
         $this->error = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\RateResult\Error::class)
             ->setMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
             ->getMock();
-
         $this->errorFactory = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-
         $this->errorFactory->expects($this->any())->method('create')->willReturn($this->error);
 
+        // Locale Mock
         $localeResolver = $this->getMockForAbstractClass(\Magento\Framework\Locale\ResolverInterface::class);
         $localeResolver->method('getLocale')->willReturn('fr_FR');
-
         $carrierHelper = $this->objectManager->getObject(
             \Magento\Shipping\Helper\Carrier::class,
             [
                 'localeResolver' => $localeResolver
             ]
         );
+
+        // Xml Validator Mock
+        $this->xmlValidator = $this->getMockBuilder(\Magento\Dhl\Model\Validator\XmlValidator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = $this->objectManager->getObject(
             \Magento\Dhl\Model\Carrier::class,
             [
@@ -188,8 +230,10 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                 'httpClientFactory' => $httpClientFactory,
                 'readFactory' => $readFactory,
                 'storeManager' => $storeManager,
+                'configReader' => $configReader,
                 'carrierHelper' => $carrierHelper,
-                'data' => ['id' => 'dhl', 'store' => '1']
+                'data' => ['id' => 'dhl', 'store' => '1'],
+                'xmlValidator' => $this->xmlValidator,
             ]
         );
     }
@@ -220,6 +264,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'carriers/dhl/height' => '1.6',
             'carriers/dhl/width' => '1.6',
             'carriers/dhl/depth' => '1.6',
+            'shipping/origin/country_id' => 'GB',
         ];
         return isset($pathMap[$path]) ? $pathMap[$path] : null;
     }
@@ -282,6 +327,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
         $this->httpResponse->method('getBody')
             ->willReturn(file_get_contents(__DIR__ . '/_files/success_dhl_response_rates.xml'));
+        $this->xmlValidator->expects($this->any())->method('validate');
 
         /** @var RateRequest $request */
         $request = $this->objectManager->getObject(
@@ -322,5 +368,82 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $request->setPackageWeight(1);
 
         $this->assertFalse(false, $this->model->collectRates($request));
+    }
+
+    /**
+     * Test request to shipment sends valid xml values.
+     */
+    public function testRequestToShipment()
+    {
+        $this->httpResponse->method('getBody')
+            ->willReturn(utf8_encode(file_get_contents(__DIR__ . '/_files/response_shipping_label.xml')));
+        $this->xmlValidator->expects($this->any())->method('validate');
+
+        $packages = [
+            'package' => [
+                'params' => [
+                    'width' => '3',
+                    'length' => '3',
+                    'height' => '3',
+                    'dimension_units' => 'INCH',
+                    'weight_units' => 'POUND',
+                    'weight' => '0.454000000001',
+                    'customs_value' => '10.00',
+                    'container' => \Magento\Dhl\Model\Carrier::DHL_CONTENT_TYPE_NON_DOC,
+                ],
+                'items' => [
+                    'item1' => [
+                        'name' => 'item_name',
+                    ],
+                ],
+            ]
+        ];
+
+        $order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $order->expects($this->any())->method('getSubtotal')->willReturn('10.00');
+
+        $shipment = $this->getMockBuilder(\Magento\Sales\Model\Order\Shipment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $shipment->expects($this->any())->method('getOrder')->willReturn($order);
+
+        $this->request->expects($this->any())->method('getPackages')->willReturn($packages);
+        $this->request->expects($this->any())->method('getOrigCountryId')->willReturn('GB');
+        $this->request->expects($this->any())->method('setPackages')->willReturnSelf();
+        $this->request->expects($this->any())->method('setPackageWeight')->willReturnSelf();
+        $this->request->expects($this->any())->method('setPackageValue')->willReturnSelf();
+        $this->request->expects($this->any())->method('setValueWithDiscount')->willReturnSelf();
+        $this->request->expects($this->any())->method('setPackageCustomsValue')->willReturnSelf();
+        $this->request->expects($this->any())->method('setFreeMethodWeight')->willReturnSelf();
+        $this->request->expects($this->any())->method('getPackageWeight')->willReturn('0.454000000001');
+        $this->request->expects($this->any())->method('getFreeMethodWeight')->willReturn('0.454000000001');
+        $this->request->expects($this->any())->method('getOrderShipment')->willReturn($shipment);
+
+        $result = $this->model->requestToShipment($this->request);
+
+        $reflectionClass = new \ReflectionObject($this->httpClient);
+        $rawPostData = $reflectionClass->getProperty('raw_post_data');
+        $rawPostData->setAccessible(true);
+
+        $this->assertNotNull($result);
+        $this->assertContains('<Weight>0.454</Weight>', $rawPostData->getValue($this->httpClient));
+    }
+
+    /**
+     * Data provider to testRequestToShipment
+     * @return array
+     */
+    public function requestToShipmentDataProvider()
+    {
+        return [
+            [
+                'GB'
+            ],
+            [
+                null
+            ]
+        ];
     }
 }
