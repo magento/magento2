@@ -8,7 +8,7 @@ namespace Magento\AdvancedSearch\Test\Unit\Model\Indexer\Fulltext\Plugin;
 
 use Magento\AdvancedSearch\Model\Indexer\Fulltext\Plugin\CustomerGroup;
 
-class CustomerGroupTest extends \PHPUnit_Framework_TestCase
+class CustomerGroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\IndexerInterface
@@ -42,13 +42,9 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->subjectMock = $this->getMock(\Magento\Customer\Model\ResourceModel\Group::class, [], [], '', false);
-        $this->customerOptionsMock = $this->getMock(
-            \Magento\AdvancedSearch\Model\Client\ClientOptionsInterface::class,
-            [],
-            [],
-            '',
-            false
+        $this->subjectMock = $this->createMock(\Magento\Customer\Model\ResourceModel\Group::class);
+        $this->customerOptionsMock = $this->createMock(
+            \Magento\AdvancedSearch\Model\Client\ClientOptionsInterface::class
         );
         $this->indexerMock = $this->getMockForAbstractClass(
             \Magento\Framework\Indexer\IndexerInterface::class,
@@ -59,19 +55,13 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
             true,
             ['getId', 'getState', '__wakeup']
         );
-        $this->indexerRegistryMock = $this->getMock(
+        $this->indexerRegistryMock = $this->createPartialMock(
             \Magento\Framework\Indexer\IndexerRegistry::class,
-            ['get'],
-            [],
-            '',
-            false
+            ['get']
         );
-        $this->engineResolverMock = $this->getMock(
+        $this->engineResolverMock = $this->createPartialMock(
             \Magento\Search\Model\EngineResolver::class,
-            ['getCurrentSearchEngine'],
-            [],
-            '',
-            false
+            ['getCurrentSearchEngine']
         );
         $this->model = new CustomerGroup(
             $this->indexerRegistryMock,
@@ -94,12 +84,9 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
             ->method('getCurrentSearchEngine')
             ->will($this->returnValue($searchEngine));
 
-        $groupMock = $this->getMock(
+        $groupMock = $this->createPartialMock(
             \Magento\Customer\Model\Group::class,
-            ['dataHasChangedFor', 'isObjectNew', '__wakeup'],
-            [],
-            '',
-            false
+            ['dataHasChangedFor', 'isObjectNew', '__wakeup']
         );
         $groupMock->expects($this->any())->method('isObjectNew')->will($this->returnValue($isObjectNew));
         $groupMock->expects($this->any())
