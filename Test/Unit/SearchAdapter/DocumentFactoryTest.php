@@ -9,7 +9,7 @@ namespace Magento\Elasticsearch\Test\Unit\SearchAdapter;
 use Magento\Elasticsearch\SearchAdapter\DocumentFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class DocumentFactoryTest extends \PHPUnit_Framework_TestCase
+class DocumentFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DocumentFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -49,7 +49,7 @@ class DocumentFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->instanceName = \Magento\Framework\Api\Search\Document::class;
 

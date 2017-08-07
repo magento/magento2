@@ -9,7 +9,7 @@ use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class SearchIndexNameResolverTest extends \PHPUnit_Framework_TestCase
+class SearchIndexNameResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SearchIndexNameResolver

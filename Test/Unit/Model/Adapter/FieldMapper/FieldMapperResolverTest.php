@@ -9,7 +9,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\FieldMapperResolver;
 use Magento\Framework\ObjectManagerInterface;
 
-class FieldMapperResolverTest extends \PHPUnit_Framework_TestCase
+class FieldMapperResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FieldMapperResolver

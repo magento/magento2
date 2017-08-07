@@ -12,7 +12,7 @@ use Magento\Framework\Config\Data;
 /**
  * Unit test for Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigTest
  */
-class EsConfigTest extends \PHPUnit_Framework_TestCase
+class EsConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -57,7 +57,7 @@ class EsConfigTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->willReturn('serializedData');
 
-        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
 
         $this->serializerMock->expects($this->once())
             ->method('unserialize')

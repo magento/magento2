@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @see \Magento\Elasticsearch\SearchAdapter\Filter\Builder\Range
  */
-class RangeTest extends \PHPUnit_Framework_TestCase
+class RangeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Range
@@ -79,6 +79,7 @@ class RangeTest extends \PHPUnit_Framework_TestCase
             ->method('getTo')
             ->willReturn('field');
 
-        $this->model->buildFilter($this->filterInterface);
+        $result = $this->model->buildFilter($this->filterInterface);
+        $this->assertNotNull($result);
     }
 }

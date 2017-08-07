@@ -12,7 +12,7 @@ use Magento\Elasticsearch\SearchAdapter\QueryContainer;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
 
-class DataProviderFactoryTest extends \PHPUnit_Framework_TestCase
+class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject

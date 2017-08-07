@@ -8,7 +8,7 @@ namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Aggregation\Builder;
 use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\Term;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class TermTest extends \PHPUnit_Framework_TestCase
+class TermTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Term

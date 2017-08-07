@@ -9,7 +9,7 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldType;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
+class ProductFieldMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Elasticsearch\Model\Adapter\FieldMapper\ProductFieldMapper
@@ -90,20 +90,17 @@ class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
             ['getWebsiteId', 'getRootCategoryId']
         );
 
-        $this->coreRegistry = $this->getMock(\Magento\Framework\Registry::class);
+        $this->coreRegistry = $this->createMock(\Magento\Framework\Registry::class);
 
         $objectManager = new ObjectManagerHelper($this);
 
-        $this->eavAttributeResource = $this->getMock(
+        $this->eavAttributeResource = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             [
                 '__wakeup',
                 'getBackendType',
                 'getFrontendInput'
-            ],
-            [],
-            '',
-            false
+            ]
         );
 
         $this->mapper = $objectManager->getObject(

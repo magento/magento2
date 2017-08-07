@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BuilderTest extends \PHPUnit_Framework_TestCase
+class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Builder
@@ -149,6 +149,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->aggregationBuilder->expects($this->any())
             ->method('build')
             ->willReturn([]);
-        $this->model->initAggregations($this->request, []);
+        $result = $this->model->initAggregations($this->request, []);
+        $this->assertNotNull($result);
     }
 }

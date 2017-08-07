@@ -8,7 +8,7 @@ namespace Magento\Elasticsearch\Test\Unit\Model\Indexer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Elasticsearch\Model\Indexer\IndexerHandler;
 
-class IndexerHandlerTest extends \PHPUnit_Framework_TestCase
+class IndexerHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var IndexerHandler

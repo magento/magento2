@@ -10,7 +10,7 @@ use Magento\Framework\Locale\Resolver as LocaleResolver;
 use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class BuilderTest extends \PHPUnit_Framework_TestCase
+class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Builder
@@ -76,7 +76,8 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                 'en_US' => 'english',
             ]);
 
-        $this->model->build();
+        $result = $this->model->build();
+        $this->assertNotNull($result);
     }
 
     /**
@@ -84,7 +85,8 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetStoreId()
     {
-        $this->model->setStoreId(1);
+        $result = $this->model->setStoreId(1);
+        $this->assertNull($result);
     }
 
     /**

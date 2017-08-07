@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @see \Magento\Elasticsearch\SearchAdapter\Filter\Builder\Wildcard
  */
-class WildcardTest extends \PHPUnit_Framework_TestCase
+class WildcardTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Wildcard
@@ -67,6 +67,7 @@ class WildcardTest extends \PHPUnit_Framework_TestCase
             ->method('getField')
             ->willReturn('field');
 
-        $this->model->buildFilter($this->filterInterface);
+        $result = $this->model->buildFilter($this->filterInterface);
+        $this->assertNotNull($result);
     }
 }

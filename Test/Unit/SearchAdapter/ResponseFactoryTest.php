@@ -9,7 +9,7 @@ namespace Magento\Elasticsearch\Test\Unit\SearchAdapter;
 use Magento\Elasticsearch\SearchAdapter\ResponseFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ResponseFactoryTest extends \PHPUnit_Framework_TestCase
+class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ResponseFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -50,7 +50,7 @@ class ResponseFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(

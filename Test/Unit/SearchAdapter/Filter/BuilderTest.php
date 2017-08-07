@@ -11,7 +11,7 @@ use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Term;
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Wildcard;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class BuilderTest extends \PHPUnit_Framework_TestCase
+class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Builder
@@ -90,8 +90,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     public function testBuild($filterMock, $filterType)
     {
         $filter = $this->getMockBuilder($filterMock)
+            ->setMethods(['getMust', 'getType', 'getShould', 'getMustNot'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $filter->expects($this->any())
             ->method('getType')
             ->willReturn($filterType);
@@ -111,7 +112,8 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->method('getMustNot')
             ->willReturn([$childFilter]);
 
-        $this->model->build($filter, 'must');
+        $result = $this->model->build($filter, 'must');
+        $this->assertNotNull($result);
     }
 
     /**
@@ -123,8 +125,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     public function testBuildNegation($filterMock, $filterType)
     {
         $filter = $this->getMockBuilder($filterMock)
+            ->setMethods(['getMust', 'getType', 'getShould', 'getMustNot'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $filter->expects($this->any())
             ->method('getType')
             ->willReturn($filterType);
@@ -144,7 +147,8 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->method('getMustNot')
             ->willReturn([$childFilter]);
 
-        $this->model->build($filter, 'must_not');
+        $result = $this->model->build($filter, 'must_not');
+        $this->assertNotNull($result);
     }
 
     /**

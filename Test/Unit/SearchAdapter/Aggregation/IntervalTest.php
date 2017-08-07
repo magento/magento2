@@ -19,7 +19,7 @@ use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class IntervalTest extends \PHPUnit_Framework_TestCase
+class IntervalTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Interval

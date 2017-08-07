@@ -8,7 +8,7 @@ namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Dynamic;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataProviderTest extends \PHPUnit_Framework_TestCase
+class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Elasticsearch\SearchAdapter\QueryContainer|\PHPUnit_Framework_MockObject_MockObject

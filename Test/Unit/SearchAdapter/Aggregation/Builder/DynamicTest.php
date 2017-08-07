@@ -8,7 +8,7 @@ namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Aggregation\Builder;
 use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\Dynamic;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class DynamicTest extends \PHPUnit_Framework_TestCase
+class DynamicTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Dynamic

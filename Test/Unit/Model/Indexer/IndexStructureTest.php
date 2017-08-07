@@ -8,7 +8,7 @@ namespace Magento\Elasticsearch\Test\Unit\Model\Indexer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Elasticsearch\Model\Indexer\IndexStructure;
 
-class IndexStructureTest extends \PHPUnit_Framework_TestCase
+class IndexStructureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var IndexStructure
