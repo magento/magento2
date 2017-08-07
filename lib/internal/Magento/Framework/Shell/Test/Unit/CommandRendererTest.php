@@ -7,7 +7,7 @@ namespace Magento\Framework\Shell\Test\Unit;
 
 use \Magento\Framework\Shell\CommandRenderer;
 
-class CommandRendererTest extends \PHPUnit_Framework_TestCase
+class CommandRendererTest extends \PHPUnit\Framework\TestCase
 {
     public function testRender()
     {

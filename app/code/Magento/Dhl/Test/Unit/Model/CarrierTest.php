@@ -16,7 +16,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CarrierTest extends \PHPUnit_Framework_TestCase
+class CarrierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -141,7 +141,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(file_get_contents(__DIR__ . '/_files/countries.xml'))
         );
-        $readFactory = $this->getMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class, [], [], '', false);
+        $readFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         $readFactory->expects($this->any())->method('create')->willReturn($modulesDirectory);
         $storeManager = $this->getMockBuilder(
             \Magento\Store\Model\StoreManager::class

@@ -15,7 +15,7 @@ use Magento\Framework\Event\ManagerInterface as EventManager;
 /**
  * @magentoAppArea frontend
  */
-class ViewedTest extends \PHPUnit_Framework_TestCase
+class ViewedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface

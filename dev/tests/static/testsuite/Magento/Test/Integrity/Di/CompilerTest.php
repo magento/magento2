@@ -23,7 +23,7 @@ use Magento\TestFramework\Integrity\PluginValidator;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CompilerTest extends \PHPUnit_Framework_TestCase
+class CompilerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string
@@ -156,7 +156,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     /**
      * Checks if class is a real one or generated Factory
      * @param string $instanceName class name
-     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit\Framework\AssertionFailedError
      * @return bool
      */
     protected function _classExistsAsReal($instanceName)
