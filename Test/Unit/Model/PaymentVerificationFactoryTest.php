@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Payment\Gateway\ConfigInterface;
 
-class PaymentVerificationFactoryTest extends \PHPUnit_Framework_TestCase
+class PaymentVerificationFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PaymentVerificationFactory

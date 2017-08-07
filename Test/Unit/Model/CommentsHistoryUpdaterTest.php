@@ -15,7 +15,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Contains tests for comments history updater class.
  */
-class CommentsHistoryUpdaterTest extends \PHPUnit_Framework_TestCase
+class CommentsHistoryUpdaterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var int
@@ -61,7 +61,7 @@ class CommentsHistoryUpdaterTest extends \PHPUnit_Framework_TestCase
 
         $this->historyFactory = $this->getMockBuilder(HistoryFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->setMethods(['create', 'save'])
             ->getMock();
 
         $this->caseEntity = $this->getMockBuilder(CaseInterface::class)

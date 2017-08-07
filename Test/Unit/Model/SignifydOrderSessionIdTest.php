@@ -14,7 +14,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  * Class SignifydOrderSessionIdTest tests that SignifydOrderSessionId class dependencies
  * follow the contracts.
  */
-class SignifydOrderSessionIdTest extends \PHPUnit_Framework_TestCase
+class SignifydOrderSessionIdTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SignifydOrderSessionId

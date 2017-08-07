@@ -15,7 +15,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Contains tests for messages generators factory.
  */
-class GeneratorFactoryTest extends \PHPUnit_Framework_TestCase
+class GeneratorFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var GeneratorFactory

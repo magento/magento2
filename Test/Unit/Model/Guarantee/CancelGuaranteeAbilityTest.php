@@ -16,7 +16,7 @@ use Magento\Signifyd\Model\Guarantee\CancelGuaranteeAbility;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CancelGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
+class CancelGuaranteeAbilityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject

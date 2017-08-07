@@ -5,7 +5,7 @@
  */
 namespace Magento\Signifyd\Test\Unit\Model\SignifydGateway;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use \PHPUnit\Framework\TestCase as TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Magento\Signifyd\Model\SignifydGateway\GatewayException;
@@ -13,7 +13,7 @@ use Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilderInterface;
 use Magento\Signifyd\Model\SignifydGateway\ApiClient;
 use Magento\Signifyd\Model\SignifydGateway\ApiCallException;
 
-class GatewayTest extends TestCase
+class GatewayTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CreateCaseBuilderInterface|MockObject
@@ -61,7 +61,8 @@ class GatewayTest extends TestCase
             ->with($this->equalTo($dummyOrderId))
             ->willReturn([]);
 
-        $this->gateway->createCase($dummyOrderId);
+        $result = $this->gateway->createCase($dummyOrderId);
+        $this->assertEquals(42, $result);
     }
 
     public function testCreateCaseCallsValidApiMethod()
@@ -84,7 +85,8 @@ class GatewayTest extends TestCase
                 'investigationId' => $dummySignifydInvestigationId
             ]);
 
-        $this->gateway->createCase($dummyOrderId);
+        $result = $this->gateway->createCase($dummyOrderId);
+        $this->assertEquals(42, $result);
     }
 
     public function testCreateCaseNormalFlow()
@@ -119,7 +121,7 @@ class GatewayTest extends TestCase
             ->method('makeApiCall')
             ->willThrowException(new ApiCallException($apiCallFailureMessage));
 
-        $this->setExpectedException(
+        $this->expectException(
             GatewayException::class,
             $apiCallFailureMessage
         );
@@ -138,7 +140,7 @@ class GatewayTest extends TestCase
                 'someOtherParameter' => 'foo',
             ]);
 
-        $this->setExpectedException(GatewayException::class);
+        $this->expectException(GatewayException::class);
         $this->gateway->createCase($dummyOrderId);
     }
 
@@ -182,7 +184,8 @@ class GatewayTest extends TestCase
                 'disposition' => $dummyDisposition
             ]);
 
-        $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
+        $result = $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
+        $this->assertEquals('APPROVED', $result);
     }
 
     public function testSubmitCaseForGuaranteeWithFailedApiCall()
@@ -194,11 +197,12 @@ class GatewayTest extends TestCase
             ->method('makeApiCall')
             ->willThrowException(new ApiCallException($apiCallFailureMessage));
 
-        $this->setExpectedException(
+        $this->expectException(
             GatewayException::class,
             $apiCallFailureMessage
         );
-        $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
+        $result = $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
+        $this->assertEquals('Api call failed', $result);
     }
 
     public function testSubmitCaseForGuaranteeReturnsDisposition()
@@ -237,7 +241,7 @@ class GatewayTest extends TestCase
                 'rereviewCount' => $dummyRereviewCount,
             ]);
 
-        $this->setExpectedException(GatewayException::class);
+        $this->expectException(GatewayException::class);
         $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
     }
 
@@ -252,8 +256,9 @@ class GatewayTest extends TestCase
                 'disposition' => $dummyUnexpectedDisposition,
             ]);
 
-        $this->setExpectedException(GatewayException::class);
-        $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
+        $this->expectException(GatewayException::class);
+        $result = $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
+        $this->assertEquals('UNEXPECTED', $result);
     }
 
     /**
@@ -270,7 +275,8 @@ class GatewayTest extends TestCase
             ]);
 
         try {
-            $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
+            $result = $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
+            $this->assertEquals($dummyExpectedDisposition, $result);
         } catch (GatewayException $e) {
             $this->fail(sprintf(
                 'Expected disposition "%s" was not accepted with message "%s"',
@@ -314,7 +320,8 @@ class GatewayTest extends TestCase
             ->with('/cases/' . $caseId . '/guarantee', 'PUT', ['guaranteeDisposition' => Gateway::GUARANTEE_CANCELED])
             ->willReturn(['disposition' => Gateway::GUARANTEE_DECLINED]);
 
-        $this->gateway->cancelGuarantee($caseId);
+        $result = $this->gateway->cancelGuarantee($caseId);
+        $this->assertEquals(Gateway::GUARANTEE_CANCELED, $result);
     }
 
     public function supportedGuaranteeDispositionsProvider()

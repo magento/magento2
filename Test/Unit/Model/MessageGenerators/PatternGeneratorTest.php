@@ -10,7 +10,7 @@ use Magento\Signifyd\Model\MessageGenerators\PatternGenerator;
 /**
  * Contains tests for different variations like empty data, wrong required arguments, or bad placeholders.
  */
-class PatternGeneratorTest extends \PHPUnit_Framework_TestCase
+class PatternGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Checks an exception if generators does not receives required data.
