@@ -90,9 +90,8 @@ class QuickDeploy implements StrategyInterface
             if ($level > 1) {
                 $parentPackage = null;
                 $packageId = $package->getArea() . '/' . $package->getTheme();
-                if (
-                    // use base package if it is not the same as current
-                    isset($this->baseLocalePackages[$packageId])
+                // use base package if it is not the same as current
+                if (isset($this->baseLocalePackages[$packageId])
                     && $package !== $this->baseLocalePackages[$packageId]
                 ) {
                     $parentPackage = $this->baseLocalePackages[$packageId];

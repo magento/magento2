@@ -25,12 +25,25 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     /** @var \PHPUnit_Framework_MockObject_MockObject | CookieManagerInterface */
     private $cookieManagerMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializerMock;
+
     protected function setUp()
     {
         $testObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->messageManager = $this->getMock(\Magento\Framework\Message\Manager::class, [], [], '', false);
         $this->cookieManagerMock = $this->getMock(CookieManagerInterface::class, [], [], '', false);
+        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->serializerMock->expects($this->any())->method('unserialize')->willReturnCallback(
+            function ($serializedData) {
+                return json_decode($serializedData, true);
+            }
+        );
         $this->interpretationStrategyMock = $this->getMock(InterpretationStrategyInterface::class, [], [], '', false);
         $this->interpretationStrategyMock->expects($this->any())
             ->method('interpret')
@@ -58,6 +71,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
                         [\Magento\Framework\App\ResponseInterface::class, $response],
                         [\Magento\Framework\Message\Manager::class, $this->messageManager],
                         [CookieManagerInterface::class, $this->cookieManagerMock],
+                        [\Magento\Framework\Serialize\Serializer\Json::class, $this->serializerMock],
                         [InterpretationStrategyInterface::class, $this->interpretationStrategyMock],
                     ]
                 )
@@ -244,6 +258,6 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
 
         $this->cookieManagerMock->expects($this->any())
             ->method('getCookie')
-            ->willReturn(\Zend_Json::encode($cookieMessages));
+            ->willReturn(json_encode($cookieMessages));
     }
 }

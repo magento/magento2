@@ -114,14 +114,12 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     public function testLoadDataProvider()
     {
         return [
-            'Ordered modules list returned by registrar' =>
-                [[
-                    '/path/to/a', '/path/to/b', '/path/to/c', '/path/to/d', '/path/to/e'
-                ]],
-            'UnOrdered modules list returned by registrar' =>
-                [[
-                    '/path/to/b', '/path/to/a', '/path/to/c', '/path/to/e', '/path/to/d'
-                ]],
+            'Ordered modules list returned by registrar' => [[
+                '/path/to/a', '/path/to/b', '/path/to/c', '/path/to/d', '/path/to/e'
+            ]],
+            'UnOrdered modules list returned by registrar' => [[
+                '/path/to/b', '/path/to/a', '/path/to/c', '/path/to/e', '/path/to/d'
+            ]],
         ];
     }
 

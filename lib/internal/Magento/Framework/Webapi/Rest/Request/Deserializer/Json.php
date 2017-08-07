@@ -12,7 +12,10 @@ use Magento\Framework\Phrase;
 
 class Json implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterface
 {
-    /** @var \Magento\Framework\Json\Decoder */
+    /**
+     * @var \Magento\Framework\Json\Decoder
+     * @deprecated
+     */
     protected $decoder;
 
     /**
@@ -21,13 +24,25 @@ class Json implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfa
     protected $_appState;
 
     /**
-     * @param \Magento\Framework\Json\Decoder $decoder
-     * @param \Magento\Framework\App\State $appState
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
-    public function __construct(\Magento\Framework\Json\Decoder $decoder, State $appState)
-    {
+    private $serializer;
+
+    /**
+     * @param \Magento\Framework\Json\Decoder $decoder
+     * @param State $appState
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
+     */
+    public function __construct(
+        \Magento\Framework\Json\Decoder $decoder,
+        State $appState,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+    ) {
         $this->decoder = $decoder;
         $this->_appState = $appState;
+        $this->serializer = $serializer?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -46,8 +61,8 @@ class Json implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfa
             );
         }
         try {
-            $decodedBody = $this->decoder->decode($encodedBody);
-        } catch (\Zend_Json_Exception $e) {
+            $decodedBody = $this->serializer->unserialize($encodedBody);
+        } catch (\InvalidArgumentException $e) {
             if ($this->_appState->getMode() !== State::MODE_DEVELOPER) {
                 throw new \Magento\Framework\Webapi\Exception(new Phrase('Decoding error.'));
             } else {

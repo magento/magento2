@@ -92,7 +92,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
         $this->productResourceModel->expects(static::once())->method('saveMultiple')->willReturnSelf();
 
-        $this->plugin->afterReplace($this->storage, null, $productUrls);
+        $this->plugin->afterReplace($this->storage, $productUrls, $productUrls);
     }
 
     /**

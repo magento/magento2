@@ -16,7 +16,7 @@ namespace Magento\Catalog\Block\Product;
  * As Magento moves from inheritance-based APIs all such classes will be deprecated together with
  * the classes they were introduced for.
  *
- * @deprecated 
+ * @deprecated
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Context extends \Magento\Framework\View\Element\Template\Context

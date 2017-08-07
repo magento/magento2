@@ -8,8 +8,8 @@ namespace Magento\Analytics\Test\Unit\Model\Connector;
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Connector\Http\JsonConverter;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\ZendClient;
-use Magento\Config\Model\Config;
 use Psr\Log\LoggerInterface;
 use Magento\Analytics\Model\Connector\NotifyDataChangedCommand;
 use Magento\Analytics\Model\Connector\Http\ClientInterface;
@@ -32,7 +32,7 @@ class NotifyDataChangedCommandTest extends \PHPUnit_Framework_TestCase
     private $httpClientMock;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     public $configMock;
 
@@ -51,7 +51,7 @@ class NotifyDataChangedCommandTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->configMock =  $this->getMockBuilder(Config::class)
+        $this->configMock =  $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -80,7 +80,7 @@ class NotifyDataChangedCommandTest extends \PHPUnit_Framework_TestCase
             ->method('isTokenExist')
             ->willReturn(true);
         $this->configMock->expects($this->any())
-            ->method('getConfigDataValue')
+            ->method('getValue')
             ->willReturn($configVal);
         $this->analyticsTokenMock->expects($this->once())
             ->method('getToken')

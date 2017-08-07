@@ -92,7 +92,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_configStructure;
 
     /**
-     *Form fieldset factory
+     * Form fieldset factory
      *
      * @var \Magento\Config\Block\System\Config\Form\Fieldset\Factory
      */

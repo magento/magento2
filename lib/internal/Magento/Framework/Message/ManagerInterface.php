@@ -179,23 +179,23 @@ interface ManagerInterface
      * Adds a message describing an exception. Does not contain Exception handling logic.
      *
      * @param \Exception $exception
-     * @param string $alternativeText
+     * @param string|null $alternativeText
      * @param string|null $group
      * @return ManagerInterface
      * @deprecated
      * @see \Magento\Framework\Message\ManagerInterface::addExceptionMessage
      */
-    public function addException(\Exception $exception, $alternativeText, $group = null);
+    public function addException(\Exception $exception, $alternativeText = null, $group = null);
 
     /**
      * Adds a message describing an exception. Does not contain Exception handling logic.
      *
      * @param \Exception $exception
-     * @param string $alternativeText
+     * @param string|null $alternativeText
      * @param string|null $group
      * @return ManagerInterface
      */
-    public function addExceptionMessage(\Exception $exception, $alternativeText, $group = null);
+    public function addExceptionMessage(\Exception $exception, $alternativeText = null, $group = null);
 
     /**
      * Creates identified message

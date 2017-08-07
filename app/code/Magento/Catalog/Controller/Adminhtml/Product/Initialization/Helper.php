@@ -8,6 +8,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory as CustomOptionFactory;
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory as ProductLinkFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface\Proxy as ProductRepository;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
 use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
 use Magento\Framework\App\ObjectManager;
@@ -203,34 +204,7 @@ class Helper
         }
 
         $product = $this->setProductLinks($product);
-
-        /**
-         * Initialize product options
-         */
-        if ($productOptions && !$product->getOptionsReadonly()) {
-            // mark custom options that should to fall back to default value
-            $options = $this->mergeProductOptions(
-                $productOptions,
-                $this->request->getPost('options_use_default')
-            );
-            $customOptions = [];
-            foreach ($options as $customOptionData) {
-                if (empty($customOptionData['is_delete'])) {
-                    if (empty($customOptionData['option_id'])) {
-                        $customOptionData['option_id'] = null;
-                    }
-                    if (isset($customOptionData['values'])) {
-                        $customOptionData['values'] = array_filter($customOptionData['values'], function ($valueData) {
-                            return empty($valueData['is_delete']);
-                        });
-                    }
-                    $customOption = $this->customOptionFactory->create(['data' => $customOptionData]);
-                    $customOption->setProductSku($product->getSku());
-                    $customOptions[] = $customOption;
-                }
-            }
-            $product->setOptions($customOptions);
-        }
+        $product = $this->fillProductOptions($product, $productOptions);
 
         $product->setCanSaveCustomOptions(
             !empty($productData['affect_product_custom_options']) && !$product->getOptionsReadonly()
@@ -426,5 +400,51 @@ class Helper
         }
 
         return $websiteIds;
+    }
+
+    /**
+     * Fills $product with options from $productOptions array
+     *
+     * @param Product $product
+     * @param array $productOptions
+     * @return Product
+     */
+    private function fillProductOptions(Product $product, array $productOptions)
+    {
+        if ($product->getOptionsReadonly()) {
+            return $product;
+        }
+
+        if (empty($productOptions)) {
+            return $product->setOptions([]);
+        }
+
+        // mark custom options that should to fall back to default value
+        $options = $this->mergeProductOptions(
+            $productOptions,
+            $this->request->getPost('options_use_default')
+        );
+        $customOptions = [];
+        foreach ($options as $customOptionData) {
+            if (!empty($customOptionData['is_delete'])) {
+                continue;
+            }
+
+            if (empty($customOptionData['option_id'])) {
+                $customOptionData['option_id'] = null;
+            }
+
+            if (isset($customOptionData['values'])) {
+                $customOptionData['values'] = array_filter($customOptionData['values'], function ($valueData) {
+                    return empty($valueData['is_delete']);
+                });
+            }
+
+            $customOption = $this->customOptionFactory->create(['data' => $customOptionData]);
+            $customOption->setProductSku($product->getSku());
+            $customOptions[] = $customOption;
+        }
+
+        return $product->setOptions($customOptions);
     }
 }
