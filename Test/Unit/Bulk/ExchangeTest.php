@@ -9,7 +9,7 @@ namespace Magento\Framework\Amqp\Test\Unit\Bulk;
 /**
  * Unit test for Exchange model.
  */
-class ExchangeTest extends \PHPUnit_Framework_TestCase
+class ExchangeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Amqp\Config|\PHPUnit_Framework_MockObject_MockObject

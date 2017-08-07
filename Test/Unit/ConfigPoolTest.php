@@ -5,12 +5,12 @@
  */
 namespace Magento\Framework\Amqp\Test\Unit;
 
-class ConfigPoolTest extends \PHPUnit_Framework_TestCase
+class ConfigPoolTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetConnection()
     {
-        $factory = $this->getMock(\Magento\Framework\Amqp\ConfigFactory::class, [], [], '', false, false);
-        $config = $this->getMock(\Magento\Framework\Amqp\Config::class, [], [], '', false, false);
+        $factory = $this->createMock(\Magento\Framework\Amqp\ConfigFactory::class);
+        $config = $this->createMock(\Magento\Framework\Amqp\Config::class);
         $factory->expects($this->once())->method('create')->with(['connectionName' => 'amqp'])->willReturn($config);
         $model = new \Magento\Framework\Amqp\ConfigPool($factory);
         $this->assertEquals($config, $model->get('amqp'));

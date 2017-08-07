@@ -9,15 +9,15 @@ use Magento\Framework\Amqp\Topology\QueueInstaller;
 use Magento\Framework\MessageQueue\Topology\Config\QueueConfigItemInterface;
 use PhpAmqpLib\Channel\AMQPChannel;
 
-class QueueInstallerTest extends \PHPUnit_Framework_TestCase
+class QueueInstallerTest extends \PHPUnit\Framework\TestCase
 {
     public function testInstall()
     {
-        $bindingInstaller = $this->getMock(QueueConfigItemInterface::class);
+        $bindingInstaller = $this->createMock(QueueConfigItemInterface::class);
         $model = new QueueInstaller($bindingInstaller);
-        $channel = $this->getMock(AMQPChannel::class, [], [], '', false, false);
+        $channel = $this->createMock(AMQPChannel::class);
 
-        $queue = $this->getMock(QueueConfigItemInterface::class);
+        $queue = $this->createMock(QueueConfigItemInterface::class);
         $queue->expects($this->once())->method('getName')->willReturn('queue01');
         $queue->expects($this->once())->method('isDurable')->willReturn(true);
         $queue->expects($this->once())->method('isAutoDelete')->willReturn(false);
