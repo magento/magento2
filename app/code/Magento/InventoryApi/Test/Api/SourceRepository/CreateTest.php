@@ -18,7 +18,7 @@ class CreateTest extends WebapiAbstract
     /**#@+
      * Service constants
      */
-    const RESOURCE_PATH = '/V1/inventory/source';
+    const SOURCE_PATH = '/V1/inventory/source';
     const SERVICE_NAME = 'inventorySourceRepositoryV1';
     /**#@-*/
 
@@ -54,7 +54,7 @@ class CreateTest extends WebapiAbstract
         ];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH,
+                'resourcePath' => self::SOURCE_PATH,
                 'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
@@ -86,7 +86,7 @@ class CreateTest extends WebapiAbstract
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceId,
+                'resourcePath' => self::SOURCE_PATH . '/' . $sourceId,
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -94,7 +94,7 @@ class CreateTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Get',
             ],
         ];
-        $response = $this->_webApiCall($serviceInfo, [], null);
+        $response = $this->_webApiCall($serviceInfo);
         self::assertArrayHasKey(SourceInterface::SOURCE_ID, $response);
         return $response;
     }

@@ -16,8 +16,8 @@ class UpdateTest extends WebapiAbstract
     /**#@+
      * Service constants
      */
-    const RESOURCE_PATH = '/V1/inventory/source';
-    const RESOURCES_PATH = '/V1/inventory/sources';
+    const SOURCE_PATH = '/V1/inventory/source';
+    const SOURCES_PATH = '/V1/inventory/sources';
     const SERVICE_NAME = 'inventorySourceRepositoryV1';
     /**#@-*/
 
@@ -58,7 +58,7 @@ class UpdateTest extends WebapiAbstract
         ];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceId,
+                'resourcePath' => self::SOURCE_PATH . '/' . $sourceId,
                 'httpMethod' => Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -93,7 +93,7 @@ class UpdateTest extends WebapiAbstract
         ];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCES_PATH . '?' . http_build_query(['searchCriteria' => $searchCriteria]),
+                'resourcePath' => self::SOURCES_PATH . '?' . http_build_query(['searchCriteria' => $searchCriteria]),
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -101,7 +101,7 @@ class UpdateTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'GetList',
             ],
         ];
-        $response = $this->_webApiCall($serviceInfo, [], null);
+        $response = $this->_webApiCall($serviceInfo);
         self::assertArrayHasKey('items', $response);
         return reset($response['items']);
     }
@@ -114,7 +114,7 @@ class UpdateTest extends WebapiAbstract
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceId,
+                'resourcePath' => self::SOURCE_PATH . '/' . $sourceId,
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -122,7 +122,7 @@ class UpdateTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Get',
             ],
         ];
-        $response = $this->_webApiCall($serviceInfo, [], null);
+        $response = $this->_webApiCall($serviceInfo);
         self::assertArrayHasKey(SourceInterface::SOURCE_ID, $response);
         return $response;
     }

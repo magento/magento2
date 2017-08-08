@@ -18,7 +18,7 @@ class GetTest extends WebapiAbstract
     /**#@+
      * Service constants
      */
-    const RESOURCE_PATH = '/V1/inventory/source';
+    const SOURCE_PATH = '/V1/inventory/source';
     const SERVICE_NAME = 'inventorySourceRepositoryV1';
     /**#@-*/
 
@@ -27,7 +27,7 @@ class GetTest extends WebapiAbstract
         $notExistingId = -1;
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $notExistingId,
+                'resourcePath' => self::SOURCE_PATH . '/' . $notExistingId,
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [

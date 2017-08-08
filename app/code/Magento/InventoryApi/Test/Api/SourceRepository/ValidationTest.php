@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace InventoryApi\Test\Api\SourceRepository;
+namespace Magento\InventoryApi\Test\Api\SourceRepository;
 
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
@@ -15,7 +15,7 @@ class ValidationTest extends WebapiAbstract
     /**#@+
      * Service constants
      */
-    const RESOURCE_PATH = '/V1/inventory/source';
+    const SOURCE_PATH = '/V1/inventory/source';
     const SERVICE_NAME = 'inventorySourceRepositoryV1';
     /**#@-*/
 
@@ -23,6 +23,7 @@ class ValidationTest extends WebapiAbstract
     {
         parent::setUp();
 
+        // TODO:
         $this->markTestIncomplete('\Magento\Framework\Model\ResourceModel\AbstractResource::_prepareDataForTable');
     }
 
@@ -41,7 +42,7 @@ class ValidationTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH,
+                'resourcePath' => self::SOURCE_PATH,
                 'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
@@ -78,7 +79,7 @@ class ValidationTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH,
+                'resourcePath' => self::SOURCE_PATH,
                 'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
