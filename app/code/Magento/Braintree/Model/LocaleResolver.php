@@ -49,9 +49,9 @@ class LocaleResolver implements ResolverInterface
     /**
      * @inheritdoc
      */
-    public function getDefaultLocale()
+    public function getDefaultLocale($store = null)
     {
-        return $this->resolver->getDefaultLocale();
+        return $this->resolver->getDefaultLocale($store);
     }
 
     /**

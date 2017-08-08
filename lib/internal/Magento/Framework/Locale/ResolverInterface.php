@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Locale;
 
+use Magento\Store\Api\Data\StoreInterface;
+
 /**
  * Manages locale config information
  *
@@ -30,9 +32,11 @@ interface ResolverInterface
     /**
      * Retrieve default locale code
      *
+     * @param bool|int|null|string|StoreInterface $store
+     *
      * @return string
      */
-    public function getDefaultLocale();
+    public function getDefaultLocale($store = null);
 
     /**
      * Set locale
