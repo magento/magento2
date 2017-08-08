@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace InventoryApi\Test\Api\SourceRepository;
+namespace Magento\InventoryApi\Test\Api\SourceRepository;
 
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
@@ -11,7 +11,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
  * Method Get is covered in CreateTest test
- * @see \InventoryApi\Test\Api\SourceRepository\CreateTest::getSourceDataById
+ * @see \Magento\InventoryApi\Test\Api\SourceRepository\CreateTest::getSourceDataById
  */
 class GetTest extends WebapiAbstract
 {

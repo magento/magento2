@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace InventoryApi\Test\Api\SourceRepository;
+namespace Magento\InventoryApi\Test\Api\SourceRepository;
 
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
