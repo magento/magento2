@@ -8,7 +8,7 @@ namespace Magento\Backend\Block\Widget;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 
 /**
- * Tabs block
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Tabs extends \Magento\Backend\Block\Widget

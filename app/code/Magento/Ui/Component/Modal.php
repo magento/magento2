@@ -6,7 +6,7 @@
 namespace Magento\Ui\Component;
 
 /**
- * Class Modal
+ * @api
  */
 class Modal extends AbstractComponent
 {

@@ -13,7 +13,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Wysiwyg\ConfigInterface;
 
 /**
- * Class Input
+ * @api
  */
 class Wysiwyg extends AbstractElement
 {

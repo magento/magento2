@@ -35,14 +35,12 @@ class Date implements \Zend_Filter_Interface
     /**
      * @var TimezoneInterface
      *
-     * @deprecated
      */
     protected $_localeDate;
 
     /**
      * @param TimezoneInterface $localeDate
      *
-     * @deprecated
      */
     public function __construct(TimezoneInterface $localeDate)
     {
@@ -65,7 +63,7 @@ class Date implements \Zend_Filter_Interface
     public function filter($value)
     {
         try {
-            $value = new \DateTime($value);
+            $value = $this->_localeDate->date($value, null, false);
             return $value->format('Y-m-d');
         } catch (\Exception $e) {
             throw new \Exception("Invalid input date format '$value'");

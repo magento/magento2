@@ -28,6 +28,9 @@ class PackagesAuthTest extends \PHPUnit_Framework_TestCase
      */
     private $packagesAuth;
 
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    private $serializerMock;
+
     public function setUp()
     {
         $zendServiceLocator = $this->getMock(\Zend\ServiceManager\ServiceLocatorInterface::class, [], [], '', false);
@@ -42,7 +45,21 @@ class PackagesAuthTest extends \PHPUnit_Framework_TestCase
             ]);
         $this->curl = $this->getMock(\Magento\Framework\HTTP\Client\Curl::class, [], [], '', false);
         $this->filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
-        $this->packagesAuth = new PackagesAuth($zendServiceLocator, $this->curl, $this->filesystem);
+        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->getMock();
+        $this->serializerMock->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(
+                function ($serializedData) {
+                    return json_encode($serializedData);
+                }
+            );
+        $this->packagesAuth = new PackagesAuth(
+            $zendServiceLocator,
+            $this->curl,
+            $this->filesystem,
+            $this->serializerMock
+        );
     }
 
     public function testCheckCredentialsActionBadCredentials()

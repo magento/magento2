@@ -8,6 +8,7 @@ namespace Magento\Backend\App;
 /**
  * Generic backend controller
  *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

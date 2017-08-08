@@ -90,7 +90,7 @@ class LowestPriceOptionsProviderTest extends \PHPUnit_Framework_TestCase
         $this->productCollection
             ->expects($this->once())
             ->method('addAttributeToSelect')
-            ->with(['price', 'special_price', 'special_from_date', 'special_to_date'])
+            ->with(['price', 'special_price', 'special_from_date', 'special_to_date', 'tax_class_id'])
             ->willReturnSelf();
         $this->productCollection->expects($this->once())->method('addIdFilter')->willReturnSelf();
         $this->productCollection->expects($this->once())->method('getItems')->willReturn($linkedProducts);

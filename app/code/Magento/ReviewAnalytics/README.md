@@ -1,4 +1,3 @@
-## Overview
+# Magento_ReviewAnalytics module
 
-The Magento_ReviewAnalytics module provides reviews data for integration with
-[Magento Business Intelligence](https://magento.com/products/business-intelligence).
+The Magento_ReviewAnalytics module configures data definitions for a data collection related to the Review module entities to be used in [Advanced Reporting](http://devdocs.magento.com/guides/v2.2/advanced-reporting/modules.html).

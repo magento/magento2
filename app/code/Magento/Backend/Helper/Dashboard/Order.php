@@ -9,6 +9,8 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Adminhtml dashboard helper for orders
+ *
+ * @api
  */
 class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
 {

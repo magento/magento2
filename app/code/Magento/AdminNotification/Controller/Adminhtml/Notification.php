@@ -7,6 +7,9 @@
  */
 namespace Magento\AdminNotification\Controller\Adminhtml;
 
+/**
+ * @api
+ */
 abstract class Notification extends \Magento\Backend\App\AbstractAction
 {
     /**

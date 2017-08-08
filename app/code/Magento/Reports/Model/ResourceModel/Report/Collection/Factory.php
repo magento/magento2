@@ -5,6 +5,9 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Report\Collection;
 
+/**
+ * @api
+ */
 class Factory
 {
     /**

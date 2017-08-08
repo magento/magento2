@@ -18,6 +18,7 @@ use Magento\GoogleOptimizer\Helper\Code as CodeHelper;
 /**
  * Class GoogleOptimizer adds Product View Optimization Panel
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class GoogleOptimizer extends AbstractModifier
 {

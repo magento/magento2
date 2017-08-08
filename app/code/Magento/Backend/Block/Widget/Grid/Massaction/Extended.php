@@ -9,7 +9,7 @@ namespace Magento\Backend\Block\Widget\Grid\Massaction;
  * Grid widget massaction block
  *
  * @api
- * @deprecated
+ * @deprecated in favour of UI component implementation
  * @method \Magento\Quote\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
  * @method boolean getHideFormElement()
  * @author      Magento Core Team <core@magentocommerce.com>
@@ -274,7 +274,14 @@ class Extended extends \Magento\Backend\Block\Widget
 
         /** @var \Magento\Framework\Data\Collection $allIdsCollection */
         $allIdsCollection = clone $this->getParentBlock()->getCollection();
-        $gridIds = $allIdsCollection->clear()->setPageSize(0)->getAllIds();
+        
+        if ($this->getMassactionIdField()) {
+            $massActionIdField = $this->getMassactionIdField();
+        } else {
+            $massActionIdField = $this->getParentBlock()->getMassactionIdField();
+        }
+        
+        $gridIds = $allIdsCollection->setPageSize(0)->getColumnValues($massActionIdField);
 
         if (!empty($gridIds)) {
             return join(",", $gridIds);

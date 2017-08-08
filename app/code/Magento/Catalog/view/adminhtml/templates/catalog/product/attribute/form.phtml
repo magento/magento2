@@ -12,22 +12,22 @@
  * @var $block \Magento\Backend\Block\Widget\Form\Container
  */
 ?>
-<?php /* @escapeNotVerified */ echo $block->getFormInitScripts() ?>
-<div data-mage-init='{"floatingHeader": {}}' class="page-actions attribute-popup-actions" <?php /* @escapeNotVerified */ echo $block->getUiId('content-header') ?>>
-    <?php echo $block->getButtonsHtml('header') ?>
+<?= /* @escapeNotVerified */ $block->getFormInitScripts() ?>
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions attribute-popup-actions" <?= /* @escapeNotVerified */ $block->getUiId('content-header') ?>>
+    <?= $block->getButtonsHtml('header') ?>
 </div>
 
-<form id="edit_form" class="admin__scope-old edit-form" action="<?php echo $block->escapeHtml($block->getSaveUrl()) ?>" method="post">
-    <input name="form_key" type="hidden" value="<?php echo $block->escapeHtml($block->getFormKey()) ?>" />
-    <?php echo $block->getChildHtml('form') ?>
+<form id="edit_form" class="admin__scope-old edit-form" action="<?= $block->escapeHtml($block->getSaveUrl()) ?>" method="post">
+    <input name="form_key" type="hidden" value="<?= $block->escapeHtml($block->getFormKey()) ?>" />
+    <?= $block->getChildHtml('form') ?>
 </form>
 
 
 <script>
 require(['jquery', "mage/mage"], function(jQuery){
 
-    jQuery('#edit_form').mage('form').mage('validation', {validationUrl: '<?php /* @escapeNotVerified */ echo $block->getValidationUrl() ?>'});
+    jQuery('#edit_form').mage('form').mage('validation', {validationUrl: '<?= /* @escapeNotVerified */ $block->getValidationUrl() ?>'});
 
 });
 </script>
-<?php /* @escapeNotVerified */ echo $block->getFormScripts() ?>
+<?= /* @escapeNotVerified */ $block->getFormScripts() ?>

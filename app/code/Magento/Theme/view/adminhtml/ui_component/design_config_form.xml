@@ -247,6 +247,7 @@
                     <dataType>text</dataType>
                     <label translate="true">Default Robots</label>
                     <dataScope>default_robots</dataScope>
+                    <scopeLabel>[WEBSITE]</scopeLabel>
                 </settings>
                 <formElements>
                     <select>
@@ -261,12 +262,14 @@
                     <dataType>text</dataType>
                     <label translate="true">Edit custom instruction of robots.txt File</label>
                     <dataScope>custom_instructions</dataScope>
+                    <scopeLabel>[WEBSITE]</scopeLabel>
                 </settings>
             </field>
             <field name="reset_to_defaults" class="Magento\Theme\Ui\Component\Design\Config\SearchRobots\ResetButton" component="Magento_Theme/js/form/component/robots-reset-button" template="Magento_Theme/form/button-field" formElement="button">
                 <settings>
                     <notice translate="true">This action will delete your custom instructions and reset robots.txt file to system's default settings.</notice>
                     <dataScope>reset_to_defaults</dataScope>
+                    <scopeLabel>[WEBSITE]</scopeLabel>
                 </settings>
                 <formElements>
                     <button>
