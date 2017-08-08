@@ -22,7 +22,7 @@ use Magento\MysqlMq\Model\Driver\Exchange;
 /**
  * Class PublisherTest @covers \Magento\Framework\MessageQueue\Publisher
  */
-class PublisherTest extends \PHPUnit_Framework_TestCase
+class PublisherTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test subject.
