@@ -11,17 +11,20 @@ use Magento\Framework\MessageQueue\Publisher\Config\CompositeReader as Publisher
 /**
  * Plugin which provides access to publishers declared in queue config using publisher config interface.
  *
- * @deprecated
+ * @deprecated 2.2.0
+ * @since 2.2.0
  */
 class ConfigReaderPlugin
 {
     /**
      * @var ConfigInterface
+     * @since 2.2.0
      */
     private $config;
 
     /**
      * @param ConfigInterface $config
+     * @since 2.2.0
      */
     public function __construct(ConfigInterface $config)
     {
@@ -37,6 +40,7 @@ class ConfigReaderPlugin
      * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterRead(PublisherConfigCompositeReader $subject, $result, $scope = null)
     {
@@ -47,6 +51,7 @@ class ConfigReaderPlugin
      * Get data from queue config in format compatible with publisher config data internal structure
      *
      * @return array
+     * @since 2.2.0
      */
     private function getPublisherConfigDataFromQueueConfig()
     {

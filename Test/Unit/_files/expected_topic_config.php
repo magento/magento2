@@ -37,11 +37,11 @@ return [
         ],
     ],
     'exchange_topic_to_queues_map' => [
-        'ex.01--top.01' => ['q.01'],
-        'magento--top.03' => ['q.03', 'q.04'],
-        'magento--top.04' => ['q.04', 'q.05', 'q.06'],
-        'magento--user.created.remote' => ['q.log'],
-        'magento--product.created.local' => ['q.log'],
+        'amqp-ex.01--top.01' => ['q.01'],
+        'amqp-magento--top.03' => ['q.03', 'q.04'],
+        'db-magento--top.04' => ['q.04', 'q.05', 'q.06'],
+        'amqp-magento--user.created.remote' => ['q.log'],
+        'amqp-magento--product.created.local' => ['q.log'],
     ],
     'consumers' => [
         'cons.01' => [

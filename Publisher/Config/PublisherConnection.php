@@ -7,6 +7,7 @@ namespace Magento\Framework\MessageQueue\Publisher\Config;
 
 /**
  * Representation of publisher connection configuration.
+ * @since 2.2.0
  */
 class PublisherConnection implements PublisherConnectionInterface
 {
@@ -14,6 +15,7 @@ class PublisherConnection implements PublisherConnectionInterface
      * Connection name.
      *
      * @var string
+     * @since 2.2.0
      */
     private $name;
 
@@ -21,6 +23,7 @@ class PublisherConnection implements PublisherConnectionInterface
      * Exchange name.
      *
      * @var string
+     * @since 2.2.0
      */
     private $exchange;
 
@@ -28,11 +31,13 @@ class PublisherConnection implements PublisherConnectionInterface
      * Flag. Is connection disabled.
      *
      * @var bool
+     * @since 2.2.0
      */
     private $isDisabled;
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getName()
     {
@@ -41,6 +46,7 @@ class PublisherConnection implements PublisherConnectionInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getExchange()
     {
@@ -49,6 +55,7 @@ class PublisherConnection implements PublisherConnectionInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function isDisabled()
     {
@@ -57,6 +64,7 @@ class PublisherConnection implements PublisherConnectionInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function setData(array $data)
     {

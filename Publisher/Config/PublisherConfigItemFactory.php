@@ -7,6 +7,7 @@ namespace Magento\Framework\MessageQueue\Publisher\Config;
 
 /**
  * Factory class for @see \Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItem
+ * @since 2.2.0
  */
 class PublisherConfigItemFactory
 {
@@ -14,6 +15,7 @@ class PublisherConfigItemFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager = null;
 
@@ -21,6 +23,7 @@ class PublisherConfigItemFactory
      * Instance name to create
      *
      * @var string
+     * @since 2.2.0
      */
     private $instanceName = null;
 
@@ -29,6 +32,7 @@ class PublisherConfigItemFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -43,6 +47,7 @@ class PublisherConfigItemFactory
      *
      * @param array $data
      * @return \Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItem
+     * @since 2.2.0
      */
     public function create(array $data = [])
     {

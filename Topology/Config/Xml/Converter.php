@@ -14,11 +14,13 @@ use Magento\Framework\MessageQueue\DefaultValueProvider;
 
 /**
  * Converts MessageQueue topology config from \DOMDocument to array
+ * @since 2.2.0
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * @var FlatConverter
+     * @since 2.2.0
      */
     private $converter;
 
@@ -26,6 +28,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * Boolean value converter.
      *
      * @var BooleanUtils
+     * @since 2.2.0
      */
     private $booleanUtils;
 
@@ -33,11 +36,13 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * Argument interpreter.
      *
      * @var InterpreterInterface
+     * @since 2.2.0
      */
     private $argumentInterpreter;
 
     /**
      * @var DefaultValueProvider
+     * @since 2.2.0
      */
     private $defaultValue;
 
@@ -47,6 +52,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param BooleanUtils $booleanUtils
      * @param InterpreterInterface $argumentInterpreter
      * @param DefaultValueProvider $defaultValueProvider
+     * @since 2.2.0
      */
     public function __construct(
         BooleanUtils $booleanUtils,
@@ -60,6 +66,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function convert($source)
     {
@@ -106,6 +113,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * Retrieve instance of XML converter
      *
      * @return FlatConverter
+     * @since 2.2.0
      */
     private function getConverter()
     {
@@ -121,6 +129,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMNode $node
      * @return array
+     * @since 2.2.0
      */
     private function processArguments(\DOMNode $node)
     {
@@ -144,6 +153,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param string $attributeName
      * @param mixed $default
      * @return string|null
+     * @since 2.2.0
      */
     private function getAttributeValue(\DOMNode $node, $attributeName, $default = null)
     {
@@ -157,6 +167,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param \DOMNode $node
      * @param array $bindings
      * @return array
+     * @since 2.2.0
      */
     private function processBindings($node, $bindings)
     {

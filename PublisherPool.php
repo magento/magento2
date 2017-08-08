@@ -14,6 +14,7 @@ use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
  * Publishers pool.
  *
  * @api
+ * @since 2.1.0
  */
 class PublisherPool implements PublisherInterface, BulkPublisherInterface
 {
@@ -34,6 +35,7 @@ class PublisherPool implements PublisherInterface, BulkPublisherInterface
      * Publisher objects pool.
      *
      * @var \Magento\Framework\MessageQueue\PublisherInterface[]
+     * @since 2.1.0
      */
     protected $publishers = [];
 
@@ -41,16 +43,19 @@ class PublisherPool implements PublisherInterface, BulkPublisherInterface
      * Communication config.
      *
      * @var CommunicationConfig
+     * @since 2.1.0
      */
     protected $communicationConfig;
 
     /**
      * @var PublisherConfig
+     * @since 2.2.0
      */
     private $publisherConfig;
 
     /**
      * @var ConnectionTypeResolver
+     * @since 2.2.0
      */
     private $connectionTypeResolver;
 
@@ -62,6 +67,7 @@ class PublisherPool implements PublisherInterface, BulkPublisherInterface
      * @param string[] $publishers
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function __construct(
         CommunicationConfig $communicationConfig,
@@ -74,6 +80,7 @@ class PublisherPool implements PublisherInterface, BulkPublisherInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function publish($topicName, $data)
     {
@@ -90,6 +97,7 @@ class PublisherPool implements PublisherInterface, BulkPublisherInterface
      *
      * @param array $publishers
      * @return void
+     * @since 2.1.0
      */
     private function initializePublishers(array $publishers)
     {
@@ -118,6 +126,7 @@ class PublisherPool implements PublisherInterface, BulkPublisherInterface
      * @param string $connectionType
      * @param PublisherInterface $publisher
      * @return $this
+     * @since 2.1.0
      */
     private function addPublisherToPool($type, $connectionType, PublisherInterface $publisher)
     {
@@ -133,6 +142,7 @@ class PublisherPool implements PublisherInterface, BulkPublisherInterface
      * @return PublisherInterface
      * @throws \LogicException
      * @throws \InvalidArgumentException
+     * @since 2.1.0
      */
     private function getPublisherForConnectionNameAndType($type, $connectionName)
     {
@@ -158,7 +168,8 @@ class PublisherPool implements PublisherInterface, BulkPublisherInterface
      *
      * @return PublisherConfig
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.1.0
      */
     private function getPublisherConfig()
     {
@@ -173,7 +184,8 @@ class PublisherPool implements PublisherInterface, BulkPublisherInterface
      *
      * @return ConnectionTypeResolver
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getConnectionTypeResolver()
     {

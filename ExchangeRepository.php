@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\MessageQueue;
 
+/**
+ * Class \Magento\Framework\MessageQueue\ExchangeRepository
+ *
+ */
 class ExchangeRepository
 {
     /**
@@ -14,6 +18,7 @@ class ExchangeRepository
 
     /**
      * @var ExchangeFactoryInterface
+     * @since 2.2.0
      */
     private $exchangeFactory;
 
@@ -21,6 +26,7 @@ class ExchangeRepository
      * Pool of exchange instances.
      *
      * @var ExchangeInterface[]
+     * @since 2.2.0
      */
     private $exchangePool = [];
 
@@ -53,7 +59,8 @@ class ExchangeRepository
      * Get exchange factory.
      *
      * @return ExchangeFactoryInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getExchangeFactory()
     {

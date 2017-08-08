@@ -9,6 +9,7 @@ use \Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\BindingIn
 
 /**
  * Instances of this class represent config items declared in etc/queue_topology.xsd
+ * @since 2.2.0
  */
 interface ExchangeConfigItemInterface
 {
@@ -16,6 +17,7 @@ interface ExchangeConfigItemInterface
      * Get exchange name.
      *
      * @return string
+     * @since 2.2.0
      */
     public function getName();
 
@@ -23,6 +25,7 @@ interface ExchangeConfigItemInterface
      * Get exchange type.
      *
      * @return string
+     * @since 2.2.0
      */
     public function getType();
 
@@ -30,6 +33,7 @@ interface ExchangeConfigItemInterface
      * Get exchange connection.
      *
      * @return string
+     * @since 2.2.0
      */
     public function getConnection();
 
@@ -37,6 +41,7 @@ interface ExchangeConfigItemInterface
      * Check if exchange is durable.
      *
      * @return bool
+     * @since 2.2.0
      */
     public function isDurable();
 
@@ -44,6 +49,7 @@ interface ExchangeConfigItemInterface
      * Check if exchange is auto delete.
      *
      * @return bool
+     * @since 2.2.0
      */
     public function isAutoDelete();
 
@@ -51,6 +57,7 @@ interface ExchangeConfigItemInterface
      * Check if exchange is internal.
      *
      * @return bool
+     * @since 2.2.0
      */
     public function isInternal();
 
@@ -58,6 +65,7 @@ interface ExchangeConfigItemInterface
      * Get exchange bindings.
      *
      * @return BindingInterface[]
+     * @since 2.2.0
      */
     public function getBindings();
 
@@ -65,6 +73,7 @@ interface ExchangeConfigItemInterface
      * Get exchange arguments
      *
      * @return array
+     * @since 2.2.0
      */
     public function getArguments();
 }

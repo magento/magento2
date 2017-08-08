@@ -11,7 +11,7 @@ use Magento\Framework\Reflection\MethodsMap;
 /**
  * @codingStandardsIgnoreFile
  */
-class HandlersTest extends \PHPUnit_Framework_TestCase
+class HandlersTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var MethodsMap|\PHPUnit_Framework_MockObject_MockObject
@@ -85,7 +85,7 @@ class HandlersTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateInvalid($configData, $expectedExceptionMessage)
     {
-        $this->setExpectedException('\LogicException', $expectedExceptionMessage);
+        $this->expectException('\LogicException', $expectedExceptionMessage);
         $this->validator->validate($configData);
     }
 
@@ -171,7 +171,7 @@ class HandlersTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         $expectedExceptionMessage = 'Service method specified as handler for of consumer "consumer1" is not available. Given "handlerClassOne::handlerMethodOne"';
-        $this->setExpectedException('\LogicException', $expectedExceptionMessage);
+        $this->expectException('\LogicException', $expectedExceptionMessage);
 
         $this->methodsMap->expects($this->once())
             ->method('getMethodParams')

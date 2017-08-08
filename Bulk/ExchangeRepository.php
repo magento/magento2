@@ -7,11 +7,13 @@ namespace Magento\Framework\MessageQueue\Bulk;
 
 /**
  * Used to get exchange instance from the pool.
+ * @since 2.2.0
  */
 class ExchangeRepository
 {
     /**
      * @var ExchangeFactoryInterface
+     * @since 2.2.0
      */
     private $exchangeFactory;
 
@@ -19,11 +21,13 @@ class ExchangeRepository
      * Pool of exchange instances.
      *
      * @var ExchangeInterface[]
+     * @since 2.2.0
      */
     private $exchangePool = [];
 
     /**
      * @param ExchangeFactoryInterface $exchangeFactory
+     * @since 2.2.0
      */
     public function __construct(ExchangeFactoryInterface $exchangeFactory)
     {
@@ -36,6 +40,7 @@ class ExchangeRepository
      * @param string $connectionName
      * @return ExchangeInterface
      * @throws \LogicException
+     * @since 2.2.0
      */
     public function getByConnectionName($connectionName)
     {

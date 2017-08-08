@@ -7,6 +7,7 @@ namespace Magento\Framework\MessageQueue\Topology\Config;
 
 /**
  * Topology config reader interface
+ * @since 2.2.0
  */
 interface ReaderInterface extends \Magento\Framework\Config\ReaderInterface
 {

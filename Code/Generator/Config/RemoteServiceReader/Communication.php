@@ -13,21 +13,25 @@ use Magento\Framework\MessageQueue\Code\Generator\RemoteServiceGenerator;
 
 /**
  * Remote service configuration reader.
+ * @since 2.1.0
  */
 class Communication implements \Magento\Framework\Config\ReaderInterface
 {
     /**
      * @var ObjectManagerConfig
+     * @since 2.1.0
      */
     private $objectManagerConfig;
 
     /**
      * @var ReflectionGenerator
+     * @since 2.1.0
      */
     private $dataGenerator;
 
     /**
      * @var ServiceMethodsMap
+     * @since 2.1.0
      */
     private $serviceMethodsMap;
 
@@ -37,6 +41,7 @@ class Communication implements \Magento\Framework\Config\ReaderInterface
      * @param ObjectManagerConfig $objectManagerConfig
      * @param ReflectionGenerator $dataGenerator
      * @param ServiceMethodsMap $serviceMethodsMap
+     * @since 2.1.0
      */
     public function __construct(
         ObjectManagerConfig $objectManagerConfig,
@@ -56,6 +61,7 @@ class Communication implements \Magento\Framework\Config\ReaderInterface
      * @throws \LogicException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.1.0
      */
     public function read($scope = null)
     {
@@ -96,8 +102,9 @@ class Communication implements \Magento\Framework\Config\ReaderInterface
      * @param string $methodName
      * @return string
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @see \Magento\Framework\Communication\Config\ReflectionGenerator::generateTopicName
+     * @since 2.1.0
      */
     public function generateTopicName($typeName, $methodName)
     {

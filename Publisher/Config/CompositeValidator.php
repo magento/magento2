@@ -7,6 +7,7 @@ namespace Magento\Framework\MessageQueue\Publisher\Config;
 
 /**
  * Publisher config data validator.
+ * @since 2.2.0
  */
 class CompositeValidator implements ValidatorInterface
 {
@@ -14,6 +15,7 @@ class CompositeValidator implements ValidatorInterface
      * Config validator list.
      *
      * @var ValidatorInterface[]
+     * @since 2.2.0
      */
     private $validators;
 
@@ -21,6 +23,7 @@ class CompositeValidator implements ValidatorInterface
      * Validator constructor.
      *
      * @param ValidatorInterface[] $validators
+     * @since 2.2.0
      */
     public function __construct($validators)
     {
@@ -34,6 +37,7 @@ class CompositeValidator implements ValidatorInterface
      * @throws \LogicException
      * @return void
      * @throws \LogicException
+     * @since 2.2.0
      */
     public function validate($configData)
     {

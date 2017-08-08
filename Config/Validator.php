@@ -10,16 +10,19 @@ use Magento\Framework\Reflection\TypeProcessor;
 
 /**
  * Communication configuration validator.
+ * @since 2.1.0
  */
 class Validator
 {
     /**
      * @var MethodsMap
+     * @since 2.1.0
      */
     private $methodsMap;
 
     /**
      * @var TypeProcessor
+     * @since 2.1.0
      */
     private $typeProcessor;
 
@@ -28,6 +31,7 @@ class Validator
      *
      * @param TypeProcessor $typeProcessor
      * @param MethodsMap $methodsMap
+     * @since 2.1.0
      */
     public function __construct(
         TypeProcessor $typeProcessor,
@@ -45,6 +49,7 @@ class Validator
      * @param string $topicName
      * @return void
      * @throws \LogicException
+     * @since 2.1.0
      */
     public function validateSchemaMethodType($schemaType, $schemaMethod, $topicName)
     {
@@ -69,6 +74,7 @@ class Validator
      * @param string $consumerName
      * @return void
      * @throws \LogicException
+     * @since 2.1.0
      */
     public function validateHandlerType($serviceName, $methodName, $consumerName)
     {
@@ -93,6 +99,7 @@ class Validator
      * @param string $topicName
      * @return void
      * @throws \LogicException
+     * @since 2.1.0
      */
     public function validateBindTopic($topics, $topicName)
     {
@@ -119,6 +126,7 @@ class Validator
      *
      * @param string $wildcardKey
      * @return string
+     * @since 2.1.0
      */
     public function buildWildcardPattern($wildcardKey)
     {
@@ -142,6 +150,7 @@ class Validator
      * @param string $topicName
      * @return void
      * @throws \LogicException
+     * @since 2.1.0
      */
     public function validateTopicPublisher($publishers, $publisherName, $topicName)
     {
@@ -163,6 +172,7 @@ class Validator
      * @param string $topicName
      * @return void
      * @throws \LogicException
+     * @since 2.1.0
      */
     public function validateResponseSchemaType($responseSchema, $topicName)
     {
@@ -187,6 +197,7 @@ class Validator
      * @param string $topicName
      * @return void
      * @throws \LogicException
+     * @since 2.1.0
      */
     public function validateSchemaType($schema, $topicName)
     {
@@ -210,6 +221,7 @@ class Validator
      * @param string $typeName
      * @return $this
      * @throws \Exception In case when type is invalid
+     * @since 2.1.0
      */
     protected function validateType($typeName)
     {

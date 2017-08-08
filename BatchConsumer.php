@@ -44,6 +44,7 @@ class BatchConsumer implements ConsumerInterface
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $batchSize;
 
@@ -54,11 +55,13 @@ class BatchConsumer implements ConsumerInterface
 
     /**
      * @var MessageController
+     * @since 2.1.0
      */
     private $messageController;
 
     /**
      * @var ConsumerConfig
+     * @since 2.2.0
      */
     private $consumerConfig;
 
@@ -67,7 +70,8 @@ class BatchConsumer implements ConsumerInterface
      *
      * @return MessageController
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getMessageController()
     {
@@ -312,6 +316,7 @@ class BatchConsumer implements ConsumerInterface
      *
      * @param array $messages
      * @return array
+     * @since 2.1.0
      */
     private function lockMessages(array $messages)
     {
@@ -333,7 +338,8 @@ class BatchConsumer implements ConsumerInterface
      *
      * @return ConsumerConfig
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getConsumerConfig()
     {

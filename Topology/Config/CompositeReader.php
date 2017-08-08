@@ -9,6 +9,7 @@ use Magento\Framework\Phrase;
 
 /**
  * Composite reader for topology config.
+ * @since 2.2.0
  */
 class CompositeReader implements ReaderInterface
 {
@@ -16,6 +17,7 @@ class CompositeReader implements ReaderInterface
      * Config validator.
      *
      * @var ValidatorInterface
+     * @since 2.2.0
      */
     private $validator;
 
@@ -23,6 +25,7 @@ class CompositeReader implements ReaderInterface
      * Config reade list.
      *
      * @var ReaderInterface[]
+     * @since 2.2.0
      */
     private $readers;
 
@@ -31,6 +34,7 @@ class CompositeReader implements ReaderInterface
      *
      * @param ValidatorInterface $validator
      * @param ReaderInterface[] $readers
+     * @since 2.2.0
      */
     public function __construct(ValidatorInterface $validator, array $readers)
     {
@@ -43,6 +47,7 @@ class CompositeReader implements ReaderInterface
      *
      * @param string|null $scope
      * @return array
+     * @since 2.2.0
      */
     public function read($scope = null)
     {

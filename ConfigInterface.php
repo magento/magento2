@@ -9,7 +9,8 @@ namespace Magento\Framework\MessageQueue;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * @deprecated
+ * @deprecated 2.2.0
+ * @since 2.1.0
  */
 interface ConfigInterface
 {
@@ -78,6 +79,7 @@ interface ConfigInterface
      * @return string
      * @throws LocalizedException
      * @see \Magento\Framework\MessageQueue\Publisher\ConfigInterface::getPublisher
+     * @since 2.1.0
      */
     public function getExchangeByTopic($topicName);
 
@@ -88,6 +90,7 @@ interface ConfigInterface
      * @return string[]
      * @throws LocalizedException
      * @see \Magento\Framework\MessageQueue\Topology\ConfigInterface::getQueues
+     * @since 2.1.0
      */
     public function getQueuesByTopic($topic);
 
@@ -96,6 +99,7 @@ interface ConfigInterface
      * @return string
      * @throws LocalizedException
      * @see \Magento\Framework\MessageQueue\Publisher\ConfigInterface::getPublisher
+     * @since 2.1.0
      */
     public function getConnectionByTopic($topic);
 
@@ -104,6 +108,7 @@ interface ConfigInterface
      * @return string
      * @throws LocalizedException
      * @see \Magento\Framework\MessageQueue\Consumer\ConfigInterface::getConsumer
+     * @since 2.1.0
      */
     public function getConnectionByConsumer($consumer);
 
@@ -113,6 +118,7 @@ interface ConfigInterface
      * @param string $topic
      * @return string
      * @see \Magento\Framework\Communication\ConfigInterface::getTopic
+     * @since 2.1.0
      */
     public function getMessageSchemaType($topic);
 
@@ -121,6 +127,7 @@ interface ConfigInterface
      *
      * @return string[]
      * @see \Magento\Framework\MessageQueue\Consumer\ConfigInterface::getConsumers
+     * @since 2.1.0
      */
     public function getConsumerNames();
 
@@ -130,6 +137,7 @@ interface ConfigInterface
      * @param string $name
      * @return array|null
      * @see \Magento\Framework\MessageQueue\Consumer\ConfigInterface::getConsumer
+     * @since 2.1.0
      */
     public function getConsumer($name);
 
@@ -138,6 +146,7 @@ interface ConfigInterface
      *
      * @return array
      * @see \Magento\Framework\MessageQueue\Topology\ConfigInterface::getExchanges
+     * @since 2.1.0
      */
     public function getBinds();
 
@@ -146,6 +155,7 @@ interface ConfigInterface
      *
      * @return array
      * @see \Magento\Framework\MessageQueue\Publisher\ConfigInterface::getPublishers
+     * @since 2.1.0
      */
     public function getPublishers();
 
@@ -154,6 +164,7 @@ interface ConfigInterface
      *
      * @return array
      * @see \Magento\Framework\MessageQueue\Consumer\ConfigInterface::getConsumers
+     * @since 2.1.0
      */
     public function getConsumers();
 
@@ -164,6 +175,7 @@ interface ConfigInterface
      * @return array
      * @see \Magento\Framework\Communication\ConfigInterface::getTopic
      * @see \Magento\Framework\MessageQueue\Publisher\ConfigInterface::getPublisher
+     * @since 2.1.0
      */
     public function getTopic($name);
 
@@ -173,6 +185,7 @@ interface ConfigInterface
      *
      * @return array
      * @see \Magento\Framework\MessageQueue\Publisher\ConfigInterface::getPublisher
+     * @since 2.1.0
      */
     public function getPublisher($name);
 
@@ -182,6 +195,7 @@ interface ConfigInterface
      * @param string $topicName
      * @return string
      * @see \Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder::getQueueName
+     * @since 2.1.0
      */
     public function getResponseQueueName($topicName);
 }

@@ -7,6 +7,7 @@ namespace Magento\Framework\MessageQueue\Publisher\Config;
 
 /**
  * {@inheritdoc}
+ * @since 2.2.0
  */
 class PublisherConfigItem implements PublisherConfigItemInterface
 {
@@ -14,6 +15,7 @@ class PublisherConfigItem implements PublisherConfigItemInterface
      * Publisher topic name.
      *
      * @var string
+     * @since 2.2.0
      */
     private $topic;
 
@@ -21,6 +23,7 @@ class PublisherConfigItem implements PublisherConfigItemInterface
      * Publisher connection.
      *
      * @var PublisherConnectionInterface
+     * @since 2.2.0
      */
     private $connection;
 
@@ -28,6 +31,7 @@ class PublisherConfigItem implements PublisherConfigItemInterface
      * Flag. Is publisher disabled.
      *
      * @var bool
+     * @since 2.2.0
      */
     private $isDisabled;
 
@@ -35,6 +39,7 @@ class PublisherConfigItem implements PublisherConfigItemInterface
      * Initialize dependencies.
      *
      * @param PublisherConnectionFactory $connectionFactory
+     * @since 2.2.0
      */
     public function __construct(PublisherConnectionFactory $connectionFactory)
     {
@@ -43,6 +48,7 @@ class PublisherConfigItem implements PublisherConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getTopic()
     {
@@ -51,6 +57,7 @@ class PublisherConfigItem implements PublisherConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function isDisabled()
     {
@@ -59,6 +66,7 @@ class PublisherConfigItem implements PublisherConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getConnection()
     {
@@ -70,6 +78,7 @@ class PublisherConfigItem implements PublisherConfigItemInterface
      *
      * @param array $data
      * @return void
+     * @since 2.2.0
      */
     public function setData(array $data)
     {

@@ -7,6 +7,7 @@ namespace Magento\Framework\MessageQueue;
 
 /**
  * Class Lock to handle message lock transactions.
+ * @since 2.1.0
  */
 interface LockInterface
 {
@@ -14,6 +15,7 @@ interface LockInterface
      * Get lock id
      *
      * @return int
+     * @since 2.1.0
      */
     public function getId();
 
@@ -22,6 +24,7 @@ interface LockInterface
      *
      * @param int $value
      * @return void
+     * @since 2.1.0
      */
     public function setId($value);
 
@@ -29,6 +32,7 @@ interface LockInterface
      * Get message code
      *
      * @return string
+     * @since 2.1.0
      */
     public function getMessageCode();
 
@@ -37,6 +41,7 @@ interface LockInterface
      *
      * @param string $value
      * @return void
+     * @since 2.1.0
      */
     public function setMessageCode($value);
 
@@ -44,6 +49,7 @@ interface LockInterface
      * Get lock date
      *
      * @return string
+     * @since 2.1.0
      */
     public function getCreatedAt();
 
@@ -52,6 +58,7 @@ interface LockInterface
      *
      * @param string $value
      * @return void
+     * @since 2.1.0
      */
     public function setCreatedAt($value);
 }

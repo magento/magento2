@@ -7,21 +7,25 @@ namespace Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem;
 
 /**
  * {@inheritdoc}
+ * @since 2.2.0
  */
 class Handler implements HandlerInterface
 {
     /**
      * @var string
+     * @since 2.2.0
      */
     private $type;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $method;
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getType()
     {
@@ -30,6 +34,7 @@ class Handler implements HandlerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getMethod()
     {
@@ -38,6 +43,7 @@ class Handler implements HandlerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function setData(array $data)
     {

@@ -10,7 +10,7 @@ use Magento\Framework\MessageQueue\Consumer\Config\Validator\ConsumerInstance as
 /**
  * @codingStandardsIgnoreFile
  */
-class ConsumerInstanceTest extends \PHPUnit_Framework_TestCase
+class ConsumerInstanceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConsumerInstanceValidator
@@ -66,7 +66,7 @@ class ConsumerInstanceTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateInvalid($configData, $expectedExceptionMessage)
     {
-        $this->setExpectedException('\LogicException', $expectedExceptionMessage);
+        $this->expectException('\LogicException', $expectedExceptionMessage);
         $this->validator->validate($configData);
     }
 

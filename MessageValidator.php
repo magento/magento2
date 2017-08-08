@@ -13,11 +13,13 @@ use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 /**
  * Class MessageValidator to validate message with topic schema
  *
+ * @since 2.1.0
  */
 class MessageValidator
 {
     /**
      * @var CommunicationConfig
+     * @since 2.2.0
      */
     private $communicationConfig;
 
@@ -28,6 +30,7 @@ class MessageValidator
      * @param bool $requestType
      * @return array
      * @throws LocalizedException
+     * @since 2.1.0
      */
     protected function getTopicSchema($topic, $requestType)
     {
@@ -58,6 +61,7 @@ class MessageValidator
      * @param bool $requestType
      * @return void
      * @throws InvalidArgumentException
+     * @since 2.1.0
      */
     public function validate($topic, $message, $requestType = true)
     {
@@ -93,6 +97,7 @@ class MessageValidator
      * @param string $messageType
      * @param string $topic
      * @return void
+     * @since 2.1.0
      */
     protected function validateMessage($message, $messageType, $topic)
     {
@@ -108,6 +113,7 @@ class MessageValidator
      * @param string $messageType
      * @param string $topic
      * @return void
+     * @since 2.1.0
      */
     protected function validatePrimitiveType($message, $messageType, $topic)
     {
@@ -139,6 +145,7 @@ class MessageValidator
      * @param string $messageType
      * @param string $topic
      * @return void
+     * @since 2.1.0
      */
     protected function validateClassType($message, $messageType, $topic)
     {
@@ -169,6 +176,7 @@ class MessageValidator
     /**
      * @param string $message
      * @return string
+     * @since 2.1.0
      */
     private function getRealType($message)
     {
@@ -181,7 +189,8 @@ class MessageValidator
      *
      * @return CommunicationConfig
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getCommunicationConfig()
     {

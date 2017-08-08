@@ -7,6 +7,7 @@ namespace Magento\Framework\MessageQueue;
 
 /**
  * Producer to publish messages in bulk via a specific transport to a specific queue or exchange.
+ * @since 2.2.0
  */
 interface BulkPublisherInterface
 {
@@ -16,6 +17,7 @@ interface BulkPublisherInterface
      * @param string $topicName
      * @param array|object $data
      * @return null|mixed
+     * @since 2.2.0
      */
     public function publish($topicName, $data);
 }
