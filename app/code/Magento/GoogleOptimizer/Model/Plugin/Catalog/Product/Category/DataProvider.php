@@ -11,19 +11,16 @@ use \Magento\Catalog\Ui\DataProvider\Product\Form\NewCategoryDataProvider;
 /**
  * Class \Magento\GoogleOptimizer\Model\Plugin\Catalog\Product\Category\DataProvider
  *
- * @since 2.1.0
  */
 class DataProvider
 {
     /**
      * @var \Magento\GoogleOptimizer\Helper\Data
-     * @since 2.1.0
      */
     private $helper;
 
     /**
      * @param \Magento\GoogleOptimizer\Helper\Data $helper
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\GoogleOptimizer\Helper\Data $helper
@@ -37,7 +34,6 @@ class DataProvider
      * @return mixed
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function afterGetMeta(NewCategoryDataProvider $subject, $result)
     {

@@ -18,7 +18,7 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var Initialization\StockDataFilter
-     * @deprecated 2.1.0
+     * @deprecated 101.0.0
      */
     protected $stockFilter;
 

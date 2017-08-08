@@ -10,7 +10,7 @@ namespace Magento\Framework\Module\Output;
 /**
  * Checks whether the module is enabled in the configuration.
  *
- * @deprecated 2.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
+ * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
  */
 class Config implements \Magento\Framework\Module\Output\ConfigInterface
 {
@@ -22,13 +22,13 @@ class Config implements \Magento\Framework\Module\Output\ConfigInterface
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @deprecated 2.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
      */
     protected $_scopeConfig;
 
     /**
      * @var string
-     * @deprecated 2.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
      */
     protected $_storeType;
 
@@ -48,7 +48,7 @@ class Config implements \Magento\Framework\Module\Output\ConfigInterface
      * Whether a module is enabled in the configuration or not
      *
      * @param string $moduleName Fully-qualified module name
-     * @deprecated 2.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
      * @return boolean
      */
     public function isEnabled($moduleName)
@@ -60,7 +60,7 @@ class Config implements \Magento\Framework\Module\Output\ConfigInterface
      * Retrieve module enabled specific path
      *
      * @param string $path Fully-qualified config path
-     * @deprecated 2.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
      * @return boolean
      */
     public function isSetFlag($path)

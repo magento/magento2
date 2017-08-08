@@ -11,25 +11,21 @@ use Magento\Framework\EntityManager\Operation\AttributePool;
 
 /**
  * Class ReadAttributes
- * @since 2.1.0
  */
 class ReadAttributes
 {
     /**
      * @var TypeResolver
-     * @since 2.1.0
      */
     private $typeResolver;
 
     /**
      * @var HydratorPool
-     * @since 2.1.0
      */
     private $hydratorPool;
 
     /**
      * @var AttributePool
-     * @since 2.1.0
      */
     private $attributePool;
 
@@ -37,7 +33,6 @@ class ReadAttributes
      * @param TypeResolver $typeResolver
      * @param HydratorPool $hydratorPool
      * @param AttributePool $attributePool
-     * @since 2.1.0
      */
     public function __construct(
         TypeResolver $typeResolver,
@@ -53,7 +48,6 @@ class ReadAttributes
      * @param object $entity
      * @param array $arguments
      * @return object
-     * @since 2.1.0
      */
     public function execute($entity, $arguments = [])
     {

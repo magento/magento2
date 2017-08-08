@@ -13,13 +13,11 @@ use Magento\Vault\Model\CreditCardTokenFactory;
 
 /**
  * Class UpgradeData
- * @since 2.1.3
  */
 class UpgradeData implements UpgradeDataInterface
 {
     /**
      * @inheritdoc
-     * @since 2.1.3
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

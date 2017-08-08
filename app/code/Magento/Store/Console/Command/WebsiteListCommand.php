@@ -14,18 +14,15 @@ use Symfony\Component\Console\Command\Command;
  * Class WebsiteListCommand
  *
  * Command for listing the configured websites
- * @since 2.2.0
  */
 class WebsiteListCommand extends Command
 {
     /**
      * @var \Magento\Store\Api\WebsiteManagementInterface
-     * @since 2.2.0
      */
     private $manager;
 
     /**
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Store\Api\WebsiteRepositoryInterface $websiteManagement
@@ -36,7 +33,6 @@ class WebsiteListCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     protected function configure()
     {
@@ -48,7 +44,6 @@ class WebsiteListCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

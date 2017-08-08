@@ -29,7 +29,6 @@ class Initializer
      *
      * @return \Magento\Quote\Model\Quote\Item|string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterInit(
         \Magento\Sales\Model\AdminOrder\Product\Quote\Initializer $subject,

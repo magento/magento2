@@ -11,7 +11,6 @@ use Magento\Deploy\Package\Package;
  * Interface CollectorInterface
  *
  * Collector returns packages with files which share same properties (e.g. area, theme, locale, etc)
- * @since 2.2.0
  */
 interface CollectorInterface
 {
@@ -23,7 +22,6 @@ interface CollectorInterface
      * - locale
      *
      * @return Package[]
-     * @since 2.2.0
      */
     public function collect();
 }

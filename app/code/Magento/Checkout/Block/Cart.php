@@ -239,7 +239,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      * Render pagination HTML
      *
      * @return string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getPagerHtml()
     {

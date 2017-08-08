@@ -36,7 +36,6 @@ class Updater
      * Serializer interface instance.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 

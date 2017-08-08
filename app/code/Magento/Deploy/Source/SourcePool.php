@@ -7,7 +7,6 @@ namespace Magento\Deploy\Source;
 
 /**
  * Configurable (via di.xml) pool of available sources of static files eligible for deployment
- * @since 2.2.0
  */
 class SourcePool
 {
@@ -15,14 +14,12 @@ class SourcePool
      * Source objects
      *
      * @var SourceInterface[]
-     * @since 2.2.0
      */
     private $sources;
 
     /**
      * SourcePool constructor.
      * @param array $sources
-     * @since 2.2.0
      */
     public function __construct(array $sources)
     {
@@ -33,7 +30,6 @@ class SourcePool
      * Retrieve static files sources
      *
      * @return SourceInterface[]
-     * @since 2.2.0
      */
     public function getAll()
     {
@@ -45,7 +41,6 @@ class SourcePool
      *
      * @param string $name
      * @return SourceInterface|null
-     * @since 2.2.0
      */
     public function getSource($name)
     {

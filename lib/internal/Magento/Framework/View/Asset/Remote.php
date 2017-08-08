@@ -54,7 +54,6 @@ class Remote implements AssetInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getSourceContentType()
     {

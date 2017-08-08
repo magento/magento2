@@ -9,7 +9,6 @@ namespace Magento\Framework\App\Config;
 
 /**
  * Interface ConfigTypeInterface
- * @since 2.1.3
  */
 interface ConfigTypeInterface
 {
@@ -21,13 +20,11 @@ interface ConfigTypeInterface
      *
      * @param string $path
      * @return array|int|string|boolean
-     * @since 2.1.3
      */
     public function get($path = '');
 
     /**
      * @return void
-     * @since 2.1.3
      */
     public function clean();
 }

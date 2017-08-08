@@ -46,7 +46,6 @@ class MaintenanceDisableCommand extends AbstractMaintenanceCommand
      * Return if IP addresses effective for maintenance mode were set
      *
      * @return bool
-     * @since 2.2.0
      */
     public function isSetAddressInfo()
     {

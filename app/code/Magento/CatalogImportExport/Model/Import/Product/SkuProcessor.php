@@ -45,7 +45,6 @@ class SkuProcessor
      * Product metadata pool
      *
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
@@ -53,7 +52,6 @@ class SkuProcessor
      * Product entity link field
      *
      * @var string
-     * @since 2.1.0
      */
     private $productEntityLinkField;
 
@@ -61,7 +59,6 @@ class SkuProcessor
      * Product entity identifier field
      *
      * @var string
-     * @since 2.1.0
      */
     private $productEntityIdentifierField;
 
@@ -179,7 +176,6 @@ class SkuProcessor
      * Get product metadata pool
      *
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
      */
     private function getMetadataPool()
     {
@@ -194,7 +190,6 @@ class SkuProcessor
      * Get product entity link field
      *
      * @return string
-     * @since 2.1.0
      */
     private function getProductEntityLinkField()
     {
@@ -210,7 +205,6 @@ class SkuProcessor
      * Get product entity identifier field
      *
      * @return string
-     * @since 2.1.0
      */
     private function getProductIdentifierField()
     {

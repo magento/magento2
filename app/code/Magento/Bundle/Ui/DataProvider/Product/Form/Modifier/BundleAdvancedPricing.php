@@ -11,7 +11,6 @@ use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Customize Advanced Pricing modal panel
- * @since 2.1.0
  */
 class BundleAdvancedPricing extends AbstractModifier
 {
@@ -23,13 +22,11 @@ class BundleAdvancedPricing extends AbstractModifier
 
     /**
      * @var ArrayManager
-     * @since 2.2.0
      */
     private $arrayManager;
 
     /**
      * @param ArrayManager $arrayManager
-     * @since 2.2.0
      */
     public function __construct(ArrayManager $arrayManager)
     {
@@ -38,7 +35,6 @@ class BundleAdvancedPricing extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -68,7 +64,6 @@ class BundleAdvancedPricing extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -80,7 +75,6 @@ class BundleAdvancedPricing extends AbstractModifier
      *
      * @param array $meta
      * @return array
-     * @since 2.2.0
      */
     private function modifyMsrpMeta(array $meta)
     {

@@ -10,7 +10,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Observer to remove persistent session if guest empties persistent cart previously created and added to by customer.
- * @since 2.2.0
  */
 class RemoveGuestPersistenceOnEmptyCartObserver implements ObserverInterface
 {
@@ -18,7 +17,6 @@ class RemoveGuestPersistenceOnEmptyCartObserver implements ObserverInterface
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
-     * @since 2.2.0
      */
     private $customerSession;
 
@@ -26,7 +24,6 @@ class RemoveGuestPersistenceOnEmptyCartObserver implements ObserverInterface
      * Persistent session
      *
      * @var \Magento\Persistent\Helper\Session
-     * @since 2.2.0
      */
     private $persistenceSessionHelper;
 
@@ -34,7 +31,6 @@ class RemoveGuestPersistenceOnEmptyCartObserver implements ObserverInterface
      * Quote manager
      *
      * @var \Magento\Persistent\Model\QuoteManager
-     * @since 2.2.0
      */
     private $quoteManager;
 
@@ -42,7 +38,6 @@ class RemoveGuestPersistenceOnEmptyCartObserver implements ObserverInterface
      * Persistent Data
      *
      * @var \Magento\Persistent\Helper\Data
-     * @since 2.2.0
      */
     private $persistenceDataHelper;
 
@@ -50,7 +45,6 @@ class RemoveGuestPersistenceOnEmptyCartObserver implements ObserverInterface
      * Cart Repository
      *
      * @var \Magento\Quote\Api\CartRepositoryInterface $cartRepository
-     * @since 2.2.0
      */
     private $cartRepository;
 
@@ -62,7 +56,6 @@ class RemoveGuestPersistenceOnEmptyCartObserver implements ObserverInterface
      * @param \Magento\Persistent\Model\QuoteManager $quoteManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepository
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistenceSessionHelper,
@@ -84,7 +77,6 @@ class RemoveGuestPersistenceOnEmptyCartObserver implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

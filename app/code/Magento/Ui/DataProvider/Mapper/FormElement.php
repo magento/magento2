@@ -7,19 +7,16 @@ namespace Magento\Ui\DataProvider\Mapper;
 
 /**
  * Class FormElement
- * @since 2.1.0
  */
 class FormElement implements MapperInterface
 {
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $mappings = [];
 
     /**
      * @param array $mappings
-     * @since 2.1.0
      */
     public function __construct(array $mappings)
     {
@@ -30,7 +27,6 @@ class FormElement implements MapperInterface
      * Retrieve mappings
      *
      * @return array
-     * @since 2.1.0
      */
     public function getMappings()
     {

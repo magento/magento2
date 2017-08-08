@@ -10,31 +10,26 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class CartTotalRepository
  * @package Magento\SalesRule\Plugin
- * @since 2.2.0
  */
 class CartTotalRepository
 {
     /**
      * @var \Magento\Quote\Api\Data\TotalsExtensionFactory
-     * @since 2.2.0
      */
     private $extensionFactory;
 
     /**
      * @var \Magento\SalesRule\Api\RuleRepositoryInterface
-     * @since 2.2.0
      */
     private $ruleRepository;
 
     /**
      * @var \Magento\SalesRule\Model\Coupon
-     * @since 2.2.0
      */
     private $coupon;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.2.0
      */
     private $storeManager;
 
@@ -44,7 +39,6 @@ class CartTotalRepository
      * @param \Magento\SalesRule\Api\RuleRepositoryInterface $ruleRepository
      * @param \Magento\SalesRule\Model\Coupon $coupon
      * @param StoreManagerInterface $storeManager
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Quote\Api\Data\TotalsExtensionFactory $extensionFactory,
@@ -64,7 +58,6 @@ class CartTotalRepository
      * @return \Magento\Quote\Api\Data\TotalsInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterGet(
         \Magento\Quote\Model\Cart\CartTotalRepository $subject,

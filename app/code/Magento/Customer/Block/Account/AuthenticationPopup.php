@@ -20,7 +20,6 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -70,7 +69,7 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
      * Added in scope of https://github.com/magento/magento2/pull/8617
      *
      * @return bool|string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getSerializedConfig()
     {
@@ -81,7 +80,6 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
      * Is autocomplete enabled for storefront
      *
      * @return string
-     * @since 2.2.0
      */
     private function isAutocompleteEnabled()
     {

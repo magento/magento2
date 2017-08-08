@@ -17,19 +17,19 @@ use Magento\Review\Model\Review;
  * @api
  *
  * @method Collection getCollection
- * @since 2.1.0
+ * @since 100.1.0
  */
 class ReviewDataProvider extends AbstractDataProvider
 {
     /**
      * @var CollectionFactory
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $collectionFactory;
 
     /**
      * @var RequestInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $request;
 
@@ -41,7 +41,7 @@ class ReviewDataProvider extends AbstractDataProvider
      * @param RequestInterface $request
      * @param array $meta
      * @param array $data
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         $name,
@@ -60,7 +60,7 @@ class ReviewDataProvider extends AbstractDataProvider
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getData()
     {
@@ -81,7 +81,7 @@ class ReviewDataProvider extends AbstractDataProvider
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {

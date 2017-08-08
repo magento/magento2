@@ -7,7 +7,6 @@ namespace Magento\Framework\DB\DataConverter;
 
 /**
  * Convert from one format to another
- * @since 2.2.0
  */
 interface DataConverterInterface
 {
@@ -18,7 +17,6 @@ interface DataConverterInterface
      * @return string
      *
      * @throws DataConversionException
-     * @since 2.2.0
      */
     public function convert($value);
 }

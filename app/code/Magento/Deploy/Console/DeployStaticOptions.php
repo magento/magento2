@@ -14,7 +14,6 @@ use Symfony\Component\Console\Input\InputArgument;
  *
  * This class contains the list options and their related constants,
  * which can be used for static content deployment CLI command
- * @since 2.2.0
  */
 class DeployStaticOptions
 {
@@ -141,7 +140,6 @@ class DeployStaticOptions
      * Deploy static command options list
      *
      * @return array
-     * @since 2.2.0
      */
     public function getOptionsList()
     {
@@ -152,7 +150,6 @@ class DeployStaticOptions
      * Basic options
      *
      * @return array
-     * @since 2.2.0
      */
     private function getBasicOptions()
     {
@@ -254,7 +251,6 @@ class DeployStaticOptions
      * Used to re-deploy specific types of static files
      *
      * @return array
-     * @since 2.2.0
      */
     private function getSkipOptions()
     {

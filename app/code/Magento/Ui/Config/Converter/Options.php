@@ -12,19 +12,16 @@ use Magento\Ui\Config\ConverterUtils;
 
 /**
  * Converter for 'settings/options' configuration settings
- * @since 2.2.0
  */
 class Options implements ConverterInterface
 {
     /**
      * @var ConverterUtils
-     * @since 2.2.0
      */
     private $converterUtils;
 
     /**
      * @param ConverterUtils $converterUtils
-     * @since 2.2.0
      */
     public function __construct(ConverterUtils $converterUtils)
     {
@@ -33,7 +30,6 @@ class Options implements ConverterInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function convert(\DOMNode $node, array $data = [])
     {
@@ -49,7 +45,6 @@ class Options implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return array
-     * @since 2.2.0
      */
     private function toArray(\DOMNode $node)
     {
@@ -94,7 +89,6 @@ class Options implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return bool
-     * @since 2.2.0
      */
     private function hasChildElements(\DOMNode $node)
     {

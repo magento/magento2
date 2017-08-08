@@ -34,13 +34,11 @@ class CustomerManagement
 
     /**
      * @var \Magento\Framework\Validator\Factory
-     * @since 2.2.0
      */
     private $validatorFactory;
 
     /**
      * @var \Magento\Customer\Model\AddressFactory
-     * @since 2.2.0
      */
     private $addressFactory;
 
@@ -108,7 +106,6 @@ class CustomerManagement
      * @param Quote $quote
      * @throws \Magento\Framework\Validator\Exception
      * @return void
-     * @since 2.2.0
      */
     public function validateAddresses(QuoteEntity $quote)
     {

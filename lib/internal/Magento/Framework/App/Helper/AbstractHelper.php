@@ -75,7 +75,6 @@ abstract class AbstractHelper
 
     /**
      * @var \Magento\Framework\Cache\ConfigInterface
-     * @since 2.1.0
      */
     protected $_cacheConfig;
 

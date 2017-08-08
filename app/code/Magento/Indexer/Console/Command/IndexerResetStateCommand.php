@@ -13,13 +13,11 @@ use Magento\Framework\Indexer\ConfigInterface;
 
 /**
  * Command for invalidating indexers.
- * @since 2.1.0
  */
 class IndexerResetStateCommand extends AbstractIndexerManageCommand
 {
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     protected function configure()
     {
@@ -32,7 +30,6 @@ class IndexerResetStateCommand extends AbstractIndexerManageCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

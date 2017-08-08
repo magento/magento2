@@ -50,13 +50,11 @@ class Rule extends AbstractResource
 
     /**
      * @var EntityManager
-     * @since 2.1.0
      */
     protected $entityManager;
 
     /**
      * @var MetadataPool
-     * @since 2.2.0
      */
     private $metadataPool;
 
@@ -102,7 +100,7 @@ class Rule extends AbstractResource
     /**
      * @param AbstractModel $object
      * @return void
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     public function loadCustomerGroupIds(AbstractModel $object)
     {
@@ -115,7 +113,7 @@ class Rule extends AbstractResource
     /**
      * @param AbstractModel $object
      * @return void
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     public function loadWebsiteIds(AbstractModel $object)
     {
@@ -150,7 +148,6 @@ class Rule extends AbstractResource
      * @param string $field field to load by (defaults to model id)
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function load(AbstractModel $object, $value, $field = null)
     {
@@ -379,7 +376,6 @@ class Rule extends AbstractResource
     /**
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.1.0
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -392,7 +388,6 @@ class Rule extends AbstractResource
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.1.0
      */
     public function delete(AbstractModel $object)
     {
@@ -402,8 +397,7 @@ class Rule extends AbstractResource
 
     /**
      * @return \Magento\Framework\EntityManager\EntityManager
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getEntityManager()
     {

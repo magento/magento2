@@ -38,7 +38,6 @@ class CartItemProcessor implements CartItemProcessorInterface
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 

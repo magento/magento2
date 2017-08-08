@@ -9,7 +9,6 @@ use Magento\Framework\EntityManager\OperationInterface;
 
 /**
  * Interface for reading entity data
- * @since 2.1.0
  */
 interface ReadInterface extends OperationInterface
 {
@@ -21,7 +20,6 @@ interface ReadInterface extends OperationInterface
      * @param array $arguments
      * @return object
      * @throws \Exception
-     * @since 2.1.0
      */
     public function execute($entity, $identifier, $arguments = []);
 }

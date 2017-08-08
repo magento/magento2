@@ -11,7 +11,6 @@ use Magento\Framework\Exception\ValidatorException;
 
 /**
  * Entity generator. Support generation for flat and eav tables
- * @since 2.2.0
  */
 class EntityGenerator
 {
@@ -27,7 +26,6 @@ class EntityGenerator
      *     'handler' => function($entityId, $fixture, $binds) callback for process binding for custom table
      *     'fields' => [key name in fixture for process custom bindings, ...]
      * ]
-     * @since 2.2.0
      */
     private $customTableMap;
 
@@ -35,49 +33,41 @@ class EntityGenerator
      * entity table class name
      *
      * @var string
-     * @since 2.2.0
      */
     private $entityType;
 
     /**
      * @var \Magento\Setup\Model\FixtureGenerator\SqlCollector
-     * @since 2.2.0
      */
     private $sqlCollector;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\AttributeLoader
-     * @since 2.2.0
      */
     private $attributeLoader;
 
     /**
      * @var \Magento\Eav\Api\Data\AttributeInterface[]
-     * @since 2.2.0
      */
     private $attributes;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.2.0
      */
     private $connection;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $tableToEntityIdMap;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $entityTable;
 
@@ -85,37 +75,31 @@ class EntityGenerator
      * List of tables where entity id information is stored
      *
      * @var array
-     * @since 2.2.0
      */
     private $primaryEntityIdTables;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var \Magento\Framework\EntityManager\EntityMetadataInterface
-     * @since 2.2.0
      */
     private $entityMetadata;
 
     /**
      * @var \Magento\Framework\EntityManager\Sequence\SequenceRegistry
-     * @since 2.2.0
      */
     private $sequenceRegistry;
 
     /**
      * @var bool
-     * @since 2.2.0
      */
     private $isMappingInitialized = false;
 
     /**
      * @var int
-     * @since 2.2.0
      */
     private $bunchSize;
 
@@ -128,7 +112,6 @@ class EntityGenerator
      * @param string $entityType
      * @param array $customTableMap
      * @param int $bunchSize
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Setup\Model\FixtureGenerator\SqlCollector $sqlCollector,
@@ -158,7 +141,6 @@ class EntityGenerator
      * @param callable $fixture
      * @throws LocalizedException
      * @return void
-     * @since 2.2.0
      */
     public function generate(TemplateEntityGeneratorInterface $entityGenerator, $entitiesAmount, callable $fixture)
     {
@@ -199,7 +181,6 @@ class EntityGenerator
      * @param int $entityNumber
      * @param callable $fixtureMap
      * @return array
-     * @since 2.2.0
      */
     private function getSqlQueries($entity, $entityNumber, callable $fixtureMap)
     {
@@ -253,7 +234,6 @@ class EntityGenerator
      * @param array $fixtureMap
      * @param array $binds
      * @return array
-     * @since 2.2.0
      */
     private function bindWithCustomHandler($table, $entityId, $entityNumber, $fixtureMap, $binds)
     {
@@ -272,7 +252,6 @@ class EntityGenerator
      * @param array $map
      * @return void
      * @throws LocalizedException
-     * @since 2.2.0
      */
     private function saveEntities(array &$map)
     {
@@ -295,7 +274,6 @@ class EntityGenerator
 
     /**
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.2.0
      */
     private function getConnection()
     {
@@ -308,7 +286,6 @@ class EntityGenerator
 
     /**
      * @return \Magento\Framework\EntityManager\EntityMetadataInterface
-     * @since 2.2.0
      */
     private function getEntityMetadata()
     {
@@ -323,7 +300,6 @@ class EntityGenerator
      * Get entity table name
      *
      * @return string
-     * @since 2.2.0
      */
     private function getEntityTable()
     {
@@ -341,7 +317,6 @@ class EntityGenerator
      * @param string $table
      * @return string
      * @throws ValidatorException
-     * @since 2.2.0
      */
     private function getEntityIdField($table)
     {
@@ -373,7 +348,6 @@ class EntityGenerator
      *
      * @return void
      * @throws ValidatorException
-     * @since 2.2.0
      */
     private function initializeMapping()
     {
@@ -411,7 +385,6 @@ class EntityGenerator
      * Rebind table name with real name, initialize table map for tables without foreign key to entity table
      *
      * @return void
-     * @since 2.2.0
      */
     private function initCustomTables()
     {
@@ -436,7 +409,6 @@ class EntityGenerator
      * Get EAV attributes metadata for non-static attributes
      *
      * @return array
-     * @since 2.2.0
      */
     private function getAttributesMetadata()
     {
@@ -466,7 +438,6 @@ class EntityGenerator
      * @param array $fixtureMap
      *
      * @return void
-     * @since 2.2.0
      */
     private function setNewBindValue($entityId, $entityNumber, $table, array &$bind, array $fixtureMap)
     {
@@ -499,7 +470,6 @@ class EntityGenerator
      * @param int $entityNumber
      * @param array $fixtureMap
      * @return mixed|string
-     * @since 2.2.0
      */
     private function getFixtureValue($fixtureField, $entityId, $entityNumber, array $fixtureMap)
     {
@@ -512,7 +482,6 @@ class EntityGenerator
      * @param int $entityId
      * @param int $entityNumber
      * @return string
-     * @since 2.2.0
      */
     private function getBindValue($fixture, $entityId, $entityNumber)
     {

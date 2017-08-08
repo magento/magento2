@@ -11,31 +11,26 @@ use Magento\Framework\ObjectManagerInterface as ObjectManager;
 
 /**
  * Class EntitySnapshot
- * @since 2.1.0
  */
 class AttributeProvider implements AttributeProviderInterface
 {
     /**
      * @var AttributeProviderInterface[]
-     * @since 2.1.0
      */
     protected $providers;
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @var ObjectManager
-     * @since 2.1.0
      */
     protected $objectManager;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $registry;
 
@@ -43,7 +38,6 @@ class AttributeProvider implements AttributeProviderInterface
      * @param MetadataPool $metadataPool
      * @param ObjectManager $objectManager
      * @param array $providers
-     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -61,7 +55,6 @@ class AttributeProvider implements AttributeProviderInterface
      * @param string $entityType
      * @return array
      * @throws \Exception
-     * @since 2.1.0
      */
     public function getAttributes($entityType)
     {

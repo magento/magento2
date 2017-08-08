@@ -16,31 +16,26 @@ use Magento\Framework\Exception\CouldNotDeleteException;
 
 /**
  * Class DeleteHandler
- * @since 2.1.0
  */
 class DeleteHandler
 {
     /**
      * @var LinkTypeProvider
-     * @since 2.1.0
      */
     protected $linkTypeProvider;
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @var ProductRepositoryInterface
-     * @since 2.1.0
      */
     protected $productRepository;
 
     /**
      * @var Link
-     * @since 2.1.0
      */
     protected $linkResource;
 
@@ -51,7 +46,6 @@ class DeleteHandler
      * @param ProductRepositoryInterface $productRepository
      * @param Link $linkResource
      * @param LinkTypeProvider $linkTypeProvider
-     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -72,7 +66,6 @@ class DeleteHandler
      * @throws CouldNotDeleteException
      * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function execute($entityType, $entity)
     {

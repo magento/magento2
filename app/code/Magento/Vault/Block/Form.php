@@ -12,19 +12,16 @@ use Magento\Payment\Model\CcConfigProvider;
 
 /**
  * Class Form
- * @since 2.1.0
  */
 class Form extends \Magento\Payment\Block\Form
 {
     /**
      * @var TokensConfigProvider
-     * @since 2.1.0
      */
     private $tokensProvider;
 
     /**
      * @var CcConfigProvider
-     * @since 2.1.0
      */
     private $cardConfigProvider;
 
@@ -33,7 +30,6 @@ class Form extends \Magento\Payment\Block\Form
      * @param TokensConfigProvider $tokensConfigProvider
      * @param CcConfigProvider $ccConfigProvider
      * @param array $data
-     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -48,7 +44,6 @@ class Form extends \Magento\Payment\Block\Form
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     protected function _prepareLayout()
     {
@@ -60,7 +55,6 @@ class Form extends \Magento\Payment\Block\Form
      * Create block for own configuration for each payment token
      *
      * @return void
-     * @since 2.1.0
      */
     protected function createVaultBlocks()
     {

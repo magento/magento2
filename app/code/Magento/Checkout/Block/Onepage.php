@@ -39,7 +39,6 @@ class Onepage extends \Magento\Framework\View\Element\Template
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -116,7 +115,7 @@ class Onepage extends \Magento\Framework\View\Element\Template
 
     /**
      * @return bool|string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getSerializedCheckoutConfig()
     {

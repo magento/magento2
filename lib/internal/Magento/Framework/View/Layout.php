@@ -169,7 +169,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
 
     /**
      * @var SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 

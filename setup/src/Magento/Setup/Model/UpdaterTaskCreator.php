@@ -12,7 +12,6 @@ use Zend\Json\Json;
 
 /**
  * Validates payloads for updater tasks
- * @since 2.1.0
  */
 class UpdaterTaskCreator
 {
@@ -29,25 +28,21 @@ class UpdaterTaskCreator
 
     /**
      * @var \Magento\Framework\Filesystem
-     * @since 2.1.0
      */
     private $filesystem;
 
     /**
      * @var \Magento\Setup\Model\Navigation
-     * @since 2.1.0
      */
     private $navigation;
 
     /**
      * @var \Magento\Setup\Model\Updater
-     * @since 2.1.0
      */
     private $updater;
 
     /**
      * @var \Magento\Setup\Model\ObjectManagerProvider
-     * @since 2.1.0
      */
     private $objectManagerProvider;
 
@@ -56,7 +51,6 @@ class UpdaterTaskCreator
      * @param \Magento\Setup\Model\Navigation $navigation
      * @param \Magento\Setup\Model\Updater $updater
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -76,7 +70,6 @@ class UpdaterTaskCreator
      * @param string $type
      * @param string $title
      * @return void
-     * @since 2.1.0
      */
     private function createTypeFlag($type, $title)
     {
@@ -101,7 +94,6 @@ class UpdaterTaskCreator
      *
      * @param array $postPayload
      * @return string
-     * @since 2.1.0
      */
     public function createUpdaterTasks(array $postPayload)
     {
@@ -180,7 +172,6 @@ class UpdaterTaskCreator
      * @param array $additionalOptions
      * @param string $cronTaskType
      * @return void
-     * @since 2.1.0
      */
     private function getCronTaskConfigInfo($jobType, $postPayload, &$additionalOptions, &$cronTaskType)
     {

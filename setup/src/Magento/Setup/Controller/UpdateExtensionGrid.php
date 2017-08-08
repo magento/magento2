@@ -12,19 +12,16 @@ use Magento\Setup\Model\Grid;
 
 /**
  * Controller for update extensions grid tasks
- * @since 2.2.0
  */
 class UpdateExtensionGrid extends AbstractActionController
 {
     /**
      * @var Grid\Extension
-     * @since 2.2.0
      */
     private $gridExtension;
 
     /**
      * @param Grid\Extension $gridExtension
-     * @since 2.2.0
      */
     public function __construct(Grid\Extension $gridExtension)
     {
@@ -35,7 +32,6 @@ class UpdateExtensionGrid extends AbstractActionController
      * Index page action
      *
      * @return ViewModel
-     * @since 2.2.0
      */
     public function indexAction()
     {
@@ -48,12 +44,11 @@ class UpdateExtensionGrid extends AbstractActionController
      * Get extensions action
      *
      * @return JsonModel
-     * @since 2.2.0
      */
     public function extensionsAction()
     {
         $extensions = $this->gridExtension->getListForUpdate();
-        
+
         return new JsonModel(
             [
                 'success' => true,

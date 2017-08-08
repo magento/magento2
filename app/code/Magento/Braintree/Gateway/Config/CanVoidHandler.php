@@ -12,20 +12,17 @@ use Magento\Sales\Model\Order\Payment;
 /**
  * Class \Magento\Braintree\Gateway\Config\CanVoidHandler
  *
- * @since 2.1.0
  */
 class CanVoidHandler implements ValueHandlerInterface
 {
     /**
      * @var SubjectReader
-     * @since 2.1.0
      */
     private $subjectReader;
 
     /**
      * CanVoidHandler constructor.
      * @param SubjectReader $subjectReader
-     * @since 2.1.0
      */
     public function __construct(
         SubjectReader $subjectReader
@@ -41,7 +38,6 @@ class CanVoidHandler implements ValueHandlerInterface
      *
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function handle(array $subject, $storeId = null)
     {

@@ -37,7 +37,6 @@ class PublicationDecorator extends RelatedGenerator
 
     /**
      * @var State
-     * @since 2.2.0
      */
     private $state;
 
@@ -82,8 +81,7 @@ class PublicationDecorator extends RelatedGenerator
 
     /**
      * @return State
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getState()
     {

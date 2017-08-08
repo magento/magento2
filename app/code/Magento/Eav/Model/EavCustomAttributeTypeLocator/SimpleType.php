@@ -10,7 +10,6 @@ use Magento\Framework\Reflection\TypeProcessor;
 
 /**
  * Class to locate simple types for Eav custom attributes
- * @since 2.1.0
  */
 class SimpleType
 {
@@ -18,7 +17,6 @@ class SimpleType
      * List of attributes, type of which cannot be identified reliably. We do not validate these attributes.
      *
      * @var string[]
-     * @since 2.1.0
      */
     private $anyTypeAttributes = ['quantity_and_stock_status'];
 
@@ -27,7 +25,6 @@ class SimpleType
      *
      * @param \Magento\Eav\Api\Data\AttributeInterface $attribute
      * @return string
-     * @since 2.1.0
      */
     public function getType($attribute)
     {

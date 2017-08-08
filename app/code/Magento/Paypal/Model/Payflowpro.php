@@ -126,7 +126,6 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @see https://developer.paypal.com/docs/classic/payflow/integration-guide/#credit-card-transaction-responses
      *
      * @var array
-     * @since 2.2.0
      */
     private $ccTypeMap = [
         '0' => 'VI',
@@ -891,7 +890,6 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param array|DataObject $data
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.11
      */
     public function assignData(DataObject $data)
     {
@@ -921,7 +919,6 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param string $transactionId
      * @return DataObject
      * @throws LocalizedException
-     * @since 2.1.0
      */
     protected function transactionInquiryRequest(InfoInterface $payment, $transactionId)
     {
@@ -940,7 +937,6 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param string|null $avsAddr
      * @param string|null $avsZip
      * @return string|null
-     * @since 2.2.0
      */
     private function mapResponseAvsData($avsAddr, $avsZip)
     {
@@ -953,7 +949,6 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param string|null $billToFirstName
      * @param string|null $billToLastName
      * @return string|null
-     * @since 2.2.0
      */
     private function mapResponseBillToName($billToFirstName, $billToLastName)
     {
@@ -967,7 +962,6 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      *
      * @param string|null $ccType
      * @return string|null
-     * @since 2.2.0
      */
     private function mapResponseCreditCardType($ccType)
     {

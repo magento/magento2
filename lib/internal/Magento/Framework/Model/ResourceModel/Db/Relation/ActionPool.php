@@ -11,26 +11,22 @@ use Magento\Framework\Model\ResourceModel\Db\ProcessEntityRelationInterface;
 
 /**
  * Class ActionPool
- * @since 2.1.0
  */
 class ActionPool
 {
     /**
      * @var ObjectManager
-     * @since 2.1.0
      */
     protected $objectManager;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $relationActions;
 
     /**
      * @param ObjectManager $objectManager
      * @param array $relationActions
-     * @since 2.1.0
      */
     public function __construct(
         ObjectManager $objectManager,
@@ -45,7 +41,6 @@ class ActionPool
      * @param string $actionName
      * @return object[]
      * @throws \Exception
-     * @since 2.1.0
      */
     public function getActions($entityType, $actionName)
     {

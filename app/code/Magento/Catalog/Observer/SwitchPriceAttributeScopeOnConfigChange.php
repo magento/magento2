@@ -16,25 +16,21 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 /**
  * Observer is responsible for changing scope for all price attributes in system
  * depending on 'Catalog Price Scope' configuration parameter
- * @since 2.1.3
  */
 class SwitchPriceAttributeScopeOnConfigChange implements ObserverInterface
 {
     /**
      * @var ReinitableConfigInterface
-     * @since 2.1.3
      */
     private $config;
 
     /**
      * @var ProductAttributeRepositoryInterface
-     * @since 2.1.3
      */
     private $productAttributeRepository;
 
     /**
      * @var SearchCriteriaBuilder
-     * @since 2.1.3
      */
     private $searchCriteriaBuilder;
 
@@ -42,7 +38,6 @@ class SwitchPriceAttributeScopeOnConfigChange implements ObserverInterface
      * @param ReinitableConfigInterface $config
      * @param ProductAttributeRepositoryInterface $productAttributeRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @since 2.1.3
      */
     public function __construct(
         ReinitableConfigInterface $config,
@@ -61,7 +56,6 @@ class SwitchPriceAttributeScopeOnConfigChange implements ObserverInterface
      * @param EventObserver $observer
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.3
      */
     public function execute(EventObserver $observer)
     {

@@ -98,19 +98,18 @@ abstract class AbstractAction
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $metadataPool;
 
     /**
      * @var string
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $tempTreeIndexTableName;
 
     /**
      * @var QueryGenerator
-     * @since 2.2.0
      */
     private $queryGenerator;
 
@@ -499,7 +498,7 @@ abstract class AbstractAction
      * Temp table name is NOT shared between action instances and each action has it's own temp tree index
      *
      * @return string
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getTemporaryTreeIndexTableName()
     {
@@ -518,7 +517,7 @@ abstract class AbstractAction
      * Returns the name of the temporary table to use in queries.
      *
      * @return string
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function makeTempCategoryTreeIndex()
     {
@@ -558,7 +557,7 @@ abstract class AbstractAction
      * Populate the temporary category tree index table
      *
      * @param string $temporaryName
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function fillTempCategoryTreeIndex($temporaryName)
     {
@@ -753,7 +752,6 @@ abstract class AbstractAction
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
      */
     private function getMetadataPool()
     {

@@ -21,7 +21,6 @@ class Start extends ImportResultController
 
     /**
      * @var \Magento\Framework\Message\ExceptionMessageFactoryInterface
-     * @since 2.2.0
      */
     private $exceptionMessageFactory;
 

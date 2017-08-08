@@ -17,20 +17,19 @@ use Magento\Sales\Model\Service\InvoiceService;
  * Class InvoiceDocumentFactory
  *
  * @api
- * @since 2.1.2
+ * @since 100.1.2
  */
 class InvoiceDocumentFactory
 {
     /**
      * @var InvoiceService
-     * @since 2.1.2
      */
     private $invoiceService;
 
     /**
      * InvoiceDocumentFactory constructor.
      * @param InvoiceService $invoiceService
-     * @since 2.1.2
+     * @since 100.1.2
      */
     public function __construct(
         InvoiceService $invoiceService
@@ -46,7 +45,7 @@ class InvoiceDocumentFactory
      * @param InvoiceCreationArgumentsInterface|null $arguments
      * @return InvoiceInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.2
+     * @since 100.1.2
      */
     public function create(
         OrderInterface $order,
@@ -74,7 +73,6 @@ class InvoiceDocumentFactory
      *
      * @param InvoiceItemCreationInterface[] $items
      * @return array
-     * @since 2.1.2
      */
     private function itemsToArray($items = [])
     {

@@ -20,13 +20,11 @@ class Marketplace extends AbstractActionController
 {
     /**
      * @var PackagesAuth
-     * @since 2.1.0
      */
     private $packagesAuth;
 
     /**
      * @var PackagesData
-     * @since 2.1.0
      */
     private $packagesData;
 
@@ -44,7 +42,6 @@ class Marketplace extends AbstractActionController
      * No index action, return 404 error page
      *
      * @return ViewModel
-     * @since 2.1.0
      */
     public function indexAction()
     {

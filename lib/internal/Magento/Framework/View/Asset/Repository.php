@@ -36,7 +36,7 @@ class Repository
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ListInterface
-     * @deprecated 2.1.1
+     * @deprecated 100.1.1
      */
     private $themeList;
 
@@ -82,7 +82,6 @@ class Repository
 
     /**
      * @var ThemeProviderInterface
-     * @since 2.1.1
      */
     private $themeProvider;
 
@@ -169,7 +168,6 @@ class Repository
 
     /**
      * @return ThemeProviderInterface
-     * @since 2.1.1
      */
     private function getThemeProvider()
     {
@@ -445,7 +443,6 @@ class Repository
      * @param string $fileId
      * @param array $params
      * @return RepositoryMap
-     * @since 2.2.0
      */
     private function getRepositoryFilesMap($fileId, array $params)
     {

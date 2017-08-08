@@ -19,7 +19,6 @@ use Magento\Framework\Stdlib\ArrayManager;
  * This processor saves the value of configuration and lock it for editing in Admin interface.
  *
  * {@inheritdoc}
- * @since 2.2.0
  */
 class LockProcessor implements ConfigSetProcessorInterface
 {
@@ -27,7 +26,6 @@ class LockProcessor implements ConfigSetProcessorInterface
      * The factory for prepared value
      *
      * @var PreparedValueFactory
-     * @since 2.2.0
      */
     private $preparedValueFactory;
 
@@ -35,7 +33,6 @@ class LockProcessor implements ConfigSetProcessorInterface
      * The deployment configuration writer
      *
      * @var DeploymentConfig\Writer
-     * @since 2.2.0
      */
     private $deploymentConfigWriter;
 
@@ -43,7 +40,6 @@ class LockProcessor implements ConfigSetProcessorInterface
      * An array manager for different manipulations with arrays
      *
      * @var ArrayManager
-     * @since 2.2.0
      */
     private $arrayManager;
 
@@ -51,7 +47,6 @@ class LockProcessor implements ConfigSetProcessorInterface
      * The resolver for configuration paths according to source type
      *
      * @var ConfigPathResolver
-     * @since 2.2.0
      */
     private $configPathResolver;
 
@@ -60,7 +55,6 @@ class LockProcessor implements ConfigSetProcessorInterface
      * @param DeploymentConfig\Writer $writer The deployment configuration writer
      * @param ArrayManager $arrayManager An array manager for different manipulations with arrays
      * @param ConfigPathResolver $configPathResolver The resolver for configuration paths according to source type
-     * @since 2.2.0
      */
     public function __construct(
         PreparedValueFactory $preparedValueFactory,
@@ -79,7 +73,6 @@ class LockProcessor implements ConfigSetProcessorInterface
      * Requires read access to filesystem.
      *
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function process($path, $value, $scope, $scopeCode)
     {

@@ -20,7 +20,6 @@ use Magento\Framework\View\Asset\Minification;
  *
  * Such URLs may pre-exist in CSS files, but can appear when file was copied from one of the ancestors,
  * so all relative URLs need to be adjusted
- * @since 2.2.0
  */
 class CssUrls implements ProcessorInterface
 {
@@ -28,7 +27,6 @@ class CssUrls implements ProcessorInterface
      * Static content directory writable interface
      *
      * @var Filesystem\Directory\WriteInterface
-     * @since 2.2.0
      */
     private $staticDir;
 
@@ -36,7 +34,6 @@ class CssUrls implements ProcessorInterface
      * Helper class for static files minification related processes
      *
      * @var Minification
-     * @since 2.2.0
      */
     private $minification;
 
@@ -44,7 +41,6 @@ class CssUrls implements ProcessorInterface
      * Deployment procedure options
      *
      * @var array
-     * @since 2.2.0
      */
     private $options = [];
 
@@ -53,7 +49,6 @@ class CssUrls implements ProcessorInterface
      *
      * @param Filesystem $filesystem
      * @param Minification $minification
-     * @since 2.2.0
      */
     public function __construct(Filesystem $filesystem, Minification $minification)
     {
@@ -63,7 +58,6 @@ class CssUrls implements ProcessorInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function process(Package $package, array $options)
     {
@@ -101,7 +95,6 @@ class CssUrls implements ProcessorInterface
      * @param Package $package
      * @return array
      * @throws NotFoundException
-     * @since 2.2.0
      */
     private function parseCss(array $urlMap, $cssFilePath, $packagePath, $cssContent, Package $package)
     {
@@ -141,7 +134,6 @@ class CssUrls implements ProcessorInterface
      *
      * @param array $urlMap
      * @return void
-     * @since 2.2.0
      */
     private function updateCssUrls(array $urlMap)
     {
@@ -162,7 +154,6 @@ class CssUrls implements ProcessorInterface
      *
      * @param string $cssContent
      * @return array
-     * @since 2.2.0
      */
     private function getCssUrls($cssContent)
     {
@@ -179,7 +170,6 @@ class CssUrls implements ProcessorInterface
      *
      * @param string $url
      * @return string
-     * @since 2.2.0
      */
     private function getNormalizedFilePath($url)
     {
@@ -214,7 +204,6 @@ class CssUrls implements ProcessorInterface
      * @param string $url
      * @param Package $package
      * @return string
-     * @since 2.2.0
      */
     private function getValidExternalUrl($url, Package $package)
     {
@@ -238,7 +227,6 @@ class CssUrls implements ProcessorInterface
      * @param string $fileName
      * @param Package $currentPackage
      * @return PackageFile|null
-     * @since 2.2.0
      */
     private function getFileFromParent($fileName, Package $currentPackage)
     {
@@ -258,7 +246,6 @@ class CssUrls implements ProcessorInterface
      *
      * @param string $url
      * @return bool
-     * @since 2.2.0
      */
     private function isExternalUrl($url)
     {
@@ -271,7 +258,6 @@ class CssUrls implements ProcessorInterface
      * @param string $filePath
      * @param Package $package
      * @return bool
-     * @since 2.2.0
      */
     private function isFileExistsInPackage($filePath, Package $package)
     {

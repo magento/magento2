@@ -17,31 +17,26 @@ use Magento\Framework\App\ResourceConnection;
 /**
  * Configurable product template generator. Return newly created configurable product for specified attribute set
  * with default values for product attributes
- * @since 2.2.0
  */
 class ConfigurableProductTemplateGenerator implements TemplateEntityGeneratorInterface
 {
     /**
      * @var array
-     * @since 2.2.0
      */
     private $fixture;
 
     /**
      * @var ProductFactory
-     * @since 2.2.0
      */
     private $productFactory;
 
     /**
      * @var OptionFactory
-     * @since 2.2.0
      */
     private $optionFactory;
 
     /**
      * @var ResourceConnection
-     * @since 2.2.0
      */
     private $resourceConnection;
 
@@ -50,7 +45,6 @@ class ConfigurableProductTemplateGenerator implements TemplateEntityGeneratorInt
      * @param array $fixture
      * @param OptionFactory $optionFactory
      * @param ResourceConnection $resourceConnection
-     * @since 2.2.0
      */
     public function __construct(
         ProductFactory $productFactory,
@@ -66,7 +60,6 @@ class ConfigurableProductTemplateGenerator implements TemplateEntityGeneratorInt
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function generateEntity()
     {
@@ -83,7 +76,6 @@ class ConfigurableProductTemplateGenerator implements TemplateEntityGeneratorInt
      *
      * @param int $attributeSet
      * @return ProductInterface
-     * @since 2.2.0
      */
     private function getProductTemplate($attributeSet)
     {
@@ -151,7 +143,6 @@ class ConfigurableProductTemplateGenerator implements TemplateEntityGeneratorInt
      * for all variations
      *
      * @return array
-     * @since 2.2.0
      */
     private function getAssociatedProductIds()
     {

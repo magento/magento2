@@ -38,7 +38,6 @@ class Authorization
      * @return ResourceOrder
      * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterLoad(
         ResourceOrder $subject,

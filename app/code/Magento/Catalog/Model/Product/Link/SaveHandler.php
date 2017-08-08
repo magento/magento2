@@ -12,25 +12,21 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class SaveProductLinks
- * @since 2.1.0
  */
 class SaveHandler
 {
     /**
      * @var ProductLinkRepositoryInterface
-     * @since 2.1.0
      */
     protected $productLinkRepository;
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
     /**
      * @var Link
-     * @since 2.1.0
      */
     private $linkResource;
 
@@ -38,7 +34,6 @@ class SaveHandler
      * @param MetadataPool $metadataPool
      * @param Link $linkResource
      * @param ProductLinkRepositoryInterface $productLinkRepository
-     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -55,7 +50,6 @@ class SaveHandler
      * @param object $entity
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function execute($entityType, $entity)
     {

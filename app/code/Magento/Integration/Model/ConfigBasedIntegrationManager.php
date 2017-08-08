@@ -19,13 +19,11 @@ class ConfigBasedIntegrationManager
      * Integration service
      *
      * @var \Magento\Integration\Api\IntegrationServiceInterface
-     * @since 2.1.0
      */
     protected $integrationService;
 
     /**
      * @var  AclRetriever
-     * @since 2.1.0
      */
     protected $aclRetriever;
 
@@ -33,7 +31,6 @@ class ConfigBasedIntegrationManager
      * Integration config
      *
      * @var Config
-     * @since 2.1.0
      */
     protected $integrationConfig;
 
@@ -57,7 +54,7 @@ class ConfigBasedIntegrationManager
      *
      * @param array $integrationNames
      * @return array
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     public function processIntegrationConfig(array $integrationNames)
     {
@@ -101,7 +98,6 @@ class ConfigBasedIntegrationManager
      *
      * @param array $integrations
      * @return array
-     * @since 2.1.0
      */
     public function processConfigBasedIntegrations(array $integrations)
     {
@@ -158,7 +154,6 @@ class ConfigBasedIntegrationManager
      * @param Integration $integration
      * @param array $originalResources
      * @return bool
-     * @since 2.1.0
      */
     private function hasDataChanged(Integration $integration, $originalResources)
     {

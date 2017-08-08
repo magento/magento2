@@ -10,7 +10,6 @@ use Magento\Framework\App\Bootstrap as MagentoAppBootstrap;
 
 /**
  * Class Bootstrap
- * @since 2.2.0
  */
 class Bootstrap
 {
@@ -20,7 +19,6 @@ class Bootstrap
      * @param string $rootDir
      * @param array $initParams
      * @return ObjectManagerFactory
-     * @since 2.2.0
      */
     public function createObjectManagerFactory($rootDir, array $initParams)
     {

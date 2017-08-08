@@ -59,13 +59,11 @@ class StaticResource implements \Magento\Framework\AppInterface
 
     /**
      * @var \Magento\Framework\Filesystem
-     * @since 2.1.0
      */
     private $filesystem;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
@@ -178,9 +176,8 @@ class StaticResource implements \Magento\Framework\AppInterface
     /**
      * Lazyload filesystem driver
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      * @return Filesystem
-     * @since 2.1.0
      */
     private function getFilesystem()
     {
@@ -194,8 +191,7 @@ class StaticResource implements \Magento\Framework\AppInterface
      * Retrieves LoggerInterface instance
      *
      * @return LoggerInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getLogger()
     {

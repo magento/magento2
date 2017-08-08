@@ -41,7 +41,6 @@ class DbStorage extends AbstractStorage
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 

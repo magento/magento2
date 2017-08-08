@@ -203,7 +203,6 @@ class SessionManager implements SessionManagerInterface
      * Renew session cookie to prolong session
      *
      * @return $this
-     * @since 2.2.0
      */
     private function renewCookie()
     {

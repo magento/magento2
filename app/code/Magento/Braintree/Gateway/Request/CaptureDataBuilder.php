@@ -12,7 +12,6 @@ use Magento\Payment\Helper\Formatter;
 
 /**
  * Class CaptureDataBuilder
- * @since 2.1.0
  */
 class CaptureDataBuilder implements BuilderInterface
 {
@@ -22,7 +21,6 @@ class CaptureDataBuilder implements BuilderInterface
 
     /**
      * @var SubjectReader
-     * @since 2.1.0
      */
     private $subjectReader;
 
@@ -30,7 +28,6 @@ class CaptureDataBuilder implements BuilderInterface
      * Constructor
      *
      * @param SubjectReader $subjectReader
-     * @since 2.1.0
      */
     public function __construct(SubjectReader $subjectReader)
     {
@@ -39,7 +36,6 @@ class CaptureDataBuilder implements BuilderInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function build(array $buildSubject)
     {

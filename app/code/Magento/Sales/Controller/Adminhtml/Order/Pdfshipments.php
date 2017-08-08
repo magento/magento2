@@ -38,7 +38,6 @@ class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMas
 
     /**
      * @var ShipmentCollectionFactory
-     * @since 2.2.0
      */
     protected $shipmentCollectionFactory;
 

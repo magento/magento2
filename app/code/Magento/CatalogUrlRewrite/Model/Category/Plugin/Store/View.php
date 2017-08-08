@@ -50,7 +50,6 @@ class View
 
     /**
      * @var AbstractModel
-     * @since 2.1.3
      */
     private $origStore;
 
@@ -80,7 +79,6 @@ class View
      * @param AbstractModel $store
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.3
      */
     public function beforeSave(
         \Magento\Store\Model\ResourceModel\Store $object,
@@ -96,7 +94,6 @@ class View
      * @param \Magento\Store\Model\ResourceModel\Store $store
      * @return \Magento\Store\Model\ResourceModel\Store
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.3
      */
     public function afterSave(
         \Magento\Store\Model\ResourceModel\Store $object,
@@ -180,7 +177,6 @@ class View
      * @param AbstractModel $store
      * @return \Magento\Store\Model\ResourceModel\Store
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterDelete(
         \Magento\Store\Model\ResourceModel\Store $subject,

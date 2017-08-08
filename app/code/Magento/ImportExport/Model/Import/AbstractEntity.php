@@ -279,7 +279,6 @@ abstract class AbstractEntity
      * Json Serializer Instance
      *
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -491,8 +490,7 @@ abstract class AbstractEntity
      * Workaround. Only way to implement dependency and not to break inherited child classes
      *
      * @return Json
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {

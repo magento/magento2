@@ -11,13 +11,11 @@ use Magento\Framework\Stdlib\BooleanUtils;
 
 /**
  * Interpreter of string data type.
- * @since 2.2.0
  */
 class BaseStringUtils implements InterpreterInterface
 {
     /**
      * @var BooleanUtils
-     * @since 2.2.0
      */
     private $booleanUtils;
 
@@ -25,7 +23,6 @@ class BaseStringUtils implements InterpreterInterface
      * BaseStringUtils constructor.
      *
      * @param BooleanUtils $booleanUtils
-     * @since 2.2.0
      */
     public function __construct(BooleanUtils $booleanUtils)
     {
@@ -36,7 +33,6 @@ class BaseStringUtils implements InterpreterInterface
      * {@inheritdoc}
      * @return string
      * @throws \InvalidArgumentException
-     * @since 2.2.0
      */
     public function evaluate(array $data)
     {

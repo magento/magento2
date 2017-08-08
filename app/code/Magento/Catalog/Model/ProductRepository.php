@@ -32,7 +32,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 {
     /**
      * @var \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface
-     * @since 2.1.0
      */
     protected $optionRepository;
 
@@ -133,25 +132,21 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
     /**
      * @var \Magento\Catalog\Model\Product\Gallery\Processor
-     * @since 2.1.0
      */
     protected $mediaGalleryProcessor;
 
     /**
      * @var CollectionProcessorInterface
-     * @since 2.2.0
      */
     private $collectionProcessor;
 
     /**
      * @var int
-     * @since 2.2.0
      */
     private $cacheLimit = 0;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -308,7 +303,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param string $cacheKey
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return void
-     * @since 2.2.0
      */
     private function cacheProduct($cacheKey, \Magento\Catalog\Api\Data\ProductInterface $product)
     {
@@ -723,7 +717,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @deprecated 2.2.0
+     * @deprecated 101.1.0
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
@@ -757,7 +751,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * Clean internal product cache
      *
      * @return void
-     * @since 2.1.0
      */
     public function cleanCache()
     {
@@ -767,7 +760,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
     /**
      * @return Product\Gallery\Processor
-     * @since 2.1.0
      */
     private function getMediaGalleryProcessor()
     {
@@ -781,9 +773,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Retrieve collection processor
      *
-     * @deprecated 2.2.0
+     * @deprecated 101.1.0
      * @return CollectionProcessorInterface
-     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

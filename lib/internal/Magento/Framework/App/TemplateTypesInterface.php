@@ -8,7 +8,7 @@ namespace Magento\Framework\App;
 /**
  * Template Types interface
  *
- * @deprecated 2.2.0 since 2.2.0 because of incorrect location
+ * @deprecated 100.2.0 because of incorrect location
  */
 interface TemplateTypesInterface
 {

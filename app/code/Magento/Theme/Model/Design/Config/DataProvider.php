@@ -16,49 +16,41 @@ use Magento\Framework\App\RequestInterface;
 /**
  * Class \Magento\Theme\Model\Design\Config\DataProvider
  *
- * @since 2.1.0
  */
 class DataProvider extends AbstractDataProvider
 {
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $loadedData;
 
     /**
      * @var Collection
-     * @since 2.1.0
      */
     protected $collection;
 
     /**
      * @var DataProvider\DataLoader
-     * @since 2.1.0
      */
     protected $dataLoader;
 
     /**
      * @var DataProvider\MetadataLoader
-     * @since 2.1.0
      */
     private $metadataLoader;
 
     /**
      * @var SettingChecker
-     * @since 2.1.3
      */
     private $settingChecker;
 
     /**
      * @var RequestInterface
-     * @since 2.1.3
      */
     private $request;
 
     /**
      * @var ScopeCodeResolver
-     * @since 2.1.3
      */
     private $scopeCodeResolver;
 
@@ -71,7 +63,6 @@ class DataProvider extends AbstractDataProvider
      * @param CollectionFactory $configCollectionFactory
      * @param array $meta
      * @param array $data
-     * @since 2.1.0
      */
     public function __construct(
         $name,
@@ -100,7 +91,6 @@ class DataProvider extends AbstractDataProvider
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getData()
     {
@@ -114,7 +104,6 @@ class DataProvider extends AbstractDataProvider
 
     /**
      * {@inheritdoc}
-     * @since 2.1.3
      */
     public function getMeta()
     {
@@ -175,7 +164,6 @@ class DataProvider extends AbstractDataProvider
      * @param string $scope
      * @param array $fields
      * @return array
-     * @since 2.2.0
      */
     private function getSearchEngineRobotsMetadata($scope, array $fields = [])
     {
@@ -200,9 +188,8 @@ class DataProvider extends AbstractDataProvider
     }
 
     /**
-     * @deprecated 2.1.3
+     * @deprecated 100.1.3
      * @return ScopeCodeResolver
-     * @since 2.1.3
      */
     private function getScopeCodeResolver()
     {
@@ -213,9 +200,8 @@ class DataProvider extends AbstractDataProvider
     }
 
     /**
-     * @deprecated 2.1.3
+     * @deprecated 100.1.3
      * @return SettingChecker
-     * @since 2.1.3
      */
     private function getSettingChecker()
     {
@@ -226,9 +212,8 @@ class DataProvider extends AbstractDataProvider
     }
 
     /**
-     * @deprecated 2.1.3
+     * @deprecated 100.1.3
      * @return RequestInterface
-     * @since 2.1.3
      */
     private function getRequest()
     {

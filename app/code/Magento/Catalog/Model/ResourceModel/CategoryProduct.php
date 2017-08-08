@@ -10,7 +10,6 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
  * Class CategoryProduct
- * @since 2.1.0
  */
 class CategoryProduct extends AbstractDb
 {
@@ -18,7 +17,6 @@ class CategoryProduct extends AbstractDb
      * Event prefix
      *
      * @var string
-     * @since 2.1.0
      */
     protected $_eventPrefix = 'catalog_category_product_resource';
 
@@ -26,7 +24,6 @@ class CategoryProduct extends AbstractDb
      * Model initialization
      *
      * @return void
-     * @since 2.1.0
      */
     protected function _construct()
     {

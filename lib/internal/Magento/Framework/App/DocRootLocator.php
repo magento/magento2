@@ -11,26 +11,22 @@ use Magento\Framework\Filesystem\Directory\ReadFactory;
 
 /**
  * This class calculates if document root is set to pub
- * @since 2.1.0
  */
 class DocRootLocator
 {
     /**
      * @var RequestInterface
-     * @since 2.1.0
      */
     private $request;
 
     /**
      * @var ReadFactory
-     * @since 2.1.0
      */
     private $readFactory;
 
     /**
      * @param RequestInterface $request
      * @param ReadFactory $readFactory
-     * @since 2.1.0
      */
     public function __construct(RequestInterface $request, ReadFactory $readFactory)
     {
@@ -42,7 +38,6 @@ class DocRootLocator
      * Returns true if doc root is pub/ and not BP
      *
      * @return bool
-     * @since 2.1.0
      */
     public function isPub()
     {

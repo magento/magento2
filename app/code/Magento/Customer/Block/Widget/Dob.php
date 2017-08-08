@@ -36,7 +36,6 @@ class Dob extends AbstractWidget
 
     /**
      * @var \Magento\Framework\Data\Form\FilterFactory
-     * @since 2.1.0
      */
     protected $filterFactory;
 
@@ -103,7 +102,6 @@ class Dob extends AbstractWidget
      * Return Data Form Filter or false
      *
      * @return \Magento\Framework\Data\Form\Filter\FilterInterface|false
-     * @since 2.1.0
      */
     protected function getFormFilter()
     {
@@ -125,7 +123,6 @@ class Dob extends AbstractWidget
      *
      * @param string $value
      * @return string
-     * @since 2.1.0
      */
     protected function applyOutputFilter($value)
     {
@@ -208,7 +205,6 @@ class Dob extends AbstractWidget
      * Return data-validate rules
      *
      * @return string
-     * @since 2.2.0
      */
     public function getHtmlExtraParams()
     {

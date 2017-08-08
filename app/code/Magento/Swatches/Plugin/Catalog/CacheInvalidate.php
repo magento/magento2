@@ -11,26 +11,22 @@ use \Magento\Framework\App\Cache\Type\Collection;
 /**
  * Class \Magento\Swatches\Plugin\Catalog\CacheInvalidate
  *
- * @since 2.0.11
  */
 class CacheInvalidate
 {
     /**
      * @var \Magento\Framework\App\Cache\TypeListInterface
-     * @since 2.0.11
      */
     private $typeList;
 
     /**
      * @var \Magento\Swatches\Helper\Data
-     * @since 2.0.11
      */
     private $swatchHelper;
 
     /**
      * @param \Magento\Framework\App\Cache\TypeListInterface $typeList
      * @param \Magento\Swatches\Helper\Data $swatchHelper
-     * @since 2.0.11
      */
     public function __construct(
         \Magento\Framework\App\Cache\TypeListInterface $typeList,
@@ -44,7 +40,6 @@ class CacheInvalidate
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $subject
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $result
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
-     * @since 2.0.11
      */
     public function afterSave(
         \Magento\Catalog\Model\ResourceModel\Eav\Attribute $subject,

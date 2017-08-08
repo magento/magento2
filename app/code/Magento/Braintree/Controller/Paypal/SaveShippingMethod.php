@@ -14,13 +14,11 @@ use Magento\Braintree\Model\Paypal\Helper\ShippingMethodUpdater;
 
 /**
  * Class SaveShippingMethod
- * @since 2.1.0
  */
 class SaveShippingMethod extends AbstractAction
 {
     /**
      * @var ShippingMethodUpdater
-     * @since 2.1.0
      */
     private $shippingMethodUpdater;
 
@@ -31,7 +29,6 @@ class SaveShippingMethod extends AbstractAction
      * @param Config $config
      * @param Session $checkoutSession
      * @param ShippingMethodUpdater $shippingMethodUpdater
-     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -45,7 +42,6 @@ class SaveShippingMethod extends AbstractAction
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function execute()
     {

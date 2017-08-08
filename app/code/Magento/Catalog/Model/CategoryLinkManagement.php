@@ -18,19 +18,16 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.1.0
      */
     protected $productRepository;
 
     /**
      * @var ResourceModel\Product
-     * @since 2.1.0
      */
     protected $productResource;
 
     /**
      * @var \Magento\Catalog\Api\CategoryLinkRepositoryInterface
-     * @since 2.1.0
      */
     protected $categoryLinkRepository;
 
@@ -41,7 +38,6 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
 
     /**
      * @var \Magento\Framework\Indexer\IndexerRegistry
-     * @since 2.1.0
      */
     protected $indexerRegistry;
 
@@ -91,7 +87,6 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
      * @param string $productSku
      * @param \int[] $categoryIds
      * @return bool
-     * @since 2.1.0
      */
     public function assignProductToCategories($productSku, array $categoryIds)
     {
@@ -120,7 +115,6 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
      * Retrieve product repository instance
      *
      * @return \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.1.0
      */
     private function getProductRepository()
     {
@@ -135,7 +129,6 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
      * Retrieve product resource instance
      *
      * @return ResourceModel\Product
-     * @since 2.1.0
      */
     private function getProductResource()
     {
@@ -150,7 +143,6 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
      * Retrieve category link repository instance
      *
      * @return \Magento\Catalog\Api\CategoryLinkRepositoryInterface
-     * @since 2.1.0
      */
     private function getCategoryLinkRepository()
     {
@@ -165,7 +157,6 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
      * Retrieve indexer registry instance
      *
      * @return \Magento\Framework\Indexer\IndexerRegistry
-     * @since 2.1.0
      */
     private function getIndexerRegistry()
     {

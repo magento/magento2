@@ -26,7 +26,6 @@ class ConfigurableProductHandler
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $childrenProducts = [];
 

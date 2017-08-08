@@ -37,7 +37,6 @@ class IndexerConfigData
      *
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterGet(Data $subject, $data, $path = null, $default = null)
     {

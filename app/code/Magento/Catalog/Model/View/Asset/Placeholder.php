@@ -14,7 +14,6 @@ use Magento\Framework\View\Asset\Repository;
 
 /**
  * A locally available image placeholder file asset that can be referred with a file type
- * @since 2.2.0
  */
 class Placeholder implements LocalInterface
 {
@@ -22,7 +21,6 @@ class Placeholder implements LocalInterface
      * Type of placeholder
      *
      * @var string
-     * @since 2.2.0
      */
     private $type;
 
@@ -30,25 +28,21 @@ class Placeholder implements LocalInterface
      * Filevpath of placeholder
      *
      * @var string
-     * @since 2.2.0
      */
     private $filePath;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $contentType = 'image';
 
     /**
      * @var ContextInterface
-     * @since 2.2.0
      */
     private $context;
 
     /**
      * @var Repository
-     * @since 2.2.0
      */
     private $assetRepo;
 
@@ -56,7 +50,6 @@ class Placeholder implements LocalInterface
      * Core store config
      *
      * @var ScopeConfigInterface
-     * @since 2.2.0
      */
     private $scopeConfig;
 
@@ -67,7 +60,6 @@ class Placeholder implements LocalInterface
      * @param ScopeConfigInterface $scopeConfig
      * @param Repository $assetRepo
      * @param string $type
-     * @since 2.2.0
      */
     public function __construct(
         ContextInterface $context,
@@ -83,7 +75,6 @@ class Placeholder implements LocalInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getUrl()
     {
@@ -98,7 +89,6 @@ class Placeholder implements LocalInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getContentType()
     {
@@ -107,7 +97,6 @@ class Placeholder implements LocalInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getPath()
     {
@@ -131,7 +120,6 @@ class Placeholder implements LocalInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getSourceFile()
     {
@@ -142,7 +130,6 @@ class Placeholder implements LocalInterface
      * Get source content type
      *
      * @return string
-     * @since 2.2.0
      */
     public function getSourceContentType()
     {
@@ -151,7 +138,6 @@ class Placeholder implements LocalInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getContent()
     {
@@ -160,7 +146,6 @@ class Placeholder implements LocalInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getFilePath()
     {
@@ -180,7 +165,6 @@ class Placeholder implements LocalInterface
     /**
      * {@inheritdoc}
      * @return ContextInterface
-     * @since 2.2.0
      */
     public function getContext()
     {
@@ -189,7 +173,6 @@ class Placeholder implements LocalInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getModule()
     {

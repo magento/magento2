@@ -7,13 +7,11 @@ namespace Magento\Framework\EntityManager;
 
 /**
  * Class Mapper
- * @since 2.1.0
  */
 class Mapper implements MapperInterface
 {
     /**
      * @var array
-     * @since 2.1.0
      */
     private $config;
 
@@ -21,7 +19,6 @@ class Mapper implements MapperInterface
      * Initialize dependencies.
      *
      * @param array $config
-     * @since 2.1.0
      */
     public function __construct(
         $config = []
@@ -31,7 +28,6 @@ class Mapper implements MapperInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function entityToDatabase($entityType, $data)
     {
@@ -51,7 +47,6 @@ class Mapper implements MapperInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function databaseToEntity($entityType, $data)
     {

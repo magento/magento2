@@ -11,7 +11,7 @@ use Magento\Framework\Exception\NotFoundException;
  * Interface CommandManagerPoolInterface
  * @package Magento\Payment\Gateway\Command
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 interface CommandManagerPoolInterface
 {
@@ -21,7 +21,7 @@ interface CommandManagerPoolInterface
      * @param string $paymentProviderCode
      * @return CommandManagerInterface
      * @throws NotFoundException
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function get($paymentProviderCode);
 }

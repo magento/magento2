@@ -67,13 +67,11 @@ class Menu extends \Magento\Backend\Block\Template
 
     /**
      * @var MenuItemChecker
-     * @since 2.2.0
      */
     private $menuItemChecker;
 
     /**
      * @var AnchorRenderer
-     * @since 2.2.0
      */
     private $anchorRenderer;
 

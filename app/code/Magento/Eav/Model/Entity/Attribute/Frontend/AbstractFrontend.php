@@ -28,31 +28,26 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      * Default cache tags values
      * will be used if no values in the constructor provided
      * @var array
-     * @since 2.2.0
      */
     private static $defaultCacheTags = [CacheType::CACHE_TAG, Attribute::CACHE_TAG];
 
     /**
      * @var CacheInterface
-     * @since 2.1.6
      */
     private $cache;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var Serializer
-     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var array
-     * @since 2.1.6
      */
     private $cacheTags;
 
@@ -265,7 +260,6 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      * Retrieve validation classes by min_text_length and max_text_length rules
      *
      * @return array
-     * @since 2.2.0
      */
     private function getTextLengthValidateClasses()
     {

@@ -22,19 +22,16 @@ use Magento\Framework\EntityManager\Operation\UpdateInterface;
  *
  * For filtering operations, it's recommended to use successor of
  * Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection class.
- * @since 2.1.0
  */
 class EntityManager
 {
     /**
      * @var OperationPool
-     * @since 2.1.0
      */
     private $operationPool;
 
     /**
      * @var CallbackHandler
-     * @since 2.1.0
      */
     private $callbackHandler;
 
@@ -43,7 +40,6 @@ class EntityManager
      * @param MetadataPool $metadataPool
      * @param TypeResolver $typeResolver
      * @param CallbackHandler $callbackHandler
-     * @since 2.1.0
      */
     public function __construct(
         OperationPool $operationPool,
@@ -63,7 +59,6 @@ class EntityManager
      * @param array $arguments
      * @return mixed
      * @throws \LogicException
-     * @since 2.1.0
      */
     public function load($entity, $identifier, $arguments = [])
     {
@@ -82,7 +77,6 @@ class EntityManager
      * @return object
      * @throws \LogicException
      * @throws \Exception
-     * @since 2.1.0
      */
     public function save($entity, $arguments = [])
     {
@@ -112,7 +106,6 @@ class EntityManager
      * @param object $entity
      * @return bool
      * @throws \LogicException
-     * @since 2.1.0
      */
     public function has($entity)
     {
@@ -130,7 +123,6 @@ class EntityManager
      * @return bool
      * @throws \LogicException
      * @throws \Exception
-     * @since 2.1.0
      */
     public function delete($entity, $arguments = [])
     {

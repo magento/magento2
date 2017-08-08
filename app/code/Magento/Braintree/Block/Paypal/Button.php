@@ -16,7 +16,6 @@ use Magento\Payment\Model\MethodInterface;
 
 /**
  * Class Button
- * @since 2.1.0
  */
 class Button extends Template implements ShortcutInterface
 {
@@ -26,31 +25,26 @@ class Button extends Template implements ShortcutInterface
 
     /**
      * @var ResolverInterface
-     * @since 2.1.0
      */
     private $localeResolver;
 
     /**
      * @var Session
-     * @since 2.1.0
      */
     private $checkoutSession;
 
     /**
      * @var Config
-     * @since 2.1.0
      */
     private $config;
 
     /**
      * @var ConfigProvider
-     * @since 2.1.0
      */
     private $configProvider;
 
     /**
      * @var MethodInterface
-     * @since 2.1.0
      */
     private $payment;
 
@@ -64,7 +58,6 @@ class Button extends Template implements ShortcutInterface
      * @param ConfigProvider $configProvider
      * @param MethodInterface $payment
      * @param array $data
-     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -86,7 +79,6 @@ class Button extends Template implements ShortcutInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     protected function _toHtml()
     {
@@ -99,7 +91,6 @@ class Button extends Template implements ShortcutInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function getAlias()
     {
@@ -108,7 +99,6 @@ class Button extends Template implements ShortcutInterface
 
     /**
      * @return string
-     * @since 2.1.0
      */
     public function getContainerId()
     {
@@ -117,7 +107,6 @@ class Button extends Template implements ShortcutInterface
 
     /**
      * @return string
-     * @since 2.1.0
      */
     public function getLocale()
     {
@@ -126,7 +115,6 @@ class Button extends Template implements ShortcutInterface
 
     /**
      * @return string
-     * @since 2.1.0
      */
     public function getCurrency()
     {
@@ -135,7 +123,6 @@ class Button extends Template implements ShortcutInterface
 
     /**
      * @return float
-     * @since 2.1.0
      */
     public function getAmount()
     {
@@ -144,7 +131,6 @@ class Button extends Template implements ShortcutInterface
 
     /**
      * @return bool
-     * @since 2.1.0
      */
     public function isActive()
     {
@@ -154,7 +140,6 @@ class Button extends Template implements ShortcutInterface
 
     /**
      * @return string
-     * @since 2.1.0
      */
     public function getMerchantName()
     {
@@ -163,7 +148,6 @@ class Button extends Template implements ShortcutInterface
 
     /**
      * @return string|null
-     * @since 2.1.0
      */
     public function getClientToken()
     {
@@ -172,7 +156,6 @@ class Button extends Template implements ShortcutInterface
 
     /**
      * @return string
-     * @since 2.1.0
      */
     public function getActionSuccess()
     {

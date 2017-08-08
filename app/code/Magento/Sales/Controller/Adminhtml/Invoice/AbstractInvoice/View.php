@@ -37,7 +37,6 @@ abstract class View extends \Magento\Backend\App\Action
 
     /**
      * @var InvoiceRepositoryInterface
-     * @since 2.1.0
      */
     protected $invoiceRepository;
 
@@ -94,8 +93,7 @@ abstract class View extends \Magento\Backend\App\Action
     /**
      * @return InvoiceRepository
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getInvoiceRepository()
     {

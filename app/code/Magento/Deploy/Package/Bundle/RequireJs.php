@@ -16,7 +16,6 @@ use Magento\Framework\View\Asset\Minification;
  * RequireJs static files bundle object
  *
  * All files added will be bundled to multiple bundle files compatible with RequireJS AMD format
- * @since 2.2.0
  */
 class RequireJs implements BundleInterface
 {
@@ -24,7 +23,6 @@ class RequireJs implements BundleInterface
      * Static files Bundling configuration class
      *
      * @var BundleConfig
-     * @since 2.2.0
      */
     private $bundleConfig;
 
@@ -32,7 +30,6 @@ class RequireJs implements BundleInterface
      * Helper class for static files minification related processes
      *
      * @var Minification
-     * @since 2.2.0
      */
     private $minification;
 
@@ -40,7 +37,6 @@ class RequireJs implements BundleInterface
      * Static content directory writable interface
      *
      * @var WriteInterface
-     * @since 2.2.0
      */
     private $staticDir;
 
@@ -48,7 +44,6 @@ class RequireJs implements BundleInterface
      * Package area
      *
      * @var string
-     * @since 2.2.0
      */
     private $area;
 
@@ -56,7 +51,6 @@ class RequireJs implements BundleInterface
      * Package theme
      *
      * @var string
-     * @since 2.2.0
      */
     private $theme;
 
@@ -64,7 +58,6 @@ class RequireJs implements BundleInterface
      * Package locale
      *
      * @var string
-     * @since 2.2.0
      */
     private $locale;
 
@@ -72,7 +65,6 @@ class RequireJs implements BundleInterface
      * Bundle content pools
      *
      * @var string[]
-     * @since 2.2.0
      */
     private $contentPools = [
         'js' => 'jsbuild',
@@ -83,7 +75,6 @@ class RequireJs implements BundleInterface
      * Files to be bundled
      *
      * @var array[]
-     * @since 2.2.0
      */
     private $files = [
         'jsbuild' => [],
@@ -94,7 +85,6 @@ class RequireJs implements BundleInterface
      * Files content cache
      *
      * @var string[]
-     * @since 2.2.0
      */
     private $fileContent = [];
 
@@ -104,7 +94,6 @@ class RequireJs implements BundleInterface
      * Chosen bundling strategy may result in creating multiple bundle files instead of one
      *
      * @var int
-     * @since 2.2.0
      */
     private $bundleFileIndex = 0;
 
@@ -112,7 +101,6 @@ class RequireJs implements BundleInterface
      * Relative path to directory where bundle files should be created
      *
      * @var string
-     * @since 2.2.0
      */
     private $pathToBundleDir;
 
@@ -126,7 +114,6 @@ class RequireJs implements BundleInterface
      * @param string $theme
      * @param string $locale
      * @param array $contentPools
-     * @since 2.2.0
      */
     public function __construct(
         Filesystem $filesystem,
@@ -150,7 +137,6 @@ class RequireJs implements BundleInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function addFile($filePath, $sourcePath, $contentType)
     {
@@ -162,7 +148,6 @@ class RequireJs implements BundleInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function flush()
     {
@@ -204,7 +189,6 @@ class RequireJs implements BundleInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function clear()
     {
@@ -216,7 +200,6 @@ class RequireJs implements BundleInterface
      *
      * @param string $contentPoolName
      * @return WriteInterface
-     * @since 2.2.0
      */
     private function startNewBundleFile($contentPoolName)
     {
@@ -235,7 +218,6 @@ class RequireJs implements BundleInterface
      * @param WriteInterface $bundleFile
      * @param array $contents
      * @return bool true on success
-     * @since 2.2.0
      */
     private function endBundleFile(WriteInterface $bundleFile, array $contents)
     {
@@ -254,7 +236,6 @@ class RequireJs implements BundleInterface
      *
      * @param string $sourcePath
      * @return string
-     * @since 2.2.0
      */
     private function getFileContent($sourcePath)
     {
@@ -270,7 +251,6 @@ class RequireJs implements BundleInterface
      * Get max size of bundle files (in KB)
      *
      * @return int
-     * @since 2.2.0
      */
     private function getBundleFileMaxSize()
     {
@@ -281,7 +261,6 @@ class RequireJs implements BundleInterface
      * Bundle initialization script content (this must be added to the latest bundle file at the very end)
      *
      * @return string
-     * @since 2.2.0
      */
     private function getInitJs()
     {

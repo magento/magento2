@@ -68,7 +68,6 @@ class Http implements \Magento\Framework\AppInterface
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.1.0
      */
     private $logger;
 
@@ -110,8 +109,7 @@ class Http implements \Magento\Framework\AppInterface
      *
      * @return \Psr\Log\LoggerInterface
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getLogger()
     {
@@ -195,7 +193,6 @@ class Http implements \Magento\Framework\AppInterface
      *
      * @param \Exception $exception
      * @return string
-     * @since 2.1.0
      */
     private function buildContentFromException(\Exception $exception)
     {

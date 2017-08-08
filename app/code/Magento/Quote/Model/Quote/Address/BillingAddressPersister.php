@@ -15,26 +15,22 @@ use Magento\Customer\Api\AddressRepositoryInterface;
 /**
  * Class \Magento\Quote\Model\Quote\Address\BillingAddressPersister
  *
- * @since 2.1.0
  */
 class BillingAddressPersister
 {
     /**
      * @var QuoteAddressValidator
-     * @since 2.1.0
      */
     private $addressValidator;
 
     /**
      * @var AddressRepositoryInterface
-     * @since 2.1.0
      */
     private $addressRepository;
 
     /**
      * @param QuoteAddressValidator $addressValidator
      * @param AddressRepositoryInterface $addressRepository
-     * @since 2.1.0
      */
     public function __construct(
         QuoteAddressValidator $addressValidator,
@@ -51,7 +47,6 @@ class BillingAddressPersister
      * @return void
      * @throws NoSuchEntityException
      * @throws InputException
-     * @since 2.1.0
      */
     public function save(CartInterface $quote, AddressInterface $address, $useForShipping = false)
     {

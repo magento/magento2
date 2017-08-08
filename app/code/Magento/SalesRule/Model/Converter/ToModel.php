@@ -213,7 +213,6 @@ class ToModel
      *
      * @param string|null $date
      * @return string|null
-     * @since 2.1.0
      */
     private function formattingDate($date)
     {

@@ -11,13 +11,11 @@ use Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorInterface;
 
 /**
  * Collect additional information about product, in order to allow product rendering on front
- * @since 2.2.0
  */
 class AdditionalInfo implements ProductRenderCollectorInterface
 {
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function collect(ProductInterface $product, ProductRenderInterface $productRender)
     {

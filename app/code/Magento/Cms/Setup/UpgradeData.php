@@ -20,7 +20,6 @@ use Magento\Widget\Setup\LayoutUpdateConverter;
 /**
  * Class \Magento\Cms\Setup\UpgradeData
  *
- * @since 2.1.0
  */
 class UpgradeData implements UpgradeDataInterface
 {
@@ -31,25 +30,21 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * @var PageFactory
-     * @since 2.1.0
      */
     private $pageFactory;
 
     /**
      * @var \Magento\Framework\DB\Select\QueryModifierFactory
-     * @since 2.2.0
      */
     private $queryModifierFactory;
 
     /**
      * @var MetadataPool
-     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var AggregatedFieldDataConverter
-     * @since 2.2.0
      */
     private $aggregatedFieldConverter;
 
@@ -60,7 +55,6 @@ class UpgradeData implements UpgradeDataInterface
      * @param AggregatedFieldDataConverter $aggregatedFieldConverter
      * @param \Magento\Framework\DB\Select\QueryModifierFactory $queryModifierFactory
      * @param MetadataPool $metadataPool
-     * @since 2.1.0
      */
     public function __construct(
         PageFactory $pageFactory,
@@ -80,7 +74,6 @@ class UpgradeData implements UpgradeDataInterface
      * @param ModuleDataSetupInterface $setup
      * @param ModuleContextInterface $context
      * @return void
-     * @since 2.1.0
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -97,7 +90,6 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param ModuleDataSetupInterface $setup
      * @return void
-     * @since 2.2.0
      */
     private function convertWidgetConditionsToJson(ModuleDataSetupInterface $setup)
     {
@@ -166,7 +158,6 @@ class UpgradeData implements UpgradeDataInterface
      * Create page
      *
      * @return Page
-     * @since 2.1.0
      */
     private function createPage()
     {
@@ -178,7 +169,6 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.2.0
      */
     private function upgradeVersionTwoZeroOne()
     {

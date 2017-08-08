@@ -15,7 +15,6 @@ class Serialized extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -30,7 +29,7 @@ class Serialized extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param Json|null $serializer
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

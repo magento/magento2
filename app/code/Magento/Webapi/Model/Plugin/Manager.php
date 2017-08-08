@@ -31,7 +31,6 @@ class Manager
      * API Integration config
      *
      * @var IntegrationConfig
-     * @since 2.1.0
      */
     protected $integrationConfig;
 
@@ -60,7 +59,7 @@ class Manager
      *
      * @return string[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     public function afterProcessIntegrationConfig(
         ConfigBasedIntegrationManager $subject,
@@ -93,7 +92,6 @@ class Manager
      *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function afterProcessConfigBasedIntegrations(
         ConfigBasedIntegrationManager $subject,

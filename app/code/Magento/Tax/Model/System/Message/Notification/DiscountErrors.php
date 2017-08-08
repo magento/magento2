@@ -9,25 +9,21 @@ namespace Magento\Tax\Model\System\Message\Notification;
  * This class allows to display notification in the admin panel about possible discount errors.
  *
  * Discount errors may be caused by tax settings misconfiguration.
- * @since 2.2.0
  */
 class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.2.0
      */
     private $urlBuilder;
 
     /**
      * @var \Magento\Tax\Model\Config
-     * @since 2.2.0
      */
     private $taxConfig;
 
@@ -35,7 +31,6 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
      * Websites with invalid discount settings
      *
      * @var array
-     * @since 2.2.0
      */
     private $storesWithInvalidSettings;
 
@@ -45,7 +40,6 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Tax\Model\Config $taxConfig
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -60,7 +54,6 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.2.0
      */
     public function getIdentity()
     {
@@ -69,7 +62,6 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function isDisplayed()
     {
@@ -81,7 +73,6 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getText()
     {
@@ -108,7 +99,6 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.2.0
      */
     public function getSeverity()
     {
@@ -124,7 +114,6 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
      *
      * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
      * @return bool
-     * @since 2.2.0
      */
     private function checkSettings($store = null)
     {
@@ -136,7 +125,6 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
      * Return true if settings are wrong for default store.
      *
      * @return array
-     * @since 2.2.0
      */
     private function getStoresWithWrongSettings()
     {

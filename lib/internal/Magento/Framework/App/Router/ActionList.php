@@ -43,13 +43,11 @@ class ActionList
 
     /**
      * @var SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $actionInterface;
 

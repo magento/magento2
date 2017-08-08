@@ -130,7 +130,6 @@ abstract class Integration extends Action
      * Restore saved form resources
      *
      * @return void
-     * @since 2.1.0
      */
     protected function restoreResourceAndSaveToRegistry()
     {

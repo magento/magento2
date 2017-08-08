@@ -73,7 +73,6 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
      * Get Key for caching block content
      *
      * @return string
-     * @since 2.1.0
      */
     public function getCacheKey()
     {
@@ -84,7 +83,6 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
      * Get block cache life time
      *
      * @return int
-     * @since 2.1.0
      */
     protected function getCacheLifetime()
     {
@@ -177,7 +175,6 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
      * Return unique ID(s) for each object in system
      *
      * @return array
-     * @since 2.1.0
      */
     public function getIdentities()
     {

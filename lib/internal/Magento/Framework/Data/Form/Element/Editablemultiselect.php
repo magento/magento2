@@ -23,7 +23,6 @@ class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multisele
 {
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -35,7 +34,6 @@ class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multisele
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
-     * @since 2.2.0
      */
     public function __construct(
         Factory $factoryElement,

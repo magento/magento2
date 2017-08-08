@@ -52,7 +52,6 @@ class Writer
      * The parser of comments from configuration files.
      *
      * @var CommentParser
-     * @since 2.2.0
      */
     private $commentParser;
 

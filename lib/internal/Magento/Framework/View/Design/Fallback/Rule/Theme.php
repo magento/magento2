@@ -34,7 +34,6 @@ class Theme implements RuleInterface
 
     /**
      * @var DirectoryList
-     * @since 2.2.0
      */
     private $directoryList;
 
@@ -89,7 +88,6 @@ class Theme implements RuleInterface
      * @param ThemeInterface $theme
      * @param array $params
      * @return array
-     * @since 2.2.0
      */
     private function getThemePubStaticDir(ThemeInterface $theme, $params = [])
     {
@@ -110,8 +108,7 @@ class Theme implements RuleInterface
      * Get DirectoryList instance
      * @return DirectoryList
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getDirectoryList()
     {

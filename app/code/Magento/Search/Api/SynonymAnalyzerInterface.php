@@ -8,7 +8,7 @@ namespace Magento\Search\Api;
 
 /**
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 interface SynonymAnalyzerInterface
 {
@@ -28,7 +28,7 @@ interface SynonymAnalyzerInterface
      *
      * @param string $phrase
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getSynonymsForPhrase($phrase);
 }

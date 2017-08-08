@@ -33,49 +33,41 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
 
     /**
      * @var AttributeRepositoryInterface
-     * @since 2.1.0
      */
     protected $attributeRepository;
 
     /**
      * @var AttributeSetRepositoryInterface
-     * @since 2.1.0
      */
     protected $attributeSetRepository;
 
     /**
      * @var AttributeGroupRepositoryInterface
-     * @since 2.1.0
      */
     protected $attributeGroupRepository;
 
     /**
      * @var SearchCriteriaBuilder
-     * @since 2.1.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var AttributeGroupInterfaceFactory
-     * @since 2.1.0
      */
     protected $attributeGroupFactory;
 
     /**
      * @var AttributeManagementInterface
-     * @since 2.1.0
      */
     protected $attributeManagement;
 
     /**
      * @var LoggerInterface
-     * @since 2.1.0
      */
     protected $logger;
 
     /**
      * @var ExtensionAttributesFactory
-     * @since 2.1.0
      */
     protected $extensionAttributesFactory;
 
@@ -184,7 +176,6 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
      *
      * @return SearchCriteriaBuilder
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.1.0
      */
     private function getBasicAttributeSearchCriteriaBuilder()
     {
@@ -201,7 +192,6 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
 
     /**
      * @return AttributeRepositoryInterface
-     * @since 2.1.0
      */
     private function getAttributeRepository()
     {
@@ -214,7 +204,6 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
 
     /**
      * @return AttributeSetRepositoryInterface
-     * @since 2.1.0
      */
     private function getAttributeSetRepository()
     {
@@ -227,7 +216,6 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
 
     /**
      * @return AttributeGroupRepositoryInterface
-     * @since 2.1.0
      */
     private function getAttributeGroupRepository()
     {
@@ -240,7 +228,6 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
 
     /**
      * @return SearchCriteriaBuilder
-     * @since 2.1.0
      */
     private function getSearchCriteriaBuilder()
     {
@@ -253,7 +240,6 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
 
     /**
      * @return AttributeManagementInterface
-     * @since 2.1.0
      */
     private function getAttributeManagement()
     {
@@ -266,7 +252,6 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
 
     /**
      * @return LoggerInterface
-     * @since 2.1.0
      */
     private function getLogger()
     {
@@ -279,7 +264,6 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
 
     /**
      * @return ExtensionAttributesFactory
-     * @since 2.1.0
      */
     private function getExtensionAttributesFactory()
     {

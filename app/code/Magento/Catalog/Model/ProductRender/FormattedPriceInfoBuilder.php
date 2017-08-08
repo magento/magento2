@@ -12,19 +12,16 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Builder which format all types of float prices into html representation
- * @since 2.2.0
  */
 class FormattedPriceInfoBuilder
 {
     /**
      * @var PriceCurrencyInterface
-     * @since 2.2.0
      */
     private $priceCurrency;
 
     /**
      * @var FormattedPriceInfoInterfaceFactory
-     * @since 2.2.0
      */
     private $formattedPriceInfoFactory;
 
@@ -32,7 +29,6 @@ class FormattedPriceInfoBuilder
      * FormattedPriceInfoBuilder constructor.
      * @param PriceCurrencyInterface $priceCurrency
      * @param FormattedPriceInfoInterfaceFactory $formattedPriceInfoFactory
-     * @since 2.2.0
      */
     public function __construct(
         PriceCurrencyInterface $priceCurrency,
@@ -53,7 +49,6 @@ class FormattedPriceInfoBuilder
      * @param int $storeId
      * @param string $currencyCode
      * @return void
-     * @since 2.2.0
      */
     public function build(PriceInfoInterface $priceInfo, $storeId, $currencyCode)
     {

@@ -143,19 +143,16 @@ class Multishipping extends \Magento\Framework\DataObject
 
     /**
      * @var \Magento\Quote\Api\Data\CartExtensionFactory
-     * @since 2.1.0
      */
     private $cartExtensionFactory;
 
     /**
      * @var AllowedCountries
-     * @since 2.2.0
      */
     private $allowedCountryReader;
 
     /**
      * @var \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor
-     * @since 2.1.0
      */
     private $shippingAssignmentProcessor;
 
@@ -1005,7 +1002,6 @@ class Multishipping extends \Magento\Framework\DataObject
     /**
      * @param \Magento\Quote\Model\Quote $quote
      * @return \Magento\Quote\Model\Quote
-     * @since 2.1.0
      */
     private function prepareShippingAssignment($quote)
     {
@@ -1025,7 +1021,6 @@ class Multishipping extends \Magento\Framework\DataObject
 
     /**
      * @return \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor
-     * @since 2.1.0
      */
     private function getShippingAssignmentProcessor()
     {

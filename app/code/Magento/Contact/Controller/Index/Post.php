@@ -24,25 +24,21 @@ class Post extends \Magento\Contact\Controller\Index
 {
     /**
      * @var DataPersistorInterface
-     * @since 2.1.0
      */
     private $dataPersistor;
 
     /**
      * @var Context
-     * @since 2.2.0
      */
     private $context;
 
     /**
      * @var MailInterface
-     * @since 2.2.0
      */
     private $mail;
 
     /**
      * @var LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
@@ -52,7 +48,6 @@ class Post extends \Magento\Contact\Controller\Index
      * @param MailInterface $mail
      * @param DataPersistorInterface $dataPersistor
      * @param LoggerInterface $logger
-     * @since 2.2.0
      */
     public function __construct(
         Context $context,
@@ -101,7 +96,6 @@ class Post extends \Magento\Contact\Controller\Index
      * Get Data Persistor
      *
      * @return DataPersistorInterface
-     * @since 2.1.0
      */
     private function getDataPersistor()
     {
@@ -116,7 +110,6 @@ class Post extends \Magento\Contact\Controller\Index
     /**
      * @param array $post Post data from contact form
      * @return void
-     * @since 2.2.0
      */
     private function sendEmail($post)
     {
@@ -125,7 +118,6 @@ class Post extends \Magento\Contact\Controller\Index
 
     /**
      * @return bool
-     * @since 2.2.0
      */
     private function isPostRequest()
     {
@@ -137,7 +129,6 @@ class Post extends \Magento\Contact\Controller\Index
     /**
      * @return array
      * @throws \Exception
-     * @since 2.2.0
      */
     private function validatedParams()
     {

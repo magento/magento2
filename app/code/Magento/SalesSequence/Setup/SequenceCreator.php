@@ -12,7 +12,6 @@ use Magento\SalesSequence\Model\EntityPool;
 
 /**
  * Initial creating sequences.
- * @since 2.2.0
  */
 class SequenceCreator
 {
@@ -20,19 +19,16 @@ class SequenceCreator
      * Sales setup factory
      *
      * @var EntityPool
-     * @since 2.2.0
      */
     private $entityPool;
 
     /**
      * @var Builder
-     * @since 2.2.0
      */
     private $sequenceBuilder;
 
     /**
      * @var SequenceConfig
-     * @since 2.2.0
      */
     private $sequenceConfig;
 
@@ -40,7 +36,6 @@ class SequenceCreator
      * @param EntityPool $entityPool
      * @param Builder $sequenceBuilder
      * @param SequenceConfig $sequenceConfig
-     * @since 2.2.0
      */
     public function __construct(
         EntityPool $entityPool,
@@ -54,7 +49,6 @@ class SequenceCreator
 
     /**
      * Creates sales sequences.
-     * @since 2.2.0
      */
     public function create()
     {

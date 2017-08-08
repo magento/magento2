@@ -231,7 +231,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function collectValidatedAttributes($productCollection)
     {

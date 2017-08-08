@@ -13,7 +13,6 @@ use Magento\Framework\Phrase;
  * Factory class for Package Bundle Interface
  *
  * @see Bundle
- * @since 2.2.0
  */
 class BundleInterfaceFactory
 {
@@ -21,7 +20,6 @@ class BundleInterfaceFactory
      * Object Manager instance
      *
      * @var ObjectManagerInterface
-     * @since 2.2.0
      */
     private $objectManager;
 
@@ -30,7 +28,6 @@ class BundleInterfaceFactory
      *
      * @param ObjectManagerInterface $objectManager
      * @param string $type
-     * @since 2.2.0
      */
     public function __construct(ObjectManagerInterface $objectManager, $type = BundleInterface::class)
     {
@@ -47,7 +44,6 @@ class BundleInterfaceFactory
      * @param array $arguments
      * @return BundleInterface
      * @throws LocalizedException
-     * @since 2.2.0
      */
     public function create(array $arguments)
     {

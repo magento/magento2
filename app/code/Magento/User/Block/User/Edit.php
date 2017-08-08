@@ -86,7 +86,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * - click "Delete User" at top left part of the page;
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getDeleteMessage()
     {
@@ -99,7 +99,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Magento\User\Controller\Adminhtml\User\Delete
      *
      * @return string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getDeleteUrl()
     {
@@ -112,7 +112,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * to create a new user account OR to edit the previously created user account
      *
      * @return int
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getObjectId()
     {

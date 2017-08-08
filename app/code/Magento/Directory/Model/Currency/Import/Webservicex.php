@@ -20,7 +20,6 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
      * Http Client Factory
      *
      * @var \Magento\Framework\HTTP\ZendClientFactory
-     * @since 2.1.0
      */
     protected $httpClientFactory;
 
@@ -28,7 +27,6 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
      * Core scope config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.1.0
      */
     private $scopeConfig;
 

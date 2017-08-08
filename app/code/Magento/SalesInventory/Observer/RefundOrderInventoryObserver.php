@@ -14,44 +14,37 @@ use Magento\SalesInventory\Model\Order\ReturnProcessor;
 
 /**
  * Catalog inventory module observer
- * @deprecated 2.2.0
- * @since 2.2.0
+ * @deprecated 100.2.0
  */
 class RefundOrderInventoryObserver implements ObserverInterface
 {
     /**
      * @var StockConfigurationInterface
-     * @since 2.2.0
      */
     private $stockConfiguration;
 
     /**
      * @var StockManagementInterface
-     * @since 2.2.0
      */
     private $stockManagement;
 
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
-     * @since 2.2.0
      */
     private $stockIndexerProcessor;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
-     * @since 2.2.0
      */
     private $priceIndexer;
 
     /**
      * @var \Magento\SalesInventory\Model\Order\ReturnProcessor
-     * @since 2.2.0
      */
     private $returnProcessor;
 
     /**
      * @var \Magento\Sales\Api\OrderRepositoryInterface
-     * @since 2.2.0
      */
     private $orderRepository;
 
@@ -63,7 +56,6 @@ class RefundOrderInventoryObserver implements ObserverInterface
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer
      * @param ReturnProcessor $returnProcessor
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
-     * @since 2.2.0
      */
     public function __construct(
         StockConfigurationInterface $stockConfiguration,
@@ -86,7 +78,6 @@ class RefundOrderInventoryObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return void
-     * @since 2.2.0
      */
     public function execute(EventObserver $observer)
     {

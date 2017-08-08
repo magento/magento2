@@ -343,7 +343,6 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * when product collection initialized.
      *
      * @return Collection
-     * @since 2.2.0
      */
     private function initializeProductCollection()
     {
@@ -408,7 +407,6 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * @param ProductList\Toolbar $toolbar
      * @param Collection $collection
      * @return void
-     * @since 2.2.0
      */
     private function configureToolbar(Toolbar $toolbar, Collection $collection)
     {

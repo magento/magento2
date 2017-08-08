@@ -17,43 +17,36 @@ use Magento\Downloadable\Api\Data\SampleInterface;
 /**
  * Class Samples
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
  */
 class Samples
 {
     /**
      * @var LocatorInterface
-     * @since 2.1.0
      */
     protected $locator;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.1.0
      */
     protected $scopeConfig;
 
     /**
      * @var Escaper
-     * @since 2.1.0
      */
     protected $escaper;
 
     /**
      * @var SampleModel
-     * @since 2.1.0
      */
     protected $sampleModel;
 
     /**
      * @var DownloadableFile
-     * @since 2.1.0
      */
     protected $downloadableFile;
 
     /**
      * @var UrlInterface
-     * @since 2.1.0
      */
     protected $urlBuilder;
 
@@ -64,7 +57,6 @@ class Samples
      * @param SampleModel $sampleModel
      * @param DownloadableFile $downloadableFile
      * @param UrlInterface $urlBuilder
-     * @since 2.1.0
      */
     public function __construct(
         Escaper $escaper,
@@ -86,7 +78,6 @@ class Samples
      * Retrieve Default samples title
      *
      * @return string
-     * @since 2.1.0
      */
     public function getSamplesTitle()
     {
@@ -103,7 +94,6 @@ class Samples
      * Get Samples data
      *
      * @return array
-     * @since 2.1.0
      */
     public function getSamplesData()
     {
@@ -140,7 +130,6 @@ class Samples
      * @param array $sampleData
      * @param SampleInterface $sample
      * @return array
-     * @since 2.1.0
      */
     protected function addSampleFile(array $sampleData, SampleInterface $sample)
     {

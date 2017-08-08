@@ -221,7 +221,7 @@ class Request extends \Magento\Framework\Webapi\Request
      * @param array $urlPathParams url path parameters as array
      * @return array
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      * @see \Magento\Webapi\Controller\Rest\ParamsOverrider::overrideRequestBodyIdWithPathParam
      */
     protected function overrideRequestBodyIdWithPathParam($urlPathParams)
@@ -251,7 +251,7 @@ class Request extends \Magento\Framework\Webapi\Request
      * @param string $key
      * @param string $value
      * @return void
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      * @see \Magento\Webapi\Controller\Rest\ParamsOverrider::substituteParameters
      */
     protected function substituteParameters(&$requestData, $key, $value)

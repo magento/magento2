@@ -14,19 +14,16 @@ use Magento\Framework\Filter\Template\Tokenizer\ParameterFactory;
 
 /**
  * Convert conditions_encoded part of cms block content data from serialized to JSON format
- * @since 2.2.0
  */
 class ContentConverter extends SerializedToJson
 {
     /**
      * @var ParameterFactory
-     * @since 2.2.0
      */
     private $parameterFactory;
 
     /**
      * @var Normalizer
-     * @since 2.2.0
      */
     private $normalizer;
 
@@ -37,7 +34,6 @@ class ContentConverter extends SerializedToJson
      * @param Json $json
      * @param ParameterFactory $parameterFactory
      * @param Normalizer $normalizer
-     * @since 2.2.0
      */
     public function __construct(
         Serialize $serialize,
@@ -56,7 +52,6 @@ class ContentConverter extends SerializedToJson
      * @param string $value
      * @return string
      * @throws DataConversionException
-     * @since 2.2.0
      */
     public function convert($value)
     {
@@ -78,7 +73,6 @@ class ContentConverter extends SerializedToJson
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     protected function isValidJsonValue($value)
     {
@@ -90,7 +84,6 @@ class ContentConverter extends SerializedToJson
      *
      * @param string $paramsString
      * @return string
-     * @since 2.2.0
      */
     private function convertWidgetParams($paramsString)
     {
@@ -121,7 +114,6 @@ class ContentConverter extends SerializedToJson
      *
      * @param string $serializedContent
      * @return string
-     * @since 2.2.0
      */
     private function restoreReservedCharactersInSerializedContent($serializedContent)
     {

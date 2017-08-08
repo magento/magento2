@@ -19,19 +19,16 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogEavAttribute;
 /**
  * Class \Magento\Catalog\Model\ResourceModel\AttributePersistor
  *
- * @since 2.1.0
  */
 class AttributePersistor extends \Magento\Eav\Model\ResourceModel\AttributePersistor
 {
     /**
      * @var ConditionBuilder
-     * @since 2.2.0
      */
     private $conditionBuilder;
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function __construct(
         FormatInterface $localeFormat,
@@ -48,7 +45,6 @@ class AttributePersistor extends \Magento\Eav\Model\ResourceModel\AttributePersi
      * @param AbstractAttribute $attribute
      * @param bool $useDefault
      * @return string
-     * @since 2.1.0
      */
     protected function getScopeValue(ScopeInterface $scope, AbstractAttribute $attribute, $useDefault = false)
     {
@@ -60,7 +56,6 @@ class AttributePersistor extends \Magento\Eav\Model\ResourceModel\AttributePersi
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     protected function buildUpdateConditions(
         AbstractAttribute $attribute,
@@ -82,7 +77,6 @@ class AttributePersistor extends \Magento\Eav\Model\ResourceModel\AttributePersi
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     protected function buildInsertConditions(
         AbstractAttribute $attribute,
@@ -103,7 +97,6 @@ class AttributePersistor extends \Magento\Eav\Model\ResourceModel\AttributePersi
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     protected function buildDeleteConditions(
         AbstractAttribute $attribute,
@@ -126,7 +119,6 @@ class AttributePersistor extends \Magento\Eav\Model\ResourceModel\AttributePersi
     /**
      * @param AbstractAttribute $attribute
      * @return bool
-     * @since 2.2.0
      */
     private function isWebsiteAttribute(AbstractAttribute $attribute)
     {

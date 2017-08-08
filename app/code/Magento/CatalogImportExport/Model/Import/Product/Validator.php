@@ -42,7 +42,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
 
     /**
      * @var string|null
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $invalidAttribute;
 
@@ -84,7 +84,6 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      * @param array $possibleOptions
      * @param string $value
      * @return bool
-     * @since 2.1.3
      */
     private function validateOption($attrCode, $possibleOptions, $value)
     {
@@ -241,7 +240,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     /**
      * @param string|null $attribute
      * @return void
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function setInvalidAttribute($attribute)
     {
@@ -250,7 +249,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
 
     /**
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getInvalidAttribute()
     {

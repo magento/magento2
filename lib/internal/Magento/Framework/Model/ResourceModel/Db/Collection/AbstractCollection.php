@@ -597,7 +597,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
     /**
      * @inheritdoc
-     * @since 2.0.9
+     * @since 100.0.11
      */
     public function __sleep()
     {
@@ -609,7 +609,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
     /**
      * @inheritdoc
-     * @since 2.0.9
+     * @since 100.0.11
      */
     public function __wakeup()
     {

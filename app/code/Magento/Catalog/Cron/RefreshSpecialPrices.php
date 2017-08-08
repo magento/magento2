@@ -53,7 +53,6 @@ class RefreshSpecialPrices
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
@@ -180,8 +179,7 @@ class RefreshSpecialPrices
      * Get MetadataPool instance
      * @return MetadataPool
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 101.0.0
      */
     private function getMetadataPool()
     {

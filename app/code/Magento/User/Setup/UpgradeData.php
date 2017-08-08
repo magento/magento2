@@ -20,7 +20,6 @@ class UpgradeData implements UpgradeDataInterface
 {
     /**
      * @var FieldDataConverterFactory
-     * @since 2.2.0
      */
     private $fieldDataConverterFactory;
 
@@ -28,7 +27,6 @@ class UpgradeData implements UpgradeDataInterface
      * UpgradeData constructor.
      *
      * @param FieldDataConverterFactory $fieldDataConverterFactory
-     * @since 2.2.0
      */
     public function __construct(
         FieldDataConverterFactory $fieldDataConverterFactory
@@ -90,7 +88,6 @@ class UpgradeData implements UpgradeDataInterface
      * @param ModuleDataSetupInterface $setup
      *
      * @return void
-     * @since 2.2.0
      */
     private function upgradeSerializedFields($setup)
     {

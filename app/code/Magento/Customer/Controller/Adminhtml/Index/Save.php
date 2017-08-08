@@ -21,7 +21,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**
      * @var EmailNotificationInterface
-     * @since 2.1.0
      */
     private $emailNotification;
 
@@ -306,8 +305,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
      * Get email notification
      *
      * @return EmailNotificationInterface
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getEmailNotification()
     {
@@ -327,7 +325,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
      * @param string $formCode
      * @param string $scope
      * @return Form
-     * @since 2.1.3
      */
     private function getMetadataForm($entityType, $formCode, $scope)
     {
@@ -364,7 +361,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
      * Retrieve current customer ID
      *
      * @return int
-     * @since 2.1.3
      */
     private function getCurrentCustomerId()
     {

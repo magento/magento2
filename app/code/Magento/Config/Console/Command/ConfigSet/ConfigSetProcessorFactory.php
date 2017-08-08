@@ -16,7 +16,7 @@ use Magento\Framework\ObjectManagerInterface;
  * @see ConfigSetCommand
  *
  * @api
- * @since 2.2.0
+ * @since 100.2.0
  */
 class ConfigSetProcessorFactory
 {
@@ -30,10 +30,7 @@ class ConfigSetProcessorFactory
     const TYPE_LOCK = 'lock';
     /**#@-*/
 
-    /**
-     * @var ObjectManagerInterface
-     * @since 2.2.0
-     */
+    /**#@-*/
     private $objectManager;
 
     /**
@@ -41,14 +38,13 @@ class ConfigSetProcessorFactory
      *
      * @var array
      * @see ConfigSetProcessorInterface
-     * @since 2.2.0
      */
     private $processors;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param array $processors
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -65,7 +61,7 @@ class ConfigSetProcessorFactory
      * @return ConfigSetProcessorInterface New processor instance
      * @throws ConfigurationMismatchException If processor type is not exists in processors array
      * or declared class has wrong implementation
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function create($processorName)
     {

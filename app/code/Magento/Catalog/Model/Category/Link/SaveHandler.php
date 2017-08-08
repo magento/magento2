@@ -11,20 +11,17 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Save handler for catalog product link.
- * @since 2.2.0
  */
 class SaveHandler implements ExtensionInterface
 {
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CategoryLink
-     * @since 2.2.0
      */
     private $productCategoryLink;
 
     /**
      * @var \Magento\Framework\EntityManager\HydratorPool
-     * @since 2.2.0
      */
     private $hydratorPool;
 
@@ -33,7 +30,6 @@ class SaveHandler implements ExtensionInterface
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\CategoryLink $productCategoryLink
      * @param \Magento\Framework\EntityManager\HydratorPool $hydratorPool
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\CategoryLink $productCategoryLink,
@@ -48,7 +44,6 @@ class SaveHandler implements ExtensionInterface
      * @param array $arguments
      * @return object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function execute($entity, $arguments = [])
     {
@@ -85,7 +80,6 @@ class SaveHandler implements ExtensionInterface
     /**
      * @param object $entity
      * @return array
-     * @since 2.2.0
      */
     private function getCategoryLinksPositions($entity)
     {
@@ -109,7 +103,6 @@ class SaveHandler implements ExtensionInterface
      * @param array $newCategoryPositions
      * @param array $oldCategoryPositions
      * @return array
-     * @since 2.2.0
      */
     private function mergeCategoryLinks($newCategoryPositions, $oldCategoryPositions)
     {

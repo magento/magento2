@@ -30,7 +30,6 @@ class UpdateConfigurations
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $keysPost = [
         'status',
@@ -94,7 +93,6 @@ class UpdateConfigurations
      * Get configurations from request
      *
      * @return array
-     * @since 2.1.0
      */
     protected function getConfigurations()
     {
@@ -128,7 +126,6 @@ class UpdateConfigurations
      *
      * @param array $item
      * @return array
-     * @since 2.1.0
      */
     private function mapData(array $item)
     {

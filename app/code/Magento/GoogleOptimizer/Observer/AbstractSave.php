@@ -185,7 +185,6 @@ abstract class AbstractSave implements ObserverInterface
 
     /**
      * @return bool
-     * @since 2.0.11
      */
     private function isDataAvailable()
     {
@@ -195,7 +194,6 @@ abstract class AbstractSave implements ObserverInterface
 
     /**
      * @return mixed
-     * @since 2.0.11
      */
     private function getRequestData()
     {

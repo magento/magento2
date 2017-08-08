@@ -47,7 +47,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
 
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote\Collection
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected $quoteCollection;
 
@@ -63,25 +63,21 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
 
     /**
      * @var SaveHandler
-     * @since 2.1.0
      */
     private $saveHandler;
 
     /**
      * @var LoadHandler
-     * @since 2.1.0
      */
     private $loadHandler;
 
     /**
      * @var CollectionProcessorInterface
-     * @since 2.2.0
      */
     private $collectionProcessor;
 
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory
-     * @since 2.2.0
      */
     private $quoteCollectionFactory;
 
@@ -250,7 +246,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
      * @param FilterGroup $filterGroup The filter group.
      * @param QuoteCollection $collection The quote collection.
      * @return void
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @throws InputException The specified filter group or quote collection does not exist.
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, QuoteCollection $collection)
@@ -270,8 +266,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     /**
      * Get new SaveHandler dependency for application code.
      * @return SaveHandler
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getSaveHandler()
     {
@@ -283,8 +278,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
 
     /**
      * @return LoadHandler
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getLoadHandler()
     {

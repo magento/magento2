@@ -86,7 +86,6 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     protected function getAdditionalFields($objectArray)
     {
@@ -130,7 +129,6 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function validate($object)
     {
@@ -152,7 +150,6 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     protected function validatePrice(array $priceRow)
     {
@@ -163,7 +160,6 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     protected function modifyPriceData($object, $data)
     {
@@ -183,7 +179,6 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
      * @param array $valuesToUpdate
      * @param array $oldValues
      * @return boolean
-     * @since 2.2.0
      */
     protected function updateValues(array $valuesToUpdate, array $oldValues)
     {
@@ -212,7 +207,6 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
      *
      * @param array $priceRow
      * @return null
-     * @since 2.2.0
      */
     private function getPercentage($priceRow)
     {

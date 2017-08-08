@@ -59,19 +59,16 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
 
     /**
      * @var \Magento\Customer\Model\EmailNotificationInterface
-     * @since 2.1.0
      */
     private $emailNotification;
 
     /**
      * @var AuthenticationInterface
-     * @since 2.1.0
      */
     private $authentication;
 
     /**
      * @var Mapper
-     * @since 2.1.3
      */
     private $customerMapper;
 
@@ -103,7 +100,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * Get authentication
      *
      * @return AuthenticationInterface
-     * @since 2.1.0
      */
     private function getAuthentication()
     {
@@ -121,8 +117,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * Get email notification
      *
      * @return EmailNotificationInterface
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getEmailNotification()
     {
@@ -201,7 +196,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      *
      * @param \Magento\Customer\Api\Data\CustomerInterface $customerCandidateDataObject
      * @return void
-     * @since 2.1.0
      */
     private function dispatchSuccessEvent(\Magento\Customer\Api\Data\CustomerInterface $customerCandidateDataObject)
     {
@@ -217,7 +211,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * @param int $customerId
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface
-     * @since 2.0.11
      */
     private function getCustomerDataObject($customerId)
     {
@@ -230,7 +223,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * @param \Magento\Framework\App\RequestInterface $inputData
      * @param \Magento\Customer\Api\Data\CustomerInterface $currentCustomerData
      * @return \Magento\Customer\Api\Data\CustomerInterface
-     * @since 2.0.11
      */
     private function populateNewCustomerDataObject(
         \Magento\Framework\App\RequestInterface $inputData,
@@ -284,7 +276,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * @return void
      * @throws InvalidEmailOrPasswordException
      * @throws UserLockedException
-     * @since 2.1.0
      */
     private function processChangeEmailRequest(\Magento\Customer\Api\Data\CustomerInterface $currentCustomerDataObject)
     {
@@ -306,8 +297,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      *
      * @return Mapper
      *
-     * @deprecated 2.1.3
-     * @since 2.1.3
+     * @deprecated 100.1.3
      */
     private function getCustomerMapper()
     {

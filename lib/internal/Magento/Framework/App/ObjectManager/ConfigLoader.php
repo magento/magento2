@@ -40,7 +40,6 @@ class ConfigLoader implements ConfigLoaderInterface
 
     /**
      * @var SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -91,8 +90,7 @@ class ConfigLoader implements ConfigLoaderInterface
      * Get serializer
      *
      * @return SerializerInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {

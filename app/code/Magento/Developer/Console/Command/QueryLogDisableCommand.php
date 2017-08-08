@@ -16,7 +16,6 @@ use Magento\Framework\DB\Logger\LoggerProxy;
 /**
  * Class \Magento\Developer\Console\Command\QueryLogDisableCommand
  *
- * @since 2.2.0
  */
 class QueryLogDisableCommand extends Command
 {
@@ -32,7 +31,6 @@ class QueryLogDisableCommand extends Command
 
     /**
      * @var Writer
-     * @since 2.2.0
      */
     private $deployConfigWriter;
 
@@ -40,7 +38,6 @@ class QueryLogDisableCommand extends Command
      * QueryLogDisableCommand constructor.
      * @param Writer $deployConfigWriter
      * @param null $name
-     * @since 2.2.0
      */
     public function __construct(
         Writer $deployConfigWriter,
@@ -52,7 +49,6 @@ class QueryLogDisableCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     protected function configure()
     {
@@ -65,7 +61,6 @@ class QueryLogDisableCommand extends Command
     /**
      * {@inheritdoc}
      * @throws \InvalidArgumentException
-     * @since 2.2.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

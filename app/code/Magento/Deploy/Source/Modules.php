@@ -10,7 +10,6 @@ use Magento\Deploy\Package\PackageFileFactory;
 
 /**
  * Collect files eligible for deployment from  modules
- * @since 2.2.0
  */
 class Modules implements SourceInterface
 {
@@ -18,13 +17,11 @@ class Modules implements SourceInterface
 
     /**
      * @var Files
-     * @since 2.2.0
      */
     private $filesUtil;
 
     /**
      * @var PackageFileFactory
-     * @since 2.2.0
      */
     private $packageFileFactory;
 
@@ -33,7 +30,6 @@ class Modules implements SourceInterface
      *
      * @param Files $filesUtil
      * @param PackageFileFactory $packageFileFactory
-     * @since 2.2.0
      */
     public function __construct(
         Files $filesUtil,
@@ -45,7 +41,6 @@ class Modules implements SourceInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function get()
     {

@@ -11,13 +11,11 @@ use Magento\Ui\Component\Container;
 
 /**
  * Customize "Customizable Options" panel
- * @since 2.1.0
  */
 class BundleCustomOptions extends AbstractModifier
 {
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -51,7 +49,6 @@ class BundleCustomOptions extends AbstractModifier
      * @param string $container
      * @param string $button
      * @return array
-     * @since 2.1.0
      */
     public function modifyCustomOptionsButton(array $meta, $group, $container, $button)
     {
@@ -68,7 +65,6 @@ class BundleCustomOptions extends AbstractModifier
      *
      * @param int $sortOrder
      * @return array
-     * @since 2.1.0
      */
     public function getErrorMessage($sortOrder)
     {
@@ -92,7 +88,6 @@ class BundleCustomOptions extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyData(array $data)
     {

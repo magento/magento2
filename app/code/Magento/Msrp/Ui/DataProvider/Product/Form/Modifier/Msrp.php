@@ -12,7 +12,6 @@ use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Class Msrp
- * @since 2.1.0
  */
 class Msrp extends AbstractModifier
 {
@@ -23,33 +22,26 @@ class Msrp extends AbstractModifier
     const FIELD_MSRP_DISPLAY_ACTUAL_PRICE = 'msrp_display_actual_price_type';
     /**#@-*/
 
-    /**
-     * @var LocatorInterface
-     * @since 2.1.0
-     */
+    /**#@-*/
     protected $locator;
 
     /**
      * @var MsrpConfig
-     * @since 2.1.0
      */
     protected $msrpConfig;
 
     /**
      * @var ArrayManager
-     * @since 2.1.0
      */
     protected $arrayManager;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $data = [];
 
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $meta = [];
 
@@ -57,7 +49,6 @@ class Msrp extends AbstractModifier
      * @param LocatorInterface $locator
      * @param MsrpConfig $msrpConfig
      * @param ArrayManager $arrayManager
-     * @since 2.1.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -71,7 +62,6 @@ class Msrp extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -80,7 +70,6 @@ class Msrp extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -96,7 +85,6 @@ class Msrp extends AbstractModifier
      * Customize msrp field
      *
      * @return $this
-     * @since 2.1.0
      */
     protected function customizeMsrp()
     {
@@ -127,7 +115,6 @@ class Msrp extends AbstractModifier
      * Customize msrp display actual price field
      *
      * @return $this
-     * @since 2.1.0
      */
     protected function customizeMsrpDisplayActualPrice()
     {

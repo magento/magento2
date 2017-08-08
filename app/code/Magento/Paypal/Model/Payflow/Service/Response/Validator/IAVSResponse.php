@@ -12,7 +12,6 @@ use Magento\Paypal\Model\Payflow\Transparent;
 /**
  * International AVS response validator checks configuration option
  * and fails validation if PayPal returns IAVS's check marked as international issuing bank.
- * @since 2.2.0
  */
 class IAVSResponse implements ValidatorInterface
 {
@@ -20,19 +19,16 @@ class IAVSResponse implements ValidatorInterface
      * Indicates whether AVS response is international (Y),
      * US (N), or cannot be determined (X).
      * @var string
-     * @since 2.2.0
      */
     private static $iavs = 'iavs';
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private static $negativeResponseCode = 'y';
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function validate(DataObject $response, Transparent $transparentModel)
     {

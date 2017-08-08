@@ -13,26 +13,22 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * StockItemValidator
- * @since 2.2.0
  */
 class StockItemValidator
 {
     /**
      * @var StockConfigurationInterface
-     * @since 2.2.0
      */
     private $stockConfiguration;
 
     /**
      * @var StockRegistryInterface
-     * @since 2.2.0
      */
     private $stockRegistry;
 
     /**
      * @param StockConfigurationInterface $stockConfiguration
      * @param StockRegistryInterface $stockRegistry
-     * @since 2.2.0
      */
     public function __construct(
         StockConfigurationInterface $stockConfiguration,
@@ -49,7 +45,6 @@ class StockItemValidator
      * @param StockItemInterface $stockItem
      * @throws LocalizedException
      * @return void
-     * @since 2.2.0
      */
     public function validate(ProductInterface $product, StockItemInterface $stockItem)
     {

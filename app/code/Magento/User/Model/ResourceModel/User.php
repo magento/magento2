@@ -36,13 +36,11 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var CacheInterface
-     * @since 2.2.0
      */
     private $aclDataCache;
 
     /**
      * @var ObserverConfig|null
-     * @since 2.2.0
      */
     private $observerConfig;
 

@@ -8,7 +8,6 @@ namespace Magento\Ui\DataProvider\Modifier;
 /**
  * Interface \Magento\Ui\DataProvider\Modifier\PoolInterface
  *
- * @since 2.1.0
  */
 interface PoolInterface
 {
@@ -16,7 +15,6 @@ interface PoolInterface
      * Retrieve modifiers
      *
      * @return array
-     * @since 2.1.0
      */
     public function getModifiers();
 
@@ -25,7 +23,6 @@ interface PoolInterface
      *
      * @return ModifierInterface[]
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.1.0
      */
     public function getModifiersInstances();
 }

@@ -20,7 +20,6 @@ use Magento\Framework\View\Asset\RepositoryMap;
  *
  * Map files needed only for compact deployment, and yet can be used for tracking changes of deployed static files
  * in development mode, when using symlinks is not possible
- * @since 2.2.0
  */
 class Map implements ProcessorInterface
 {
@@ -30,7 +29,6 @@ class Map implements ProcessorInterface
      * The service does simple write, copy or go through publication process (apply fallback rules, pre-processing etc)
      *
      * @var DeployStaticFile
-     * @since 2.2.0
      */
     private $deployStaticFile;
 
@@ -40,7 +38,6 @@ class Map implements ProcessorInterface
      * Formatter generates code for PHP file that returns data array
      *
      * @var PhpFormatter
-     * @since 2.2.0
      */
     private $formatter;
 
@@ -49,7 +46,6 @@ class Map implements ProcessorInterface
      *
      * @see PackageFile
      * @var PackageFileFactory
-     * @since 2.2.0
      */
     private $packageFileFactory;
 
@@ -57,7 +53,6 @@ class Map implements ProcessorInterface
      * Helper class for static files minification related processes
      *
      * @var Minification
-     * @since 2.2.0
      */
     private $minification;
 
@@ -65,7 +60,6 @@ class Map implements ProcessorInterface
      * Deployment procedure options
      *
      * @var array
-     * @since 2.2.0
      */
     private $options = [];
 
@@ -76,7 +70,6 @@ class Map implements ProcessorInterface
      * @param PhpFormatter $formatter
      * @param PackageFileFactory $packageFileFactory
      * @param Minification $minification
-     * @since 2.2.0
      */
     public function __construct(
         DeployStaticFile $deployStaticFile,
@@ -92,7 +85,6 @@ class Map implements ProcessorInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function process(Package $package, array $options)
     {
@@ -142,7 +134,6 @@ class Map implements ProcessorInterface
      *
      * @param array $map
      * @return string
-     * @since 2.2.0
      */
     private function getRequireJsMap(array $map)
     {

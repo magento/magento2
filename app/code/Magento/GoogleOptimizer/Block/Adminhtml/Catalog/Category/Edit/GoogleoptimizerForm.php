@@ -9,25 +9,21 @@ namespace Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Category\Edit;
 
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.1.0
  */
 class GoogleoptimizerForm extends \Magento\Catalog\Block\Adminhtml\Form
 {
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.1.0
      */
     protected $_registry;
 
     /**
      * @var \Magento\GoogleOptimizer\Helper\Code
-     * @since 2.1.0
      */
     protected $_codeHelper;
 
     /**
      * @var \Magento\GoogleOptimizer\Helper\Form
-     * @since 2.1.0
      */
     protected $_formHelper;
 
@@ -38,7 +34,6 @@ class GoogleoptimizerForm extends \Magento\Catalog\Block\Adminhtml\Form
      * @param \Magento\GoogleOptimizer\Helper\Code $codeHelper
      * @param \Magento\GoogleOptimizer\Helper\Form $formHelper
      * @param array $data
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -59,7 +54,6 @@ class GoogleoptimizerForm extends \Magento\Catalog\Block\Adminhtml\Form
      * Prepare form before rendering HTML
      *
      * @return \Magento\Backend\Block\Widget\Form
-     * @since 2.1.0
      */
     protected function _prepareForm()
     {
@@ -73,7 +67,6 @@ class GoogleoptimizerForm extends \Magento\Catalog\Block\Adminhtml\Form
      *
      * @return \Magento\GoogleOptimizer\Model\Code|null
      * @throws \RuntimeException
-     * @since 2.1.0
      */
     protected function _getGoogleExperiment()
     {
@@ -89,7 +82,6 @@ class GoogleoptimizerForm extends \Magento\Catalog\Block\Adminhtml\Form
      *
      * @return mixed
      * @throws \RuntimeException
-     * @since 2.1.0
      */
     protected function _getCategory()
     {

@@ -78,7 +78,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var CustomerMetadataInterface
      *
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected $_customerMetadataService;
 
@@ -380,7 +380,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $code
      * @return bool
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function isAttributeVisible($code)
     {

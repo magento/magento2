@@ -128,7 +128,6 @@ interface ContextInterface
      * @param array $htmlBlocks
      * @param UiComponentInterface $component
      * @return void
-     * @since 2.1.0
      */
     public function addHtmlBlocks(array $htmlBlocks, UiComponentInterface $component);
 
@@ -159,7 +158,6 @@ interface ContextInterface
      * Get Ui Component Factory
      *
      * @return UiComponentFactory
-     * @since 2.1.0
      */
     public function getUiComponentFactory();
 }

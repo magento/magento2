@@ -70,7 +70,6 @@ class StockRegistryProvider implements StockRegistryProviderInterface
 
     /**
      * @var StockRegistryStorage
-     * @since 2.1.0
      */
     protected $stockRegistryStorage;
 
@@ -176,7 +175,6 @@ class StockRegistryProvider implements StockRegistryProviderInterface
 
     /**
      * @return StockRegistryStorage
-     * @since 2.1.0
      */
     private function getStockRegistryStorage()
     {

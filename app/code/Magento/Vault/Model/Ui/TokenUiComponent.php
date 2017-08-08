@@ -8,26 +8,22 @@ namespace Magento\Vault\Model\Ui;
 /**
  * Class \Magento\Vault\Model\Ui\TokenUiComponent
  *
- * @since 2.1.0
  */
 class TokenUiComponent implements TokenUiComponentInterface
 {
     /**
      * @var array
-     * @since 2.1.0
      */
     private $config;
 
     /**
      * @var string
-     * @since 2.1.0
      */
     private $name;
 
     /**
      * @param array $config
      * @param string $name
-     * @since 2.1.0
      */
     public function __construct(
         array $config,
@@ -41,7 +37,6 @@ class TokenUiComponent implements TokenUiComponentInterface
      * Returns component configuration
      *
      * @return array
-     * @since 2.1.0
      */
     public function getConfig()
     {
@@ -52,7 +47,6 @@ class TokenUiComponent implements TokenUiComponentInterface
      * Returns component name
      *
      * @return string
-     * @since 2.1.0
      */
     public function getName()
     {

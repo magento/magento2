@@ -17,7 +17,6 @@ class Copier
 {
     /**
      * @var Option\Repository
-     * @since 2.1.0
      */
     protected $optionRepository;
 
@@ -33,7 +32,6 @@ class Copier
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
      */
     protected $metadataPool;
 
@@ -101,8 +99,7 @@ class Copier
 
     /**
      * @return Option\Repository
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 101.0.0
      */
     private function getOptionRepository()
     {
@@ -115,8 +112,7 @@ class Copier
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 101.0.0
      */
     private function getMetadataPool()
     {
@@ -132,7 +128,6 @@ class Copier
      *
      * @param array $productData
      * @return array
-     * @since 2.2.0
      */
     private function removeStockItem(array $productData)
     {

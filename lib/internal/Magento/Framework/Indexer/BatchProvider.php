@@ -12,13 +12,11 @@ use \Magento\Framework\DB\Adapter\AdapterInterface;
  *
  * Some ranges may contain non existent entity IDs.
  * So the code that uses the generator must check if any entities were loaded during batch load.
- * @since 2.2.0
  */
 class BatchProvider implements BatchProviderInterface
 {
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getBatches(AdapterInterface $adapter, $tableName, $linkField, $batchSize)
     {
@@ -47,7 +45,6 @@ class BatchProvider implements BatchProviderInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getBatchIds(
         \Magento\Framework\DB\Adapter\AdapterInterface $connection,

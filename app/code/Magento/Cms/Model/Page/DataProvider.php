@@ -10,25 +10,21 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 
 /**
  * Class DataProvider
- * @since 2.1.0
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
     /**
      * @var \Magento\Cms\Model\ResourceModel\Page\Collection
-     * @since 2.1.0
      */
     protected $collection;
 
     /**
      * @var DataPersistorInterface
-     * @since 2.1.0
      */
     protected $dataPersistor;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $loadedData;
 
@@ -40,7 +36,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param DataPersistorInterface $dataPersistor
      * @param array $meta
      * @param array $data
-     * @since 2.1.0
      */
     public function __construct(
         $name,
@@ -62,7 +57,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param array $meta
      * @return array
-     * @since 2.1.0
      */
     public function prepareMeta(array $meta)
     {
@@ -73,7 +67,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Get data
      *
      * @return array
-     * @since 2.1.0
      */
     public function getData()
     {

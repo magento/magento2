@@ -406,7 +406,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Checks if display billing address on payment method is available, otherwise
      * billing address should be display on payment page
      * @return bool
-     * @since 2.1.4
      */
     public function isDisplayBillingOnPaymentMethodAvailable()
     {

@@ -16,20 +16,17 @@ use Magento\Vault\Model\Method\Vault;
 /**
  * Class \Magento\Vault\Observer\PaymentTokenAssigner
  *
- * @since 2.1.0
  */
 class PaymentTokenAssigner extends AbstractDataAssignObserver
 {
     /**
      * @var PaymentTokenManagementInterface
-     * @since 2.1.0
      */
     private $paymentTokenManagement;
 
     /**
      * PaymentTokenAssigner constructor.
      * @param PaymentTokenManagementInterface $paymentTokenManagement
-     * @since 2.1.0
      */
     public function __construct(
         PaymentTokenManagementInterface $paymentTokenManagement
@@ -40,7 +37,6 @@ class PaymentTokenAssigner extends AbstractDataAssignObserver
     /**
      * @param Observer $observer
      * @return void
-     * @since 2.1.0
      */
     public function execute(Observer $observer)
     {

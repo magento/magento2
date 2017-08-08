@@ -73,7 +73,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Weight precision
      *
      * @var int
-     * @since 2.1.0
      */
     private static $weightPrecision = 10;
 
@@ -124,7 +123,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     protected $_debugReplacePrivateDataKeys = [
         'USERID'
@@ -132,7 +130,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
     /**
      * @var DataHelper
-     * @since 2.2.0
      */
     private $dataHelper;
 
@@ -2061,7 +2058,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param \SimpleXMLElement $service
      * @return boolean
-     * @since 2.1.0
      */
     private function isServiceAvailable(\SimpleXMLElement $service)
     {
@@ -2093,7 +2089,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string $data
      * @return string
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.1.0
      */
     protected function filterDebugData($data)
     {
@@ -2117,8 +2112,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Gets Data helper object
      *
      * @return DataHelper
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getDataHelper()
     {

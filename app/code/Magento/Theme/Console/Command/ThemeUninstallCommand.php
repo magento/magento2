@@ -277,7 +277,6 @@ class ThemeUninstallCommand extends Command
      *
      * @param string[] $themePaths
      * @return string[]
-     * @since 2.1.0
      */
     protected function getIncorrectThemes($themePaths)
     {
@@ -296,7 +295,6 @@ class ThemeUninstallCommand extends Command
      *
      * @param string[] $themePaths
      * @return string[]
-     * @since 2.1.0
      */
     protected function getUnknownPackages($themePaths)
     {
@@ -316,7 +314,6 @@ class ThemeUninstallCommand extends Command
      *
      * @param string[] $themePaths
      * @return string[]
-     * @since 2.1.0
      */
     protected function getUnknownThemes($themePaths)
     {

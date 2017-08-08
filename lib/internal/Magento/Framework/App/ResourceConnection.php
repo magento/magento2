@@ -98,7 +98,7 @@ class ResourceConnection
     /**
      * @param string $resourceName
      * @return void
-     * @since 2.1.3
+     * @since 100.1.3
      */
     public function closeConnection($resourceName = self::DEFAULT_CONNECTION)
     {
@@ -139,7 +139,6 @@ class ResourceConnection
     /**
      * @param string $connectionName
      * @return string
-     * @since 2.1.3
      */
     private function getProcessConnectionName($connectionName)
     {
@@ -184,7 +183,7 @@ class ResourceConnection
      *
      * @param string $tableName
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getTablePlaceholder($tableName)
     {

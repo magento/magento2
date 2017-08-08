@@ -32,7 +32,6 @@ class Context
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -40,7 +39,6 @@ class Context
      * @param array $data
      * @param array $default
      * @param Json|null $serializer
-     * @since 2.2.0
      */
     public function __construct(array $data = [], array $default = [], Json $serializer = null)
     {
@@ -126,7 +124,6 @@ class Context
      * Get data and default data in "key-value" format
      *
      * @return array
-     * @since 2.2.0
      */
     public function toArray()
     {

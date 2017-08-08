@@ -14,21 +14,18 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 
 /**
- * @deprecated 2.2.0 Added in order to avoid backward incompatibility because class was moved to another directory.
+ * @deprecated 100.2.0 Added in order to avoid backward incompatibility because class was moved to another directory.
  * @see \Magento\Framework\App\Scope\Validator
- * @since 2.2.0
  */
 class Validator implements ValidatorInterface
 {
     /**
      * @var ScopeResolverPool
-     * @since 2.2.0
      */
     private $scopeResolverPool;
 
     /**
      * @param ScopeResolverPool $scopeResolverPool
-     * @since 2.2.0
      */
     public function __construct(ScopeResolverPool $scopeResolverPool)
     {
@@ -37,7 +34,6 @@ class Validator implements ValidatorInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function isValid($scope, $scopeCode = null)
     {
@@ -79,7 +75,6 @@ class Validator implements ValidatorInterface
      * @param string $scopeCode
      * @return void
      * @throws LocalizedException if scope code is empty or has a wrong format
-     * @since 2.2.0
      */
     private function validateScopeCode($scopeCode)
     {

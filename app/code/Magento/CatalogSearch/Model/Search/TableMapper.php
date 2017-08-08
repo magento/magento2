@@ -29,19 +29,16 @@ class TableMapper
 {
     /**
      * @var FilterStrategyInterface
-     * @since 2.2.0
      */
     private $filterStrategy;
 
     /**
      * @var AliasResolver
-     * @since 2.2.0
      */
     private $aliasResolver;
 
     /**
      * @var AliasResolver
-     * @since 2.2.0
      */
     private $filtersExtractor;
 
@@ -108,7 +105,7 @@ class TableMapper
      * This method is deprecated.
      * Please use \Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver::getAlias() instead.
      *
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @see AliasResolver::getAlias()
      *
      * @param FilterInterface $filter

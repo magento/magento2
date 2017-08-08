@@ -15,43 +15,36 @@ use Magento\Framework\Model\Entity\ScopeResolver;
 /**
  * Class CreateHandler
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
  */
 class CreateHandler implements AttributeInterface
 {
     /**
      * @var AttributeRepository
-     * @since 2.1.0
      */
     private $attributeRepository;
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
     /**
      * @var SearchCriteriaBuilder
-     * @since 2.1.0
      */
     private $searchCriteriaBuilder;
 
     /**
      * @var AttributePersistor
-     * @since 2.1.0
      */
     private $attributePersistor;
 
     /**
      * @var ScopeResolver
-     * @since 2.1.0
      */
     private $scopeResolver;
 
     /**
      * @var AttributeLoader
-     * @since 2.1.3
      */
     private $attributeLoader;
 
@@ -62,7 +55,6 @@ class CreateHandler implements AttributeInterface
      * @param AttributePersistor $attributePersistor
      * @param ScopeResolver $scopeResolver
      * @param AttributeLoader $attributeLoader
-     * @since 2.1.0
      */
     public function __construct(
         AttributeRepository $attributeRepository,
@@ -84,7 +76,6 @@ class CreateHandler implements AttributeInterface
      * @param string $entityType
      * @param int $attributeSetId
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
-     * @since 2.1.0
      */
     protected function getAttributes($entityType, $attributeSetId = null)
     {
@@ -99,7 +90,6 @@ class CreateHandler implements AttributeInterface
      * @throws \Exception
      * @throws \Magento\Framework\Exception\ConfigurationMismatchException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function execute($entityType, $entityData, $arguments = [])
     {

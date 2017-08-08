@@ -11,19 +11,16 @@ use Magento\SalesRule\Model\Rule;
 
 /**
  * Class DataProvider
- * @since 2.1.0
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
     /**
      * @var Collection
-     * @since 2.1.0
      */
     protected $collection;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $loadedData;
 
@@ -31,13 +28,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.1.0
      */
     protected $coreRegistry;
 
     /**
      * @var \Magento\SalesRule\Model\Rule\Metadata\ValueProvider
-     * @since 2.1.0
      */
     protected $metadataValueProvider;
 
@@ -52,7 +47,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param Metadata\ValueProvider $metadataValueProvider
      * @param array $meta
      * @param array $data
-     * @since 2.1.0
      */
     public function __construct(
         $name,
@@ -75,7 +69,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Get metadata values
      *
      * @return array
-     * @since 2.1.0
      */
     protected function getMetadataValues()
     {
@@ -85,7 +78,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getData()
     {
