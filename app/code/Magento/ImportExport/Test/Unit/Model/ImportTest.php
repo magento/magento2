@@ -240,13 +240,6 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      */
     public function testImportSource()
     {
-        $validationStrategy = ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR;
-        $allowedErrorCount = 1;
-
-        $this->errorAggregatorMock->expects($this->once())
-            ->method('initValidationStrategy')
-            ->with($validationStrategy, $allowedErrorCount);
-
         $entityTypeCode = 'code';
         $this->_importData->expects($this->any())
                         ->method('getEntityTypeCode')
@@ -269,7 +262,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                     ->with($this->isInstanceOf($phraseClass));
         $this->_entityAdapter->expects($this->any())
                     ->method('importData')
-                    ->will($this->returnSelf());
+                    ->will($this->returnValue(true));
         $this->import->expects($this->any())
                     ->method('_getEntityAdapter')
                     ->will($this->returnValue($this->_entityAdapter));
@@ -291,19 +284,13 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             $this->import->expects($this->once())->method($method)->will($this->returnValue(null));
         }
 
-        $this->import->expects($this->any())
-            ->method('getData')
-            ->willReturnMap([
-                [Import::FIELD_NAME_VALIDATION_STRATEGY, null, $validationStrategy],
-                [Import::FIELD_NAME_ALLOWED_ERROR_COUNT, null, $allowedErrorCount],
-            ]);
-
         $this->assertEquals(true, $this->import->importSource());
     }
 
     /**
      * Test importSource with expected exception
      *
+     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
      */
     public function testImportSourceException()
     {
@@ -325,23 +312,13 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ['entity', $entityTypeCode],
             ['behavior', $behaviour]
         );
-        $phraseClass = \Magento\Framework\Phrase::class;
-        $this->import->expects($this->any())
-            ->method('addLogComment')
-            ->with($this->isInstanceOf($phraseClass));
+
         $this->_entityAdapter->expects($this->any())
             ->method('importData')
             ->will($this->throwException($exceptionMock));
         $this->import->expects($this->any())
             ->method('_getEntityAdapter')
             ->will($this->returnValue($this->_entityAdapter));
-        $importOnceMethodsReturnNull = [
-            'getBehavior',
-        ];
-
-        foreach ($importOnceMethodsReturnNull as $method) {
-            $this->import->expects($this->once())->method($method)->will($this->returnValue(null));
-        }
 
         $this->import->importSource();
     }

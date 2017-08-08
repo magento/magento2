@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3375a604cb23088317e3daa54900aee2",
+    "content-hash": "d95c93a118b25c8ce9b473445a8e4616",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -1479,16 +1479,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.8.25",
+            "version": "v2.8.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "46e65f8d98c9ab629bbfcc16a4ff023f61c37fb2"
+                "reference": "32a3c6b3398de5db8ed381f4ef92970c59c2fcdd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/46e65f8d98c9ab629bbfcc16a4ff023f61c37fb2",
-                "reference": "46e65f8d98c9ab629bbfcc16a4ff023f61c37fb2",
+                "url": "https://api.github.com/repos/symfony/console/zipball/32a3c6b3398de5db8ed381f4ef92970c59c2fcdd",
+                "reference": "32a3c6b3398de5db8ed381f4ef92970c59c2fcdd",
                 "shasum": ""
             },
             "require": {
@@ -1536,7 +1536,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-07-03T08:04:30+00:00"
+            "time": "2017-07-29T21:26:04+00:00"
         },
         {
             "name": "symfony/debug",
@@ -1597,7 +1597,7 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.8.25",
+            "version": "v2.8.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
@@ -1657,7 +1657,7 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v3.3.5",
+            "version": "v3.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
@@ -1706,7 +1706,7 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v3.3.5",
+            "version": "v3.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
@@ -1814,7 +1814,7 @@
         },
         {
             "name": "symfony/process",
-            "version": "v2.8.25",
+            "version": "v2.8.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
@@ -4980,60 +4980,36 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "1.5.3",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "396178ada8499ec492363587f037125bf7b07fcc"
+                "reference": "f9eaf037edf22fdfccf04cb0ab57ebcb1e166219"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/396178ada8499ec492363587f037125bf7b07fcc",
-                "reference": "396178ada8499ec492363587f037125bf7b07fcc",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/f9eaf037edf22fdfccf04cb0ab57ebcb1e166219",
+                "reference": "f9eaf037edf22fdfccf04cb0ab57ebcb1e166219",
                 "shasum": ""
             },
             "require": {
+                "ext-simplexml": "*",
                 "ext-tokenizer": "*",
-                "php": ">=5.1.2"
+                "ext-xmlwriter": "*",
+                "php": ">=5.4.0"
             },
-            "suggest": {
-                "phpunit/php-timer": "dev-master"
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
             },
             "bin": [
-                "scripts/phpcs"
+                "bin/phpcs",
+                "bin/phpcbf"
             ],
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-phpcs-fixer": "2.0.x-dev"
+                    "dev-master": "3.x-dev"
                 }
-            },
-            "autoload": {
-                "classmap": [
-                    "CodeSniffer.php",
-                    "CodeSniffer/CLI.php",
-                    "CodeSniffer/Exception.php",
-                    "CodeSniffer/File.php",
-                    "CodeSniffer/Report.php",
-                    "CodeSniffer/Reporting.php",
-                    "CodeSniffer/Sniff.php",
-                    "CodeSniffer/Tokens.php",
-                    "CodeSniffer/Reports/",
-                    "CodeSniffer/CommentParser/",
-                    "CodeSniffer/Tokenizers/",
-                    "CodeSniffer/DocGenerators/",
-                    "CodeSniffer/Standards/AbstractPatternSniff.php",
-                    "CodeSniffer/Standards/AbstractScopeSniff.php",
-                    "CodeSniffer/Standards/AbstractVariableSniff.php",
-                    "CodeSniffer/Standards/IncorrectPatternException.php",
-                    "CodeSniffer/Standards/Generic/Sniffs/",
-                    "CodeSniffer/Standards/MySource/Sniffs/",
-                    "CodeSniffer/Standards/PEAR/Sniffs/",
-                    "CodeSniffer/Standards/PSR1/Sniffs/",
-                    "CodeSniffer/Standards/PSR2/Sniffs/",
-                    "CodeSniffer/Standards/Squiz/Sniffs/",
-                    "CodeSniffer/Standards/Zend/Sniffs/"
-                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -5045,17 +5021,17 @@
                     "role": "lead"
                 }
             ],
-            "description": "PHP_CodeSniffer tokenises PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
+            "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
             "homepage": "http://www.squizlabs.com/php-codesniffer",
             "keywords": [
                 "phpcs",
                 "standards"
             ],
-            "time": "2014-05-01T03:07:07+00:00"
+            "time": "2017-06-14T01:23:49+00:00"
         },
         {
             "name": "symfony/config",
-            "version": "v3.2.12",
+            "version": "v3.2.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
@@ -5447,7 +5423,7 @@
         },
         {
             "name": "symfony/stopwatch",
-            "version": "v3.3.5",
+            "version": "v3.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/stopwatch.git",
@@ -5496,7 +5472,7 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.8.25",
+            "version": "v2.8.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
