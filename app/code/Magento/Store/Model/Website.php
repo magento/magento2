@@ -575,6 +575,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Clear configuration cache after creation website
      *
      * @return $this
+     * @since 100.2.0
      */
     public function afterSave()
     {
@@ -672,6 +673,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function getScopeType()
     {
@@ -680,6 +682,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function getScopeTypeName()
     {

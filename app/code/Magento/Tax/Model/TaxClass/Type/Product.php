@@ -9,6 +9,10 @@
  */
 namespace Magento\Tax\Model\TaxClass\Type;
 
+/**
+ * Class \Magento\Tax\Model\TaxClass\Type\Product
+ *
+ */
 class Product extends \Magento\Tax\Model\TaxClass\AbstractType
 {
     /**

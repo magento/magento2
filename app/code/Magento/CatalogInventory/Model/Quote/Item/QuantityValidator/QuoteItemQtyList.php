@@ -5,6 +5,10 @@
  */
 namespace Magento\CatalogInventory\Model\Quote\Item\QuantityValidator;
 
+/**
+ * Class \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList
+ *
+ */
 class QuoteItemQtyList
 {
     /**

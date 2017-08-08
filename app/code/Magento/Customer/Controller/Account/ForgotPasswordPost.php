@@ -20,10 +20,14 @@ use Magento\Framework\Exception\SecurityViolationException;
  */
 class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount
 {
-    /** @var AccountManagementInterface */
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     */
     protected $customerAccountManagement;
 
-    /** @var Escaper */
+    /**
+     * @var \Magento\Framework\Escaper
+     */
     protected $escaper;
 
     /**

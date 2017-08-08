@@ -6,6 +6,10 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Status;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Status\AssignPost
+ *
+ */
 class AssignPost extends \Magento\Sales\Controller\Adminhtml\Order\Status
 {
     /**

@@ -172,7 +172,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $stockRegistry;
 

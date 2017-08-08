@@ -6,6 +6,10 @@
 
 namespace Magento\Catalog\Model\ProductOptions;
 
+/**
+ * Class \Magento\Catalog\Model\ProductOptions\TypeList
+ *
+ */
 class TypeList implements \Magento\Catalog\Api\ProductCustomOptionTypeListInterface
 {
     /**

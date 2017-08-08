@@ -59,6 +59,7 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $newStatus
      * @param string $currentStatus
      * @return bool
+     * @since 100.2.0
      */
     public function trySetJobUniqueStatusAtomic($scheduleId, $newStatus, $currentStatus)
     {

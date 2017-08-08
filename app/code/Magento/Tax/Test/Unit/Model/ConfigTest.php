@@ -13,7 +13,7 @@ namespace Magento\Tax\Test\Unit\Model;
 
 use \Magento\Tax\Model\Config;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests the setter/getter methods that bypass the ScopeConfigInterface object

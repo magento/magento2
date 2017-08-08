@@ -8,6 +8,10 @@ namespace Magento\PageCache\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\PageCache\Observer\InvalidateCache
+ *
+ */
 class InvalidateCache implements ObserverInterface
 {
     /**

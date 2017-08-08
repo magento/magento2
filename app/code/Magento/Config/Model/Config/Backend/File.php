@@ -122,6 +122,7 @@ class File extends \Magento\Framework\App\Config\Value
      * Receiving uploaded file data
      *
      * @return array
+     * @since 100.1.0
      */
     protected function getFileData()
     {
@@ -210,6 +211,7 @@ class File extends \Magento\Framework\App\Config\Value
      *
      * @param string $uploadDir
      * @return string
+     * @since 100.1.0
      */
     protected function getUploadDirPath($uploadDir)
     {

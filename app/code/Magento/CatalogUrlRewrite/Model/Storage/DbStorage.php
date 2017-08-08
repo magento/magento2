@@ -9,6 +9,10 @@ use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product;
 use Magento\UrlRewrite\Model\Storage\DbStorage as BaseDbStorage;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Model\Storage\DbStorage
+ *
+ */
 class DbStorage extends BaseDbStorage
 {
     /**

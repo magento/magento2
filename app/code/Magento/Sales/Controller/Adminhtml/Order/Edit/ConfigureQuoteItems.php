@@ -6,6 +6,10 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Edit;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Edit\ConfigureQuoteItems
+ *
+ */
 class ConfigureQuoteItems extends \Magento\Sales\Controller\Adminhtml\Order\Create\ConfigureQuoteItems
 {
     /**

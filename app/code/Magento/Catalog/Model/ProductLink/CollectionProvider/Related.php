@@ -6,6 +6,10 @@
 
 namespace Magento\Catalog\Model\ProductLink\CollectionProvider;
 
+/**
+ * Class \Magento\Catalog\Model\ProductLink\CollectionProvider\Related
+ *
+ */
 class Related implements \Magento\Catalog\Model\ProductLink\CollectionProviderInterface
 {
     /**

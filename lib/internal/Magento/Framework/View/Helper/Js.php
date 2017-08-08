@@ -9,6 +9,10 @@
  */
 namespace Magento\Framework\View\Helper;
 
+/**
+ * Class \Magento\Framework\View\Helper\Js
+ *
+ */
 class Js
 {
     /**

@@ -5,6 +5,10 @@
  */
 namespace Magento\GiftMessage\Model\Type\Plugin;
 
+/**
+ * Class \Magento\GiftMessage\Model\Type\Plugin\Multishipping
+ *
+ */
 class Multishipping
 {
     /**

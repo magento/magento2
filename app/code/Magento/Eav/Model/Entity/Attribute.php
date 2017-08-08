@@ -304,6 +304,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
     /**
      * @return $this
+     * @since 100.0.7
      */
     public function afterDelete()
     {
@@ -475,6 +476,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
     /**
      * @inheritdoc
+     * @since 100.0.7
      */
     public function __sleep()
     {
@@ -487,6 +489,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
     /**
      * @inheritdoc
+     * @since 100.0.7
      */
     public function __wakeup()
     {

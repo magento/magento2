@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category\Flat\Action;
 
+/**
+ * Class \Magento\Catalog\Model\Indexer\Category\Flat\Action\Full
+ *
+ */
 class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
 {
     /**

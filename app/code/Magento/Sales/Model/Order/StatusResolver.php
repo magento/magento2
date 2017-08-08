@@ -7,6 +7,10 @@ namespace Magento\Sales\Model\Order;
 
 use Magento\Sales\Api\Data\OrderInterface;
 
+/**
+ * Class \Magento\Sales\Model\Order\StatusResolver
+ *
+ */
 class StatusResolver
 {
     /**

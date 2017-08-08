@@ -8,6 +8,10 @@ namespace Magento\Sales\Model\Order;
 use Magento\Sales\Api\Data\ShippingInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
+/**
+ * Class \Magento\Sales\Model\Order\Shipping
+ *
+ */
 class Shipping extends AbstractExtensibleModel implements ShippingInterface
 {
     /**

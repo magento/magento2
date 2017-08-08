@@ -21,7 +21,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Relation as ProductRelation;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigurableTest extends \PHPUnit_Framework_TestCase
+class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Configurable
@@ -109,16 +109,17 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $context = $this->getMock(
-            Context::class,
-            ['getResources'],
-            $this->objectManagerHelper->getConstructArguments(
-                Context::class,
-                [
-                    'resources' => $this->resource
-                ]
+        $context = $this->getMockBuilder(Context::class)
+            ->setMethods(['getResources'])
+            ->setConstructorArgs(
+                $this->objectManagerHelper->getConstructArguments(
+                    Context::class,
+                    [
+                        'resources' => $this->resource
+                    ]
+                )
             )
-        );
+            ->getMock();
         $context->expects($this->once())->method('getResources')->willReturn($this->resource);
 
         $this->configurable = $this->objectManagerHelper->getObject(

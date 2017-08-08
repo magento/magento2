@@ -6,6 +6,10 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Auth;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\Auth\DeniedIframe
+ *
+ */
 class DeniedIframe extends \Magento\Backend\Controller\Adminhtml\Auth
 {
     /**

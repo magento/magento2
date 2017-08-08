@@ -8,6 +8,10 @@ namespace Magento\Catalog\Model\Layer\Search;
 use Magento\Catalog\Model\Layer\ItemCollectionProviderInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
+/**
+ * Class \Magento\Catalog\Model\Layer\Search\ItemCollectionProvider
+ *
+ */
 class ItemCollectionProvider implements ItemCollectionProviderInterface
 {
     /**

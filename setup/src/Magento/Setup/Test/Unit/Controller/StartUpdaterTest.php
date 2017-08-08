@@ -13,7 +13,7 @@ use Magento\Setup\Controller\StartUpdater;
  * Class StartUpdaterTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StartUpdaterTest extends \PHPUnit_Framework_TestCase
+class StartUpdaterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var StartUpdater|\PHPUnit_Framework_MockObject_MockObject
@@ -47,17 +47,17 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->payloadValidator = $this->getMock(\Magento\Setup\Model\PayloadValidator::class, [], [], '', false);
-        $this->updaterTaskCreator = $this->getMock(\Magento\Setup\Model\UpdaterTaskCreator::class, [], [], '', false);
+        $this->payloadValidator = $this->createMock(\Magento\Setup\Model\PayloadValidator::class);
+        $this->updaterTaskCreator = $this->createMock(\Magento\Setup\Model\UpdaterTaskCreator::class);
 
         $this->controller = new StartUpdater(
             $this->updaterTaskCreator,
             $this->payloadValidator
         );
-        $this->request = $this->getMock(\Zend\Http\PhpEnvironment\Request::class, [], [], '', false);
-        $this->response = $this->getMock(\Zend\Http\PhpEnvironment\Response::class, [], [], '', false);
-        $routeMatch = $this->getMock(\Zend\Mvc\Router\RouteMatch::class, [], [], '', false);
-        $this->mvcEvent = $this->getMock(\Zend\Mvc\MvcEvent::class, [], [], '', false);
+        $this->request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
+        $this->response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
+        $this->mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
         $this->mvcEvent->expects($this->any())
             ->method('setRequest')
             ->with($this->request)

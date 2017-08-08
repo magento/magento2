@@ -93,7 +93,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Get StoreManager dependency
      *
      * @return StoreManagerInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getStoreManager()
     {

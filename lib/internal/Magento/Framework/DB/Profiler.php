@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\DB;
 
+/**
+ * Class \Magento\Framework\DB\Profiler
+ *
+ */
 class Profiler extends \Zend_Db_Profiler
 {
     /**

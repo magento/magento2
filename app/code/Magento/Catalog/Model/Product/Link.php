@@ -53,12 +53,13 @@ class Link extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var \Magento\Catalog\Model\Product\Link\SaveHandler
+     * @since 101.0.0
      */
     protected $saveProductLinks;
 
     /**
      * @var \Magento\CatalogInventory\Helper\Stock
-     * @deprecated
+     * @deprecated 101.0.1
      */
     protected $stockHelper;
 

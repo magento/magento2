@@ -11,6 +11,10 @@ use Magento\Store\Model\Group;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\Website;
 
+/**
+ * Class \Magento\Store\Model\ScopeTreeProvider
+ *
+ */
 class ScopeTreeProvider implements ScopeTreeProviderInterface
 {
     /**

@@ -8,6 +8,10 @@ namespace Magento\Framework\Logger\Handler;
 
 use Monolog\Logger;
 
+/**
+ * Class \Magento\Framework\Logger\Handler\Exception
+ *
+ */
 class Exception extends Base
 {
     /**

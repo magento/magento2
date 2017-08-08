@@ -6,6 +6,10 @@
 
 namespace Magento\Framework\Message;
 
+/**
+ * Class \Magento\Framework\Message\ExceptionMessageLookupFactory
+ *
+ */
 class ExceptionMessageLookupFactory implements ExceptionMessageFactoryInterface
 {
     /**

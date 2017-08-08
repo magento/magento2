@@ -7,7 +7,7 @@ namespace Magento\Tax\Test\Unit\Model\Calculation\Rate;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Tax\Model\Calculation\Rate\Converter
@@ -57,8 +57,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateTitlesFromServiceObject()
     {
-        $taxRateMock = $this->getMock(\Magento\Tax\Api\Data\TaxRateInterface::class);
-        $titlesMock = $this->getMock(\Magento\Tax\Api\Data\TaxRateTitleInterface::class);
+        $taxRateMock = $this->createMock(\Magento\Tax\Api\Data\TaxRateInterface::class);
+        $titlesMock = $this->createMock(\Magento\Tax\Api\Data\TaxRateTitleInterface::class);
 
         $taxRateMock->expects($this->once())->method('getTitles')->willReturn([$titlesMock]);
         $titlesMock->expects($this->once())->method('getStoreId')->willReturn(1);
@@ -69,7 +69,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateTitlesFromServiceObjectWhenTitlesAreNotProvided()
     {
-        $taxRateMock = $this->getMock(\Magento\Tax\Api\Data\TaxRateInterface::class);
+        $taxRateMock = $this->createMock(\Magento\Tax\Api\Data\TaxRateInterface::class);
 
         $taxRateMock->expects($this->once())->method('getTitles')->willReturn([]);
 
@@ -78,8 +78,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateArrayFromServiceObject()
     {
-        $taxRateMock = $this->getMock(\Magento\Tax\Api\Data\TaxRateInterface::class);
-        $titlesMock = $this->getMock(\Magento\Tax\Api\Data\TaxRateTitleInterface::class);
+        $taxRateMock = $this->createMock(\Magento\Tax\Api\Data\TaxRateInterface::class);
+        $titlesMock = $this->createMock(\Magento\Tax\Api\Data\TaxRateTitleInterface::class);
 
         $taxRateMock->expects($this->atLeastOnce())->method('getTitles')->willReturn([$titlesMock]);
         $titlesMock->expects($this->atLeastOnce())->method('getStoreId')->willReturn(1);

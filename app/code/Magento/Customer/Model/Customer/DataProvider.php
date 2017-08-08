@@ -104,6 +104,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
     /**
      * @var SessionManagerInterface
+     * @since 100.1.0
      */
     protected $session;
 
@@ -185,7 +186,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @return SessionManagerInterface
      *
-     * @deprecated
+     * @deprecated 100.1.3
+     * @since 100.1.0
      */
     protected function getSession()
     {
@@ -403,7 +405,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Retrieve Country With Websites Source
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CountryWithWebsites
      */
     private function getCountryWithWebsiteSource()
@@ -418,7 +420,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Retrieve Customer Config Share
      *
-     * @deprecated
+     * @deprecated 100.1.3
      * @return \Magento\Customer\Model\Config\Share
      */
     private function getShareConfig()
@@ -590,7 +592,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @return FileProcessorFactory
      *
-     * @deprecated
+     * @deprecated 100.1.3
      */
     private function getFileProcessorFactory()
     {

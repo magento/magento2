@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit;
 use Magento\Framework\App\ProductMetadata;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ProductMetadataTest extends \PHPUnit_Framework_TestCase
+class ProductMetadataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductMetadata

@@ -284,7 +284,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @param   mixed  $value
      * @return  $this
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     public function setAttributeDefaultValue($attributeCode, $value)
     {
@@ -297,7 +297,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @return \Magento\Catalog\Model\Attribute\ScopeOverriddenValue
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getAttributeScopeOverriddenValue()
     {
@@ -314,7 +314,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @param   string $attributeCode
      * @return  array|boolean
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     public function getAttributeDefaultValue($attributeCode)
     {
@@ -336,7 +336,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @param   string $attributeCode
      * @return  $this
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     public function setExistsStoreValueFlag($attributeCode)
     {
@@ -351,7 +351,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @return  bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     public function getExistsStoreValueFlag($attributeCode)
     {

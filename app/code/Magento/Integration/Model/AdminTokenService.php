@@ -123,7 +123,7 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
      * Get request throttler instance
      *
      * @return RequestThrottler
-     * @deprecated
+     * @deprecated 100.0.4
      */
     private function getRequestThrottler()
     {

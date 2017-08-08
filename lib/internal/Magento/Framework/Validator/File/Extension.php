@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Validator\File;
 
+/**
+ * Class \Magento\Framework\Validator\File\Extension
+ *
+ */
 class Extension extends \Zend_Validate_File_Extension implements \Magento\Framework\Validator\ValidatorInterface
 {
 }

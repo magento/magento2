@@ -12,6 +12,10 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
+/**
+ * Class \Magento\Setup\Model\AdminAccount
+ *
+ */
 class AdminAccount
 {
     /**#@+

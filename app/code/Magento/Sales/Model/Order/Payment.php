@@ -265,6 +265,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns transaction parent
      *
      * @return string
+     * @since 100.1.0
      */
     public function setParentTransactionId($txnId)
     {
@@ -1171,6 +1172,8 @@ class Payment extends Info implements OrderPaymentInterface
         return $builder->build($type);
     }
 
+    /**
+     */
     public function addTransactionCommentsToOrder($transaction, $message)
     {
         $order = $this->getOrder();
@@ -1425,7 +1428,7 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.2.0
      * @return OrderStateResolverInterface
      */
     private function getOrderStateResolver()
@@ -1753,7 +1756,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_ss_issue
      *
      * @return string
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function getCcSsIssue()
     {
@@ -1764,7 +1767,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_ss_start_month
      *
      * @return string
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function getCcSsStartMonth()
     {
@@ -1775,7 +1778,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_ss_start_year
      *
      * @return string
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function getCcSsStartYear()
     {
@@ -2140,7 +2143,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function setCcSsStartYear($ccSsStartYear)
     {
@@ -2229,7 +2232,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function setCcSsStartMonth($ccSsStartMonth)
     {
@@ -2334,7 +2337,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function setCcSsIssue($ccSsIssue)
     {

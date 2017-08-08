@@ -38,11 +38,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     const KEY_TITLES          = 'titles';
     /**#@-*/
 
-    /**
-     * List of tax titles
-     *
-     * @var array
-     */
+    /**#@-*/
     protected $_titles = null;
 
     /**

@@ -6,6 +6,10 @@
  */
 namespace Magento\User\Controller\Adminhtml\User\Role;
 
+/**
+ * Class \Magento\User\Controller\Adminhtml\User\Role\Index
+ *
+ */
 class Index extends \Magento\User\Controller\Adminhtml\User\Role
 {
     /**

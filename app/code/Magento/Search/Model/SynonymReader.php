@@ -25,6 +25,7 @@ use Magento\Framework\Registry;
  * @method \Magento\Search\Model\SynonymReader setSynonyms(string $value)
  * @method string getSynonyms()
  * @api
+ * @since 100.1.0
  */
 class SynonymReader extends AbstractModel
 {
@@ -32,6 +33,7 @@ class SynonymReader extends AbstractModel
      * Event prefix
      *
      * @var string
+     * @since 100.1.0
      */
     protected $_eventPrefix = 'search_synonyms';
 
@@ -39,6 +41,7 @@ class SynonymReader extends AbstractModel
      * Event object key name
      *
      * @var string
+     * @since 100.1.0
      */
     protected $_eventObject = 'search_synonyms';
 
@@ -50,6 +53,7 @@ class SynonymReader extends AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param DbCollection $resourceCollection
      * @param array $data
+     * @since 100.1.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -65,6 +69,7 @@ class SynonymReader extends AbstractModel
      * Init resource model
      *
      * @return void
+     * @since 100.1.0
      */
     protected function _construct()
     {
@@ -76,6 +81,7 @@ class SynonymReader extends AbstractModel
      *
      * @param string $phrase
      * @return $this
+     * @since 100.1.0
      */
     public function loadByPhrase($phrase)
     {

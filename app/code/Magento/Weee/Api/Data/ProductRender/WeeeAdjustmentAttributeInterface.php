@@ -9,6 +9,7 @@ namespace Magento\Weee\Api\Data\ProductRender;
 /**
  * List of all weee attributes, their amounts, etc.., that product has
  * @api
+ * @since 100.2.0
  */
 interface WeeeAdjustmentAttributeInterface
 {
@@ -17,6 +18,7 @@ interface WeeeAdjustmentAttributeInterface
      *
      * @param string|float $amount
      * @return void
+     * @since 100.2.0
      */
     public function setAmount($amount);
 
@@ -24,6 +26,7 @@ interface WeeeAdjustmentAttributeInterface
      * Retrieve weee attribute amount
      *
      * @return string
+     * @since 100.2.0
      */
     public function getAmount();
 
@@ -31,6 +34,7 @@ interface WeeeAdjustmentAttributeInterface
      * Retrieve tax which is calculated to fixed product tax attribute
      *
      * @return string
+     * @since 100.2.0
      */
     public function getTaxAmount();
 
@@ -39,6 +43,7 @@ interface WeeeAdjustmentAttributeInterface
      *
      * @param string $taxAmount
      * @return void
+     * @since 100.2.0
      */
     public function setTaxAmount($taxAmount);
 
@@ -47,6 +52,7 @@ interface WeeeAdjustmentAttributeInterface
      *
      * @param string $amountExclTax
      * @return void
+     * @since 100.2.0
      */
     public function setAmountExclTax($amountExclTax);
 
@@ -55,6 +61,7 @@ interface WeeeAdjustmentAttributeInterface
      *
      * @param string $amountInclTax
      * @return void
+     * @since 100.2.0
      */
     public function setTaxAmountInclTax($amountInclTax);
 
@@ -62,6 +69,7 @@ interface WeeeAdjustmentAttributeInterface
      * Retrieve tax amount of weee attribute
      *
      * @return string
+     * @since 100.2.0
      */
     public function getTaxAmountInclTax();
 
@@ -69,6 +77,7 @@ interface WeeeAdjustmentAttributeInterface
      * Retrieve product amount exclude tax
      *
      * @return string
+     * @since 100.2.0
      */
     public function getAmountExclTax();
 
@@ -77,6 +86,7 @@ interface WeeeAdjustmentAttributeInterface
      *
      * @param string $attributeCode
      * @return void
+     * @since 100.2.0
      */
     public function setAttributeCode($attributeCode);
 
@@ -84,17 +94,20 @@ interface WeeeAdjustmentAttributeInterface
      * Retrieve weee attribute code
      *
      * @return string
+     * @since 100.2.0
      */
     public function getAttributeCode();
 
     /**
      * @return \Magento\Weee\Api\Data\ProductRender\WeeeAdjustmentAttributeExtensionInterface
+     * @since 100.2.0
      */
     public function getExtensionAttributes();
 
     /**
      * @param \Magento\Weee\Api\Data\ProductRender\WeeeAdjustmentAttributeExtensionInterface $extensionAttributes
      * @return void
+     * @since 100.2.0
      */
     public function setExtensionAttributes(
         \Magento\Weee\Api\Data\ProductRender\WeeeAdjustmentAttributeExtensionInterface $extensionAttributes

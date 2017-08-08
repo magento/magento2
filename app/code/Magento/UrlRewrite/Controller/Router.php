@@ -17,19 +17,29 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  */
 class Router implements \Magento\Framework\App\RouterInterface
 {
-    /** var \Magento\Framework\App\ActionFactory */
+    /**
+     * @var \Magento\Framework\App\ActionFactory
+     */
     protected $actionFactory;
 
-    /** @var \Magento\Framework\UrlInterface */
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
     protected $url;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $storeManager;
 
-    /** @var \Magento\Framework\App\ResponseInterface */
+    /**
+     * @var \Magento\Framework\App\ResponseInterface
+     */
     protected $response;
 
-    /** @var UrlFinderInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     */
     protected $urlFinder;
 
     /**

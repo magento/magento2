@@ -8,7 +8,7 @@ namespace Magento\Payment\Test\Unit\Gateway\Validator;
 use Magento\Payment\Gateway\Validator\ValidatorComposite;
 use Magento\Payment\Gateway\Validator\ValidatorInterface;
 
-class ValidatorCompositeTest extends \PHPUnit_Framework_TestCase
+class ValidatorCompositeTest extends \PHPUnit\Framework\TestCase
 {
     public function testValidate()
     {

@@ -787,7 +787,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * @return Data\Condition\Converter
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getRuleConditionConverter()
     {

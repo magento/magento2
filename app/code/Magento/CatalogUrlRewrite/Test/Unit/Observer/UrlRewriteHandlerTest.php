@@ -16,7 +16,7 @@ use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 use Magento\UrlRewrite\Model\MergeDataProvider;
 use Magento\CatalogUrlRewrite\Model\CategoryProductUrlPathGenerator;
 
-class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
+class UrlRewriteHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UrlRewriteHandler
