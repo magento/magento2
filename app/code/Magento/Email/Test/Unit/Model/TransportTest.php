@@ -6,12 +6,14 @@
 namespace Magento\Email\Test\Unit\Model;
 
 use Magento\Email\Model\Transport;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Mail\Message;
 use Magento\Store\Model\ScopeInterface;
 
 /**
  * Covers \Magento\Email\Model\Transport
  */
-class TransportTest extends \PHPUnit_Framework_TestCase
+class TransportTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Zend_Mail_Transport_Sendmail|\PHPUnit_Framework_MockObject_MockObject
@@ -19,12 +21,12 @@ class TransportTest extends \PHPUnit_Framework_TestCase
     private $transportMock;
 
     /**
-     * @var \Magento\Framework\Mail\Message|\PHPUnit_Framework_MockObject_MockObject
+     * @var Message|\PHPUnit_Framework_MockObject_MockObject
      */
     private $messageMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $scopeConfigMock;
 
@@ -35,14 +37,11 @@ class TransportTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->transportMock = $this->getMockBuilder(\Zend_Mail_Transport_Sendmail::class)
-            ->getMock();
+        $this->transportMock = $this->createMock(\Zend_Mail_Transport_Sendmail::class);
 
-        $this->messageMock = $this->getMockBuilder(\Magento\Framework\Mail\Message::class)
-            ->getMock();
+        $this->messageMock = $this->createMock(Message::class);
 
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->model = new Transport($this->transportMock, $this->messageMock, $this->scopeConfigMock);
     }
