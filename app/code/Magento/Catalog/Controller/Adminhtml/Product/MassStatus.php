@@ -99,7 +99,7 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_getSession()->addException($e, __('Something went wrong while updating the product(s) status.'));
+            $this->messageManager->addException($e, __('Something went wrong while updating the product(s) status.'));
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
