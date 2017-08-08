@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit\Utility;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 
-class FilesTest extends \PHPUnit\Framework\Testcase
+class FilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Component\DirSearch|\PHPUnit_Framework_MockObject_MockObject
