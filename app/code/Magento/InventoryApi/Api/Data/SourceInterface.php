@@ -318,7 +318,7 @@ interface SourceInterface extends ExtensibleDataInterface
      * @param \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface[] $carrierLinks
      * @return void
      */
-    public function setCarrierLinks($carrierLinks);
+    public function setCarrierLinks(array $carrierLinks);
 
     /**
      * Retrieve existing extension attributes object

@@ -5,7 +5,6 @@
  */
 namespace Magento\Inventory\Model;
 
-use Magento\Framework\Exception\StateException;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
@@ -23,7 +22,6 @@ interface SourceCarrierLinkManagementInterface
      *
      * @param SourceInterface $source
      * @return void
-     * @throws StateException
      */
     public function saveCarrierLinksBySource(SourceInterface $source);
 

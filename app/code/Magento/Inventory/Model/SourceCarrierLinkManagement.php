@@ -8,12 +8,10 @@ namespace Magento\Inventory\Model;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Exception\StateException;
 use Magento\Inventory\Model\ResourceModel\SourceCarrierLink as SourceCarrierLinkResourceModel;
 use Magento\Inventory\Model\ResourceModel\SourceCarrierLink;
 use Magento\Inventory\Model\ResourceModel\SourceCarrierLink\Collection;
 use Magento\Inventory\Model\ResourceModel\SourceCarrierLink\CollectionFactory;
-use Magento\Inventory\Setup\InstallSchema;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 
@@ -75,15 +73,9 @@ class SourceCarrierLinkManagement implements SourceCarrierLinkManagementInterfac
      */
     public function saveCarrierLinksBySource(SourceInterface $source)
     {
-        if (is_array($source->getCarrierLinks())) {
-            try {
-                $this->deleteCurrentCarrierLinks($source);
-                if (!empty($source->getCarrierLinks())) {
-                    $this->saveNewCarrierLinks($source);
-                }
-            } catch (\Exception $e) {
-                throw new StateException(__('Could not update Carrier Links'), $e);
-            }
+        $this->deleteCurrentCarrierLinks($source);
+        if (is_array($source->getCarrierLinks()) && !empty($source->getCarrierLinks())) {
+            $this->saveNewCarrierLinks($source);
         }
     }
 

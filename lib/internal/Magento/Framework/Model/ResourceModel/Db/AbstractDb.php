@@ -444,15 +444,11 @@ abstract class AbstractDb extends AbstractResource
         try {
             $object->beforeDelete();
             $this->_beforeDelete($object);
-            $entityId = null === $object->getId()
-                ? $object->getData($this->getIdFieldName())
-                : $object->getId();
-
             $this->objectRelationProcessor->delete(
                 $this->transactionManager,
                 $connection,
                 $this->getMainTable(),
-                $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $entityId),
+                $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $object->getId()),
                 $object->getData()
             );
             $this->_afterDelete($object);
