@@ -14,7 +14,7 @@ interface MergerInterface
 {
     /**
      * @param object[] $messages
-     * @return object[]
+     * @return object[]|array
      * @since 2.0.0
      */
     public function merge(array $messages);
