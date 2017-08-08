@@ -1055,6 +1055,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param string $response
      * @return bool|\Magento\Framework\DataObject|Result|Error
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @since 2.0.0
      */
     protected function _parseResponse($response)
