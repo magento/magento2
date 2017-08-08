@@ -10,19 +10,16 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Class \Magento\Framework\MessageQueue\MergerFactory
  *
- * @since 2.0.0
  */
 class MergerFactory
 {
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var string[]
-     * @since 2.0.0
      */
     private $mergers;
 
@@ -30,7 +27,6 @@ class MergerFactory
      * MergerFactory constructor.
      * @param ObjectManagerInterface $objectManager
      * @param string[] $mergers
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager, $mergers)
     {
@@ -42,7 +38,6 @@ class MergerFactory
      * @param string $consumerName
      * @return MergerInterface
      * @throws \LogicException
-     * @since 2.0.0
      */
     public function create($consumerName)
     {

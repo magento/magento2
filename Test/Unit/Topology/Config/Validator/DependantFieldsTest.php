@@ -7,7 +7,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Topology\Config\Validator;
 
 use \Magento\Framework\MessageQueue\Topology\Config\Validator\DependentFields;
 
-class DependantFieldsTest extends \PHPUnit_Framework_TestCase
+class DependantFieldsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DependentFields
@@ -66,7 +66,7 @@ class DependantFieldsTest extends \PHPUnit_Framework_TestCase
     public function testValidateMissingTopicField()
     {
         $expectedMessage = "Topic name is required for topic based exchange: ex01";
-        $this->setExpectedException('\LogicException', $expectedMessage);
+        $this->expectException('\LogicException', $expectedMessage);
         $configData = [
             'ex01' => [
                 'name' => 'ex01',

@@ -9,7 +9,6 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Class for access to MessageQueue configuration data.
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\Config\Data
 {
@@ -22,7 +21,6 @@ class Data extends \Magento\Framework\Config\Data
      * @param Reader\Env\Validator $envValidator
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\MessageQueue\Config\CompositeReader $reader,

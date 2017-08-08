@@ -7,7 +7,6 @@ namespace Magento\Framework\MessageQueue\Publisher\Config;
 
 /**
  * Representation of publisher connection configuration.
- * @since 2.2.0
  */
 interface PublisherConnectionInterface
 {
@@ -15,7 +14,6 @@ interface PublisherConnectionInterface
      * Get Connection name.
      *
      * @return string
-     * @since 2.2.0
      */
     public function getName();
 
@@ -23,7 +21,6 @@ interface PublisherConnectionInterface
      * Get exchange name.
      *
      * @return string
-     * @since 2.2.0
      */
     public function getExchange();
 
@@ -31,7 +28,6 @@ interface PublisherConnectionInterface
      * Check if connection disabled.
      *
      * @return bool
-     * @since 2.2.0
      */
     public function isDisabled();
 }

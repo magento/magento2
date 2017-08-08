@@ -7,7 +7,6 @@ namespace Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem;
 
 /**
  * Instances of this interface represent config binging items declared in etc/queue_topology.xsd
- * @since 2.2.0
  */
 interface BindingInterface
 {
@@ -15,7 +14,6 @@ interface BindingInterface
      * Get binding name.
      *
      * @return string
-     * @since 2.2.0
      */
     public function getId();
 
@@ -23,7 +21,6 @@ interface BindingInterface
      * Get binding destination type.
      *
      * @return string
-     * @since 2.2.0
      */
     public function getDestinationType();
 
@@ -31,7 +28,6 @@ interface BindingInterface
      * Get destination.
      *
      * @return string
-     * @since 2.2.0
      */
     public function getDestination();
 
@@ -39,7 +35,6 @@ interface BindingInterface
      * Check if binding is disabled.
      *
      * @return bool
-     * @since 2.2.0
      */
     public function isDisabled();
 
@@ -47,7 +42,6 @@ interface BindingInterface
      * Get topic name.
      *
      * @return string
-     * @since 2.2.0
      */
     public function getTopic();
 
@@ -55,7 +49,6 @@ interface BindingInterface
      * Get binding arguments
      *
      * @return array
-     * @since 2.2.0
      */
     public function getArguments();
 }

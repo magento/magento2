@@ -9,13 +9,11 @@ use Magento\Framework\MessageQueue\Consumer\Config\ValidatorInterface;
 
 /**
  * Consumer config data validator for required fields.
- * @since 2.2.0
  */
 class RequiredFields implements ValidatorInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function validate($configData)
     {

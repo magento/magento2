@@ -19,73 +19,61 @@ use Psr\Log\LoggerInterface;
  * This could be used for both synchronous and asynchronous processing, depending on topic.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Consumer implements ConsumerInterface
 {
     /**
      * @var ConsumerConfigurationInterface
-     * @since 2.0.0
      */
     private $configuration;
 
     /**
      * @var ResourceConnection
-     * @since 2.0.0
      */
     private $resource;
 
     /**
      * @var MessageEncoder
-     * @since 2.0.0
      */
     private $messageEncoder;
 
     /**
      * @var CallbackInvoker
-     * @since 2.1.0
      */
     private $invoker;
 
     /**
      * @var MessageController
-     * @since 2.1.0
      */
     private $messageController;
 
     /**
      * @var QueueRepository
-     * @since 2.2.0
      */
     private $queueRepository;
 
     /**
      * @var EnvelopeFactory
-     * @since 2.2.0
      */
     private $envelopeFactory;
 
     /**
      * @var MessageValidator
-     * @since 2.2.0
      */
     private $messageValidator;
 
     /**
      * @var ConsumerConfig
-     * @since 2.2.0
      */
     private $consumerConfig;
 
     /**
      * @var CommunicationConfig
-     * @since 2.2.0
      */
     private $communicationConfig;
 
     /**
      * @var LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
@@ -99,7 +87,6 @@ class Consumer implements ConsumerInterface
      * @param LoggerInterface $logger
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function __construct(
         CallbackInvoker $invoker,
@@ -117,7 +104,6 @@ class Consumer implements ConsumerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function process($maxNumberOfMessages = null)
     {
@@ -137,7 +123,6 @@ class Consumer implements ConsumerInterface
      * @param boolean $isSync
      * @return string|null
      * @throws LocalizedException
-     * @since 2.0.0
      */
     private function dispatchMessage(EnvelopeInterface $message, $isSync = false)
     {
@@ -172,7 +157,6 @@ class Consumer implements ConsumerInterface
      * @param mixed $result
      * @return string
      * @throws LocalizedException
-     * @since 2.2.0
      */
     private function processSyncResponse($topicName, $result)
     {
@@ -189,7 +173,6 @@ class Consumer implements ConsumerInterface
      *
      * @param EnvelopeInterface $envelope
      * @return void
-     * @since 2.2.0
      */
     private function sendResponse(EnvelopeInterface $envelope)
     {
@@ -205,7 +188,6 @@ class Consumer implements ConsumerInterface
      *
      * @param QueueInterface $queue
      * @return \Closure
-     * @since 2.0.0
      */
     private function getTransactionCallback(QueueInterface $queue)
     {
@@ -258,8 +240,7 @@ class Consumer implements ConsumerInterface
      *
      * @return ConsumerConfig
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getConsumerConfig()
     {
@@ -274,8 +255,7 @@ class Consumer implements ConsumerInterface
      *
      * @return CommunicationConfig
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getCommunicationConfig()
     {
@@ -291,8 +271,7 @@ class Consumer implements ConsumerInterface
      *
      * @return QueueRepository
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getQueueRepository()
     {
@@ -307,8 +286,7 @@ class Consumer implements ConsumerInterface
      *
      * @return MessageController
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getMessageController()
     {
@@ -324,8 +302,7 @@ class Consumer implements ConsumerInterface
      *
      * @return MessageValidator
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getMessageValidator()
     {
@@ -341,8 +318,7 @@ class Consumer implements ConsumerInterface
      *
      * @return EnvelopeFactory
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getEnvelopeFactory()
     {

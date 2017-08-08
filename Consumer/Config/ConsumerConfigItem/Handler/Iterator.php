@@ -10,7 +10,6 @@ use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\HandlerFac
 
 /**
  * Consumer handler config iterator.
- * @since 2.2.0
  */
 class Iterator implements \Iterator, \ArrayAccess
 {
@@ -18,7 +17,6 @@ class Iterator implements \Iterator, \ArrayAccess
      * Consumer config handler item.
      *
      * @var Handler
-     * @since 2.2.0
      */
     private $object;
 
@@ -26,7 +24,6 @@ class Iterator implements \Iterator, \ArrayAccess
      * Config data.
      *
      * @var array
-     * @since 2.2.0
      */
     private $data;
 
@@ -34,7 +31,6 @@ class Iterator implements \Iterator, \ArrayAccess
      * Initialize dependencies.
      *
      * @param HandlerFactory $itemFactory
-     * @since 2.2.0
      */
     public function __construct(HandlerFactory $itemFactory)
     {
@@ -46,7 +42,6 @@ class Iterator implements \Iterator, \ArrayAccess
      *
      * @param array $data
      * @return void
-     * @since 2.2.0
      */
     public function setData(array $data)
     {
@@ -58,7 +53,6 @@ class Iterator implements \Iterator, \ArrayAccess
      * Get current item.
      *
      * @return Handler
-     * @since 2.2.0
      */
     public function current()
     {
@@ -67,7 +61,6 @@ class Iterator implements \Iterator, \ArrayAccess
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function next()
     {
@@ -82,7 +75,6 @@ class Iterator implements \Iterator, \ArrayAccess
      *
      * @param array $data
      * @return void
-     * @since 2.2.0
      */
     private function initObject(array $data)
     {
@@ -91,7 +83,6 @@ class Iterator implements \Iterator, \ArrayAccess
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function key()
     {
@@ -100,7 +91,6 @@ class Iterator implements \Iterator, \ArrayAccess
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function valid()
     {
@@ -109,7 +99,6 @@ class Iterator implements \Iterator, \ArrayAccess
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function rewind()
     {
@@ -121,7 +110,6 @@ class Iterator implements \Iterator, \ArrayAccess
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function offsetExists($offset)
     {
@@ -130,7 +118,6 @@ class Iterator implements \Iterator, \ArrayAccess
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function offsetGet($offset)
     {
@@ -144,7 +131,6 @@ class Iterator implements \Iterator, \ArrayAccess
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function offsetSet($offset, $value)
     {
@@ -153,7 +139,6 @@ class Iterator implements \Iterator, \ArrayAccess
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function offsetUnset($offset)
     {

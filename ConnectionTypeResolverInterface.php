@@ -7,7 +7,6 @@ namespace Magento\Framework\MessageQueue;
 
 /**
  * Message Queue connection type resolver.
- * @since 2.2.0
  */
 interface ConnectionTypeResolverInterface
 {
@@ -16,7 +15,6 @@ interface ConnectionTypeResolverInterface
      *
      * @param string $connectionName
      * @return string|null
-     * @since 2.2.0
      */
     public function getConnectionType($connectionName);
 }

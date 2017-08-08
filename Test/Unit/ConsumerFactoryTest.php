@@ -12,7 +12,7 @@ use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
 use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem;
 
-class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
+class ConsumerFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

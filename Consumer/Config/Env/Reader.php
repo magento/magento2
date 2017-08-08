@@ -8,19 +8,16 @@ namespace Magento\Framework\MessageQueue\Consumer\Config\Env;
 
 /**
  * Communication configuration reader. Reads data from env.php.
- * @since 2.2.0
  */
 class Reader implements \Magento\Framework\Config\ReaderInterface
 {
     /**
      * @var \Magento\Framework\MessageQueue\Config\Reader\Env
-     * @since 2.2.0
      */
     private $envConfig;
 
     /**
      * @param \Magento\Framework\MessageQueue\Config\Reader\Env $envConfig
-     * @since 2.2.0
      */
     public function __construct(\Magento\Framework\MessageQueue\Config\Reader\Env $envConfig)
     {
@@ -32,7 +29,6 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
      *
      * @param string|null $scope
      * @return array
-     * @since 2.2.0
      */
     public function read($scope = null)
     {

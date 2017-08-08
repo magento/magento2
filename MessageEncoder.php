@@ -15,7 +15,6 @@ use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
  * Class which provides encoding and decoding capabilities for MessageQueue messages.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class MessageEncoder
 {
@@ -24,31 +23,26 @@ class MessageEncoder
 
     /**
      * @var \Magento\Framework\Webapi\ServiceOutputProcessor
-     * @since 2.0.0
      */
     private $dataObjectEncoder;
 
     /**
      * @var \Magento\Framework\Webapi\ServiceInputProcessor
-     * @since 2.0.0
      */
     private $dataObjectDecoder;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     private $jsonEncoder;
 
     /**
      * @var \Magento\Framework\Json\DecoderInterface
-     * @since 2.0.0
      */
     private $jsonDecoder;
 
     /**
      * @var CommunicationConfig
-     * @since 2.2.0
      */
     private $communicationConfig;
 
@@ -62,7 +56,6 @@ class MessageEncoder
      * @param \Magento\Framework\Webapi\ServiceInputProcessor $dataObjectDecoder
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function __construct(
         QueueConfig $queueConfig,
@@ -85,7 +78,6 @@ class MessageEncoder
      * @param bool $requestType
      * @return string
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function encode($topic, $message, $requestType = true)
     {
@@ -101,7 +93,6 @@ class MessageEncoder
      * @param bool $requestType
      * @return mixed
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function decode($topic, $message, $requestType = true)
     {
@@ -120,7 +111,6 @@ class MessageEncoder
      * @param bool $requestType
      * @return array
      * @throws LocalizedException
-     * @since 2.0.0
      */
     protected function getTopicSchema($topic, $requestType)
     {
@@ -152,7 +142,6 @@ class MessageEncoder
      * @param bool $requestType
      * @return mixed
      * @throws LocalizedException
-     * @since 2.0.0
      */
     protected function convertMessage($topic, $message, $direction, $requestType)
     {
@@ -219,7 +208,6 @@ class MessageEncoder
      *
      * @param string $direction
      * @return ServicePayloadConverterInterface
-     * @since 2.0.0
      */
     protected function getConverter($direction)
     {
@@ -231,8 +219,7 @@ class MessageEncoder
      *
      * @return CommunicationConfig
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getCommunicationConfig()
     {

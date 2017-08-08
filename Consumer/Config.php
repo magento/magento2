@@ -11,7 +11,6 @@ use Magento\Framework\Phrase;
 
 /**
  * {@inheritdoc}
- * @since 2.2.0
  */
 class Config implements ConfigInterface
 {
@@ -19,7 +18,6 @@ class Config implements ConfigInterface
      * Item iterator.
      *
      * @var Iterator
-     * @since 2.2.0
      */
     private $iterator;
 
@@ -27,7 +25,6 @@ class Config implements ConfigInterface
      * Initialize dependencies.
      *
      * @param Iterator $iterator
-     * @since 2.2.0
      */
     public function __construct(Iterator $iterator)
     {
@@ -36,7 +33,6 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getConsumer($name)
     {
@@ -49,7 +45,6 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getConsumers()
     {

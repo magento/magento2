@@ -9,7 +9,7 @@ use Magento\Framework\MessageQueue\Topology\Config\Xml\Converter;
 use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Converter
@@ -31,15 +31,9 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->defaultConfigProviderMock = $this->getMock(
-            \Magento\Framework\MessageQueue\DefaultValueProvider::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
-        $this->interpreter = $this->getMock(InterpreterInterface::class);
+        $this->defaultConfigProviderMock =
+            $this->createMock(\Magento\Framework\MessageQueue\DefaultValueProvider::class);
+        $this->interpreter = $this->createMock(InterpreterInterface::class);
         $this->converter = new Converter(new BooleanUtils(), $this->interpreter, $this->defaultConfigProviderMock);
         $this->defaultConfigProviderMock->expects($this->any())->method('getConnection')->willReturn('amqp');
     }

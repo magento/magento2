@@ -10,13 +10,11 @@ use Magento\Framework\Reflection\MethodsMap;
 
 /**
  * Consumer config data validator for handlers.
- * @since 2.2.0
  */
 class Handlers implements ValidatorInterface
 {
     /**
      * @var MethodsMap
-     * @since 2.2.0
      */
     private $methodsMap;
 
@@ -24,7 +22,6 @@ class Handlers implements ValidatorInterface
      * Initialize dependencies.
      *
      * @param MethodsMap $methodsMap
-     * @since 2.2.0
      */
     public function __construct(MethodsMap $methodsMap)
     {
@@ -33,7 +30,6 @@ class Handlers implements ValidatorInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function validate($configData)
     {
@@ -60,7 +56,6 @@ class Handlers implements ValidatorInterface
      * @param string $consumerName
      * @return void
      * @throws \LogicException
-     * @since 2.2.0
      */
     private function validateHandler($handler, $consumerName)
     {
