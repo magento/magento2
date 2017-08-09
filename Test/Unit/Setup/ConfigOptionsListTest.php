@@ -118,29 +118,20 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedOptions, $this->model->getOptions());
     }
 
-    public function testCreateConfig()
+    /**
+     * @param array $options
+     * @param array $expectedConfigData
+     * @dataProvider getCreateConfigDataProvider
+     */
+    public function testCreateConfig($options, $expectedConfigData)
     {
-        $expectedConfigData = ['queue' =>
-            ['amqp' =>
-                [
-                    'host' => 'host',
-                    'port' => 'port',
-                    'user' => 'user',
-                    'password' => 'password',
-                    'virtualhost' => 'virtual host',
-                    'ssl' => 'ssl',
-                 ]
-            ]
-        ];
-
-        $result = $this->model->createConfig($this->options, $this->deploymentConfigMock);
+        $result = $this->model->createConfig($options, $this->deploymentConfigMock);
         $this->assertInternalType('array', $result);
         $this->assertNotEmpty($result);
         /** @var \Magento\Framework\Config\Data\ConfigData $configData */
         $configData = $result[0];
         $this->assertInstanceOf(\Magento\Framework\Config\Data\ConfigData::class, $configData);
-        $actualData = $configData->getData();
-        $this->assertEquals($expectedConfigData, $actualData);
+        $this->assertEquals($expectedConfigData, $configData->getData());
     }
 
     public function testValidateInvalidConnection()
@@ -163,5 +154,67 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
         $options = [];
         $this->connectionValidatorMock->expects($this->never())->method('isConnectionValid');
         $this->assertEquals($expectedResult, $this->model->validate($options, $this->deploymentConfigMock));
+    }
+
+    public function getCreateConfigDataProvider()
+    {
+        return [
+            [
+                [
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_HOST => 'host',
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_PORT => 'port',
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_USER => 'user',
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_PASSWORD => 'password',
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST => 'virtual host',
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL => 'ssl',
+                ],
+                ['queue' =>
+                    ['amqp' =>
+                        [
+                            'host' => 'host',
+                            'port' => 'port',
+                            'user' => 'user',
+                            'password' => 'password',
+                            'virtualhost' => 'virtual host',
+                            'ssl' => 'ssl',
+                         ]
+                    ]
+                ],
+            ],
+            [
+                [
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_HOST => 'host',
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_PORT => ConfigOptionsList::DEFAULT_AMQP_PORT,
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_USER => 'user',
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_PASSWORD => 'password',
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST => 'virtual host',
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL => 'ssl',
+                ],
+                ['queue' =>
+                    ['amqp' =>
+                        [
+                            'host' => 'host',
+                            'port' => ConfigOptionsList::DEFAULT_AMQP_PORT,
+                            'user' => 'user',
+                            'password' => 'password',
+                            'virtualhost' => 'virtual host',
+                            'ssl' => 'ssl',
+                         ]
+                    ]
+                ],
+            ],
+            [
+                [
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_HOST => ConfigOptionsList::DEFAULT_AMQP_HOST,
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_PORT => ConfigOptionsList::DEFAULT_AMQP_PORT,
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_USER => ConfigOptionsList::DEFAULT_AMQP_USER,
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_PASSWORD => ConfigOptionsList::DEFAULT_AMQP_PASSWORD,
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST =>
+                        ConfigOptionsList::DEFAULT_AMQP_VIRTUAL_HOST,
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL => ConfigOptionsList::DEFAULT_AMQP_SSL,
+                ],
+                [],
+            ],
+        ];
     }
 }
