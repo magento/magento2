@@ -17,7 +17,7 @@ use Magento\Framework\Amqp\TopologyInstaller;
 /**
  * Class Topology creates topology for Amqp messaging
  *
- * @deprecated
+ * @deprecated 100.2.0
  */
 class Topology extends TopologyInstaller
 {
