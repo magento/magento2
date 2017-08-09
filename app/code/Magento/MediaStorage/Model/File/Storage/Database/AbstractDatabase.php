@@ -95,7 +95,7 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
      * Get resource instance
      *
      * @return \Magento\Framework\Model\ResourceModel\AbstractResource
-     * @deprecated 100.2.0 because resource models should be used directly
+     * @deprecated because resource models should be used directly
      */
     protected function _getResource()
     {

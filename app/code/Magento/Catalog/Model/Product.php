@@ -501,7 +501,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get collection instance
      *
      * @return object
-     * @deprecated 100.2.0 because collections should be used directly via factory
+     * @deprecated because collections should be used directly via factory
      */
     public function getResourceCollection()
     {
