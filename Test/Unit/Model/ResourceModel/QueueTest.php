@@ -9,7 +9,7 @@ namespace Magento\MysqlMq\Test\Unit\Model\ResourceModel;
 /**
  * Unit test for Queue resource model.
  */
-class QueueTest extends \PHPUnit_Framework_TestCase
+class QueueTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
@@ -79,7 +79,8 @@ class QueueTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['insertMultiple', 'lastInsertId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->resources->expects($this->exactly(2))->method('getConnection')->with('default')->willReturn($connection);
+        $this->resources->expects($this->atLeastOnce())
+            ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->once())
             ->method('getTableName')->with($tableName, 'default')->willReturn($tableName);
         $connection->expects($this->once())->method('insertMultiple')
@@ -91,6 +92,13 @@ class QueueTest extends \PHPUnit_Framework_TestCase
                 ]
             )->willReturn(2);
         $connection->expects($this->once())->method('lastInsertId')->with($tableName)->willReturn($messageIds[0]);
+        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+            ->disableOriginalConstructor()->getMock();
+        $connection->expects($this->once())->method('select')->willReturn($select);
+        $select->expects($this->once())->method('from')->with(['qm' => $tableName], ['id'])->willReturnSelf();
+        $select->expects($this->once())->method('where')->with('qm.id >= ?', $messageIds[0])->willReturnSelf();
+        $select->expects($this->once())->method('limit')->with(2)->willReturnSelf();
+        $connection->expects($this->once())->method('fetchCol')->with($select)->willReturn($messageIds);
         $this->assertEquals($messageIds, $this->queue->saveMessages($messageTopic, $messages));
     }
 

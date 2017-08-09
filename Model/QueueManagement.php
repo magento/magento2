@@ -38,9 +38,7 @@ class QueueManagement
     const XML_PATH_NEW_MESSAGES_LIFETIME = 'system/mysqlmq/new_messages_lifetime';
     /**#@-*/
 
-    /**
-     * @var \Magento\MysqlMq\Model\ResourceModel\Queue
-     */
+    /**#@-*/
     private $messageResource;
 
     /**
@@ -98,6 +96,7 @@ class QueueManagement
      * @param array $messages
      * @param string[] $queueNames
      * @return $this
+     * @since 100.2.0
      */
     public function addMessagesToQueues($topic, $messages, $queueNames)
     {
