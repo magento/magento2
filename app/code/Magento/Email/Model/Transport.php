@@ -60,7 +60,8 @@ class Transport implements TransportInterface
      * @param MessageInterface $message Email message object
      * @param ScopeConfigInterface $scopeConfig Core store config
      * @param string|array|\Zend_Config|null $parameters Config options for sendmail parameters
-     * @throws \InvalidArgumentException when $message is not instance of \Zend_Mail
+     *
+     * @throws \InvalidArgumentException when $message is not an instance of \Zend_Mail
      */
     public function __construct(
         \Zend_Mail_Transport_Sendmail $transport,
@@ -79,7 +80,7 @@ class Transport implements TransportInterface
      * Sets Return-Path to email if necessary, and sends email if it is allowed by System Configurations
      *
      * @return void
-     * @throws \Magento\Framework\Exception\MailException
+     * @throws MailException
      */
     public function sendMessage()
     {
