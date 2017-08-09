@@ -14,6 +14,10 @@ use Magento\Catalog\Model\ResourceModel\Attribute;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\Search\Model\EngineResolver;
 
+/**
+ * Class \Magento\AdvancedSearch\Model\Indexer\Fulltext\Plugin\CustomerGroup
+ *
+ */
 class CustomerGroup extends AbstractPlugin
 {
     /**

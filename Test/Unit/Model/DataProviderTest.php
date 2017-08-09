@@ -9,7 +9,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Search\Model\EngineResolver;
 use Magento\Framework\ObjectManagerInterface;
 
-class DataProviderTest extends \PHPUnit_Framework_TestCase
+class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\AdvancedSearch\Model\SuggestedQueries;
@@ -50,7 +50,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\AdvancedSearch\Model\SuggestedQueriesInterface|
          *     \PHPUnit_Framework_MockObject_MockObject
          */
-        $suggestedQueriesMock = $this->getMock(\Magento\AdvancedSearch\Model\SuggestedQueriesInterface::class);
+        $suggestedQueriesMock = $this->createMock(\Magento\AdvancedSearch\Model\SuggestedQueriesInterface::class);
         $suggestedQueriesMock->expects($this->any())
             ->method('isResultsCountEnabled')
             ->willReturn(true);
@@ -124,7 +124,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetItems()
     {
         /** @var $queryInterfaceMock \Magento\Search\Model\QueryInterface */
-        $queryInterfaceMock = $this->getMock(\Magento\Search\Model\QueryInterface::class);
+        $queryInterfaceMock = $this->createMock(\Magento\Search\Model\QueryInterface::class);
         $result = $this->model->getItems($queryInterfaceMock);
         $this->assertEquals([], $result);
     }

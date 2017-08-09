@@ -14,7 +14,7 @@ use Magento\AdvancedSearch\Model\Client\ClientInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TestConnectionTest extends \PHPUnit_Framework_TestCase
+class TestConnectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
@@ -59,19 +59,20 @@ class TestConnectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getParams'], [], '', false);
-        $responseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $this->requestMock = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getParams']);
+        $responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
 
-        $context = $this->getMock(
-            \Magento\Backend\App\Action\Context::class,
-            ['getRequest', 'getResponse', 'getMessageManager', 'getSession'],
-            $helper->getConstructArguments(
-                \Magento\Backend\App\Action\Context::class,
-                [
-                    'request' => $this->requestMock
-                ]
+        $context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+            ->setMethods(['getRequest', 'getResponse', 'getMessageManager', 'getSession'])
+            ->setConstructorArgs(
+                $helper->getConstructArguments(
+                    \Magento\Backend\App\Action\Context::class,
+                    [
+                        'request' => $this->requestMock
+                    ]
+                )
             )
-        );
+            ->getMock();
         $context->expects($this->once())->method('getRequest')->will($this->returnValue($this->requestMock));
         $context->expects($this->once())->method('getResponse')->will($this->returnValue($responseMock));
 
@@ -80,7 +81,7 @@ class TestConnectionTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->clientMock = $this->getMock(\Magento\AdvancedSearch\Model\Client\ClientInterface::class);
+        $this->clientMock = $this->createMock(\Magento\AdvancedSearch\Model\Client\ClientInterface::class);
 
         $this->resultJson = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
             ->disableOriginalConstructor()

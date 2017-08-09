@@ -9,6 +9,10 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Search\Model\QueryInterface;
 use Magento\Search\Model\EngineResolver;
 
+/**
+ * Class \Magento\AdvancedSearch\Model\SuggestedQueries
+ *
+ */
 class SuggestedQueries implements SuggestedQueriesInterface
 {
     /**

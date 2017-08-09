@@ -12,6 +12,10 @@ use Magento\AdvancedSearch\Model\Client\ClientResolver;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Filter\StripTags;
 
+/**
+ * Class \Magento\AdvancedSearch\Controller\Adminhtml\Search\System\Config\TestConnection
+ *
+ */
 class TestConnection extends Action
 {
     /**

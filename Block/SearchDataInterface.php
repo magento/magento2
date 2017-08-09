@@ -5,6 +5,10 @@
  */
 namespace Magento\AdvancedSearch\Block;
 
+/**
+ * Interface \Magento\AdvancedSearch\Block\SearchDataInterface
+ *
+ */
 interface SearchDataInterface
 {
     /**

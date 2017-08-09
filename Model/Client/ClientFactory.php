@@ -7,6 +7,10 @@ namespace Magento\AdvancedSearch\Model\Client;
 
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Class \Magento\AdvancedSearch\Model\Client\ClientFactory
+ *
+ */
 class ClientFactory implements ClientFactoryInterface
 {
     /**
