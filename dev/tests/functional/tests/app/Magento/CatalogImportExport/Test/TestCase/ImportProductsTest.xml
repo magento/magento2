@@ -29,6 +29,10 @@
                     </item>
                 </item>
             </data>
+            <data name="indexerType" xsi:type="array">
+                <item name="0" xsi:type="string">catalog_category_product</item>
+                <item name="1" xsi:type="string">catalog_product_category</item>
+             </data>
             <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsOnStorefront" />
             <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertImportedProducts" />
             <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsInGrid" />
@@ -45,6 +49,10 @@
             <data name="import/data/import_file/template/entities" xsi:type="string">4</data>
             <data name="import/data/import_file/entities/0" xsi:type="string">catalogProductSimple::default_in_custom_website</data>
             <data name="import/data/import_file/entities/1" xsi:type="string">catalogProductSimple::default</data>
+            <data name="indexerType" xsi:type="array">
+                <item name="0" xsi:type="string">catalog_category_product</item>
+                <item name="1" xsi:type="string">catalog_product_category</item>
+            </data>
             <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsOnStorefront" />
             <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertImportedProducts" />
             <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsInGrid" />
@@ -60,6 +68,10 @@
             <data name="import/data/import_file/template/count" xsi:type="string">7</data>
             <data name="import/data/import_file/template/entities" xsi:type="string">7</data>
             <data name="import/data/import_file/entities/0" xsi:type="string">catalogProductSimple::default_in_custom_website</data>
+            <data name="indexerType" xsi:type="array">
+                <item name="0" xsi:type="string">catalog_category_product</item>
+                <item name="1" xsi:type="string">catalog_product_category</item>
+            </data>
             <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsOnStorefront" />
             <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertImportedProducts" />
             <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsInGrid" />
