@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\DB\Ddl;
 
+/**
+ * Class \Magento\Framework\DB\Ddl\TriggerFactory
+ *
+ */
 class TriggerFactory
 {
     /**

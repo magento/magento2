@@ -9,6 +9,10 @@ use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
 use Magento\Store\Model\Store;
 use Magento\Tax\Model\Sales\Total\Quote\CommonTaxCollector;
 
+/**
+ * Class \Magento\Weee\Model\Total\Quote\WeeeTax
+ *
+ */
 class WeeeTax extends Weee
 {
     /**

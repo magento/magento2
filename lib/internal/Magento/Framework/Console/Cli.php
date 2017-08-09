@@ -42,11 +42,7 @@ class Cli extends Console\Application
     const RETURN_FAILURE = 1;
     /**#@-*/
 
-    /**
-     * Service Manager.
-     *
-     * @var ServiceManager
-     */
+    /**#@-*/
     private $serviceManager;
 
     /**

@@ -41,7 +41,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
 
     const REPORT_DATE_TYPE_REFUND_CREATED = 'refund_created';
 
-    /*
+    /**
      * Identifier for order history item
      *
      * @var string

@@ -12,8 +12,9 @@ use Magento\Framework\Registry;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoAppArea adminhtml
+ * @magentoAppIsolation enabled
  */
-class CreateTest extends \PHPUnit_Framework_TestCase
+class CreateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\AdminOrder\Create

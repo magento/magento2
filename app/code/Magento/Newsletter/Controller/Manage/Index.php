@@ -6,6 +6,10 @@
  */
 namespace Magento\Newsletter\Controller\Manage;
 
+/**
+ * Class \Magento\Newsletter\Controller\Manage\Index
+ *
+ */
 class Index extends \Magento\Newsletter\Controller\Manage
 {
     /**

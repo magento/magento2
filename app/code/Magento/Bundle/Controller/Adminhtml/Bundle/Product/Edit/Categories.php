@@ -6,6 +6,10 @@
  */
 namespace Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit;
 
+/**
+ * Class \Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit\Categories
+ *
+ */
 class Categories extends \Magento\Catalog\Controller\Adminhtml\Product\Categories
 {
 }

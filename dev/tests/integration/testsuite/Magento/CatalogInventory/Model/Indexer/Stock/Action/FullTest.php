@@ -8,7 +8,7 @@ namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
 /**
  * Full reindex Test
  */
-class FullTest extends \PHPUnit_Framework_TestCase
+class FullTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor

@@ -8,6 +8,10 @@ namespace Magento\Persistent\Controller\Index;
 use Magento\Persistent\Controller\Index;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Persistent\Controller\Index\SaveMethod
+ *
+ */
 class SaveMethod extends Index
 {
     /**

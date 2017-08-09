@@ -31,11 +31,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     const KEY_CALCULATE_SUBTOTAL     = 'calculate_subtotal';
     /**#@-*/
 
-    /**
-     * Prefix of model events names
-     *
-     * @var string
-     */
+    /**#@-*/
     protected $_eventPrefix = 'tax_rule';
 
     /**

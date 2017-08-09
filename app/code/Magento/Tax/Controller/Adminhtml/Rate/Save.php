@@ -9,6 +9,10 @@ namespace Magento\Tax\Controller\Adminhtml\Rate;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Tax\Controller\Adminhtml\Rate\Save
+ *
+ */
 class Save extends \Magento\Tax\Controller\Adminhtml\Rate
 {
     /**

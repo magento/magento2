@@ -5,12 +5,10 @@
  */
 namespace Magento\Customer\Test\Unit\Model;
 
-use Magento\Framework\App\ResourceConnection;
-
 /**
  * Customer log data logger test.
  */
-class LoggerTest extends \PHPUnit_Framework_TestCase
+class LoggerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Customer log data logger.
@@ -43,15 +41,12 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->connection = $this->getMock(
+        $this->connection = $this->createPartialMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            ['select', 'insertOnDuplicate', 'fetchRow'],
-            [],
-            '',
-            false
+            ['select', 'insertOnDuplicate', 'fetchRow']
         );
-        $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
-        $this->logFactory = $this->getMock(\Magento\Customer\Model\LogFactory::class, ['create'], [], '', false);
+        $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->logFactory = $this->createPartialMock(\Magento\Customer\Model\LogFactory::class, ['create']);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -67,7 +62,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     /**
      * @param int $customerId
      * @param array $data
-     * @dataProvider testLogDataProvider
+     * @dataProvider logDataProvider
      * @return void
      */
     public function testLog($customerId, $data)
@@ -76,7 +71,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $data = array_filter($data);
 
         if (!$data) {
-            $this->setExpectedException('\InvalidArgumentException', 'Log data is empty');
+            $this->expectException('\InvalidArgumentException', 'Log data is empty');
             $this->logger->log($customerId, $data);
             return;
         }
@@ -98,7 +93,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function testLogDataProvider()
+    public function logDataProvider()
     {
         return [
             [235, ['last_login_at' => '2015-03-04 12:00:00']],
@@ -109,7 +104,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     /**
      * @param int $customerId
      * @param array $data
-     * @dataProvider testGetDataProvider
+     * @dataProvider getDataProvider
      * @return void
      */
     public function testGet($customerId, $data)
@@ -121,7 +116,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
             'lastVisitAt' => $data['last_visit_at']
         ];
 
-        $select = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $select = $this->createMock(\Magento\Framework\DB\Select::class);
 
         $select->expects($this->any())->method('from')->willReturnSelf();
         $select->expects($this->any())->method('joinLeft')->willReturnSelf();
@@ -141,11 +136,9 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
             ->with($select)
             ->willReturn($data);
 
-        $log = $this->getMock(
-            \Magento\Customer\Model\Log::class,
-            [],
-            $logArguments
-        );
+        $log = $this->getMockBuilder(\Magento\Customer\Model\Log::class)
+            ->setConstructorArgs($logArguments)
+            ->getMock();
 
         $this->logFactory->expects($this->any())
             ->method('create')
@@ -158,7 +151,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function testGetDataProvider()
+    public function getDataProvider()
     {
         return [
             [

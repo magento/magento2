@@ -5,6 +5,10 @@
  */
 namespace Magento\OfflinePayments\Block\Info;
 
+/**
+ * Class \Magento\OfflinePayments\Block\Info\Purchaseorder
+ *
+ */
 class Purchaseorder extends \Magento\Payment\Block\Info
 {
     /**

@@ -6,7 +6,7 @@
 
 namespace Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Stock;
 
-class GroupedTest extends \PHPUnit_Framework_TestCase
+class GroupedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor

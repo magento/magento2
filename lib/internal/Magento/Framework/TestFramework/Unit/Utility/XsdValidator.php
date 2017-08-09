@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\TestFramework\Unit\Utility;
 
+/**
+ * Class \Magento\Framework\TestFramework\Unit\Utility\XsdValidator
+ *
+ */
 class XsdValidator
 {
     /**

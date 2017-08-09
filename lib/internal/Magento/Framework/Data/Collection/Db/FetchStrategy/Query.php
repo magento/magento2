@@ -11,6 +11,10 @@ namespace Magento\Framework\Data\Collection\Db\FetchStrategy;
 
 use Magento\Framework\DB\Select;
 
+/**
+ * Class \Magento\Framework\Data\Collection\Db\FetchStrategy\Query
+ *
+ */
 class Query implements \Magento\Framework\Data\Collection\Db\FetchStrategyInterface
 {
     /**

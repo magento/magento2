@@ -9,6 +9,10 @@ namespace Magento\Sales\Controller\Guest;
 use Magento\Framework\App\RequestInterface;
 use Magento\Sales\Controller\AbstractController\OrderLoaderInterface;
 
+/**
+ * Class \Magento\Sales\Controller\Guest\OrderLoader
+ *
+ */
 class OrderLoader implements OrderLoaderInterface
 {
     /**

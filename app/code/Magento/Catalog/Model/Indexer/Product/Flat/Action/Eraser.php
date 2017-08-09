@@ -9,6 +9,10 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
 use Magento\Framework\App\ResourceConnection;
 
+/**
+ * Class \Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser
+ *
+ */
 class Eraser
 {
     /**

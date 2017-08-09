@@ -12,7 +12,7 @@ namespace Magento\Test\Integrity\Phrase;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Module\I18n\FilesCollector;
 
-class AbstractTestCase extends \PHPUnit_Framework_TestCase
+class AbstractTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $phrase

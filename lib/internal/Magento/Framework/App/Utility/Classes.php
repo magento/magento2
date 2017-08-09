@@ -9,6 +9,10 @@ namespace Magento\Framework\App\Utility;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
+/**
+ * Class \Magento\Framework\App\Utility\Classes
+ *
+ */
 class Classes
 {
     /**

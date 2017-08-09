@@ -15,7 +15,7 @@ use Magento\Quote\Model\Webapi\ParamOverriderCartId;
 /**
  * Test for \Magento\Quote\Model\Webapi\ParamOverriderCartId
  */
-class ParamOverriderCartIdTest extends \PHPUnit_Framework_TestCase
+class ParamOverriderCartIdTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ParamOverriderCartId

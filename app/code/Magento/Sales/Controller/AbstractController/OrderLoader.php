@@ -11,6 +11,10 @@ use Magento\Framework\Registry;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Controller\Result\RedirectFactory;
 
+/**
+ * Class \Magento\Sales\Controller\AbstractController\OrderLoader
+ *
+ */
 class OrderLoader implements OrderLoaderInterface
 {
     /**

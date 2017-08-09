@@ -11,6 +11,10 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main;
 
 use Magento\Backend\Block\Widget\Form;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main\Formattribute
+ *
+ */
 class Formattribute extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**

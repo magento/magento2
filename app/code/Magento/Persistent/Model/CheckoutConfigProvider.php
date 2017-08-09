@@ -8,6 +8,10 @@ namespace Magento\Persistent\Model;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Persistent\Helper\Data as PersistentHelper;
 
+/**
+ * Class \Magento\Persistent\Model\CheckoutConfigProvider
+ *
+ */
 class CheckoutConfigProvider implements ConfigProviderInterface
 {
     /**

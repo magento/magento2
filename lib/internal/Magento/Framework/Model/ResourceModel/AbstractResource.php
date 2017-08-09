@@ -19,6 +19,7 @@ abstract class AbstractResource
 {
     /**
      * @var Json
+     * @since 100.2.0
      */
     protected $serializer;
 
@@ -241,7 +242,8 @@ abstract class AbstractResource
      * Get serializer
      *
      * @return Json
-     * @deprecated
+     * @deprecated 100.2.0
+     * @since 100.2.0
      */
     protected function getSerializer()
     {

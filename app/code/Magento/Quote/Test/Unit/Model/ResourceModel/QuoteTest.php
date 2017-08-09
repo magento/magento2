@@ -6,7 +6,7 @@
 
 namespace Magento\Quote\Test\Unit\Model\ResourceModel;
 
-class QuoteTest extends \PHPUnit_Framework_TestCase
+class QuoteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote

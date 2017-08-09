@@ -31,9 +31,7 @@ class Code extends \Magento\Framework\Model\AbstractModel
 
     /**#@-*/
 
-    /**
-     * @var bool
-     */
+    /**#@-*/
     protected $_validateEntryFlag = false;
 
     /**

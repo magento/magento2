@@ -6,6 +6,10 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Index;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\Index\ChangeLocale
+ *
+ */
 class ChangeLocale extends \Magento\Backend\Controller\Adminhtml\Index
 {
     /**

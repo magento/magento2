@@ -824,6 +824,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
 
     /**
      * @inheritdoc
+     * @since 100.0.9
      */
     public function __sleep()
     {
@@ -836,6 +837,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
 
     /**
      * @inheritdoc
+     * @since 100.0.9
      */
     public function __wakeup()
     {
@@ -851,6 +853,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
 
     /**
      * @inheritdoc
+     * @since 101.1.0
      */
     public function setIsUsedInGrid($isUsedInGrid)
     {
@@ -860,6 +863,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
 
     /**
      * @inheritdoc
+     * @since 101.1.0
      */
     public function setIsVisibleInGrid($isVisibleInGrid)
     {
@@ -869,6 +873,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
 
     /**
      * @inheritdoc
+     * @since 101.1.0
      */
     public function setIsFilterableInGrid($isFilterableInGrid)
     {

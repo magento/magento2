@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Cache\Config;
 
+/**
+ * Class \Magento\Framework\Cache\Config\Reader
+ *
+ */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

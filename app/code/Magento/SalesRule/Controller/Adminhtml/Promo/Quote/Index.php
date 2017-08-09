@@ -6,6 +6,10 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
+/**
+ * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\Index
+ *
+ */
 class Index extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
     /**

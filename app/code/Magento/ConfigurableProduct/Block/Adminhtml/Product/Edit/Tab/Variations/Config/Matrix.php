@@ -38,13 +38,19 @@ class Matrix extends \Magento\Backend\Block\Template
      */
     protected $productRepository;
 
-    /** @var \Magento\Catalog\Helper\Image */
+    /**
+     * @var \Magento\Catalog\Helper\Image
+     */
     protected $image;
 
-    /** @var null|array */
+    /**
+     * @var null|array
+     */
     private $productMatrix;
 
-    /** @var null|array */
+    /**
+     * @var null|array
+     */
     private $productAttributes;
 
     /**
@@ -54,6 +60,7 @@ class Matrix extends \Magento\Backend\Block\Template
 
     /**
      * @var LocatorInterface
+     * @since 100.1.0
      */
     protected $locator;
 
@@ -121,6 +128,7 @@ class Matrix extends \Magento\Backend\Block\Template
      * Retrieve data source for variations data
      *
      * @return string
+     * @since 100.1.0
      */
     public function getProvider()
     {
@@ -131,6 +139,7 @@ class Matrix extends \Magento\Backend\Block\Template
      * Retrieve configurable modal name
      *
      * @return string
+     * @since 100.1.0
      */
     public function getModal()
     {
@@ -141,6 +150,7 @@ class Matrix extends \Magento\Backend\Block\Template
      * Retrieve form name
      *
      * @return string
+     * @since 100.1.0
      */
     public function getForm()
     {
@@ -151,6 +161,7 @@ class Matrix extends \Magento\Backend\Block\Template
      * Retrieve configurable modal name
      *
      * @return string
+     * @since 100.1.0
      */
     public function getConfigurableModal()
     {

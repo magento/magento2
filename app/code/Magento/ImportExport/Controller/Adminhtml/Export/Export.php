@@ -13,6 +13,10 @@ use Magento\ImportExport\Model\Export as ExportModel;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class \Magento\ImportExport\Controller\Adminhtml\Export\Export
+ *
+ */
 class Export extends ExportController
 {
     /**

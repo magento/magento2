@@ -18,7 +18,7 @@ use Magento\Customer\Model\GroupManagement;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     const KEY_TIER_PRICE = 'tier_price';
     const PRICE_SCOPE_GLOBAL = 0;
@@ -66,17 +66,12 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->product = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\Product::class);
 
-        $this->tpFactory = $this->getMock(
+        $this->tpFactory = $this->createPartialMock(
             \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false,
-            false,
-            false
+            ['create']
         );
 
-        $this->websiteMock = $this->getMock(\Magento\Store\Model\Website::class, ['getId'], [], '', false);
+        $this->websiteMock = $this->createPartialMock(\Magento\Store\Model\Website::class, ['getId']);
         $storeMangerMock = $this->getMockForAbstractClass(
             \Magento\Store\Model\StoreManagerInterface::class,
             [],
@@ -100,16 +95,10 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ['getValue']
         );
 
-        $group = $this->getMock(
-            \Magento\Customer\Model\Data\Group::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $group = $this->createMock(\Magento\Customer\Model\Data\Group::class);
         $group->expects($this->any())->method('getId')->willReturn(GroupManagement::CUST_GROUP_ALL);
         $this->groupManagementMock =
-            $this->getMock(\Magento\Customer\Api\GroupManagementInterface::class, [], [], '', false);
+            $this->createMock(\Magento\Customer\Api\GroupManagementInterface::class);
         $this->groupManagementMock->expects($this->any())->method('getAllCustomersGroup')
             ->will($this->returnValue($group));
         $this->tierPriceExtensionFactoryMock = $this->getMockBuilder(ProductTierPriceExtensionFactory::class)

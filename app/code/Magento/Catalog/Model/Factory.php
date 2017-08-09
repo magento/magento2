@@ -9,6 +9,10 @@
  */
 namespace Magento\Catalog\Model;
 
+/**
+ * Class \Magento\Catalog\Model\Factory
+ *
+ */
 class Factory
 {
     /**

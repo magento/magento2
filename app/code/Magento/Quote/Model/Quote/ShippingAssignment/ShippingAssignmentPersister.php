@@ -8,6 +8,10 @@ namespace Magento\Quote\Model\Quote\ShippingAssignment;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 
+/**
+ * Class \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister
+ *
+ */
 class ShippingAssignmentPersister
 {
     /**

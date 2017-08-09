@@ -11,6 +11,10 @@
  */
 namespace Magento\Customer\Model\Attribute\Data;
 
+/**
+ * Class \Magento\Customer\Model\Attribute\Data\AbstractData
+ *
+ */
 abstract class AbstractData extends \Magento\Eav\Model\Attribute\Data\AbstractData
 {
 }

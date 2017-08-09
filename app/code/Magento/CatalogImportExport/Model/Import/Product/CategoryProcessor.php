@@ -47,6 +47,7 @@ class CategoryProcessor
      * Failed categories during creation
      *
      * @var array
+     * @since 100.1.0
      */
     protected $failedCategories = [];
 
@@ -198,6 +199,7 @@ class CategoryProcessor
      * Return failed categories
      *
      * @return array
+     * @since 100.1.0
      */
     public function getFailedCategories()
     {
@@ -208,6 +210,7 @@ class CategoryProcessor
      * Resets failed categories' array
      *
      * @return $this
+     * @since 100.2.0
      */
     public function clearFailedCategories()
     {

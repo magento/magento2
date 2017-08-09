@@ -19,7 +19,7 @@ use Magento\Framework\Controller\Result\Redirect;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LoginPostTest extends \PHPUnit_Framework_TestCase
+class LoginPostTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var LoginPost

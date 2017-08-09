@@ -56,9 +56,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
 
     /**#@- */
 
-    /**
-     * @var OauthHelper
-     */
+    /**#@- */
     protected $_oauthHelper;
 
     /**

@@ -10,9 +10,15 @@ namespace Magento\Framework\Webapi\Rest\Request\Deserializer;
 use Magento\Framework\App\State;
 use Magento\Framework\Phrase;
 
+/**
+ * Class \Magento\Framework\Webapi\Rest\Request\Deserializer\Json
+ *
+ */
 class Json implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterface
 {
-    /** @var \Magento\Framework\Json\Decoder */
+    /**
+     * @var \Magento\Framework\Json\Decoder
+     */
     protected $decoder;
 
     /**

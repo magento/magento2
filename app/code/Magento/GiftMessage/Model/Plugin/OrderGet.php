@@ -9,18 +9,30 @@ namespace Magento\GiftMessage\Model\Plugin;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class \Magento\GiftMessage\Model\Plugin\OrderGet
+ *
+ */
 class OrderGet
 {
-    /** @var \Magento\GiftMessage\Api\OrderRepositoryInterface */
+    /**
+     * @var \Magento\GiftMessage\Api\OrderRepositoryInterface
+     */
     protected $giftMessageOrderRepository;
 
-    /** @var \Magento\GiftMessage\Api\OrderItemRepositoryInterface */
+    /**
+     * @var \Magento\GiftMessage\Api\OrderItemRepositoryInterface
+     */
     protected $giftMessageOrderItemRepository;
 
-    /** @var \Magento\Sales\Api\Data\OrderExtensionFactory */
+    /**
+     * @var \Magento\Sales\Api\Data\OrderExtensionFactory
+     */
     protected $orderExtensionFactory;
 
-    /** @var \Magento\Sales\Api\Data\OrderItemExtensionFactory */
+    /**
+     * @var \Magento\Sales\Api\Data\OrderItemExtensionFactory
+     */
     protected $orderItemExtensionFactory;
 
     /**

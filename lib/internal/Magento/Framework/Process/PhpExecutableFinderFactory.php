@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Process;
 
+/**
+ * Class \Magento\Framework\Process\PhpExecutableFinderFactory
+ *
+ */
 class PhpExecutableFinderFactory
 {
     /**

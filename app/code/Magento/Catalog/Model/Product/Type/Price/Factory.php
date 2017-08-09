@@ -9,6 +9,10 @@
  */
 namespace Magento\Catalog\Model\Product\Type\Price;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Type\Price\Factory
+ *
+ */
 class Factory
 {
     /**

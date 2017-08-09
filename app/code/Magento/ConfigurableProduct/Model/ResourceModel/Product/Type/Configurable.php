@@ -18,6 +18,10 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
+ *
+ */
 class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

@@ -11,6 +11,10 @@
  */
 namespace Magento\Directory\Model;
 
+/**
+ * Class \Magento\Directory\Model\Observer
+ *
+ */
 class Observer
 {
     const CRON_STRING_PATH = 'crontab/default/jobs/currency_rates_update/schedule/cron_expr';

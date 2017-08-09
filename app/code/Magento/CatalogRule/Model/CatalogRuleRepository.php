@@ -11,6 +11,10 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\ValidatorException;
 
+/**
+ * Class \Magento\CatalogRule\Model\CatalogRuleRepository
+ *
+ */
 class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepositoryInterface
 {
     /**
