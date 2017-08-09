@@ -13,26 +13,22 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Backend config accessor.
- * @since 2.0.0
  */
 class Config implements ConfigInterface
 {
     /**
      * @var \Magento\Framework\App\Config
-     * @since 2.2.0
      */
     protected $appConfig;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $data;
 
     /**
      * @param \Magento\Framework\App\Config $appConfig
      * @return void
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\Config $appConfig)
     {
@@ -41,7 +37,6 @@ class Config implements ConfigInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function getValue($path)
     {
@@ -58,7 +53,6 @@ class Config implements ConfigInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function setValue($path, $value)
     {
@@ -67,7 +61,6 @@ class Config implements ConfigInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function isSetFlag($path)
     {

@@ -10,19 +10,16 @@ namespace Magento\Widget\Model\ResourceModel\Layout;
 
 /**
  * Layout update resource model
- * @since 2.0.0
  */
 class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\Cache\FrontendInterface
-     * @since 2.0.0
      */
     private $_cache;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $layoutUpdateCache;
 
@@ -30,7 +27,6 @@ class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -45,7 +41,6 @@ class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -59,7 +54,6 @@ class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @param \Magento\Framework\App\ScopeInterface $store
      * @return string
-     * @since 2.0.0
      */
     public function fetchUpdatesByHandle(
         $handle,
@@ -85,7 +79,6 @@ class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param bool $loadAllUpdates
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function _getFetchUpdatesByHandleSelect($loadAllUpdates = false)
     {
@@ -120,7 +113,6 @@ class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Widget\Model\Layout\Update|\Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {

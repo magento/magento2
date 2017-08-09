@@ -8,7 +8,6 @@ namespace Magento\Search\Controller\Adminhtml\Synonyms;
 /**
  * Class \Magento\Search\Controller\Adminhtml\Synonyms\NewAction
  *
- * @since 2.1.0
  */
 class NewAction extends \Magento\Backend\App\Action
 {
@@ -21,7 +20,6 @@ class NewAction extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory $forwardFactory
-     * @since 2.1.0
      */
     private $forwardFactory;
 
@@ -30,7 +28,6 @@ class NewAction extends \Magento\Backend\App\Action
      *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $forwardFactory
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -44,7 +41,6 @@ class NewAction extends \Magento\Backend\App\Action
      * Create new synonyms group action
      *
      * @return \Magento\Backend\Model\View\Result\Forward
-     * @since 2.1.0
      */
     public function execute()
     {

@@ -10,31 +10,26 @@ use Magento\Framework\Filesystem\Directory\ReadFactory;
 
 /**
  * Maps package name to full theme path, and vice versa
- * @since 2.0.0
  */
 class ThemePackageInfo
 {
     /**
      * @var ComponentRegistrar
-     * @since 2.0.0
      */
     private $componentRegistrar;
 
     /**
      * @var ReadFactory
-     * @since 2.0.0
      */
     private $readDirFactory;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $packageNameToFullPathMap = [];
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -44,7 +39,6 @@ class ThemePackageInfo
      * @param ComponentRegistrar $componentRegistrar
      * @param ReadFactory $readDirFactory
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         ComponentRegistrar $componentRegistrar,
@@ -62,7 +56,6 @@ class ThemePackageInfo
      *
      * @param string $themePath
      * @return string
-     * @since 2.0.0
      */
     public function getPackageName($themePath)
     {
@@ -84,7 +77,6 @@ class ThemePackageInfo
      *
      * @param string $packageName
      * @return string
-     * @since 2.0.0
      */
     public function getFullThemePath($packageName)
     {
@@ -99,7 +91,6 @@ class ThemePackageInfo
      * Initialize package name to full theme path map
      *
      * @return void
-     * @since 2.0.0
      */
     private function initializeMap()
     {

@@ -11,19 +11,16 @@ use Magento\Quote\Model\Quote;
 
 /**
  * Class ShippingMethodUpdater
- * @since 2.1.0
  */
 class ShippingMethodUpdater extends AbstractHelper
 {
     /**
      * @var Config
-     * @since 2.1.0
      */
     private $config;
 
     /**
      * @var CartRepositoryInterface
-     * @since 2.1.0
      */
     private $quoteRepository;
 
@@ -32,7 +29,6 @@ class ShippingMethodUpdater extends AbstractHelper
      *
      * @param Config $config
      * @param CartRepositoryInterface $quoteRepository
-     * @since 2.1.0
      */
     public function __construct(
         Config $config,
@@ -49,7 +45,6 @@ class ShippingMethodUpdater extends AbstractHelper
      * @param Quote $quote
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.1.0
      */
     public function execute($shippingMethod, Quote $quote)
     {

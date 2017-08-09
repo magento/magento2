@@ -14,7 +14,6 @@ use Magento\Framework\Exception\CouldNotDeleteException;
  *
  * @method \Magento\Tax\Model\ResourceModel\TaxClass _getResource()
  * @method \Magento\Tax\Model\ResourceModel\TaxClass getResource()
- * @since 2.0.0
  */
 class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Tax\Api\Data\TaxClassInterface
@@ -39,7 +38,6 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
 
     /**
      * @var \Magento\Tax\Model\TaxClass\Factory
-     * @since 2.0.0
      */
     protected $_classFactory;
 
@@ -52,7 +50,6 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -78,7 +75,6 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function _construct()
     {
@@ -90,7 +86,6 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      *
      * @return bool
      * @throws CouldNotDeleteException
-     * @since 2.0.0
      */
     protected function checkClassCanBeDeleted()
     {
@@ -126,7 +121,6 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function beforeDelete()
     {
@@ -137,7 +131,6 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
     /**
      * @codeCoverageIgnoreStart
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getClassId()
     {
@@ -146,7 +139,6 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getClassName()
     {
@@ -155,7 +147,6 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getClassType()
     {
@@ -167,7 +158,6 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      *
      * @param int $classId
      * @return $this
-     * @since 2.0.0
      */
     public function setClassId($classId)
     {
@@ -179,7 +169,6 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      *
      * @param string $className
      * @return $this
-     * @since 2.0.0
      */
     public function setClassName($className)
     {
@@ -191,7 +180,6 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      *
      * @param string $classType
      * @return $this
-     * @since 2.0.0
      */
     public function setClassType($classType)
     {
@@ -204,7 +192,6 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      * {@inheritdoc}
      *
      * @return \Magento\Tax\Api\Data\TaxClassExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -216,7 +203,6 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      *
      * @param \Magento\Tax\Api\Data\TaxClassExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxClassExtensionInterface $extensionAttributes)
     {

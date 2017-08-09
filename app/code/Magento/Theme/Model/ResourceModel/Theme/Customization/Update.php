@@ -7,7 +7,6 @@ namespace Magento\Theme\Model\ResourceModel\Theme\Customization;
 
 /**
  * Theme customization link resource model
- * @since 2.0.0
  */
 class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -15,7 +14,6 @@ class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

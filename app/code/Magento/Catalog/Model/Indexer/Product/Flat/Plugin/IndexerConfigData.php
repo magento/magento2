@@ -11,19 +11,16 @@ use Magento\Catalog\Model\Indexer\Product\Flat\Processor as ProductFlatIndexerPr
 
 /**
  * Plugin for Magento\Indexer\Model\Config\Data
- * @since 2.0.0
  */
 class IndexerConfigData
 {
     /**
      * @var ProductFlatIndexerState
-     * @since 2.2.0
      */
     protected $state;
 
     /**
      * @param ProductFlatIndexerState $state
-     * @since 2.0.0
      */
     public function __construct(ProductFlatIndexerState $state)
     {
@@ -41,7 +38,6 @@ class IndexerConfigData
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @since 2.2.0
      */
     public function afterGet(ConfigData $subject, $data, $path = null, $default = null)
     {

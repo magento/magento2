@@ -7,19 +7,16 @@ namespace Magento\Paypal\Block\Payment\Form\Billing;
 
 /**
  * Paypal Billing Agreement form block
- * @since 2.0.0
  */
 class Agreement extends \Magento\Payment\Block\Form
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Paypal::payment/form/billing/agreement.phtml';
 
     /**
      * @var \Magento\Paypal\Model\Billing\AgreementFactory
-     * @since 2.0.0
      */
     protected $_agreementFactory;
 
@@ -27,7 +24,6 @@ class Agreement extends \Magento\Payment\Block\Form
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -41,7 +37,6 @@ class Agreement extends \Magento\Payment\Block\Form
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -56,7 +51,6 @@ class Agreement extends \Magento\Payment\Block\Form
      * Retrieve available customer billing agreements
      *
      * @return array
-     * @since 2.0.0
      */
     public function getBillingAgreements()
     {

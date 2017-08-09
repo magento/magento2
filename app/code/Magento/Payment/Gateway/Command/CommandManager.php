@@ -15,19 +15,17 @@ use Magento\Payment\Model\InfoInterface;
  * Class CommandManager
  * @package Magento\Payment\Gateway\Command
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class CommandManager implements CommandManagerInterface
 {
     /**
      * @var CommandPoolInterface
-     * @since 2.1.0
      */
     private $commandPool;
 
     /**
      * @var PaymentDataObjectFactoryInterface
-     * @since 2.1.0
      */
     private $paymentDataObjectFactory;
 
@@ -35,7 +33,7 @@ class CommandManager implements CommandManagerInterface
      * CommandExecutor constructor.
      * @param CommandPoolInterface $commandPool
      * @param PaymentDataObjectFactoryInterface $paymentDataObjectFactory
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         CommandPoolInterface $commandPool,
@@ -54,7 +52,7 @@ class CommandManager implements CommandManagerInterface
      * @return ResultInterface|null
      * @throws NotFoundException
      * @throws CommandException
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function executeByCode($commandCode, InfoInterface $payment = null, array $arguments = [])
     {
@@ -76,7 +74,7 @@ class CommandManager implements CommandManagerInterface
      * @param array $arguments
      * @return ResultInterface|null
      * @throws CommandException
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function execute(CommandInterface $command, InfoInterface $payment = null, array $arguments = [])
     {
@@ -94,7 +92,7 @@ class CommandManager implements CommandManagerInterface
      * @param string $commandCode
      * @return CommandInterface
      * @throws NotFoundException
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function get($commandCode)
     {

@@ -13,7 +13,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Categories tree block for URL rewrites editing process
  *
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 {
@@ -21,13 +20,11 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * List of allowed category ids
      *
      * @var []
-     * @since 2.0.0
      */
     protected $_allowedCategoryIds = [];
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'categories.phtml';
 
@@ -35,31 +32,26 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * Adminhtml data
      *
      * @var \Magento\Backend\Helper\Data
-     * @since 2.0.0
      */
     protected $_adminhtmlData = null;
 
     /**
      * @var \Magento\Catalog\Model\CategoryFactory
-     * @since 2.0.0
      */
     protected $_categoryFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $_productFactory;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
     /**
      * @var CategoryRepositoryInterface
-     * @since 2.0.0
      */
     protected $categoryRepository;
 
@@ -73,7 +65,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * @param \Magento\Backend\Helper\Data $adminhtmlData
      * @param CategoryRepositoryInterface $categoryRepository
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -101,7 +92,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * @param bool $asJson
      * @param int $recursionLevel
      * @return array
-     * @since 2.0.0
      */
     public function getTreeArray($parentId = null, $asJson = false, $recursionLevel = 3)
     {
@@ -142,7 +132,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * Get categories collection
      *
      * @return \Magento\Catalog\Model\ResourceModel\Category\Collection
-     * @since 2.0.0
      */
     public function getCategoryCollection()
     {
@@ -164,7 +153,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      *
      * @param  \Magento\Framework\Data\Tree\Node $node
      * @return array
-     * @since 2.0.0
      */
     protected function _getNodesArray($node)
     {
@@ -198,7 +186,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * Get URL for categories tree ajax loader
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLoadTreeUrl()
     {

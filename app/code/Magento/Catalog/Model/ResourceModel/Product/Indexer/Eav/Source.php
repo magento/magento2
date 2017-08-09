@@ -12,7 +12,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
  * Catalog Product Eav Select and Multiply Select Attributes Indexer resource model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Source extends AbstractEav
 {
@@ -22,7 +21,6 @@ class Source extends AbstractEav
      * Catalog resource helper
      *
      * @var \Magento\Catalog\Model\ResourceModel\Helper
-     * @since 2.0.0
      */
     protected $_resourceHelper;
 
@@ -35,7 +33,6 @@ class Source extends AbstractEav
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param null|string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -59,7 +56,6 @@ class Source extends AbstractEav
      * Initialize connection and define main index table
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -71,7 +67,6 @@ class Source extends AbstractEav
      *
      * @param bool $multiSelect
      * @return array
-     * @since 2.0.0
      */
     protected function _getIndexableAttributes($multiSelect)
     {
@@ -101,7 +96,6 @@ class Source extends AbstractEav
      * @param array $entityIds the entity ids limitation
      * @param int $attributeId the attribute id limitation
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareIndex($entityIds = null, $attributeId = null)
     {
@@ -118,7 +112,6 @@ class Source extends AbstractEav
      * @param int $attributeId the attribute id limitation
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _prepareSelectIndex($entityIds = null, $attributeId = null)
     {
@@ -217,7 +210,6 @@ class Source extends AbstractEav
      * @param array $entityIds the entity ids limitation
      * @param int $attributeId the attribute id limitation
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareMultiselectIndex($entityIds = null, $attributeId = null)
     {
@@ -310,7 +302,6 @@ class Source extends AbstractEav
      *
      * @param array $data
      * @return $this
-     * @since 2.0.0
      */
     protected function _saveIndexData(array $data)
     {
@@ -332,7 +323,6 @@ class Source extends AbstractEav
      * @param string|null $table
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getIdxTable($table = null)
     {
@@ -343,7 +333,6 @@ class Source extends AbstractEav
      * @param \Magento\Framework\DB\Select $select
      * @param array $options
      * @return void
-     * @since 2.2.0
      */
     private function saveDataFromSelect(\Magento\Framework\DB\Select $select, array $options)
     {
@@ -372,7 +361,6 @@ class Source extends AbstractEav
      *
      * @param array $parentIds the parent entity ids limitation
      * @return $this
-     * @since 2.2.0
      */
     protected function _prepareRelationIndex($parentIds = null)
     {

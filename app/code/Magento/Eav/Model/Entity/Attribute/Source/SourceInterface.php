@@ -11,7 +11,6 @@ namespace Magento\Eav\Model\Entity\Attribute\Source;
  * Source is providing the selection options for user interface
  *
  * @api
- * @since 2.0.0
  */
 interface SourceInterface
 {
@@ -19,7 +18,6 @@ interface SourceInterface
      * Retrieve All options
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllOptions();
 
@@ -28,7 +26,6 @@ interface SourceInterface
      *
      * @param string $value
      * @return mixed
-     * @since 2.0.0
      */
     public function getOptionText($value);
 }

@@ -16,32 +16,27 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class \Magento\Customer\Console\Command\UpgradeHashAlgorithmCommand
  *
- * @since 2.0.0
  */
 class UpgradeHashAlgorithmCommand extends Command
 {
     /**
      * @var CollectionFactory
-     * @since 2.0.0
      */
     private $customerCollectionFactory;
 
     /**
      * @var Collection
-     * @since 2.0.0
      */
     private $collection;
 
     /**
      * @var Encryptor
-     * @since 2.0.0
      */
     private $encryptor;
 
     /**
      * @param CollectionFactory $customerCollectionFactory
      * @param Encryptor $encryptor
-     * @since 2.0.0
      */
     public function __construct(
         CollectionFactory $customerCollectionFactory,
@@ -54,7 +49,6 @@ class UpgradeHashAlgorithmCommand extends Command
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -64,7 +58,6 @@ class UpgradeHashAlgorithmCommand extends Command
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

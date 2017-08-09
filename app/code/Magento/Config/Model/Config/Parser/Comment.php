@@ -19,26 +19,24 @@ use Magento\Framework\Filesystem;
  * It is used to parse config paths from
  * comment section in provided configuration file.
  * @api
- * @since 2.2.0
+ * @since 100.2.0
  */
 class Comment implements CommentParserInterface
 {
     /**
      * @var Filesystem
-     * @since 2.2.0
      */
     private $filesystem;
 
     /**
      * @var PlaceholderInterface
-     * @since 2.2.0
      */
     private $placeholder;
 
     /**
      * @param Filesystem $filesystem
      * @param PlaceholderInterface $placeholder
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function __construct(
         Filesystem $filesystem,
@@ -87,7 +85,7 @@ class Comment implements CommentParserInterface
      * @param string $fileName the basename of file
      * @return array
      * @throws FileSystemException
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function execute($fileName)
     {

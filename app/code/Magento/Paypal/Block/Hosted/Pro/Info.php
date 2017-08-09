@@ -14,7 +14,6 @@ namespace Magento\Paypal\Block\Hosted\Pro;
 /**
  * Class \Magento\Paypal\Block\Hosted\Pro\Info
  *
- * @since 2.0.0
  */
 class Info extends \Magento\Paypal\Block\Payment\Info
 {
@@ -22,7 +21,6 @@ class Info extends \Magento\Paypal\Block\Payment\Info
      * Don't show CC type
      *
      * @return false
-     * @since 2.0.0
      */
     public function getCcTypeName()
     {

@@ -11,19 +11,16 @@ use Magento\Translation\Model\Js\Config;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Js extends Template
 {
     /**
      * @var Config
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Translation\Model\FileManager
-     * @since 2.0.0
      */
     private $fileManager;
 
@@ -32,7 +29,6 @@ class Js extends Template
      * @param Config $config
      * @param \Magento\Translation\Model\FileManager $fileManager
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Template\Context $context,
@@ -49,7 +45,6 @@ class Js extends Template
      * Is js translation set to dictionary mode
      *
      * @return bool
-     * @since 2.0.0
      */
     public function dictionaryEnabled()
     {
@@ -60,7 +55,6 @@ class Js extends Template
      * gets current js-translation.json timestamp
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTranslationFileTimestamp()
     {
@@ -69,7 +63,6 @@ class Js extends Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getTranslationFilePath()
     {

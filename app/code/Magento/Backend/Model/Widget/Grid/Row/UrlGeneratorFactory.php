@@ -9,19 +9,16 @@ namespace Magento\Backend\Model\Widget\Grid\Row;
  * Grid row url generator factory
  *
  * @api
- * @since 2.0.0
  */
 class UrlGeneratorFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -35,7 +32,6 @@ class UrlGeneratorFactory
      * @param array $arguments
      * @return \Magento\Backend\Model\Widget\Grid\Row\UrlGenerator
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function createUrlGenerator($generatorClassName, array $arguments = [])
     {

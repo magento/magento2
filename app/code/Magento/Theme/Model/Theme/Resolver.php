@@ -7,25 +7,21 @@ namespace Magento\Theme\Model\Theme;
 
 /**
  * Theme resolver model
- * @since 2.0.0
  */
 class Resolver implements \Magento\Framework\View\Design\Theme\ResolverInterface
 {
     /**
      * @var \Magento\Framework\View\DesignInterface
-     * @since 2.0.0
      */
     protected $design;
 
     /**
      * @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory
-     * @since 2.0.0
      */
     protected $themeFactory;
 
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     protected $appState;
 
@@ -33,7 +29,6 @@ class Resolver implements \Magento\Framework\View\Design\Theme\ResolverInterface
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $themeFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\State $appState,
@@ -49,7 +44,6 @@ class Resolver implements \Magento\Framework\View\Design\Theme\ResolverInterface
      * Retrieve instance of a theme currently used in an area
      *
      * @return \Magento\Framework\View\Design\ThemeInterface
-     * @since 2.0.0
      */
     public function get()
     {

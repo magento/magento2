@@ -11,32 +11,27 @@ use Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\ConfigurableProduct
 
 /**
  * Add configurable sub products to catalog rule indexer on full reindex
- * @since 2.0.0
  */
 class ConfigurableProductHandler
 {
     /**
      * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
-     * @since 2.0.0
      */
     private $configurable;
 
     /**
      * @var \Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\ConfigurableProductsProvider
-     * @since 2.0.0
      */
     private $configurableProductsProvider;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $childrenProducts = [];
 
     /**
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurable
      * @param ConfigurableProductsProvider $configurableProductsProvider
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurable,
@@ -51,7 +46,6 @@ class ConfigurableProductHandler
      * @param array $productIds
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterGetMatchingProductIds(\Magento\CatalogRule\Model\Rule $rule, array $productIds)
     {

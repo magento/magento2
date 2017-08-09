@@ -16,87 +16,73 @@ namespace Magento\Catalog\Block\Product;
  * As Magento moves from inheritance-based APIs all such classes will be deprecated together with
  * the classes they were introduced for.
  *
- * @deprecated 2.2.0
+ * @deprecated 101.1.0
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Context extends \Magento\Framework\View\Element\Template\Context
 {
     /**
      * @var \Magento\Catalog\Helper\Image
-     * @since 2.0.0
      */
     protected $imageHelper;
 
     /**
      * @var \Magento\Catalog\Helper\Product\Compare
-     * @since 2.0.0
      */
     protected $compareProduct;
 
     /**
      * @var \Magento\Wishlist\Helper\Data
-     * @since 2.0.0
      */
     protected $wishlistHelper;
 
     /**
      * @var \Magento\Checkout\Helper\Cart
-     * @since 2.0.0
      */
     protected $cartHelper;
 
     /**
      * @var \Magento\Catalog\Model\Config
-     * @since 2.0.0
      */
     protected $catalogConfig;
 
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $registry;
 
     /**
      * @var \Magento\Tax\Helper\Data
-     * @since 2.0.0
      */
     protected $taxData;
 
     /**
      * @var \Magento\Catalog\Helper\Data
-     * @since 2.0.0
      */
     protected $catalogHelper;
 
     /**
      * @var \Magento\Framework\Math\Random
-     * @since 2.0.0
      */
     protected $mathRandom;
 
     /**
      * @var ReviewRendererInterface
-     * @since 2.0.0
      */
     protected $reviewRenderer;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
-     * @since 2.0.0
      */
     protected $stockRegistry;
 
     /**
      * @var \Magento\Framework\View\Page\Config
-     * @since 2.0.0
      */
     protected $pageConfig;
 
     /**
      * @var ImageBuilder
-     * @since 2.0.0
      */
     protected $imageBuilder;
 
@@ -140,7 +126,6 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -224,7 +209,6 @@ class Context extends \Magento\Framework\View\Element\Template\Context
 
     /**
      * @return \Magento\CatalogInventory\Api\StockRegistryInterface
-     * @since 2.0.0
      */
     public function getStockRegistry()
     {
@@ -233,7 +217,6 @@ class Context extends \Magento\Framework\View\Element\Template\Context
 
     /**
      * @return \Magento\Checkout\Helper\Cart
-     * @since 2.0.0
      */
     public function getCartHelper()
     {
@@ -242,7 +225,6 @@ class Context extends \Magento\Framework\View\Element\Template\Context
 
     /**
      * @return \Magento\Catalog\Model\Config
-     * @since 2.0.0
      */
     public function getCatalogConfig()
     {
@@ -251,7 +233,6 @@ class Context extends \Magento\Framework\View\Element\Template\Context
 
     /**
      * @return \Magento\Catalog\Helper\Data
-     * @since 2.0.0
      */
     public function getCatalogHelper()
     {
@@ -260,7 +241,6 @@ class Context extends \Magento\Framework\View\Element\Template\Context
 
     /**
      * @return \Magento\Catalog\Helper\Product\Compare
-     * @since 2.0.0
      */
     public function getCompareProduct()
     {
@@ -269,7 +249,6 @@ class Context extends \Magento\Framework\View\Element\Template\Context
 
     /**
      * @return \Magento\Catalog\Helper\Image
-     * @since 2.0.0
      */
     public function getImageHelper()
     {
@@ -278,7 +257,6 @@ class Context extends \Magento\Framework\View\Element\Template\Context
 
     /**
      * @return \Magento\Catalog\Block\Product\ImageBuilder
-     * @since 2.0.0
      */
     public function getImageBuilder()
     {
@@ -287,7 +265,6 @@ class Context extends \Magento\Framework\View\Element\Template\Context
 
     /**
      * @return \Magento\Framework\Math\Random
-     * @since 2.0.0
      */
     public function getMathRandom()
     {
@@ -296,7 +273,6 @@ class Context extends \Magento\Framework\View\Element\Template\Context
 
     /**
      * @return \Magento\Framework\Registry
-     * @since 2.0.0
      */
     public function getRegistry()
     {
@@ -305,7 +281,6 @@ class Context extends \Magento\Framework\View\Element\Template\Context
 
     /**
      * @return \Magento\Tax\Helper\Data
-     * @since 2.0.0
      */
     public function getTaxData()
     {
@@ -314,7 +289,6 @@ class Context extends \Magento\Framework\View\Element\Template\Context
 
     /**
      * @return \Magento\Wishlist\Helper\Data
-     * @since 2.0.0
      */
     public function getWishlistHelper()
     {
@@ -323,7 +297,6 @@ class Context extends \Magento\Framework\View\Element\Template\Context
 
     /**
      * @return \Magento\Catalog\Block\Product\ReviewRendererInterface
-     * @since 2.0.0
      */
     public function getReviewRenderer()
     {

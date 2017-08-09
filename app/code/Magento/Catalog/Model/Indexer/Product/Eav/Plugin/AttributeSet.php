@@ -13,31 +13,26 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class \Magento\Catalog\Model\Indexer\Product\Eav\Plugin\AttributeSet
  *
- * @since 2.0.0
  */
 class AttributeSet
 {
     /**
      * @var bool
-     * @since 2.2.0
      */
     private $requiresReindex;
 
     /**
      * @var SetFactory
-     * @since 2.2.0
      */
     private $attributeSetFactory;
 
     /**
      * @var Processor
-     * @since 2.0.0
      */
     private $_indexerEavProcessor;
 
     /**
      * @var AttributeSet\IndexableAttributeFilter
-     * @since 2.0.0
      */
     private $_attributeFilter;
 
@@ -47,7 +42,6 @@ class AttributeSet
      * @param Processor $indexerEavProcessor
      * @param AttributeSet\IndexableAttributeFilter $filter
      * @param SetFactory $attributeSetFactory
-     * @since 2.0.0
      */
     public function __construct(
         Processor $indexerEavProcessor,
@@ -65,7 +59,6 @@ class AttributeSet
      * @param EavAttributeSet $subject
      *
      * @return void
-     * @since 2.2.0
      */
     public function beforeSave(EavAttributeSet $subject)
     {
@@ -93,7 +86,6 @@ class AttributeSet
      * @return EavAttributeSet
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterSave(EavAttributeSet $subject, EavAttributeSet $result)
     {

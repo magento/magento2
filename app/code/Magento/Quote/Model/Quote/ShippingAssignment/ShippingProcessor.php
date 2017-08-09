@@ -14,25 +14,21 @@ use Magento\Quote\Model\ShippingMethodManagement;
 /**
  * Class \Magento\Quote\Model\Quote\ShippingAssignment\ShippingProcessor
  *
- * @since 2.1.0
  */
 class ShippingProcessor
 {
     /**
      * @var ShippingFactory
-     * @since 2.1.0
      */
     private $shippingFactory;
 
     /**
      * @var ShippingAddressManagement
-     * @since 2.1.0
      */
     private $shippingAddressManagement;
 
     /**
      * @var ShippingMethodManagement
-     * @since 2.1.0
      */
     private $shippingMethodManagement;
 
@@ -40,7 +36,6 @@ class ShippingProcessor
      * @param ShippingFactory $shippingFactory
      * @param ShippingAddressManagement $shippingAddressManagement
      * @param ShippingMethodManagement $shippingMethodManagement
-     * @since 2.1.0
      */
     public function __construct(
         ShippingFactory $shippingFactory,
@@ -55,7 +50,6 @@ class ShippingProcessor
     /**
      * @param \Magento\Quote\Api\Data\AddressInterface $shippingAddress
      * @return \Magento\Quote\Api\Data\ShippingInterface
-     * @since 2.1.0
      */
     public function create(\Magento\Quote\Api\Data\AddressInterface $shippingAddress)
     {
@@ -70,7 +64,6 @@ class ShippingProcessor
      * @param ShippingInterface $shipping
      * @param CartInterface $quote
      * @return void
-     * @since 2.1.0
      */
     public function save(ShippingInterface $shipping, CartInterface $quote)
     {

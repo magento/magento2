@@ -9,7 +9,6 @@ namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 /**
  * Class \Magento\Newsletter\Controller\Adminhtml\Queue\Preview
  *
- * @since 2.0.0
  */
 class Preview extends \Magento\Newsletter\Controller\Adminhtml\Queue
 {
@@ -17,7 +16,6 @@ class Preview extends \Magento\Newsletter\Controller\Adminhtml\Queue
      * Preview Newsletter queue template
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

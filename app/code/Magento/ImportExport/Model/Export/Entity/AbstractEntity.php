@@ -15,7 +15,6 @@ use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class AbstractEntity
 {
@@ -23,7 +22,6 @@ abstract class AbstractEntity
      * Attribute code to its values. Only attributes with options and only default store values used.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_attributeValues = [];
 
@@ -31,7 +29,6 @@ abstract class AbstractEntity
      * Attribute code to its values. Only attributes with options and only default store values used.
      *
      * @var array
-     * @since 2.0.0
      */
     protected static $attrCodes = null;
 
@@ -39,7 +36,6 @@ abstract class AbstractEntity
      * DB connection.
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected $_connection;
 
@@ -47,7 +43,6 @@ abstract class AbstractEntity
      * Array of attributes codes which are disabled for export.
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_disabledAttrs = [];
 
@@ -55,7 +50,6 @@ abstract class AbstractEntity
      * Entity type id.
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_entityTypeId;
 
@@ -63,7 +57,6 @@ abstract class AbstractEntity
      * Error codes with arrays of corresponding row numbers.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_errors = [];
 
@@ -71,7 +64,6 @@ abstract class AbstractEntity
      * Error counter.
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_errorsCount = 0;
 
@@ -79,7 +71,6 @@ abstract class AbstractEntity
      * Limit of errors after which pre-processing will exit.
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_errorsLimit = 100;
 
@@ -87,7 +78,6 @@ abstract class AbstractEntity
      * Export filter data.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_filter = [];
 
@@ -95,7 +85,6 @@ abstract class AbstractEntity
      * Attributes with index (not label) value.
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_indexValueAttributes = [];
 
@@ -103,7 +92,6 @@ abstract class AbstractEntity
      * Validation failure message template definitions.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_messageTemplates = [];
 
@@ -111,7 +99,6 @@ abstract class AbstractEntity
      * Parameters.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_parameters = [];
 
@@ -119,7 +106,6 @@ abstract class AbstractEntity
      * Column names that holds values with particular meaning.
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_specialAttributes = [];
 
@@ -127,7 +113,6 @@ abstract class AbstractEntity
      * Permanent entity columns.
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_permanentAttributes = [];
 
@@ -135,7 +120,6 @@ abstract class AbstractEntity
      * Number of entities processed by validation.
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_processedEntitiesCount = 0;
 
@@ -143,7 +127,6 @@ abstract class AbstractEntity
      * Number of rows processed by validation.
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_processedRowsCount = 0;
 
@@ -151,19 +134,16 @@ abstract class AbstractEntity
      * Source model.
      *
      * @var AbstractAdapter
-     * @since 2.0.0
      */
     protected $_writer;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $_localeDate;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -172,7 +152,6 @@ abstract class AbstractEntity
      * @param \Magento\Eav\Model\Config $config
      * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -191,7 +170,6 @@ abstract class AbstractEntity
      * Initialize stores hash.
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initStores()
     {
@@ -208,7 +186,6 @@ abstract class AbstractEntity
      * Get header columns
      *
      * @return string[]
-     * @since 2.0.0
      */
     abstract protected function _getHeaderColumns();
 
@@ -217,7 +194,6 @@ abstract class AbstractEntity
      *
      * @param bool $resetCollection
      * @return \Magento\Framework\Data\Collection\AbstractDb
-     * @since 2.0.0
      */
     abstract protected function _getEntityCollection($resetCollection = false);
 
@@ -225,7 +201,6 @@ abstract class AbstractEntity
      * Get attributes codes which are appropriate for export.
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getExportAttrCodes()
     {
@@ -260,7 +235,6 @@ abstract class AbstractEntity
      * Initialize attribute option values.
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initAttrValues()
     {
@@ -276,7 +250,6 @@ abstract class AbstractEntity
      * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
      * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _prepareEntityCollection(\Magento\Eav\Model\Entity\Collection\AbstractCollection $collection)
     {
@@ -348,7 +321,6 @@ abstract class AbstractEntity
      * @param string $errorCode Error code or simply column name
      * @param int $errorRowNum Row number.
      * @return \Magento\ImportExport\Model\Import\AbstractSource
-     * @since 2.0.0
      */
     public function addRowError($errorCode, $errorRowNum)
     {
@@ -367,7 +339,6 @@ abstract class AbstractEntity
      * @param string $errorCode Error code
      * @param string $message Message template
      * @return \Magento\ImportExport\Model\Import\Entity\AbstractEntity
-     * @since 2.0.0
      */
     public function addMessageTemplate($errorCode, $message)
     {
@@ -381,7 +352,6 @@ abstract class AbstractEntity
      *
      * @param string $errorCode
      * @return null|string
-     * @since 2.0.0
      */
     public function retrieveMessageTemplate($errorCode)
     {
@@ -395,7 +365,6 @@ abstract class AbstractEntity
      * Export process.
      *
      * @return string
-     * @since 2.0.0
      */
     abstract public function export();
 
@@ -404,7 +373,6 @@ abstract class AbstractEntity
      *
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection
      * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
-     * @since 2.0.0
      */
     public function filterAttributeCollection(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection)
     {
@@ -422,7 +390,6 @@ abstract class AbstractEntity
      * Entity attributes collection getter.
      *
      * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
-     * @since 2.0.0
      */
     abstract public function getAttributeCollection();
 
@@ -431,7 +398,6 @@ abstract class AbstractEntity
      *
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @return array
-     * @since 2.0.0
      */
     public function getAttributeOptions(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute)
     {
@@ -465,7 +431,6 @@ abstract class AbstractEntity
      *
      * @abstract
      * @return string
-     * @since 2.0.0
      */
     abstract public function getEntityTypeCode();
 
@@ -473,7 +438,6 @@ abstract class AbstractEntity
      * Entity type ID getter.
      *
      * @return int
-     * @since 2.0.0
      */
     public function getEntityTypeId()
     {
@@ -484,7 +448,6 @@ abstract class AbstractEntity
      * Returns error information.
      *
      * @return array
-     * @since 2.0.0
      */
     public function getErrorMessages()
     {
@@ -507,7 +470,6 @@ abstract class AbstractEntity
      * Returns error counter value.
      *
      * @return int
-     * @since 2.0.0
      */
     public function getErrorsCount()
     {
@@ -518,7 +480,6 @@ abstract class AbstractEntity
      * Returns invalid rows count.
      *
      * @return int
-     * @since 2.0.0
      */
     public function getInvalidRowsCount()
     {
@@ -529,7 +490,6 @@ abstract class AbstractEntity
      * Returns number of checked entities.
      *
      * @return int
-     * @since 2.0.0
      */
     public function getProcessedEntitiesCount()
     {
@@ -540,7 +500,6 @@ abstract class AbstractEntity
      * Returns number of checked rows.
      *
      * @return int
-     * @since 2.0.0
      */
     public function getProcessedRowsCount()
     {
@@ -552,7 +511,6 @@ abstract class AbstractEntity
      *
      * @return AbstractAdapter
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getWriter()
     {
@@ -567,7 +525,6 @@ abstract class AbstractEntity
      *
      * @param array $parameters
      * @return $this
-     * @since 2.0.0
      */
     public function setParameters(array $parameters)
     {
@@ -581,7 +538,6 @@ abstract class AbstractEntity
      *
      * @param AbstractAdapter $writer
      * @return $this
-     * @since 2.0.0
      */
     public function setWriter(AbstractAdapter $writer)
     {
@@ -592,7 +548,7 @@ abstract class AbstractEntity
 
     /**
      * Clean cached values
-     * @since 2.2.0
+     * @since 100.1.2
      */
     public function __destruct()
     {

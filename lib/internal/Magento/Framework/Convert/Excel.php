@@ -9,7 +9,6 @@ use Magento\Framework\Filesystem\File\WriteInterface;
 
 /**
  * Convert the data to XML Excel
- * @since 2.0.0
  */
 class Excel
 {
@@ -17,7 +16,6 @@ class Excel
      * \ArrayIterator Object
      *
      * @var \Iterator|null
-     * @since 2.0.0
      */
     protected $_iterator = null;
 
@@ -25,7 +23,6 @@ class Excel
      * Method Callback Array
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_rowCallback = [];
 
@@ -33,7 +30,6 @@ class Excel
      * Grid Header Array
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_dataHeader = [];
 
@@ -41,7 +37,6 @@ class Excel
      * Grid Footer Array
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_dataFooter = [];
 
@@ -50,7 +45,6 @@ class Excel
      *
      * @param \Iterator $iterator
      * @param array $rowCallback
-     * @since 2.0.0
      */
     public function __construct(\Iterator $iterator, $rowCallback = [])
     {
@@ -64,7 +58,6 @@ class Excel
      *
      * @param string $sheetName
      * @return string
-     * @since 2.0.0
      */
     protected function _getXmlHeader($sheetName = '')
     {
@@ -108,7 +101,6 @@ class Excel
      * Append data footer if it is available
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getXmlFooter()
     {
@@ -131,7 +123,6 @@ class Excel
      * @return string
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _getXmlRow($row, $useCallback)
     {
@@ -174,7 +165,6 @@ class Excel
      *
      * @param array $data
      * @return void
-     * @since 2.0.0
      */
     public function setDataHeader($data)
     {
@@ -186,7 +176,6 @@ class Excel
      *
      * @param array $data
      * @return void
-     * @since 2.0.0
      */
     public function setDataFooter($data)
     {
@@ -198,7 +187,6 @@ class Excel
      *
      * @param string $sheetName
      * @return string
-     * @since 2.0.0
      */
     public function convert($sheetName = '')
     {
@@ -218,7 +206,6 @@ class Excel
      * @param WriteInterface $stream
      * @param string $sheetName
      * @return void
-     * @since 2.0.0
      */
     public function write(WriteInterface $stream, $sheetName = '')
     {

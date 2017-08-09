@@ -12,7 +12,6 @@ use Magento\Framework\Api\SearchResults;
 /**
  * Class \Magento\Catalog\Model\ProductRenderInfoSearchResults
  *
- * @since 2.2.0
  */
 class ProductRenderInfoSearchResults extends SearchResults implements ProductRenderSearchResultsInterface
 {

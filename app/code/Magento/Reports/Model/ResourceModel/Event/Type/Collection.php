@@ -13,7 +13,6 @@ namespace Magento\Reports\Model\ResourceModel\Event\Type;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -21,7 +20,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -32,7 +30,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Return option array
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

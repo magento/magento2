@@ -21,7 +21,6 @@ use Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory;
 
 /**
  * @api
- * @since 2.0.0
  */
 abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\Frontend\FrontendInterface
 {
@@ -29,31 +28,26 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      * Default cache tags values
      * will be used if no values in the constructor provided
      * @var array
-     * @since 2.2.0
      */
     private static $defaultCacheTags = [CacheType::CACHE_TAG, Attribute::CACHE_TAG];
 
     /**
      * @var CacheInterface
-     * @since 2.2.0
      */
     private $cache;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var Serializer
-     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $cacheTags;
 
@@ -61,13 +55,11 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      * Reference to the attribute instance
      *
      * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
-     * @since 2.0.0
      */
     protected $_attribute;
 
     /**
      * @var BooleanFactory
-     * @since 2.0.0
      */
     protected $_attrBooleanFactory;
 
@@ -80,7 +72,6 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      * @param Serializer $serializer
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function __construct(
         BooleanFactory $attrBooleanFactory,
@@ -103,7 +94,6 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setAttribute($attribute)
     {
@@ -116,7 +106,6 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      *
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getAttribute()
     {
@@ -128,7 +117,6 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getInputType()
     {
@@ -139,7 +127,6 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      * Retrieve label
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLabel()
     {
@@ -155,7 +142,6 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      * Retrieve localized label
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getLocalizedLabel()
     {
@@ -167,7 +153,6 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      *
      * @param \Magento\Framework\DataObject $object
      * @return mixed
-     * @since 2.0.0
      */
     public function getValue(\Magento\Framework\DataObject $object)
     {
@@ -201,7 +186,6 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      *
      * @return bool
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function isVisible()
     {
@@ -212,7 +196,6 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      * Retrieve frontend class
      *
      * @return string
-     * @since 2.0.0
      */
     public function getClass()
     {
@@ -240,7 +223,6 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      * Return validate class by attribute input validation rule
      *
      * @return string|false
-     * @since 2.0.0
      */
     protected function _getInputValidateClass()
     {
@@ -278,7 +260,6 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      * Retrieve validation classes by min_text_length and max_text_length rules
      *
      * @return array
-     * @since 2.2.0
      */
     private function getTextLengthValidateClasses()
     {
@@ -306,7 +287,6 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      * @param string $fieldName
      * @return mixed
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getConfigField($fieldName)
     {
@@ -317,7 +297,6 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      * Get select options in case it's select box and options source is defined
      *
      * @return array
-     * @since 2.0.0
      */
     public function getSelectOptions()
     {
@@ -343,7 +322,6 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      *
      * @param int $optionId
      * @return mixed|bool
-     * @since 2.0.0
      */
     public function getOption($optionId)
     {
@@ -359,7 +337,6 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      *
      * @return string|null
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getInputRendererClass()
     {

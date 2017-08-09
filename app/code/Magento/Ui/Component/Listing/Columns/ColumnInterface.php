@@ -9,7 +9,6 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface ColumnInterface extends UiComponentInterface
 {

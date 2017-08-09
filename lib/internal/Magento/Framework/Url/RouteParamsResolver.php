@@ -18,25 +18,21 @@ use Magento\Framework\Url\RouteParamsResolverInterface;
  * @method bool getSecureIsForced()
  * @method $this setSecure(bool $isForced)
  * @method bool getSecure()
- * @since 2.0.0
  */
 class RouteParamsResolver extends \Magento\Framework\DataObject implements RouteParamsResolverInterface
 {
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var \Magento\Framework\Url\QueryParamsResolverInterface
-     * @since 2.0.0
      */
     protected $queryParamsResolver;
 
     /**
      * @var \Magento\Framework\Escaper
-     * @since 2.2.0
      */
     protected $escaper;
 
@@ -44,7 +40,6 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -60,7 +55,6 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function setRouteParams(array $data, $unsetOldParams = true)
     {
@@ -128,7 +122,6 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setRouteParam($key, $data)
     {
@@ -143,7 +136,6 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getRouteParams()
     {
@@ -152,7 +144,6 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getRouteParam($key)
     {
@@ -163,8 +154,7 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
      * Get escaper
      *
      * @return \Magento\Framework\Escaper
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getEscaper()
     {

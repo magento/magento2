@@ -7,7 +7,6 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer\Options;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Converter
 {
@@ -16,7 +15,6 @@ class Converter
      *
      * @param array $treeData
      * @return array
-     * @since 2.0.0
      */
     public function toFlatArray($treeData)
     {
@@ -36,7 +34,6 @@ class Converter
      *
      * @param array $flatData
      * @return array
-     * @since 2.0.0
      */
     public function toTreeArray($flatData)
     {

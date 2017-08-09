@@ -12,7 +12,6 @@ use Magento\Framework\Filter\Template;
 /**
  * Class \Magento\Catalog\Helper\Output
  *
- * @since 2.0.0
  */
 class Output extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -20,7 +19,6 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
      * Array of existing handlers
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_handlers;
 
@@ -28,7 +26,6 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
      * Template processor instance
      *
      * @var Template
-     * @since 2.0.0
      */
     protected $_templateProcessor = null;
 
@@ -36,7 +33,6 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
      * Catalog data
      *
      * @var Data
-     * @since 2.0.0
      */
     protected $_catalogData = null;
 
@@ -44,13 +40,11 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
      * Eav config
      *
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $_eavConfig;
 
     /**
      * @var \Magento\Framework\Escaper
-     * @since 2.0.0
      */
     protected $_escaper;
 
@@ -59,7 +53,6 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param Data $catalogData
      * @param \Magento\Framework\Escaper $escaper
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -75,7 +68,6 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @return Template
-     * @since 2.0.0
      */
     protected function _getTemplateProcessor()
     {
@@ -92,7 +84,6 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $method
      * @param object $handler
      * @return $this
-     * @since 2.0.0
      */
     public function addHandler($method, $handler)
     {
@@ -114,7 +105,6 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $method
      * @return array
-     * @since 2.0.0
      */
     public function getHandlers($method)
     {
@@ -129,7 +119,6 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
      * @param mixed $result
      * @param array $params
      * @return mixed
-     * @since 2.0.0
      */
     public function process($method, $result, $params)
     {
@@ -149,7 +138,6 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $attributeName
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function productAttribute($product, $attributeHtml, $attributeName)
     {
@@ -189,7 +177,6 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $attributeHtml
      * @param string $attributeName
      * @return string
-     * @since 2.0.0
      */
     public function categoryAttribute($category, $attributeHtml, $attributeName)
     {

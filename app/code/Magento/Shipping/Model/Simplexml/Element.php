@@ -8,7 +8,6 @@ namespace Magento\Shipping\Model\Simplexml;
 /**
  * Extends SimpleXML to add valuable functionality to \SimpleXMLElement class
  *
- * @since 2.0.0
  */
 class Element extends \Magento\Framework\Simplexml\Element
 {
@@ -19,7 +18,6 @@ class Element extends \Magento\Framework\Simplexml\Element
      * @param string $value If specified, the value of the attribute.
      * @param string $namespace If specified, the namespace to which the attribute belongs.
      * @return void
-     * @since 2.0.0
      */
     public function addAttribute($name, $value = null, $namespace = null)
     {
@@ -36,7 +34,6 @@ class Element extends \Magento\Framework\Simplexml\Element
      * @param string $value If specified, the value of the child element.
      * @param string $namespace If specified, the namespace to which the child element belongs.
      * @return \Magento\Shipping\Model\Simplexml\Element
-     * @since 2.0.0
      */
     public function addChild($name, $value = null, $namespace = null)
     {
@@ -51,7 +48,6 @@ class Element extends \Magento\Framework\Simplexml\Element
      *
      * @param string|null $value
      * @return string
-     * @since 2.0.0
      */
     public function xmlentities($value = null)
     {

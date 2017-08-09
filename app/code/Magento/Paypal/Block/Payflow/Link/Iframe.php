@@ -9,7 +9,6 @@ namespace Magento\Paypal\Block\Payflow\Link;
  * Payflow link iframe block
  *
  * @api
- * @since 2.0.0
  */
 class Iframe extends \Magento\Paypal\Block\Iframe
 {
@@ -17,7 +16,6 @@ class Iframe extends \Magento\Paypal\Block\Iframe
      * Payment data
      *
      * @var \Magento\Payment\Helper\Data
-     * @since 2.0.0
      */
     protected $_paymentData = null;
 
@@ -30,7 +28,6 @@ class Iframe extends \Magento\Paypal\Block\Iframe
      * @param \Magento\Framework\Module\Dir\Reader $reader
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -50,7 +47,6 @@ class Iframe extends \Magento\Paypal\Block\Iframe
      * Set payment method code
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -62,7 +58,6 @@ class Iframe extends \Magento\Paypal\Block\Iframe
      * Get frame action URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFrameActionUrl()
     {
@@ -73,7 +68,6 @@ class Iframe extends \Magento\Paypal\Block\Iframe
      * Get secure token
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSecureToken()
     {
@@ -84,7 +78,6 @@ class Iframe extends \Magento\Paypal\Block\Iframe
      * Get secure token ID
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSecureTokenId()
     {
@@ -95,7 +88,6 @@ class Iframe extends \Magento\Paypal\Block\Iframe
      * Get payflow transaction URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTransactionUrl()
     {
@@ -110,7 +102,6 @@ class Iframe extends \Magento\Paypal\Block\Iframe
      * Check sandbox mode
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isTestMode()
     {

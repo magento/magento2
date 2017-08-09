@@ -11,7 +11,6 @@ use Magento\Framework\Exception\FileSystemException;
 /**
  * Class \Magento\Framework\Filesystem\File\Write
  *
- * @since 2.0.0
  */
 class Write extends Read implements WriteInterface
 {
@@ -21,7 +20,6 @@ class Write extends Read implements WriteInterface
      * @param string $path
      * @param DriverInterface $driver
      * @param string $mode
-     * @since 2.0.0
      */
     public function __construct($path, DriverInterface $driver, $mode)
     {
@@ -34,7 +32,6 @@ class Write extends Read implements WriteInterface
      *
      * @return void
      * @throws \Magento\Framework\Exception\FileSystemException
-     * @since 2.0.0
      */
     protected function assertValid()
     {
@@ -52,7 +49,6 @@ class Write extends Read implements WriteInterface
      * @param string $data
      * @return int
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function write($data)
     {
@@ -73,7 +69,6 @@ class Write extends Read implements WriteInterface
      * @param string $enclosure
      * @return int
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function writeCsv(array $data, $delimiter = ',', $enclosure = '"')
     {
@@ -91,7 +86,6 @@ class Write extends Read implements WriteInterface
      *
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function flush()
     {
@@ -109,7 +103,6 @@ class Write extends Read implements WriteInterface
      *
      * @param int $lockMode
      * @return bool
-     * @since 2.0.0
      */
     public function lock($lockMode = LOCK_EX)
     {
@@ -120,7 +113,6 @@ class Write extends Read implements WriteInterface
      * File unlocking
      *
      * @return bool
-     * @since 2.0.0
      */
     public function unlock()
     {

@@ -12,20 +12,17 @@ namespace Magento\Backend\Block;
  *
  * Marked as public API because it is actively used now.
  * @api
- * @since 2.0.0
  */
 class AbstractBlock extends \Magento\Framework\View\Element\AbstractBlock
 {
     /**
      * @var \Magento\Framework\AuthorizationInterface
-     * @since 2.0.0
      */
     protected $_authorization;
 
     /**
      * @param \Magento\Backend\Block\Context $context
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(\Magento\Backend\Block\Context $context, array $data = [])
     {

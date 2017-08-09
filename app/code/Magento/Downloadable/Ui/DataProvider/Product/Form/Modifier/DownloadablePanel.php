@@ -16,32 +16,27 @@ use Magento\Ui\Component\Form;
 /**
  * Class adds Downloadable collapsible panel
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
  */
 class DownloadablePanel extends AbstractModifier
 {
     /**
      * @var LocatorInterface
-     * @since 2.1.0
      */
     protected $locator;
 
     /**
      * @var ArrayManager
-     * @since 2.1.0
      */
     protected $arrayManager;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $meta = [];
 
     /**
      * @param LocatorInterface $locator
      * @param ArrayManager $arrayManager
-     * @since 2.1.0
      */
     public function __construct(LocatorInterface $locator, ArrayManager $arrayManager)
     {
@@ -51,7 +46,6 @@ class DownloadablePanel extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -65,7 +59,6 @@ class DownloadablePanel extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -91,7 +84,6 @@ class DownloadablePanel extends AbstractModifier
      * Add message
      *
      * @return void
-     * @since 2.1.0
      */
     protected function addMessageBox()
     {
@@ -116,7 +108,6 @@ class DownloadablePanel extends AbstractModifier
      * Add Checkbox
      *
      * @return void
-     * @since 2.1.0
      */
     protected function addCheckboxIsDownloadable()
     {

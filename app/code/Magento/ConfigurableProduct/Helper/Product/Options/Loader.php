@@ -13,19 +13,16 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
 /**
  * Class Loader
- * @since 2.1.0
  */
 class Loader
 {
     /**
      * @var OptionValueInterfaceFactory
-     * @since 2.1.0
      */
     private $optionValueFactory;
 
     /**
      * @var JoinProcessorInterface
-     * @since 2.1.0
      */
     private $extensionAttributesJoinProcessor;
 
@@ -34,7 +31,6 @@ class Loader
      *
      * @param OptionValueInterfaceFactory $optionValueFactory
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
-     * @since 2.1.0
      */
     public function __construct(
         OptionValueInterfaceFactory $optionValueFactory,
@@ -47,7 +43,6 @@ class Loader
     /**
      * @param ProductInterface $product
      * @return OptionInterface[]
-     * @since 2.1.0
      */
     public function load(ProductInterface $product)
     {

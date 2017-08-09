@@ -15,7 +15,6 @@ use Magento\Downloadable\Api\Data\SampleInterface;
  * @method int getProductId()
  *
  * @api
- * @since 2.0.0
  */
 class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements ComponentInterface, SampleInterface
 {
@@ -40,7 +39,6 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -66,7 +64,6 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Initialize resource
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -78,7 +75,6 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * After save process
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -90,7 +86,6 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Retrieve sample URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUrl()
     {
@@ -105,7 +100,6 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Retrieve base tmp path
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBaseTmpPath()
     {
@@ -116,7 +110,6 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Retrieve sample files path
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBasePath()
     {
@@ -129,7 +122,6 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param int $productId
      * @param int $storeId
      * @return array
-     * @since 2.0.0
      */
     public function getSearchableData($productId, $storeId)
     {
@@ -139,7 +131,6 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -149,7 +140,6 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getSortOrder()
     {
@@ -159,7 +149,6 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getSampleType()
     {
@@ -169,7 +158,6 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getSampleFile()
     {
@@ -179,7 +167,6 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getSampleFileContent()
     {
@@ -189,7 +176,6 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getSampleUrl()
     {
@@ -201,7 +187,6 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $title
      * @return $this
-     * @since 2.0.0
      */
     public function setTitle($title)
     {
@@ -213,7 +198,6 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param int $sortOrder
      * @return $this
-     * @since 2.0.0
      */
     public function setSortOrder($sortOrder)
     {
@@ -223,7 +207,6 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * @param string $sampleType
      * @return $this
-     * @since 2.0.0
      */
     public function setSampleType($sampleType)
     {
@@ -235,7 +218,6 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $sampleFile
      * @return $this
-     * @since 2.0.0
      */
     public function setSampleFile($sampleFile)
     {
@@ -247,7 +229,6 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param \Magento\Downloadable\Api\Data\File\ContentInterface $sampleFileContent
      * @return $this
-     * @since 2.0.0
      */
     public function setSampleFileContent(\Magento\Downloadable\Api\Data\File\ContentInterface $sampleFileContent = null)
     {
@@ -259,7 +240,6 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $sampleUrl
      * @return $this
-     * @since 2.0.0
      */
     public function setSampleUrl($sampleUrl)
     {
@@ -270,7 +250,6 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * {@inheritdoc}
      *
      * @return \Magento\Downloadable\Api\Data\SampleExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -282,7 +261,6 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param \Magento\Downloadable\Api\Data\SampleExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Downloadable\Api\Data\SampleExtensionInterface $extensionAttributes)
     {

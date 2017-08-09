@@ -12,7 +12,6 @@ namespace Magento\Reports\Model\ResourceModel\Customer;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collection
 {
@@ -20,7 +19,6 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
      * Add order statistics flag
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_addOrderStatistics = false;
 
@@ -28,7 +26,6 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
      * Add order statistics is filter flag
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_addOrderStatFilter = false;
 
@@ -36,7 +33,6 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
      * Customer id table name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_customerIdTableName;
 
@@ -44,7 +40,6 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
      * Customer id field name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_customerIdFieldName;
 
@@ -52,7 +47,6 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
      * Order entity table name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_orderEntityTable;
 
@@ -60,25 +54,21 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
      * Order entity field name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_orderEntityField;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory
-     * @since 2.0.0
      */
     protected $_quoteItemFactory;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Collection
-     * @since 2.0.0
      */
     protected $orderResource;
 
@@ -101,7 +91,6 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
      * @param string $modelName
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -145,7 +134,6 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
      * Add cart info to collection
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addCartInfo()
     {
@@ -169,7 +157,6 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
      * Add customer name to results
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addCustomerName()
     {
@@ -182,7 +169,6 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
      *
      * @param bool $isFilter
      * @return $this
-     * @since 2.0.0
      */
     public function addOrdersStatistics($isFilter = false)
     {
@@ -195,7 +181,6 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
      * Add orders statistics to collection items
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _addOrdersStatistics()
     {
@@ -244,7 +229,6 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
      * Collection after load operations like adding orders statistics
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -257,7 +241,6 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
      *
      * @param string $dir
      * @return $this
-     * @since 2.0.0
      */
     public function orderByCustomerRegistration($dir = self::SORT_ORDER_DESC)
     {
@@ -269,7 +252,6 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
      * Get select count sql
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSelectCountSql()
     {

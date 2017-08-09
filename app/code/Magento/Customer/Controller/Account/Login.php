@@ -13,19 +13,16 @@ use Magento\Framework\View\Result\PageFactory;
 /**
  * Class \Magento\Customer\Controller\Account\Login
  *
- * @since 2.0.0
  */
 class Login extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
      * @var Session
-     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -33,7 +30,6 @@ class Login extends \Magento\Customer\Controller\AbstractAccount
      * @param Context $context
      * @param Session $customerSession
      * @param PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -49,7 +45,6 @@ class Login extends \Magento\Customer\Controller\AbstractAccount
      * Customer login form page
      *
      * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

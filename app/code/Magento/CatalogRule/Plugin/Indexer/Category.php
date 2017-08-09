@@ -10,19 +10,16 @@ use Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor;
 /**
  * Class \Magento\CatalogRule\Plugin\Indexer\Category
  *
- * @since 2.0.0
  */
 class Category
 {
     /**
      * @var ProductRuleProcessor
-     * @since 2.0.0
      */
     protected $productRuleProcessor;
 
     /**
      * @param ProductRuleProcessor $productRuleProcessor
-     * @since 2.0.0
      */
     public function __construct(
         ProductRuleProcessor $productRuleProcessor
@@ -36,7 +33,6 @@ class Category
      * @return \Magento\Catalog\Model\Category
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterSave(
         \Magento\Catalog\Model\Category $subject,
@@ -56,7 +52,6 @@ class Category
      * @return \Magento\Catalog\Model\Category
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterDelete(
         \Magento\Catalog\Model\Category $subject,

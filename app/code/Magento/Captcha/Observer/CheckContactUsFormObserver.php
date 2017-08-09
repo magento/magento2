@@ -12,43 +12,36 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class \Magento\Captcha\Observer\CheckContactUsFormObserver
  *
- * @since 2.0.0
  */
 class CheckContactUsFormObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Captcha\Helper\Data
-     * @since 2.0.0
      */
     protected $_helper;
 
     /**
      * @var \Magento\Framework\App\ActionFlag
-     * @since 2.0.0
      */
     protected $_actionFlag;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
-     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var \Magento\Framework\App\Response\RedirectInterface
-     * @since 2.0.0
      */
     protected $redirect;
 
     /**
      * @var CaptchaStringResolver
-     * @since 2.0.0
      */
     protected $captchaStringResolver;
 
     /**
      * @var DataPersistorInterface
-     * @since 2.1.0
      */
     private $dataPersistor;
 
@@ -58,7 +51,6 @@ class CheckContactUsFormObserver implements ObserverInterface
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\App\Response\RedirectInterface $redirect
      * @param CaptchaStringResolver $captchaStringResolver
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Captcha\Helper\Data $helper,
@@ -79,7 +71,6 @@ class CheckContactUsFormObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
@@ -101,7 +92,6 @@ class CheckContactUsFormObserver implements ObserverInterface
      * Get Data Persistor
      *
      * @return DataPersistorInterface
-     * @since 2.1.0
      */
     private function getDataPersistor()
     {

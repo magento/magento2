@@ -10,14 +10,12 @@ use Magento\Framework\View\Element\Template;
 /**
  * Class Serializer
  * @package Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Ajax
- * @deprecated 2.2.0
- * @since 2.0.0
+ * @deprecated 101.1.0
  */
 class Serializer extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -26,7 +24,6 @@ class Serializer extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param array $data
      * @throws \RuntimeException
-     * @since 2.2.0
      */
     public function __construct(
         Template\Context $context,
@@ -40,7 +37,6 @@ class Serializer extends \Magento\Framework\View\Element\Template
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function _construct()
     {
@@ -51,8 +47,7 @@ class Serializer extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 101.1.0
      */
     public function getProductsJSON()
     {

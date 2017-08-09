@@ -8,7 +8,6 @@ namespace Magento\Integration\Model\Oauth\Token\RequestLog;
 
 /**
  * OAuth token request log reader interface.
- * @since 2.1.0
  */
 interface ReaderInterface
 {
@@ -18,7 +17,6 @@ interface ReaderInterface
      * @param string $userName
      * @param int $userType
      * @return int
-     * @since 2.1.0
      */
     public function getFailuresCount($userName, $userType);
 }

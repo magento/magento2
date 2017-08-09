@@ -11,7 +11,6 @@ namespace Magento\Shipping\Block\Adminhtml\Order\Tracking;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Invoice extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
 {
@@ -19,7 +18,6 @@ class Invoice extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
      * Retrieve invoice
      *
      * @return \Magento\Sales\Model\Order\Shipment
-     * @since 2.0.0
      */
     public function getInvoice()
     {
@@ -30,7 +28,6 @@ class Invoice extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
      * Retrieve carriers
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getCarriersInstances()
     {

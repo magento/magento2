@@ -8,7 +8,6 @@ namespace Magento\Framework\Url;
 /**
  * Class \Magento\Framework\Url\Encoder
  *
- * @since 2.0.0
  */
 class Encoder implements EncoderInterface
 {
@@ -17,7 +16,6 @@ class Encoder implements EncoderInterface
      *
      * @param    string $url
      * @return   string
-     * @since 2.0.0
      */
     public function encode($url)
     {

@@ -16,13 +16,11 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Class \Magento\Customer\Controller\Adminhtml\Index\Save
  *
- * @since 2.0.0
  */
 class Save extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**
      * @var EmailNotificationInterface
-     * @since 2.1.0
      */
     private $emailNotification;
 
@@ -30,7 +28,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
      * Reformat customer account data to be compatible with customer service interface
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _extractCustomerData()
     {
@@ -70,7 +67,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
      * @param string[] $additionalAttributes The list of attribute codes to skip filtration for
      * @param string $scope scope of the request
      * @return array
-     * @since 2.0.0
      */
     protected function _extractData(
         $formCode,
@@ -115,7 +111,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
      * @param array $addressIdList
      * @param array $extractedCustomerData
      * @return array
-     * @since 2.0.0
      */
     protected function saveDefaultFlags(array $addressIdList, array & $extractedCustomerData)
     {
@@ -157,7 +152,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
      *
      * @param array $extractedCustomerData
      * @return array
-     * @since 2.0.0
      */
     protected function _extractCustomerAddressData(array & $extractedCustomerData)
     {
@@ -182,7 +176,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -312,8 +305,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
      * Get email notification
      *
      * @return EmailNotificationInterface
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getEmailNotification()
     {
@@ -333,7 +325,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
      * @param string $formCode
      * @param string $scope
      * @return Form
-     * @since 2.2.0
      */
     private function getMetadataForm($entityType, $formCode, $scope)
     {
@@ -370,7 +361,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
      * Retrieve current customer ID
      *
      * @return int
-     * @since 2.2.0
      */
     private function getCurrentCustomerId()
     {

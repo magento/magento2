@@ -27,7 +27,6 @@ namespace Magento\Framework\Webapi\Rest\Request;
  * adding to the parameter list for ParamsOverrider's dependency injection configuration.
  *
  * @api
- * @since 2.0.0
  */
 interface ParamOverriderInterface
 {
@@ -35,7 +34,6 @@ interface ParamOverriderInterface
      * Returns the overridden value to use.
      *
      * @return string|int|null
-     * @since 2.0.0
      */
     public function getOverriddenValue();
 }

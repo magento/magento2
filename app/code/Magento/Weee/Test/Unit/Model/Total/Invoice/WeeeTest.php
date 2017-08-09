@@ -7,7 +7,7 @@ namespace Magento\Weee\Test\Unit\Model\Total\Invoice;
 
 use Magento\Framework\Serialize\Serializer\Json;
 
-class WeeeTest extends \PHPUnit_Framework_TestCase
+class WeeeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Weee\Model\Total\Invoice\Weee
@@ -53,7 +53,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $serializer = $this->getMock(Json::class, null);
+        $serializer = $this->objectManager->getObject(Json::class);
         /** @var \Magento\Sales\Model\Order\Invoice\Total\Tax $model */
         $this->model = $this->objectManager->getObject(
             \Magento\Weee\Model\Total\Invoice\Weee::class,
@@ -63,30 +63,18 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->order = $this->getMock(
-            \Magento\Sales\Model\Order::class,
-            [
+        $this->order = $this->createPartialMock(\Magento\Sales\Model\Order::class, [
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
-        $this->invoice = $this->getMock(
-            \Magento\Sales\Model\Order\Invoice::class,
-            [
+        $this->invoice = $this->createPartialMock(\Magento\Sales\Model\Order\Invoice::class, [
                 'getAllItems',
                 'getOrder',
                 'roundPrice',
                 'isLast',
                 'getStore',
                 '__wakeup',
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $this->invoice->expects($this->atLeastOnce())->method('getOrder')->will($this->returnValue($this->order));
     }
 
@@ -685,16 +673,10 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
     protected function getInvoiceItem($invoiceItemData)
     {
         /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject $orderItem */
-        $orderItem = $this->getMock(
-            \Magento\Sales\Model\Order\Item::class,
-            [
+        $orderItem = $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, [
                 'isDummy',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         foreach ($invoiceItemData['order_item'] as $key => $value) {
             $orderItem->setData($key, $value);
         }
@@ -726,17 +708,11 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($orderItem->getBaseWeeeTaxAmountInvoiced()));
         }
         /** @var \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit_Framework_MockObject_MockObject $invoiceItem */
-        $invoiceItem = $this->getMock(
-            \Magento\Sales\Model\Order\Invoice\Item::class,
-            [
+        $invoiceItem = $this->createPartialMock(\Magento\Sales\Model\Order\Invoice\Item::class, [
                 'getOrderItem',
                 'isLast',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $invoiceItem->expects($this->any())->method('getOrderItem')->will($this->returnValue($orderItem));
         $invoiceItem->expects($this->any())
             ->method('isLast')

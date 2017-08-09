@@ -12,7 +12,6 @@ use Magento\Framework\Exception\NotFoundException;
 
 /**
  * Contact module base controller
- * @since 2.0.0
  */
 abstract class Index extends \Magento\Framework\App\Action\Action
 {
@@ -38,14 +37,12 @@ abstract class Index extends \Magento\Framework\App\Action\Action
 
     /**
      * @var ConfigInterface
-     * @since 2.2.0
      */
     private $contactsConfig;
 
     /**
      * @param Context $context
      * @param ConfigInterface $contactsConfig
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -61,7 +58,6 @@ abstract class Index extends \Magento\Framework\App\Action\Action
      * @param RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
      * @throws \Magento\Framework\Exception\NotFoundException
-     * @since 2.0.0
      */
     public function dispatch(RequestInterface $request)
     {

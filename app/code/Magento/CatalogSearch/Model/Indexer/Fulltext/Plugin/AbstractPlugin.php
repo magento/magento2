@@ -10,19 +10,16 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 
 /**
  * Abstract plugin for indexers
- * @since 2.0.0
  */
 abstract class AbstractPlugin
 {
     /**
      * @var IndexerRegistry
-     * @since 2.0.0
      */
     protected $indexerRegistry;
 
     /**
      * @param IndexerRegistry $indexerRegistry
-     * @since 2.0.0
      */
     public function __construct(IndexerRegistry $indexerRegistry)
     {
@@ -34,7 +31,6 @@ abstract class AbstractPlugin
      *
      * @param int $productId
      * @return void
-     * @since 2.0.0
      */
     protected function reindexRow($productId)
     {
@@ -50,7 +46,6 @@ abstract class AbstractPlugin
      *
      * @param int[] $productIds
      * @return void
-     * @since 2.0.0
      */
     protected function reindexList(array $productIds)
     {

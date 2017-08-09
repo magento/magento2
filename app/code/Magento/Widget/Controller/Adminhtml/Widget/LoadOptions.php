@@ -11,13 +11,11 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class \Magento\Widget\Controller\Adminhtml\Widget\LoadOptions
  *
- * @since 2.0.0
  */
 class LoadOptions extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Widget\Helper\Conditions
-     * @since 2.2.0
      */
     private $conditionsHelper;
 
@@ -25,7 +23,6 @@ class LoadOptions extends \Magento\Backend\App\Action
      * Ajax responder for loading plugin options form
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -60,8 +57,7 @@ class LoadOptions extends \Magento\Backend\App\Action
 
     /**
      * @return \Magento\Widget\Helper\Conditions
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getConditionsHelper()
     {

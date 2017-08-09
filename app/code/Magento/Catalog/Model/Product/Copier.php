@@ -12,38 +12,32 @@ use Magento\Catalog\Api\Data\ProductInterface;
 /**
  * Class \Magento\Catalog\Model\Product\Copier
  *
- * @since 2.0.0
  */
 class Copier
 {
     /**
      * @var Option\Repository
-     * @since 2.1.0
      */
     protected $optionRepository;
 
     /**
      * @var CopyConstructorInterface
-     * @since 2.0.0
      */
     protected $copyConstructor;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $productFactory;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @param CopyConstructorInterface $copyConstructor
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @since 2.0.0
      */
     public function __construct(
         CopyConstructorInterface $copyConstructor,
@@ -58,7 +52,6 @@ class Copier
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function copy(\Magento\Catalog\Model\Product $product)
     {
@@ -106,8 +99,7 @@ class Copier
 
     /**
      * @return Option\Repository
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 101.0.0
      */
     private function getOptionRepository()
     {
@@ -120,8 +112,7 @@ class Copier
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 101.0.0
      */
     private function getMetadataPool()
     {
@@ -137,7 +128,6 @@ class Copier
      *
      * @param array $productData
      * @return array
-     * @since 2.2.0
      */
     private function removeStockItem(array $productData)
     {

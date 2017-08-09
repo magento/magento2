@@ -11,19 +11,16 @@ use Magento\Framework\Filesystem;
 
 /**
  * Queue content file reader.
- * @since 2.0.0
  */
 class Reader
 {
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
-     * @since 2.0.0
      */
     protected $reader;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $queueFileBasename;
 
@@ -32,7 +29,6 @@ class Reader
      *
      * @param Filesystem $filesystem
      * @param string|null $queueFileBasename
-     * @since 2.0.0
      */
     public function __construct(Filesystem $filesystem, $queueFileBasename = null)
     {
@@ -45,7 +41,6 @@ class Reader
      *
      * @return string Queue file content (valid JSON string)
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     public function read()
     {

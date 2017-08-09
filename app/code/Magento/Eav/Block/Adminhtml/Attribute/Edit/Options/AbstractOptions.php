@@ -9,8 +9,7 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
  * Attribute add/edit form options tab
  *
  * @api
- * @deprecated 2.2.0
- * @since 2.0.0
+ * @deprecated 100.2.0
  */
 abstract class AbstractOptions extends \Magento\Framework\View\Element\AbstractBlock
 {
@@ -18,7 +17,6 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\AbstractB
      * Preparing layout, adding buttons
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -30,7 +28,6 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\AbstractB
     /**
      * {@inheritdoc}
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

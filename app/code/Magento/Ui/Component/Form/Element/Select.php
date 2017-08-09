@@ -7,7 +7,6 @@ namespace Magento\Ui\Component\Form\Element;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Select extends AbstractOptionsField
 {
@@ -17,7 +16,6 @@ class Select extends AbstractOptionsField
      * Get component name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getComponentName()
     {
@@ -26,7 +24,6 @@ class Select extends AbstractOptionsField
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getIsSelected($optionValue)
     {

@@ -23,7 +23,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.2.0
  */
 class GenerateVclCommand extends Command
 {
@@ -59,19 +58,16 @@ class GenerateVclCommand extends Command
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteFactory
-     * @since 2.2.0
      */
     private $writeFactory;
 
     /**
      * @var VclGeneratorInterfaceFactory
-     * @since 2.2.0
      */
     private $vclGeneratorFactory;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $inputToVclMap = [
         self::ACCESS_LIST_OPTION => 'accessList',
@@ -82,19 +78,16 @@ class GenerateVclCommand extends Command
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.2.0
      */
     private $scopeConfig;
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     protected function configure()
     {
@@ -108,7 +101,6 @@ class GenerateVclCommand extends Command
      * @param WriteFactory $writeFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param Json $serializer
-     * @since 2.2.0
      */
     public function __construct(
         VclGeneratorInterfaceFactory $vclGeneratorFactory,
@@ -125,7 +117,6 @@ class GenerateVclCommand extends Command
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -171,7 +162,6 @@ class GenerateVclCommand extends Command
      * Get list of options for the command
      *
      * @return InputOption[]
-     * @since 2.2.0
      */
     private function getOptionList()
     {
@@ -223,7 +213,6 @@ class GenerateVclCommand extends Command
     /**
      * @param InputInterface $input
      * @return array
-     * @since 2.2.0
      */
     private function inputToVclParameters(InputInterface $input)
     {
@@ -241,7 +230,6 @@ class GenerateVclCommand extends Command
      *
      * @param InputInterface $input
      * @return array
-     * @since 2.2.0
      */
     private function validate(InputInterface $input)
     {
@@ -267,7 +255,6 @@ class GenerateVclCommand extends Command
      * Get ssl Offloaded header
      *
      * @return mixed
-     * @since 2.2.0
      */
     private function getSslOffloadedHeader()
     {
@@ -278,7 +265,6 @@ class GenerateVclCommand extends Command
      * Get design exceptions
      *
      * @return array
-     * @since 2.2.0
      */
     private function getDesignExceptions()
     {

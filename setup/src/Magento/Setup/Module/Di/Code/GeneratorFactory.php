@@ -10,19 +10,16 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Class \Magento\Setup\Module\Di\Code\GeneratorFactory
  *
- * @since 2.0.0
  */
 class GeneratorFactory
 {
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -34,7 +31,6 @@ class GeneratorFactory
      *
      * @param array $arguments
      * @return Generator
-     * @since 2.0.0
      */
     public function create($arguments = [])
     {

@@ -10,7 +10,6 @@ use Magento\Framework\Encryption\Helper\Security;
 
 /**
  * Authorize.net response model for DirectPost model
- * @since 2.0.0
  */
 class Response extends AuthorizenetResponse
 {
@@ -22,7 +21,6 @@ class Response extends AuthorizenetResponse
      * @param string $amount
      * @param string $transactionId
      * @return string
-     * @since 2.0.0
      */
     public function generateHash($merchantMd5, $merchantApiLogin, $amount, $transactionId)
     {
@@ -39,7 +37,6 @@ class Response extends AuthorizenetResponse
      * @param string $merchantMd5
      * @param string $merchantApiLogin
      * @return bool
-     * @since 2.0.0
      */
     public function isValidHash($merchantMd5, $merchantApiLogin)
     {
@@ -52,7 +49,6 @@ class Response extends AuthorizenetResponse
      * Return if this is approved response from Authorize.net auth request.
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isApproved()
     {

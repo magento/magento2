@@ -14,7 +14,6 @@ use Magento\Framework\View\Element\UiComponent\Config\UiReaderInterface;
 
 /**
  * Class Definition
- * @since 2.0.0
  */
 class Definition
 {
@@ -30,7 +29,6 @@ class Definition
 
     /**
      * @var CacheInterface
-     * @since 2.0.0
      */
     protected $cache;
 
@@ -38,13 +36,11 @@ class Definition
      * UI component data
      *
      * @var \ArrayObject
-     * @since 2.0.0
      */
     protected $componentData;
 
     /**
      * @var \Magento\Framework\Serialize\SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -54,7 +50,6 @@ class Definition
      * @param UiReaderInterface $uiReader
      * @param ArrayObjectFactory $arrayObjectFactory
      * @param CacheInterface $cache
-     * @since 2.0.0
      */
     public function __construct(
         UiReaderInterface $uiReader,
@@ -79,7 +74,6 @@ class Definition
      * @param string $name
      * @return array
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function getComponentData($name)
     {
@@ -95,7 +89,6 @@ class Definition
      * @param string $name
      * @param array $data
      * @return void
-     * @since 2.0.0
      */
     public function setComponentData($name, array $data)
     {
@@ -107,7 +100,6 @@ class Definition
      *
      * @param array $componentsData
      * @return void
-     * @since 2.0.0
      */
     protected function prepareComponentData(array $componentsData)
     {
@@ -122,8 +114,7 @@ class Definition
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {

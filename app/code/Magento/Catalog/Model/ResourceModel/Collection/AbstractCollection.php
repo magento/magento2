@@ -12,7 +12,6 @@ namespace Magento\Catalog\Model\ResourceModel\Collection;
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
 {
@@ -20,7 +19,6 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      * Current scope (store Id)
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_storeId;
 
@@ -28,7 +26,6 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -46,7 +43,6 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -81,7 +77,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      *
      * @param \Magento\Eav\Model\Entity\AbstractEntity $entity
      * @return string
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getEntityPkName(\Magento\Eav\Model\Entity\AbstractEntity $entity)
     {
@@ -93,7 +89,6 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      *
      * @param int|string|\Magento\Store\Model\Store $store
      * @return $this
-     * @since 2.0.0
      */
     public function setStore($store)
     {
@@ -106,7 +101,6 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      *
      * @param int|string|\Magento\Store\Api\Data\StoreInterface $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreId($storeId)
     {
@@ -121,7 +115,6 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      * Return current store id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -135,7 +128,6 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      * Retrieve default store id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getDefaultStoreId()
     {
@@ -148,7 +140,6 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      * @param string $table
      * @param array|int $attributeIds
      * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
-     * @since 2.0.0
      */
     protected function _getLoadAttributesSelect($table, $attributeIds = [])
     {
@@ -217,7 +208,6 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      * @param string $table
      * @param string $type
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function _addLoadAttributesSelectValues($select, $table, $type)
     {
@@ -245,7 +235,6 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      * @param string $fieldCode
      * @param string $fieldAlias
      * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
-     * @since 2.0.0
      */
     protected function _joinAttributeToSelect($method, $attribute, $tableAlias, $condition, $fieldCode, $fieldAlias)
     {

@@ -12,19 +12,16 @@ namespace Magento\Tax\Model\ResourceModel\Report;
 /**
  * Class \Magento\Tax\Model\ResourceModel\Report\Tax
  *
- * @since 2.0.0
  */
 class Tax extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
 {
     /**
      * @var \Magento\Tax\Model\ResourceModel\Report\Tax\CreatedatFactory
-     * @since 2.0.0
      */
     protected $_createdAtFactory;
 
     /**
      * @var \Magento\Tax\Model\ResourceModel\Report\Tax\UpdatedatFactory
-     * @since 2.0.0
      */
     protected $_updatedAtFactory;
 
@@ -38,7 +35,6 @@ class Tax extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
      * @param \Magento\Tax\Model\ResourceModel\Report\Tax\CreatedatFactory $createdAtFactory
      * @param \Magento\Tax\Model\ResourceModel\Report\Tax\UpdatedatFactory $updatedAtFactory
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -68,7 +64,6 @@ class Tax extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -81,7 +76,6 @@ class Tax extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
      * @param mixed $from
      * @param mixed $to
      * @return $this
-     * @since 2.0.0
      */
     public function aggregate($from = null, $to = null)
     {

@@ -8,7 +8,6 @@ namespace Magento\Framework\Webapi\Soap;
 /**
  * Class ClientFactory
  * @package Magento\Framework\Webapi\Soap
- * @since 2.0.0
  */
 class ClientFactory
 {
@@ -18,7 +17,6 @@ class ClientFactory
      * @param string $wsdl
      * @param array $options
      * @return \SoapClient
-     * @since 2.0.0
      */
     public function create($wsdl, array $options = [])
     {

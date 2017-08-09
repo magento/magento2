@@ -15,7 +15,6 @@ use Magento\Tax\Model\ClassModel;
 /**
  * Class \Magento\Tax\Model\TaxClass\Management
  *
- * @since 2.0.0
  */
 class Management implements \Magento\Tax\Api\TaxClassManagementInterface
 {
@@ -23,7 +22,6 @@ class Management implements \Magento\Tax\Api\TaxClassManagementInterface
      * Filter Builder
      *
      * @var FilterBuilder
-     * @since 2.0.0
      */
     protected $filterBuilder;
 
@@ -31,7 +29,6 @@ class Management implements \Magento\Tax\Api\TaxClassManagementInterface
      * Search Criteria Builder
      *
      * @var SearchCriteriaBuilder
-     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
@@ -39,7 +36,6 @@ class Management implements \Magento\Tax\Api\TaxClassManagementInterface
      * Tax class repository
      *
      * @var \Magento\Tax\Model\TaxClass\Repository
-     * @since 2.0.0
      */
     protected $classRepository;
 
@@ -47,7 +43,6 @@ class Management implements \Magento\Tax\Api\TaxClassManagementInterface
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
      * @param Repository $classRepository
-     * @since 2.0.0
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
@@ -61,7 +56,6 @@ class Management implements \Magento\Tax\Api\TaxClassManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTaxClassId($taxClassKey, $taxClassType = self::TYPE_PRODUCT)
     {

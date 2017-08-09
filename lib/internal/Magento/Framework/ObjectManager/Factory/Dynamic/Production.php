@@ -8,7 +8,6 @@ namespace Magento\Framework\ObjectManager\Factory\Dynamic;
 /**
  * Class \Magento\Framework\ObjectManager\Factory\Dynamic\Production
  *
- * @since 2.0.0
  */
 class Production extends \Magento\Framework\ObjectManager\Factory\AbstractFactory
 {
@@ -23,7 +22,6 @@ class Production extends \Magento\Framework\ObjectManager\Factory\AbstractFactor
      *
      * @throws \UnexpectedValueException
      * @throws \BadMethodCallException
-     * @since 2.0.0
      */
     protected function _resolveArguments($requestedType, array $parameters, array $arguments = [])
     {
@@ -58,7 +56,6 @@ class Production extends \Magento\Framework\ObjectManager\Factory\AbstractFactor
      * @return object
      *
      * @throws \Exception
-     * @since 2.0.0
      */
     public function create($requestedType, array $arguments = [])
     {

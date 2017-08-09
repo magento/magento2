@@ -7,7 +7,6 @@ namespace Magento\Framework\Data;
 
 /**
  * Class AbstractSearchResult
- * @since 2.0.0
  */
 abstract class AbstractSearchResult extends AbstractDataObject implements SearchResultInterface
 {
@@ -15,7 +14,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      * Data Interface name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $dataInterface = \Magento\Framework\DataObject::class;
 
@@ -23,7 +21,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      * Name prefix of events that are dispatched by model
      *
      * @var string
-     * @since 2.0.0
      */
     protected $eventPrefix = '';
 
@@ -31,7 +28,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      * Name of event parameter
      *
      * @var string
-     * @since 2.0.0
      */
     protected $eventObject = '';
 
@@ -39,7 +35,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      * Event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $eventManager = null;
 
@@ -47,7 +42,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      * Total items number
      *
      * @var int
-     * @since 2.0.0
      */
     protected $totalRecords;
 
@@ -55,32 +49,27 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      * Loading state flag
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $isLoaded;
 
     /**
      * @var \Magento\Framework\Data\Collection\EntityFactoryInterface
-     * @since 2.0.0
      */
     protected $entityFactory;
 
     /**
      * @var \Magento\Framework\DB\QueryInterface
-     * @since 2.2.0
      */
     protected $query;
     
     /**
      * @var \Magento\Framework\DB\Select
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 100.2.0
      */
     protected $select;
 
     /**
      * @var \Magento\Framework\Data\SearchResultIteratorFactory
-     * @since 2.0.0
      */
     protected $resultIteratorFactory;
 
@@ -89,7 +78,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Data\SearchResultIteratorFactory $resultIteratorFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\DB\QueryInterface $query,
@@ -108,13 +96,11 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      * Standard query builder initialization
      *
      * @return void
-     * @since 2.0.0
      */
     abstract protected function init();
 
     /**
      * @return \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     public function getItems()
     {
@@ -125,7 +111,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
     /**
      * @param \Magento\Framework\DataObject[] $items
      * @return $this
-     * @since 2.0.0
      */
     public function setItems(array $items = null)
     {
@@ -135,7 +120,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getTotalCount()
     {
@@ -148,7 +132,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
     /**
      * @param int $totalCount
      * @return $this
-     * @since 2.0.0
      */
     public function setTotalCount($totalCount)
     {
@@ -158,7 +141,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
 
     /**
      * @return \Magento\Framework\Api\CriteriaInterface
-     * @since 2.0.0
      */
     public function getSearchCriteria()
     {
@@ -172,7 +154,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
     {
@@ -181,7 +162,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
 
     /**
      * @return \Magento\Framework\Data\SearchResultIterator
-     * @since 2.0.0
      */
     public function createIterator()
     {
@@ -196,7 +176,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
     /**
      * @param array $arguments
      * @return \Magento\Framework\DataObject|mixed
-     * @since 2.0.0
      */
     public function createDataObject(array $arguments = [])
     {
@@ -205,7 +184,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getIdFieldName()
     {
@@ -214,7 +192,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getSize()
     {
@@ -226,7 +203,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      *
      * @param \Magento\Framework\DataObject $item
      * @return mixed
-     * @since 2.0.0
      */
     public function getItemId(\Magento\Framework\DataObject $item)
     {
@@ -239,7 +215,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     protected function isLoaded()
     {
@@ -250,7 +225,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      * Load data
      *
      * @return void
-     * @since 2.0.0
      */
     protected function load()
     {
@@ -274,7 +248,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      *
      * @param bool $flag
      * @return void
-     * @since 2.0.0
      */
     protected function setIsLoaded($flag = true)
     {
@@ -287,7 +260,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      * @param \Magento\Framework\DataObject $item
      * @return void
      * @throws \Exception
-     * @since 2.0.0
      */
     protected function addItem(\Magento\Framework\DataObject $item)
     {
@@ -308,7 +280,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      * Dispatch "before" load method events
      *
      * @return void
-     * @since 2.0.0
      */
     protected function beforeLoad()
     {
@@ -322,7 +293,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      * Dispatch "after" load method events
      *
      * @return void
-     * @since 2.0.0
      */
     protected function afterLoad()
     {
@@ -337,7 +307,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      *
      * @param string $dataInterface
      * @return void
-     * @since 2.0.0
      */
     protected function setDataInterfaceName($dataInterface)
     {
@@ -350,7 +319,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      * Get Data Interface name for collection items
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getDataInterfaceName()
     {
@@ -359,7 +327,6 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
 
     /**
      * @return \Magento\Framework\DB\QueryInterface
-     * @since 2.0.0
      */
     protected function getQuery()
     {

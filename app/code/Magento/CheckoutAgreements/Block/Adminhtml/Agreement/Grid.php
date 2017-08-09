@@ -8,13 +8,11 @@ namespace Magento\CheckoutAgreements\Block\Adminhtml\Agreement;
 /**
  * Class \Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Grid
  *
- * @since 2.0.0
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * @var \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory
-     * @since 2.0.0
      */
     protected $_collectionFactory;
 
@@ -24,7 +22,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory $collectionFactory
      * @param array $data
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -38,7 +35,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -52,7 +48,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -62,7 +57,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -120,7 +114,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _afterLoadCollection()
     {
@@ -133,7 +126,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function _filterStoreCondition($collection, $column)
     {
@@ -148,7 +140,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Framework\DataObject $row
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getRowUrl($row)
     {

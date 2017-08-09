@@ -11,7 +11,6 @@ use Magento\Framework\Exception\AuthenticationException;
  * OAuth Exception
  *
  * @api
- * @since 2.0.0
  */
 class Exception extends AuthenticationException
 {

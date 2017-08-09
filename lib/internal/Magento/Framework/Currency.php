@@ -10,7 +10,6 @@ use Magento\Framework\App\CacheInterface;
 /**
  * Class \Magento\Framework\Currency
  *
- * @since 2.0.0
  */
 class Currency extends \Zend_Currency implements CurrencyInterface
 {
@@ -20,7 +19,6 @@ class Currency extends \Zend_Currency implements CurrencyInterface
      * @param CacheInterface $appCache
      * @param string|array $options Options array or currency short name when string is given
      * @param string $locale Locale name
-     * @since 2.1.0
      */
     public function __construct(
         CacheInterface $appCache,

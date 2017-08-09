@@ -21,7 +21,6 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Advanced extends Generic
 {
@@ -29,25 +28,21 @@ class Advanced extends Generic
      * Eav data
      *
      * @var Data
-     * @since 2.0.0
      */
     protected $_eavData = null;
 
     /**
      * @var Yesno
-     * @since 2.0.0
      */
     protected $_yesNo;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $disableScopeChangeList;
 
     /**
      * @var PropertyLocker
-     * @since 2.1.0
      */
     private $propertyLocker;
 
@@ -59,7 +54,6 @@ class Advanced extends Generic
      * @param Data $eavData
      * @param array $disableScopeChangeList
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -81,7 +75,6 @@ class Advanced extends Generic
      *
      * @return $this
      * @SuppressWarnings(PHPMD)
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -266,7 +259,6 @@ class Advanced extends Generic
      * Initialize form fileds values
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initFormValues()
     {
@@ -278,7 +270,6 @@ class Advanced extends Generic
      * Retrieve attribute object from registry
      *
      * @return mixed
-     * @since 2.0.0
      */
     private function getAttributeObject()
     {
@@ -289,7 +280,6 @@ class Advanced extends Generic
      * Get property locker
      *
      * @return PropertyLocker
-     * @since 2.1.0
      */
     private function getPropertyLocker()
     {

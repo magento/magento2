@@ -14,7 +14,6 @@ use \Magento\Framework\Data\Collection\AbstractDb;
  *
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @since 2.0.0
  */
 abstract class AbstractCollection extends AbstractDb implements SourceProviderInterface
 {
@@ -22,7 +21,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Model name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_model;
 
@@ -30,7 +28,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Resource model name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_resourceModel;
 
@@ -38,7 +35,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Resource instance
      *
      * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @since 2.0.0
      */
     protected $_resource;
 
@@ -46,7 +42,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Fields to select in query
      *
      * @var array|null
-     * @since 2.0.0
      */
     protected $_fieldsToSelect = null;
 
@@ -54,7 +49,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Fields initial fields to select like id_field
      *
      * @var array|null
-     * @since 2.0.0
      */
     protected $_initialFieldsToSelect = null;
 
@@ -62,7 +56,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Fields to select changed flag
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_fieldsToSelectChanged = false;
 
@@ -70,7 +63,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Store joined tables here
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_joinedTables = [];
 
@@ -78,7 +70,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Collection main table
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_mainTable = null;
 
@@ -86,7 +77,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Reset items data changed flag
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_resetItemsDataChanged = false;
 
@@ -94,7 +84,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Name prefix of events that are dispatched by model
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = '';
 
@@ -102,7 +91,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Name of event parameter
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = '';
 
@@ -110,7 +98,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager = null;
 
@@ -121,7 +108,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
@@ -143,7 +129,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Initialization here
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -153,7 +138,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Retrieve main table
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMainTable()
     {
@@ -169,7 +153,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param string $table
      * @return $this
-     * @since 2.0.0
      */
     public function setMainTable($table)
     {
@@ -188,7 +171,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _initSelect()
     {
@@ -200,7 +182,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Get \Magento\Framework\DB\Select instance and applies fields to select if needed
      *
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     public function getSelect()
     {
@@ -217,7 +198,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _initSelectFields()
     {
@@ -279,7 +259,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Retrieve initial fields to select like id field
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getInitialFieldsToSelect()
     {
@@ -295,7 +274,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Initialize initial fields to select like id field
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initInitialFieldsToSelect()
     {
@@ -312,7 +290,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string|array $field
      * @param string|null $alias
      * @return $this
-     * @since 2.0.0
      */
     public function addFieldToSelect($field, $alias = null)
     {
@@ -356,7 +333,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string $expression
      * @param array|string $fields
      * @return $this
-     * @since 2.0.0
      */
     public function addExpressionFieldToSelect($alias, $expression, $fields)
     {
@@ -381,7 +357,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string|null $field
      * @param bool $isAlias Alias identifier
      * @return $this
-     * @since 2.0.0
      */
     public function removeFieldFromSelect($field, $isAlias = false)
     {
@@ -407,7 +382,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Removes all fields from select
      *
      * @return $this
-     * @since 2.0.0
      */
     public function removeAllFieldsFromSelect()
     {
@@ -422,7 +396,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string $model
      * @param string $resourceModel
      * @return $this
-     * @since 2.0.0
      */
     protected function _init($model, $resourceModel)
     {
@@ -436,7 +409,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param string $model
      * @return $this
-     * @since 2.0.0
      */
     public function setModel($model)
     {
@@ -451,7 +423,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Get model instance
      *
      * @return string
-     * @since 2.0.0
      */
     public function getModelName()
     {
@@ -463,7 +434,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param string $model
      * @return void
-     * @since 2.0.0
      */
     public function setResourceModel($model)
     {
@@ -474,7 +444,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *  Retrieve resource model name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getResourceModelName()
     {
@@ -485,7 +454,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Get resource instance
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @since 2.0.0
      */
     public function getResource()
     {
@@ -502,7 +470,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param string $table
      * @return string
-     * @since 2.0.0
      */
     public function getTable($table)
     {
@@ -513,7 +480,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Retrieve all ids for collection
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllIds()
     {
@@ -534,7 +500,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string $cond
      * @param string $cols
      * @return $this
-     * @since 2.0.0
      */
     public function join($table, $cond, $cols = '*')
     {
@@ -559,7 +524,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Redeclare before load method for adding event
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeLoad()
     {
@@ -576,7 +540,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param bool $flag
      * @return $this
-     * @since 2.0.0
      */
     public function setResetItemsDataChanged($flag)
     {
@@ -588,7 +551,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Set flag data has changed to all collection items
      *
      * @return $this
-     * @since 2.0.0
      */
     public function resetItemsDataChanged()
     {
@@ -603,7 +565,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Redeclare after load method for specifying collection items original data
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -625,7 +586,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Save all the entities in the collection
      *
      * @return $this
-     * @since 2.0.0
      */
     public function save()
     {
@@ -637,7 +597,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
     /**
      * @inheritdoc
-     * @since 2.1.0
+     * @since 100.0.11
      */
     public function __sleep()
     {
@@ -649,7 +609,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
     /**
      * @inheritdoc
-     * @since 2.1.0
+     * @since 100.0.11
      */
     public function __wakeup()
     {

@@ -14,43 +14,36 @@ use Magento\Customer\Api\AddressRepositoryInterface;
  * Multishipping checkout select billing address
  *
  * @api
- * @since 2.0.0
  */
 class Select extends \Magento\Multishipping\Block\Checkout\AbstractMultishipping
 {
     /**
      * @var CustomerAddressHelper
-     * @since 2.0.0
      */
     protected $_customerAddressHelper;
 
     /**
      * @var \Magento\Customer\Model\Address\Mapper
-     * @since 2.0.0
      */
     protected $addressMapper;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_isScopePrivate = true;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
-     * @since 2.0.0
      */
     protected $filterBuilder;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var AddressRepositoryInterface
-     * @since 2.0.0
      */
     protected $addressRepository;
 
@@ -65,7 +58,6 @@ class Select extends \Magento\Multishipping\Block\Checkout\AbstractMultishipping
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -87,7 +79,6 @@ class Select extends \Magento\Multishipping\Block\Checkout\AbstractMultishipping
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -101,7 +92,6 @@ class Select extends \Magento\Multishipping\Block\Checkout\AbstractMultishipping
      * Get a list of current customer addresses.
      *
      * @return \Magento\Customer\Api\Data\AddressInterface[]
-     * @since 2.0.0
      */
     public function getAddress()
     {
@@ -128,7 +118,6 @@ class Select extends \Magento\Multishipping\Block\Checkout\AbstractMultishipping
      *
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return string
-     * @since 2.0.0
      */
     public function getAddressAsHtml(\Magento\Customer\Api\Data\AddressInterface $address)
     {
@@ -145,7 +134,6 @@ class Select extends \Magento\Multishipping\Block\Checkout\AbstractMultishipping
      *
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return bool
-     * @since 2.0.0
      */
     public function isAddressDefaultBilling(\Magento\Customer\Api\Data\AddressInterface $address)
     {
@@ -157,7 +145,6 @@ class Select extends \Magento\Multishipping\Block\Checkout\AbstractMultishipping
      *
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return bool
-     * @since 2.0.0
      */
     public function isAddressDefaultShipping(\Magento\Customer\Api\Data\AddressInterface $address)
     {
@@ -169,7 +156,6 @@ class Select extends \Magento\Multishipping\Block\Checkout\AbstractMultishipping
      *
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return string
-     * @since 2.0.0
      */
     public function getEditAddressUrl(\Magento\Customer\Api\Data\AddressInterface $address)
     {
@@ -181,7 +167,6 @@ class Select extends \Magento\Multishipping\Block\Checkout\AbstractMultishipping
      *
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return string
-     * @since 2.0.0
      */
     public function getSetAddressUrl(\Magento\Customer\Api\Data\AddressInterface $address)
     {
@@ -190,7 +175,6 @@ class Select extends \Magento\Multishipping\Block\Checkout\AbstractMultishipping
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getAddNewUrl()
     {
@@ -199,7 +183,6 @@ class Select extends \Magento\Multishipping\Block\Checkout\AbstractMultishipping
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getBackUrl()
     {

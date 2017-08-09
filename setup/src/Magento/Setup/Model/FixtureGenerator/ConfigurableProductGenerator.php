@@ -19,26 +19,22 @@ namespace Magento\Setup\Model\FixtureGenerator;
  * ]
  * @see ProductGenerator
  * @see ConfigurableProductTemplateGenerator
- * @since 2.2.0
  */
 class ConfigurableProductGenerator
 {
     /**
      * @var ProductGeneratorFactory
-     * @since 2.2.0
      */
     private $productGeneratorFactory;
 
     /**
      * @var AutoIncrement
-     * @since 2.2.0
      */
     private $autoIncrement;
 
     /**
      * @param ProductGeneratorFactory $productGeneratorFactory
      * @param AutoIncrement $autoIncrement
-     * @since 2.2.0
      */
     public function __construct(
         ProductGeneratorFactory $productGeneratorFactory,
@@ -54,7 +50,6 @@ class ConfigurableProductGenerator
      * @param int $products
      * @param array $fixtureMap
      * @return void
-     * @since 2.2.0
      */
     public function generate($products, $fixtureMap)
     {
@@ -112,7 +107,6 @@ class ConfigurableProductGenerator
      * @param int $entityNumber
      * @param array $fixture
      * @return int
-     * @since 2.2.0
      */
     private function generateSuperAttributeId($superAttributeId, $entityNumber, array $fixture)
     {
@@ -127,7 +121,6 @@ class ConfigurableProductGenerator
      * @param int $entityNumber
      * @param array $fixture
      * @return mixed
-     * @since 2.2.0
      */
     private function generateSimpleProductId($previousProductId, $entityNumber, array $fixture)
     {

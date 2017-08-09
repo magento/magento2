@@ -8,8 +8,7 @@ namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
 /**
  * Class Save
- * @deprecated 2.2.0
- * @since 2.0.0
+ * @deprecated 100.2.0
  */
 class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {
@@ -18,7 +17,6 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -11,7 +11,6 @@ use Magento\Framework\DB\Ddl\Table;
  * Magento Database Adapter Interface
  *
  * @api
- * @since 2.0.0
  */
 interface AdapterInterface
 {
@@ -80,7 +79,6 @@ interface AdapterInterface
      * Begin new DB transaction for connection
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function beginTransaction();
 
@@ -88,7 +86,6 @@ interface AdapterInterface
      * Commit DB transaction
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function commit();
 
@@ -96,7 +93,6 @@ interface AdapterInterface
      * Roll-back DB transaction
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function rollBack();
 
@@ -106,7 +102,6 @@ interface AdapterInterface
      * @param string $tableName the table name
      * @param string $schemaName the database or schema name
      * @return Table
-     * @since 2.0.0
      */
     public function newTable($tableName = null, $schemaName = null);
 
@@ -116,7 +111,6 @@ interface AdapterInterface
      * @param Table $table
      * @throws \Zend_Db_Exception
      * @return \Zend_Db_Statement_Interface
-     * @since 2.0.0
      */
     public function createTable(Table $table);
 
@@ -126,7 +120,6 @@ interface AdapterInterface
      * @param string $tableName
      * @param string $schemaName
      * @return boolean
-     * @since 2.0.0
      */
     public function dropTable($tableName, $schemaName = null);
 
@@ -136,7 +129,6 @@ interface AdapterInterface
      * @param Table $table
      * @throws \Zend_Db_Exception
      * @return \Zend_Db_Statement_Interface
-     * @since 2.0.0
      */
     public function createTemporaryTable(Table $table);
 
@@ -147,7 +139,6 @@ interface AdapterInterface
      * @param string $originTableName
      * @param bool $ifNotExists
      * @return \Zend_Db_Statement_Interface
-     * @since 2.0.0
      */
     public function createTemporaryTableLike($temporaryTableName, $originTableName, $ifNotExists = false);
 
@@ -157,7 +148,6 @@ interface AdapterInterface
      * @param string $tableName
      * @param string $schemaName
      * @return boolean
-     * @since 2.0.0
      */
     public function dropTemporaryTable($tableName, $schemaName = null);
 
@@ -168,7 +158,6 @@ interface AdapterInterface
      *
      * @return boolean
      * @throws \Zend_Db_Exception
-     * @since 2.0.0
      */
     public function renameTablesBatch(array $tablePairs);
 
@@ -178,7 +167,6 @@ interface AdapterInterface
      * @param string $tableName
      * @param string $schemaName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function truncateTable($tableName, $schemaName = null);
 
@@ -188,7 +176,6 @@ interface AdapterInterface
      * @param string $tableName
      * @param string $schemaName
      * @return boolean
-     * @since 2.0.0
      */
     public function isTableExists($tableName, $schemaName = null);
 
@@ -198,7 +185,6 @@ interface AdapterInterface
      * @param string $tableName
      * @param string $schemaName
      * @return array|false
-     * @since 2.0.0
      */
     public function showTableStatus($tableName, $schemaName = null);
 
@@ -229,7 +215,6 @@ interface AdapterInterface
      * @param string $tableName
      * @param string $schemaName OPTIONAL
      * @return array
-     * @since 2.0.0
      */
     public function describeTable($tableName, $schemaName = null);
 
@@ -239,7 +224,6 @@ interface AdapterInterface
      * @param string $tableName
      * @param string $newTableName
      * @return Table
-     * @since 2.0.0
      */
     public function createTableByDdl($tableName, $newTableName);
 
@@ -252,7 +236,6 @@ interface AdapterInterface
      * @param boolean $flushData
      * @param string $schemaName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function modifyColumnByDdl($tableName, $columnName, $definition, $flushData = false, $schemaName = null);
 
@@ -263,7 +246,6 @@ interface AdapterInterface
      * @param string $newTableName
      * @param string $schemaName
      * @return boolean
-     * @since 2.0.0
      */
     public function renameTable($oldTableName, $newTableName, $schemaName = null);
 
@@ -278,7 +260,6 @@ interface AdapterInterface
      * @param array|string $definition  string specific or universal array DB Server definition
      * @param string $schemaName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function addColumn($tableName, $columnName, $definition, $schemaName = null);
 
@@ -294,7 +275,6 @@ interface AdapterInterface
      * @param boolean $flushData        flush table statistic
      * @param string $schemaName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function changeColumn(
         $tableName,
@@ -314,7 +294,6 @@ interface AdapterInterface
      * @param boolean $flushData
      * @param string $schemaName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function modifyColumn($tableName, $columnName, $definition, $flushData = false, $schemaName = null);
 
@@ -325,7 +304,6 @@ interface AdapterInterface
      * @param string $columnName
      * @param string $schemaName
      * @return boolean
-     * @since 2.0.0
      */
     public function dropColumn($tableName, $columnName, $schemaName = null);
 
@@ -336,7 +314,6 @@ interface AdapterInterface
      * @param string $columnName
      * @param string $schemaName
      * @return boolean
-     * @since 2.0.0
      */
     public function tableColumnExists($tableName, $columnName, $schemaName = null);
 
@@ -349,7 +326,6 @@ interface AdapterInterface
      * @param string $indexType     the index type
      * @param string $schemaName
      * @return \Zend_Db_Statement_Interface
-     * @since 2.0.0
      */
     public function addIndex($tableName, $indexName, $fields, $indexType = self::INDEX_TYPE_INDEX, $schemaName = null);
 
@@ -360,7 +336,6 @@ interface AdapterInterface
      * @param string $keyName
      * @param string $schemaName
      * @return bool|\Zend_Db_Statement_Interface
-     * @since 2.0.0
      */
     public function dropIndex($tableName, $keyName, $schemaName = null);
 
@@ -385,7 +360,6 @@ interface AdapterInterface
      * @param string $tableName
      * @param string $schemaName
      * @return array
-     * @since 2.0.0
      */
     public function getIndexList($tableName, $schemaName = null);
 
@@ -406,7 +380,6 @@ interface AdapterInterface
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function addForeignKey(
         $fkName,
@@ -427,7 +400,6 @@ interface AdapterInterface
      * @param string $fkName
      * @param string $schemaName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function dropForeignKey($tableName, $fkName, $schemaName = null);
 
@@ -453,7 +425,6 @@ interface AdapterInterface
      * @param string $tableName
      * @param string $schemaName
      * @return array
-     * @since 2.0.0
      */
     public function getForeignKeys($tableName, $schemaName = null);
 
@@ -461,7 +432,6 @@ interface AdapterInterface
      * Creates and returns a new \Magento\Framework\DB\Select object for this adapter.
      *
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     public function select();
 
@@ -472,7 +442,6 @@ interface AdapterInterface
      * @param array $data Column-value pairs or array of column-value pairs.
      * @param array $fields update fields pairs or values
      * @return int The number of affected rows.
-     * @since 2.0.0
      */
     public function insertOnDuplicate($table, array $data, array $fields = []);
 
@@ -482,7 +451,6 @@ interface AdapterInterface
      * @param mixed $table The table to insert data into.
      * @param array $data Column-value pairs or array of Column-value pairs.
      * @return int The number of affected rows.
-     * @since 2.0.0
      */
     public function insertMultiple($table, array $data);
 
@@ -502,7 +470,6 @@ interface AdapterInterface
      * @param   string[] $columns  the data array column map
      * @param   array $data
      * @return  int
-     * @since 2.0.0
      */
     public function insertArray($table, array $columns, array $data);
 
@@ -512,7 +479,6 @@ interface AdapterInterface
      * @param mixed $table The table to insert data into.
      * @param array $bind Column-value pairs.
      * @return int The number of affected rows.
-     * @since 2.0.0
      */
     public function insert($table, array $bind);
 
@@ -523,7 +489,6 @@ interface AdapterInterface
      * @param string $table
      * @param array $bind
      * @return int The number of affected rows.
-     * @since 2.0.0
      */
     public function insertForce($table, array $bind);
 
@@ -534,7 +499,6 @@ interface AdapterInterface
      * @param  array        $bind  Column-value pairs.
      * @param  mixed        $where UPDATE WHERE clause(s).
      * @return int          The number of affected rows.
-     * @since 2.0.0
      */
     public function update($table, array $bind, $where = '');
 
@@ -544,7 +508,6 @@ interface AdapterInterface
      * @param  mixed        $table The table to update.
      * @param  mixed        $where DELETE WHERE clause(s).
      * @return int          The number of affected rows.
-     * @since 2.0.0
      */
     public function delete($table, $where = '');
 
@@ -555,7 +518,6 @@ interface AdapterInterface
      *                      May be a string or \Magento\Framework\DB\Select.
      * @param  mixed  $bind An array of data or data itself to bind to the placeholders.
      * @return \Zend_Db_Statement_Interface
-     * @since 2.0.0
      */
     public function query($sql, $bind = []);
 
@@ -567,7 +529,6 @@ interface AdapterInterface
      * @param mixed                 $bind Data to bind into SELECT placeholders.
      * @param mixed                 $fetchMode Override current fetch mode.
      * @return array
-     * @since 2.0.0
      */
     public function fetchAll($sql, $bind = [], $fetchMode = null);
 
@@ -579,7 +540,6 @@ interface AdapterInterface
      * @param mixed $bind Data to bind into SELECT placeholders.
      * @param mixed                 $fetchMode Override current fetch mode.
      * @return array
-     * @since 2.0.0
      */
     public function fetchRow($sql, $bind = [], $fetchMode = null);
 
@@ -595,7 +555,6 @@ interface AdapterInterface
      * @param string|\Magento\Framework\DB\Select $sql An SQL SELECT statement.
      * @param mixed $bind Data to bind into SELECT placeholders.
      * @return array
-     * @since 2.0.0
      */
     public function fetchAssoc($sql, $bind = []);
 
@@ -607,7 +566,6 @@ interface AdapterInterface
      * @param string|\Magento\Framework\DB\Select $sql An SQL SELECT statement.
      * @param mixed $bind Data to bind into SELECT placeholders.
      * @return array
-     * @since 2.0.0
      */
     public function fetchCol($sql, $bind = []);
 
@@ -620,7 +578,6 @@ interface AdapterInterface
      * @param string|\Magento\Framework\DB\Select $sql An SQL SELECT statement.
      * @param mixed $bind Data to bind into SELECT placeholders.
      * @return array
-     * @since 2.0.0
      */
     public function fetchPairs($sql, $bind = []);
 
@@ -630,7 +587,6 @@ interface AdapterInterface
      * @param string|\Magento\Framework\DB\Select $sql An SQL SELECT statement.
      * @param mixed $bind Data to bind into SELECT placeholders.
      * @return string
-     * @since 2.0.0
      */
     public function fetchOne($sql, $bind = []);
 
@@ -643,7 +599,6 @@ interface AdapterInterface
      * @param mixed $value The value to quote.
      * @param mixed $type  OPTIONAL the SQL datatype name, or constant, or null.
      * @return mixed An SQL-safe quoted value (or string of separated values).
-     * @since 2.0.0
      */
     public function quote($value, $type = null);
 
@@ -665,7 +620,6 @@ interface AdapterInterface
      * @param string  $type  OPTIONAL SQL datatype
      * @param integer $count OPTIONAL count of placeholders to replace
      * @return string An SQL-safe quoted value placed into the original text.
-     * @since 2.0.0
      */
     public function quoteInto($text, $value, $type = null, $count = null);
 
@@ -690,7 +644,6 @@ interface AdapterInterface
      * @param string|array|\Zend_Db_Expr $ident The identifier.
      * @param boolean $auto If true, heed the AUTO_QUOTE_IDENTIFIERS config option.
      * @return string The quoted identifier.
-     * @since 2.0.0
      */
     public function quoteIdentifier($ident, $auto = false);
 
@@ -701,7 +654,6 @@ interface AdapterInterface
      * @param string $alias An alias for the column.
      * @param boolean $auto If true, heed the AUTO_QUOTE_IDENTIFIERS config option.
      * @return string The quoted identifier and alias.
-     * @since 2.0.0
      */
     public function quoteColumnAs($ident, $alias, $auto = false);
 
@@ -712,7 +664,6 @@ interface AdapterInterface
      * @param string $alias An alias for the table.
      * @param boolean $auto If true, heed the AUTO_QUOTE_IDENTIFIERS config option.
      * @return string The quoted identifier and alias.
-     * @since 2.0.0
      */
     public function quoteTableAs($ident, $alias = null, $auto = false);
 
@@ -722,7 +673,6 @@ interface AdapterInterface
      * @param int|string|\DateTimeInterface $date
      * @param boolean $includeTime
      * @return \Zend_Db_Expr
-     * @since 2.0.0
      */
     public function formatDate($date, $includeTime = true);
 
@@ -730,7 +680,6 @@ interface AdapterInterface
      * Run additional environment before setup
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function startSetup();
 
@@ -738,7 +687,6 @@ interface AdapterInterface
      * Run additional environment after setup
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function endSetup();
 
@@ -747,7 +695,6 @@ interface AdapterInterface
      *
      * @param \Magento\Framework\Cache\FrontendInterface $cacheAdapter
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function setCacheAdapter(\Magento\Framework\Cache\FrontendInterface $cacheAdapter);
 
@@ -755,7 +702,6 @@ interface AdapterInterface
      * Allow DDL caching
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function allowDdlCache();
 
@@ -763,7 +709,6 @@ interface AdapterInterface
      * Disallow DDL caching
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function disallowDdlCache();
 
@@ -774,7 +719,6 @@ interface AdapterInterface
      * @param string $tableName
      * @param string $schemaName OPTIONAL
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function resetDdlCache($tableName = null, $schemaName = null);
 
@@ -785,7 +729,6 @@ interface AdapterInterface
      * @param int $ddlType
      * @param mixed $data
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function saveDdlCache($tableCacheKey, $ddlType, $data);
 
@@ -796,7 +739,6 @@ interface AdapterInterface
      * @param string $tableCacheKey the table cache key
      * @param int $ddlType          the DDL constant
      * @return string|array|int|false
-     * @since 2.0.0
      */
     public function loadDdlCache($tableCacheKey, $ddlType);
 
@@ -830,7 +772,6 @@ interface AdapterInterface
      * @param string $fieldName
      * @param integer|string|array $condition
      * @return string
-     * @since 2.0.0
      */
     public function prepareSqlCondition($fieldName, $condition);
 
@@ -841,7 +782,6 @@ interface AdapterInterface
      * @param array $column     the column describe array
      * @param mixed $value
      * @return mixed
-     * @since 2.0.0
      */
     public function prepareColumnValue(array $column, $value);
 
@@ -852,7 +792,6 @@ interface AdapterInterface
      * @param string $true          true value
      * @param string $false         false value
      * @return \Zend_Db_Expr
-     * @since 2.0.0
      */
     public function getCheckSql($condition, $true, $false);
 
@@ -862,7 +801,6 @@ interface AdapterInterface
      * @param string $expression
      * @param string|int $value OPTIONAL. Applies when $expression is NULL
      * @return \Zend_Db_Expr
-     * @since 2.0.0
      */
     public function getIfNullSql($expression, $value = 0);
 
@@ -873,7 +811,6 @@ interface AdapterInterface
      * @param array $data
      * @param string $separator concatenate with separator
      * @return \Zend_Db_Expr
-     * @since 2.0.0
      */
     public function getConcatSql(array $data, $separator = null);
 
@@ -883,7 +820,6 @@ interface AdapterInterface
      *
      * @param string $string
      * @return \Zend_Db_Expr
-     * @since 2.0.0
      */
     public function getLengthSql($string);
 
@@ -894,7 +830,6 @@ interface AdapterInterface
      *
      * @param array $data
      * @return \Zend_Db_Expr
-     * @since 2.0.0
      */
     public function getLeastSql(array $data);
 
@@ -905,7 +840,6 @@ interface AdapterInterface
      *
      * @param array $data
      * @return \Zend_Db_Expr
-     * @since 2.0.0
      */
     public function getGreatestSql(array $data);
 
@@ -918,7 +852,6 @@ interface AdapterInterface
      * @param int $interval
      * @param string $unit
      * @return \Zend_Db_Expr
-     * @since 2.0.0
      */
     public function getDateAddSql($date, $interval, $unit);
 
@@ -931,7 +864,6 @@ interface AdapterInterface
      * @param int|string $interval
      * @param string $unit
      * @return \Zend_Db_Expr
-     * @since 2.0.0
      */
     public function getDateSubSql($date, $interval, $unit);
 
@@ -950,7 +882,6 @@ interface AdapterInterface
      * @param \Zend_Db_Expr|string $date   quoted field name or SQL statement
      * @param string $format
      * @return \Zend_Db_Expr
-     * @since 2.0.0
      */
     public function getDateFormatSql($date, $format);
 
@@ -959,7 +890,6 @@ interface AdapterInterface
      *
      * @param \Zend_Db_Expr|string $date   quoted field name or SQL statement
      * @return \Zend_Db_Expr
-     * @since 2.0.0
      */
     public function getDatePartSql($date);
 
@@ -970,7 +900,6 @@ interface AdapterInterface
      * @param int|string|\Zend_Db_Expr $pos
      * @param int|string|\Zend_Db_Expr|null $len
      * @return \Zend_Db_Expr
-     * @since 2.0.0
      */
     public function getSubstringSql($stringExpression, $pos, $len = null);
 
@@ -979,7 +908,6 @@ interface AdapterInterface
      *
      * @param \Zend_Db_Expr|string $expressionField   quoted field name or SQL statement
      * @return \Zend_Db_Expr
-     * @since 2.0.0
      */
     public function getStandardDeviationSql($expressionField);
 
@@ -991,7 +919,6 @@ interface AdapterInterface
      * @param \Zend_Db_Expr|string $date   quoted field name or SQL statement
      * @param string $unit
      * @return \Zend_Db_Expr
-     * @since 2.0.0
      */
     public function getDateExtractSql($date, $unit);
 
@@ -1001,7 +928,6 @@ interface AdapterInterface
      *
      * @param string $tableName
      * @return string
-     * @since 2.0.0
      */
     public function getTableName($tableName);
 
@@ -1012,7 +938,6 @@ interface AdapterInterface
      * @param string $time  Either "before" or "after"
      * @param string $event  The DB level event which activates the trigger, i.e. "update" or "insert"
      * @return string
-     * @since 2.0.0
      */
     public function getTriggerName($tableName, $time, $event);
 
@@ -1024,7 +949,6 @@ interface AdapterInterface
      * @param string|array $fields  the columns list
      * @param string $indexType
      * @return string
-     * @since 2.0.0
      */
     public function getIndexName($tableName, $fields, $indexType = '');
 
@@ -1037,7 +961,6 @@ interface AdapterInterface
      * @param string $refTableName
      * @param string $refColumnName
      * @return string
-     * @since 2.0.0
      */
     public function getForeignKeyName($priTableName, $priColumnName, $refTableName, $refColumnName);
 
@@ -1047,7 +970,6 @@ interface AdapterInterface
      * @param string $tableName
      * @param string $schemaName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function disableTableKeys($tableName, $schemaName = null);
 
@@ -1057,7 +979,6 @@ interface AdapterInterface
      * @param string $tableName
      * @param string $schemaName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function enableTableKeys($tableName, $schemaName = null);
 
@@ -1069,7 +990,6 @@ interface AdapterInterface
      * @param array $fields
      * @param int|bool $mode
      * @return string
-     * @since 2.0.0
      */
     public function insertFromSelect(\Magento\Framework\DB\Select $select, $table, array $fields = [], $mode = false);
 
@@ -1081,7 +1001,6 @@ interface AdapterInterface
      * @param int $stepCount
      * @return \Magento\Framework\DB\Select[]
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function selectsByRange($rangeField, \Magento\Framework\DB\Select $select, $stepCount = 100);
 
@@ -1091,7 +1010,6 @@ interface AdapterInterface
      * @param \Magento\Framework\DB\Select $select
      * @param string|array $table
      * @return string
-     * @since 2.0.0
      */
     public function updateFromSelect(\Magento\Framework\DB\Select $select, $table);
 
@@ -1101,7 +1019,6 @@ interface AdapterInterface
      * @param \Magento\Framework\DB\Select $select
      * @param string $table the table name or alias used in select
      * @return string|int
-     * @since 2.0.0
      */
     public function deleteFromSelect(\Magento\Framework\DB\Select $select, $table);
 
@@ -1111,7 +1028,6 @@ interface AdapterInterface
      * @param array|string $tableNames
      * @param string $schemaName
      * @return array
-     * @since 2.0.0
      */
     public function getTablesChecksum($tableNames, $schemaName = null);
 
@@ -1119,7 +1035,6 @@ interface AdapterInterface
      * Check if the database support STRAIGHT JOIN
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function supportStraightJoin();
 
@@ -1130,7 +1045,6 @@ interface AdapterInterface
      * @param \Magento\Framework\DB\Select $select
      * @param string $field
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     public function orderRand(\Magento\Framework\DB\Select $select, $field = null);
 
@@ -1139,7 +1053,6 @@ interface AdapterInterface
      *
      * @param string $sql
      * @return string
-     * @since 2.0.0
      */
     public function forUpdate($sql);
 
@@ -1149,7 +1062,6 @@ interface AdapterInterface
      * @param string $tableName Table name
      * @param string $schemaName OPTIONAL
      * @return string Primary Key name
-     * @since 2.0.0
      */
     public function getPrimaryKeyName($tableName, $schemaName = null);
 
@@ -1159,7 +1071,6 @@ interface AdapterInterface
      *
      * @param mixed $value
      * @return mixed
-     * @since 2.0.0
      */
     public function decodeVarbinary($value);
 
@@ -1167,7 +1078,6 @@ interface AdapterInterface
      * Get adapter transaction level state. Return 0 if all transactions are complete
      *
      * @return int
-     * @since 2.0.0
      */
     public function getTransactionLevel();
 
@@ -1176,7 +1086,6 @@ interface AdapterInterface
      *
      * @param \Magento\Framework\DB\Ddl\Trigger $trigger
      * @return \Zend_Db_Statement_Pdo
-     * @since 2.0.0
      */
     public function createTrigger(\Magento\Framework\DB\Ddl\Trigger $trigger);
 
@@ -1186,7 +1095,6 @@ interface AdapterInterface
      * @param string $triggerName
      * @param string|null $schemaName
      * @return bool
-     * @since 2.0.0
      */
     public function dropTrigger($triggerName, $schemaName = null);
 
@@ -1195,7 +1103,6 @@ interface AdapterInterface
      *
      * @param null|string $likeCondition
      * @return array
-     * @since 2.0.0
      */
     public function getTables($likeCondition = null);
 
@@ -1207,7 +1114,6 @@ interface AdapterInterface
      * @param array $casesResults Cases and results
      * @param string $defaultValue value to use if value doesn't confirm to any cases
      * @return \Zend_Db_Expr
-     * @since 2.0.0
      */
     public function getCaseSql($valueName, $casesResults, $defaultValue = null);
 
@@ -1217,7 +1123,7 @@ interface AdapterInterface
      * @param string $tableName
      * @param string|null $schemaName
      * @return string|bool
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getAutoIncrementField($tableName, $schemaName = null);
 }

@@ -12,7 +12,6 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 
 /**
  * UI Component configuration data
- * @since 2.2.0
  */
 class Data implements \Magento\Framework\Config\DataInterface
 {
@@ -30,37 +29,31 @@ class Data implements \Magento\Framework\Config\DataInterface
      * Config data
      *
      * @var array
-     * @since 2.2.0
      */
     private $data = [];
 
     /**
      * @var ReaderFactory
-     * @since 2.2.0
      */
     private $readerFactory;
 
     /**
      * @var CacheInterface
-     * @since 2.2.0
      */
     private $cache;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $cacheId;
 
     /**
      * @var SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $componentName;
 
@@ -68,7 +61,6 @@ class Data implements \Magento\Framework\Config\DataInterface
      * Argument interpreter.
      *
      * @var InterpreterInterface
-     * @since 2.2.0
      */
     private $argumentInterpreter;
 
@@ -78,7 +70,6 @@ class Data implements \Magento\Framework\Config\DataInterface
      * @param CacheInterface $cache
      * @param SerializerInterface $serializer
      * @param InterpreterInterface $argumentInterpreter,
-     * @since 2.2.0
      */
     public function __construct(
         $componentName,
@@ -99,7 +90,6 @@ class Data implements \Magento\Framework\Config\DataInterface
      * Initialise data for configuration
      *
      * @return void
-     * @since 2.2.0
      */
     private function initData()
     {
@@ -127,7 +117,6 @@ class Data implements \Magento\Framework\Config\DataInterface
      *
      * @param array $config
      * @return void
-     * @since 2.2.0
      */
     public function merge(array $config)
     {
@@ -140,7 +129,6 @@ class Data implements \Magento\Framework\Config\DataInterface
      * @param string $path
      * @param mixed $default
      * @return mixed
-     * @since 2.2.0
      */
     public function get($path = null, $default = null)
     {
@@ -167,7 +155,6 @@ class Data implements \Magento\Framework\Config\DataInterface
      *
      * @param array $components
      * @return array
-     * @since 2.2.0
      */
     private function evaluateComponentArguments($components)
     {

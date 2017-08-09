@@ -13,7 +13,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Customer\ExportAccountsExcel
  *
- * @since 2.0.0
  */
 class ExportAccountsExcel extends \Magento\Reports\Controller\Adminhtml\Report\Customer
 {
@@ -21,7 +20,6 @@ class ExportAccountsExcel extends \Magento\Reports\Controller\Adminhtml\Report\C
      * Export new accounts report grid to Excel XML format
      *
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

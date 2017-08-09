@@ -11,26 +11,22 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\Framework\App\Response\Http\FileFactory
  *
- * @since 2.0.0
  */
 class FileFactory
 {
     /**
      * @var \Magento\Framework\App\ResponseInterface
-     * @since 2.0.0
      */
     protected $_response;
 
     /**
      * @var \Magento\Framework\Filesystem
-     * @since 2.0.0
      */
     protected $_filesystem;
 
     /**
      * @param \Magento\Framework\App\ResponseInterface $response
      * @param \Magento\Framework\Filesystem $filesystem
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ResponseInterface $response,
@@ -56,7 +52,6 @@ class FileFactory
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExitExpression)
-     * @since 2.0.0
      */
     public function create(
         $fileName,
@@ -118,7 +113,6 @@ class FileFactory
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExitExpression)
-     * @since 2.0.0
      */
     protected function callExit()
     {

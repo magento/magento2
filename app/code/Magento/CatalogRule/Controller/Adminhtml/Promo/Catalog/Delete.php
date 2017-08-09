@@ -11,13 +11,11 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog\Delete
  *
- * @since 2.0.0
  */
 class Delete extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

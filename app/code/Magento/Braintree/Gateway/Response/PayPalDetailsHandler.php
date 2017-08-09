@@ -11,7 +11,6 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
  * Class PayPalDetailsHandler
- * @since 2.1.0
  */
 class PayPalDetailsHandler implements HandlerInterface
 {
@@ -21,7 +20,6 @@ class PayPalDetailsHandler implements HandlerInterface
 
     /**
      * @var SubjectReader
-     * @since 2.1.0
      */
     private $subjectReader;
 
@@ -29,7 +27,6 @@ class PayPalDetailsHandler implements HandlerInterface
      * Constructor
      *
      * @param SubjectReader $subjectReader
-     * @since 2.1.0
      */
     public function __construct(SubjectReader $subjectReader)
     {
@@ -38,7 +35,6 @@ class PayPalDetailsHandler implements HandlerInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function handle(array $handlingSubject, array $response)
     {

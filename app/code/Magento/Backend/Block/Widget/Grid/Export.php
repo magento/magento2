@@ -10,9 +10,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * @api
- * @deprecated 2.2.0 in favour of UI component implementation
+ * @deprecated 100.2.0 in favour of UI component implementation
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Grid\ExportInterface
 {
@@ -20,7 +19,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Grid export types
      *
      * @var  \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     protected $_exportTypes = [];
 
@@ -28,7 +26,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Rows per page for import
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_exportPageSize = 1000;
 
@@ -36,19 +33,16 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Template file name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = "Magento_Backend::widget/grid/export.phtml";
 
     /**
      * @var \Magento\Framework\Data\CollectionFactory
-     * @since 2.0.0
      */
     protected $_collectionFactory;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     * @since 2.0.0
      */
     protected $_directory;
 
@@ -56,7 +50,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Additional path to folder
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_path = 'export';
 
@@ -64,7 +57,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Data\CollectionFactory $collectionFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -78,7 +70,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     /**
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -100,7 +91,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Retrieve grid columns
      *
      * @return \Magento\Backend\Block\Widget\Grid\Column[]
-     * @since 2.0.0
      */
     protected function _getColumns()
     {
@@ -111,7 +101,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Retrieve totals
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     protected function _getTotals()
     {
@@ -123,7 +112,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getCountTotals()
     {
@@ -134,7 +122,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Get collection object
      *
      * @return \Magento\Framework\Data\Collection
-     * @since 2.0.0
      */
     protected function _getCollection()
     {
@@ -145,7 +132,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Retrieve grid export types
      *
      * @return  \Magento\Framework\DataObject[]|false
-     * @since 2.0.0
      */
     public function getExportTypes()
     {
@@ -156,7 +142,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Retrieve grid id
      *
      * @return string
-     * @since 2.0.0
      */
     public function getId()
     {
@@ -167,7 +152,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Prepare export button
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -190,7 +174,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Render export button
      *
      * @return string
-     * @since 2.0.0
      */
     public function getExportButtonHtml()
     {
@@ -203,7 +186,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * @param   string $url
      * @param   string $label
      * @return  $this
-     * @since 2.0.0
      */
     public function addExportType($url, $label)
     {
@@ -218,7 +200,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      *
      * @param array $fileData
      * @return string
-     * @since 2.0.0
      */
     protected function _getFileContainerContent(array $fileData)
     {
@@ -229,7 +210,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Retrieve Headers row array for Export
      *
      * @return string[]
-     * @since 2.0.0
      */
     protected function _getExportHeaders()
     {
@@ -246,7 +226,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Retrieve Totals row array for Export
      *
      * @return string[]
-     * @since 2.0.0
      */
     protected function _getExportTotals()
     {
@@ -267,7 +246,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * @param string $callback
      * @param array $args additional arguments for callback method
      * @return void
-     * @since 2.0.0
      */
     public function _exportIterateCollection($callback, array $args)
     {
@@ -305,7 +283,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * @param \Magento\Framework\DataObject $item
      * @param \Magento\Framework\Filesystem\File\WriteInterface $stream
      * @return void
-     * @since 2.0.0
      */
     protected function _exportCsvItem(
         \Magento\Framework\DataObject $item,
@@ -326,7 +303,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Return array with keys type and value
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCsvFile()
     {
@@ -356,7 +332,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Retrieve Grid data as CSV
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCsv()
     {
@@ -406,7 +381,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Retrieve data in xml
      *
      * @return string
-     * @since 2.0.0
      */
     public function getXml()
     {
@@ -435,7 +409,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      *
      * @param \Magento\Framework\DataObject $data
      * @return string[]
-     * @since 2.0.0
      */
     public function getRowRecord(\Magento\Framework\DataObject $data)
     {
@@ -455,7 +428,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      *
      * @param string $sheetName
      * @return array
-     * @since 2.0.0
      */
     public function getExcelFile($sheetName = '')
     {
@@ -490,7 +462,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Retrieve grid data as MS Excel 2003 XML Document
      *
      * @return string
-     * @since 2.0.0
      */
     public function getExcel()
     {
@@ -534,7 +505,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      *
      * @param \Magento\Framework\Data\Collection $baseCollection
      * @return \Magento\Framework\Data\Collection
-     * @since 2.0.0
      */
     protected function _getRowCollection(\Magento\Framework\Data\Collection $baseCollection = null)
     {
@@ -568,7 +538,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Return prepared collection as row collection with additional conditions
      *
      * @return \Magento\Framework\Data\Collection
-     * @since 2.0.0
      */
     public function _getPreparedCollection()
     {
@@ -582,7 +551,6 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getExportPageSize()
     {

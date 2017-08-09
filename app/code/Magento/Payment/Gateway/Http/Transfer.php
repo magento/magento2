@@ -7,7 +7,6 @@ namespace Magento\Payment\Gateway\Http;
 
 /**
  * Class Transfer
- * @since 2.0.0
  */
 class Transfer implements TransferInterface
 {
@@ -23,43 +22,36 @@ class Transfer implements TransferInterface
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $clientConfig;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $headers;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $method;
 
     /**
      * @var array|string
-     * @since 2.0.0
      */
     private $body;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $uri;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     private $encode;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $auth;
 
@@ -71,7 +63,6 @@ class Transfer implements TransferInterface
      * @param string $method
      * @param string $uri
      * @param bool $encode
-     * @since 2.0.0
      */
     public function __construct(
         array $clientConfig,
@@ -95,7 +86,6 @@ class Transfer implements TransferInterface
      * Returns gateway client configuration
      *
      * @return array
-     * @since 2.0.0
      */
     public function getClientConfig()
     {
@@ -106,7 +96,6 @@ class Transfer implements TransferInterface
      * Returns method used to place request
      *
      * @return string|int
-     * @since 2.0.0
      */
     public function getMethod()
     {
@@ -117,7 +106,6 @@ class Transfer implements TransferInterface
      * Returns headers
      *
      * @return array
-     * @since 2.0.0
      */
     public function getHeaders()
     {
@@ -128,7 +116,6 @@ class Transfer implements TransferInterface
      * Returns request body
      *
      * @return array|string
-     * @since 2.0.0
      */
     public function getBody()
     {
@@ -139,7 +126,6 @@ class Transfer implements TransferInterface
      * Returns URI
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUri()
     {
@@ -148,7 +134,6 @@ class Transfer implements TransferInterface
 
     /**
      * @return boolean
-     * @since 2.0.0
      */
     public function shouldEncode()
     {
@@ -159,7 +144,6 @@ class Transfer implements TransferInterface
      * Returns Auth username
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAuthUsername()
     {
@@ -170,7 +154,6 @@ class Transfer implements TransferInterface
      * Returns Auth password
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAuthPassword()
     {

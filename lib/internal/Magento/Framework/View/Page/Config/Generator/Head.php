@@ -12,7 +12,6 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class \Magento\Framework\View\Page\Config\Generator\Head
  *
- * @since 2.0.0
  */
 class Head implements Layout\GeneratorInterface
 {
@@ -36,7 +35,6 @@ class Head implements Layout\GeneratorInterface
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $remoteAssetTypes = [
         self::SRC_TYPE_CONTROLLER => self::SRC_TYPE_CONTROLLER,
@@ -45,7 +43,6 @@ class Head implements Layout\GeneratorInterface
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $assetProperties = [
         'ie_condition',
@@ -53,7 +50,6 @@ class Head implements Layout\GeneratorInterface
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $serviceAssetProperties = [
         'src',
@@ -63,13 +59,11 @@ class Head implements Layout\GeneratorInterface
 
     /**
      * @var \Magento\Framework\View\Page\Config
-     * @since 2.0.0
      */
     protected $pageConfig;
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.2.0
      */
     private $url;
 
@@ -78,7 +72,6 @@ class Head implements Layout\GeneratorInterface
      *
      * @param \Magento\Framework\View\Page\Config $pageConfig
      * @param \Magento\Framework\UrlInterface|null $url
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Page\Config $pageConfig,
@@ -92,7 +85,6 @@ class Head implements Layout\GeneratorInterface
      * {@inheritdoc}
      *
      * @return string
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -105,7 +97,6 @@ class Head implements Layout\GeneratorInterface
      * @param Layout\Reader\Context $readerContext
      * @param Layout\Generator\Context $generatorContext
      * @return $this
-     * @since 2.0.0
      */
     public function process(Layout\Reader\Context $readerContext, Layout\Generator\Context $generatorContext)
     {
@@ -125,7 +116,6 @@ class Head implements Layout\GeneratorInterface
      *
      * @param \Magento\Framework\View\Page\Config\Structure $pageStructure
      * @return $this
-     * @since 2.0.0
      */
     protected function processAssets(Structure $pageStructure)
     {
@@ -153,7 +143,6 @@ class Head implements Layout\GeneratorInterface
      *
      * @param array $data
      * @return array
-     * @since 2.0.0
      */
     protected function getAssetProperties(array $data = [])
     {
@@ -175,7 +164,6 @@ class Head implements Layout\GeneratorInterface
      *
      * @param \Magento\Framework\View\Page\Config\Structure $pageStructure
      * @return $this
-     * @since 2.0.0
      */
     protected function processTitle(Structure $pageStructure)
     {
@@ -190,7 +178,6 @@ class Head implements Layout\GeneratorInterface
      *
      * @param \Magento\Framework\View\Page\Config\Structure $pageStructure
      * @return $this
-     * @since 2.0.0
      */
     protected function processMetadata(Structure $pageStructure)
     {
@@ -205,7 +192,6 @@ class Head implements Layout\GeneratorInterface
      *
      * @param \Magento\Framework\View\Page\Config\Structure $pageStructure
      * @return $this
-     * @since 2.0.0
      */
     protected function processElementAttributes(Structure $pageStructure)
     {

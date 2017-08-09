@@ -9,7 +9,6 @@ namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images;
  * Directory tree renderer for Cms Wysiwyg Images
  *
  * @api
- * @since 2.0.0
  */
 class Tree extends \Magento\Backend\Block\Template
 {
@@ -17,7 +16,6 @@ class Tree extends \Magento\Backend\Block\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -25,13 +23,11 @@ class Tree extends \Magento\Backend\Block\Template
      * Cms wysiwyg images
      *
      * @var \Magento\Cms\Helper\Wysiwyg\Images
-     * @since 2.0.0
      */
     protected $_cmsWysiwygImages = null;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -42,7 +38,6 @@ class Tree extends \Magento\Backend\Block\Template
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -62,7 +57,6 @@ class Tree extends \Magento\Backend\Block\Template
      * Json tree builder
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTreeJson()
     {
@@ -88,7 +82,6 @@ class Tree extends \Magento\Backend\Block\Template
      * Json source URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTreeLoaderUrl()
     {
@@ -99,7 +92,6 @@ class Tree extends \Magento\Backend\Block\Template
      * Root node name of tree
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getRootNodeName()
     {
@@ -110,7 +102,6 @@ class Tree extends \Magento\Backend\Block\Template
      * Return tree node full path based on current path
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTreeCurrentPath()
     {
@@ -132,7 +123,6 @@ class Tree extends \Magento\Backend\Block\Template
      * Get tree widget options
      *
      * @return array
-     * @since 2.0.0
      */
     public function getTreeWidgetOptions()
     {

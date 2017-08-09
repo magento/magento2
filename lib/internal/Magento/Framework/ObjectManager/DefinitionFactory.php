@@ -14,7 +14,6 @@ use Magento\Framework\Code\Generator\Autoloader;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class DefinitionFactory
 {
@@ -22,7 +21,6 @@ class DefinitionFactory
      * Class generation dir
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_generationDir;
 
@@ -30,20 +28,17 @@ class DefinitionFactory
      * Filesystem Driver
      *
      * @var DriverInterface
-     * @since 2.0.0
      */
     protected $_filesystemDriver;
 
     /**
      * @var \Magento\Framework\Code\Generator
-     * @since 2.0.0
      */
     protected $codeGenerator;
 
     /**
      * @param DriverInterface $filesystemDriver
      * @param string $generationDir
-     * @since 2.0.0
      */
     public function __construct(
         DriverInterface $filesystemDriver,
@@ -57,7 +52,6 @@ class DefinitionFactory
      * Create class definitions
      *
      * @return DefinitionInterface
-     * @since 2.0.0
      */
     public function createClassDefinition()
     {
@@ -70,7 +64,6 @@ class DefinitionFactory
      * Create plugin definitions
      *
      * @return \Magento\Framework\Interception\DefinitionInterface
-     * @since 2.0.0
      */
     public function createPluginDefinition()
     {
@@ -81,7 +74,6 @@ class DefinitionFactory
      * Create relations
      *
      * @return RelationsInterface
-     * @since 2.0.0
      */
     public function createRelations()
     {
@@ -92,7 +84,6 @@ class DefinitionFactory
      * Get existing code generator. Instantiate a new one if it does not exist yet.
      *
      * @return \Magento\Framework\Code\Generator
-     * @since 2.0.0
      */
     public function getCodeGenerator()
     {

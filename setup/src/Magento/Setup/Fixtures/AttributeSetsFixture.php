@@ -20,7 +20,6 @@ namespace Magento\Setup\Fixtures;
  * <product_attribute_sets_attributes_values>{int}</product_attribute_sets_attributes_values>
  *
  * @see setup/performance-toolkit/profiles/ce/small.xml
- * @since 2.2.0
  */
 class AttributeSetsFixture extends Fixture
 {
@@ -29,19 +28,16 @@ class AttributeSetsFixture extends Fixture
 
     /**
      * @var int
-     * @since 2.2.0
      */
     protected $priority = 25;
 
     /**
      * @var AttributeSet\AttributeSetFixture
-     * @since 2.2.0
      */
     private $attributeSetsFixture;
 
     /**
      * @var AttributeSet\Pattern
-     * @since 2.2.0
      */
     private $pattern;
 
@@ -49,7 +45,6 @@ class AttributeSetsFixture extends Fixture
      * @param FixtureModel $fixtureModel
      * @param AttributeSet\AttributeSetFixture $attributeSetsFixture
      * @param AttributeSet\Pattern $pattern
-     * @since 2.2.0
      */
     public function __construct(
         FixtureModel $fixtureModel,
@@ -63,7 +58,6 @@ class AttributeSetsFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function execute()
     {
@@ -98,7 +92,6 @@ class AttributeSetsFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getActionTitle()
     {
@@ -107,7 +100,6 @@ class AttributeSetsFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function introduceParamLabels()
     {

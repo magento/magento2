@@ -9,7 +9,6 @@ namespace Magento\Setup\Controller;
 /**
  * Interface \Magento\Setup\Controller\ResponseTypeInterface
  *
- * @since 2.0.0
  */
 interface ResponseTypeInterface
 {

@@ -14,7 +14,6 @@ use Magento\Framework\Filesystem\DriverInterface;
  * validation by protected file extension list to extended class
  *
  * @api
- * @since 2.0.0
  */
 class Uploader
 {
@@ -23,7 +22,6 @@ class Uploader
      *
      * @var array
      * @access protected
-     * @since 2.0.0
      */
     protected $_file;
 
@@ -32,7 +30,6 @@ class Uploader
      *
      * @var string
      * @access protected
-     * @since 2.0.0
      */
     protected $_fileMimeType;
 
@@ -41,7 +38,6 @@ class Uploader
      *
      * @var \Magento\Framework\File\Uploader::SINGLE_STYLE|\Magento\Framework\File\Uploader::MULTIPLE_STYLE
      * @access protected
-     * @since 2.0.0
      */
     protected $_uploadType;
 
@@ -51,7 +47,6 @@ class Uploader
      *
      * @var string
      * @access protected
-     * @since 2.0.0
      */
     protected $_uploadedFileName;
 
@@ -60,7 +55,6 @@ class Uploader
      *
      * @var string
      * @access protected
-     * @since 2.0.0
      */
     protected $_uploadedFileDir;
 
@@ -70,7 +64,6 @@ class Uploader
      *
      * @var bool
      * @access protected
-     * @since 2.0.0
      */
     protected $_allowCreateFolders = true;
 
@@ -80,7 +73,6 @@ class Uploader
      *
      * @var bool
      * @access protected
-     * @since 2.0.0
      */
     protected $_allowRenameFiles = false;
 
@@ -89,7 +81,6 @@ class Uploader
      *
      * @var bool
      * @access protected
-     * @since 2.0.0
      */
     protected $_enableFilesDispersion = false;
 
@@ -100,26 +91,22 @@ class Uploader
      *
      * @var bool
      * @access protected
-     * @since 2.0.0
      */
     protected $_caseInsensitiveFilenames = true;
 
     /**
      * @var string
      * @access protected
-     * @since 2.0.0
      */
     protected $_dispretionPath = null;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_fileExists = false;
 
     /**
      * @var null|string[]
-     * @since 2.0.0
      */
     protected $_allowedExtensions = null;
 
@@ -128,7 +115,6 @@ class Uploader
      *
      * @var array
      * @access protected
-     * @since 2.0.0
      */
     protected $_validateCallbacks = [];
 
@@ -161,7 +147,6 @@ class Uploader
      *
      * @var array|bool      Array with file info keys: path, file. Result is
      *                      FALSE when file not uploaded
-     * @since 2.0.0
      */
     protected $_result;
 
@@ -170,7 +155,6 @@ class Uploader
      *
      * @param string|array $fileId
      * @throws \Exception
-     * @since 2.0.0
      */
     public function __construct($fileId)
     {
@@ -189,7 +173,6 @@ class Uploader
      * @param  array $result
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function _afterSave($result)
     {
@@ -205,7 +188,6 @@ class Uploader
      * @return array
      * @throws \Exception
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function save($destinationFolder, $newFileName = null)
     {
@@ -263,7 +245,6 @@ class Uploader
      * @param string $destinationFolder
      * @return void
      * @throws \Exception
-     * @since 2.1.0
      */
     private function validateDestination($destinationFolder)
     {
@@ -280,8 +261,7 @@ class Uploader
      * @param string $file
      * @return void
      *
-     * @deprecated 2.1.0
-     * @since 2.0.0
+     * @deprecated 100.0.8
      */
     protected function chmod($file)
     {
@@ -294,7 +274,6 @@ class Uploader
      * @param string $tmpPath
      * @param string $destPath
      * @return bool|void
-     * @since 2.0.0
      */
     protected function _moveFile($tmpPath, $destPath)
     {
@@ -310,7 +289,6 @@ class Uploader
      *
      * @return void
      * @throws \Exception
-     * @since 2.0.0
      */
     protected function _validateFile()
     {
@@ -337,7 +315,6 @@ class Uploader
      * Returns extension of the uploaded file
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFileExtension()
     {
@@ -352,7 +329,6 @@ class Uploader
      * @param string $callbackMethod    Method name of $callbackObject. It must
      *                                  have interface (string $tmpFilePath)
      * @return \Magento\Framework\File\Uploader
-     * @since 2.0.0
      */
     public function addValidateCallback($callbackName, $callbackObject, $callbackMethod)
     {
@@ -366,7 +342,6 @@ class Uploader
      * @param string $callbackName
      * @access public
      * @return \Magento\Framework\File\Uploader
-     * @since 2.0.0
      */
     public function removeValidateCallback($callbackName)
     {
@@ -381,7 +356,6 @@ class Uploader
      *
      * @param string $fileName
      * @return string
-     * @since 2.0.0
      */
     public static function getCorrectFileName($fileName)
     {
@@ -399,7 +373,6 @@ class Uploader
      *
      * @param string $fileName
      * @return string
-     * @since 2.0.0
      */
     public function correctFileNameCase($fileName)
     {
@@ -414,7 +387,6 @@ class Uploader
      *
      * @param string $dir
      * @return string
-     * @since 2.0.0
      */
     protected static function _addDirSeparator($dir)
     {
@@ -430,7 +402,6 @@ class Uploader
      * @param string[] $validTypes
      * @access public
      * @return bool
-     * @since 2.0.0
      */
     public function checkMimeType($validTypes = [])
     {
@@ -447,7 +418,6 @@ class Uploader
      *
      * @access public
      * @return string
-     * @since 2.0.0
      */
     public function getUploadedFileName()
     {
@@ -460,7 +430,6 @@ class Uploader
      * @param bool $flag
      * @access public
      * @return $this
-     * @since 2.0.0
      */
     public function setAllowCreateFolders($flag)
     {
@@ -474,7 +443,6 @@ class Uploader
      * @param bool $flag
      * @access public
      * @return $this
-     * @since 2.0.0
      */
     public function setAllowRenameFiles($flag)
     {
@@ -488,7 +456,6 @@ class Uploader
      * @param bool $flag
      * @access public
      * @return $this
-     * @since 2.0.0
      */
     public function setFilesDispersion($flag)
     {
@@ -501,7 +468,6 @@ class Uploader
      *
      * @param bool $flag
      * @return $this
-     * @since 2.0.0
      */
     public function setFilenamesCaseSensitivity($flag)
     {
@@ -514,7 +480,6 @@ class Uploader
      *
      * @param string[] $extensions
      * @return $this
-     * @since 2.0.0
      */
     public function setAllowedExtensions($extensions = [])
     {
@@ -529,7 +494,6 @@ class Uploader
      *
      * @param string $extension
      * @return boolean
-     * @since 2.0.0
      */
     public function checkAllowedExtension($extension)
     {
@@ -544,7 +508,6 @@ class Uploader
      * Return file mime type
      *
      * @return string
-     * @since 2.0.0
      */
     private function _getMimeType()
     {
@@ -558,7 +521,6 @@ class Uploader
      * @return void
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     private function _setUploadFileId($fileId)
     {
@@ -600,7 +562,6 @@ class Uploader
      * @param string $destinationFolder
      * @return \Magento\Framework\File\Uploader
      * @throws \Exception
-     * @since 2.0.0
      */
     private function _createDestinationFolder($destinationFolder)
     {
@@ -625,7 +586,6 @@ class Uploader
      *
      * @param string $destinationFile
      * @return string
-     * @since 2.0.0
      */
     public static function getNewFileName($destinationFile)
     {
@@ -650,7 +610,6 @@ class Uploader
      *
      * @param string $fileName
      * @return string
-     * @since 2.0.0
      */
     public static function getDispretionPath($fileName)
     {

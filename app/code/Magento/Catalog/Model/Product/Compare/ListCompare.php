@@ -12,7 +12,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
  *
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
- * @since 2.0.0
  */
 class ListCompare extends \Magento\Framework\DataObject
 {
@@ -20,7 +19,6 @@ class ListCompare extends \Magento\Framework\DataObject
      * Customer visitor
      *
      * @var \Magento\Customer\Model\Visitor
-     * @since 2.0.0
      */
     protected $_customerVisitor;
 
@@ -28,7 +26,6 @@ class ListCompare extends \Magento\Framework\DataObject
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
@@ -36,7 +33,6 @@ class ListCompare extends \Magento\Framework\DataObject
      * Catalog product compare item
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item
-     * @since 2.0.0
      */
     protected $_catalogProductCompareItem;
 
@@ -44,7 +40,6 @@ class ListCompare extends \Magento\Framework\DataObject
      * Item collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory
-     * @since 2.0.0
      */
     protected $_itemCollectionFactory;
 
@@ -52,7 +47,6 @@ class ListCompare extends \Magento\Framework\DataObject
      * Compare item factory
      *
      * @var \Magento\Catalog\Model\Product\Compare\ItemFactory
-     * @since 2.0.0
      */
     protected $_compareItemFactory;
 
@@ -65,7 +59,6 @@ class ListCompare extends \Magento\Framework\DataObject
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Compare\ItemFactory $compareItemFactory,
@@ -88,7 +81,6 @@ class ListCompare extends \Magento\Framework\DataObject
      *
      * @param int|\Magento\Catalog\Model\Product $product
      * @return $this
-     * @since 2.0.0
      */
     public function addProduct($product)
     {
@@ -110,7 +102,6 @@ class ListCompare extends \Magento\Framework\DataObject
      *
      * @param string[] $productIds
      * @return $this
-     * @since 2.0.0
      */
     public function addProducts($productIds)
     {
@@ -126,7 +117,6 @@ class ListCompare extends \Magento\Framework\DataObject
      * Retrieve Compare Items Collection
      *
      * @return Collection
-     * @since 2.0.0
      */
     public function getItemCollection()
     {
@@ -138,7 +128,6 @@ class ListCompare extends \Magento\Framework\DataObject
      *
      * @param int|\Magento\Catalog\Model\Product $product
      * @return $this
-     * @since 2.0.0
      */
     public function removeProduct($product)
     {
@@ -159,7 +148,6 @@ class ListCompare extends \Magento\Framework\DataObject
      *
      * @param \Magento\Catalog\Model\Product\Compare\Item $item
      * @return $this
-     * @since 2.0.0
      */
     protected function _addVisitorToItem($item)
     {
@@ -177,7 +165,6 @@ class ListCompare extends \Magento\Framework\DataObject
      * @param int $customerId
      * @param int $visitorId
      * @return bool
-     * @since 2.0.0
      */
     public function hasItems($customerId, $visitorId)
     {

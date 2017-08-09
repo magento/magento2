@@ -11,13 +11,11 @@ use Magento\Search\Api\SynonymAnalyzerInterface;
 /**
  * Class \Magento\Search\Adapter\Query\Preprocessor\Synonyms
  *
- * @since 2.1.0
  */
 class Synonyms implements PreprocessorInterface
 {
     /**
      * @var SynonymAnalyzerInterface
-     * @since 2.1.0
      */
     private $synonymsAnalyzer;
 
@@ -25,7 +23,6 @@ class Synonyms implements PreprocessorInterface
      * Constructor
      *
      * @param SynonymAnalyzerInterface $synonymsAnalyzer
-     * @since 2.1.0
      */
     public function __construct(SynonymAnalyzerInterface $synonymsAnalyzer)
     {
@@ -34,7 +31,6 @@ class Synonyms implements PreprocessorInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function process($query)
     {

@@ -10,13 +10,11 @@ namespace Magento\Setup\Module\Di\Compiler;
 /**
  * Class \Magento\Setup\Module\Di\Compiler\ArgumentsResolver
  *
- * @since 2.0.0
  */
 class ArgumentsResolver
 {
     /**
      * @var \Magento\Framework\ObjectManager\ConfigInterface
-     * @since 2.0.0
      */
     private $diContainerConfig;
 
@@ -24,7 +22,6 @@ class ArgumentsResolver
      * Shared instance argument pattern used for configuration
      *
      * @var array
-     * @since 2.0.0
      */
     private $sharedInstancePattern = [
         '_i_' => null,
@@ -34,7 +31,6 @@ class ArgumentsResolver
      * Instance argument pattern used for configuration
      *
      * @var array
-     * @since 2.0.0
      */
     private $notSharedInstancePattern = [
         '_ins_' => null,
@@ -44,7 +40,6 @@ class ArgumentsResolver
      * Value argument pattern used for configuration
      *
      * @var array
-     * @since 2.0.0
      */
     private $valuePattern = [
         '_v_' => null,
@@ -54,7 +49,6 @@ class ArgumentsResolver
      * Value null argument pattern used for configuration
      *
      * @var array
-     * @since 2.0.0
      */
     private $nullValuePattern = [
         '_vn_' => true,
@@ -64,7 +58,6 @@ class ArgumentsResolver
      * Value configured array argument pattern used for configuration
      *
      * @var array
-     * @since 2.0.0
      */
     private $configuredArrayValuePattern = [
         '_vac_' => true,
@@ -74,7 +67,6 @@ class ArgumentsResolver
      * Configured argument pattern used for configuration
      *
      * @var array
-     * @since 2.0.0
      */
     private $configuredPattern = [
         '_a_' => null,
@@ -83,7 +75,6 @@ class ArgumentsResolver
 
     /**
      * @param \Magento\Framework\ObjectManager\ConfigInterface $diContainerConfig
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManager\ConfigInterface $diContainerConfig)
     {
@@ -96,7 +87,6 @@ class ArgumentsResolver
      * @param string $instanceType
      * @param ConstructorArgument[] $constructor
      * @return array|null
-     * @since 2.0.0
      */
     public function getResolvedConstructorArguments($instanceType, $constructor)
     {
@@ -132,7 +122,6 @@ class ArgumentsResolver
      * @param array $configuredArgument
      * @param ConstructorArgument $constructorArgument
      * @return mixed
-     * @since 2.0.0
      */
     private function getConfiguredArgument($configuredArgument, ConstructorArgument $constructorArgument)
     {
@@ -151,7 +140,6 @@ class ArgumentsResolver
      *
      * @param array $array
      * @return mixed
-     * @since 2.0.0
      */
     private function getConfiguredArrayAttribute($array)
     {
@@ -181,7 +169,6 @@ class ArgumentsResolver
      *
      * @param array $config
      * @return array|mixed
-     * @since 2.0.0
      */
     private function getConfiguredInstanceArgument(array $config)
     {
@@ -204,7 +191,6 @@ class ArgumentsResolver
      *
      * @param string $instanceType
      * @return array
-     * @since 2.0.0
      */
     private function getConfiguredArguments($instanceType)
     {
@@ -226,7 +212,6 @@ class ArgumentsResolver
      *
      * @param string $instanceType
      * @return array|mixed
-     * @since 2.0.0
      */
     private function getInstanceArgument($instanceType)
     {
@@ -245,7 +230,6 @@ class ArgumentsResolver
      *
      * @param mixed $value
      * @return array
-     * @since 2.0.0
      */
     private function getNonObjectArgument($value)
     {
@@ -272,7 +256,6 @@ class ArgumentsResolver
      *
      * @param array $value
      * @return bool
-     * @since 2.0.0
      */
     private function isConfiguredArray($value)
     {
@@ -299,7 +282,6 @@ class ArgumentsResolver
      * @param string $value
      * @param string $default
      * @return array
-     * @since 2.0.0
      */
     private function getGlobalArgument($value, $default)
     {

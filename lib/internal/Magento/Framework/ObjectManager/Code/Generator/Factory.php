@@ -8,7 +8,6 @@ namespace Magento\Framework\ObjectManager\Code\Generator;
 /**
  * Class \Magento\Framework\ObjectManager\Code\Generator\Factory
  *
- * @since 2.0.0
  */
 class Factory extends \Magento\Framework\Code\Generator\EntityAbstract
 {
@@ -21,7 +20,6 @@ class Factory extends \Magento\Framework\Code\Generator\EntityAbstract
      * Retrieve class properties
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getClassProperties()
     {
@@ -43,7 +41,6 @@ class Factory extends \Magento\Framework\Code\Generator\EntityAbstract
      * Get default constructor definition for generated class
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getDefaultConstructorDefinition()
     {
@@ -71,7 +68,6 @@ class Factory extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns list of methods for class generator
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getClassMethods()
     {
@@ -99,7 +95,6 @@ class Factory extends \Magento\Framework\Code\Generator\EntityAbstract
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _validateData()
     {

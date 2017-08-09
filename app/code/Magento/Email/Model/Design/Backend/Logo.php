@@ -10,7 +10,6 @@ use Magento\Theme\Model\Design\Backend\Logo as DesignLogo;
 /**
  * Class \Magento\Email\Model\Design\Backend\Logo
  *
- * @since 2.2.0
  */
 class Logo extends DesignLogo
 {
@@ -23,7 +22,6 @@ class Logo extends DesignLogo
      * Upload max file size in kilobytes
      *
      * @var int
-     * @since 2.2.0
      */
     protected $maxFileSize = 2048;
 
@@ -31,7 +29,6 @@ class Logo extends DesignLogo
      * Getter for allowed extensions of uploaded files
      *
      * @return string[]
-     * @since 2.2.0
      */
     public function getAllowedExtensions()
     {

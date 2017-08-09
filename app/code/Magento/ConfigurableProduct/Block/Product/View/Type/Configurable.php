@@ -17,7 +17,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 {
@@ -25,7 +24,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Catalog product
      *
      * @var \Magento\Catalog\Helper\Product
-     * @since 2.0.0
      */
     protected $catalogProduct = null;
 
@@ -33,7 +31,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Current customer
      *
      * @var CurrentCustomer
-     * @since 2.0.0
      */
     protected $currentCustomer;
 
@@ -41,37 +38,31 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Prices
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_prices = [];
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $jsonEncoder;
 
     /**
      * @var \Magento\ConfigurableProduct\Helper\Data $imageHelper
-     * @since 2.0.0
      */
     protected $helper;
 
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var ConfigurableAttributeData
-     * @since 2.0.0
      */
     protected $configurableAttributeData;
 
     /**
      * @var Format
-     * @since 2.2.0
      */
     private $localeFormat;
 
@@ -87,7 +78,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param array $data
      * @param Format|null $localeFormat
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -120,7 +110,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Get cache key informative items.
      *
      * @return array
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getCacheKeyInfo()
     {
@@ -133,7 +123,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Get allowed attributes
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllowAttributes()
     {
@@ -144,7 +133,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Check if allowed attributes have options
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasOptions()
     {
@@ -164,7 +152,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Get Allowed Products
      *
      * @return \Magento\Catalog\Model\Product[]
-     * @since 2.0.0
      */
     public function getAllowProducts()
     {
@@ -186,7 +173,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Retrieve current store
      *
      * @return \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     public function getCurrentStore()
     {
@@ -197,7 +183,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Returns additional values for js config, con be overridden by descendants
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getAdditionalConfig()
     {
@@ -208,7 +193,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Composes configuration for js
      *
      * @return string
-     * @since 2.0.0
      */
     public function getJsonConfig()
     {
@@ -257,7 +241,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Get product images for configurable variations
      *
      * @return array
-     * @since 2.2.0
+     * @since 100.2.0
      */
     protected function getOptionImages()
     {
@@ -284,7 +268,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 
     /**
      * @return array
-     * @since 2.0.0
      */
     protected function getOptionPrices()
     {
@@ -330,10 +313,9 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Replace ',' on '.' for js
      *
-     * @deprecated 2.2.0 Will be removed in major release
+     * @deprecated 100.2.0 Will be removed in major release
      * @param float $price
      * @return string
-     * @since 2.0.0
      */
     protected function _registerJsPrice($price)
     {
@@ -344,7 +326,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Should we generate "As low as" block or not
      *
      * @return bool
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function showMinimalPrice()
     {

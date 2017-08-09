@@ -13,7 +13,6 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  * An invoice is a record of the receipt of payment for an order. An invoice can include comments that detail the
  * invoice history.
  * @api
- * @since 2.0.0
  */
 interface InvoiceCommentInterface extends ExtensibleDataInterface, CommentInterface, EntityInterface
 {
@@ -33,7 +32,6 @@ interface InvoiceCommentInterface extends ExtensibleDataInterface, CommentInterf
      * Gets the is-customer-notified flag value for the invoice.
      *
      * @return int Is-customer-notified flag value.
-     * @since 2.0.0
      */
     public function getIsCustomerNotified();
 
@@ -41,7 +39,6 @@ interface InvoiceCommentInterface extends ExtensibleDataInterface, CommentInterf
      * Gets the parent ID for the invoice.
      *
      * @return int Parent ID.
-     * @since 2.0.0
      */
     public function getParentId();
 
@@ -50,7 +47,6 @@ interface InvoiceCommentInterface extends ExtensibleDataInterface, CommentInterf
      *
      * @param int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setParentId($id);
 
@@ -59,7 +55,6 @@ interface InvoiceCommentInterface extends ExtensibleDataInterface, CommentInterf
      *
      * @param int $isCustomerNotified
      * @return $this
-     * @since 2.0.0
      */
     public function setIsCustomerNotified($isCustomerNotified);
 
@@ -67,7 +62,6 @@ interface InvoiceCommentInterface extends ExtensibleDataInterface, CommentInterf
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\InvoiceCommentExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -76,7 +70,6 @@ interface InvoiceCommentInterface extends ExtensibleDataInterface, CommentInterf
      *
      * @param \Magento\Sales\Api\Data\InvoiceCommentExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\InvoiceCommentExtensionInterface $extensionAttributes

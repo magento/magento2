@@ -14,7 +14,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class \Magento\Setup\Console\Command\AbstractMaintenanceCommand
  *
- * @since 2.0.0
  */
 abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
 {
@@ -25,13 +24,11 @@ abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
 
     /**
      * @var MaintenanceMode
-     * @since 2.0.0
      */
     protected $maintenanceMode;
 
     /**
      * @var IpValidator
-     * @since 2.0.0
      */
     protected $ipValidator;
 
@@ -40,7 +37,6 @@ abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
      *
      * @param MaintenanceMode $maintenanceMode
      * @param IpValidator $ipValidator
-     * @since 2.0.0
      */
     public function __construct(MaintenanceMode $maintenanceMode, IpValidator $ipValidator)
     {
@@ -53,7 +49,6 @@ abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
      * Initialization of the command
      *
      * @return void
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -73,7 +68,6 @@ abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
      * Get maintenance mode to set
      *
      * @return bool
-     * @since 2.0.0
      */
     abstract protected function isEnable();
 
@@ -81,13 +75,11 @@ abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
      * Get display string after mode is set
      *
      * @return string
-     * @since 2.0.0
      */
     abstract protected function getDisplayString();
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -118,7 +110,6 @@ abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
      *
      * @param string[] $addresses
      * @return string[]
-     * @since 2.0.0
      */
     protected function validate(array $addresses)
     {

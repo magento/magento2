@@ -11,26 +11,22 @@ use Magento\Quote\Model\Quote\Address\Total\ReaderInterface;
 /**
  * Class \Magento\Quote\Model\Quote\TotalsReader
  *
- * @since 2.0.0
  */
 class TotalsReader
 {
     /**
      * @var \Magento\Quote\Model\Quote\Address\TotalFactory
-     * @since 2.0.0
      */
     protected $totalFactory;
 
     /**
      * @var \Magento\Quote\Model\Quote\TotalsCollectorList
-     * @since 2.0.0
      */
     protected $collectorList;
 
     /**
      * @param Address\TotalFactory $totalFactory
      * @param TotalsCollectorList $collectorList
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Quote\Model\Quote\Address\TotalFactory $totalFactory,
@@ -44,7 +40,6 @@ class TotalsReader
      * @param \Magento\Quote\Model\Quote $quote
      * @param array $total
      * @return Total[]
-     * @since 2.0.0
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, array $total)
     {
@@ -72,7 +67,6 @@ class TotalsReader
     /**
      * @param array $total
      * @return Total|Total[]
-     * @since 2.0.0
      */
     protected function convert($total)
     {
@@ -95,7 +89,6 @@ class TotalsReader
      * @param Total $totalInstance
      * @param Total[] $output
      * @return Total[]
-     * @since 2.0.0
      */
     protected function merge(Total $totalInstance, $output)
     {

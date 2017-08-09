@@ -12,37 +12,31 @@ use Magento\Framework\Phrase;
  * Data object processor for array serialization using class reflection
  *
  * @api
- * @since 2.0.0
  */
 class DataObjectProcessor
 {
     /**
      * @var MethodsMap
-     * @since 2.0.0
      */
     private $methodsMapProcessor;
 
     /**
      * @var TypeCaster
-     * @since 2.0.0
      */
     private $typeCaster;
 
     /**
      * @var FieldNamer
-     * @since 2.0.0
      */
     private $fieldNamer;
 
     /**
      * @var ExtensionAttributesProcessor
-     * @since 2.0.0
      */
     private $extensionAttributesProcessor;
 
     /**
      * @var CustomAttributesProcessor
-     * @since 2.0.0
      */
     private $customAttributesProcessor;
 
@@ -52,7 +46,6 @@ class DataObjectProcessor
      * @param FieldNamer $fieldNamer
      * @param CustomAttributesProcessor $customAttributesProcessor
      * @param ExtensionAttributesProcessor $extensionAttributesProcessor
-     * @since 2.0.0
      */
     public function __construct(
         MethodsMap $methodsMapProcessor,
@@ -75,7 +68,6 @@ class DataObjectProcessor
      * @param string $dataObjectType
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function buildOutputDataArray($dataObject, $dataObjectType)
     {

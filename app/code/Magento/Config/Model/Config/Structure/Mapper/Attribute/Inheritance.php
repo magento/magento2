@@ -11,7 +11,6 @@ namespace Magento\Config\Model\Config\Structure\Mapper\Attribute;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Inheritance implements \Magento\Config\Model\Config\Structure\MapperInterface
 {
@@ -20,7 +19,6 @@ class Inheritance implements \Magento\Config\Model\Config\Structure\MapperInterf
      *
      * @param array $data
      * @return array
-     * @since 2.0.0
      */
     public function map(array $data)
     {

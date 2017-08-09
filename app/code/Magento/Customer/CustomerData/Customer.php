@@ -11,26 +11,22 @@ use Magento\Customer\Helper\View;
 
 /**
  * Customer section
- * @since 2.0.0
  */
 class Customer implements SectionSourceInterface
 {
     /**
      * @var CurrentCustomer
-     * @since 2.0.0
      */
     protected $currentCustomer;
 
     /**
      * @var View
-     * @since 2.2.0
      */
     private $customerViewHelper;
 
     /**
      * @param CurrentCustomer $currentCustomer
      * @param View $customerViewHelper
-     * @since 2.0.0
      */
     public function __construct(
         CurrentCustomer $currentCustomer,
@@ -42,7 +38,6 @@ class Customer implements SectionSourceInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getSectionData()
     {

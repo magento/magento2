@@ -19,7 +19,6 @@ use Magento\Ui\Component\Modal;
 /**
  * Create Ship Bundle Items and Affect Bundle Product Selections fields
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
  */
 class BundlePanel extends AbstractModifier
 {
@@ -33,25 +32,21 @@ class BundlePanel extends AbstractModifier
 
     /**
      * @var UrlInterface
-     * @since 2.1.0
      */
     protected $urlBuilder;
 
     /**
      * @var ShipmentType
-     * @since 2.1.0
      */
     protected $shipmentType;
 
     /**
      * @var ArrayManager
-     * @since 2.1.0
      */
     protected $arrayManager;
 
     /**
      * @var LocatorInterface
-     * @since 2.1.0
      */
     protected $locator;
 
@@ -60,7 +55,6 @@ class BundlePanel extends AbstractModifier
      * @param UrlInterface $urlBuilder
      * @param ShipmentType $shipmentType
      * @param ArrayManager $arrayManager
-     * @since 2.1.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -77,7 +71,6 @@ class BundlePanel extends AbstractModifier
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -192,7 +185,6 @@ class BundlePanel extends AbstractModifier
      *
      * @param array $meta
      * @return array
-     * @since 2.2.0
      */
     private function removeFixedTierPrice(array $meta)
     {
@@ -229,7 +221,6 @@ class BundlePanel extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -241,7 +232,6 @@ class BundlePanel extends AbstractModifier
      *
      * @param array $meta
      * @return array
-     * @since 2.1.0
      */
     private function modifyShipmentType(array $meta)
     {
@@ -268,7 +258,6 @@ class BundlePanel extends AbstractModifier
      * Get bundle header structure
      *
      * @return array
-     * @since 2.1.0
      */
     protected function getBundleHeader()
     {
@@ -313,7 +302,6 @@ class BundlePanel extends AbstractModifier
      * Get Bundle Options structure
      *
      * @return array
-     * @since 2.1.0
      */
     protected function getBundleOptions()
     {
@@ -413,7 +401,6 @@ class BundlePanel extends AbstractModifier
      * @param string $columnName
      * @param int $sortOrder
      * @return array
-     * @since 2.1.0
      */
     protected function getHiddenColumn($columnName, $sortOrder)
     {
@@ -438,7 +425,6 @@ class BundlePanel extends AbstractModifier
      * Get configuration for the modal set: modal and trigger button
      *
      * @return array
-     * @since 2.1.0
      */
     protected function getModalSet()
     {
@@ -475,7 +461,6 @@ class BundlePanel extends AbstractModifier
      * Get configuration for option title
      *
      * @return array
-     * @since 2.1.0
      */
     protected function getTitleConfiguration()
     {
@@ -508,7 +493,6 @@ class BundlePanel extends AbstractModifier
      * Get option info
      *
      * @return array
-     * @since 2.1.0
      */
     protected function getOptionInfo()
     {
@@ -601,7 +585,6 @@ class BundlePanel extends AbstractModifier
      *
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.1.0
      */
     protected function getBundleSelections()
     {
@@ -739,7 +722,6 @@ class BundlePanel extends AbstractModifier
      * Get selection price value structure
      *
      * @return array
-     * @since 2.1.0
      */
     protected function getSelectionPriceValue()
     {
@@ -767,7 +749,6 @@ class BundlePanel extends AbstractModifier
      * Get selection price type structure
      *
      * @return array
-     * @since 2.1.0
      */
     protected function getSelectionPriceType()
     {
@@ -805,7 +786,6 @@ class BundlePanel extends AbstractModifier
      * Check that store is default
      *
      * @return bool
-     * @since 2.1.0
      */
     protected function isDefaultStore()
     {

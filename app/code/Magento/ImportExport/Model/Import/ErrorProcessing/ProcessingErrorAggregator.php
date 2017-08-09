@@ -8,61 +8,51 @@ namespace Magento\ImportExport\Model\Import\ErrorProcessing;
 
 /**
  * Import/Export Error Aggregator class
- * @since 2.0.0
  */
 class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $validationStrategy = self::VALIDATION_STRATEGY_STOP_ON_ERROR;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $allowedErrorsCount = 0;
 
     /**
      * @var ProcessingError[]
-     * @since 2.0.0
      */
     protected $items = [];
 
     /**
      * @var int[]
-     * @since 2.0.0
      */
     protected $invalidRows = [];
 
     /**
      * @var int[]
-     * @since 2.0.0
      */
     protected $skippedRows = [];
 
     /**
      * @var int[]
-     * @since 2.0.0
      */
     protected $errorStatistics = [];
 
     /**
      * @var string[]
-     * @since 2.0.0
      */
     protected $messageTemplate = [];
 
     /**
      * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory
-     * @since 2.0.0
      */
     protected $errorFactory;
 
     /**
      * @param \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory $errorFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory $errorFactory
@@ -78,7 +68,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      * @param string|null $errorMessage
      * @param string|null $errorDescription
      * @return $this
-     * @since 2.0.0
      */
     public function addError(
         $errorCode,
@@ -109,7 +98,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     /**
      * @param int $rowNumber
      * @return $this
-     * @since 2.0.0
      */
     public function addRowToSkip($rowNumber)
     {
@@ -124,7 +112,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     /**
      * @param int $rowNumber
      * @return $this
-     * @since 2.0.0
      */
     protected function processInvalidRow($rowNumber)
     {
@@ -142,7 +129,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      * @param string $code
      * @param string $template
      * @return $this
-     * @since 2.0.0
      */
     public function addErrorMessageTemplate($code, $template)
     {
@@ -154,7 +140,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     /**
      * @param int $rowNumber
      * @return bool
-     * @since 2.0.0
      */
     public function isRowInvalid($rowNumber)
     {
@@ -163,7 +148,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getInvalidRowsCount()
     {
@@ -175,7 +159,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      * @param int $allowedErrorCount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function initValidationStrategy($validationStrategy, $allowedErrorCount = 0)
     {
@@ -196,7 +179,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function hasToBeTerminated()
     {
@@ -205,7 +187,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isErrorLimitExceeded()
     {
@@ -223,7 +204,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function hasFatalExceptions()
     {
@@ -232,7 +212,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
 
     /**
      * @return ProcessingError[]
-     * @since 2.0.0
      */
     public function getAllErrors()
     {
@@ -251,7 +230,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     /**
      * @param string[] $codes
      * @return ProcessingError[]
-     * @since 2.0.0
      */
     public function getErrorsByCode(array $codes)
     {
@@ -268,7 +246,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     /**
      * @param int $rowNumber
      * @return ProcessingError[]
-     * @since 2.0.0
      */
     public function getErrorByRowNumber($rowNumber)
     {
@@ -285,7 +262,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      * @param array $excludedCodes
      * @param bool $replaceCodeWithMessage
      * @return array
-     * @since 2.0.0
      */
     public function getRowsGroupedByErrorCode(
         array $errorCode = [],
@@ -317,7 +293,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getAllowedErrorsCount()
     {
@@ -327,7 +302,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     /**
      * @param string[] $errorLevels
      * @return int
-     * @since 2.0.0
      */
     public function getErrorsCount(
         array $errorLevels = [
@@ -345,7 +319,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function clear()
     {
@@ -361,7 +334,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      * @param int $rowNum
      * @param string $errorCode
      * @return bool
-     * @since 2.0.0
      */
     protected function isErrorAlreadyAdded($rowNum, $errorCode)
     {
@@ -379,7 +351,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      * @param string $errorMessage
      * @param string $columnName
      * @return string
-     * @since 2.0.0
      */
     protected function getErrorMessage($errorCode, $errorMessage, $columnName)
     {
@@ -399,7 +370,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     /**
      * @param string $errorLevel
      * @return $this
-     * @since 2.0.0
      */
     protected function processErrorStatistics($errorLevel)
     {

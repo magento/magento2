@@ -18,31 +18,26 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Class \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor
  *
- * @since 2.1.0
  */
 class ShippingAssignmentProcessor
 {
     /**
      * @var ShippingAssignmentFactory
-     * @since 2.1.0
      */
     private $shippingAssignmentFactory;
 
     /**
      * @var ShippingProcessor
-     * @since 2.1.0
      */
     protected $shippingProcessor;
 
     /**
      * @var CartItemPersister
-     * @since 2.1.0
      */
     protected $cartItemPersister;
 
     /**
      * @var AddressRepositoryInterface
-     * @since 2.2.0
      */
     private $addressRepository;
 
@@ -51,7 +46,6 @@ class ShippingAssignmentProcessor
      * @param ShippingProcessor $shippingProcessor
      * @param CartItemPersister $cartItemPersister
      * @param AddressRepositoryInterface $addressRepository
-     * @since 2.1.0
      */
     public function __construct(
         ShippingAssignmentFactory $shippingAssignmentFactory,
@@ -71,7 +65,6 @@ class ShippingAssignmentProcessor
      *
      * @param CartInterface $quote
      * @return \Magento\Quote\Api\Data\ShippingAssignmentInterface
-     * @since 2.1.0
      */
     public function create(CartInterface $quote)
     {
@@ -93,7 +86,6 @@ class ShippingAssignmentProcessor
      * @param CartInterface $quote
      * @return void
      * @throws InputException|LocalizedException
-     * @since 2.1.0
      */
     public function save(CartInterface $quote, ShippingAssignmentInterface $shippingAssignment)
     {

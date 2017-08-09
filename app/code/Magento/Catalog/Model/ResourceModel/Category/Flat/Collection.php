@@ -17,7 +17,6 @@ use Magento\Store\Model\StoreManagerInterface;
  * Catalog category flat collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -25,7 +24,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Event prefix
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'catalog_category_collection';
 
@@ -33,7 +31,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Event object name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'category_collection';
 
@@ -41,7 +38,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -49,7 +45,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Store id of application
      *
      * @var integer
-     * @since 2.0.0
      */
     protected $_storeId;
 
@@ -61,7 +56,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param AbstractDb $resource
-     * @since 2.0.0
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -80,7 +74,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Collection initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -92,7 +85,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _initSelect()
     {
@@ -108,7 +100,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param array|int|string $categoryIds
      * @return $this
-     * @since 2.0.0
      */
     public function addIdFilter($categoryIds)
     {
@@ -136,7 +127,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Before collection load
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeLoad()
     {
@@ -148,7 +138,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * After collection load
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -161,7 +150,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param integer $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreId($storeId)
     {
@@ -174,7 +162,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * If store id is not set yet, return store of application
      *
      * @return integer
-     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -189,7 +176,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $parent
      * @return $this
-     * @since 2.0.0
      */
     public function addParentPathFilter($parent)
     {
@@ -201,7 +187,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add store filter
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addStoreFilter()
     {
@@ -214,7 +199,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $sorted
      * @return $this
-     * @since 2.0.0
      */
     public function addSortedField($sorted)
     {
@@ -228,7 +212,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function addIsActiveFilter()
     {
@@ -244,7 +227,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add name field to result
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addNameToResult()
     {
@@ -257,7 +239,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param array|string $attribute
      * @return $this
-     * @since 2.0.0
      */
     public function addAttributeToSelect($attribute = '*')
     {
@@ -297,7 +278,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Retrieve resource instance
      *
      * @return \Magento\Catalog\Model\ResourceModel\Category\Flat
-     * @since 2.0.0
      */
     public function getResource()
     {
@@ -310,7 +290,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $attribute
      * @param string $dir
      * @return $this
-     * @since 2.0.0
      */
     public function addAttributeToSort($attribute, $dir = self::SORT_ORDER_ASC)
     {
@@ -327,7 +306,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $attribute
      * @param null|string|array $condition
      * @return $this
-     * @since 2.0.0
      */
     public function addAttributeToFilter($attribute, $condition = null)
     {
@@ -340,7 +318,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function addUrlRewriteToResult()
     {
@@ -359,7 +336,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * @param string|array $paths
      * @return $this
-     * @since 2.0.0
      */
     public function addPathsFilter($paths)
     {
@@ -382,7 +358,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * @param string $level
      * @return $this
-     * @since 2.0.0
      */
     public function addLevelFilter($level)
     {
@@ -393,7 +368,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * @param string $field
      * @return $this
-     * @since 2.0.0
      */
     public function addOrderField($field)
     {
@@ -407,7 +381,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param integer $pageNum
      * @param integer $pageSize
      * @return $this
-     * @since 2.0.0
      */
     public function setPage($pageNum, $pageSize)
     {

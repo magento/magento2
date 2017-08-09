@@ -10,7 +10,6 @@ use Magento\Framework\View;
 
 /**
  * Class BuilderFactory
- * @since 2.0.0
  */
 class BuilderFactory
 {
@@ -21,12 +20,7 @@ class BuilderFactory
     const TYPE_PAGE   = 'page';
     /**#@-*/
 
-    /**
-     * Map of types which are references to classes
-     *
-     * @var array
-     * @since 2.0.0
-     */
+    /**#@-*/
     protected $typeMap = [
         self::TYPE_LAYOUT => \Magento\Framework\View\Layout\Builder::class,
         self::TYPE_PAGE   => \Magento\Framework\View\Page\Builder::class,
@@ -34,7 +28,6 @@ class BuilderFactory
 
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -43,7 +36,6 @@ class BuilderFactory
      *
      * @param ObjectManagerInterface $objectManager
      * @param array $typeMap
-     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -58,7 +50,6 @@ class BuilderFactory
      *
      * @param array $typeMap
      * @return void
-     * @since 2.0.0
      */
     protected function mergeTypes(array $typeMap)
     {
@@ -76,7 +67,6 @@ class BuilderFactory
      * @param array $arguments
      * @throws \InvalidArgumentException
      * @return BuilderInterface
-     * @since 2.0.0
      */
     public function create($type, array $arguments)
     {

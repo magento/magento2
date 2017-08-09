@@ -9,7 +9,7 @@ namespace Magento\Bundle\Model\Product;
 /**
  * Abstract class for testing bundle prices
  */
-abstract class BundlePriceAbstract extends \PHPUnit_Framework_TestCase
+abstract class BundlePriceAbstract extends \PHPUnit\Framework\TestCase
 {
     /** Fixed price type for product custom option */
     const CUSTOM_OPTION_PRICE_TYPE_FIXED = 'fixed';

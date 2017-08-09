@@ -7,7 +7,6 @@ namespace Magento\AdminNotification\Model\System\Message\Media\Synchronization;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Success extends \Magento\AdminNotification\Model\System\Message\Media\AbstractSynchronization
 {
@@ -15,7 +14,6 @@ class Success extends \Magento\AdminNotification\Model\System\Message\Media\Abst
      * Message identity
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_identity = 'MEDIA_SYNCHRONIZATION_SUCCESS';
 
@@ -23,7 +21,6 @@ class Success extends \Magento\AdminNotification\Model\System\Message\Media\Abst
      * Check whether
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _shouldBeDisplayed()
     {
@@ -37,7 +34,6 @@ class Success extends \Magento\AdminNotification\Model\System\Message\Media\Abst
      * Retrieve message text
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getText()
     {

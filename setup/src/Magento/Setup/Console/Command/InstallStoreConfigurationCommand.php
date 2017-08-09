@@ -23,13 +23,11 @@ use Magento\Framework\Validator\Url as UrlValidator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class InstallStoreConfigurationCommand extends AbstractSetupCommand
 {
     /**
      * @var InstallerFactory
-     * @since 2.0.0
      */
     private $installerFactory;
 
@@ -37,7 +35,6 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
      * Deployment configuration
      *
      * @var DeploymentConfig
-     * @since 2.0.0
      */
     private $deploymentConfig;
 
@@ -46,31 +43,26 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
      *
      * @var ObjectManagerInterface
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var LocaleValidator
-     * @since 2.2.0
      */
     private $localeValidator;
 
     /**
      * @var TimezoneValidator
-     * @since 2.2.0
      */
     private $timezoneValidator;
 
     /**
      * @var CurrencyValidator
-     * @since 2.2.0
      */
     private $currencyValidator;
 
     /**
      * @var UrlValidator
-     * @since 2.2.0
      */
     private $urlValidator;
 
@@ -84,7 +76,6 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
      * @param TimezoneValidator $timezoneValidator,
      * @param CurrencyValidator $currencyValidator,
      * @param UrlValidator $urlValidator
-     * @since 2.0.0
      */
     public function __construct(
         InstallerFactory $installerFactory,
@@ -107,7 +98,6 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -119,7 +109,6 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -144,7 +133,6 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
      * Get list of options for the command
      *
      * @return InputOption[]
-     * @since 2.0.0
      */
     public function getOptionsList()
     {
@@ -223,7 +211,6 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
      * @return string[]
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function validate(InputInterface $input)
     {
@@ -309,7 +296,6 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
      * @param string $value
      * @param string $key
      * @return string
-     * @since 2.0.0
      */
     private function validateBinaryValue($value, $key)
     {
@@ -327,7 +313,6 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
      * @param string  $code
      * @param string  $type
      * @return string
-     * @since 2.0.0
      */
     private function validateCodes($lists, $code, $type)
     {
@@ -346,7 +331,6 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
      * @param string $option
      * @param array $allowedSchemes
      * @return string
-     * @since 2.2.0
      */
     private function validateUrl($url, $option, array $allowedSchemes)
     {

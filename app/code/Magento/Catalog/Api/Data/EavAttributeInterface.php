@@ -8,7 +8,6 @@ namespace Magento\Catalog\Api\Data;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
 {
@@ -56,7 +55,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      * Enable WYSIWYG flag
      *
      * @return bool|null
-     * @since 2.0.0
      */
     public function getIsWysiwygEnabled();
 
@@ -65,7 +63,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param bool $isWysiwygEnabled
      * @return $this
-     * @since 2.0.0
      */
     public function setIsWysiwygEnabled($isWysiwygEnabled);
 
@@ -73,7 +70,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      * Whether the HTML tags are allowed on the frontend
      *
      * @return bool|null
-     * @since 2.0.0
      */
     public function getIsHtmlAllowedOnFront();
 
@@ -82,7 +78,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param bool $isHtmlAllowedOnFront
      * @return $this
-     * @since 2.0.0
      */
     public function setIsHtmlAllowedOnFront($isHtmlAllowedOnFront);
 
@@ -90,7 +85,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      * Whether it is used for sorting in product listing
      *
      * @return bool|null
-     * @since 2.0.0
      */
     public function getUsedForSortBy();
 
@@ -99,7 +93,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param bool $usedForSortBy
      * @return $this
-     * @since 2.0.0
      */
     public function setUsedForSortBy($usedForSortBy);
 
@@ -107,7 +100,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      * Whether it used in layered navigation
      *
      * @return bool|null
-     * @since 2.0.0
      */
     public function getIsFilterable();
 
@@ -116,7 +108,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param bool $isFilterable
      * @return $this
-     * @since 2.0.0
      */
     public function setIsFilterable($isFilterable);
 
@@ -124,7 +115,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      * Whether it is used in search results layered navigation
      *
      * @return bool|null
-     * @since 2.0.0
      */
     public function getIsFilterableInSearch();
 
@@ -132,7 +122,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      * Whether it is used in catalog product grid
      *
      * @return bool|null
-     * @since 2.0.0
      */
     public function getIsUsedInGrid();
 
@@ -140,7 +129,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      * Whether it is visible in catalog product grid
      *
      * @return bool|null
-     * @since 2.0.0
      */
     public function getIsVisibleInGrid();
 
@@ -148,7 +136,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      * Whether it is filterable in catalog product grid
      *
      * @return bool|null
-     * @since 2.0.0
      */
     public function getIsFilterableInGrid();
 
@@ -157,7 +144,7 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param bool|null $isUsedInGrid
      * @return $this
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function setIsUsedInGrid($isUsedInGrid);
 
@@ -166,7 +153,7 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param bool|null $isVisibleInGrid
      * @return $this
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function setIsVisibleInGrid($isVisibleInGrid);
 
@@ -175,7 +162,7 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param bool|null $isFilterableInGrid
      * @return $this
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function setIsFilterableInGrid($isFilterableInGrid);
 
@@ -184,7 +171,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param bool $isFilterableInSearch
      * @return $this
-     * @since 2.0.0
      */
     public function setIsFilterableInSearch($isFilterableInSearch);
 
@@ -192,7 +178,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      * Get position
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getPosition();
 
@@ -201,7 +186,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param int $position
      * @return $this
-     * @since 2.0.0
      */
     public function setPosition($position);
 
@@ -218,7 +202,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *  - 'downloadable'
      *
      * @return string[]|null
-     * @since 2.0.0
      */
     public function getApplyTo();
 
@@ -227,7 +210,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param string[]|string $applyTo
      * @return $this
-     * @since 2.0.0
      */
     public function setApplyTo($applyTo);
 
@@ -235,7 +217,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      * Whether the attribute can be used in Quick Search
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getIsSearchable();
 
@@ -244,7 +225,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param string $isSearchable
      * @return $this
-     * @since 2.0.0
      */
     public function setIsSearchable($isSearchable);
 
@@ -252,7 +232,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      * Whether the attribute can be used in Advanced Search
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getIsVisibleInAdvancedSearch();
 
@@ -261,7 +240,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param string $isVisibleInAdvancedSearch
      * @return $this
-     * @since 2.0.0
      */
     public function setIsVisibleInAdvancedSearch($isVisibleInAdvancedSearch);
 
@@ -269,7 +247,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      * Whether the attribute can be compared on the frontend
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getIsComparable();
 
@@ -278,7 +255,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param string $isComparable
      * @return $this
-     * @since 2.0.0
      */
     public function setIsComparable($isComparable);
 
@@ -286,7 +262,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      * Whether the attribute can be used for promo rules
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getIsUsedForPromoRules();
 
@@ -295,7 +270,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param string $isUsedForPromoRules
      * @return $this
-     * @since 2.0.0
      */
     public function setIsUsedForPromoRules($isUsedForPromoRules);
 
@@ -303,7 +277,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      * Whether the attribute is visible on the frontend
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getIsVisibleOnFront();
 
@@ -312,7 +285,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param string $isVisibleOnFront
      * @return $this
-     * @since 2.0.0
      */
     public function setIsVisibleOnFront($isVisibleOnFront);
 
@@ -320,7 +292,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      * Whether the attribute can be used in product listing
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getUsedInProductListing();
 
@@ -329,7 +300,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param string $usedInProductListing
      * @return $this
-     * @since 2.0.0
      */
     public function setUsedInProductListing($usedInProductListing);
 
@@ -337,7 +307,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      * Whether attribute is visible on frontend.
      *
      * @return bool|null
-     * @since 2.0.0
      */
     public function getIsVisible();
 
@@ -346,7 +315,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param bool $isVisible
      * @return $this
-     * @since 2.0.0
      */
     public function setIsVisible($isVisible);
 
@@ -354,7 +322,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      * Retrieve attribute scope
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getScope();
 
@@ -363,13 +330,11 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param string $scope
      * @return $this
-     * @since 2.0.0
      */
     public function setScope($scope);
 
     /**
      * @return \Magento\Catalog\Api\Data\EavAttributeExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 }

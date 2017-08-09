@@ -7,7 +7,6 @@ namespace Magento\Store\Model;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface ScopeInterface
 {

@@ -45,26 +45,22 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method float getRowTotal()
  * @method float getPriceInclTax()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface
 {
     /**
      * @var Item|null
-     * @since 2.0.0
      */
     protected $_parentItem = null;
 
     /**
      * @var \Magento\Quote\Model\Quote\Item\AbstractItem[]
-     * @since 2.0.0
      */
     protected $_children = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_messages = [];
 
@@ -72,19 +68,16 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * List of custom options
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_optionsByCode;
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
@@ -98,7 +91,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -128,7 +120,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Retrieve Quote instance
      *
      * @return \Magento\Quote\Model\Quote
-     * @since 2.0.0
      */
     abstract public function getQuote();
 
@@ -136,7 +127,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Retrieve address model
      *
      * @return \Magento\Quote\Model\Quote\Address
-     * @since 2.0.0
      */
     abstract public function getAddress();
 
@@ -144,7 +134,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Retrieve product model object associated with item
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -174,7 +163,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Return null, as quote item needs no additional configuration.
      *
      * @return null|\Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getFileDownloadParams()
     {
@@ -185,7 +173,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Specify parent item id before saving data
      *
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -201,7 +188,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      *
      * @param  Item $parentItem
      * @return $this
-     * @since 2.0.0
      */
     public function setParentItem($parentItem)
     {
@@ -216,7 +202,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Get parent item
      *
      * @return Item
-     * @since 2.0.0
      */
     public function getParentItem()
     {
@@ -227,7 +212,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Get child items
      *
      * @return \Magento\Quote\Model\Quote\Item\AbstractItem[]
-     * @since 2.0.0
      */
     public function getChildren()
     {
@@ -239,7 +223,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      *
      * @param  \Magento\Quote\Model\Quote\Item\AbstractItem $child
      * @return $this
-     * @since 2.0.0
      */
     public function addChild($child)
     {
@@ -253,7 +236,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      *
      * @param  mixed $messages
      * @return $this
-     * @since 2.0.0
      */
     public function setMessage($messages)
     {
@@ -274,7 +256,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      *
      * @param   string $message
      * @return $this
-     * @since 2.0.0
      */
     public function addMessage($message)
     {
@@ -287,7 +268,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      *
      * @param   bool $string flag for converting messages to string
      * @return  array|string
-     * @since 2.0.0
      */
     public function getMessage($string = true)
     {
@@ -302,7 +282,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      *
      * @param string $text
      * @return $this
-     * @since 2.0.0
      */
     public function removeMessageByText($text)
     {
@@ -318,7 +297,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Clears all messages
      *
      * @return $this
-     * @since 2.0.0
      */
     public function clearMessage()
     {
@@ -332,7 +310,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Retrieve store model object
      *
      * @return \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     public function getStore()
     {
@@ -343,7 +320,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Checking item data
      *
      * @return $this
-     * @since 2.0.0
      */
     public function checkData()
     {
@@ -403,7 +379,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Get original (not related with parent item) item quantity
      *
      * @return  int|float
-     * @since 2.0.0
      */
     public function getQty()
     {
@@ -414,7 +389,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Get total item quantity (include parent item relation)
      *
      * @return  int|float
-     * @since 2.0.0
      */
     public function getTotalQty()
     {
@@ -428,7 +402,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Calculate item row total price
      *
      * @return $this
-     * @since 2.0.0
      */
     public function calcRowTotal()
     {
@@ -447,7 +420,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * This method get custom price (if it is defined) or original product final price
      *
      * @return float
-     * @since 2.0.0
      */
     public function getCalculationPrice()
     {
@@ -468,7 +440,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * This method get original custom price applied before tax calculation
      *
      * @return float
-     * @since 2.0.0
      */
     public function getCalculationPriceOriginal()
     {
@@ -488,7 +459,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Get calculation price used for quote calculation in base currency.
      *
      * @return float
-     * @since 2.0.0
      */
     public function getBaseCalculationPrice()
     {
@@ -511,7 +481,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Get original calculation price used for quote calculation in base currency.
      *
      * @return float
-     * @since 2.0.0
      */
     public function getBaseCalculationPriceOriginal()
     {
@@ -535,7 +504,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Original price value is in quote selected currency
      *
      * @return float
-     * @since 2.0.0
      */
     public function getOriginalPrice()
     {
@@ -552,7 +520,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      *
      * @param   float $price
      * @return  \Magento\Quote\Model\Quote\Item\AbstractItem
-     * @since 2.0.0
      */
     public function setOriginalPrice($price)
     {
@@ -563,7 +530,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Get Original item price (got from product) in base website currency
      *
      * @return float
-     * @since 2.0.0
      */
     public function getBaseOriginalPrice()
     {
@@ -575,7 +541,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      *
      * @param   float $value
      * @return  \Magento\Quote\Model\Quote\Item\AbstractItem
-     * @since 2.0.0
      */
     public function setCustomPrice($value)
     {
@@ -588,7 +553,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Get item price. Item price currency is website base currency.
      *
      * @return float
-     * @since 2.0.0
      */
     public function getPrice()
     {
@@ -600,7 +564,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      *
      * @param   float $value
      * @return  $this
-     * @since 2.0.0
      */
     public function setPrice($value)
     {
@@ -612,7 +575,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     /**
      * Get item price converted to quote currency
      * @return float
-     * @since 2.0.0
      */
     public function getConvertedPrice()
     {
@@ -628,7 +590,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Set new value for converted price
      * @param float $value
      * @return $this
-     * @since 2.0.0
      */
     public function setConvertedPrice($value)
     {
@@ -641,7 +602,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Clone quote item
      *
      * @return $this
-     * @since 2.0.0
      */
     public function __clone()
     {
@@ -657,7 +617,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * when we have parent quote item and its children
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isChildrenCalculated()
     {
@@ -680,7 +639,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * or each parent product item can be shipped only like one item
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isShipSeparately()
     {
@@ -703,7 +661,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * amount of this item.
      *
      * @return float
-     * @since 2.0.0
      */
     public function getTotalDiscountAmount()
     {

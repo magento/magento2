@@ -12,7 +12,6 @@ use Magento\Framework\Phrase;
 /**
  * Class \Magento\Framework\Indexer\Config\Converter
  *
- * @since 2.0.0
  */
 class Converter implements ConverterInterface
 {
@@ -22,7 +21,6 @@ class Converter implements ConverterInterface
      * @param \DOMDocument $source
      * @return array
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function convert($source)
     {
@@ -66,7 +64,6 @@ class Converter implements ConverterInterface
      * @param string $attributeName
      * @param mixed $default
      * @return null|string
-     * @since 2.0.0
      */
     protected function getAttributeValue(\DOMNode $input, $attributeName, $default = null)
     {
@@ -80,7 +77,6 @@ class Converter implements ConverterInterface
      * @param \DOMElement $childNode
      * @param array $data
      * @return array
-     * @since 2.0.0
      */
     protected function convertChild(\DOMElement $childNode, $data)
     {
@@ -115,7 +111,6 @@ class Converter implements ConverterInterface
      * @param array $data
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function convertFieldset(\DOMElement $node, $data)
     {
@@ -204,7 +199,6 @@ class Converter implements ConverterInterface
      * @param string $field
      * @param array $data
      * @return void
-     * @since 2.0.0
      */
     protected function addVirtualField($fieldset, $field, $data)
     {
@@ -222,7 +216,6 @@ class Converter implements ConverterInterface
      * @param \DOMElement $node
      * @param array $data
      * @return array
-     * @since 2.0.0
      */
     protected function convertField(\DOMElement $node, $data)
     {
@@ -251,8 +244,7 @@ class Converter implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return string
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 100.2.0
      */
     protected function getTranslatedNodeValue(\DOMNode $node)
     {
@@ -268,7 +260,6 @@ class Converter implements ConverterInterface
      *
      * @param array $data
      * @return array
-     * @since 2.0.0
      */
     protected function sorting($data)
     {

@@ -14,7 +14,6 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
  * Class LockerProcess
- * @since 2.0.0
  */
 class LockerProcess implements LockerProcessInterface
 {
@@ -30,25 +29,21 @@ class LockerProcess implements LockerProcessInterface
 
     /**
      * @var Filesystem
-     * @since 2.0.0
      */
     private $filesystem;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $lockFilePath;
 
     /**
      * @var WriteInterface
-     * @since 2.0.0
      */
     private $tmpDirectory;
 
     /**
      * @var State
-     * @since 2.2.0
      */
     private $state;
 
@@ -56,7 +51,6 @@ class LockerProcess implements LockerProcessInterface
      * Constructor
      *
      * @param Filesystem $filesystem
-     * @since 2.0.0
      */
     public function __construct(Filesystem $filesystem)
     {
@@ -65,7 +59,6 @@ class LockerProcess implements LockerProcessInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function lockProcess($lockName)
     {
@@ -86,7 +79,6 @@ class LockerProcess implements LockerProcessInterface
     /**
      * @inheritdoc
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function unlockProcess()
     {
@@ -101,7 +93,6 @@ class LockerProcess implements LockerProcessInterface
      * Check whether generation process has already locked
      *
      * @return bool
-     * @since 2.0.0
      */
     private function isProcessLocked()
     {
@@ -128,7 +119,6 @@ class LockerProcess implements LockerProcessInterface
      *
      * @param string $name
      * @return string
-     * @since 2.0.0
      */
     private function getFilePath($name)
     {
@@ -137,8 +127,7 @@ class LockerProcess implements LockerProcessInterface
 
     /**
      * @return State
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.1.1
      */
     private function getState()
     {

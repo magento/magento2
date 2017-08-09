@@ -15,7 +15,6 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Class AbstractTypeHandler
- * @since 2.0.0
  */
 abstract class AbstractTypeHandler
 {
@@ -25,32 +24,27 @@ abstract class AbstractTypeHandler
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $deletedItems = [];
 
     /**
      * @var Data
-     * @since 2.0.0
      */
     protected $jsonHelper;
 
     /**
      * @var File
-     * @since 2.0.0
      */
     protected $downloadableFile;
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @param Data $jsonHelper
      * @param File $downloadableFile
-     * @since 2.0.0
      */
     public function __construct(
         Data $jsonHelper,
@@ -62,13 +56,11 @@ abstract class AbstractTypeHandler
 
     /**
      * @return string
-     * @since 2.0.0
      */
     abstract public function getDataKey();
 
     /**
      * @return string
-     * @since 2.0.0
      */
     abstract public function getIdentifierKey();
 
@@ -76,7 +68,6 @@ abstract class AbstractTypeHandler
      * @param Product $product
      * @param array $data
      * @return $this
-     * @since 2.0.0
      */
     public function save(Product $product, array $data)
     {
@@ -96,7 +87,6 @@ abstract class AbstractTypeHandler
 
     /**
      * @return ComponentInterface
-     * @since 2.0.0
      */
     abstract protected function createItem();
 
@@ -105,7 +95,6 @@ abstract class AbstractTypeHandler
      * @param array $data
      * @param Product $product
      * @return void
-     * @since 2.0.0
      */
     abstract protected function setDataToModel(
         ComponentInterface $model,
@@ -117,14 +106,12 @@ abstract class AbstractTypeHandler
      * @param ComponentInterface $model
      * @param Product $product
      * @return void
-     * @since 2.0.0
      */
     abstract protected function linkToProduct(ComponentInterface $model, Product $product);
 
     /**
      * @param array $item
      * @return array
-     * @since 2.0.0
      */
     protected function prepareItem(array $item)
     {
@@ -137,14 +124,12 @@ abstract class AbstractTypeHandler
 
     /**
      * @return void
-     * @since 2.0.0
      */
     abstract protected function processDelete();
 
     /**
      * @param array $item
      * @return bool
-     * @since 2.0.0
      */
     protected function isDelete(array $item)
     {
@@ -154,7 +139,6 @@ abstract class AbstractTypeHandler
     /**
      * @param array $item
      * @return array
-     * @since 2.0.0
      */
     protected function getFiles(array $item)
     {
@@ -169,7 +153,6 @@ abstract class AbstractTypeHandler
      * @param ComponentInterface $model
      * @param array $files
      * @return void
-     * @since 2.0.0
      */
     abstract protected function setFiles(ComponentInterface $model, array $files);
 
@@ -177,7 +160,6 @@ abstract class AbstractTypeHandler
      * @param Product $product
      * @param array $item
      * @return array
-     * @since 2.0.0
      */
     protected function saveItem(Product $product, array $item)
     {
@@ -195,7 +177,6 @@ abstract class AbstractTypeHandler
     /**
      * @param array $item
      * @return void
-     * @since 2.0.0
      */
     protected function addToDeleteQueue(array $item)
     {
@@ -208,7 +189,6 @@ abstract class AbstractTypeHandler
      * Clear type state
      *
      * @return void
-     * @since 2.0.0
      */
     protected function clear()
     {
@@ -218,7 +198,6 @@ abstract class AbstractTypeHandler
     /**
      * Get MetadataPool instance
      * @return MetadataPool
-     * @since 2.1.0
      */
     protected function getMetadataPool()
     {

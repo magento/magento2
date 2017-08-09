@@ -23,7 +23,6 @@ use Magento\Framework\Api\DataObjectHelper;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @since 2.0.0
  */
 abstract class Index extends \Magento\Backend\App\Action
 {
@@ -36,8 +35,7 @@ abstract class Index extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Framework\Validator
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 100.2.0
      */
     protected $_validator;
 
@@ -45,151 +43,127 @@ abstract class Index extends \Magento\Backend\App\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
-     * @since 2.0.0
      */
     protected $_fileFactory;
 
     /**
      * @var \Magento\Customer\Model\CustomerFactory
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 100.2.0
      */
     protected $_customerFactory = null;
 
     /**
      * @var \Magento\Customer\Model\AddressFactory
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 100.2.0
      */
     protected $_addressFactory = null;
 
     /**
      * @var \Magento\Newsletter\Model\SubscriberFactory
-     * @since 2.0.0
      */
     protected $_subscriberFactory;
 
     /**
      * @var \Magento\Customer\Model\Metadata\FormFactory
-     * @since 2.0.0
      */
     protected $_formFactory;
 
     /**
      * @var CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $_customerRepository;
 
     /**
      * @var  \Magento\Customer\Helper\View
-     * @since 2.0.0
      */
     protected $_viewHelper;
 
     /**
      * @var \Magento\Framework\Math\Random
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 100.2.0
      */
     protected $_random;
 
     /**
      * @var ObjectFactory
-     * @since 2.0.0
      */
     protected $_objectFactory;
 
     /**
      * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 100.2.0
      */
     protected $_extensibleDataObjectConverter;
 
     /**
      * @var Mapper
-     * @since 2.0.0
      */
     protected $addressMapper;
 
     /**
      * @var AccountManagementInterface
-     * @since 2.0.0
      */
     protected $customerAccountManagement;
 
     /**
      * @var AddressRepositoryInterface
-     * @since 2.0.0
      */
     protected $addressRepository;
 
     /**
      * @var CustomerInterfaceFactory
-     * @since 2.0.0
      */
     protected $customerDataFactory;
 
     /**
      * @var AddressInterfaceFactory
-     * @since 2.0.0
      */
     protected $addressDataFactory;
 
     /**
      * @var \Magento\Customer\Model\Customer\Mapper
-     * @since 2.0.0
      */
     protected $customerMapper;
 
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 100.2.0
      */
     protected $dataObjectProcessor;
 
     /**
      * @var DataObjectHelper
-     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 100.2.0
      */
     protected $layoutFactory;
 
     /**
      * @var \Magento\Framework\View\Result\LayoutFactory
-     * @since 2.0.0
      */
     protected $resultLayoutFactory;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
-     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
@@ -222,7 +196,6 @@ abstract class Index extends \Magento\Backend\App\Action
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -282,7 +255,6 @@ abstract class Index extends \Magento\Backend\App\Action
      * Customer initialization
      *
      * @return string customer id
-     * @since 2.0.0
      */
     protected function initCurrentCustomer()
     {
@@ -300,7 +272,6 @@ abstract class Index extends \Magento\Backend\App\Action
      *
      * @param \Magento\Backend\Model\View\Result\Page $resultPage
      * @return void
-     * @since 2.0.0
      */
     protected function prepareDefaultCustomerTitle(\Magento\Backend\Model\View\Result\Page $resultPage)
     {
@@ -314,7 +285,6 @@ abstract class Index extends \Magento\Backend\App\Action
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     protected function _addSessionErrorMessages($messages)
     {
@@ -336,8 +306,7 @@ abstract class Index extends \Magento\Backend\App\Action
      * @param callable $singleAction A single action callable that takes a customer ID as input
      * @param int[] $customerIds Array of customer Ids to perform the action upon
      * @return int Number of customers successfully acted upon
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 100.2.0
      */
     protected function actUponMultipleCustomers(callable $singleAction, $customerIds)
     {

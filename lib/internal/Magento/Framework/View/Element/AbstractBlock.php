@@ -20,7 +20,6 @@ use Magento\Framework\DataObject\IdentityInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @since 2.0.0
  */
 abstract class AbstractBlock extends \Magento\Framework\DataObject implements BlockInterface
 {
@@ -38,7 +37,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Design
      *
      * @var \Magento\Framework\View\DesignInterface
-     * @since 2.0.0
      */
     protected $_design;
 
@@ -46,7 +44,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Session
      *
      * @var \Magento\Framework\Session\SessionManagerInterface
-     * @since 2.0.0
      */
     protected $_session;
 
@@ -54,7 +51,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * SID Resolver
      *
      * @var \Magento\Framework\Session\SidResolverInterface
-     * @since 2.0.0
      */
     protected $_sidResolver;
 
@@ -62,7 +58,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Block name in layout
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_nameInLayout;
 
@@ -70,7 +65,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Parent layout of the block
      *
      * @var \Magento\Framework\View\LayoutInterface
-     * @since 2.0.0
      */
     protected $_layout;
 
@@ -78,7 +72,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * JS layout configuration
      *
      * @var array
-     * @since 2.0.0
      */
     protected $jsLayout = [];
 
@@ -86,7 +79,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Request
      *
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $_request;
 
@@ -94,7 +86,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Url Builder
      *
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $_urlBuilder;
 
@@ -103,7 +94,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager;
 
@@ -111,7 +101,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Application front controller
      *
      * @var \Magento\Framework\App\FrontController
-     * @since 2.0.0
      */
     protected $_frontController;
 
@@ -119,7 +108,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Asset service
      *
      * @var \Magento\Framework\View\Asset\Repository
-     * @since 2.0.0
      */
     protected $_assetRepo;
 
@@ -127,7 +115,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * View config model
      *
      * @var \Magento\Framework\View\ConfigInterface
-     * @since 2.0.0
      */
     protected $_viewConfig;
 
@@ -135,7 +122,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Cache State
      *
      * @var \Magento\Framework\App\Cache\StateInterface
-     * @since 2.0.0
      */
     protected $_cacheState;
 
@@ -143,7 +129,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Logger
      *
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $_logger;
 
@@ -151,7 +136,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Escaper
      *
      * @var \Magento\Framework\Escaper
-     * @since 2.0.0
      */
     protected $_escaper;
 
@@ -159,19 +143,16 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Filter manager
      *
      * @var \Magento\Framework\Filter\FilterManager
-     * @since 2.0.0
      */
     protected $filterManager;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $_localeDate;
 
     /**
      * @var \Magento\Framework\Translate\Inline\StateInterface
-     * @since 2.0.0
      */
     protected $inlineTranslation;
 
@@ -180,19 +161,17 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * If it isn't defined then application considers it as false.
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isScopePrivate = false;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Framework\App\CacheInterface
-     * @since 2.2.0
+     * @since 100.2.0
      */
     protected $_cache;
 
@@ -201,7 +180,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param \Magento\Framework\View\Element\Context $context
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\View\Element\Context $context, array $data = [])
     {
@@ -234,7 +212,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Retrieve serialized JS layout configuration ready to use in template
      *
      * @return string
-     * @since 2.0.0
      */
     public function getJsLayout()
     {
@@ -245,7 +222,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Get request
      *
      * @return \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     public function getRequest()
     {
@@ -258,7 +234,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Please override this one instead of overriding real __construct constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -271,7 +246,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Retrieve parent block
      *
      * @return \Magento\Framework\View\Element\AbstractBlock|bool
-     * @since 2.0.0
      */
     public function getParentBlock()
     {
@@ -291,7 +265,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param   \Magento\Framework\View\LayoutInterface $layout
      * @return  $this
-     * @since 2.0.0
      */
     public function setLayout(\Magento\Framework\View\LayoutInterface $layout)
     {
@@ -306,7 +279,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * You can redefine this method in child classes for changing layout
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -318,7 +290,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @return \Magento\Framework\View\LayoutInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getLayout()
     {
@@ -335,7 +306,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setNameInLayout($name)
     {
@@ -353,7 +323,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Retrieves sorted list of child names
      *
      * @return array
-     * @since 2.0.0
      */
     public function getChildNames()
     {
@@ -372,7 +341,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param   string $name
      * @param   mixed $value
      * @return  $this
-     * @since 2.0.0
      */
     public function setAttribute($name, $value = null)
     {
@@ -385,7 +353,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param   string $alias
      * @param   \Magento\Framework\View\Element\AbstractBlock|string $block
      * @return  $this
-     * @since 2.0.0
      */
     public function setChild($alias, $block)
     {
@@ -413,7 +380,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string $block
      * @param array $data
      * @return $this new block
-     * @since 2.0.0
      */
     public function addChild($alias, $block, $data = [])
     {
@@ -431,7 +397,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param  string $alias
      * @return $this
-     * @since 2.0.0
      */
     public function unsetChild($alias)
     {
@@ -461,7 +426,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param mixed $result
      * @param array $params
      * @return $this
-     * @since 2.0.0
      */
     public function unsetCallChild($alias, $callback, $result, $params)
     {
@@ -488,7 +452,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Unset all children blocks
      *
      * @return $this
-     * @since 2.0.0
      */
     public function unsetChildren()
     {
@@ -509,7 +472,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $alias
      * @return \Magento\Framework\View\Element\AbstractBlock|bool
-     * @since 2.0.0
      */
     public function getChildBlock($alias)
     {
@@ -530,7 +492,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param   string $alias
      * @param   boolean $useCache
      * @return  string
-     * @since 2.0.0
      */
     public function getChildHtml($alias = '', $useCache = true)
     {
@@ -561,7 +522,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string $childChildAlias
      * @param bool $useCache
      * @return string
-     * @since 2.0.0
      */
     public function getChildChildHtml($alias, $childChildAlias = '', $useCache = true)
     {
@@ -590,7 +550,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param   string $name
      * @return  string
-     * @since 2.0.0
      */
     public function getBlockHtml($name)
     {
@@ -611,7 +570,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param bool $after
      * @param string $alias
      * @return $this|bool
-     * @since 2.0.0
      */
     public function insert($element, $siblingName = 0, $after = true, $alias = '')
     {
@@ -635,7 +593,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param \Magento\Framework\View\Element\AbstractBlock|string $element
      * @param string $alias
      * @return $this
-     * @since 2.0.0
      */
     public function append($element, $alias = '')
     {
@@ -651,7 +608,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $groupName
      * @return array
-     * @since 2.0.0
      */
     public function getGroupChildNames($groupName)
     {
@@ -664,7 +620,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string $alias
      * @param string $key
      * @return mixed
-     * @since 2.0.0
      */
     public function getChildData($alias, $key = '')
     {
@@ -679,7 +634,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Before rendering html, but after trying to load cache
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -692,7 +646,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * This method should not be overridden. You can override _toHtml() method in descendants if needed.
      *
      * @return string
-     * @since 2.0.0
      */
     public function toHtml()
     {
@@ -735,7 +688,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param   string $html
      * @return  string
-     * @since 2.0.0
      */
     protected function _afterToHtml($html)
     {
@@ -746,7 +698,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Override this method in descendants to produce html
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -766,7 +717,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string|null $arg4
      * @param string|null $arg5
      * @return string
-     * @since 2.0.0
      */
     public function getUiId($arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null)
     {
@@ -784,7 +734,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string|null $arg4
      * @param string|null $arg5
      * @return string
-     * @since 2.0.0
      */
     public function getJsId($arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null)
     {
@@ -814,7 +763,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param   string $route
      * @param   array $params
      * @return  string
-     * @since 2.0.0
      */
     public function getUrl($route = '', $params = [])
     {
@@ -827,7 +775,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string $fileId
      * @param array $params
      * @return string
-     * @since 2.0.0
      */
     public function getViewFileUrl($fileId, array $params = [])
     {
@@ -846,7 +793,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string $route
      * @param array $params
      * @return string
-     * @since 2.0.0
      */
     protected function _getNotFoundUrl($route = '', $params = ['_direct' => 'core/index/notFound'])
     {
@@ -861,7 +807,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param bool $showTime
      * @param null|string $timezone
      * @return string
-     * @since 2.0.0
      */
     public function formatDate(
         $date = null,
@@ -886,7 +831,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param   int $format
      * @param   bool $showDate
      * @return  string
-     * @since 2.0.0
      */
     public function formatTime(
         $time = null,
@@ -905,7 +849,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Retrieve module name of block
      *
      * @return string
-     * @since 2.0.0
      */
     public function getModuleName()
     {
@@ -920,7 +863,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $className
      * @return string
-     * @since 2.0.0
      */
     public static function extractModuleName($className)
     {
@@ -938,7 +880,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string|array $data
      * @param array|null $allowedTags
      * @return string
-     * @since 2.0.0
      */
     public function escapeHtml($data, $allowedTags = null)
     {
@@ -950,7 +891,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $string
      * @return string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function escapeJs($string)
     {
@@ -963,7 +904,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string $string
      * @param boolean $escapeSingleQuote
      * @return string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function escapeHtmlAttr($string, $escapeSingleQuote = true)
     {
@@ -975,7 +916,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $string
      * @return string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function escapeCss($string)
     {
@@ -989,7 +930,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string|null $allowableTags
      * @param bool $allowHtmlEntities
      * @return string
-     * @since 2.0.0
      */
     public function stripTags($data, $allowableTags = null, $allowHtmlEntities = false)
     {
@@ -1004,7 +944,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $string
      * @return string
-     * @since 2.0.0
      */
     public function escapeUrl($string)
     {
@@ -1016,8 +955,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $data
      * @return string
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 100.2.0
      */
     public function escapeXssInUrl($data)
     {
@@ -1032,8 +970,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param  string $data
      * @param  bool $addSlashes
      * @return string
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 100.2.0
      */
     public function escapeQuote($data, $addSlashes = false)
     {
@@ -1046,8 +983,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string|array $data
      * @param string $quote
      * @return string|array
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 100.2.0
      */
     public function escapeJsQuote($data, $quote = '\'')
     {
@@ -1058,7 +994,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Get block name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getNameInLayout()
     {
@@ -1071,7 +1006,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Provide string array key to share specific info item with FPC placeholder
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getCacheKeyInfo()
     {
@@ -1082,7 +1016,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Get Key for caching block content
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCacheKey()
     {
@@ -1107,7 +1040,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Get tags array for saving cache
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getCacheTags()
     {
@@ -1128,7 +1060,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Get block cache life time
      *
      * @return int|bool|null
-     * @since 2.0.0
      */
     protected function getCacheLifetime()
     {
@@ -1148,7 +1079,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Load block html from cache storage
      *
      * @return string|false
-     * @since 2.0.0
      */
     protected function _loadCache()
     {
@@ -1172,7 +1102,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $data
      * @return $this
-     * @since 2.0.0
      */
     protected function _saveCache($data)
     {
@@ -1195,7 +1124,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param null|string $cacheKey
      * @return string
-     * @since 2.0.0
      */
     protected function _getSidPlaceholder($cacheKey = null)
     {
@@ -1214,7 +1142,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string $name variable name
      * @param string|null $module optional module name
      * @return string|false
-     * @since 2.0.0
      */
     public function getVar($name, $module = null)
     {
@@ -1227,7 +1154,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Returns true if scope is private, false otherwise
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isScopePrivate()
     {

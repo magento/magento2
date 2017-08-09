@@ -11,19 +11,16 @@ use Magento\Sales\Model\Order\Creditmemo\RefundOperation;
 
 /**
  * @inheritdoc
- * @since 2.2.0
  */
 class RefundAdapter implements RefundAdapterInterface
 {
     /**
      * @var RefundOperation
-     * @since 2.2.0
      */
     private $refundOperation;
 
     /**
      * @param RefundOperation $refundOperation
-     * @since 2.2.0
      */
     public function __construct(
         RefundOperation $refundOperation
@@ -33,7 +30,6 @@ class RefundAdapter implements RefundAdapterInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function refund(
         CreditmemoInterface $creditmemo,

@@ -11,7 +11,6 @@ use Magento\Framework\Data\Form\Element\Fieldset;
  * Adminhtml order creating gift message item form
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -19,7 +18,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Entity for editing of gift message
      *
      * @var \Magento\Eav\Model\Entity\AbstractEntity
-     * @since 2.0.0
      */
     protected $_entity;
 
@@ -27,7 +25,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Giftmessage object
      *
      * @var \Magento\GiftMessage\Model\Message
-     * @since 2.0.0
      */
     protected $_giftMessage;
 
@@ -35,7 +32,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Session quote
      *
      * @var \Magento\Backend\Model\Session\Quote
-     * @since 2.0.0
      */
     protected $_sessionQuote;
 
@@ -43,19 +39,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Message helper
      *
      * @var \Magento\GiftMessage\Helper\Message
-     * @since 2.0.0
      */
     protected $_messageHelper;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Customer\Helper\View
-     * @since 2.0.0
      */
     protected $_customerViewHelper;
 
@@ -70,7 +63,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Helper\View $customerViewHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -94,7 +86,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param \Magento\Framework\DataObject $entity
      * @return $this
-     * @since 2.0.0
      */
     public function setEntity(\Magento\Framework\DataObject $entity)
     {
@@ -106,7 +97,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Retrieve entity for form
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getEntity()
     {
@@ -115,7 +105,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @return \Magento\Backend\Model\Session\Quote
-     * @since 2.0.0
      */
     protected function _getSession()
     {
@@ -126,7 +115,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Retrieve default value for giftmessage sender
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultSender()
     {
@@ -153,7 +141,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Retrieve default value for giftmessage recipient
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultRecipient()
     {
@@ -182,7 +169,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepares form
      *
      * @return $this
-     * @since 2.0.0
      */
     public function _prepareForm()
     {
@@ -222,7 +208,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param Fieldset $fieldset
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareHiddenFields(Fieldset $fieldset)
     {
@@ -239,7 +224,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param Fieldset $fieldset
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareVisibleFields(Fieldset $fieldset)
     {
@@ -278,7 +262,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Initialize gift message for entity
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initMessage()
     {
@@ -290,7 +273,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Retrieve gift message for entity
      *
      * @return \Magento\GiftMessage\Model\Message
-     * @since 2.0.0
      */
     public function getMessage()
     {
@@ -306,7 +288,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param string $name
      * @return string
-     * @since 2.0.0
      */
     protected function _getFieldName($name)
     {
@@ -318,7 +299,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param string $id
      * @return string
-     * @since 2.0.0
      */
     protected function _getFieldId($id)
     {
@@ -329,7 +309,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Retrieve field html id prefix
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getFieldIdPrefix()
     {
@@ -340,7 +319,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Applies posted data to gift message
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _applyPostData()
     {

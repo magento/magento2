@@ -11,7 +11,6 @@ use Magento\Paypal\Model\Payflow\Transparent;
 
 /**
  * Class SecureToken
- * @since 2.0.0
  */
 class SecureToken implements ValidatorInterface
 {
@@ -35,7 +34,6 @@ class SecureToken implements ValidatorInterface
      * @param DataObject $response
      * @param Transparent $transparentModel
      * @return bool
-     * @since 2.0.0
      */
     public function validate(DataObject $response, Transparent $transparentModel)
     {

@@ -14,7 +14,6 @@ use Magento\Framework\DataObject;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class State extends DataObject
 {
@@ -23,7 +22,6 @@ class State extends DataObject
      *
      * @param   Item $filter
      * @return  $this
-     * @since 2.0.0
      */
     public function addFilter($filter)
     {
@@ -39,7 +37,6 @@ class State extends DataObject
      * @param  Item[] $filters
      * @return $this
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function setFilters($filters)
     {
@@ -54,7 +51,6 @@ class State extends DataObject
      * Get applied to layer filter items
      *
      * @return Item[]
-     * @since 2.0.0
      */
     public function getFilters()
     {

@@ -10,19 +10,16 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\Sales\Observer\Backend\CatalogProductSaveAfterObserver
  *
- * @since 2.0.0
  */
 class CatalogProductSaveAfterObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote
-     * @since 2.0.0
      */
     protected $_quote;
 
     /**
      * @param \Magento\Quote\Model\ResourceModel\Quote $quote
-     * @since 2.0.0
      */
     public function __construct(\Magento\Quote\Model\ResourceModel\Quote $quote)
     {
@@ -35,7 +32,6 @@ class CatalogProductSaveAfterObserver implements ObserverInterface
      * @param int $productId
      * @param int $status
      * @return void
-     * @since 2.0.0
      */
     protected function _recollectQuotes($productId, $status)
     {
@@ -49,7 +45,6 @@ class CatalogProductSaveAfterObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

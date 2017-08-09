@@ -9,7 +9,6 @@ namespace Magento\Sales\Model\ResourceModel\Report\Collection;
  * Report collection abstract model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class AbstractCollection extends \Magento\Reports\Model\ResourceModel\Report\Collection\AbstractCollection
 {
@@ -17,7 +16,6 @@ class AbstractCollection extends \Magento\Reports\Model\ResourceModel\Report\Col
      * Order status
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_orderStatus = null;
 
@@ -28,7 +26,6 @@ class AbstractCollection extends \Magento\Reports\Model\ResourceModel\Report\Col
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\ResourceModel\Report $resource
      * @param null $connection
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -47,7 +44,6 @@ class AbstractCollection extends \Magento\Reports\Model\ResourceModel\Report\Col
      *
      * @param string $orderStatus
      * @return $this
-     * @since 2.0.0
      */
     public function addOrderStatusFilter($orderStatus)
     {
@@ -59,7 +55,6 @@ class AbstractCollection extends \Magento\Reports\Model\ResourceModel\Report\Col
      * Apply order status filter
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _applyOrderStatusFilter()
     {
@@ -78,7 +73,6 @@ class AbstractCollection extends \Magento\Reports\Model\ResourceModel\Report\Col
      * Order status filter is custom for this collection
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _applyCustomFilter()
     {

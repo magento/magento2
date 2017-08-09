@@ -7,13 +7,11 @@ namespace Magento\Framework\Code\Generator;
 
 /**
  * Interface generator.
- * @since 2.0.0
  */
 class InterfaceGenerator extends \Magento\Framework\Code\Generator\ClassGenerator
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function generate()
     {
@@ -48,7 +46,6 @@ class InterfaceGenerator extends \Magento\Framework\Code\Generator\ClassGenerato
      * Instantiate interface method generator object.
      *
      * @return \Magento\Framework\Code\Generator\InterfaceMethodGenerator
-     * @since 2.0.0
      */
     protected function createMethodGenerator()
     {
@@ -59,7 +56,6 @@ class InterfaceGenerator extends \Magento\Framework\Code\Generator\ClassGenerato
      * Generate methods.
      *
      * @return string
-     * @since 2.0.0
      */
     protected function generateMethods()
     {
@@ -77,7 +73,6 @@ class InterfaceGenerator extends \Magento\Framework\Code\Generator\ClassGenerato
      * Generate directives.
      *
      * @return string
-     * @since 2.0.0
      */
     protected function generateDirectives()
     {

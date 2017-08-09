@@ -7,7 +7,6 @@ namespace Magento\OfflinePayments\Block\Form;
 
 /**
  * Abstract class for Cash On Delivery and Bank Transfer payment method form
- * @since 2.0.0
  */
 abstract class AbstractInstruction extends \Magento\Payment\Block\Form
 {
@@ -15,7 +14,6 @@ abstract class AbstractInstruction extends \Magento\Payment\Block\Form
      * Instructions text
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_instructions;
 
@@ -23,7 +21,6 @@ abstract class AbstractInstruction extends \Magento\Payment\Block\Form
      * Get instructions text from config
      *
      * @return null|string
-     * @since 2.0.0
      */
     public function getInstructions()
     {

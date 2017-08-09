@@ -9,7 +9,6 @@ namespace Magento\Catalog\Model\ResourceModel\Category\Attribute;
  * Catalog category EAV additional attribute resource collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
 {
@@ -17,7 +16,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      * Entity factory
      *
      * @var \Magento\Eav\Model\EntityFactory
-     * @since 2.0.0
      */
     protected $_eavEntityFactory;
 
@@ -30,7 +28,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -51,7 +48,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      * Joins catalog/eav_attribute table
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initSelect()
     {
@@ -73,7 +69,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      * @param int $typeId
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function setEntityTypeFilter($typeId)
     {

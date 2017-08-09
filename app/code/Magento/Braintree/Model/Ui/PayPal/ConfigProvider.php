@@ -11,7 +11,6 @@ use Magento\Framework\Locale\ResolverInterface;
 
 /**
  * Class ConfigProvider
- * @since 2.2.0
  */
 class ConfigProvider implements ConfigProviderInterface
 {
@@ -21,13 +20,11 @@ class ConfigProvider implements ConfigProviderInterface
 
     /**
      * @var Config
-     * @since 2.2.0
      */
     private $config;
 
     /**
      * @var ResolverInterface
-     * @since 2.2.0
      */
     private $resolver;
 
@@ -36,7 +33,6 @@ class ConfigProvider implements ConfigProviderInterface
      *
      * @param Config $config
      * @param ResolverInterface $resolver
-     * @since 2.2.0
      */
     public function __construct(Config $config, ResolverInterface $resolver)
     {
@@ -48,7 +44,6 @@ class ConfigProvider implements ConfigProviderInterface
      * Retrieve assoc array of checkout configuration
      *
      * @return array
-     * @since 2.2.0
      */
     public function getConfig()
     {

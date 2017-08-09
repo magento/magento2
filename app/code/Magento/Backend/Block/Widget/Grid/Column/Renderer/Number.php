@@ -9,14 +9,12 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
  * Backend grid item renderer number
  *
  * @api
- * @deprecated 2.2.0 in favour of UI component implementation
- * @since 2.0.0
+ * @deprecated 100.2.0 in favour of UI component implementation
  */
 class Number extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_defaultWidth = 100;
 
@@ -25,7 +23,6 @@ class Number extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      *
      * @param \Magento\Framework\DataObject $row
      * @return mixed|string
-     * @since 2.0.0
      */
     protected function _getValue(\Magento\Framework\DataObject $row)
     {
@@ -46,7 +43,6 @@ class Number extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      * Renders CSS
      *
      * @return string
-     * @since 2.0.0
      */
     public function renderCss()
     {

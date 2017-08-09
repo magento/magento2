@@ -14,7 +14,6 @@ use Magento\Framework\View\Result\PageFactory;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class Compare extends \Magento\Framework\App\Action\Action
 {
@@ -22,7 +21,6 @@ abstract class Compare extends \Magento\Framework\App\Action\Action
      * Customer id
      *
      * @var null|int
-     * @since 2.0.0
      */
     protected $_customerId = null;
 
@@ -30,7 +28,6 @@ abstract class Compare extends \Magento\Framework\App\Action\Action
      * Catalog session
      *
      * @var \Magento\Catalog\Model\Session
-     * @since 2.0.0
      */
     protected $_catalogSession;
 
@@ -38,7 +35,6 @@ abstract class Compare extends \Magento\Framework\App\Action\Action
      * Catalog product compare list
      *
      * @var \Magento\Catalog\Model\Product\Compare\ListCompare
-     * @since 2.0.0
      */
     protected $_catalogProductCompareList;
 
@@ -46,7 +42,6 @@ abstract class Compare extends \Magento\Framework\App\Action\Action
      * Customer visitor
      *
      * @var \Magento\Customer\Model\Visitor
-     * @since 2.0.0
      */
     protected $_customerVisitor;
 
@@ -54,7 +49,6 @@ abstract class Compare extends \Magento\Framework\App\Action\Action
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
@@ -62,7 +56,6 @@ abstract class Compare extends \Magento\Framework\App\Action\Action
      * Item collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory
-     * @since 2.0.0
      */
     protected $_itemCollectionFactory;
 
@@ -70,31 +63,26 @@ abstract class Compare extends \Magento\Framework\App\Action\Action
      * Compare item factory
      *
      * @var \Magento\Catalog\Model\Product\Compare\ItemFactory
-     * @since 2.0.0
      */
     protected $_compareItemFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var Validator
-     * @since 2.0.0
      */
     protected $_formKeyValidator;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @var ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
@@ -113,7 +101,6 @@ abstract class Compare extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param ProductRepositoryInterface $productRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -146,7 +133,6 @@ abstract class Compare extends \Magento\Framework\App\Action\Action
      *
      * @param int $customerId
      * @return $this
-     * @since 2.0.0
      */
     public function setCustomerId($customerId)
     {

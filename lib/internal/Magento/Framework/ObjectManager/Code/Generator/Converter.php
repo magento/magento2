@@ -8,7 +8,6 @@ namespace Magento\Framework\ObjectManager\Code\Generator;
 /**
  * Class Converter
  * @package Magento\Framework\ObjectManager\Code\Generator
- * @since 2.0.0
  */
 class Converter extends \Magento\Framework\Code\Generator\EntityAbstract
 {
@@ -21,7 +20,6 @@ class Converter extends \Magento\Framework\Code\Generator\EntityAbstract
      * Retrieve class properties
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getClassProperties()
     {
@@ -46,7 +44,6 @@ class Converter extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns factory name
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getFactoryPropertyName()
     {
@@ -57,7 +54,6 @@ class Converter extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns factory class
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getFactoryClass()
     {
@@ -68,7 +64,6 @@ class Converter extends \Magento\Framework\Code\Generator\EntityAbstract
      * Get default constructor definition for generated class
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getDefaultConstructorDefinition()
     {
@@ -100,7 +95,6 @@ class Converter extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns list of methods for class generator
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getClassMethods()
     {
@@ -136,7 +130,6 @@ class Converter extends \Magento\Framework\Code\Generator\EntityAbstract
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _validateData()
     {

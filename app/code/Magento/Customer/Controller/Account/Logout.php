@@ -15,32 +15,27 @@ use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 /**
  * Class \Magento\Customer\Controller\Account\Logout
  *
- * @since 2.0.0
  */
 class Logout extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
      * @var Session
-     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var CookieMetadataFactory
-     * @since 2.1.0
      */
     private $cookieMetadataFactory;
 
     /**
      * @var PhpCookieManager
-     * @since 2.1.0
      */
     private $cookieMetadataManager;
 
     /**
      * @param Context $context
      * @param Session $customerSession
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -53,9 +48,8 @@ class Logout extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie manager
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      * @return PhpCookieManager
-     * @since 2.1.0
      */
     private function getCookieManager()
     {
@@ -68,9 +62,8 @@ class Logout extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie metadata factory
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      * @return CookieMetadataFactory
-     * @since 2.1.0
      */
     private function getCookieMetadataFactory()
     {
@@ -84,7 +77,6 @@ class Logout extends \Magento\Customer\Controller\AbstractAccount
      * Customer logout action
      *
      * @return \Magento\Framework\Controller\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

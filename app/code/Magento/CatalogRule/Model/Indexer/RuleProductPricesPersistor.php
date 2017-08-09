@@ -8,25 +8,21 @@ namespace Magento\CatalogRule\Model\Indexer;
 
 /**
  * Persist product prices to index table.
- * @since 2.2.0
  */
 class RuleProductPricesPersistor
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.2.0
      */
     private $resource;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
-     * @since 2.2.0
      */
     private $dateFormat;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
-     * @since 2.2.0
      */
     private $activeTableSwitcher;
 
@@ -34,7 +30,6 @@ class RuleProductPricesPersistor
      * @param \Magento\Framework\Stdlib\DateTime $dateFormat
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime $dateFormat,
@@ -53,7 +48,6 @@ class RuleProductPricesPersistor
      * @param bool $useAdditionalTable
      * @return bool
      * @throws \Exception
-     * @since 2.2.0
      */
     public function execute(array $priceData, $useAdditionalTable = false)
     {

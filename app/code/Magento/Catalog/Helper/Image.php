@@ -12,7 +12,6 @@ use Magento\Framework\App\Helper\AbstractHelper;
  *
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
- * @since 2.0.0
  */
 class Image extends AbstractHelper
 {
@@ -25,7 +24,6 @@ class Image extends AbstractHelper
      * Current model
      *
      * @var \Magento\Catalog\Model\Product\Image
-     * @since 2.0.0
      */
     protected $_model;
 
@@ -33,7 +31,6 @@ class Image extends AbstractHelper
      * Scheduled for resize image
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_scheduleResize = true;
 
@@ -41,7 +38,6 @@ class Image extends AbstractHelper
      * Scheduled for rotate image
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_scheduleRotate = false;
 
@@ -49,7 +45,6 @@ class Image extends AbstractHelper
      * Angle
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_angle;
 
@@ -57,7 +52,6 @@ class Image extends AbstractHelper
      * Watermark file name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_watermark;
 
@@ -65,7 +59,6 @@ class Image extends AbstractHelper
      * Watermark Position
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_watermarkPosition;
 
@@ -73,7 +66,6 @@ class Image extends AbstractHelper
      * Watermark Size
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_watermarkSize;
 
@@ -81,7 +73,6 @@ class Image extends AbstractHelper
      * Watermark Image opacity
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_watermarkImageOpacity;
 
@@ -89,7 +80,6 @@ class Image extends AbstractHelper
      * Current Product
      *
      * @var \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     protected $_product;
 
@@ -97,7 +87,6 @@ class Image extends AbstractHelper
      * Image File
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_imageFile;
 
@@ -105,13 +94,11 @@ class Image extends AbstractHelper
      * Image Placeholder
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_placeholder;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
-     * @since 2.0.0
      */
     protected $_assetRepo;
 
@@ -119,19 +106,16 @@ class Image extends AbstractHelper
      * Product image factory
      *
      * @var \Magento\Catalog\Model\Product\ImageFactory
-     * @since 2.0.0
      */
     protected $_productImageFactory;
 
     /**
      * @var \Magento\Framework\View\ConfigInterface
-     * @since 2.0.0
      */
     protected $viewConfig;
 
     /**
      * @var \Magento\Framework\Config\View
-     * @since 2.0.0
      */
     protected $configView;
 
@@ -139,13 +123,11 @@ class Image extends AbstractHelper
      * Image configuration attributes
      *
      * @var array
-     * @since 2.0.0
      */
     protected $attributes = [];
 
     /**
      * @var \Magento\Catalog\Model\View\Asset\PlaceholderFactory
-     * @since 2.2.0
      */
     private $viewAssetPlaceholderFactory;
 
@@ -155,7 +137,6 @@ class Image extends AbstractHelper
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\ConfigInterface $viewConfig
      * @param \Magento\Catalog\Model\View\Asset\PlaceholderFactory $placeholderFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -177,7 +158,6 @@ class Image extends AbstractHelper
      * Reset all previous data
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _reset()
     {
@@ -201,7 +181,6 @@ class Image extends AbstractHelper
      * @param string $imageId
      * @param array $attributes
      * @return $this
-     * @since 2.0.0
      */
     public function init($product, $imageId, $attributes = [])
     {
@@ -223,7 +202,6 @@ class Image extends AbstractHelper
      * Set image properties
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function setImageProperties()
     {
@@ -268,7 +246,6 @@ class Image extends AbstractHelper
      * Set watermark properties
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function setWatermarkProperties()
     {
@@ -307,7 +284,6 @@ class Image extends AbstractHelper
      * @param int $width
      * @param int $height
      * @return $this
-     * @since 2.0.0
      */
     public function resize($width, $height = null)
     {
@@ -321,7 +297,6 @@ class Image extends AbstractHelper
      *
      * @param int $quality
      * @return $this
-     * @since 2.0.0
      */
     public function setQuality($quality)
     {
@@ -337,7 +312,6 @@ class Image extends AbstractHelper
      * @see \Magento\Catalog\Model\Product\Image
      * @param bool $flag
      * @return $this
-     * @since 2.0.0
      */
     public function keepAspectRatio($flag)
     {
@@ -356,7 +330,6 @@ class Image extends AbstractHelper
      * @param bool $flag
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function keepFrame($flag)
     {
@@ -375,7 +348,6 @@ class Image extends AbstractHelper
      * @param bool $flag
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function keepTransparency($flag)
     {
@@ -390,7 +362,6 @@ class Image extends AbstractHelper
      *
      * @param bool $flag
      * @return $this
-     * @since 2.0.0
      */
     public function constrainOnly($flag)
     {
@@ -407,7 +378,6 @@ class Image extends AbstractHelper
      * @see \Magento\Catalog\Model\Product\Image
      * @param array $colorRGB
      * @return $this
-     * @since 2.0.0
      */
     public function backgroundColor($colorRGB)
     {
@@ -424,7 +394,6 @@ class Image extends AbstractHelper
      *
      * @param int $angle
      * @return $this
-     * @since 2.0.0
      */
     public function rotate($angle)
     {
@@ -443,7 +412,6 @@ class Image extends AbstractHelper
      * @param string $size
      * @param int $imageOpacity
      * @return $this
-     * @since 2.0.0
      */
     public function watermark($fileName, $position, $size = null, $imageOpacity = null)
     {
@@ -464,7 +432,6 @@ class Image extends AbstractHelper
      *
      * @param string $fileName
      * @return void
-     * @since 2.0.0
      */
     public function placeholder($fileName)
     {
@@ -477,9 +444,8 @@ class Image extends AbstractHelper
      * @param null|string $placeholder
      * @return string
      *
-     * @deprecated 2.2.0 Returns only default placeholder.
+     * @deprecated 101.1.0 Returns only default placeholder.
      * Does not take into account custom placeholders set in Configuration.
-     * @since 2.0.0
      */
     public function getPlaceholder($placeholder = null)
     {
@@ -497,7 +463,6 @@ class Image extends AbstractHelper
      *
      * @return $this
      * @throws \Exception
-     * @since 2.0.0
      */
     protected function applyScheduledActions()
     {
@@ -522,7 +487,6 @@ class Image extends AbstractHelper
      * Initialize base image file
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function initBaseFile()
     {
@@ -542,7 +506,6 @@ class Image extends AbstractHelper
      * Check if scheduled actions is allowed
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function isScheduledActionsAllowed()
     {
@@ -557,7 +520,6 @@ class Image extends AbstractHelper
      * Retrieve image URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUrl()
     {
@@ -571,7 +533,6 @@ class Image extends AbstractHelper
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function save()
     {
@@ -583,7 +544,6 @@ class Image extends AbstractHelper
      * Return resized product image information
      *
      * @return array
-     * @since 2.0.0
      */
     public function getResizedImageInfo()
     {
@@ -594,7 +554,6 @@ class Image extends AbstractHelper
     /**
      * @param null|string $placeholder
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultPlaceholderUrl($placeholder = null)
     {
@@ -616,7 +575,6 @@ class Image extends AbstractHelper
      * Get current Image model
      *
      * @return \Magento\Catalog\Model\Product\Image
-     * @since 2.0.0
      */
     protected function _getModel()
     {
@@ -631,7 +589,6 @@ class Image extends AbstractHelper
      *
      * @param int $angle
      * @return $this
-     * @since 2.0.0
      */
     protected function setAngle($angle)
     {
@@ -643,7 +600,6 @@ class Image extends AbstractHelper
      * Get Rotation Angle
      *
      * @return int
-     * @since 2.0.0
      */
     protected function getAngle()
     {
@@ -655,7 +611,6 @@ class Image extends AbstractHelper
      *
      * @param string $watermark
      * @return $this
-     * @since 2.0.0
      */
     protected function setWatermark($watermark)
     {
@@ -668,7 +623,6 @@ class Image extends AbstractHelper
      * Get watermark file name
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getWatermark()
     {
@@ -680,7 +634,6 @@ class Image extends AbstractHelper
      *
      * @param string $position
      * @return $this
-     * @since 2.0.0
      */
     protected function setWatermarkPosition($position)
     {
@@ -693,7 +646,6 @@ class Image extends AbstractHelper
      * Get watermark position
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getWatermarkPosition()
     {
@@ -706,7 +658,6 @@ class Image extends AbstractHelper
      *
      * @param string $size
      * @return $this
-     * @since 2.0.0
      */
     public function setWatermarkSize($size)
     {
@@ -719,7 +670,6 @@ class Image extends AbstractHelper
      * Get watermark size
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getWatermarkSize()
     {
@@ -731,7 +681,6 @@ class Image extends AbstractHelper
      *
      * @param int $imageOpacity
      * @return $this
-     * @since 2.0.0
      */
     public function setWatermarkImageOpacity($imageOpacity)
     {
@@ -744,7 +693,6 @@ class Image extends AbstractHelper
      * Get watermark image opacity
      *
      * @return int
-     * @since 2.0.0
      */
     protected function getWatermarkImageOpacity()
     {
@@ -760,7 +708,6 @@ class Image extends AbstractHelper
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
-     * @since 2.0.0
      */
     protected function setProduct($product)
     {
@@ -772,7 +719,6 @@ class Image extends AbstractHelper
      * Get current Product
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     protected function getProduct()
     {
@@ -784,7 +730,6 @@ class Image extends AbstractHelper
      *
      * @param string $file
      * @return $this
-     * @since 2.0.0
      */
     public function setImageFile($file)
     {
@@ -796,7 +741,6 @@ class Image extends AbstractHelper
      * Get Image file
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getImageFile()
     {
@@ -808,7 +752,6 @@ class Image extends AbstractHelper
      *
      * @param string $string
      * @return array|bool
-     * @since 2.0.0
      */
     protected function parseSize($string)
     {
@@ -823,7 +766,6 @@ class Image extends AbstractHelper
      * Retrieve original image width
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getOriginalWidth()
     {
@@ -834,7 +776,6 @@ class Image extends AbstractHelper
      * Retrieve original image height
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getOriginalHeight()
     {
@@ -846,7 +787,6 @@ class Image extends AbstractHelper
      * 0 - width, 1 - height
      *
      * @return int[]
-     * @since 2.0.0
      */
     public function getOriginalSizeArray()
     {
@@ -857,7 +797,6 @@ class Image extends AbstractHelper
      * Retrieve config view
      *
      * @return \Magento\Framework\Config\View
-     * @since 2.0.0
      */
     protected function getConfigView()
     {
@@ -871,7 +810,6 @@ class Image extends AbstractHelper
      * Retrieve image type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -882,7 +820,6 @@ class Image extends AbstractHelper
      * Retrieve image width
      *
      * @return string
-     * @since 2.0.0
      */
     public function getWidth()
     {
@@ -893,7 +830,6 @@ class Image extends AbstractHelper
      * Retrieve image height
      *
      * @return string
-     * @since 2.0.0
      */
     public function getHeight()
     {
@@ -904,7 +840,6 @@ class Image extends AbstractHelper
      * Retrieve image frame flag
      *
      * @return false|string
-     * @since 2.0.0
      */
     public function getFrame()
     {
@@ -920,7 +855,6 @@ class Image extends AbstractHelper
      *
      * @param string $name
      * @return string
-     * @since 2.0.0
      */
     protected function getAttribute($name)
     {
@@ -931,7 +865,6 @@ class Image extends AbstractHelper
      * Return image label
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLabel()
     {

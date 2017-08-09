@@ -10,13 +10,11 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
  * Backend grid item renderer currency
  *
  * @api
- * @since 2.0.0
  */
 class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_defaultWidth = 100;
 
@@ -24,7 +22,6 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      * Currency objects cache
      *
      * @var \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     protected static $_currencies = [];
 
@@ -32,25 +29,21 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      * Application object
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Directory\Model\Currency\DefaultLocator
-     * @since 2.0.0
      */
     protected $_currencyLocator;
 
     /**
      * @var \Magento\Directory\Model\Currency
-     * @since 2.0.0
      */
     protected $_defaultBaseCurrency;
 
     /**
      * @var \Magento\Framework\Locale\CurrencyInterface
-     * @since 2.0.0
      */
     protected $_localeCurrency;
 
@@ -61,7 +54,6 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -87,7 +79,6 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      *
      * @param   \Magento\Framework\DataObject $row
      * @return  string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {
@@ -107,7 +98,6 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
-     * @since 2.0.0
      */
     protected function _getCurrencyCode($row)
     {
@@ -126,7 +116,6 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      *
      * @param \Magento\Framework\DataObject $row
      * @return float|int
-     * @since 2.0.0
      */
     protected function _getRate($row)
     {
@@ -143,7 +132,6 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      * Returns HTML for CSS
      *
      * @return string
-     * @since 2.0.0
      */
     public function renderCss()
     {

@@ -17,7 +17,6 @@ use Magento\Framework\Session\SaveHandlerInterface;
  * Magento session configuration
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Config implements ConfigInterface
 {
@@ -49,25 +48,21 @@ class Config implements ConfigInterface
      * All options
      *
      * @var array
-     * @since 2.0.0
      */
     protected $options = [];
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Framework\Stdlib\StringUtils
-     * @since 2.0.0
      */
     protected $_stringHelper;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $_httpRequest;
 
@@ -75,7 +70,6 @@ class Config implements ConfigInterface
      * List of boolean options
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $booleanOptions = [
         'session.use_cookies',
@@ -86,19 +80,16 @@ class Config implements ConfigInterface
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_scopeType;
 
     /**
      * @var string
-     * @since 2.1.0
      */
     protected $lifetimePath;
 
     /**
      * @var \Magento\Framework\ValidatorFactory
-     * @since 2.0.0
      */
     protected $_validatorFactory;
 
@@ -112,7 +103,6 @@ class Config implements ConfigInterface
      * @param string $scopeType
      * @param string $lifetimePath
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ValidatorFactory $validatorFactory,
@@ -182,7 +172,6 @@ class Config implements ConfigInterface
      * @param array $options
      * @param array $default
      * @return $this
-     * @since 2.0.0
      */
     public function setOptions($options, $default = [])
     {
@@ -204,7 +193,6 @@ class Config implements ConfigInterface
      * Get all options set
      *
      * @return array
-     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -217,7 +205,6 @@ class Config implements ConfigInterface
      * @param string $option
      * @param mixed $value
      * @return $this
-     * @since 2.0.0
      */
     public function setOption($option, $value)
     {
@@ -232,7 +219,6 @@ class Config implements ConfigInterface
      *
      * @param string $option
      * @return mixed
-     * @since 2.0.0
      */
     public function getOption($option)
     {
@@ -254,7 +240,6 @@ class Config implements ConfigInterface
      * Convert config to array
      *
      * @return array
-     * @since 2.0.0
      */
     public function toArray()
     {
@@ -267,7 +252,6 @@ class Config implements ConfigInterface
      * @param string $name
      * @param string|null $default
      * @return $this
-     * @since 2.0.0
      */
     public function setName($name, $default = null)
     {
@@ -284,7 +268,6 @@ class Config implements ConfigInterface
      * Get session.name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -296,7 +279,6 @@ class Config implements ConfigInterface
      *
      * @param string $savePath
      * @return $this
-     * @since 2.0.0
      */
     public function setSavePath($savePath)
     {
@@ -308,7 +290,6 @@ class Config implements ConfigInterface
      * Set session.save_path
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSavePath()
     {
@@ -321,7 +302,6 @@ class Config implements ConfigInterface
      * @param int $cookieLifetime
      * @param int|null $default
      * @return $this
-     * @since 2.0.0
      */
     public function setCookieLifetime($cookieLifetime, $default = null)
     {
@@ -342,7 +322,6 @@ class Config implements ConfigInterface
      * Get session.cookie_lifetime
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCookieLifetime()
     {
@@ -355,7 +334,6 @@ class Config implements ConfigInterface
      * @param string $cookiePath
      * @param string|null $default
      * @return $this
-     * @since 2.0.0
      */
     public function setCookiePath($cookiePath, $default = null)
     {
@@ -377,7 +355,6 @@ class Config implements ConfigInterface
      * Get session.cookie_path
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCookiePath()
     {
@@ -390,7 +367,6 @@ class Config implements ConfigInterface
      * @param string $cookieDomain
      * @param string|null $default
      * @return $this
-     * @since 2.0.0
      */
     public function setCookieDomain($cookieDomain, $default = null)
     {
@@ -411,7 +387,6 @@ class Config implements ConfigInterface
      * Get session.cookie_domain
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCookieDomain()
     {
@@ -423,7 +398,6 @@ class Config implements ConfigInterface
      *
      * @param bool $cookieSecure
      * @return $this
-     * @since 2.0.0
      */
     public function setCookieSecure($cookieSecure)
     {
@@ -436,7 +410,6 @@ class Config implements ConfigInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getCookieSecure()
     {
@@ -448,7 +421,6 @@ class Config implements ConfigInterface
      *
      * @param bool $cookieHttpOnly
      * @return $this
-     * @since 2.0.0
      */
     public function setCookieHttpOnly($cookieHttpOnly)
     {
@@ -461,7 +433,6 @@ class Config implements ConfigInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getCookieHttpOnly()
     {
@@ -473,7 +444,6 @@ class Config implements ConfigInterface
      *
      * @param bool $useCookies
      * @return $this
-     * @since 2.0.0
      */
     public function setUseCookies($useCookies)
     {
@@ -486,7 +456,6 @@ class Config implements ConfigInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getUseCookies()
     {
@@ -498,7 +467,6 @@ class Config implements ConfigInterface
      *
      * @param string $option
      * @return string|bool
-     * @since 2.0.0
      */
     protected function getStorageOption($option)
     {
@@ -515,7 +483,6 @@ class Config implements ConfigInterface
      *
      * @param string $option
      * @return string
-     * @since 2.0.0
      */
     protected function getFixedOptionName($option)
     {
@@ -545,7 +512,6 @@ class Config implements ConfigInterface
      * @param  array $args
      * @return mixed
      * @throws \BadMethodCallException On non-getter/setter method
-     * @since 2.0.0
      */
     public function __call($method, $args)
     {

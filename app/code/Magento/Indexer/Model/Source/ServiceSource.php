@@ -13,25 +13,21 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Class \Magento\Indexer\Model\Source\ServiceSource
  *
- * @since 2.0.0
  */
 class ServiceSource implements DataInterface
 {
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $service;
 
     /**
      * @var SearchCriteriaBuilder
-     * @since 2.0.0
      */
     private $searchCriteriaBuilder;
 
@@ -39,7 +35,6 @@ class ServiceSource implements DataInterface
      * @param ObjectManagerInterface $objectManager
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param string $service
-     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -53,7 +48,6 @@ class ServiceSource implements DataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getData(array $fieldsData)
     {
@@ -72,7 +66,6 @@ class ServiceSource implements DataInterface
      * @param array $fields
      * @return array
      * @throws NotFoundException
-     * @since 2.0.0
      */
     private function getRequestedFields(SearchResults $list, array $fields)
     {
@@ -91,7 +84,6 @@ class ServiceSource implements DataInterface
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     private function getService()
     {

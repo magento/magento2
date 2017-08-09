@@ -23,44 +23,37 @@ namespace Magento\Backend\Block;
  *
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @since 2.0.0
  */
 class Template extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Framework\AuthorizationInterface
-     * @since 2.0.0
      */
     protected $_authorization;
 
     /**
      * @var \Magento\Framework\Math\Random
-     * @since 2.0.0
      */
     protected $mathRandom;
 
     /**
      * @var \Magento\Backend\Model\Session
-     * @since 2.0.0
      */
     protected $_backendSession;
 
     /**
      * @var \Magento\Framework\Data\Form\FormKey
-     * @since 2.0.0
      */
     protected $formKey;
 
     /**
      * @var \Magento\Framework\Code\NameBuilder
-     * @since 2.0.0
      */
     protected $nameBuilder;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(\Magento\Backend\Block\Template\Context $context, array $data = [])
     {
@@ -77,7 +70,6 @@ class Template extends \Magento\Framework\View\Element\Template
      * Retrieve Session Form Key
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFormKey()
     {
@@ -92,9 +84,8 @@ class Template extends \Magento\Framework\View\Element\Template
      *
      * @param string $moduleName Full module name
      * @return boolean
-     * @deprecated 2.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function isOutputEnabled($moduleName = null)
     {
@@ -105,7 +96,6 @@ class Template extends \Magento\Framework\View\Element\Template
      * Make this public so that templates can use it properly with template engine
      *
      * @return \Magento\Framework\AuthorizationInterface
-     * @since 2.0.0
      */
     public function getAuthorization()
     {
@@ -116,7 +106,6 @@ class Template extends \Magento\Framework\View\Element\Template
      * Prepare html output
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -128,7 +117,6 @@ class Template extends \Magento\Framework\View\Element\Template
      * Return toolbar block instance
      *
      * @return bool|\Magento\Framework\View\Element\BlockInterface
-     * @since 2.0.0
      */
     public function getToolbar()
     {

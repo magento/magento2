@@ -12,13 +12,11 @@ use Magento\Framework\Event\Observer;
 /**
  * Class \Magento\GoogleOptimizer\Observer\CmsPage\SaveGoogleExperimentScriptObserver
  *
- * @since 2.0.0
  */
 class SaveGoogleExperimentScriptObserver extends \Magento\GoogleOptimizer\Observer\AbstractSave
 {
     /**
      * @var \Magento\Cms\Model\Page
-     * @since 2.0.0
      */
     protected $_page;
 
@@ -27,7 +25,6 @@ class SaveGoogleExperimentScriptObserver extends \Magento\GoogleOptimizer\Observ
      *
      * @param Observer $observer
      * @return void
-     * @since 2.0.0
      */
     protected function _initEntity($observer)
     {
@@ -38,7 +35,6 @@ class SaveGoogleExperimentScriptObserver extends \Magento\GoogleOptimizer\Observ
      * Get data for saving code model
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getCodeData()
     {

@@ -10,7 +10,6 @@ namespace Magento\Framework\Interception;
 /**
  * Interface \Magento\Framework\Interception\DefinitionInterface
  *
- * @since 2.0.0
  */
 interface DefinitionInterface
 {
@@ -25,7 +24,6 @@ interface DefinitionInterface
      *
      * @param string $type
      * @return string[]
-     * @since 2.0.0
      */
     public function getMethodList($type);
 }

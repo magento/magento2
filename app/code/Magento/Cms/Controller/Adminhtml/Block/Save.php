@@ -15,13 +15,11 @@ use Magento\TestFramework\Inspection\Exception;
 /**
  * Class \Magento\Cms\Controller\Adminhtml\Block\Save
  *
- * @since 2.0.0
  */
 class Save extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**
      * @var DataPersistorInterface
-     * @since 2.1.0
      */
     protected $dataPersistor;
 
@@ -29,7 +27,6 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
      * @param Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param DataPersistorInterface $dataPersistor
-     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -45,7 +42,6 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -8,37 +8,31 @@ namespace Magento\Checkout\CustomerData;
 
 /**
  * Default item
- * @since 2.0.0
  */
 class DefaultItem extends AbstractItem
 {
     /**
      * @var \Magento\Catalog\Helper\Image
-     * @since 2.0.0
      */
     protected $imageHelper;
 
     /**
      * @var \Magento\Msrp\Helper\Data
-     * @since 2.0.0
      */
     protected $msrpHelper;
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var \Magento\Catalog\Helper\Product\ConfigurationPool
-     * @since 2.0.0
      */
     protected $configurationPool;
 
     /**
      * @var \Magento\Checkout\Helper\Data
-     * @since 2.0.0
      */
     protected $checkoutHelper;
 
@@ -49,7 +43,6 @@ class DefaultItem extends AbstractItem
      * @param \Magento\Catalog\Helper\Product\ConfigurationPool $configurationPool
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Helper\Image $imageHelper,
@@ -67,7 +60,6 @@ class DefaultItem extends AbstractItem
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function doGetItemData()
     {
@@ -101,7 +93,6 @@ class DefaultItem extends AbstractItem
      *
      * @return array
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function getOptionList()
     {
@@ -111,7 +102,6 @@ class DefaultItem extends AbstractItem
     /**
      * @return \Magento\Catalog\Model\Product
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function getProductForThumbnail()
     {
@@ -121,7 +111,6 @@ class DefaultItem extends AbstractItem
     /**
      * @return \Magento\Catalog\Model\Product
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function getProduct()
     {
@@ -132,7 +121,6 @@ class DefaultItem extends AbstractItem
      * Get item configure url
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getConfigureUrl()
     {
@@ -146,7 +134,6 @@ class DefaultItem extends AbstractItem
      * Check Product has URL
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function hasProductUrl()
     {
@@ -178,7 +165,6 @@ class DefaultItem extends AbstractItem
      * Retrieve URL to item Product
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getProductUrl()
     {

@@ -13,7 +13,6 @@ use Magento\Ui\Component\Filters\FilterModifier;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Select extends AbstractFilter
 {
@@ -25,13 +24,11 @@ class Select extends AbstractFilter
      * Wrapped component
      *
      * @var ElementSelect
-     * @since 2.0.0
      */
     protected $wrappedComponent;
 
     /**
      * @var OptionSourceInterface
-     * @since 2.0.0
      */
     protected $optionsProvider;
 
@@ -43,7 +40,6 @@ class Select extends AbstractFilter
      * @param OptionSourceInterface|null $optionsProvider
      * @param array $components
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -62,7 +58,6 @@ class Select extends AbstractFilter
      * Prepare component configuration
      *
      * @return void
-     * @since 2.0.0
      */
     public function prepare()
     {
@@ -96,7 +91,6 @@ class Select extends AbstractFilter
      * Apply filter
      *
      * @return void
-     * @since 2.0.0
      */
     protected function applyFilter()
     {
@@ -124,7 +118,6 @@ class Select extends AbstractFilter
      * Returns options provider
      *
      * @return OptionSourceInterface
-     * @since 2.0.0
      */
     public function getOptionProvider()
     {

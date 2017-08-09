@@ -11,7 +11,6 @@ use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 
 /**
  * Security config
- * @since 2.1.0
  */
 class Config implements ConfigInterface
 {
@@ -57,13 +56,11 @@ class Config implements ConfigInterface
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.1.0
      */
     private $scopeConfig;
 
     /**
      * @var ScopeInterface
-     * @since 2.1.0
      */
     private $scope;
 
@@ -72,7 +69,6 @@ class Config implements ConfigInterface
      *
      * @param ScopeConfigInterface $scopeConfig
      * @param ScopeInterface $scope
-     * @since 2.1.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -86,7 +82,6 @@ class Config implements ConfigInterface
      * {@inheritDoc}
      *
      * @return string
-     * @since 2.1.0
      */
     public function getCustomerServiceEmail()
     {
@@ -100,7 +95,6 @@ class Config implements ConfigInterface
      * {@inheritDoc}
      *
      * @return int
-     * @since 2.1.0
      */
     public function getLimitationTimePeriod()
     {
@@ -111,7 +105,6 @@ class Config implements ConfigInterface
      * {@inheritDoc}
      *
      * @return bool
-     * @since 2.1.0
      */
     public function isAdminAccountSharingEnabled()
     {
@@ -125,7 +118,6 @@ class Config implements ConfigInterface
      * {@inheritDoc}
      *
      * @return int
-     * @since 2.1.0
      */
     public function getAdminSessionLifetime()
     {
@@ -136,7 +128,6 @@ class Config implements ConfigInterface
      * {@inheritDoc}
      *
      * @return string
-     * @since 2.1.0
      */
     protected function getXmlPathPrefix()
     {
@@ -150,7 +141,6 @@ class Config implements ConfigInterface
      * {@inheritdoc}
      *
      * @return int
-     * @since 2.1.0
      */
     public function getPasswordResetProtectionType()
     {
@@ -165,7 +155,6 @@ class Config implements ConfigInterface
      *
      * @param int $scope
      * @return int
-     * @since 2.1.0
      */
     public function getMaxNumberPasswordResetRequests()
     {
@@ -180,7 +169,6 @@ class Config implements ConfigInterface
      *
      * @param int $scope
      * @return int
-     * @since 2.1.0
      */
     public function getMinTimeBetweenPasswordResetRequests()
     {

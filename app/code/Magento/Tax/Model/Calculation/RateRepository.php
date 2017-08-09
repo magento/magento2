@@ -18,7 +18,6 @@ use Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
 {
@@ -28,7 +27,6 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
      * Tax rate model and tax rate data object converter
      *
      * @var  Converter
-     * @since 2.0.0
      */
     protected $converter;
 
@@ -36,49 +34,41 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
      * Tax rate registry
      *
      * @var  RateRegistry
-     * @since 2.0.0
      */
     protected $rateRegistry;
 
     /**
      * @var \Magento\Tax\Api\Data\TaxRuleSearchResultsInterfaceFactory
-     * @since 2.0.0
      */
     private $taxRateSearchResultsFactory;
 
     /**
      * @var RateFactory
-     * @since 2.0.0
      */
     private $rateFactory;
 
     /**
      * @var \Magento\Directory\Model\CountryFactory
-     * @since 2.0.0
      */
     protected $countryFactory;
 
     /**
      * @var \Magento\Directory\Model\RegionFactory
-     * @since 2.0.0
      */
     protected $regionFactory;
 
     /**
      * @var \Magento\Tax\Model\ResourceModel\Calculation\Rate
-     * @since 2.0.0
      */
     protected $resourceModel;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
-     * @since 2.0.0
      */
     protected $joinProcessor;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
-     * @since 2.2.0
      */
     private $collectionProcessor;
 
@@ -92,7 +82,6 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
      * @param \Magento\Tax\Model\ResourceModel\Calculation\Rate $rateResource
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param CollectionProcessorInterface $collectionProcessor
-     * @since 2.0.0
      */
     public function __construct(
         Converter $converter,
@@ -118,7 +107,6 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function save(\Magento\Tax\Api\Data\TaxRateInterface $taxRate)
     {
@@ -139,7 +127,6 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function get($rateId)
     {
@@ -148,7 +135,6 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function delete(\Magento\Tax\Api\Data\TaxRateInterface $taxRate)
     {
@@ -157,7 +143,6 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function deleteById($rateId)
     {
@@ -169,7 +154,6 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -198,9 +182,8 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @throws \Magento\Framework\Exception\InputException
-     * @since 2.0.0
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
     {
@@ -219,10 +202,9 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     /**
      * Translates a field name to a DB column name for use in collection queries.
      *
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @param string $field a field name that should be translated to a DB column name.
      * @return string
-     * @since 2.0.0
      */
     protected function translateField($field)
     {
@@ -243,7 +225,6 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     private function validate(\Magento\Tax\Api\Data\TaxRateInterface $taxRate)
     {
@@ -323,9 +304,8 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
-     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

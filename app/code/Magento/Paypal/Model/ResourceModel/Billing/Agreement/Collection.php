@@ -9,7 +9,6 @@ namespace Magento\Paypal\Model\ResourceModel\Billing\Agreement;
  * Billing agreements resource collection
  *
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -17,7 +16,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Mapping for fields
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_map = [
         'fields' => [
@@ -31,13 +29,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\Customer
-     * @since 2.0.0
      */
     protected $_customerResource;
 
     /**
      * @var \Magento\Eav\Helper\Data
-     * @since 2.0.0
      */
     protected $_eavHelper;
 
@@ -50,7 +46,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Eav\Helper\Data $eavHelper
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -71,7 +66,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Collection initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -85,7 +79,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add customer details(email, firstname, lastname) to select
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addCustomerDetails()
     {
@@ -103,7 +96,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function addFieldToFilter($field, $condition = null)
     {

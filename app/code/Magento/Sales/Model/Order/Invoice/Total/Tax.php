@@ -8,7 +8,6 @@ namespace Magento\Sales\Model\Order\Invoice\Total;
 /**
  * Class \Magento\Sales\Model\Order\Invoice\Total\Tax
  *
- * @since 2.0.0
  */
 class Tax extends AbstractTotal
 {
@@ -19,7 +18,6 @@ class Tax extends AbstractTotal
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function collect(\Magento\Sales\Model\Order\Invoice $invoice)
     {
@@ -127,7 +125,6 @@ class Tax extends AbstractTotal
      *
      * @param \Magento\Sales\Model\Order\Invoice $invoice
      * @return bool
-     * @since 2.0.0
      */
     protected function _canIncludeShipping($invoice)
     {

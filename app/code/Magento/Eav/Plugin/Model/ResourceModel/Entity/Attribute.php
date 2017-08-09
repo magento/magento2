@@ -15,7 +15,6 @@ use Magento\Framework\Serialize\SerializerInterface;
 /**
  * Class \Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute
  *
- * @since 2.0.0
  */
 class Attribute
 {
@@ -26,19 +25,16 @@ class Attribute
 
     /**
      * @var CacheInterface
-     * @since 2.0.0
      */
     private $cache;
 
     /**
      * @var StateInterface
-     * @since 2.2.0
      */
     private $cacheState;
 
     /**
      * @var SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -47,7 +43,6 @@ class Attribute
      * @param StateInterface $cacheState
      * @param SerializerInterface $serializer
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         CacheInterface $cache,
@@ -65,7 +60,6 @@ class Attribute
      * @param int $attributeId
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function aroundGetStoreLabelsByAttributeId(
         AttributeResource $subject,
@@ -94,7 +88,6 @@ class Attribute
      * Check if cache is enabled
      *
      * @return bool
-     * @since 2.2.0
      */
     private function isCacheEnabled()
     {

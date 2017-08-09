@@ -12,7 +12,6 @@ use Magento\Framework\Data\Collection\AbstractDb;
 /**
  * Class \Magento\Cms\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\BlockStoreFilter
  *
- * @since 2.2.0
  */
 class BlockStoreFilter implements CustomFilterInterface
 {
@@ -22,7 +21,6 @@ class BlockStoreFilter implements CustomFilterInterface
      * @param Filter $filter
      * @param AbstractDb $collection
      * @return bool
-     * @since 2.2.0
      */
     public function apply(Filter $filter, AbstractDb $collection)
     {

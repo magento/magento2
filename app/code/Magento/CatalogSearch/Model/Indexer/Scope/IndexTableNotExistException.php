@@ -13,7 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
  * but it does not exist in a database
  *
  * @api
- * @since 2.2.0
+ * @since 100.2.0
  */
 class IndexTableNotExistException extends LocalizedException
 {

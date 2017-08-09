@@ -10,13 +10,11 @@ namespace Magento\Checkout\Controller\Cart;
 /**
  * Class \Magento\Checkout\Controller\Cart\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Checkout\Controller\Cart
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -29,7 +27,6 @@ class Index extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Checkout\Model\Cart $cart
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -55,7 +52,6 @@ class Index extends \Magento\Checkout\Controller\Cart
      * Shopping cart display action
      *
      * @return \Magento\Framework\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

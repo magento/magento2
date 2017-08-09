@@ -11,25 +11,21 @@ use Magento\Framework\DB\Sequence\SequenceInterface;
 
 /**
  * Class Sequence
- * @since 2.1.0
  */
 class Sequence implements SequenceInterface
 {
     /**
      * @var string
-     * @since 2.1.0
      */
     protected $connectionName;
 
     /**
      * @var string
-     * @since 2.1.0
      */
     protected $sequenceTable;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.1.0
      */
     protected $resource;
 
@@ -37,7 +33,6 @@ class Sequence implements SequenceInterface
      * @param ResourceConnection $resource
      * @param string $connectionName
      * @param string $sequenceTable
-     * @since 2.1.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -51,7 +46,6 @@ class Sequence implements SequenceInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function getNextValue()
     {
@@ -63,7 +57,6 @@ class Sequence implements SequenceInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function getCurrentValue()
     {

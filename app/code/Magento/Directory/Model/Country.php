@@ -17,31 +17,26 @@ namespace Magento\Directory\Model;
  * @method \Magento\Directory\Model\Country setCountryId(string $value)
  *
  * @api
- * @since 2.0.0
  */
 class Country extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     public static $_format = [];
 
     /**
      * @var \Magento\Framework\Locale\ListsInterface
-     * @since 2.0.0
      */
     protected $_localeLists;
 
     /**
      * @var \Magento\Directory\Model\Country\FormatFactory
-     * @since 2.0.0
      */
     protected $_formatFactory;
 
     /**
      * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
-     * @since 2.0.0
      */
     protected $_regionCollectionFactory;
 
@@ -54,7 +49,6 @@ class Country extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -74,7 +68,6 @@ class Country extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -86,7 +79,6 @@ class Country extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function loadByCode($code)
     {
@@ -98,7 +90,6 @@ class Country extends \Magento\Framework\Model\AbstractModel
      * Get regions
      *
      * @return \Magento\Directory\Model\ResourceModel\Region\Collection
-     * @since 2.0.0
      */
     public function getRegions()
     {
@@ -107,7 +98,6 @@ class Country extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return \Magento\Directory\Model\ResourceModel\Region\Collection
-     * @since 2.0.0
      */
     public function getLoadedRegionCollection()
     {
@@ -118,7 +108,6 @@ class Country extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return \Magento\Directory\Model\ResourceModel\Region\Collection
-     * @since 2.0.0
      */
     public function getRegionCollection()
     {
@@ -131,7 +120,6 @@ class Country extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\DataObject $address
      * @param bool $html
      * @return string
-     * @since 2.0.0
      */
     public function formatAddress(\Magento\Framework\DataObject $address, $html = false)
     {
@@ -173,7 +161,6 @@ T: {{telephone}}";
      * Retrieve country formats
      *
      * @return \Magento\Directory\Model\ResourceModel\Country\Format\Collection
-     * @since 2.0.0
      */
     public function getFormats()
     {
@@ -195,7 +182,6 @@ T: {{telephone}}";
      *
      * @param string $type
      * @return \Magento\Directory\Model\Country\Format|null
-     * @since 2.0.0
      */
     public function getFormat($type)
     {
@@ -213,7 +199,6 @@ T: {{telephone}}";
      * Get country name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName($locale = null)
     {

@@ -8,13 +8,13 @@ namespace Magento\Bundle\Model\Product\Attribute\Source\Shipment;
 /**
  * Bundle Shipment Type Attribute Renderer
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class Type extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getAllOptions()
     {
@@ -29,7 +29,7 @@ class Type extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getOptionText($value)
     {

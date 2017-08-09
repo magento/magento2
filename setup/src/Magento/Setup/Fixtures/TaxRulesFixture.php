@@ -22,7 +22,6 @@ use Magento\Tax\Model\ResourceModel\Calculation\Rate\CollectionFactory;
  * Tax Config Settings setter for different Tax Modes (for example VAT)
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.2.0
  */
 class TaxRulesFixture extends Fixture
 {
@@ -38,7 +37,6 @@ class TaxRulesFixture extends Fixture
 
     /**
      * @var array config paths and values for tax modes
-     * @since 2.2.0
      */
     private $configs = [
         'VAT' => [
@@ -62,43 +60,36 @@ class TaxRulesFixture extends Fixture
 
     /**
      * @var int
-     * @since 2.2.0
      */
     protected $priority = 101;
 
     /**
      * @var TaxRuleRepositoryInterface
-     * @since 2.2.0
      */
     private $taxRuleRepository;
 
     /**
      * @var TaxRuleInterfaceFactory
-     * @since 2.2.0
      */
     private $taxRuleFactory;
 
     /**
      * @var TaxRateInterfaceFactory
-     * @since 2.2.0
      */
     private $taxRateFactory;
 
     /**
      * @var CollectionFactory
-     * @since 2.2.0
      */
     private $taxRateCollectionFactory;
 
     /**
      * @var TaxRateRepositoryInterface
-     * @since 2.2.0
      */
     private $taxRateRepository;
 
     /**
      * @var ConfigWriter
-     * @since 2.2.0
      */
     private $configWriter;
 
@@ -110,7 +101,6 @@ class TaxRulesFixture extends Fixture
      * @param TaxRateInterfaceFactory $taxRateFactory
      * @param TaxRateRepositoryInterface $taxRateRepository
      * @param ConfigWriter $configWriter
-     * @since 2.2.0
      */
     public function __construct(
         FixtureModel $fixtureModel,
@@ -133,7 +123,6 @@ class TaxRulesFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function execute()
     {
@@ -169,7 +158,6 @@ class TaxRulesFixture extends Fixture
      *
      * @param string $taxMode
      * @return void
-     * @since 2.2.0
      */
     private function setTaxMode($taxMode)
     {
@@ -204,7 +192,6 @@ class TaxRulesFixture extends Fixture
      *
      * @param string $mode
      * @return void
-     * @since 2.2.0
      */
     private function setConfigByTaxMode($mode = self::DEFAULT_TAX_MODE)
     {
@@ -220,7 +207,6 @@ class TaxRulesFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getActionTitle()
     {
@@ -229,7 +215,6 @@ class TaxRulesFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function introduceParamLabels()
     {

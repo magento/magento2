@@ -14,19 +14,16 @@ use Magento\Framework\Config\FileIteratorFactory;
 /**
  * Class \Magento\Email\Model\Template\Config\FileResolver
  *
- * @since 2.0.0
  */
 class FileResolver implements \Magento\Framework\Config\FileResolverInterface
 {
     /**
      * @var \Magento\Framework\Config\FileIteratorFactory
-     * @since 2.0.0
      */
     protected $iteratorFactory;
 
     /**
      * @var DirSearch
-     * @since 2.0.0
      */
     protected $dirSearch;
 
@@ -35,7 +32,6 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
      *
      * @param FileIteratorFactory $iteratorFactory
      * @param DirSearch $dirSearch
-     * @since 2.0.0
      */
     public function __construct(
         FileIteratorFactory $iteratorFactory,
@@ -47,7 +43,6 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function get($filename, $scope)
     {

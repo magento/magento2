@@ -11,13 +11,11 @@ use Magento\Setup\Module\Dependency\Report\Data\Config\AbstractConfig;
  * Config
  *
  * @method \Magento\Setup\Module\Dependency\Report\Dependency\Data\Module[] getModules()
- * @since 2.0.0
  */
 class Config extends AbstractConfig
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getDependenciesCount()
     {
@@ -28,7 +26,6 @@ class Config extends AbstractConfig
      * Get hard dependencies count
      *
      * @return int
-     * @since 2.0.0
      */
     public function getHardDependenciesCount()
     {
@@ -43,7 +40,6 @@ class Config extends AbstractConfig
      * Get soft dependencies count
      *
      * @return int
-     * @since 2.0.0
      */
     public function getSoftDependenciesCount()
     {

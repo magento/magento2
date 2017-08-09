@@ -18,43 +18,36 @@ use Magento\CatalogSearch\Model\Search\FilterMapper\VisibilityFilter;
  * Class SelectContainerBuilder
  * Class is responsible for SelectContainer creation and filling it with all required data
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.2.0
  */
 class SelectContainerBuilder
 {
     /**
      * @var SelectContainerFactory
-     * @since 2.2.0
      */
     private $selectContainerFactory;
 
     /**
      * @var FullTextSearchCheck
-     * @since 2.2.0
      */
     private $fullTextSearchCheck;
 
     /**
      * @var CustomAttributeFilterCheck
-     * @since 2.2.0
      */
     private $customAttributeFilterCheck;
 
     /**
      * @var FiltersExtractor
-     * @since 2.2.0
      */
     private $filtersExtractor;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.2.0
      */
     private $scopeConfig;
 
     /**
      * @var ResourceConnection
-     * @since 2.2.0
      */
     private $resource;
 
@@ -65,7 +58,6 @@ class SelectContainerBuilder
      * @param FiltersExtractor $filtersExtractor
      * @param ScopeConfigInterface $scopeConfig
      * @param ResourceConnection $resource
-     * @since 2.2.0
      */
     public function __construct(
         SelectContainerFactory $selectContainerFactory,
@@ -91,7 +83,6 @@ class SelectContainerBuilder
      * @throws \DomainException
      * @throws \InvalidArgumentException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.2.0
      */
     public function buildByRequest(RequestInterface $request)
     {
@@ -132,7 +123,6 @@ class SelectContainerBuilder
      * Checks if show_out_of_stock flag is enabled in current configuration
      *
      * @return bool
-     * @since 2.2.0
      */
     private function isSetShowOutOfStockFlag()
     {

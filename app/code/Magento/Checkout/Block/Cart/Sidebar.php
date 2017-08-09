@@ -11,7 +11,6 @@ use Magento\Store\Model\ScopeInterface;
  * Cart sidebar block
  *
  * @api
- * @since 2.0.0
  */
 class Sidebar extends AbstractCart
 {
@@ -27,13 +26,11 @@ class Sidebar extends AbstractCart
 
     /**
      * @var \Magento\Catalog\Helper\Image
-     * @since 2.0.0
      */
     protected $imageHelper;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -46,7 +43,6 @@ class Sidebar extends AbstractCart
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -74,7 +70,6 @@ class Sidebar extends AbstractCart
      * Returns minicart config
      *
      * @return array
-     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -93,7 +88,7 @@ class Sidebar extends AbstractCart
 
     /**
      * @return string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getSerializedConfig()
     {
@@ -102,7 +97,6 @@ class Sidebar extends AbstractCart
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getImageHtmlTemplate()
     {
@@ -116,7 +110,6 @@ class Sidebar extends AbstractCart
      *
      * @codeCoverageIgnore
      * @return string
-     * @since 2.0.0
      */
     public function getCheckoutUrl()
     {
@@ -128,7 +121,6 @@ class Sidebar extends AbstractCart
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getShoppingCartUrl()
     {
@@ -140,7 +132,6 @@ class Sidebar extends AbstractCart
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getUpdateItemQtyUrl()
     {
@@ -152,7 +143,6 @@ class Sidebar extends AbstractCart
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getRemoveItemUrl()
     {
@@ -165,7 +155,6 @@ class Sidebar extends AbstractCart
      * @return bool
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsNeedToDisplaySideBar()
     {
@@ -179,7 +168,6 @@ class Sidebar extends AbstractCart
      * Return totals from custom quote if needed
      *
      * @return array
-     * @since 2.0.0
      */
     public function getTotalsCache()
     {
@@ -195,7 +183,6 @@ class Sidebar extends AbstractCart
      *
      * @codeCoverageIgnore
      * @return string
-     * @since 2.0.0
      */
     public function getTotalsHtml()
     {
@@ -207,7 +194,6 @@ class Sidebar extends AbstractCart
      *
      * @codeCoverageIgnore
      * @return string
-     * @since 2.0.0
      */
     public function getBaseUrl()
     {
@@ -218,7 +204,6 @@ class Sidebar extends AbstractCart
      * Return max visible item count for minicart
      *
      * @return int
-     * @since 2.1.0
      */
     private function getMiniCartMaxItemsCount()
     {
@@ -230,7 +215,6 @@ class Sidebar extends AbstractCart
      * This setting regulates how many items will be displayed in minicart
      *
      * @return int
-     * @since 2.2.0
      */
     private function getMaxItemsToDisplay()
     {

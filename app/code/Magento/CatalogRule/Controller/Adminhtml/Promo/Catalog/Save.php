@@ -14,13 +14,11 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
     /**
      * @var DataPersistorInterface
-     * @since 2.1.0
      */
     protected $dataPersistor;
 
@@ -29,7 +27,6 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
      * @param Registry $coreRegistry
      * @param Date $dateFilter
      * @param DataPersistorInterface $dataPersistor
-     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -44,7 +41,6 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
     /**
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

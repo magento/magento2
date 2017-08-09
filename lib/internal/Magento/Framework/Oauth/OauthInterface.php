@@ -11,7 +11,6 @@ namespace Magento\Framework\Oauth;
  * token requests. A method is also included for generating an OAuth header that can be used in an HTTP request.
  *
  * @api
- * @since 2.0.0
  */
 interface OauthInterface
 {
@@ -89,7 +88,6 @@ interface OauthInterface
      * )
      * </pre>
      * @throws \Magento\Framework\Oauth\Exception - Validation errors.
-     * @since 2.0.0
      */
     public function getRequestToken($params, $requestUrl, $httpMethod = 'POST');
 
@@ -119,7 +117,6 @@ interface OauthInterface
      * )
      * </pre>
      * @throws \Magento\Framework\Oauth\Exception
-     * @since 2.0.0
      */
     public function getAccessToken($params, $requestUrl, $httpMethod = 'POST');
 
@@ -142,7 +139,6 @@ interface OauthInterface
      * @param string $httpMethod - (default: 'POST')
      * @return int Consumer ID.
      * @throws \Magento\Framework\Oauth\Exception - Validation errors.
-     * @since 2.0.0
      */
     public function validateAccessTokenRequest($params, $requestUrl, $httpMethod = 'POST');
 
@@ -152,7 +148,6 @@ interface OauthInterface
      * @param string $accessToken - The access token.
      * @return int - Consumer ID if the access token is valid.
      * @throws \Magento\Framework\Oauth\Exception - Validation errors.
-     * @since 2.0.0
      */
     public function validateAccessToken($accessToken);
 
@@ -180,7 +175,6 @@ interface OauthInterface
      * oauth_token="7c0709f789e1f38a17aa4b9a28e1b06c", oauth_signature="agVxK0epXOOeQK4%2Bc7UAqUXoAok%3D"
      * <pre>
      * @throws \Magento\Framework\Oauth\Exception
-     * @since 2.0.0
      */
     public function buildAuthorizationHeader(
         $params,

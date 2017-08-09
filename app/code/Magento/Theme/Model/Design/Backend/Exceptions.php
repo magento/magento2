@@ -11,7 +11,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Class \Magento\Theme\Model\Design\Backend\Exceptions
  *
- * @since 2.0.0
  */
 class Exceptions extends ArraySerialized
 {
@@ -19,7 +18,6 @@ class Exceptions extends ArraySerialized
      * Design package instance
      *
      * @var \Magento\Framework\View\DesignInterface
-     * @since 2.0.0
      */
     protected $_design = null;
 
@@ -35,7 +33,6 @@ class Exceptions extends ArraySerialized
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param Json|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -67,7 +64,6 @@ class Exceptions extends ArraySerialized
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * if there is no field value, search value is empty or regular expression is not valid
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -109,7 +105,6 @@ class Exceptions extends ArraySerialized
      * @param string $search
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException on invalid regular expression
-     * @since 2.0.0
      */
     protected function _composeRegexp($search)
     {
@@ -131,7 +126,6 @@ class Exceptions extends ArraySerialized
      *
      * @param string $search
      * @return bool
-     * @since 2.0.0
      */
     protected function _isRegexp($search)
     {
@@ -158,7 +152,6 @@ class Exceptions extends ArraySerialized
 
     /**
      * @inheritDoc
-     * @since 2.1.0
      */
     public function afterLoad()
     {
@@ -175,7 +168,6 @@ class Exceptions extends ArraySerialized
 
     /**
      * @return array
-     * @since 2.1.0
      */
     public function getValue()
     {

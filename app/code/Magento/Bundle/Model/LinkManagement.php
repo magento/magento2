@@ -15,49 +15,41 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var \Magento\Bundle\Api\Data\LinkInterfaceFactory
-     * @since 2.0.0
      */
     protected $linkFactory;
 
     /**
      * @var \Magento\Bundle\Model\ResourceModel\BundleFactory
-     * @since 2.0.0
      */
     protected $bundleFactory;
 
     /**
      * @var SelectionFactory
-     * @since 2.0.0
      */
     protected $bundleSelection;
 
     /**
      * @var \Magento\Bundle\Model\ResourceModel\Option\CollectionFactory
-     * @since 2.0.0
      */
     protected $optionCollection;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
-     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
@@ -69,7 +61,6 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
      * @param \Magento\Bundle\Model\ResourceModel\Option\CollectionFactory $optionCollection
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @since 2.0.0
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
@@ -91,7 +82,6 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getChildren($productSku, $optionId = null)
     {
@@ -115,7 +105,6 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function addChildByProductSku($sku, $optionId, \Magento\Bundle\Api\Data\LinkInterface $linkedProduct)
     {
@@ -128,7 +117,6 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function saveChild(
         $sku,
@@ -182,7 +170,6 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
      * @return \Magento\Bundle\Model\Selection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function mapProductLinkToSelectionModel(
         \Magento\Bundle\Model\Selection $selectionModel,
@@ -223,7 +210,6 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function addChild(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -303,7 +289,6 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function removeChild($sku, $optionId, $childSku)
     {
@@ -345,7 +330,6 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
      * @param \Magento\Catalog\Model\Product $selection
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Bundle\Api\Data\LinkInterface
-     * @since 2.0.0
      */
     private function buildLink(\Magento\Catalog\Model\Product $selection, \Magento\Catalog\Model\Product $product)
     {
@@ -376,7 +360,6 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     /**
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return \Magento\Bundle\Api\Data\OptionInterface[]
-     * @since 2.0.0
      */
     private function getOptions(\Magento\Catalog\Api\Data\ProductInterface $product)
     {
@@ -401,7 +384,6 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     /**
      * Get MetadataPool instance
      * @return MetadataPool
-     * @since 2.1.0
      */
     private function getMetadataPool()
     {

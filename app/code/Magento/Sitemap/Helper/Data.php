@@ -15,7 +15,6 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Class \Magento\Sitemap\Helper\Data
  *
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -73,7 +72,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return int
-     * @since 2.0.0
      */
     public function getMaximumLinesNumber($storeId)
     {
@@ -89,7 +87,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return int
-     * @since 2.0.0
      */
     public function getMaximumFileSize($storeId)
     {
@@ -105,7 +102,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
-     * @since 2.0.0
      */
     public function getCategoryChangefreq($storeId)
     {
@@ -121,7 +117,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
-     * @since 2.0.0
      */
     public function getProductChangefreq($storeId)
     {
@@ -137,7 +132,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
-     * @since 2.0.0
      */
     public function getPageChangefreq($storeId)
     {
@@ -153,7 +147,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
-     * @since 2.0.0
      */
     public function getCategoryPriority($storeId)
     {
@@ -169,7 +162,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
-     * @since 2.0.0
      */
     public function getProductPriority($storeId)
     {
@@ -185,7 +177,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
-     * @since 2.0.0
      */
     public function getPagePriority($storeId)
     {
@@ -201,7 +192,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return int
-     * @since 2.0.0
      */
     public function getEnableSubmissionRobots($storeId)
     {
@@ -217,7 +207,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
-     * @since 2.0.0
      */
     public function getProductImageIncludePolicy($storeId)
     {
@@ -232,7 +221,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get list valid paths for generate a sitemap XML file
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getValidPaths()
     {

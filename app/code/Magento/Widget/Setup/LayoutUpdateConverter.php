@@ -13,13 +13,11 @@ use Magento\Framework\DB\DataConverter\SerializedToJson;
 
 /**
  * Convert conditions_encoded part of layout update data from serialized to JSON format
- * @since 2.2.0
  */
 class LayoutUpdateConverter extends SerializedToJson
 {
     /**
      * @var Normalizer
-     * @since 2.2.0
      */
     private $normalizer;
 
@@ -29,7 +27,6 @@ class LayoutUpdateConverter extends SerializedToJson
      * @param Serialize $serialize
      * @param Json $json
      * @param Normalizer $normalizer
-     * @since 2.2.0
      */
     public function __construct(
         Serialize $serialize,
@@ -46,7 +43,6 @@ class LayoutUpdateConverter extends SerializedToJson
      * @param string $value
      * @return string
      * @throws DataConversionException
-     * @since 2.2.0
      */
     public function convert($value)
     {
@@ -67,7 +63,6 @@ class LayoutUpdateConverter extends SerializedToJson
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     protected function isValidJsonValue($value)
     {
@@ -77,7 +72,6 @@ class LayoutUpdateConverter extends SerializedToJson
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     protected function unserializeValue($value)
     {
@@ -88,7 +82,6 @@ class LayoutUpdateConverter extends SerializedToJson
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     protected function encodeJson($value)
     {
@@ -102,7 +95,6 @@ class LayoutUpdateConverter extends SerializedToJson
      *
      * @param string $serializedContent
      * @return string
-     * @since 2.2.0
      */
     private function restoreReservedCharactersInSerializedContent($serializedContent)
     {

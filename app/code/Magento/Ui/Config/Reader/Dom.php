@@ -12,7 +12,6 @@ use Magento\Framework\Config\Dom as ConfigDom;
 
 /**
  * UI Component configuration file DOM object representation
- * @since 2.2.0
  */
 class Dom extends ConfigDom
 {
@@ -20,13 +19,11 @@ class Dom extends ConfigDom
      * Id attribute list
      *
      * @var array
-     * @since 2.2.0
      */
     private $idAttributes = [];
 
     /**
      * @var \DOMXPath
-     * @since 2.2.0
      */
     private $domXPath;
 
@@ -34,13 +31,11 @@ class Dom extends ConfigDom
      * Path to corresponding XSD file with validation rules for separate config files
      *
      * @var string
-     * @since 2.2.0
      */
     private $schemaFile;
 
     /**
      * @var SchemaLocatorInterface
-     * @since 2.2.0
      */
     private $schemaLocator;
 
@@ -53,7 +48,6 @@ class Dom extends ConfigDom
      * @param array $idAttributes
      * @param null $typeAttributeName
      * @param string $errorFormat
-     * @since 2.2.0
      */
     public function __construct(
         $xml,
@@ -76,7 +70,6 @@ class Dom extends ConfigDom
      *
      * @param string $xml
      * @return void
-     * @since 2.2.0
      */
     public function merge($xml)
     {
@@ -91,7 +84,6 @@ class Dom extends ConfigDom
      * @param \DOMNode $contextNode
      * @param \DOMNodeList $insertedNodes
      * @return void
-     * @since 2.2.0
      */
     private function nestedMerge(\DOMNode $contextNode, \DOMNodeList $insertedNodes)
     {
@@ -128,7 +120,6 @@ class Dom extends ConfigDom
      * @param \DOMNodeList $rootMatchList
      * @param \DOMElement $insertedItem
      * @return void
-     * @since 2.2.0
      */
     private function processMatchedNodes(\DOMNodeList $rootMatchList, \DOMElement $insertedItem)
     {
@@ -147,7 +138,6 @@ class Dom extends ConfigDom
      *
      * @param \DOMNode $node
      * @return string
-     * @since 2.2.0
      */
     private function createXPath(\DOMNode $node)
     {
@@ -183,7 +173,6 @@ class Dom extends ConfigDom
      * @param \DOMNode $insertedNode
      * @param \DOMNode $contextNode
      * @return void
-     * @since 2.2.0
      */
     private function appendNode(\DOMNode $insertedNode, \DOMNode $contextNode)
     {
@@ -201,7 +190,6 @@ class Dom extends ConfigDom
      * @param \DOMNode $contextNode
      * @param \DOMNode $importNode
      * @return void
-     * @since 2.2.0
      */
     private function appendNodeToContext(\DOMNode $contextNode, \DOMNode $importNode)
     {

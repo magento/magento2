@@ -10,7 +10,6 @@ namespace Magento\Framework\Model\ResourceModel\Db;
 /**
  * Class \Magento\Framework\Model\ResourceModel\Db\Profiler
  *
- * @since 2.0.0
  */
 class Profiler extends \Magento\Framework\DB\Profiler
 {
@@ -26,7 +25,6 @@ class Profiler extends \Magento\Framework\DB\Profiler
 
     /**
      * @var array Allowed query types
-     * @since 2.0.0
      */
     protected $_queryTypes = ['select', 'insert', 'update', 'delete'];
 
@@ -35,7 +33,6 @@ class Profiler extends \Magento\Framework\DB\Profiler
      *
      * @param string $operation
      * @return string
-     * @since 2.0.0
      */
     protected function _getTimerName($operation)
     {
@@ -63,7 +60,6 @@ class Profiler extends \Magento\Framework\DB\Profiler
      *
      * @param string $queryText
      * @return string
-     * @since 2.0.0
      */
     protected function _parseQueryType($queryText)
     {
@@ -82,7 +78,6 @@ class Profiler extends \Magento\Framework\DB\Profiler
      * @param string $queryText SQL statement
      * @param integer $queryType OPTIONAL Type of query, one of the \Zend_Db_Profiler::* constants
      * @return integer|null
-     * @since 2.0.0
      */
     public function queryStart($queryText, $queryType = null)
     {
@@ -120,7 +115,6 @@ class Profiler extends \Magento\Framework\DB\Profiler
      *
      * @param int $queryId
      * @return string|void
-     * @since 2.0.0
      */
     public function queryEnd($queryId)
     {

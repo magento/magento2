@@ -12,7 +12,6 @@ use Magento\Framework\Exception\LocalizedException;
  * impossible to send any cookie information back to the client.
  *
  * @api
- * @since 2.0.0
  */
 class FailureToSendException extends LocalizedException
 {

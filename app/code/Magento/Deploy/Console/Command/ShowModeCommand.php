@@ -14,7 +14,6 @@ use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * Command to show application mode
- * @since 2.0.0
  */
 class ShowModeCommand extends Command
 {
@@ -22,7 +21,6 @@ class ShowModeCommand extends Command
      * Object manager factory
      *
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
@@ -30,7 +28,6 @@ class ShowModeCommand extends Command
      * Inject dependencies
      *
      * @param ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -40,7 +37,6 @@ class ShowModeCommand extends Command
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -52,7 +48,6 @@ class ShowModeCommand extends Command
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

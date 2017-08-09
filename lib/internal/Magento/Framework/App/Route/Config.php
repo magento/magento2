@@ -12,49 +12,41 @@ use Magento\Framework\Serialize\SerializerInterface;
 /**
  * Class \Magento\Framework\App\Route\Config
  *
- * @since 2.0.0
  */
 class Config implements ConfigInterface
 {
     /**
      * @var \Magento\Framework\App\Route\Config\Reader
-     * @since 2.0.0
      */
     protected $_reader;
 
     /**
      * @var \Magento\Framework\Cache\FrontendInterface
-     * @since 2.0.0
      */
     protected $_cache;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_cacheId;
 
     /**
      * @var \Magento\Framework\Config\ScopeInterface
-     * @since 2.0.0
      */
     protected $_configScope;
 
     /**
      * @var \Magento\Framework\App\AreaList
-     * @since 2.0.0
      */
     protected $_areaList;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_routes;
 
     /**
      * @var SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -64,7 +56,6 @@ class Config implements ConfigInterface
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Framework\App\AreaList $areaList
      * @param string $cacheId
-     * @since 2.0.0
      */
     public function __construct(
         Config\Reader $reader,
@@ -85,7 +76,6 @@ class Config implements ConfigInterface
      *
      * @param string $scope
      * @return array
-     * @since 2.0.0
      */
     protected function _getRoutes($scope = null)
     {
@@ -117,7 +107,6 @@ class Config implements ConfigInterface
      * @param string $routeId
      * @param null $scope
      * @return string
-     * @since 2.0.0
      */
     public function getRouteFrontName($routeId, $scope = null)
     {
@@ -129,7 +118,6 @@ class Config implements ConfigInterface
      * @param string $frontName
      * @param string $scope
      * @return bool|int|string
-     * @since 2.0.0
      */
     public function getRouteByFrontName($frontName, $scope = null)
     {
@@ -146,7 +134,6 @@ class Config implements ConfigInterface
      * @param string $frontName
      * @param string $scope
      * @return string[]
-     * @since 2.0.0
      */
     public function getModulesByFrontName($frontName, $scope = null)
     {
@@ -166,8 +153,7 @@ class Config implements ConfigInterface
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {

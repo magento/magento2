@@ -14,7 +14,6 @@ use Magento\Sales\Model\Order\Item as OrderItem;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class DefaultItems extends \Magento\Framework\View\Element\Template
 {
@@ -22,7 +21,6 @@ class DefaultItems extends \Magento\Framework\View\Element\Template
      * Retrieve current order model instance
      *
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -31,7 +29,6 @@ class DefaultItems extends \Magento\Framework\View\Element\Template
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getItemOptions()
     {
@@ -54,7 +51,6 @@ class DefaultItems extends \Magento\Framework\View\Element\Template
     /**
      * @param string|array $value
      * @return string
-     * @since 2.0.0
      */
     public function getValueHtml($value)
     {
@@ -75,7 +71,6 @@ class DefaultItems extends \Magento\Framework\View\Element\Template
     /**
      * @param mixed $item
      * @return mixed
-     * @since 2.0.0
      */
     public function getSku($item)
     {
@@ -90,7 +85,6 @@ class DefaultItems extends \Magento\Framework\View\Element\Template
      * Return product additional information block
      *
      * @return \Magento\Framework\View\Element\AbstractBlock
-     * @since 2.0.0
      */
     public function getProductAdditionalInformationBlock()
     {
@@ -102,7 +96,6 @@ class DefaultItems extends \Magento\Framework\View\Element\Template
      *
      * @param OrderItem|InvoiceItem|CreditmemoItem $item
      * @return string
-     * @since 2.0.0
      */
     public function getItemPrice($item)
     {

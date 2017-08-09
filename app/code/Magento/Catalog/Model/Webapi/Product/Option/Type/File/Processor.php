@@ -13,32 +13,27 @@ use Magento\Framework\Filesystem;
 /**
  * Class \Magento\Catalog\Model\Webapi\Product\Option\Type\File\Processor
  *
- * @since 2.0.0
  */
 class Processor
 {
     /**
      * @var \Magento\Framework\Filesystem
-     * @since 2.0.0
      */
     protected $filesystem;
 
     /**
      * @var \Magento\Framework\Api\ImageProcessor
-     * @since 2.0.0
      */
     protected $imageProcessor;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $destinationFolder = 'custom_options/quote';
 
     /**
      * @param Filesystem $filesystem
      * @param ImageProcessor $imageProcessor
-     * @since 2.0.0
      */
     public function __construct(
         Filesystem $filesystem,
@@ -51,7 +46,6 @@ class Processor
     /**
      * @param ImageContentInterface $imageContent
      * @return string
-     * @since 2.0.0
      */
     protected function saveFile(ImageContentInterface $imageContent)
     {
@@ -63,7 +57,6 @@ class Processor
      * @param ImageContentInterface $imageContent
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function processFileContent(ImageContentInterface $imageContent)
     {

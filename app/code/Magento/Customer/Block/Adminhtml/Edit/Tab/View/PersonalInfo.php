@@ -15,7 +15,6 @@ use Magento\Customer\Model\Customer;
  * Adminhtml customer view personal information sales block.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class PersonalInfo extends \Magento\Backend\Block\Template
 {
@@ -30,7 +29,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Customer
      *
      * @var \Magento\Customer\Api\Data\CustomerInterface
-     * @since 2.0.0
      */
     protected $customer;
 
@@ -38,7 +36,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Customer log
      *
      * @var \Magento\Customer\Model\Log
-     * @since 2.0.0
      */
     protected $customerLog;
 
@@ -46,7 +43,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Customer logger
      *
      * @var \Magento\Customer\Model\Logger
-     * @since 2.0.0
      */
     protected $customerLogger;
 
@@ -54,7 +50,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Customer registry
      *
      * @var \Magento\Customer\Model\CustomerRegistry
-     * @since 2.1.0
      */
     protected $customerRegistry;
 
@@ -62,7 +57,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Account management
      *
      * @var AccountManagementInterface
-     * @since 2.0.0
      */
     protected $accountManagement;
 
@@ -70,7 +64,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Customer group repository
      *
      * @var \Magento\Customer\Api\GroupRepositoryInterface
-     * @since 2.0.0
      */
     protected $groupRepository;
 
@@ -78,7 +71,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Customer data factory
      *
      * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
-     * @since 2.0.0
      */
     protected $customerDataFactory;
 
@@ -86,7 +78,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Address helper
      *
      * @var \Magento\Customer\Helper\Address
-     * @since 2.0.0
      */
     protected $addressHelper;
 
@@ -94,7 +85,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Date time
      *
      * @var \Magento\Framework\Stdlib\DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
@@ -102,7 +92,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $coreRegistry;
 
@@ -110,7 +99,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Address mapper
      *
      * @var Mapper
-     * @since 2.0.0
      */
     protected $addressMapper;
 
@@ -118,7 +106,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Data object helper
      *
      * @var \Magento\Framework\Api\DataObjectHelper
-     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
@@ -135,7 +122,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * @param \Magento\Customer\Model\Logger $customerLogger
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -168,8 +154,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      *
      * @param \Magento\Framework\Registry $coreRegistry
      * @return void
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     public function setCustomerRegistry(\Magento\Customer\Model\CustomerRegistry $customerRegistry)
     {
@@ -181,8 +166,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Get customer registry
      *
      * @return \Magento\Customer\Model\CustomerRegistry
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     public function getCustomerRegistry()
     {
@@ -200,7 +184,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Retrieve customer object
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface
-     * @since 2.0.0
      */
     public function getCustomer()
     {
@@ -220,7 +203,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Retrieve customer id
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getCustomerId()
     {
@@ -231,7 +213,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Retrieves customer log model
      *
      * @return \Magento\Customer\Model\Log
-     * @since 2.0.0
      */
     protected function getCustomerLog()
     {
@@ -248,7 +229,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Returns customer's created date in the assigned store
      *
      * @return string
-     * @since 2.0.0
      */
     public function getStoreCreateDate()
     {
@@ -270,7 +250,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Retrieve store default timezone from configuration
      *
      * @return string
-     * @since 2.0.0
      */
     public function getStoreCreateDateTimezone()
     {
@@ -285,7 +264,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Get customer creation date
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCreateDate()
     {
@@ -300,7 +278,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Check if account is confirmed
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getIsConfirmedStatus()
     {
@@ -320,7 +297,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Retrieve store
      *
      * @return null|string
-     * @since 2.0.0
      */
     public function getCreatedInStore()
     {
@@ -333,7 +309,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Retrieve billing address html
      *
      * @return \Magento\Framework\Phrase|string
-     * @since 2.0.0
      */
     public function getBillingAddressHtml()
     {
@@ -358,7 +333,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Retrieve group name
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getGroupName()
     {
@@ -377,7 +351,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      *
      * @param int $groupId
      * @return \Magento\Customer\Api\Data\GroupInterface|null
-     * @since 2.0.0
      */
     private function getGroup($groupId)
     {
@@ -393,7 +366,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Returns timezone of the store to which customer assigned.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getStoreLastLoginDateTimezone()
     {
@@ -416,7 +388,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * In all other cases customer considered 'Online'.
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getCurrentStatus()
     {
@@ -450,7 +421,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Get customer last login date.
      *
      * @return \Magento\Framework\Phrase|string
-     * @since 2.0.0
      */
     public function getLastLoginDate()
     {
@@ -467,7 +437,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Returns customer last login date in store's timezone.
      *
      * @return \Magento\Framework\Phrase|string
-     * @since 2.0.0
      */
     public function getStoreLastLoginDate()
     {
@@ -485,7 +454,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Returns interval that shows how long customer will be considered 'Online'.
      *
      * @return int Interval in minutes
-     * @since 2.0.0
      */
     protected function getOnlineMinutesInterval()
     {
@@ -500,7 +468,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Get customer account lock status
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.1.0
      */
     public function getAccountLock()
     {

@@ -17,38 +17,32 @@ use Magento\Vault\Api\PaymentTokenManagementInterface;
 
 /**
  * Class GetPaymentNonceCommand
- * @since 2.1.0
  */
 class GetPaymentNonceCommand implements CommandInterface
 {
 
     /**
      * @var PaymentTokenManagementInterface
-     * @since 2.1.0
      */
     private $tokenManagement;
 
     /**
      * @var BraintreeAdapter
-     * @since 2.1.0
      */
     private $adapter;
 
     /**
      * @var ArrayResultFactory
-     * @since 2.1.0
      */
     private $resultFactory;
 
     /**
      * @var SubjectReader
-     * @since 2.1.0
      */
     private $subjectReader;
 
     /**
      * @var PaymentNonceResponseValidator
-     * @since 2.1.0
      */
     private $responseValidator;
 
@@ -58,7 +52,6 @@ class GetPaymentNonceCommand implements CommandInterface
      * @param ArrayResultFactory $resultFactory
      * @param SubjectReader $subjectReader
      * @param PaymentNonceResponseValidator $responseValidator
-     * @since 2.1.0
      */
     public function __construct(
         PaymentTokenManagementInterface $tokenManagement,
@@ -77,7 +70,6 @@ class GetPaymentNonceCommand implements CommandInterface
     /**
      * @inheritdoc
      * @throws \Exception
-     * @since 2.1.0
      */
     public function execute(array $commandSubject)
     {

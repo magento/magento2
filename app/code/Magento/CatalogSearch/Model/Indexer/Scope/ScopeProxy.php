@@ -11,7 +11,6 @@ use Magento\Framework\Search\Request\Dimension;
 /**
  * Implementation of IndexScopeResolverInterface which resolves index scope dynamically
  * depending on current scope state
- * @since 2.2.0
  */
 class ScopeProxy implements \Magento\Framework\Search\Request\IndexScopeResolverInterface
 {
@@ -19,19 +18,16 @@ class ScopeProxy implements \Magento\Framework\Search\Request\IndexScopeResolver
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $states = [];
 
     /**
      * @var State
-     * @since 2.2.0
      */
     private $scopeState;
 
@@ -41,7 +37,6 @@ class ScopeProxy implements \Magento\Framework\Search\Request\IndexScopeResolver
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param State $scopeState
      * @param array $states
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -59,7 +54,6 @@ class ScopeProxy implements \Magento\Framework\Search\Request\IndexScopeResolver
      * @param string $state
      * @return \Magento\Framework\Search\Request\IndexScopeResolverInterface
      * @throws UnknownStateException
-     * @since 2.2.0
      */
     private function create($state)
     {
@@ -73,7 +67,6 @@ class ScopeProxy implements \Magento\Framework\Search\Request\IndexScopeResolver
      * @param string $index
      * @param Dimension[] $dimensions
      * @return string
-     * @since 2.2.0
      */
     public function resolve($index, array $dimensions)
     {

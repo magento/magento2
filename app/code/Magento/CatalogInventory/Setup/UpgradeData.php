@@ -18,37 +18,31 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Upgrade Data script
  * @codeCoverageIgnore
- * @since 2.2.0
  */
 class UpgradeData implements UpgradeDataInterface
 {
     /**
      * @var StockConfigurationInterface
-     * @since 2.2.0
      */
     private $configuration;
 
     /**
      * @var AbstractProcessor
-     * @since 2.2.0
      */
     private $indexerProcessor;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var FieldDataConverterFactory
-     * @since 2.2.0
      */
     private $fieldDataConverterFactory;
 
     /**
      * @var QueryModifierFactory
-     * @since 2.2.0
      */
     private $queryModifierFactory;
 
@@ -58,7 +52,6 @@ class UpgradeData implements UpgradeDataInterface
      * @param AbstractProcessor $indexerProcessor
      * @param FieldDataConverterFactory $fieldDataConverterFactory
      * @param QueryModifierFactory $queryModifierFactory
-     * @since 2.2.0
      */
     public function __construct(
         StockConfigurationInterface $configuration,
@@ -76,7 +69,6 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -94,7 +86,6 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @param ModuleDataSetupInterface $setup
      * @return void
-     * @since 2.2.0
      */
     private function upgradeCatalogInventoryStockItem($setup)
     {
@@ -113,7 +104,6 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param ModuleDataSetupInterface $setup
      * @return void
-     * @since 2.2.0
      */
     private function convertSerializedDataToJson(ModuleDataSetupInterface $setup)
     {
@@ -154,7 +144,6 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param string $value
      * @return boolean
-     * @since 2.2.0
      */
     private function isSerialized($value)
     {

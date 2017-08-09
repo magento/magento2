@@ -13,7 +13,6 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Class \Magento\Catalog\Model\Layer\Filter\Price\Render
  *
- * @since 2.0.0
  */
 class Render
 {
@@ -21,19 +20,16 @@ class Render
 
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     private $priceCurrency;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     private $scopeConfig;
 
     /**
      * @var DataBuilder
-     * @since 2.0.0
      */
     private $itemDataBuilder;
 
@@ -41,7 +37,6 @@ class Render
      * @param PriceCurrencyInterface $priceCurrency
      * @param ScopeConfigInterface $scopeConfig
      * @param DataBuilder $itemDataBuilder
-     * @since 2.0.0
      */
     public function __construct(
         PriceCurrencyInterface $priceCurrency,
@@ -59,7 +54,6 @@ class Render
      * @param float|string $fromPrice
      * @param float|string $toPrice
      * @return float|\Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function renderRangeLabel($fromPrice, $toPrice)
     {
@@ -85,7 +79,6 @@ class Render
      * @param int $range
      * @param int[] $dbRanges
      * @return array
-     * @since 2.0.0
      */
     public function renderRangeData($range, $dbRanges)
     {

@@ -15,7 +15,7 @@ use Magento\Framework\View\Element\Template\Context;
  * Class Component
  *
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class Component extends Template
 {
@@ -23,20 +23,18 @@ class Component extends Template
 
     /**
      * @var ResolverInterface
-     * @since 2.1.0
      */
     private $localeResolver;
 
     /**
      * @var Config
-     * @since 2.1.0
      */
     private $config;
 
     /**
      * @inheritdoc
      * @param ResolverInterface $localeResolver
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         Context $context,
@@ -53,7 +51,7 @@ class Component extends Template
 
     /**
      * @inheritdoc
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function _toHtml()
     {
@@ -66,7 +64,6 @@ class Component extends Template
 
     /**
      * @return bool
-     * @since 2.1.0
      */
     private function isInContext()
     {
@@ -75,7 +72,7 @@ class Component extends Template
 
     /**
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getEnvironment()
     {
@@ -84,7 +81,7 @@ class Component extends Template
 
     /**
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getLocale()
     {
@@ -93,7 +90,7 @@ class Component extends Template
 
     /**
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getMerchantId()
     {
@@ -102,7 +99,7 @@ class Component extends Template
 
     /**
      * @return bool
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function isButtonContext()
     {

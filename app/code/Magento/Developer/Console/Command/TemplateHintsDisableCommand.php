@@ -14,7 +14,6 @@ use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 /**
  * Class \Magento\Developer\Console\Command\TemplateHintsDisableCommand
  *
- * @since 2.2.0
  */
 class TemplateHintsDisableCommand extends Command
 {
@@ -30,7 +29,6 @@ class TemplateHintsDisableCommand extends Command
 
     /**
      * @var ConfigInterface
-     * @since 2.2.0
      */
     private $resourceConfig;
 
@@ -38,7 +36,6 @@ class TemplateHintsDisableCommand extends Command
      * Initialize dependencies.
      *
      * @param ConfigInterface $resourceConfig
-     * @since 2.2.0
      */
     public function __construct(ConfigInterface $resourceConfig)
     {
@@ -48,7 +45,6 @@ class TemplateHintsDisableCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     protected function configure()
     {
@@ -61,7 +57,6 @@ class TemplateHintsDisableCommand extends Command
     /**
      * {@inheritdoc}
      * @throws \InvalidArgumentException
-     * @since 2.2.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

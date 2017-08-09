@@ -13,25 +13,21 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
  * Class EntitySnapshot
- * @since 2.1.0
  */
 class AttributeProvider implements AttributeProviderInterface
 {
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @var AttributeRepositoryInterface
-     * @since 2.1.0
      */
     protected $attributeRepository;
 
     /**
      * @var SearchCriteriaBuilder
-     * @since 2.1.0
      */
     protected $searchCriteriaBuilder;
 
@@ -41,7 +37,6 @@ class AttributeProvider implements AttributeProviderInterface
      * @param MetadataPool $metadataPool
      * @param AttributeRepositoryInterface $attributeRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -59,7 +54,6 @@ class AttributeProvider implements AttributeProviderInterface
      * @param string $entityType
      * @return array
      * @throws \Exception
-     * @since 2.1.0
      */
     public function getAttributes($entityType)
     {

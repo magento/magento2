@@ -13,13 +13,11 @@ use Magento\Framework\Search\Request\FilterInterface;
 /**
  * Class \Magento\CatalogSearch\Model\Search\RequestGenerator\Decimal
  *
- * @since 2.2.0
  */
 class Decimal implements GeneratorInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getFilterData(Attribute $attribute, $filterName)
     {
@@ -34,7 +32,6 @@ class Decimal implements GeneratorInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getAggregationData(Attribute $attribute, $bucketName)
     {

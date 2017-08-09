@@ -10,13 +10,11 @@ use Magento\Usps\Model\Carrier;
 
 /**
  * Generic source
- * @since 2.0.0
  */
 class Generic implements GenericInterface
 {
     /**
      * @var \Magento\Usps\Model\Carrier
-     * @since 2.0.0
      */
     protected $shippingUsps;
 
@@ -24,13 +22,11 @@ class Generic implements GenericInterface
      * Carrier code
      *
      * @var string
-     * @since 2.0.0
      */
     protected $code = '';
 
     /**
      * @param \Magento\Usps\Model\Carrier $shippingUsps
-     * @since 2.0.0
      */
     public function __construct(Carrier $shippingUsps)
     {
@@ -41,7 +37,6 @@ class Generic implements GenericInterface
      * Returns array to be used in multiselect on back-end
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

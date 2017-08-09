@@ -12,7 +12,6 @@ namespace Magento\Paypal\Block\Adminhtml\System\Config\Fieldset;
 /**
  * Class \Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Group
  *
- * @since 2.0.0
  */
 class Group extends \Magento\Config\Block\System\Config\Form\Fieldset
 {
@@ -21,7 +20,6 @@ class Group extends \Magento\Config\Block\System\Config\Form\Fieldset
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\View\Helper\Js $jsHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -37,7 +35,6 @@ class Group extends \Magento\Config\Block\System\Config\Form\Fieldset
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     protected function _getHeaderCommentHtml($element)
     {
@@ -64,7 +61,6 @@ class Group extends \Magento\Config\Block\System\Config\Form\Fieldset
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return bool
-     * @since 2.0.0
      */
     protected function _isCollapseState($element)
     {

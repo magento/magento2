@@ -15,7 +15,6 @@ use Magento\Paypal\Model\Info;
 /**
  * PayPal Website Payments Pro implementation for payment method instances
  * This model was created because right now PayPal Direct and PayPal Express payment methods cannot have same abstract
- * @since 2.0.0
  */
 class Pro
 {
@@ -30,7 +29,6 @@ class Pro
      * Config instance
      *
      * @var \Magento\Paypal\Model\Config
-     * @since 2.0.0
      */
     protected $_config;
 
@@ -38,7 +36,6 @@ class Pro
      * API instance
      *
      * @var \Magento\Paypal\Model\Api\Nvp
-     * @since 2.0.0
      */
     protected $_api;
 
@@ -46,7 +43,6 @@ class Pro
      * PayPal info object
      *
      * @var \Magento\Paypal\Model\Info
-     * @since 2.0.0
      */
     protected $_infoInstance;
 
@@ -54,7 +50,6 @@ class Pro
      * API model type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_apiType = \Magento\Paypal\Model\Api\Nvp::class;
 
@@ -62,31 +57,26 @@ class Pro
      * Config model type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_configType = \Magento\Paypal\Model\Config::class;
 
     /**
      * @var \Magento\Paypal\Model\Config\Factory
-     * @since 2.0.0
      */
     protected $_configFactory;
 
     /**
      * @var \Magento\Paypal\Model\Api\Type\Factory
-     * @since 2.0.0
      */
     protected $_apiFactory;
 
     /**
      * @var \Magento\Paypal\Model\InfoFactory
-     * @since 2.0.0
      */
     protected $_infoFactory;
 
     /**
      * @var TransactionRepositoryInterface
-     * @since 2.0.0
      */
     protected $transactionRepository;
 
@@ -95,7 +85,6 @@ class Pro
      * @param \Magento\Paypal\Model\Api\Type\Factory $apiFactory
      * @param \Magento\Paypal\Model\InfoFactory $infoFactory
      * @param TransactionRepositoryInterface $transactionRepository
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Paypal\Model\Config\Factory $configFactory,
@@ -115,7 +104,6 @@ class Pro
      * @param string $code
      * @param int|null $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function setMethod($code, $storeId = null)
     {
@@ -140,7 +128,6 @@ class Pro
      * @param \Magento\Paypal\Model\Config $instace
      * @param int|null $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function setConfig(\Magento\Paypal\Model\Config $instance, $storeId = null)
     {
@@ -155,7 +142,6 @@ class Pro
      * Config instance getter
      *
      * @return \Magento\Paypal\Model\Config
-     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -167,7 +153,6 @@ class Pro
      * Sets current store id to current config instance and passes it to API
      *
      * @return \Magento\Paypal\Model\Api\Nvp
-     * @since 2.0.0
      */
     public function getApi()
     {
@@ -182,7 +167,6 @@ class Pro
      * Destroy existing NVP Api object
      *
      * @return $this
-     * @since 2.0.0
      */
     public function resetApi()
     {
@@ -195,7 +179,6 @@ class Pro
      * Instantiate and return info model
      *
      * @return \Magento\Paypal\Model\Info
-     * @since 2.0.0
      */
     public function getInfo()
     {
@@ -211,7 +194,6 @@ class Pro
      * @param \Magento\Framework\DataObject|AbstractApi $from
      * @param \Magento\Payment\Model\InfoInterface $to
      * @return $this
-     * @since 2.0.0
      */
     public function importPaymentInfo(\Magento\Framework\DataObject $from, \Magento\Payment\Model\InfoInterface $to)
     {
@@ -245,7 +227,6 @@ class Pro
      * @param \Magento\Framework\DataObject $payment
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function void(\Magento\Framework\DataObject $payment)
     {
@@ -268,7 +249,6 @@ class Pro
      * @param \Magento\Framework\DataObject $payment
      * @param float $amount
      * @return false|null
-     * @since 2.0.0
      */
     public function capture(\Magento\Framework\DataObject $payment, $amount)
     {
@@ -300,7 +280,6 @@ class Pro
      * @param float $amount
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function refund(\Magento\Framework\DataObject $payment, $amount)
     {
@@ -337,7 +316,6 @@ class Pro
      *
      * @param \Magento\Framework\DataObject $payment
      * @return void
-     * @since 2.0.0
      */
     public function cancel(\Magento\Framework\DataObject $payment)
     {
@@ -351,7 +329,6 @@ class Pro
      *
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @return bool
-     * @since 2.0.0
      */
     public function canReviewPayment(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -366,7 +343,6 @@ class Pro
      *
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @return bool
-     * @since 2.0.0
      */
     protected function _isPaymentReviewRequired(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -379,7 +355,6 @@ class Pro
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @param string $action
      * @return bool
-     * @since 2.0.0
      */
     public function reviewPayment(\Magento\Payment\Model\InfoInterface $payment, $action)
     {
@@ -405,7 +380,6 @@ class Pro
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @param string $transactionId
      * @return array
-     * @since 2.0.0
      */
     public function fetchTransactionInfo(\Magento\Payment\Model\InfoInterface $payment, $transactionId)
     {
@@ -422,7 +396,6 @@ class Pro
      * @param \Magento\Paypal\Model\Api\Nvp $api
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @return void
-     * @since 2.0.0
      */
     protected function _importCaptureResultToPayment($api, $payment)
     {
@@ -437,7 +410,6 @@ class Pro
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @param bool $canRefundMore
      * @return void
-     * @since 2.0.0
      */
     protected function _importRefundResultToPayment($api, $payment, $canRefundMore)
     {
@@ -456,7 +428,6 @@ class Pro
      *
      * @param \Magento\Framework\DataObject $payment
      * @return string
-     * @since 2.0.0
      */
     protected function _getParentTransactionId(\Magento\Framework\DataObject $payment)
     {

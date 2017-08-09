@@ -27,7 +27,6 @@ use Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\StockInterface;
  *
  * @package Magento\CatalogInventory\Model\Indexer\Stock\Action
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Full extends AbstractAction
 {
@@ -38,31 +37,26 @@ class Full extends AbstractAction
 
     /**
      * @var MetadataPool
-     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var BatchSizeManagementInterface
-     * @since 2.2.0
      */
     private $batchSizeManagement;
 
     /**
      * @var BatchProviderInterface
-     * @since 2.2.0
      */
     private $batchProvider;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $batchRowsCount;
 
     /**
      * @var ActiveTableSwitcher
-     * @since 2.2.0
      */
     private $activeTableSwitcher;
 
@@ -79,7 +73,6 @@ class Full extends AbstractAction
      * @param ActiveTableSwitcher|null $activeTableSwitcher
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -120,7 +113,6 @@ class Full extends AbstractAction
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function execute($ids = null)
     {
@@ -179,7 +171,6 @@ class Full extends AbstractAction
      *
      * @param array $indexers
      * @return void
-     * @since 2.2.0
      */
     private function cleanIndexersTables(array $indexers)
     {

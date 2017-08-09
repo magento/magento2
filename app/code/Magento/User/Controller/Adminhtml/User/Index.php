@@ -9,13 +9,11 @@ namespace Magento\User\Controller\Adminhtml\User;
 /**
  * Class \Magento\User\Controller\Adminhtml\User\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\User\Controller\Adminhtml\User
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

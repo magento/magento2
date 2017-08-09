@@ -14,19 +14,16 @@ use Zend\Json\Json;
 
 /**
  * Controller for updater tasks
- * @since 2.0.0
  */
 class StartUpdater extends AbstractActionController
 {
     /**
      * @var \Magento\Setup\Model\UpdaterTaskCreator
-     * @since 2.1.0
      */
     private $updaterTaskCreator;
 
     /**
      * @var \Magento\Setup\Model\PayloadValidator
-     * @since 2.1.0
      */
     private $payloadValidator;
 
@@ -35,7 +32,6 @@ class StartUpdater extends AbstractActionController
      *
      * @param \Magento\Setup\Model\UpdaterTaskCreator $updaterTaskCreator
      * @param \Magento\Setup\Model\PayloadValidator $payloadValidator
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Setup\Model\UpdaterTaskCreator $updaterTaskCreator,
@@ -49,7 +45,6 @@ class StartUpdater extends AbstractActionController
      * Index page action
      *
      * @return ViewModel
-     * @since 2.0.0
      */
     public function indexAction()
     {
@@ -62,7 +57,6 @@ class StartUpdater extends AbstractActionController
      * Update action
      *
      * @return JsonModel
-     * @since 2.0.0
      */
     public function updateAction()
     {

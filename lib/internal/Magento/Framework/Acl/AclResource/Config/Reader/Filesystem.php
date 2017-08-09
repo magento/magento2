@@ -8,7 +8,6 @@ namespace Magento\Framework\Acl\AclResource\Config\Reader;
 /**
  * Class \Magento\Framework\Acl\AclResource\Config\Reader\Filesystem
  *
- * @since 2.0.0
  */
 class Filesystem extends \Magento\Framework\Config\Reader\Filesystem
 {
@@ -16,7 +15,6 @@ class Filesystem extends \Magento\Framework\Config\Reader\Filesystem
      * List of id attributes for merge
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_idAttributes = ['/config/acl/resources(/resource)+' => 'id'];
 
@@ -29,7 +27,6 @@ class Filesystem extends \Magento\Framework\Config\Reader\Filesystem
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,

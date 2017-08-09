@@ -12,7 +12,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Sales\ExportSalesCsv
  *
- * @since 2.0.0
  */
 class ExportSalesCsv extends \Magento\Reports\Controller\Adminhtml\Report\Sales
 {
@@ -20,7 +19,6 @@ class ExportSalesCsv extends \Magento\Reports\Controller\Adminhtml\Report\Sales
      * Export sales report grid to CSV format
      *
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

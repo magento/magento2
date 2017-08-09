@@ -10,7 +10,6 @@ use Magento\Framework\Indexer\StateInterface;
 /**
  * Class \Magento\Indexer\Model\Indexer\State
  *
- * @since 2.0.0
  */
 class State extends \Magento\Framework\Model\AbstractModel implements StateInterface
 {
@@ -18,7 +17,6 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
      * Prefix of model events names
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'indexer_state';
 
@@ -26,7 +24,6 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
      * Parameter name in event
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'indexer_state';
 
@@ -36,7 +33,6 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
      * @param \Magento\Indexer\Model\ResourceModel\Indexer\State $resource
      * @param \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -55,7 +51,6 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
      * Return indexer id
      *
      * @return string
-     * @since 2.0.0
      */
     public function getIndexerId()
     {
@@ -67,7 +62,6 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
      *
      * @param string $value
      * @return $this
-     * @since 2.0.0
      */
     public function setIndexerId($value)
     {
@@ -78,7 +72,6 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
      * Return status
      *
      * @return string
-     * @since 2.0.0
      */
     public function getStatus()
     {
@@ -89,7 +82,6 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
      * Return updated
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUpdated()
     {
@@ -101,7 +93,6 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
      *
      * @param string $value
      * @return $this
-     * @since 2.0.0
      */
     public function setUpdated($value)
     {
@@ -113,7 +104,6 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
      *
      * @param string $indexerId
      * @return $this
-     * @since 2.0.0
      */
     public function loadByIndexer($indexerId)
     {
@@ -129,7 +119,6 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
      *
      * @param string $status
      * @return $this
-     * @since 2.0.0
      */
     public function setStatus($status)
     {
@@ -140,7 +129,6 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
      * Processing object before save data
      *
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {

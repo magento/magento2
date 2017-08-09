@@ -7,7 +7,6 @@ namespace Magento\Framework\Filter;
 
 /**
  * Magento filter factory abstract
- * @since 2.0.0
  */
 abstract class AbstractFactory implements FactoryInterface
 {
@@ -15,7 +14,6 @@ abstract class AbstractFactory implements FactoryInterface
      * Set of filters
      *
      * @var array
-     * @since 2.0.0
      */
     protected $invokableClasses = [];
 
@@ -23,7 +21,6 @@ abstract class AbstractFactory implements FactoryInterface
      * Whether or not to share by default; default to false
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $shareByDefault = true;
 
@@ -31,25 +28,21 @@ abstract class AbstractFactory implements FactoryInterface
      * Shared instances, by default is shared
      *
      * @var array
-     * @since 2.0.0
      */
     protected $shared = [];
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var \Zend_Filter_Interface[]
-     * @since 2.0.0
      */
     protected $sharedInstances = [];
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManger
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManger)
     {
@@ -61,7 +54,6 @@ abstract class AbstractFactory implements FactoryInterface
      *
      * @param string $alias
      * @return bool
-     * @since 2.0.0
      */
     public function canCreateFilter($alias)
     {
@@ -73,7 +65,6 @@ abstract class AbstractFactory implements FactoryInterface
      *
      * @param string $class
      * @return bool
-     * @since 2.0.0
      */
     public function isShared($class)
     {
@@ -86,7 +77,6 @@ abstract class AbstractFactory implements FactoryInterface
      * @param string $alias
      * @param array $arguments
      * @return \Zend_Filter_Interface
-     * @since 2.0.0
      */
     public function createFilter($alias, array $arguments = [])
     {

@@ -23,61 +23,51 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class SampleRepository
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var ContentValidator
-     * @since 2.0.0
      */
     protected $contentValidator;
 
     /**
      * @var Type
-     * @since 2.0.0
      */
     protected $downloadableType;
 
     /**
      * @var SampleFactory
-     * @since 2.1.0
      */
     protected $sampleFactory;
 
     /**
      * @var SampleInterfaceFactory
-     * @since 2.0.0
      */
     protected $sampleDataObjectFactory;
 
     /**
      * @var ContentUploaderInterface
-     * @since 2.0.0
      */
     protected $fileContentUploader;
 
     /**
      * @var EncoderInterface
-     * @since 2.0.0
      */
     protected $jsonEncoder;
 
     /**
      * @var SampleHandler
-     * @since 2.1.0
      */
     private $sampleTypeHandler;
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
@@ -89,7 +79,6 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
      * @param ContentUploaderInterface $fileContentUploader
      * @param EncoderInterface $jsonEncoder
      * @param SampleFactory $sampleFactory
-     * @since 2.0.0
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
@@ -111,7 +100,6 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getList($sku)
     {
@@ -125,7 +113,6 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
      *
      * @param \Magento\Downloadable\Model\Sample $resourceData
      * @return \Magento\Downloadable\Model\Sample
-     * @since 2.0.0
      */
     protected function buildSample($resourceData)
     {
@@ -140,7 +127,6 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
      * @param \Magento\Downloadable\Model\Link|\Magento\Downloadable\Model\Sample $resourceData
      * @param \Magento\Downloadable\Api\Data\LinkInterface|\Magento\Downloadable\Api\Data\SampleInterface $dataObject
      * @return null
-     * @since 2.0.0
      */
     protected function setBasicFields($resourceData, $dataObject)
     {
@@ -163,7 +149,6 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
      *
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return \Magento\Downloadable\Api\Data\SampleInterface[]
-     * @since 2.0.0
      */
     public function getSamplesByProduct(\Magento\Catalog\Api\Data\ProductInterface $product)
     {
@@ -185,7 +170,6 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
      * @return int
      * @throws InputException
      * @throws NoSuchEntityException
-     * @since 2.0.0
      */
     public function save(
         $sku,
@@ -224,7 +208,6 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
      * @param SampleInterface $sample
      * @param bool $isGlobalScopeContent
      * @return int
-     * @since 2.0.0
      */
     protected function saveSample(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -277,7 +260,6 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
      * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function updateSample(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -326,7 +308,6 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function delete($id)
     {
@@ -346,9 +327,8 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     /**
      * Get MetadataPool instance
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      * @return MetadataPool
-     * @since 2.1.0
      */
     private function getMetadataPool()
     {
@@ -362,9 +342,8 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     /**
      * Get SampleTypeHandler Instance
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      * @return SampleHandler
-     * @since 2.1.0
      */
     private function getSampleTypeHandler()
     {

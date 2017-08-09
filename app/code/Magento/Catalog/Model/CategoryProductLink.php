@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model;
 
 /**
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class CategoryProductLink extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\Catalog\Api\Data\CategoryProductLinkInterface
@@ -23,7 +22,6 @@ class CategoryProductLink extends \Magento\Framework\Api\AbstractExtensibleObjec
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getSku()
     {
@@ -32,7 +30,6 @@ class CategoryProductLink extends \Magento\Framework\Api\AbstractExtensibleObjec
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getPosition()
     {
@@ -41,7 +38,6 @@ class CategoryProductLink extends \Magento\Framework\Api\AbstractExtensibleObjec
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCategoryId()
     {
@@ -51,7 +47,6 @@ class CategoryProductLink extends \Magento\Framework\Api\AbstractExtensibleObjec
     /**
      * @param string $sku
      * @return $this
-     * @since 2.0.0
      */
     public function setSku($sku)
     {
@@ -61,7 +56,6 @@ class CategoryProductLink extends \Magento\Framework\Api\AbstractExtensibleObjec
     /**
      * @param int $position
      * @return $this
-     * @since 2.0.0
      */
     public function setPosition($position)
     {
@@ -73,7 +67,6 @@ class CategoryProductLink extends \Magento\Framework\Api\AbstractExtensibleObjec
      *
      * @param string $categoryId
      * @return $this
-     * @since 2.0.0
      */
     public function setCategoryId($categoryId)
     {
@@ -84,7 +77,6 @@ class CategoryProductLink extends \Magento\Framework\Api\AbstractExtensibleObjec
      * {@inheritdoc}
      *
      * @return \Magento\Catalog\Api\Data\CategoryProductLinkExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -96,7 +88,6 @@ class CategoryProductLink extends \Magento\Framework\Api\AbstractExtensibleObjec
      *
      * @param \Magento\Catalog\Api\Data\CategoryProductLinkExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\CategoryProductLinkExtensionInterface $extensionAttributes

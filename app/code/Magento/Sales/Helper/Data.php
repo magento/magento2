@@ -11,7 +11,6 @@ use Magento\Store\Model\Store;
  * Sales module base helper
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -20,7 +19,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function canSendNewOrderConfirmationEmail($store = null)
     {
@@ -36,7 +34,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function canSendNewOrderEmail($store = null)
     {
@@ -48,7 +45,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function canSendOrderCommentEmail($store = null)
     {
@@ -64,7 +60,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function canSendNewShipmentEmail($store = null)
     {
@@ -80,7 +75,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function canSendShipmentCommentEmail($store = null)
     {
@@ -96,7 +90,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function canSendNewInvoiceEmail($store = null)
     {
@@ -112,7 +105,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function canSendInvoiceCommentEmail($store = null)
     {
@@ -128,7 +120,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function canSendNewCreditmemoEmail($store = null)
     {
@@ -144,7 +135,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function canSendCreditmemoCommentEmail($store = null)
     {

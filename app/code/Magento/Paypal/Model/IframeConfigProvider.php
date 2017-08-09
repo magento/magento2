@@ -12,13 +12,11 @@ use Magento\Payment\Helper\Data as PaymentHelper;
 /**
  * Class \Magento\Paypal\Model\IframeConfigProvider
  *
- * @since 2.0.0
  */
 class IframeConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var string[]
-     * @since 2.0.0
      */
     protected $methodCodes = [
         Config::METHOD_PAYFLOWADVANCED,
@@ -28,26 +26,22 @@ class IframeConfigProvider implements ConfigProviderInterface
 
     /**
      * @var \Magento\Payment\Model\Method\AbstractMethod[]
-     * @since 2.0.0
      */
     protected $methods = [];
 
     /**
      * @var PaymentHelper
-     * @since 2.0.0
      */
     protected $paymentHelper;
 
     /**
      * @var UrlInterface
-     * @since 2.0.0
      */
     protected $urlBuilder;
 
     /**
      * @param PaymentHelper $paymentHelper
      * @param UrlInterface $urlBuilder
-     * @since 2.0.0
      */
     public function __construct(
         PaymentHelper $paymentHelper,
@@ -63,7 +57,6 @@ class IframeConfigProvider implements ConfigProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -86,7 +79,6 @@ class IframeConfigProvider implements ConfigProviderInterface
      *
      * @param string $code
      * @return string
-     * @since 2.0.0
      */
     protected function getFrameActionUrl($code)
     {

@@ -7,7 +7,6 @@ namespace Magento\Framework\Data;
 
 /**
  * Graph data structure
- * @since 2.0.0
  */
 class Graph
 {
@@ -22,19 +21,13 @@ class Graph
 
     /**#@-*/
 
-    /**
-     * Registry of nodes
-     *
-     * @var array
-     * @since 2.0.0
-     */
+    /**#@-*/
     protected $_nodes = [];
 
     /**
      * Declared relations directed "from" "to"
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_from = [];
 
@@ -42,7 +35,6 @@ class Graph
      * Inverse relations "to" "from"
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_to = [];
 
@@ -51,7 +43,6 @@ class Graph
      *
      * @param array $nodes plain array with node identifiers
      * @param array $relations array of 2-item plain arrays, which represent relations of nodes "from" "to"
-     * @since 2.0.0
      */
     public function __construct(array $nodes, array $relations)
     {
@@ -72,7 +63,6 @@ class Graph
      * @param string|int $toNode
      * @return $this
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function addRelation($fromNode, $toNode)
     {
@@ -92,7 +82,6 @@ class Graph
      * @param int $mode
      * @return array
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function getRelations($mode = self::DIRECTIONAL)
     {
@@ -123,7 +112,6 @@ class Graph
      * @param string|int $node
      * @param boolean $firstOnly found only first cycle
      * @return array
-     * @since 2.0.0
      */
     public function findCycle($node = null, $firstOnly = true)
     {
@@ -151,7 +139,6 @@ class Graph
      * @param string|int $rootNode
      * @param int $mode
      * @return array
-     * @since 2.0.0
      */
     public function findPathsToReachableNodes($rootNode, $mode = self::DIRECTIONAL)
     {
@@ -186,7 +173,6 @@ class Graph
      * @param string|int $toNode
      * @param int $mode
      * @return array
-     * @since 2.0.0
      */
     public function dfs($fromNode, $toNode, $mode = self::DIRECTIONAL)
     {
@@ -205,7 +191,6 @@ class Graph
      * @param array $stack
      * @return array
      * @link http://en.wikipedia.org/wiki/Depth-first_search
-     * @since 2.0.0
      */
     protected function _dfs($fromNode, $toNode, $graph, &$visited = [], $stack = [])
     {
@@ -235,7 +220,6 @@ class Graph
      * @param bool $mustExist
      * @return void
      * @throws \InvalidArgumentException according to assertion rules
-     * @since 2.0.0
      */
     protected function _assertNode($node, $mustExist)
     {

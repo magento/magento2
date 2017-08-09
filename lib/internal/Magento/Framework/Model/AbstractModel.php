@@ -14,7 +14,6 @@ use Magento\Framework\Phrase;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.TooManyFields)
- * @since 2.0.0
  */
 abstract class AbstractModel extends \Magento\Framework\DataObject
 {
@@ -22,7 +21,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Prefix of model events names
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'core_abstract';
 
@@ -32,7 +30,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * In observe method you can use $observer->getEvent()->getObject() in this case
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'object';
 
@@ -40,14 +37,12 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Name of object id field
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_idFieldName = 'id';
 
     /**
      * Data changes flag (true after setData|unsetData call)
      * @var $_hasDataChange bool
-     * @since 2.0.0
      */
     protected $_hasDataChanges = false;
 
@@ -55,7 +50,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Original data that was loaded
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_origData;
 
@@ -63,7 +57,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Object delete flag
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isDeleted = false;
 
@@ -71,7 +64,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Resource model instance
      *
      * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @since 2.0.0
      */
     protected $_resource;
 
@@ -79,7 +71,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Resource collection
      *
      * @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
-     * @since 2.0.0
      */
     protected $_resourceCollection;
 
@@ -87,7 +78,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Name of the resource model
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_resourceName;
 
@@ -95,7 +85,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Name of the resource collection model
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_collectionName;
 
@@ -105,7 +94,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * When you use true - all cache will be clean
      *
      * @var string|array|bool
-     * @since 2.0.0
      */
     protected $_cacheTag = false;
 
@@ -115,7 +103,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * not valid - we can set this flag to false value and save process will be stopped
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_dataSaveAllowed = true;
 
@@ -123,7 +110,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Flag which allow detect object state: is it new object (without id) or existing one (with id)
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isObjectNew = null;
 
@@ -131,7 +117,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Validator for checking the model state before saving it
      *
      * @var \Zend_Validate_Interface|bool|null
-     * @since 2.0.0
      */
     protected $_validatorBeforeSave = null;
 
@@ -139,7 +124,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Application Event Dispatcher
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager;
 
@@ -147,31 +131,26 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Application Cache Manager
      *
      * @var \Magento\Framework\App\CacheInterface
-     * @since 2.0.0
      */
     protected $_cacheManager;
 
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_registry;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $_logger;
 
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     protected $_appState;
 
     /**
      * @var \Magento\Framework\Model\ActionValidator\RemoveAction
-     * @since 2.0.0
      */
     protected $_actionValidator;
 
@@ -179,7 +158,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Array to store object's original data
      *
      * @var array
-     * @since 2.0.0
      */
     protected $storedData = [];
 
@@ -189,7 +167,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -221,7 +198,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Model construct that should be used for object initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -232,7 +208,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @param string $resourceModel
      * @return void
-     * @since 2.0.0
      */
     protected function _init($resourceModel)
     {
@@ -242,7 +217,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
 
     /**
      * @return string[]
-     * @since 2.0.0
      */
     public function __sleep()
     {
@@ -267,7 +241,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Init not serializable fields
      *
      * @return void
-     * @since 2.0.0
      */
     public function __wakeup()
     {
@@ -289,7 +262,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @param  string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setIdFieldName($name)
     {
@@ -301,7 +273,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Id field name getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getIdFieldName()
     {
@@ -312,7 +283,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Identifier getter
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getId()
     {
@@ -324,7 +294,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @param mixed $value
      * @return $this
-     * @since 2.0.0
      */
     public function setId($value)
     {
@@ -337,7 +306,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @param boolean $isDeleted
      * @return bool
-     * @since 2.0.0
      */
     public function isDeleted($isDeleted = null)
     {
@@ -355,7 +323,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Flag value should be set up to true after any external data changes
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasDataChanges()
     {
@@ -373,7 +340,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * @param string|array  $key
      * @param mixed         $value
      * @return $this
-     * @since 2.0.0
      */
     public function setData($key, $value = null)
     {
@@ -396,7 +362,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @param null|string|array $key
      * @return $this
-     * @since 2.0.0
      */
     public function unsetData($key = null)
     {
@@ -420,7 +385,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @param bool $value
      * @return $this
-     * @since 2.0.0
      */
     public function setDataChanges($value)
     {
@@ -433,7 +397,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @param string $key
      * @return mixed
-     * @since 2.0.0
      */
     public function getOrigData($key = null)
     {
@@ -454,7 +417,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * @param string $key
      * @param mixed $data
      * @return $this
-     * @since 2.0.0
      */
     public function setOrigData($key = null, $data = null)
     {
@@ -471,7 +433,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @param string $field
      * @return bool
-     * @since 2.0.0
      */
     public function dataHasChangedFor($field)
     {
@@ -488,7 +449,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * @param string $resourceName
      * @param string|null $collectionName
      * @return void
-     * @since 2.0.0
      */
     protected function _setResourceModel($resourceName, $collectionName = null)
     {
@@ -504,7 +464,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @since 2.0.0
      */
     protected function _getResource()
     {
@@ -521,7 +480,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Retrieve model resource name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getResourceName()
     {
@@ -534,7 +492,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * @TODO MAGETWO-23541: Incorrect dependencies between Model\AbstractModel and Data\Collection\Db from Framework
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
-     * @since 2.0.0
      */
     public function getResourceCollection()
     {
@@ -555,7 +512,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @TODO MAGETWO-23541: Incorrect dependencies between Model\AbstractModel and Data\Collection\Db from Framework
      * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
-     * @since 2.0.0
      */
     public function getCollection()
     {
@@ -568,10 +524,9 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * @param integer $modelId
      * @param null|string $field
      * @return $this
-     * @deprecated 2.1.0 because entities must not be responsible for their own loading.
+     * @deprecated 100.1.0 because entities must not be responsible for their own loading.
      * Service contracts should persist entities. Use resource model "load" or collections to implement
      * service contract model loading operations.
-     * @since 2.0.0
      */
     public function load($modelId, $field = null)
     {
@@ -583,7 +538,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Get array of objects transferred to default events processing
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getEventData()
     {
@@ -599,7 +553,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * @param int $modelId
      * @param null|string $field
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeLoad($modelId, $field = null)
     {
@@ -614,7 +567,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Processing object after load data
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -629,7 +581,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * @param string $identifier
      * @param string|null $field
      * @return void
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function beforeLoad($identifier, $field = null)
     {
@@ -640,7 +592,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Object after load processing. Implemented as public interface for supporting objects after load in collections
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterLoad()
     {
@@ -655,7 +606,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * e.g. using resourceModel->hasDataChanged() or any other technique
      *
      * @return boolean
-     * @since 2.0.0
      */
     protected function _hasModelChanged()
     {
@@ -664,7 +614,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isSaveAllowed()
     {
@@ -674,7 +623,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     /**
      * @param bool $flag
      * @return void
-     * @since 2.0.0
      */
     public function setHasDataChanges($flag)
     {
@@ -687,10 +635,9 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * @return $this
      * @throws \Exception
      *
-     * @deprecated 2.1.0 because entities must not be responsible for their own persistence.
+     * @deprecated 100.1.0 because entities must not be responsible for their own persistence.
      * Service contracts should persist entities. Use resource model "save" to implement
      * service contract persistence operations.
-     * @since 2.0.0
      */
     public function save()
     {
@@ -702,7 +649,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Callback function which called after transaction commit in resource model
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterCommitCallback()
     {
@@ -719,7 +665,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @param bool|null $flag
      * @return bool
-     * @since 2.0.0
      */
     public function isObjectNew($flag = null)
     {
@@ -736,7 +681,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Processing object before save data
      *
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -753,7 +697,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @return $this
      * @throws \Magento\Framework\Validator\Exception
-     * @since 2.0.0
      */
     public function validateBeforeSave()
     {
@@ -776,7 +719,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Returns FALSE, if no validation rules exist.
      *
      * @return \Zend_Validate_Interface|false
-     * @since 2.0.0
      */
     protected function _getValidatorBeforeSave()
     {
@@ -791,7 +733,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Returns FALSE, if no validation rules exist.
      *
      * @return \Zend_Validate_Interface|bool
-     * @since 2.0.0
      */
     protected function _createValidatorBeforeSave()
     {
@@ -818,7 +759,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Template method to return validate rules for the entity
      *
      * @return \Zend_Validate_Interface|null
-     * @since 2.0.0
      */
     protected function _getValidationRulesBeforeSave()
     {
@@ -830,7 +770,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Return false if cache tags are not supported by model
      *
      * @return array|false
-     * @since 2.0.0
      */
     public function getCacheTags()
     {
@@ -853,7 +792,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Remove model object related cache
      *
      * @return $this
-     * @since 2.0.0
      */
     public function cleanModelCache()
     {
@@ -868,7 +806,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Processing object after save data
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -885,10 +822,9 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @return $this
      * @throws \Exception
-     * @deprecated 2.1.0 because entities must not be responsible for their own deletion.
+     * @deprecated 100.1.0 because entities must not be responsible for their own deletion.
      * Service contracts should delete entities. Use resource model "delete" method to implement
      * service contract persistence operations.
-     * @since 2.0.0
      */
     public function delete()
     {
@@ -901,7 +837,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function beforeDelete()
     {
@@ -921,7 +856,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Processing object after delete data
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterDelete()
     {
@@ -936,7 +870,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Processing manipulation after main transaction commit
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterDeleteCommit()
     {
@@ -949,7 +882,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Retrieve model resource
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @since 2.0.0
      */
     public function getResource()
     {
@@ -960,7 +892,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Retrieve entity id
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getEntityId()
     {
@@ -972,7 +903,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @param int $entityId
      * @return $this
-     * @since 2.0.0
      */
     public function setEntityId($entityId)
     {
@@ -983,7 +913,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Clearing object for correct deleting by garbage collector
      *
      * @return $this
-     * @since 2.0.0
      */
     public function clearInstance()
     {
@@ -997,7 +926,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Clearing cyclic references
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _clearReferences()
     {
@@ -1008,7 +936,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Clearing object's data
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _clearData()
     {
@@ -1019,7 +946,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Synchronize object's stored data with the actual data
      *
      * @return $this
-     * @since 2.0.0
      */
     private function updateStoredData()
     {
@@ -1035,7 +961,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Model StoredData getter
      *
      * @return array
-     * @since 2.0.0
      */
     public function getStoredData()
     {
@@ -1046,7 +971,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Returns _eventPrefix
      *
      * @return string
-     * @since 2.0.0
      */
     public function getEventPrefix()
     {

@@ -8,7 +8,6 @@ namespace Magento\Theme\Model\Design\Config;
 /**
  * Interface \Magento\Theme\Model\Design\Config\MetadataProviderInterface
  *
- * @since 2.1.0
  */
 interface MetadataProviderInterface
 {
@@ -21,7 +20,6 @@ interface MetadataProviderInterface
      *  - other optional parameters
      *
      * @return array
-     * @since 2.1.0
      */
     public function get();
 }

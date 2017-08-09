@@ -8,19 +8,16 @@ namespace Magento\Checkout\Model\Cart;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class ImageProvider
 {
     /**
      * @var \Magento\Quote\Api\CartItemRepositoryInterface
-     * @since 2.0.0
      */
     protected $itemRepository;
 
     /**
      * @var \Magento\Checkout\CustomerData\ItemPoolInterface
-     * @since 2.0.0
      */
     protected $itemPool;
 
@@ -28,7 +25,6 @@ class ImageProvider
      * @param \Magento\Quote\Api\CartItemRepositoryInterface $itemRepository
      * @param \Magento\Checkout\CustomerData\ItemPoolInterface $itemPool
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Quote\Api\CartItemRepositoryInterface $itemRepository,
@@ -40,7 +36,6 @@ class ImageProvider
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getImages($cartId)
     {

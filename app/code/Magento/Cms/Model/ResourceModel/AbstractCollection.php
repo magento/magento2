@@ -9,7 +9,6 @@ use Magento\Store\Model\Store;
 
 /**
  * Abstract collection of CMS pages and blocks
- * @since 2.0.0
  */
 abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -17,13 +16,11 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
      */
     protected $metadataPool;
 
@@ -36,7 +33,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
@@ -59,7 +55,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * @param string $tableName
      * @param string|null $linkField
      * @return void
-     * @since 2.0.0
      */
     protected function performAfterLoad($tableName, $linkField)
     {
@@ -103,7 +98,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * @param array|string $field
      * @param string|int|array|null $condition
      * @return $this
-     * @since 2.0.0
      */
     public function addFieldToFilter($field, $condition = null)
     {
@@ -120,7 +114,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * @param int|array|Store $store
      * @param bool $withAdmin
      * @return $this
-     * @since 2.0.0
      */
     abstract public function addStoreFilter($store, $withAdmin = true);
 
@@ -130,7 +123,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * @param int|array|Store $store
      * @param bool $withAdmin
      * @return void
-     * @since 2.0.0
      */
     protected function performAddStoreFilter($store, $withAdmin = true)
     {
@@ -155,7 +147,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * @param string $tableName
      * @param string|null $linkField
      * @return void
-     * @since 2.0.0
      */
     protected function joinStoreRelationTable($tableName, $linkField)
     {
@@ -177,7 +168,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * Extra GROUP BY strip added.
      *
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     public function getSelectCountSql()
     {

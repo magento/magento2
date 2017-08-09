@@ -15,7 +15,6 @@ use Magento\Persistent\Helper\Session as SessionHelper;
 /**
  * Persistent front controller
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 abstract class Index extends Action
 {
@@ -23,7 +22,6 @@ abstract class Index extends Action
      * Persistent observer
      *
      * @var \Magento\Persistent\Model\Observer
-     * @since 2.0.0
      */
     protected $quoteManager;
 
@@ -31,7 +29,6 @@ abstract class Index extends Action
      * Checkout session
      *
      * @var \Magento\Checkout\Model\Session
-     * @since 2.0.0
      */
     protected $checkoutSession;
 
@@ -39,13 +36,11 @@ abstract class Index extends Action
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var \Magento\Persistent\Helper\Session
-     * @since 2.0.0
      */
     protected $sessionHelper;
 
@@ -53,7 +48,6 @@ abstract class Index extends Action
      * Whether clear checkout session when logout
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $clearCheckoutSession = true;
 
@@ -63,7 +57,6 @@ abstract class Index extends Action
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Persistent\Helper\Session $sessionHelper
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -84,7 +77,6 @@ abstract class Index extends Action
      *
      * @param bool $clear
      * @return $this
-     * @since 2.0.0
      */
     public function setClearCheckoutSession($clear = true)
     {

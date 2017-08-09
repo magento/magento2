@@ -9,7 +9,6 @@ namespace Magento\Variable\Block\System;
  * Custom Variable Block
  *
  * @api
- * @since 2.0.0
  */
 class Variable extends \Magento\Backend\Block\Widget\Grid\Container
 {
@@ -17,7 +16,6 @@ class Variable extends \Magento\Backend\Block\Widget\Grid\Container
      * Block constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

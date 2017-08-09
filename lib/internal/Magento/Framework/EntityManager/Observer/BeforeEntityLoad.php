@@ -11,7 +11,6 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * Class BeforeEntityLoad
- * @since 2.2.0
  */
 class BeforeEntityLoad
 {
@@ -21,7 +20,6 @@ class BeforeEntityLoad
      * @param Observer $observer
      * @throws \Magento\Framework\Validator\Exception
      * @return void
-     * @since 2.2.0
      */
     public function execute(Observer $observer)
     {

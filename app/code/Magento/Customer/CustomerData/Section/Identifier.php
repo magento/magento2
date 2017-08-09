@@ -7,7 +7,6 @@ namespace Magento\Customer\CustomerData\Section;
 
 /**
  * Customer section identifier
- * @since 2.0.0
  */
 class Identifier
 {
@@ -19,25 +18,21 @@ class Identifier
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $markId;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
-     * @since 2.0.0
      */
     protected $cookieManager;
 
     /**
      * @var \Magento\Framework\Session\Config\ConfigInterface
-     * @since 2.0.0
      */
     protected $sessionConfig;
 
     /**
      * @param \Magento\Framework\Stdlib\Cookie\PhpCookieManager $cookieManager
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\Cookie\PhpCookieManager $cookieManager
@@ -50,7 +45,6 @@ class Identifier
      *
      * @param bool $forceUpdate
      * @return int
-     * @since 2.0.0
      */
     public function initMark($forceUpdate)
     {
@@ -76,7 +70,6 @@ class Identifier
      * @param null $sectionNames
      * @param bool $updateIds
      * @return array
-     * @since 2.0.0
      */
     public function markSections(array $sectionsData, $sectionNames = null, $updateIds = false)
     {

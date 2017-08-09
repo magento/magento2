@@ -7,7 +7,6 @@ namespace Magento\Ui\DataProvider\Mapper;
 
 /**
  * Interface MapperInterface
- * @since 2.1.0
  */
 interface MapperInterface
 {
@@ -15,7 +14,6 @@ interface MapperInterface
      * Retrieve mapped values
      *
      * @return array
-     * @since 2.1.0
      */
     public function getMappings();
 }

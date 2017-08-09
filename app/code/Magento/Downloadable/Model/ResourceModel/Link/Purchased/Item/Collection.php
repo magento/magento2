@@ -9,7 +9,6 @@ namespace Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item;
  * Downloadable links purchased items resource collection
  *
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -17,7 +16,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Init resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

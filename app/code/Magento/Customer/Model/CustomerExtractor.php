@@ -14,37 +14,31 @@ use Magento\Framework\App\RequestInterface;
 /**
  * Class \Magento\Customer\Model\CustomerExtractor
  *
- * @since 2.0.0
  */
 class CustomerExtractor
 {
     /**
      * @var \Magento\Customer\Model\Metadata\FormFactory
-     * @since 2.0.0
      */
     protected $formFactory;
 
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
-     * @since 2.0.0
      */
     protected $customerFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var GroupManagementInterface
-     * @since 2.0.0
      */
     protected $customerGroupManagement;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
-     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
@@ -54,7 +48,6 @@ class CustomerExtractor
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param GroupManagementInterface $customerGroupManagement
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Model\Metadata\FormFactory $formFactory,
@@ -75,7 +68,6 @@ class CustomerExtractor
      * @param RequestInterface $request
      * @param array $attributeValues
      * @return CustomerInterface
-     * @since 2.0.0
      */
     public function extract(
         $formCode,

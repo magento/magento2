@@ -11,7 +11,6 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
  * Catalog Product Mass processing resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Action extends \Magento\Catalog\Model\ResourceModel\AbstractResource
 {
@@ -19,7 +18,6 @@ class Action extends \Magento\Catalog\Model\ResourceModel\AbstractResource
      * Initialize connection
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -39,7 +37,6 @@ class Action extends \Magento\Catalog\Model\ResourceModel\AbstractResource
      * @param int $storeId
      * @return $this
      * @throws \Exception
-     * @since 2.0.0
      */
     public function updateAttributes($entityIds, $attrData, $storeId)
     {
@@ -84,7 +81,6 @@ class Action extends \Magento\Catalog\Model\ResourceModel\AbstractResource
      * @param AbstractAttribute $attribute
      * @param mixed $value
      * @return $this
-     * @since 2.1.0
      */
     protected function _saveAttributeValue($object, $attribute, $value)
     {
@@ -149,7 +145,6 @@ class Action extends \Magento\Catalog\Model\ResourceModel\AbstractResource
     /**
      * @param int $entityId
      * @return int
-     * @since 2.1.0
      */
     protected function resolveEntityId($entityId)
     {

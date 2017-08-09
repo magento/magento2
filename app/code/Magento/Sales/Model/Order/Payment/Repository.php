@@ -14,7 +14,6 @@ use Magento\Sales\Model\ResourceModel\Metadata;
 
 /**
  * Class Repository
- * @since 2.0.0
  */
 class Repository implements OrderPaymentRepositoryInterface
 {
@@ -22,25 +21,21 @@ class Repository implements OrderPaymentRepositoryInterface
      * Magento\Sales\Model\Order\Payment\Transaction[]
      *
      * @var array
-     * @since 2.0.0
      */
     private $registry = [];
 
     /**
      * @var Metadata
-     * @since 2.0.0
      */
     protected $metaData;
 
     /**
      * @var SearchResultFactory
-     * @since 2.0.0
      */
     protected $searchResultFactory;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
-     * @since 2.2.0
      */
     private $collectionProcessor;
 
@@ -48,7 +43,6 @@ class Repository implements OrderPaymentRepositoryInterface
      * @param Metadata $metaData
      * @param SearchResultFactory $searchResultFactory
      * @param CollectionProcessorInterface $collectionProcessor
-     * @since 2.0.0
      */
     public function __construct(
         Metadata $metaData,
@@ -65,7 +59,6 @@ class Repository implements OrderPaymentRepositoryInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
      * @return \Magento\Sales\Api\Data\OrderPaymentSearchResultInterface Order payment search result interface.
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -83,7 +76,6 @@ class Repository implements OrderPaymentRepositoryInterface
      * @return \Magento\Sales\Api\Data\OrderPaymentInterface Order payment interface.
      * @throws NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
-     * @since 2.0.0
      */
     public function get($id)
     {
@@ -105,7 +97,6 @@ class Repository implements OrderPaymentRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\OrderPaymentInterface $entity The order payment ID.
      * @return bool
-     * @since 2.0.0
      */
     public function delete(\Magento\Sales\Api\Data\OrderPaymentInterface $entity)
     {
@@ -118,7 +109,6 @@ class Repository implements OrderPaymentRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\OrderPaymentInterface $entity The order payment ID.
      * @return \Magento\Sales\Api\Data\OrderPaymentInterface Order payment interface.
-     * @since 2.0.0
      */
     public function save(\Magento\Sales\Api\Data\OrderPaymentInterface $entity)
     {
@@ -130,7 +120,6 @@ class Repository implements OrderPaymentRepositoryInterface
      * Creates new Order Payment instance.
      *
      * @return \Magento\Sales\Api\Data\OrderPaymentInterface Transaction interface.
-     * @since 2.0.0
      */
     public function create()
     {
@@ -140,9 +129,8 @@ class Repository implements OrderPaymentRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
-     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

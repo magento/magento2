@@ -10,25 +10,21 @@ use Magento\Catalog\Api\CategoryAttributeRepositoryInterface;
 /**
  * Class \Magento\Catalog\Model\Category\AttributeRepository
  *
- * @since 2.0.0
  */
 class AttributeRepository implements CategoryAttributeRepositoryInterface
 {
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
-     * @since 2.0.0
      */
     protected $filterBuilder;
 
     /**
      * @var \Magento\Eav\Api\AttributeRepositoryInterface
-     * @since 2.0.0
      */
     protected $eavAttributeRepository;
 
@@ -37,7 +33,6 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Eav\Api\AttributeRepositoryInterface $eavAttributeRepository
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
@@ -53,7 +48,6 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -65,7 +59,6 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function get($attributeCode)
     {
@@ -78,7 +71,6 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getCustomAttributesMetadata($dataObjectClassName = null)
     {

@@ -10,7 +10,6 @@ namespace Magento\Framework\Translate;
  * Magento translate adapter interface
  *
  * @api
- * @since 2.0.0
  */
 interface AdapterInterface
 {
@@ -20,7 +19,6 @@ interface AdapterInterface
      * @param string|array $messageId
      * @param null $locale
      * @return string
-     * @since 2.0.0
      */
     public function translate($messageId, $locale = null);
 
@@ -30,7 +28,6 @@ interface AdapterInterface
      *
      * @return string
      * @SuppressWarnings(PHPMD.ShortMethodName)
-     * @since 2.0.0
      */
     public function __();
     // @codingStandardsIgnoreEnd

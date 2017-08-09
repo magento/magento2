@@ -20,67 +20,56 @@ use Psr\Log\LoggerInterface;
 /**
  * Class ShipOrder
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.2.0
  */
 class ShipOrder implements ShipOrderInterface
 {
     /**
      * @var ResourceConnection
-     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var OrderRepositoryInterface
-     * @since 2.2.0
      */
     private $orderRepository;
 
     /**
      * @var ShipmentDocumentFactory
-     * @since 2.2.0
      */
     private $shipmentDocumentFactory;
 
     /**
      * @var OrderStateResolverInterface
-     * @since 2.2.0
      */
     private $orderStateResolver;
 
     /**
      * @var OrderConfig
-     * @since 2.2.0
      */
     private $config;
 
     /**
      * @var ShipmentRepositoryInterface
-     * @since 2.2.0
      */
     private $shipmentRepository;
 
     /**
      * @var ShipOrderValidator
-     * @since 2.2.0
      */
     private $shipOrderValidator;
 
     /**
      * @var NotifierInterface
-     * @since 2.2.0
      */
     private $notifierInterface;
 
     /**
      * @var LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
     /**
      * @var OrderRegistrarInterface
-     * @since 2.2.0
      */
     private $orderRegistrar;
 
@@ -96,7 +85,6 @@ class ShipOrder implements ShipOrderInterface
      * @param OrderRegistrarInterface $orderRegistrar
      * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -137,7 +125,6 @@ class ShipOrder implements ShipOrderInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \DomainException
-     * @since 2.2.0
      */
     public function execute(
         $orderId,

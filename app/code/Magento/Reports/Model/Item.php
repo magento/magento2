@@ -7,19 +7,16 @@ namespace Magento\Reports\Model;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Item extends \Magento\Framework\DataObject
 {
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_isEmpty = false;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_children = [];
 
@@ -29,7 +26,6 @@ class Item extends \Magento\Framework\DataObject
      *
      * @param bool $flag
      * @return $this
-     * @since 2.0.0
      */
     public function setIsEmpty($flag = true)
     {
@@ -43,7 +39,6 @@ class Item extends \Magento\Framework\DataObject
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsEmpty()
     {
@@ -52,7 +47,6 @@ class Item extends \Magento\Framework\DataObject
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function hasIsEmpty()
     {
@@ -63,7 +57,6 @@ class Item extends \Magento\Framework\DataObject
      * @codeCoverageIgnore
      *
      * @return array
-     * @since 2.0.0
      */
     public function getChildren()
     {
@@ -76,7 +69,6 @@ class Item extends \Magento\Framework\DataObject
      *
      * @param array $children
      * @return $this
-     * @since 2.0.0
      */
     public function setChildren($children)
     {
@@ -88,7 +80,6 @@ class Item extends \Magento\Framework\DataObject
      * Indicator of whether or not children are present
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasChildren()
     {
@@ -100,7 +91,6 @@ class Item extends \Magento\Framework\DataObject
      *
      * @param array $child
      * @return $this
-     * @since 2.0.0
      */
     public function addChild($child)
     {

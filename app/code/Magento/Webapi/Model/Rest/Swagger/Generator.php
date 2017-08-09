@@ -25,7 +25,6 @@ use Magento\Webapi\Model\ServiceMetadata;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * @since 2.0.0
  */
 class Generator extends AbstractSchemaGenerator
 {
@@ -46,7 +45,6 @@ class Generator extends AbstractSchemaGenerator
      * Swagger factory instance.
      *
      * @var SwaggerFactory
-     * @since 2.0.0
      */
     protected $swaggerFactory;
 
@@ -54,7 +52,6 @@ class Generator extends AbstractSchemaGenerator
      * Magento product metadata
      *
      * @var ProductMetadataInterface
-     * @since 2.0.0
      */
     protected $productMetadata;
 
@@ -69,7 +66,6 @@ class Generator extends AbstractSchemaGenerator
      * ]
      *
      * @var array
-     * @since 2.0.0
      */
     protected $tags = [];
 
@@ -84,7 +80,6 @@ class Generator extends AbstractSchemaGenerator
      * ]
      * Note: definitionName is converted from class name
      * @var array
-     * @since 2.0.0
      */
     protected $definitions = [];
 
@@ -93,7 +88,6 @@ class Generator extends AbstractSchemaGenerator
      * Contains  mapping to the internal swagger simple types
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $simpleTypeList = [
         'bool'                              => 'boolean',
@@ -118,7 +112,6 @@ class Generator extends AbstractSchemaGenerator
      * @param Authorization $authorization
      * @param SwaggerFactory $swaggerFactory
      * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Webapi\Model\Cache\Type\Webapi $cache,
@@ -142,7 +135,6 @@ class Generator extends AbstractSchemaGenerator
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function generateSchema($requestedServiceMetadata, $requestScheme, $requestHost, $endpointUrl)
     {
@@ -186,7 +178,6 @@ class Generator extends AbstractSchemaGenerator
      * Get the 'Info' section data
      *
      * @return string[]
-     * @since 2.0.0
      */
     protected function getGeneralInfo()
     {
@@ -209,7 +200,6 @@ class Generator extends AbstractSchemaGenerator
      * @param array $httpMethodData
      * @param string $tagName
      * @return array
-     * @since 2.0.0
      */
     protected function generatePathInfo($methodName, $httpMethodData, $tagName)
     {
@@ -235,7 +225,6 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param array $methodData
      * @return array
-     * @since 2.0.0
      */
     protected function generateMethodResponses($methodData)
     {
@@ -279,7 +268,6 @@ class Generator extends AbstractSchemaGenerator
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     private function generateMethodParameters($httpMethodData)
     {
@@ -363,7 +351,6 @@ class Generator extends AbstractSchemaGenerator
      * @param string $description
      * @param bool|null $required
      * @return array
-     * @since 2.0.0
      */
     private function createQueryParam($name, $type, $description, $required = null)
     {
@@ -386,7 +373,6 @@ class Generator extends AbstractSchemaGenerator
      * @param string $serviceName
      * @param array $serviceData
      * @return string[]
-     * @since 2.0.0
      */
     protected function generateTagInfo($serviceName, $serviceData)
     {
@@ -404,7 +390,6 @@ class Generator extends AbstractSchemaGenerator
      * @param string $typeName
      * @param string $description
      * @return array
-     * @since 2.0.0
      */
     protected function getObjectSchema($typeName, $description = '')
     {
@@ -443,7 +428,6 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param string $typeName
      * @return array
-     * @since 2.0.0
      */
     protected function generateDefinition($typeName)
     {
@@ -479,7 +463,6 @@ class Generator extends AbstractSchemaGenerator
      *
      * @return array
      * Todo: create interface for error response
-     * @since 2.0.0
      */
     protected function getDefinitions()
     {
@@ -564,7 +547,6 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param array $definitions
      * @return array
-     * @since 2.1.0
      */
     private function snakeCaseDefinitions($definitions)
     {
@@ -588,7 +570,6 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param array $properties
      * @return array
-     * @since 2.1.0
      */
     private function convertArrayToSnakeCase($properties)
     {
@@ -608,7 +589,6 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param string $typeName
      * @return string
-     * @since 2.0.0
      */
     protected function getDefinitionReference($typeName)
     {
@@ -622,7 +602,6 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param string $typeName
      * @return string
-     * @since 2.0.0
      */
     protected function toLowerCaseDashSeparated($typeName)
     {
@@ -634,7 +613,6 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param string $typeName
      * @return bool
-     * @since 2.0.0
      */
     protected function isDefinitionExists($typeName)
     {
@@ -645,7 +623,6 @@ class Generator extends AbstractSchemaGenerator
      * Create and add custom attribute types
      *
      * @return void
-     * @since 2.0.0
      */
     protected function addCustomAttributeTypes()
     {
@@ -659,7 +636,6 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param string $serviceName
      * @return array
-     * @since 2.0.0
      */
     protected function getServiceMetadata($serviceName)
     {
@@ -671,7 +647,6 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param string $type
      * @return bool|string
-     * @since 2.0.0
      */
     protected function getSimpleType($type)
     {
@@ -693,7 +668,6 @@ class Generator extends AbstractSchemaGenerator
      * @param string $description
      * @param string $prefix
      * @return string[]
-     * @since 2.0.0
      */
     protected function getQueryParamNames($name, $type, $description, $prefix = '')
     {
@@ -724,7 +698,6 @@ class Generator extends AbstractSchemaGenerator
      * @param string $prefix
      * @param bool $isArray
      * @return string[]
-     * @since 2.0.0
      */
     private function handleComplex($name, $type, $prefix, $isArray)
     {
@@ -755,7 +728,6 @@ class Generator extends AbstractSchemaGenerator
      * @param string $name
      * @param string $prefix
      * @return string
-     * @since 2.0.0
      */
     private function handlePrimitive($name, $prefix)
     {
@@ -769,7 +741,6 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param string $uri
      * @return string
-     * @since 2.0.0
      */
     private function convertPathParams($uri)
     {
@@ -789,7 +760,6 @@ class Generator extends AbstractSchemaGenerator
      * @param array $parameterInfo
      * @param string $description
      * @return string[]
-     * @since 2.0.0
      */
     private function generateMethodPathParameter($parameterName, $parameterInfo, $description)
     {
@@ -814,7 +784,6 @@ class Generator extends AbstractSchemaGenerator
      * @param string $description
      * @param array $parameters
      * @return array
-     * @since 2.0.0
      */
     private function generateMethodQueryParameters($parameterName, $parameterInfo, $description, $parameters)
     {
@@ -852,7 +821,6 @@ class Generator extends AbstractSchemaGenerator
      * @param string $description
      * @param array $bodySchema
      * @return array
-     * @since 2.0.0
      */
     private function generateBodySchema($parameterName, $parameterInfo, $description, $bodySchema)
     {
@@ -878,7 +846,6 @@ class Generator extends AbstractSchemaGenerator
      * @param array $parameters
      * @param array $responses
      * @return array
-     * @since 2.0.0
      */
     private function generateMethodSuccessResponse($parameters, $responses)
     {
@@ -905,7 +872,6 @@ class Generator extends AbstractSchemaGenerator
      * @param array $exceptionClass
      * @param array $responses
      * @return array
-     * @since 2.0.0
      */
     private function generateMethodExceptionErrorResponses($exceptionClass, $responses)
     {
@@ -937,7 +903,6 @@ class Generator extends AbstractSchemaGenerator
      * Retrieve a list of services visible to current user.
      *
      * @return string[]
-     * @since 2.2.0
      */
     public function getListOfServices()
     {

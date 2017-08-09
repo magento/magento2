@@ -8,13 +8,11 @@ namespace Magento\Framework\DB\Ddl;
 /**
  * Class \Magento\Framework\DB\Ddl\TriggerFactory
  *
- * @since 2.0.0
  */
 class TriggerFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -25,7 +23,6 @@ class TriggerFactory
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -37,7 +34,6 @@ class TriggerFactory
      *
      * @param array $data
      * @return \Magento\Framework\DB\Ddl\Trigger
-     * @since 2.0.0
      */
     public function create(array $data = [])
     {

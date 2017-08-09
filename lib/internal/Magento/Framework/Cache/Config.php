@@ -10,19 +10,16 @@ namespace Magento\Framework\Cache;
 /**
  * Class \Magento\Framework\Cache\Config
  *
- * @since 2.0.0
  */
 class Config implements ConfigInterface
 {
     /**
      * @var \Magento\Framework\Cache\Config\Data
-     * @since 2.0.0
      */
     protected $_dataStorage;
 
     /**
      * @param \Magento\Framework\Cache\Config\Data $dataStorage
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Cache\Config\Data $dataStorage)
     {
@@ -33,7 +30,6 @@ class Config implements ConfigInterface
      * {inheritdoc}
      *
      * @return array
-     * @since 2.0.0
      */
     public function getTypes()
     {
@@ -45,7 +41,6 @@ class Config implements ConfigInterface
      *
      * @param string $type
      * @return array
-     * @since 2.0.0
      */
     public function getType($type)
     {

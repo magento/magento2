@@ -11,7 +11,6 @@ use Magento\Framework\Api\AbstractSimpleObject;
 
 /**
  * Grand Total Tax Details Model
- * @since 2.0.0
  */
 class GrandTotalRates extends AbstractSimpleObject implements GrandTotalRatesInterface
 {
@@ -24,7 +23,6 @@ class GrandTotalRates extends AbstractSimpleObject implements GrandTotalRatesInt
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -33,7 +31,6 @@ class GrandTotalRates extends AbstractSimpleObject implements GrandTotalRatesInt
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setTitle($title)
     {
@@ -42,7 +39,6 @@ class GrandTotalRates extends AbstractSimpleObject implements GrandTotalRatesInt
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getPercent()
     {
@@ -51,7 +47,6 @@ class GrandTotalRates extends AbstractSimpleObject implements GrandTotalRatesInt
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setPercent($percent)
     {

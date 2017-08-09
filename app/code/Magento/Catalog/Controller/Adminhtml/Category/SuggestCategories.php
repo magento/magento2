@@ -9,19 +9,16 @@ namespace Magento\Catalog\Controller\Adminhtml\Category;
 /**
  * Class \Magento\Catalog\Controller\Adminhtml\Category\SuggestCategories
  *
- * @since 2.0.0
  */
 class SuggestCategories extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
-     * @since 2.0.0
      */
     protected $layoutFactory;
 
@@ -29,7 +26,6 @@ class SuggestCategories extends \Magento\Catalog\Controller\Adminhtml\Category
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -45,7 +41,6 @@ class SuggestCategories extends \Magento\Catalog\Controller\Adminhtml\Category
      * Category list suggestion based on already entered symbols
      *
      * @return \Magento\Framework\Controller\Result\Json
-     * @since 2.0.0
      */
     public function execute()
     {

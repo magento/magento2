@@ -13,19 +13,16 @@ use Magento\Framework\Phrase;
 
 /**
  * Class ScopeResolver
- * @since 2.1.0
  */
 class ScopeResolver
 {
     /**
      * @var ObjectManagerInterface
-     * @since 2.1.0
      */
     private $objectManager;
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
@@ -33,7 +30,6 @@ class ScopeResolver
      * ScopeResolver constructor.
      * @param ObjectManagerInterface $objectManager
      * @param MetadataPool $metadataPool
-     * @since 2.1.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -49,7 +45,6 @@ class ScopeResolver
      * @return \Magento\Framework\Model\Entity\ScopeInterface[]
      * @throws ConfigurationMismatchException
      * @throws \Exception
-     * @since 2.1.0
      */
     public function getEntityContext($entityType, $entityData = [])
     {

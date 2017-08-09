@@ -9,7 +9,6 @@ use Magento\Quote\Model\Quote\Address\RateRequest;
 
 /**
  * Interface AbstractCarrierInterface
- * @since 2.0.0
  */
 interface AbstractCarrierInterface
 {
@@ -19,7 +18,6 @@ interface AbstractCarrierInterface
      * @param   string $field
      * @return  mixed
      * @api
-     * @since 2.0.0
      */
     public function getConfigData($field);
 
@@ -29,7 +27,6 @@ interface AbstractCarrierInterface
      * @param RateRequest $request
      * @return \Magento\Framework\DataObject|bool|null
      * @api
-     * @since 2.0.0
      */
     public function collectRates(RateRequest $request);
 
@@ -40,7 +37,6 @@ interface AbstractCarrierInterface
      * @param \Magento\Framework\DataObject $request
      * @return \Magento\Framework\DataObject
      * @api
-     * @since 2.0.0
      */
     public function requestToShipment($request);
 
@@ -51,7 +47,6 @@ interface AbstractCarrierInterface
      * @param \Magento\Framework\DataObject $request
      * @return \Magento\Framework\DataObject
      * @api
-     * @since 2.0.0
      */
     public function returnOfShipment($request);
 
@@ -61,7 +56,6 @@ interface AbstractCarrierInterface
      * @param \Magento\Framework\DataObject|null $params
      * @return array
      * @api
-     * @since 2.0.0
      */
     public function getContainerTypes(\Magento\Framework\DataObject $params = null);
 
@@ -70,7 +64,6 @@ interface AbstractCarrierInterface
      *
      * @return array
      * @api
-     * @since 2.0.0
      */
     public function getCustomizableContainerTypes();
 
@@ -80,7 +73,6 @@ interface AbstractCarrierInterface
      * @param \Magento\Framework\DataObject|null $params
      * @return array
      * @api
-     * @since 2.0.0
      */
     public function getDeliveryConfirmationTypes(\Magento\Framework\DataObject $params = null);
 
@@ -88,7 +80,6 @@ interface AbstractCarrierInterface
      * @param \Magento\Framework\DataObject $request
      * @return $this|bool|false|\Magento\Framework\Model\AbstractModel
      * @api
-     * @since 2.0.0
      */
     public function checkAvailableShipCountries(\Magento\Framework\DataObject $request);
 
@@ -98,7 +89,6 @@ interface AbstractCarrierInterface
      * @param \Magento\Framework\DataObject $request
      * @return $this|\Magento\Framework\DataObject|boolean
      * @api
-     * @since 2.0.0
      */
     public function proccessAdditionalValidation(\Magento\Framework\DataObject $request);
 
@@ -107,7 +97,6 @@ interface AbstractCarrierInterface
      *
      * @return bool
      * @api
-     * @since 2.0.0
      */
     public function isActive();
 
@@ -116,7 +105,6 @@ interface AbstractCarrierInterface
      *
      * @return bool
      * @api
-     * @since 2.0.0
      */
     public function isFixed();
 
@@ -125,7 +113,6 @@ interface AbstractCarrierInterface
      *
      * @return bool
      * @api
-     * @since 2.0.0
      */
     public function isTrackingAvailable();
 
@@ -134,7 +121,6 @@ interface AbstractCarrierInterface
      *
      * @return bool
      * @api
-     * @since 2.0.0
      */
     public function isShippingLabelsAvailable();
 
@@ -143,7 +129,6 @@ interface AbstractCarrierInterface
      *
      * @return string|null
      * @api
-     * @since 2.0.0
      */
     public function getSortOrder();
 
@@ -153,7 +138,6 @@ interface AbstractCarrierInterface
      * @param float $cost
      * @return float final price for shipping method
      * @api
-     * @since 2.0.0
      */
     public function getFinalPriceWithHandlingFee($cost);
 
@@ -163,7 +147,6 @@ interface AbstractCarrierInterface
      * @param int|float $weight
      * @return int|float weight
      * @api
-     * @since 2.0.0
      */
     public function getTotalNumOfBoxes($weight);
 
@@ -172,7 +155,6 @@ interface AbstractCarrierInterface
      *
      * @return bool
      * @api
-     * @since 2.0.0
      */
     public function isStateProvinceRequired();
 
@@ -181,7 +163,6 @@ interface AbstractCarrierInterface
      *
      * @return bool
      * @api
-     * @since 2.0.0
      */
     public function isCityRequired();
 
@@ -191,7 +172,6 @@ interface AbstractCarrierInterface
      * @param string|null $countryId
      * @return bool
      * @api
-     * @since 2.0.0
      */
     public function isZipCodeRequired($countryId = null);
 
@@ -201,7 +181,6 @@ interface AbstractCarrierInterface
      * @param mixed $debugData
      * @return void
      * @api
-     * @since 2.0.0
      */
     public function debugData($debugData);
 
@@ -210,7 +189,6 @@ interface AbstractCarrierInterface
      *
      * @return string
      * @api
-     * @since 2.0.0
      */
     public function getCarrierCode();
 
@@ -220,7 +198,6 @@ interface AbstractCarrierInterface
      * @param \Magento\Framework\DataObject $params
      * @return array
      * @api
-     * @since 2.0.0
      */
     public function getContentTypes(\Magento\Framework\DataObject $params);
 }

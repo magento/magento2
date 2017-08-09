@@ -13,25 +13,21 @@ use Magento\Framework\Composer\MagentoComposerApplicationFactory;
 
 /**
  * Class SystemPackage returns system package and available for update versions
- * @since 2.0.0
  */
 class SystemPackage
 {
     /**
      * @var InfoCommand
-     * @since 2.0.0
      */
     private $infoCommand;
 
     /**
      * @var MagentoComposerApplication
-     * @since 2.0.0
      */
     private $magentoComposerApplication;
 
     /**
      * @var ComposerInformation
-     * @since 2.0.0
      */
     private $composerInfo;
 
@@ -44,7 +40,6 @@ class SystemPackage
      *
      * @param MagentoComposerApplicationFactory $composerAppFactory
      * @param ComposerInformation $composerInfo
-     * @since 2.0.0
      */
     public function __construct(
         MagentoComposerApplicationFactory $composerAppFactory,
@@ -60,7 +55,6 @@ class SystemPackage
      *
      * @throws \RuntimeException
      * @return array
-     * @since 2.0.0
      */
     public function getPackageVersions()
     {
@@ -104,7 +98,6 @@ class SystemPackage
      *
      * @param string $currentCE
      * @return array
-     * @since 2.0.0
      */
     public function getAllowedEnterpriseVersions($currentCE)
     {
@@ -134,7 +127,6 @@ class SystemPackage
      *
      * @param array $systemPackageInfo
      * @return array
-     * @since 2.0.0
      */
     public function getSystemPackageVersions($systemPackageInfo)
     {
@@ -165,7 +157,6 @@ class SystemPackage
      * @return array
      * @throws \Exception
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     public function getInstalledSystemPackages()
     {
@@ -198,7 +189,6 @@ class SystemPackage
     /**
      * @param array $enterpriseVersions
      * @return array
-     * @since 2.0.0
      */
     public function sortVersions($enterpriseVersions)
     {
@@ -217,7 +207,6 @@ class SystemPackage
      *
      * @param array $packages
      * @return array
-     * @since 2.1.0
      */
     private function formatPackages($packages)
     {
@@ -256,7 +245,6 @@ class SystemPackage
      * @param array $enterpriseVersions
      * @param string $maxVersion
      * @return array
-     * @since 2.0.0
      */
     public function filterEeVersions($currentCE, $enterpriseVersions, $maxVersion)
     {

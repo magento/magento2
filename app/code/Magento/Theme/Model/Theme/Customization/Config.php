@@ -12,7 +12,6 @@ namespace Magento\Theme\Model\Theme\Customization;
 /**
  * Class \Magento\Theme\Model\Theme\Customization\Config
  *
- * @since 2.0.0
  */
 class Config implements \Magento\Framework\View\Design\Theme\Customization\ConfigInterface
 {
@@ -23,13 +22,11 @@ class Config implements \Magento\Framework\View\Design\Theme\Customization\Confi
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $config)
     {
@@ -38,7 +35,6 @@ class Config implements \Magento\Framework\View\Design\Theme\Customization\Confi
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getFileTypes()
     {

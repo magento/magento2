@@ -14,25 +14,21 @@ use Magento\Framework\DB\Select;
 
 /**
  * Provider for retrieving configurable options.
- * @since 2.2.0
  */
 class AttributeOptionProvider implements AttributeOptionProviderInterface
 {
     /**
      * @var ScopeResolverInterface
-     * @since 2.2.0
      */
     private $scopeResolver;
 
     /**
      * @var Attribute
-     * @since 2.2.0
      */
     private $attributeResource;
 
     /**
      * @var OptionSelectBuilderInterface
-     * @since 2.2.0
      */
     private $optionSelectBuilder;
 
@@ -40,7 +36,6 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
      * @param Attribute $attributeResource
      * @param ScopeResolverInterface $scopeResolver,
      * @param OptionSelectBuilderInterface $optionSelectBuilder
-     * @since 2.2.0
      */
     public function __construct(
         Attribute $attributeResource,
@@ -54,7 +49,6 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getAttributeOptions(AbstractAttribute $superAttribute, $productId)
     {

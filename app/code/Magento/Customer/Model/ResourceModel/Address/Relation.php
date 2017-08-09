@@ -11,19 +11,16 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationInterface;
 
 /**
  * Class represents save operations for customer address relations
- * @since 2.0.0
  */
 class Relation implements RelationInterface
 {
     /**
      * @var \Magento\Customer\Model\CustomerFactory
-     * @since 2.0.0
      */
     protected $customerFactory;
 
     /**
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @since 2.0.0
      */
     public function __construct(\Magento\Customer\Model\CustomerFactory $customerFactory)
     {
@@ -35,7 +32,6 @@ class Relation implements RelationInterface
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return void
-     * @since 2.0.0
      */
     public function processRelation(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -69,7 +65,6 @@ class Relation implements RelationInterface
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return bool
-     * @since 2.0.0
      */
     protected function isAddressDefault(\Magento\Framework\Model\AbstractModel $object)
     {

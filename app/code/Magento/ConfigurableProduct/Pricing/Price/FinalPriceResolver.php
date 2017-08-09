@@ -11,14 +11,12 @@ use Magento\Catalog\Pricing\Price\FinalPrice as CatalogFinalPrice;
 /**
  * Class \Magento\ConfigurableProduct\Pricing\Price\FinalPriceResolver
  *
- * @since 2.0.0
  */
 class FinalPriceResolver implements PriceResolverInterface
 {
     /**
      * @param \Magento\Framework\Pricing\SaleableInterface $product
      * @return float
-     * @since 2.0.0
      */
     public function resolvePrice(\Magento\Framework\Pricing\SaleableInterface $product)
     {

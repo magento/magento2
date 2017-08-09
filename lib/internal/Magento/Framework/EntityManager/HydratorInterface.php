@@ -8,7 +8,6 @@ namespace Magento\Framework\EntityManager;
 
 /**
  * Interface HydratorInterface
- * @since 2.1.0
  */
 interface HydratorInterface
 {
@@ -17,7 +16,6 @@ interface HydratorInterface
      *
      * @param object $entity
      * @return array
-     * @since 2.1.0
      */
     public function extract($entity);
 
@@ -27,7 +25,6 @@ interface HydratorInterface
      * @param object $entity
      * @param array $data
      * @return object
-     * @since 2.1.0
      */
     public function hydrate($entity, array $data);
 }

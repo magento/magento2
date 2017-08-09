@@ -8,7 +8,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Create\Cancel
  *
- * @since 2.0.0
  */
 class Cancel extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
@@ -16,7 +15,6 @@ class Cancel extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * Cancel order create
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

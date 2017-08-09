@@ -9,7 +9,6 @@ namespace Magento\Directory\Controller\Adminhtml\Json;
 /**
  * Class \Magento\Directory\Controller\Adminhtml\Json\CountryRegion
  *
- * @since 2.0.0
  */
 class CountryRegion extends \Magento\Backend\App\Action
 {
@@ -17,7 +16,6 @@ class CountryRegion extends \Magento\Backend\App\Action
      * Return JSON-encoded array of country regions
      *
      * @return string
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -9,8 +9,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
  * Backend grid item renderer concat
  *
  * @api
- * @deprecated 2.2.0 in favour of UI component implementation
- * @since 2.0.0
+ * @deprecated 100.2.0 in favour of UI component implementation
  */
 class Concat extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -19,7 +18,6 @@ class Concat extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      *
      * @param   \Magento\Framework\DataObject $row
      * @return  string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

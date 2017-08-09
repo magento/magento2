@@ -11,8 +11,7 @@ use Magento\Backend\Block\Widget\Grid\Column;
  * Backend grid item renderer interface
  *
  * @api
- * @deprecated 2.2.0 in favour of UI component implementation
- * @since 2.0.0
+ * @deprecated 100.2.0 in favour of UI component implementation
  */
 interface RendererInterface
 {
@@ -23,7 +22,6 @@ interface RendererInterface
      * @return void
      * @abstract
      * @api
-     * @since 2.0.0
      */
     public function setColumn($column);
 
@@ -33,7 +31,6 @@ interface RendererInterface
      * @abstract
      * @return void
      * @api
-     * @since 2.0.0
      */
     public function getColumn();
 
@@ -43,7 +40,6 @@ interface RendererInterface
      * @param \Magento\Framework\DataObject $row
      * @return string
      * @api
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row);
 }

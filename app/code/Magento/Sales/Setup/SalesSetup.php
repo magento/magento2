@@ -18,7 +18,6 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class SalesSetup extends EavSetup
 {
@@ -44,19 +43,16 @@ class SalesSetup extends EavSetup
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var EncryptorInterface
-     * @since 2.0.0
      */
     protected $encryptor;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private static $connectionName = 'sales';
 
@@ -68,7 +64,6 @@ class SalesSetup extends EavSetup
      * @param CacheInterface $cache
      * @param CollectionFactory $attrGroupCollectionFactory
      * @param ScopeConfigInterface $config
-     * @since 2.0.0
      */
     public function __construct(
         ModuleDataSetupInterface $setup,
@@ -86,7 +81,6 @@ class SalesSetup extends EavSetup
      * List of entities converted from EAV to flat data structure
      *
      * @var $_flatEntityTables array
-     * @since 2.0.0
      */
     protected $_flatEntityTables = [
         'order' => 'sales_order',
@@ -110,7 +104,6 @@ class SalesSetup extends EavSetup
      * List of entities used with separate grid table
      *
      * @var string[] $_flatEntitiesGrid
-     * @since 2.0.0
      */
     protected $_flatEntitiesGrid = ['order', 'invoice', 'shipment', 'creditmemo'];
 
@@ -119,7 +112,6 @@ class SalesSetup extends EavSetup
      *
      * @param string $table
      * @return bool
-     * @since 2.0.0
      */
     protected function _flatTableExist($table)
     {
@@ -138,7 +130,6 @@ class SalesSetup extends EavSetup
      * @param string $code
      * @param array $attr
      * @return $this
-     * @since 2.0.0
      */
     public function addAttribute($entityTypeId, $code, array $attr)
     {
@@ -163,7 +154,6 @@ class SalesSetup extends EavSetup
      * @param string $attribute
      * @param array $attr
      * @return $this
-     * @since 2.0.0
      */
     protected function _addFlatAttribute($table, $attribute, $attr)
     {
@@ -189,7 +179,6 @@ class SalesSetup extends EavSetup
      * @param array $attr
      * @param string $entityTypeId
      * @return $this
-     * @since 2.0.0
      */
     protected function _addGridAttribute($table, $attribute, $attr, $entityTypeId)
     {
@@ -212,7 +201,6 @@ class SalesSetup extends EavSetup
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _getAttributeColumnDefinition($code, $data)
     {
@@ -256,7 +244,6 @@ class SalesSetup extends EavSetup
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getDefaultEntities()
     {
@@ -301,7 +288,6 @@ class SalesSetup extends EavSetup
      * Get config model
      *
      * @return ScopeConfigInterface
-     * @since 2.0.0
      */
     public function getConfigModel()
     {
@@ -310,7 +296,6 @@ class SalesSetup extends EavSetup
 
     /**
      * @return EncryptorInterface
-     * @since 2.0.0
      */
     public function getEncryptor()
     {
@@ -321,7 +306,6 @@ class SalesSetup extends EavSetup
      * Get sales connection
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.2.0
      */
     public function getConnection()
     {
@@ -333,7 +317,6 @@ class SalesSetup extends EavSetup
      *
      * @param string $table
      * @return string
-     * @since 2.2.0
      */
     public function getTable($table)
     {
@@ -344,7 +327,6 @@ class SalesSetup extends EavSetup
      * Update entity types
      *
      * @return void
-     * @since 2.2.0
      */
     public function updateEntityTypes()
     {

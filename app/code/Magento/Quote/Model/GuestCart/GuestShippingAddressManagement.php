@@ -12,19 +12,16 @@ use Magento\Quote\Model\ShippingAddressManagementInterface;
 
 /**
  * Shipping address management class for guest carts.
- * @since 2.0.0
  */
 class GuestShippingAddressManagement implements GuestShippingAddressManagementInterface
 {
     /**
      * @var QuoteIdMaskFactory
-     * @since 2.0.0
      */
     protected $quoteIdMaskFactory;
 
     /**
      * @var ShippingAddressManagementInterface
-     * @since 2.0.0
      */
     protected $shippingAddressManagement;
 
@@ -33,7 +30,6 @@ class GuestShippingAddressManagement implements GuestShippingAddressManagementIn
      *
      * @param ShippingAddressManagementInterface $shippingAddressManagement
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
-     * @since 2.0.0
      */
     public function __construct(
         ShippingAddressManagementInterface $shippingAddressManagement,
@@ -45,7 +41,6 @@ class GuestShippingAddressManagement implements GuestShippingAddressManagementIn
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address)
     {
@@ -56,7 +51,6 @@ class GuestShippingAddressManagement implements GuestShippingAddressManagementIn
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function get($cartId)
     {

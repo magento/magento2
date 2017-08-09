@@ -10,7 +10,6 @@ use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 /**
  * Class \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Metrics
  *
- * @since 2.0.0
  */
 class Metrics
 {
@@ -18,7 +17,6 @@ class Metrics
      * Available metrics
      *
      * @var string[]
-     * @since 2.2.0
      */
     private $allowedMetrics = ['count', 'sum', 'min', 'max', 'avg'];
 
@@ -27,7 +25,6 @@ class Metrics
      *
      * @param RequestBucketInterface $bucket
      * @return string[]
-     * @since 2.0.0
      */
     public function build(RequestBucketInterface $bucket)
     {

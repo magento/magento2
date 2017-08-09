@@ -17,7 +17,6 @@ use Magento\Sales\Model\AbstractModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Track extends AbstractModel implements ShipmentTrackInterface
 {
@@ -28,31 +27,26 @@ class Track extends AbstractModel implements ShipmentTrackInterface
 
     /**
      * @var \Magento\Sales\Model\Order\Shipment|null
-     * @since 2.0.0
      */
     protected $_shipment = null;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_shipment_track';
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'track';
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Sales\Api\ShipmentRepositoryInterface
-     * @since 2.0.0
      */
     protected $shipmentRepository;
 
@@ -67,7 +61,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -97,7 +90,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -110,7 +102,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * @codeCoverageIgnore
      *
      * @return string
-     * @since 2.0.0
      */
     public function getNumber()
     {
@@ -124,7 +115,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      *
      * @param string $number
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function setNumber($number)
     {
@@ -138,7 +128,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      *
      * @param \Magento\Sales\Model\Order\Shipment $shipment
      * @return $this
-     * @since 2.0.0
      */
     public function setShipment(\Magento\Sales\Model\Order\Shipment $shipment)
     {
@@ -151,7 +140,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      *
      * @return \Magento\Sales\Model\Order\Shipment
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getShipment()
     {
@@ -170,7 +158,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * Check whether custom carrier was used for this track
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isCustom()
     {
@@ -181,7 +168,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * Retrieve hash code of current order
      *
      * @return string
-     * @since 2.0.0
      */
     public function getProtectCode()
     {
@@ -192,7 +178,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * Get store object
      *
      * @return \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     public function getStore()
     {
@@ -206,7 +191,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * Get store id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -220,7 +204,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      *
      * @param array $data
      * @return $this
-     * @since 2.0.0
      */
     public function addData(array $data)
     {
@@ -237,7 +220,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * Returns track_number
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTrackNumber()
     {
@@ -248,7 +230,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * Returns carrier_code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCarrierCode()
     {
@@ -259,7 +240,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * Returns created_at
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCreatedAt()
     {
@@ -268,7 +248,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setCreatedAt($createdAt)
     {
@@ -279,7 +258,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * Returns description
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDescription()
     {
@@ -290,7 +268,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * Returns order_id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getOrderId()
     {
@@ -301,7 +278,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * Returns parent_id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getParentId()
     {
@@ -312,7 +288,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * Returns qty
      *
      * @return float
-     * @since 2.0.0
      */
     public function getQty()
     {
@@ -323,7 +298,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * Returns title
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -334,7 +308,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * Returns updated_at
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUpdatedAt()
     {
@@ -345,7 +318,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * Returns weight
      *
      * @return float
-     * @since 2.0.0
      */
     public function getWeight()
     {
@@ -354,7 +326,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setUpdatedAt($timestamp)
     {
@@ -363,7 +334,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setParentId($id)
     {
@@ -372,7 +342,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setWeight($weight)
     {
@@ -381,7 +350,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setQty($qty)
     {
@@ -390,7 +358,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setOrderId($id)
     {
@@ -399,7 +366,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setTrackNumber($trackNumber)
     {
@@ -408,7 +374,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setDescription($description)
     {
@@ -417,7 +382,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setTitle($title)
     {
@@ -426,7 +390,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setCarrierCode($code)
     {
@@ -437,7 +400,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * {@inheritdoc}
      *
      * @return \Magento\Sales\Api\Data\ShipmentTrackExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -449,7 +411,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      *
      * @param \Magento\Sales\Api\Data\ShipmentTrackExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Sales\Api\Data\ShipmentTrackExtensionInterface $extensionAttributes)
     {

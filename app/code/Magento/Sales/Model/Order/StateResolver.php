@@ -10,7 +10,6 @@ use Magento\Sales\Model\Order;
 
 /**
  * Class OrderStateResolver
- * @since 2.2.0
  */
 class StateResolver implements OrderStateResolverInterface
 {
@@ -19,7 +18,6 @@ class StateResolver implements OrderStateResolverInterface
      *
      * @param OrderInterface $order
      * @return bool
-     * @since 2.2.0
      */
     private function isOrderComplete(OrderInterface $order)
     {
@@ -36,7 +34,6 @@ class StateResolver implements OrderStateResolverInterface
      * @param OrderInterface $order
      * @param array $arguments
      * @return bool
-     * @since 2.2.0
      */
     private function isOrderClosed(OrderInterface $order, $arguments)
     {
@@ -54,7 +51,6 @@ class StateResolver implements OrderStateResolverInterface
      * @param OrderInterface $order
      * @param array $arguments
      * @return bool
-     * @since 2.2.0
      */
     private function isOrderProcessing(OrderInterface $order, $arguments)
     {
@@ -70,7 +66,6 @@ class StateResolver implements OrderStateResolverInterface
      *
      * @param OrderInterface $order
      * @return string
-     * @since 2.2.0
      */
     private function getInitialOrderState(OrderInterface $order)
     {
@@ -81,7 +76,6 @@ class StateResolver implements OrderStateResolverInterface
      * @param OrderInterface $order
      * @param array $arguments
      * @return string
-     * @since 2.2.0
      */
     public function getStateForOrder(OrderInterface $order, array $arguments = [])
     {

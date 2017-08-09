@@ -20,7 +20,6 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
  * Command to rollback code, media and DB
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class RollbackCommand extends AbstractSetupCommand
 {
@@ -35,19 +34,16 @@ class RollbackCommand extends AbstractSetupCommand
      * Object Manager
      *
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var MaintenanceMode
-     * @since 2.0.0
      */
     private $maintenanceMode;
 
     /**
      * @var BackupRollbackFactory
-     * @since 2.0.0
      */
     private $backupRollbackFactory;
 
@@ -55,7 +51,6 @@ class RollbackCommand extends AbstractSetupCommand
      * Existing deployment config
      *
      * @var DeploymentConfig
-     * @since 2.0.0
      */
     private $deploymentConfig;
 
@@ -65,7 +60,6 @@ class RollbackCommand extends AbstractSetupCommand
      * @param ObjectManagerProvider $objectManagerProvider
      * @param MaintenanceMode $maintenanceMode
      * @param DeploymentConfig $deploymentConfig
-     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerProvider $objectManagerProvider,
@@ -81,7 +75,6 @@ class RollbackCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -113,7 +106,6 @@ class RollbackCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -155,7 +147,6 @@ class RollbackCommand extends AbstractSetupCommand
      * @param OutputInterface $output
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     private function doRollback(InputInterface $input, OutputInterface $output)
     {
@@ -185,7 +176,6 @@ class RollbackCommand extends AbstractSetupCommand
      * Sets area code to start a session for database backup and rollback
      *
      * @return void
-     * @since 2.0.0
      */
     private function setAreaCode()
     {

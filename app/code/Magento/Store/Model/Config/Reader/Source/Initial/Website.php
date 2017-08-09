@@ -11,25 +11,21 @@ use Magento\Framework\App\Config\Scope\Converter;
 
 /**
  * Class for retrieving configuration from initial config by website scope
- * @since 2.2.0
  */
 class Website implements SourceInterface
 {
     /**
      * @var Initial
-     * @since 2.2.0
      */
     private $initialConfig;
 
     /**
      * @var DefaultScope
-     * @since 2.2.0
      */
     private $defaultScope;
 
     /**
      * @var Converter
-     * @since 2.2.0
      */
     private $converter;
 
@@ -37,7 +33,6 @@ class Website implements SourceInterface
      * @param Initial $initialConfig
      * @param DefaultScope $defaultScope
      * @param Converter $converter
-     * @since 2.2.0
      */
     public function __construct(
         Initial $initialConfig,
@@ -54,7 +49,6 @@ class Website implements SourceInterface
      *
      * @param string|null $scopeCode
      * @return array
-     * @since 2.2.0
      */
     public function get($scopeCode = null)
     {

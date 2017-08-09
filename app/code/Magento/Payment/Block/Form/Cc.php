@@ -7,13 +7,11 @@ namespace Magento\Payment\Block\Form;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Cc extends \Magento\Payment\Block\Form
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Payment::form/cc.phtml';
 
@@ -21,7 +19,6 @@ class Cc extends \Magento\Payment\Block\Form
      * Payment config model
      *
      * @var \Magento\Payment\Model\Config
-     * @since 2.0.0
      */
     protected $_paymentConfig;
 
@@ -29,7 +26,6 @@ class Cc extends \Magento\Payment\Block\Form
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Payment\Model\Config $paymentConfig
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -45,7 +41,6 @@ class Cc extends \Magento\Payment\Block\Form
      *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function getCcAvailableTypes()
     {
@@ -68,7 +63,6 @@ class Cc extends \Magento\Payment\Block\Form
      * Retrieve credit card expire months
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCcMonths()
     {
@@ -85,7 +79,6 @@ class Cc extends \Magento\Payment\Block\Form
      * Retrieve credit card expire years
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCcYears()
     {
@@ -102,7 +95,6 @@ class Cc extends \Magento\Payment\Block\Form
      * Retrieve has verification configuration
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasVerification()
     {
@@ -119,9 +111,8 @@ class Cc extends \Magento\Payment\Block\Form
     /**
      * Whether switch/solo card type available
      *
-     * @deprecated 2.1.0 unused
+     * @deprecated 100.1.0 unused
      * @return bool
-     * @since 2.0.0
      */
     public function hasSsCardType()
     {
@@ -136,9 +127,8 @@ class Cc extends \Magento\Payment\Block\Form
     /**
      * Solo/switch card start year
      *
-     * @deprecated 2.1.0 unused
+     * @deprecated 100.1.0 unused
      * @return array
-     * @since 2.0.0
      */
     public function getSsStartYears()
     {
@@ -157,7 +147,6 @@ class Cc extends \Magento\Payment\Block\Form
      * Render block HTML
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

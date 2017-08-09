@@ -9,7 +9,6 @@ namespace Magento\Tax\Model\Sales\Order;
 
 /**
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class Details extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Tax\Api\Data\OrderTaxDetailsInterface
@@ -23,7 +22,6 @@ class Details extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAppliedTaxes()
     {
@@ -32,7 +30,6 @@ class Details extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getItems()
     {
@@ -44,7 +41,6 @@ class Details extends \Magento\Framework\Model\AbstractExtensibleModel implement
      *
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface[] $appliedTaxes
      * @return $this
-     * @since 2.0.0
      */
     public function setAppliedTaxes(array $appliedTaxes = null)
     {
@@ -56,7 +52,6 @@ class Details extends \Magento\Framework\Model\AbstractExtensibleModel implement
      *
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface[] $items
      * @return $this
-     * @since 2.0.0
      */
     public function setItems(array $items = null)
     {
@@ -67,7 +62,6 @@ class Details extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * {@inheritdoc}
      *
      * @return \Magento\Tax\Api\Data\OrderTaxDetailsExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -79,7 +73,6 @@ class Details extends \Magento\Framework\Model\AbstractExtensibleModel implement
      *
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Tax\Api\Data\OrderTaxDetailsExtensionInterface $extensionAttributes)
     {

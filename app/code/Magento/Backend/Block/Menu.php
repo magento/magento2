@@ -16,7 +16,6 @@ namespace Magento\Backend\Block;
  * @method array getAdditionalCacheKeyInfo()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Menu extends \Magento\Backend\Block\Template
 {
@@ -24,13 +23,11 @@ class Menu extends \Magento\Backend\Block\Template
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_containerRenderer;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_itemRenderer;
 
@@ -38,7 +35,6 @@ class Menu extends \Magento\Backend\Block\Template
      * Backend URL instance
      *
      * @var \Magento\Backend\Model\UrlInterface
-     * @since 2.0.0
      */
     protected $_url;
 
@@ -46,43 +42,36 @@ class Menu extends \Magento\Backend\Block\Template
      * Current selected item
      *
      * @var \Magento\Backend\Model\Menu\Item|false|null
-     * @since 2.0.0
      */
     protected $_activeItemModel = null;
 
     /**
      * @var \Magento\Backend\Model\Menu\Filter\IteratorFactory
-     * @since 2.0.0
      */
     protected $_iteratorFactory;
 
     /**
      * @var \Magento\Backend\Model\Auth\Session
-     * @since 2.0.0
      */
     protected $_authSession;
 
     /**
      * @var \Magento\Backend\Model\Menu\Config
-     * @since 2.0.0
      */
     protected $_menuConfig;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $_localeResolver;
 
     /**
      * @var MenuItemChecker
-     * @since 2.2.0
      */
     private $menuItemChecker;
 
     /**
      * @var AnchorRenderer
-     * @since 2.2.0
      */
     private $anchorRenderer;
 
@@ -96,7 +85,6 @@ class Menu extends \Magento\Backend\Block\Template
      * @param array $data
      * @param MenuItemChecker|null $menuItemChecker
      * @param AnchorRenderer|null $anchorRenderer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -123,7 +111,6 @@ class Menu extends \Magento\Backend\Block\Template
      * Initialize template and cache settings
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -136,7 +123,6 @@ class Menu extends \Magento\Backend\Block\Template
      *
      * @param \Magento\Backend\Model\Menu\Item $menuItem
      * @return string
-     * @since 2.0.0
      */
     protected function _getAnchorLabel($menuItem)
     {
@@ -147,7 +133,6 @@ class Menu extends \Magento\Backend\Block\Template
      * Render menu item mouse events
      * @param \Magento\Backend\Model\Menu\Item $menuItem
      * @return string
-     * @since 2.0.0
      */
     protected function _renderMouseEvent($menuItem)
     {
@@ -160,7 +145,6 @@ class Menu extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Model\Menu\Item $menuItem
      * @param int $level
      * @return string
-     * @since 2.0.0
      */
     protected function _renderItemCssClass($menuItem, $level)
     {
@@ -187,7 +171,6 @@ class Menu extends \Magento\Backend\Block\Template
      *
      * @param \Magento\Backend\Model\Menu $menu
      * @return \Magento\Backend\Model\Menu\Filter\Iterator
-     * @since 2.0.0
      */
     protected function _getMenuIterator($menu)
     {
@@ -199,7 +182,6 @@ class Menu extends \Magento\Backend\Block\Template
      *
      * @param   string $html
      * @return  string
-     * @since 2.0.0
      */
     protected function _afterToHtml($html)
     {
@@ -217,7 +199,6 @@ class Menu extends \Magento\Backend\Block\Template
      *
      * @param string[] $match
      * @return string
-     * @since 2.0.0
      */
     protected function _callbackSecretKey($match)
     {
@@ -232,7 +213,6 @@ class Menu extends \Magento\Backend\Block\Template
      * Retrieve cache lifetime
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCacheLifetime()
     {
@@ -243,7 +223,6 @@ class Menu extends \Magento\Backend\Block\Template
      * Get Key pieces for caching block content
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCacheKeyInfo()
     {
@@ -265,7 +244,6 @@ class Menu extends \Magento\Backend\Block\Template
      * Get menu config model
      *
      * @return \Magento\Backend\Model\Menu
-     * @since 2.0.0
      */
     public function getMenuModel()
     {
@@ -278,7 +256,6 @@ class Menu extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Model\Menu $menu
      * @param int $level
      * @return string HTML
-     * @since 2.0.0
      */
     public function renderMenu($menu, $level = 0)
     {
@@ -312,7 +289,6 @@ class Menu extends \Magento\Backend\Block\Template
      *
      * @param \Magento\Backend\Model\Menu $items
      * @return int
-     * @since 2.0.0
      */
     protected function _countItems($items)
     {
@@ -333,7 +309,6 @@ class Menu extends \Magento\Backend\Block\Template
      * @param int $limit
      * @return array|void
      * @todo: Add Depth Level limit, and better logic for columns
-     * @since 2.0.0
      */
     protected function _columnBrake($items, $limit)
     {
@@ -368,7 +343,6 @@ class Menu extends \Magento\Backend\Block\Template
      * @param int $limit
      * @param $id int
      * @return string HTML code
-     * @since 2.0.0
      */
     protected function _addSubMenu($menuItem, $level, $limit, $id = null)
     {
@@ -399,7 +373,6 @@ class Menu extends \Magento\Backend\Block\Template
      * @return string HTML
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function renderNavigation($menu, $level = 0, $limit = 0, $colBrakes = [])
     {
@@ -438,7 +411,6 @@ class Menu extends \Magento\Backend\Block\Template
      * Get current selected menu item
      *
      * @return \Magento\Backend\Model\Menu\Item|false
-     * @since 2.0.0
      */
     public function getActiveItemModel()
     {

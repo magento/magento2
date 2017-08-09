@@ -10,7 +10,7 @@ use Magento\Sales\Api\Exception\DocumentValidationExceptionInterface;
 
 /**
  * @api
- * @since 2.2.0
+ * @since 100.1.2
  */
 class DocumentValidationException extends LocalizedException implements DocumentValidationExceptionInterface
 {

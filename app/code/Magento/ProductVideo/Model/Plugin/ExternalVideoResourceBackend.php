@@ -11,19 +11,16 @@ use Magento\ProductVideo\Setup\InstallSchema;
 
 /**
  * Media Resource decorator
- * @since 2.0.0
  */
 class ExternalVideoResourceBackend
 {
     /**
      * @var \Magento\ProductVideo\Model\ResourceModel\Video
-     * @since 2.0.0
      */
     protected $videoResourceModel;
 
     /**
      * @param \Magento\ProductVideo\Model\ResourceModel\Video $videoResourceModel
-     * @since 2.0.0
      */
     public function __construct(\Magento\ProductVideo\Model\ResourceModel\Video $videoResourceModel)
     {
@@ -36,7 +33,6 @@ class ExternalVideoResourceBackend
      * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterDuplicate(Gallery $originalResourceModel, array $valueIdMap)
     {
@@ -53,7 +49,6 @@ class ExternalVideoResourceBackend
      * @param Gallery $originalResourceModel
      * @param Select $select
      * @return Select
-     * @since 2.2.0
      */
     public function afterCreateBatchBaseSelect(Gallery $originalResourceModel, Select $select)
     {

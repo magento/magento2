@@ -12,7 +12,6 @@ use Magento\Framework\Config\ScopeInterface;
 /**
  * Emulates callback inside adminhtml area code and adminhtml scope.
  * It is used for CLI commands which should work with data available only in adminhtml scope.
- * @since 2.2.0
  */
 class EmulatedAdminhtmlAreaProcessor
 {
@@ -20,7 +19,6 @@ class EmulatedAdminhtmlAreaProcessor
      * The application scope manager.
      *
      * @var ScopeInterface
-     * @since 2.2.0
      */
     private $scope;
 
@@ -28,14 +26,12 @@ class EmulatedAdminhtmlAreaProcessor
      * The application state manager.
      *
      * @var State
-     * @since 2.2.0
      */
     private $state;
 
     /**
      * @param ScopeInterface $scope The application scope manager
      * @param State $state The application state manager
-     * @since 2.2.0
      */
     public function __construct(ScopeInterface $scope, State $state)
     {
@@ -53,7 +49,6 @@ class EmulatedAdminhtmlAreaProcessor
      * @return bool|int|float|string|array|null - as the result of this method is the result of callback,
      * you can use callback only with specified in this method return types
      * @throws \Exception The exception is thrown if the parameter $callback throws an exception
-     * @since 2.2.0
      */
     public function process(callable $callback, array $params = [])
     {

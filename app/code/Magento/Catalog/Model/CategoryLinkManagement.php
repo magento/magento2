@@ -8,43 +8,36 @@ namespace Magento\Catalog\Model;
 
 /**
  * Class CategoryLinkManagement
- * @since 2.0.0
  */
 class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagementInterface
 {
     /**
      * @var \Magento\Catalog\Api\CategoryRepositoryInterface
-     * @since 2.0.0
      */
     protected $categoryRepository;
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.1.0
      */
     protected $productRepository;
 
     /**
      * @var ResourceModel\Product
-     * @since 2.1.0
      */
     protected $productResource;
 
     /**
      * @var \Magento\Catalog\Api\CategoryLinkRepositoryInterface
-     * @since 2.1.0
      */
     protected $categoryLinkRepository;
 
     /**
      * @var \Magento\Catalog\Api\Data\CategoryProductLinkInterfaceFactory
-     * @since 2.0.0
      */
     protected $productLinkFactory;
 
     /**
      * @var \Magento\Framework\Indexer\IndexerRegistry
-     * @since 2.1.0
      */
     protected $indexerRegistry;
 
@@ -53,7 +46,6 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
      *
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Catalog\Api\Data\CategoryProductLinkInterfaceFactory $productLinkFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
@@ -65,7 +57,6 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAssignedProducts($categoryId)
     {
@@ -96,7 +87,6 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
      * @param string $productSku
      * @param \int[] $categoryIds
      * @return bool
-     * @since 2.1.0
      */
     public function assignProductToCategories($productSku, array $categoryIds)
     {
@@ -125,7 +115,6 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
      * Retrieve product repository instance
      *
      * @return \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.1.0
      */
     private function getProductRepository()
     {
@@ -140,7 +129,6 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
      * Retrieve product resource instance
      *
      * @return ResourceModel\Product
-     * @since 2.1.0
      */
     private function getProductResource()
     {
@@ -155,7 +143,6 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
      * Retrieve category link repository instance
      *
      * @return \Magento\Catalog\Api\CategoryLinkRepositoryInterface
-     * @since 2.1.0
      */
     private function getCategoryLinkRepository()
     {
@@ -170,7 +157,6 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
      * Retrieve indexer registry instance
      *
      * @return \Magento\Framework\Indexer\IndexerRegistry
-     * @since 2.1.0
      */
     private function getIndexerRegistry()
     {

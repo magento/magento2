@@ -12,13 +12,11 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Abstract Visitor Observer
- * @since 2.0.0
  */
 abstract class AbstractVisitorObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Customer\Model\Visitor
-     * @since 2.0.0
      */
     protected $visitor;
 
@@ -26,7 +24,6 @@ abstract class AbstractVisitorObserver implements ObserverInterface
      * Constructor
      *
      * @param Visitor $visitor
-     * @since 2.0.0
      */
     public function __construct(Visitor $visitor)
     {

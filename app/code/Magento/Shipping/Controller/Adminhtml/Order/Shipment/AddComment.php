@@ -13,7 +13,6 @@ use Magento\Framework\View\Result\LayoutFactory;
 /**
  * Class \Magento\Shipping\Controller\Adminhtml\Order\Shipment\AddComment
  *
- * @since 2.0.0
  */
 class AddComment extends \Magento\Backend\App\Action
 {
@@ -26,19 +25,16 @@ class AddComment extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
-     * @since 2.0.0
      */
     protected $shipmentLoader;
 
     /**
      * @var ShipmentCommentSender
-     * @since 2.0.0
      */
     protected $shipmentCommentSender;
 
     /**
      * @var LayoutFactory
-     * @since 2.0.0
      */
     protected $resultLayoutFactory;
 
@@ -47,7 +43,6 @@ class AddComment extends \Magento\Backend\App\Action
      * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
      * @param ShipmentCommentSender $shipmentCommentSender
      * @param LayoutFactory $resultLayoutFactory
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -65,7 +60,6 @@ class AddComment extends \Magento\Backend\App\Action
      * Add comment to shipment history
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -11,7 +11,6 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 /**
  * Class Stock
  *
- * @since 2.0.0
  */
 class Stock extends AbstractExtensibleModel implements StockInterface
 {
@@ -24,7 +23,6 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      * Prefix of model events names
      *
      * @var string
-     * @since 2.2.0
      */
     protected $_eventPrefix = 'cataloginventory_stock';
 
@@ -33,7 +31,6 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      * In observe method you can use $observer->getEvent()->getStock() in this case
      *
      * @var string
-     * @since 2.2.0
      */
     protected $_eventObject = 'stock';
 
@@ -56,7 +53,6 @@ class Stock extends AbstractExtensibleModel implements StockInterface
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -69,7 +65,6 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      * Retrieve stock identifier
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getStockId()
     {
@@ -80,7 +75,6 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      * Retrieve website identifier
      *
      * @return int
-     * @since 2.0.0
      */
     public function getWebsiteId()
     {
@@ -91,7 +85,6 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      * Retrieve Stock Name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getStockName()
     {
@@ -103,7 +96,6 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      *
      * @param int $stockId
      * @return $this
-     * @since 2.0.0
      */
     public function setStockId($stockId)
     {
@@ -115,7 +107,6 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      *
      * @param int $websiteId
      * @return $this
-     * @since 2.0.0
      */
     public function setWebsiteId($websiteId)
     {
@@ -127,7 +118,6 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      *
      * @param string $stockName
      * @return $this
-     * @since 2.0.0
      */
     public function setStockName($stockName)
     {
@@ -138,7 +128,6 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      * {@inheritdoc}
      *
      * @return \Magento\CatalogInventory\Api\Data\StockExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -150,7 +139,6 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      *
      * @param \Magento\CatalogInventory\Api\Data\StockExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\CatalogInventory\Api\Data\StockExtensionInterface $extensionAttributes

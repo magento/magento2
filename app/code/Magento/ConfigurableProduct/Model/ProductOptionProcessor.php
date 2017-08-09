@@ -15,26 +15,22 @@ use Magento\Framework\DataObject\Factory as DataObjectFactory;
 /**
  * Class \Magento\ConfigurableProduct\Model\ProductOptionProcessor
  *
- * @since 2.0.0
  */
 class ProductOptionProcessor implements ProductOptionProcessorInterface
 {
     /**
      * @var DataObjectFactory
-     * @since 2.0.0
      */
     protected $objectFactory;
 
     /**
      * @var ConfigurableItemOptionValueFactory
-     * @since 2.0.0
      */
     protected $itemOptionValueFactory;
 
     /**
      * @param DataObjectFactory $objectFactory
      * @param ConfigurableItemOptionValueFactory $itemOptionValueFactory
-     * @since 2.0.0
      */
     public function __construct(
         DataObjectFactory $objectFactory,
@@ -46,7 +42,6 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function convertToBuyRequest(ProductOptionInterface $productOption)
     {
@@ -71,7 +66,6 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
      *
      * @param ProductOptionInterface $productOption
      * @return array
-     * @since 2.0.0
      */
     protected function getConfigurableItemOptions(ProductOptionInterface $productOption)
     {
@@ -87,7 +81,6 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function convertToProductOption(DataObject $request)
     {

@@ -8,7 +8,6 @@ namespace Magento\Tax\Api;
 /**
  * Interface OrderTaxManagementInterface
  * @api
- * @since 2.0.0
  */
 interface OrderTaxManagementInterface
 {
@@ -18,7 +17,6 @@ interface OrderTaxManagementInterface
      * @param int $orderId
      * @return \Magento\Tax\Api\Data\OrderTaxDetailsInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @since 2.0.0
      */
     public function getOrderTaxDetails($orderId);
 }

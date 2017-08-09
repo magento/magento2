@@ -12,7 +12,6 @@ namespace Magento\ImportExport\Model\Import\Entity;
 /**
  * Class \Magento\ImportExport\Model\Import\Entity\Factory
  *
- * @since 2.0.0
  */
 class Factory
 {
@@ -20,13 +19,11 @@ class Factory
      * Object Manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -37,7 +34,6 @@ class Factory
      * @param string $className
      * @return AbstractEntity|\Magento\ImportExport\Model\Import\AbstractEntity
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function create($className)
     {

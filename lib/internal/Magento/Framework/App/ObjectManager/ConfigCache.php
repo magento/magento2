@@ -13,13 +13,11 @@ use Magento\Framework\Serialize\Serializer\Serialize;
 /**
  * Class \Magento\Framework\App\ObjectManager\ConfigCache
  *
- * @since 2.0.0
  */
 class ConfigCache implements \Magento\Framework\ObjectManager\ConfigCacheInterface
 {
     /**
      * @var \Magento\Framework\Cache\FrontendInterface
-     * @since 2.0.0
      */
     protected $_cacheFrontend;
 
@@ -27,19 +25,16 @@ class ConfigCache implements \Magento\Framework\ObjectManager\ConfigCacheInterfa
      * Cache prefix
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_prefix = 'diConfig';
 
     /**
      * @var SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @param \Magento\Framework\Cache\FrontendInterface $cacheFrontend
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Cache\FrontendInterface $cacheFrontend)
     {
@@ -51,7 +46,6 @@ class ConfigCache implements \Magento\Framework\ObjectManager\ConfigCacheInterfa
      *
      * @param string $key
      * @return array|false
-     * @since 2.0.0
      */
     public function get($key)
     {
@@ -68,7 +62,6 @@ class ConfigCache implements \Magento\Framework\ObjectManager\ConfigCacheInterfa
      * @param array $config
      * @param string $key
      * @return void
-     * @since 2.0.0
      */
     public function save(array $config, $key)
     {
@@ -79,8 +72,7 @@ class ConfigCache implements \Magento\Framework\ObjectManager\ConfigCacheInterfa
      * Get serializer
      *
      * @return SerializerInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {

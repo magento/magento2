@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\ProductOptions;
 /**
  * Interface \Magento\Catalog\Model\ProductOptions\ConfigInterface
  *
- * @since 2.0.0
  */
 interface ConfigInterface
 {
@@ -17,7 +16,6 @@ interface ConfigInterface
      *
      * @param string $name
      * @return array
-     * @since 2.0.0
      */
     public function getOption($name);
 
@@ -25,7 +23,6 @@ interface ConfigInterface
      * Get configuration of all registered product types
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAll();
 }

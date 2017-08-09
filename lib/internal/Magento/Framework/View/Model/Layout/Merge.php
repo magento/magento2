@@ -15,7 +15,6 @@ use Magento\Framework\View\Model\Layout\Update\Validator;
  * Layout merge model
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
 {
@@ -46,13 +45,11 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
 
     /**
      * @var \Magento\Framework\View\Design\ThemeInterface
-     * @since 2.0.0
      */
     private $theme;
 
     /**
      * @var \Magento\Framework\Url\ScopeInterface
-     * @since 2.0.0
      */
     private $scope;
 
@@ -60,7 +57,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * In-memory cache for loaded layout updates
      *
      * @var \Magento\Framework\View\Layout\Element
-     * @since 2.0.0
      */
     protected $layoutUpdatesCache;
 
@@ -68,7 +64,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Cumulative array of update XML strings
      *
      * @var array
-     * @since 2.0.0
      */
     protected $updates = [];
 
@@ -76,7 +71,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Handles used in this update
      *
      * @var array
-     * @since 2.0.0
      */
     protected $handles = [];
 
@@ -84,7 +78,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Page handle names sorted by from parent to child
      *
      * @var array
-     * @since 2.0.0
      */
     protected $pageHandles = [];
 
@@ -92,55 +85,46 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Substitution values in structure array('from' => array(), 'to' => array())
      *
      * @var array|null
-     * @since 2.0.0
      */
     protected $subst = null;
 
     /**
      * @var \Magento\Framework\View\File\CollectorInterface
-     * @since 2.0.0
      */
     private $fileSource;
 
     /**
      * @var \Magento\Framework\View\File\CollectorInterface
-     * @since 2.0.0
      */
     private $pageLayoutFileSource;
 
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     private $appState;
 
     /**
      * @var \Magento\Framework\Cache\FrontendInterface
-     * @since 2.0.0
      */
     protected $cache;
 
     /**
      * @var \Magento\Framework\View\Model\Layout\Update\Validator
-     * @since 2.0.0
      */
     protected $layoutValidator;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $pageLayout;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $cacheSuffix;
 
@@ -148,7 +132,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * All processed handles used in this update
      *
      * @var array
-     * @since 2.0.0
      */
     protected $allHandles = [];
 
@@ -156,7 +139,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Status for handle being processed
      *
      * @var int
-     * @since 2.0.0
      */
     protected $handleProcessing = 1;
 
@@ -164,13 +146,11 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Status for processed handle
      *
      * @var int
-     * @since 2.0.0
      */
     protected $handleProcessed = 2;
 
     /**
      * @var ReadFactory
-     * @since 2.0.0
      */
     private $readFactory;
 
@@ -189,7 +169,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param \Magento\Framework\View\Design\ThemeInterface $theme Non-injectable theme instance
      * @param string $cacheSuffix
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\DesignInterface $design,
@@ -221,7 +200,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * @param string $update
      * @return $this
-     * @since 2.0.0
      */
     public function addUpdate($update)
     {
@@ -235,7 +213,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Get all registered updates as array
      *
      * @return array
-     * @since 2.0.0
      */
     public function asArray()
     {
@@ -246,7 +223,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Get all registered updates as string
      *
      * @return string
-     * @since 2.0.0
      */
     public function asString()
     {
@@ -258,7 +234,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * @param array|string $handleName
      * @return $this
-     * @since 2.0.0
      */
     public function addHandle($handleName)
     {
@@ -277,7 +252,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * @param string $handleName
      * @return $this
-     * @since 2.0.0
      */
     public function removeHandle($handleName)
     {
@@ -289,7 +263,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Get handle names array
      *
      * @return array
-     * @since 2.0.0
      */
     public function getHandles()
     {
@@ -302,7 +275,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * @param string[] $handlesToTry
      * @return bool
-     * @since 2.0.0
      */
     public function addPageHandles(array $handlesToTry)
     {
@@ -324,7 +296,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * @param string $handleName
      * @return bool
-     * @since 2.0.0
      */
     public function pageHandleExists($handleName)
     {
@@ -333,7 +304,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
 
     /**
      * @return string|null
-     * @since 2.0.0
      */
     public function getPageLayout()
     {
@@ -344,7 +314,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Check current handles if layout was defined on it
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isLayoutDefined()
     {
@@ -362,7 +331,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * @param string $handleName
      * @return \Magento\Framework\View\Layout\Element|null
-     * @since 2.0.0
      */
     protected function _getPageHandleNode($handleName)
     {
@@ -382,7 +350,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Retrieve used page handle names sorted from parent to child
      *
      * @return array
-     * @since 2.0.0
      */
     public function getPageHandles()
     {
@@ -403,7 +370,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * )
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllDesignAbstractions()
     {
@@ -433,7 +399,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * @param string $handleName
      * @return string|null
-     * @since 2.0.0
      */
     public function getPageHandleType($handleName)
     {
@@ -447,7 +412,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param array|string $handles
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
-     * @since 2.0.0
      */
     public function load($handles = [])
     {
@@ -488,7 +452,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param string $layout
      * @return $this
      * @throws \Exception
-     * @since 2.0.0
      */
     protected function _validateMergedLayout($cacheId, $layout)
     {
@@ -516,7 +479,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Get layout updates as \Magento\Framework\View\Layout\Element object
      *
      * @return \SimpleXMLElement
-     * @since 2.0.0
      */
     public function asSimplexml()
     {
@@ -533,7 +495,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * @param string $xmlString
      * @return \SimpleXMLElement
-     * @since 2.0.0
      */
     protected function _loadXmlString($xmlString)
     {
@@ -545,7 +506,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * @param string $handle
      * @return $this
-     * @since 2.0.0
      */
     protected function _merge($handle)
     {
@@ -567,7 +527,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * @param string $handle
      * @return bool
-     * @since 2.0.0
      */
     protected function _fetchPackageLayoutUpdates($handle)
     {
@@ -590,7 +549,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * @param string $handle
      * @return bool
-     * @since 2.0.0
      */
     protected function _fetchDbLayoutUpdates($handle)
     {
@@ -626,7 +584,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codeCoverageIgnore
-     * @since 2.2.0
      */
     public function validateUpdate($handle, $updateXml)
     {
@@ -638,7 +595,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * @param string $xmlString
      * @return string
-     * @since 2.0.0
      */
     protected function _substitutePlaceholders($xmlString)
     {
@@ -663,7 +619,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @return string
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getDbUpdateString($handle)
     {
@@ -675,7 +630,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * @param \SimpleXMLElement $updateXml
      * @return $this
-     * @since 2.0.0
      */
     protected function _fetchRecursiveUpdates($updateXml)
     {
@@ -694,7 +648,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Retrieve already merged layout updates from files for specified area/theme/package/store
      *
      * @return \Magento\Framework\View\Layout\Element
-     * @since 2.0.0
      */
     public function getFileLayoutUpdatesXml()
     {
@@ -718,7 +671,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * @param string $suffix
      * @return string
-     * @since 2.0.0
      */
     protected function generateCacheId($suffix = '')
     {
@@ -730,7 +682,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * @param string $cacheId
      * @return string|bool
-     * @since 2.0.0
      */
     protected function _loadCache($cacheId)
     {
@@ -744,7 +695,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param string $cacheId
      * @param array $cacheTags
      * @return void
-     * @since 2.0.0
      */
     protected function _saveCache($data, $cacheId, array $cacheTags = [])
     {
@@ -756,7 +706,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * @return \Magento\Framework\View\Layout\Element
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _loadFileLayoutUpdatesXml()
     {
@@ -815,7 +764,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param string $fileName
      * @param array $xmlErrors
      * @return void
-     * @since 2.0.0
      */
     protected function _logXmlErrors($fileName, $xmlErrors)
     {
@@ -829,7 +777,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * @param array $libXmlErrors
      * @return array
-     * @since 2.2.0
      */
     private function getXmlErrors($libXmlErrors)
     {
@@ -848,7 +795,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @return \Magento\Theme\Model\Theme
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _getPhysicalTheme(\Magento\Framework\View\Design\ThemeInterface $theme)
     {
@@ -872,7 +818,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * @param \SimpleXMLElement $node
      * @return string
-     * @since 2.0.0
      */
     protected function _renderXmlAttributes(\SimpleXMLElement $node)
     {
@@ -893,7 +838,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * )
      *
      * @return array
-     * @since 2.0.0
      */
     public function getContainers()
     {
@@ -914,7 +858,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * Destructor should be called explicitly in order to work around the PHP bug
      * https://bugs.php.net/bug.php?id=62468
-     * @since 2.0.0
      */
     public function __destruct()
     {
@@ -924,7 +867,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function isCustomerDesignAbstraction(array $abstraction)
     {
@@ -936,7 +878,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function isPageLayoutDesignAbstraction(array $abstraction)
     {
@@ -950,7 +891,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Retrieve theme
      *
      * @return \Magento\Framework\View\Design\ThemeInterface
-     * @since 2.0.0
      */
     public function getTheme()
     {
@@ -961,7 +901,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Retrieve current scope
      *
      * @return \Magento\Framework\Url\ScopeInterface
-     * @since 2.0.0
      */
     public function getScope()
     {
@@ -972,7 +911,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Return cache ID based current area/package/theme/store and handles
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCacheId()
     {

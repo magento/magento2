@@ -10,31 +10,26 @@ use Magento\Framework\Indexer\CacheContext;
 /**
  * Class \Magento\Catalog\Model\Indexer\Product\Flat
  *
- * @since 2.0.0
  */
 class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row
-     * @since 2.0.0
      */
     protected $_productFlatIndexerRow;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows
-     * @since 2.0.0
      */
     protected $_productFlatIndexerRows;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\Action\Full
-     * @since 2.0.0
      */
     protected $_productFlatIndexerFull;
 
     /**
      * @var \Magento\Framework\Indexer\CacheContext
-     * @since 2.1.0
      */
     private $cacheContext;
 
@@ -42,7 +37,6 @@ class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Frame
      * @param Flat\Action\Row $productFlatIndexerRow
      * @param Flat\Action\Rows $productFlatIndexerRows
      * @param Flat\Action\Full $productFlatIndexerFull
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row $productFlatIndexerRow,
@@ -59,7 +53,6 @@ class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Frame
      *
      * @param int[] $ids
      * @return void
-     * @since 2.0.0
      */
     public function execute($ids)
     {
@@ -71,7 +64,6 @@ class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Frame
      * Execute full indexation
      *
      * @return void
-     * @since 2.0.0
      */
     public function executeFull()
     {
@@ -89,7 +81,6 @@ class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Frame
      *
      * @param int[] $ids
      * @return void
-     * @since 2.0.0
      */
     public function executeList(array $ids)
     {
@@ -101,7 +92,6 @@ class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Frame
      *
      * @param int $id
      * @return void
-     * @since 2.0.0
      */
     public function executeRow($id)
     {
@@ -112,8 +102,7 @@ class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Frame
      * Get cache context
      *
      * @return \Magento\Framework\Indexer\CacheContext
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.0.11
      */
     protected function getCacheContext()
     {

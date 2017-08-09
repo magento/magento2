@@ -13,7 +13,6 @@ use Magento\Swatches\Model\Swatch;
 
 /**
  * Plugin model for Catalog Resource Attribute
- * @since 2.0.0
  */
 class EavAttribute
 {
@@ -26,19 +25,16 @@ class EavAttribute
 
     /**
      * @var \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory
-     * @since 2.0.0
      */
     protected $swatchCollectionFactory;
 
     /**
      * @var \Magento\Swatches\Model\SwatchFactory
-     * @since 2.0.0
      */
     protected $swatchFactory;
 
     /**
      * @var \Magento\Swatches\Helper\Data
-     * @since 2.0.0
      */
     protected $swatchHelper;
 
@@ -46,7 +42,6 @@ class EavAttribute
      * Array which contains links for new created attributes for swatches
      *
      * @var array
-     * @since 2.0.0
      */
     protected $dependencyArray = [];
 
@@ -54,7 +49,6 @@ class EavAttribute
      * Swatch existing status
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $isSwatchExists;
 
@@ -62,7 +56,6 @@ class EavAttribute
      * Serializer from arrays to string.
      *
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -71,7 +64,6 @@ class EavAttribute
      * @param \Magento\Swatches\Model\SwatchFactory $swatchFactory
      * @param \Magento\Swatches\Helper\Data $swatchHelper
      * @param Json|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory,
@@ -90,7 +82,6 @@ class EavAttribute
      *
      * @param Attribute $attribute
      * @return void
-     * @since 2.2.0
      */
     public function beforeBeforeSave(Attribute $attribute)
     {
@@ -108,7 +99,6 @@ class EavAttribute
      * @param Attribute $attribute
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
-     * @since 2.0.0
      */
     public function afterAfterSave(Attribute $attribute)
     {
@@ -124,7 +114,6 @@ class EavAttribute
      *
      * @param Attribute $attribute
      * @return void
-     * @since 2.0.0
      */
     protected function setProperOptionsArray(Attribute $attribute)
     {
@@ -152,7 +141,6 @@ class EavAttribute
      *
      * @param Attribute $attribute
      * @return void
-     * @since 2.0.0
      */
     protected function convertSwatchToDropdown(Attribute $attribute)
     {
@@ -174,7 +162,6 @@ class EavAttribute
      * @param Attribute $attribute
      * @return Attribute
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function processSwatchOptions(Attribute $attribute)
     {
@@ -194,7 +181,6 @@ class EavAttribute
      *
      * @param array $optionsArray
      * @return array
-     * @since 2.0.0
      */
     protected function prepareOptionIds(array $optionsArray)
     {
@@ -216,7 +202,6 @@ class EavAttribute
      * @param array $optionsArray
      * @param array $attributeSavedOptions
      * @return void
-     * @since 2.0.0
      */
     protected function prepareOptionLinks(array $optionsArray, array $attributeSavedOptions)
     {
@@ -237,7 +222,6 @@ class EavAttribute
      *
      * @param Attribute $attribute
      * @return void
-     * @since 2.0.0
      */
     protected function saveSwatchParams(Attribute $attribute)
     {
@@ -253,7 +237,6 @@ class EavAttribute
      *
      * @param Attribute $attribute
      * @return void
-     * @since 2.0.0
      */
     protected function processVisualSwatch(Attribute $attribute)
     {
@@ -279,7 +262,6 @@ class EavAttribute
     /**
      * @param string $value
      * @return int
-     * @since 2.0.0
      */
     private function determineSwatchType($value)
     {
@@ -297,7 +279,6 @@ class EavAttribute
      *
      * @param Attribute $attribute
      * @return void
-     * @since 2.0.0
      */
     protected function processTextualSwatch(Attribute $attribute)
     {
@@ -335,7 +316,6 @@ class EavAttribute
      *
      * @param integer $optionId
      * @return int
-     * @since 2.0.0
      */
     protected function getAttributeOptionId($optionId)
     {
@@ -351,7 +331,6 @@ class EavAttribute
      * @param Attribute $attribute
      * @param integer $optionId
      * @return bool
-     * @since 2.0.0
      */
     protected function isOptionForDelete(Attribute $attribute, $optionId)
     {
@@ -365,7 +344,6 @@ class EavAttribute
      * @param int $optionId
      * @param int $storeId
      * @return Swatch
-     * @since 2.0.0
      */
     protected function loadSwatchIfExists($optionId, $storeId)
     {
@@ -390,7 +368,6 @@ class EavAttribute
      * @param integer $type
      * @param string $value
      * @return void
-     * @since 2.0.0
      */
     protected function saveSwatchData($swatch, $optionId, $storeId, $type, $value)
     {
@@ -411,7 +388,6 @@ class EavAttribute
      *
      * @param Attribute $attribute
      * @return void
-     * @since 2.0.0
      */
     protected function saveDefaultSwatchOptionValue(Attribute $attribute)
     {
@@ -438,7 +414,6 @@ class EavAttribute
      * @param Attribute $attribute
      * @return bool
      * @throws InputException
-     * @since 2.0.0
      */
     protected function validateOptions(Attribute $attribute)
     {
@@ -460,7 +435,6 @@ class EavAttribute
      * @param array $options
      * @param Attribute $attribute
      * @return bool
-     * @since 2.0.0
      */
     protected function isOptionsValid(array $options, Attribute $attribute)
     {
@@ -483,7 +457,6 @@ class EavAttribute
      * @param Attribute $attribute
      * @param bool $result
      * @return bool
-     * @since 2.2.0
      */
     public function afterUsesSource(Attribute $attribute, $result)
     {

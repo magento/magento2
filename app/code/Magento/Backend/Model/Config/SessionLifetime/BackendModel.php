@@ -11,7 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Backend model for the admin/security/session_lifetime configuration field. Validates session lifetime.
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class BackendModel extends Value
 {
@@ -22,7 +22,7 @@ class BackendModel extends Value
     const MIN_LIFETIME = 60;
 
     /**
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function beforeSave()
     {

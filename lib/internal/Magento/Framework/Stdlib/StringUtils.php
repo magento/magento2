@@ -9,7 +9,6 @@ namespace Magento\Framework\Stdlib;
  * Magento methods to work with string
  *
  * @api
- * @since 2.0.0
  */
 class StringUtils
 {
@@ -25,7 +24,6 @@ class StringUtils
      * @param string $sourceSeparator
      * @param string $destinationSeparator
      * @return string
-     * @since 2.0.0
      */
     public function upperCaseWords($str, $sourceSeparator = '_', $destinationSeparator = '_')
     {
@@ -40,7 +38,6 @@ class StringUtils
      * @param string $needle
      * @param string $insert
      * @return string
-     * @since 2.0.0
      */
     public function splitInjection($str, $length = 50, $needle = '-', $insert = ' ')
     {
@@ -73,7 +70,6 @@ class StringUtils
      * @return string[]
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function split($value, $length = 1, $keepWords = false, $trim = false, $wordSeparatorRegex = '\s')
     {
@@ -149,7 +145,6 @@ class StringUtils
      *
      * @param string $string
      * @return int
-     * @since 2.0.0
      */
     public function strlen($string)
     {
@@ -161,7 +156,6 @@ class StringUtils
      *
      * @param string $string
      * @return string
-     * @since 2.0.0
      */
     public function cleanString($string)
     {
@@ -179,7 +173,6 @@ class StringUtils
      * @param int $offset
      * @param int $length
      * @return string
-     * @since 2.0.0
      */
     public function substr($string, $offset, $length = null)
     {
@@ -195,7 +188,6 @@ class StringUtils
      *
      * @param string $str
      * @return string
-     * @since 2.0.0
      */
     public function strrev($str)
     {
@@ -217,7 +209,6 @@ class StringUtils
      * @param string $needle
      * @param int $offset
      * @return int|bool
-     * @since 2.0.0
      */
     public function strpos($haystack, $needle, $offset = null)
     {

@@ -15,25 +15,25 @@ use Magento\MediaStorage\Model\File\Uploader as FileUploader;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
+ * @since 101.0.0
  */
 class CreateHandler implements ExtensionInterface
 {
     /**
      * @var \Magento\Framework\EntityManager\EntityMetadata
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $metadata;
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductAttributeInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $attribute;
 
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $attributeRepository;
 
@@ -41,37 +41,36 @@ class CreateHandler implements ExtensionInterface
      * Resource model
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $resourceModel;
 
     /**
      * @var \Magento\Framework\Json\Helper\Data
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $jsonHelper;
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $mediaConfig;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $mediaDirectory;
 
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $fileStorageDb;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $mediaAttributeCodes;
 
@@ -83,7 +82,7 @@ class CreateHandler implements ExtensionInterface
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function __construct(
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
@@ -111,7 +110,7 @@ class CreateHandler implements ExtensionInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function execute($product, $arguments = [])
     {
@@ -211,7 +210,7 @@ class CreateHandler implements ExtensionInterface
 
     /**
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function getAttribute()
     {
@@ -229,7 +228,7 @@ class CreateHandler implements ExtensionInterface
      * @param array $images
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function processDeletedImages($product, array &$images)
     {
@@ -239,7 +238,7 @@ class CreateHandler implements ExtensionInterface
      * @param \Magento\Catalog\Model\Product $product
      * @param array $images
      * @return void
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function processNewAndExistingImages($product, array &$images)
     {
@@ -273,7 +272,7 @@ class CreateHandler implements ExtensionInterface
      * @param \Magento\Catalog\Model\Product $product
      * @param array $image
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function processNewImage($product, array &$image)
     {
@@ -299,7 +298,7 @@ class CreateHandler implements ExtensionInterface
     /**
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function duplicate($product)
     {
@@ -326,7 +325,7 @@ class CreateHandler implements ExtensionInterface
      *
      * @param string $file
      * @return string
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function moveImageFromTmp($file)
     {
@@ -354,7 +353,7 @@ class CreateHandler implements ExtensionInterface
     /**
      * @param string $file
      * @return string
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getFilenameFromTmp($file)
     {
@@ -367,7 +366,7 @@ class CreateHandler implements ExtensionInterface
      * @param string $file
      * @param bool $forTmp
      * @return string
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function getUniqueFileName($file, $forTmp = false)
     {
@@ -392,7 +391,7 @@ class CreateHandler implements ExtensionInterface
      * @param string $file
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function copyImage($file)
     {
@@ -429,7 +428,6 @@ class CreateHandler implements ExtensionInterface
      * Get Media Attribute Codes cached value
      *
      * @return array
-     * @since 2.2.0
      */
     private function getMediaAttributeCodes()
     {

@@ -7,26 +7,22 @@ namespace Magento\Setup\Model;
 
 /**
  * Provide random word from dictionary
- * @since 2.2.0
  */
 class Dictionary
 {
     /**
      * @var string
-     * @since 2.2.0
      */
     private $dictionaryFilePath;
 
     /**
      * @var \SplFixedArray
-     * @since 2.2.0
      */
     private $dictionary;
 
     /**
      * @param string $dictionaryFilePath
      * @throws \Magento\Setup\Exception
-     * @since 2.2.0
      */
     public function __construct($dictionaryFilePath)
     {
@@ -37,7 +33,6 @@ class Dictionary
      * Returns random word from dictionary
      *
      * @return string
-     * @since 2.2.0
      */
     public function getRandWord()
     {
@@ -54,7 +49,6 @@ class Dictionary
      *
      * @return void
      * @throws \Magento\Setup\Exception
-     * @since 2.2.0
      */
     private function readDictionary()
     {

@@ -16,13 +16,11 @@ use Magento\Security\Model\SecurityCookie;
  * Integration Save controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Save extends \Magento\Integration\Controller\Adminhtml\Integration
 {
     /**
      * @var SecurityCookie
-     * @since 2.1.0
      */
     private $securityCookie;
 
@@ -30,8 +28,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
      * Get security cookie
      *
      * @return SecurityCookie
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getSecurityCookie()
     {
@@ -46,7 +43,6 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
      * Save integration action.
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -95,7 +91,6 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
      * @return $this
      * @throws UserLockedException
      * @throws \Magento\Framework\Exception\AuthenticationException
-     * @since 2.1.0
      */
     protected function validateUser()
     {
@@ -113,7 +108,6 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
      *
      * @param int $integrationId
      * @return \Magento\Integration\Model\Integration|null
-     * @since 2.1.0
      */
     protected function getIntegration($integrationId)
     {
@@ -137,7 +131,6 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
      * Redirect merchant to 'Edit integration' or 'New integration' if error happened during integration save.
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _redirectOnSaveError()
     {
@@ -154,7 +147,6 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
      *
      * @param array $integrationData
      * @return void
-     * @since 2.1.0
      */
     private function processData($integrationData)
     {

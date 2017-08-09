@@ -11,13 +11,11 @@ use Magento\Framework\HTTP\Header;
 /**
  * Class \Magento\Framework\App\Response\HeaderProvider\XssProtection
  *
- * @since 2.1.0
  */
 class XssProtection extends AbstractHeaderProvider
 {
     /**
      * @var string
-     * @since 2.1.0
      */
     protected $headerName = 'X-XSS-Protection';
 
@@ -32,13 +30,11 @@ class XssProtection extends AbstractHeaderProvider
 
     /**
      * @var \Magento\Framework\HTTP\Header
-     * @since 2.1.0
      */
     private $headerService;
 
     /**
      * @param Header $headerService
-     * @since 2.1.0
      */
     public function __construct(Header $headerService)
     {
@@ -49,7 +45,6 @@ class XssProtection extends AbstractHeaderProvider
      * Header value. Must be disabled for IE 8.
      *
      * @return string
-     * @since 2.1.0
      */
     public function getValue()
     {

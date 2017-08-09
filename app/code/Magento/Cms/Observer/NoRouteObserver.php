@@ -10,7 +10,6 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\Cms\Observer\NoRouteObserver
  *
- * @since 2.0.0
  */
 class NoRouteObserver implements ObserverInterface
 {
@@ -19,7 +18,6 @@ class NoRouteObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return self
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

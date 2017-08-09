@@ -11,7 +11,6 @@ use Magento\Framework\View\Element\AbstractBlock;
  * Sales order details block
  *
  * @api
- * @since 2.0.0
  */
 class Invoice extends \Magento\Sales\Block\Items\AbstractItems
 {
@@ -19,19 +18,16 @@ class Invoice extends \Magento\Sales\Block\Items\AbstractItems
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Payment\Helper\Data
-     * @since 2.0.0
      */
     protected $_paymentHelper;
 
     /**
      * @var \Magento\Sales\Model\Order\Address\Renderer
-     * @since 2.0.0
      */
     protected $addressRenderer;
 
@@ -41,7 +37,6 @@ class Invoice extends \Magento\Sales\Block\Items\AbstractItems
      * @param \Magento\Payment\Helper\Data $paymentHelper
      * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -58,7 +53,6 @@ class Invoice extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -69,7 +63,6 @@ class Invoice extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -78,7 +71,6 @@ class Invoice extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getPrintUrl()
     {
@@ -87,7 +79,6 @@ class Invoice extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getPaymentInfoHtml()
     {
@@ -96,7 +87,6 @@ class Invoice extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return array|null
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -105,7 +95,6 @@ class Invoice extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return array|null
-     * @since 2.0.0
      */
     public function getInvoice()
     {
@@ -115,7 +104,6 @@ class Invoice extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * @param AbstractBlock $renderer
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareItem(AbstractBlock $renderer)
     {
@@ -128,7 +116,6 @@ class Invoice extends \Magento\Sales\Block\Items\AbstractItems
      *
      * @param   \Magento\Sales\Model\Order\Invoice $invoice
      * @return  string
-     * @since 2.0.0
      */
     public function getInvoiceTotalsHtml($invoice)
     {
@@ -147,7 +134,6 @@ class Invoice extends \Magento\Sales\Block\Items\AbstractItems
      * @param \Magento\Sales\Model\Order\Address $address
      * @param string $format
      * @return null|string
-     * @since 2.0.0
      */
     public function formatAddress(\Magento\Sales\Model\Order\Address $address, $format)
     {

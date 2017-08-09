@@ -12,19 +12,16 @@ use Magento\Theme\Model\Theme\ThemeDependencyChecker;
 
 /**
  * Class checks components dependencies for uninstall flow
- * @since 2.0.0
  */
 class UninstallDependencyCheck
 {
     /**
      * @var ComposerInformation
-     * @since 2.0.0
      */
     private $composerInfo;
 
     /**
      * @var DependencyChecker
-     * @since 2.0.0
      */
     private $packageDependencyChecker;
 
@@ -32,7 +29,6 @@ class UninstallDependencyCheck
      * Theme Dependency Checker
      *
      * @var ThemeDependencyChecker
-     * @since 2.0.0
      */
     private $themeDependencyChecker;
 
@@ -42,7 +38,6 @@ class UninstallDependencyCheck
      * @param ComposerInformation $composerInfo
      * @param DependencyChecker $dependencyChecker
      * @param ThemeDependencyCheckerFactory $themeDependencyCheckerFactory
-     * @since 2.0.0
      */
     public function __construct(
         ComposerInformation $composerInfo,
@@ -60,7 +55,6 @@ class UninstallDependencyCheck
      * @param array $packages
      * @return array
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     public function runUninstallReadinessCheck(array $packages)
     {

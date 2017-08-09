@@ -11,26 +11,22 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class GenericButton
- * @since 2.1.0
  */
 class GenericButton
 {
     /**
      * @var Context
-     * @since 2.1.0
      */
     protected $context;
 
     /**
      * @var PageRepositoryInterface
-     * @since 2.1.0
      */
     protected $pageRepository;
 
     /**
      * @param Context $context
      * @param PageRepositoryInterface $pageRepository
-     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -44,7 +40,6 @@ class GenericButton
      * Return CMS page ID
      *
      * @return int|null
-     * @since 2.1.0
      */
     public function getPageId()
     {
@@ -63,7 +58,6 @@ class GenericButton
      * @param   string $route
      * @param   array $params
      * @return  string
-     * @since 2.1.0
      */
     public function getUrl($route = '', $params = [])
     {

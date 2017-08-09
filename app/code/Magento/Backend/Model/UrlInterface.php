@@ -7,7 +7,6 @@ namespace Magento\Backend\Model;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface UrlInterface extends \Magento\Framework\UrlInterface
 {
@@ -28,7 +27,6 @@ interface UrlInterface extends \Magento\Framework\UrlInterface
      * @param string $controller Controller name
      * @param string $action Action name
      * @return string
-     * @since 2.0.0
      */
     public function getSecretKey($routeName = null, $controller = null, $action = null);
 
@@ -36,7 +34,6 @@ interface UrlInterface extends \Magento\Framework\UrlInterface
      * Return secret key settings flag
      *
      * @return bool
-     * @since 2.0.0
      */
     public function useSecretKey();
 
@@ -44,7 +41,6 @@ interface UrlInterface extends \Magento\Framework\UrlInterface
      * Enable secret key using
      *
      * @return \Magento\Backend\Model\UrlInterface
-     * @since 2.0.0
      */
     public function turnOnSecretKey();
 
@@ -52,7 +48,6 @@ interface UrlInterface extends \Magento\Framework\UrlInterface
      * Disable secret key using
      *
      * @return \Magento\Backend\Model\UrlInterface
-     * @since 2.0.0
      */
     public function turnOffSecretKey();
 
@@ -60,7 +55,6 @@ interface UrlInterface extends \Magento\Framework\UrlInterface
      * Refresh admin menu cache etc.
      *
      * @return \Magento\Backend\Model\UrlInterface
-     * @since 2.0.0
      */
     public function renewSecretUrls();
 
@@ -68,7 +62,6 @@ interface UrlInterface extends \Magento\Framework\UrlInterface
      * Find admin start page url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getStartupPageUrl();
 
@@ -77,7 +70,6 @@ interface UrlInterface extends \Magento\Framework\UrlInterface
      *
      * @param \Magento\Backend\Model\Auth\Session $session
      * @return \Magento\Backend\Model\UrlInterface
-     * @since 2.0.0
      */
     public function setSession(\Magento\Backend\Model\Auth\Session $session);
 
@@ -85,7 +77,6 @@ interface UrlInterface extends \Magento\Framework\UrlInterface
      * Return backend area front name, defined in configuration
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAreaFrontName();
 
@@ -93,7 +84,6 @@ interface UrlInterface extends \Magento\Framework\UrlInterface
      * Find first menu item that user is able to access
      *
      * @return string
-     * @since 2.0.0
      */
     public function findFirstAvailableMenu();
 }

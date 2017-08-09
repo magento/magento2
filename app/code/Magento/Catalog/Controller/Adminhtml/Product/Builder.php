@@ -15,37 +15,31 @@ use Magento\Framework\Registry;
 /**
  * Class \Magento\Catalog\Controller\Adminhtml\Product\Builder
  *
- * @since 2.0.0
  */
 class Builder
 {
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $productFactory;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $registry;
 
     /**
      * @var \Magento\Cms\Model\Wysiwyg\Config
-     * @since 2.0.0
      */
     protected $wysiwygConfig;
 
     /**
      * @var StoreFactory
-     * @since 2.1.0
      */
     protected $storeFactory;
 
@@ -57,7 +51,6 @@ class Builder
      * @param Registry $registry
      * @param WysiwygModel\Config $wysiwygConfig
      * @param StoreFactory|null $storeFactory
-     * @since 2.0.0
      */
     public function __construct(
         ProductFactory $productFactory,
@@ -79,7 +72,6 @@ class Builder
      *
      * @param RequestInterface $request
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function build(RequestInterface $request)
     {

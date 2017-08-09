@@ -9,7 +9,6 @@ namespace Magento\Framework\Stdlib;
  * Class ArrayUtils
  *
  * @api
- * @since 2.0.0
  */
 class ArrayUtils
 {
@@ -19,7 +18,6 @@ class ArrayUtils
      * @param  array $sort
      * @param  string $locale
      * @return array|bool
-     * @since 2.0.0
      */
     public function ksortMultibyte(array &$sort, $locale)
     {
@@ -61,7 +59,6 @@ class ArrayUtils
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function decorateArray($array, $prefix = 'decorated_', $forceSetAll = false)
     {
@@ -120,7 +117,6 @@ class ArrayUtils
      * @param bool $value
      * @param bool $isSkipped
      * @return void
-     * @since 2.0.0
      */
     private function _decorateArrayObject($element, $key, $value, $isSkipped)
     {
@@ -154,7 +150,7 @@ class ArrayUtils
      * @param string $path The leading path
      * @param string $separator The path parts separator
      * @return array
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function flatten(array $data, $path = '', $separator = '/')
     {
@@ -185,7 +181,7 @@ class ArrayUtils
      * @param array $originalArray The array to compare from
      * @param array $newArray The array to compare with
      * @return array Diff array
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function recursiveDiff(array $originalArray, array $newArray)
     {

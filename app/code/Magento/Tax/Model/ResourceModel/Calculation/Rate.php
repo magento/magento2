@@ -14,7 +14,6 @@ namespace Magento\Tax\Model\ResourceModel\Calculation;
 /**
  * Class \Magento\Tax\Model\ResourceModel\Calculation\Rate
  *
- * @since 2.0.0
  */
 class Rate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -22,7 +21,6 @@ class Rate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -33,7 +31,6 @@ class Rate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize unique fields
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initUniqueFields()
     {
@@ -45,7 +42,6 @@ class Rate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Delete all rates
      *
      * @return $this
-     * @since 2.0.0
      */
     public function deleteAllRates()
     {
@@ -58,7 +54,6 @@ class Rate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param  int $rateId
      * @return array
-     * @since 2.0.0
      */
     public function isInRule($rateId)
     {

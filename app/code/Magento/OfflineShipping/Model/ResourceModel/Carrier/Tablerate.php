@@ -22,7 +22,6 @@ use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\RateQueryFacto
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
- * @since 2.0.0
  */
 class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -30,7 +29,6 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Import table rates website ID
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_importWebsiteId = 0;
 
@@ -38,7 +36,6 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Errors in import process
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_importErrors = [];
 
@@ -46,7 +43,6 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Count of imported table rates
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_importedRows = 0;
 
@@ -54,7 +50,6 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Array of unique table rate keys to protect from duplicates
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_importUniqueHash = [];
 
@@ -62,7 +57,6 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Array of countries keyed by iso2 code
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_importIso2Countries;
 
@@ -70,7 +64,6 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Array of countries keyed by iso3 code
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_importIso3Countries;
 
@@ -79,7 +72,6 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * [country_id][region_code] = region_id
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_importRegions;
 
@@ -87,7 +79,6 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Import Table Rate condition name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_importConditionName;
 
@@ -95,31 +86,30 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Array of condition full names
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_conditionFullNames = [];
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $coreConfig;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $logger;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $carrierTablerate;
 
@@ -127,19 +117,17 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Filesystem instance
      *
      * @var \Magento\Framework\Filesystem
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $filesystem;
 
     /**
      * @var Import
-     * @since 2.1.0
      */
     private $import;
 
     /**
      * @var RateQueryFactory
-     * @since 2.1.0
      */
     private $rateQueryFactory;
 
@@ -154,7 +142,6 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param RateQueryFactory $rateQueryFactory
      * @param Import $import
      * @param null $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -181,7 +168,6 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table and id field name
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -193,7 +179,6 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return array|bool
-     * @since 2.0.0
      */
     public function getRate(\Magento\Quote\Model\Quote\Address\RateRequest $request)
     {
@@ -219,7 +204,6 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $condition
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.1.0
      */
     private function deleteByCondition(array $condition)
     {
@@ -235,7 +219,6 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $values
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
-     * @since 2.1.0
      */
     private function importData(array $fields, array $values)
     {
@@ -270,7 +253,6 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @see https://wiki.corp.x.com/display/MCOMS/Magento+Filesystem+Decisions
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function uploadAndImport(\Magento\Framework\DataObject $object)
     {
@@ -320,7 +302,7 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @param \Magento\Framework\DataObject $object
      * @return mixed|string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getConditionName(\Magento\Framework\DataObject $object)
     {
@@ -335,7 +317,6 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @param string $filePath
      * @return \Magento\Framework\Filesystem\File\ReadInterface
-     * @since 2.1.0
      */
     private function getCsvFile($filePath)
     {
@@ -349,7 +330,6 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $conditionName
      * @return string
-     * @since 2.0.0
      */
     protected function _getConditionFullName($conditionName)
     {
@@ -366,7 +346,6 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param array $data
      * @return \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate
-     * @since 2.0.0
      */
     protected function _saveImportData(array $data)
     {

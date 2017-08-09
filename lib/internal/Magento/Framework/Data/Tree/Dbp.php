@@ -14,7 +14,6 @@ use Magento\Framework\DB\Select;
  * id  |  path  |  order
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Dbp extends \Magento\Framework\Data\Tree
 {
@@ -30,7 +29,6 @@ class Dbp extends \Magento\Framework\Data\Tree
      * DB connection
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected $_conn;
 
@@ -38,7 +36,6 @@ class Dbp extends \Magento\Framework\Data\Tree
      * Data table name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_table;
 
@@ -46,7 +43,6 @@ class Dbp extends \Magento\Framework\Data\Tree
      * Indicates if loaded
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_loaded = false;
 
@@ -54,7 +50,6 @@ class Dbp extends \Magento\Framework\Data\Tree
      * SQL select object
      *
      * @var \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected $_select;
 
@@ -62,7 +57,6 @@ class Dbp extends \Magento\Framework\Data\Tree
      * Tree structure field: id
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_idField;
 
@@ -70,7 +64,6 @@ class Dbp extends \Magento\Framework\Data\Tree
      * Tree structure field: path
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_pathField;
 
@@ -78,7 +71,6 @@ class Dbp extends \Magento\Framework\Data\Tree
      * Tree structure field: order
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_orderField;
 
@@ -86,7 +78,6 @@ class Dbp extends \Magento\Framework\Data\Tree
      * Tree structure field: level
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_levelField;
 
@@ -104,7 +95,6 @@ class Dbp extends \Magento\Framework\Data\Tree
      * @param string $table
      * @param array $fields
      * @throws \Exception
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\DB\Adapter\AdapterInterface $connection, $table, $fields)
     {
@@ -143,7 +133,6 @@ class Dbp extends \Magento\Framework\Data\Tree
      * Retrieve current select object
      *
      * @return Select
-     * @since 2.0.0
      */
     public function getDbSelect()
     {
@@ -155,7 +144,6 @@ class Dbp extends \Magento\Framework\Data\Tree
      *
      * @param Select $select
      * @return void
-     * @since 2.0.0
      */
     public function setDbSelect($select)
     {
@@ -168,7 +156,6 @@ class Dbp extends \Magento\Framework\Data\Tree
      * @param   int|Node|string $parentNode
      * @param   int $recursionLevel
      * @return  $this
-     * @since 2.0.0
      */
     public function load($parentNode = null, $recursionLevel = 0)
     {
@@ -233,7 +220,6 @@ class Dbp extends \Magento\Framework\Data\Tree
      * @param Node $parentNode
      * @param int $level
      * @return void
-     * @since 2.0.0
      */
     public function addChildNodes($children, $path, $parentNode, $level = 0)
     {
@@ -269,7 +255,6 @@ class Dbp extends \Magento\Framework\Data\Tree
      *
      * @param int|string $nodeId
      * @return Node
-     * @since 2.0.0
      */
     public function loadNode($nodeId)
     {
@@ -294,7 +279,6 @@ class Dbp extends \Magento\Framework\Data\Tree
      * @param bool $recursive
      * @param array $result
      * @return array
-     * @since 2.0.0
      */
     public function getChildren($node, $recursive = true, $result = [])
     {
@@ -325,7 +309,6 @@ class Dbp extends \Magento\Framework\Data\Tree
      * @return void
      * @throws \Exception
      * @todo Use adapter for generate conditions
-     * @since 2.0.0
      */
     public function move($node, $newParent, $prevNode = null)
     {
@@ -390,7 +373,6 @@ class Dbp extends \Magento\Framework\Data\Tree
      * @param object $category
      * @param Node $rootNode
      * @return void
-     * @since 2.0.0
      */
     public function loadEnsuredNodes($category, $rootNode)
     {
@@ -435,7 +417,6 @@ class Dbp extends \Magento\Framework\Data\Tree
      * @param bool $withChildren
      * @param int $level
      * @return void
-     * @since 2.0.0
      */
     protected function _addChildNodes($children, $path, $parentNode, $withChildren = false, $level = 0)
     {

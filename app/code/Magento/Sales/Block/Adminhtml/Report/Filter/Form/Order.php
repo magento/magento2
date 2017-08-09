@@ -11,7 +11,6 @@ namespace Magento\Sales\Block\Adminhtml\Report\Filter\Form;
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Order extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
 {
@@ -20,7 +19,6 @@ class Order extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
      *
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {

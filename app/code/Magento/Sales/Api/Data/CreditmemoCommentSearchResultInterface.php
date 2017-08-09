@@ -13,7 +13,6 @@ namespace Magento\Sales\Api\Data;
  * customer account so that the customer can make future purchases. A credit memo usually includes comments that detail
  * why the credit memo amount was credited to the customer.
  * @api
- * @since 2.0.0
  */
 interface CreditmemoCommentSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
@@ -21,7 +20,6 @@ interface CreditmemoCommentSearchResultInterface extends \Magento\Framework\Api\
      * Gets collection items.
      *
      * @return \Magento\Sales\Api\Data\CreditmemoCommentInterface[] Array of collection items.
-     * @since 2.0.0
      */
     public function getItems();
 
@@ -30,7 +28,6 @@ interface CreditmemoCommentSearchResultInterface extends \Magento\Framework\Api\
      *
      * @param \Magento\Sales\Api\Data\CreditmemoCommentInterface[] $items
      * @return $this
-     * @since 2.0.0
      */
     public function setItems(array $items);
 }

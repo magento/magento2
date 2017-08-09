@@ -9,7 +9,7 @@ namespace Magento\Payment\Block\Transparent;
  * Class IframeTest
  * @package Magento\Payment\Block\Transparent
  */
-class IframeTest extends \PHPUnit_Framework_TestCase
+class IframeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

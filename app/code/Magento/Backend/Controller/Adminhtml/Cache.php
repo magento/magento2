@@ -11,7 +11,6 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Class \Magento\Backend\Controller\Adminhtml\Cache
  *
- * @since 2.0.0
  */
 abstract class Cache extends Action
 {
@@ -24,25 +23,21 @@ abstract class Cache extends Action
 
     /**
      * @var \Magento\Framework\App\Cache\TypeListInterface
-     * @since 2.0.0
      */
     protected $_cacheTypeList;
 
     /**
      * @var \Magento\Framework\App\Cache\StateInterface
-     * @since 2.0.0
      */
     protected $_cacheState;
 
     /**
      * @var \Magento\Framework\App\Cache\Frontend\Pool
-     * @since 2.0.0
      */
     protected $_cacheFrontendPool;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -52,7 +47,6 @@ abstract class Cache extends Action
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -74,7 +68,6 @@ abstract class Cache extends Action
      * @param array $types
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _validateTypes(array $types)
     {

@@ -13,19 +13,16 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
  * Cart totals repository class for guest carts.
- * @since 2.0.0
  */
 class GuestCartTotalRepository implements GuestCartTotalRepositoryInterface
 {
     /**
      * @var QuoteIdMaskFactory
-     * @since 2.0.0
      */
     private $quoteIdMaskFactory;
 
     /**
      * @var CartTotalRepositoryInterface
-     * @since 2.0.0
      */
     private $cartTotalRepository;
 
@@ -34,7 +31,6 @@ class GuestCartTotalRepository implements GuestCartTotalRepositoryInterface
      *
      * @param CartTotalRepositoryInterface $cartTotalRepository
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
-     * @since 2.0.0
      */
     public function __construct(
         CartTotalRepositoryInterface $cartTotalRepository,
@@ -46,7 +42,6 @@ class GuestCartTotalRepository implements GuestCartTotalRepositoryInterface
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function get($cartId)
     {

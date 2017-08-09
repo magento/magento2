@@ -12,7 +12,6 @@ use Magento\Sales\Model\ValidatorResultInterface;
 
 /**
  * Interface InvoiceValidatorInterface
- * @since 2.2.0
  */
 interface InvoiceValidatorInterface
 {
@@ -21,7 +20,6 @@ interface InvoiceValidatorInterface
      * @param ValidatorInterface[] $validators
      * @return ValidatorResultInterface
      * @throws DocumentValidationException
-     * @since 2.2.0
      */
     public function validate(InvoiceInterface $entity, array $validators);
 }

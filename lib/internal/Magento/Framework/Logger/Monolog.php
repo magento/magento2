@@ -11,13 +11,11 @@ use Monolog\Logger;
 /**
  * Class \Magento\Framework\Logger\Monolog
  *
- * @since 2.0.0
  */
 class Monolog extends Logger
 {
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function __construct($name, array $handlers = [], array $processors = [])
     {
@@ -36,7 +34,6 @@ class Monolog extends Logger
      * @param string $message The log message
      * @param array $context The log context
      * @return Boolean Whether the record has been processed
-     * @since 2.0.0
      */
     public function addRecord($level, $message, array $context = [])
     {

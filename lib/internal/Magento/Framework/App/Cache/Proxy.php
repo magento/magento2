@@ -10,7 +10,6 @@ use \Magento\Framework\ObjectManager\NoninterceptableInterface;
 
 /**
  * System cache proxy model
- * @since 2.0.0
  */
 class Proxy implements
     CacheInterface,
@@ -18,19 +17,16 @@ class Proxy implements
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var CacheInterface
-     * @since 2.0.0
      */
     protected $_cache;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -41,7 +37,6 @@ class Proxy implements
      * Create cache model
      *
      * @return CacheInterface
-     * @since 2.0.0
      */
     protected function _getCache()
     {
@@ -55,7 +50,6 @@ class Proxy implements
      * Get cache frontend API object
      *
      * @return \Zend_Cache_Core
-     * @since 2.0.0
      */
     public function getFrontend()
     {
@@ -67,7 +61,6 @@ class Proxy implements
      *
      * @param  string $identifier
      * @return string
-     * @since 2.0.0
      */
     public function load($identifier)
     {
@@ -82,7 +75,6 @@ class Proxy implements
      * @param array $tags
      * @param int $lifeTime
      * @return bool
-     * @since 2.0.0
      */
     public function save($data, $identifier, $tags = [], $lifeTime = null)
     {
@@ -94,7 +86,6 @@ class Proxy implements
      *
      * @param string $identifier
      * @return bool
-     * @since 2.0.0
      */
     public function remove($identifier)
     {
@@ -106,7 +97,6 @@ class Proxy implements
      *
      * @param array $tags
      * @return bool
-     * @since 2.0.0
      */
     public function clean($tags = [])
     {

@@ -14,19 +14,16 @@ use Magento\CatalogInventory\Model\Configuration;
 /**
  * Class \Magento\CatalogInventory\Model\Plugin\ProductLinks
  *
- * @since 2.1.0
  */
 class ProductLinks
 {
     /**
      * @var Configuration
-     * @since 2.1.0
      */
     private $configuration;
 
     /**
      * @var Stock
-     * @since 2.1.0
      */
     private $stockHelper;
 
@@ -35,7 +32,6 @@ class ProductLinks
      *
      * @param Configuration $configuration
      * @param Stock $stockHelper
-     * @since 2.1.0
      */
     public function __construct(Configuration $configuration, Stock $stockHelper)
     {
@@ -48,7 +44,6 @@ class ProductLinks
      * @param Collection $collection
      * @return Collection
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function afterGetProductCollection(Link $subject, Collection $collection)
     {

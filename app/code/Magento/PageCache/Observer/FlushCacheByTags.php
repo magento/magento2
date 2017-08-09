@@ -12,15 +12,13 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\PageCache\Observer\FlushCacheByTags
  *
- * @since 2.0.0
  */
 class FlushCacheByTags implements ObserverInterface
 {
     /**
      * @var \Magento\Framework\App\PageCache\Cache
      *
-     * @deprecated 2.1.0
-     * @since 2.0.0
+     * @deprecated 100.1.0
      */
     protected $_cache;
 
@@ -28,13 +26,11 @@ class FlushCacheByTags implements ObserverInterface
      * Application config object
      *
      * @var \Magento\PageCache\Model\Config
-     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @var \Magento\PageCache\Model\Cache\Type
-     * @since 2.1.0
      */
     private $fullPageCache;
 
@@ -42,14 +38,12 @@ class FlushCacheByTags implements ObserverInterface
      * Invalidation tags resolver
      *
      * @var \Magento\Framework\App\Cache\Tag\Resolver
-     * @since 2.2.0
      */
     private $tagResolver;
 
     /**
      * @param \Magento\PageCache\Model\Config $config
      * @param \Magento\Framework\App\PageCache\Cache $cache
-     * @since 2.0.0
      */
     public function __construct(\Magento\PageCache\Model\Config $config, \Magento\Framework\App\PageCache\Cache $cache)
     {
@@ -63,7 +57,6 @@ class FlushCacheByTags implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
@@ -85,7 +78,6 @@ class FlushCacheByTags implements ObserverInterface
      *
      *
      * @return \Magento\PageCache\Model\Cache\Type
-     * @since 2.1.0
      */
     private function getCache()
     {
@@ -96,9 +88,8 @@ class FlushCacheByTags implements ObserverInterface
     }
 
     /**
-     * @deprecated 2.2.0
+     * @deprecated 100.1.2
      * @return \Magento\Framework\App\Cache\Tag\Resolver
-     * @since 2.2.0
      */
     private function getTagResolver()
     {

@@ -9,7 +9,6 @@ namespace Magento\Framework\Mail;
  * Mail Template interface
  *
  * @api
- * @since 2.0.0
  */
 interface TemplateInterface extends \Magento\Framework\App\TemplateTypesInterface
 {
@@ -17,7 +16,6 @@ interface TemplateInterface extends \Magento\Framework\App\TemplateTypesInterfac
      * Get processed template
      *
      * @return string
-     * @since 2.0.0
      */
     public function processTemplate();
 
@@ -25,7 +23,6 @@ interface TemplateInterface extends \Magento\Framework\App\TemplateTypesInterfac
      * Get processed subject
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSubject();
 
@@ -34,7 +31,6 @@ interface TemplateInterface extends \Magento\Framework\App\TemplateTypesInterfac
      *
      * @param array $vars
      * @return $this
-     * @since 2.0.0
      */
     public function setVars(array $vars);
 
@@ -43,7 +39,6 @@ interface TemplateInterface extends \Magento\Framework\App\TemplateTypesInterfac
      *
      * @param array $options
      * @return $this
-     * @since 2.0.0
      */
     public function setOptions(array $options);
 }

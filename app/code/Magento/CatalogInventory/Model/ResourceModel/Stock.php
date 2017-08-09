@@ -11,13 +11,11 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Stock resource model
- * @since 2.0.0
  */
 class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements QtyCounterInterface
 {
     /**
      * @var StockConfigurationInterface
-     * @since 2.0.0
      */
     protected $stockConfiguration;
 
@@ -25,7 +23,6 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * Is initialized configuration flag
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isConfig;
 
@@ -33,7 +30,6 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * Manage Stock flag
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isConfigManageStock;
 
@@ -41,7 +37,6 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * Backorders
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isConfigBackorders;
 
@@ -49,7 +44,6 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * Minimum quantity allowed in shopping card
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_configMinQty;
 
@@ -57,7 +51,6 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * Product types that could have quantities
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_configTypeIds;
 
@@ -65,7 +58,6 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * Notify for quantity below _configNotifyStockQty value
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_configNotifyStockQty;
 
@@ -73,20 +65,17 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
     /**
      * @var StoreManagerInterface
-     * @deprecated 2.1.0
-     * @since 2.0.0
+     * @deprecated 100.1.0
      */
     protected $storeManager;
 
@@ -97,7 +86,6 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * @param StockConfigurationInterface $stockConfiguration
      * @param StoreManagerInterface $storeManager
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -118,7 +106,6 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * Define main table and initialize connection
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -131,7 +118,6 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * @param int[] $productIds
      * @param int $websiteId
      * @return array
-     * @since 2.0.0
      */
     public function lockProductsStock($productIds, $websiteId)
     {
@@ -160,7 +146,6 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function correctItemsQty(array $items, $websiteId, $operator)
     {
@@ -188,7 +173,6 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * Load some inventory configuration settings
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _initConfig()
     {
@@ -218,7 +202,6 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * @param string|int $website
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
-     * @since 2.0.0
      */
     public function updateSetOutOfStock($website = null)
     {
@@ -254,7 +237,6 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * @param int|string $website
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
-     * @since 2.0.0
      */
     public function updateSetInStock($website)
     {
@@ -288,7 +270,6 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * @param int|string $website
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
-     * @since 2.0.0
      */
     public function updateLowStockDate($website)
     {
@@ -326,7 +307,6 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @param array $fields
      * @return $this
-     * @since 2.0.0
      */
     public function addLowStockFilter(\Magento\Catalog\Model\ResourceModel\Product\Collection $collection, $fields)
     {

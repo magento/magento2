@@ -16,7 +16,6 @@ use Magento\Framework\Search\RequestInterface;
  * MySQL Search Adapter
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Adapter implements AdapterInterface
 {
@@ -24,7 +23,6 @@ class Adapter implements AdapterInterface
      * Mapper instance
      *
      * @var Mapper
-     * @since 2.0.0
      */
     protected $mapper;
 
@@ -32,25 +30,21 @@ class Adapter implements AdapterInterface
      * Response Factory
      *
      * @var ResponseFactory
-     * @since 2.0.0
      */
     protected $responseFactory;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.0.0
      */
     private $resource;
 
     /**
      * @var AggregationBuilder
-     * @since 2.0.0
      */
     private $aggregationBuilder;
 
     /**
      * @var TemporaryStorageFactory
-     * @since 2.0.0
      */
     private $temporaryStorageFactory;
 
@@ -60,7 +54,6 @@ class Adapter implements AdapterInterface
      * @param ResourceConnection $resource
      * @param AggregationBuilder $aggregationBuilder
      * @param TemporaryStorageFactory $temporaryStorageFactory
-     * @since 2.0.0
      */
     public function __construct(
         Mapper $mapper,
@@ -79,7 +72,6 @@ class Adapter implements AdapterInterface
     /**
      * {@inheritdoc}
      * @throws \LogicException
-     * @since 2.0.0
      */
     public function query(RequestInterface $request)
     {
@@ -103,7 +95,6 @@ class Adapter implements AdapterInterface
      * @param Table $table
      * @return array
      * @throws \Zend_Db_Exception
-     * @since 2.0.0
      */
     private function getDocuments(Table $table)
     {
@@ -115,7 +106,6 @@ class Adapter implements AdapterInterface
 
     /**
      * @return false|\Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     private function getConnection()
     {

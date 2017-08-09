@@ -11,7 +11,6 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Search\Controller\Adminhtml\Term\Report
  *
- * @since 2.0.0
  */
 class Report extends ReportsIndexController
 {
@@ -26,7 +25,6 @@ class Report extends ReportsIndexController
      * Search terms report action
      *
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

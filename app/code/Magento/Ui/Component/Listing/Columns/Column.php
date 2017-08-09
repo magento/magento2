@@ -12,7 +12,6 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Column extends AbstractComponent implements ColumnInterface
 {
@@ -22,7 +21,6 @@ class Column extends AbstractComponent implements ColumnInterface
      * Wrapped component
      *
      * @var UiComponentInterface
-     * @since 2.0.0
      */
     protected $wrappedComponent;
 
@@ -30,7 +28,6 @@ class Column extends AbstractComponent implements ColumnInterface
      * UI component factory
      *
      * @var UiComponentFactory
-     * @since 2.0.0
      */
     protected $uiComponentFactory;
 
@@ -41,7 +38,6 @@ class Column extends AbstractComponent implements ColumnInterface
      * @param UiComponentFactory $uiComponentFactory
      * @param array $components
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -57,7 +53,6 @@ class Column extends AbstractComponent implements ColumnInterface
      * Get component name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getComponentName()
     {
@@ -68,7 +63,6 @@ class Column extends AbstractComponent implements ColumnInterface
      * Prepare component configuration
      *
      * @return void
-     * @since 2.0.0
      */
     public function prepare()
     {
@@ -106,7 +100,6 @@ class Column extends AbstractComponent implements ColumnInterface
      *
      * @param array $items
      * @return array
-     * @since 2.0.0
      */
     public function prepareItems(array & $items)
     {
@@ -116,7 +109,6 @@ class Column extends AbstractComponent implements ColumnInterface
     /**
      * Add field to select
      * @return void
-     * @since 2.0.0
      */
     protected function addFieldToSelect()
     {
@@ -129,7 +121,6 @@ class Column extends AbstractComponent implements ColumnInterface
      * Apply sorting
      *
      * @return void
-     * @since 2.0.0
      */
     protected function applySorting()
     {

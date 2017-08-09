@@ -10,31 +10,26 @@ use Magento\Framework\Indexer\CacheContext;
 /**
  * Class \Magento\Catalog\Model\Indexer\Product\Eav
  *
- * @since 2.0.0
  */
 class Eav implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Eav\Action\Row
-     * @since 2.0.0
      */
     protected $_productEavIndexerRow;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Eav\Action\Rows
-     * @since 2.0.0
      */
     protected $_productEavIndexerRows;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Eav\Action\Full
-     * @since 2.0.0
      */
     protected $_productEavIndexerFull;
 
     /**
      * @var \Magento\Framework\Indexer\CacheContext
-     * @since 2.1.0
      */
     private $cacheContext;
 
@@ -42,7 +37,6 @@ class Eav implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framew
      * @param Eav\Action\Row $productEavIndexerRow
      * @param Eav\Action\Rows $productEavIndexerRows
      * @param Eav\Action\Full $productEavIndexerFull
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Indexer\Product\Eav\Action\Row $productEavIndexerRow,
@@ -59,7 +53,6 @@ class Eav implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framew
      *
      * @param int[] $ids
      * @return void
-     * @since 2.0.0
      */
     public function execute($ids)
     {
@@ -71,7 +64,6 @@ class Eav implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framew
      * Execute full indexation
      *
      * @return void
-     * @since 2.0.0
      */
     public function executeFull()
     {
@@ -89,7 +81,6 @@ class Eav implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framew
      *
      * @param int[] $ids
      * @return void
-     * @since 2.0.0
      */
     public function executeList(array $ids)
     {
@@ -101,7 +92,6 @@ class Eav implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framew
      *
      * @param int $id
      * @return void
-     * @since 2.0.0
      */
     public function executeRow($id)
     {
@@ -112,8 +102,7 @@ class Eav implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framew
      * Get cache context
      *
      * @return \Magento\Framework\Indexer\CacheContext
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.0.11
      */
     protected function getCacheContext()
     {

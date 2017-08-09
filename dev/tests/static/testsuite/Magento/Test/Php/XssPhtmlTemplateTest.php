@@ -13,7 +13,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 /**
  * Find not escaped output in phtml templates
  */
-class XssPhtmlTemplateTest extends \PHPUnit_Framework_TestCase
+class XssPhtmlTemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return void

@@ -13,7 +13,6 @@ use Magento\Setup\Module\I18n\Pack\WriterInterface;
 
 /**
  * Abstract pack writer
- * @since 2.0.0
  */
 abstract class AbstractFile implements WriterInterface
 {
@@ -21,7 +20,6 @@ abstract class AbstractFile implements WriterInterface
      * Context
      *
      * @var \Magento\Setup\Module\I18n\Context
-     * @since 2.0.0
      */
     protected $_context;
 
@@ -29,7 +27,6 @@ abstract class AbstractFile implements WriterInterface
      * Dictionary loader. This object is need for read dictionary for merge mode
      *
      * @var \Magento\Setup\Module\I18n\Dictionary\Loader\FileInterface
-     * @since 2.0.0
      */
     protected $_dictionaryLoader;
 
@@ -37,7 +34,6 @@ abstract class AbstractFile implements WriterInterface
      * Domain abstract factory
      *
      * @var \Magento\Setup\Module\I18n\Factory
-     * @since 2.0.0
      */
     protected $_factory;
 
@@ -45,7 +41,6 @@ abstract class AbstractFile implements WriterInterface
      * Locale
      *
      * @var \Magento\Setup\Module\I18n\Locale
-     * @since 2.0.0
      */
     protected $_locale;
 
@@ -53,7 +48,6 @@ abstract class AbstractFile implements WriterInterface
      * Save mode. One of const of WriterInterface::MODE_
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_mode;
 
@@ -63,7 +57,6 @@ abstract class AbstractFile implements WriterInterface
      * @param Context $context
      * @param Dictionary\Loader\FileInterface $dictionaryLoader
      * @param Factory $factory
-     * @since 2.0.0
      */
     public function __construct(Context $context, Dictionary\Loader\FileInterface $dictionaryLoader, Factory $factory)
     {
@@ -74,7 +67,6 @@ abstract class AbstractFile implements WriterInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function write(Dictionary $dictionary, $packPath, Locale $locale, $mode = self::MODE_REPLACE)
     {
@@ -83,7 +75,6 @@ abstract class AbstractFile implements WriterInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function writeDictionary(Dictionary $dictionary, Locale $locale, $mode = self::MODE_REPLACE)
     {
@@ -103,7 +94,6 @@ abstract class AbstractFile implements WriterInterface
      * @param array $phrases
      * @return void
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     abstract public function _writeFile($file, $phrases);
 
@@ -113,7 +103,6 @@ abstract class AbstractFile implements WriterInterface
      * @param Dictionary $dictionary
      * @return array
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     protected function _buildPackFilesData(Dictionary $dictionary)
     {
@@ -148,7 +137,6 @@ abstract class AbstractFile implements WriterInterface
      * Get file extension
      *
      * @return string
-     * @since 2.0.0
      */
     abstract protected function _getFileExtension();
 
@@ -159,7 +147,6 @@ abstract class AbstractFile implements WriterInterface
      * @param int $mode
      * @param bool $recursive Allows the creation of nested directories specified in the $destinationPath
      * @return void
-     * @since 2.0.0
      */
     protected function _createDirectoryIfNotExist($destinationPath, $mode = 0777, $recursive = true)
     {

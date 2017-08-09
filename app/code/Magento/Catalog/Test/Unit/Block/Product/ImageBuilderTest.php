@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Block\Product;
 
-class ImageBuilderTest extends \PHPUnit_Framework_TestCase
+class ImageBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Product\ImageBuilder

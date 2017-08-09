@@ -10,7 +10,6 @@ namespace Magento\Framework\Code;
 /**
  * Class \Magento\Framework\Code\NameBuilder
  *
- * @since 2.0.0
  */
 class NameBuilder
 {
@@ -22,7 +21,6 @@ class NameBuilder
      *
      * @param string[] $parts
      * @return string
-     * @since 2.0.0
      */
     public function buildClassName($parts)
     {

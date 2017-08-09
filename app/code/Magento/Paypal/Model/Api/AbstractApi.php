@@ -10,7 +10,6 @@ use Magento\Payment\Model\Method\Logger;
 
 /**
  * Abstract class for Paypal API wrappers
- * @since 2.0.0
  */
 abstract class AbstractApi extends \Magento\Framework\DataObject
 {
@@ -20,14 +19,12 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * Config instance
      *
      * @var \Magento\Paypal\Model\Config
-     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * Global private to public interface map
      * @var array
-     * @since 2.0.0
      */
     protected $_globalMap = [];
 
@@ -35,7 +32,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * Filter callbacks for exporting $this data to API call
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_exportToRequestFilters = [];
 
@@ -43,7 +39,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * Filter callbacks for importing API result to $this data
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_importFromRequestFilters = [];
 
@@ -51,13 +46,11 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * Line items export to request mapping settings
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_lineItemExportItemsFormat = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_lineItemExportItemsFilters = [
         'name' => 'strval'
@@ -65,7 +58,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_lineItemTotalExportMap = [];
 
@@ -73,7 +65,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * PayPal shopping cart instance
      *
      * @var \Magento\Paypal\Model\Cart
-     * @since 2.0.0
      */
     protected $_cart;
 
@@ -81,7 +72,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * Shipping options export to request mapping settings
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_shippingOptionsExportItemsFormat = [];
 
@@ -89,7 +79,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * Fields that should be replaced in debug with '***'
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_debugReplacePrivateDataKeys = [];
 
@@ -97,31 +86,26 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * Customer address
      *
      * @var \Magento\Customer\Helper\Address
-     * @since 2.0.0
      */
     protected $_customerAddress;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $_logger;
 
     /**
      * @var Logger
-     * @since 2.0.0
      */
     protected $customLogger;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $_localeResolver;
 
     /**
      * @var \Magento\Directory\Model\RegionFactory
-     * @since 2.0.0
      */
     protected $_regionFactory;
 
@@ -135,7 +119,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddress,
@@ -157,7 +140,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * Return Paypal Api user name based on config data
      *
      * @return string
-     * @since 2.0.0
      */
     public function getApiUsername()
     {
@@ -168,7 +150,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * Return Paypal Api password based on config data
      *
      * @return string
-     * @since 2.0.0
      */
     public function getApiPassword()
     {
@@ -179,7 +160,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * Return Paypal Api signature based on config data
      *
      * @return string
-     * @since 2.0.0
      */
     public function getApiSignature()
     {
@@ -190,7 +170,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * Return Paypal Api certificate based on config data
      *
      * @return string
-     * @since 2.0.0
      */
     public function getApiCertificate()
     {
@@ -201,7 +180,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * BN code getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBuildNotationCode()
     {
@@ -213,7 +191,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getUseProxy()
     {
@@ -224,7 +201,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * Return Paypal Api proxy host based on config data
      *
      * @return string
-     * @since 2.0.0
      */
     public function getProxyHost()
     {
@@ -235,7 +211,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * Return Paypal Api proxy port based on config data
      *
      * @return string
-     * @since 2.0.0
      */
     public function getProxyPort()
     {
@@ -246,7 +221,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * PayPal page CSS getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPageStyle()
     {
@@ -257,7 +231,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * PayPal page header image URL getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getHdrimg()
     {
@@ -268,7 +241,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * PayPal page header border color getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getHdrbordercolor()
     {
@@ -279,7 +251,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * PayPal page header background color getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getHdrbackcolor()
     {
@@ -290,7 +261,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * PayPal page "payflow color" (?) getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPayflowcolor()
     {
@@ -301,7 +271,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * Payment action getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPaymentAction()
     {
@@ -312,7 +281,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * PayPal merchant email getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBusinessAccount()
     {
@@ -325,7 +293,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * @param array|\Magento\Framework\DataObject $to
      * @param array $publicMap
      * @return array|\Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function import($to, array $publicMap = [])
     {
@@ -338,7 +305,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * @param array|\Magento\Framework\DataObject $from
      * @param array $publicMap
      * @return $this
-     * @since 2.0.0
      */
     public function export($from, array $publicMap = [])
     {
@@ -351,7 +317,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      *
      * @param \Magento\Paypal\Model\Cart $cart
      * @return $this
-     * @since 2.0.0
      */
     public function setPaypalCart(\Magento\Paypal\Model\Cart $cart)
     {
@@ -364,7 +329,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      *
      * @param \Magento\Paypal\Model\Config $config
      * @return $this
-     * @since 2.0.0
      */
     public function setConfigObject(\Magento\Paypal\Model\Config $config)
     {
@@ -376,7 +340,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * Current locale code getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLocale()
     {
@@ -387,7 +350,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * Always take into account
      *
      * @return int
-     * @since 2.0.0
      */
     public function getFraudManagementFiltersEnabled()
     {
@@ -400,7 +362,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * @param array $privateRequestMap
      * @param array $request
      * @return array
-     * @since 2.0.0
      */
     protected function &_exportToRequest(array $privateRequestMap, array $request = [])
     {
@@ -428,7 +389,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * @param array $privateResponseMap
      * @param array $response
      * @return void
-     * @since 2.0.0
      */
     protected function _importFromResponse(array $privateResponseMap, array $response)
     {
@@ -454,7 +414,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * @param int $i
      * @return true|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _exportLineItems(array &$request, $i = 0)
     {
@@ -497,7 +456,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * @param array &$request
      * @param int $i
      * @return bool
-     * @since 2.0.0
      */
     protected function _exportShippingOptions(array &$request, $i = 0)
     {
@@ -526,7 +484,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      *
      * @param mixed $value
      * @return string
-     * @since 2.0.0
      */
     protected function _filterBool($value)
     {
@@ -538,7 +495,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      *
      * @param mixed $value
      * @return int
-     * @since 2.0.0
      */
     protected function _filterInt($value)
     {
@@ -551,7 +507,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * @param string $key
      * @param mixed|null $default
      * @return mixed
-     * @since 2.0.0
      */
     protected function _getDataOrConfig($key, $default = null)
     {
@@ -566,7 +521,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      *
      * @param \Magento\Framework\DataObject $address
      * @return string
-     * @since 2.0.0
      */
     protected function _lookupRegionCodeFromAddress(\Magento\Framework\DataObject $address)
     {
@@ -587,7 +541,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * @param \Magento\Framework\DataObject $address
      * @param array $to
      * @return void
-     * @since 2.0.0
      */
     protected function _importStreetFromAddress(\Magento\Framework\DataObject $address, array &$to)
     {
@@ -613,7 +566,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      *
      * @param array $request
      * @return string
-     * @since 2.0.0
      */
     protected function _buildQuery($request)
     {
@@ -626,7 +578,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      *
      * @param float|string|int $value
      * @return string
-     * @since 2.0.0
      */
     protected function _filterQty($value)
     {
@@ -638,7 +589,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      *
      * @param mixed $debugData
      * @return void
-     * @since 2.0.0
      */
     protected function _debug($debugData)
     {
@@ -654,7 +604,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getDebugFlag()
     {
@@ -666,7 +615,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getUseCertAuthentication()
     {
@@ -677,7 +625,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * Return replace keys for debug data
      *
      * @return array
-     * @since 2.0.0
      */
     public function getDebugReplacePrivateDataKeys()
     {
@@ -690,7 +637,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * @param string|int|float|\Magento\Framework\Phrase $value
      * @param string $publicKey
      * @return string
-     * @since 2.2.0
      */
     private function formatValue($value, $publicKey)
     {

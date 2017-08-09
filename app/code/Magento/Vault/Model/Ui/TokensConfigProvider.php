@@ -14,37 +14,32 @@ use Magento\Vault\Model\CustomerTokenManagement;
 /**
  * Class ConfigProvider
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class TokensConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var string
-     * @since 2.1.0
      */
     private static $vaultCode = 'vault';
 
     /**
      * @var StoreManagerInterface
-     * @since 2.1.0
      */
     private $storeManager;
 
     /**
      * @var TokenUiComponentProviderInterface[]
-     * @since 2.1.0
      */
     private $tokenUiComponentProviders;
 
     /**
      * @var CustomerTokenManagement
-     * @since 2.1.0
      */
     private $customerTokenManagement;
 
     /**
      * @var PaymentMethodListInterface
-     * @since 2.2.0
      */
     private $vaultPaymentList;
 
@@ -54,7 +49,7 @@ class TokensConfigProvider implements ConfigProviderInterface
      * @param StoreManagerInterface $storeManager
      * @param CustomerTokenManagement $customerTokenManagement
      * @param TokenUiComponentProviderInterface[] $tokenUiComponentProviders
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -70,7 +65,7 @@ class TokensConfigProvider implements ConfigProviderInterface
      * Retrieve assoc array of checkout configuration
      *
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getConfig()
     {
@@ -110,7 +105,6 @@ class TokensConfigProvider implements ConfigProviderInterface
      * Get list of available vault ui token providers.
      *
      * @return TokenUiComponentProviderInterface[]
-     * @since 2.1.0
      */
     private function getComponentProviders()
     {
@@ -133,7 +127,6 @@ class TokensConfigProvider implements ConfigProviderInterface
     /**
      * @param string $vaultProviderCode
      * @return TokenUiComponentProviderInterface|null
-     * @since 2.1.0
      */
     private function getComponentProvider($vaultProviderCode)
     {
@@ -148,8 +141,7 @@ class TokensConfigProvider implements ConfigProviderInterface
     /**
      * Get instance of vault payment list instance
      * @return PaymentMethodListInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getVaultPaymentList()
     {

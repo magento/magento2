@@ -15,7 +15,6 @@ use Magento\Framework\Locale\OptionInterface;
  * Cms page edit form main tab
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Main extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -23,13 +22,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @var \Magento\Backend\Model\Auth\Session
-     * @since 2.0.0
      */
     protected $_authSession;
 
     /**
      * @var \Magento\Framework\Locale\ListsInterface
-     * @since 2.0.0
      */
     protected $_LocaleLists;
 
@@ -37,7 +34,6 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
      * Operates with deployed locales.
      *
      * @var OptionInterface
-     * @since 2.2.0
      */
     private $deployedLocales;
 
@@ -49,7 +45,6 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Locale\ListsInterface $localeLists
      * @param array $data
      * @param OptionInterface $deployedLocales Operates with deployed locales.
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -72,7 +67,6 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return \Magento\Backend\Block\Widget\Form
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -215,7 +209,6 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
      * @param string $confirmationLabel
      * @param bool $isRequired
      * @return void
-     * @since 2.0.0
      */
     protected function _addPasswordFields(
         \Magento\Framework\Data\Form\Element\Fieldset $fieldset,

@@ -9,19 +9,16 @@ use Magento\Backend\Block\Widget;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Options extends Widget
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'catalog/product/edit/options.phtml';
 
     /**
      * @return Widget
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -44,7 +41,6 @@ class Options extends Widget
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getAddButtonHtml()
     {
@@ -53,7 +49,6 @@ class Options extends Widget
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getOptionsBoxHtml()
     {

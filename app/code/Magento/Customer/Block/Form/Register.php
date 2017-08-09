@@ -12,25 +12,21 @@ use Magento\Customer\Model\AccountManagement;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Register extends \Magento\Directory\Block\Data
 {
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Framework\Module\Manager
-     * @since 2.0.0
      */
     protected $_moduleManager;
 
     /**
      * @var \Magento\Customer\Model\Url
-     * @since 2.0.0
      */
     protected $_customerUrl;
 
@@ -49,7 +45,6 @@ class Register extends \Magento\Directory\Block\Data
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -83,7 +78,6 @@ class Register extends \Magento\Directory\Block\Data
      *
      * @param string $path
      * @return string|null
-     * @since 2.0.0
      */
     public function getConfig($path)
     {
@@ -92,7 +86,6 @@ class Register extends \Magento\Directory\Block\Data
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -104,7 +97,6 @@ class Register extends \Magento\Directory\Block\Data
      * Retrieve form posting url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPostActionUrl()
     {
@@ -115,7 +107,6 @@ class Register extends \Magento\Directory\Block\Data
      * Retrieve back url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -130,7 +121,6 @@ class Register extends \Magento\Directory\Block\Data
      * Retrieve form data
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getFormData()
     {
@@ -154,7 +144,6 @@ class Register extends \Magento\Directory\Block\Data
      * Retrieve customer country identifier
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCountryId()
     {
@@ -169,7 +158,6 @@ class Register extends \Magento\Directory\Block\Data
      * Retrieve customer region identifier
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getRegion()
     {
@@ -185,7 +173,6 @@ class Register extends \Magento\Directory\Block\Data
      * Newsletter module availability
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isNewsletterEnabled()
     {
@@ -199,7 +186,6 @@ class Register extends \Magento\Directory\Block\Data
      * @param \Magento\Customer\Model\Metadata\Form $form
      * @param string|null $scope
      * @return $this
-     * @since 2.0.0
      */
     public function restoreSessionData(\Magento\Customer\Model\Metadata\Form $form, $scope = null)
     {
@@ -216,7 +202,7 @@ class Register extends \Magento\Directory\Block\Data
      * Get minimum password length
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getMinimumPasswordLength()
     {
@@ -227,7 +213,7 @@ class Register extends \Magento\Directory\Block\Data
      * Get number of password required character classes
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getRequiredCharacterClassesNumber()
     {

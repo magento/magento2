@@ -10,7 +10,6 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 
 /**
  * Customer groups controller
- * @since 2.0.0
  */
 abstract class Group extends \Magento\Backend\App\Action
 {
@@ -25,31 +24,26 @@ abstract class Group extends \Magento\Backend\App\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var GroupRepositoryInterface
-     * @since 2.0.0
      */
     protected $groupRepository;
 
     /**
      * @var GroupInterfaceFactory
-     * @since 2.0.0
      */
     protected $groupDataFactory;
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
-     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -62,7 +56,6 @@ abstract class Group extends \Magento\Backend\App\Action
      * @param GroupInterfaceFactory $groupDataFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,

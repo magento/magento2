@@ -9,7 +9,6 @@ namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 /**
  * Class \Magento\Shipping\Controller\Adminhtml\Order\Shipment\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\Index
 {

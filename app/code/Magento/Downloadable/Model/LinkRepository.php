@@ -20,61 +20,51 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class LinkRepository
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var \Magento\Downloadable\Api\Data\LinkInterfaceFactory
-     * @since 2.0.0
      */
     protected $linkDataObjectFactory;
 
     /**
      * @var \Magento\Downloadable\Model\LinkFactory
-     * @since 2.0.0
      */
     protected $linkFactory;
 
     /**
      * @var \Magento\Downloadable\Model\Link\ContentValidator
-     * @since 2.0.0
      */
     protected $contentValidator;
 
     /**
      * @var Type
-     * @since 2.1.0
      */
     protected $downloadableType;
 
     /**
      * @var ContentUploaderInterface
-     * @since 2.0.0
      */
     protected $fileContentUploader;
 
     /**
      * @var EncoderInterface
-     * @since 2.0.0
      */
     protected $jsonEncoder;
 
     /**
      * @var LinkHandler
-     * @since 2.1.0
      */
     private $linkTypeHandler;
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
@@ -86,7 +76,6 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
      * @param Link\ContentValidator $contentValidator
      * @param EncoderInterface $jsonEncoder
      * @param ContentUploaderInterface $fileContentUploader
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -108,7 +97,6 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getList($sku)
     {
@@ -120,7 +108,6 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     /**
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return array
-     * @since 2.0.0
      */
     public function getLinksByProduct(\Magento\Catalog\Api\Data\ProductInterface $product)
     {
@@ -138,7 +125,6 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
      *
      * @param \Magento\Downloadable\Model\Link $resourceData
      * @return \Magento\Downloadable\Model\Link
-     * @since 2.0.0
      */
     protected function buildLink($resourceData)
     {
@@ -161,7 +147,6 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
      * @param \Magento\Downloadable\Model\Link $resourceData
      * @param \Magento\Downloadable\Api\Data\LinkInterface $dataObject
      * @return null
-     * @since 2.0.0
      */
     protected function setBasicFields($resourceData, $dataObject)
     {
@@ -183,7 +168,6 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function save($sku, LinkInterface $link, $isGlobalScopeContent = true)
     {
@@ -216,7 +200,6 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
      * @param LinkInterface $link
      * @param bool $isGlobalScopeContent
      * @return int
-     * @since 2.0.0
      */
     protected function saveLink(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -291,7 +274,6 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
      * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function updateLink(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -337,7 +319,6 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function delete($id)
     {
@@ -357,9 +338,8 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     /**
      * Get MetadataPool instance
      *
-     * @deprecated 2.1.0 MAGETWO-52273
+     * @deprecated 100.1.0 MAGETWO-52273
      * @return MetadataPool
-     * @since 2.1.0
      */
     private function getMetadataPool()
     {
@@ -373,9 +353,8 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     /**
      * Get LinkTypeHandler  instance
      *
-     * @deprecated 2.1.0 MAGETWO-52273
+     * @deprecated 100.1.0 MAGETWO-52273
      * @return LinkHandler
-     * @since 2.1.0
      */
     private function getLinkTypeHandler()
     {

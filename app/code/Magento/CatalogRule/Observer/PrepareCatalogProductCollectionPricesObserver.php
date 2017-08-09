@@ -20,43 +20,36 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class PrepareCatalogProductCollectionPricesObserver implements ObserverInterface
 {
     /**
      * @var CustomerModelSession
-     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $localeDate;
 
     /**
      * @var \Magento\CatalogRule\Model\ResourceModel\RuleFactory
-     * @since 2.0.0
      */
     protected $resourceRuleFactory;
 
     /**
      * @var \Magento\CatalogRule\Observer\RulePricesStorage
-     * @since 2.0.0
      */
     protected $rulePricesStorage;
 
     /**
      * @var GroupManagementInterface
-     * @since 2.0.0
      */
     protected $groupManagement;
 
@@ -67,7 +60,6 @@ class PrepareCatalogProductCollectionPricesObserver implements ObserverInterface
      * @param TimezoneInterface $localeDate
      * @param CustomerModelSession $customerSession
      * @param GroupManagementInterface $groupManagement
-     * @since 2.0.0
      */
     public function __construct(
         RulePricesStorage $rulePricesStorage,
@@ -90,7 +82,6 @@ class PrepareCatalogProductCollectionPricesObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

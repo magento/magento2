@@ -11,19 +11,16 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
  * Catalog product option date type
  *
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_formattedOptionValue = null;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $_localeDate;
 
@@ -31,7 +28,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Serializer interface instance.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -41,7 +37,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -64,7 +59,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function validateUserValue($values)
     {
@@ -145,7 +139,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function prepareForCart()
     {
@@ -202,7 +195,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param string $optionValue Prepared for cart option value
      * @return string
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     public function getFormattedOptionValue($optionValue)
     {
@@ -244,7 +236,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @param string $optionValue Prepared for cart option value
      * @return string
-     * @since 2.0.0
      */
     public function getPrintableOptionValue($optionValue)
     {
@@ -256,7 +247,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @param string $optionValue Prepared for cart option value
      * @return string
-     * @since 2.0.0
      */
     public function getEditableOptionValue($optionValue)
     {
@@ -270,7 +260,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param array $productOptionValues Values for product option
      * @return string|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function parseOptionValue($optionValue, $productOptionValues)
     {
@@ -287,7 +276,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @param string $optionValue
      * @return array
-     * @since 2.0.0
      */
     public function prepareOptionValueForRequest($optionValue)
     {
@@ -310,7 +298,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Use Calendar on frontend or not
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function useCalendar()
     {
@@ -321,7 +308,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Time Format
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function is24hTimeFormat()
     {
@@ -332,7 +318,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Year range start
      *
      * @return string|false
-     * @since 2.0.0
      */
     public function getYearStart()
     {
@@ -348,7 +333,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Year range end
      *
      * @return string|false
-     * @since 2.0.0
      */
     public function getYearEnd()
     {
@@ -365,7 +349,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @param string $internalValue Datetime value in internal format
      * @return void
-     * @since 2.0.0
      */
     protected function _setInternalInRequest($internalValue)
     {
@@ -384,7 +367,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Does option have date?
      *
      * @return boolean
-     * @since 2.0.0
      */
     protected function _dateExists()
     {
@@ -401,7 +383,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Does option have time?
      *
      * @return boolean
-     * @since 2.0.0
      */
     protected function _timeExists()
     {

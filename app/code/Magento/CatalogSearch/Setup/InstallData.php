@@ -14,20 +14,17 @@ use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 /**
  * Class \Magento\CatalogSearch\Setup\InstallData
  *
- * @since 2.0.0
  */
 class InstallData implements InstallDataInterface
 {
     /**
      * @var IndexerInterfaceFactory
-     * @since 2.0.0
      */
     private $indexerFactory;
 
     /**
      * @param IndexerInterfaceFactory $indexerFactory
      * @param ProductAttributeRepositoryInterface $attributeRepository
-     * @since 2.0.0
      */
     public function __construct(
         IndexerInterfaceFactory $indexerFactory,
@@ -44,7 +41,6 @@ class InstallData implements InstallDataInterface
      * @param ModuleContextInterface $context
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -56,7 +52,6 @@ class InstallData implements InstallDataInterface
     /**
      * @param string $indexerId
      * @return \Magento\Framework\Indexer\IndexerInterface
-     * @since 2.0.0
      */
     private function getIndexer($indexerId)
     {
@@ -67,7 +62,6 @@ class InstallData implements InstallDataInterface
      * @param string $attributeCode
      * @param int $weight
      * @return void
-     * @since 2.0.0
      */
     private function setWeight($attributeCode, $weight)
     {

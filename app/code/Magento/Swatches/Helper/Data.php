@@ -24,7 +24,6 @@ use Magento\Swatches\Model\SwatchAttributesProvider;
  * Class Helper Data
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Data
 {
@@ -40,25 +39,21 @@ class Data
 
     /**
      * @var CollectionFactory
-     * @since 2.0.0
      */
     protected $productCollectionFactory;
 
     /**
      * @var ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var SwatchCollectionFactory
-     * @since 2.0.0
      */
     protected $swatchCollectionFactory;
 
@@ -66,7 +61,6 @@ class Data
      * Catalog Image Helper
      *
      * @var Image
-     * @since 2.0.0
      */
     protected $imageHelper;
 
@@ -74,13 +68,11 @@ class Data
      * Product metadata pool
      *
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var SwatchAttributesProvider
-     * @since 2.2.0
      */
     private $swatchAttributesProvider;
 
@@ -88,7 +80,6 @@ class Data
      * Data key which should populated to Attribute entity from "additional_data" field
      *
      * @var array
-     * @since 2.0.0
      */
     protected $eavAttributeAdditionalDataKeys = [
         Swatch::SWATCH_INPUT_TYPE_KEY,
@@ -100,7 +91,6 @@ class Data
      * Serializer to/from JSON.
      *
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -112,7 +102,6 @@ class Data
      * @param Image $imageHelper
      * @param Json|null $serializer
      * @param SwatchAttributesProvider $swatchAttributesProvider
-     * @since 2.0.0
      */
     public function __construct(
         CollectionFactory $productCollectionFactory,
@@ -136,7 +125,6 @@ class Data
     /**
      * @param Attribute $attribute
      * @return $this
-     * @since 2.0.0
      */
     public function assembleAdditionalDataEavAttribute(Attribute $attribute)
     {
@@ -164,7 +152,6 @@ class Data
     /**
      * @param Attribute $attribute
      * @return $this
-     * @since 2.0.0
      */
     private function populateAdditionalDataEavAttribute(Attribute $attribute)
     {
@@ -187,7 +174,6 @@ class Data
      * @param ModelProduct $configurableProduct
      * @param array $requiredAttributes
      * @return bool|Product
-     * @since 2.1.0
      */
     private function loadFirstVariation($attributeCode, ModelProduct $configurableProduct, array $requiredAttributes)
     {
@@ -210,7 +196,6 @@ class Data
      * @param Product $configurableProduct
      * @param array $requiredAttributes
      * @return bool|Product
-     * @since 2.0.0
      */
     public function loadFirstVariationWithSwatchImage(Product $configurableProduct, array $requiredAttributes)
     {
@@ -221,7 +206,6 @@ class Data
      * @param Product $configurableProduct
      * @param array $requiredAttributes
      * @return bool|Product
-     * @since 2.0.0
      */
     public function loadFirstVariationWithImage(Product $configurableProduct, array $requiredAttributes)
     {
@@ -234,7 +218,6 @@ class Data
      * @param Product $parentProduct
      * @param array $attributes
      * @return bool|Product
-     * @since 2.0.0
      */
     public function loadVariationByFallback(Product $parentProduct, array $attributes)
     {
@@ -278,7 +261,6 @@ class Data
      * @param ProductCollection $productCollection
      * @param array $attributes
      * @return void
-     * @since 2.0.0
      */
     private function addFilterByAttributes(ProductCollection $productCollection, array $attributes)
     {
@@ -291,7 +273,6 @@ class Data
      * @param ProductCollection $productCollection
      * @param integer $parentId
      * @return void
-     * @since 2.0.0
      */
     private function addFilterByParent(ProductCollection $productCollection, $parentId)
     {
@@ -317,7 +298,6 @@ class Data
      * ]
      * @param ModelProduct $product
      * @return array
-     * @since 2.0.0
      */
     public function getProductMediaGallery(ModelProduct $product)
     {
@@ -348,7 +328,6 @@ class Data
     /**
      * @param ModelProduct $product
      * @return array
-     * @since 2.0.0
      */
     private function getGalleryImages(ModelProduct $product)
     {
@@ -370,7 +349,6 @@ class Data
      * @param ModelProduct $product
      * @param string $imageFile
      * @return array
-     * @since 2.0.0
      */
     private function getAllSizeImages(ModelProduct $product, $imageFile)
     {
@@ -392,7 +370,6 @@ class Data
      *
      * @param Product $product
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute[]
-     * @since 2.0.0
      */
     private function getSwatchAttributes(Product $product)
     {
@@ -405,7 +382,6 @@ class Data
      *
      * @param Product $product
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute[]
-     * @since 2.0.0
      */
     public function getAttributesFromConfigurable(Product $product)
     {
@@ -428,7 +404,6 @@ class Data
      *
      * @param Product $product
      * @return array
-     * @since 2.0.0
      */
     public function getSwatchAttributesAsArray(Product $product)
     {
@@ -448,7 +423,6 @@ class Data
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $swatchesCache = [];
 
@@ -457,7 +431,6 @@ class Data
      *
      * @param array $optionIds
      * @return array
-     * @since 2.0.0
      */
     public function getSwatchesByOptionsId(array $optionIds)
     {
@@ -495,7 +468,6 @@ class Data
      *
      * @param array $optionIds
      * @return array
-     * @since 2.2.0
      */
     private function getCachedSwatches(array $optionIds)
     {
@@ -508,7 +480,6 @@ class Data
      * @param array $optionIds
      * @param array $swatches
      * @return void
-     * @since 2.2.0
      */
     private function setCachedSwatches(array $optionIds, array $swatches)
     {
@@ -521,7 +492,6 @@ class Data
      * @param array $fallbackValues
      * @param array $swatches
      * @return array
-     * @since 2.0.0
      */
     private function addFallbackOptions(array $fallbackValues, array $swatches)
     {
@@ -542,7 +512,6 @@ class Data
      *
      * @param Product $product
      * @return bool
-     * @since 2.0.0
      */
     public function isProductHasSwatch(Product $product)
     {
@@ -555,7 +524,6 @@ class Data
      *
      * @param Attribute $attribute
      * @return bool
-     * @since 2.0.0
      */
     public function isSwatchAttribute(Attribute $attribute)
     {
@@ -568,7 +536,6 @@ class Data
      *
      * @param Attribute $attribute
      * @return bool
-     * @since 2.0.0
      */
     public function isVisualSwatch(Attribute $attribute)
     {
@@ -583,7 +550,6 @@ class Data
      *
      * @param Attribute $attribute
      * @return bool
-     * @since 2.0.0
      */
     public function isTextSwatch(Attribute $attribute)
     {
@@ -598,7 +564,6 @@ class Data
      *
      * @return \Magento\Framework\EntityManager\MetadataPool
      * @deprecared
-     * @since 2.2.0
      */
     protected function getMetadataPool()
     {

@@ -10,13 +10,11 @@ use Magento\Framework\Config\ConverterInterface;
 /**
  * Class \Magento\Framework\Search\SearchEngine\Config\Converter
  *
- * @since 2.1.0
  */
 class Converter implements ConverterInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function convert($source)
     {

@@ -9,7 +9,6 @@ namespace Magento\Framework\Backup\Filesystem\Iterator;
  * File lines iterator
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class File extends \SplFileObject
 {
@@ -17,7 +16,6 @@ class File extends \SplFileObject
      * The statement that was last read during iteration
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_currentStatement = '';
 
@@ -25,7 +23,6 @@ class File extends \SplFileObject
      * Return current sql statement
      *
      * @return string
-     * @since 2.0.0
      */
     public function current()
     {
@@ -36,7 +33,6 @@ class File extends \SplFileObject
      * Iterate to next sql statement in file
      *
      * @return void
-     * @since 2.0.0
      */
     public function next()
     {
@@ -56,7 +52,6 @@ class File extends \SplFileObject
      * Return to first statement
      *
      * @return void
-     * @since 2.0.0
      */
     public function rewind()
     {
@@ -69,7 +64,6 @@ class File extends \SplFileObject
      *
      * @param string $line
      * @return bool
-     * @since 2.0.0
      */
     protected function _isComment($line)
     {
@@ -81,7 +75,6 @@ class File extends \SplFileObject
      *
      * @param string $line
      * @return bool
-     * @since 2.0.0
      */
     protected function _isLineLastInCommand($line)
     {

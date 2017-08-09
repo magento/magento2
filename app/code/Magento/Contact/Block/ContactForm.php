@@ -11,14 +11,12 @@ use Magento\Framework\View\Element\Template;
  * Main contact form block
  *
  * @api
- * @since 2.0.0
  */
 class ContactForm extends Template
 {
     /**
      * @param Template\Context $context
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(Template\Context $context, array $data = [])
     {
@@ -30,7 +28,6 @@ class ContactForm extends Template
      * Returns action url for contact form
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFormAction()
     {

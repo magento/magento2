@@ -12,7 +12,6 @@ use Magento\Framework\Url\Validator;
 /**
  * Class \Magento\CatalogImportExport\Model\Import\Product\Validator\Media
  *
- * @since 2.0.0
  */
 class Media extends AbstractImportValidator implements RowValidatorInterface
 {
@@ -30,13 +29,11 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
      * The url validator. Checks if given url is valid.
      *
      * @var Validator
-     * @since 2.2.0
      */
     private $validator;
 
     /**
      * @param Validator $validator The url validator
-     * @since 2.2.0
      */
     public function __construct(Validator $validator = null)
     {
@@ -51,16 +48,14 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $mediaAttributes = ['image', 'small_image', 'thumbnail'];
 
     /**
      * @param string $string
      * @return bool
-     * @deprecated 2.2.0 As this method doesn't give guarantee of correct url validation.
+     * @deprecated 100.2.0 As this method doesn't give guarantee of correct url validation.
      * @see \Magento\Framework\Url\Validator::isValid() It provides better url validation.
-     * @since 2.0.0
      */
     protected function checkValidUrl($string)
     {
@@ -70,7 +65,6 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
     /**
      * @param string $string
      * @return bool
-     * @since 2.0.0
      */
     protected function checkPath($string)
     {
@@ -80,7 +74,6 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
     /**
      * @param string $path
      * @return bool
-     * @since 2.0.0
      */
     protected function checkFileExists($path)
     {
@@ -93,7 +86,6 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
      * @param array $value
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function isValid($value)
     {

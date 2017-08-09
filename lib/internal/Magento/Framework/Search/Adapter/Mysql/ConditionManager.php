@@ -10,7 +10,6 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class ConditionManager
 {
@@ -19,13 +18,11 @@ class ConditionManager
 
     /**
      * @var AdapterInterface
-     * @since 2.0.0
      */
     private $connection;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
-     * @since 2.0.0
      */
     public function __construct(ResourceConnection $resource)
     {
@@ -35,7 +32,6 @@ class ConditionManager
     /**
      * @param string $query
      * @return string
-     * @since 2.0.0
      */
     public function wrapBrackets($query)
     {
@@ -48,7 +44,6 @@ class ConditionManager
      * @param string[] $queries
      * @param string $unionOperator
      * @return string
-     * @since 2.0.0
      */
     public function combineQueries(array $queries, $unionOperator)
     {
@@ -63,7 +58,6 @@ class ConditionManager
      * @param string $operator
      * @param mixed $value
      * @return string
-     * @since 2.0.0
      */
     public function generateCondition($field, $operator, $value)
     {

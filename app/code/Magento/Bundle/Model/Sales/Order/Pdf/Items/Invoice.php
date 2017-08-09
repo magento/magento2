@@ -12,13 +12,11 @@ use Magento\Framework\Serialize\Serializer\Json;
  * Order invoice pdf default items renderer
  *
  * @codingStandardsIgnoreFile
- * @since 2.0.0
  */
 class Invoice extends AbstractItems
 {
     /**
      * @var \Magento\Framework\Stdlib\StringUtils
-     * @since 2.0.0
      */
     protected $string;
 
@@ -36,7 +34,6 @@ class Invoice extends AbstractItems
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -71,7 +68,6 @@ class Invoice extends AbstractItems
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function draw()
     {

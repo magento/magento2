@@ -16,25 +16,21 @@ use Magento\Payment\Model\Method\Logger;
  * Class Zend
  * @package Magento\Payment\Gateway\Http\Client
  * @api
- * @since 2.0.0
  */
 class Zend implements ClientInterface
 {
     /**
      * @var ZendClientFactory
-     * @since 2.0.0
      */
     private $clientFactory;
 
     /**
      * @var ConverterInterface | null
-     * @since 2.0.0
      */
     private $converter;
 
     /**
      * @var Logger
-     * @since 2.0.0
      */
     private $logger;
 
@@ -42,7 +38,6 @@ class Zend implements ClientInterface
      * @param ZendClientFactory $clientFactory
      * @param Logger $logger
      * @param ConverterInterface | null $converter
-     * @since 2.0.0
      */
     public function __construct(
         ZendClientFactory $clientFactory,
@@ -56,7 +51,6 @@ class Zend implements ClientInterface
 
     /**
      * {inheritdoc}
-     * @since 2.0.0
      */
     public function placeRequest(TransferInterface $transferObject)
     {

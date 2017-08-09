@@ -8,7 +8,6 @@ namespace Magento\Setup\Fixtures;
 
 /**
  * Random price provider for fixtures
- * @since 2.2.0
  */
 class PriceProvider
 {
@@ -17,7 +16,6 @@ class PriceProvider
      *
      * @param int $productIndex
      * @return float
-     * @since 2.2.0
      */
     public function getPrice($productIndex)
     {

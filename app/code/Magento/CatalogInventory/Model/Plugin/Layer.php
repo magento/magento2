@@ -8,7 +8,6 @@ namespace Magento\CatalogInventory\Model\Plugin;
 /**
  * Class \Magento\CatalogInventory\Model\Plugin\Layer
  *
- * @since 2.0.0
  */
 class Layer
 {
@@ -16,7 +15,6 @@ class Layer
      * Stock status instance
      *
      * @var \Magento\CatalogInventory\Helper\Stock
-     * @since 2.0.0
      */
     protected $stockHelper;
 
@@ -24,14 +22,12 @@ class Layer
      * Store config instance
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @param \Magento\CatalogInventory\Helper\Stock $stockHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\CatalogInventory\Helper\Stock $stockHelper,
@@ -49,7 +45,6 @@ class Layer
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function beforePrepareProductCollection(
         \Magento\Catalog\Model\Layer $subject,
@@ -65,7 +60,6 @@ class Layer
      * Get config value for 'display out of stock' option
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _isEnabledShowOutOfStock()
     {

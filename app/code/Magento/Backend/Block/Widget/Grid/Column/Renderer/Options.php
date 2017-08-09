@@ -9,8 +9,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
  * Grid column widget for rendering grid cells that contains mapped values
  *
  * @api
- * @deprecated 2.2.0 in favour of UI component implementation
- * @since 2.0.0
+ * @deprecated 100.2.0 in favour of UI component implementation
  */
 class Options extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {
@@ -18,7 +17,6 @@ class Options extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      * Get options from column
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getOptions()
     {
@@ -31,7 +29,6 @@ class Options extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      * @param \Magento\Framework\DataObject $row
      * @return string|void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

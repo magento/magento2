@@ -7,7 +7,6 @@ namespace Magento\Review\Block\Adminhtml\Rating;
 
 /**
  * Rating edit form
- * @since 2.0.0
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -15,7 +14,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -23,13 +21,11 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Rating factory
      *
      * @var \Magento\Review\Model\RatingFactory
-     * @since 2.0.0
      */
     protected $_ratingFactory;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_blockGroup = 'Magento_Review';
 
@@ -38,7 +34,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -53,7 +48,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -74,7 +68,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {

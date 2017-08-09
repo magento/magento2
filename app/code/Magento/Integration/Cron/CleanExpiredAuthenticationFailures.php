@@ -9,13 +9,11 @@ use Magento\Integration\Model\Oauth\Token\RequestLog\WriterInterface as RequestL
 
 /**
  * Cron class for clearing log of outdated token request authentication failures.
- * @since 2.1.0
  */
 class CleanExpiredAuthenticationFailures
 {
     /**
      * @var RequestLogWriter
-     * @since 2.1.0
      */
     private $requestLogWriter;
 
@@ -23,7 +21,6 @@ class CleanExpiredAuthenticationFailures
      * Initialize dependencies.
      *
      * @param RequestLogWriter $requestLogWriter
-     * @since 2.1.0
      */
     public function __construct(
         RequestLogWriter $requestLogWriter
@@ -35,7 +32,6 @@ class CleanExpiredAuthenticationFailures
      * Clearing log of outdated token request authentication failures.
      *
      * @return void
-     * @since 2.1.0
      */
     public function execute()
     {

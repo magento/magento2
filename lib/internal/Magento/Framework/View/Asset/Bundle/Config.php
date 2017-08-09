@@ -15,9 +15,8 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 
 /**
  * Class Config
- * @deprecated 2.2.0 since 2.2.0
+ * @deprecated 100.2.0
  * @see \Magento\Deploy\Config\BundleConfig
- * @since 2.0.0
  */
 class Config implements Bundle\ConfigInterface
 {
@@ -28,34 +27,27 @@ class Config implements Bundle\ConfigInterface
     const VIEW_CONFIG_BUNDLE_SIZE_NAME = 'bundle_size';
     /**#@-*/
 
-    /**
-     * @var ListInterface
-     * @since 2.0.0
-     */
+    /**#@-*/
     protected $themeList;
 
     /**
      * @var View\ConfigInterface
-     * @since 2.0.0
      */
     protected $viewConfig;
 
     /**
      * @var ThemeProviderInterface
-     * @since 2.2.0
      */
     private $themeProvider;
 
     /**
      * @var \Magento\Framework\Config\View[]
-     * @since 2.2.0
      */
     private $config = [];
 
     /**
      * @param View\ConfigInterface $viewConfig
      * @param ListInterface $themeList
-     * @since 2.0.0
      */
     public function __construct(
         View\ConfigInterface $viewConfig,
@@ -68,7 +60,6 @@ class Config implements Bundle\ConfigInterface
     /**
      * @param FallbackContext $assetContext
      * @return bool
-     * @since 2.0.0
      */
     public function isSplit(FallbackContext $assetContext)
     {
@@ -78,7 +69,6 @@ class Config implements Bundle\ConfigInterface
     /**
      * @param FallbackContext $assetContext
      * @return \Magento\Framework\Config\View
-     * @since 2.0.0
      */
     public function getConfig(FallbackContext $assetContext)
     {
@@ -98,7 +88,6 @@ class Config implements Bundle\ConfigInterface
     /**
      * @param FallbackContext $assetContext
      * @return int
-     * @since 2.0.0
      */
     public function getPartSize(FallbackContext $assetContext)
     {
@@ -120,7 +109,6 @@ class Config implements Bundle\ConfigInterface
 
     /**
      * @return ThemeProviderInterface
-     * @since 2.2.0
      */
     private function getThemeProvider()
     {

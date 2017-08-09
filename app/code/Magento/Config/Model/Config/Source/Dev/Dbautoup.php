@@ -10,13 +10,11 @@ namespace Magento\Config\Model\Config\Source\Dev;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Dbautoup implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

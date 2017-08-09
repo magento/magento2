@@ -9,7 +9,6 @@ namespace Magento\Newsletter\Controller\Adminhtml\Problem;
 /**
  * Class \Magento\Newsletter\Controller\Adminhtml\Problem\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Newsletter\Controller\Adminhtml\Problem
 {
@@ -17,7 +16,6 @@ class Index extends \Magento\Newsletter\Controller\Adminhtml\Problem
      * Newsletter problems report page
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

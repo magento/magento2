@@ -11,13 +11,11 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 /**
  * Backend system config datetime field renderer
  * @api
- * @since 2.0.0
  */
 class Notification extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * @var DateTimeFormatterInterface
-     * @since 2.0.0
      */
     protected $dateTimeFormatter;
 
@@ -25,7 +23,6 @@ class Notification extends \Magento\Config\Block\System\Config\Form\Field
      * @param \Magento\Backend\Block\Template\Context $context
      * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -39,7 +36,6 @@ class Notification extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * @param AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     protected function _getElementHtml(AbstractElement $element)
     {

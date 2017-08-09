@@ -8,8 +8,7 @@ namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
 /**
  * Class Index
- * @deprecated 2.2.0
- * @since 2.0.0
+ * @deprecated 100.2.0
  */
 class Index extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {
@@ -17,7 +16,6 @@ class Index extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
      * Index action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

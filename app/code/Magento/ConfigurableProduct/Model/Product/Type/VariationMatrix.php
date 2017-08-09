@@ -7,7 +7,6 @@ namespace Magento\ConfigurableProduct\Model\Product\Type;
 
 /**
  * @api
- * @since 2.0.0
  */
 class VariationMatrix
 {
@@ -16,7 +15,6 @@ class VariationMatrix
      *
      * @param array $usedProductAttributes
      * @return array
-     * @since 2.0.0
      */
     public function getVariations($usedProductAttributes)
     {
@@ -56,7 +54,6 @@ class VariationMatrix
      *
      * @param array $usedProductAttributes
      * @return array
-     * @since 2.0.0
      */
     private function combineVariationalAttributes($usedProductAttributes)
     {
@@ -85,7 +82,6 @@ class VariationMatrix
      * @param array $variationalAttributes
      * @param array $currentVariation
      * @return void
-     * @since 2.0.0
      */
     private function incrementVariationalIndex($attributesCount, $variationalAttributes, &$currentVariation)
     {

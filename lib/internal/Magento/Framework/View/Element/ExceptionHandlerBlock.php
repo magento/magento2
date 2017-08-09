@@ -16,19 +16,16 @@ use Magento\Framework\Phrase;
  *
  * When calls from parent to child block occurred and the error appeared in the child block,
  * all blocks chain would be removed.
- * @since 2.0.0
  */
 class ExceptionHandlerBlock implements BlockInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $blockName;
 
     /**
      * @param string $blockName
-     * @since 2.0.0
      */
     public function __construct($blockName = '')
     {
@@ -42,7 +39,6 @@ class ExceptionHandlerBlock implements BlockInterface
      * @param array $args
      * @return void
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function __call($method, $args)
     {
@@ -56,7 +52,6 @@ class ExceptionHandlerBlock implements BlockInterface
      *
      * @throws LocalizedException
      * @return void
-     * @since 2.0.0
      */
     public function toHtml()
     {

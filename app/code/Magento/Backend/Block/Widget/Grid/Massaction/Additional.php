@@ -9,14 +9,12 @@ namespace Magento\Backend\Block\Widget\Grid\Massaction;
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated 2.2.0 in favour of UI component implementation
- * @since 2.0.0
+ * @deprecated 100.2.0 in favour of UI component implementation
  */
 class Additional extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\Framework\View\Layout\Argument\Interpreter\Options
-     * @since 2.0.0
      */
     protected $_optionsInterpreter;
 
@@ -26,7 +24,6 @@ class Additional extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\View\Layout\Argument\Interpreter\Options $optionsInterpreter
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -43,7 +40,6 @@ class Additional extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepare form before rendering HTML
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -62,7 +58,6 @@ class Additional extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param array &$item
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareFormItem(array &$item)
     {

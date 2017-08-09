@@ -14,7 +14,6 @@ namespace Magento\Tax\Model\ResourceModel\TaxClass;
 /**
  * Class \Magento\Tax\Model\ResourceModel\TaxClass\Collection
  *
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -22,7 +21,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     public function _construct()
     {
@@ -34,7 +32,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $classTypeId
      * @return $this
-     * @since 2.0.0
      */
     public function setClassTypeFilter($classTypeId)
     {
@@ -45,7 +42,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Retrieve option array
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {
@@ -56,7 +52,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Retrieve option hash
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionHash()
     {

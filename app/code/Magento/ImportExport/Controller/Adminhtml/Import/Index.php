@@ -11,7 +11,6 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\ImportExport\Controller\Adminhtml\Import\Index
  *
- * @since 2.0.0
  */
 class Index extends ImportController
 {
@@ -19,7 +18,6 @@ class Index extends ImportController
      * Index action
      *
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -23,43 +23,36 @@ use Zend\View\Model\ViewModel;
  * Install controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Install extends AbstractActionController
 {
     /**
      * @var WebLogger
-     * @since 2.0.0
      */
     private $log;
 
     /**
      * @var Installer
-     * @since 2.0.0
      */
     private $installer;
 
     /**
      * @var ProgressFactory
-     * @since 2.0.0
      */
     private $progressFactory;
 
     /**
      * @var \Magento\Framework\Setup\SampleData\State
-     * @since 2.0.0
      */
     protected $sampleDataState;
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig
-     * @since 2.1.0
      */
     private $deploymentConfig;
 
     /**
      * @var RequestDataConverter
-     * @since 2.1.0
      */
     private $requestDataConverter;
 
@@ -72,7 +65,6 @@ class Install extends AbstractActionController
      * @param \Magento\Framework\Setup\SampleData\State $sampleDataState
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      * @param RequestDataConverter $requestDataConverter
-     * @since 2.0.0
      */
     public function __construct(
         WebLogger $logger,
@@ -92,7 +84,6 @@ class Install extends AbstractActionController
 
     /**
      * @return ViewModel
-     * @since 2.0.0
      */
     public function indexAction()
     {
@@ -105,7 +96,6 @@ class Install extends AbstractActionController
      * Index Action
      *
      * @return JsonModel
-     * @since 2.0.0
      */
     public function startAction()
     {
@@ -138,7 +128,6 @@ class Install extends AbstractActionController
      * Checks progress of installation
      *
      * @return JsonModel
-     * @since 2.0.0
      */
     public function progressAction()
     {
@@ -174,7 +163,6 @@ class Install extends AbstractActionController
      *
      * @return void
      * @throws \Magento\Setup\Exception
-     * @since 2.1.0
      */
     private function checkForPriorInstall()
     {

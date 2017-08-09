@@ -12,13 +12,11 @@ use Magento\Sales\Api\InvoiceRepositoryInterface;
 
 /**
  * Class State
- * @since 2.0.0
  */
 class State extends Column
 {
     /**
      * @var string[]
-     * @since 2.0.0
      */
     protected $states;
 
@@ -30,7 +28,6 @@ class State extends Column
      * @param InvoiceRepositoryInterface $invoiceRepository
      * @param array $components
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -48,7 +45,6 @@ class State extends Column
      *
      * @param array $dataSource
      * @return array
-     * @since 2.0.0
      */
     public function prepareDataSource(array $dataSource)
     {

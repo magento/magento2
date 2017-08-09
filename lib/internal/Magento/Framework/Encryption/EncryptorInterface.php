@@ -9,7 +9,6 @@ namespace Magento\Framework\Encryption;
  * Encryptor interface
  *
  * @api
- * @since 2.0.0
  */
 interface EncryptorInterface
 {
@@ -25,7 +24,6 @@ interface EncryptorInterface
      * @param string $password
      * @param bool|int|string $salt
      * @return string
-     * @since 2.0.0
      */
     public function getHash($password, $salt = false);
 
@@ -34,7 +32,6 @@ interface EncryptorInterface
      *
      * @param string $data
      * @return string
-     * @since 2.0.0
      */
     public function hash($data);
 
@@ -45,7 +42,6 @@ interface EncryptorInterface
      * @param string $hash
      * @return bool
      * @throws \Exception
-     * @since 2.0.0
      */
     public function validateHash($password, $hash);
 
@@ -56,7 +52,6 @@ interface EncryptorInterface
      * @param string $hash
      * @return bool
      * @throws \Exception
-     * @since 2.0.0
      */
     public function isValidHash($password, $hash);
 
@@ -66,7 +61,6 @@ interface EncryptorInterface
      * @param string $hash
      * @param bool $validateCount
      * @return bool
-     * @since 2.0.0
      */
     public function validateHashVersion($hash, $validateCount = false);
 
@@ -75,7 +69,6 @@ interface EncryptorInterface
      *
      * @param string $data
      * @return string
-     * @since 2.0.0
      */
     public function encrypt($data);
 
@@ -84,7 +77,6 @@ interface EncryptorInterface
      *
      * @param string $data
      * @return string
-     * @since 2.0.0
      */
     public function decrypt($data);
 
@@ -93,7 +85,6 @@ interface EncryptorInterface
      *
      * @param string $key
      * @return \Magento\Framework\Encryption\Crypt
-     * @since 2.0.0
      */
     public function validateKey($key);
 }

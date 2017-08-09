@@ -7,31 +7,26 @@ namespace Magento\Payment\Model;
 
 /**
  * Payment method class.
- * @since 2.2.0
  */
 class PaymentMethod implements \Magento\Payment\Api\Data\PaymentMethodInterface
 {
     /**
      * @var string
-     * @since 2.2.0
      */
     private $code;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $title;
 
     /**
      * @var int
-     * @since 2.2.0
      */
     private $storeId;
 
     /**
      * @var bool
-     * @since 2.2.0
      */
     private $isActive;
 
@@ -40,7 +35,6 @@ class PaymentMethod implements \Magento\Payment\Api\Data\PaymentMethodInterface
      * @param string $title
      * @param int $storeId
      * @param bool $isActive
-     * @since 2.2.0
      */
     public function __construct($code, $title, $storeId, $isActive)
     {
@@ -52,7 +46,6 @@ class PaymentMethod implements \Magento\Payment\Api\Data\PaymentMethodInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getCode()
     {
@@ -61,7 +54,6 @@ class PaymentMethod implements \Magento\Payment\Api\Data\PaymentMethodInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getTitle()
     {
@@ -70,7 +62,6 @@ class PaymentMethod implements \Magento\Payment\Api\Data\PaymentMethodInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getStoreId()
     {
@@ -79,7 +70,6 @@ class PaymentMethod implements \Magento\Payment\Api\Data\PaymentMethodInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getIsActive()
     {

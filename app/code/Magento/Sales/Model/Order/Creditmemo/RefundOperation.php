@@ -12,26 +12,22 @@ use Magento\Sales\Model\Order\Creditmemo;
 /**
  * Class \Magento\Sales\Model\Order\Creditmemo\RefundOperation
  *
- * @since 2.2.0
  */
 class RefundOperation
 {
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.2.0
      */
     private $eventManager;
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     * @since 2.2.0
      */
     private $priceCurrency;
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -46,7 +42,6 @@ class RefundOperation
      * @param OrderInterface $order
      * @param bool $online
      * @return OrderInterface
-     * @since 2.2.0
      */
     public function execute(CreditmemoInterface $creditmemo, OrderInterface $order, $online = false)
     {

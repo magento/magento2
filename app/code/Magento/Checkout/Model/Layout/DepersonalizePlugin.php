@@ -9,19 +9,16 @@ use Magento\PageCache\Model\DepersonalizeChecker;
 
 /**
  * Class DepersonalizePlugin
- * @since 2.0.0
  */
 class DepersonalizePlugin
 {
     /**
      * @var DepersonalizeChecker
-     * @since 2.0.0
      */
     protected $depersonalizeChecker;
 
     /**
      * @var \Magento\Checkout\Model\Session
-     * @since 2.0.0
      */
     protected $checkoutSession;
 
@@ -29,7 +26,6 @@ class DepersonalizePlugin
      * @param DepersonalizeChecker $depersonalizeChecker
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         DepersonalizeChecker $depersonalizeChecker,
@@ -45,7 +41,6 @@ class DepersonalizePlugin
      * @param \Magento\Framework\View\LayoutInterface $subject
      * @param \Magento\Framework\View\LayoutInterface $result
      * @return \Magento\Framework\View\LayoutInterface
-     * @since 2.0.0
      */
     public function afterGenerateXml(\Magento\Framework\View\LayoutInterface $subject, $result)
     {

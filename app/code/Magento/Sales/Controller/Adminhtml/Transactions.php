@@ -15,7 +15,6 @@ use Magento\Sales\Api\OrderPaymentRepositoryInterface;
  * Adminhtml sales transactions controller
  *
  * @author Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 abstract class Transactions extends \Magento\Backend\App\Action
 {
@@ -30,25 +29,21 @@ abstract class Transactions extends \Magento\Backend\App\Action
      * Core registry
      *
      * @var Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @var LayoutFactory
-     * @since 2.0.0
      */
     protected $resultLayoutFactory;
 
     /**
      * @var OrderPaymentRepositoryInterface
-     * @since 2.0.0
      */
     protected $orderPaymentRepository;
 
@@ -58,7 +53,6 @@ abstract class Transactions extends \Magento\Backend\App\Action
      * @param PageFactory $resultPageFactory
      * @param LayoutFactory $resultLayoutFactory
      * @param OrderPaymentRepositoryInterface $orderPaymentRepository
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -78,7 +72,6 @@ abstract class Transactions extends \Magento\Backend\App\Action
      * Initialize payment transaction model
      *
      * @return \Magento\Sales\Model\Order\Payment\Transaction|bool
-     * @since 2.0.0
      */
     protected function _initTransaction()
     {

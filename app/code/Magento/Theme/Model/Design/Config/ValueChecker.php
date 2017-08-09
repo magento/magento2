@@ -11,25 +11,21 @@ use Magento\Framework\App\ScopeFallbackResolverInterface;
 /**
  * Class \Magento\Theme\Model\Design\Config\ValueChecker
  *
- * @since 2.1.0
  */
 class ValueChecker
 {
     /**
      * @var ScopeFallbackResolverInterface
-     * @since 2.1.0
      */
     protected $fallbackResolver;
 
     /**
      * @var AppConfig
-     * @since 2.1.0
      */
     protected $appConfig;
 
     /**
      * @var ValueProcessor
-     * @since 2.1.0
      */
     protected $valueProcessor;
 
@@ -37,7 +33,6 @@ class ValueChecker
      * @param ScopeFallbackResolverInterface $fallbackResolver
      * @param AppConfig $appConfig
      * @param \Magento\Theme\Model\Design\Config\ValueProcessor $valueProcessor
-     * @since 2.1.0
      */
     public function __construct(
         ScopeFallbackResolverInterface $fallbackResolver,
@@ -57,7 +52,6 @@ class ValueChecker
      * @param int $scopeId
      * @param array $fieldConfig
      * @return bool
-     * @since 2.1.0
      */
     public function isDifferentFromDefault($value, $scope, $scopeId, array $fieldConfig)
     {
@@ -87,7 +81,6 @@ class ValueChecker
      * @param mixed $value
      * @param mixed $defaultValue
      * @return bool
-     * @since 2.1.0
      */
     protected function isEqual($value, $defaultValue)
     {
@@ -105,7 +98,6 @@ class ValueChecker
      * @param array $value
      * @param array $defaultValue
      * @return bool
-     * @since 2.1.0
      */
     protected function isEqualArrays(array $value, array $defaultValue)
     {

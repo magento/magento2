@@ -11,7 +11,6 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Websites extends \Magento\Ui\Component\Listing\Columns\Column
 {
@@ -24,7 +23,6 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
      * Store manager
      *
      * @var StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -34,7 +32,6 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
      * @param StoreManagerInterface $storeManager
      * @param array $components
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -49,8 +46,7 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
 
     /**
      * {@inheritdoc}
-     * @deprecated 2.1.0
-     * @since 2.0.0
+     * @deprecated 101.0.0
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -78,7 +74,6 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
     /**
      * Prepare component configuration
      * @return void
-     * @since 2.0.0
      */
     public function prepare()
     {

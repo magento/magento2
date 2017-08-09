@@ -8,7 +8,6 @@ namespace Magento\Sales\Model\ResourceModel\Order;
 
 /**
  * Class CollectionFactory
- * @since 2.2.0
  */
 class CollectionFactory implements CollectionFactoryInterface
 {
@@ -16,7 +15,6 @@ class CollectionFactory implements CollectionFactoryInterface
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.2.0
      */
     private $objectManager = null;
 
@@ -24,7 +22,6 @@ class CollectionFactory implements CollectionFactoryInterface
      * Instance name to create
      *
      * @var string
-     * @since 2.2.0
      */
     private $instanceName = null;
 
@@ -33,7 +30,6 @@ class CollectionFactory implements CollectionFactoryInterface
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -45,7 +41,6 @@ class CollectionFactory implements CollectionFactoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function create($customerId = null)
     {

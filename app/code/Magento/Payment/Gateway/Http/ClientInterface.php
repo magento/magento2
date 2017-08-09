@@ -11,7 +11,6 @@ use Magento\Payment\Gateway\Response;
  * Interface ClientInterface
  * @package Magento\Payment\Gateway\Http
  * @api
- * @since 2.0.0
  */
 interface ClientInterface
 {
@@ -22,7 +21,6 @@ interface ClientInterface
      * @return array
      * @throws \Magento\Payment\Gateway\Http\ClientException
      * @throws \Magento\Payment\Gateway\Http\ConverterException
-     * @since 2.0.0
      */
     public function placeRequest(\Magento\Payment\Gateway\Http\TransferInterface $transferObject);
 }

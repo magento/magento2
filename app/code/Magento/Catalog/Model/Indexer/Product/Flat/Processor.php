@@ -9,7 +9,6 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat;
  * Catalog flat indexer
  *
  * @api
- * @since 2.0.0
  */
 class Processor extends \Magento\Framework\Indexer\AbstractProcessor
 {
@@ -20,14 +19,12 @@ class Processor extends \Magento\Framework\Indexer\AbstractProcessor
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\State
-     * @since 2.0.0
      */
     protected $_state;
 
     /**
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param State $state
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
@@ -43,7 +40,6 @@ class Processor extends \Magento\Framework\Indexer\AbstractProcessor
      * @param int $id
      * @param bool $forceReindex
      * @return void
-     * @since 2.0.0
      */
     public function reindexRow($id, $forceReindex = false)
     {
@@ -59,7 +55,6 @@ class Processor extends \Magento\Framework\Indexer\AbstractProcessor
      * @param int[] $ids
      * @param bool $forceReindex
      * @return void
-     * @since 2.0.0
      */
     public function reindexList($ids, $forceReindex = false)
     {
@@ -73,7 +68,6 @@ class Processor extends \Magento\Framework\Indexer\AbstractProcessor
      * Run full reindex
      *
      * @return void
-     * @since 2.0.0
      */
     public function reindexAll()
     {
@@ -87,7 +81,6 @@ class Processor extends \Magento\Framework\Indexer\AbstractProcessor
      * Mark Product flat indexer as invalid
      *
      * @return void
-     * @since 2.0.0
      */
     public function markIndexerAsInvalid()
     {

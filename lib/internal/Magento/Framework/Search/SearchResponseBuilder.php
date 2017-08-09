@@ -12,27 +12,23 @@ use Magento\Framework\Api\Search\SearchResultFactory;
 /**
  * Class \Magento\Framework\Search\SearchResponseBuilder
  *
- * @since 2.0.0
  */
 class SearchResponseBuilder
 {
     /**
      * @var DocumentFactory
-     * @deprecated 2.1.0
-     * @since 2.0.0
+     * @deprecated 100.1.0
      */
     private $documentFactory;
 
     /**
      * @var SearchResultFactory
-     * @since 2.0.0
      */
     private $searchResultFactory;
 
     /**
      * @param SearchResultFactory $searchResultFactory
      * @param DocumentFactory $documentFactory
-     * @since 2.0.0
      */
     public function __construct(
         SearchResultFactory $searchResultFactory,
@@ -45,7 +41,6 @@ class SearchResponseBuilder
     /**
      * @param ResponseInterface $response
      * @return SearchResultInterface
-     * @since 2.0.0
      */
     public function build(ResponseInterface $response)
     {

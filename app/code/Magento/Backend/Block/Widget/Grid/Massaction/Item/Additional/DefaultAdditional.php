@@ -9,14 +9,12 @@ namespace Magento\Backend\Block\Widget\Grid\Massaction\Item\Additional;
  * Backend grid widget massaction item additional action default
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class DefaultAdditional extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Backend\Block\Widget\Grid\Massaction\Item\Additional\AdditionalInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function createFromConfiguration(array $configuration)
     {

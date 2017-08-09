@@ -14,7 +14,6 @@ use Magento\Ui\DataProvider\Modifier\ModifierFactory;
 
 /**
  * Customize Downloadable panel
- * @since 2.1.0
  */
 class Composite extends AbstractModifier
 {
@@ -25,25 +24,21 @@ class Composite extends AbstractModifier
 
     /**
      * @var ModifierFactory
-     * @since 2.1.0
      */
     protected $modifierFactory;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $modifiers = [];
 
     /**
      * @var ModifierInterface[]
-     * @since 2.1.0
      */
     protected $modifiersInstances = [];
 
     /**
      * @var LocatorInterface
-     * @since 2.1.0
      */
     protected $locator;
 
@@ -51,7 +46,6 @@ class Composite extends AbstractModifier
      * @param ModifierFactory $modifierFactory
      * @param LocatorInterface $locator
      * @param array $modifiers
-     * @since 2.1.0
      */
     public function __construct(
         ModifierFactory $modifierFactory,
@@ -65,7 +59,6 @@ class Composite extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -80,7 +73,6 @@ class Composite extends AbstractModifier
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -97,7 +89,6 @@ class Composite extends AbstractModifier
      * Check that can show downloadable panel
      *
      * @return bool
-     * @since 2.1.0
      */
     protected function canShowDownloadablePanel()
     {
@@ -114,7 +105,6 @@ class Composite extends AbstractModifier
      * Get modifiers list
      *
      * @return ModifierInterface[]
-     * @since 2.1.0
      */
     protected function getModifiers()
     {

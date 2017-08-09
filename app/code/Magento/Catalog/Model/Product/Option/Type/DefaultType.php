@@ -17,7 +17,6 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class DefaultType extends \Magento\Framework\DataObject
 {
@@ -25,7 +24,6 @@ class DefaultType extends \Magento\Framework\DataObject
      * Option Instance
      *
      * @var \Magento\Catalog\Model\Product\Option
-     * @since 2.0.0
      */
     protected $_option;
 
@@ -33,7 +31,6 @@ class DefaultType extends \Magento\Framework\DataObject
      * Product Instance
      *
      * @var \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     protected $_product;
 
@@ -41,7 +38,6 @@ class DefaultType extends \Magento\Framework\DataObject
      * TODO: Fill in description
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_productOptions = [];
 
@@ -49,7 +45,6 @@ class DefaultType extends \Magento\Framework\DataObject
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -57,7 +52,6 @@ class DefaultType extends \Magento\Framework\DataObject
      * Checkout session
      *
      * @var \Magento\Checkout\Model\Session
-     * @since 2.0.0
      */
     protected $_checkoutSession;
 
@@ -67,7 +61,6 @@ class DefaultType extends \Magento\Framework\DataObject
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -84,7 +77,6 @@ class DefaultType extends \Magento\Framework\DataObject
      *
      * @param \Magento\Catalog\Model\Product\Option $option
      * @return $this
-     * @since 2.0.0
      */
     public function setOption($option)
     {
@@ -97,7 +89,6 @@ class DefaultType extends \Magento\Framework\DataObject
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\Product\Option
-     * @since 2.0.0
      */
     public function getOption()
     {
@@ -112,7 +103,6 @@ class DefaultType extends \Magento\Framework\DataObject
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
-     * @since 2.0.0
      */
     public function setProduct($product)
     {
@@ -125,7 +115,6 @@ class DefaultType extends \Magento\Framework\DataObject
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -140,7 +129,6 @@ class DefaultType extends \Magento\Framework\DataObject
      *
      * @return \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function getConfigurationItemOption()
     {
@@ -164,7 +152,6 @@ class DefaultType extends \Magento\Framework\DataObject
      *
      * @return \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getConfigurationItem()
     {
@@ -188,7 +175,6 @@ class DefaultType extends \Magento\Framework\DataObject
      *
      * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getRequest()
     {
@@ -203,7 +189,6 @@ class DefaultType extends \Magento\Framework\DataObject
      *
      * @param string $key Config value key
      * @return string
-     * @since 2.0.0
      */
     public function getConfigData($key)
     {
@@ -216,7 +201,6 @@ class DefaultType extends \Magento\Framework\DataObject
      * @param array $values All product option values, i.e. array (option_id => mixed, option_id => mixed...)
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function validateUserValue($values)
     {
@@ -239,7 +223,6 @@ class DefaultType extends \Magento\Framework\DataObject
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getSkipCheckRequiredOption()
     {
@@ -252,7 +235,6 @@ class DefaultType extends \Magento\Framework\DataObject
      *
      * @return string|null Prepared option value
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function prepareForCart()
     {
@@ -268,7 +250,6 @@ class DefaultType extends \Magento\Framework\DataObject
      * Flag to indicate that custom option has own customized output (blocks, native html etc.)
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isCustomizedView()
     {
@@ -280,7 +261,6 @@ class DefaultType extends \Magento\Framework\DataObject
      *
      * @param string $optionValue Prepared for cart option value
      * @return string
-     * @since 2.0.0
      */
     public function getFormattedOptionValue($optionValue)
     {
@@ -292,7 +272,6 @@ class DefaultType extends \Magento\Framework\DataObject
      *
      * @param array $optionInfo
      * @return string
-     * @since 2.0.0
      */
     public function getCustomizedView($optionInfo)
     {
@@ -304,7 +283,6 @@ class DefaultType extends \Magento\Framework\DataObject
      *
      * @param string $optionValue Prepared for cart option value
      * @return string
-     * @since 2.0.0
      */
     public function getPrintableOptionValue($optionValue)
     {
@@ -317,7 +295,6 @@ class DefaultType extends \Magento\Framework\DataObject
      *
      * @param string $optionValue Prepared for cart option value
      * @return string
-     * @since 2.0.0
      */
     public function getEditableOptionValue($optionValue)
     {
@@ -331,7 +308,6 @@ class DefaultType extends \Magento\Framework\DataObject
      * @param array $productOptionValues Values for product option
      * @return string|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function parseOptionValue($optionValue, $productOptionValues)
     {
@@ -343,7 +319,6 @@ class DefaultType extends \Magento\Framework\DataObject
      *
      * @param string $optionValue
      * @return string|null
-     * @since 2.0.0
      */
     public function prepareOptionValueForRequest($optionValue)
     {
@@ -357,7 +332,6 @@ class DefaultType extends \Magento\Framework\DataObject
      * @param float $basePrice For percent price type
      * @return float
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getOptionPrice($optionValue, $basePrice)
     {
@@ -373,7 +347,6 @@ class DefaultType extends \Magento\Framework\DataObject
      * @param string $skuDelimiter Delimiter for Sku parts
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getOptionSku($optionValue, $skuDelimiter)
     {
@@ -384,7 +357,6 @@ class DefaultType extends \Magento\Framework\DataObject
      * Return value => key all product options (using for parsing)
      *
      * @return array Array of Product custom options, reversing option values and option ids
-     * @since 2.0.0
      */
     public function getProductOptions()
     {
@@ -425,7 +397,6 @@ class DefaultType extends \Magento\Framework\DataObject
      * @param boolean $isPercent Price type - percent or fixed
      * @param float $basePrice For percent price type
      * @return float
-     * @since 2.0.0
      */
     protected function _getChargableOptionPrice($price, $isPercent, $basePrice)
     {

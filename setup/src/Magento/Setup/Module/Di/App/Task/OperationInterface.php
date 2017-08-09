@@ -8,7 +8,6 @@ namespace Magento\Setup\Module\Di\App\Task;
 /**
  * Interface \Magento\Setup\Module\Di\App\Task\OperationInterface
  *
- * @since 2.0.0
  */
 interface OperationInterface
 {
@@ -16,7 +15,6 @@ interface OperationInterface
      * Processes operation task
      *
      * @return void
-     * @since 2.0.0
      */
     public function doOperation();
 
@@ -24,7 +22,6 @@ interface OperationInterface
      * Returns operation name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName();
 }

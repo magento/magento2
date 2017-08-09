@@ -8,7 +8,6 @@ namespace Magento\Framework\Filesystem\Filter;
 
 /**
  * Filters Iterator to exclude specified files
- * @since 2.1.0
  */
 class ExcludeFilter extends \FilterIterator
 {
@@ -16,7 +15,6 @@ class ExcludeFilter extends \FilterIterator
      * Array that is used for filtering
      *
      * @var array
-     * @since 2.1.0
      */
     protected $_filters;
 
@@ -25,7 +23,6 @@ class ExcludeFilter extends \FilterIterator
      *
      * @param \Iterator $iterator
      * @param array $filters list of files to skip
-     * @since 2.1.0
      */
     public function __construct(\Iterator $iterator, array $filters)
     {
@@ -37,7 +34,6 @@ class ExcludeFilter extends \FilterIterator
      * Check whether the current element of the iterator is acceptable
      *
      * @return bool
-     * @since 2.1.0
      */
     public function accept()
     {

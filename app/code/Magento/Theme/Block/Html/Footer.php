@@ -11,7 +11,6 @@ use Magento\Customer\Model\Context;
  * Html page footer block
  *
  * @api
- * @since 2.0.0
  */
 class Footer extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -19,7 +18,6 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
      * Copyright information
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_copyright;
 
@@ -27,13 +25,11 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
      * Miscellaneous HTML information
      *
      * @var string
-     * @since 2.1.0
      */
     private $miscellaneousHtml;
 
     /**
      * @var \Magento\Framework\App\Http\Context
-     * @since 2.0.0
      */
     protected $httpContext;
 
@@ -41,7 +37,6 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -56,7 +51,6 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
      * Set footer data
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -72,7 +66,6 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
      * Get cache key informative items
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCacheKeyInfo()
     {
@@ -91,7 +84,6 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
      * Retrieve copyright information
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCopyright()
     {
@@ -108,7 +100,7 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
      * Retrieve Miscellaneous HTML information
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getMiscellaneousHtml()
     {
@@ -125,7 +117,6 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
      * Return identifiers for produced content
      *
      * @return array
-     * @since 2.0.0
      */
     public function getIdentities()
     {

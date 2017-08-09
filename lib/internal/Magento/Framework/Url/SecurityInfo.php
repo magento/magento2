@@ -10,7 +10,6 @@ namespace Magento\Framework\Url;
 /**
  * Class \Magento\Framework\Url\SecurityInfo
  *
- * @since 2.0.0
  */
 class SecurityInfo implements \Magento\Framework\Url\SecurityInfoInterface
 {
@@ -18,13 +17,11 @@ class SecurityInfo implements \Magento\Framework\Url\SecurityInfoInterface
      * List of secure url patterns
      *
      * @var array
-     * @since 2.0.0
      */
     protected $secureUrlsList = [];
 
     /**
      * List of patterns excluded form secure url list
-     * @since 2.0.0
      */
     protected $excludedUrlsList = [];
 
@@ -32,14 +29,12 @@ class SecurityInfo implements \Magento\Framework\Url\SecurityInfoInterface
      * List of already checked urls
      *
      * @var array
-     * @since 2.0.0
      */
     protected $secureUrlsCache = [];
 
     /**
      * @param string[] $secureUrlList
      * @param string[] $excludedUrlList
-     * @since 2.0.0
      */
     public function __construct($secureUrlList = [], $excludedUrlList = [])
     {
@@ -52,7 +47,6 @@ class SecurityInfo implements \Magento\Framework\Url\SecurityInfoInterface
      *
      * @param string $url
      * @return bool
-     * @since 2.0.0
      */
     public function isSecure($url)
     {

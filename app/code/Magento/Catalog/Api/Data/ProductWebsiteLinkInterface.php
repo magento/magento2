@@ -8,20 +8,17 @@ namespace Magento\Catalog\Api\Data;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface ProductWebsiteLinkInterface
 {
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getSku();
 
     /**
      * @param string $sku
      * @return $this
-     * @since 2.0.0
      */
     public function setSku($sku);
 
@@ -29,7 +26,6 @@ interface ProductWebsiteLinkInterface
      * Get website ids
      *
      * @return int
-     * @since 2.0.0
      */
     public function getWebsiteId();
 
@@ -38,7 +34,6 @@ interface ProductWebsiteLinkInterface
      *
      * @param int $websiteId
      * @return $this
-     * @since 2.0.0
      */
     public function setWebsiteId($websiteId);
 }

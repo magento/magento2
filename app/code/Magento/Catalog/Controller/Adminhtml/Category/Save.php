@@ -12,32 +12,27 @@ use Magento\Store\Model\StoreManagerInterface;
  * Class Save
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
-     * @since 2.0.0
      */
     protected $resultRawFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
-     * @since 2.0.0
      */
     protected $layoutFactory;
 
     /**
      * The list of inputs that need to convert from string to boolean
      * @var array
-     * @since 2.1.0
      */
     protected $stringToBoolInputs = [
         'custom_use_parent_settings',
@@ -51,13 +46,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
     /**
      * @var StoreManagerInterface
-     * @since 2.1.0
      */
     private $storeManager;
 
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.2.0
      */
     private $eavConfig;
 
@@ -70,7 +63,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -92,10 +84,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     /**
      * Filter category data
      *
-     * @deprecated 2.2.0
+     * @deprecated 101.1.0
      * @param array $rawData
      * @return array
-     * @since 2.0.0
      */
     protected function _filterCategoryPostData(array $rawData)
     {
@@ -121,7 +112,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -268,7 +258,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      *
      * @param array $data
      * @return array
-     * @since 2.1.0
      */
     public function imagePreprocessing($data)
     {
@@ -299,7 +288,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * @param array $stringToBoolInputs
      *
      * @return array
-     * @since 2.1.0
      */
     public function stringToBoolConverting($data, $stringToBoolInputs = null)
     {
@@ -332,7 +320,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * @param int $storeId
      *
      * @return \Magento\Catalog\Model\Category
-     * @since 2.1.0
      */
     protected function getParentCategory($parentId, $storeId)
     {
@@ -360,7 +347,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * @param int $storeId
      *
      * @return array
-     * @since 2.1.0
      */
     protected function getRedirectParams($isNewCategory, $hasError, $categoryId, $parentId, $storeId)
     {

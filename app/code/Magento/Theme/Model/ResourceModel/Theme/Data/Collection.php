@@ -7,7 +7,6 @@ namespace Magento\Theme\Model\ResourceModel\Theme\Data;
 
 /**
  * Theme data collection
- * @since 2.0.0
  */
 class Collection extends \Magento\Theme\Model\ResourceModel\Theme\Collection implements
     \Magento\Framework\View\Design\Theme\Label\ListInterface,
@@ -15,7 +14,6 @@ class Collection extends \Magento\Theme\Model\ResourceModel\Theme\Collection imp
 {
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     protected function _construct()
     {

@@ -9,7 +9,6 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Option;
  * Catalog product custom option resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -17,7 +16,6 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -25,7 +23,6 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Currency factory
      *
      * @var \Magento\Directory\Model\CurrencyFactory
-     * @since 2.0.0
      */
     protected $_currencyFactory;
 
@@ -33,13 +30,11 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Core config model
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @var \Magento\Framework\Locale\FormatInterface
-     * @since 2.2.0
      */
     private $localeFormat;
 
@@ -51,7 +46,6 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -70,7 +64,6 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table and initialize connection
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -83,7 +76,6 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -100,7 +92,6 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _saveValuePrices(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -229,7 +220,6 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _saveValueTitles(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -302,7 +292,6 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $optionId
      * @param int $storeId
      * @return string
-     * @since 2.0.0
      */
     protected function getOptionIdFromOptionTable($tableName, $optionId, $storeId)
     {
@@ -325,7 +314,6 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $optionId
      * @return $this
-     * @since 2.0.0
      */
     public function deleteValue($optionId)
     {
@@ -352,7 +340,6 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $optionTypeId
      * @return void
-     * @since 2.0.0
      */
     public function deleteValues($optionTypeId)
     {
@@ -370,7 +357,6 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $oldOptionId
      * @param int $newOptionId
      * @return \Magento\Catalog\Model\Product\Option\Value
-     * @since 2.0.0
      */
     public function duplicate(\Magento\Catalog\Model\Product\Option\Value $object, $oldOptionId, $newOptionId)
     {
@@ -440,8 +426,7 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Get FormatInterface to convert price from string to number format
      *
      * @return \Magento\Framework\Locale\FormatInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 101.1.0
      */
     private function getLocaleFormatter()
     {

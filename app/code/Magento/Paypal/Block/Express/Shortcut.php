@@ -13,7 +13,6 @@ use Magento\Paypal\Helper\Shortcut\ValidatorInterface;
  * Paypal express checkout shortcut link
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Shortcut extends \Magento\Framework\View\Element\Template implements CatalogBlock\ShortcutInterface
 {
@@ -21,7 +20,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * Whether the block should be eventually rendered
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_shouldRender = true;
 
@@ -29,7 +27,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * Payment method code
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_paymentMethodCode = '';
 
@@ -37,7 +34,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * Start express action
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_startAction = '';
 
@@ -45,7 +41,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * Express checkout model factory name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_checkoutType = '';
 
@@ -53,49 +48,41 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * Shortcut alias
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_alias = '';
 
     /**
      * @var \Magento\Paypal\Model\ConfigFactory
-     * @since 2.0.0
      */
     protected $_paypalConfigFactory;
 
     /**
      * @var \Magento\Checkout\Model\Session
-     * @since 2.0.0
      */
     protected $_checkoutSession;
 
     /**
      * @var \Magento\Paypal\Model\Express\Checkout\Factory
-     * @since 2.0.0
      */
     protected $_checkoutFactory;
 
     /**
      * @var \Magento\Framework\Math\Random
-     * @since 2.0.0
      */
     protected $_mathRandom;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $_localeResolver;
 
     /**
      * @var ValidatorInterface
-     * @since 2.0.0
      */
     private $_shortcutValidator;
 
     /**
      * @var Config
-     * @since 2.1.0
      */
     private $config;
 
@@ -114,7 +101,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -152,7 +138,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
 
     /**
      * @return \Magento\Framework\View\Element\AbstractBlock
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -191,7 +176,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * Render the block if needed
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -203,7 +187,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
 
     /**
      * @return bool
-     * @since 2.1.0
      */
     protected function shouldRender()
     {
@@ -222,7 +205,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * Check is "OR" label position before shortcut
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isOrPositionBefore()
     {
@@ -233,7 +215,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * Check is "OR" label position after shortcut
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isOrPositionAfter()
     {
@@ -244,7 +225,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * Get shortcut alias
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAlias()
     {

@@ -19,49 +19,41 @@ use Magento\Framework\View;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
- * @since 2.0.0
  */
 class Layout extends AbstractResult
 {
     /**
      * @var \Magento\Framework\View\LayoutFactory
-     * @since 2.0.0
      */
     protected $layoutFactory;
 
     /**
      * @var \Magento\Framework\View\Layout\BuilderFactory
-     * @since 2.0.0
      */
     protected $layoutBuilderFactory;
 
     /**
      * @var \Magento\Framework\View\Layout\ReaderPool
-     * @since 2.0.0
      */
     protected $layoutReaderPool;
 
     /**
      * @var \Magento\Framework\View\LayoutInterface
-     * @since 2.0.0
      */
     protected $layout;
 
     /**
      * @var \Magento\Framework\Translate\InlineInterface
-     * @since 2.0.0
      */
     protected $translateInline;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @var \Magento\Framework\App\Request\Http
-     * @since 2.0.0
      */
     protected $request;
 
@@ -75,7 +67,6 @@ class Layout extends AbstractResult
      * @param View\Layout\BuilderFactory $layoutBuilderFactory
      * @param View\Layout\GeneratorPool $generatorPool
      * @param bool $isIsolated
-     * @since 2.0.0
      */
     public function __construct(
         View\Element\Template\Context $context,
@@ -104,7 +95,6 @@ class Layout extends AbstractResult
      * Create layout builder
      *
      * @return void
-     * @since 2.0.0
      */
     protected function initLayoutBuilder()
     {
@@ -115,7 +105,6 @@ class Layout extends AbstractResult
      * Get layout instance for current page
      *
      * @return \Magento\Framework\View\LayoutInterface
-     * @since 2.0.0
      */
     public function getLayout()
     {
@@ -124,7 +113,6 @@ class Layout extends AbstractResult
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function addDefaultHandle()
     {
@@ -136,7 +124,6 @@ class Layout extends AbstractResult
      * Retrieve the default layout handle name for the current action
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultLayoutHandle()
     {
@@ -146,7 +133,6 @@ class Layout extends AbstractResult
     /**
      * @param string|string[] $handleName
      * @return $this
-     * @since 2.0.0
      */
     public function addHandle($handleName)
     {
@@ -159,7 +145,6 @@ class Layout extends AbstractResult
      *
      * @param string $update
      * @return $this
-     * @since 2.0.0
      */
     public function addUpdate($update)
     {
@@ -172,7 +157,6 @@ class Layout extends AbstractResult
      *
      * @param HttpResponseInterface|ResponseInterface $httpResponse
      * @return $this
-     * @since 2.0.0
      */
     public function renderResult(ResponseInterface $httpResponse)
     {
@@ -192,7 +176,6 @@ class Layout extends AbstractResult
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function render(HttpResponseInterface $response)
     {

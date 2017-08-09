@@ -12,7 +12,6 @@ use Magento\Framework\Setup\UpgradeSchemaInterface;
 
 /**
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
@@ -20,7 +19,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {

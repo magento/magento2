@@ -12,7 +12,6 @@ namespace Magento\Config\Model;
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Config extends \Magento\Framework\DataObject
 {
@@ -20,7 +19,6 @@ class Config extends \Magento\Framework\DataObject
      * Config data for sections
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_configData;
 
@@ -28,7 +26,6 @@ class Config extends \Magento\Framework\DataObject
      * Event dispatcher
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager;
 
@@ -36,7 +33,6 @@ class Config extends \Magento\Framework\DataObject
      * System configuration structure
      *
      * @var \Magento\Config\Model\Config\Structure
-     * @since 2.0.0
      */
     protected $_configStructure;
 
@@ -44,7 +40,6 @@ class Config extends \Magento\Framework\DataObject
      * Application config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_appConfig;
 
@@ -52,7 +47,6 @@ class Config extends \Magento\Framework\DataObject
      * Global factory
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_objectFactory;
 
@@ -60,7 +54,6 @@ class Config extends \Magento\Framework\DataObject
      * TransactionFactory
      *
      * @var \Magento\Framework\DB\TransactionFactory
-     * @since 2.0.0
      */
     protected $_transactionFactory;
 
@@ -68,7 +61,6 @@ class Config extends \Magento\Framework\DataObject
      * Config data loader
      *
      * @var \Magento\Config\Model\Config\Loader
-     * @since 2.0.0
      */
     protected $_configLoader;
 
@@ -76,13 +68,11 @@ class Config extends \Magento\Framework\DataObject
      * Config data factory
      *
      * @var \Magento\Framework\App\Config\ValueFactory
-     * @since 2.0.0
      */
     protected $_configValueFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -95,7 +85,6 @@ class Config extends \Magento\Framework\DataObject
      * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
@@ -123,7 +112,6 @@ class Config extends \Magento\Framework\DataObject
      *
      * @throws \Exception
      * @return $this
-     * @since 2.0.0
      */
     public function save()
     {
@@ -194,7 +182,6 @@ class Config extends \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _processGroup(
         $groupId,
@@ -331,7 +318,6 @@ class Config extends \Magento\Framework\DataObject
      * Load config data for section
      *
      * @return array
-     * @since 2.0.0
      */
     public function load()
     {
@@ -349,7 +335,6 @@ class Config extends \Magento\Framework\DataObject
      * @param bool $full Simple config structure or not
      * @param array $oldConfig Config data to extend
      * @return array
-     * @since 2.0.0
      */
     public function extendConfig($path, $full = true, $oldConfig = [])
     {
@@ -367,7 +352,6 @@ class Config extends \Magento\Framework\DataObject
      * @param mixed $value
      * @return void
      * @throws \UnexpectedValueException
-     * @since 2.0.0
      */
     public function setDataByPath($path, $value)
     {
@@ -400,7 +384,6 @@ class Config extends \Magento\Framework\DataObject
      * Get scope name and scopeId
      * @todo refactor to scope resolver
      * @return void
-     * @since 2.0.0
      */
     private function initScope()
     {
@@ -439,7 +422,6 @@ class Config extends \Magento\Framework\DataObject
      *
      * @param bool $full Simple config structure or not
      * @return array
-     * @since 2.0.0
      */
     protected function _getConfig($full = true)
     {
@@ -457,7 +439,6 @@ class Config extends \Magento\Framework\DataObject
      * @param \Magento\Config\Model\Config\Structure\Element\Field $fieldConfig
      * @param \Magento\Framework\App\Config\ValueInterface $dataObject
      * @return void
-     * @since 2.0.0
      */
     protected function _checkSingleStoreMode(
         \Magento\Config\Model\Config\Structure\Element\Field $fieldConfig,
@@ -484,7 +465,6 @@ class Config extends \Magento\Framework\DataObject
      * @param null|bool &$inherit
      * @param null|array $configData
      * @return \Magento\Framework\Simplexml\Element
-     * @since 2.0.0
      */
     public function getConfigDataValue($path, &$inherit = null, $configData = null)
     {

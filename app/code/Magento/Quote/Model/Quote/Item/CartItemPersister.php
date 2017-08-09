@@ -16,26 +16,22 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 /**
  * Class \Magento\Quote\Model\Quote\Item\CartItemPersister
  *
- * @since 2.1.0
  */
 class CartItemPersister
 {
     /**
      * @var ProductRepositoryInterface
-     * @since 2.1.0
      */
     private $productRepository;
 
     /**
      * @var CartItemOptionsProcessor
-     * @since 2.1.0
      */
     private $cartItemOptionProcessor;
 
     /**
      * @param ProductRepositoryInterface $productRepository
      * @param CartItemOptionsProcessor $cartItemOptionProcessor
-     * @since 2.1.0
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
@@ -54,7 +50,6 @@ class CartItemPersister
      * @throws LocalizedException
      * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.1.0
      */
     public function save(CartInterface $quote, CartItemInterface $item)
     {

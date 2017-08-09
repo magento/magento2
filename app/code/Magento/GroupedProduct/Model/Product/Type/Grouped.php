@@ -12,7 +12,6 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 {
@@ -22,7 +21,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Cache key for Associated Products
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_keyAssociatedProducts = '_cache_instance_associated_products';
 
@@ -30,7 +28,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Cache key for Associated Product Ids
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_keyAssociatedProductIds = '_cache_instance_associated_product_ids';
 
@@ -38,7 +35,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Cache key for Status Filters
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_keyStatusFilters = '_cache_instance_status_filters';
 
@@ -46,7 +42,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Product is composite properties
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isComposite = true;
 
@@ -54,7 +49,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Product is possible to configure
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_canConfigure = true;
 
@@ -62,7 +56,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Catalog product status
      *
      * @var \Magento\Catalog\Model\Product\Attribute\Source\Status
-     * @since 2.0.0
      */
     protected $_catalogProductStatus;
 
@@ -70,7 +63,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -78,19 +70,16 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Catalog product link
      *
      * @var \Magento\GroupedProduct\Model\ResourceModel\Product\Link
-     * @since 2.0.0
      */
     protected $productLinks;
 
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     protected $_appState;
 
     /**
      * @var \Magento\Msrp\Helper\Data
-     * @since 2.0.0
      */
     protected $msrpData;
 
@@ -111,7 +100,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Msrp\Helper\Data $msrpData
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Option $catalogProductOption,
@@ -153,7 +141,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Return relation info about used products
      *
      * @return \Magento\Framework\DataObject Object with information data
-     * @since 2.0.0
      */
     public function getRelationInfo()
     {
@@ -181,7 +168,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getChildrenIds($parentId, $required = true)
     {
@@ -196,7 +182,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param int|array $childId
      * @return array
-     * @since 2.0.0
      */
     public function getParentIdsByChild($childId)
     {
@@ -211,7 +196,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
-     * @since 2.0.0
      */
     public function getAssociatedProducts($product)
     {
@@ -243,7 +227,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function flushAssociatedProductsCache($product)
     {
@@ -256,7 +240,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param  int $status
      * @param  \Magento\Catalog\Model\Product $product
      * @return $this
-     * @since 2.0.0
      */
     public function addStatusFilter($status, $product)
     {
@@ -276,7 +259,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param  \Magento\Catalog\Model\Product $product
      * @return $this
-     * @since 2.0.0
      */
     public function setSaleableStatus($product)
     {
@@ -289,7 +271,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
-     * @since 2.0.0
      */
     public function getStatusFilters($product)
     {
@@ -307,7 +288,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
-     * @since 2.0.0
      */
     public function getAssociatedProductIds($product)
     {
@@ -327,7 +307,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection
-     * @since 2.0.0
      */
     public function getAssociatedProductCollection($product)
     {
@@ -347,7 +326,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @param bool $isStrictProcessMode
      * @return array|string
-     * @since 2.0.0
      */
     protected function getProductInfo(\Magento\Framework\DataObject $buyRequest, $product, $isStrictProcessMode)
     {
@@ -379,7 +357,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @return \Magento\Framework\Phrase|array|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _prepareProduct(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
@@ -449,7 +426,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
-     * @since 2.0.0
      */
     public function getProductsToPurchaseByReqGroups($product)
     {
@@ -463,7 +439,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param  \Magento\Framework\DataObject $buyRequest
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function processBuyRequest($product, $buyRequest)
     {
@@ -479,7 +454,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Check that product of this type has weight
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasWeight()
     {
@@ -492,7 +466,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product)
     {
@@ -500,7 +473,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function beforeSave($product)
     {
@@ -515,7 +487,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * @param \Magento\Catalog\Model\Product $product
      * @return int
-     * @since 2.0.0
      */
     public function getChildrenMsrp(\Magento\Catalog\Model\Product $product)
     {

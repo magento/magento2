@@ -10,7 +10,6 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface ProductCustomOptionTypeInterface extends ExtensibleDataInterface
 {
@@ -18,7 +17,6 @@ interface ProductCustomOptionTypeInterface extends ExtensibleDataInterface
      * Get option type label
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLabel();
 
@@ -27,7 +25,6 @@ interface ProductCustomOptionTypeInterface extends ExtensibleDataInterface
      *
      * @param string $label
      * @return $this
-     * @since 2.0.0
      */
     public function setLabel($label);
 
@@ -35,7 +32,6 @@ interface ProductCustomOptionTypeInterface extends ExtensibleDataInterface
      * Get option type code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCode();
 
@@ -44,7 +40,6 @@ interface ProductCustomOptionTypeInterface extends ExtensibleDataInterface
      *
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function setCode($code);
 
@@ -52,7 +47,6 @@ interface ProductCustomOptionTypeInterface extends ExtensibleDataInterface
      * Get option type group
      *
      * @return string
-     * @since 2.0.0
      */
     public function getGroup();
 
@@ -61,7 +55,6 @@ interface ProductCustomOptionTypeInterface extends ExtensibleDataInterface
      *
      * @param string $group
      * @return $this
-     * @since 2.0.0
      */
     public function setGroup($group);
 
@@ -69,7 +62,6 @@ interface ProductCustomOptionTypeInterface extends ExtensibleDataInterface
      * Retrieve existing extension attributes object.
      *
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionTypeExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -78,7 +70,6 @@ interface ProductCustomOptionTypeInterface extends ExtensibleDataInterface
      *
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionTypeExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductCustomOptionTypeExtensionInterface $extensionAttributes

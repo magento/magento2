@@ -11,7 +11,6 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
  * Customer Show Address Model
  *
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.2.0
  */
 class AddressOnly extends Customer
 {
@@ -19,7 +18,6 @@ class AddressOnly extends Customer
      * Retrieve attribute objects
      *
      * @return AbstractAttribute[]
-     * @since 2.2.0
      */
     protected function _getAttributeObjects()
     {

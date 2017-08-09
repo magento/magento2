@@ -13,7 +13,6 @@ use Magento\Customer\Model\AccountManagement;
  *
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Edit extends \Magento\Customer\Block\Account\Dashboard
 {
@@ -21,7 +20,6 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
      * Retrieve form data
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getFormData()
     {
@@ -44,7 +42,6 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
      * @param \Magento\Customer\Model\Metadata\Form $form
      * @param null $scope
      * @return \Magento\Customer\Block\Form\Register
-     * @since 2.0.0
      */
     public function restoreSessionData(\Magento\Customer\Model\Metadata\Form $form, $scope = null)
     {
@@ -64,7 +61,6 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
      * @return bool
      *
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getChangePassword()
     {
@@ -75,7 +71,7 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
      * Get minimum password length
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getMinimumPasswordLength()
     {
@@ -86,7 +82,7 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
      * Get minimum password length
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getRequiredCharacterClassesNumber()
     {

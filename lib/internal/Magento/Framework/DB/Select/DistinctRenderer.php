@@ -9,7 +9,6 @@ use Magento\Framework\DB\Select;
 
 /**
  * Class DistinctRenderer
- * @since 2.1.0
  */
 class DistinctRenderer implements RendererInterface
 {
@@ -19,7 +18,6 @@ class DistinctRenderer implements RendererInterface
      * @param Select $select
      * @param string $sql
      * @return string
-     * @since 2.1.0
      */
     public function render(Select $select, $sql = '')
     {

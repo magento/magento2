@@ -9,14 +9,12 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
  * Select grid column filter
  *
  * @api
- * @deprecated 2.2.0 in favour of UI component implementation
- * @since 2.0.0
+ * @deprecated 100.2.0 in favour of UI component implementation
  */
 class Select extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _getOptions()
     {
@@ -50,7 +48,6 @@ class Select extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFi
      * @param array $option
      * @param string $value
      * @return string
-     * @since 2.0.0
      */
     protected function _renderOption($option, $value)
     {
@@ -64,7 +61,6 @@ class Select extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFi
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getHtml()
     {
@@ -90,7 +86,6 @@ class Select extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFi
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCondition()
     {

@@ -7,13 +7,11 @@ namespace Magento\Weee\Model\Sales\Pdf;
 
 /**
  * Sales order total for PDF, taking into account WEEE tax
- * @since 2.0.0
  */
 class Weee extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
 {
     /**
      * @var \Magento\Weee\Helper\Data
-     * @since 2.0.0
      */
     protected $_weeeData;
 
@@ -23,7 +21,6 @@ class Weee extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
      * @param \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory $ordersFactory
      * @param \Magento\Weee\Helper\Data $_weeeData
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Tax\Helper\Data $taxHelper,
@@ -47,7 +44,6 @@ class Weee extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
      *  )
      * )
      * @return array
-     * @since 2.0.0
      */
     public function getTotalsForDisplay()
     {

@@ -13,7 +13,6 @@ use Magento\Framework\ObjectManager\RelationsInterface;
 /**
  * Class \Magento\Framework\ObjectManager\Config\Config
  *
- * @since 2.0.0
  */
 class Config implements \Magento\Framework\ObjectManager\ConfigInterface
 {
@@ -21,7 +20,6 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      * Config cache
      *
      * @var ConfigCacheInterface
-     * @since 2.0.0
      */
     protected $_cache;
 
@@ -29,7 +27,6 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      * Class definitions
      *
      * @var \Magento\Framework\ObjectManager\DefinitionInterface
-     * @since 2.0.0
      */
     protected $_definitions;
 
@@ -37,7 +34,6 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      * Current cache key
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_currentCacheKey;
 
@@ -45,7 +41,6 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      * Interface preferences
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_preferences = [];
 
@@ -53,7 +48,6 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      * Virtual types
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_virtualTypes = [];
 
@@ -61,7 +55,6 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      * Instance arguments
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_arguments = [];
 
@@ -69,7 +62,6 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      * Type shareability
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_nonShared = [];
 
@@ -77,7 +69,6 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      * List of relations
      *
      * @var RelationsInterface
-     * @since 2.0.0
      */
     protected $_relations;
 
@@ -85,20 +76,17 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      * List of merged arguments
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_mergedArguments;
 
     /**
      * @var \Magento\Framework\Serialize\SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @param RelationsInterface $relations
      * @param DefinitionInterface $definitions
-     * @since 2.0.0
      */
     public function __construct(RelationsInterface $relations = null, DefinitionInterface $definitions = null)
     {
@@ -111,7 +99,6 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      *
      * @param RelationsInterface $relations
      * @return void
-     * @since 2.0.0
      */
     public function setRelations(RelationsInterface $relations)
     {
@@ -123,7 +110,6 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      *
      * @param ConfigCacheInterface $cache
      * @return void
-     * @since 2.0.0
      */
     public function setCache(ConfigCacheInterface $cache)
     {
@@ -135,7 +121,6 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      *
      * @param string $type
      * @return array
-     * @since 2.0.0
      */
     public function getArguments($type)
     {
@@ -150,7 +135,6 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      *
      * @param string $type
      * @return bool
-     * @since 2.0.0
      */
     public function isShared($type)
     {
@@ -162,7 +146,6 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      *
      * @param string $instanceName
      * @return mixed
-     * @since 2.0.0
      */
     public function getInstanceType($instanceName)
     {
@@ -178,7 +161,6 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      * @param string $type
      * @return string
      * @throws \LogicException
-     * @since 2.0.0
      */
     public function getPreference($type)
     {
@@ -206,7 +188,6 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      * @param string $type
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _collectConfiguration($type)
     {
@@ -247,7 +228,6 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      * @param array $configuration
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _mergeConfiguration(array $configuration)
     {
@@ -291,7 +271,6 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      *
      * @param array $configuration
      * @return void
-     * @since 2.0.0
      */
     public function extend(array $configuration)
     {
@@ -341,7 +320,6 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      * Returns list of virtual types
      *
      * @return array
-     * @since 2.0.0
      */
     public function getVirtualTypes()
     {
@@ -352,7 +330,6 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      * Returns list on preferences
      *
      * @return array
-     * @since 2.0.0
      */
     public function getPreferences()
     {
@@ -363,8 +340,7 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {

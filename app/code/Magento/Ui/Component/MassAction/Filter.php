@@ -15,7 +15,6 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
 
 /**
  * @api
- * @since 2.0.0
  */
 class Filter
 {
@@ -25,31 +24,26 @@ class Filter
 
     /**
      * @var UiComponentFactory
-     * @since 2.0.0
      */
     protected $factory;
 
     /**
      * @var RequestInterface
-     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var UiComponentInterface[]
-     * @since 2.0.0
      */
     protected $components = [];
 
     /**
      * @var FilterBuilder
-     * @since 2.0.0
      */
     protected $filterBuilder;
 
     /**
      * @var DataProviderInterface
-     * @since 2.2.0
      */
     private $dataProvider;
 
@@ -57,7 +51,6 @@ class Filter
      * @param UiComponentFactory $factory
      * @param RequestInterface $request
      * @param FilterBuilder $filterBuilder
-     * @since 2.0.0
      */
     public function __construct(
         UiComponentFactory $factory,
@@ -74,7 +67,6 @@ class Filter
      *
      * @return UiComponentInterface
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function getComponent()
     {
@@ -91,7 +83,6 @@ class Filter
      * @param AbstractDb $collection
      * @return AbstractDb
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function getCollection(AbstractDb $collection)
     {
@@ -122,7 +113,6 @@ class Filter
      *
      * @throws LocalizedException
      * @return void
-     * @since 2.0.0
      */
     public function applySelectionOnTargetProvider()
     {
@@ -155,7 +145,6 @@ class Filter
      * @param AbstractDb $collection
      * @return AbstractDb
      * @throws LocalizedException
-     * @since 2.0.0
      */
     protected function applySelection(AbstractDb $collection)
     {
@@ -185,7 +174,6 @@ class Filter
      *
      * @param UiComponentInterface $component
      * @return void
-     * @since 2.0.0
      */
     public function prepareComponent(UiComponentInterface $component)
     {
@@ -199,7 +187,6 @@ class Filter
      * Returns Referrer Url
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getComponentRefererUrl()
     {
@@ -211,7 +198,6 @@ class Filter
      * Get data provider
      *
      * @return DataProviderInterface
-     * @since 2.2.0
      */
     private function getDataProvider()
     {
@@ -227,7 +213,6 @@ class Filter
      * Get filter ids as array
      *
      * @return int[]
-     * @since 2.2.0
      */
     private function getFilterIds()
     {

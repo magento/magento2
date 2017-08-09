@@ -8,7 +8,7 @@ namespace Magento\ConfigurableProduct\Model;
 /**
  * Interface to retrieve options for attribute
  * @api
- * @since 2.2.0
+ * @since 100.2.0
  */
 interface AttributeOptionProviderInterface
 {
@@ -18,7 +18,7 @@ interface AttributeOptionProviderInterface
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @param int $productId
      * @return array
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getAttributeOptions(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute, $productId);
 }

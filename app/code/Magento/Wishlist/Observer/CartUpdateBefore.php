@@ -15,7 +15,6 @@ use Magento\Wishlist\Model\WishlistFactory;
 /**
  * Class CartUpdateBefore
  * @package Magento\Wishlist\Observer
- * @since 2.0.0
  */
 class CartUpdateBefore implements ObserverInterface
 {
@@ -23,20 +22,17 @@ class CartUpdateBefore implements ObserverInterface
      * Wishlist data
      *
      * @var Data
-     * @since 2.0.0
      */
     protected $wishlistData;
 
     /**
      * @var WishlistFactory
-     * @since 2.0.0
      */
     protected $wishlistFactory;
 
     /**
      * @param Data $wishlistData
      * @param WishlistFactory $wishlistFactory
-     * @since 2.0.0
      */
     public function __construct(
         Data $wishlistData,
@@ -51,7 +47,6 @@ class CartUpdateBefore implements ObserverInterface
      *
      * @param   int $customerId
      * @return  Wishlist|false
-     * @since 2.0.0
      */
     protected function getWishlist($customerId)
     {
@@ -66,7 +61,6 @@ class CartUpdateBefore implements ObserverInterface
      *
      * @param   Observer $observer
      * @return  $this
-     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

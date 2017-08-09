@@ -18,25 +18,21 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
  */
 class FileProcessor
 {
     /**
      * @var UploaderFactory
-     * @since 2.1.0
      */
     protected $uploaderFactory;
 
     /**
      * @var BackendModelFactory
-     * @since 2.1.0
      */
     protected $backendModelFactory;
 
     /**
      * @var MetadataProvider
-     * @since 2.1.0
      */
     protected $metadataProvider;
 
@@ -44,13 +40,11 @@ class FileProcessor
      * Media Directory object (writable).
      *
      * @var WriteInterface
-     * @since 2.1.0
      */
     protected $mediaDirectory;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.1.0
      */
     protected $storeManager;
 
@@ -65,7 +59,6 @@ class FileProcessor
      * @param MetadataProvider $metadataProvider
      * @param Filesystem $filesystem
      * @param StoreManagerInterface $storeManager
-     * @since 2.1.0
      */
     public function __construct(
         UploaderFactory $uploaderFactory,
@@ -87,7 +80,6 @@ class FileProcessor
      * @param  string $fileId
      * @return array
      * @throws LocalizedException
-     * @since 2.1.0
      */
     public function saveToTmp($fileId)
     {
@@ -105,7 +97,6 @@ class FileProcessor
      *
      * @param string $file
      * @return string
-     * @since 2.1.0
      */
     protected function getTmpMediaUrl($file)
     {
@@ -118,7 +109,6 @@ class FileProcessor
      *
      * @param string $file
      * @return string
-     * @since 2.1.0
      */
     protected function prepareFile($file)
     {
@@ -129,7 +119,6 @@ class FileProcessor
      * Retrieve absolute temp media path
      *
      * @return string
-     * @since 2.1.0
      */
     protected function getAbsoluteTmpMediaPath()
     {
@@ -143,7 +132,6 @@ class FileProcessor
      * @param string $destination
      * @return array
      * @throws LocalizedException
-     * @since 2.1.0
      */
     protected function save($fileId, $destination)
     {
@@ -165,7 +153,6 @@ class FileProcessor
      * @param string $code
      * @return File
      * @throws LocalizedException
-     * @since 2.1.0
      */
     protected function getBackendModel($code)
     {

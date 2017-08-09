@@ -10,20 +10,17 @@ use Magento\Sales\Api\Data\OrderInterface;
 
 /**
  * Class ItemCreationValidator
- * @since 2.2.0
  */
 class ItemCreationValidator implements ItemCreationValidatorInterface
 {
     /**
      * @var \Magento\Sales\Model\Validator
-     * @since 2.2.0
      */
     private $validator;
 
     /**
      * InvoiceValidatorRunner constructor.
      * @param \Magento\Sales\Model\Validator $validator
-     * @since 2.2.0
      */
     public function __construct(\Magento\Sales\Model\Validator $validator)
     {
@@ -32,7 +29,6 @@ class ItemCreationValidator implements ItemCreationValidatorInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function validate(
         CreditmemoItemCreationInterface $entity,

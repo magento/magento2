@@ -9,7 +9,7 @@ namespace Magento\Catalog\Api\Data;
 /**
  * Interface returned in case of incorrect price passed to efficient price API.
  * @api
- * @since 2.2.0
+ * @since 101.1.0
  */
 interface PriceUpdateResultInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -24,7 +24,7 @@ interface PriceUpdateResultInterface extends \Magento\Framework\Api\ExtensibleDa
      * Get error message, that contains description of error occurred during price update.
      *
      * @return string
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function getMessage();
 
@@ -33,7 +33,7 @@ interface PriceUpdateResultInterface extends \Magento\Framework\Api\ExtensibleDa
      *
      * @param string $message
      * @return $this
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function setMessage($message);
 
@@ -41,7 +41,7 @@ interface PriceUpdateResultInterface extends \Magento\Framework\Api\ExtensibleDa
      * Get parameters, that could be displayed in error message placeholders.
      *
      * @return string[]
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function getParameters();
 
@@ -50,7 +50,7 @@ interface PriceUpdateResultInterface extends \Magento\Framework\Api\ExtensibleDa
      *
      * @param string[] $parameters
      * @return $this
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function setParameters(array $parameters);
 
@@ -59,7 +59,7 @@ interface PriceUpdateResultInterface extends \Magento\Framework\Api\ExtensibleDa
      * If extension attributes do not exist return null.
      *
      * @return \Magento\Catalog\Api\Data\PriceUpdateResultExtensionInterface|null
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function getExtensionAttributes();
 
@@ -68,7 +68,7 @@ interface PriceUpdateResultInterface extends \Magento\Framework\Api\ExtensibleDa
      *
      * @param \Magento\Catalog\Api\Data\PriceUpdateResultExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\PriceUpdateResultExtensionInterface $extensionAttributes

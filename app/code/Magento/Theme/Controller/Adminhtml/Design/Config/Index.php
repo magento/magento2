@@ -11,20 +11,17 @@ use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Design Config Settings index page action controller
- * @since 2.1.0
  */
 class Index extends Action
 {
     /**
      * @var PageFactory
-     * @since 2.1.0
      */
     protected $resultPageFactory;
 
     /**
      * @param Context $context
      * @param PageFactory $resultPageFactory
-     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -38,7 +35,6 @@ class Index extends Action
      * Design config list action
      *
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.1.0
      */
     public function execute()
     {
@@ -54,7 +50,6 @@ class Index extends Action
      * Theme access rights checking
      *
      * @return bool
-     * @since 2.1.0
      */
     protected function _isAllowed()
     {

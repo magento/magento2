@@ -9,13 +9,11 @@ namespace Magento\Framework\Mail;
 /**
  * Class \Magento\Framework\Mail\Transport
  *
- * @since 2.0.0
  */
 class Transport extends \Zend_Mail_Transport_Sendmail implements \Magento\Framework\Mail\TransportInterface
 {
     /**
      * @var \Magento\Framework\Mail\MessageInterface
-     * @since 2.0.0
      */
     protected $_message;
 
@@ -23,7 +21,6 @@ class Transport extends \Zend_Mail_Transport_Sendmail implements \Magento\Framew
      * @param MessageInterface $message
      * @param null $parameters
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Mail\MessageInterface $message, $parameters = null)
     {
@@ -39,7 +36,6 @@ class Transport extends \Zend_Mail_Transport_Sendmail implements \Magento\Framew
      *
      * @return void
      * @throws \Magento\Framework\Exception\MailException
-     * @since 2.0.0
      */
     public function sendMessage()
     {
@@ -54,7 +50,6 @@ class Transport extends \Zend_Mail_Transport_Sendmail implements \Magento\Framew
      * Get message
      *
      * @return string
-     * @since 2.2.0
      */
     public function getMessage()
     {

@@ -13,37 +13,31 @@ use Magento\Webapi\Model\Cache\Type\Webapi;
 
 /**
  * Abstract API schema generator.
- * @since 2.0.0
  */
 abstract class AbstractSchemaGenerator
 {
     /**
      * @var Webapi
-     * @since 2.0.0
      */
     protected $cache;
 
     /**
      * @var \Magento\Framework\Reflection\TypeProcessor
-     * @since 2.0.0
      */
     protected $typeProcessor;
 
     /**
      * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface
-     * @since 2.0.0
      */
     protected $customAttributeTypeLocator;
 
-     /**
-      * @var ServiceMetadata
-      * @since 2.0.0
-      */
+    /**
+     * @var ServiceMetadata
+     */
     protected $serviceMetadata;
 
     /**
      * @var Authorization
-     * @since 2.1.0
      */
     protected $authorization;
 
@@ -51,7 +45,6 @@ abstract class AbstractSchemaGenerator
      * Instance of serializer.
      *
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -64,7 +57,6 @@ abstract class AbstractSchemaGenerator
      * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
      * @param Authorization $authorization
      * @param Json|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         Webapi $cache,
@@ -86,7 +78,6 @@ abstract class AbstractSchemaGenerator
      * Retrieve a list of all services.
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getListOfServices()
     {
@@ -101,7 +92,6 @@ abstract class AbstractSchemaGenerator
      * @param string $requestHost
      * @param string $endPointUrl
      * @return string
-     * @since 2.0.0
      */
     public function generate($requestedServices, $requestScheme, $requestHost, $endPointUrl)
     {
@@ -129,7 +119,6 @@ abstract class AbstractSchemaGenerator
      * @param string $requestHost
      * @param string $requestUri
      * @return string
-     * @since 2.0.0
      */
     abstract protected function generateSchema($requestedServiceMetadata, $requestScheme, $requestHost, $requestUri);
 
@@ -138,7 +127,6 @@ abstract class AbstractSchemaGenerator
      *
      * @param string $serviceName
      * @return array
-     * @since 2.0.0
      */
     abstract protected function getServiceMetadata($serviceName);
 
@@ -147,7 +135,6 @@ abstract class AbstractSchemaGenerator
      *
      * @param string $messageName
      * @return string
-     * @since 2.0.0
      */
     public function getElementComplexTypeName($messageName)
     {
@@ -161,7 +148,6 @@ abstract class AbstractSchemaGenerator
      *
      * @param array $requestedServiceMetadata
      * @return void
-     * @since 2.0.0
      */
     protected function collectCallInfo($requestedServiceMetadata)
     {
@@ -177,7 +163,6 @@ abstract class AbstractSchemaGenerator
      *
      * @param string[] $requestedServices
      * @return array
-     * @since 2.1.0
      */
     protected function getAllowedServicesMetadata($requestedServices)
     {
@@ -202,7 +187,6 @@ abstract class AbstractSchemaGenerator
      *
      * @param array &$serviceMetadata
      * @return void
-     * @since 2.1.0
      */
     protected function removeRestrictedRoutes(&$serviceMetadata)
     {

@@ -10,7 +10,6 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\Review\Observer\TagProductCollectionLoadAfterObserver
  *
- * @since 2.0.0
  */
 class TagProductCollectionLoadAfterObserver implements ObserverInterface
 {
@@ -18,13 +17,11 @@ class TagProductCollectionLoadAfterObserver implements ObserverInterface
      * Review model
      *
      * @var \Magento\Review\Model\ReviewFactory
-     * @since 2.0.0
      */
     protected $_reviewFactory;
 
     /**
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Review\Model\ReviewFactory $reviewFactory
@@ -37,7 +34,6 @@ class TagProductCollectionLoadAfterObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

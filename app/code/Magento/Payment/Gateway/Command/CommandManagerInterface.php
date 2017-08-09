@@ -12,7 +12,7 @@ use Magento\Payment\Model\InfoInterface;
 /**
  * Interface CommandManagerInterface
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 interface CommandManagerInterface extends CommandPoolInterface
 {
@@ -26,7 +26,7 @@ interface CommandManagerInterface extends CommandPoolInterface
      * @throws NotFoundException
      * @throws CommandException
      *
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function executeByCode($commandCode, InfoInterface $payment = null, array $arguments = []);
 
@@ -38,7 +38,7 @@ interface CommandManagerInterface extends CommandPoolInterface
      * @param array $arguments
      * @return ResultInterface|null
      * @throws CommandException
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function execute(CommandInterface $command, InfoInterface $payment = null, array $arguments = []);
 }

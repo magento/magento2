@@ -11,7 +11,6 @@ use Magento\Framework\Phrase;
  * Exception to be thrown when there is an issue with the Input to a function call.
  *
  * @api
- * @since 2.0.0
  */
 class InputException extends AbstractAggregateException
 {
@@ -51,7 +50,6 @@ class InputException extends AbstractAggregateException
      * @param \Magento\Framework\Phrase $phrase
      * @param \Exception $cause
      * @param int $code
-     * @since 2.0.0
      */
     public function __construct(Phrase $phrase = null, \Exception $cause = null, $code = 0)
     {
@@ -68,7 +66,6 @@ class InputException extends AbstractAggregateException
      * @param string $fieldValue The invalid value that was provided for the field.
      * @param \Exception $cause   Cause of the InputException
      * @return \Magento\Framework\Exception\InputException
-     * @since 2.0.0
      */
     public static function invalidFieldValue($fieldName, $fieldValue, \Exception $cause = null)
     {
@@ -86,7 +83,6 @@ class InputException extends AbstractAggregateException
      *
      * @param string $fieldName Name of the missing required field.
      * @return \Magento\Framework\Exception\InputException
-     * @since 2.0.0
      */
     public static function requiredField($fieldName)
     {

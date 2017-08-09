@@ -13,7 +13,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Product\ExportSoldCsv
  *
- * @since 2.0.0
  */
 class ExportSoldCsv extends \Magento\Reports\Controller\Adminhtml\Report\Product
 {
@@ -28,7 +27,6 @@ class ExportSoldCsv extends \Magento\Reports\Controller\Adminhtml\Report\Product
      * Export Sold Products report to CSV format action
      *
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

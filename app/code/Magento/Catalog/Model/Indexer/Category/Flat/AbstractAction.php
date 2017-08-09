@@ -14,7 +14,6 @@ use Magento\Framework\EntityManager\MetadataPool;
 /**
  * Class \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
  *
- * @since 2.0.0
  */
 class AbstractAction
 {
@@ -27,19 +26,16 @@ class AbstractAction
      * Attribute codes
      *
      * @var array
-     * @since 2.0.0
      */
     protected $attributeCodes;
 
     /**
      * @var Resource
-     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -47,7 +43,6 @@ class AbstractAction
      * Catalog resource helper
      *
      * @var \Magento\Catalog\Model\ResourceModel\Helper
-     * @since 2.0.0
      */
     protected $resourceHelper;
 
@@ -55,19 +50,16 @@ class AbstractAction
      * Flat columns
      *
      * @var array
-     * @since 2.0.0
      */
     protected $columns = [];
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected $connection;
 
     /**
      * @var \Magento\Framework\EntityManager\EntityMetadata
-     * @since 2.1.0
      */
     protected $categoryMetadata;
 
@@ -75,7 +67,6 @@ class AbstractAction
      * Static columns to skip
      *
      * @var array
-     * @since 2.1.0
      */
     protected $skipStaticColumns = [];
 
@@ -83,7 +74,6 @@ class AbstractAction
      * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
-     * @since 2.0.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -102,7 +92,6 @@ class AbstractAction
      *
      * @param string $tableName
      * @return string
-     * @since 2.0.0
      */
     protected function addTemporaryTableSuffix($tableName)
     {
@@ -113,7 +102,6 @@ class AbstractAction
      * Retrieve list of columns for flat structure
      *
      * @return array
-     * @since 2.0.0
      */
     public function getColumns()
     {
@@ -125,7 +113,6 @@ class AbstractAction
      *
      * @param integer $storeId
      * @return string
-     * @since 2.0.0
      */
     public function getMainStoreTable($storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID)
     {
@@ -144,7 +131,6 @@ class AbstractAction
      *
      * @param string $tableName
      * @return \Magento\Framework\DB\Ddl\Table
-     * @since 2.0.0
      */
     protected function getFlatTableStructure($tableName)
     {
@@ -204,7 +190,6 @@ class AbstractAction
      *
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function getStaticColumns()
     {
@@ -279,7 +264,6 @@ class AbstractAction
      * Return array of eav columns, skip attribute with static type
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getEavColumns()
     {
@@ -345,7 +329,6 @@ class AbstractAction
      * Return array of attribute codes for entity type 'catalog_category'
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getAttributes()
     {
@@ -382,7 +365,6 @@ class AbstractAction
      * @param array $entityIds
      * @param integer $storeId
      * @return array
-     * @since 2.0.0
      */
     protected function getAttributeValues($entityIds, $storeId)
     {
@@ -417,7 +399,6 @@ class AbstractAction
      * @param array $entityIds
      * @param integer $storeId
      * @return array
-     * @since 2.0.0
      */
     protected function getAttributeTypeValues($type, $entityIds, $storeId)
     {
@@ -464,7 +445,6 @@ class AbstractAction
      *
      * @param array $data
      * @return array
-     * @since 2.0.0
      */
     protected function prepareValuesToInsert($data)
     {
@@ -484,7 +464,6 @@ class AbstractAction
      *
      * @param string $name
      * @return string
-     * @since 2.0.0
      */
     protected function getTableName($name)
     {
@@ -493,7 +472,6 @@ class AbstractAction
 
     /**
      * @return \Magento\Framework\EntityManager\EntityMetadata
-     * @since 2.1.0
      */
     private function getCategoryMetadata()
     {
@@ -507,7 +485,6 @@ class AbstractAction
 
     /**
      * @return array
-     * @since 2.1.0
      */
     private function getSkipStaticColumns()
     {

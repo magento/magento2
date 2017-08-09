@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\ProductLink;
 
 /**
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Catalog\Api\Data\ProductLinkInterface
@@ -28,7 +27,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $key
      * @return mixed|null
-     * @since 2.0.0
      */
     protected function _get($key)
     {
@@ -40,7 +38,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @return array
      * @todo refactor with converter for AbstractExtensibleModel
-     * @since 2.0.0
      */
     public function __toArray()
     {
@@ -68,7 +65,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @identifier
      * @return string
-     * @since 2.0.0
      */
     public function getSku()
     {
@@ -80,7 +76,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @identifier
      * @return string
-     * @since 2.0.0
      */
     public function getLinkType()
     {
@@ -92,7 +87,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @identifier
      * @return string
-     * @since 2.0.0
      */
     public function getLinkedProductSku()
     {
@@ -103,7 +97,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get linked product type (simple, virtual, etc)
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLinkedProductType()
     {
@@ -114,7 +107,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get product position
      *
      * @return int
-     * @since 2.0.0
      */
     public function getPosition()
     {
@@ -126,7 +118,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $sku
      * @return $this
-     * @since 2.0.0
      */
     public function setSku($sku)
     {
@@ -138,7 +129,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $linkType
      * @return $this
-     * @since 2.0.0
      */
     public function setLinkType($linkType)
     {
@@ -150,7 +140,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $linkedProductSku
      * @return $this
-     * @since 2.0.0
      */
     public function setLinkedProductSku($linkedProductSku)
     {
@@ -162,7 +151,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $linkedProductType
      * @return $this
-     * @since 2.0.0
      */
     public function setLinkedProductType($linkedProductType)
     {
@@ -174,7 +162,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param int $position
      * @return $this
-     * @since 2.0.0
      */
     public function setPosition($position)
     {
@@ -185,7 +172,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * {@inheritdoc}
      *
      * @return \Magento\Catalog\Api\Data\ProductLinkExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -202,7 +188,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param \Magento\Catalog\Api\Data\ProductLinkExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Catalog\Api\Data\ProductLinkExtensionInterface $extensionAttributes)
     {

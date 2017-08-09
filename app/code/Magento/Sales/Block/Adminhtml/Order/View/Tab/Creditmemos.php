@@ -9,14 +9,12 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
  * Order Credit Memos grid
  *
  * @api
- * @since 2.0.0
  */
 class Creditmemos extends \Magento\Framework\View\Element\Text\ListText implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -25,7 +23,6 @@ class Creditmemos extends \Magento\Framework\View\Element\Text\ListText implemen
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -34,7 +31,6 @@ class Creditmemos extends \Magento\Framework\View\Element\Text\ListText implemen
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -43,7 +39,6 @@ class Creditmemos extends \Magento\Framework\View\Element\Text\ListText implemen
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function isHidden()
     {

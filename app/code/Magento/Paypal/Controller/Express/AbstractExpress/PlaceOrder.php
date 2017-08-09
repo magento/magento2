@@ -11,13 +11,11 @@ use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
 /**
  * Class PlaceOrder
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
 {
     /**
      * @var \Magento\Checkout\Api\AgreementsValidatorInterface
-     * @since 2.0.0
      */
     protected $agreementsValidator;
 
@@ -31,7 +29,6 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -62,7 +59,6 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -132,7 +128,6 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      *
      * @param \Magento\Paypal\Model\Api\ProcessableException $exception
      * @return void
-     * @since 2.0.0
      */
     protected function _processPaypalApiError($exception)
     {
@@ -169,7 +164,6 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      * Redirect customer back to PayPal with the same token
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _redirectSameToken()
     {
@@ -184,7 +178,6 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      *
      * @param string $errorMessage
      * @return void
-     * @since 2.0.0
      */
     protected function _redirectToCartAndShowError($errorMessage)
     {
@@ -197,7 +190,6 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      *
      * @param string $errorMessage
      * @return void
-     * @since 2.1.0
      */
     private function redirectToOrderReviewPageAndShowError($errorMessage)
     {
@@ -209,7 +201,6 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      * Return true if agreements validation required
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function isValidationRequired()
     {

@@ -9,7 +9,6 @@ namespace Magento\Framework\Cache;
  * Interface of a cache frontend - an ultimate publicly available interface to an actual cache storage
  *
  * @api
- * @since 2.0.0
  */
 interface FrontendInterface
 {
@@ -18,7 +17,6 @@ interface FrontendInterface
      *
      * @param string $identifier Cache id
      * @return int|bool Last modified time of cache entry if it is available, false otherwise
-     * @since 2.0.0
      */
     public function test($identifier);
 
@@ -28,7 +26,6 @@ interface FrontendInterface
      * @param string $identifier
      * @return string|bool
      * @api
-     * @since 2.0.0
      */
     public function load($identifier);
 
@@ -41,7 +38,6 @@ interface FrontendInterface
      * @param int|bool|null $lifeTime
      * @return bool
      * @api
-     * @since 2.0.0
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null);
 
@@ -51,7 +47,6 @@ interface FrontendInterface
      * @param string $identifier
      * @return bool
      * @api
-     * @since 2.0.0
      */
     public function remove($identifier);
 
@@ -62,7 +57,6 @@ interface FrontendInterface
      * @param array $tags
      * @return bool
      * @api
-     * @since 2.0.0
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = []);
 
@@ -70,7 +64,6 @@ interface FrontendInterface
      * Retrieve backend instance
      *
      * @return \Zend_Cache_Backend_Interface
-     * @since 2.0.0
      */
     public function getBackend();
 
@@ -78,7 +71,6 @@ interface FrontendInterface
      * Retrieve frontend instance compatible with Zend Locale Data setCache() to be used as a workaround
      *
      * @return \Zend_Cache_Core
-     * @since 2.0.0
      */
     public function getLowLevelFrontend();
 }

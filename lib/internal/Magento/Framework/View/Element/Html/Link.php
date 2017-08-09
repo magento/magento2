@@ -11,13 +11,11 @@ namespace Magento\Framework\View\Element\Html;
  * @method string getLabel()
  * @method string getPath()
  * @method string getTitle()
- * @since 2.0.0
  */
 class Link extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $allowedAttributes = [
         'href',
@@ -55,7 +53,6 @@ class Link extends \Magento\Framework\View\Element\Template
      * Prepare link attributes as serialized and formatted string
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLinkAttributes()
     {
@@ -82,7 +79,6 @@ class Link extends \Magento\Framework\View\Element\Template
      * @param   string $fieldSeparator
      * @param   string $quote
      * @return  string
-     * @since 2.0.0
      */
     public function serialize($attributes = [], $valueSeparator = '=', $fieldSeparator = ' ', $quote = '"')
     {
@@ -98,7 +94,6 @@ class Link extends \Magento\Framework\View\Element\Template
      * Render block HTML
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -113,7 +108,6 @@ class Link extends \Magento\Framework\View\Element\Template
      * Get href URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getHref()
     {

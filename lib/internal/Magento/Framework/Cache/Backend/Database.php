@@ -35,7 +35,6 @@ namespace Magento\Framework\Cache\Backend;
 /**
  * Class \Magento\Framework\Cache\Backend\Database
  *
- * @since 2.0.0
  */
 class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {
@@ -43,7 +42,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Available options
      *
      * @var array available options
-     * @since 2.0.0
      */
     protected $_options = [
         'adapter' => '',
@@ -58,7 +56,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected $_connection = null;
 
@@ -66,7 +63,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Constructor
      *
      * @param array $options associative array of options
-     * @since 2.0.0
      */
     public function __construct($options = [])
     {
@@ -90,7 +86,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Get DB adapter
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected function _getConnection()
     {
@@ -115,7 +110,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Get table name where data is stored
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getDataTable()
     {
@@ -132,7 +126,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Get table name where tags are stored
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getTagsTable()
     {
@@ -153,7 +146,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * @param  string  $id                     Cache id
      * @param  boolean $doNotTestCacheValidity If set to true, the cache validity won't be tested
      * @return string|false cached datas
-     * @since 2.0.0
      */
     public function load($id, $doNotTestCacheValidity = false)
     {
@@ -180,7 +172,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param  string $id cache id
      * @return mixed|false (a cache is not available) or "last modified" timestamp (int) of the available cache record
-     * @since 2.0.0
      */
     public function test($id)
     {
@@ -214,7 +205,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * @param string[] $tags          Array of strings, the cache record will be tagged by each string entry
      * @param int|bool $specificLifetime  Integer to set a specific lifetime or null for infinite lifetime
      * @return bool true if no problem
-     * @since 2.0.0
      */
     public function save($data, $id, $tags = [], $specificLifetime = false)
     {
@@ -256,7 +246,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param  string $id Cache id
      * @return boolean True if no problem
-     * @since 2.0.0
      */
     public function remove($id)
     {
@@ -285,7 +274,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * @param  string $mode Clean mode
      * @param  string[] $tags Array of tags
      * @return boolean true if no problem
-     * @since 2.0.0
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = [])
     {
@@ -318,7 +306,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Return an array of stored cache ids
      *
      * @return string[] array of stored cache ids (string)
-     * @since 2.0.0
      */
     public function getIds()
     {
@@ -334,7 +321,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Return an array of stored tags
      *
      * @return string[] array of stored tags (string)
-     * @since 2.0.0
      */
     public function getTags()
     {
@@ -349,7 +335,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param string[] $tags array of tags
      * @return string[] array of matching cache ids (string)
-     * @since 2.0.0
      */
     public function getIdsMatchingTags($tags = [])
     {
@@ -376,7 +361,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param string[] $tags array of tags
      * @return string[] array of not matching cache ids (string)
-     * @since 2.0.0
      */
     public function getIdsNotMatchingTags($tags = [])
     {
@@ -390,7 +374,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param string[] $tags array of tags
      * @return string[] array of any matching cache ids (string)
-     * @since 2.0.0
      */
     public function getIdsMatchingAnyTags($tags = [])
     {
@@ -410,7 +393,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Return the filling percentage of the backend storage
      *
      * @return int integer between 0 and 100
-     * @since 2.0.0
      */
     public function getFillingPercentage()
     {
@@ -427,7 +409,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param string $id cache id
      * @return array|false array of metadatas (false if the cache id is not found)
-     * @since 2.0.0
      */
     public function getMetadatas($id)
     {
@@ -449,7 +430,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * @param string $id cache id
      * @param int $extraLifetime
      * @return boolean true if ok
-     * @since 2.0.0
      */
     public function touch($id, $extraLifetime)
     {
@@ -477,7 +457,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * - get_list (is it possible to get the list of cache ids and the complete list of tags)
      *
      * @return array associative of with capabilities
-     * @since 2.0.0
      */
     public function getCapabilities()
     {
@@ -497,7 +476,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * @param string $id
      * @param string[] $tags
      * @return bool
-     * @since 2.0.0
      */
     protected function _saveTags($id, $tags)
     {
@@ -537,7 +515,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * @param string[] $tags
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _cleanByTags($mode, $tags)
     {
@@ -586,7 +563,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return bool
-     * @since 2.1.0
      */
     private function cleanAll(\Magento\Framework\DB\Adapter\AdapterInterface $connection)
     {
@@ -604,7 +580,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return bool
-     * @since 2.1.0
      */
     private function cleanOld(\Magento\Framework\DB\Adapter\AdapterInterface $connection)
     {

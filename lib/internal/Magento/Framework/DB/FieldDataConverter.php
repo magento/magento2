@@ -13,7 +13,6 @@ use Magento\Framework\DB\Select\QueryModifierInterface;
 
 /**
  * Convert field data from one representation to another
- * @since 2.2.0
  */
 class FieldDataConverter
 {
@@ -29,25 +28,21 @@ class FieldDataConverter
 
     /**
      * @var Generator
-     * @since 2.2.0
      */
     private $queryGenerator;
 
     /**
      * @var DataConverterInterface
-     * @since 2.2.0
      */
     private $dataConverter;
 
     /**
      * @var SelectFactory
-     * @since 2.2.0
      */
     private $selectFactory;
 
     /**
      * @var string|null
-     * @since 2.2.0
      */
     private $envBatchSize;
 
@@ -58,7 +53,6 @@ class FieldDataConverter
      * @param DataConverterInterface $dataConverter
      * @param SelectFactory $selectFactory
      * @param string|null $envBatchSize
-     * @since 2.2.0
      */
     public function __construct(
         Generator $queryGenerator,
@@ -82,7 +76,6 @@ class FieldDataConverter
      * @param QueryModifierInterface|null $queryModifier
      * @throws FieldDataConversionException
      * @return void
-     * @since 2.2.0
      */
     public function convert(
         AdapterInterface $connection,
@@ -133,7 +126,6 @@ class FieldDataConverter
      * Get batch size from environment variable or default
      *
      * @return int
-     * @since 2.2.0
      */
     private function getBatchSize()
     {

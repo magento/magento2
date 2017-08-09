@@ -11,31 +11,26 @@ use Magento\Framework\Phrase;
 /**
  * Class \Magento\Framework\Oauth\Oauth
  *
- * @since 2.0.0
  */
 class Oauth implements OauthInterface
 {
     /**
      * @var  \Magento\Framework\Oauth\Helper\Oauth
-     * @since 2.0.0
      */
     protected $_oauthHelper;
 
     /**
      * @var  \Zend_Oauth_Http_Utility
-     * @since 2.0.0
      */
     protected $_httpUtility;
 
     /**
      * @var \Magento\Framework\Oauth\NonceGeneratorInterface
-     * @since 2.0.0
      */
     protected $_nonceGenerator;
 
     /**
      * @var \Magento\Framework\Oauth\TokenProviderInterface
-     * @since 2.0.0
      */
     protected $_tokenProvider;
 
@@ -44,7 +39,6 @@ class Oauth implements OauthInterface
      * @param NonceGeneratorInterface $nonceGenerator
      * @param TokenProviderInterface $tokenProvider
      * @param \Zend_Oauth_Http_Utility $httpUtility
-     * @since 2.0.0
      */
     public function __construct(
         Helper\Oauth $oauthHelper,
@@ -63,7 +57,6 @@ class Oauth implements OauthInterface
      * Retrieve array of supported signature methods.
      *
      * @return string[] - Supported HMAC-SHA1 and HMAC-SHA256 signature methods.
-     * @since 2.0.0
      */
     public static function getSupportedSignatureMethods()
     {
@@ -72,7 +65,6 @@ class Oauth implements OauthInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getRequestToken($params, $requestUrl, $httpMethod = 'POST')
     {
@@ -86,7 +78,6 @@ class Oauth implements OauthInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAccessToken($params, $requestUrl, $httpMethod = 'POST')
     {
@@ -115,7 +106,6 @@ class Oauth implements OauthInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function validateAccessTokenRequest($params, $requestUrl, $httpMethod = 'POST')
     {
@@ -139,7 +129,6 @@ class Oauth implements OauthInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function validateAccessToken($accessToken)
     {
@@ -148,7 +137,6 @@ class Oauth implements OauthInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function buildAuthorizationHeader(
         $params,
@@ -189,7 +177,6 @@ class Oauth implements OauthInterface
      * @param string $tokenSecret
      * @return void
      * @throws Exception|OauthInputException
-     * @since 2.0.0
      */
     protected function _validateSignature($params, $consumerSecret, $httpMethod, $requestUrl, $tokenSecret = null)
     {
@@ -225,7 +212,6 @@ class Oauth implements OauthInterface
      * @param string $version
      * @return void
      * @throws OauthInputException
-     * @since 2.0.0
      */
     protected function _validateVersionParam($version)
     {
@@ -242,7 +228,6 @@ class Oauth implements OauthInterface
      * @param array $requiredParams
      * @return void
      * @throws OauthInputException
-     * @since 2.0.0
      */
     protected function _validateProtocolParams($protocolParams, $requiredParams = [])
     {
@@ -297,7 +282,6 @@ class Oauth implements OauthInterface
      * @param array $requiredParams
      * @return void
      * @throws OauthInputException
-     * @since 2.0.0
      */
     protected function _checkRequiredParams($protocolParams, $requiredParams)
     {

@@ -13,7 +13,6 @@ use Magento\Framework\Serialize\Serializer\Json;
  * Order pdf items renderer
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
 {
@@ -21,7 +20,6 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      * Serializer
      *
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -37,7 +35,6 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -68,7 +65,6 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      *
      * @param \Magento\Framework\DataObject $item
      * @return array
-     * @since 2.0.0
      */
     public function getChildren($item)
     {
@@ -107,7 +103,6 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      * @param \Magento\Framework\DataObject $item
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function isShipmentSeparately($item = null)
     {
@@ -146,7 +141,6 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      * @param \Magento\Framework\DataObject $item
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function isChildCalculated($item = null)
     {
@@ -187,7 +181,6 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      * @param \Magento\Framework\DataObject $item
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getBundleOptions($item = null)
     {
@@ -203,7 +196,6 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      *
      * @param \Magento\Framework\DataObject $item
      * @return mixed
-     * @since 2.0.0
      */
     public function getSelectionAttributes($item)
     {
@@ -224,7 +216,6 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      * @param \Magento\Framework\DataObject $item
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getOrderOptions($item = null)
     {
@@ -248,7 +239,6 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      * Retrieve Order Item
      *
      * @return \Magento\Sales\Model\Order\Item
-     * @since 2.0.0
      */
     public function getOrderItem()
     {
@@ -264,7 +254,6 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      *
      * @param \Magento\Sales\Model\Order\Item $item
      * @return string
-     * @since 2.0.0
      */
     public function getValueHtml($item)
     {
@@ -291,7 +280,6 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      *
      * @param \Magento\Sales\Model\Order\Item $item
      * @return bool
-     * @since 2.0.0
      */
     public function canShowPriceInfo($item)
     {

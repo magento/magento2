@@ -24,7 +24,6 @@ use Magento\Webapi\Model\ServiceMetadata;
  * The main responsibility is to instantiate proper action controller (service) and execute requested method on it.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Handler
 {
@@ -32,49 +31,41 @@ class Handler
 
     /**
      * @var \Magento\Framework\Webapi\Request
-     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var \Magento\Webapi\Model\Soap\Config
-     * @since 2.0.0
      */
     protected $_apiConfig;
 
     /**
      * @var \Magento\Framework\Webapi\Authorization
-     * @since 2.1.0
      */
     protected $authorization;
 
     /**
      * @var \Magento\Framework\Api\SimpleDataObjectConverter
-     * @since 2.0.0
      */
     protected $_dataObjectConverter;
 
     /**
      * @var \Magento\Framework\Webapi\ServiceInputProcessor
-     * @since 2.0.0
      */
     protected $serviceInputProcessor;
 
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
-     * @since 2.0.0
      */
     protected $_dataObjectProcessor;
 
     /**
      * @var \Magento\Framework\Reflection\MethodsMap
-     * @since 2.0.0
      */
     protected $methodsMapProcessor;
 
@@ -89,7 +80,6 @@ class Handler
      * @param ServiceInputProcessor $serviceInputProcessor
      * @param DataObjectProcessor $dataObjectProcessor
      * @param MethodsMap $methodsMapProcessor
-     * @since 2.0.0
      */
     public function __construct(
         SoapRequest $request,
@@ -120,7 +110,6 @@ class Handler
      * @throws WebapiException
      * @throws \LogicException
      * @throws AuthorizationException
-     * @since 2.0.0
      */
     public function __call($operation, $arguments)
     {
@@ -155,7 +144,6 @@ class Handler
      * @param string $serviceMethod
      * @param array $arguments
      * @return array
-     * @since 2.0.0
      */
     protected function _prepareRequestData($serviceClass, $serviceMethod, $arguments)
     {
@@ -173,7 +161,6 @@ class Handler
      * @param string $serviceMethodName
      * @return array
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     protected function _prepareResponseData($data, $serviceClassName, $serviceMethodName)
     {

@@ -10,25 +10,21 @@ use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Provide data for theme grid and for theme edit page
- * @since 2.2.0
  */
 class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProviderInterface
 {
     /**
      * @var ListInterface
-     * @since 2.2.0
      */
     private $themeList;
 
     /**
      * @var ThemeFactory
-     * @since 2.2.0
      */
     protected $themeFactory;
 
     /**
      * @var ThemeInterface[]
-     * @since 2.2.0
      */
     private $themes;
 
@@ -37,7 +33,6 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      *
      * @param ListInterface $themeList
      * @param ThemeFactory  $themeFactory
-     * @since 2.2.0
      */
     public function __construct(
         ListInterface $themeList,
@@ -49,7 +44,6 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getThemeByFullPath($fullPath)
     {
@@ -62,7 +56,6 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
     /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function getThemeCustomizations(
         $area = \Magento\Framework\App\Area::AREA_FRONTEND,
@@ -73,7 +66,6 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getThemeById($themeId)
     {

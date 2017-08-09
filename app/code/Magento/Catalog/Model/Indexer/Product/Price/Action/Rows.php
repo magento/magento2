@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\Indexer\Product\Price\Action;
 /**
  * Class Rows reindex action for mass actions
  *
- * @since 2.0.0
  */
 class Rows extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
 {
@@ -19,7 +18,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      * @return void
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function execute($ids)
     {

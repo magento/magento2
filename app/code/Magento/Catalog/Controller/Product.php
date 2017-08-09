@@ -13,7 +13,6 @@ use Magento\Catalog\Model\Product as ModelProduct;
 /**
  * Class \Magento\Catalog\Controller\Product
  *
- * @since 2.0.0
  */
 abstract class Product extends \Magento\Framework\App\Action\Action implements ViewInterface
 {
@@ -21,7 +20,6 @@ abstract class Product extends \Magento\Framework\App\Action\Action implements V
      * Initialize requested product object
      *
      * @return ModelProduct
-     * @since 2.0.0
      */
     protected function _initProduct()
     {

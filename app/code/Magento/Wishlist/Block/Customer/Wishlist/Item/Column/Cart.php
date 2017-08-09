@@ -10,7 +10,6 @@ namespace Magento\Wishlist\Block\Customer\Wishlist\Item\Column;
  * Wishlist block customer item cart column
  *
  * @api
- * @since 2.0.0
  */
 class Cart extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
 {
@@ -19,7 +18,6 @@ class Cart extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
      *
      * @param \Magento\Wishlist\Model\Item $item
      * @return float
-     * @since 2.0.0
      */
     public function getAddToCartQty(\Magento\Wishlist\Model\Item $item)
     {
@@ -31,7 +29,6 @@ class Cart extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
      * Return product for current item
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function getProductItem()
     {

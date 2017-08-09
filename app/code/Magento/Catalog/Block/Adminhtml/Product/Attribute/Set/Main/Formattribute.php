@@ -14,13 +14,11 @@ use Magento\Backend\Block\Widget\Form;
 /**
  * Class \Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main\Formattribute
  *
- * @since 2.0.0
  */
 class Formattribute extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {

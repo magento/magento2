@@ -8,7 +8,6 @@ namespace Magento\Framework\ObjectManager\Helper;
 
 /**
  * Helper for classes which implement Composite pattern.
- * @since 2.0.0
  */
 class Composite
 {
@@ -22,7 +21,6 @@ class Composite
      * ]
      * </pre>
      * @return array Array of components declarations. Items are sorted and misconfigured ones are removed.
-     * @since 2.0.0
      */
     public function filterAndSortDeclaredComponents($declaredComponents)
     {

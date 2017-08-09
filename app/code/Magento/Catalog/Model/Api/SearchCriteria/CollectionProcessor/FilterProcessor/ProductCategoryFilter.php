@@ -13,7 +13,6 @@ use Magento\Framework\Data\Collection\AbstractDb;
 /**
  * Class \Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ProductCategoryFilter
  *
- * @since 2.2.0
  */
 class ProductCategoryFilter implements CustomFilterInterface
 {
@@ -23,7 +22,6 @@ class ProductCategoryFilter implements CustomFilterInterface
      * @param Filter $filter
      * @param AbstractDb $collection
      * @return bool Whether the filter is applied
-     * @since 2.2.0
      */
     public function apply(Filter $filter, AbstractDb $collection)
     {

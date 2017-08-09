@@ -12,32 +12,27 @@ use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Store view service
- * @since 2.0.0
  */
 class StoreViewService
 {
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $eavConfig;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected $connection;
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @param Config $eavConfig
      * @param \Magento\Framework\App\ResourceConnection $resource
-     * @since 2.0.0
      */
     public function __construct(
         Config $eavConfig,
@@ -55,7 +50,6 @@ class StoreViewService
      * @param string $entityType
      * @throws \InvalidArgumentException
      * @return bool
-     * @since 2.0.0
      */
     public function doesEntityHaveOverriddenUrlKeyForStore($storeId, $entityId, $entityType)
     {
@@ -70,7 +64,6 @@ class StoreViewService
      * @param string $entityType
      * @throws \InvalidArgumentException
      * @return bool
-     * @since 2.0.0
      */
     public function doesEntityHaveOverriddenUrlPathForStore($storeId, $entityId, $entityType)
     {
@@ -86,7 +79,6 @@ class StoreViewService
      * @param mixed $attributeName
      * @throws \InvalidArgumentException
      * @return bool
-     * @since 2.0.0
      */
     protected function doesEntityHaveOverriddenUrlAttributeForStore($storeId, $entityId, $entityType, $attributeName)
     {
@@ -114,7 +106,6 @@ class StoreViewService
      * Get product metadata pool
      *
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
      */
     private function getMetadataPool()
     {

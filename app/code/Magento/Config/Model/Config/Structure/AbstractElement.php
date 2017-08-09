@@ -11,7 +11,6 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * @api
- * @since 2.0.0
  */
 abstract class AbstractElement implements ElementInterface
 {
@@ -19,7 +18,6 @@ abstract class AbstractElement implements ElementInterface
      * Element data
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_data = [];
 
@@ -27,7 +25,6 @@ abstract class AbstractElement implements ElementInterface
      * Current configuration scope
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_scope;
 
@@ -35,26 +32,22 @@ abstract class AbstractElement implements ElementInterface
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\Module\Manager
-     * @since 2.0.0
      */
     protected $moduleManager;
 
     /**
      * @var ElementVisibilityInterface
-     * @since 2.2.0
      */
     private $elementVisibility;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Module\Manager $moduleManager
-     * @since 2.0.0
      */
     public function __construct(StoreManagerInterface $storeManager, \Magento\Framework\Module\Manager $moduleManager)
     {
@@ -67,7 +60,6 @@ abstract class AbstractElement implements ElementInterface
      *
      * @param string $code
      * @return \Magento\Framework\Phrase|string
-     * @since 2.0.0
      */
     protected function _getTranslatedAttribute($code)
     {
@@ -83,7 +75,6 @@ abstract class AbstractElement implements ElementInterface
      * @param array $data
      * @param string $scope
      * @return void
-     * @since 2.0.0
      */
     public function setData(array $data, $scope)
     {
@@ -95,7 +86,6 @@ abstract class AbstractElement implements ElementInterface
      * Retrieve flyweight data
      *
      * @return array
-     * @since 2.0.0
      */
     public function getData()
     {
@@ -106,7 +96,6 @@ abstract class AbstractElement implements ElementInterface
      * Retrieve element id
      *
      * @return string
-     * @since 2.0.0
      */
     public function getId()
     {
@@ -117,7 +106,6 @@ abstract class AbstractElement implements ElementInterface
      * Retrieve element label
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLabel()
     {
@@ -128,7 +116,6 @@ abstract class AbstractElement implements ElementInterface
      * Retrieve element label
      *
      * @return string
-     * @since 2.0.0
      */
     public function getComment()
     {
@@ -139,7 +126,6 @@ abstract class AbstractElement implements ElementInterface
      * Retrieve frontend model class name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFrontendModel()
     {
@@ -151,7 +137,6 @@ abstract class AbstractElement implements ElementInterface
      *
      * @param string $key
      * @return mixed
-     * @since 2.0.0
      */
     public function getAttribute($key)
     {
@@ -162,7 +147,6 @@ abstract class AbstractElement implements ElementInterface
      * Check whether element should be displayed
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isVisible()
     {
@@ -193,7 +177,6 @@ abstract class AbstractElement implements ElementInterface
      *
      * @param string $key
      * @return bool
-     * @since 2.0.0
      */
     protected function _hasVisibilityValue($key)
     {
@@ -204,7 +187,6 @@ abstract class AbstractElement implements ElementInterface
      * Retrieve css class of a tab
      *
      * @return string
-     * @since 2.0.0
      */
     public function getClass()
     {
@@ -217,7 +199,6 @@ abstract class AbstractElement implements ElementInterface
      * @param string $fieldId
      * @param string $fieldPrefix
      * @return string
-     * @since 2.0.0
      */
     protected function _getPath($fieldId, $fieldPrefix = '')
     {
@@ -230,7 +211,6 @@ abstract class AbstractElement implements ElementInterface
      *
      * @param string $fieldPrefix
      * @return string
-     * @since 2.0.0
      */
     public function getPath($fieldPrefix = '')
     {
@@ -241,10 +221,10 @@ abstract class AbstractElement implements ElementInterface
      * Get instance of ElementVisibilityInterface.
      *
      * @return ElementVisibilityInterface
-     * @deprecated 2.2.0 Added to not break backward compatibility of the constructor signature
+     * @deprecated 100.2.0 Added to not break backward compatibility of the constructor signature
      *             by injecting the new dependency directly.
      *             The method can be removed in a future major release, when constructor signature can be changed.
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getElementVisibility()
     {

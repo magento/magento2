@@ -13,25 +13,21 @@ use Magento\Setup\Module\Di\Code\Scanner;
  * Class ServiceDataAttributesGenerator
  *
  * Generates extension classes for data objects.
- * @since 2.0.0
  */
 class ServiceDataAttributesGenerator implements OperationInterface
 {
     /**
      * @var Scanner\ServiceDataAttributesScanner
-     * @since 2.0.0
      */
     private $serviceDataAttributesScanner;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $data;
 
     /**
      * @var Scanner\ConfigurationScanner
-     * @since 2.1.0
      */
     private $configurationScanner;
 
@@ -39,7 +35,6 @@ class ServiceDataAttributesGenerator implements OperationInterface
      * @param Scanner\ServiceDataAttributesScanner $serviceDataAttributesScanner
      * @param Scanner\ConfigurationScanner $configurationScanner
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Scanner\ServiceDataAttributesScanner $serviceDataAttributesScanner,
@@ -55,7 +50,6 @@ class ServiceDataAttributesGenerator implements OperationInterface
      * Processes operation task
      *
      * @return void
-     * @since 2.0.0
      */
     public function doOperation()
     {
@@ -70,7 +64,6 @@ class ServiceDataAttributesGenerator implements OperationInterface
      * Returns operation name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName()
     {

@@ -12,7 +12,6 @@ namespace Magento\SalesRule\Model\ResourceModel\Report\Rule;
  * Rule report resource model with aggregation by created at
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
 {
@@ -20,7 +19,6 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
      * Resource Report Rule constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -33,7 +31,6 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
      * @param mixed|null $from
      * @param mixed|null $to
      * @return $this
-     * @since 2.0.0
      */
     public function aggregate($from = null, $to = null)
     {
@@ -49,7 +46,6 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
      * @param mixed $to
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _aggregateByOrder($aggregationField, $from, $to)
     {

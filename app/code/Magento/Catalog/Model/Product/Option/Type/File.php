@@ -17,34 +17,29 @@ use Magento\Framework\App\ObjectManager;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 {
     /**
      * Url for custom option download controller
      * @var string
-     * @since 2.0.0
      */
     protected $_customOptionDownloadUrl = 'sales/download/downloadCustomOption';
 
     /**
      * @var string|null
-     * @since 2.0.0
      */
     protected $_formattedOptionValue = null;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
-     * @deprecated 2.2.0
+     * @deprecated 101.1.0
      * @see $mediaDirectory
-     * @since 2.0.0
      */
     protected $_rootDirectory;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     * @since 2.2.0
      */
     private $mediaDirectory;
 
@@ -52,13 +47,11 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Core file storage database
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
-     * @since 2.0.0
      */
     protected $_coreFileStorageDatabase = null;
 
     /**
      * @var \Magento\Framework\Escaper
-     * @since 2.0.0
      */
     protected $_escaper;
 
@@ -66,7 +59,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Url
      *
      * @var \Magento\Catalog\Model\Product\Option\UrlBuilder
-     * @since 2.0.0
      */
     protected $_urlBuilder;
 
@@ -74,31 +66,26 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Item option factory
      *
      * @var \Magento\Quote\Model\Quote\Item\OptionFactory
-     * @since 2.0.0
      */
     protected $_itemOptionFactory;
 
     /**
      * @var File\ValidatorInfo
-     * @since 2.0.0
      */
     protected $validatorInfo;
 
     /**
      * @var File\ValidatorFile
-     * @since 2.0.0
      */
     protected $validatorFile;
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var Filesystem
-     * @since 2.2.0
      */
     private $filesystem;
 
@@ -115,7 +102,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param Filesystem $filesystem
      * @param Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -148,7 +134,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Flag to indicate that custom option has own customized output (blocks, native html etc.)
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isCustomizedView()
     {
@@ -160,7 +145,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @param array $optionInfo
      * @return string|void
-     * @since 2.0.0
      */
     public function getCustomizedView($optionInfo)
     {
@@ -179,7 +163,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Returns additional params for processing options
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     protected function _getProcessingParams()
     {
@@ -200,7 +183,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Or returns null, if we need to get file from uploaded array.
      *
      * @return null|array
-     * @since 2.0.0
      */
     protected function _getCurrentConfigFileInfo()
     {
@@ -230,7 +212,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @throws LocalizedException
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function validateUserValue($values)
     {
@@ -299,7 +280,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Prepare option value for cart
      *
      * @return string|null Prepared option value
-     * @since 2.0.0
      */
     public function prepareForCart()
     {
@@ -340,7 +320,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @param string $optionValue Prepared for cart option value
      * @return string
-     * @since 2.0.0
      */
     public function getFormattedOptionValue($optionValue)
     {
@@ -370,7 +349,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param string|array $optionValue Serialized string of option data or its data array
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _getOptionHtml($optionValue)
     {
@@ -398,7 +376,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @param string|array $value
      * @return array
-     * @since 2.0.0
      */
     protected function _unserializeValue($value)
     {
@@ -416,7 +393,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @param string $optionValue Prepared for cart option value
      * @return string
-     * @since 2.0.0
      */
     public function getPrintableOptionValue($optionValue)
     {
@@ -429,8 +405,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param string $optionValue Prepared for cart option value
      * @return string
      *
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 101.1.0
      */
     public function getEditableOptionValue($optionValue)
     {
@@ -454,8 +429,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 101.1.0
      */
     public function parseOptionValue($optionValue, $productOptionValues)
     {
@@ -475,7 +449,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @param string $optionValue
      * @return string|null
-     * @since 2.0.0
      */
     public function prepareOptionValueForRequest($optionValue)
     {
@@ -490,7 +463,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Quote item to order item copy process
      *
      * @return $this
-     * @since 2.0.0
      */
     public function copyQuoteToOrder()
     {
@@ -526,7 +498,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @param string $url
      * @return $this
-     * @since 2.0.0
      */
     public function setCustomOptionDownloadUrl($url)
     {
@@ -540,7 +511,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param string|null $route
      * @param array|null $params
      * @return string
-     * @since 2.0.0
      */
     protected function _getOptionDownloadUrl($route, $params)
     {
@@ -550,7 +520,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * @param array $value
      * @return string
-     * @since 2.0.0
      */
     protected function prepareSize($value)
     {

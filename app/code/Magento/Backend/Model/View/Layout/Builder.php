@@ -11,13 +11,11 @@ use Magento\Framework\View;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Builder extends \Magento\Framework\View\Layout\Builder
 {
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function afterGenerateBlock()
     {

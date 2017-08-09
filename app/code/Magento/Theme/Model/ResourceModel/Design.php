@@ -10,13 +10,11 @@ use Magento\Framework\Stdlib\DateTime;
 
 /**
  * Design Change Resource Model
- * @since 2.0.0
  */
 class Design extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
@@ -24,7 +22,6 @@ class Design extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param DateTime $dateTime
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -39,7 +36,6 @@ class Design extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table and primary key
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -52,7 +48,6 @@ class Design extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -112,7 +107,6 @@ class Design extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _checkIntersection($storeId, $dateFrom, $dateTo, $currentId)
     {
@@ -183,7 +177,6 @@ class Design extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $storeId
      * @param string $date
      * @return array
-     * @since 2.0.0
      */
     public function loadChange($storeId, $date)
     {

@@ -10,49 +10,41 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Special price storage presents efficient price API and is used to retrieve, update or delete special prices.
- * @since 2.2.0
  */
 class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInterface
 {
     /**
      * @var \Magento\Catalog\Api\SpecialPriceInterface
-     * @since 2.2.0
      */
     private $specialPriceResource;
 
     /**
      * @var \Magento\Catalog\Api\Data\SpecialPriceInterfaceFactory
-     * @since 2.2.0
      */
     private $specialPriceFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductIdLocatorInterface
-     * @since 2.2.0
      */
     private $productIdLocator;
 
     /**
      * @var \Magento\Store\Api\StoreRepositoryInterface
-     * @since 2.2.0
      */
     private $storeRepository;
 
     /**
      * @var \Magento\Catalog\Model\Product\Price\Validation\Result
-     * @since 2.2.0
      */
     private $validationResult;
 
     /**
      * @var \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor
-     * @since 2.2.0
      */
     private $invalidSkuProcessor;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $allowedProductTypes = [];
 
@@ -64,7 +56,6 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
      * @param \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult
      * @param \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor $invalidSkuProcessor
      * @param array $allowedProductTypes [optional]
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Catalog\Api\SpecialPriceInterface $specialPriceResource,
@@ -86,7 +77,6 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function get(array $skus)
     {
@@ -113,7 +103,6 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function update(array $prices)
     {
@@ -125,7 +114,6 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function delete(array $prices)
     {
@@ -140,7 +128,6 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
      *
      * @param array $prices
      * @return array
-     * @since 2.2.0
      */
     private function retrieveValidPrices(array $prices)
     {
@@ -216,7 +203,6 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
      * @param string $label
      * @param int $key
      * @return void
-     * @since 2.2.0
      */
     private function checkDate(\Magento\Catalog\Api\Data\SpecialPriceInterface $price, $value, $label, $key)
     {
@@ -252,7 +238,6 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
      * @param \Magento\Catalog\Api\Data\SpecialPriceInterface $price
      * @param int $key
      * @return void
-     * @since 2.2.0
      */
     private function checkPrice(\Magento\Catalog\Api\Data\SpecialPriceInterface $price, $key)
     {
@@ -287,7 +272,6 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
      * @param int $productId
      * @param array $skus
      * @return string|null
-     * @since 2.2.0
      */
     private function retrieveSkuById($productId, array $skus)
     {
@@ -305,7 +289,6 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
      *
      * @param string $date
      * @return bool
-     * @since 2.2.0
      */
     private function isCorrectDateValue($date)
     {

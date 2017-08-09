@@ -8,7 +8,6 @@ namespace Magento\Catalog\Api;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface CategoryLinkRepositoryInterface
 {
@@ -21,7 +20,6 @@ interface CategoryLinkRepositoryInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
-     * @since 2.0.0
      */
     public function save(\Magento\Catalog\Api\Data\CategoryProductLinkInterface $productLink);
 
@@ -33,7 +31,6 @@ interface CategoryLinkRepositoryInterface
      *
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\StateException
-     * @since 2.0.0
      */
     public function delete(\Magento\Catalog\Api\Data\CategoryProductLinkInterface $productLink);
 
@@ -46,7 +43,6 @@ interface CategoryLinkRepositoryInterface
      *
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\StateException
-     * @since 2.0.0
      */
     public function deleteByIds($categoryId, $sku);
 }

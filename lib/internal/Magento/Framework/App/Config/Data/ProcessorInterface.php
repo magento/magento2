@@ -9,7 +9,6 @@ namespace Magento\Framework\App\Config\Data;
  * Processes data from admin store configuration fields
  *
  * @api
- * @since 2.0.0
  */
 interface ProcessorInterface
 {
@@ -18,7 +17,6 @@ interface ProcessorInterface
      *
      * @param string $value Raw value of the configuration field
      * @return string Processed value
-     * @since 2.0.0
      */
     public function processValue($value);
 }

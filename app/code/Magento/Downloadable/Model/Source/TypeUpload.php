@@ -7,13 +7,11 @@ namespace Magento\Downloadable\Model\Source;
 
 /**
  * TypeUpload source class
- * @since 2.1.0
  */
 class TypeUpload implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function toOptionArray()
     {

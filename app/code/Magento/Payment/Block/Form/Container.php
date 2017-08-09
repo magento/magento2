@@ -14,37 +14,32 @@ use Magento\Payment\Model\Method\AbstractMethod;
  * @method \Magento\Quote\Model\Quote getQuote()
  *
  * @api
- * @since 2.0.0
  */
 class Container extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Payment\Helper\Data
-     * @since 2.0.0
      */
     protected $_paymentHelper;
 
     /**
      * @var \Magento\Payment\Model\Checks\SpecificationFactory
-     * @since 2.0.0
      */
     protected $methodSpecificationFactory;
 
     /**
      * @var \Magento\Payment\Api\PaymentMethodListInterface
-     * @since 2.2.0
      */
     private $paymentMethodList;
 
     /**
      * @var \Magento\Payment\Model\Method\InstanceFactory
-     * @since 2.2.0
      */
     private $paymentMethodInstanceFactory;
 
     /**
      * @var array
-     * @since 2.2.0
+     * @since 100.1.3
      */
     protected $additionalChecks;
 
@@ -54,7 +49,6 @@ class Container extends \Magento\Framework\View\Element\Template
      * @param \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory
      * @param array $data
      * @param array $additionalChecks
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -73,7 +67,6 @@ class Container extends \Magento\Framework\View\Element\Template
      * Prepare children blocks
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -95,7 +88,6 @@ class Container extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Payment\Model\MethodInterface $method
      * @return bool
-     * @since 2.0.0
      */
     protected function _canUseMethod($method)
     {
@@ -122,7 +114,6 @@ class Container extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Payment\Model\MethodInterface $method
      * @return $this
-     * @since 2.0.0
      */
     protected function _assignMethod($method)
     {
@@ -136,7 +127,6 @@ class Container extends \Magento\Framework\View\Element\Template
      * @param string $method
      * @param string $template
      * @return $this
-     * @since 2.0.0
      */
     public function setMethodFormTemplate($method = '', $template = '')
     {
@@ -152,7 +142,6 @@ class Container extends \Magento\Framework\View\Element\Template
      * Retrieve available payment methods
      *
      * @return array
-     * @since 2.0.0
      */
     public function getMethods()
     {
@@ -177,7 +166,6 @@ class Container extends \Magento\Framework\View\Element\Template
      * Retrieve code of current payment method
      *
      * @return string|false
-     * @since 2.0.0
      */
     public function getSelectedMethodCode()
     {
@@ -193,8 +181,7 @@ class Container extends \Magento\Framework\View\Element\Template
      * Get payment method list.
      *
      * @return \Magento\Payment\Api\PaymentMethodListInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.1.3
      */
     private function getPaymentMethodList()
     {
@@ -210,8 +197,7 @@ class Container extends \Magento\Framework\View\Element\Template
      * Get payment method instance factory.
      *
      * @return \Magento\Payment\Model\Method\InstanceFactory
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.1.3
      */
     private function getPaymentMethodInstanceFactory()
     {

@@ -8,7 +8,6 @@ namespace Magento\Framework\Mview\View;
 /**
  * Interface \Magento\Framework\Mview\View\ChangelogInterface
  *
- * @since 2.0.0
  */
 interface ChangelogInterface
 {
@@ -16,7 +15,6 @@ interface ChangelogInterface
      * Create changelog table
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function create();
 
@@ -24,7 +22,6 @@ interface ChangelogInterface
      * Drop changelog table
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function drop();
 
@@ -33,7 +30,6 @@ interface ChangelogInterface
      *
      * @param int $versionId
      * @return bool
-     * @since 2.0.0
      */
     public function clear($versionId);
 
@@ -43,7 +39,6 @@ interface ChangelogInterface
      * @param integer $fromVersionId
      * @param integer $toVersionId
      * @return int[]
-     * @since 2.0.0
      */
     public function getList($fromVersionId, $toVersionId);
 
@@ -51,7 +46,6 @@ interface ChangelogInterface
      * Get maximum version_id from changelog
      *
      * @return int
-     * @since 2.0.0
      */
     public function getVersion();
 
@@ -59,7 +53,6 @@ interface ChangelogInterface
      * Get changlog name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName();
 
@@ -67,7 +60,6 @@ interface ChangelogInterface
      * Get changlog entity column name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getColumnName();
 
@@ -76,7 +68,6 @@ interface ChangelogInterface
      *
      * @param string $viewId
      * @return ChangelogInterface
-     * @since 2.0.0
      */
     public function setViewId($viewId);
 
@@ -84,7 +75,6 @@ interface ChangelogInterface
      * Get view's identifier
      *
      * @return string
-     * @since 2.0.0
      */
     public function getViewId();
 }

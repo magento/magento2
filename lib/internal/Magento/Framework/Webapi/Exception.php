@@ -16,7 +16,6 @@ use Magento\Framework\Phrase;
  *
  * During web API requests, all exceptions are converted to this exception,
  * which is then used for proper error response generation.
- * @since 2.0.0
  */
 class Exception extends LocalizedException
 {
@@ -49,7 +48,6 @@ class Exception extends LocalizedException
      * Optional exception details.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_details;
 
@@ -57,7 +55,6 @@ class Exception extends LocalizedException
      * HTTP status code associated with current exception.
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_httpCode;
 
@@ -65,7 +62,6 @@ class Exception extends LocalizedException
      * Exception name is used for SOAP faults generation.
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_name;
 
@@ -73,7 +69,6 @@ class Exception extends LocalizedException
      * Stacktrace
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_stackTrace;
 
@@ -81,7 +76,6 @@ class Exception extends LocalizedException
      * List of errors
      *
      * @var null|\Magento\Framework\Exception\LocalizedException[]
-     * @since 2.0.0
      */
     protected $_errors;
 
@@ -97,7 +91,6 @@ class Exception extends LocalizedException
      * @param string $stackTrace
      *
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function __construct(
         Phrase $phrase,
@@ -125,7 +118,6 @@ class Exception extends LocalizedException
      * Retrieve current HTTP code.
      *
      * @return int
-     * @since 2.0.0
      */
     public function getHttpCode()
     {
@@ -136,7 +128,6 @@ class Exception extends LocalizedException
      * Identify exception originator: sender or receiver.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getOriginator()
     {
@@ -147,7 +138,6 @@ class Exception extends LocalizedException
      * Retrieve exception details.
      *
      * @return array
-     * @since 2.0.0
      */
     public function getDetails()
     {
@@ -158,7 +148,6 @@ class Exception extends LocalizedException
      * Retrieve exception name.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -169,7 +158,6 @@ class Exception extends LocalizedException
      * Retrieve list of errors.
      *
      * @return null|\Magento\Framework\Exception\LocalizedException[]
-     * @since 2.0.0
      */
     public function getErrors()
     {
@@ -180,7 +168,6 @@ class Exception extends LocalizedException
      * Retrieve stack trace string.
      *
      * @return null|string
-     * @since 2.0.0
      */
     public function getStackTrace()
     {

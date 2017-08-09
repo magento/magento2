@@ -13,7 +13,6 @@ use Magento\Sales\Model\ResourceModel\Order\Comment\Collection\AbstractCollectio
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Collection extends AbstractCollection implements InvoiceCommentSearchResultInterface
 {
@@ -21,7 +20,6 @@ class Collection extends AbstractCollection implements InvoiceCommentSearchResul
      * Event prefix
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_invoice_comment_collection';
 
@@ -29,7 +27,6 @@ class Collection extends AbstractCollection implements InvoiceCommentSearchResul
      * Event object
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'order_invoice_comment_collection';
 
@@ -37,7 +34,6 @@ class Collection extends AbstractCollection implements InvoiceCommentSearchResul
      * Model initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -53,7 +49,6 @@ class Collection extends AbstractCollection implements InvoiceCommentSearchResul
      *
      * @param int $invoiceId
      * @return $this
-     * @since 2.0.0
      */
     public function setInvoiceFilter($invoiceId)
     {

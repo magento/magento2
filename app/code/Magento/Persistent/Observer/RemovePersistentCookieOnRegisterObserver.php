@@ -10,7 +10,6 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Plugin to change persistent session cart to guest cart on new customer register success.
- * @since 2.2.0
  */
 class RemovePersistentCookieOnRegisterObserver implements ObserverInterface
 {
@@ -18,7 +17,6 @@ class RemovePersistentCookieOnRegisterObserver implements ObserverInterface
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
-     * @since 2.2.0
      */
     protected $_customerSession;
 
@@ -26,7 +24,6 @@ class RemovePersistentCookieOnRegisterObserver implements ObserverInterface
      * Persistent session
      *
      * @var \Magento\Persistent\Helper\Session
-     * @since 2.2.0
      */
     protected $_persistentSession = null;
 
@@ -34,13 +31,11 @@ class RemovePersistentCookieOnRegisterObserver implements ObserverInterface
      * Persistent data
      *
      * @var \Magento\Persistent\Helper\Data
-     * @since 2.2.0
      */
     protected $_persistentData = null;
 
     /**
      * @var \Magento\Persistent\Model\QuoteManager
-     * @since 2.2.0
      */
     protected $quoteManager;
 
@@ -49,7 +44,6 @@ class RemovePersistentCookieOnRegisterObserver implements ObserverInterface
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Persistent\Model\QuoteManager $quoteManager
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
@@ -68,7 +62,6 @@ class RemovePersistentCookieOnRegisterObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
-     * @since 2.2.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

@@ -14,25 +14,21 @@ use Magento\Framework\View\Asset;
  * A publishing service for view assets
  *
  * @api
- * @since 2.0.0
  */
 class Publisher
 {
     /**
      * @var \Magento\Framework\Filesystem
-     * @since 2.0.0
      */
     protected $filesystem;
 
     /**
      * @var MaterializationStrategy\Factory
-     * @since 2.0.0
      */
     private $materializationStrategyFactory;
 
     /**
      * @var WriteFactory
-     * @since 2.1.0
      */
     private $writeFactory;
 
@@ -40,7 +36,6 @@ class Publisher
      * @param \Magento\Framework\Filesystem $filesystem
      * @param MaterializationStrategy\Factory $materializationStrategyFactory
      * @param WriteFactory $writeFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -55,7 +50,6 @@ class Publisher
     /**
      * @param Asset\LocalInterface $asset
      * @return bool
-     * @since 2.0.0
      */
     public function publish(Asset\LocalInterface $asset)
     {
@@ -72,7 +66,6 @@ class Publisher
      *
      * @param Asset\LocalInterface $asset
      * @return bool
-     * @since 2.0.0
      */
     private function publishAsset(Asset\LocalInterface $asset)
     {

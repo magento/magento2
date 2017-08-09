@@ -9,33 +9,28 @@ namespace Magento\Store\Api\Data;
  * Website interface
  *
  * @api
- * @since 2.0.0
  */
 interface WebsiteInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getId();
 
     /**
      * @param int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setId($id);
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getCode();
 
     /**
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function setCode($code);
 
@@ -43,7 +38,6 @@ interface WebsiteInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Rethreive website name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName();
 
@@ -52,20 +46,17 @@ interface WebsiteInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setName($name);
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getDefaultGroupId();
 
     /**
      * @param int $defaultGroupId
      * @return $this
-     * @since 2.0.0
      */
     public function setDefaultGroupId($defaultGroupId);
 
@@ -73,7 +64,6 @@ interface WebsiteInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Store\Api\Data\WebsiteExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -82,7 +72,6 @@ interface WebsiteInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param \Magento\Store\Api\Data\WebsiteExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Store\Api\Data\WebsiteExtensionInterface $extensionAttributes

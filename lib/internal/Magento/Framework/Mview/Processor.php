@@ -8,19 +8,16 @@ namespace Magento\Framework\Mview;
 /**
  * Class \Magento\Framework\Mview\Processor
  *
- * @since 2.0.0
  */
 class Processor implements ProcessorInterface
 {
     /**
      * @var View\CollectionFactory
-     * @since 2.0.0
      */
     protected $viewsFactory;
 
     /**
      * @param View\CollectionFactory $viewsFactory
-     * @since 2.0.0
      */
     public function __construct(View\CollectionFactory $viewsFactory)
     {
@@ -32,7 +29,6 @@ class Processor implements ProcessorInterface
      *
      * @param string $group
      * @return ViewInterface[]
-     * @since 2.0.0
      */
     protected function getViewsByGroup($group = '')
     {
@@ -45,7 +41,6 @@ class Processor implements ProcessorInterface
      *
      * @param string $group
      * @return void
-     * @since 2.0.0
      */
     public function update($group = '')
     {
@@ -59,7 +54,6 @@ class Processor implements ProcessorInterface
      *
      * @param string $group
      * @return void
-     * @since 2.0.0
      */
     public function clearChangelog($group = '')
     {

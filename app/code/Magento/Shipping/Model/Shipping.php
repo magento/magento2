@@ -12,7 +12,6 @@ use Magento\Sales\Model\Order\Shipment;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Shipping implements RateCollectorInterface
 {
@@ -20,7 +19,6 @@ class Shipping implements RateCollectorInterface
      * Default shipping orig for requests
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_orig = null;
 
@@ -28,7 +26,6 @@ class Shipping implements RateCollectorInterface
      * Cached result
      *
      * @var \Magento\Shipping\Model\Rate\Result
-     * @since 2.0.0
      */
     protected $_result = null;
 
@@ -36,7 +33,6 @@ class Shipping implements RateCollectorInterface
      * Part of carrier xml config path
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_availabilityConfigField = 'active';
 
@@ -44,61 +40,51 @@ class Shipping implements RateCollectorInterface
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Shipping\Model\Config
-     * @since 2.0.0
      */
     protected $_shippingConfig;
 
     /**
      * @var \Magento\Shipping\Model\CarrierFactory
-     * @since 2.0.0
      */
     protected $_carrierFactory;
 
     /**
      * @var \Magento\Shipping\Model\Rate\ResultFactory
-     * @since 2.0.0
      */
     protected $_rateResultFactory;
 
     /**
      * @var \Magento\Quote\Model\Quote\Address\RateRequestFactory
-     * @since 2.0.0
      */
     protected $_shipmentRequestFactory;
 
     /**
      * @var \Magento\Directory\Model\RegionFactory
-     * @since 2.0.0
      */
     protected $_regionFactory;
 
     /**
      * @var \Magento\Framework\Math\Division
-     * @since 2.0.0
      */
     protected $mathDivision;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
-     * @since 2.0.0
      */
     protected $stockRegistry;
 
     /**
      * @var RateRequestFactory
-     * @since 2.2.0
      */
     private $rateRequestFactory;
 
@@ -115,7 +101,6 @@ class Shipping implements RateCollectorInterface
      * @param RateRequestFactory $rateRequestFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -145,7 +130,6 @@ class Shipping implements RateCollectorInterface
      * Get shipping rate result model
      *
      * @return \Magento\Shipping\Model\Rate\Result
-     * @since 2.0.0
      */
     public function getResult()
     {
@@ -160,7 +144,6 @@ class Shipping implements RateCollectorInterface
      *
      * @param array $data
      * @return void
-     * @since 2.0.0
      */
     public function setOrigData($data)
     {
@@ -171,7 +154,6 @@ class Shipping implements RateCollectorInterface
      * Reset cached result
      *
      * @return $this
-     * @since 2.0.0
      */
     public function resetResult()
     {
@@ -183,7 +165,6 @@ class Shipping implements RateCollectorInterface
      * Retrieve configuration model
      *
      * @return \Magento\Shipping\Model\Config
-     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -196,7 +177,6 @@ class Shipping implements RateCollectorInterface
      * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return $this
      * @todo make it ordered
-     * @since 2.0.0
      */
     public function collectRates(\Magento\Quote\Model\Quote\Address\RateRequest $request)
     {
@@ -268,7 +248,6 @@ class Shipping implements RateCollectorInterface
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function collectCarrierRates($carrierCode, $request)
     {
@@ -350,7 +329,6 @@ class Shipping implements RateCollectorInterface
      * @return array [int, float]
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function composePackagesForCarrier($carrier, $request)
     {
@@ -447,7 +425,6 @@ class Shipping implements RateCollectorInterface
      * @param array $items
      * @param float $maxWeight
      * @return array
-     * @since 2.0.0
      */
     protected function _makePieces($items, $maxWeight)
     {
@@ -494,7 +471,6 @@ class Shipping implements RateCollectorInterface
      * @param \Magento\Framework\DataObject $address
      * @param null|bool|array $limitCarrier
      * @return $this
-     * @since 2.0.0
      */
     public function collectRatesByAddress(\Magento\Framework\DataObject $address, $limitCarrier = null)
     {
@@ -528,7 +504,6 @@ class Shipping implements RateCollectorInterface
      *
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function setCarrierAvailabilityConfigField($code = 'active')
     {

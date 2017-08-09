@@ -7,7 +7,6 @@ namespace Magento\Catalog\Model\ResourceModel\ProductFrontendAction;
 
 /**
  * Collection of Product Frontend Actions
- * @since 2.2.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -15,7 +14,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Initializes Product Frontend Actions collection
      *
      * @return void
-     * @since 2.2.0
      */
     protected function _construct()
     {
@@ -31,7 +29,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $customerId
      * @param int $visitorId
      * @return $this
-     * @since 2.2.0
      */
     public function addFilterByUserIdentities($customerId, $visitorId)
     {

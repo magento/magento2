@@ -15,7 +15,6 @@ use Magento\SalesRule\Api\Data\RuleInterface;
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\SalesRule\Api\Data\RuleInterface
@@ -52,7 +51,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Return rule id
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getRuleId()
     {
@@ -64,7 +62,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param int $ruleId
      * @return $this
-     * @since 2.0.0
      */
     public function setRuleId($ruleId)
     {
@@ -75,7 +72,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get rule name
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -87,7 +83,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -98,7 +93,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get description
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getDescription()
     {
@@ -110,7 +104,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $description
      * @return $this
-     * @since 2.0.0
      */
     public function setDescription($description)
     {
@@ -121,7 +114,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get the start date when the coupon is active
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getFromDate()
     {
@@ -133,7 +125,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $fromDate
      * @return $this
-     * @since 2.0.0
      */
     public function setFromDate($fromDate)
     {
@@ -144,7 +135,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get the end date when the coupon is active
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getToDate()
     {
@@ -156,7 +146,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $toDate
      * @return $this
-     * @since 2.0.0
      */
     public function setToDate($toDate)
     {
@@ -167,7 +156,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get number of uses per customer
      *
      * @return int
-     * @since 2.0.0
      */
     public function getUsesPerCustomer()
     {
@@ -179,7 +167,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param int $usesPerCustomer
      * @return $this
-     * @since 2.0.0
      */
     public function setUsesPerCustomer($usesPerCustomer)
     {
@@ -191,7 +178,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsActive()
     {
@@ -203,7 +189,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param bool $isActive
      * @return bool
-     * @since 2.0.0
      */
     public function setIsActive($isActive)
     {
@@ -214,7 +199,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get condition for the rule
      *
      * @return \Magento\SalesRule\Api\Data\ConditionInterface|null
-     * @since 2.0.0
      */
     public function getCondition()
     {
@@ -226,7 +210,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param \Magento\SalesRule\Api\Data\ConditionInterface|null $condition
      * @return $this
-     * @since 2.0.0
      */
     public function setCondition(ConditionInterface $condition = null)
     {
@@ -237,7 +220,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get action condition
      *
      * @return \Magento\SalesRule\Api\Data\ConditionInterface|null
-     * @since 2.0.0
      */
     public function getActionCondition()
     {
@@ -249,7 +231,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param \Magento\SalesRule\Api\Data\ConditionInterface|null $actionCondition
      * @return $this
-     * @since 2.0.0
      */
     public function setActionCondition(ConditionInterface $actionCondition = null)
     {
@@ -261,7 +242,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getStopRulesProcessing()
     {
@@ -273,7 +253,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param bool $stopRulesProcessing
      * @return $this
-     * @since 2.0.0
      */
     public function setStopRulesProcessing($stopRulesProcessing)
     {
@@ -285,7 +264,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsAdvanced()
     {
@@ -295,7 +273,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
     /**
      * @param bool $isAdvanced
      * @return $this
-     * @since 2.0.0
      */
     public function setIsAdvanced($isAdvanced)
     {
@@ -306,7 +283,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get display label
      *
      * @return \Magento\SalesRule\Api\Data\RuleLabelInterface[]|null
-     * @since 2.0.0
      */
     public function getStoreLabels()
     {
@@ -318,7 +294,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param \Magento\SalesRule\Api\Data\RuleLabelInterface[]|null $storeLabels
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreLabels(array $storeLabels = null)
     {
@@ -329,7 +304,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get a list of websites the rule applies to
      *
      * @return int[]
-     * @since 2.0.0
      */
     public function getWebsiteIds()
     {
@@ -341,7 +315,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param int[] $websites
      * @return $this
-     * @since 2.0.0
      */
     public function setWebsiteIds(array $websites)
     {
@@ -352,7 +325,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get ids of customer groups that the rule applies to
      *
      * @return int[]
-     * @since 2.0.0
      */
     public function getCustomerGroupIds()
     {
@@ -364,7 +336,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param int[] $customerGroups
      * @return $this
-     * @since 2.0.0
      */
     public function setCustomerGroupIds(array $customerGroups)
     {
@@ -375,7 +346,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Return product ids
      *
      * @return int[]|null
-     * @since 2.0.0
      */
     public function getProductIds()
     {
@@ -387,7 +357,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param int[]|null $productIds
      * @return $this
-     * @since 2.0.0
      */
     public function setProductIds(array $productIds = null)
     {
@@ -398,7 +367,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get sort order
      *
      * @return int
-     * @since 2.0.0
      */
     public function getSortOrder()
     {
@@ -408,7 +376,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
     /**
      * @param int $sortOrder
      * @return $this
-     * @since 2.0.0
      */
     public function setSortOrder($sortOrder)
     {
@@ -419,7 +386,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get simple action of the rule
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getSimpleAction()
     {
@@ -431,7 +397,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $simpleAction
      * @return $this
-     * @since 2.0.0
      */
     public function setSimpleAction($simpleAction)
     {
@@ -442,7 +407,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get discount amount
      *
      * @return float
-     * @since 2.0.0
      */
     public function getDiscountAmount()
     {
@@ -454,7 +418,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param float $discountAmount
      * @return $this
-     * @since 2.0.0
      */
     public function setDiscountAmount($discountAmount)
     {
@@ -465,7 +428,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Return maximum qty discount is applied
      *
      * @return float
-     * @since 2.0.0
      */
     public function getDiscountQty()
     {
@@ -477,7 +439,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param float $discountQty
      * @return $this
-     * @since 2.0.0
      */
     public function setDiscountQty($discountQty)
     {
@@ -488,7 +449,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get discount step
      *
      * @return int
-     * @since 2.0.0
      */
     public function getDiscountStep()
     {
@@ -500,7 +460,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param int $discountStep
      * @return $this
-     * @since 2.0.0
      */
     public function setDiscountStep($discountStep)
     {
@@ -512,7 +471,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getApplyToShipping()
     {
@@ -524,7 +482,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param bool $applyToShipping
      * @return $this
-     * @since 2.0.0
      */
     public function setApplyToShipping($applyToShipping)
     {
@@ -535,7 +492,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Return how many times the rule has been used
      *
      * @return int
-     * @since 2.0.0
      */
     public function getTimesUsed()
     {
@@ -547,7 +503,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param int $timesUsed
      * @return $this
-     * @since 2.0.0
      */
     public function setTimesUsed($timesUsed)
     {
@@ -559,7 +514,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsRss()
     {
@@ -571,7 +525,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param bool $isRss
      * @return $this
-     * @since 2.0.0
      */
     public function setIsRss($isRss)
     {
@@ -582,7 +535,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get coupon type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCouponType()
     {
@@ -594,7 +546,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $couponType
      * @return $this
-     * @since 2.0.0
      */
     public function setCouponType($couponType)
     {
@@ -606,7 +557,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getUseAutoGeneration()
     {
@@ -618,7 +568,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param bool $useAutoGeneration
      * @return $this
-     * @since 2.0.0
      */
     public function setUseAutoGeneration($useAutoGeneration)
     {
@@ -629,7 +578,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Return limit of uses per coupon
      *
      * @return int
-     * @since 2.0.0
      */
     public function getUsesPerCoupon()
     {
@@ -641,7 +589,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param int $usesPerCoupon
      * @return $this
-     * @since 2.0.0
      */
     public function setUsesPerCoupon($usesPerCoupon)
     {
@@ -652,7 +599,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * When to grant free shipping
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSimpleFreeShipping()
     {
@@ -664,7 +610,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $simpleFreeShipping
      * @return $this
-     * @since 2.0.0
      */
     public function setSimpleFreeShipping($simpleFreeShipping)
     {
@@ -675,7 +620,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * {@inheritdoc}
      *
      * @return \Magento\SalesRule\Api\Data\RuleExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -687,7 +631,6 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param \Magento\SalesRule\Api\Data\RuleExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\SalesRule\Api\Data\RuleExtensionInterface $extensionAttributes

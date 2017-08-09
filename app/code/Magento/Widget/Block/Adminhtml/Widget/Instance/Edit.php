@@ -13,7 +13,6 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -21,7 +20,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -29,7 +27,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -44,7 +41,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Internal constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -58,7 +54,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Getter
      *
      * @return \Magento\Widget\Model\Widget\Instance
-     * @since 2.0.0
      */
     public function getWidgetInstance()
     {
@@ -70,7 +65,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Adding save_and_continue button
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _preparelayout()
     {
@@ -98,7 +92,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Return translated header text depending on creating/editing action
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -113,7 +106,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Return validation url for edit form
      *
      * @return string
-     * @since 2.0.0
      */
     public function getValidationUrl()
     {
@@ -124,7 +116,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Return save url for edit form
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSaveUrl()
     {

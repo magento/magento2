@@ -9,43 +9,36 @@ namespace Magento\Checkout\Block;
  * Onepage checkout block
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Onepage extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Framework\Data\Form\FormKey
-     * @since 2.0.0
      */
     protected $formKey;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_isScopePrivate = false;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $jsLayout;
 
     /**
      * @var \Magento\Checkout\Model\CompositeConfigProvider
-     * @since 2.0.0
      */
     protected $configProvider;
 
     /**
      * @var array|\Magento\Checkout\Block\Checkout\LayoutProcessorInterface[]
-     * @since 2.0.0
      */
     protected $layoutProcessors;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -57,7 +50,6 @@ class Onepage extends \Magento\Framework\View\Element\Template
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -79,7 +71,6 @@ class Onepage extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getJsLayout()
     {
@@ -94,7 +85,6 @@ class Onepage extends \Magento\Framework\View\Element\Template
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getFormKey()
     {
@@ -106,7 +96,6 @@ class Onepage extends \Magento\Framework\View\Element\Template
      *
      * @return array
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getCheckoutConfig()
     {
@@ -118,7 +107,6 @@ class Onepage extends \Magento\Framework\View\Element\Template
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getBaseUrl()
     {
@@ -127,7 +115,7 @@ class Onepage extends \Magento\Framework\View\Element\Template
 
     /**
      * @return bool|string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getSerializedCheckoutConfig()
     {

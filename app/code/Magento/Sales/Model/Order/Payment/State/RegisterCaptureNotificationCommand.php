@@ -14,19 +14,16 @@ use Magento\Sales\Model\Order\StatusResolver;
 /**
  * Class \Magento\Sales\Model\Order\Payment\State\RegisterCaptureNotificationCommand
  *
- * @since 2.0.0
  */
 class RegisterCaptureNotificationCommand implements CommandInterface
 {
     /**
      * @var StatusResolver
-     * @since 2.2.0
      */
     private $statusResolver;
 
     /**
      * @param StatusResolver|null $statusResolver
-     * @since 2.2.0
      */
     public function __construct(StatusResolver $statusResolver = null)
     {
@@ -39,7 +36,6 @@ class RegisterCaptureNotificationCommand implements CommandInterface
      * @param string|float|int $amount
      * @param OrderInterface $order
      * @return string
-     * @since 2.0.0
      */
     public function execute(OrderPaymentInterface $payment, $amount, OrderInterface $order)
     {
@@ -69,13 +65,12 @@ class RegisterCaptureNotificationCommand implements CommandInterface
     }
 
     /**
-     * @deprecated 2.2.0 Replaced by a StatusResolver class call.
+     * @deprecated 100.2.0 Replaced by a StatusResolver class call.
      *
      * @param Order $order
      * @param string $status
      * @param string $state
      * @return void
-     * @since 2.0.0
      */
     protected function setOrderStateAndStatus(Order $order, $status, $state)
     {

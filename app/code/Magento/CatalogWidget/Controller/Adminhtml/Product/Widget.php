@@ -9,7 +9,6 @@ use Magento\Backend\App\Action;
 
 /**
  * Class Widget
- * @since 2.0.0
  */
 abstract class Widget extends Action
 {

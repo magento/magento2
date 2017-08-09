@@ -11,7 +11,6 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterface as ProductOption;
 
 /**
  * Plugin for Magento\Quote\Model\Quote\Item\ToOrderItem
- * @since 2.0.0
  */
 class QuoteItemProductOption
 {
@@ -24,7 +23,6 @@ class QuoteItemProductOption
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function beforeConvert(
         QuoteToOrderItem $subject,

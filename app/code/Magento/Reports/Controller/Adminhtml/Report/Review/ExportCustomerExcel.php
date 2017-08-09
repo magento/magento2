@@ -12,7 +12,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Review\ExportCustomerExcel
  *
- * @since 2.0.0
  */
 class ExportCustomerExcel extends \Magento\Reports\Controller\Adminhtml\Report\Review
 {
@@ -20,7 +19,6 @@ class ExportCustomerExcel extends \Magento\Reports\Controller\Adminhtml\Report\R
      * Export review customer report to Excel XML format
      *
      * @return ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

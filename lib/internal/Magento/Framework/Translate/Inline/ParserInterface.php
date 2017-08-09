@@ -9,7 +9,6 @@ namespace Magento\Framework\Translate\Inline;
  * Processes the content with the inline translation replacement so the inline translate JavaScript code will work.
  *
  * @api
- * @since 2.0.0
  */
 interface ParserInterface
 {
@@ -23,7 +22,6 @@ interface ParserInterface
      *
      * @param array $translateParams
      * @return $this
-     * @since 2.0.0
      */
     public function processAjaxPost(array $translateParams);
 
@@ -32,7 +30,6 @@ interface ParserInterface
      *
      * @param string $body
      * @return string
-     * @since 2.0.0
      */
     public function processResponseBodyString($body);
 
@@ -40,7 +37,6 @@ interface ParserInterface
      * Returns the body content that is being parsed.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getContent();
 
@@ -49,7 +45,6 @@ interface ParserInterface
      *
      * @param $content string
      * @return void
-     * @since 2.0.0
      */
     public function setContent($content);
 
@@ -58,7 +53,6 @@ interface ParserInterface
      *
      * @param bool $flag
      * @return $this
-     * @since 2.0.0
      */
     public function setIsJson($flag);
 }

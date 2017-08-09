@@ -14,37 +14,31 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Customer
- * @since 2.0.0
  */
 class CustomerManagement
 {
     /**
      * @var CustomerRepository
-     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var CustomerAddressRepository
-     * @since 2.0.0
      */
     protected $customerAddressRepository;
 
     /**
      * @var AccountManagement
-     * @since 2.0.0
      */
     protected $accountManagement;
 
     /**
      * @var \Magento\Framework\Validator\Factory
-     * @since 2.2.0
      */
     private $validatorFactory;
 
     /**
      * @var \Magento\Customer\Model\AddressFactory
-     * @since 2.2.0
      */
     private $addressFactory;
 
@@ -55,7 +49,6 @@ class CustomerManagement
      * @param AccountManagement $accountManagement
      * @param \Magento\Framework\Validator\Factory|null $validatorFactory
      * @param \Magento\Customer\Model\AddressFactory|null $addressFactory
-     * @since 2.0.0
      */
     public function __construct(
         CustomerRepository $customerRepository,
@@ -78,7 +71,6 @@ class CustomerManagement
      *
      * @param Quote $quote
      * @return void
-     * @since 2.0.0
      */
     public function populateCustomerInfo(QuoteEntity $quote)
     {
@@ -114,7 +106,6 @@ class CustomerManagement
      * @param Quote $quote
      * @throws \Magento\Framework\Validator\Exception
      * @return void
-     * @since 2.2.0
      */
     public function validateAddresses(QuoteEntity $quote)
     {

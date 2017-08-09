@@ -15,19 +15,16 @@ use Magento\Weee\Helper\Data;
 /**
  * Class \Magento\Weee\Observer\CustomerLoggedIn
  *
- * @since 2.0.0
  */
 class CustomerLoggedIn implements ObserverInterface
 {
     /**
      * @var Session
-     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var Data
-     * @since 2.0.0
      */
     protected $weeeHelper;
 
@@ -35,7 +32,6 @@ class CustomerLoggedIn implements ObserverInterface
      * Module manager
      *
      * @var Manager
-     * @since 2.0.0
      */
     private $moduleManager;
 
@@ -43,7 +39,6 @@ class CustomerLoggedIn implements ObserverInterface
      * Cache config
      *
      * @var Config
-     * @since 2.0.0
      */
     private $cacheConfig;
 
@@ -52,7 +47,6 @@ class CustomerLoggedIn implements ObserverInterface
      * @param Data $weeeHelper
      * @param Manager $moduleManager
      * @param Config $cacheConfig
-     * @since 2.0.0
      */
     public function __construct(
         Session $customerSession,
@@ -70,7 +64,6 @@ class CustomerLoggedIn implements ObserverInterface
      * @param Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

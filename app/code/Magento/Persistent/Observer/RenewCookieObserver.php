@@ -11,7 +11,6 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Persistent Session Observer
- * @since 2.0.0
  */
 class RenewCookieObserver implements ObserverInterface
 {
@@ -19,7 +18,6 @@ class RenewCookieObserver implements ObserverInterface
      * Persistent session
      *
      * @var \Magento\Persistent\Helper\Session
-     * @since 2.0.0
      */
     protected $_persistentSession;
 
@@ -27,7 +25,6 @@ class RenewCookieObserver implements ObserverInterface
      * Persistent data
      *
      * @var \Magento\Persistent\Helper\Data
-     * @since 2.0.0
      */
     protected $_persistentData = null;
 
@@ -35,7 +32,6 @@ class RenewCookieObserver implements ObserverInterface
      * Session factory
      *
      * @var \Magento\Persistent\Model\SessionFactory
-     * @since 2.0.0
      */
     protected $_sessionFactory;
 
@@ -43,7 +39,6 @@ class RenewCookieObserver implements ObserverInterface
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
@@ -54,7 +49,6 @@ class RenewCookieObserver implements ObserverInterface
      * @param \Magento\Persistent\Helper\Session $persistentSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Persistent\Model\SessionFactory $sessionFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Persistent\Helper\Data $persistentData,
@@ -73,7 +67,6 @@ class RenewCookieObserver implements ObserverInterface
      *
      * @param Observer $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

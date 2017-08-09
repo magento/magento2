@@ -10,13 +10,11 @@ use Magento\Sales\Model\ValidatorInterface;
 
 /**
  * Class TotalsValidator
- * @since 2.2.0
  */
 class TotalsValidator implements ValidatorInterface
 {
     /**
      * @var PriceCurrencyInterface
-     * @since 2.2.0
      */
     private $priceCurrency;
 
@@ -24,7 +22,6 @@ class TotalsValidator implements ValidatorInterface
      * TotalsValidator constructor.
      *
      * @param PriceCurrencyInterface $priceCurrency
-     * @since 2.2.0
      */
     public function __construct(PriceCurrencyInterface $priceCurrency)
     {
@@ -33,7 +30,6 @@ class TotalsValidator implements ValidatorInterface
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function validate($entity)
     {

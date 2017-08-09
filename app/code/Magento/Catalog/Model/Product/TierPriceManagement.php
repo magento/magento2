@@ -16,49 +16,41 @@ use Magento\Framework\Exception\TemporaryStateExceptionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManagementInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory
-     * @since 2.0.0
      */
     protected $priceFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Catalog\Model\Product\PriceModifier
-     * @since 2.0.0
      */
     protected $priceModifier;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var GroupManagementInterface
-     * @since 2.0.0
      */
     protected $groupManagement;
 
     /**
      * @var GroupRepositoryInterface
-     * @since 2.0.0
      */
     protected $groupRepository;
 
@@ -70,7 +62,6 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param GroupManagementInterface $groupManagement
      * @param GroupRepositoryInterface $groupRepository
-     * @since 2.0.0
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
@@ -94,7 +85,6 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function add($sku, $customerGroupId, $price, $qty)
     {
@@ -159,7 +149,6 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function remove($sku, $customerGroupId, $qty)
     {
@@ -175,7 +164,6 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getList($sku, $customerGroupId)
     {

@@ -8,37 +8,31 @@ namespace Magento\Checkout\Block\Cart;
 /**
  * Class \Magento\Checkout\Block\Cart\LayoutProcessor
  *
- * @since 2.0.0
  */
 class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcessorInterface
 {
     /**
      * @var \Magento\Checkout\Block\Checkout\AttributeMerger
-     * @since 2.0.0
      */
     protected $merger;
 
     /**
      * @var \Magento\Directory\Model\ResourceModel\Country\Collection
-     * @since 2.0.0
      */
     protected $countryCollection;
 
     /**
      * @var \Magento\Directory\Model\ResourceModel\Region\Collection
-     * @since 2.0.0
      */
     protected $regionCollection;
 
     /**
      * @var \Magento\Customer\Api\Data\AddressInterface
-     * @since 2.0.0
      */
     protected $defaultShippingAddress = null;
 
     /**
      * @var \Magento\Directory\Model\TopDestinationCountries
-     * @since 2.2.0
      */
     private $topDestinationCountries;
 
@@ -48,7 +42,6 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @param \Magento\Directory\Model\ResourceModel\Region\Collection $regionCollection
      * @param \Magento\Directory\Model\TopDestinationCountries $topDestinationCountries
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Checkout\Block\Checkout\AttributeMerger $merger,
@@ -69,7 +62,6 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      *
      * @return bool
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function isCityActive()
     {
@@ -81,7 +73,6 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      *
      * @return bool
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function isStateActive()
     {
@@ -94,7 +85,6 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @param array $jsLayout
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function process($jsLayout)
     {

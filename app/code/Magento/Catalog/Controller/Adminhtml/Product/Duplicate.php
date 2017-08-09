@@ -12,13 +12,11 @@ use Magento\Catalog\Controller\Adminhtml\Product;
 /**
  * Class \Magento\Catalog\Controller\Adminhtml\Product\Duplicate
  *
- * @since 2.0.0
  */
 class Duplicate extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var \Magento\Catalog\Model\Product\Copier
-     * @since 2.0.0
      */
     protected $productCopier;
 
@@ -26,7 +24,6 @@ class Duplicate extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param Action\Context $context
      * @param Builder $productBuilder
      * @param \Magento\Catalog\Model\Product\Copier $productCopier
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -41,7 +38,6 @@ class Duplicate extends \Magento\Catalog\Controller\Adminhtml\Product
      * Create product duplicate
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

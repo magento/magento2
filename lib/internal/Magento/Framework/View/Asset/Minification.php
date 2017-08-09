@@ -11,7 +11,6 @@ use Magento\Framework\App\State;
 /**
  * Helper class for static files minification related processes.
  * @api
- * @since 2.0.0
  */
 class Minification
 {
@@ -24,25 +23,21 @@ class Minification
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     private $scopeConfig;
 
     /**
      * @var State
-     * @since 2.0.0
      */
     private $appState;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $scope;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $configCache = [];
 
@@ -50,7 +45,6 @@ class Minification
      * @param ScopeConfigInterface $scopeConfig
      * @param State $appState
      * @param string $scope
-     * @since 2.0.0
      */
     public function __construct(ScopeConfigInterface $scopeConfig, State $appState, $scope = 'store')
     {
@@ -64,7 +58,6 @@ class Minification
      *
      * @param string $contentType
      * @return bool
-     * @since 2.0.0
      */
     public function isEnabled($contentType)
     {
@@ -85,7 +78,6 @@ class Minification
      *
      * @param string $filename
      * @return string
-     * @since 2.0.0
      */
     public function addMinifiedSign($filename)
     {
@@ -105,7 +97,6 @@ class Minification
      *
      * @param string $filename
      * @return string
-     * @since 2.0.0
      */
     public function removeMinifiedSign($filename)
     {
@@ -123,7 +114,6 @@ class Minification
     /**
      * @param string $filename
      * @return bool
-     * @since 2.0.0
      */
     public function isMinifiedFilename($filename)
     {
@@ -133,7 +123,6 @@ class Minification
     /**
      * @param string $filename
      * @return boolean
-     * @since 2.0.0
      */
     public function isExcluded($filename)
     {
@@ -148,7 +137,6 @@ class Minification
     /**
      * @param string $contentType
      * @return string[]
-     * @since 2.0.0
      */
     public function getExcludes($contentType)
     {

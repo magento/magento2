@@ -11,7 +11,6 @@ namespace Magento\AdminNotification\Block;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class ToolbarEntry extends \Magento\Backend\Block\Template
 {
@@ -34,7 +33,6 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
      * Collection of latest unread notifications
      *
      * @var \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection
-     * @since 2.0.0
      */
     protected $_notificationList;
 
@@ -42,7 +40,6 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread $notificationList
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -57,7 +54,6 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
      * Retrieve notification description start length
      *
      * @return int
-     * @since 2.0.0
      */
     public function getNotificationDescriptionLength()
     {
@@ -68,7 +64,6 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
      * Retrieve notification counter max value
      *
      * @return int
-     * @since 2.0.0
      */
     public function getNotificationCounterMax()
     {
@@ -79,7 +74,6 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
      * Retrieve number of unread notifications
      *
      * @return int
-     * @since 2.0.0
      */
     public function getUnreadNotificationCount()
     {
@@ -90,7 +84,6 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
      * Retrieve the list of latest unread notifications
      *
      * @return \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection
-     * @since 2.0.0
      */
     public function getLatestUnreadNotifications()
     {
@@ -102,7 +95,6 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
      *
      * @param string $dateString
      * @return string
-     * @since 2.0.0
      */
     public function formatNotificationDate($dateString)
     {

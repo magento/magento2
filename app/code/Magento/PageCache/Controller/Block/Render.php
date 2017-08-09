@@ -9,7 +9,6 @@ namespace Magento\PageCache\Controller\Block;
 /**
  * Class \Magento\PageCache\Controller\Block\Render
  *
- * @since 2.0.0
  */
 class Render extends \Magento\PageCache\Controller\Block
 {
@@ -17,7 +16,6 @@ class Render extends \Magento\PageCache\Controller\Block
      * Returns block content depends on ajax request
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

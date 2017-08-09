@@ -12,25 +12,21 @@ use Magento\NewRelicReporting\Model\NewRelicWrapper;
 
 /**
  * Class ReportConcurrentAdminsToNewRelic
- * @since 2.0.0
  */
 class ReportConcurrentAdminsToNewRelic implements ObserverInterface
 {
     /**
      * @var Config
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Backend\Model\Auth\Session
-     * @since 2.0.0
      */
     protected $backendAuthSession;
 
     /**
      * @var NewRelicWrapper
-     * @since 2.0.0
      */
     protected $newRelicWrapper;
 
@@ -38,7 +34,6 @@ class ReportConcurrentAdminsToNewRelic implements ObserverInterface
      * @param Config $config
      * @param \Magento\Backend\Model\Auth\Session $backendAuthSession
      * @param NewRelicWrapper $newRelicWrapper
-     * @since 2.0.0
      */
     public function __construct(
         Config $config,
@@ -56,7 +51,6 @@ class ReportConcurrentAdminsToNewRelic implements ObserverInterface
      * @param Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

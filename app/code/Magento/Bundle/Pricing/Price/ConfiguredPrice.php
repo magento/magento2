@@ -15,7 +15,6 @@ use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 /**
  * Configured price model
  * @api
- * @since 2.0.0
  */
 class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPriceInterface
 {
@@ -26,13 +25,11 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
 
     /**
      * @var BundleCalculatorInterface
-     * @since 2.0.0
      */
     protected $calculator;
 
     /**
      * @var null|ItemInterface
-     * @since 2.0.0
      */
     protected $item;
 
@@ -40,7 +37,6 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      * Serializer interface instance.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -51,7 +47,6 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param ItemInterface $item
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         Product $saleableItem,
@@ -70,7 +65,6 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
     /**
      * @param ItemInterface $item
      * @return $this
-     * @since 2.0.0
      */
     public function setItem(ItemInterface $item)
     {
@@ -82,7 +76,6 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      * Get Options with attached Selections collection
      *
      * @return array|\Magento\Bundle\Model\ResourceModel\Option\Collection
-     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -116,7 +109,6 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      *
      * @param float $baseValue
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     public function getConfiguredAmount($baseValue = 0.)
     {
@@ -138,7 +130,6 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      * Get price value
      *
      * @return float
-     * @since 2.0.0
      */
     public function getValue()
     {
@@ -157,7 +148,6 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      * Get Amount for configured price which is included amount for all selected options
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
-     * @since 2.0.0
      */
     public function getAmount()
     {

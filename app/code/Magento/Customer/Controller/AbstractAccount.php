@@ -12,7 +12,6 @@ use Magento\Framework\App\Action\Action;
  * Class AbstractAccount
  * @package Magento\Customer\Controller
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @since 2.0.0
  */
 abstract class AbstractAccount extends Action implements AccountInterface
 {

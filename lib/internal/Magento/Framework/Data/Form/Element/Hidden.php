@@ -16,7 +16,6 @@ use Magento\Framework\Escaper;
 /**
  * Class \Magento\Framework\Data\Form\Element\Hidden
  *
- * @since 2.0.0
  */
 class Hidden extends AbstractElement
 {
@@ -25,7 +24,6 @@ class Hidden extends AbstractElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -40,7 +38,6 @@ class Hidden extends AbstractElement
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getDefaultHtml()
     {

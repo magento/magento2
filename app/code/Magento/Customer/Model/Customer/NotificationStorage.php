@@ -11,7 +11,6 @@ use Magento\Framework\Serialize\SerializerInterface;
 /**
  * Class \Magento\Customer\Model\Customer\NotificationStorage
  *
- * @since 2.1.0
  */
 class NotificationStorage
 {
@@ -19,7 +18,6 @@ class NotificationStorage
 
     /**
      * @var FrontendInterface
-     * @since 2.1.0
      */
     private $cache;
 
@@ -28,15 +26,13 @@ class NotificationStorage
      */
 
     /**
-     * @var SerializerInterface
-     * @since 2.2.0
+     * @param FrontendInterface $cache
      */
     private $serializer;
 
     /**
      * NotificationStorage constructor.
      * @param FrontendInterface $cache
-     * @since 2.1.0
      */
     public function __construct(FrontendInterface $cache)
     {
@@ -49,7 +45,6 @@ class NotificationStorage
      * @param string $notificationType
      * @param string $customerId
      * @return void
-     * @since 2.1.0
      */
     public function add($notificationType, $customerId)
     {
@@ -68,7 +63,6 @@ class NotificationStorage
      * @param string $notificationType
      * @param string $customerId
      * @return bool
-     * @since 2.1.0
      */
     public function isExists($notificationType, $customerId)
     {
@@ -81,7 +75,6 @@ class NotificationStorage
      * @param string $notificationType
      * @param string $customerId
      * @return void
-     * @since 2.1.0
      */
     public function remove($notificationType, $customerId)
     {
@@ -94,7 +87,6 @@ class NotificationStorage
      * @param string $notificationType
      * @param string $customerId
      * @return string
-     * @since 2.1.0
      */
     private function getCacheKey($notificationType, $customerId)
     {
@@ -105,8 +97,7 @@ class NotificationStorage
      * Get serializer
      *
      * @return SerializerInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {

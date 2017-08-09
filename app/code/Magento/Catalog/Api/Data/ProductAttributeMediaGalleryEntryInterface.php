@@ -11,7 +11,6 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInterface
 {
@@ -28,7 +27,6 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      * Retrieve gallery entry ID
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getId();
 
@@ -37,7 +35,6 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      *
      * @param int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setId($id);
 
@@ -45,7 +42,6 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      * Get media type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getMediaType();
 
@@ -54,7 +50,6 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      *
      * @param string $mediaType
      * @return $this
-     * @since 2.0.0
      */
     public function setMediaType($mediaType);
 
@@ -62,7 +57,6 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      * Retrieve gallery entry alternative text
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLabel();
 
@@ -71,7 +65,6 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      *
      * @param string $label
      * @return $this
-     * @since 2.0.0
      */
     public function setLabel($label);
 
@@ -79,7 +72,6 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      * Retrieve gallery entry position (sort order)
      *
      * @return int
-     * @since 2.0.0
      */
     public function getPosition();
 
@@ -88,7 +80,6 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      *
      * @param int $position
      * @return $this
-     * @since 2.0.0
      */
     public function setPosition($position);
 
@@ -96,7 +87,6 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      * Check if gallery entry is hidden from product page
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isDisabled();
 
@@ -105,7 +95,6 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      *
      * @param bool $disabled
      * @return $this
-     * @since 2.0.0
      */
     public function setDisabled($disabled);
 
@@ -113,7 +102,6 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      * Retrieve gallery entry image types (thumbnail, image, small_image etc)
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getTypes();
 
@@ -122,7 +110,6 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      *
      * @param string[] $types
      * @return $this
-     * @since 2.0.0
      */
     public function setTypes(array $types = null);
 
@@ -130,7 +117,6 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      * Get file path
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getFile();
 
@@ -139,7 +125,6 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      *
      * @param string $file
      * @return $this
-     * @since 2.0.0
      */
     public function setFile($file);
 
@@ -147,7 +132,6 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      * Get media gallery content
      *
      * @return \Magento\Framework\Api\Data\ImageContentInterface|null
-     * @since 2.0.0
      */
     public function getContent();
 
@@ -156,7 +140,6 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      *
      * @param \Magento\Framework\Api\Data\ImageContentInterface $content
      * @return $this
-     * @since 2.0.0
      */
     public function setContent($content);
 
@@ -164,7 +147,6 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -173,7 +155,6 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      *
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionInterface $extensionAttributes

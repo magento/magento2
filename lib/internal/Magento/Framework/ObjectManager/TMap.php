@@ -10,49 +10,41 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Class TMap
  * @internal
- * @since 2.0.0
  */
 class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     private $type;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $array = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $objectsArray = [];
 
     /**
      * @var int
-     * @since 2.0.0
      */
     private $counter = 0;
 
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var ConfigInterface
-     * @since 2.0.0
      */
     private $configInterface;
 
     /**
      * @var \Closure
-     * @since 2.1.0
      */
     private $objectCreationStrategy;
 
@@ -62,7 +54,6 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
      * @param ConfigInterface $configInterface
      * @param array $array
      * @param \Closure $objectCreationStrategy
-     * @since 2.0.0
      */
     public function __construct(
         $type,
@@ -99,7 +90,6 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
      * @param string|int|null $index
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     private function assertValidTypeLazy($instanceName, $index = null)
     {
@@ -123,7 +113,6 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
      * @param string $index
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     private function throwTypeException($inputType, $index)
     {
@@ -139,7 +128,6 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
      *
      * @param string|int $index
      * @return object
-     * @since 2.0.0
      */
     private function initObject($index)
     {
@@ -155,7 +143,6 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
 
     /**
      * {inheritdoc}
-     * @since 2.0.0
      */
     public function getIterator()
     {
@@ -170,7 +157,6 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
 
     /**
      * {inheritdoc}
-     * @since 2.0.0
      */
     public function offsetExists($offset)
     {
@@ -179,7 +165,6 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
 
     /**
      * {inheritdoc}
-     * @since 2.0.0
      */
     public function offsetGet($offset)
     {
@@ -188,7 +173,6 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
 
     /**
      * {inheritdoc}
-     * @since 2.0.0
      */
     public function offsetSet($offset, $value)
     {
@@ -204,7 +188,6 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
 
     /**
      * {inheritdoc}
-     * @since 2.0.0
      */
     public function offsetUnset($offset)
     {
@@ -220,7 +203,6 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
 
     /**
      * {inheritdoc}
-     * @since 2.0.0
      */
     public function count()
     {

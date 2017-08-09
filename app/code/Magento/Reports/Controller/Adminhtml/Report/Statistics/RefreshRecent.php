@@ -9,7 +9,6 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Statistics;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Statistics\RefreshRecent
  *
- * @since 2.0.0
  */
 class RefreshRecent extends \Magento\Reports\Controller\Adminhtml\Report\Statistics
 {
@@ -17,7 +16,6 @@ class RefreshRecent extends \Magento\Reports\Controller\Adminhtml\Report\Statist
      * Refresh statistics for last 25 hours
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

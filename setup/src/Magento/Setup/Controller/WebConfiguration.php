@@ -13,7 +13,6 @@ use Zend\View\Model\ViewModel;
 /**
  * Class \Magento\Setup\Controller\WebConfiguration
  *
- * @since 2.0.0
  */
 class WebConfiguration extends AbstractActionController
 {
@@ -21,7 +20,6 @@ class WebConfiguration extends AbstractActionController
      * Displays web configuration form
      *
      * @return array|ViewModel
-     * @since 2.0.0
      */
     public function indexAction()
     {

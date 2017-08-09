@@ -7,7 +7,6 @@ namespace Magento\Review\Block\Adminhtml;
 
 /**
  * Review edit form
- * @since 2.0.0
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -15,7 +14,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Review action pager
      *
      * @var \Magento\Review\Helper\Action\Pager
-     * @since 2.0.0
      */
     protected $_reviewActionPager = null;
 
@@ -23,7 +21,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -31,7 +28,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Review model factory
      *
      * @var \Magento\Review\Model\ReviewFactory
-     * @since 2.0.0
      */
     protected $_reviewFactory;
 
@@ -41,7 +37,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * @param \Magento\Review\Helper\Action\Pager $reviewActionPager
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -61,7 +56,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -218,7 +212,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Get edit review header text
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {

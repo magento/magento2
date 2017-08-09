@@ -15,19 +15,16 @@ use Magento\Framework\Setup\FilePermissions;
 /**
  * Class \Magento\Setup\Model\ConfigModel
  *
- * @since 2.0.0
  */
 class ConfigModel
 {
     /**
      * @var \Magento\Setup\Model\ConfigOptionsListCollector
-     * @since 2.0.0
      */
     protected $collector;
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig\Writer
-     * @since 2.0.0
      */
     protected $writer;
 
@@ -35,13 +32,11 @@ class ConfigModel
      * File permissions checker
      *
      * @var FilePermissions
-     * @since 2.0.0
      */
     private $filePermissions;
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig
-     * @since 2.0.0
      */
     protected $deploymentConfig;
 
@@ -52,7 +47,6 @@ class ConfigModel
      * @param Writer $writer
      * @param DeploymentConfig $deploymentConfig
      * @param FilePermissions $filePermissions
-     * @since 2.0.0
      */
     public function __construct(
         ConfigOptionsListCollector $collector,
@@ -70,7 +64,6 @@ class ConfigModel
      * Gets available config options
      *
      * @return AbstractConfigOption[]
-     * @since 2.0.0
      */
     public function getAvailableOptions()
     {
@@ -98,7 +91,6 @@ class ConfigModel
      * @param array $inputOptions
      * @return void
      * @throws \Exception
-     * @since 2.0.0
      */
     public function process($inputOptions)
     {
@@ -137,7 +129,6 @@ class ConfigModel
      *
      * @param array $inputOptions
      * @return array
-     * @since 2.0.0
      */
     public function validate(array $inputOptions)
     {
@@ -170,7 +161,6 @@ class ConfigModel
      *
      * @return void
      * @throws \Exception
-     * @since 2.0.0
      */
     private function checkInstallationFilePermissions()
     {

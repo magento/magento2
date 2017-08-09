@@ -17,13 +17,11 @@ use Magento\Customer\Model\Context;
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Navigation extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var Category
-     * @since 2.0.0
      */
     protected $_categoryInstance;
 
@@ -31,7 +29,6 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
      * Current category key
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_currentCategoryKey;
 
@@ -39,7 +36,6 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
      * Array of level position counters
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_itemLevelPositions = [];
 
@@ -47,13 +43,11 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
      * Catalog category
      *
      * @var \Magento\Catalog\Helper\Category
-     * @since 2.0.0
      */
     protected $_catalogCategory;
 
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_registry;
 
@@ -61,7 +55,6 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
      * Customer session
      *
      * @var \Magento\Framework\App\Http\Context
-     * @since 2.0.0
      */
     protected $httpContext;
 
@@ -69,7 +62,6 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
      * Catalog layer
      *
      * @var \Magento\Catalog\Model\Layer
-     * @since 2.0.0
      */
     protected $_catalogLayer;
 
@@ -77,13 +69,11 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
      * Product collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     * @since 2.0.0
      */
     protected $_productCollectionFactory;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Category\Flat\State
-     * @since 2.0.0
      */
     protected $flatState;
 
@@ -97,7 +87,6 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\Indexer\Category\Flat\State $flatState
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -122,7 +111,6 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -138,7 +126,6 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
      * Get current category
      *
      * @return Category
-     * @since 2.0.0
      */
     public function getCategory()
     {
@@ -149,7 +136,6 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
      * Get Key pieces for caching block content
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCacheKeyInfo()
     {
@@ -178,7 +164,6 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
      * Get current category key
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCurrentCategoryKey()
     {
@@ -198,7 +183,6 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
      * Retrieve child categories of current category
      *
      * @return \Magento\Framework\Data\Tree\Node\Collection
-     * @since 2.0.0
      */
     public function getCurrentChildCategories()
     {
@@ -215,7 +199,6 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
      *
      * @param   \Magento\Framework\DataObject $category
      * @return  bool
-     * @since 2.0.0
      */
     public function isCategoryActive($category)
     {
@@ -230,7 +213,6 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
      *
      * @param Category $category
      * @return string
-     * @since 2.0.0
      */
     public function getCategoryUrl($category)
     {
@@ -247,7 +229,6 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
      * Enter description here...
      *
      * @return Category
-     * @since 2.0.0
      */
     public function getCurrentCategory()
     {
@@ -258,7 +239,6 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
      * Return identifiers for produced content
      *
      * @return array
-     * @since 2.0.0
      */
     public function getIdentities()
     {

@@ -9,7 +9,6 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
  * Class CategoryProcessor
  *
  * @api
- * @since 2.0.0
  */
 class CategoryProcessor
 {
@@ -20,7 +19,6 @@ class CategoryProcessor
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
-     * @since 2.0.0
      */
     protected $categoryColFactory;
 
@@ -28,7 +26,6 @@ class CategoryProcessor
      * Categories text-path to ID hash.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $categories = [];
 
@@ -36,7 +33,6 @@ class CategoryProcessor
      * Categories id to object cache.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $categoriesCache = [];
 
@@ -44,7 +40,6 @@ class CategoryProcessor
      * Instance of catalog category factory.
      *
      * @var \Magento\Catalog\Model\CategoryFactory
-     * @since 2.0.0
      */
     protected $categoryFactory;
 
@@ -52,14 +47,13 @@ class CategoryProcessor
      * Failed categories during creation
      *
      * @var array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $failedCategories = [];
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryColFactory
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryColFactory,
@@ -72,7 +66,6 @@ class CategoryProcessor
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function initCategories()
     {
@@ -110,7 +103,6 @@ class CategoryProcessor
      * @param int $parentId
      *
      * @return int
-     * @since 2.0.0
      */
     protected function createCategory($name, $parentId)
     {
@@ -137,7 +129,6 @@ class CategoryProcessor
      * @param string $categoryPath
      *
      * @return int
-     * @since 2.0.0
      */
     protected function upsertCategory($categoryPath)
     {
@@ -169,7 +160,6 @@ class CategoryProcessor
      * @param string $categoriesSeparator
      *
      * @return array
-     * @since 2.0.0
      */
     public function upsertCategories($categoriesString, $categoriesSeparator)
     {
@@ -194,7 +184,6 @@ class CategoryProcessor
      * @param \Magento\Framework\Exception\AlreadyExistsException $exception
      *
      * @return $this
-     * @since 2.1.0
      */
     private function addFailedCategory($category, $exception)
     {
@@ -210,7 +199,7 @@ class CategoryProcessor
      * Return failed categories
      *
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getFailedCategories()
     {
@@ -221,7 +210,7 @@ class CategoryProcessor
      * Resets failed categories' array
      *
      * @return $this
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function clearFailedCategories()
     {
@@ -235,7 +224,6 @@ class CategoryProcessor
      * @param int $categoryId
      *
      * @return \Magento\Catalog\Model\Category|null
-     * @since 2.0.0
      */
     public function getCategoryById($categoryId)
     {
@@ -249,7 +237,6 @@ class CategoryProcessor
      *
      * @param string $string
      * @return string
-     * @since 2.2.0
      */
     private function standardizeString($string)
     {

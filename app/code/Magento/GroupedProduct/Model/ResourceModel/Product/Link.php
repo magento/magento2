@@ -11,7 +11,6 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Link extends \Magento\Catalog\Model\ResourceModel\Product\Link
 {
@@ -19,7 +18,7 @@ class Link extends \Magento\Catalog\Model\ResourceModel\Product\Link
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $metadataPool;
 
@@ -29,7 +28,7 @@ class Link extends \Magento\Catalog\Model\ResourceModel\Product\Link
      * @param Relation $catalogProductRelation
      * @param MetadataPool $metadataPool
      * @param string|null $connectionName
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -54,7 +53,6 @@ class Link extends \Magento\Catalog\Model\ResourceModel\Product\Link
      * @param int $parentId
      * @param int $typeId
      * @return array
-     * @since 2.0.0
      */
     public function getChildrenIds($parentId, $typeId)
     {

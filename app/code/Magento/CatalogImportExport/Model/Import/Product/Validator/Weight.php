@@ -10,13 +10,11 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 /**
  * Class \Magento\CatalogImportExport\Model\Import\Product\Validator\Weight
  *
- * @since 2.0.0
  */
 class Weight extends AbstractImportValidator implements RowValidatorInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function isValid($value)
     {

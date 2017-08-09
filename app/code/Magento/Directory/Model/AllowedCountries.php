@@ -14,7 +14,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * Provider of allowed countries based on configuration settings
  *
  * @api
- * @since 2.2.0
+ * @since 100.1.2
  */
 class AllowedCountries
 {
@@ -22,13 +22,11 @@ class AllowedCountries
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.2.0
      */
     private $scopeConfig;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.2.0
      */
     private $storeManager;
 
@@ -36,7 +34,7 @@ class AllowedCountries
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @return void
-     * @since 2.2.0
+     * @since 100.1.2
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -52,7 +50,7 @@ class AllowedCountries
      * @param string | null $scopeCode
      * @param string $scope
      * @return array
-     * @since 2.2.0
+     * @since 100.1.2
      */
     public function getAllowedCountries(
         $scope = ScopeInterface::SCOPE_WEBSITE,
@@ -86,7 +84,6 @@ class AllowedCountries
      * @throws \InvalidArgumentException
      * @param string $scope
      * @return array|int
-     * @since 2.2.0
      */
     private function getDefaultScopeCode($scope)
     {
@@ -111,7 +108,7 @@ class AllowedCountries
      *
      * @param array $allowedCountries
      * @return array
-     * @since 2.2.0
+     * @since 100.1.2
      */
     public function makeCountriesUnique(array $allowedCountries)
     {
@@ -124,7 +121,7 @@ class AllowedCountries
      * @param string $scope
      * @param int $scopeCode
      * @return array
-     * @since 2.2.0
+     * @since 100.1.2
      */
     public function getCountriesFromConfig($scope, $scopeCode)
     {
@@ -143,7 +140,6 @@ class AllowedCountries
      *
      * @param string $scope
      * @return string
-     * @since 2.2.0
      */
     private function getSingleScope($scope)
     {

@@ -13,13 +13,11 @@ use Magento\Theme\Model\Theme\Registration;
 
 /**
  * Register themes
- * @since 2.0.0
  */
 class InstallData implements InstallDataInterface
 {
     /**
      * @var Registration
-     * @since 2.1.0
      */
     private $themeRegistration;
 
@@ -27,7 +25,6 @@ class InstallData implements InstallDataInterface
      * Initialize dependencies
      *
      * @param Registration $themeRegistration
-     * @since 2.0.0
      */
     public function __construct(Registration $themeRegistration)
     {
@@ -36,7 +33,6 @@ class InstallData implements InstallDataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

@@ -11,7 +11,6 @@ use Magento\Framework\Cache\FrontendInterface;
 /**
  * Class \Magento\Framework\Validator\Factory
  *
- * @since 2.0.0
  */
 class Factory
 {
@@ -20,7 +19,6 @@ class Factory
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -28,37 +26,31 @@ class Factory
      * Validator config files
      *
      * @var array|null
-     * @since 2.0.0
      */
     protected $_configFiles = null;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     private $isDefaultTranslatorInitialized = false;
 
     /**
      * @var \Magento\Framework\Module\Dir\Reader
-     * @since 2.1.0
      */
     private $moduleReader;
 
     /**
      * @var FrontendInterface
-     * @since 2.1.0
      */
     private $cache;
 
     /**
      * @var \Magento\Framework\Serialize\SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var \Magento\Framework\Config\FileIteratorFactory
-     * @since 2.2.0
      */
     private $fileIteratorFactory;
 
@@ -68,7 +60,6 @@ class Factory
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      * @param FrontendInterface $cache
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -84,7 +75,6 @@ class Factory
      * Init cached list of validation files
      *
      * @return void
-     * @since 2.1.0
      */
     protected function _initializeConfigList()
     {
@@ -107,7 +97,6 @@ class Factory
      * Create and set default translator to \Magento\Framework\Validator\AbstractValidator.
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _initializeDefaultTranslator()
     {
@@ -131,7 +120,6 @@ class Factory
      * Will instantiate \Magento\Framework\Validator\Config
      *
      * @return \Magento\Framework\Validator\Config
-     * @since 2.0.0
      */
     public function getValidatorConfig()
     {
@@ -150,7 +138,6 @@ class Factory
      * @param string $groupName
      * @param array|null $builderConfig
      * @return \Magento\Framework\Validator\Builder
-     * @since 2.0.0
      */
     public function createValidatorBuilder($entityName, $groupName, array $builderConfig = null)
     {
@@ -165,7 +152,6 @@ class Factory
      * @param string $groupName
      * @param array|null $builderConfig
      * @return \Magento\Framework\Validator
-     * @since 2.0.0
      */
     public function createValidator($entityName, $groupName, array $builderConfig = null)
     {
@@ -177,8 +163,7 @@ class Factory
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {
@@ -194,8 +179,7 @@ class Factory
      * Get file iterator factory
      *
      * @return \Magento\Framework\Config\FileIteratorFactory
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getFileIteratorFactory()
     {

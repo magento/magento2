@@ -13,7 +13,6 @@ use Magento\Backend\App\AbstractAction;
 /**
  * Class \Magento\Backend\App\Action\Plugin\MassactionKey
  *
- * @since 2.0.0
  */
 class MassactionKey
 {
@@ -25,7 +24,6 @@ class MassactionKey
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function beforeDispatch(AbstractAction $subject, RequestInterface $request)
     {

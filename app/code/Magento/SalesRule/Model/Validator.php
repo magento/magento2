@@ -23,7 +23,6 @@ use Magento\Quote\Model\Quote\Item\AbstractItem;
  * @method mixed getCustomerGroupId()
  * @method Validator setCustomerGroupId($id)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Validator extends \Magento\Framework\Model\AbstractModel
 {
@@ -31,7 +30,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * Rule source collection
      *
      * @var \Magento\SalesRule\Model\ResourceModel\Rule\Collection
-     * @since 2.0.0
      */
     protected $_rules;
 
@@ -40,7 +38,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * Used for clearing applied rule ids in Quote and in Address
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isFirstTimeResetRun = true;
 
@@ -48,7 +45,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * Information about item totals for rules
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_rulesItemTotals = [];
 
@@ -56,7 +52,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * Skip action rules validation flag
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_skipActionsValidation = false;
 
@@ -64,43 +59,36 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * Catalog data
      *
      * @var \Magento\Catalog\Helper\Data|null
-     * @since 2.0.0
      */
     protected $_catalogData = null;
 
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory
-     * @since 2.0.0
      */
     protected $_collectionFactory;
 
     /**
      * @var \Magento\SalesRule\Model\Utility
-     * @since 2.0.0
      */
     protected $validatorUtility;
 
     /**
      * @var \Magento\SalesRule\Model\RulesApplier
-     * @since 2.0.0
      */
     protected $rulesApplier;
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var Validator\Pool
-     * @since 2.0.0
      */
     protected $validators;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
-     * @since 2.0.0
      */
     protected $messageManager;
 
@@ -108,7 +96,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * Counter is used for assigning temporary id to quote address
      *
      * @var int
-     * @since 2.1.0
      */
     protected $counter = 0;
 
@@ -126,7 +113,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -161,7 +147,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @param int $customerGroupId
      * @param string $couponCode
      * @return $this
-     * @since 2.0.0
      */
     public function init($websiteId, $customerGroupId, $couponCode)
     {
@@ -175,7 +160,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      *
      * @param Address|null $address
      * @return \Magento\SalesRule\Model\ResourceModel\Rule\Collection
-     * @since 2.0.0
      */
     protected function _getRules(Address $address = null)
     {
@@ -202,7 +186,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     /**
      * @param Address $address
      * @return string
-     * @since 2.1.0
      */
     protected function getAddressId(Address $address)
     {
@@ -226,7 +209,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      *
      * @param bool $flag
      * @return $this
-     * @since 2.0.0
      */
     public function setSkipActionsValidation($flag)
     {
@@ -239,7 +221,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      *
      * @param AbstractItem $item
      * @return bool
-     * @since 2.0.0
      */
     public function canApplyRules(AbstractItem $item)
     {
@@ -258,7 +239,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      *
      * @param Address $address
      * @return $this
-     * @since 2.0.0
      */
     public function reset(Address $address)
     {
@@ -277,7 +257,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      *
      * @param AbstractItem $item
      * @return $this
-     * @since 2.0.0
      */
     public function process(AbstractItem $item)
     {
@@ -307,7 +286,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @param Address $address
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function processShippingAmount(Address $address)
     {
@@ -397,7 +375,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @param mixed $items
      * @param Address $address
      * @return $this
-     * @since 2.0.0
      */
     public function initTotals($items, Address $address)
     {
@@ -449,7 +426,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      *
      * @param AbstractItem $item
      * @return float
-     * @since 2.0.0
      */
     public function getItemPrice($item)
     {
@@ -463,7 +439,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      *
      * @param AbstractItem $item
      * @return float
-     * @since 2.0.0
      */
     public function getItemOriginalPrice($item)
     {
@@ -475,7 +450,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      *
      * @param AbstractItem $item
      * @return float
-     * @since 2.0.0
      */
     public function getItemBasePrice($item)
     {
@@ -488,7 +462,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      *
      * @param AbstractItem $item
      * @return float
-     * @since 2.0.0
      */
     public function getItemBaseOriginalPrice($item)
     {
@@ -501,7 +474,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @param Address $address
      * @param string $separator
      * @return $this
-     * @since 2.0.0
      */
     public function prepareDescription($address, $separator = ', ')
     {
@@ -527,7 +499,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @param array $items
      * @param Address $address
      * @return array $items
-     * @since 2.0.0
      */
     public function sortItemsByPriority($items, Address $address = null)
     {
@@ -553,7 +524,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @param int $key
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getRuleItemTotalsInfo($key)
     {
@@ -567,7 +537,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     /**
      * @param int $key
      * @return $this
-     * @since 2.0.0
      */
     public function decrementRuleItemTotalsCount($key)
     {
@@ -581,7 +550,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      *
      * @param AbstractItem $item
      * @return bool
-     * @since 2.0.0
      */
     public function canApplyDiscount(AbstractItem $item)
     {

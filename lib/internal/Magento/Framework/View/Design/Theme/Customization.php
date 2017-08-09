@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Design\Theme;
 
 /**
  * Theme customizations manager
- * @since 2.0.0
  */
 class Customization implements CustomizationInterface
 {
@@ -15,7 +14,6 @@ class Customization implements CustomizationInterface
      * File provider
      *
      * @var \Magento\Framework\View\Design\Theme\FileProviderInterface
-     * @since 2.0.0
      */
     protected $fileProvider;
 
@@ -23,7 +21,6 @@ class Customization implements CustomizationInterface
      * Theme customization path
      *
      * @var \Magento\Framework\View\Design\Theme\Customization\Path
-     * @since 2.0.0
      */
     protected $customizationPath;
 
@@ -31,7 +28,6 @@ class Customization implements CustomizationInterface
      * Theme
      *
      * @var \Magento\Framework\View\Design\ThemeInterface
-     * @since 2.0.0
      */
     protected $theme;
 
@@ -39,7 +35,6 @@ class Customization implements CustomizationInterface
      * Theme files
      *
      * @var \Magento\Framework\View\Design\Theme\FileInterface[]
-     * @since 2.0.0
      */
     protected $themeFiles;
 
@@ -47,7 +42,6 @@ class Customization implements CustomizationInterface
      * Theme files by type
      *
      * @var \Magento\Framework\View\Design\Theme\FileInterface[]
-     * @since 2.0.0
      */
     protected $themeFilesByType = [];
 
@@ -57,7 +51,6 @@ class Customization implements CustomizationInterface
      * @param \Magento\Framework\View\Design\Theme\FileProviderInterface $fileProvider
      * @param \Magento\Framework\View\Design\Theme\Customization\Path $customizationPath
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Design\Theme\FileProviderInterface $fileProvider,
@@ -73,7 +66,6 @@ class Customization implements CustomizationInterface
      * Retrieve list of files which belong to a theme
      *
      * @return \Magento\Framework\View\Design\Theme\FileInterface[]
-     * @since 2.0.0
      */
     public function getFiles()
     {
@@ -88,7 +80,6 @@ class Customization implements CustomizationInterface
      *
      * @param string $type
      * @return \Magento\Framework\View\Design\Theme\FileInterface[]
-     * @since 2.0.0
      */
     public function getFilesByType($type)
     {
@@ -103,7 +94,6 @@ class Customization implements CustomizationInterface
      *
      * @param \Magento\Framework\View\Design\Theme\FileInterface[] $files
      * @return array
-     * @since 2.0.0
      */
     public function generateFileInfo(array $files)
     {
@@ -121,7 +111,6 @@ class Customization implements CustomizationInterface
      * Returns customization absolute path
      *
      * @return null|string
-     * @since 2.0.0
      */
     public function getCustomizationPath()
     {
@@ -132,7 +121,6 @@ class Customization implements CustomizationInterface
      * Get directory where themes files are stored
      *
      * @return null|string
-     * @since 2.0.0
      */
     public function getThemeFilesPath()
     {
@@ -147,7 +135,6 @@ class Customization implements CustomizationInterface
      * Get path to custom view configuration file
      *
      * @return null|string
-     * @since 2.0.0
      */
     public function getCustomViewConfigPath()
     {
@@ -160,7 +147,6 @@ class Customization implements CustomizationInterface
      * @param string $type
      * @param array $sequence
      * @return $this|CustomizationInterface
-     * @since 2.0.0
      */
     public function reorder($type, array $sequence)
     {
@@ -184,7 +170,6 @@ class Customization implements CustomizationInterface
      *
      * @param array $fileIds
      * @return $this
-     * @since 2.0.0
      */
     public function delete(array $fileIds)
     {

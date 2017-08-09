@@ -14,7 +14,6 @@ namespace Magento\Directory\Model;
 /**
  * Class \Magento\Directory\Model\Observer
  *
- * @since 2.0.0
  */
 class Observer
 {
@@ -32,7 +31,6 @@ class Observer
 
     /**
      * @var \Magento\Directory\Model\Currency\Import\Factory
-     * @since 2.0.0
      */
     protected $_importFactory;
 
@@ -40,31 +38,26 @@ class Observer
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder
-     * @since 2.0.0
      */
     protected $_transportBuilder;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Directory\Model\CurrencyFactory
-     * @since 2.0.0
      */
     protected $_currencyFactory;
 
     /**
      * @var \Magento\Framework\Translate\Inline\StateInterface
-     * @since 2.0.0
      */
     protected $inlineTranslation;
 
@@ -75,7 +68,6 @@ class Observer
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Directory\Model\Currency\Import\Factory $importFactory,
@@ -98,7 +90,6 @@ class Observer
      * @return void
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function scheduledUpdateCurrencyRates($schedule)
     {

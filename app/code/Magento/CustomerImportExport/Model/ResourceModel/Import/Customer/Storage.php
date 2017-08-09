@@ -8,7 +8,6 @@ namespace Magento\CustomerImportExport\Model\ResourceModel\Import\Customer;
 /**
  * Class \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage
  *
- * @since 2.0.0
  */
 class Storage
 {
@@ -16,7 +15,6 @@ class Storage
      * Flag to not load collection more than one time
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isCollectionLoaded = false;
 
@@ -24,7 +22,6 @@ class Storage
      * Customer collection
      *
      * @var \Magento\Customer\Model\ResourceModel\Customer\Collection
-     * @since 2.0.0
      */
     protected $_customerCollection;
 
@@ -39,7 +36,6 @@ class Storage
      * )
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_customerIds = [];
 
@@ -47,7 +43,6 @@ class Storage
      * Number of items to fetch from db in one query
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_pageSize;
 
@@ -55,7 +50,6 @@ class Storage
      * Collection by pages iterator
      *
      * @var \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator
-     * @since 2.0.0
      */
     protected $_byPagesIterator;
 
@@ -63,7 +57,6 @@ class Storage
      * @param \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $collectionFactory
      * @param \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $colIteratorFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $collectionFactory,
@@ -83,7 +76,6 @@ class Storage
      * Load needed data from customer collection
      *
      * @return void
-     * @since 2.0.0
      */
     public function load()
     {
@@ -108,7 +100,6 @@ class Storage
      *
      * @param \Magento\Framework\DataObject|\Magento\Customer\Model\Customer $customer
      * @return $this
-     * @since 2.0.0
      */
     public function addCustomer(\Magento\Framework\DataObject $customer)
     {
@@ -127,7 +118,6 @@ class Storage
      * @param string $email
      * @param int $websiteId
      * @return bool|int
-     * @since 2.0.0
      */
     public function getCustomerId($email, $websiteId)
     {

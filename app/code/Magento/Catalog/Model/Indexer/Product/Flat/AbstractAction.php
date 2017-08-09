@@ -12,7 +12,6 @@ use Magento\Framework\EntityManager\MetadataPool;
 /**
  * Abstract action reindex class
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class AbstractAction
 {
@@ -20,7 +19,6 @@ abstract class AbstractAction
      * Suffix for value field on composite attributes
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_valueFieldSuffix = '_value';
 
@@ -28,31 +26,26 @@ abstract class AbstractAction
      * Suffix for drop table (uses on flat table rename)
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_tableDropSuffix = '_drop_indexer';
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Catalog\Helper\Product\Flat\Indexer
-     * @since 2.0.0
      */
     protected $_productIndexerHelper;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected $_connection;
 
     /**
      * @var \Magento\Catalog\Model\Product\Type
-     * @since 2.0.0
      */
     protected $_productType;
 
@@ -60,7 +53,6 @@ abstract class AbstractAction
      * Existing flat tables flags pool
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_flatTablesExist = [];
 
@@ -68,25 +60,21 @@ abstract class AbstractAction
      * List of product types available in installation
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_productTypes = [];
 
     /**
      * @var TableBuilder
-     * @since 2.0.0
      */
     protected $_tableBuilder;
 
     /**
      * @var FlatTableBuilder
-     * @since 2.0.0
      */
     protected $_flatTableBuilder;
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
@@ -97,7 +85,6 @@ abstract class AbstractAction
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param TableBuilder $tableBuilder
      * @param FlatTableBuilder $flatTableBuilder
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -120,7 +107,6 @@ abstract class AbstractAction
      *
      * @param array|int $ids
      * @return \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
-     * @since 2.0.0
      */
     abstract public function execute($ids);
 
@@ -129,7 +115,6 @@ abstract class AbstractAction
      *
      * @param string $tableName
      * @return string
-     * @since 2.0.0
      */
     protected function _getTemporaryTableName($tableName)
     {
@@ -143,7 +128,6 @@ abstract class AbstractAction
      * @param int|string $storeId
      * @return void
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     protected function _cleanOnFailure(array $tablesList, $storeId)
     {
@@ -161,7 +145,6 @@ abstract class AbstractAction
      * @param array $changedIds
      * @return void
      * @throws \Exception
-     * @since 2.0.0
      */
     protected function _reindex($storeId, array $changedIds = [])
     {
@@ -190,7 +173,6 @@ abstract class AbstractAction
      * as key - type code, value - instance model
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getProductTypeInstances()
     {
@@ -212,7 +194,6 @@ abstract class AbstractAction
      * @param int|array $productIds Update child product(s) only
      * @return \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _updateRelationProducts($storeId, $productIds = null)
     {
@@ -272,7 +253,6 @@ abstract class AbstractAction
      *
      * @param int $storeId
      * @return \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
-     * @since 2.0.0
      */
     protected function _cleanRelationProducts($storeId)
     {
@@ -341,7 +321,6 @@ abstract class AbstractAction
      *
      * @param int $storeId
      * @return bool
-     * @since 2.0.0
      */
     protected function _isFlatTableExists($storeId)
     {
@@ -357,7 +336,6 @@ abstract class AbstractAction
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
      */
     private function getMetadataPool()
     {

@@ -9,7 +9,6 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Attribute;
  * Catalog product EAV additional attribute resource collection
  *
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
 {
@@ -17,7 +16,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      * Entity factory
      *
      * @var \Magento\Eav\Model\EntityFactory
-     * @since 2.0.0
      */
     protected $_eavEntityFactory;
 
@@ -30,7 +28,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -50,7 +47,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      * Resource model initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -64,7 +60,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      * Initialize select object
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initSelect()
     {
@@ -100,7 +95,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      * @param  int $typeId
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function setEntityTypeFilter($typeId)
     {
@@ -111,7 +105,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      * Return array of fields to load attribute values
      *
      * @return string[]
-     * @since 2.0.0
      */
     protected function _getLoadDataFields()
     {
@@ -131,7 +124,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      * Remove price from attribute list
      *
      * @return $this
-     * @since 2.0.0
      */
     public function removePriceFilter()
     {
@@ -142,7 +134,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      * Specify "is_visible_in_advanced_search" filter
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addDisplayInAdvancedSearchFilter()
     {
@@ -153,7 +144,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      * Specify "is_filterable" filter
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addIsFilterableFilter()
     {
@@ -164,7 +154,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      * Add filterable in search filter
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addIsFilterableInSearchFilter()
     {
@@ -175,7 +164,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      * Specify filter by "is_visible" field
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addVisibleFilter()
     {
@@ -186,7 +174,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      * Specify "is_searchable" filter
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addIsSearchableFilter()
     {
@@ -198,7 +185,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      *
      * @param bool $addRequiredCodes
      * @return $this
-     * @since 2.0.0
      */
     public function addToIndexFilter($addRequiredCodes = false)
     {
@@ -226,7 +212,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      * Specify filter for attributes used in quick search
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addSearchableAttributeFilter()
     {
@@ -244,7 +229,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      * Add is used in grid filter
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addIsUsedInGridFilter()
     {

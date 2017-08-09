@@ -12,7 +12,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  * Shipment Track Creation interface.
  *
  * @api
- * @since 2.2.0
+ * @since 100.1.2
  */
 interface ShipmentTrackCreationInterface extends TrackInterface, ExtensibleDataInterface
 {
@@ -20,7 +20,7 @@ interface ShipmentTrackCreationInterface extends TrackInterface, ExtensibleDataI
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\ShipmentTrackCreationExtensionInterface|null
-     * @since 2.2.0
+     * @since 100.1.2
      */
     public function getExtensionAttributes();
 
@@ -29,7 +29,7 @@ interface ShipmentTrackCreationInterface extends TrackInterface, ExtensibleDataI
      *
      * @param \Magento\Sales\Api\Data\ShipmentTrackCreationExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.2.0
+     * @since 100.1.2
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\ShipmentTrackCreationExtensionInterface $extensionAttributes

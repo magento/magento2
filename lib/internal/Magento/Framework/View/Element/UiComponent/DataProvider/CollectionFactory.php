@@ -11,26 +11,22 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class CollectionPool
- * @since 2.0.0
  */
 class CollectionFactory
 {
     /**
      * @var Collection[]
-     * @since 2.0.0
      */
     protected $collections;
 
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManagerInterface
      * @param array $collections
-     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManagerInterface,
@@ -46,7 +42,6 @@ class CollectionFactory
      * @param string $requestName
      * @return Collection
      * @throws \Exception
-     * @since 2.0.0
      */
     public function getReport($requestName)
     {

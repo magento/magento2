@@ -8,37 +8,31 @@ namespace Magento\CatalogRule\Model\Indexer;
 
 /**
  * Reindex product prices according rule settings.
- * @since 2.2.0
  */
 class ReindexRuleProductPrice
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var \Magento\CatalogRule\Model\Indexer\RuleProductsSelectBuilder
-     * @since 2.2.0
      */
     private $ruleProductsSelectBuilder;
 
     /**
      * @var \Magento\CatalogRule\Model\Indexer\ProductPriceCalculator
-     * @since 2.2.0
      */
     private $productPriceCalculator;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.2.0
      */
     private $dateTime;
 
     /**
      * @var \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor
-     * @since 2.2.0
      */
     private $pricesPersistor;
 
@@ -48,7 +42,6 @@ class ReindexRuleProductPrice
      * @param ProductPriceCalculator $productPriceCalculator
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor $pricesPersistor
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -72,7 +65,6 @@ class ReindexRuleProductPrice
      * @param bool $useAdditionalTable
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.2.0
      */
     public function execute(
         $batchCount,
@@ -165,7 +157,6 @@ class ReindexRuleProductPrice
     /**
      * @param int $timeStamp
      * @return int
-     * @since 2.2.0
      */
     private function roundTime($timeStamp)
     {

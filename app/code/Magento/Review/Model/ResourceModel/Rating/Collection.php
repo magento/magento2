@@ -11,26 +11,22 @@ namespace Magento\Review\Model\ResourceModel\Rating;
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Review\Model\ResourceModel\Rating\Option\CollectionFactory
-     * @since 2.0.0
      */
     protected $_ratingCollectionF;
 
     /**
      * Add store data flag
      * @var bool
-     * @since 2.0.0
      */
     protected $_addStoreDataFlag = false;
 
@@ -43,7 +39,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Review\Model\ResourceModel\Rating\Option\CollectionFactory $ratingCollectionF
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -62,7 +57,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_isStoreJoined = false;
 
@@ -70,7 +64,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -82,7 +75,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param   int|string $entity
      * @return  $this
-     * @since 2.0.0
      */
     public function addEntityFilter($entity)
     {
@@ -115,7 +107,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param   string $dir
      * @return  $this
-     * @since 2.0.0
      */
     public function setPositionOrder($dir = 'ASC')
     {
@@ -128,7 +119,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreFilter($storeId)
     {
@@ -163,7 +153,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add options to ratings in collection
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addOptionToItems()
     {
@@ -189,7 +178,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $entityPkValue
      * @param int $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function addEntitySummaryToItem($entityPkValue, $storeId)
     {
@@ -250,7 +238,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function addRatingPerStoreName($storeId)
     {
@@ -268,7 +255,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add stores data to collection
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addStoreData()
     {
@@ -289,7 +275,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
-     * @since 2.0.0
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -308,7 +293,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add store data
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _addStoreData()
     {
@@ -341,7 +325,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param bool $isActive
      * @return $this
-     * @since 2.0.0
      */
     public function setActiveFilter($isActive = true)
     {

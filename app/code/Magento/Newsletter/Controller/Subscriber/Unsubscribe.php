@@ -9,14 +9,12 @@ namespace Magento\Newsletter\Controller\Subscriber;
 /**
  * Class \Magento\Newsletter\Controller\Subscriber\Unsubscribe
  *
- * @since 2.0.0
  */
 class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber
 {
     /**
      * Unsubscribe newsletter
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

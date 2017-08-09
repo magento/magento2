@@ -13,19 +13,16 @@ use Magento\Setup\Model\PackagesData;
 
 /**
  * Controller for extensions grid tasks
- * @since 2.0.0
  */
 class InstallExtensionGrid extends AbstractActionController
 {
     /**
      * @var PackagesData
-     * @since 2.1.0
      */
     private $packagesData;
 
     /**
      * @param PackagesData $packagesData
-     * @since 2.0.0
      */
     public function __construct(
         PackagesData $packagesData
@@ -37,7 +34,6 @@ class InstallExtensionGrid extends AbstractActionController
      * Index page action
      *
      * @return ViewModel
-     * @since 2.0.0
      */
     public function indexAction()
     {
@@ -50,7 +46,6 @@ class InstallExtensionGrid extends AbstractActionController
      * Get Extensions info action
      *
      * @return JsonModel
-     * @since 2.0.0
      */
     public function extensionsAction()
     {
@@ -72,7 +67,6 @@ class InstallExtensionGrid extends AbstractActionController
      *
      * @param array $packages
      * @return array
-     * @since 2.2.0
      */
     private function formatPackageList(array $packages)
     {

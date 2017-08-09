@@ -11,7 +11,6 @@ use Magento\Framework\Exception\NotFoundException;
  * Interface ValidatorPoolInterface
  * @package Magento\Payment\Gateway\Validator
  * @api
- * @since 2.0.0
  */
 interface ValidatorPoolInterface
 {
@@ -21,7 +20,6 @@ interface ValidatorPoolInterface
      * @param string $code
      * @return \Magento\Payment\Gateway\Validator\ValidatorInterface
      * @throws NotFoundException
-     * @since 2.0.0
      */
     public function get($code);
 }

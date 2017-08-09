@@ -13,7 +13,6 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Tax\Controller\Adminhtml\Rate\Edit
  *
- * @since 2.0.0
  */
 class Edit extends \Magento\Tax\Controller\Adminhtml\Rate
 {
@@ -21,7 +20,6 @@ class Edit extends \Magento\Tax\Controller\Adminhtml\Rate
      * Show Edit Form
      *
      * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

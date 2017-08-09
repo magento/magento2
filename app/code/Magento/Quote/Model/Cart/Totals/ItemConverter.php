@@ -14,37 +14,31 @@ use Magento\Framework\Event\ManagerInterface as EventManager;
  * Cart item totals converter.
  *
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class ItemConverter
 {
     /**
      * @var ConfigurationPool
-     * @since 2.0.0
      */
     private $configurationPool;
 
     /**
      * @var EventManager
-     * @since 2.0.0
      */
     private $eventManager;
 
     /**
      * @var \Magento\Quote\Api\Data\TotalsItemInterfaceFactory
-     * @since 2.0.0
      */
     private $totalsItemFactory;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
-     * @since 2.0.0
      */
     private $dataObjectHelper;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -57,7 +51,6 @@ class ItemConverter
      * @param DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     public function __construct(
         ConfigurationPool $configurationPool,
@@ -80,7 +73,6 @@ class ItemConverter
      * @param \Magento\Quote\Model\Quote\Item $item
      * @return array
      * @throws \Exception
-     * @since 2.0.0
      */
     public function modelToDataObject($item)
     {
@@ -103,7 +95,6 @@ class ItemConverter
      *
      * @param \Magento\Quote\Api\Data\CartItemInterface $item
      * @return string
-     * @since 2.0.0
      */
     private function getFormattedOptionValue($item)
     {

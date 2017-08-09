@@ -9,7 +9,6 @@ namespace Magento\Framework;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface AuthorizationInterface
 {
@@ -19,7 +18,6 @@ interface AuthorizationInterface
      * @param   string $resource
      * @param   string $privilege
      * @return  boolean
-     * @since 2.0.0
      */
     public function isAllowed($resource, $privilege = null);
 }

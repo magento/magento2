@@ -12,31 +12,26 @@ use Magento\Tax\Model\ClassModel;
 
 /**
  * Product tax class source model.
- * @since 2.0.0
  */
 class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
      * @var \Magento\Tax\Api\TaxClassRepositoryInterface
-     * @since 2.0.0
      */
     protected $_taxClassRepository;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     * @since 2.0.0
      */
     protected $_searchCriteriaBuilder;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
-     * @since 2.0.0
      */
     protected $_filterBuilder;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory
-     * @since 2.0.0
      */
     protected $_optionFactory;
 
@@ -48,7 +43,6 @@ class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * @param \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory $classesFactory,
@@ -69,7 +63,6 @@ class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @param bool $withEmpty
      * @return array
-     * @since 2.0.0
      */
     public function getAllOptions($withEmpty = true)
     {
@@ -103,7 +96,6 @@ class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @param string|integer $value
      * @return string
-     * @since 2.0.0
      */
     public function getOptionText($value)
     {
@@ -121,7 +113,6 @@ class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Retrieve flat column definition
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFlatColumns()
     {
@@ -144,7 +135,6 @@ class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @param   int $store
      * @return  \Magento\Framework\DB\Select|null
-     * @since 2.0.0
      */
     public function getFlatUpdateSelect($store)
     {

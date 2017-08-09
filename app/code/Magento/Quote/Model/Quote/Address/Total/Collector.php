@@ -9,7 +9,6 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Address Total Collector model
- * @since 2.0.0
  */
 class Collector extends \Magento\Sales\Model\Config\Ordered
 {
@@ -22,7 +21,6 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      * Total models array ordered for right display sequence
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_retrievers = [];
 
@@ -30,7 +28,6 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      * Corresponding store object
      *
      * @var \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     protected $_store;
 
@@ -38,13 +35,11 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      * Config group for totals declaration
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_configGroup = 'totals';
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_configSection = 'quote';
 
@@ -52,7 +47,6 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      * Cache key for collectors
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_collectorsCacheKey = 'sorted_quote_collectors';
 
@@ -60,13 +54,11 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Quote\Model\Quote\Address\TotalFactory
-     * @since 2.0.0
      */
     protected $_totalFactory;
 
@@ -80,7 +72,6 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      * @param \Magento\Framework\Simplexml\Element|mixed $sourceData
      * @param mixed $store
      * @param SerializerInterface $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
@@ -104,7 +95,6 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      * Get total models array ordered for right calculation logic
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCollectors()
     {
@@ -115,7 +105,6 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      * Get total models array ordered for right display sequence
      *
      * @return \Magento\Quote\Model\Quote\Address\Total\AbstractTotal[]
-     * @since 2.0.0
      */
     public function getRetrievers()
     {
@@ -130,7 +119,6 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      * @param array $totalConfig
      * @return \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _initModelInstance($class, $totalCode, $totalConfig)
     {
@@ -156,7 +144,6 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      *
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
-     * @since 2.0.0
      */
     private function _initRetrievers()
     {

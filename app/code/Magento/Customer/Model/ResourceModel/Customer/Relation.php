@@ -8,7 +8,6 @@ namespace Magento\Customer\Model\ResourceModel\Customer;
 
 /**
  * Class Relation
- * @since 2.0.0
  */
 class Relation implements \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationInterface
 {
@@ -18,7 +17,6 @@ class Relation implements \Magento\Framework\Model\ResourceModel\Db\VersionContr
      * @param \Magento\Framework\Model\AbstractModel $customer
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function processRelation(\Magento\Framework\Model\AbstractModel $customer)
     {

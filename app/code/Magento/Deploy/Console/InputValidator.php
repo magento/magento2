@@ -12,13 +12,11 @@ use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * Command input arguments validator class
- * @since 2.2.0
  */
 class InputValidator
 {
     /**
      * @var array
-     * @since 2.2.0
      */
     public static $fileExtensionOptionMap = [
         'js' => Options::NO_JAVASCRIPT,
@@ -54,7 +52,6 @@ class InputValidator
      * Used to check if specified locale codes are valid
      *
      * @var Locale
-     * @since 2.2.0
      */
     private $localeValidator;
 
@@ -62,7 +59,6 @@ class InputValidator
      * InputValidator constructor
      *
      * @param Locale $localeValidator
-     * @since 2.2.0
      */
     public function __construct(Locale $localeValidator)
     {
@@ -74,7 +70,6 @@ class InputValidator
      *
      * @param InputInterface $input
      * @return void
-     * @since 2.2.0
      */
     public function validate(InputInterface $input)
     {
@@ -99,7 +94,6 @@ class InputValidator
      * @param array $areasExclude
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.2.0
      */
     private function checkAreasInput(array $areasInclude, array $areasExclude)
     {
@@ -117,7 +111,6 @@ class InputValidator
      * @param array $themesExclude
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.2.0
      */
     private function checkThemesInput(array $themesInclude, array $themesExclude)
     {
@@ -135,7 +128,6 @@ class InputValidator
      * @param array $languagesExclude
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.2.0
      */
     private function checkLanguagesInput(array $languagesInclude, array $languagesExclude)
     {

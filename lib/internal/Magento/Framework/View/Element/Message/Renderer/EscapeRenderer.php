@@ -11,7 +11,6 @@ use Magento\Framework\Message\MessageInterface;
 /**
  * Class \Magento\Framework\View\Element\Message\Renderer\EscapeRenderer
  *
- * @since 2.0.0
  */
 class EscapeRenderer implements RendererInterface
 {
@@ -22,13 +21,11 @@ class EscapeRenderer implements RendererInterface
 
     /**
      * @var Escaper
-     * @since 2.0.0
      */
     private $escaper;
 
     /**
      * @param Escaper $escaper
-     * @since 2.0.0
      */
     public function __construct(
         Escaper $escaper
@@ -42,7 +39,6 @@ class EscapeRenderer implements RendererInterface
      * @param MessageInterface $message
      * @param array $initializationData
      * @return string
-     * @since 2.0.0
      */
     public function render(MessageInterface $message, array $initializationData)
     {

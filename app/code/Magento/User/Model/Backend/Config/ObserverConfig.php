@@ -8,7 +8,6 @@ namespace Magento\User\Model\Backend\Config;
 
 /**
  * User backend observer helper class
- * @since 2.0.0
  */
 class ObserverConfig
 {
@@ -16,13 +15,11 @@ class ObserverConfig
      * Backend configuration interface
      *
      * @var \Magento\Backend\App\ConfigInterface
-     * @since 2.0.0
      */
     protected $backendConfig;
 
     /**
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\ConfigInterface $backendConfig
@@ -35,7 +32,6 @@ class ObserverConfig
      *
      * @param array $latestPassword
      * @return bool
-     * @since 2.0.0
      */
     public function _isLatestPasswordExpired($latestPassword)
     {
@@ -49,7 +45,6 @@ class ObserverConfig
     /**
      * Get admin lock threshold from configuration
      * @return int
-     * @since 2.0.0
      */
     public function getAdminLockThreshold()
     {
@@ -60,7 +55,6 @@ class ObserverConfig
      * Check whether password change is forced
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isPasswordChangeForced()
     {
@@ -71,7 +65,6 @@ class ObserverConfig
      * Get admin password lifetime
      *
      * @return int
-     * @since 2.0.0
      */
     public function getAdminPasswordLifetime()
     {
@@ -82,7 +75,6 @@ class ObserverConfig
      * Get admin maxiumum security failures from config
      *
      * @return int
-     * @since 2.0.0
      */
     public function getMaxFailures()
     {

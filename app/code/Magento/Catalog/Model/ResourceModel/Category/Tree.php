@@ -12,7 +12,6 @@ use Magento\Framework\EntityManager\MetadataPool;
 /**
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Tree extends Dbp
 {
@@ -26,19 +25,16 @@ class Tree extends Dbp
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     private $_eventManager;
 
     /**
      * @var \Magento\Catalog\Model\Attribute\Config
-     * @since 2.0.0
      */
     private $_attributeConfig;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category\Collection\Factory
-     * @since 2.0.0
      */
     private $_collectionFactory;
 
@@ -46,7 +42,6 @@ class Tree extends Dbp
      * Categories resource collection
      *
      * @var Collection
-     * @since 2.0.0
      */
     protected $_collection;
 
@@ -54,7 +49,6 @@ class Tree extends Dbp
      * Join URL rewrites data to collection flag
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_joinUrlRewriteIntoCollection = false;
 
@@ -62,7 +56,6 @@ class Tree extends Dbp
      * Inactive categories ids
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_inactiveCategoryIds = null;
 
@@ -70,13 +63,11 @@ class Tree extends Dbp
      * Store id
      *
      * @var integer
-     * @since 2.0.0
      */
     protected $_storeId = null;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.0.0
      */
     protected $_coreResource;
 
@@ -84,7 +75,6 @@ class Tree extends Dbp
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -92,7 +82,6 @@ class Tree extends Dbp
      * Cache
      *
      * @var \Magento\Framework\App\CacheInterface
-     * @since 2.0.0
      */
     protected $_cache;
 
@@ -100,13 +89,12 @@ class Tree extends Dbp
      * Catalog category
      *
      * @var \Magento\Catalog\Model\ResourceModel\Category
-     * @since 2.0.0
      */
     protected $_catalogCategory;
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $metadataPool;
 
@@ -119,7 +107,6 @@ class Tree extends Dbp
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
      * @param Collection\Factory $collectionFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Category $catalogCategory,
@@ -154,7 +141,6 @@ class Tree extends Dbp
      *
      * @param integer $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreId($storeId)
     {
@@ -166,7 +152,6 @@ class Tree extends Dbp
      * Return store id
      *
      * @return integer
-     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -187,7 +172,6 @@ class Tree extends Dbp
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function addCollectionData(
         $collection = null,
@@ -251,7 +235,6 @@ class Tree extends Dbp
      *
      * @param mixed $ids
      * @return $this
-     * @since 2.0.0
      */
     public function addInactiveCategoryIds($ids)
     {
@@ -266,7 +249,6 @@ class Tree extends Dbp
      * Retrieve inactive categories ids
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initInactiveCategoryIds()
     {
@@ -279,7 +261,6 @@ class Tree extends Dbp
      * Retrieve inactive categories ids
      *
      * @return array
-     * @since 2.0.0
      */
     public function getInactiveCategoryIds()
     {
@@ -296,7 +277,6 @@ class Tree extends Dbp
      * @param Collection $collection
      * @param array $allIds
      * @return array
-     * @since 2.0.0
      */
     protected function _getDisabledIds($collection, $allIds)
     {
@@ -324,7 +304,6 @@ class Tree extends Dbp
      * @param Collection $collection
      * @param int $storeId
      * @return array
-     * @since 2.0.0
      */
     protected function _getInactiveItemIds($collection, $storeId)
     {
@@ -365,7 +344,6 @@ class Tree extends Dbp
      * @param int $id
      * @return boolean
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     protected function _getItemIsActive($id)
     {
@@ -380,7 +358,6 @@ class Tree extends Dbp
      *
      * @param boolean $sorted
      * @return Collection
-     * @since 2.0.0
      */
     public function getCollection($sorted = false)
     {
@@ -395,7 +372,6 @@ class Tree extends Dbp
      *
      * @param Collection|array $object
      * @return void
-     * @since 2.0.0
      */
     protected function _clean($object)
     {
@@ -412,7 +388,6 @@ class Tree extends Dbp
      *
      * @param Collection $collection
      * @return $this
-     * @since 2.0.0
      */
     public function setCollection($collection)
     {
@@ -428,7 +403,6 @@ class Tree extends Dbp
      *
      * @param boolean $sorted
      * @return Collection
-     * @since 2.0.0
      */
     protected function _getDefaultCollection($sorted = false)
     {
@@ -456,7 +430,6 @@ class Tree extends Dbp
      * @param mixed $newParent
      * @param mixed $prevNode
      * @return void
-     * @since 2.0.0
      */
     public function move($category, $newParent, $prevNode = null)
     {
@@ -470,7 +443,6 @@ class Tree extends Dbp
      * Move tree after
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterMove()
     {
@@ -487,7 +459,6 @@ class Tree extends Dbp
      * @return $this|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function loadByIds($ids, $addCollectionData = true, $updateAnchorProductCount = true)
     {
@@ -557,7 +528,6 @@ class Tree extends Dbp
      * @param bool $addCollectionData
      * @param bool $withRootNode
      * @return array
-     * @since 2.0.0
      */
     public function loadBreadcrumbsArray($path, $addCollectionData = true, $withRootNode = false)
     {
@@ -589,7 +559,6 @@ class Tree extends Dbp
      *
      * @param array &$data
      * @return void
-     * @since 2.0.0
      */
     protected function _updateAnchorProductCount(&$data)
     {
@@ -609,7 +578,6 @@ class Tree extends Dbp
      * @param bool $sorted
      * @param array $optionalAttributes
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function _createCollectionDataSelect($sorted = true, $optionalAttributes = [])
     {
@@ -697,7 +665,6 @@ class Tree extends Dbp
      *
      * @param array $ids
      * @return array
-     * @since 2.0.0
      */
     public function getExistingCategoryIdsBySpecifiedIds($ids)
     {
@@ -713,7 +680,6 @@ class Tree extends Dbp
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
      */
     private function getMetadataPool()
     {

@@ -12,31 +12,26 @@ use Magento\Framework\View;
 
 /**
  * Class Builder
- * @since 2.0.0
  */
 class Builder implements BuilderInterface
 {
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @var \Magento\Framework\App\Request\Http
-     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var \Magento\Framework\View\LayoutInterface
-     * @since 2.0.0
      */
     protected $layout;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $isBuilt = false;
 
@@ -44,7 +39,6 @@ class Builder implements BuilderInterface
      * @param View\LayoutInterface $layout
      * @param App\Request\Http $request
      * @param Event\ManagerInterface $eventManager
-     * @since 2.0.0
      */
     public function __construct(
         View\LayoutInterface $layout,
@@ -61,7 +55,6 @@ class Builder implements BuilderInterface
      * Build layout structure
      *
      * @return \Magento\Framework\View\LayoutInterface
-     * @since 2.0.0
      */
     public function build()
     {
@@ -78,7 +71,6 @@ class Builder implements BuilderInterface
      * Load layout updates
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function loadLayoutUpdates()
     {
@@ -102,7 +94,6 @@ class Builder implements BuilderInterface
      * Generate layout xml
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function generateLayoutXml()
     {
@@ -121,7 +112,6 @@ class Builder implements BuilderInterface
      * Generate layout blocks
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function generateLayoutBlocks()
     {
@@ -152,7 +142,6 @@ class Builder implements BuilderInterface
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function beforeGenerateBlock()
     {
@@ -161,7 +150,6 @@ class Builder implements BuilderInterface
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function afterGenerateBlock()
     {

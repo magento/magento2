@@ -11,31 +11,26 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\SalesRule\Observer\SalesOrderAfterPlaceObserver
  *
- * @since 2.0.0
  */
 class SalesOrderAfterPlaceObserver implements ObserverInterface
 {
     /**
      * @var \Magento\SalesRule\Model\RuleFactory
-     * @since 2.0.0
      */
     protected $_ruleFactory;
 
     /**
      * @var \Magento\SalesRule\Model\RuleFactory
-     * @since 2.0.0
      */
     protected $_ruleCustomerFactory;
 
     /**
      * @var \Magento\SalesRule\Model\Coupon
-     * @since 2.0.0
      */
     protected $_coupon;
 
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Coupon\Usage
-     * @since 2.0.0
      */
     protected $_couponUsage;
 
@@ -44,7 +39,6 @@ class SalesOrderAfterPlaceObserver implements ObserverInterface
      * @param \Magento\SalesRule\Model\Rule\CustomerFactory $ruleCustomerFactory
      * @param \Magento\SalesRule\Model\Coupon $coupon
      * @param \Magento\SalesRule\Model\ResourceModel\Coupon\Usage $couponUsage
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,
@@ -62,7 +56,6 @@ class SalesOrderAfterPlaceObserver implements ObserverInterface
      * @param EventObserver $observer
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

@@ -16,7 +16,6 @@ use \Magento\Cron\Model\Schedule;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class ProcessCronQueueObserver implements ObserverInterface
 {
@@ -59,85 +58,71 @@ class ProcessCronQueueObserver implements ObserverInterface
 
     /**
      * @var \Magento\Cron\Model\ResourceModel\Schedule\Collection
-     * @since 2.0.0
      */
     protected $_pendingSchedules;
 
     /**
      * @var \Magento\Cron\Model\ConfigInterface
-     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @var \Magento\Framework\App\ObjectManager
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var \Magento\Framework\App\CacheInterface
-     * @since 2.0.0
      */
     protected $_cache;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var ScheduleFactory
-     * @since 2.0.0
      */
     protected $_scheduleFactory;
 
     /**
      * @var \Magento\Framework\App\Console\Request
-     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @var \Magento\Framework\ShellInterface
-     * @since 2.0.0
      */
     protected $_shell;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.2.0
      */
     protected $dateTime;
 
     /**
      * @var \Symfony\Component\Process\PhpExecutableFinder
-     * @since 2.1.0
      */
     protected $phpExecutableFinder;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.2.0
      */
     private $state;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $invalid = [];
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $jobs;
 
@@ -154,7 +139,6 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\App\State $state
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -192,7 +176,6 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
@@ -277,7 +260,6 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param string $groupId
      * @return void
      * @throws \Exception
-     * @since 2.0.0
      */
     protected function _runJob($scheduledTime, $currentTime, $jobConfig, $schedule, $groupId)
     {
@@ -323,7 +305,6 @@ class ProcessCronQueueObserver implements ObserverInterface
      * Return job collection from data base with status 'pending'
      *
      * @return \Magento\Cron\Model\ResourceModel\Schedule\Collection
-     * @since 2.0.0
      */
     protected function _getPendingSchedules()
     {
@@ -341,7 +322,6 @@ class ProcessCronQueueObserver implements ObserverInterface
      *
      * @param string $groupId
      * @return $this
-     * @since 2.0.0
      */
     protected function _generate($groupId)
     {
@@ -393,7 +373,6 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param   array $exists
      * @param   string $groupId
      * @return  $this
-     * @since 2.0.0
      */
     protected function _generateJobs($jobs, $exists, $groupId)
     {
@@ -414,7 +393,6 @@ class ProcessCronQueueObserver implements ObserverInterface
      *
      * @param string $groupId
      * @return $this
-     * @since 2.0.0
      */
     protected function _cleanup($groupId)
     {
@@ -483,7 +461,6 @@ class ProcessCronQueueObserver implements ObserverInterface
     /**
      * @param array $jobConfig
      * @return mixed
-     * @since 2.0.0
      */
     protected function getConfigSchedule($jobConfig)
     {
@@ -501,7 +478,6 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param int $timeInterval
      * @param array $exists
      * @return void
-     * @since 2.0.0
      */
     protected function saveSchedule($jobCode, $cronExpression, $timeInterval, $exists)
     {
@@ -533,7 +509,6 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param string $cronExpression
      * @param int $time
      * @return Schedule
-     * @since 2.0.0
      */
     protected function generateSchedule($jobCode, $cronExpression, $time)
     {
@@ -550,7 +525,6 @@ class ProcessCronQueueObserver implements ObserverInterface
     /**
      * @param string $groupId
      * @return int
-     * @since 2.0.0
      */
     protected function getScheduleTimeInterval($groupId)
     {
@@ -569,7 +543,6 @@ class ProcessCronQueueObserver implements ObserverInterface
      *
      * @param string $groupId
      * @return void
-     * @since 2.2.0
      */
     private function cleanupDisabledJobs($groupId)
     {
@@ -589,7 +562,6 @@ class ProcessCronQueueObserver implements ObserverInterface
     /**
      * @param array $jobConfig
      * @return null|string
-     * @since 2.2.0
      */
     private function getCronExpression($jobConfig)
     {
@@ -611,7 +583,6 @@ class ProcessCronQueueObserver implements ObserverInterface
      * This can happen when you change the cron expression and flush the cache
      *
      * @return $this
-     * @since 2.2.0
      */
     private function cleanupScheduleMismatches()
     {
@@ -629,7 +600,6 @@ class ProcessCronQueueObserver implements ObserverInterface
 
     /**
      * @return array
-     * @since 2.2.0
      */
     private function getJobs()
     {

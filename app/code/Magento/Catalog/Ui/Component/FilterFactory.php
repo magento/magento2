@@ -7,19 +7,16 @@ namespace Magento\Catalog\Ui\Component;
 
 /**
  * @api
- * @since 2.0.0
  */
 class FilterFactory
 {
     /**
      * @var \Magento\Framework\View\Element\UiComponentFactory
-     * @since 2.0.0
      */
     protected $componentFactory;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $filterMap = [
         'default' => 'filterInput',
@@ -31,7 +28,6 @@ class FilterFactory
 
     /**
      * @param \Magento\Framework\View\Element\UiComponentFactory $componentFactory
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\View\Element\UiComponentFactory $componentFactory)
     {
@@ -43,7 +39,6 @@ class FilterFactory
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @param array $config
      * @return \Magento\Ui\Component\Listing\Columns\ColumnInterface
-     * @since 2.0.0
      */
     public function create($attribute, $context, $config = [])
     {
@@ -72,7 +67,6 @@ class FilterFactory
     /**
      * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
      * @return string
-     * @since 2.0.0
      */
     protected function getFilterType($attribute)
     {

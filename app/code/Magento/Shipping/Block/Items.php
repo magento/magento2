@@ -13,7 +13,6 @@ namespace Magento\Shipping\Block;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Items extends \Magento\Sales\Block\Items\AbstractItems
 {
@@ -21,7 +20,6 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -29,7 +27,6 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -44,7 +41,6 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * Retrieve current order model instance
      *
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -54,7 +50,6 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * @param object $shipment
      * @return string
-     * @since 2.0.0
      */
     public function getPrintShipmentUrl($shipment)
     {
@@ -64,7 +59,6 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * @param object $order
      * @return string
-     * @since 2.0.0
      */
     public function getPrintAllShipmentsUrl($order)
     {
@@ -76,7 +70,6 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      *
      * @param   \Magento\Sales\Model\Order\Shipment $shipment
      * @return  string
-     * @since 2.0.0
      */
     public function getCommentsHtml($shipment)
     {

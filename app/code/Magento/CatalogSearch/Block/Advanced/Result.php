@@ -17,7 +17,6 @@ use Magento\Framework\View\Element\Template\Context;
  * Advanced search result
  *
  * @api
- * @since 2.0.0
  */
 class Result extends Template
 {
@@ -25,7 +24,6 @@ class Result extends Template
      * Url factory
      *
      * @var UrlFactory
-     * @since 2.0.0
      */
     protected $_urlFactory;
 
@@ -33,7 +31,6 @@ class Result extends Template
      * Catalog layer
      *
      * @var \Magento\Catalog\Model\Layer
-     * @since 2.0.0
      */
     protected $_catalogLayer;
 
@@ -41,7 +38,6 @@ class Result extends Template
      * Catalog search advanced
      *
      * @var Advanced
-     * @since 2.0.0
      */
     protected $_catalogSearchAdvanced;
 
@@ -51,7 +47,6 @@ class Result extends Template
      * @param LayerResolver $layerResolver
      * @param UrlFactory $urlFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -68,7 +63,6 @@ class Result extends Template
 
     /**
      * @return AbstractBlock
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -97,7 +91,6 @@ class Result extends Template
      * Get page title
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.2.0
      */
     private function getPageTitle()
     {
@@ -108,7 +101,6 @@ class Result extends Template
      * Set order options
      *
      * @return void
-     * @since 2.0.0
      */
     public function setListOrders()
     {
@@ -125,7 +117,6 @@ class Result extends Template
      * Set view mode options
      *
      * @return void
-     * @since 2.0.0
      */
     public function setListModes()
     {
@@ -134,7 +125,6 @@ class Result extends Template
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function setListCollection()
     {
@@ -143,7 +133,6 @@ class Result extends Template
 
     /**
      * @return Collection
-     * @since 2.0.0
      */
     protected function _getProductCollection()
     {
@@ -152,7 +141,6 @@ class Result extends Template
 
     /**
      * @return Advanced
-     * @since 2.0.0
      */
     public function getSearchModel()
     {
@@ -161,7 +149,6 @@ class Result extends Template
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getResultCount()
     {
@@ -174,7 +161,6 @@ class Result extends Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getProductListHtml()
     {
@@ -183,7 +169,6 @@ class Result extends Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getFormUrl()
     {
@@ -197,7 +182,6 @@ class Result extends Template
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getSearchCriterias()
     {

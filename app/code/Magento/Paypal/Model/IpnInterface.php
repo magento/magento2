@@ -8,7 +8,6 @@ namespace Magento\Paypal\Model;
 /**
  * Interface \Magento\Paypal\Model\IpnInterface
  *
- * @since 2.0.0
  */
 interface IpnInterface
 {
@@ -17,7 +16,6 @@ interface IpnInterface
      *
      * @return void
      * @throws \Exception
-     * @since 2.0.0
      */
     public function processIpnRequest();
 }

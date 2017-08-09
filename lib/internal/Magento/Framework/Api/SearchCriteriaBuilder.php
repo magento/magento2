@@ -10,19 +10,16 @@ use Magento\Framework\Api\Search\FilterGroupBuilder;
 
 /**
  * Builder for SearchCriteria Service Data Object
- * @since 2.0.0
  */
 class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
 {
     /**
      * @var FilterGroupBuilder
-     * @since 2.0.0
      */
     protected $_filterGroupBuilder;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
-     * @since 2.0.0
      */
     protected $filterBuilder;
 
@@ -30,7 +27,6 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
      * @param ObjectFactory $objectFactory
      * @param FilterGroupBuilder $filterGroupBuilder
      * @param FilterBuilder $filterBuilder
-     * @since 2.0.0
      */
     public function __construct(
         ObjectFactory $objectFactory,
@@ -48,7 +44,6 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
      * Builds the SearchCriteria Data Object
      *
      * @return SearchCriteria
-     * @since 2.0.0
      */
     public function create()
     {
@@ -64,7 +59,6 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
      *
      * @param \Magento\Framework\Api\Filter[] $filter
      * @return $this
-     * @since 2.0.0
      */
     public function addFilters(array $filter)
     {
@@ -77,7 +71,6 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
      * @param mixed $value
      * @param string $conditionType
      * @return $this
-     * @since 2.0.0
      */
     public function addFilter($field, $value, $conditionType = 'eq')
     {
@@ -95,7 +88,6 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
      *
      * @param \Magento\Framework\Api\Search\FilterGroup[] $filterGroups
      * @return $this
-     * @since 2.0.0
      */
     public function setFilterGroups(array $filterGroups)
     {
@@ -107,7 +99,6 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
      *
      * @param SortOrder $sortOrder
      * @return $this
-     * @since 2.0.0
      */
     public function addSortOrder($sortOrder)
     {
@@ -123,7 +114,6 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
      *
      * @param SortOrder[] $sortOrders
      * @return $this
-     * @since 2.0.0
      */
     public function setSortOrders(array $sortOrders)
     {
@@ -135,7 +125,6 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
      *
      * @param int $pageSize
      * @return $this
-     * @since 2.0.0
      */
     public function setPageSize($pageSize)
     {
@@ -147,7 +136,6 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
      *
      * @param int $currentPage
      * @return $this
-     * @since 2.0.0
      */
     public function setCurrentPage($currentPage)
     {

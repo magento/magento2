@@ -12,19 +12,16 @@ use Magento\Sales\Model\Order\Payment;
  * PayPal Direct Module
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Direct extends \Magento\Payment\Model\Method\Cc
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_code = \Magento\Paypal\Model\Config::METHOD_WPP_DIRECT;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_infoBlockType = \Magento\Paypal\Block\Payment\Info::class;
 
@@ -32,7 +29,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * Availability option
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isGateway = true;
 
@@ -40,7 +36,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * Availability option
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_canAuthorize = true;
 
@@ -48,7 +43,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * Availability option
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_canCapture = true;
 
@@ -56,7 +50,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * Availability option
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_canCapturePartial = true;
 
@@ -64,7 +57,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * Availability option
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_canRefund = true;
 
@@ -72,7 +64,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * Availability option
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_canRefundInvoicePartial = true;
 
@@ -80,7 +71,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * Availability option
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_canVoid = true;
 
@@ -88,7 +78,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * Availability option
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_canUseInternal = true;
 
@@ -96,7 +85,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * Availability option
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_canUseCheckout = true;
 
@@ -104,13 +92,11 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * Availability option
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_canSaveCc = false;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_canFetchTransactionInfo = true;
 
@@ -118,7 +104,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * Availability option
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_canReviewPayment = true;
 
@@ -126,31 +111,26 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * Website Payments Pro instance
      *
      * @var \Magento\Paypal\Model\Pro
-     * @since 2.0.0
      */
     protected $_pro;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $_urlBuilder;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $_requestHttp;
 
     /**
      * @var \Magento\Paypal\Model\CartFactory
-     * @since 2.0.0
      */
     protected $_cartFactory;
 
@@ -173,7 +153,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -228,7 +207,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      *
      * @param \Magento\Store\Model\Store|int $store
      * @return $this
-     * @since 2.0.0
      */
     public function setStore($store)
     {
@@ -245,7 +223,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      *
      * @param string $currencyCode
      * @return bool
-     * @since 2.0.0
      */
     public function canUseForCurrency($currencyCode)
     {
@@ -257,7 +234,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      *
      * @see \Magento\Sales\Model\Payment::place()
      * @return string
-     * @since 2.0.0
      */
     public function getConfigPaymentAction()
     {
@@ -268,7 +244,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * Return available CC types for gateway based on merchant country
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAllowedCcTypes()
     {
@@ -288,7 +263,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      *
      * @param \Magento\Quote\Api\Data\CartInterface|\Magento\Quote\Model\Quote|null $quote
      * @return bool
-     * @since 2.0.0
      */
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
@@ -302,7 +276,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * @param int|null $storeId
      * @return null|string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getConfigData($field, $storeId = null)
     {
@@ -326,7 +299,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface|Payment $payment
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -339,7 +311,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface|Payment $payment
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function void(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -353,7 +324,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface|Payment $payment
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -370,7 +340,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -383,7 +352,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      *
      * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface|Payment $payment
      * @return $this
-     * @since 2.0.0
      */
     public function cancel(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -395,7 +363,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
     /**
      * Whether payment can be reviewed
      * @return bool
-     * @since 2.0.0
      */
     public function canReviewPayment()
     {
@@ -407,7 +374,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      *
      * @param \Magento\Payment\Model\Info|Payment $payment
      * @return bool
-     * @since 2.0.0
      */
     public function acceptPayment(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -420,7 +386,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      *
      * @param \Magento\Payment\Model\Info|PaymentInterface $payment
      * @return bool
-     * @since 2.0.0
      */
     public function denyPayment(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -434,7 +399,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @param string $transactionId
      * @return array
-     * @since 2.0.0
      */
     public function fetchTransactionInfo(\Magento\Payment\Model\InfoInterface $payment, $transactionId)
     {
@@ -447,7 +411,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * @param Payment $payment
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     protected function _placeOrder(Payment $payment, $amount)
     {
@@ -510,7 +473,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * @param string|int $month
      * @param string|int $year
      * @return string
-     * @since 2.0.0
      */
     protected function _getFormattedCcExpirationDate($month, $year)
     {
@@ -523,7 +485,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Paypal\Model\Api\Nvp $api
      * @param Payment $payment
      * @return void
-     * @since 2.0.0
      */
     protected function _importResultToPayment($api, $payment)
     {
@@ -535,7 +496,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * Check void availability
      * @return bool
      * @internal param \Magento\Framework\DataObject $payment
-     * @since 2.0.0
      */
     public function canVoid()
     {

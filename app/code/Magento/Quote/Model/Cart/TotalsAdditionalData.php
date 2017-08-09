@@ -10,7 +10,6 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
  * @inheritDoc
- * @since 2.0.0
  */
 class TotalsAdditionalData extends AbstractExtensibleModel implements TotalsAdditionalDataInterface
 {
@@ -18,7 +17,6 @@ class TotalsAdditionalData extends AbstractExtensibleModel implements TotalsAddi
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Quote\Api\Data\TotalsAdditionalDataExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -30,7 +28,6 @@ class TotalsAdditionalData extends AbstractExtensibleModel implements TotalsAddi
      *
      * @param \Magento\Quote\Api\Data\TotalsAdditionalDataExtensionInterface $extensionAttributes
      * @return void
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Quote\Api\Data\TotalsAdditionalDataExtensionInterface $extensionAttributes

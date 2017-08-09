@@ -15,7 +15,6 @@ use Magento\Framework\Serialize\Serializer\Json;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
- * @since 2.0.0
  */
 class Currencysymbol
 {
@@ -23,7 +22,6 @@ class Currencysymbol
      * Custom currency symbol properties
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_symbolsData = [];
 
@@ -31,7 +29,6 @@ class Currencysymbol
      * Store id
      *
      * @var string|null
-     * @since 2.0.0
      */
     protected $_storeId;
 
@@ -39,7 +36,6 @@ class Currencysymbol
      * Website id
      *
      * @var string|null
-     * @since 2.0.0
      */
     protected $_websiteId;
 
@@ -47,7 +43,6 @@ class Currencysymbol
      * Cache types which should be invalidated
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_cacheTypes = [
         \Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER,
@@ -77,43 +72,36 @@ class Currencysymbol
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager;
 
     /**
      * @var \Magento\Framework\App\Cache\TypeListInterface
-     * @since 2.0.0
      */
     protected $_cacheTypeList;
 
     /**
      * @var \Magento\Config\Model\Config\Factory
-     * @since 2.0.0
      */
     protected $_configFactory;
 
     /**
      * @var \Magento\Store\Model\System\Store
-     * @since 2.0.0
      */
     protected $_systemStore;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $localeResolver;
 
     /**
      * @var \Magento\Framework\App\Config\ReinitableConfigInterface
-     * @since 2.0.0
      */
     protected $_coreConfig;
 
@@ -121,13 +109,11 @@ class Currencysymbol
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -141,7 +127,6 @@ class Currencysymbol
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param Json|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -169,7 +154,6 @@ class Currencysymbol
      * Return currency symbol properties array based on config values
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCurrencySymbolsData()
     {
@@ -204,7 +188,6 @@ class Currencysymbol
      *
      * @param  $symbols array
      * @return $this
-     * @since 2.0.0
      */
     public function setCurrencySymbolsData($symbols = [])
     {
@@ -252,7 +235,6 @@ class Currencysymbol
      *
      * @param string $code
      * @return string|false
-     * @since 2.0.0
      */
     public function getCurrencySymbol($code)
     {
@@ -268,7 +250,6 @@ class Currencysymbol
      * Clear translate cache
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function clearCache()
     {
@@ -285,7 +266,6 @@ class Currencysymbol
      * @param string $configPath
      * @param int $storeId
      * @return array
-     * @since 2.0.0
      */
     protected function _unserializeStoreConfig($configPath, $storeId = null)
     {
@@ -306,7 +286,6 @@ class Currencysymbol
      * Return allowed currencies
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getAllowedCurrencies()
     {

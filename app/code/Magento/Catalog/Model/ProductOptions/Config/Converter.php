@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\ProductOptions\Config;
 /**
  * Class \Magento\Catalog\Model\ProductOptions\Config\Converter
  *
- * @since 2.0.0
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
@@ -18,7 +17,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param \DOMDocument $source
      * @return array
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function convert($source)
     {
@@ -56,7 +54,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param string $attributeName
      * @param string|null $defaultValue
      * @return null|string
-     * @since 2.0.0
      */
     protected function _getAttributeValue(\DOMNode $node, $attributeName, $defaultValue = null)
     {

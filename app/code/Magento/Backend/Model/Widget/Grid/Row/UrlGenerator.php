@@ -8,31 +8,26 @@ namespace Magento\Backend\Model\Widget\Grid\Row;
 /**
  * Grid row url generator
  * @api
- * @since 2.0.0
  */
 class UrlGenerator implements \Magento\Backend\Model\Widget\Grid\Row\GeneratorInterface
 {
     /**
      * @var \Magento\Backend\Model\UrlInterface
-     * @since 2.0.0
      */
     protected $_urlModel;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_path;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_params = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_extraParamsTemplate = [];
 
@@ -40,7 +35,6 @@ class UrlGenerator implements \Magento\Backend\Model\Widget\Grid\Row\GeneratorIn
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param array $args
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function __construct(\Magento\Backend\Model\UrlInterface $backendUrl, array $args = [])
     {
@@ -62,7 +56,6 @@ class UrlGenerator implements \Magento\Backend\Model\Widget\Grid\Row\GeneratorIn
      *
      * @param \Magento\Framework\DataObject $item
      * @return string
-     * @since 2.0.0
      */
     public function getUrl($item)
     {
@@ -78,7 +71,6 @@ class UrlGenerator implements \Magento\Backend\Model\Widget\Grid\Row\GeneratorIn
      *
      * @param \Magento\Framework\DataObject $item
      * @return array
-     * @since 2.0.0
      */
     protected function _prepareParameters($item)
     {

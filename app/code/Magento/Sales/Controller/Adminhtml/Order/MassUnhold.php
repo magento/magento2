@@ -13,7 +13,6 @@ use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\MassUnhold
  *
- * @since 2.0.0
  */
 class MassUnhold extends AbstractMassAction
 {
@@ -21,7 +20,6 @@ class MassUnhold extends AbstractMassAction
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
-     * @since 2.0.0
      */
     public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
     {
@@ -34,7 +32,6 @@ class MassUnhold extends AbstractMassAction
      *
      * @param AbstractCollection $collection
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     protected function massAction(AbstractCollection $collection)
     {

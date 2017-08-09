@@ -15,37 +15,31 @@ use Magento\Sales\Model\OrderFactory;
 /**
  * Class ShippingBuilder
  * @package Magento\Sales\Model\Order
- * @since 2.1.0
  */
 class ShippingBuilder
 {
     /**
      * @var int|null
-     * @since 2.1.0
      */
     private $orderId = null;
 
     /**
      * @var Order
-     * @since 2.1.0
      */
     private $order;
 
     /**
      * @var OrderFactory
-     * @since 2.1.0
      */
     private $orderFactory;
 
     /**
      * @var ShippingInterfaceFactory
-     * @since 2.1.0
      */
     private $shippingFactory;
 
     /**
      * @var TotalInterfaceFactory
-     * @since 2.1.0
      */
     private $totalFactory;
 
@@ -55,7 +49,6 @@ class ShippingBuilder
      * @param OrderFactory $orderFactory
      * @param ShippingInterfaceFactory $shippingFactory
      * @param TotalInterfaceFactory $totalFactory
-     * @since 2.1.0
      */
     public function __construct(
         OrderFactory $orderFactory,
@@ -70,7 +63,6 @@ class ShippingBuilder
     /**
      * @param int $orderId
      * @return void
-     * @since 2.1.0
      */
     public function setOrderId($orderId)
     {
@@ -79,7 +71,6 @@ class ShippingBuilder
 
     /**
      * @return ShippingInterface|null
-     * @since 2.1.0
      */
     public function create()
     {
@@ -102,7 +93,6 @@ class ShippingBuilder
 
     /**
      * @return int|null
-     * @since 2.1.0
      */
     private function getOrderId()
     {
@@ -111,7 +101,6 @@ class ShippingBuilder
 
     /**
      * @return TotalInterface
-     * @since 2.1.0
      */
     private function getTotal()
     {

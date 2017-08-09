@@ -11,7 +11,6 @@ use Magento\Framework\DataObject;
 
 /**
  * Multishipping items box plugin
- * @since 2.0.0
  */
 class ItemsBox
 {
@@ -19,7 +18,6 @@ class ItemsBox
      * Gift message helper
      *
      * @var MessageHelper
-     * @since 2.0.0
      */
     protected $helper;
 
@@ -27,7 +25,6 @@ class ItemsBox
      * Construct
      *
      * @param MessageHelper $helper
-     * @since 2.0.0
      */
     public function __construct(MessageHelper $helper)
     {
@@ -43,7 +40,6 @@ class ItemsBox
      *
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterGetItemsBoxTextAfter(ShippingBlock $subject, $itemsBoxText, DataObject $addressEntity)
     {

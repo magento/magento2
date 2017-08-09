@@ -9,13 +9,11 @@ namespace Magento\Bundle\Pricing\Price;
 /**
  * Interface DiscountProviderInterface
  * @api
- * @since 2.0.0
  */
 interface DiscountProviderInterface
 {
     /**
      * @return float
-     * @since 2.0.0
      */
     public function getDiscountPercent();
 }

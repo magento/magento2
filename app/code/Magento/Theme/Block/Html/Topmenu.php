@@ -15,7 +15,6 @@ use Magento\Framework\View\Element\Template;
  * Html page top menu block
  *
  * @api
- * @since 2.0.0
  */
 class Topmenu extends Template implements IdentityInterface
 {
@@ -23,7 +22,6 @@ class Topmenu extends Template implements IdentityInterface
      * Cache identities
      *
      * @var array
-     * @since 2.0.0
      */
     protected $identities = [];
 
@@ -31,19 +29,16 @@ class Topmenu extends Template implements IdentityInterface
      * Top menu data tree
      *
      * @var \Magento\Framework\Data\Tree\Node
-     * @since 2.0.0
      */
     protected $_menu;
 
     /**
      * @var NodeFactory
-     * @since 2.2.0
      */
     private $nodeFactory;
 
     /**
      * @var TreeFactory
-     * @since 2.2.0
      */
     private $treeFactory;
 
@@ -52,7 +47,6 @@ class Topmenu extends Template implements IdentityInterface
      * @param NodeFactory $nodeFactory
      * @param TreeFactory $treeFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Template\Context $context,
@@ -69,7 +63,7 @@ class Topmenu extends Template implements IdentityInterface
      * Get block cache life time
      *
      * @return int
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function getCacheLifetime()
     {
@@ -83,7 +77,6 @@ class Topmenu extends Template implements IdentityInterface
      * @param string $childrenWrapClass
      * @param int $limit
      * @return string
-     * @since 2.0.0
      */
     public function getHtml($outermostClass = '', $childrenWrapClass = '', $limit = 0)
     {
@@ -111,7 +104,6 @@ class Topmenu extends Template implements IdentityInterface
      *
      * @param \Magento\Backend\Model\Menu $items
      * @return int
-     * @since 2.0.0
      */
     protected function _countItems($items)
     {
@@ -133,7 +125,6 @@ class Topmenu extends Template implements IdentityInterface
      * @return array|void
      *
      * @todo: Add Depth Level limit, and better logic for columns
-     * @since 2.0.0
      */
     protected function _columnBrake($items, $limit)
     {
@@ -177,7 +168,6 @@ class Topmenu extends Template implements IdentityInterface
      * @param string $childrenWrapClass
      * @param int $limit
      * @return string HTML code
-     * @since 2.0.0
      */
     protected function _addSubMenu($child, $childLevel, $childrenWrapClass, $limit)
     {
@@ -209,7 +199,6 @@ class Topmenu extends Template implements IdentityInterface
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _getHtml(
         \Magento\Framework\Data\Tree\Node $menuTree,
@@ -273,7 +262,6 @@ class Topmenu extends Template implements IdentityInterface
      *
      * @param \Magento\Framework\Data\Tree\Node $item
      * @return string
-     * @since 2.0.0
      */
     protected function _getRenderedMenuItemAttributes(\Magento\Framework\Data\Tree\Node $item)
     {
@@ -290,7 +278,6 @@ class Topmenu extends Template implements IdentityInterface
      *
      * @param \Magento\Framework\Data\Tree\Node $item
      * @return array
-     * @since 2.0.0
      */
     protected function _getMenuItemAttributes(\Magento\Framework\Data\Tree\Node $item)
     {
@@ -303,7 +290,6 @@ class Topmenu extends Template implements IdentityInterface
      *
      * @param \Magento\Framework\Data\Tree\Node $item
      * @return array
-     * @since 2.0.0
      */
     protected function _getMenuItemClasses(\Magento\Framework\Data\Tree\Node $item)
     {
@@ -342,7 +328,6 @@ class Topmenu extends Template implements IdentityInterface
      *
      * @param array $identity
      * @return void
-     * @since 2.0.0
      */
     public function addIdentity($identity)
     {
@@ -355,7 +340,6 @@ class Topmenu extends Template implements IdentityInterface
      * Get identities
      *
      * @return array
-     * @since 2.0.0
      */
     public function getIdentities()
     {
@@ -366,7 +350,7 @@ class Topmenu extends Template implements IdentityInterface
      * Get cache key informative items
      *
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getCacheKeyInfo()
     {
@@ -379,7 +363,7 @@ class Topmenu extends Template implements IdentityInterface
      * Get tags array for saving cache
      *
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function getCacheTags()
     {
@@ -393,7 +377,7 @@ class Topmenu extends Template implements IdentityInterface
      * The creation logic was moved from class constructor into separate method.
      *
      * @return Node
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getMenu()
     {

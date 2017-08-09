@@ -19,49 +19,41 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class AttributeSetRepository implements AttributeSetRepositoryInterface
 {
     /**
      * @var AttributeSetResource
-     * @since 2.0.0
      */
     private $attributeSetResource;
 
     /**
      * @var AttributeSetFactory
-     * @since 2.0.0
      */
     private $attributeSetFactory;
 
     /**
      * @var CollectionFactory
-     * @since 2.0.0
      */
     private $collectionFactory;
 
     /**
      * @var EavConfig
-     * @since 2.0.0
      */
     private $eavConfig;
 
     /**
      * @var \Magento\Eav\Api\Data\AttributeSetSearchResultsInterfaceFactory
-     * @since 2.0.0
      */
     private $searchResultsFactory;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
-     * @since 2.0.0
      */
     protected $joinProcessor;
 
     /**
      * @var CollectionProcessorInterface
-     * @since 2.2.0
      */
     private $collectionProcessor;
 
@@ -74,7 +66,6 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param CollectionProcessorInterface $collectionProcessor
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         AttributeSetResource $attributeSetResource,
@@ -96,7 +87,6 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function save(AttributeSetInterface $attributeSet)
     {
@@ -110,7 +100,6 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -131,10 +120,9 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
     /**
      * Retrieve entity type code from search criteria
      *
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return null|string
-     * @since 2.0.0
      */
     protected function getEntityTypeCode(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -150,7 +138,6 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function get($attributeSetId)
     {
@@ -166,7 +153,6 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function delete(AttributeSetInterface $attributeSet)
     {
@@ -182,7 +168,6 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function deleteById($attributeSetId)
     {
@@ -192,9 +177,8 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
-     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

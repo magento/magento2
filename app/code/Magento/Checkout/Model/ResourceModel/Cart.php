@@ -9,7 +9,6 @@ namespace Magento\Checkout\Model\ResourceModel;
  * Resource model for Checkout Cart
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Cart extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -18,7 +17,6 @@ class Cart extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -30,7 +28,6 @@ class Cart extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $quoteId
      * @return array
-     * @since 2.0.0
      */
     public function fetchItemsSummary($quoteId)
     {
@@ -51,7 +48,6 @@ class Cart extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $quoteId
      * @return array
-     * @since 2.0.0
      */
     public function fetchItems($quoteId)
     {
@@ -72,7 +68,6 @@ class Cart extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @param int $quoteId
      * @return $this
-     * @since 2.0.0
      */
     public function addExcludeProductFilter($collection, $quoteId)
     {

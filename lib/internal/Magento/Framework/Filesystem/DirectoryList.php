@@ -20,7 +20,6 @@ namespace Magento\Framework\Filesystem;
  * This object is intended to be immutable (a "value object").
  * The defaults are pre-defined and can be modified only by inheritors of this class.
  * Through the constructor, it is possible to inject custom paths or URL paths, but impossible to inject new types.
- * @since 2.0.0
  */
 class DirectoryList
 {
@@ -40,7 +39,6 @@ class DirectoryList
      * Root path
      *
      * @var string
-     * @since 2.0.0
      */
     private $root;
 
@@ -48,7 +46,6 @@ class DirectoryList
      * Directories configurations
      *
      * @var array
-     * @since 2.0.0
      */
     private $directories;
 
@@ -56,7 +53,6 @@ class DirectoryList
      * Predefined types/paths
      *
      * @return array
-     * @since 2.0.0
      */
     public static function getDefaultConfig()
     {
@@ -69,7 +65,6 @@ class DirectoryList
      * @param array $config
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public static function validate($config)
     {
@@ -95,7 +90,6 @@ class DirectoryList
      *
      * @param string $root
      * @param array $config
-     * @since 2.0.0
      */
     public function __construct($root, array $config = [])
     {
@@ -132,7 +126,6 @@ class DirectoryList
      *
      * @param string $path
      * @return string
-     * @since 2.1.0
      */
     private function normalizePath($path)
     {
@@ -148,7 +141,6 @@ class DirectoryList
      * @param string $urlPath
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     private function assertUrlPath($urlPath)
     {
@@ -164,7 +156,6 @@ class DirectoryList
      *
      * @param string $path
      * @return string
-     * @since 2.0.0
      */
     protected function prependRoot($path)
     {
@@ -177,7 +168,6 @@ class DirectoryList
      *
      * @param string $path
      * @return bool
-     * @since 2.0.0
      */
     protected function isAbsolute($path)
     {
@@ -201,7 +191,6 @@ class DirectoryList
      * Gets a filesystem path of the root directory
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRoot()
     {
@@ -213,7 +202,6 @@ class DirectoryList
      *
      * @param string $code
      * @return string
-     * @since 2.0.0
      */
     public function getPath($code)
     {
@@ -226,7 +214,6 @@ class DirectoryList
      *
      * @param string $code
      * @return string|bool
-     * @since 2.0.0
      */
     public function getUrlPath($code)
     {
@@ -243,7 +230,6 @@ class DirectoryList
      * @param string $code
      * @throws \Magento\Framework\Exception\FileSystemException
      * @return void
-     * @since 2.0.0
      */
     private function assertCode($code)
     {

@@ -13,7 +13,6 @@ namespace Magento\Reports\Model\ResourceModel\Event;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -21,7 +20,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Store Ids
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_storeIds;
 
@@ -29,7 +27,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Resource initializations
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -42,7 +39,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param array $storeIds
      * @return $this
-     * @since 2.0.0
      */
     public function addStoreFilter(array $storeIds)
     {
@@ -59,7 +55,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param null|int|array $ignore
      * @param int $limit
      * @return $this
-     * @since 2.0.0
      */
     public function addRecentlyFiler($typeId, $subjectId, $subtype = 0, $ignore = null, $limit = 15)
     {

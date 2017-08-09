@@ -11,7 +11,6 @@ namespace Magento\Sales\Model\Convert;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Order extends \Magento\Framework\DataObject
 {
@@ -19,43 +18,36 @@ class Order extends \Magento\Framework\DataObject
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager = null;
 
     /**
      * @var \Magento\Sales\Api\InvoiceRepositoryInterface
-     * @since 2.0.0
      */
     protected $invoiceRepository;
 
     /**
      * @var \Magento\Sales\Model\Order\Invoice\ItemFactory
-     * @since 2.0.0
      */
     protected $_invoiceItemFactory;
 
     /**
      * @var \Magento\Sales\Api\ShipmentRepositoryInterface
-     * @since 2.0.0
      */
     protected $shipmentRepository;
 
     /**
      * @var \Magento\Sales\Api\CreditmemoRepositoryInterface
-     * @since 2.0.0
      */
     protected $creditmemoRepository;
 
     /**
      * @var \Magento\Sales\Model\Order\Creditmemo\ItemFactory
-     * @since 2.0.0
      */
     protected $_creditmemoItemFactory;
 
     /**
      * @var \Magento\Framework\DataObject\Copy
-     * @since 2.0.0
      */
     protected $_objectCopyService;
 
@@ -71,7 +63,6 @@ class Order extends \Magento\Framework\DataObject
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -100,7 +91,6 @@ class Order extends \Magento\Framework\DataObject
      *
      * @param   \Magento\Sales\Model\Order $order
      * @return  \Magento\Sales\Model\Order\Invoice
-     * @since 2.0.0
      */
     public function toInvoice(\Magento\Sales\Model\Order $order)
     {
@@ -126,7 +116,6 @@ class Order extends \Magento\Framework\DataObject
      *
      * @param   \Magento\Sales\Model\Order\Item $item
      * @return  \Magento\Sales\Model\Order\Invoice\Item
-     * @since 2.0.0
      */
     public function itemToInvoiceItem(\Magento\Sales\Model\Order\Item $item)
     {
@@ -147,7 +136,6 @@ class Order extends \Magento\Framework\DataObject
      *
      * @param   \Magento\Sales\Model\Order $order
      * @return  \Magento\Sales\Model\Order\Shipment
-     * @since 2.0.0
      */
     public function toShipment(\Magento\Sales\Model\Order $order)
     {
@@ -173,7 +161,6 @@ class Order extends \Magento\Framework\DataObject
      *
      * @param   \Magento\Sales\Model\Order\Item $item
      * @return  \Magento\Sales\Model\Order\Shipment\Item
-     * @since 2.0.0
      */
     public function itemToShipmentItem(\Magento\Sales\Model\Order\Item $item)
     {
@@ -194,7 +181,6 @@ class Order extends \Magento\Framework\DataObject
      *
      * @param   \Magento\Sales\Model\Order $order
      * @return  \Magento\Sales\Model\Order\Creditmemo
-     * @since 2.0.0
      */
     public function toCreditmemo(\Magento\Sales\Model\Order $order)
     {
@@ -220,7 +206,6 @@ class Order extends \Magento\Framework\DataObject
      *
      * @param   \Magento\Sales\Model\Order\Item $item
      * @return  \Magento\Sales\Model\Order\Creditmemo\Item
-     * @since 2.0.0
      */
     public function itemToCreditmemoItem(\Magento\Sales\Model\Order\Item $item)
     {

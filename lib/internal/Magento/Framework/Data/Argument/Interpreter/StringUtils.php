@@ -11,19 +11,16 @@ use Magento\Framework\Stdlib\BooleanUtils;
 
 /**
  * Interpreter of string data type that may optionally perform text translation.
- * @since 2.0.0
  */
 class StringUtils implements InterpreterInterface
 {
     /**
      * @var BaseStringUtils
-     * @since 2.2.0
      */
     private $baseStringUtils;
 
     /**
      * @var BooleanUtils
-     * @since 2.0.0
      */
     private $booleanUtils;
 
@@ -32,7 +29,6 @@ class StringUtils implements InterpreterInterface
      *
      * @param BooleanUtils $booleanUtils
      * @param BaseStringUtils $baseStringUtils
-     * @since 2.0.0
      */
     public function __construct(
         BooleanUtils $booleanUtils,
@@ -46,7 +42,6 @@ class StringUtils implements InterpreterInterface
      * {@inheritdoc}
      * @return string
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function evaluate(array $data)
     {

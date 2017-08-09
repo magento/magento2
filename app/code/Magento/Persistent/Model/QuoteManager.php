@@ -7,7 +7,6 @@ namespace Magento\Persistent\Model;
 
 /**
  * Class QuoteManager
- * @since 2.0.0
  */
 class QuoteManager
 {
@@ -15,7 +14,6 @@ class QuoteManager
      * Persistent session
      *
      * @var \Magento\Persistent\Helper\Session
-     * @since 2.0.0
      */
     protected $persistentSession;
 
@@ -23,7 +21,6 @@ class QuoteManager
      * Checkout session
      *
      * @var \Magento\Checkout\Model\Session
-     * @since 2.0.0
      */
     protected $checkoutSession;
 
@@ -31,7 +28,6 @@ class QuoteManager
      * Persistent data
      *
      * @var \Magento\Persistent\Helper\Data
-     * @since 2.0.0
      */
     protected $persistentData;
 
@@ -39,13 +35,11 @@ class QuoteManager
      * Whether set quote to be persistent in workflow
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_setQuotePersistent = true;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
@@ -54,7 +48,6 @@ class QuoteManager
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
@@ -73,7 +66,6 @@ class QuoteManager
      *
      * @param bool $checkQuote Check quote to be persistent (not stolen)
      * @return void
-     * @since 2.0.0
      */
     public function setGuest($checkQuote = false)
     {
@@ -113,7 +105,6 @@ class QuoteManager
      * checkout
      *
      * @return void
-     * @since 2.2.0
      */
     public function convertCustomerCartToGuest()
     {
@@ -141,7 +132,6 @@ class QuoteManager
      * Expire persistent quote
      *
      * @return void
-     * @since 2.0.0
      */
     public function expire()
     {
@@ -160,7 +150,6 @@ class QuoteManager
      * Is quote persistent
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isPersistent()
     {

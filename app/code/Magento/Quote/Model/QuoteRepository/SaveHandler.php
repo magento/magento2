@@ -14,37 +14,31 @@ use Magento\Framework\Exception\InputException;
 /**
  * Class \Magento\Quote\Model\QuoteRepository\SaveHandler
  *
- * @since 2.1.0
  */
 class SaveHandler
 {
     /**
      * @var \Magento\Quote\Model\Quote\Item\CartItemPersister
-     * @since 2.1.0
      */
     private $cartItemPersister;
 
     /**
      * @var \Magento\Quote\Model\Quote\Address\BillingAddressPersister
-     * @since 2.1.0
      */
     private $billingAddressPersister;
 
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote
-     * @since 2.1.0
      */
     private $quoteResourceModel;
 
     /**
      * @var \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister
-     * @since 2.1.0
      */
     private $shippingAssignmentPersister;
 
     /**
      * @var AddressRepositoryInterface
-     * @since 2.2.0
      */
     private $addressRepository;
 
@@ -54,7 +48,6 @@ class SaveHandler
      * @param \Magento\Quote\Model\Quote\Address\BillingAddressPersister $billingAddressPersister
      * @param \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister $shippingAssignmentPersister
      * @param AddressRepositoryInterface $addressRepository
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Quote\Model\ResourceModel\Quote $quoteResource,
@@ -79,7 +72,6 @@ class SaveHandler
      * @throws InputException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.1.0
      */
     public function save(CartInterface $quote)
     {
@@ -123,7 +115,6 @@ class SaveHandler
      * @param \Magento\Quote\Model\Quote $quote
      * @return void
      * @throws InputException
-     * @since 2.1.0
      */
     private function processShippingAssignment($quote)
     {

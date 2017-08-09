@@ -20,7 +20,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * @inheritdoc
  */
-class ModeTest extends \PHPUnit_Framework_TestCase
+class ModeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Mode

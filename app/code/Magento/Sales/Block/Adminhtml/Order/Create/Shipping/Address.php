@@ -11,7 +11,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Shipping;
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
 {
@@ -19,7 +18,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * Return header text
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -30,7 +28,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * Return Header CSS Class
      *
      * @return string
-     * @since 2.0.0
      */
     public function getHeaderCssClass()
     {
@@ -41,7 +38,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * Prepare Form and add elements to form
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -59,7 +55,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * Return is shipping address flag
      *
      * @return true
-     * @since 2.0.0
      */
     public function getIsShipping()
     {
@@ -71,7 +66,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsAsBilling()
     {
@@ -83,7 +77,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getDontSaveInAddressBook()
     {
@@ -94,7 +87,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * Return Form Elements values
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFormValues()
     {
@@ -105,7 +97,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * Return customer address id
      *
      * @return int|bool
-     * @since 2.0.0
      */
     public function getAddressId()
     {
@@ -116,7 +107,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * Return address object
      *
      * @return \Magento\Quote\Model\Quote\Address
-     * @since 2.0.0
      */
     public function getAddress()
     {
@@ -134,7 +124,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsDisabled()
     {

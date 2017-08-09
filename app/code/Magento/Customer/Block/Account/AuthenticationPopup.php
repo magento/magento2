@@ -10,19 +10,16 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class AuthenticationPopup extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $jsLayout;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -31,7 +28,6 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -46,7 +42,6 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getJsLayout()
     {
@@ -57,7 +52,6 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
      * Returns popup config
      *
      * @return array
-     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -75,7 +69,7 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
      * Added in scope of https://github.com/magento/magento2/pull/8617
      *
      * @return bool|string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getSerializedConfig()
     {
@@ -86,7 +80,6 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
      * Is autocomplete enabled for storefront
      *
      * @return string
-     * @since 2.2.0
      */
     private function isAutocompleteEnabled()
     {
@@ -100,7 +93,6 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
      * Return base url.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBaseUrl()
     {
@@ -111,7 +103,6 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
      * Get customer register url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCustomerRegisterUrlUrl()
     {
@@ -122,7 +113,6 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
      * Get customer forgot password url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCustomerForgotPasswordUrl()
     {

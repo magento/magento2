@@ -7,7 +7,6 @@ namespace Magento\Integration\Model\ResourceModel\Oauth\Consumer;
 
 /**
  * OAuth Application resource collection model
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -15,7 +14,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Initialize collection model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

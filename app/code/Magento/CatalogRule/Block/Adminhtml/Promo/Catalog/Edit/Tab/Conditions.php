@@ -13,19 +13,16 @@ use Magento\Rule\Model\Condition\AbstractCondition;
 /**
  * Class \Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Conditions
  *
- * @since 2.0.0
  */
 class Conditions extends Generic implements TabInterface
 {
     /**
      * @var \Magento\Backend\Block\Widget\Form\Renderer\Fieldset
-     * @since 2.0.0
      */
     protected $_rendererFieldset;
 
     /**
      * @var \Magento\Rule\Block\Conditions
-     * @since 2.0.0
      */
     protected $_conditions;
 
@@ -36,7 +33,6 @@ class Conditions extends Generic implements TabInterface
      * @param \Magento\Rule\Block\Conditions $conditions
      * @param \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -56,7 +52,6 @@ class Conditions extends Generic implements TabInterface
      *
      * @return \Magento\Framework\Phrase
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -68,7 +63,6 @@ class Conditions extends Generic implements TabInterface
      *
      * @return \Magento\Framework\Phrase
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -80,7 +74,6 @@ class Conditions extends Generic implements TabInterface
      *
      * @return bool
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -92,7 +85,6 @@ class Conditions extends Generic implements TabInterface
      *
      * @return bool
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -104,7 +96,6 @@ class Conditions extends Generic implements TabInterface
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.1.0
      */
     public function getTabClass()
     {
@@ -116,7 +107,6 @@ class Conditions extends Generic implements TabInterface
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.1.0
      */
     public function getTabUrl()
     {
@@ -128,7 +118,6 @@ class Conditions extends Generic implements TabInterface
      *
      * @return bool
      * @codeCoverageIgnore
-     * @since 2.1.0
      */
     public function isAjaxLoaded()
     {
@@ -137,7 +126,6 @@ class Conditions extends Generic implements TabInterface
 
     /**
      * @return Form
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -156,7 +144,6 @@ class Conditions extends Generic implements TabInterface
      * @param string $formName
      * @return \Magento\Framework\Data\Form
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.1.0
      */
     protected function addTabToForm($model, $fieldsetId = 'conditions_fieldset', $formName = 'catalog_rule_form')
     {
@@ -204,7 +191,6 @@ class Conditions extends Generic implements TabInterface
      * @param string $formName
      * @param string $jsFormName
      * @return void
-     * @since 2.1.0
      */
     private function setConditionFormName(AbstractCondition $conditions, $formName, $jsFormName)
     {

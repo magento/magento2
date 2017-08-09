@@ -8,7 +8,6 @@ namespace Magento\Sales\Model\Config\Backend\Email;
 /**
  * Backend model for global configuration value
  * 'sales_email/general/async_sending'.
- * @since 2.0.0
  */
 class AsyncSending extends \Magento\Framework\App\Config\Value
 {
@@ -22,7 +21,6 @@ class AsyncSending extends \Magento\Framework\App\Config\Value
      * - config_data_sales_email_general_async_sending_disabled
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {

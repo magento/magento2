@@ -10,55 +10,46 @@ use Magento\Customer\CustomerData\SectionSourceInterface;
 
 /**
  * Cart source
- * @since 2.0.0
  */
 class Cart extends \Magento\Framework\DataObject implements SectionSourceInterface
 {
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $checkoutSession;
 
     /**
      * @var \Magento\Checkout\Model\Cart
-     * @since 2.0.0
      */
     protected $checkoutCart;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Url
-     * @since 2.0.0
      */
     protected $catalogUrl;
 
     /**
      * @var \Magento\Quote\Model\Quote|null
-     * @since 2.0.0
      */
     protected $quote = null;
 
     /**
      * @var \Magento\Checkout\Helper\Data
-     * @since 2.0.0
      */
     protected $checkoutHelper;
 
     /**
      * @var ItemPoolInterface
-     * @since 2.0.0
      */
     protected $itemPoolInterface;
 
     /**
      * @var int|float
-     * @since 2.0.0
      */
     protected $summeryCount;
 
     /**
      * @var \Magento\Framework\View\LayoutInterface
-     * @since 2.0.0
      */
     protected $layout;
 
@@ -71,7 +62,6 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param array $data
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -93,7 +83,6 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getSectionData()
     {
@@ -115,7 +104,6 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
      * Get active quote
      *
      * @return \Magento\Quote\Model\Quote
-     * @since 2.0.0
      */
     protected function getQuote()
     {
@@ -129,7 +117,6 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
      * Get shopping cart items qty based on configuration (summary qty or items qty)
      *
      * @return int|float
-     * @since 2.0.0
      */
     protected function getSummaryCount()
     {
@@ -143,7 +130,6 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
      * Check if one page checkout is available
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function isPossibleOnepageCheckout()
     {
@@ -154,7 +140,6 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
      * Get array of last added items
      *
      * @return \Magento\Quote\Model\Quote\Item[]
-     * @since 2.0.0
      */
     protected function getRecentItems()
     {
@@ -186,7 +171,6 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
      * Return customer quote items
      *
      * @return \Magento\Quote\Model\Quote\Item[]
-     * @since 2.0.0
      */
     protected function getAllQuoteItems()
     {
@@ -200,7 +184,6 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
      * Check if guest checkout is allowed
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isGuestCheckoutAllowed()
     {

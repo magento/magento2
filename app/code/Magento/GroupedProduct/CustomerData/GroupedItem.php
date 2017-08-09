@@ -11,13 +11,11 @@ use Magento\Checkout\CustomerData\DefaultItem;
 /**
  * Class \Magento\GroupedProduct\CustomerData\GroupedItem
  *
- * @since 2.0.0
  */
 class GroupedItem extends DefaultItem
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -28,7 +26,6 @@ class GroupedItem extends DefaultItem
      * @param \Magento\Catalog\Helper\Product\ConfigurationPool $configurationPool
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Helper\Image $imageHelper,
@@ -50,7 +47,6 @@ class GroupedItem extends DefaultItem
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function getProductForThumbnail()
     {
@@ -73,7 +69,6 @@ class GroupedItem extends DefaultItem
      * Get item grouped product
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     protected function getGroupedProduct()
     {

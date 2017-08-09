@@ -15,7 +15,6 @@ namespace Magento\Review\Model\Review;
 /**
  * Class \Magento\Review\Model\Review\Status
  *
- * @since 2.0.0
  */
 class Status extends \Magento\Framework\Model\AbstractModel
 {
@@ -25,7 +24,6 @@ class Status extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

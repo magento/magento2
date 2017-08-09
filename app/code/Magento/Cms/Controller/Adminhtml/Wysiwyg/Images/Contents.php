@@ -9,19 +9,16 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 /**
  * Class \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\Contents
  *
- * @since 2.0.0
  */
 class Contents extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 {
     /**
      * @var \Magento\Framework\View\Result\LayoutFactory
-     * @since 2.0.0
      */
     protected $resultLayoutFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
@@ -30,7 +27,6 @@ class Contents extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -47,7 +43,6 @@ class Contents extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      * Save current path in session
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _saveSessionCurrentPath()
     {
@@ -61,7 +56,6 @@ class Contents extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      * Contents action
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

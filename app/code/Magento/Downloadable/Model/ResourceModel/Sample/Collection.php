@@ -11,13 +11,12 @@ use Magento\Catalog\Api\Data\ProductInterface;
  * Downloadable samples resource collection
  *
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $metadataPool;
 
@@ -29,7 +28,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
@@ -55,7 +54,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Init resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -70,7 +68,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param \Magento\Catalog\Model\Product|array|int|null $product
      * @return $this
-     * @since 2.0.0
      */
     public function addProductToFilter($product)
     {
@@ -99,7 +96,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function addTitleToResult($storeId = 0)
     {

@@ -16,7 +16,6 @@ use Magento\Framework\Escaper;
 /**
  * Class \Magento\Framework\Data\Form\Element\Multiselect
  *
- * @since 2.0.0
  */
 class Multiselect extends AbstractElement
 {
@@ -25,7 +24,6 @@ class Multiselect extends AbstractElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -43,7 +41,6 @@ class Multiselect extends AbstractElement
      * Get the name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -58,7 +55,6 @@ class Multiselect extends AbstractElement
      * Get the element as HTML
      *
      * @return string
-     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -101,7 +97,6 @@ class Multiselect extends AbstractElement
      * Get the HTML attributes
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getHtmlAttributes()
     {
@@ -124,7 +119,6 @@ class Multiselect extends AbstractElement
      * Get the default HTML
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultHtml()
     {
@@ -173,7 +167,6 @@ class Multiselect extends AbstractElement
      * Get the  name of the JS object
      *
      * @return string
-     * @since 2.0.0
      */
     public function getJsObjectName()
     {
@@ -184,7 +177,6 @@ class Multiselect extends AbstractElement
      * @param array $option
      * @param array $selected
      * @return string
-     * @since 2.0.0
      */
     protected function _optionToHtml($option, $selected)
     {

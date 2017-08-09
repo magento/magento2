@@ -9,19 +9,16 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Shell driver encapsulates command execution and arguments escaping
- * @since 2.1.0
  */
 class Driver
 {
     /**
      * @var \Magento\Framework\Shell\CommandRendererInterface
-     * @since 2.1.0
      */
     private $commandRenderer;
 
     /**
      * @param CommandRendererInterface $commandRenderer
-     * @since 2.1.0
      */
     public function __construct(CommandRendererInterface $commandRenderer)
     {
@@ -35,7 +32,6 @@ class Driver
      * @param string[] $arguments Argument values to substitute markers with
      * @return Response
      * @throws LocalizedException
-     * @since 2.1.0
      */
     public function execute($command, $arguments)
     {

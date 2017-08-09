@@ -12,7 +12,6 @@ namespace Magento\Sitemap\Model\Source\Product\Image;
 
 /**
  * @api
- * @since 2.0.0
  */
 class IncludeImage implements \Magento\Framework\Option\ArrayInterface
 {
@@ -31,7 +30,6 @@ class IncludeImage implements \Magento\Framework\Option\ArrayInterface
      * Retrieve options array
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

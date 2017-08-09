@@ -7,13 +7,11 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Button;
 
 /**
  * Class Back
- * @since 2.1.0
  */
 class Back extends Generic
 {
     /**
      * @return array
-     * @since 2.1.0
      */
     public function getButtonData()
     {

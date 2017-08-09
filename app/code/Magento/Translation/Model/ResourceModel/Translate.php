@@ -13,32 +13,27 @@ use Magento\Translation\App\Config\Type\Translation;
 /**
  * Class \Magento\Translation\Model\ResourceModel\Translate
  *
- * @since 2.0.0
  */
 class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements
     \Magento\Framework\Translate\ResourceInterface
 {
     /**
      * @var \Magento\Framework\App\ScopeResolverInterface
-     * @since 2.0.0
      */
     protected $scopeResolver;
 
     /**
      * @var null|string
-     * @since 2.0.0
      */
     protected $scope;
 
     /**
      * @var Config
-     * @since 2.2.0
      */
     private $appConfig;
 
     /**
      * @var DeploymentConfig
-     * @since 2.2.0
      */
     private $deployedConfig;
 
@@ -47,7 +42,6 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param string $connectionName
      * @param null|string $scope
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -64,7 +58,6 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
      * Define main table
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -77,7 +70,6 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
      * @param int $storeId
      * @param string $locale
      * @return array
-     * @since 2.0.0
      */
     public function getTranslationArray($storeId = null, $locale = null)
     {
@@ -111,7 +103,6 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
      * @param array $strings
      * @param int|null $storeId
      * @return array
-     * @since 2.0.0
      */
     public function getTranslationArrayByStrings(array $strings, $storeId = null)
     {
@@ -141,7 +132,6 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
      * Retrieve table checksum
      *
      * @return int
-     * @since 2.0.0
      */
     public function getMainChecksum()
     {
@@ -152,7 +142,6 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
      * Get connection
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
-     * @since 2.2.0
      */
     public function getConnection()
     {
@@ -166,7 +155,6 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
      * Retrieve current store identifier
      *
      * @return int
-     * @since 2.0.0
      */
     protected function getStoreId()
     {
@@ -178,7 +166,6 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
      *
      * @param int $storeId
      * @return string
-     * @since 2.2.0
      */
     private function getStoreCode($storeId)
     {
@@ -186,9 +173,8 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
     }
 
     /**
-     * @deprecated 2.2.0
+     * @deprecated 100.1.2
      * @return DeploymentConfig
-     * @since 2.2.0
      */
     private function getDeployedConfig()
     {
@@ -199,9 +185,8 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
     }
 
     /**
-     * @deprecated 2.2.0
+     * @deprecated 100.1.2
      * @return Config
-     * @since 2.2.0
      */
     private function getAppConfig()
     {

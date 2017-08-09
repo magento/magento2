@@ -8,25 +8,21 @@ namespace Magento\Framework\Filter;
 /**
  * Class \Magento\Framework\Filter\DataObject
  *
- * @since 2.0.0
  */
 class DataObject extends \Zend_Filter
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_columnFilters = [];
 
     /**
      * @var \Magento\Framework\Data\Collection\EntityFactoryInterface
-     * @since 2.0.0
      */
     protected $_entityFactory;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory)
     {
@@ -37,7 +33,6 @@ class DataObject extends \Zend_Filter
      * @param \Zend_Filter_Interface $filter
      * @param string $column
      * @return null|\Zend_Filter
-     * @since 2.0.0
      */
     public function addFilter(\Zend_Filter_Interface $filter, $column = '')
     {
@@ -55,7 +50,6 @@ class DataObject extends \Zend_Filter
      * @param \Magento\Framework\DataObject $object
      * @return \Magento\Framework\DataObject
      * @throws \Exception
-     * @since 2.0.0
      */
     public function filter($object)
     {

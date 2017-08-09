@@ -9,14 +9,12 @@ namespace Magento\Theme\Block\Html;
  * Html page notices block
  *
  * @api
- * @since 2.0.0
  */
 class Notices extends \Magento\Framework\View\Element\Template
 {
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\View\Element\Template\Context $context, array $data = [])
     {
@@ -27,7 +25,6 @@ class Notices extends \Magento\Framework\View\Element\Template
      * Check if noscript notice should be displayed
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function displayNoscriptNotice()
     {
@@ -41,7 +38,6 @@ class Notices extends \Magento\Framework\View\Element\Template
      * Check if no local storage notice should be displayed
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function displayNoLocalStorageNotice()
     {
@@ -55,7 +51,6 @@ class Notices extends \Magento\Framework\View\Element\Template
      * Check if demo store notice should be displayed
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function displayDemoNotice()
     {

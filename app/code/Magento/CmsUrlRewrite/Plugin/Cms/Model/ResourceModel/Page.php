@@ -16,26 +16,22 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
  * Before save and around delete plugin for \Magento\Cms\Model\ResourceModel\Page:
  * - autogenerates url_key if the merchant didn't fill this field
  * - remove all url rewrites for cms page on delete
- * @since 2.0.0
  */
 class Page
 {
     /**
      * @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator
-     * @since 2.0.0
      */
     protected $cmsPageUrlPathGenerator;
 
     /**
      * @var UrlPersistInterface
-     * @since 2.0.0
      */
     protected $urlPersist;
 
     /**
      * @param CmsPageUrlPathGenerator $cmsPageUrlPathGenerator
      * @param UrlPersistInterface $urlPersist
-     * @since 2.0.0
      */
     public function __construct(
         CmsPageUrlPathGenerator $cmsPageUrlPathGenerator,
@@ -53,7 +49,6 @@ class Page
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function beforeSave(
         \Magento\Cms\Model\ResourceModel\Page $subject,
@@ -74,7 +69,6 @@ class Page
      * @param AbstractModel $page
      * @return AbstractDb
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterDelete(
         \Magento\Cms\Model\ResourceModel\Page $subject,
