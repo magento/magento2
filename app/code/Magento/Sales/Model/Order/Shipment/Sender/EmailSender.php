@@ -10,31 +10,26 @@ use Magento\Sales\Model\Order\Shipment\SenderInterface;
 
 /**
  * Email notification sender for Shipment.
- * @since 2.1.2
  */
 class EmailSender extends Sender implements SenderInterface
 {
     /**
      * @var \Magento\Payment\Helper\Data
-     * @since 2.1.2
      */
     private $paymentHelper;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Shipment
-     * @since 2.1.2
      */
     private $shipmentResource;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.1.2
      */
     private $globalConfig;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.1.2
      */
     private $eventManager;
 
@@ -48,7 +43,6 @@ class EmailSender extends Sender implements SenderInterface
      * @param \Magento\Sales\Model\ResourceModel\Order\Shipment $shipmentResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @since 2.1.2
      */
     public function __construct(
         \Magento\Sales\Model\Order\Email\Container\Template $templateContainer,
@@ -92,7 +86,6 @@ class EmailSender extends Sender implements SenderInterface
      * @param bool $forceSyncMode
      *
      * @return bool
-     * @since 2.1.2
      */
     public function send(
         \Magento\Sales\Api\Data\OrderInterface $order,
@@ -145,7 +138,6 @@ class EmailSender extends Sender implements SenderInterface
      * @param \Magento\Sales\Api\Data\OrderInterface $order
      *
      * @return string
-     * @since 2.1.2
      */
     private function getPaymentHtml(\Magento\Sales\Api\Data\OrderInterface $order)
     {

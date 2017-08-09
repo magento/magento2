@@ -16,7 +16,7 @@ class Sample extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $metadataPool;
 
@@ -24,7 +24,7 @@ class Sample extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param null $connectionName
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,

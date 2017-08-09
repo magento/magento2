@@ -20,19 +20,16 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
 {
     /**
      * @var array
-     * @since 2.1.0
      */
     private $sharedIndexesComplete = [];
 
     /**
      * @var \Magento\Framework\Indexer\ConfigInterface
-     * @since 2.1.0
      */
     private $config;
 
     /**
      * @var IndexerFactory
-     * @since 2.2.0
      */
     private $indexerFactory;
 
@@ -41,7 +38,6 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      *
      * @param ObjectManagerFactory $objectManagerFactory
      * @param IndexerFactory|null $indexerFactory
-     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
@@ -108,7 +104,6 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      * @param \Magento\Framework\Indexer\IndexerInterface $indexer
      * @return void
      * @throws LocalizedException
-     * @since 2.1.0
      */
     private function validateIndexerStatus(\Magento\Framework\Indexer\IndexerInterface $indexer)
     {
@@ -127,7 +122,6 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      *
      * @param string $sharedIndex
      * @return array
-     * @since 2.1.0
      */
     private function getIndexerIdsBySharedIndex($sharedIndex)
     {
@@ -146,7 +140,6 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      *
      * @param string $sharedIndex
      * @return $this
-     * @since 2.1.0
      */
     private function validateSharedIndex($sharedIndex)
     {
@@ -174,8 +167,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      * Get config
      *
      * @return \Magento\Framework\Indexer\ConfigInterface
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getConfig()
     {
@@ -189,8 +181,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      * Get indexer factory
      *
      * @return IndexerFactory
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getIndexerFactory()
     {

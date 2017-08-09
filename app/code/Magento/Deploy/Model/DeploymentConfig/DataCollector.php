@@ -35,7 +35,6 @@ use Magento\Framework\App\DeploymentConfig;
  * files to appropriate application sources.
  *
  * @see \Magento\Deploy\Console\Command\App\ConfigImport\Processor::execute()
- * @since 2.2.0
  */
 class DataCollector
 {
@@ -43,7 +42,6 @@ class DataCollector
      * Pool of all deployment configuration importers.
      *
      * @var ImporterPool
-     * @since 2.2.0
      */
     private $configImporterPool;
 
@@ -51,14 +49,12 @@ class DataCollector
      * Application deployment configuration.
      *
      * @var DeploymentConfig
-     * @since 2.2.0
      */
     private $deploymentConfig;
 
     /**
      * @param ImporterPool $configImporterPool the pool of all deployment configuration importers
      * @param DeploymentConfig $deploymentConfig the application deployment configuration
-     * @since 2.2.0
      */
     public function __construct(ImporterPool $configImporterPool, DeploymentConfig $deploymentConfig)
     {
@@ -90,7 +86,6 @@ class DataCollector
      *
      * @param string $sectionName the section name for retrieving its configuration data
      * @return array
-     * @since 2.2.0
      */
     public function getConfig($sectionName = null)
     {

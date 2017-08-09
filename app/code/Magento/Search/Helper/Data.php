@@ -38,19 +38,19 @@ class Data extends AbstractHelper
      * Core store config
      *
      * @var ScopeConfigInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $scopeConfig;
 
     /**
      * @var Escaper
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $escaper;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $storeManager;
 
@@ -234,7 +234,6 @@ class Data extends AbstractHelper
      * @param string $queryText
      * @param int|string $maxQueryLength
      * @return bool
-     * @since 2.1.0
      */
     private function isQueryTooLong($queryText, $maxQueryLength)
     {
@@ -245,7 +244,6 @@ class Data extends AbstractHelper
      * Retrieve search query text
      *
      * @return string
-     * @since 2.1.0
      */
     private function getQueryText()
     {
@@ -259,7 +257,6 @@ class Data extends AbstractHelper
      * @param string $queryText
      * @param int|string $maxQueryLength
      * @return string
-     * @since 2.1.0
      */
     private function getPreparedQueryText($queryText, $maxQueryLength)
     {

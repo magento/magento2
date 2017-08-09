@@ -14,19 +14,16 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * CronRemoveCommand removes Magento cron tasks
- * @since 2.2.0
  */
 class CronRemoveCommand extends Command
 {
     /**
      * @var CrontabManagerInterface
-     * @since 2.2.0
      */
     private $crontabManager;
 
     /**
      * @param CrontabManagerInterface $crontabManager
-     * @since 2.2.0
      */
     public function __construct(CrontabManagerInterface $crontabManager)
     {
@@ -37,7 +34,6 @@ class CronRemoveCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     protected function configure()
     {
@@ -49,7 +45,6 @@ class CronRemoveCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

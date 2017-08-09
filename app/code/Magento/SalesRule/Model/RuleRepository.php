@@ -65,7 +65,6 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
 
     /**
      * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
-     * @since 2.2.0
      */
     private $collectionProcessor;
 
@@ -186,7 +185,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
      *
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param Collection $collection
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @return void
      */
     protected function addFilterGroupToCollection(
@@ -208,9 +207,8 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
-     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

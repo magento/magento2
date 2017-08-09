@@ -15,20 +15,17 @@ class ArgumentsReader
 
     /**
      * @var NamespaceResolver
-     * @since 2.2.0
      */
     private $namespaceResolver;
 
     /**
      * @var ScalarTypesProvider
-     * @since 2.2.0
      */
     private $scalarTypesProvider;
 
     /**
      * @param NamespaceResolver|null $namespaceResolver
      * @param ScalarTypesProvider|null $scalarTypesProvider
-     * @since 2.2.0
      */
     public function __construct(
         NamespaceResolver $namespaceResolver = null,
@@ -99,7 +96,6 @@ class ArgumentsReader
      * @param \ReflectionClass $class
      * @param \Zend\Code\Reflection\ParameterReflection $parameter
      * @return string
-     * @since 2.2.0
      */
     private function processType(\ReflectionClass $class, \Zend\Code\Reflection\ParameterReflection $parameter)
     {

@@ -48,25 +48,21 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
 
     /**
      * @var LocaleValidator
-     * @since 2.2.0
      */
     private $localeValidator;
 
     /**
      * @var TimezoneValidator
-     * @since 2.2.0
      */
     private $timezoneValidator;
 
     /**
      * @var CurrencyValidator
-     * @since 2.2.0
      */
     private $currencyValidator;
 
     /**
      * @var UrlValidator
-     * @since 2.2.0
      */
     private $urlValidator;
 
@@ -335,7 +331,6 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
      * @param string $option
      * @param array $allowedSchemes
      * @return string
-     * @since 2.2.0
      */
     private function validateUrl($url, $option, array $allowedSchemes)
     {

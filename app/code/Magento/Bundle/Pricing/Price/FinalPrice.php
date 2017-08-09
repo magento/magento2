@@ -40,7 +40,6 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements Fi
 
     /**
      * @var \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface
-     * @since 2.1.0
      */
     private $productOptionRepository;
 
@@ -93,8 +92,7 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements Fi
      * Return ProductCustomOptionRepository
      *
      * @return ProductCustomOptionRepositoryInterface
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getProductOptionRepository()
     {
@@ -140,7 +138,6 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements Fi
      * Load product custom options
      *
      * @return void
-     * @since 2.1.0
      */
     private function loadProductCustomOptions()
     {

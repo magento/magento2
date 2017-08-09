@@ -47,7 +47,7 @@ class CategoryProcessor
      * Failed categories during creation
      *
      * @var array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $failedCategories = [];
 
@@ -184,7 +184,6 @@ class CategoryProcessor
      * @param \Magento\Framework\Exception\AlreadyExistsException $exception
      *
      * @return $this
-     * @since 2.1.0
      */
     private function addFailedCategory($category, $exception)
     {
@@ -200,7 +199,7 @@ class CategoryProcessor
      * Return failed categories
      *
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getFailedCategories()
     {
@@ -211,7 +210,7 @@ class CategoryProcessor
      * Resets failed categories' array
      *
      * @return $this
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function clearFailedCategories()
     {
@@ -238,7 +237,6 @@ class CategoryProcessor
      *
      * @param string $string
      * @return string
-     * @since 2.2.0
      */
     private function standardizeString($string)
     {

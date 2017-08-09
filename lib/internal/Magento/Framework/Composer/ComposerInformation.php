@@ -85,7 +85,6 @@ class ComposerInformation
 
     /**
      * @var ComposerFactory
-     * @since 2.1.0
      */
     private $composerFactory;
 
@@ -235,7 +234,6 @@ class ComposerInformation
      * Collect all system packages from composer.lock
      *
      * @return array
-     * @since 2.1.0
      */
     public function getSystemPackages()
     {
@@ -283,7 +281,6 @@ class ComposerInformation
      * Get root package
      *
      * @return \Composer\Package\RootPackageInterface
-     * @since 2.1.0
      */
     public function getRootPackage()
     {
@@ -326,7 +323,6 @@ class ComposerInformation
      * Returns all repository URLs, except local and packagists.
      *
      * @return string[]
-     * @since 2.1.0
      */
     public function getRootRepositories()
     {
@@ -345,8 +341,7 @@ class ComposerInformation
      * Load composerFactory
      *
      * @return ComposerFactory
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getComposerFactory()
     {
@@ -360,7 +355,6 @@ class ComposerInformation
      * Load composer
      *
      * @return \Composer\Composer
-     * @since 2.1.0
      */
     private function getComposer()
     {
@@ -374,7 +368,6 @@ class ComposerInformation
      * Load locker
      *
      * @return \Composer\Package\Locker
-     * @since 2.1.0
      */
     private function getLocker()
     {

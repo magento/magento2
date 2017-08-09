@@ -15,25 +15,21 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class AbstractTransaction
- * @since 2.1.0
  */
 abstract class AbstractTransaction implements ClientInterface
 {
     /**
      * @var LoggerInterface
-     * @since 2.1.0
      */
     protected $logger;
 
     /**
      * @var Logger
-     * @since 2.1.0
      */
     protected $customLogger;
 
     /**
      * @var BraintreeAdapter
-     * @since 2.1.0
      */
     protected $adapter;
 
@@ -43,7 +39,6 @@ abstract class AbstractTransaction implements ClientInterface
      * @param LoggerInterface $logger
      * @param Logger $customLogger
      * @param BraintreeAdapter $transaction
-     * @since 2.1.0
      */
     public function __construct(LoggerInterface $logger, Logger $customLogger, BraintreeAdapter $adapter)
     {
@@ -54,7 +49,6 @@ abstract class AbstractTransaction implements ClientInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function placeRequest(TransferInterface $transferObject)
     {
@@ -83,7 +77,6 @@ abstract class AbstractTransaction implements ClientInterface
      * Process http request
      * @param array $data
      * @return \Braintree\Result\Error|\Braintree\Result\Successful
-     * @since 2.1.0
      */
     abstract protected function process(array $data);
 }

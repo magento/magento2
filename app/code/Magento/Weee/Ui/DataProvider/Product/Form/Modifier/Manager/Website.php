@@ -15,13 +15,11 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Website
- * @since 2.1.0
  */
 class Website
 {
     /**
      * @var array
-     * @since 2.1.0
      */
     private $websites;
 
@@ -29,7 +27,6 @@ class Website
      * @param LocatorInterface $locator
      * @param StoreManagerInterface $storeManager
      * @param DirectoryHelper $directoryHelper
-     * @since 2.1.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -47,7 +44,6 @@ class Website
      * @param ProductInterface $product
      * @param EavAttribute $eavAttribute
      * @return array
-     * @since 2.1.0
      */
     public function getWebsites(ProductInterface $product, EavAttribute $eavAttribute)
     {
@@ -102,7 +98,6 @@ class Website
      * Retrieve regions
      *
      * @return array
-     * @since 2.1.0
      */
     public function getRegions()
     {
@@ -115,7 +110,6 @@ class Website
      * @param string $websiteName
      * @param string $currencyCode
      * @return string
-     * @since 2.1.0
      */
     protected function formatLabel($websiteName, $currencyCode)
     {
@@ -126,7 +120,6 @@ class Website
      * Check is multi websites mode enabled
      *
      * @return bool
-     * @since 2.1.0
      */
     public function isMultiWebsites()
     {

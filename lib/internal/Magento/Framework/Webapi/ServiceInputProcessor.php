@@ -56,7 +56,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
 
     /**
      * @var \Magento\Framework\Reflection\NameFinder
-     * @since 2.1.0
      */
     private $nameFinder;
 
@@ -88,8 +87,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      *
      * @return \Magento\Framework\Reflection\NameFinder
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getNameFinder()
     {
@@ -257,7 +255,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      *
      * @param string[] $customAttribute
      * @return string[]
-     * @since 2.1.0
      */
     private function processCustomAttribute($customAttribute)
     {

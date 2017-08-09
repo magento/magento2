@@ -13,14 +13,12 @@ use Magento\Vault\Model\Ui\VaultConfigProvider;
 /**
  * Class \Magento\Vault\Observer\VaultEnableAssigner
  *
- * @since 2.1.0
  */
 class VaultEnableAssigner extends AbstractDataAssignObserver
 {
     /**
      * @param Observer $observer
      * @return void
-     * @since 2.1.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

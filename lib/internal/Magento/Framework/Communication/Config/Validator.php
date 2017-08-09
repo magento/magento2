@@ -10,19 +10,16 @@ use Magento\Framework\Reflection\MethodsMap;
 
 /**
  * Communication configuration validator.
- * @since 2.1.0
  */
 class Validator
 {
     /**
      * @var TypeProcessor
-     * @since 2.1.0
      */
     private $typeProcessor;
 
     /**
      * @var MethodsMap
-     * @since 2.1.0
      */
     private $methodsMap;
 
@@ -31,7 +28,6 @@ class Validator
      *
      * @param TypeProcessor $typeProcessor
      * @param MethodsMap $methodsMap
-     * @since 2.1.0
      */
     public function __construct(
         TypeProcessor $typeProcessor,
@@ -45,7 +41,6 @@ class Validator
      * @param string $responseSchema
      * @param string $topicName
      * @return void
-     * @since 2.1.0
      */
     public function validateResponseSchemaType($responseSchema, $topicName)
     {
@@ -67,7 +62,6 @@ class Validator
      * @param string $requestSchema
      * @param string $topicName
      * @return void
-     * @since 2.1.0
      */
     public function validateRequestSchemaType($requestSchema, $topicName)
     {
@@ -91,7 +85,6 @@ class Validator
      * @param string $handlerName
      * @param string $topicName
      * @return void
-     * @since 2.1.0
      */
     public function validateResponseHandlersType($serviceName, $methodName, $handlerName, $topicName)
     {
@@ -116,7 +109,6 @@ class Validator
      * @param string $typeName
      * @return $this
      * @throws \Exception In case when type is invalid
-     * @since 2.1.0
      */
     protected function validateType($typeName)
     {

@@ -7,7 +7,7 @@
 namespace Magento\CatalogInventory\Model\Plugin;
 
 /**
- * @deprecated 2.2.0 Stock Item as a part of ExtensionAttributes is deprecated
+ * @deprecated 100.2.0 Stock Item as a part of ExtensionAttributes is deprecated
  * @see StockItemInterface when you want to change the stock data
  * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
  * @see StockItemRepositoryInterface::save as extension point for customization of saving process

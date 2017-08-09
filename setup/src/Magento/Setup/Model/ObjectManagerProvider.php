@@ -33,7 +33,6 @@ class ObjectManagerProvider
 
     /**
      * @var Bootstrap
-     * @since 2.2.0
      */
     private $bootstrap;
 
@@ -72,7 +71,6 @@ class ObjectManagerProvider
      * Creates cli commands and initialize them with application instance
      *
      * @return void
-     * @since 2.2.0
      */
     private function createCliCommands()
     {

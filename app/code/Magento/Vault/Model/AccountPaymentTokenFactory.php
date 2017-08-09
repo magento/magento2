@@ -7,9 +7,8 @@ namespace Magento\Vault\Model;
 
 /**
  * Class AccountPaymentTokenFactory
- * @deprecated 2.2.0
+ * @deprecated 100.3.0
  * @see PaymentTokenFactoryInterface
- * @since 2.1.3
  */
 class AccountPaymentTokenFactory extends AbstractPaymentTokenFactory
 {
@@ -20,7 +19,6 @@ class AccountPaymentTokenFactory extends AbstractPaymentTokenFactory
 
     /**
      * @inheritdoc
-     * @since 2.1.3
      */
     public function getType()
     {

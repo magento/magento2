@@ -28,7 +28,6 @@ class ConvertToCsv
 
     /**
      * @var int|null
-     * @since 2.1.0
      */
     protected $pageSize = null;
 

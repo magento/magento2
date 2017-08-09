@@ -13,20 +13,19 @@ use Magento\Framework\ObjectManager\TMapFactory;
  * Class CommandManagerPool
  * @package Magento\Payment\Gateway\Command
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class CommandManagerPool implements CommandManagerPoolInterface
 {
     /**
      * @var CommandManagerInterface[] | TMap
-     * @since 2.1.0
      */
     private $executors;
 
     /**
      * @param TMapFactory $tmapFactory
      * @param array $executors
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         TMapFactory $tmapFactory,
@@ -46,7 +45,7 @@ class CommandManagerPool implements CommandManagerPoolInterface
      * @param string $paymentProviderCode
      * @return CommandManagerInterface
      * @throws NotFoundException
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function get($paymentProviderCode)
     {

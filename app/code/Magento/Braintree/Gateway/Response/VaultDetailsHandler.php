@@ -18,37 +18,31 @@ use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
 /**
  * Vault Details Handler
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
  */
 class VaultDetailsHandler implements HandlerInterface
 {
     /**
      * @var PaymentTokenInterfaceFactory
-     * @since 2.1.0
      */
     protected $paymentTokenFactory;
 
     /**
      * @var OrderPaymentExtensionInterfaceFactory
-     * @since 2.1.0
      */
     protected $paymentExtensionFactory;
 
     /**
      * @var SubjectReader
-     * @since 2.1.0
      */
     protected $subjectReader;
 
     /**
      * @var Config
-     * @since 2.1.0
      */
     protected $config;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -61,7 +55,6 @@ class VaultDetailsHandler implements HandlerInterface
      * @param SubjectReader $subjectReader
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
-     * @since 2.1.0
      */
     public function __construct(
         PaymentTokenInterfaceFactory $paymentTokenFactory,
@@ -80,7 +73,6 @@ class VaultDetailsHandler implements HandlerInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function handle(array $handlingSubject, array $response)
     {
@@ -101,7 +93,6 @@ class VaultDetailsHandler implements HandlerInterface
      *
      * @param \Braintree\Transaction $transaction
      * @return PaymentTokenInterface|null
-     * @since 2.1.0
      */
     protected function getVaultPaymentToken(Transaction $transaction)
     {
@@ -128,7 +119,6 @@ class VaultDetailsHandler implements HandlerInterface
     /**
      * @param Transaction $transaction
      * @return string
-     * @since 2.1.0
      */
     private function getExpirationDate(Transaction $transaction)
     {
@@ -150,7 +140,6 @@ class VaultDetailsHandler implements HandlerInterface
      * Convert payment token details to JSON
      * @param array $details
      * @return string
-     * @since 2.1.0
      */
     private function convertDetailsToJSON($details)
     {
@@ -163,7 +152,6 @@ class VaultDetailsHandler implements HandlerInterface
      *
      * @param string $type
      * @return array
-     * @since 2.1.0
      */
     private function getCreditCardType($type)
     {
@@ -177,7 +165,6 @@ class VaultDetailsHandler implements HandlerInterface
      * Get payment extension attributes
      * @param InfoInterface $payment
      * @return OrderPaymentExtensionInterface
-     * @since 2.1.0
      */
     private function getExtensionAttributes(InfoInterface $payment)
     {

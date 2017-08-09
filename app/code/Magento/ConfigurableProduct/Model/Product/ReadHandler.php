@@ -12,13 +12,11 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class ReadHandler
- * @since 2.1.0
  */
 class ReadHandler implements ExtensionInterface
 {
     /**
      * @var Loader
-     * @since 2.1.0
      */
     private $optionLoader;
 
@@ -26,7 +24,6 @@ class ReadHandler implements ExtensionInterface
      * ReadHandler constructor
      *
      * @param Loader $optionLoader
-     * @since 2.1.0
      */
     public function __construct(Loader $optionLoader)
     {
@@ -38,7 +35,6 @@ class ReadHandler implements ExtensionInterface
      * @param array $arguments
      * @return object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function execute($entity, $arguments = [])
     {
@@ -61,7 +57,6 @@ class ReadHandler implements ExtensionInterface
      *
      * @param ProductInterface $product
      * @return int[]
-     * @since 2.1.0
      */
     private function getLinkedProducts(ProductInterface $product)
     {

@@ -24,7 +24,6 @@ class Action extends AbstractIndexerPlugin
      * @return ProductAction
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterUpdateAttributes(
         ProductAction $subject,
@@ -49,7 +48,6 @@ class Action extends AbstractIndexerPlugin
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterUpdateWebsites(ProductAction $subject, $result, $productIds, $websiteIds, $type)
     {

@@ -96,7 +96,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * Counter is used for assigning temporary id to quote address
      *
      * @var int
-     * @since 2.1.0
      */
     protected $counter = 0;
 
@@ -187,7 +186,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     /**
      * @param Address $address
      * @return string
-     * @since 2.1.0
      */
     protected function getAddressId(Address $address)
     {

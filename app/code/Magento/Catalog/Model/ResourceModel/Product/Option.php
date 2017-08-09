@@ -17,7 +17,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
      */
     protected $metadataPool;
 
@@ -569,7 +568,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * All Option Types that support price and price_type
      *
      * @return string[]
-     * @since 2.2.0
      */
     public function getPriceTypes()
     {
@@ -585,7 +583,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
      */
     private function getMetadataPool()
     {

@@ -12,7 +12,7 @@ use Magento\Quote\Model\Quote;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @deprecated 2.1.0
+ * @deprecated 100.1.0
  */
 interface CartInterface
 {

@@ -98,37 +98,31 @@ class ProcessCronQueueObserver implements ObserverInterface
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.2.0
      */
     protected $dateTime;
 
     /**
      * @var \Symfony\Component\Process\PhpExecutableFinder
-     * @since 2.1.0
      */
     protected $phpExecutableFinder;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.2.0
      */
     private $state;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $invalid = [];
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $jobs;
 
@@ -549,7 +543,6 @@ class ProcessCronQueueObserver implements ObserverInterface
      *
      * @param string $groupId
      * @return void
-     * @since 2.2.0
      */
     private function cleanupDisabledJobs($groupId)
     {
@@ -569,7 +562,6 @@ class ProcessCronQueueObserver implements ObserverInterface
     /**
      * @param array $jobConfig
      * @return null|string
-     * @since 2.2.0
      */
     private function getCronExpression($jobConfig)
     {
@@ -591,7 +583,6 @@ class ProcessCronQueueObserver implements ObserverInterface
      * This can happen when you change the cron expression and flush the cache
      *
      * @return $this
-     * @since 2.2.0
      */
     private function cleanupScheduleMismatches()
     {
@@ -609,7 +600,6 @@ class ProcessCronQueueObserver implements ObserverInterface
 
     /**
      * @return array
-     * @since 2.2.0
      */
     private function getJobs()
     {

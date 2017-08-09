@@ -120,7 +120,6 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.1.0
      */
     private $psrLogger;
 
@@ -984,8 +983,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     /**
      * @return \Psr\Log\LoggerInterface
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getPsrLogger()
     {
@@ -1002,7 +1000,6 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param string $fdsFilterAction
      * @return bool
-     * @since 2.2.0
      */
     private function fdsFilterActionIsReportOnly($fdsFilterAction)
     {

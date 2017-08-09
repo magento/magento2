@@ -14,7 +14,6 @@ class CustomerCachedMetadata extends CachedMetadata implements CustomerMetadataI
 {
     /**
      * @var string
-     * @since 2.0.9
      */
     protected $entityType = 'customer';
 

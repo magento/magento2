@@ -9,7 +9,6 @@ use Braintree\TextNode;
 
 /**
  * Text applier
- * @since 2.1.0
  */
 class Text implements ApplierInterface
 {
@@ -20,7 +19,6 @@ class Text implements ApplierInterface
      * @param string $condition
      * @param mixed $value
      * @return bool
-     * @since 2.1.0
      */
     public function apply($field, $condition, $value)
     {

@@ -17,31 +17,26 @@ use Magento\Checkout\Api\AgreementsValidatorInterface;
 /**
  * Class OrderPlace
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
  */
 class OrderPlace extends AbstractHelper
 {
     /**
      * @var CartManagementInterface
-     * @since 2.1.0
      */
     private $cartManagement;
 
     /**
      * @var AgreementsValidatorInterface
-     * @since 2.1.0
      */
     private $agreementsValidator;
 
     /**
      * @var Session
-     * @since 2.1.0
      */
     private $customerSession;
 
     /**
      * @var Data
-     * @since 2.1.0
      */
     private $checkoutHelper;
 
@@ -52,7 +47,6 @@ class OrderPlace extends AbstractHelper
      * @param AgreementsValidatorInterface $agreementsValidator
      * @param Session $customerSession
      * @param Data $checkoutHelper
-     * @since 2.1.0
      */
     public function __construct(
         CartManagementInterface $cartManagement,
@@ -73,7 +67,6 @@ class OrderPlace extends AbstractHelper
      * @param array $agreement
      * @return void
      * @throws LocalizedException
-     * @since 2.1.0
      */
     public function execute(Quote $quote, array $agreement)
     {
@@ -96,7 +89,6 @@ class OrderPlace extends AbstractHelper
      *
      * @param Quote $quote
      * @return string
-     * @since 2.1.0
      */
     private function getCheckoutMethod(Quote $quote)
     {
@@ -119,7 +111,6 @@ class OrderPlace extends AbstractHelper
      *
      * @param Quote $quote
      * @return void
-     * @since 2.1.0
      */
     private function prepareGuestQuote(Quote $quote)
     {

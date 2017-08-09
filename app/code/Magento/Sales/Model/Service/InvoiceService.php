@@ -165,7 +165,6 @@ class InvoiceService implements InvoiceManagementInterface
      * @param Order $order
      * @param array $qtys
      * @return array
-     * @since 2.2.0
      */
     private function prepareItemsQty(Order $order, array $qtys = [])
     {

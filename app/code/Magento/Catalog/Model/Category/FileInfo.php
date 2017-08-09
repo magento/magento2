@@ -14,7 +14,6 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
  * Class FileInfo
  *
  * Provides information about requested file
- * @since 2.2.0
  */
 class FileInfo
 {
@@ -25,26 +24,22 @@ class FileInfo
 
     /**
      * @var Filesystem
-     * @since 2.2.0
      */
     private $filesystem;
 
     /**
      * @var Mime
-     * @since 2.2.0
      */
     private $mime;
 
     /**
      * @var WriteInterface
-     * @since 2.2.0
      */
     private $mediaDirectory;
 
     /**
      * @param Filesystem $filesystem
      * @param Mime $mime
-     * @since 2.2.0
      */
     public function __construct(
         Filesystem $filesystem,
@@ -58,7 +53,6 @@ class FileInfo
      * Get WriteInterface instance
      *
      * @return WriteInterface
-     * @since 2.2.0
      */
     private function getMediaDirectory()
     {
@@ -73,7 +67,6 @@ class FileInfo
      *
      * @param string $fileName
      * @return string
-     * @since 2.2.0
      */
     public function getMimeType($fileName)
     {
@@ -89,7 +82,6 @@ class FileInfo
      *
      * @param string $fileName
      * @return array
-     * @since 2.2.0
      */
     public function getStat($fileName)
     {
@@ -104,7 +96,6 @@ class FileInfo
      *
      * @param string $fileName
      * @return bool
-     * @since 2.2.0
      */
     public function isExist($fileName)
     {

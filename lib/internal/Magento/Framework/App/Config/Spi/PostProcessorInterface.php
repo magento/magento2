@@ -14,7 +14,6 @@ use Magento\Framework\App\Config\Reader\Source\SourceInterface;
  * @see SourceInterface
  * @see ConfigTypeInterface
  * @package Magento\Framework\App\Config\Spi
- * @since 2.1.3
  */
 interface PostProcessorInterface
 {
@@ -23,7 +22,6 @@ interface PostProcessorInterface
      *
      * @param array $config
      * @return array
-     * @since 2.1.3
      */
     public function process(array $config);
 }

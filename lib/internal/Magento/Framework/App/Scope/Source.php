@@ -11,26 +11,22 @@ use Magento\Framework\Option\ArrayInterface;
 /**
  * Class \Magento\Framework\App\Scope\Source
  *
- * @since 2.1.0
  */
 class Source implements ArrayInterface
 {
     /**
      * @var ScopeResolverPool
-     * @since 2.1.0
      */
     protected $scopeResolverPool;
 
     /**
      * @var string
-     * @since 2.1.0
      */
     protected $scope;
 
     /**
      * @param ScopeResolverPool $scopeResolverPool
      * @param string $scope
-     * @since 2.1.0
      */
     public function __construct(
         ScopeResolverPool $scopeResolverPool,
@@ -44,7 +40,6 @@ class Source implements ArrayInterface
      * Return array of scope names
      *
      * @return array
-     * @since 2.1.0
      */
     public function toOptionArray()
     {

@@ -40,7 +40,6 @@ class UrlRewrite extends AbstractSimpleObject
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -49,7 +48,7 @@ class UrlRewrite extends AbstractSimpleObject
      *
      * @param array $data
      * @param Json $serializer
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function __construct(
         $data = [],

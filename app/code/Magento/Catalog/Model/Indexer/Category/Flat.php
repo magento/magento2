@@ -31,7 +31,6 @@ class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Frame
 
     /**
      * @var \Magento\Framework\Indexer\CacheContext
-     * @since 2.0.11
      */
     private $cacheContext;
 
@@ -109,8 +108,8 @@ class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Frame
      * Get cache context
      *
      * @return \Magento\Framework\Indexer\CacheContext
-     * @deprecated 2.0.11
-     * @since 2.0.11
+     * @deprecated 100.0.11
+     * @since 100.0.11
      */
     protected function getCacheContext()
     {

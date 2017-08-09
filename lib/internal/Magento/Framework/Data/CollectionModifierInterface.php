@@ -10,7 +10,6 @@ use Magento\Framework\Data\Collection\AbstractDb;
 /**
  * Represents specific condition, that can be applied on product collection.
  * This condition can be some join statement, some filter, some derived query, etc...
- * @since 2.2.0
  */
 interface CollectionModifierInterface
 {
@@ -21,7 +20,6 @@ interface CollectionModifierInterface
      *
      * @param AbstractDb $abstractCollection
      * @return void
-     * @since 2.2.0
      */
     public function apply(AbstractDb $abstractCollection);
 }

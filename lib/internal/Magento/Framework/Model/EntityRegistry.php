@@ -8,13 +8,11 @@ namespace Magento\Framework\Model;
 
 /**
  * Class EntityRegistry
- * @since 2.1.0
  */
 class EntityRegistry
 {
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $registry = [];
 
@@ -25,7 +23,6 @@ class EntityRegistry
      * @param string $identifier
      * @param object $entity
      * @return void
-     * @since 2.1.0
      */
     public function register($entityType, $identifier, $entity)
     {
@@ -38,7 +35,6 @@ class EntityRegistry
      * @param string $entityType
      * @param string $identifier
      * @return null|object
-     * @since 2.1.0
      */
     public function retrieve($entityType, $identifier)
     {
@@ -55,7 +51,6 @@ class EntityRegistry
      * @param string $entityType
      * @param string $identifier
      * @return bool
-     * @since 2.1.0
      */
     public function remove($entityType, $identifier)
     {

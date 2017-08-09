@@ -28,7 +28,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Serializer interface instance.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 

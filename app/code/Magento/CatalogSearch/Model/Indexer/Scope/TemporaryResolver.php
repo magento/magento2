@@ -11,19 +11,16 @@ use Magento\Framework\Search\Request\Dimension;
 
 /**
  * Resolves name of a temporary table for indexation
- * @since 2.2.0
  */
 class TemporaryResolver implements \Magento\Framework\Search\Request\IndexScopeResolverInterface
 {
     /**
      * @var IndexScopeResolver
-     * @since 2.2.0
      */
     private $indexScopeResolver;
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function __construct(IndexScopeResolver $indexScopeResolver)
     {
@@ -34,7 +31,6 @@ class TemporaryResolver implements \Magento\Framework\Search\Request\IndexScopeR
      * @param string $index
      * @param Dimension[] $dimensions
      * @return string
-     * @since 2.2.0
      */
     public function resolve($index, array $dimensions)
     {

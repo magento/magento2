@@ -113,7 +113,6 @@ abstract class AbstractAction
      * @param array $ids
      * @throws \Exception
      * @return void
-     * @since 2.2.0
      */
     protected function syncData($indexer, $destinationTable, $ids)
     {
@@ -140,7 +139,6 @@ abstract class AbstractAction
      *
      * @param bool $onlyParents
      * @return array $ids
-     * @since 2.2.0
      */
     protected function processRelations($indexer, $ids, $onlyParents = false)
     {

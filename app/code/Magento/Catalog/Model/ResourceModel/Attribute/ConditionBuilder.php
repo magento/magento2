@@ -20,20 +20,17 @@ use Magento\Framework\Model\Entity\ScopeInterface;
  *
  * Class ConditionBuilder
  * @package Magento\Catalog\Model\ResourceModel\Attribute
- * @since 2.2.0
  */
 class ConditionBuilder
 {
     /**
      * @var StoreManagerInterface
-     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * ConditionBuilder constructor
      * @param StoreManagerInterface $storeManager
-     * @since 2.2.0
      */
     public function __construct(StoreManagerInterface $storeManager)
     {
@@ -48,7 +45,6 @@ class ConditionBuilder
      * @param ScopeInterface[] $scopes
      * @param string $linkFieldValue
      * @return array
-     * @since 2.2.0
      */
     public function buildExistingAttributeWebsiteScope(
         AbstractAttribute $attribute,
@@ -85,7 +81,6 @@ class ConditionBuilder
      * @param ScopeInterface[] $scopes
      * @param string $linkFieldValue
      * @return array
-     * @since 2.2.0
      */
     public function buildNewAttributesWebsiteScope(
         AbstractAttribute $attribute,
@@ -116,7 +111,6 @@ class ConditionBuilder
     /**
      * @param array $scopes
      * @return null|Website
-     * @since 2.2.0
      */
     private function getWebsiteForWebsiteScope(array $scopes)
     {
@@ -127,7 +121,6 @@ class ConditionBuilder
     /**
      * @param ScopeInterface[] $scopes
      * @return StoreInterface|null
-     * @since 2.2.0
      */
     private function getStoreFromScopes(array $scopes)
     {

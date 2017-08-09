@@ -9,19 +9,16 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Query generator
- * @since 2.1.3
  */
 class Generator
 {
     /**
      * @var \Magento\Framework\DB\Query\BatchIteratorFactory
-     * @since 2.1.3
      */
     private $iteratorFactory;
 
     /**
      * @var \Magento\Framework\DB\Query\BatchRangeIteratorFactory
-     * @since 2.2.0
      */
     private $rangeIteratorFactory;
 
@@ -30,7 +27,6 @@ class Generator
      *
      * @param BatchIteratorFactory $iteratorFactory
      * @param BatchRangeIteratorFactory $rangeIteratorFactory
-     * @since 2.1.3
      */
     public function __construct(
         BatchIteratorFactory $iteratorFactory,
@@ -65,7 +61,6 @@ class Generator
      * @param string $batchStrategy It determines which strategy is chosen
      * @return BatchIteratorInterface
      * @throws LocalizedException Throws if incorrect "FROM" part in \Select exists
-     * @since 2.1.3
      */
     public function generate(
         $rangeField,
@@ -136,10 +131,9 @@ class Generator
      * @return BatchIteratorInterface
      * @throws LocalizedException Throws if incorrect "FROM" part in \Select exists
      * @see \Magento\Framework\DB\Query\Generator
-     * @deprecated 2.2.0 This is a temporary solution which is made due to the fact that we
+     * @deprecated 100.2.0 This is a temporary solution which is made due to the fact that we
      *             can't change method generate() in version 2.1 due to a backwards incompatibility.
      *             In 2.2 version need to use original method generate() with additional parameter.
-     * @since 2.2.0
      */
     public function generateByRange(
         $rangeField,

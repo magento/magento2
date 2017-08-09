@@ -35,13 +35,11 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
 
     /**
      * @var ComplexTypeLocator
-     * @since 2.1.0
      */
     private $complexTypeLocator;
 
     /**
      * @var SimpleTypeLocator
-     * @since 2.1.0
      */
     private $simpleTypeLocator;
 
@@ -128,8 +126,7 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
      * Get complex type locator instance
      *
      * @return ComplexTypeLocator
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getComplexTypeLocator()
     {
@@ -143,8 +140,7 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
      * Get simple type locator instance
      *
      * @return SimpleTypeLocator
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getSimpleTypeLocator()
     {

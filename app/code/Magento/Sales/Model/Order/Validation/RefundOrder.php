@@ -17,31 +17,26 @@ use Magento\Sales\Model\ValidatorResultMerger;
 
 /**
  * Class RefundOrder
- * @since 2.1.3
  */
 class RefundOrder implements RefundOrderInterface
 {
     /**
      * @var OrderValidatorInterface
-     * @since 2.1.3
      */
     private $orderValidator;
 
     /**
      * @var CreditmemoValidatorInterface
-     * @since 2.1.3
      */
     private $creditmemoValidator;
 
     /**
      * @var ItemCreationValidatorInterface
-     * @since 2.1.3
      */
     private $itemCreationValidator;
 
     /**
      * @var ValidatorResultMerger
-     * @since 2.1.3
      */
     private $validatorResultMerger;
 
@@ -52,7 +47,6 @@ class RefundOrder implements RefundOrderInterface
      * @param CreditmemoValidatorInterface $creditmemoValidator
      * @param ItemCreationValidatorInterface $itemCreationValidator
      * @param ValidatorResultMerger $validatorResultMerger
-     * @since 2.1.3
      */
     public function __construct(
         OrderValidatorInterface $orderValidator,
@@ -68,7 +62,6 @@ class RefundOrder implements RefundOrderInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.3
      */
     public function validate(
         OrderInterface $order,

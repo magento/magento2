@@ -10,37 +10,31 @@ use Magento\Sales\Api\Data\OrderInterface;
 
 /**
  * Class ReturnProcessor
- * @since 2.1.3
  */
 class ReturnProcessor
 {
     /**
      * @var \Magento\CatalogInventory\Api\StockManagementInterface
-     * @since 2.1.3
      */
     private $stockManagement;
 
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
-     * @since 2.1.3
      */
     private $stockIndexerProcessor;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
-     * @since 2.1.3
      */
     private $priceIndexer;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.1.3
      */
     private $storeManager;
 
     /**
      * @var \Magento\Sales\Api\OrderItemRepositoryInterface
-     * @since 2.1.3
      */
     private $orderItemRepository;
 
@@ -51,7 +45,6 @@ class ReturnProcessor
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Api\OrderItemRepositoryInterface $orderItemRepository
-     * @since 2.1.3
      */
     public function __construct(
         \Magento\CatalogInventory\Api\StockManagementInterface $stockManagement,
@@ -73,7 +66,6 @@ class ReturnProcessor
      * @param array $returnToStockItems
      * @param bool $isAutoReturn
      * @return void
-     * @since 2.1.3
      */
     public function execute(
         CreditmemoInterface $creditmemo,
@@ -118,7 +110,6 @@ class ReturnProcessor
      * @param int[] $returnToStockItems
      * @param int $parentItemId
      * @return bool
-     * @since 2.1.3
      */
     private function canReturnItem(
         \Magento\Sales\Api\Data\CreditmemoItemInterface $item,

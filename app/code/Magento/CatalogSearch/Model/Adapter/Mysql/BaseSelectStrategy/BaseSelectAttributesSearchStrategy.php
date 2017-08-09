@@ -18,25 +18,21 @@ use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
  *
  * The main idea of this strategy is using eav index table as main table for query
  * in case when search request requires search by attributes
- * @since 2.2.0
  */
 class BaseSelectAttributesSearchStrategy implements BaseSelectStrategyInterface
 {
     /**
      * @var ResourceConnection
-     * @since 2.2.0
      */
     private $resource;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var IndexScopeResolver
-     * @since 2.2.0
      */
     private $scopeResolver;
 
@@ -44,7 +40,6 @@ class BaseSelectAttributesSearchStrategy implements BaseSelectStrategyInterface
      * @param ResourceConnection $resource
      * @param StoreManagerInterface $storeManager
      * @param IndexScopeResolver $scopeResolver
-     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -62,7 +57,6 @@ class BaseSelectAttributesSearchStrategy implements BaseSelectStrategyInterface
      * @param SelectContainer $selectContainer
      * @return SelectContainer
      * @throws \DomainException
-     * @since 2.2.0
      */
     public function createBaseSelect(SelectContainer $selectContainer)
     {

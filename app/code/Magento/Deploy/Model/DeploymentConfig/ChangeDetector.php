@@ -12,7 +12,6 @@ use Magento\Deploy\Model\DeploymentConfig\Hash\Generator as HashGenerator;
  *
  * Detects changes in specific sections of the deployment configuration files.
  * This detector checks that configuration data from sections was not changed.
- * @since 2.2.0
  */
 class ChangeDetector
 {
@@ -20,7 +19,6 @@ class ChangeDetector
      * Hash storage.
      *
      * @var Hash
-     * @since 2.2.0
      */
     private $configHash;
 
@@ -28,7 +26,6 @@ class ChangeDetector
      * Hash generator of config data.
      *
      * @var HashGenerator
-     * @since 2.2.0
      */
     private $hashGenerator;
 
@@ -36,7 +33,6 @@ class ChangeDetector
      * Config data collector of specific sections.
      *
      * @var DataCollector
-     * @since 2.2.0
      */
     private $dataConfigCollector;
 
@@ -44,7 +40,6 @@ class ChangeDetector
      * @param Hash $configHash The hash storage
      * @param HashGenerator $hashGenerator The hash generator of config data
      * @param DataCollector $dataConfigCollector The config data collector of specific sections
-     * @since 2.2.0
      */
     public function __construct(
         Hash $configHash,
@@ -66,7 +61,6 @@ class ChangeDetector
      *
      * @param string $sectionName The section name for check data of the specific section
      * @return bool
-     * @since 2.2.0
      */
     public function hasChanges($sectionName = null)
     {

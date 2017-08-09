@@ -27,7 +27,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     /**
      * The namespace of repository interface
      * @var string
-     * @since 2.2.0
      */
     private $interfaceName;
 
@@ -35,7 +34,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * List of interface methods.
      *
      * @var array
-     * @since 2.2.0
      */
     private $methodList = [];
 
@@ -536,7 +534,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns getList() method
      *
      * @return string
-     * @since 2.2.0
      */
     private function _getGetCollectionProcessorMethod()
     {
@@ -638,7 +635,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * Gets name of implementation interface.
      *
      * @return string
-     * @since 2.2.0
      */
     private function getInterfaceName()
     {
@@ -660,7 +656,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      *
      * @param string $methodName
      * @return array in ['paramType' => ..., 'returnType' => ...] format
-     * @since 2.2.0
      */
     private function getMethodParamAndReturnType($methodName)
     {
@@ -691,7 +686,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      *
      * @param string $name the class namespace
      * @return array
-     * @since 2.2.0
      */
     private function getClassMethods($name)
     {

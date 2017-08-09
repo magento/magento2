@@ -10,7 +10,6 @@ use Magento\Framework\View\Element\BlockInterface;
 
 /**
  * Interface BlockWrapperInterface
- * @since 2.1.0
  */
 interface BlockWrapperInterface extends UiComponentInterface
 {
@@ -18,7 +17,6 @@ interface BlockWrapperInterface extends UiComponentInterface
      * Get wrapped block
      *
      * @return BlockInterface
-     * @since 2.1.0
      */
     public function getBlock();
 }

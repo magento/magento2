@@ -10,19 +10,19 @@ use Magento\Vault\Block\Customer\IconInterface;
 /**
  * Interface CardRendererInterface
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 interface CardRendererInterface extends TokenRendererInterface, IconInterface
 {
     /**
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getNumberLast4Digits();
 
     /**
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getExpDate();
 }

@@ -11,49 +11,41 @@ use Magento\Framework\DB\Sequence\SequenceInterface;
 
 /**
  * Class EntityMetadata
- * @since 2.1.0
  */
 class EntityMetadata implements EntityMetadataInterface
 {
     /**
      * @var ResourceConnection
-     * @since 2.1.0
      */
     protected $resourceConnection;
 
     /**
      * @var string
-     * @since 2.1.0
      */
     protected $entityTableName;
 
     /**
      * @var null|string
-     * @since 2.1.0
      */
     protected $connectionName;
 
     /**
      * @var SequenceInterface
-     * @since 2.1.0
      */
     protected $sequence;
 
     /**
      * @var string
-     * @since 2.1.0
      */
     protected $eavEntityType;
 
     /**
      * @var string
-     * @since 2.1.0
      */
     protected $identifierField;
 
     /**
      * @var string[]
-     * @since 2.1.0
      */
     protected $entityContext;
 
@@ -67,7 +59,6 @@ class EntityMetadata implements EntityMetadataInterface
      * @param null $eavEntityType
      * @param null $connectionName
      * @param array $entityContext
-     * @since 2.1.0
      */
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -89,7 +80,6 @@ class EntityMetadata implements EntityMetadataInterface
 
     /**
      * @return string
-     * @since 2.1.0
      */
     public function getIdentifierField()
     {
@@ -98,7 +88,6 @@ class EntityMetadata implements EntityMetadataInterface
 
     /**
      * @return string
-     * @since 2.1.0
      */
     public function getLinkField()
     {
@@ -109,8 +98,7 @@ class EntityMetadata implements EntityMetadataInterface
 
     /**
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     public function getEntityConnection()
     {
@@ -119,7 +107,6 @@ class EntityMetadata implements EntityMetadataInterface
 
     /**
      * @return string
-     * @since 2.1.0
      */
     public function getEntityTable()
     {
@@ -128,7 +115,6 @@ class EntityMetadata implements EntityMetadataInterface
 
     /**
      * @return string
-     * @since 2.1.0
      */
     public function getEntityConnectionName()
     {
@@ -137,7 +123,6 @@ class EntityMetadata implements EntityMetadataInterface
 
     /**
      * @return null|string
-     * @since 2.1.0
      */
     public function generateIdentifier()
     {
@@ -150,7 +135,6 @@ class EntityMetadata implements EntityMetadataInterface
 
     /**
      * @return string[]
-     * @since 2.1.0
      */
     public function getEntityContext()
     {
@@ -159,7 +143,6 @@ class EntityMetadata implements EntityMetadataInterface
 
     /**
      * @return null|string
-     * @since 2.1.0
      */
     public function getEavEntityType()
     {

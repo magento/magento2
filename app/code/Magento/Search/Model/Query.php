@@ -168,7 +168,7 @@ class Query extends AbstractModel implements QueryInterface
      *
      * @param string $text
      * @return $this
-     * @deprecated 2.1.0 "synonym for" feature has been removed
+     * @deprecated 100.1.0 "synonym for" feature has been removed
      */
     public function loadByQuery($text)
     {
@@ -310,7 +310,7 @@ class Query extends AbstractModel implements QueryInterface
     /**
      * @return bool
      * @codeCoverageIgnore
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function isQueryTextShort()
     {

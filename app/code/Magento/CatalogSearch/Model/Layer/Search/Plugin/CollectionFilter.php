@@ -37,7 +37,6 @@ class CollectionFilter
      * @param Category $category
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterFilter(
         \Magento\Catalog\Model\Layer\Search\CollectionFilter $subject,

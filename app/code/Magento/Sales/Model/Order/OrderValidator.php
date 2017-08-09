@@ -10,20 +10,17 @@ use Magento\Sales\Exception\DocumentValidationException;
 
 /**
  * Class OrderValidator
- * @since 2.1.2
  */
 class OrderValidator implements OrderValidatorInterface
 {
     /**
      * @var \Magento\Sales\Model\Validator
-     * @since 2.1.2
      */
     private $validator;
 
     /**
      * OrderValidator constructor.
      * @param \Magento\Sales\Model\Validator $validator
-     * @since 2.1.2
      */
     public function __construct(\Magento\Sales\Model\Validator $validator)
     {
@@ -32,7 +29,6 @@ class OrderValidator implements OrderValidatorInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.2
      */
     public function validate(OrderInterface $entity, array $validators)
     {

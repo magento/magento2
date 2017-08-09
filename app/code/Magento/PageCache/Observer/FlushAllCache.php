@@ -18,7 +18,7 @@ class FlushAllCache implements ObserverInterface
     /**
      * @var \Magento\Framework\App\PageCache\Cache
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     protected $_cache;
 
@@ -31,7 +31,6 @@ class FlushAllCache implements ObserverInterface
 
     /**
      * @var \Magento\PageCache\Model\Cache\Type
-     * @since 2.1.0
      */
     private $fullPageCache;
 
@@ -62,7 +61,6 @@ class FlushAllCache implements ObserverInterface
      * TODO: Workaround to support backwards compatibility, will rework to use Dependency Injection in MAGETWO-49547
      *
      * @return \Magento\PageCache\Model\Cache\Type
-     * @since 2.1.0
      */
     private function getCache()
     {

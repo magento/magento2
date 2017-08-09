@@ -29,7 +29,6 @@ class InvalidateVarnishObserver implements ObserverInterface
      * Invalidation tags resolver
      *
      * @var \Magento\Framework\App\Cache\Tag\Resolver
-     * @since 2.1.3
      */
     private $tagResolver;
 
@@ -73,9 +72,8 @@ class InvalidateVarnishObserver implements ObserverInterface
     }
 
     /**
-     * @deprecated 2.1.3
+     * @deprecated 100.1.2
      * @return \Magento\Framework\App\Cache\Tag\Resolver
-     * @since 2.1.3
      */
     private function getTagResolver()
     {

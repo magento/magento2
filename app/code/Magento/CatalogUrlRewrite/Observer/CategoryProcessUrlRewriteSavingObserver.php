@@ -25,7 +25,6 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer
-     * @since 2.2.0
      */
     private $urlRewriteBunchReplacer;
 
@@ -36,13 +35,11 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool
-     * @since 2.2.0
      */
     private $databaseMapPool;
 
     /**
      * @var string[]
-     * @since 2.2.0
      */
     private $dataUrlRewriteClassNames;
 
@@ -110,7 +107,6 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
      *
      * @param Category $category
      * @return void
-     * @since 2.2.0
      */
     private function resetUrlRewritesDataMaps($category)
     {

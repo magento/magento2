@@ -40,7 +40,6 @@ class Service
      * Data size converter
      *
      * @var \Magento\Framework\Convert\DataSize
-     * @since 2.1.0
      */
     protected $dataSize;
 

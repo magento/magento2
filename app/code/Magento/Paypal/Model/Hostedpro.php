@@ -72,7 +72,6 @@ class Hostedpro extends Direct
 
     /**
      * @var \Magento\Paypal\Model\Hostedpro\RequestFactory
-     * @since 2.1.0
      */
     protected $hostedproRequestFactory;
 
@@ -207,7 +206,6 @@ class Hostedpro extends Direct
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.1.0
      */
     protected function setPaymentFormUrl(InfoInterface $payment)
     {
@@ -225,7 +223,6 @@ class Hostedpro extends Direct
      *
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @return \Magento\Paypal\Model\Hostedpro\Request
-     * @since 2.1.0
      */
     protected function buildFormUrlRequest(InfoInterface $payment)
     {
@@ -240,7 +237,6 @@ class Hostedpro extends Direct
      *
      * @param \Magento\Paypal\Model\Hostedpro\Request $request
      * @return string|false
-     * @since 2.1.0
      */
     protected function sendFormUrlRequest(Request $request)
     {
@@ -257,7 +253,6 @@ class Hostedpro extends Direct
      * Return request object with basic information
      *
      * @return \Magento\Paypal\Model\Hostedpro\Request
-     * @since 2.1.0
      */
     protected function buildBasicRequest()
     {
@@ -311,7 +306,6 @@ class Hostedpro extends Direct
      * @param int $storeId
      * @param bool|null $secure
      * @return string
-     * @since 2.1.0
      */
     protected function getUrl($path, $storeId, $secure = null)
     {

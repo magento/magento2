@@ -13,19 +13,16 @@ use Magento\Framework\App\ResourceConnection;
 
 /**
  * Class CreateRow
- * @since 2.1.0
  */
 class CreateRow
 {
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
     /**
      * @var ResourceConnection
-     * @since 2.1.0
      */
     private $resourceConnection;
 
@@ -34,7 +31,6 @@ class CreateRow
      *
      * @param MetadataPool $metadataPool
      * @param ResourceConnection $resourceConnection
-     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -49,7 +45,6 @@ class CreateRow
      * @param AdapterInterface $connection
      * @param array $data
      * @return array
-     * @since 2.1.0
      */
     protected function prepareData(EntityMetadataInterface $metadata, AdapterInterface $connection, $data)
     {
@@ -77,7 +72,6 @@ class CreateRow
      * @param string $column
      * @param array $data
      * @return bool
-     * @since 2.2.0
      */
     private function canNotSetTimeStamp($columnName, $column, array $data)
     {
@@ -89,7 +83,6 @@ class CreateRow
      * @param string $entityType
      * @param array $data
      * @return array
-     * @since 2.1.0
      */
     public function execute($entityType, $data)
     {

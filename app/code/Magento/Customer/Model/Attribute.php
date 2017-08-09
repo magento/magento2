@@ -43,7 +43,6 @@ class Attribute extends \Magento\Eav\Model\Attribute
 
     /**
      * @var \Magento\Customer\Model\Metadata\AttributeMetadataCache
-     * @since 2.2.0
      */
     private $attributeMetadataCache;
 
@@ -148,7 +147,6 @@ class Attribute extends \Magento\Eav\Model\Attribute
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function afterDelete()
     {
@@ -204,7 +202,6 @@ class Attribute extends \Magento\Eav\Model\Attribute
 
     /**
      * @inheritdoc
-     * @since 2.0.9
      */
     public function __sleep()
     {
@@ -217,7 +214,6 @@ class Attribute extends \Magento\Eav\Model\Attribute
 
     /**
      * @inheritdoc
-     * @since 2.0.9
      */
     public function __wakeup()
     {

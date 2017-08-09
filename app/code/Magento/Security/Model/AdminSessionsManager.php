@@ -12,7 +12,7 @@ use \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory;
  * Admin Sessions Manager Model
  *
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class AdminSessionsManager
 {
@@ -28,43 +28,41 @@ class AdminSessionsManager
 
     /**
      * @var ConfigInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $securityConfig;
 
     /**
      * @var \Magento\Backend\Model\Auth\Session
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $authSession;
 
     /**
      * @var AdminSessionInfoFactory
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $adminSessionInfoFactory;
 
     /**
      * @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $adminSessionInfoCollectionFactory;
 
     /**
      * @var \Magento\Security\Model\AdminSessionInfo
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $currentSession;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.1.0
      */
     private $dateTime;
 
     /**
      * @var RemoteAddress
-     * @since 2.1.0
      */
     private $remoteAddress;
 
@@ -75,7 +73,7 @@ class AdminSessionsManager
      * @param CollectionFactory $adminSessionInfoCollectionFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param RemoteAddress $remoteAddress
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         ConfigInterface $securityConfig,
@@ -97,7 +95,7 @@ class AdminSessionsManager
      * Handle all others active sessions according Sharing Account Setting
      *
      * @return $this
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function processLogin()
     {
@@ -123,7 +121,7 @@ class AdminSessionsManager
      * Handle Prolong process
      *
      * @return $this
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function processProlong()
     {
@@ -140,7 +138,7 @@ class AdminSessionsManager
      * Handle logout process
      *
      * @return $this
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function processLogout()
     {
@@ -157,7 +155,7 @@ class AdminSessionsManager
      * Get current session record
      *
      * @return AdminSessionInfo
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getCurrentSession()
     {
@@ -174,7 +172,7 @@ class AdminSessionsManager
      *
      * @param int $statusCode
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getLogoutReasonMessageByStatus($statusCode)
     {
@@ -210,7 +208,7 @@ class AdminSessionsManager
      * Get message with explanation of logout reason
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getLogoutReasonMessage()
     {
@@ -223,7 +221,7 @@ class AdminSessionsManager
      * Get sessions for current user
      *
      * @return \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getSessionsForCurrentUser()
     {
@@ -237,7 +235,7 @@ class AdminSessionsManager
      * Logout another user sessions
      *
      * @return $this
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function logoutOtherUserSessions()
     {
@@ -260,7 +258,7 @@ class AdminSessionsManager
      * Clean expired Admin Sessions
      *
      * @return $this
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function cleanExpiredSessions()
     {
@@ -275,7 +273,7 @@ class AdminSessionsManager
      * Create new record
      *
      * @return $this
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function createNewSession()
     {
@@ -295,7 +293,7 @@ class AdminSessionsManager
 
     /**
      * @return \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function createAdminSessionInfoCollection()
     {

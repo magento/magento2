@@ -17,43 +17,36 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as Attribut
 /**
  * Class \Magento\CatalogSearch\Model\Adapter\Aggregation\AggregationResolver
  *
- * @since 2.1.0
  */
 class AggregationResolver implements AggregationResolverInterface
 {
     /**
      * @var AttributeSetFinderInterface
-     * @since 2.1.0
      */
     private $attributeSetFinder;
 
     /**
      * @var ProductAttributeRepositoryInterface
-     * @since 2.1.0
      */
     private $productAttributeRepository;
 
     /**
      * @var SearchCriteriaBuilder
-     * @since 2.1.0
      */
     private $searchCriteriaBuilder;
 
     /**
      * @var Config
-     * @since 2.1.0
      */
     private $config;
 
     /**
      * @var RequestCheckerInterface
-     * @since 2.2.0
      */
     private $requestChecker;
 
     /**
      * @var AttributeCollection
-     * @since 2.2.0
      */
     private $attributeCollection;
 
@@ -66,7 +59,6 @@ class AggregationResolver implements AggregationResolverInterface
      * @param Config $config
      * @param AttributeCollection $attributeCollection [optional]
      * @param RequestCheckerInterface|null $aggregationChecker
-     * @since 2.1.0
      */
     public function __construct(
         AttributeSetFinderInterface $attributeSetFinder,
@@ -88,7 +80,6 @@ class AggregationResolver implements AggregationResolverInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function resolve(RequestInterface $request, array $documentIds)
     {
@@ -117,7 +108,6 @@ class AggregationResolver implements AggregationResolverInterface
      *
      * @param array $documentIds
      * @return array
-     * @since 2.1.0
      */
     private function getApplicableAttributeCodes(array $documentIds)
     {

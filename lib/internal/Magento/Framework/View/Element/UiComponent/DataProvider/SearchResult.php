@@ -39,19 +39,16 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
 
     /**
      * @var string class name of document
-     * @since 2.1.0
      */
     protected $document = Document::class;
 
     /**
      * @var ResourceConnection
-     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $identifierName;
 
@@ -98,9 +95,8 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     }
 
     /**
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @return ResourceConnection
-     * @since 2.2.0
      */
     private function getResourceConnection()
     {
@@ -122,7 +118,6 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
      *  Get resource instance
      *
      * @return ResourceConnection|\Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @since 2.2.0
      */
     public function getResource()
     {
@@ -203,7 +198,6 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
      *
      * @param string $table
      * @return string
-     * @since 2.2.0
      */
     public function getTable($table)
     {
@@ -215,7 +209,6 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
      *
      * @return string|bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.2.0
      */
     private function getIdentifierName()
     {
@@ -232,7 +225,6 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
      * Initialize initial fields to select like id field
      *
      * @return $this
-     * @since 2.2.0
      */
     protected function _initInitialFieldsToSelect()
     {
@@ -247,7 +239,6 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
      * Retrieve all ids for collection
      *
      * @return array
-     * @since 2.2.0
      */
     public function getAllIds()
     {

@@ -27,19 +27,16 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * Order items per page.
      *
      * @var int
-     * @since 2.2.0
      */
     private $itemsPerPage;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory
-     * @since 2.2.0
      */
     private $itemCollectionFactory;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Item\Collection|null
-     * @since 2.2.0
      */
     private $itemCollection;
 
@@ -65,7 +62,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * Init pager block and item collection with page size and current page number
      *
      * @return $this
-     * @since 2.2.0
+     * @since 100.2.0
      */
     protected function _prepareLayout()
     {
@@ -93,7 +90,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * To be called from templates(after _prepareLayout())
      *
      * @return bool
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function isPagerDisplayed()
     {
@@ -106,7 +103,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * To be called from templates(after _prepareLayout())
      *
      * @return \Magento\Framework\DataObject[]
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getItems()
     {
@@ -118,7 +115,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * To be called from templates(after _prepareLayout())
      *
      * @return string HTML output
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getPagerHtml()
     {

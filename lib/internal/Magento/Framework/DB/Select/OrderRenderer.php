@@ -10,19 +10,16 @@ use Magento\Framework\DB\Platform\Quote;
 
 /**
  * Class OrderRenderer
- * @since 2.1.0
  */
 class OrderRenderer implements RendererInterface
 {
     /**
      * @var Quote
-     * @since 2.1.0
      */
     protected $quote;
 
     /**
      * @param Quote $quote
-     * @since 2.1.0
      */
     public function __construct(
         Quote $quote
@@ -36,7 +33,6 @@ class OrderRenderer implements RendererInterface
      * @param Select $select
      * @param string $sql
      * @return string
-     * @since 2.1.0
      */
     public function render(Select $select, $sql = '')
     {

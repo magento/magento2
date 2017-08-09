@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model;
 /**
  * Product ID locator provides all product IDs by SKU.
  * @api
- * @since 2.2.0
+ * @since 101.1.0
  */
 interface ProductIdLocatorInterface
 {
@@ -17,7 +17,7 @@ interface ProductIdLocatorInterface
      *
      * @param array $skus
      * @return array
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function retrieveProductIdsBySkus(array $skus);
 }

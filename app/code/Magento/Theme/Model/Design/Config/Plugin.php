@@ -14,26 +14,22 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Class \Magento\Theme\Model\Design\Config\Plugin
  *
- * @since 2.1.0
  */
 class Plugin
 {
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.1.0
      */
     protected $eventManager;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.1.0
      */
     protected $storeManager;
 
     /**
      * @param EventManager $eventManager
      * @param StoreManager $storeManager
-     * @since 2.1.0
      */
     public function __construct(
         EventManager $eventManager,
@@ -48,7 +44,6 @@ class Plugin
      * @param DesignConfigInterface $designConfig
      * @return DesignConfigInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function afterSave(DesignConfigRepository $subject, DesignConfigInterface $designConfig)
     {
@@ -70,7 +65,6 @@ class Plugin
      * @param DesignConfigInterface $designConfig
      * @return DesignConfigInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function afterDelete(DesignConfigRepository $subject, DesignConfigInterface $designConfig)
     {

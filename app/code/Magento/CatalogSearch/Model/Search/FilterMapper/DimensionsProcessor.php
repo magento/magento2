@@ -16,26 +16,22 @@ use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
 /**
  * Class DimensionsProcessor
  * Adds dimension conditions to select query
- * @since 2.2.0
  */
 class DimensionsProcessor
 {
     /**
      * @var ConditionManager
-     * @since 2.2.0
      */
     private $conditionManager;
 
     /**
      * @var ScopeResolverInterface
-     * @since 2.2.0
      */
     private $dimensionScopeResolver;
 
     /**
      * @param ConditionManager $conditionManager
      * @param ScopeResolverInterface $dimensionScopeResolver
-     * @since 2.2.0
      */
     public function __construct(
         ConditionManager $conditionManager,
@@ -50,7 +46,6 @@ class DimensionsProcessor
      *
      * @param SelectContainer $selectContainer
      * @return SelectContainer
-     * @since 2.2.0
      */
     public function processDimensions(SelectContainer $selectContainer)
     {
@@ -73,7 +68,6 @@ class DimensionsProcessor
      *
      * @param Dimension[] $dimensions
      * @return string[]
-     * @since 2.2.0
      */
     private function prepareDimensions(array $dimensions)
     {

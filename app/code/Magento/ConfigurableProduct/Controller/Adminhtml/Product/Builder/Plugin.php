@@ -47,7 +47,6 @@ class Plugin
      * @return Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.2.0
      */
     public function afterBuild(CatalogProductBuilder $subject, Product $product, RequestInterface $request)
     {

@@ -15,13 +15,11 @@ use Magento\Ui\Component\Listing\Columns\Column;
 /**
  * Class \Magento\Customer\Ui\Component\Listing\Column\Confirmation
  *
- * @since 2.1.0
  */
 class Confirmation extends Column
 {
     /**
      * @var ScopeConfigInterface
-     * @since 2.1.0
      */
     private $scopeConfig;
 
@@ -31,7 +29,6 @@ class Confirmation extends Column
      * @param ScopeConfigInterface $scopeConfig
      * @param array $components
      * @param array $data
-     * @since 2.1.0
      */
     public function __construct(
         ContextInterface $context,
@@ -46,7 +43,6 @@ class Confirmation extends Column
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -63,7 +59,6 @@ class Confirmation extends Column
      *
      * @param array $item
      * @return string
-     * @since 2.1.0
      */
     private function getFieldLabel(array $item)
     {
@@ -81,7 +76,6 @@ class Confirmation extends Column
      *
      * @param array $item
      * @return bool
-     * @since 2.1.0
      */
     private function isConfirmationRequired(array $item)
     {

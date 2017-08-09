@@ -10,7 +10,6 @@ use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
 /**
  * Interface BaseSelectStrategyInterface
  * This interface represents strategy that will be used to create base select for search request
- * @since 2.2.0
  */
 interface BaseSelectStrategyInterface
 {
@@ -20,7 +19,6 @@ interface BaseSelectStrategyInterface
      * @param SelectContainer $selectContainer
      * @return SelectContainer
      * @throws \DomainException
-     * @since 2.2.0
      */
     public function createBaseSelect(SelectContainer $selectContainer);
 }

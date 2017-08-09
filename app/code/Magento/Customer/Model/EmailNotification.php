@@ -15,7 +15,6 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
  */
 class EmailNotification implements EmailNotificationInterface
 {
@@ -63,39 +62,31 @@ class EmailNotification implements EmailNotificationInterface
 
     /**#@-*/
 
-    /**
-     * @var CustomerRegistry
-     * @since 2.1.0
-     */
+    /**#@-*/
     private $customerRegistry;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.1.0
      */
     private $storeManager;
 
     /**
      * @var TransportBuilder
-     * @since 2.1.0
      */
     private $transportBuilder;
 
     /**
      * @var CustomerViewHelper
-     * @since 2.1.0
      */
     protected $customerViewHelper;
 
     /**
      * @var DataObjectProcessor
-     * @since 2.1.0
      */
     protected $dataProcessor;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.1.0
      */
     private $scopeConfig;
 
@@ -106,7 +97,6 @@ class EmailNotification implements EmailNotificationInterface
      * @param CustomerViewHelper $customerViewHelper
      * @param DataObjectProcessor $dataProcessor
      * @param ScopeConfigInterface $scopeConfig
-     * @since 2.1.0
      */
     public function __construct(
         CustomerRegistry $customerRegistry,
@@ -131,7 +121,6 @@ class EmailNotification implements EmailNotificationInterface
      * @param string $origCustomerEmail
      * @param bool $isPasswordChanged
      * @return void
-     * @since 2.1.0
      */
     public function credentialsChanged(
         CustomerInterface $savedCustomer,
@@ -161,7 +150,6 @@ class EmailNotification implements EmailNotificationInterface
      * @param CustomerInterface $customer
      * @param string $email
      * @return void
-     * @since 2.1.0
      */
     private function emailAndPasswordChanged(CustomerInterface $customer, $email)
     {
@@ -188,7 +176,6 @@ class EmailNotification implements EmailNotificationInterface
      * @param CustomerInterface $customer
      * @param string $email
      * @return void
-     * @since 2.1.0
      */
     private function emailChanged(CustomerInterface $customer, $email)
     {
@@ -214,7 +201,6 @@ class EmailNotification implements EmailNotificationInterface
      *
      * @param CustomerInterface $customer
      * @return void
-     * @since 2.1.0
      */
     private function passwordReset(CustomerInterface $customer)
     {
@@ -244,7 +230,6 @@ class EmailNotification implements EmailNotificationInterface
      * @param int|null $storeId
      * @param string $email
      * @return void
-     * @since 2.1.0
      */
     private function sendEmailTemplate(
         $customer,
@@ -273,7 +258,6 @@ class EmailNotification implements EmailNotificationInterface
      *
      * @param CustomerInterface $customer
      * @return \Magento\Customer\Model\Data\CustomerSecure
-     * @since 2.1.0
      */
     private function getFullCustomerObject($customer)
     {
@@ -293,7 +277,6 @@ class EmailNotification implements EmailNotificationInterface
      * @param CustomerInterface $customer
      * @param int|string|null $defaultStoreId
      * @return int
-     * @since 2.1.0
      */
     private function getWebsiteStoreId($customer, $defaultStoreId = null)
     {
@@ -309,7 +292,6 @@ class EmailNotification implements EmailNotificationInterface
      *
      * @param CustomerInterface $customer
      * @return void
-     * @since 2.1.0
      */
     public function passwordReminder(CustomerInterface $customer)
     {
@@ -334,7 +316,6 @@ class EmailNotification implements EmailNotificationInterface
      *
      * @param CustomerInterface $customer
      * @return void
-     * @since 2.1.0
      */
     public function passwordResetConfirmation(CustomerInterface $customer)
     {
@@ -364,7 +345,6 @@ class EmailNotification implements EmailNotificationInterface
      * @param string $sendemailStoreId
      * @return void
      * @throws LocalizedException
-     * @since 2.1.0
      */
     public function newAccount(
         CustomerInterface $customer,

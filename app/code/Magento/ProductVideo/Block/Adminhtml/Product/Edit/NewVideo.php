@@ -34,7 +34,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @var string
-     * @since 2.1.0
      */
     protected $videoSelector = '#media_gallery_content';
 

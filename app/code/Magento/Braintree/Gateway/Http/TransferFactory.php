@@ -13,19 +13,16 @@ use Magento\Payment\Gateway\ConfigInterface;
 /**
  * Class \Magento\Braintree\Gateway\Http\TransferFactory
  *
- * @since 2.1.0
  */
 class TransferFactory implements TransferFactoryInterface
 {
     /**
      * @var TransferBuilder
-     * @since 2.1.0
      */
     private $transferBuilder;
 
     /**
      * @param TransferBuilder $transferBuilder
-     * @since 2.1.0
      */
     public function __construct(
         TransferBuilder $transferBuilder
@@ -38,7 +35,6 @@ class TransferFactory implements TransferFactoryInterface
      *
      * @param array $request
      * @return TransferInterface
-     * @since 2.1.0
      */
     public function create(array $request)
     {

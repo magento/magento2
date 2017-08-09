@@ -15,26 +15,22 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 
 /**
  * Plugin for loading vault payment extension attribute to order/payment entity
- * @since 2.1.0
  */
 class PaymentVaultAttributesLoad
 {
     /**
      * @var OrderPaymentExtensionFactory
-     * @since 2.1.0
      */
     protected $paymentExtensionFactory;
 
     /**
      * @var PaymentTokenManagementInterface
-     * @since 2.1.0
      */
     protected $paymentTokenManagement;
 
     /**
      * @param OrderPaymentExtensionFactory $paymentExtensionFactory
      * @param PaymentTokenManagement|PaymentTokenManagementInterface $paymentTokenManagement
-     * @since 2.1.0
      */
     public function __construct(
         OrderPaymentExtensionFactory $paymentExtensionFactory,
@@ -50,7 +46,6 @@ class PaymentVaultAttributesLoad
      * @param OrderPaymentInterface $payment
      * @param OrderPaymentExtensionInterface|null $paymentExtension
      * @return OrderPaymentExtensionInterface
-     * @since 2.1.3
      */
     public function afterGetExtensionAttributes(
         OrderPaymentInterface $payment,

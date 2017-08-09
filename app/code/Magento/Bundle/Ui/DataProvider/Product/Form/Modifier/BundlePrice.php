@@ -12,7 +12,6 @@ use Magento\Catalog\Model\Locator\LocatorInterface;
 
 /**
  * Customize Price field
- * @since 2.1.0
  */
 class BundlePrice extends AbstractModifier
 {
@@ -21,20 +20,17 @@ class BundlePrice extends AbstractModifier
 
     /**
      * @var ArrayManager
-     * @since 2.1.0
      */
     protected $arrayManager;
 
     /**
      * @var LocatorInterface
-     * @since 2.1.0
      */
     protected $locator;
 
     /**
      * @param LocatorInterface $locator
      * @param ArrayManager $arrayManager
-     * @since 2.1.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -46,7 +42,6 @@ class BundlePrice extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -100,7 +95,6 @@ class BundlePrice extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyData(array $data)
     {

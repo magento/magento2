@@ -22,13 +22,11 @@ class ClassesScanner implements ClassesScannerInterface
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $fileResults = [];
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $generationDirectory;
 
@@ -94,7 +92,6 @@ class ClassesScanner implements ClassesScannerInterface
      *
      * @param \RecursiveIteratorIterator $recursiveIterator
      * @return array
-     * @since 2.2.0
      */
     private function extract(\RecursiveIteratorIterator $recursiveIterator)
     {
@@ -122,7 +119,6 @@ class ClassesScanner implements ClassesScannerInterface
      * @param array $classNames
      * @param string $fileItemPath
      * @return bool Whether the clas is included or not
-     * @since 2.2.0
      */
     private function includeClasses(array $classNames, $fileItemPath)
     {

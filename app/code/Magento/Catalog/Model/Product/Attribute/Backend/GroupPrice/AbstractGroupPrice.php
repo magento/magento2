@@ -22,7 +22,6 @@ abstract class AbstractGroupPrice extends Price
 {
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
      */
     protected $metadataPool;
 
@@ -146,7 +145,6 @@ abstract class AbstractGroupPrice extends Price
      * @param array $objectArray
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     protected function getAdditionalFields($objectArray)
     {
@@ -254,7 +252,6 @@ abstract class AbstractGroupPrice extends Price
      * @param array $priceRow
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.2.0
      */
     protected function validatePrice(array $priceRow)
     {
@@ -319,7 +316,6 @@ abstract class AbstractGroupPrice extends Price
     /**
      * @param int $storeId
      * @return int|null
-     * @since 2.2.0
      */
     private function getWebsiteId($storeId)
     {
@@ -335,7 +331,6 @@ abstract class AbstractGroupPrice extends Price
     /**
      * @param \Magento\Catalog\Model\Product $object
      * @param array $priceData
-     * @since 2.2.0
      */
     public function setPriceData($object, $priceData)
     {
@@ -360,7 +355,6 @@ abstract class AbstractGroupPrice extends Price
      * @param array $data
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     protected function modifyPriceData($object, $data)
     {
@@ -500,7 +494,6 @@ abstract class AbstractGroupPrice extends Price
      * @param array $valuesToUpdate
      * @param array $oldValues
      * @return boolean
-     * @since 2.2.0
      */
     protected function updateValues(array $valuesToUpdate, array $oldValues)
     {
@@ -554,7 +547,6 @@ abstract class AbstractGroupPrice extends Price
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
      */
     private function getMetadataPool()
     {

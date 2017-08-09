@@ -18,7 +18,6 @@ use Magento\Framework\FlagManager;
 /**
  * Class WebsiteAttributesSynchronizer
  * @package Magento\Catalog\Cron
- * @since 2.2.0
  */
 class WebsiteAttributesSynchronizer
 {
@@ -34,7 +33,6 @@ class WebsiteAttributesSynchronizer
 
     /**
      * Map table names to metadata classes where link field might be found
-     * @since 2.2.0
      */
     private $tableMetaDataClass = [
         'catalog_category_entity_datetime' => CategoryInterface::class,
@@ -61,49 +59,41 @@ class WebsiteAttributesSynchronizer
      *  ]
      *
      * @var array
-     * @since 2.2.0
      */
     private $groupedStoreViews = [];
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $processedAttributeValues = [];
 
     /**
      * @var ResourceConnection
-     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var AdapterInterface
-     * @since 2.2.0
      */
     private $connection;
 
     /**
      * @var FlagManager
-     * @since 2.2.0
      */
     private $flagManager;
 
     /**
      * @var Generator
-     * @since 2.2.0
      */
     private $batchQueryGenerator;
 
     /**
      * @var MetadataPool
-     * @since 2.2.0
      */
     private $metaDataPool;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $linkFields = [];
 
@@ -113,7 +103,6 @@ class WebsiteAttributesSynchronizer
      * @param FlagManager $flagManager
      * @param Generator $batchQueryGenerator,
      * @param MetadataPool $metadataPool
-     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -132,7 +121,6 @@ class WebsiteAttributesSynchronizer
      * Synchronizes attribute values between different store views on website level
      * @return void
      * @throws \Exception
-     * @since 2.2.0
      */
     public function synchronize()
     {
@@ -154,7 +142,6 @@ class WebsiteAttributesSynchronizer
 
     /**
      * @return bool
-     * @since 2.2.0
      */
     public function isSynchronizationRequired()
     {
@@ -164,7 +151,6 @@ class WebsiteAttributesSynchronizer
     /**
      * Puts a flag that synchronization is required
      * @return void
-     * @since 2.2.0
      */
     public function scheduleSynchronization()
     {
@@ -174,7 +160,6 @@ class WebsiteAttributesSynchronizer
     /**
      * Marks flag as in progress in case if several crons enabled, so sync. won't be duplicated
      * @return void
-     * @since 2.2.0
      */
     private function markSynchronizationInProgress()
     {
@@ -184,7 +169,6 @@ class WebsiteAttributesSynchronizer
     /**
      * Turn off synchronization flag
      * @return void
-     * @since 2.2.0
      */
     private function markSynchronized()
     {
@@ -194,7 +178,6 @@ class WebsiteAttributesSynchronizer
     /**
      * @param string $tableName
      * @return void
-     * @since 2.2.0
      */
     private function synchronizeTable($tableName)
     {
@@ -208,7 +191,6 @@ class WebsiteAttributesSynchronizer
      * @param array $attributeValueItems
      * @param string $tableName
      * @return void
-     * @since 2.2.0
      */
     private function processAttributeValues(array $attributeValueItems, $tableName)
     {
@@ -234,7 +216,6 @@ class WebsiteAttributesSynchronizer
      * @param string $tableName
      * @yield array
      * @return void
-     * @since 2.2.0
      */
     private function fetchAttributeValues($tableName)
     {
@@ -277,7 +258,6 @@ class WebsiteAttributesSynchronizer
 
     /**
      * @return array
-     * @since 2.2.0
      */
     private function getGroupedStoreViews()
     {
@@ -309,7 +289,6 @@ class WebsiteAttributesSynchronizer
      * @param array $attributeValue
      * @param string $tableName
      * @return bool
-     * @since 2.2.0
      */
     private function isAttributeValueProcessed(array $attributeValue, $tableName)
     {
@@ -326,7 +305,6 @@ class WebsiteAttributesSynchronizer
     /**
      * Resets processed attribute values
      * @return void
-     * @since 2.2.0
      */
     private function resetProcessedAttributeValues()
     {
@@ -337,7 +315,6 @@ class WebsiteAttributesSynchronizer
      * @param array $attributeValue
      * @param string $tableName
      * @return void
-     * @since 2.2.0
      */
     private function markAttributeValueProcessed(array $attributeValue, $tableName)
     {
@@ -353,7 +330,6 @@ class WebsiteAttributesSynchronizer
      * @param int $attributeId
      * @param int $websiteId
      * @return string
-     * @since 2.2.0
      */
     private function getAttributeValueKey($entityId, $attributeId, $websiteId)
     {
@@ -369,7 +345,6 @@ class WebsiteAttributesSynchronizer
      * @param array $attributeValue
      * @param string $tableName
      * @return array|null
-     * @since 2.2.0
      */
     private function generateAttributeValueInsertions(array $attributeValue, $tableName)
     {
@@ -397,7 +372,6 @@ class WebsiteAttributesSynchronizer
      * @param array $insertions
      * @param string $tableName
      * @return void
-     * @since 2.2.0
      */
     private function executeInsertions(array $insertions, $tableName)
     {
@@ -420,7 +394,6 @@ class WebsiteAttributesSynchronizer
      *
      * @param array $insertions
      * @return array
-     * @since 2.2.0
      */
     private function getPlaceholderValues(array $insertions)
     {
@@ -440,7 +413,6 @@ class WebsiteAttributesSynchronizer
      *
      * @param array $insertions
      * @return string
-     * @since 2.2.0
      */
     private function prepareInsertValuesStatement(array $insertions)
     {
@@ -457,7 +429,6 @@ class WebsiteAttributesSynchronizer
      * @param string $tableName
      * @return string
      * @throws LocalizedException
-     * @since 2.2.0
      */
     private function getTableLinkField($tableName)
     {

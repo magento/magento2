@@ -97,7 +97,6 @@ class Filesystem
 
     /**
      * @var UserCollection
-     * @since 2.1.0
      */
     private $userCollection;
 
@@ -189,7 +188,6 @@ class Filesystem
      * Get admin user locales
      *
      * @return array
-     * @since 2.1.0
      */
     private function getAdminUserInterfaceLocales()
     {
@@ -204,7 +202,6 @@ class Filesystem
      * Get used store and admin user locales
      *
      * @return array
-     * @since 2.1.0
      */
     private function getUsedLocales()
     {
@@ -219,10 +216,9 @@ class Filesystem
      * Get user collection
      *
      * @return UserCollection
-     * @deprecated 2.1.0 Added to not break backward compatibility of the constructor signature
+     * @deprecated 100.1.0 Added to not break backward compatibility of the constructor signature
      * by injecting the new dependency directly.
      * The method can be removed in a future major release, when constructor signature can be changed.
-     * @since 2.1.0
      */
     private function getUserCollection()
     {
@@ -310,7 +306,7 @@ class Filesystem
      * @param int $dirPermissions
      * @param int $filePermissions
      * @return void
-     * @deprecated 2.0.6 As magento2 doesn't control indirectly
+     * @deprecated 100.0.6 As magento2 doesn't control indirectly
      * the access permissions to the files and directories anymore.
      * Access permissions to the files and directories are set during deploy Magento 2, directly after
      * uploading code of Magento. Also it is possible to specify the value
@@ -335,7 +331,7 @@ class Filesystem
      * Change permissions on static resources
      *
      * @return void
-     * @deprecated 2.0.6 As magento2 doesn't control indirectly the access permissions to the files
+     * @deprecated 100.0.6 As magento2 doesn't control indirectly the access permissions to the files
      * and directories anymore.
      * Access permissions to the files and directories are set during deploy Magento 2, directly after
      * uploading code of Magento. Also it is possible to specify the value

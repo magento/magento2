@@ -10,26 +10,22 @@ use Magento\Framework\Escaper;
 
 /**
  * Class AnchorRenderer
- * @since 2.2.0
  */
 class AnchorRenderer
 {
     /**
      * @var MenuItemChecker
-     * @since 2.2.0
      */
     private $menuItemChecker;
 
     /**
      * @var Escaper
-     * @since 2.2.0
      */
     private $escaper;
 
     /**
      * @param MenuItemChecker $menuItemChecker
      * @param Escaper $escaper
-     * @since 2.2.0
      */
     public function __construct(
         MenuItemChecker $menuItemChecker,
@@ -49,7 +45,6 @@ class AnchorRenderer
      * @param Item $menuItem
      * @param int $level
      * @return string
-     * @since 2.2.0
      */
     public function renderAnchor($activeItem, Item $menuItem, $level)
     {
@@ -79,7 +74,6 @@ class AnchorRenderer
      *
      * @param Item $menuItem
      * @return string
-     * @since 2.2.0
      */
     private function _renderItemAnchorTitle($menuItem)
     {
@@ -91,7 +85,6 @@ class AnchorRenderer
      *
      * @param Item $menuItem
      * @return string
-     * @since 2.2.0
      */
     private function _renderItemOnclickFunction($menuItem)
     {

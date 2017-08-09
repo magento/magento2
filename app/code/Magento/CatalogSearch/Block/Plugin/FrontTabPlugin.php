@@ -34,7 +34,6 @@ class FrontTabPlugin
      * @param ProductAttributeFrontTabBlock $subject
      * @param Form $form
      * @return void
-     * @since 2.2.0
      */
     public function beforeSetForm(ProductAttributeFrontTabBlock $subject, Form $form)
     {

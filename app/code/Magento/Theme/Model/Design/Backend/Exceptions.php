@@ -152,7 +152,6 @@ class Exceptions extends ArraySerialized
 
     /**
      * @inheritDoc
-     * @since 2.1.0
      */
     public function afterLoad()
     {
@@ -169,7 +168,6 @@ class Exceptions extends ArraySerialized
 
     /**
      * @return array
-     * @since 2.1.0
      */
     public function getValue()
     {

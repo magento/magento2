@@ -59,7 +59,6 @@ class ValidatorFile extends Validator
 
     /**
      * @var \Magento\Framework\Validator\File\IsImage
-     * @since 2.0.1
      */
     protected $isImageValidator;
 

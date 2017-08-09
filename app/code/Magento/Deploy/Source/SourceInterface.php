@@ -9,7 +9,6 @@ use Magento\Deploy\Package\PackageFile;
 
 /**
  * Provide list of files located in some source location (e.g. modules directories, library, themes, else)
- * @since 2.2.0
  */
 interface SourceInterface
 {
@@ -17,7 +16,6 @@ interface SourceInterface
      * Return the list of files located in source
      *
      * @return PackageFile[]
-     * @since 2.2.0
      */
     public function get();
 }

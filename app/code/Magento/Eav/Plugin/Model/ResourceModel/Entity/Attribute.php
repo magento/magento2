@@ -30,13 +30,11 @@ class Attribute
 
     /**
      * @var StateInterface
-     * @since 2.2.0
      */
     private $cacheState;
 
     /**
      * @var SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -90,7 +88,6 @@ class Attribute
      * Check if cache is enabled
      *
      * @return bool
-     * @since 2.2.0
      */
     private function isCacheEnabled()
     {

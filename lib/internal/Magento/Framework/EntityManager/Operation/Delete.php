@@ -19,55 +19,46 @@ use Magento\Framework\App\ResourceConnection;
  * Class Delete
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
  */
 class Delete implements DeleteInterface
 {
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
     /**
      * @var TypeResolver
-     * @since 2.1.0
      */
     private $typeResolver;
 
     /**
      * @var ResourceConnection
-     * @since 2.1.0
      */
     private $resourceConnection;
 
     /**
      * @var EventManager
-     * @since 2.1.0
      */
     private $eventManager;
 
     /**
      * @var TransactionManagerInterface
-     * @since 2.1.0
      */
     private $transactionManager;
 
     /**
      * @var DeleteMain
-     * @since 2.1.0
      */
     private $deleteMain;
 
     /**
      * @var DeleteAttributes
-     * @since 2.1.0
      */
     private $deleteAttributes;
 
     /**
      * @var DeleteExtensions
-     * @since 2.1.0
      */
     private $deleteExtensions;
 
@@ -80,7 +71,6 @@ class Delete implements DeleteInterface
      * @param DeleteMain $deleteMain
      * @param DeleteAttributes $deleteAttributes
      * @param DeleteExtensions $deleteExtensions
-     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -107,7 +97,6 @@ class Delete implements DeleteInterface
      * @param array $arguments
      * @return object
      * @throws \Exception
-     * @since 2.1.0
      */
     public function execute($entity, $arguments = [])
     {

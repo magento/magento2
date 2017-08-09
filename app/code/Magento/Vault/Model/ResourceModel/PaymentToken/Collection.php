@@ -7,7 +7,6 @@ namespace Magento\Vault\Model\ResourceModel\PaymentToken;
 
 /**
  * Vault Payment Tokens collection
- * @since 2.1.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -15,7 +14,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Resource initialization
      *
      * @return void
-     * @since 2.1.0
      */
     public function _construct()
     {

@@ -40,7 +40,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @var AllowedCountries
-     * @since 2.2.0
      */
     private $allowedCountriesReader;
 
@@ -107,8 +106,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Return Allowed Countries reader
      *
      * @return \Magento\Directory\Model\AllowedCountries
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getAllowedCountriesReader()
     {
@@ -125,7 +123,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param null|int|string|\Magento\Store\Model\Store $store
      * @return \Magento\Directory\Model\ResourceModel\Region\Collection
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function addAllowedCountriesFilter($store = null)
     {

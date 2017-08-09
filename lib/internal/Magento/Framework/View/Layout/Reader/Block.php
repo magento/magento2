@@ -77,14 +77,12 @@ class Block implements Layout\ReaderInterface
 
     /**
      * @var Condition
-     * @since 2.2.0
      */
     private $conditionReader;
 
     /**
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @var string
-     * @since 2.2.0
      */
     private $deprecatedAttributeAcl = 'acl';
 
@@ -213,7 +211,6 @@ class Block implements Layout\ReaderInterface
      * @param array|Element $data
      *
      * @return array|Element
-     * @since 2.2.0
      */
     private function replaceDeprecatedAclKey($data)
     {

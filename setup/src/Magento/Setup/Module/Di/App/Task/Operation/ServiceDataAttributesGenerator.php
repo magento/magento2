@@ -28,7 +28,6 @@ class ServiceDataAttributesGenerator implements OperationInterface
 
     /**
      * @var Scanner\ConfigurationScanner
-     * @since 2.0.1
      */
     private $configurationScanner;
 

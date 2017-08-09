@@ -139,7 +139,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $metadataPool;
 
@@ -215,7 +215,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Get metadata pool object
      *
      * @return MetadataPool
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function getMetadataPool()
     {

@@ -28,7 +28,6 @@ class ReturnUrl extends Payflow
     /**
      * Payment method code
      * @var string
-     * @since 2.0.1
      */
     protected $allowedPaymentMethodCodes = [
         Config::METHOD_PAYFLOWPRO,
@@ -74,7 +73,6 @@ class ReturnUrl extends Payflow
      *
      * @param Order $order
      * @return bool
-     * @since 2.0.1
      */
     protected function checkOrderState(Order $order)
     {
@@ -86,7 +84,6 @@ class ReturnUrl extends Payflow
      *
      * @param Order $order
      * @return bool
-     * @since 2.0.1
      */
     protected function checkPaymentMethod(Order $order)
     {

@@ -8,25 +8,21 @@ namespace Magento\Setup\Model\FixtureGenerator;
 
 /**
  * Class provides information about MySQL auto_increment configuration setting.
- * @since 2.2.0
  */
 class AutoIncrement
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.2.0
      */
     private $resource;
 
     /**
      * @var int
-     * @since 2.2.0
      */
     private $incrementValue;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
-     * @since 2.2.0
      */
     public function __construct(\Magento\Framework\App\ResourceConnection $resource)
     {
@@ -37,7 +33,6 @@ class AutoIncrement
      * Get value of auto_increment_increment variable.
      *
      * @return int
-     * @since 2.2.0
      */
     public function getIncrement()
     {

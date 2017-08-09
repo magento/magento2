@@ -10,26 +10,22 @@ use Magento\Framework\Code\Generator\Io;
 
 /**
  * Autoloader that initiates auto-generation of requested classes
- * @since 2.2.0
  */
 class GeneratedClassesAutoloader
 {
     /**
      * @var Io
-     * @since 2.2.0
      */
     private $generatorIo;
 
     /**
      * @var GeneratorInterface[]
-     * @since 2.2.0
      */
     private $generators;
 
     /**
      * @param GeneratorInterface[] $generators
      * @param Io $generatorIo
-     * @since 2.2.0
      */
     public function __construct(array $generators, Io $generatorIo)
     {
@@ -53,7 +49,6 @@ class GeneratedClassesAutoloader
      *
      * @param string $className
      * @return bool
-     * @since 2.2.0
      */
     public function load($className)
     {

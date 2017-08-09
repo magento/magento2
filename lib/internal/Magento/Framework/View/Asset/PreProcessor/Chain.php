@@ -18,7 +18,6 @@ class Chain
 {
     /**
      * @var array
-     * @since 2.2.0
      */
     private $compatibleTypes;
 

@@ -15,31 +15,27 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable\AttributeFactory
 /**
  * Class Factory
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class Factory
 {
     /**
      * @var AttributeFactory
-     * @since 2.1.0
      */
     private $attributeFactory;
 
     /**
      * @var ProductAttributeRepositoryInterface
-     * @since 2.1.0
      */
     private $productAttributeRepository;
 
     /**
      * @var Configurable
-     * @since 2.1.0
      */
     private $productType;
 
     /**
      * @var OptionValueInterfaceFactory
-     * @since 2.1.0
      */
     private $optionValueFactory;
 
@@ -50,7 +46,7 @@ class Factory
      * @param AttributeFactory $attributeFactory
      * @param OptionValueInterfaceFactory $optionValueFactory
      * @param ProductAttributeRepositoryInterface $productAttributeRepository
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         Configurable $productType,
@@ -70,7 +66,7 @@ class Factory
      * @param array $attributesData
      * @return OptionInterface[]
      * @throws \InvalidArgumentException
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function create(array $attributesData)
     {
@@ -97,7 +93,6 @@ class Factory
      * @param OptionInterface $attribute
      * @param array $item
      * @return void
-     * @since 2.1.0
      */
     private function updateAttributeData(OptionInterface $attribute, array $item)
     {

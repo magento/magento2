@@ -11,31 +11,26 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class SequenceManager
- * @since 2.1.0
  */
 class SequenceManager
 {
     /**
      * @var SequenceRegistry
-     * @since 2.1.0
      */
     private $sequenceRegistry;
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
     /**
      * @var LoggerInterface
-     * @since 2.1.0
      */
     private $logger;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.1.0
      */
     private $appResource;
 
@@ -44,7 +39,6 @@ class SequenceManager
      * @param SequenceRegistry $sequenceRegistry
      * @param LoggerInterface $logger
      * @param \Magento\Framework\App\ResourceConnection $appResource
-     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -67,7 +61,6 @@ class SequenceManager
      * @return int
      *
      * @throws \Exception
-     * @since 2.1.0
      */
     public function force($entityType, $identifier)
     {
@@ -102,7 +95,6 @@ class SequenceManager
      * @param int $identifier
      * @return int
      * @throws \Exception
-     * @since 2.1.0
      */
     public function delete($entityType, $identifier)
     {

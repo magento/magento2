@@ -13,19 +13,16 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class SaveHandler
  * @package Magento\Catalog\Model\Product\Website
- * @since 2.2.0
  */
 class SaveHandler implements ExtensionInterface
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Website\Link
-     * @since 2.2.0
      */
     private $productWebsiteLink;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.2.0
      */
     private $storeManager;
 
@@ -33,7 +30,6 @@ class SaveHandler implements ExtensionInterface
      * SaveHandler constructor.
      * @param ProductWebsiteLink $productWebsiteLink
      * @param StoreManagerInterface $storeManager
-     * @since 2.2.0
      */
     public function __construct(
         ProductWebsiteLink $productWebsiteLink,
@@ -49,7 +45,6 @@ class SaveHandler implements ExtensionInterface
      * @param array $arguments
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return ProductInterface
-     * @since 2.2.0
      */
     public function execute($product, $arguments = [])
     {

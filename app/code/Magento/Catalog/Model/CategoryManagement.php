@@ -27,13 +27,11 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
 
     /**
      * @var \Magento\Framework\App\ScopeResolverInterface
-     * @since 2.1.0
      */
     private $scopeResolver;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
-     * @since 2.1.0
      */
     private $categoriesFactory;
     
@@ -72,7 +70,6 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
      * Check is request use default scope
      *
      * @return bool
-     * @since 2.1.0
      */
     private function isAdminStore()
     {
@@ -83,7 +80,6 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
      * Get store manager for operations with admin code
      *
      * @return \Magento\Framework\App\ScopeResolverInterface
-     * @since 2.1.0
      */
     private function getScopeResolver()
     {
@@ -99,7 +95,6 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
      * Get top level hidden root category
      *
      * @return \Magento\Catalog\Model\Category
-     * @since 2.1.0
      */
     private function getTopLevelCategory()
     {

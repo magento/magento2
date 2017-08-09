@@ -67,7 +67,6 @@ class Server
 
     /**
      * @var Wsdl\Generator
-     * @since 2.1.0
      */
     private $wsdlGenerator;
 
@@ -131,7 +130,6 @@ class Server
      * Local WSDL URI is used to be able to pass wsdl schema to SoapServer without authorization
      *
      * @return string
-     * @since 2.1.0
      */
     private function getWsdlLocalUri()
     {

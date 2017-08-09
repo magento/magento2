@@ -9,7 +9,6 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class Upload
- * @since 2.1.0
  */
 class Upload extends \Magento\Backend\App\Action
 {
@@ -17,7 +16,6 @@ class Upload extends \Magento\Backend\App\Action
      * Image uploader
      *
      * @var \Magento\Catalog\Model\ImageUploader
-     * @since 2.1.0
      */
     protected $imageUploader;
 
@@ -26,7 +24,6 @@ class Upload extends \Magento\Backend\App\Action
      *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Catalog\Model\ImageUploader $imageUploader
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -40,7 +37,6 @@ class Upload extends \Magento\Backend\App\Action
      * Check admin permissions for this controller
      *
      * @return boolean
-     * @since 2.1.0
      */
     protected function _isAllowed()
     {
@@ -51,7 +47,6 @@ class Upload extends \Magento\Backend\App\Action
      * Upload file controller action
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.1.0
      */
     public function execute()
     {

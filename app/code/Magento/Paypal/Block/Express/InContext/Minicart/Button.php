@@ -17,7 +17,6 @@ use Magento\Framework\View\Element\Template\Context;
 
 /**
  * Class Button
- * @since 2.1.0
  */
 class Button extends Template implements ShortcutInterface
 {
@@ -33,31 +32,26 @@ class Button extends Template implements ShortcutInterface
 
     /**
      * @var bool
-     * @since 2.1.0
      */
     private $isMiniCart = false;
 
     /**
      * @var ResolverInterface
-     * @since 2.1.0
      */
     private $localeResolver;
 
     /**
      * @var Config
-     * @since 2.1.0
      */
     private $config;
 
     /**
      * @var MethodInterface
-     * @since 2.1.0
      */
     private $payment;
 
     /**
      * @var Session
-     * @since 2.1.0
      */
     private $session;
 
@@ -68,7 +62,6 @@ class Button extends Template implements ShortcutInterface
      * @param MethodInterface $payment
      * @param Session $session
      * @param array $data
-     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -91,7 +84,6 @@ class Button extends Template implements ShortcutInterface
      * Check `in_context` config value
      *
      * @return bool
-     * @since 2.1.0
      */
     private function isInContext()
     {
@@ -102,7 +94,6 @@ class Button extends Template implements ShortcutInterface
      * Check `visible_on_cart` config value
      *
      * @return bool
-     * @since 2.2.0
      */
     private function isVisibleOnCart()
     {
@@ -114,7 +105,6 @@ class Button extends Template implements ShortcutInterface
      * should render in cart/mini-cart
      *
      * @return bool
-     * @since 2.1.0
      */
     protected function shouldRender()
     {
@@ -126,7 +116,6 @@ class Button extends Template implements ShortcutInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     protected function _toHtml()
     {
@@ -139,7 +128,6 @@ class Button extends Template implements ShortcutInterface
 
     /**
      * @return string
-     * @since 2.1.0
      */
     public function getContainerId()
     {
@@ -148,7 +136,6 @@ class Button extends Template implements ShortcutInterface
 
     /**
      * @return string
-     * @since 2.2.0
      */
     public function getLinkAction()
     {
@@ -157,7 +144,6 @@ class Button extends Template implements ShortcutInterface
 
     /**
      * @return string
-     * @since 2.1.0
      */
     public function getAddToCartSelector()
     {
@@ -166,7 +152,6 @@ class Button extends Template implements ShortcutInterface
 
     /**
      * @return string
-     * @since 2.1.0
      */
     public function getImageUrl()
     {
@@ -179,7 +164,6 @@ class Button extends Template implements ShortcutInterface
      * Get shortcut alias
      *
      * @return string
-     * @since 2.1.0
      */
     public function getAlias()
     {
@@ -189,7 +173,6 @@ class Button extends Template implements ShortcutInterface
     /**
      * @param bool $isCatalog
      * @return $this
-     * @since 2.1.0
      */
     public function setIsInCatalogProduct($isCatalog)
     {

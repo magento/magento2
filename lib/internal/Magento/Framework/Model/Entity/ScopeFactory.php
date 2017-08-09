@@ -10,13 +10,11 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class ScopeFactory
- * @since 2.1.0
  */
 class ScopeFactory
 {
     /**
      * @var ObjectManagerInterface
-     * @since 2.1.0
      */
     private $objectManager;
 
@@ -24,7 +22,6 @@ class ScopeFactory
      * ScopeFactory constructor.
      *
      * @param ObjectManagerInterface $objectManager
-     * @since 2.1.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager
@@ -37,7 +34,6 @@ class ScopeFactory
      * @param string $value
      * @param ScopeInterface|null $fallback
      * @return ScopeInterface
-     * @since 2.1.0
      */
     public function create($identifier, $value, $fallback = null)
     {

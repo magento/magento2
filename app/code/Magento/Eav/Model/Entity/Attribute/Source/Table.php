@@ -32,7 +32,6 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 
     /**
      * @var StoreManagerInterface
-     * @since 2.2.0
      */
     private $storeManager;
 
@@ -94,8 +93,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Get StoreManager dependency
      *
      * @return StoreManagerInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getStoreManager()
     {
@@ -130,7 +128,6 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     /**
      * @param array $options
      * @return array
-     * @since 2.0.9
      */
     private function addEmptyOption(array $options)
     {

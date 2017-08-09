@@ -13,26 +13,22 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Composite batch size calculator for EAV related indexers.
  *
  * Can be configured to provide batch sizes for different indexer types.
- * @since 2.2.0
  */
 class BatchSizeCalculator
 {
     /**
      * @var array
-     * @since 2.2.0
      */
     private $batchSizes;
 
     /**
      * @var \Magento\Framework\Indexer\BatchSizeManagement[]
-     * @since 2.2.0
      */
     private $batchSizeManagers;
 
     /**
      * @param array $batchSizes preferable sizes (number of rows in batch) of batches per index type
      * @param array $batchSizeManagers batch managers per index type
-     * @since 2.2.0
      */
     public function __construct(
         array $batchSizes,
@@ -49,7 +45,6 @@ class BatchSizeCalculator
      * @param string $indexerTypeId unique identifier of the indexer
      * @return int estimated batch size
      * @throws NoSuchEntityException thrown if indexer identifier is not recognized
-     * @since 2.2.0
      */
     public function estimateBatchSize(
         AdapterInterface $connection,

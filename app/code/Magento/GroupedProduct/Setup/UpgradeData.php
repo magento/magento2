@@ -15,20 +15,17 @@ use Magento\GroupedProduct\Model\ResourceModel\Product\Link;
 /**
  * Class \Magento\GroupedProduct\Setup\UpgradeData
  *
- * @since 2.1.0
  */
 class UpgradeData implements UpgradeDataInterface
 {
     /**
      * @var Relation
-     * @since 2.1.0
      */
     private $relationProcessor;
 
     /**
      * UpgradeData constructor
      * @param Relation $relationProcessor
-     * @since 2.1.0
      */
     public function __construct(Relation $relationProcessor)
     {
@@ -37,7 +34,6 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

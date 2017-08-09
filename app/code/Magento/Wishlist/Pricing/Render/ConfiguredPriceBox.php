@@ -10,13 +10,11 @@ use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 /**
  * Class \Magento\Wishlist\Pricing\Render\ConfiguredPriceBox
  *
- * @since 2.1.0
  */
 class ConfiguredPriceBox extends \Magento\Catalog\Pricing\Render\ConfiguredPriceBox
 {
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     protected function getCacheLifetime()
     {
@@ -25,7 +23,6 @@ class ConfiguredPriceBox extends \Magento\Catalog\Pricing\Render\ConfiguredPrice
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     protected function _prepareLayout()
     {

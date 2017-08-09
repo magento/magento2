@@ -62,7 +62,6 @@ class OrderGet
      * @param \Magento\Sales\Api\Data\OrderInterface $resultOrder
      * @return \Magento\Sales\Api\Data\OrderInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.11
      */
     public function afterGet(
         \Magento\Sales\Api\OrderRepositoryInterface $subject,
@@ -145,7 +144,6 @@ class OrderGet
      * @param \Magento\Sales\Model\ResourceModel\Order\Collection $resultOrder
      * @return \Magento\Sales\Model\ResourceModel\Order\Collection
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function afterGetList(
         \Magento\Sales\Api\OrderRepositoryInterface $subject,

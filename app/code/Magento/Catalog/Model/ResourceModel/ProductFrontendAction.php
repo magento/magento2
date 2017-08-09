@@ -7,7 +7,6 @@ namespace Magento\Catalog\Model\ResourceModel;
 
 /**
  * Resource model for Product Frontend Action
- * @since 2.2.0
  */
 class ProductFrontendAction extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -15,7 +14,6 @@ class ProductFrontendAction extends \Magento\Framework\Model\ResourceModel\Db\Ab
      * Initialize resource model
      *
      * @return void
-     * @since 2.2.0
      */
     protected function _construct()
     {

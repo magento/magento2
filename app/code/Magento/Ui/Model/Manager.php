@@ -22,7 +22,7 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Manager
- * @deprecated 2.2.0
+ * @deprecated 100.2.0
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Manager implements ManagerInterface
@@ -98,7 +98,6 @@ class Manager implements ManagerInterface
 
     /**
      * @var SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 

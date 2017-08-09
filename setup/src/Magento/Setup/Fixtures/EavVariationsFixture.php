@@ -28,31 +28,26 @@ class EavVariationsFixture extends Fixture
 
     /**
      * @var Config
-     * @since 2.2.0
      */
     private $eavConfig;
 
     /**
      * @var CacheInterface
-     * @since 2.2.0
      */
     private $cache;
 
     /**
      * @var StoreManager
-     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var Set
-     * @since 2.2.0
      */
     private $attributeSet;
 
     /**
      * @var AttributeFactory
-     * @since 2.2.0
      */
     private $attributeFactory;
 
@@ -64,7 +59,6 @@ class EavVariationsFixture extends Fixture
      * @param StoreManager $storeManager
      * @param Set $attributeSet
      * @param AttributeFactory $attributeFactory
-     * @since 2.2.0
      */
     public function __construct(
         FixtureModel $fixtureModel,
@@ -117,7 +111,6 @@ class EavVariationsFixture extends Fixture
     /**
      * @param int $optionCount
      * @return void
-     * @since 2.2.0
      */
     private function generateAttribute($optionCount)
     {
@@ -202,7 +195,6 @@ class EavVariationsFixture extends Fixture
 
     /**
      * @return string
-     * @since 2.2.0
      */
     private function getAttributeCode()
     {

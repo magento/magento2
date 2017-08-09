@@ -63,13 +63,11 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
-     * @since 2.2.0
      */
     private $cookieMetadataFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
-     * @since 2.2.0
      */
     private $cookieMetadataManager;
 
@@ -106,9 +104,8 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie manager
      *
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
-     * @since 2.2.0
      */
     private function getCookieManager()
     {
@@ -123,9 +120,8 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie metadata factory
      *
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
-     * @since 2.2.0
      */
     private function getCookieMetadataFactory()
     {

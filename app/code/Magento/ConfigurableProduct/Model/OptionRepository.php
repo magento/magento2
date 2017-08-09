@@ -67,13 +67,11 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
     /**
      * @var Loader
-     * @since 2.1.0
      */
     private $optionLoader;
 
@@ -294,7 +292,6 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     /**
      * Get MetadataPool instance
      * @return MetadataPool
-     * @since 2.1.0
      */
     private function getMetadataPool()
     {

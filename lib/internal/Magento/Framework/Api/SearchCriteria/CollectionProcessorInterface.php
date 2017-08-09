@@ -10,7 +10,7 @@ use Magento\Framework\Data\Collection\AbstractDb;
 
 /**
  * @api
- * @since 2.2.0
+ * @since 100.2.0
  */
 interface CollectionProcessorInterface
 {
@@ -21,7 +21,7 @@ interface CollectionProcessorInterface
      * @param AbstractDb $collection
      * @throws \InvalidArgumentException
      * @return void
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function process(SearchCriteriaInterface $searchCriteria, AbstractDb $collection);
 }

@@ -10,7 +10,6 @@ use Magento\Sales\Model\Order\Payment;
 /**
  * Class \Magento\Braintree\Gateway\Response\RefundHandler
  *
- * @since 2.1.0
  */
 class RefundHandler extends VoidHandler
 {
@@ -20,7 +19,6 @@ class RefundHandler extends VoidHandler
      * @param Payment $orderPayment
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     protected function shouldCloseParentTransaction(Payment $orderPayment)
     {

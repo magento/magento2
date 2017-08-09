@@ -37,7 +37,6 @@ class Session extends \Zend\Mvc\Controller\AbstractActionController
      * No index action, return 404 error page
      *
      * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
-     * @since 2.1.0
      */
     public function indexAction()
     {

@@ -173,7 +173,6 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @return string
-     * @since 2.0.6
      */
     private function getSetupCookiePath(\Magento\Framework\ObjectManagerInterface $objectManager)
     {

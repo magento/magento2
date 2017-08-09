@@ -11,13 +11,11 @@ use Magento\Framework\View\Element\Html\Select;
 
 /**
  * Class CcTypes
- * @since 2.1.0
  */
 class CcTypes extends Select
 {
     /**
      * @var CcType
-     * @since 2.1.0
      */
     private $ccTypeHelper;
 
@@ -27,7 +25,6 @@ class CcTypes extends Select
      * @param Context $context
      * @param CcType $ccTypeHelper
      * @param array $data
-     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -42,7 +39,6 @@ class CcTypes extends Select
      * Render block HTML
      *
      * @return string
-     * @since 2.1.0
      */
     protected function _toHtml()
     {
@@ -59,7 +55,6 @@ class CcTypes extends Select
      *
      * @param string $value
      * @return $this
-     * @since 2.1.0
      */
     public function setInputName($value)
     {

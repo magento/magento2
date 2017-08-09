@@ -9,19 +9,16 @@ use Magento\Framework\DB\Select;
 
 /**
  * Class SelectRenderer
- * @since 2.1.0
  */
 class SelectRenderer implements RendererInterface
 {
     /**
      * @var RendererInterface[]
-     * @since 2.1.0
      */
     protected $renderers;
 
     /**
      * @param RendererInterface[] $renderers
-     * @since 2.1.0
      */
     public function __construct(
         array $renderers
@@ -34,7 +31,6 @@ class SelectRenderer implements RendererInterface
      *
      * @param array $renders
      * @return array
-     * @since 2.1.0
      */
     protected function sort($renders)
     {
@@ -66,7 +62,6 @@ class SelectRenderer implements RendererInterface
      * @param Select $select
      * @param string $sql
      * @return string
-     * @since 2.1.0
      */
     public function render(Select $select, $sql = '')
     {

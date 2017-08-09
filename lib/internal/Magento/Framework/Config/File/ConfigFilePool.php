@@ -39,8 +39,7 @@ class ConfigFilePool
      * Initial files for configuration
      *
      * @var array
-     * @deprecated 2.2.0 Magento does not support custom config file pools since 2.2.0 version
-     * @since 2.1.3
+     * @deprecated 100.2.0 Magento does not support custom config file pools since 2.2.0 version
      */
     private $initialConfigFiles = [
         self::DIST => [
@@ -92,8 +91,8 @@ class ConfigFilePool
      * Returns application initial config files.
      *
      * @return array
-     * @deprecated 2.2.0 Magento does not support custom config file pools since 2.2.0 version
-     * @since 2.1.3
+     * @deprecated 100.2.0 Magento does not support custom config file pools since 2.2.0 version
+     * @since 100.1.3
      */
     public function getInitialFilePools()
     {
@@ -105,8 +104,8 @@ class ConfigFilePool
      *
      * @param string $pool
      * @return array
-     * @deprecated 2.2.0 Magento does not support custom config file pools since 2.2.0 version
-     * @since 2.1.3
+     * @deprecated 100.2.0 Magento does not support custom config file pools since 2.2.0 version
+     * @since 100.1.3
      */
     public function getPathsByPool($pool)
     {

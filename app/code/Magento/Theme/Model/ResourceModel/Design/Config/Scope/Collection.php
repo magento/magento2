@@ -14,31 +14,26 @@ use Magento\Theme\Model\Design\Config\ValueProcessor;
 /**
  * Data collection
  *
- * @since 2.1.0
  */
 class Collection extends \Magento\Framework\Data\Collection
 {
     /**
      * @var ScopeTreeProviderInterface
-     * @since 2.1.0
      */
     protected $scopeTree;
 
     /**
      * @var MetadataProviderInterface
-     * @since 2.1.0
      */
     protected $metadataProvider;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.1.0
      */
     protected $appConfig;
 
     /**
      * @var ValueProcessor
-     * @since 2.1.0
      */
     protected $valueProcessor;
 
@@ -50,7 +45,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * @param MetadataProviderInterface $metadataProvider
      * @param ScopeConfigInterface $appConfig
      * @param ValueProcessor $valueProcessor
-     * @since 2.1.0
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
@@ -74,7 +68,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * @return \Magento\Theme\Model\ResourceModel\Design\Config\Scope\Collection
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function loadData($printQuery = false, $logQuery = false)
     {
@@ -100,7 +93,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * @param string $scope
      * @param int $scopeId
      * @return array
-     * @since 2.1.0
      */
     protected function getMetadataValues($scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeId = null)
     {
@@ -127,7 +119,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * @param array $storeScope
      *
      * @return void
-     * @since 2.1.0
      */
     protected function prepareItemData(array $websiteScope = [], array $groupScope = [], array $storeScope = [])
     {
@@ -149,7 +140,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * @param array $groupScope
      * @param array $storeScope
      * @return array
-     * @since 2.1.0
      */
     protected function getScopeData(array $websiteScope, array $groupScope, array $storeScope)
     {

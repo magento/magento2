@@ -245,7 +245,6 @@ class Uploader
      * @param string $destinationFolder
      * @return void
      * @throws \Exception
-     * @since 2.1.0
      */
     private function validateDestination($destinationFolder)
     {
@@ -262,7 +261,7 @@ class Uploader
      * @param string $file
      * @return void
      *
-     * @deprecated 2.0.6
+     * @deprecated 100.0.8
      */
     protected function chmod($file)
     {

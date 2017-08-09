@@ -393,7 +393,6 @@ class Configuration implements StockConfigurationInterface
     /**
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return string|null
-     * @since 2.2.0
      */
     public function getStockThresholdQty($store = null)
     {

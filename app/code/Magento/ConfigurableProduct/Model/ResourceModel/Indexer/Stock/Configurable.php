@@ -25,7 +25,6 @@ class Configurable extends \Magento\CatalogInventory\Model\ResourceModel\Indexer
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
-     * @since 2.2.0
      */
     private $activeTableSwitcher;
 
@@ -37,7 +36,6 @@ class Configurable extends \Magento\CatalogInventory\Model\ResourceModel\Indexer
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param null $connectionName
      * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,

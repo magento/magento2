@@ -59,7 +59,6 @@ class Design extends AbstractModel implements IdentityInterface, DesignInterface
 
     /**
      * @var SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 

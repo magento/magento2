@@ -114,7 +114,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
 
     /**
      * @var \Magento\Framework\Math\Random
-     * @since 2.1.0
      */
     private $mathRandom;
 

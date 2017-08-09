@@ -19,7 +19,6 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
      * Serializer
      *
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -30,7 +29,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,

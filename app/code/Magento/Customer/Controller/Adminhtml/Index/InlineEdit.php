@@ -56,7 +56,6 @@ class InlineEdit extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Customer\Model\EmailNotificationInterface
-     * @since 2.1.0
      */
     private $emailNotification;
 
@@ -88,8 +87,7 @@ class InlineEdit extends \Magento\Backend\App\Action
      * Get email notification
      *
      * @return EmailNotificationInterface
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getEmailNotification()
     {

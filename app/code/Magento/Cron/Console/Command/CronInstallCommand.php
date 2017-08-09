@@ -16,26 +16,22 @@ use Symfony\Component\Console\Input\InputOption;
 
 /**
  * CronInstallCommand installs Magento cron tasks
- * @since 2.2.0
  */
 class CronInstallCommand extends Command
 {
     /**
      * @var CrontabManagerInterface
-     * @since 2.2.0
      */
     private $crontabManager;
 
     /**
      * @var TasksProviderInterface
-     * @since 2.2.0
      */
     private $tasksProvider;
 
     /**
      * @param CrontabManagerInterface $crontabManager
      * @param TasksProviderInterface $tasksProvider
-     * @since 2.2.0
      */
     public function __construct(
         CrontabManagerInterface $crontabManager,
@@ -49,7 +45,6 @@ class CronInstallCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     protected function configure()
     {
@@ -62,7 +57,6 @@ class CronInstallCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

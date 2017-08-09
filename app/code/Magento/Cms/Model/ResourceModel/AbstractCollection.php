@@ -21,7 +21,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
      */
     protected $metadataPool;
 

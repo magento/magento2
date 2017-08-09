@@ -97,7 +97,7 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
 
     /**
      * @var Filesystem
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $filesystem;
 

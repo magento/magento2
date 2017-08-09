@@ -31,7 +31,7 @@ class Resetpassword extends \Magento\Framework\View\Element\Template
      * Get minimum password length
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getMinimumPasswordLength()
     {
@@ -42,7 +42,7 @@ class Resetpassword extends \Magento\Framework\View\Element\Template
      * Get minimum password length
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getRequiredCharacterClassesNumber()
     {

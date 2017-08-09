@@ -10,32 +10,27 @@ use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
 
 /**
  * Strategy which processes exclusions from general rules
- * @since 2.2.0
  */
 class ExclusionStrategy implements FilterStrategyInterface
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var AliasResolver
-     * @since 2.2.0
      */
     private $aliasResolver;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * List of fields that can be processed by exclusion strategy
      * @var array
-     * @since 2.2.0
      */
     private $validFields = ['price', 'category_ids'];
 
@@ -43,7 +38,6 @@ class ExclusionStrategy implements FilterStrategyInterface
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param AliasResolver $aliasResolver
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resourceConnection,
@@ -57,7 +51,6 @@ class ExclusionStrategy implements FilterStrategyInterface
 
     /**
      * {@inheritDoc}
-     * @since 2.2.0
      */
     public function apply(
         \Magento\Framework\Search\Request\FilterInterface $filter,
@@ -82,7 +75,6 @@ class ExclusionStrategy implements FilterStrategyInterface
      * @return bool
      * @throws \DomainException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.2.0
      */
     private function applyPriceFilter(
         \Magento\Framework\Search\Request\FilterInterface $filter,
@@ -114,7 +106,6 @@ class ExclusionStrategy implements FilterStrategyInterface
      * @return bool
      * @throws \DomainException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.2.0
      */
     private function applyCategoryFilter(
         \Magento\Framework\Search\Request\FilterInterface $filter,
@@ -146,7 +137,6 @@ class ExclusionStrategy implements FilterStrategyInterface
      *
      * @param \Magento\Framework\DB\Select $select
      * @return string|null
-     * @since 2.2.0
      */
     private function extractTableAliasFromSelect(\Magento\Framework\DB\Select $select)
     {

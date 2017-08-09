@@ -10,7 +10,7 @@ use Magento\Framework\Module\Dir;
 /**
  * Integration config schema locator.
  *
- * @deprecated 2.1.0
+ * @deprecated 100.1.0
  */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {

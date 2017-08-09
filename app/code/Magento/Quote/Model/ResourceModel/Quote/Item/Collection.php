@@ -284,7 +284,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * @return void
      *
      * @see \Magento\CatalogInventory\Helper\Stock::addIsInStockFilterToCollection
-     * @since 2.2.0
      */
     private function skipStockStatusFilter(ProductCollection $productCollection)
     {
@@ -296,7 +295,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      *
      * @param ProductCollection $productCollection
      * @return void
-     * @since 2.2.0
      */
     private function addTierPriceData(ProductCollection $productCollection)
     {

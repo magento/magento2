@@ -53,7 +53,6 @@ class SalesSetup extends EavSetup
 
     /**
      * @var string
-     * @since 2.1.3
      */
     private static $connectionName = 'sales';
 
@@ -307,7 +306,6 @@ class SalesSetup extends EavSetup
      * Get sales connection
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.2.0
      */
     public function getConnection()
     {
@@ -319,7 +317,6 @@ class SalesSetup extends EavSetup
      *
      * @param string $table
      * @return string
-     * @since 2.2.0
      */
     public function getTable($table)
     {
@@ -330,7 +327,6 @@ class SalesSetup extends EavSetup
      * Update entity types
      *
      * @return void
-     * @since 2.2.0
      */
     public function updateEntityTypes()
     {

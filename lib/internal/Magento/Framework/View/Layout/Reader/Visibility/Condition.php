@@ -13,7 +13,6 @@ use Magento\Framework\View\Layout\ConfigCondition;
 
 /**
  * Parse conditions from element.
- * @since 2.2.0
  */
 class Condition
 {
@@ -24,20 +23,17 @@ class Condition
 
     /**
      * @var Parser
-     * @since 2.2.0
      */
     private $argumentParser;
 
     /**
      * @var InterpreterInterface
-     * @since 2.2.0
      */
     private $argumentInterpreter;
 
     /**
      * @param Parser $argumentParser
      * @param InterpreterInterface $argumentInterpreter
-     * @since 2.2.0
      */
     public function __construct(
         Parser $argumentParser,
@@ -51,7 +47,6 @@ class Condition
      * @param Element $element
      *
      * @return array
-     * @since 2.2.0
      */
     public function parseConditions(Element $element)
     {
@@ -94,7 +89,6 @@ class Condition
      *
      * @param Element $blockElement
      * @return array
-     * @since 2.2.0
      */
     private function evaluateArguments(Element $blockElement)
     {
@@ -121,7 +115,6 @@ class Condition
      * @param Element $element
      *
      * @return array
-     * @since 2.2.0
      */
     private function getArguments(Element $element)
     {
@@ -137,7 +130,6 @@ class Condition
      * @param Element $element
      * @param string $type
      * @return array
-     * @since 2.2.0
      */
     private function getElementsByType(Element $element, $type)
     {
@@ -156,7 +148,6 @@ class Condition
      *
      * @param Element $node
      * @return array
-     * @since 2.2.0
      */
     private function parseArguments(Element $node)
     {

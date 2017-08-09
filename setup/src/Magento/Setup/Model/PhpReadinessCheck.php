@@ -34,7 +34,6 @@ class PhpReadinessCheck
      * Data size converter
      *
      * @var DataSize
-     * @since 2.1.0
      */
     protected $dataSize;
 
@@ -123,7 +122,6 @@ class PhpReadinessCheck
      * Checks PHP settings for cron
      *
      * @return array
-     * @since 2.1.0
      */
     public function checkPhpCronSettings()
     {
@@ -182,7 +180,6 @@ class PhpReadinessCheck
     /**
      * Checks php memory limit
      * @return array
-     * @since 2.1.0
      */
     public function checkMemoryLimit()
     {
@@ -321,7 +318,6 @@ class PhpReadinessCheck
      * Check whether all special functions exists
      *
      * @return array
-     * @since 2.2.0
      */
     private function checkFunctionsExistence()
     {

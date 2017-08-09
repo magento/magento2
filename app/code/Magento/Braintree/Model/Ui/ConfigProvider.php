@@ -12,7 +12,6 @@ use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 
 /**
  * Class ConfigProvider
- * @since 2.1.0
  */
 class ConfigProvider implements ConfigProviderInterface
 {
@@ -22,19 +21,16 @@ class ConfigProvider implements ConfigProviderInterface
 
     /**
      * @var Config
-     * @since 2.1.0
      */
     private $config;
 
     /**
      * @var BraintreeAdapter
-     * @since 2.1.0
      */
     private $adapter;
 
     /**
      * @var string
-     * @since 2.1.0
      */
     private $clientToken = '';
 
@@ -43,7 +39,6 @@ class ConfigProvider implements ConfigProviderInterface
      *
      * @param Config $config
      * @param BraintreeAdapter $adapter
-     * @since 2.1.0
      */
     public function __construct(
         Config $config,
@@ -57,7 +52,6 @@ class ConfigProvider implements ConfigProviderInterface
      * Retrieve assoc array of checkout configuration
      *
      * @return array
-     * @since 2.1.0
      */
     public function getConfig()
     {
@@ -89,7 +83,6 @@ class ConfigProvider implements ConfigProviderInterface
     /**
      * Generate a new client token if necessary
      * @return string
-     * @since 2.1.0
      */
     public function getClientToken()
     {

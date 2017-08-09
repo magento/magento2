@@ -27,13 +27,11 @@ class Registration
 
     /**
      * @var \Magento\Theme\Model\Theme\Collection
-     * @since 2.1.0
      */
     protected $themeCollection;
 
     /**
      * @var \Magento\Theme\Model\ResourceModel\Theme\Collection
-     * @since 2.1.0
      */
     protected $themeLoader;
 
@@ -95,7 +93,6 @@ class Registration
      * Update theme data
      *
      * @return void
-     * @since 2.1.0
      */
     protected function updateThemeData()
     {

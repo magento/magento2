@@ -34,7 +34,6 @@ class AggregatedFileCollector implements FileCollectorInterface
 
     /**
      * @var ReadFactory
-     * @since 2.1.0
      */
     protected $readFactory;
 

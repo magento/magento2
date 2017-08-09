@@ -204,7 +204,6 @@ class SessionManager implements SessionManagerInterface
      *
      * @param null|string $sid If we have session id we need to use it instead of old cookie value
      * @return $this
-     * @since 2.2.0
      */
     private function renewCookie($sid)
     {

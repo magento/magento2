@@ -70,13 +70,13 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
 
     /**
      * @var string
-     * @since 2.0.1
+     * @since 100.0.3
      */
     protected $_defaultScope;
 
     /**
      * @var string
-     * @since 2.0.1
+     * @since 100.0.3
      */
     protected $_schemaFile;
 

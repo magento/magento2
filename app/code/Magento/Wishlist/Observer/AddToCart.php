@@ -15,7 +15,7 @@ use Magento\Wishlist\Model\WishlistFactory;
 
 /**
  * Class AddToCart
- * @deprecated 2.2.0
+ * @deprecated 100.2.0
  * @package Magento\Wishlist\Observer
  */
 class AddToCart implements ObserverInterface

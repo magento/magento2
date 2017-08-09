@@ -26,19 +26,19 @@ class CurrentUrlRewritesRegenerator
 {
     /**
      * @var Product
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected $product;
 
     /**
      * @var ObjectRegistry
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected $productCategories;
 
     /**
      * @var UrlFinderInterface
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected $urlFinder;
 
@@ -54,25 +54,21 @@ class CurrentUrlRewritesRegenerator
 
     /**
      * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite
-     * @since 2.2.0
      */
     private $urlRewritePrototype;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder
-     * @since 2.2.0
      */
     private $urlRewriteFinder;
 
     /**
      * @var \Magento\UrlRewrite\Model\MergeDataProvider
-     * @since 2.2.0
      */
     private $mergeDataProviderPrototype;
 
     /**
      * @var \Magento\Catalog\Model\CategoryRepository
-     * @since 2.2.0
      */
     private $categoryRepository;
 
@@ -146,7 +142,6 @@ class CurrentUrlRewritesRegenerator
      * @param ObjectRegistry $productCategories
      * @param int|null $rootCategoryId
      * @return UrlRewrite[]
-     * @since 2.2.0
      */
     public function generateAnchor(
         $storeId,

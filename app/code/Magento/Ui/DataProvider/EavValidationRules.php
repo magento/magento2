@@ -14,7 +14,7 @@ class EavValidationRules
 {
     /**
      * @var array
-     * @since 2.0.11
+     * @since 100.0.6
      */
     protected $validationRules = [
         'email' => ['validate-email' => true],

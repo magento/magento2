@@ -10,19 +10,16 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Contact module configuration
- * @since 2.2.0
  */
 class Config implements ConfigInterface
 {
     /**
      * @var ScopeConfigInterface
-     * @since 2.2.0
      */
     private $scopeConfig;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @since 2.2.0
      */
     public function __construct(ScopeConfigInterface $scopeConfig)
     {
@@ -31,7 +28,6 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function isEnabled()
     {
@@ -43,7 +39,6 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function emailTemplate()
     {
@@ -55,7 +50,6 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function emailSender()
     {
@@ -67,7 +61,6 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function emailRecipient()
     {

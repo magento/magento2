@@ -26,7 +26,6 @@ class Export extends ExportController
 
     /**
      * @var \Magento\Framework\Session\SessionManagerInterface
-     * @since 2.2.0
      */
     private $sessionManager;
 

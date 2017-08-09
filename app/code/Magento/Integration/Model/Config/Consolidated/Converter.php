@@ -7,7 +7,6 @@ namespace Magento\Integration\Model\Config\Consolidated;
 
 /**
  * Converter of integration.xml content into array format.
- * @since 2.1.0
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
@@ -22,17 +21,13 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
     /**#@-*/
 
-    /**
-     * @var \Magento\Framework\Acl\AclResource\ProviderInterface
-     * @since 2.1.0
-     */
+    /**#@-*/
     protected $resourceProvider;
 
     /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Acl\AclResource\ProviderInterface $resourceProvider
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\Acl\AclResource\ProviderInterface $resourceProvider
@@ -42,7 +37,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function convert($source)
     {
@@ -98,7 +92,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param array $resources
      * @return array
-     * @since 2.1.0
      */
     private function hashResources(array $resources)
     {
@@ -120,7 +113,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param array $resourcesHash
      * @param string $nodeName
      * @return array
-     * @since 2.1.0
      */
     private function addParentsToResource(array $resourcesHash, $nodeName)
     {

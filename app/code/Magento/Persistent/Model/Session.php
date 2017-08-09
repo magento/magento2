@@ -100,7 +100,6 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Request
      *
      * @var \Magento\Framework\App\Request\Http
-     * @since 2.1.0
      */
     private $request;
 
@@ -402,8 +401,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Get request object
      *
      * @return \Magento\Framework\App\Request\Http
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getRequest()
     {
@@ -418,7 +416,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Set `updated_at` to be always changed
      *
      * @return $this
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function save()
     {

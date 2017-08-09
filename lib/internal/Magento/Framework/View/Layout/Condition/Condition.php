@@ -7,19 +7,16 @@ namespace Magento\Framework\View\Layout\Condition;
 
 /**
  * Composite condition which iterate over included conditions.
- * @since 2.2.0
  */
 class Condition
 {
     /**
      * @var VisibilityConditionInterface[]
-     * @since 2.2.0
      */
     private $conditions;
 
     /**
      * @param VisibilityConditionInterface[] $conditions
-     * @since 2.2.0
      */
     public function __construct(array $conditions)
     {
@@ -33,7 +30,6 @@ class Condition
      * @param array $arguments Attributes from element node.
      *
      * @return bool
-     * @since 2.2.0
      */
     public function isVisible(array $arguments)
     {

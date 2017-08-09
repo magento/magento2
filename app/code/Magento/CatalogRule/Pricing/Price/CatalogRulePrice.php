@@ -44,13 +44,12 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
 
     /**
      * @var \Magento\CatalogRule\Model\ResourceModel\RuleFactory
-     * @deprecated 2.1.1
+     * @deprecated 100.1.1
      */
     protected $resourceRuleFactory;
 
     /**
      * @var \Magento\CatalogRule\Model\ResourceModel\Rule
-     * @since 2.1.1
      */
     private $ruleResource;
 
@@ -111,8 +110,7 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
 
     /**
      * @return Rule
-     * @deprecated 2.1.1
-     * @since 2.1.1
+     * @deprecated 100.1.1
      */
     private function getRuleResource()
     {

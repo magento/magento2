@@ -12,7 +12,6 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 /**
  * Class \Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns\Name
  *
- * @since 2.1.0
  */
 class Name extends \Magento\Ui\Component\Listing\Columns\Column
 {
@@ -23,7 +22,6 @@ class Name extends \Magento\Ui\Component\Listing\Columns\Column
 
     /**
      * @var UrlInterface
-     * @since 2.1.0
      */
     protected $urlBuilder;
 
@@ -33,7 +31,6 @@ class Name extends \Magento\Ui\Component\Listing\Columns\Column
      * @param UrlInterface $urlBuilder
      * @param array $components
      * @param array $data
-     * @since 2.1.0
      */
     public function __construct(
         ContextInterface $context,
@@ -51,7 +48,6 @@ class Name extends \Magento\Ui\Component\Listing\Columns\Column
      *
      * @param array $dataSource
      * @return array
-     * @since 2.1.0
      */
     public function prepareDataSource(array $dataSource)
     {

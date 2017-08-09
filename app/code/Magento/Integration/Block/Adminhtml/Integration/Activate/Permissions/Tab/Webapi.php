@@ -188,7 +188,6 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Get lit of all ACL resources declared in the system.
      *
      * @return array
-     * @since 2.2.0
      */
     private function getAclResources()
     {

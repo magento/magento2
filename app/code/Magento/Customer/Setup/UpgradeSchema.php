@@ -122,7 +122,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * @param SchemaSetupInterface $setup
      * @param array $keys
      * @return void
-     * @since 2.2.0
      */
     private function alterTables(SchemaSetupInterface $setup, array $keys)
     {
@@ -151,7 +150,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * @param SchemaSetupInterface $setup
      * @param array $keys
      * @return void
-     * @since 2.2.0
      */
     private function dropForeignKeys(SchemaSetupInterface $setup, array $keys)
     {
@@ -164,7 +162,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * @param SchemaSetupInterface $setup
      * @param array $keys
      * @return void
-     * @since 2.2.0
      */
     private function createForeignKeys(SchemaSetupInterface $setup, array $keys)
     {
@@ -183,7 +180,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
     /**
      * @param SchemaSetupInterface $setup
      * @return array
-     * @since 2.2.0
      */
     private function getForeignKeys(SchemaSetupInterface $setup)
     {

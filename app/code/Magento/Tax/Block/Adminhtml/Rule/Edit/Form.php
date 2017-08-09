@@ -263,7 +263,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param array $formValues
      * @return array
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getTaxRatesSelectConfig($formValues)
     {
@@ -332,7 +332,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Retrieve next Tax Rates page URL
      *
      * @return string
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getTaxRatesPageUrl()
     {

@@ -22,7 +22,6 @@ class Date extends Column
 
     /**
      * @var BooleanUtils
-     * @since 2.2.0
      */
     private $booleanUtils;
 

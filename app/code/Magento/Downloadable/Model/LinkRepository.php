@@ -45,7 +45,6 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
 
     /**
      * @var Type
-     * @since 2.1.0
      */
     protected $downloadableType;
 
@@ -61,13 +60,11 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
 
     /**
      * @var LinkHandler
-     * @since 2.1.0
      */
     private $linkTypeHandler;
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
@@ -341,9 +338,8 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     /**
      * Get MetadataPool instance
      *
-     * @deprecated 2.1.0 MAGETWO-52273
+     * @deprecated 100.1.0 MAGETWO-52273
      * @return MetadataPool
-     * @since 2.1.0
      */
     private function getMetadataPool()
     {
@@ -357,9 +353,8 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     /**
      * Get LinkTypeHandler  instance
      *
-     * @deprecated 2.1.0 MAGETWO-52273
+     * @deprecated 100.1.0 MAGETWO-52273
      * @return LinkHandler
-     * @since 2.1.0
      */
     private function getLinkTypeHandler()
     {

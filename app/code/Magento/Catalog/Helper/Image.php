@@ -128,7 +128,6 @@ class Image extends AbstractHelper
 
     /**
      * @var \Magento\Catalog\Model\View\Asset\PlaceholderFactory
-     * @since 2.2.0
      */
     private $viewAssetPlaceholderFactory;
 
@@ -445,7 +444,7 @@ class Image extends AbstractHelper
      * @param null|string $placeholder
      * @return string
      *
-     * @deprecated 2.2.0 Returns only default placeholder.
+     * @deprecated 101.1.0 Returns only default placeholder.
      * Does not take into account custom placeholders set in Configuration.
      */
     public function getPlaceholder($placeholder = null)

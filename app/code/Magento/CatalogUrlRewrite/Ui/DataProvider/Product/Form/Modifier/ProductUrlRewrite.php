@@ -17,7 +17,6 @@ use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Class adds a checkbox "url_key_create_redirect" after input "url_key" for product form
- * @since 2.1.0
  */
 class ProductUrlRewrite extends AbstractModifier
 {
@@ -25,19 +24,16 @@ class ProductUrlRewrite extends AbstractModifier
 
     /**
      * @var LocatorInterface
-     * @since 2.1.0
      */
     protected $locator;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.1.0
      */
     protected $scopeConfig;
 
     /**
      * @var ArrayManager
-     * @since 2.1.0
      */
     protected $arrayManager;
 
@@ -45,7 +41,6 @@ class ProductUrlRewrite extends AbstractModifier
      * @param LocatorInterface $locator
      * @param ArrayManager $arrayManager
      * @param ScopeConfigInterface $scopeConfig
-     * @since 2.1.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -59,7 +54,6 @@ class ProductUrlRewrite extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -72,7 +66,6 @@ class ProductUrlRewrite extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -84,7 +77,6 @@ class ProductUrlRewrite extends AbstractModifier
      *
      * @param array $meta
      * @return array
-     * @since 2.1.0
      */
     protected function addUrlRewriteCheckbox(array $meta)
     {

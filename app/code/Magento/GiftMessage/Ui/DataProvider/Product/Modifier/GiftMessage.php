@@ -17,7 +17,6 @@ use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
 
 /**
  * Class GiftMessageDataProvider
- * @since 2.1.0
  */
 class GiftMessage extends AbstractModifier
 {
@@ -25,19 +24,16 @@ class GiftMessage extends AbstractModifier
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.1.0
      */
     protected $scopeConfig;
 
     /**
      * @var LocatorInterface
-     * @since 2.1.0
      */
     protected $locator;
 
     /**
      * @var ArrayManager
-     * @since 2.1.0
      */
     protected $arrayManager;
 
@@ -45,7 +41,6 @@ class GiftMessage extends AbstractModifier
      * @param LocatorInterface $locator
      * @param ArrayManager $arrayManager
      * @param ScopeConfigInterface $scopeConfig
-     * @since 2.1.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -59,7 +54,6 @@ class GiftMessage extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -80,7 +74,6 @@ class GiftMessage extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -92,7 +85,6 @@ class GiftMessage extends AbstractModifier
      *
      * @param array $meta
      * @return array
-     * @since 2.1.0
      */
     protected function customizeAllowGiftMessageField(array $meta)
     {
@@ -185,7 +177,6 @@ class GiftMessage extends AbstractModifier
      * Get config value data
      *
      * @return string|null
-     * @since 2.1.0
      */
     protected function getValueFromConfig()
     {
