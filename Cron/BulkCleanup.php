@@ -11,6 +11,10 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * Class \Magento\AsynchronousOperations\Cron\BulkCleanup
+ *
+ */
 class BulkCleanup
 {
     /**

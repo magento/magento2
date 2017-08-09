@@ -11,7 +11,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 
 /**
- * @deprecated
+ * @deprecated 100.2.0
  */
 class BulkSummaryMapper implements MapperInterface
 {

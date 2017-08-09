@@ -7,6 +7,10 @@ namespace Magento\AsynchronousOperations\Model\Operation;
 
 use Magento\Framework\Bulk\OperationInterface;
 
+/**
+ * Class \Magento\AsynchronousOperations\Model\Operation\Details
+ *
+ */
 class Details
 {
     /**

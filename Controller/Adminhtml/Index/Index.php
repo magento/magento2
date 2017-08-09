@@ -6,6 +6,10 @@
 
 namespace Magento\AsynchronousOperations\Controller\Adminhtml\Index;
 
+/**
+ * Class \Magento\AsynchronousOperations\Controller\Adminhtml\Index\Index
+ *
+ */
 class Index extends \Magento\Backend\App\Action
 {
     /**

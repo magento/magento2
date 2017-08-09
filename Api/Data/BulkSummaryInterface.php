@@ -9,6 +9,7 @@ namespace Magento\AsynchronousOperations\Api\Data;
 /**
  * Interface BulkSummaryInterface
  * @api
+ * @since 100.2.0
  */
 interface BulkSummaryInterface extends \Magento\Framework\Bulk\BulkSummaryInterface
 {
@@ -16,6 +17,7 @@ interface BulkSummaryInterface extends \Magento\Framework\Bulk\BulkSummaryInterf
      * Retrieve existing extension attributes object.
      *
      * @return \Magento\AsynchronousOperations\Api\Data\BulkSummaryExtensionInterface|null
+     * @since 100.2.0
      */
     public function getExtensionAttributes();
 
@@ -24,6 +26,7 @@ interface BulkSummaryInterface extends \Magento\Framework\Bulk\BulkSummaryInterf
      *
      * @param \Magento\AsynchronousOperations\Api\Data\BulkSummaryExtensionInterface $extensionAttributes
      * @return $this
+     * @since 100.2.0
      */
     public function setExtensionAttributes(
         \Magento\AsynchronousOperations\Api\Data\BulkSummaryExtensionInterface $extensionAttributes
