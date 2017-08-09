@@ -85,7 +85,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
 
     /**
      * @var CollectionProcessorInterface
-     * @since 2.2.0
      */
     private $collectionProcessor;
 
@@ -250,7 +249,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      * @param string|null $passwordHash
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @return void
-     * @since 2.2.0
      */
     private function populateCustomerWithSecureData($customerModel, $passwordHash = null)
     {
@@ -353,7 +351,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param \Magento\Customer\Model\ResourceModel\Customer\Collection $collection
      * @return void
@@ -376,9 +374,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     /**
      * Retrieve collection processor
      *
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
-     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

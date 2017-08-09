@@ -9,7 +9,7 @@ namespace Magento\Catalog\Api;
 /**
  * Special price storage presents efficient price API and is used to retrieve, update or delete special prices.
  * @api
- * @since 2.2.0
+ * @since 101.1.0
  */
 interface SpecialPriceStorageInterface
 {
@@ -19,7 +19,7 @@ interface SpecialPriceStorageInterface
      * @param string[] $skus
      * @return \Magento\Catalog\Api\Data\SpecialPriceInterface[]
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function get(array $skus);
 
@@ -33,7 +33,7 @@ interface SpecialPriceStorageInterface
      * @param \Magento\Catalog\Api\Data\SpecialPriceInterface[] $prices
      * @return \Magento\Catalog\Api\Data\PriceUpdateResultInterface[]
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function update(array $prices);
 
@@ -47,7 +47,7 @@ interface SpecialPriceStorageInterface
      * @param \Magento\Catalog\Api\Data\SpecialPriceInterface[] $prices
      * @return \Magento\Catalog\Api\Data\PriceUpdateResultInterface[]
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function delete(array $prices);
 }

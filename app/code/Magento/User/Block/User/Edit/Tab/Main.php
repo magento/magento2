@@ -34,7 +34,6 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
      * Operates with deployed locales.
      *
      * @var OptionInterface
-     * @since 2.2.0
      */
     private $deployedLocales;
 

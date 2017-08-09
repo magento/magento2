@@ -9,7 +9,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\ExtensionAttributesProcessor;
 
-class DataObjectProcessorTest extends \PHPUnit\Framework\Testcase
+class DataObjectProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DataObjectProcessor

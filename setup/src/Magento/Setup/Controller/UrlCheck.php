@@ -13,19 +13,16 @@ use Magento\Framework\Validator\Url as UrlValidator;
 /**
  * Class \Magento\Setup\Controller\UrlCheck
  *
- * @since 2.2.0
  */
 class UrlCheck extends AbstractActionController
 {
     /**
      * @var UrlValidator
-     * @since 2.2.0
      */
     private $urlValidator;
 
     /**
      * @param UrlValidator $urlValidator
-     * @since 2.2.0
      */
     public function __construct(UrlValidator $urlValidator)
     {
@@ -36,7 +33,6 @@ class UrlCheck extends AbstractActionController
      * Validate URL
      *
      * @return JsonModel
-     * @since 2.2.0
      */
     public function indexAction()
     {

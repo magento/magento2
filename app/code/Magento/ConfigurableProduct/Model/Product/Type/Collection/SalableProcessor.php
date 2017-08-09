@@ -13,19 +13,16 @@ use Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory;
 /**
  * This class is responsible for adding additional filters for products collection
  * to check if the product from this collection available to buy.
- * @since 2.1.6
  */
 class SalableProcessor
 {
     /**
      * @var StatusFactory
-     * @since 2.1.6
      */
     private $stockStatusFactory;
 
     /**
      * @param StatusFactory $stockStatusFactory
-     * @since 2.1.6
      */
     public function __construct(StatusFactory $stockStatusFactory)
     {
@@ -42,7 +39,6 @@ class SalableProcessor
      *
      * @param Collection $collection
      * @return Collection
-     * @since 2.1.6
      */
     public function process(Collection $collection)
     {

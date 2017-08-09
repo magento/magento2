@@ -116,7 +116,6 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * Get old Users Form Data
      *
      * @return null|string
-     * @since 2.1.0
      */
     protected function getOldUsers()
     {

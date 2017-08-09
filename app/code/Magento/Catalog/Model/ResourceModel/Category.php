@@ -34,7 +34,6 @@ class Category extends AbstractResource
 
     /**
      * @var array[]
-     * @since 2.2.0
      */
     private $entitiesWhereAttributesIs;
 
@@ -75,13 +74,11 @@ class Category extends AbstractResource
 
     /**
      * @var EntityManager
-     * @since 2.1.0
      */
     protected $entityManager;
 
     /**
      * @var Category\AggregateCount
-     * @since 2.1.0
      */
     protected $aggregateCount;
 
@@ -1010,7 +1007,6 @@ class Category extends AbstractResource
      * @param integer $entityId
      * @param array|null $attributes
      * @return $this
-     * @since 2.1.0
      */
     public function load($object, $entityId, $attributes = [])
     {
@@ -1034,7 +1030,6 @@ class Category extends AbstractResource
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function delete($object)
     {
@@ -1052,7 +1047,6 @@ class Category extends AbstractResource
      * @param  \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Exception
-     * @since 2.1.0
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -1062,7 +1056,6 @@ class Category extends AbstractResource
 
     /**
      * @return EntityManager
-     * @since 2.1.0
      */
     private function getEntityManager()
     {
@@ -1075,7 +1068,6 @@ class Category extends AbstractResource
 
     /**
      * @return Category\AggregateCount
-     * @since 2.1.0
      */
     private function getAggregateCount()
     {

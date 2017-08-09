@@ -18,13 +18,11 @@ class AttributeSet
 {
     /**
      * @var bool
-     * @since 2.2.0
      */
     private $requiresReindex;
 
     /**
      * @var SetFactory
-     * @since 2.2.0
      */
     private $attributeSetFactory;
 
@@ -61,7 +59,6 @@ class AttributeSet
      * @param EavAttributeSet $subject
      *
      * @return void
-     * @since 2.2.0
      */
     public function beforeSave(EavAttributeSet $subject)
     {
@@ -89,7 +86,6 @@ class AttributeSet
      * @return EavAttributeSet
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterSave(EavAttributeSet $subject, EavAttributeSet $result)
     {

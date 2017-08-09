@@ -20,7 +20,6 @@ use Magento\Framework\View\Element\Template\Context;
  * @method Name setObject(CustomerInterface $customer)
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.2.0
  */
 class Company extends AbstractWidget
 {
@@ -32,13 +31,11 @@ class Company extends AbstractWidget
 
     /**
      * @var AddressMetadataInterface
-     * @since 2.2.0
      */
     protected $addressMetadata;
 
     /**
      * @var Options
-     * @since 2.2.0
      */
     protected $options;
 
@@ -49,7 +46,6 @@ class Company extends AbstractWidget
      * @param Options                   $options
      * @param AddressMetadataInterface  $addressMetadata
      * @param array                     $data
-     * @since 2.2.0
      */
     public function __construct(
         Context $context,
@@ -67,7 +63,6 @@ class Company extends AbstractWidget
 
     /**
      * @return void
-     * @since 2.2.0
      */
     public function _construct()
     {
@@ -83,7 +78,6 @@ class Company extends AbstractWidget
      * @param string $key
      *
      * @return bool
-     * @since 2.2.0
      */
     protected function _showConfig($key)
     {
@@ -94,7 +88,6 @@ class Company extends AbstractWidget
      * Can show prefix
      *
      * @return bool
-     * @since 2.2.0
      */
     public function showCompany()
     {
@@ -103,7 +96,6 @@ class Company extends AbstractWidget
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     protected function _getAttribute($attributeCode)
     {
@@ -133,7 +125,6 @@ class Company extends AbstractWidget
      * @param string $attributeCode
      *
      * @return string
-     * @since 2.2.0
      */
     public function getStoreLabel($attributeCode)
     {
@@ -147,7 +138,6 @@ class Company extends AbstractWidget
      * @param string $attributeCode
      *
      * @return string
-     * @since 2.2.0
      */
     public function getAttributeValidationClass($attributeCode)
     {
@@ -158,7 +148,6 @@ class Company extends AbstractWidget
      * @param string $attributeCode
      *
      * @return bool
-     * @since 2.2.0
      */
     private function _isAttributeVisible($attributeCode)
     {
@@ -170,7 +159,6 @@ class Company extends AbstractWidget
      * Check if company attribute enabled in system
      *
      * @return bool
-     * @since 2.2.0
      */
     public function isEnabled()
     {
@@ -182,7 +170,6 @@ class Company extends AbstractWidget
      * Check if company attribute marked as required
      *
      * @return bool
-     * @since 2.2.0
      */
     public function isRequired()
     {

@@ -11,7 +11,6 @@ use Magento\Integration\Model\Cache\TypeConsolidated;
 
 /**
  * ConsolidatedConfig to deliver information for config-based integrations that use integration.xml
- * @since 2.1.0
  */
 class ConsolidatedConfig
 {
@@ -19,13 +18,11 @@ class ConsolidatedConfig
 
     /**
      * @var \Magento\Framework\App\Cache\Type\Config
-     * @since 2.1.0
      */
     protected $configCacheType;
 
     /**
      * @var \Magento\Integration\Model\Config\Consolidated\Reader
-     * @since 2.1.0
      */
     protected $configReader;
 
@@ -33,13 +30,11 @@ class ConsolidatedConfig
      * Array of integrations
      *
      * @var array
-     * @since 2.1.0
      */
     protected $integrations;
 
     /**
      * @var SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -47,7 +42,6 @@ class ConsolidatedConfig
      * @param Cache\TypeConsolidated $configCacheType
      * @param Config\Consolidated\Reader $configReader
      * @param SerializerInterface $serializer
-     * @since 2.1.0
      */
     public function __construct(
         Cache\TypeConsolidated $configCacheType,
@@ -63,7 +57,6 @@ class ConsolidatedConfig
      * Return integrations loaded from cache if enabled or from files merged previously
      *
      * @return array
-     * @since 2.1.0
      */
     public function getIntegrations()
     {

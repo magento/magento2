@@ -134,7 +134,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      *
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.2.0
      */
     private function fixCustomerGroupIdColumn(SchemaSetupInterface $setup)
     {
@@ -174,7 +173,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      *
      * @param SchemaSetupInterface $installer
      * @return void
-     * @since 2.2.0
      */
     private function addCatalogProductFrontendActionTable(SchemaSetupInterface $installer)
     {
@@ -271,7 +269,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      *
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.2.0
      */
     private function addSourceEntityIdToProductEavIndex(SchemaSetupInterface $setup)
     {
@@ -313,7 +310,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
     /**
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.1.0
      */
     protected function addUniqueKeyToCategoryProductTable(SchemaSetupInterface $setup)
     {
@@ -559,7 +555,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * Add percentage value column
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.2.0
      */
     private function addPercentageValueColumn(SchemaSetupInterface $setup)
     {
@@ -593,7 +588,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      *
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.2.0
      */
     private function recreateCatalogCategoryProductIndexTmpTable(SchemaSetupInterface $setup)
     {
@@ -662,7 +656,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      *
      * @param SchemaSetupInterface $setup
      * @return void
-     * @since 2.2.0
      */
     private function addPathKeyToCategoryEntityTableIfNotExists(SchemaSetupInterface $setup)
     {
@@ -696,7 +689,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * @param string $existingTable
      * @param string $replicaTable
      * @return void
-     * @since 2.2.0
      */
     private function addReplicaTable(SchemaSetupInterface $setup, $existingTable, $replicaTable)
     {

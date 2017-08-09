@@ -65,7 +65,6 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
@@ -145,7 +144,6 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     /**
      * @param ProductInterface $product
      * @return \Magento\Bundle\Api\Data\OptionInterface[]
-     * @since 2.1.0
      */
     public function getListByProduct(ProductInterface $product)
     {
@@ -326,7 +324,6 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     /**
      * Get MetadataPool instance
      * @return MetadataPool
-     * @since 2.1.0
      */
     private function getMetadataPool()
     {

@@ -60,7 +60,6 @@ class VarnishPlugin
      * @return ResultInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterRenderResult(ResultInterface $subject, ResultInterface $result, ResponseHttp $response)
     {

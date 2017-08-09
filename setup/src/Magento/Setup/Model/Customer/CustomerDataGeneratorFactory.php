@@ -7,19 +7,16 @@ namespace Magento\Setup\Model\Customer;
 
 /**
  * Create new instance of CustomerDataGenerator
- * @since 2.2.0
  */
 class CustomerDataGeneratorFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.2.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -31,7 +28,6 @@ class CustomerDataGeneratorFactory
      *
      * @param array $config
      * @return \Magento\Setup\Model\Customer\CustomerDataGenerator
-     * @since 2.2.0
      */
     public function create(array $config)
     {

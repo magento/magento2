@@ -13,19 +13,16 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 /**
  * Class \Magento\Braintree\Setup\UpgradeData
  *
- * @since 2.2.0
  */
 class UpgradeData implements UpgradeDataInterface
 {
     /**
      * @var \Magento\Framework\DB\FieldDataConverterFactory
-     * @since 2.2.0
      */
     private $fieldDataConverterFactory;
 
     /**
      * @var \Magento\Framework\DB\Select\QueryModifierFactory
-     * @since 2.2.0
      */
     private $queryModifierFactory;
 
@@ -34,7 +31,6 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory
      * @param \Magento\Framework\DB\Select\QueryModifierFactory $queryModifierFactory
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory,
@@ -50,7 +46,6 @@ class UpgradeData implements UpgradeDataInterface
      * @param ModuleDataSetupInterface $setup
      * @param ModuleContextInterface $context
      * @return void
-     * @since 2.2.0
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -65,7 +60,6 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param ModuleDataSetupInterface $setup
      * @return void
-     * @since 2.2.0
      */
     private function convertSerializedDataToJson(ModuleDataSetupInterface $setup)
     {

@@ -20,7 +20,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for set sensitive variable through deploy process
- * @since 2.2.0
  */
 class SensitiveConfigSetCommand extends Command
 {
@@ -53,7 +52,6 @@ class SensitiveConfigSetCommand extends Command
      * The config change detector.
      *
      * @var ChangeDetector
-     * @since 2.2.0
      */
     private $changeDetector;
 
@@ -61,7 +59,6 @@ class SensitiveConfigSetCommand extends Command
      * The hash manager.
      *
      * @var Hash
-     * @since 2.2.0
      */
     private $hash;
 
@@ -69,7 +66,6 @@ class SensitiveConfigSetCommand extends Command
      * The facade for command.
      *
      * @var SensitiveConfigSetFacade
-     * @since 2.2.0
      */
     private $facade;
 
@@ -77,7 +73,6 @@ class SensitiveConfigSetCommand extends Command
      * Emulator adminhtml area for CLI command.
      *
      * @var EmulatedAdminhtmlAreaProcessor
-     * @since 2.2.0
      */
     private $emulatedAreaProcessor;
 
@@ -86,7 +81,6 @@ class SensitiveConfigSetCommand extends Command
      * @param ChangeDetector $changeDetector The config change detector
      * @param Hash $hash The hash manager
      * @param EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor Emulator adminhtml area for CLI command
-     * @since 2.2.0
      */
     public function __construct(
         SensitiveConfigSetFacade $facade,
@@ -104,7 +98,6 @@ class SensitiveConfigSetCommand extends Command
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     protected function configure()
     {
@@ -145,7 +138,6 @@ class SensitiveConfigSetCommand extends Command
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

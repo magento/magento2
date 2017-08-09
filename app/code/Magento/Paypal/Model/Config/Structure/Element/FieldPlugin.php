@@ -16,7 +16,6 @@ class FieldPlugin
 {
     /**
      * @var RequestInterface
-     * @since 2.2.0
      */
     private $request;
 
@@ -34,7 +33,6 @@ class FieldPlugin
      * @param FieldConfigStructure $subject
      * @param string|null $result
      * @return string|null
-     * @since 2.2.0
      */
     public function afterGetConfigPath(FieldConfigStructure $subject, $result)
     {

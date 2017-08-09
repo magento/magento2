@@ -13,7 +13,7 @@ class Kernel
     /**
      * @var \Magento\PageCache\Model\Cache\Type
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     protected $cache;
 
@@ -29,31 +29,26 @@ class Kernel
 
     /**
      * @var \Magento\PageCache\Model\Cache\Type
-     * @since 2.1.0
      */
     private $fullPageCache;
 
     /**
      * @var \Magento\Framework\Serialize\SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var \Magento\Framework\App\Http\Context
-     * @since 2.2.0
      */
     private $context;
 
     /**
      * @var \Magento\Framework\App\Http\ContextFactory
-     * @since 2.2.0
      */
     private $contextFactory;
 
     /**
      * @var \Magento\Framework\App\Response\HttpFactory
-     * @since 2.2.0
      */
     private $httpFactory;
 
@@ -169,7 +164,6 @@ class Kernel
      *
      * @param \Magento\Framework\App\Response\Http $response
      * @return array
-     * @since 2.2.0
      */
     private function getPreparedData(\Magento\Framework\App\Response\Http $response)
     {
@@ -186,7 +180,6 @@ class Kernel
      *
      * @param array $responseData
      * @return \Magento\Framework\App\Response\Http
-     * @since 2.2.0
      */
     private function buildResponse($responseData)
     {
@@ -215,7 +208,6 @@ class Kernel
      * TODO: Workaround to support backwards compatibility, will rework to use Dependency Injection in MAGETWO-49547
      *
      * @return \Magento\PageCache\Model\Cache\Type
-     * @since 2.1.0
      */
     private function getCache()
     {

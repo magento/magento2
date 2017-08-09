@@ -9,19 +9,16 @@ namespace Magento\Quote\Model;
 /**
  * Class \Magento\Quote\Model\ShippingAddressAssignment
  *
- * @since 2.2.0
  */
 class ShippingAddressAssignment
 {
     /**
      * @var \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor
-     * @since 2.2.0
      */
     private $shippingAssignmentProcessor;
 
     /**
      * @var \Magento\Quote\Api\Data\CartExtensionFactory
-     * @since 2.2.0
      */
     private $cartExtensionFactory;
 
@@ -29,7 +26,6 @@ class ShippingAddressAssignment
      * ShippingAddressAssignment constructor.
      * @param \Magento\Quote\Api\Data\CartExtensionFactory $cartExtensionFactory
      * @param Quote\ShippingAssignment\ShippingAssignmentProcessor $shippingAssignmentProcessor
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Quote\Api\Data\CartExtensionFactory $cartExtensionFactory,
@@ -44,7 +40,6 @@ class ShippingAddressAssignment
      * @param \Magento\Quote\Api\Data\AddressInterface $address
      * @param bool $useForShipping
      * @return void
-     * @since 2.2.0
      */
     public function setAddress(
         \Magento\Quote\Api\Data\CartInterface $quote,

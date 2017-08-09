@@ -45,7 +45,6 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
 
     /**
      * @var \Closure
-     * @since 2.1.0
      */
     private $objectCreationStrategy;
 

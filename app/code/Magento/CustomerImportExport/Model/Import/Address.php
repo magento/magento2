@@ -233,7 +233,6 @@ class Address extends AbstractCustomer
 
     /**
      * @var \Magento\Customer\Model\Address\Validator\Postcode
-     * @since 2.1.0
      */
     protected $postcodeValidator;
 

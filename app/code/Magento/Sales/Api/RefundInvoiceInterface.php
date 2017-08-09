@@ -9,7 +9,7 @@ namespace Magento\Sales\Api;
  * Interface RefundInvoiceInterface
  *
  * @api
- * @since 2.1.3
+ * @since 100.1.3
  */
 interface RefundInvoiceInterface
 {
@@ -24,7 +24,7 @@ interface RefundInvoiceInterface
      * @param \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface|null $comment
      * @param \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface|null $arguments
      * @return int
-     * @since 2.1.3
+     * @since 100.1.3
      */
     public function execute(
         $invoiceId,

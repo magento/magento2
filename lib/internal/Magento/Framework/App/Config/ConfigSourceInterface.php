@@ -9,7 +9,6 @@ namespace Magento\Framework\App\Config;
 
 /**
  * Interface ConfigSourceInterface
- * @since 2.1.3
  */
 interface ConfigSourceInterface
 {
@@ -33,7 +32,6 @@ interface ConfigSourceInterface
      * ```
      * And string will be returned if you use full path to field (e.g. scope/scope_code/section_id/group_id/field_id)
      * E.g. 'value1'
-     * @since 2.1.3
      */
     public function get($path = '');
 }

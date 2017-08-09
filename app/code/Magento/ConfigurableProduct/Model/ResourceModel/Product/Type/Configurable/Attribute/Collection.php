@@ -24,7 +24,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 {
     /**
      * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
-     * @since 2.1.1
      */
     private $configurableResource;
 
@@ -65,7 +64,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     private $metadataPool;
 
@@ -201,7 +199,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add Associated Product Filters (From Product Type Instance)
      *
      * @return $this
-     * @deprecated 2.1.1
+     * @deprecated 100.1.1
      */
     public function _addAssociatedProductFilters()
     {
@@ -318,7 +316,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @inheritdoc
-     * @since 2.0.9
+     * @since 100.0.6
      */
     public function __sleep()
     {
@@ -337,7 +335,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @inheritdoc
-     * @since 2.0.9
+     * @since 100.0.6
      */
     public function __wakeup()
     {
@@ -353,9 +351,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Get MetadataPool instance
      *
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @return MetadataPool
-     * @since 2.1.0
      */
     private function getMetadataPool()
     {
@@ -368,9 +365,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Get Configurable Resource
      *
-     * @deprecated 2.1.1
+     * @deprecated 100.1.1
      * @return ConfigurableResource
-     * @since 2.1.1
      */
     private function getConfigurableResource()
     {

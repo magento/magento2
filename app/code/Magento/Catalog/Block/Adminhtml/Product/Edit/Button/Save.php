@@ -9,13 +9,11 @@ use Magento\Ui\Component\Control\Container;
 
 /**
  * Class Save
- * @since 2.1.0
  */
 class Save extends Generic
 {
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getButtonData()
     {
@@ -50,7 +48,6 @@ class Save extends Generic
      * Retrieve options
      *
      * @return array
-     * @since 2.1.0
      */
     protected function getOptions()
     {

@@ -11,13 +11,11 @@ use Magento\Sales\Api\Data\ShippingAssignmentInterface;
 /**
  * Class \Magento\Sales\Model\Order\ShippingAssignment
  *
- * @since 2.0.3
  */
 class ShippingAssignment extends AbstractExtensibleModel implements ShippingAssignmentInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.3
      */
     public function getShipping()
     {
@@ -26,7 +24,6 @@ class ShippingAssignment extends AbstractExtensibleModel implements ShippingAssi
 
     /**
      * {@inheritdoc}
-     * @since 2.0.3
      */
     public function getItems()
     {
@@ -35,7 +32,6 @@ class ShippingAssignment extends AbstractExtensibleModel implements ShippingAssi
 
     /**
      * {@inheritdoc}
-     * @since 2.0.3
      */
     public function getStockId()
     {
@@ -44,7 +40,6 @@ class ShippingAssignment extends AbstractExtensibleModel implements ShippingAssi
 
     /**
      * {@inheritdoc}
-     * @since 2.0.3
      */
     public function setShipping(\Magento\Sales\Api\Data\ShippingInterface $shipping)
     {
@@ -53,7 +48,6 @@ class ShippingAssignment extends AbstractExtensibleModel implements ShippingAssi
 
     /**
      * {@inheritdoc}
-     * @since 2.0.3
      */
     public function setItems(array $items)
     {
@@ -62,7 +56,6 @@ class ShippingAssignment extends AbstractExtensibleModel implements ShippingAssi
 
     /**
      * {@inheritdoc}
-     * @since 2.0.3
      */
     public function setStockId($stockId = null)
     {
@@ -71,7 +64,6 @@ class ShippingAssignment extends AbstractExtensibleModel implements ShippingAssi
 
     /**
      * {@inheritdoc}
-     * @since 2.0.3
      */
     public function getExtensionAttributes()
     {
@@ -80,7 +72,6 @@ class ShippingAssignment extends AbstractExtensibleModel implements ShippingAssi
 
     /**
      * {@inheritdoc}
-     * @since 2.0.3
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\ShippingAssignmentExtensionInterface $extensionAttributes

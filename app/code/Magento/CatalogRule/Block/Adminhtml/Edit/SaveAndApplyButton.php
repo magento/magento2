@@ -11,14 +11,12 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 /**
  * Class \Magento\CatalogRule\Block\Adminhtml\Edit\SaveAndApplyButton
  *
- * @since 2.1.0
  */
 class SaveAndApplyButton extends GenericButton implements ButtonProviderInterface
 {
     /**
      * @return array
      * @codeCoverageIgnore
-     * @since 2.1.0
      */
     public function getButtonData()
     {

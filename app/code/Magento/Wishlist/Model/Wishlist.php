@@ -125,7 +125,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 

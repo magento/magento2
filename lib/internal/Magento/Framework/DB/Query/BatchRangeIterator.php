@@ -20,67 +20,56 @@ use Magento\Framework\DB\Select;
  * @see \Magento\Framework\DB\Query\BatchIteratorFactory
  * @see \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
  * @see \Magento\Framework\DB\Adapter\Pdo\Mysql
- * @since 2.2.0
  */
 class BatchRangeIterator implements BatchIteratorInterface
 {
     /**
      * @var Select
-     * @since 2.2.0
      */
     private $currentSelect;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $rangeField;
 
     /**
      * @var int
-     * @since 2.2.0
      */
     private $batchSize;
 
     /**
      * @var AdapterInterface
-     * @since 2.2.0
      */
     private $connection;
 
     /**
      * @var int
-     * @since 2.2.0
      */
     private $currentOffset = 0;
 
     /**
      * @var int
-     * @since 2.2.0
      */
     private $totalItemCount;
 
     /**
      * @var int
-     * @since 2.2.0
      */
     private $iteration = 0;
 
     /**
      * @var Select
-     * @since 2.2.0
      */
     private $select;
 
     /**
      * @var string
-     * @since 2.2.0
      */
     private $correlationName;
 
     /**
      * @var bool
-     * @since 2.2.0
      */
     private $isValid = true;
 
@@ -92,7 +81,6 @@ class BatchRangeIterator implements BatchIteratorInterface
      * @param string $correlationName
      * @param string $rangeField
      * @param string $rangeFieldAlias
-     * @since 2.2.0
      */
     public function __construct(
         Select $select,
@@ -115,7 +103,6 @@ class BatchRangeIterator implements BatchIteratorInterface
      * If we don't have sub-select we should create and remember it.
      *
      * @return Select
-     * @since 2.2.0
      */
     public function current()
     {
@@ -132,7 +119,6 @@ class BatchRangeIterator implements BatchIteratorInterface
      * Сan return the number of the current sub-select in the iteration.
      *
      * @return int
-     * @since 2.2.0
      */
     public function key()
     {
@@ -146,7 +132,6 @@ class BatchRangeIterator implements BatchIteratorInterface
      * Checks that the count of elements more than the sum of limit and offset.
      *
      * @return Select
-     * @since 2.2.0
      */
     public function next()
     {
@@ -170,7 +155,6 @@ class BatchRangeIterator implements BatchIteratorInterface
      * Allows to start iteration from the beginning.
      *
      * @return void
-     * @since 2.2.0
      */
     public function rewind()
     {
@@ -184,7 +168,6 @@ class BatchRangeIterator implements BatchIteratorInterface
      * Checks if current position is valid
      *
      * @return bool
-     * @since 2.2.0
      */
     public function valid()
     {
@@ -197,7 +180,6 @@ class BatchRangeIterator implements BatchIteratorInterface
      * Return sub-select which is limited by current batch value and return items from n page of SQL request.
      *
      * @return \Magento\Framework\DB\Select
-     * @since 2.2.0
      */
     private function initSelectObject()
     {

@@ -11,7 +11,6 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 /**
  * Class \Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns\Price
  *
- * @since 2.1.0
  */
 class Price extends \Magento\Ui\Component\Listing\Columns\Column
 {
@@ -22,7 +21,6 @@ class Price extends \Magento\Ui\Component\Listing\Columns\Column
 
     /**
      * @var \Magento\Framework\Locale\CurrencyInterface
-     * @since 2.1.0
      */
     protected $localeCurrency;
 
@@ -33,7 +31,6 @@ class Price extends \Magento\Ui\Component\Listing\Columns\Column
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $components
      * @param array $data
-     * @since 2.1.0
      */
     public function __construct(
         ContextInterface $context,
@@ -53,7 +50,6 @@ class Price extends \Magento\Ui\Component\Listing\Columns\Column
      *
      * @param array $dataSource
      * @return array
-     * @since 2.1.0
      */
     public function prepareDataSource(array $dataSource)
     {

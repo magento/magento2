@@ -11,7 +11,6 @@ use Magento\Framework\DB\Select;
 
 /**
  * Plugin for OptionSelectBuilderInterface to add stock status filter.
- * @since 2.2.0
  */
 class InStockOptionSelectBuilder
 {
@@ -19,13 +18,11 @@ class InStockOptionSelectBuilder
      * CatalogInventory Stock Status Resource Model.
      *
      * @var Status
-     * @since 2.2.0
      */
     private $stockStatusResource;
     
     /**
      * @param Status $stockStatusResource
-     * @since 2.2.0
      */
     public function __construct(Status $stockStatusResource)
     {
@@ -40,7 +37,6 @@ class InStockOptionSelectBuilder
      * @return Select
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterGetSelect(OptionSelectBuilderInterface $subject, Select $select)
     {

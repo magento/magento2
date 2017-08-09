@@ -275,25 +275,21 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * @var AuthenticationInterface
-     * @since 2.1.0
      */
     protected $authentication;
 
     /**
      * @var EmailNotificationInterface
-     * @since 2.1.0
      */
     private $emailNotification;
 
     /**
      * @var \Magento\Eav\Model\Validator\Attribute\Backend
-     * @since 2.1.0
      */
     private $eavValidator;
 
     /**
      * @var CredentialsValidator
-     * @since 2.2.0
      */
     private $credentialsValidator;
 
@@ -381,7 +377,6 @@ class AccountManagement implements AccountManagementInterface
      * Get authentication
      *
      * @return AuthenticationInterface
-     * @since 2.1.0
      */
     private function getAuthentication()
     {
@@ -610,7 +605,6 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param string $password
      * @return int
-     * @since 2.1.0
      */
     protected function makeRequiredCharactersCheck($password)
     {
@@ -642,7 +636,6 @@ class AccountManagement implements AccountManagementInterface
      * Retrieve minimum password length
      *
      * @return int
-     * @since 2.1.0
      */
     protected function getMinPasswordLength()
     {
@@ -873,7 +866,6 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * @return Backend
-     * @since 2.1.0
      */
     private function getEavValidator()
     {
@@ -1004,7 +996,7 @@ class AccountManagement implements AccountManagementInterface
      * @param string $sendemailStoreId
      * @return $this
      * @throws LocalizedException
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     protected function sendNewAccountEmail(
         $customer,
@@ -1043,7 +1035,7 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return $this
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     protected function sendPasswordResetNotificationEmail($customer)
     {
@@ -1056,7 +1048,7 @@ class AccountManagement implements AccountManagementInterface
      * @param CustomerInterface $customer
      * @param int|string|null $defaultStoreId
      * @return int
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     protected function getWebsiteStoreId($customer, $defaultStoreId = null)
     {
@@ -1070,7 +1062,7 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * @return array
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     protected function getTemplateTypes()
     {
@@ -1102,7 +1094,7 @@ class AccountManagement implements AccountManagementInterface
      * @param int|null $storeId
      * @param string $email
      * @return $this
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     protected function sendEmailTemplate(
         $customer,
@@ -1234,7 +1226,7 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return $this
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     public function sendPasswordReminderEmail($customer)
     {
@@ -1261,7 +1253,7 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return $this
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     public function sendPasswordResetConfirmationEmail($customer)
     {
@@ -1305,7 +1297,7 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return Data\CustomerSecure
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     protected function getFullCustomerObject($customer)
     {
@@ -1334,8 +1326,7 @@ class AccountManagement implements AccountManagementInterface
      * Get email notification
      *
      * @return EmailNotificationInterface
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getEmailNotification()
     {

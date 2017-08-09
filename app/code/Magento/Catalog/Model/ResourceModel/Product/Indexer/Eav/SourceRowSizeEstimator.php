@@ -20,25 +20,21 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
  *
  * Can be used with batch size manager to ensure that the batch will be handled correctly by the database.
  * @see \Magento\Framework\Indexer\BatchSizeManagement
- * @since 2.2.0
  */
 class SourceRowSizeEstimator implements IndexTableRowSizeEstimatorInterface
 {
     /**
      * @var StoreManagementInterface
-     * @since 2.2.0
      */
     private $storeManagement;
 
     /**
      * @var Source
-     * @since 2.2.0
      */
     private $indexerResource;
 
     /**
      * @var MetadataPool
-     * @since 2.2.0
      */
     private $metadataPool;
 
@@ -46,7 +42,6 @@ class SourceRowSizeEstimator implements IndexTableRowSizeEstimatorInterface
      * @param StoreManagementInterface $storeManagement
      * @param Source $indexerResource
      * @param MetadataPool $metadataPool
-     * @since 2.2.0
      */
     public function __construct(
         StoreManagementInterface $storeManagement,
@@ -60,7 +55,6 @@ class SourceRowSizeEstimator implements IndexTableRowSizeEstimatorInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function estimateRowSize()
     {
@@ -90,7 +84,6 @@ class SourceRowSizeEstimator implements IndexTableRowSizeEstimatorInterface
      * @param string $valueTable name of the target table
      * @param string $entityIdField entity ID field name
      * @return string maximum rows per store and product stored in the table
-     * @since 2.2.0
      */
     private function getMaxRowsPerStore(
         AdapterInterface $connection,

@@ -45,7 +45,6 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -53,7 +52,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      * @param Template\Context $context
      * @param array $data
      * @param Json|null $serializer
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function __construct(
         Template\Context $context,

@@ -57,7 +57,6 @@ class Relation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $childId
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.1.0
      */
     public function addRelation($parentId, $childId)
     {

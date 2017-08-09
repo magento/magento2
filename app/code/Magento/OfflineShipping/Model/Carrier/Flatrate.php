@@ -40,7 +40,6 @@ class Flatrate extends AbstractCarrier implements CarrierInterface
 
     /**
      * @var ItemPriceCalculator
-     * @since 2.1.0
      */
     private $itemPriceCalculator;
 
@@ -99,7 +98,6 @@ class Flatrate extends AbstractCarrier implements CarrierInterface
     /**
      * @param RateRequest $request
      * @return int
-     * @since 2.1.0
      */
     private function getFreeBoxesCount(RateRequest $request)
     {
@@ -132,7 +130,6 @@ class Flatrate extends AbstractCarrier implements CarrierInterface
      * @param RateRequest $request
      * @param int $freeBoxes
      * @return bool|float
-     * @since 2.1.0
      */
     private function getShippingPrice(RateRequest $request, $freeBoxes)
     {
@@ -158,7 +155,6 @@ class Flatrate extends AbstractCarrier implements CarrierInterface
     /**
      * @param int|float $shippingPrice
      * @return \Magento\Quote\Model\Quote\Address\RateResult\Method
-     * @since 2.1.0
      */
     private function createResultMethod($shippingPrice)
     {
@@ -179,7 +175,6 @@ class Flatrate extends AbstractCarrier implements CarrierInterface
     /**
      * @param mixed $item
      * @return mixed
-     * @since 2.1.0
      */
     private function getFreeBoxesCountFromChildren($item)
     {

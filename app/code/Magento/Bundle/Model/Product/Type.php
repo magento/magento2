@@ -47,7 +47,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Cache key for Selections Collection
      *
      * @var string
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected $_keySelectionsCollection = '_cache_instance_selections_collection';
 
@@ -152,13 +152,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * @var MetadataPool
-     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var SelectionCollectionFilterApplier
-     * @since 2.2.0
      */
     private $selectionCollectionFilterApplier;
 

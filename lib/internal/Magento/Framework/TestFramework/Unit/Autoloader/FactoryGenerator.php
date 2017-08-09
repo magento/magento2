@@ -10,7 +10,6 @@ use Magento\Framework\Code\Generator\ClassGenerator;
 
 /**
  * Generates a simple factory class with create() method
- * @since 2.2.0
  */
 class FactoryGenerator implements GeneratorInterface
 {
@@ -19,7 +18,6 @@ class FactoryGenerator implements GeneratorInterface
      *
      * @param string $className
      * @return bool|string
-     * @since 2.2.0
      */
     public function generate($className)
     {
@@ -42,7 +40,6 @@ class FactoryGenerator implements GeneratorInterface
      *
      * @param string $className
      * @return bool
-     * @since 2.2.0
      */
     private function isFactory($className)
     {

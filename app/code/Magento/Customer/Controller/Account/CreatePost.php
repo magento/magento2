@@ -110,13 +110,11 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
-     * @since 2.1.0
      */
     private $cookieMetadataFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
-     * @since 2.1.0
      */
     private $cookieMetadataManager;
 
@@ -185,9 +183,8 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie manager
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
-     * @since 2.1.0
      */
     private function getCookieManager()
     {
@@ -202,9 +199,8 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie metadata factory
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
-     * @since 2.1.0
      */
     private function getCookieMetadataFactory()
     {

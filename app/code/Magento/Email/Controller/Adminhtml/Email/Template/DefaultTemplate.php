@@ -19,7 +19,6 @@ class DefaultTemplate extends \Magento\Email\Controller\Adminhtml\Email\Template
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 

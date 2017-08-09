@@ -80,7 +80,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
     /**
      * Return media gallery for product options
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getOptionsMediaGalleryDataJson()
     {

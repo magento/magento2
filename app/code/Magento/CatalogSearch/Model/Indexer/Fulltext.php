@@ -62,13 +62,11 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
 
     /**
      * @var IndexSwitcherInterface
-     * @since 2.2.0
      */
     private $indexSwitcher;
 
     /**
      * @var \Magento\CatalogSearch\Model\Indexer\Scope\State
-     * @since 2.2.0
      */
     private $indexScopeState;
 

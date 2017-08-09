@@ -38,7 +38,6 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\ResourceModel
     /**
      * @param int|null $websiteId
      * @return \Magento\Framework\DB\Select
-     * @since 2.2.0
      */
     public function getSelect($websiteId = null)
     {
@@ -67,7 +66,6 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\ResourceModel
 
     /**
      * @return string
-     * @since 2.1.0
      */
     protected function getProductIdFieldName()
     {

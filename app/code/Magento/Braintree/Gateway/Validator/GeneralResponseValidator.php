@@ -14,13 +14,11 @@ use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 /**
  * Class \Magento\Braintree\Gateway\Validator\GeneralResponseValidator
  *
- * @since 2.1.0
  */
 class GeneralResponseValidator extends AbstractValidator
 {
     /**
      * @var SubjectReader
-     * @since 2.1.0
      */
     protected $subjectReader;
 
@@ -29,7 +27,6 @@ class GeneralResponseValidator extends AbstractValidator
      *
      * @param ResultInterfaceFactory $resultFactory
      * @param SubjectReader $subjectReader
-     * @since 2.1.0
      */
     public function __construct(ResultInterfaceFactory $resultFactory, SubjectReader $subjectReader)
     {
@@ -39,7 +36,6 @@ class GeneralResponseValidator extends AbstractValidator
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function validate(array $validationSubject)
     {
@@ -63,7 +59,6 @@ class GeneralResponseValidator extends AbstractValidator
 
     /**
      * @return array
-     * @since 2.1.0
      */
     protected function getResponseValidators()
     {

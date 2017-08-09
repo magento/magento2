@@ -42,7 +42,6 @@ interface WriterInterface
      * @param \Magento\Setup\Module\I18n\Locale $locale
      * @param string $mode One of const of WriterInterface::MODE_
      * @return void
-     * @since 2.1.0
      */
     public function writeDictionary(Dictionary $dictionary, Locale $locale, $mode);
 }

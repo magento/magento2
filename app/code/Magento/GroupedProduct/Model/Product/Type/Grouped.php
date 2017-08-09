@@ -227,7 +227,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function flushAssociatedProductsCache($product)
     {

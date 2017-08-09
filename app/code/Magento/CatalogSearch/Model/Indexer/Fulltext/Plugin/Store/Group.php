@@ -17,7 +17,6 @@ class Group extends AbstractIndexerPlugin
 {
     /**
      * @var bool
-     * @since 2.2.0
      */
     private $needInvalidation;
 
@@ -29,7 +28,6 @@ class Group extends AbstractIndexerPlugin
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function beforeSave(StoreGroupResourceModel $subject, AbstractModel $group)
     {
@@ -44,7 +42,6 @@ class Group extends AbstractIndexerPlugin
      * @return StoreGroupResourceModel
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterSave(StoreGroupResourceModel $subject, StoreGroupResourceModel $result)
     {

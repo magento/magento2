@@ -27,7 +27,6 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
      * Cached orders data.
      *
      * @var \Magento\Sales\Api\Data\OrderInterface[]
-     * @since 2.2.0
      */
     private $orders;
 

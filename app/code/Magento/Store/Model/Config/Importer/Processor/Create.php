@@ -18,7 +18,6 @@ use Magento\Store\Model\WebsiteFactory;
  * The processor for creating of new entities.
  *
  * {@inheritdoc}
- * @since 2.2.0
  */
 class Create implements ProcessorInterface
 {
@@ -26,7 +25,6 @@ class Create implements ProcessorInterface
      * The calculator for data differences.
      *
      * @var DataDifferenceCalculator
-     * @since 2.2.0
      */
     private $dataDifferenceCalculator;
 
@@ -34,7 +32,6 @@ class Create implements ProcessorInterface
      * The factory for website entity.
      *
      * @var WebsiteFactory
-     * @since 2.2.0
      */
     private $websiteFactory;
 
@@ -42,7 +39,6 @@ class Create implements ProcessorInterface
      * The factory for group entity.
      *
      * @var GroupFactory
-     * @since 2.2.0
      */
     private $groupFactory;
 
@@ -50,7 +46,6 @@ class Create implements ProcessorInterface
      * The factory for store entity.
      *
      * @var StoreFactory
-     * @since 2.2.0
      */
     private $storeFactory;
 
@@ -58,7 +53,6 @@ class Create implements ProcessorInterface
      * The event manager.
      *
      * @var ManagerInterface
-     * @since 2.2.0
      */
     private $eventManager;
 
@@ -68,7 +62,6 @@ class Create implements ProcessorInterface
      * @param WebsiteFactory $websiteFactory The factory for website entity
      * @param GroupFactory $groupFactory The factory for group entity
      * @param StoreFactory $storeFactory The factory for store entity
-     * @since 2.2.0
      */
     public function __construct(
         DataDifferenceCalculator $dataDifferenceCalculator,
@@ -88,7 +81,6 @@ class Create implements ProcessorInterface
      * Creates entities in application according to the data set.
      *
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function run(array $data)
     {
@@ -133,7 +125,6 @@ class Create implements ProcessorInterface
      * @param array $items Websites to create
      * @param array $data The all available data
      * @return void
-     * @since 2.2.0
      */
     private function createWebsites(array $items, array $data)
     {
@@ -164,7 +155,6 @@ class Create implements ProcessorInterface
      * @param array $items Groups to create
      * @param array $data The all available data
      * @return void
-     * @since 2.2.0
      */
     private function createGroups(array $items, array $data)
     {
@@ -203,7 +193,6 @@ class Create implements ProcessorInterface
      * @param array $items Stores to create
      * @param array $data The all available data
      * @return void
-     * @since 2.2.0
      */
     private function createStores(array $items, array $data)
     {
@@ -242,7 +231,6 @@ class Create implements ProcessorInterface
      * @param string $websiteId The website id
      * @return \Magento\Store\Model\Website
      * @throws NotFoundException If website was not detected
-     * @since 2.2.0
      */
     private function detectWebsiteById(array $data, $websiteId)
     {
@@ -266,7 +254,6 @@ class Create implements ProcessorInterface
      * @param string $groupId The group id
      * @return \Magento\Store\Model\Group
      * @throws NotFoundException If group was not detected
-     * @since 2.2.0
      */
     private function detectGroupById(array $data, $groupId)
     {
@@ -290,7 +277,6 @@ class Create implements ProcessorInterface
      * @param string $storeId The store id
      * @return \Magento\Store\Model\Store
      * @throws NotFoundException If store was not detected
-     * @since 2.2.0
      */
     private function detectStoreById(array $data, $storeId)
     {

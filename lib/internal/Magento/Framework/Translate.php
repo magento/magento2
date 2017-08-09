@@ -110,7 +110,6 @@ class Translate implements \Magento\Framework\TranslateInterface
 
     /**
      * @var \Magento\Framework\Serialize\SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -500,8 +499,7 @@ class Translate implements \Magento\Framework\TranslateInterface
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {

@@ -28,67 +28,57 @@ use Magento\Vault\Model\VaultPaymentInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class TokensConfigProvider
 {
     /**
      * @var PaymentTokenRepositoryInterface
-     * @since 2.1.0
      */
     private $paymentTokenRepository;
 
     /**
      * @var FilterBuilder
-     * @since 2.1.0
      */
     private $filterBuilder;
 
     /**
      * @var SearchCriteriaBuilder
-     * @since 2.1.0
      */
     private $searchCriteriaBuilder;
 
     /**
      * @var SessionManagerInterface
-     * @since 2.1.0
      */
     private $session;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.1.0
      */
     private $storeManager;
 
     /**
      * @var TokenUiComponentProviderInterface[]
-     * @since 2.1.0
      */
     private $tokenUiComponentProviders;
 
     /**
      * @var DateTimeFactory
-     * @since 2.1.0
      */
     private $dateTimeFactory;
 
     /**
      * @var Data
-     * @since 2.1.0
      */
     private $paymentDataHelper;
 
     /**
      * @var OrderRepositoryInterface
-     * @since 2.1.3
      */
     private $orderRepository;
 
     /**
      * @var PaymentTokenManagementInterface
-     * @since 2.1.3
      */
     private $paymentTokenManagement;
 
@@ -102,7 +92,7 @@ class TokensConfigProvider
      * @param StoreManagerInterface $storeManager
      * @param DateTimeFactory $dateTimeFactory
      * @param TokenUiComponentProviderInterface[] $tokenUiComponentProviders
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         SessionManagerInterface $session,
@@ -125,7 +115,7 @@ class TokensConfigProvider
     /**
      * @param string $vaultPaymentCode
      * @return TokenUiComponentInterface[]
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getTokensComponents($vaultPaymentCode)
     {
@@ -207,7 +197,6 @@ class TokensConfigProvider
     /**
      * @param string $vaultProviderCode
      * @return TokenUiComponentProviderInterface|null
-     * @since 2.1.0
      */
     private function getComponentProvider($vaultProviderCode)
     {
@@ -223,7 +212,6 @@ class TokensConfigProvider
      * Get active vault payment by code
      * @param string $vaultPaymentCode
      * @return VaultPaymentInterface|null
-     * @since 2.1.0
      */
     private function getVaultPayment($vaultPaymentCode)
     {
@@ -235,7 +223,6 @@ class TokensConfigProvider
     /**
      * Returns payment token entity id by order payment id
      * @return int|null
-     * @since 2.1.3
      */
     private function getPaymentTokenEntityId()
     {
@@ -251,7 +238,6 @@ class TokensConfigProvider
      * Using 'getReordered' for Reorder action
      * Using 'getOrder' for Edit action
      * @return int
-     * @since 2.1.3
      */
     private function getOrderPaymentEntityId()
     {
@@ -265,8 +251,7 @@ class TokensConfigProvider
     /**
      * Get payment data helper instance
      * @return Data
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getPaymentDataHelper()
     {
@@ -279,8 +264,7 @@ class TokensConfigProvider
     /**
      * Returns order repository instance
      * @return OrderRepositoryInterface
-     * @deprecated 2.1.3
-     * @since 2.1.3
+     * @deprecated 100.2.0
      */
     private function getOrderRepository()
     {
@@ -295,8 +279,7 @@ class TokensConfigProvider
     /**
      * Returns payment token management instance
      * @return PaymentTokenManagementInterface
-     * @deprecated 2.1.3
-     * @since 2.1.3
+     * @deprecated 100.2.0
      */
     private function getPaymentTokenManagement()
     {

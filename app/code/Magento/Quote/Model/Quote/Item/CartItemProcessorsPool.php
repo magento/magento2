@@ -9,27 +9,23 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManager\ConfigInterface;
 
 /**
- * @deprecated 2.1.0
- * @since 2.1.0
+ * @deprecated 100.1.0
  */
 class CartItemProcessorsPool
 {
     /**
      * @var CartItemProcessorInterface[]
-     * @since 2.1.0
      */
     private $cartItemProcessors = [];
 
     /**
      * @var ConfigInterface
-     * @since 2.1.0
      */
     private $objectManagerConfig;
 
     /**
      * @param ConfigInterface $objectManagerConfig
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     public function __construct(ConfigInterface $objectManagerConfig)
     {
@@ -38,8 +34,7 @@ class CartItemProcessorsPool
 
     /**
      * @return CartItemProcessorInterface[]
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     public function getCartItemProcessors()
     {

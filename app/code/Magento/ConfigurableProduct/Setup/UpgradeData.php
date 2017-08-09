@@ -15,7 +15,6 @@ use Magento\Eav\Setup\EavSetupFactory;
 /**
  * Upgrade Data script
  * @codeCoverageIgnore
- * @since 2.2.0
  */
 class UpgradeData implements UpgradeDataInterface
 {
@@ -23,7 +22,6 @@ class UpgradeData implements UpgradeDataInterface
      * EAV setup factory
      *
      * @var EavSetupFactory
-     * @since 2.2.0
      */
     private $eavSetupFactory;
 
@@ -31,7 +29,6 @@ class UpgradeData implements UpgradeDataInterface
      * Init
      *
      * @param EavSetupFactory $eavSetupFactory
-     * @since 2.2.0
      */
     public function __construct(EavSetupFactory $eavSetupFactory)
     {
@@ -40,7 +37,6 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

@@ -24,25 +24,21 @@ class Downloadable
 
     /**
      * @var SampleInterfaceFactory
-     * @since 2.1.0
      */
     private $sampleFactory;
 
     /**
      * @var LinkInterfaceFactory
-     * @since 2.1.0
      */
     private $linkFactory;
 
     /**
      * @var SampleBuilder
-     * @since 2.1.0
      */
     private $sampleBuilder;
 
     /**
      * @var LinkBuilder
-     * @since 2.1.0
      */
     private $linkBuilder;
 

@@ -11,7 +11,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Class TopDestinationCountries
- * @since 2.2.0
  */
 class TopDestinationCountries
 {
@@ -19,13 +18,11 @@ class TopDestinationCountries
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.2.0
      */
     private $scopeConfig;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @since 2.2.0
      */
     public function __construct(ScopeConfigInterface $scopeConfig)
     {
@@ -36,7 +33,6 @@ class TopDestinationCountries
      * Retrieve list of top destinations countries
      *
      * @return array
-     * @since 2.2.0
      */
     public function getTopDestinations()
     {

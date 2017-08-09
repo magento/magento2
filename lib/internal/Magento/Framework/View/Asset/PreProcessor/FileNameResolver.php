@@ -8,13 +8,11 @@ namespace Magento\Framework\View\Asset\PreProcessor;
 /**
  * Class \Magento\Framework\View\Asset\PreProcessor\FileNameResolver
  *
- * @since 2.2.0
  */
 class FileNameResolver
 {
     /**
      * @var AlternativeSource[]
-     * @since 2.2.0
      */
     private $alternativeSources;
 
@@ -22,7 +20,6 @@ class FileNameResolver
      * FileNameResolver constructor.
      * @param array $alternativeSources
      * @internal param AlternativeSource $alternativeSource
-     * @since 2.2.0
      */
     public function __construct(array $alternativeSources = [])
     {
@@ -39,7 +36,6 @@ class FileNameResolver
      *
      * @param string $fileName
      * @return string
-     * @since 2.2.0
      */
     public function resolve($fileName)
     {

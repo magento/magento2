@@ -16,25 +16,21 @@ use Magento\Store\Api\StoreRepositoryInterface;
 /**
  * Class \Magento\GroupedProduct\Ui\DataProvider\Product\GroupedProductDataProvider
  *
- * @since 2.1.0
  */
 class GroupedProductDataProvider extends ProductDataProvider
 {
     /**
      * @var RequestInterface
-     * @since 2.1.0
      */
     protected $request;
 
     /**
      * @var ConfigInterface
-     * @since 2.1.0
      */
     protected $config;
 
     /**
      * @var StoreRepositoryInterface
-     * @since 2.1.0
      */
     protected $storeRepository;
 
@@ -53,7 +49,6 @@ class GroupedProductDataProvider extends ProductDataProvider
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.1.0
      */
     public function __construct(
         $name,
@@ -88,7 +83,6 @@ class GroupedProductDataProvider extends ProductDataProvider
      * Get data
      *
      * @return array
-     * @since 2.1.0
      */
     public function getData()
     {

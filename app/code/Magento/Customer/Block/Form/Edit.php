@@ -71,7 +71,7 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
      * Get minimum password length
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getMinimumPasswordLength()
     {
@@ -82,7 +82,7 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
      * Get minimum password length
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getRequiredCharacterClassesNumber()
     {

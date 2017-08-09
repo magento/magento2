@@ -68,7 +68,6 @@ class AfterImportDataObserver implements ObserverInterface
 
     /**
      * @var \Magento\UrlRewrite\Model\UrlFinderInterface
-     * @since 2.0.3
      */
     protected $urlFinder;
 
@@ -140,7 +139,6 @@ class AfterImportDataObserver implements ObserverInterface
 
     /**
      * @var \Magento\UrlRewrite\Model\MergeDataProvider
-     * @since 2.2.0
      */
     private $mergeDataProviderPrototype;
 
@@ -148,7 +146,6 @@ class AfterImportDataObserver implements ObserverInterface
      * Factory for creating category collection.
      *
      * @var CategoryCollectionFactory
-     * @since 2.2.0
      */
     private $categoryCollectionFactory;
 
@@ -156,7 +153,6 @@ class AfterImportDataObserver implements ObserverInterface
      * Array of invoked categories during url rewrites generation.
      *
      * @var array
-     * @since 2.2.0
      */
     private $categoriesCache = [];
 
@@ -549,7 +545,6 @@ class AfterImportDataObserver implements ObserverInterface
      * @param int $categoryId
      * @param int $storeId
      * @return Category|\Magento\Framework\DataObject
-     * @since 2.2.0
      */
     private function getCategoryById($categoryId, $storeId)
     {

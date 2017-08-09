@@ -159,13 +159,11 @@ class Filter extends \Magento\Framework\Filter\Template
 
     /**
      * @var \Magento\Email\Model\Template\Css\Processor
-     * @since 2.1.3
      */
     private $cssProcessor;
 
     /**
      * @var ReadInterface
-     * @since 2.1.3
      */
     private $pubDirectory;
 
@@ -312,9 +310,8 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * @deprecated 2.1.3
+     * @deprecated 100.1.2
      * @return Css\Processor
-     * @since 2.1.3
      */
     private function getCssProcessor()
     {
@@ -325,10 +322,9 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * @deprecated 2.1.3
+     * @deprecated 100.1.2
      * @param string $dirType
      * @return ReadInterface
-     * @since 2.1.3
      */
     private function getPubDirectory($dirType)
     {

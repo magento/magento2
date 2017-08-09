@@ -14,7 +14,6 @@ class AddressCachedMetadata extends CachedMetadata implements AddressMetadataInt
 {
     /**
      * @var string
-     * @since 2.0.9
      */
     protected $entityType = 'customer_address';
 

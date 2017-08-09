@@ -79,7 +79,6 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
 
     /**
      * @var SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 

@@ -85,7 +85,6 @@ class Shipping implements RateCollectorInterface
 
     /**
      * @var RateRequestFactory
-     * @since 2.2.0
      */
     private $rateRequestFactory;
 

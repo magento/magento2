@@ -7,7 +7,6 @@ namespace Magento\Framework\App\Utility;
 
 /**
  * Factory for \RegexIterator
- * @since 2.2.0
  */
 class RegexIteratorFactory
 {
@@ -17,7 +16,6 @@ class RegexIteratorFactory
      * @param string $directoryPath
      * @param string $regexp
      * @return \RegexIterator
-     * @since 2.2.0
      */
     public function create($directoryPath, $regexp)
     {

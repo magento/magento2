@@ -15,7 +15,6 @@ use Magento\Framework\RequireJs\ConfigFactory;
 
 /**
  * Deploy RequireJS configuration service
- * @since 2.2.0
  */
 class DeployRequireJsConfig
 {
@@ -26,37 +25,31 @@ class DeployRequireJsConfig
 
     /**
      * @var ListInterface
-     * @since 2.2.0
      */
     private $themeList;
 
     /**
      * @var DesignInterfaceFactory
-     * @since 2.2.0
      */
     private $designFactory;
 
     /**
      * @var RepositoryFactory
-     * @since 2.2.0
      */
     private $assetRepoFactory;
 
     /**
      * @var FileManagerFactory
-     * @since 2.2.0
      */
     private $fileManagerFactory;
 
     /**
      * @var ConfigFactory
-     * @since 2.2.0
      */
     private $requireJsConfigFactory;
 
     /**
      * @var ResolverInterfaceFactory
-     * @since 2.2.0
      */
     private $localeFactory;
 
@@ -69,7 +62,6 @@ class DeployRequireJsConfig
      * @param FileManagerFactory $fileManagerFactory
      * @param ConfigFactory $requireJsConfigFactory
      * @param ResolverInterfaceFactory $localeFactory
-     * @since 2.2.0
      */
     public function __construct(
         ListInterface $themeList,
@@ -92,7 +84,6 @@ class DeployRequireJsConfig
      * @param string $themePath
      * @param string $localeCode
      * @return bool true on success
-     * @since 2.2.0
      */
     public function deploy($areaCode, $themePath, $localeCode)
     {

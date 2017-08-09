@@ -11,31 +11,26 @@ use Magento\Framework\DB\Profiler;
 
 /**
  * Collect insert queries for quick entity generation
- * @since 2.2.0
  */
 class SqlCollector
 {
     /**
      * @var ResourceConnection
-     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $sql = [];
 
     /**
      * @var \Zend_Db_Profiler
-     * @since 2.2.0
      */
     private $profiler;
 
     /**
      * @param ResourceConnection $resourceConnection
-     * @since 2.2.0
      */
     public function __construct(ResourceConnection $resourceConnection)
     {
@@ -46,7 +41,6 @@ class SqlCollector
      * @param string $sql
      * @param array $bind
      * @return void
-     * @since 2.2.0
      */
     private function addSql($sql, $bind)
     {
@@ -83,7 +77,6 @@ class SqlCollector
      * @param array $bind
      * @param int $bindPosition
      * @return array
-     * @since 2.2.0
      */
     private function handleBindValues(array $sqlBind, array $bind, $bindPosition = 0)
     {
@@ -100,7 +93,6 @@ class SqlCollector
 
     /**
      * @return array
-     * @since 2.2.0
      */
     public function getSql()
     {
@@ -111,7 +103,6 @@ class SqlCollector
      * Enable sql parsing
      *
      * @return void
-     * @since 2.2.0
      */
     public function enable()
     {
@@ -124,7 +115,6 @@ class SqlCollector
      * Disable sql parsing and collect all queries from profiler
      *
      * @return void
-     * @since 2.2.0
      */
     public function disable()
     {
@@ -139,7 +129,6 @@ class SqlCollector
 
     /**
      * @return \Zend_Db_Profiler
-     * @since 2.2.0
      */
     private function getProfiler()
     {

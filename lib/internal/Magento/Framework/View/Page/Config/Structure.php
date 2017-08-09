@@ -17,7 +17,6 @@ class Structure
      * Map of class properties.
      *
      * @var array
-     * @since 2.2.0
      */
     private $serializableProperties = [
         'assets',
@@ -217,7 +216,7 @@ class Structure
      * Reformat 'Page config structure' to array.
      *
      * @return array
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function __toArray()
     {
@@ -234,7 +233,7 @@ class Structure
      *
      * @param array $data
      * @return void
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function populateWithArray(array $data)
     {
@@ -249,7 +248,6 @@ class Structure
      * @param string $key
      * @param array $array
      * @return array
-     * @since 2.2.0
      */
     private function getArrayValueByKey($key, array $array)
     {

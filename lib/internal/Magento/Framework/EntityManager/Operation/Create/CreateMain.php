@@ -11,25 +11,21 @@ use Magento\Framework\EntityManager\Db\CreateRow;
 
 /**
  * Class CreateMain
- * @since 2.1.0
  */
 class CreateMain
 {
     /**
      * @var TypeResolver
-     * @since 2.1.0
      */
     private $typeResolver;
 
     /**
      * @var HydratorPool
-     * @since 2.1.0
      */
     private $hydratorPool;
 
     /**
      * @var CreateRow
-     * @since 2.1.0
      */
     private $createRow;
 
@@ -37,7 +33,6 @@ class CreateMain
      * @param TypeResolver $typeResolver
      * @param HydratorPool $hydratorPool
      * @param CreateRow $createRow
-     * @since 2.1.0
      */
     public function __construct(
         TypeResolver $typeResolver,
@@ -53,7 +48,6 @@ class CreateMain
      * @param object $entity
      * @param array $arguments
      * @return object
-     * @since 2.1.0
      */
     public function execute($entity, $arguments = [])
     {

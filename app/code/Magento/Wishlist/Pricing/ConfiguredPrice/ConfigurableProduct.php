@@ -12,19 +12,16 @@ use Magento\Catalog\Pricing\Price\FinalPrice;
 /**
  * Class \Magento\Wishlist\Pricing\ConfiguredPrice\ConfigurableProduct
  *
- * @since 2.1.0
  */
 class ConfigurableProduct extends FinalPrice implements ConfiguredPriceInterface
 {
     /**
      * @var ItemInterface
-     * @since 2.1.0
      */
     private $item;
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function getValue()
     {
@@ -38,7 +35,6 @@ class ConfigurableProduct extends FinalPrice implements ConfiguredPriceInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function setItem(ItemInterface $item)
     {

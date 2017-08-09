@@ -20,7 +20,7 @@ class Created extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
     /**
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @codeCoverageIgnore
-     * @deprecated 2.1.0 Remove unused dependency
+     * @deprecated 100.1.0 Remove unused dependency
      */
     public function __construct(\Magento\Framework\Stdlib\DateTime\DateTime $dateTime)
     {

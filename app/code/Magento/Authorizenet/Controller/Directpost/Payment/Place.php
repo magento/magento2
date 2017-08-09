@@ -50,7 +50,6 @@ class Place extends Payment
      * Logger for exception details
      *
      * @var LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 

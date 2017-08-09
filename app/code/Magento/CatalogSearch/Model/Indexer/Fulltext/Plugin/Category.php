@@ -12,7 +12,6 @@ use Magento\Framework\Model\AbstractModel;
 /**
  * Class Category
  * @package Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin
- * @since 2.1.0
  */
 class Category extends AbstractPlugin
 {
@@ -24,7 +23,6 @@ class Category extends AbstractPlugin
      * @param AbstractModel $category
      * @return ResourceCategory
      * @throws \Exception
-     * @since 2.1.0
      */
     public function aroundSave(ResourceCategory $resourceCategory, \Closure $proceed, AbstractModel $category)
     {
@@ -37,7 +35,6 @@ class Category extends AbstractPlugin
      * @param AbstractModel $category
      * @return ResourceCategory
      * @throws \Exception
-     * @since 2.1.0
      */
     private function addCommitCallback(ResourceCategory $resourceCategory, \Closure $proceed, AbstractModel $category)
     {

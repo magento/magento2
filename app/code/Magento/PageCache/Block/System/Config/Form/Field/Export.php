@@ -51,7 +51,6 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
 
     /**
      * @return \Magento\Framework\Phrase
-     * @since 2.1.0
      */
     private function getLabel()
     {
@@ -62,7 +61,6 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
      * @param array $params
      *
      * @return string
-     * @since 2.1.0
      */
     private function getVarnishUrl($params = [])
     {
@@ -74,7 +72,7 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
      * to avoid saving empty field
      *
      * @return string
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     public function getTtlValue()
     {

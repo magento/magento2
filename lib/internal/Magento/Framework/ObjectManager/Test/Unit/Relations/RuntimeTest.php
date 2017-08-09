@@ -8,7 +8,7 @@ namespace Magento\Framework\ObjectManager\Test\Unit\Relations;
 
 require_once __DIR__ . '/../_files/Child.php';
 
-class RuntimeTest extends \PHPUnit\Framework\Testcase
+class RuntimeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManager\Relations\Runtime

@@ -18,26 +18,24 @@ use Magento\Ui\Component\Form\Field;
  * Tier prices modifier adds price type option to tier prices.
  *
  * @api
- * @since 2.2.0
+ * @since 101.1.0
  */
 class TierPrice extends AbstractModifier
 {
     /**
      * @var ProductPriceOptionsInterface
-     * @since 2.2.0
      */
     private $productPriceOptions;
 
     /**
      * @var ArrayManager
-     * @since 2.2.0
      */
     private $arrayManager;
 
     /**
      * @param ProductPriceOptionsInterface $productPriceOptions
      * @param ArrayManager $arrayManager
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function __construct(
         ProductPriceOptionsInterface $productPriceOptions,
@@ -49,7 +47,7 @@ class TierPrice extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function modifyData(array $data)
     {
@@ -58,7 +56,7 @@ class TierPrice extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 101.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -94,7 +92,6 @@ class TierPrice extends AbstractModifier
      *
      * @param array $priceMeta
      * @return array
-     * @since 2.2.0
      */
     private function getUpdatedTierPriceStructure(array $priceMeta)
     {

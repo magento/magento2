@@ -12,31 +12,26 @@ namespace Magento\Setup\Fixtures;
  * Support the following format:
  * <!-- Number of admin users -->
  * <admin_users>{int}</admin_users>
- * @since 2.2.0
  */
 class AdminUsersFixture extends Fixture
 {
     /**
      * @var int
-     * @since 2.2.0
      */
     protected $priority = 5;
 
     /**
      * @var \Magento\User\Model\UserFactory
-     * @since 2.2.0
      */
     private $userFactory;
 
     /**
      * @var \Magento\Authorization\Model\RoleFactory
-     * @since 2.2.0
      */
     private $roleFactory;
 
     /**
      * @var \Magento\User\Model\ResourceModel\User\CollectionFactory
-     * @since 2.2.0
      */
     private $userCollectionFactory;
 
@@ -45,7 +40,6 @@ class AdminUsersFixture extends Fixture
      * @param \Magento\User\Model\ResourceModel\User\CollectionFactory $userCollectionFactory
      * @param \Magento\Authorization\Model\RoleFactory $roleFactory
      * @param FixtureModel $fixtureModel
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\User\Model\UserFactory $userFactory,
@@ -61,7 +55,6 @@ class AdminUsersFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function execute()
     {
@@ -101,7 +94,6 @@ class AdminUsersFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getActionTitle()
     {
@@ -110,7 +102,6 @@ class AdminUsersFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function introduceParamLabels()
     {

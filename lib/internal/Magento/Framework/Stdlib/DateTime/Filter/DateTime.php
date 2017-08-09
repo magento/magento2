@@ -37,7 +37,7 @@ class DateTime extends Date
      * @param string $value
      * @return string
      * @throws \Exception
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function filter($value)
     {

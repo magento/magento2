@@ -20,7 +20,7 @@ class Footer extends \Magento\Backend\Block\Template
 
     /**
      * @var \Magento\Framework\App\ProductMetadataInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $productMetadata;
 
@@ -28,7 +28,7 @@ class Footer extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
      * @param array $data
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -51,7 +51,7 @@ class Footer extends \Magento\Backend\Block\Template
      * Get product version
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getMagentoVersion()
     {

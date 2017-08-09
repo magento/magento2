@@ -12,7 +12,6 @@ use Zend\ServiceManager\ServiceManager;
 /**
  * This class is wrapper on \Zend\Mvc\Application and allows to do more customization like services loading, which
  * cannot be loaded via configuration.
- * @since 2.2.0
  */
 class Application
 {
@@ -23,7 +22,6 @@ class Application
      *
      * @param array $configuration
      * @return ZendApplication
-     * @since 2.2.0
      */
     public function bootstrap(array $configuration)
     {
@@ -55,7 +53,6 @@ class Application
      * @param ServiceManager $serviceManager
      * @param array $services
      * @return void
-     * @since 2.2.0
      */
     private function loadServices(ServiceManager $serviceManager, array $services)
     {
@@ -70,7 +67,6 @@ class Application
      * @param ServiceManager $serviceManager
      * @param array $configuration
      * @return array
-     * @since 2.2.0
      */
     private function getListeners(ServiceManager $serviceManager, array $configuration)
     {

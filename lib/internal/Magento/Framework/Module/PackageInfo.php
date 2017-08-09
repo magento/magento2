@@ -231,7 +231,6 @@ class PackageInfo
      *
      * @param string $requiredModuleName
      * @return array
-     * @since 2.2.0
      */
     public function getRequiredBy($requiredModuleName)
     {

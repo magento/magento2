@@ -10,7 +10,6 @@ use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Theme filesystem collection
- * @since 2.2.0
  */
 class ThemeList extends \Magento\Framework\Data\Collection implements ListInterface
 {
@@ -37,13 +36,11 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
      * Model of collection item
      *
      * @var string
-     * @since 2.2.0
      */
     protected $_itemObjectClass = ThemeInterface::class;
 
     /**
      * @var \Magento\Framework\Config\ThemeFactory $themeConfigFactory
-     * @since 2.2.0
      */
     protected $themeConfigFactory;
 
@@ -51,7 +48,6 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
      * Constraints for the collection loading
      *
      * @var array
-     * @since 2.2.0
      */
     private $constraints = [
         self::CONSTRAINT_AREA => [],
@@ -63,7 +59,6 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
      * Theme package list
      *
      * @var ThemePackageList
-     * @since 2.2.0
      */
     private $themePackageList;
 
@@ -71,7 +66,6 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
      * Factory for read directory
      *
      * @var ReadFactory
-     * @since 2.2.0
      */
     private $dirReadFactory;
 
@@ -82,7 +76,6 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
      * @param \Magento\Framework\Config\ThemeFactory $themeConfigFactory
      * @param ThemePackageList $themePackageList
      * @param ReadFactory $dirReadFactory
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -104,7 +97,6 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
      * @param string $type
      * @param string $value
      * @return void
-     * @since 2.2.0
      */
     public function addConstraint($type, $value)
     {
@@ -122,7 +114,6 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
      * Reset constraints for the collection loading
      *
      * @return void
-     * @since 2.2.0
      */
     public function resetConstraints()
     {
@@ -137,7 +128,6 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
      * @param string $constraintType
      * @param string $value
      * @return bool
-     * @since 2.2.0
      */
     private function isAcceptable($constraintType, $value)
     {
@@ -151,7 +141,6 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
      * @param bool $logQuery
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function loadData($printQuery = false, $logQuery = false)
     {
@@ -182,7 +171,6 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
      * Set all parent themes
      *
      * @return $this
-     * @since 2.2.0
      */
     protected function _updateRelations()
     {
@@ -205,7 +193,6 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
      *
      * @param ThemePackage[] $themes
      * @return $this
-     * @since 2.2.0
      */
     protected function _loadFromFilesystem(array $themes)
     {
@@ -223,7 +210,6 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
      *
      * @param ThemePackage $themePackage
      * @return array
-     * @since 2.2.0
      */
     protected function _preparePathData($themePackage)
     {
@@ -240,7 +226,6 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
      *
      * @param ThemePackage $themePackage
      * @return array
-     * @since 2.2.0
      */
     protected function _prepareConfigurationData($themePackage)
     {
@@ -275,7 +260,6 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
      * Apply set field filters
      *
      * @return $this
-     * @since 2.2.0
      */
     protected function _renderFilters()
     {
@@ -299,7 +283,6 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
      * Clear all added filters
      *
      * @return $this
-     * @since 2.2.0
      */
     protected function _clearFilters()
     {
@@ -312,7 +295,6 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
      *
      * @param ThemePackage $themePackage
      * @return \Magento\Framework\Config\Theme
-     * @since 2.2.0
      */
     protected function _getConfigModel($themePackage)
     {
@@ -330,7 +312,6 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
      *
      * @param \Magento\Framework\DataObject $item
      * @return string
-     * @since 2.2.0
      */
     protected function _getItemId(\Magento\Framework\DataObject $item)
     {
@@ -342,7 +323,6 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
      *
      * @param bool $addEmptyField
      * @return array
-     * @since 2.2.0
      */
     public function toOptionArray($addEmptyField = false)
     {
@@ -355,7 +335,6 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
      *
      * @param ThemeInterface $theme
      * @return bool
-     * @since 2.2.0
      */
     public function hasTheme(ThemeInterface $theme)
     {
@@ -368,7 +347,6 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
      *
      * @param string $fullPath
      * @return ThemeInterface
-     * @since 2.2.0
      */
     public function getThemeByFullPath($fullPath)
     {

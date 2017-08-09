@@ -7,7 +7,6 @@ namespace Magento\Framework\DB;
 
 /**
  * Class FieldDataConversionException
- * @since 2.2.0
  */
 class FieldDataConversionException extends \Exception
 {

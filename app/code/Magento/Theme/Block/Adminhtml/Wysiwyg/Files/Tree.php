@@ -25,7 +25,6 @@ class Tree extends \Magento\Backend\Block\Template
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 

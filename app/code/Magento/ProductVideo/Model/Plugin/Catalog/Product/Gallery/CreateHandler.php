@@ -10,7 +10,6 @@ use Magento\ProductVideo\Setup\InstallSchema;
 
 /**
  * Plugin for catalog product gallery create/update handlers.
- * @since 2.1.0
  */
 class CreateHandler extends AbstractHandler
 {
@@ -25,7 +24,6 @@ class CreateHandler extends AbstractHandler
      * @param array $arguments
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function beforeExecute(
         \Magento\Catalog\Model\Product\Gallery\CreateHandler $mediaGalleryCreateHandler,
@@ -48,7 +46,6 @@ class CreateHandler extends AbstractHandler
      * @param \Magento\Catalog\Model\Product\Gallery\CreateHandler $mediaGalleryCreateHandler
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
-     * @since 2.1.0
      */
     public function afterExecute(
         \Magento\Catalog\Model\Product\Gallery\CreateHandler $mediaGalleryCreateHandler,
@@ -72,7 +69,6 @@ class CreateHandler extends AbstractHandler
      * @param array $videoDataCollection
      * @param int $storeId
      * @return void
-     * @since 2.1.0
      */
     protected function saveVideoData(array $videoDataCollection, $storeId)
     {
@@ -85,7 +81,6 @@ class CreateHandler extends AbstractHandler
     /**
      * @param array $videoDataCollection
      * @return void
-     * @since 2.1.0
      */
     protected function saveAdditionalStoreData(array $videoDataCollection)
     {
@@ -102,7 +97,6 @@ class CreateHandler extends AbstractHandler
     /**
      * @param array $item
      * @return void
-     * @since 2.1.0
      */
     protected function saveVideoValuesItem(array $item)
     {
@@ -116,7 +110,6 @@ class CreateHandler extends AbstractHandler
      * @param array $mediaCollection
      * @param int $currentStoreId
      * @return array
-     * @since 2.1.0
      */
     protected function excludeCurrentStoreRecord(array $mediaCollection, $currentStoreId)
     {
@@ -131,7 +124,6 @@ class CreateHandler extends AbstractHandler
     /**
      * @param array $rowData
      * @return array
-     * @since 2.1.0
      */
     protected function prepareVideoRowDataForSave(array $rowData)
     {
@@ -150,7 +142,6 @@ class CreateHandler extends AbstractHandler
      * @param array $mediaCollection
      * @param int $excludedStore
      * @return array
-     * @since 2.1.0
      */
     protected function loadStoreViewVideoData(array $mediaCollection, $excludedStore)
     {
@@ -172,7 +163,6 @@ class CreateHandler extends AbstractHandler
     /**
      * @param array $mediaCollection
      * @return array
-     * @since 2.1.0
      */
     protected function collectVideoData(array $mediaCollection)
     {
@@ -193,7 +183,6 @@ class CreateHandler extends AbstractHandler
     /**
      * @param array $rowData
      * @return array
-     * @since 2.1.0
      */
     protected function extractVideoDataFromRowData(array $rowData)
     {
@@ -206,7 +195,6 @@ class CreateHandler extends AbstractHandler
     /**
      * @param array $mediaCollection
      * @return array
-     * @since 2.1.0
      */
     protected function collectVideoEntriesIdsToAdditionalLoad(array $mediaCollection)
     {
@@ -227,7 +215,6 @@ class CreateHandler extends AbstractHandler
      * @param array $mediaCollection
      * @param array $data
      * @return array
-     * @since 2.1.0
      */
     protected function addAdditionalStoreData(array $mediaCollection, array $data)
     {
@@ -247,7 +234,6 @@ class CreateHandler extends AbstractHandler
      * @param array $storeData
      * @param int $valueId
      * @return array
-     * @since 2.1.0
      */
     protected function createAdditionalStoreDataCollection(array $storeData, $valueId)
     {

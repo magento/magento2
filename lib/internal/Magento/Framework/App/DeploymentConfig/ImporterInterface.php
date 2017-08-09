@@ -9,7 +9,6 @@ use Magento\Framework\Exception\State\InvalidTransitionException;
 
 /**
  * Interface for importers which import data from shared configuration files to appropriate data storage.
- * @since 2.2.0
  */
 interface ImporterInterface
 {
@@ -20,7 +19,6 @@ interface ImporterInterface
      * @return string[] The array of messages that generated during importing
      * @throws InvalidTransitionException In case of errors during importing (e.g., cannot save some data).
      * All changed during importing data is rolled back
-     * @since 2.2.0
      */
     public function import(array $data);
 
@@ -29,7 +27,6 @@ interface ImporterInterface
      *
      * @param array $data Data that should be imported
      * @return string[] The array of warning messages
-     * @since 2.2.0
      */
     public function getWarningMessages(array $data);
 }

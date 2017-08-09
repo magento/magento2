@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\Product\Price;
 
 /**
  * Price persistence.
- * @since 2.2.0
  */
 class PricePersistence
 {
@@ -16,25 +15,21 @@ class PricePersistence
      * Price storage table.
      *
      * @var string
-     * @since 2.2.0
      */
     private $table = 'catalog_product_entity_decimal';
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Attribute
-     * @since 2.2.0
      */
     private $attributeResource;
 
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
-     * @since 2.2.0
      */
     private $attributeRepository;
 
     /**
      * @var \Magento\Catalog\Model\ProductIdLocatorInterface
-     * @since 2.2.0
      */
     private $productIdLocator;
 
@@ -42,7 +37,6 @@ class PricePersistence
      * Metadata pool.
      *
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.2.0
      */
     private $metadataPool;
 
@@ -50,7 +44,6 @@ class PricePersistence
      * Attribute code.
      *
      * @var string
-     * @since 2.2.0
      */
     private $attributeCode;
 
@@ -58,7 +51,6 @@ class PricePersistence
      * Attribute ID.
      *
      * @var int
-     * @since 2.2.0
      */
     private $attributeId;
 
@@ -66,7 +58,6 @@ class PricePersistence
      * Items per operation.
      *
      * @var int
-     * @since 2.2.0
      */
     private $itemsPerOperation = 500;
 
@@ -78,7 +69,6 @@ class PricePersistence
      * @param \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param string $attributeCode
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource,
@@ -99,7 +89,6 @@ class PricePersistence
      *
      * @param array $skus
      * @return array
-     * @since 2.2.0
      */
     public function get(array $skus)
     {
@@ -119,7 +108,6 @@ class PricePersistence
      * @param array $prices
      * @return void
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @since 2.2.0
      */
     public function update(array $prices)
     {
@@ -152,7 +140,6 @@ class PricePersistence
      * @param array $skus
      * @return void
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @since 2.2.0
      */
     public function delete(array $skus)
     {
@@ -185,7 +172,6 @@ class PricePersistence
      * @param int $id
      * @param array $skus
      * @return int|null
-     * @since 2.2.0
      */
     public function retrieveSkuById($id, $skus)
     {
@@ -202,7 +188,6 @@ class PricePersistence
      * Get attribute ID.
      *
      * @return int
-     * @since 2.2.0
      */
     private function getAttributeId()
     {
@@ -218,7 +203,6 @@ class PricePersistence
      *
      * @param array $skus
      * @return array
-     * @since 2.2.0
      */
     private function retrieveAffectedIds(array $skus)
     {
@@ -235,7 +219,6 @@ class PricePersistence
      * Get link field.
      *
      * @return string
-     * @since 2.2.0
      */
     public function getEntityLinkField()
     {

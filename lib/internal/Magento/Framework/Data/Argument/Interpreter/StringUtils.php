@@ -16,7 +16,6 @@ class StringUtils implements InterpreterInterface
 {
     /**
      * @var BaseStringUtils
-     * @since 2.2.0
      */
     private $baseStringUtils;
 

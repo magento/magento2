@@ -9,7 +9,6 @@ namespace Magento\Catalog\Block\Adminhtml\Category;
 /**
  * Class \Magento\Catalog\Block\Adminhtml\Category\AssignProducts
  *
- * @since 2.1.0
  */
 class AssignProducts extends \Magento\Backend\Block\Template
 {
@@ -17,25 +16,21 @@ class AssignProducts extends \Magento\Backend\Block\Template
      * Block template
      *
      * @var string
-     * @since 2.1.0
      */
     protected $_template = 'catalog/category/edit/assign_products.phtml';
 
     /**
      * @var \Magento\Catalog\Block\Adminhtml\Category\Tab\Product
-     * @since 2.1.0
      */
     protected $blockGrid;
 
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.1.0
      */
     protected $registry;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.1.0
      */
     protected $jsonEncoder;
 
@@ -46,7 +41,6 @@ class AssignProducts extends \Magento\Backend\Block\Template
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -64,7 +58,6 @@ class AssignProducts extends \Magento\Backend\Block\Template
      *
      * @return \Magento\Framework\View\Element\BlockInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.1.0
      */
     public function getBlockGrid()
     {
@@ -81,7 +74,6 @@ class AssignProducts extends \Magento\Backend\Block\Template
      * Return HTML of grid block
      *
      * @return string
-     * @since 2.1.0
      */
     public function getGridHtml()
     {
@@ -90,7 +82,6 @@ class AssignProducts extends \Magento\Backend\Block\Template
 
     /**
      * @return string
-     * @since 2.1.0
      */
     public function getProductsJson()
     {
@@ -105,7 +96,6 @@ class AssignProducts extends \Magento\Backend\Block\Template
      * Retrieve current category instance
      *
      * @return array|null
-     * @since 2.1.0
      */
     public function getCategory()
     {

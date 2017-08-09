@@ -9,7 +9,6 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Interface ProductPriceOptionsInterface
- * @since 2.2.0
  */
 interface ProductPriceOptionsInterface extends OptionSourceInterface
 {

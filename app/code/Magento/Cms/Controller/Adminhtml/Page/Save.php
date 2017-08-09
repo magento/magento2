@@ -31,19 +31,16 @@ class Save extends \Magento\Backend\App\Action
 
     /**
      * @var DataPersistorInterface
-     * @since 2.1.0
      */
     protected $dataPersistor;
 
     /**
      * @var \Magento\Cms\Model\PageFactory
-     * @since 2.2.0
      */
     private $pageFactory;
 
     /**
      * @var \Magento\Cms\Api\PageRepositoryInterface
-     * @since 2.2.0
      */
     private $pageRepository;
 

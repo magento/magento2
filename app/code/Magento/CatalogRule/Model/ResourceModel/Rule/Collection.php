@@ -23,7 +23,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     protected $serializer;
 
@@ -36,7 +35,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @param Json|null $serializer
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
@@ -83,7 +81,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @param string $objectField
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
-     * @since 2.1.0
      */
     protected function mapAssociatedEntities($entityType, $objectField)
     {
@@ -114,7 +111,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
     /**
      * @return $this
-     * @since 2.1.0
      */
     protected function _afterLoad()
     {
@@ -130,7 +126,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      *
      * @param int $customerGroupId
      * @return $this
-     * @since 2.1.0
      */
     public function addCustomerGroupFilter($customerGroupId)
     {
@@ -151,8 +146,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
     /**
      * @return array
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getAssociatedEntitiesMap()
     {

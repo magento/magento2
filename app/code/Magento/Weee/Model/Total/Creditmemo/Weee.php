@@ -28,7 +28,6 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
      * Instance of serializer.
      *
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 

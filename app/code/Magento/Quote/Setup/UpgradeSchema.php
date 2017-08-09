@@ -16,7 +16,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
      * @var string
-     * @since 2.1.3
      */
     private static $connectionName = 'checkout';
 

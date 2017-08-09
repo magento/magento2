@@ -10,32 +10,27 @@ use Magento\Braintree\Model\Adminhtml\System\Config\Country as CountryConfig;
 
 /**
  * Class Country
- * @since 2.1.0
  */
 class Country
 {
     /**
      * @var CollectionFactory
-     * @since 2.1.0
      */
     private $collectionFactory;
 
     /**
      * @var CountryConfig
-     * @since 2.1.0
      */
     private $countryConfig;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $countries;
 
     /**
      * @param CollectionFactory $factory
      * @param CountryConfig $countryConfig
-     * @since 2.1.0
      */
     public function __construct(CollectionFactory $factory, CountryConfig $countryConfig)
     {
@@ -47,7 +42,6 @@ class Country
      * Returns countries array
      *
      * @return array
-     * @since 2.1.0
      */
     public function getCountries()
     {

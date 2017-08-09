@@ -36,19 +36,16 @@ class UiComponent implements ReaderInterface
 
     /**
      * @var Condition
-     * @since 2.2.0
      */
     private $conditionReader;
 
     /**
      * @var DataInterfaceFactory
-     * @since 2.2.0
      */
     private $uiConfigFactory;
 
     /**
      * @var ReaderPool
-     * @since 2.2.0
      */
     private $readerPool;
 
@@ -119,7 +116,6 @@ class UiComponent implements ReaderInterface
      * @param array $config
      * @param array $elements
      * @return void
-     * @since 2.2.0
      */
     private function getLayoutElementsFromUiConfiguration(array $config, array &$elements = [])
     {

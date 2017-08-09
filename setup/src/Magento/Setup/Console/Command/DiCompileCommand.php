@@ -220,7 +220,6 @@ class DiCompileCommand extends Command
      *
      * @param string[] $modulePaths
      * @return string[]
-     * @since 2.1.3
      */
     private function getExcludedModulePaths(array $modulePaths)
     {
@@ -256,7 +255,6 @@ class DiCompileCommand extends Command
      *
      * @param string[] $libraryPaths
      * @return string[]
-     * @since 2.1.3
      */
     private function getExcludedLibraryPaths(array $libraryPaths)
     {
@@ -272,7 +270,6 @@ class DiCompileCommand extends Command
      *
      * @param string $setupPath
      * @return string[]
-     * @since 2.2.0
      */
     private function getExcludedSetupPaths($setupPath)
     {

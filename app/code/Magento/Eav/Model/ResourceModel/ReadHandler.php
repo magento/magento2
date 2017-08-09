@@ -14,31 +14,26 @@ use Psr\Log\LoggerInterface;
 /**
  * Class \Magento\Eav\Model\ResourceModel\ReadHandler
  *
- * @since 2.1.0
  */
 class ReadHandler implements AttributeInterface
 {
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @var ScopeResolver
-     * @since 2.1.0
      */
     protected $scopeResolver;
 
     /**
      * @var LoggerInterface
-     * @since 2.1.3
      */
     private $logger;
 
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.2.0
      */
     private $config;
 
@@ -49,7 +44,6 @@ class ReadHandler implements AttributeInterface
      * @param ScopeResolver $scopeResolver
      * @param LoggerInterface $logger
      * @param \Magento\Eav\Model\Config $config
-     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -69,7 +63,6 @@ class ReadHandler implements AttributeInterface
      * @param string $entityType
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
      * @throws \Exception if for unknown entity type
-     * @since 2.1.0
      */
     protected function getAttributes($entityType)
     {
@@ -82,7 +75,6 @@ class ReadHandler implements AttributeInterface
     /**
      * @param ScopeInterface $scope
      * @return array
-     * @since 2.1.0
      */
     protected function getContextVariables(ScopeInterface $scope)
     {
@@ -102,7 +94,6 @@ class ReadHandler implements AttributeInterface
      * @throws \Magento\Framework\Exception\ConfigurationMismatchException
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function execute($entityType, $entityData, $arguments = [])
     {

@@ -346,7 +346,6 @@ class ObjectManager
      * @param object $propertyValue
      * @param string $className The namespace of parent class for injection private property into this class
      * @return void
-     * @since 2.0.10
      */
     public function setBackwardCompatibleProperty($object, $propertyName, $propertyValue, $className = '')
     {

@@ -12,7 +12,6 @@ use Magento\UrlRewrite\Model\MergeDataProvider;
 
 /**
  * Map that holds data for category url rewrites entity
- * @since 2.2.0
  */
 class DataCategoryUrlRewriteDatabaseMap implements DatabaseMapInterface
 {
@@ -20,25 +19,21 @@ class DataCategoryUrlRewriteDatabaseMap implements DatabaseMapInterface
 
     /**
      * @var string[]
-     * @since 2.2.0
      */
     private $createdTableAdapters = [];
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\Map\HashMapPool
-     * @since 2.2.0
      */
     private $hashMapPool;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.2.0
      */
     private $connection;
 
     /**
      * @var \Magento\Framework\DB\TemporaryTableService
-     * @since 2.2.0
      */
     private $temporaryTableService;
 
@@ -46,7 +41,6 @@ class DataCategoryUrlRewriteDatabaseMap implements DatabaseMapInterface
      * @param ResourceConnection $connection
      * @param HashMapPool $hashMapPool,
      * @param TemporaryTableService $temporaryTableService
-     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $connection,
@@ -63,7 +57,6 @@ class DataCategoryUrlRewriteDatabaseMap implements DatabaseMapInterface
      *
      * @param int $categoryId
      * @return void
-     * @since 2.2.0
      */
     private function generateTableAdapter($categoryId)
     {
@@ -78,7 +71,6 @@ class DataCategoryUrlRewriteDatabaseMap implements DatabaseMapInterface
      *
      * @param int $categoryId
      * @return string
-     * @since 2.2.0
      */
     private function generateData($categoryId)
     {
@@ -119,7 +111,6 @@ class DataCategoryUrlRewriteDatabaseMap implements DatabaseMapInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function destroyTableAdapter($categoryId)
     {
@@ -137,7 +128,6 @@ class DataCategoryUrlRewriteDatabaseMap implements DatabaseMapInterface
      * @param int $categoryId
      * @param string $key
      * @return array
-     * @since 2.2.0
      */
     public function getData($categoryId, $key)
     {

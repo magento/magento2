@@ -10,19 +10,16 @@ use Magento\Theme\Model\Design\BackendModelFactory;
 /**
  * Class \Magento\Theme\Model\Design\Config\ValueProcessor
  *
- * @since 2.1.0
  */
 class ValueProcessor
 {
     /**
      * @var BackendModelFactory
-     * @since 2.1.0
      */
     protected $backendModelFactory;
 
     /**
      * @param BackendModelFactory $backendModelFactory
-     * @since 2.1.0
      */
     public function __construct(
         BackendModelFactory $backendModelFactory
@@ -38,7 +35,6 @@ class ValueProcessor
      * @param string $scopeId
      * @param array $fieldConfig
      * @return mixed
-     * @since 2.1.0
      */
     public function process($value, $scope, $scopeId, array $fieldConfig)
     {

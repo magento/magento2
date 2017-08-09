@@ -12,7 +12,6 @@ use Magento\Framework\ObjectManagerInterface;
  * Factory for validators.
  *
  * Creates object instance that implements Magento\Framework\App\DeploymentConfig\ValidatorInterface interface.
- * @since 2.2.0
  */
 class ValidatorFactory
 {
@@ -20,13 +19,11 @@ class ValidatorFactory
      * Magento object manager.
      *
      * @var ObjectManagerInterface
-     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager the magento object manager
-     * @since 2.2.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -40,7 +37,6 @@ class ValidatorFactory
      * @param array $data the array with some additional configuration data for creation of object instance
      * @return ValidatorInterface the created object instance
      * @throws \InvalidArgumentException is thrown when object instance does not implement ValidatorInterface
-     * @since 2.2.0
      */
     public function create($className, array $data = [])
     {

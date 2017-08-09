@@ -211,7 +211,7 @@ class Converter implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return string
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected function getTranslatedNodeValue(\DOMNode $node)
     {

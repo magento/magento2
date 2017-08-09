@@ -15,7 +15,7 @@ namespace Magento\Security\Model;
  * @method string getCreatedAt()
  *
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
 {
@@ -45,19 +45,18 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
 
     /**
      * All other open sessions were terminated
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $isOtherSessionsTerminated = false;
 
     /**
      * @var ConfigInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $securityConfig;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.1.0
      */
     private $dateTime;
 
@@ -71,7 +70,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -91,7 +90,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * Initialize resource model
      *
      * @return void
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function _construct()
     {
@@ -102,7 +101,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * Check if a status is logged in
      *
      * @return bool
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function isLoggedInStatus()
     {
@@ -114,7 +113,6 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * Check if session is timed out and set status accordingly
      *
      * @return void
-     * @since 2.1.0
      */
     private function checkActivity()
     {
@@ -127,7 +125,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * Check whether the session is expired
      *
      * @return bool
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function isSessionExpired()
     {
@@ -145,7 +143,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * Get formatted IP
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getFormattedIp()
     {
@@ -156,7 +154,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * Check if other sessions terminated
      *
      * @return bool
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function isOtherSessionsTerminated()
     {
@@ -168,7 +166,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      *
      * @param bool $isOtherSessionsTerminated
      * @return this
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function setIsOtherSessionsTerminated($isOtherSessionsTerminated)
     {

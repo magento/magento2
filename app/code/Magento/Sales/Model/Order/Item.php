@@ -98,7 +98,6 @@ class Item extends AbstractModel implements OrderItemInterface
      * Serializer interface instance.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -2399,7 +2398,7 @@ class Item extends AbstractModel implements OrderItemInterface
      * Check if it is possible to process item after cancellation
      *
      * @return bool
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function isProcessingAvailable()
     {

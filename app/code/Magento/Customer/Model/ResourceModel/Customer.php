@@ -42,7 +42,6 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 
     /**
      * @var NotificationStorage
-     * @since 2.1.0
      */
     private $notificationStorage;
 
@@ -179,7 +178,6 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * Retrieve notification storage
      *
      * @return NotificationStorage
-     * @since 2.1.0
      */
     private function getNotificationStorage()
     {

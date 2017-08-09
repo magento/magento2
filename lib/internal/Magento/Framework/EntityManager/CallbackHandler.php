@@ -11,19 +11,16 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class CallbackHandler
- * @since 2.1.0
  */
 class CallbackHandler
 {
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @var LoggerInterface
-     * @since 2.1.0
      */
     protected $logger;
 
@@ -32,7 +29,6 @@ class CallbackHandler
      *
      * @param MetadataPool $metadataPool
      * @param LoggerInterface $logger
-     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -46,7 +42,6 @@ class CallbackHandler
      * @param string $entityType
      * @throws \Exception
      * @return void
-     * @since 2.1.0
      */
     public function process($entityType)
     {
@@ -71,7 +66,6 @@ class CallbackHandler
      * @param array $callback
      * @throws \Exception
      * @return void
-     * @since 2.1.0
      */
     public function attach($entityType, $callback)
     {
@@ -83,7 +77,6 @@ class CallbackHandler
      * @param string $entityType
      * @throws \Exception
      * @return void
-     * @since 2.1.0
      */
     public function clear($entityType)
     {

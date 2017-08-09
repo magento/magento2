@@ -12,25 +12,21 @@ use Magento\Framework\Reflection\MethodsMap;
 
 /**
  * Communication configuration validator.
- * @since 2.1.0
  */
 class Validator extends ConfigValidator
 {
     /**
      * @var TypeProcessor
-     * @since 2.1.0
      */
     private $typeProcessor;
 
     /**
      * @var MethodsMap
-     * @since 2.1.0
      */
     private $methodsMap;
 
     /**
      * @var BooleanUtils
-     * @since 2.1.0
      */
     private $booleanUtils;
 
@@ -40,7 +36,6 @@ class Validator extends ConfigValidator
      * @param TypeProcessor $typeProcessor
      * @param MethodsMap $methodsMap
      * @param BooleanUtils $booleanUtils
-     * @since 2.1.0
      */
     public function __construct(
         TypeProcessor $typeProcessor,
@@ -61,7 +56,6 @@ class Validator extends ConfigValidator
      * @param string $className
      * @param string $methodName
      * @return void
-     * @since 2.1.0
      */
     public function validateServiceMethod($serviceMethod, $topicName, $className, $methodName)
     {
@@ -87,7 +81,6 @@ class Validator extends ConfigValidator
      * @param string $responseSchema
      * @param array $handlers
      * @return void
-     * @since 2.1.0
      */
     public function validateResponseRequest(
         $requestResponseSchema,
@@ -125,7 +118,6 @@ class Validator extends ConfigValidator
      * @param string $requestSchema
      * @param string $responseSchema
      * @return void
-     * @since 2.1.0
      */
     public function validateDeclarationOfTopic(
         $requestResponseSchema,

@@ -24,14 +24,12 @@ class CreditmemoFactory
 
     /**
      * @var \Magento\Framework\Unserialize\Unserialize
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     protected $unserialize;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -277,7 +275,6 @@ class CreditmemoFactory
      * @param \Magento\Sales\Api\Data\OrderItemInterface $orderItem
      * @param int $parentQty
      * @return int
-     * @since 2.2.0
      */
     private function calculateProductOptions(\Magento\Sales\Api\Data\OrderItemInterface $orderItem, $parentQty)
     {

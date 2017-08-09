@@ -19,7 +19,6 @@ class ConfigurableProductsProvider
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $productIds = [];
 

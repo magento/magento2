@@ -19,55 +19,46 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Import
  *
- * @since 2.1.0
  */
 class Import
 {
     /**
      * @var StoreManagerInterface
-     * @since 2.1.0
      */
     private $storeManager;
 
     /**
      * @var Filesystem
-     * @since 2.1.0
      */
     private $filesystem;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.1.0
      */
     private $coreConfig;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $errors = [];
 
     /**
      * @var CSV\RowParser
-     * @since 2.1.0
      */
     private $rowParser;
 
     /**
      * @var CSV\ColumnResolverFactory
-     * @since 2.1.0
      */
     private $columnResolverFactory;
 
     /**
      * @var DataHashGenerator
-     * @since 2.1.0
      */
     private $dataHashGenerator;
 
     /**
      * @var array
-     * @since 2.1.0
      */
     private $uniqueHash = [];
 
@@ -79,7 +70,6 @@ class Import
      * @param CSV\RowParser $rowParser
      * @param CSV\ColumnResolverFactory $columnResolverFactory
      * @param DataHashGenerator $dataHashGenerator
-     * @since 2.1.0
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -99,7 +89,6 @@ class Import
 
     /**
      * @return bool
-     * @since 2.1.0
      */
     public function hasErrors()
     {
@@ -108,7 +97,6 @@ class Import
 
     /**
      * @return array
-     * @since 2.1.0
      */
     public function getErrors()
     {
@@ -117,7 +105,6 @@ class Import
 
     /**
      * @return array
-     * @since 2.1.0
      */
     public function getColumns()
     {
@@ -132,7 +119,6 @@ class Import
      * @param int $bunchSize
      * @return \Generator
      * @throws LocalizedException
-     * @since 2.1.0
      */
     public function getData(ReadInterface $file, $websiteId, $conditionShortName, $conditionFullName, $bunchSize = 5000)
     {
@@ -190,7 +176,6 @@ class Import
      * @param ReadInterface $file
      * @return array|bool
      * @throws LocalizedException
-     * @since 2.1.0
      */
     private function getHeaders(ReadInterface $file)
     {

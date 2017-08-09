@@ -37,7 +37,6 @@ class PreprocessorStrategy implements PreProcessorInterface
 
     /**
      * @var State
-     * @since 2.2.0
      */
     private $state;
 
@@ -79,8 +78,7 @@ class PreprocessorStrategy implements PreProcessorInterface
 
     /**
      * @return State
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getState()
     {

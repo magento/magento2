@@ -15,7 +15,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Factory class for @see \Magento\Deploy\Console\ConsoleLogger
  *
  * This factory can be requested only in CLI command classes constructors
- * @since 2.2.0
  */
 class ConsoleLoggerFactory
 {
@@ -23,7 +22,6 @@ class ConsoleLoggerFactory
      * Object manager instance
      *
      * @var ObjectManagerProvider
-     * @since 2.2.0
      */
     private $objectManagerProvider;
 
@@ -31,7 +29,6 @@ class ConsoleLoggerFactory
      * Type of logger instance to create
      *
      * @var string
-     * @since 2.2.0
      */
     private $type;
 
@@ -40,7 +37,6 @@ class ConsoleLoggerFactory
      *
      * @param ObjectManagerProvider $objectManagerProvider
      * @param string $type
-     * @since 2.2.0
      */
     public function __construct(ObjectManagerProvider $objectManagerProvider, $type = ConsoleLogger::class)
     {
@@ -55,7 +51,6 @@ class ConsoleLoggerFactory
      * @param int $verbose
      * @return ConsoleLogger
      * @throws LocalizedException
-     * @since 2.2.0
      */
     public function getLogger(OutputInterface $output, $verbose)
     {

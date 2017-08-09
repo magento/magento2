@@ -36,7 +36,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
 {
     /**
      * @var \Magento\Eav\Model\Entity\AttributeLoaderInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $attributeLoader;
 
@@ -100,7 +100,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Entity primary key for link field name
      *
      * @var string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $linkIdField;
 
@@ -726,7 +726,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Get link id
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getLinkField()
     {
@@ -979,10 +979,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Loads attributes metadata.
      *
-     * @deprecated 2.2.0 Use self::loadAttributesForObject instead
+     * @deprecated 100.2.0 Use self::loadAttributesForObject instead
      * @param array|null $attributes
      * @return $this
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function loadAttributesMetadata($attributes)
     {
@@ -1164,7 +1164,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return void
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function processSave($object)
     {
@@ -1729,7 +1729,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @return void
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function evaluateDelete($object, $id, $connection)
     {
@@ -1866,8 +1866,8 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @return AttributeLoaderInterface
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
+     * @since 100.1.0
      */
     protected function getAttributeLoader()
     {
@@ -1881,7 +1881,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Perform actions after entity load
      *
      * @param \Magento\Framework\DataObject $object
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function afterLoad(\Magento\Framework\DataObject $object)
     {
@@ -1892,7 +1892,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Perform actions before entity save
      *
      * @param \Magento\Framework\DataObject $object
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function beforeSave(\Magento\Framework\DataObject $object)
     {
@@ -1903,7 +1903,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Perform actions after entity save
      *
      * @param \Magento\Framework\DataObject $object
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function afterSave(\Magento\Framework\DataObject $object)
     {
@@ -1914,7 +1914,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Perform actions before entity delete
      *
      * @param \Magento\Framework\DataObject $object
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function beforeDelete(\Magento\Framework\DataObject $object)
     {
@@ -1925,7 +1925,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Perform actions after entity delete
      *
      * @param \Magento\Framework\DataObject $object
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function afterDelete(\Magento\Framework\DataObject $object)
     {
@@ -1939,7 +1939,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param array $attributes
      * @param AbstractEntity|null $object
      * @return void
-     * @since 2.2.0
+     * @since 100.2.0
      */
     protected function loadAttributesForObject($attributes, $object = null)
     {

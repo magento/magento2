@@ -19,7 +19,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Store model manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     protected $_storeManager;
 
@@ -37,7 +37,6 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var StockConfigurationInterface
-     * @since 2.1.0
      */
     private $stockConfiguration;
 
@@ -219,7 +218,6 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @param bool $isFilterInStock
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
-     * @since 2.0.9
      */
     public function addStockDataToCollection($collection, $isFilterInStock)
     {
@@ -341,8 +339,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @return StockConfigurationInterface
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getStockConfiguration()
     {

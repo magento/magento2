@@ -10,7 +10,6 @@ use Magento\Framework\DB\Sql\LimitExpression;
 
 /**
  * Class LimitRenderer
- * @since 2.1.0
  */
 class LimitRenderer implements RendererInterface
 {
@@ -20,7 +19,6 @@ class LimitRenderer implements RendererInterface
      * @param Select $select
      * @param string $sql
      * @return LimitExpression|string
-     * @since 2.1.0
      */
     public function render(Select $select, $sql = '')
     {

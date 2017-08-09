@@ -968,7 +968,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Validate customer attribute values.
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      * @return bool
      */
     public function validate()
@@ -1318,7 +1318,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check if customer is locked
      *
      * @return boolean
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function isCustomerLocked()
     {
@@ -1335,7 +1335,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Return Password Confirmation
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getPasswordConfirm()
     {
@@ -1346,7 +1346,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Return Password
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getPassword()
     {

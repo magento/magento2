@@ -17,25 +17,21 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Request checker for catalog view.
  *
  * Checks catalog view query whether required to collect all attributes for entity.
- * @since 2.2.0
  */
 class CatalogView implements RequestCheckerInterface
 {
     /**
      * Identifier for query name
-     * @since 2.2.0
      */
     private $name;
 
     /**
      * @var CategoryRepositoryInterface
-     * @since 2.2.0
      */
     private $categoryRepository;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.2.0
      */
     private $storeManager;
 
@@ -43,7 +39,6 @@ class CatalogView implements RequestCheckerInterface
      * @param CategoryRepositoryInterface $categoryRepository
      * @param StoreManagerInterface $storeManager
      * @param string $name
-     * @since 2.2.0
      */
     public function __construct(
         CategoryRepositoryInterface $categoryRepository,
@@ -57,7 +52,6 @@ class CatalogView implements RequestCheckerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function isApplicable(RequestInterface $request)
     {
@@ -76,7 +70,6 @@ class CatalogView implements RequestCheckerInterface
      *
      * @param RequestInterface $request
      * @return bool
-     * @since 2.2.0
      */
     private function hasAnchorCategory(RequestInterface $request)
     {
@@ -107,7 +100,6 @@ class CatalogView implements RequestCheckerInterface
      *
      * @param QueryInterface $queryExpression
      * @return \Magento\Catalog\Api\Data\CategoryInterface[]|[]
-     * @since 2.2.0
      */
     private function getCategoriesFromQuery(QueryInterface $queryExpression)
     {
@@ -134,7 +126,6 @@ class CatalogView implements RequestCheckerInterface
      *
      * @param QueryInterface $queryExpression
      * @return array
-     * @since 2.2.0
      */
     private function getCategoryIdsFromQuery(QueryInterface $queryExpression)
     {

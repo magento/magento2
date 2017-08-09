@@ -9,13 +9,11 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Create instance of FieldDataConverter with concrete implementation of DataConverterInterface
- * @since 2.2.0
  */
 class FieldDataConverterFactory
 {
     /**
      * @var ObjectManagerInterface
-     * @since 2.2.0
      */
     private $objectManager;
 
@@ -23,7 +21,6 @@ class FieldDataConverterFactory
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager
@@ -36,7 +33,6 @@ class FieldDataConverterFactory
      *
      * @param string $dataConverterClassName
      * @return FieldDataConverter
-     * @since 2.2.0
      */
     public function create($dataConverterClassName)
     {

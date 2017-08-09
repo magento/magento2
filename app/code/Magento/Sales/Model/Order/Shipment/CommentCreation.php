@@ -9,25 +9,21 @@ use Magento\Sales\Api\Data\ShipmentCommentCreationInterface;
 
 /**
  * Class CommentCreation
- * @since 2.1.2
  */
 class CommentCreation implements ShipmentCommentCreationInterface
 {
     /**
      * @var \Magento\Sales\Api\Data\ShipmentCommentCreationExtensionInterface
-     * @since 2.1.2
      */
     private $extensionAttributes;
 
     /**
      * @var string
-     * @since 2.1.2
      */
     private $comment;
 
     /**
      * @var int
-     * @since 2.1.2
      */
     private $isVisibleOnFront;
 
@@ -35,7 +31,6 @@ class CommentCreation implements ShipmentCommentCreationInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\ShipmentCommentCreationExtensionInterface|null
-     * @since 2.1.2
      */
     public function getExtensionAttributes()
     {
@@ -47,7 +42,6 @@ class CommentCreation implements ShipmentCommentCreationInterface
      *
      * @param \Magento\Sales\Api\Data\ShipmentCommentCreationExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.1.2
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\ShipmentCommentCreationExtensionInterface $extensionAttributes
@@ -60,7 +54,6 @@ class CommentCreation implements ShipmentCommentCreationInterface
      * Gets the comment for the invoice.
      *
      * @return string Comment.
-     * @since 2.1.2
      */
     public function getComment()
     {
@@ -72,7 +65,6 @@ class CommentCreation implements ShipmentCommentCreationInterface
      *
      * @param string $comment
      * @return $this
-     * @since 2.1.2
      */
     public function setComment($comment)
     {
@@ -84,7 +76,6 @@ class CommentCreation implements ShipmentCommentCreationInterface
      * Gets the is-visible-on-storefront flag value for the invoice.
      *
      * @return int Is-visible-on-storefront flag value.
-     * @since 2.1.2
      */
     public function getIsVisibleOnFront()
     {
@@ -96,7 +87,6 @@ class CommentCreation implements ShipmentCommentCreationInterface
      *
      * @param int $isVisibleOnFront
      * @return $this
-     * @since 2.1.2
      */
     public function setIsVisibleOnFront($isVisibleOnFront)
     {

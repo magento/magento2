@@ -12,7 +12,6 @@ use Magento\Catalog\Pricing\Price\RegularPrice;
 /**
  * Class \Magento\Tax\Observer\GetPriceConfigurationObserver
  *
- * @since 2.1.0
  */
 class GetPriceConfigurationObserver implements ObserverInterface
 {
@@ -20,20 +19,17 @@ class GetPriceConfigurationObserver implements ObserverInterface
      * Tax data
      *
      * @var \Magento\Tax\Helper\Data
-     * @since 2.1.0
      */
     protected $taxData;
 
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.1.0
      */
     protected $registry;
 
     /**
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\Registry $registry,
@@ -49,7 +45,6 @@ class GetPriceConfigurationObserver implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.1.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
@@ -78,7 +73,6 @@ class GetPriceConfigurationObserver implements ObserverInterface
      * @param array $input
      * @param string $searchKey
      * @return array
-     * @since 2.1.0
      */
     private function recurConfigAndUpdatePrice($input, $searchKey)
     {
@@ -109,7 +103,6 @@ class GetPriceConfigurationObserver implements ObserverInterface
      * @param array $holder
      * @param int|string $key
      * @return array
-     * @since 2.1.0
      */
     private function updatePriceForBundle($holder, $key)
     {

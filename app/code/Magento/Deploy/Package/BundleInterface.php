@@ -7,7 +7,6 @@ namespace Magento\Deploy\Package;
 
 /**
  * Bundle Interface
- * @since 2.2.0
  */
 interface BundleInterface
 {
@@ -23,7 +22,6 @@ interface BundleInterface
      * @param string $sourcePath
      * @param string $contentType
      * @return bool true on success
-     * @since 2.2.0
      */
     public function addFile($filePath, $sourcePath, $contentType);
 
@@ -31,7 +29,6 @@ interface BundleInterface
      * Flushes all files added to appropriate bundle
      *
      * @return bool true on success
-     * @since 2.2.0
      */
     public function flush();
 
@@ -39,7 +36,6 @@ interface BundleInterface
      * Delete all bundles
      *
      * @return bool true on success
-     * @since 2.2.0
      */
     public function clear();
 }

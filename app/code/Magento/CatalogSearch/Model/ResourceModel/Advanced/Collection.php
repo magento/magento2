@@ -33,7 +33,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @var \Magento\Search\Api\SearchInterface
-     * @since 2.1.0
      */
     private $search;
 
@@ -44,19 +43,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @var SearchCriteriaBuilder
-     * @since 2.1.0
      */
     private $searchCriteriaBuilder;
 
     /**
      * @var SearchResultFactory
-     * @since 2.1.0
      */
     private $searchResultFactory;
 
     /**
      * @var FilterBuilder
-     * @since 2.1.0
      */
     private $filterBuilder;
 
@@ -227,7 +223,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param string $attributeCode
      * @param array|string $attributeValue
      * @return void
-     * @since 2.1.0
      */
     private function addAttributeToSearch($attributeCode, $attributeValue)
     {
@@ -254,7 +249,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param string $attributeCode
      * @param array|string $attributeValue
      * @return void
-     * @since 2.1.0
      */
     private function addRangeAttributeToSearch($attributeCode, $attributeValue)
     {
@@ -270,7 +264,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @return \Magento\Search\Api\SearchInterface
-     * @since 2.1.0
      */
     private function getSearch()
     {
@@ -283,7 +276,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @return SearchCriteriaBuilder
-     * @since 2.1.0
      */
     private function getSearchCriteriaBuilder()
     {
@@ -296,7 +288,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @return FilterBuilder
-     * @since 2.1.0
      */
     private function getFilterBuilder()
     {

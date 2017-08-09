@@ -11,7 +11,7 @@ namespace Magento\Framework\App;
  * Direct usage of RequestInterface and PlainTextRequestInterface is preferable.
  *
  * @api
- * @since 2.2.0
+ * @since 100.2.0
  */
 interface RequestContentInterface extends RequestInterface, PlainTextRequestInterface
 {

@@ -19,7 +19,7 @@ use Magento\Framework\App\ObjectManager;
  * Review modifier for catalog product form
  *
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class Review extends AbstractModifier
 {
@@ -31,26 +31,25 @@ class Review extends AbstractModifier
 
     /**
      * @var LocatorInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $locator;
 
     /**
      * @var UrlInterface
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $urlBuilder;
 
     /**
      * @var ModuleManager
-     * @since 2.2.0
      */
     private $moduleManager;
 
     /**
      * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -62,7 +61,7 @@ class Review extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -120,7 +119,7 @@ class Review extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function modifyData(array $data)
     {
@@ -136,8 +135,7 @@ class Review extends AbstractModifier
      *
      * @return ModuleManager
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getModuleManager()
     {

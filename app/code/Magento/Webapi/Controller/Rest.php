@@ -36,13 +36,13 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
 
     /**
      * @var Router
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     protected $_router;
 
     /**
      * @var Route
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     protected $_route;
 
@@ -68,14 +68,13 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
 
     /**
      * @var Authorization
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     protected $authorization;
 
     /**
      * @var ServiceInputProcessor
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     protected $serviceInputProcessor;
 
@@ -106,7 +105,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
 
     /**
      * @var ParamsOverrider
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     protected $paramsOverrider;
 
@@ -122,19 +121,17 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
 
     /**
      * @var StoreManagerInterface
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     private $storeManager;
 
     /**
      * @var DeploymentConfig
-     * @since 2.1.0
      */
     private $deploymentConfig;
 
     /**
      * @var Rest\InputParamsResolver
-     * @since 2.1.0
      */
     private $inputParamsResolver;
 
@@ -198,7 +195,6 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * Get deployment config
      *
      * @return DeploymentConfig
-     * @since 2.1.0
      */
     private function getDeploymentConfig()
     {
@@ -214,8 +210,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      *
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      * @return void
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     public function setDeploymentConfig(\Magento\Framework\App\DeploymentConfig $deploymentConfig)
     {
@@ -264,7 +259,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * Retrieve current route.
      *
      * @return Route
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      * @see \Magento\Webapi\Controller\Rest\InputParamsResolver::getRoute
      */
     protected function getCurrentRoute()
@@ -280,7 +275,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      *
      * @throws \Magento\Framework\Exception\AuthorizationException
      * @return void
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      * @see \Magento\Webapi\Controller\Rest\RequestValidator::checkPermissions
      */
     protected function checkPermissions()
@@ -354,7 +349,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @throws AuthorizationException
      * @throws \Magento\Framework\Webapi\Exception
      * @return void
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      * @see \Magento\Webapi\Controller\Rest\RequestValidator::validate
      */
     protected function validateRequest()
@@ -375,8 +370,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      *
      * @return \Magento\Webapi\Controller\Rest\InputParamsResolver
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getInputParamsResolver()
     {

@@ -7,7 +7,6 @@ namespace Magento\Framework\EntityManager;
 
 /**
  * Marker interface for entity manager operations.
- * @since 2.1.0
  */
 interface OperationInterface
 {

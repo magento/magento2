@@ -8,7 +8,6 @@ namespace Magento\Bundle\Model\Sales\Order\Plugin;
 
 /**
  * Plugin to calculate bundle item qty available for cancel
- * @since 2.2.0
  */
 class Item
 {
@@ -18,7 +17,6 @@ class Item
      * @param \Magento\Sales\Model\Order\Item $subject
      * @param float|integer $result
      * @return float|integer
-     * @since 2.2.0
      */
     public function afterGetQtyToCancel(\Magento\Sales\Model\Order\Item $subject, $result)
     {
@@ -37,7 +35,6 @@ class Item
      * @param \Magento\Sales\Model\Order\Item $subject
      * @param float|integer $result
      * @return bool
-     * @since 2.2.0
      */
     public function afterIsProcessingAvailable(\Magento\Sales\Model\Order\Item $subject, $result)
     {
@@ -55,7 +52,6 @@ class Item
      *
      * @param \Magento\Sales\Model\Order\Item $item
      * @return float|integer
-     * @since 2.2.0
      */
     private function getQtyToCancelBundle($item)
     {

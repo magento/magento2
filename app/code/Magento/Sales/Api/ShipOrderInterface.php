@@ -9,7 +9,7 @@ namespace Magento\Sales\Api;
  * Class ShipOrderInterface
  *
  * @api
- * @since 2.1.2
+ * @since 100.1.2
  */
 interface ShipOrderInterface
 {
@@ -25,7 +25,7 @@ interface ShipOrderInterface
      * @param \Magento\Sales\Api\Data\ShipmentPackageCreationInterface[] $packages
      * @param \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface|null $arguments
      * @return int Id of created Shipment.
-     * @since 2.1.2
+     * @since 100.1.2
      */
     public function execute(
         $orderId,

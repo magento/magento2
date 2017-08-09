@@ -16,7 +16,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     /**
      * Max supported protocol by curl CURL_SSLVERSION_TLSv1_2
      * @var int
-     * @since 2.2.0
      */
     private $sslVersion;
 

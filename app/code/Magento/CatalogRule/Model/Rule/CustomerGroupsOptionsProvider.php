@@ -8,25 +8,21 @@ namespace Magento\CatalogRule\Model\Rule;
 /**
  * Class \Magento\CatalogRule\Model\Rule\CustomerGroupsOptionsProvider
  *
- * @since 2.1.0
  */
 class CustomerGroupsOptionsProvider implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var \Magento\Customer\Api\GroupRepositoryInterface
-     * @since 2.1.0
      */
     private $groupRepository;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     * @since 2.1.0
      */
     private $searchCriteriaBuilder;
 
     /**
      * @var \Magento\Framework\Convert\DataObject
-     * @since 2.1.0
      */
     private $objectConverter;
 
@@ -34,7 +30,6 @@ class CustomerGroupsOptionsProvider implements \Magento\Framework\Data\OptionSou
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Convert\DataObject $objectConverter
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
@@ -48,7 +43,6 @@ class CustomerGroupsOptionsProvider implements \Magento\Framework\Data\OptionSou
 
     /**
      * @return array
-     * @since 2.1.0
      */
     public function toOptionArray()
     {

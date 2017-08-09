@@ -7,26 +7,22 @@ namespace Magento\Setup\Model\Description\Mixin;
 
 /**
  * Add bold html tag in random position to description
- * @since 2.2.0
  */
 class BoldMixin implements DescriptionMixinInterface
 {
     /**
      * @var \Magento\Setup\Model\Description\Mixin\Helper\RandomWordSelector
-     * @since 2.2.0
      */
     private $randomWordSelector;
 
     /**
      * @var \Magento\Setup\Model\Description\Mixin\Helper\WordWrapper
-     * @since 2.2.0
      */
     private $wordWrapper;
 
     /**
      * @param \Magento\Setup\Model\Description\Mixin\Helper\RandomWordSelector $randomWordSelector
      * @param \Magento\Setup\Model\Description\Mixin\Helper\WordWrapper $wordWrapper
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Setup\Model\Description\Mixin\Helper\RandomWordSelector $randomWordSelector,
@@ -41,7 +37,6 @@ class BoldMixin implements DescriptionMixinInterface
      *
      * @param string $text
      * @return string
-     * @since 2.2.0
      */
     public function apply($text)
     {

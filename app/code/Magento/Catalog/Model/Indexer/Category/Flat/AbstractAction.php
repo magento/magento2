@@ -60,7 +60,6 @@ class AbstractAction
 
     /**
      * @var \Magento\Framework\EntityManager\EntityMetadata
-     * @since 2.1.0
      */
     protected $categoryMetadata;
 
@@ -68,7 +67,6 @@ class AbstractAction
      * Static columns to skip
      *
      * @var array
-     * @since 2.1.0
      */
     protected $skipStaticColumns = [];
 
@@ -474,7 +472,6 @@ class AbstractAction
 
     /**
      * @return \Magento\Framework\EntityManager\EntityMetadata
-     * @since 2.1.0
      */
     private function getCategoryMetadata()
     {
@@ -488,7 +485,6 @@ class AbstractAction
 
     /**
      * @return array
-     * @since 2.1.0
      */
     private function getSkipStaticColumns()
     {

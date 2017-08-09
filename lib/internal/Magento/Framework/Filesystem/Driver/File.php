@@ -206,7 +206,6 @@ class File implements DriverInterface
      * @param int $permissions
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.1
      */
     private function mkdirRecursive($path, $permissions = 0777)
     {
@@ -727,7 +726,6 @@ class File implements DriverInterface
      * @param array $arguments
      * @return void
      * @throws FileSystemException
-     * @since 2.1.0
      */
     private function fileSystemException($message, $arguments = [])
     {

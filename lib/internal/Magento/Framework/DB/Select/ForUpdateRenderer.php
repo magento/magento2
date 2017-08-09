@@ -9,7 +9,6 @@ use Magento\Framework\DB\Select;
 
 /**
  * Class ForUpdateRenderer
- * @since 2.1.0
  */
 class ForUpdateRenderer implements RendererInterface
 {
@@ -20,7 +19,6 @@ class ForUpdateRenderer implements RendererInterface
      * @param string $sql
      * @return string
      * @throws \Zend_Db_Select_Exception
-     * @since 2.1.0
      */
     public function render(Select $select, $sql = '')
     {

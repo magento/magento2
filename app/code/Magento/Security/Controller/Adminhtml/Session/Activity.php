@@ -7,13 +7,11 @@ namespace Magento\Security\Controller\Adminhtml\Session;
 
 /**
  * Admin session activity
- * @since 2.1.0
  */
 class Activity extends \Magento\Backend\App\Action
 {
     /**
      * @return void
-     * @since 2.1.0
      */
     public function execute()
     {

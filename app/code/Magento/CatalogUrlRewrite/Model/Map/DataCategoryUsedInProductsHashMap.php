@@ -9,32 +9,27 @@ use Magento\Framework\App\ResourceConnection;
 
 /**
  * Map that holds data for categories used by products found in root category
- * @since 2.2.0
  */
 class DataCategoryUsedInProductsHashMap implements HashMapInterface
 {
     /**
      * @var int[]
-     * @since 2.2.0
      */
     private $hashMap = [];
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\Map\HashMapPool
-     * @since 2.2.0
      */
     private $hashMapPool;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.2.0
      */
     private $connection;
 
     /**
      * @param ResourceConnection $connection
      * @param HashMapPool $hashMapPool
-     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $connection,
@@ -50,7 +45,6 @@ class DataCategoryUsedInProductsHashMap implements HashMapInterface
      *
      * @param int $categoryId
      * @return array
-     * @since 2.2.0
      */
     public function getAllData($categoryId)
     {
@@ -88,7 +82,6 @@ class DataCategoryUsedInProductsHashMap implements HashMapInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getData($categoryId, $key)
     {
@@ -101,7 +94,6 @@ class DataCategoryUsedInProductsHashMap implements HashMapInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function resetData($categoryId)
     {

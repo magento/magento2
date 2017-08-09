@@ -18,7 +18,6 @@ class Info extends ConfigurableInfo
      *
      * @param string $field
      * @return Phrase
-     * @since 2.1.0
      */
     protected function getLabel($field)
     {

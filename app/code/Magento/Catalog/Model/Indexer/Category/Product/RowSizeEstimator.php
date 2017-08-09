@@ -12,7 +12,6 @@ use Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface;
  * Class RowSizeEstimator
  * Intended to estimate amount of memory necessary for saving the biggest category in the DB
  * @package Magento\Catalog\Model\Indexer\Category\Product
- * @since 2.2.0
  */
 class RowSizeEstimator implements IndexTableRowSizeEstimatorInterface
 {
@@ -23,13 +22,11 @@ class RowSizeEstimator implements IndexTableRowSizeEstimatorInterface
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resourceConnection
@@ -46,7 +43,6 @@ class RowSizeEstimator implements IndexTableRowSizeEstimatorInterface
      *  c) memory amount per each index row in DB table
      *
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function estimateRowSize()
     {

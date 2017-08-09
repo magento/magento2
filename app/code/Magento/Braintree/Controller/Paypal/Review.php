@@ -14,19 +14,16 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class Review
- * @since 2.1.0
  */
 class Review extends AbstractAction
 {
     /**
      * @var QuoteUpdater
-     * @since 2.1.0
      */
     private $quoteUpdater;
 
     /**
      * @var string
-     * @since 2.1.0
      */
     private static $paymentMethodNonce = 'payment_method_nonce';
 
@@ -37,7 +34,6 @@ class Review extends AbstractAction
      * @param Config $config
      * @param Session $checkoutSession
      * @param QuoteUpdater $quoteUpdater
-     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -51,7 +47,6 @@ class Review extends AbstractAction
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function execute()
     {
@@ -97,7 +92,6 @@ class Review extends AbstractAction
     /**
      * @param array $requestData
      * @return boolean
-     * @since 2.1.0
      */
     private function validateRequestData(array $requestData)
     {

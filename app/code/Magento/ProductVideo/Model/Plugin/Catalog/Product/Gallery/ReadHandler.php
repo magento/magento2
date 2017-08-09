@@ -10,7 +10,6 @@ use Magento\ProductVideo\Setup\InstallSchema;
 
 /**
  * Plugin for catalog product gallery read handler.
- * @since 2.1.0
  */
 class ReadHandler extends AbstractHandler
 {
@@ -18,7 +17,6 @@ class ReadHandler extends AbstractHandler
      * @param \Magento\Catalog\Model\Product\Gallery\ReadHandler $mediaGalleryReadHandler
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
-     * @since 2.1.0
      */
     public function afterExecute(
         \Magento\Catalog\Model\Product\Gallery\ReadHandler $mediaGalleryReadHandler,
@@ -53,7 +51,6 @@ class ReadHandler extends AbstractHandler
     /**
      * @param array $mediaCollection
      * @return array
-     * @since 2.1.0
      */
     protected function collectVideoEntriesIds(array $mediaCollection)
     {
@@ -72,7 +69,6 @@ class ReadHandler extends AbstractHandler
      * @param array $ids
      * @param int $storeId
      * @return array
-     * @since 2.1.0
      */
     protected function loadVideoDataById(array $ids, $storeId = null)
     {
@@ -119,7 +115,6 @@ class ReadHandler extends AbstractHandler
      * @param array $mediaCollection
      * @param array $data
      * @return array
-     * @since 2.1.0
      */
     protected function addVideoDataToMediaEntries(array $mediaCollection, array $data)
     {
@@ -136,7 +131,6 @@ class ReadHandler extends AbstractHandler
     /**
      * @param array $rowData
      * @return mixed
-     * @since 2.1.0
      */
     protected function substituteNullsWithDefaultValues(array $rowData)
     {
@@ -153,7 +147,6 @@ class ReadHandler extends AbstractHandler
     /**
      * @param bool $withDbMapping
      * @return array
-     * @since 2.1.0
      */
     protected function getVideoProperties($withDbMapping = true)
     {
@@ -168,7 +161,6 @@ class ReadHandler extends AbstractHandler
      * @param array $mediaEntriesCollection
      * @param string $indexKey
      * @return array
-     * @since 2.1.0
      */
     protected function createIndexedCollection(array $mediaEntriesCollection, $indexKey = 'value_id')
     {

@@ -21,61 +21,51 @@ use Magento\Vault\Model\ResourceModel\PaymentToken as PaymentTokenResourceModel;
 /**
  * Vault payment token repository
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
  */
 class PaymentTokenManagement implements PaymentTokenManagementInterface
 {
     /**
      * @var PaymentTokenRepositoryInterface
-     * @since 2.1.0
      */
     protected $paymentTokenRepository;
 
     /**
      * @var PaymentTokenResourceModel
-     * @since 2.1.0
      */
     protected $paymentTokenResourceModel;
 
     /**
      * @var PaymentTokenResourceModel
-     * @since 2.1.0
      */
     protected $resourceModel;
 
     /**
      * @var PaymentTokenFactory
-     * @since 2.1.0
      */
     protected $paymentTokenFactory;
 
     /**
      * @var PaymentTokenSearchResultsInterfaceFactory
-     * @since 2.1.0
      */
     protected $searchResultsFactory;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
-     * @since 2.1.0
      */
     protected $filterBuilder;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     * @since 2.1.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var EncryptorInterface
-     * @since 2.1.0
      */
     private $encryptor;
 
     /**
      * @var DateTimeFactory
-     * @since 2.1.0
      */
     private $dateTimeFactory;
 
@@ -88,7 +78,6 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
      * @param PaymentTokenSearchResultsInterfaceFactory $searchResultsFactory
      * @param EncryptorInterface $encryptor
      * @param DateTimeFactory $dateTimeFactory
-     * @since 2.1.0
      */
     public function __construct(
         PaymentTokenRepositoryInterface $repository,
@@ -115,7 +104,6 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
      *
      * @param int $customerId Customer ID.
      * @return \Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface[] Payment tokens search result interface.
-     * @since 2.1.0
      */
     public function getListByCustomerId($customerId)
     {
@@ -137,7 +125,6 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
      *
      * @param int $customerId
      * @return Data\PaymentTokenInterface[]
-     * @since 2.1.0
      */
     public function getVisibleAvailableTokens($customerId)
     {
@@ -181,7 +168,6 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
      *
      * @param int $paymentId The payment token ID.
      * @return PaymentTokenInterface|null Payment token interface.
-     * @since 2.1.0
      */
     public function getByPaymentId($paymentId)
     {
@@ -197,7 +183,6 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
      * @param string $paymentMethodCode
      * @param int $customerId Customer ID.
      * @return PaymentTokenInterface|null Payment token interface.
-     * @since 2.1.0
      */
     public function getByGatewayToken($token, $paymentMethodCode, $customerId)
     {
@@ -212,7 +197,6 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
      * @param string $hash Public hash.
      * @param int $customerId Customer ID.
      * @return PaymentTokenInterface|null Payment token interface.
-     * @since 2.1.0
      */
     public function getByPublicHash($hash, $customerId)
     {
@@ -225,7 +209,6 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
      * @param PaymentTokenInterface $token
      * @param OrderPaymentInterface $payment
      * @return bool
-     * @since 2.1.0
      */
     public function saveTokenWithPaymentLink(PaymentTokenInterface $token, OrderPaymentInterface $payment)
     {
@@ -262,7 +245,6 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
      * @param int $paymentTokenId Payment token ID.
      * @param int $orderPaymentId Order payment ID.
      * @return bool
-     * @since 2.1.0
      */
     public function addLinkToOrderPayment($paymentTokenId, $orderPaymentId)
     {

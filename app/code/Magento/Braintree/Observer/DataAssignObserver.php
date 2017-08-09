@@ -11,7 +11,6 @@ use Magento\Quote\Api\Data\PaymentInterface;
 
 /**
  * Class DataAssignObserver
- * @since 2.1.0
  */
 class DataAssignObserver extends AbstractDataAssignObserver
 {
@@ -20,7 +19,6 @@ class DataAssignObserver extends AbstractDataAssignObserver
 
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $additionalInformationList = [
         self::PAYMENT_METHOD_NONCE,
@@ -30,7 +28,6 @@ class DataAssignObserver extends AbstractDataAssignObserver
     /**
      * @param Observer $observer
      * @return void
-     * @since 2.1.0
      */
     public function execute(Observer $observer)
     {

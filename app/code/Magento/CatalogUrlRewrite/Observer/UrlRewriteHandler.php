@@ -43,19 +43,16 @@ class UrlRewriteHandler
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\CategoryProductUrlPathGenerator
-     * @since 2.2.0
      */
     private $categoryBasedProductRewriteGenerator;
 
     /**
      * @var \Magento\UrlRewrite\Model\MergeDataProvider
-     * @since 2.2.0
      */
     private $mergeDataProviderPrototype;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
