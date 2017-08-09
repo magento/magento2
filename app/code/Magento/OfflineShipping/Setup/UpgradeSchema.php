@@ -18,12 +18,12 @@ class UpgradeSchema implements UpgradeSchemaInterface
     /**
      * @var string
      */
-    private static $quoteConnectionName = 'checkout';
+    private $quoteConnectionName = 'checkout';
 
     /**
      * @var string
      */
-    private static $salesConnectionName = 'sales';
+    private $salesConnectionName = 'sales';
 
     /**
      * @inheritdoc
@@ -58,8 +58,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'comment' => 'Simple Free Shipping',
             ]
         );
-        $setup->getConnection(self::$salesConnectionName)->modifyColumn(
-            $setup->getTable('sales_order_item', self::$salesConnectionName),
+        $setup->getConnection($this->salesConnectionName)->modifyColumn(
+            $setup->getTable('sales_order_item', $this->salesConnectionName),
             'free_shipping',
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
@@ -69,8 +69,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'comment' => 'Free Shipping',
             ]
         );
-        $setup->getConnection(self::$quoteConnectionName)->modifyColumn(
-            $setup->getTable('quote_address', self::$quoteConnectionName),
+        $setup->getConnection($this->quoteConnectionName)->modifyColumn(
+            $setup->getTable('quote_address', $this->quoteConnectionName),
             'free_shipping',
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
@@ -80,8 +80,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'comment' => 'Free Shipping',
             ]
         );
-        $setup->getConnection(self::$quoteConnectionName)->modifyColumn(
-            $setup->getTable('quote_item', self::$quoteConnectionName),
+        $setup->getConnection($this->quoteConnectionName)->modifyColumn(
+            $setup->getTable('quote_item', $this->quoteConnectionName),
             'free_shipping',
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
@@ -91,8 +91,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'comment' => 'Free Shipping',
             ]
         );
-        $setup->getConnection(self::$quoteConnectionName)->modifyColumn(
-            $setup->getTable('quote_address_item', self::$quoteConnectionName),
+        $setup->getConnection($this->quoteConnectionName)->modifyColumn(
+            $setup->getTable('quote_address_item', $this->quoteConnectionName),
             'free_shipping',
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,

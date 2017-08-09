@@ -18,12 +18,12 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @var string
      */
-    private static $quoteConnectionName = 'checkout';
+    private $quoteConnectionName = 'checkout';
 
     /**
      * @var string
      */
-    private static $salesConnectionName = 'sales';
+    private $salesConnectionName = 'sales';
 
     /**
      * {@inheritdoc}
@@ -50,17 +50,17 @@ class UpgradeData implements UpgradeDataInterface
             ['simple_free_shipping' => 0],
             [new \Zend_Db_Expr('simple_free_shipping IS NULL')]
         );
-        $setup->getConnection(self::$salesConnectionName)->update(
+        $setup->getConnection($this->salesConnectionName)->update(
             $setup->getTable('sales_order_item'),
             ['free_shipping' => 0],
             [new \Zend_Db_Expr('free_shipping IS NULL')]
         );
-        $setup->getConnection(self::$quoteConnectionName)->update(
+        $setup->getConnection($this->quoteConnectionName)->update(
             $setup->getTable('quote_address'),
             ['free_shipping' => 0],
             [new \Zend_Db_Expr('free_shipping IS NULL')]
         );
-        $setup->getConnection(self::$quoteConnectionName)->update(
+        $setup->getConnection($this->quoteConnectionName)->update(
             $setup->getTable('quote_item'),
             ['free_shipping' => 0],
             [new \Zend_Db_Expr('free_shipping IS NULL')]
