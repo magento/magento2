@@ -19,9 +19,7 @@ class Lock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     const QUEUE_LOCK_TABLE = 'queue_lock';
     /**#@-*/
 
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     */
+    /**#@-*/
     private $dateTime;
 
     /**
