@@ -11,7 +11,7 @@ use Magento\Customer\Api\GroupManagementInterface;
 /**
  * Test for class CustomerGroupRetriever.
  */
-class CustomerGroupRetrieverTest extends \PHPUnit_Framework_TestCase
+class CustomerGroupRetrieverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\CustomerGroupRetriever
