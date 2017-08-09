@@ -122,7 +122,7 @@ class ConsumerFactory
      *
      * @return ConsumerConfig
      *
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getConsumerConfig()
     {
@@ -137,7 +137,7 @@ class ConsumerFactory
      *
      * @return CommunicationConfig
      *
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getCommunicationConfig()
     {

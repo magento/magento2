@@ -6,6 +6,10 @@
 
 namespace Magento\Framework\MessageQueue\Rpc;
 
+/**
+ * Class \Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder
+ *
+ */
 class ResponseQueueNameBuilder
 {
     /**

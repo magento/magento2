@@ -9,7 +9,7 @@ namespace Magento\Framework\MessageQueue\Config\Reader;
 /**
  * MessageQueue configuration filesystem loader. Loads all publisher configuration from XML file
  *
- * @deprecated
+ * @deprecated 100.2.0
  */
 class Xml extends \Magento\Framework\Config\Reader\Filesystem
 {

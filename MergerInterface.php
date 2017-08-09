@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\MessageQueue;
 
+/**
+ * Interface \Magento\Framework\MessageQueue\MergerInterface
+ *
+ */
 interface MergerInterface
 {
     /**

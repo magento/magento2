@@ -93,7 +93,7 @@ class Publisher implements PublisherInterface
      *
      * @return PublisherConfig
      *
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getPublisherConfig()
     {

@@ -67,7 +67,7 @@ class BatchConsumer implements ConsumerInterface
      *
      * @return MessageController
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getMessageController()
     {
@@ -333,7 +333,7 @@ class BatchConsumer implements ConsumerInterface
      *
      * @return ConsumerConfig
      *
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getConsumerConfig()
     {

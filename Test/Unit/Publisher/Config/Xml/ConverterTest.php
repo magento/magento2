@@ -8,7 +8,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Publisher\Config\Xml;
 use Magento\Framework\MessageQueue\Publisher\Config\Xml\Converter;
 use Magento\Framework\Stdlib\BooleanUtils;
 
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Converter
@@ -25,14 +25,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->defaultConfigProviderMock = $this->getMock(
-            \Magento\Framework\MessageQueue\DefaultValueProvider::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $this->defaultConfigProviderMock =
+            $this->createMock(\Magento\Framework\MessageQueue\DefaultValueProvider::class);
         $this->converter = new Converter(new BooleanUtils(), $this->defaultConfigProviderMock);
     }
 

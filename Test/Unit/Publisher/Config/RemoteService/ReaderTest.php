@@ -12,7 +12,7 @@ use Magento\Framework\ObjectManager\ConfigInterface as ObjectManagerConfig;
 use Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Reader
@@ -45,10 +45,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->defaultValueProvider = $this->getMock(DefaultValueProvider::class, [], [], '', false, false);
-        $this->objectManagerConfig = $this->getMock(ObjectManagerConfig::class, [], [], '', false, false);
-        $this->reflectionGenerator = $this->getMock(ReflectionGenerator::class, [], [], '', false, false);
-        $this->serviceMethodsMap = $this->getMock(ServiceMethodsMap::class, [], [], '', false, false);
+        $this->defaultValueProvider = $this->createMock(DefaultValueProvider::class);
+        $this->objectManagerConfig = $this->createMock(ObjectManagerConfig::class);
+        $this->reflectionGenerator = $this->createMock(ReflectionGenerator::class);
+        $this->serviceMethodsMap = $this->createMock(ServiceMethodsMap::class);
         $this->reader = $objectManager->getObject(
             Reader::class,
             [
