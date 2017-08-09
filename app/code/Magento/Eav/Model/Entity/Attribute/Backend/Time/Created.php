@@ -7,6 +7,8 @@ namespace Magento\Eav\Model\Entity\Attribute\Backend\Time;
 
 /**
  * Entity/Attribute/Model - attribute backend default
+ *
+ * @api
  */
 class Created extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {

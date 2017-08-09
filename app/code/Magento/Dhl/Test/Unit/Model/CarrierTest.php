@@ -5,8 +5,13 @@
  */
 namespace Magento\Dhl\Test\Unit\Model;
 
-use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\HTTP\ZendClient;
+use Magento\Framework\HTTP\ZendClientFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Xml\Security;
+use Magento\Quote\Model\Quote\Address\RateRequest;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -14,39 +19,39 @@ use Magento\Framework\Xml\Security;
 class CarrierTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
-    protected $_helper;
+    private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Zend_Http_Response|MockObject
      */
-    protected $_httpResponse;
+    private $httpResponse;
 
     /**
      * @var \Magento\Dhl\Model\Carrier
      */
-    protected $_model;
+    private $model;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\RateResult\Error|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Address\RateResult\Error|MockObject
      */
-    protected $error;
+    private $error;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory|MockObject
      */
-    protected $errorFactory;
+    private $errorFactory;
 
     /**
-     * @var \Magento\Dhl\Model\Carrier|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
-    protected $carrier;
+    private $scope;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ZendClient|MockObject
      */
-    protected $scope;
+    private $httpClient;
 
     /**
      * @return void
@@ -54,19 +59,11 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $this->scope = $this->getMockBuilder(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class
-        )->disableOriginalConstructor()->getMock();
-
-        $this->scope->expects(
-            $this->any()
-        )->method(
-            'getValue'
-        )->will(
-            $this->returnCallback([$this, 'scopeConfiggetValue'])
-        );
+        $this->scope = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scope->method('getValue')
+            ->willReturnCallback([$this, 'scopeConfigGetValue']);
 
         // xml element factory
         $xmlElFactory = $this->getMockBuilder(
@@ -77,7 +74,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $xmlElFactory->expects($this->any())->method('create')->will(
             $this->returnCallback(
                 function ($data) {
-                    $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+                    $helper = new ObjectManager($this);
 
                     return $helper->getObject(
                         \Magento\Shipping\Model\Simplexml\Element::class,
@@ -115,27 +112,23 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
         $rateMethodFactory->expects($this->any())->method('create')->will($this->returnValue($rateMethod));
 
-        // http client
-        $this->_httpResponse = $this->getMockBuilder(
-            \Zend_Http_Response::class
-        )->disableOriginalConstructor()->setMethods(
-            ['getBody']
-        )->getMock();
+        $this->httpResponse = $this->getMockBuilder(\Zend_Http_Response::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $httpClient = $this->getMockBuilder(
-            \Magento\Framework\HTTP\ZendClient::class
-        )->disableOriginalConstructor()->setMethods(
-            ['request']
-        )->getMock();
-        $httpClient->expects($this->any())->method('request')->will($this->returnValue($this->_httpResponse));
+        $this->httpClient = $this->getMockBuilder(ZendClient::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['request'])
+            ->getMock();
+        $this->httpClient->method('request')
+            ->willReturn($this->httpResponse);
 
-        $httpClientFactory = $this->getMockBuilder(
-            \Magento\Framework\HTTP\ZendClientFactory::class
-        )->disableOriginalConstructor()->setMethods(
-            ['create']
-        )->getMock();
+        $httpClientFactory = $this->getMockBuilder(ZendClientFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $httpClientFactory->method('create')
+            ->willReturn($this->httpClient);
 
-        $httpClientFactory->expects($this->any())->method('create')->will($this->returnValue($httpClient));
         $modulesDirectory = $this->getMockBuilder(
             \Magento\Framework\Filesystem\Directory\Read::class
         )->disableOriginalConstructor()->setMethods(
@@ -174,7 +167,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
         $this->errorFactory->expects($this->any())->method('create')->willReturn($this->error);
 
-        $this->_model = $this->_helper->getObject(
+        $this->model = $this->objectManager->getObject(
             \Magento\Dhl\Model\Carrier::class,
             [
                 'scopeConfig' => $this->scope,
@@ -192,11 +185,12 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Callback function, emulates getValue function
-     * @param $path
-     * @return null|string
+     * Emulates the config's `getValue` method.
+     *
+     * @param string $path
+     * @return string|null
      */
-    public function scopeConfiggetValue($path)
+    public function scopeConfigGetValue($path)
     {
         $pathMap = [
             'carriers/dhl/shipment_days' => 'Mon,Tue,Wed,Thu,Fri,Sat',
@@ -211,6 +205,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             'carriers/dhl/showmethod' => 1,
             'carriers/dhl/title' => 'dhl Title',
             'carriers/dhl/specificerrmsg' => 'dhl error message',
+            'carriers/dhl/unit_of_measure' => 'L',
         ];
         return isset($pathMap[$path]) ? $pathMap[$path] : null;
     }
@@ -260,7 +255,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
      */
     protected function _invokePrepareShippingLabelContent(\SimpleXMLElement $xml)
     {
-        $model = $this->_helper->getObject(\Magento\Dhl\Model\Carrier::class);
+        $model = $this->objectManager->getObject(\Magento\Dhl\Model\Carrier::class);
         $method = new \ReflectionMethod($model, '_prepareShippingLabelContent');
         $method->setAccessible(true);
         return $method->invoke($model, $xml);
@@ -268,21 +263,24 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
     public function testCollectRates()
     {
-        $this->scope->expects($this->any())->method('isSetFlag')->willReturn(true);
+        $this->scope->method('isSetFlag')
+            ->willReturn(true);
 
-        $this->_httpResponse->expects(
-            $this->any()
-        )->method(
-            'getBody'
-        )->will(
-            $this->returnValue(file_get_contents(__DIR__ . '/_files/success_dhl_response_rates.xml'))
-        );
-        // for setRequest
-        $request = $this->_helper->getObject(
-            \Magento\Quote\Model\Quote\Address\RateRequest::class,
+        $this->httpResponse->method('getBody')
+            ->willReturn(file_get_contents(__DIR__ . '/_files/success_dhl_response_rates.xml'));
+
+        /** @var RateRequest $request */
+        $request = $this->objectManager->getObject(
+            RateRequest::class,
             require __DIR__ . '/_files/rates_request_data_dhl.php'
         );
-        $this->assertNotEmpty($this->_model->collectRates($request)->getAllRates());
+
+        $reflectionClass = new \ReflectionObject($this->httpClient);
+        $rawPostData = $reflectionClass->getProperty('raw_post_data');
+        $rawPostData->setAccessible(true);
+
+        self::assertNotEmpty($this->model->collectRates($request)->getAllRates());
+        self::assertContains('<Weight>8.266</Weight>', $rawPostData->getValue($this->httpClient));
     }
 
     public function testCollectRatesErrorMessage()
@@ -296,7 +294,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $request = new RateRequest();
         $request->setPackageWeight(1);
 
-        $this->assertSame($this->error, $this->_model->collectRates($request));
+        $this->assertSame($this->error, $this->model->collectRates($request));
     }
 
     public function testCollectRatesFail()
@@ -306,6 +304,6 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $request = new RateRequest();
         $request->setPackageWeight(1);
 
-        $this->assertFalse(false, $this->_model->collectRates($request));
+        $this->assertFalse(false, $this->model->collectRates($request));
     }
 }

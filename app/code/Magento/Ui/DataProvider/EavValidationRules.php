@@ -8,7 +8,7 @@ namespace Magento\Ui\DataProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 /**
- * Class EavValidationRules
+ * @api
  */
 class EavValidationRules
 {

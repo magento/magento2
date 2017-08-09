@@ -7,6 +7,9 @@ namespace Magento\Backend\Block\Widget\Grid\Massaction;
 
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
+/**
+ * @api
+ */
 interface VisibilityCheckerInterface extends ArgumentInterface
 {
     /**

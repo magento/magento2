@@ -11,7 +11,7 @@ use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Analytics\Model\Connector\SignUpCommand;
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\IntegrationManager;
-use Magento\Config\Model\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Integration\Model\Oauth\Token as IntegrationToken;
 use Psr\Log\LoggerInterface;
 
@@ -41,7 +41,7 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
     private $integrationToken;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $configMock;
 
@@ -71,7 +71,7 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
         $this->integrationToken = $this->getMockBuilder(IntegrationToken::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configMock = $this->getMockBuilder(Config::class)
+        $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->httpClientMock = $this->getMockBuilder(ClientInterface::class)
@@ -105,7 +105,7 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
         $data = $this->getTestData();
 
         $this->configMock->expects($this->any())
-            ->method('getConfigDataValue')
+            ->method('getValue')
             ->willReturn($data['url']);
         $this->integrationToken->expects($this->any())
             ->method('getData')

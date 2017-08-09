@@ -10,6 +10,8 @@ namespace Magento\Framework\Notification;
  * Interface for notifiers
  *
  * Interface NotifierInterface
+ *
+ * @api
  */
 interface NotifierInterface
 {

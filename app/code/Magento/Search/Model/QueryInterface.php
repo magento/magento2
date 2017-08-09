@@ -6,6 +6,9 @@
 
 namespace Magento\Search\Model;
 
+/**
+ * @api
+ */
 interface QueryInterface
 {
     /**

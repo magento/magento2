@@ -762,8 +762,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $storeId = $customer->getStoreId();
         $name = $this->customerViewHelper->getCustomerName($customer);
         $transportMock = $this->getMock(
-            \Magento\Framework\Mail\TransportInterface::class,
-            ['sendMessage']
+            \Magento\Framework\Mail\TransportInterface::class
         );
         $transportMock->expects($this->exactly($occurrenceNumber))
             ->method('sendMessage');

@@ -16,6 +16,8 @@ use Magento\Framework\Data\ValueSourceInterface;
 
 /**
  * Abstract class AbstractComponent
+ *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractComponent extends DataObject implements UiComponentInterface

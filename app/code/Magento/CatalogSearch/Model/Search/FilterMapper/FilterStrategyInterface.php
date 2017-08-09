@@ -8,6 +8,7 @@ namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
 /**
  * FilterStrategyInterface provides the interface to work with strategies
+ * @api
  */
 interface FilterStrategyInterface
 {

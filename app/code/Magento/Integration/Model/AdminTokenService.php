@@ -95,7 +95,13 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
     }
 
     /**
-     * {@inheritdoc}
+     * Revoke token by admin id.
+     *
+     * The function will delete the token from the oauth_token table.
+     *
+     * @param int $adminId
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function revokeAdminAccessToken($adminId)
     {
@@ -105,7 +111,7 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
         }
         try {
             foreach ($tokenCollection as $token) {
-                $token->setRevoked(1)->save();
+                $token->delete();
             }
         } catch (\Exception $e) {
             throw new LocalizedException(__('The tokens could not be revoked.'));

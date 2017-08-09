@@ -3,19 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * Catalog Product visibilite model and attribute source model
- *
- * @api
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\DB\Ddl\Table;
 
+/**
+ * Catalog Product visibility model and attribute source model
+ *
+ * @api
+ */
 class Visibility extends \Magento\Framework\DataObject implements OptionSourceInterface
 {
     const VISIBILITY_NOT_VISIBLE = 1;

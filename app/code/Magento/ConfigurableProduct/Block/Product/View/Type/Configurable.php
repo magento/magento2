@@ -245,7 +245,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     {
         $images = [];
         foreach ($this->getAllowProducts() as $product) {
-
             $productImages = $this->helper->getGalleryImages($product) ?: [];
             foreach ($productImages as $image) {
                 $images[$product->getId()][] =
@@ -256,6 +255,8 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
                         'caption' => $image->getLabel(),
                         'position' => $image->getPosition(),
                         'isMain' => $image->getFile() == $product->getImage(),
+                        'type' => str_replace('external-', '', $image->getMediaType()),
+                        'videoUrl' => $image->getVideoUrl(),
                     ];
             }
         }

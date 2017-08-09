@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Block\Page;
 
 /**
@@ -81,6 +79,9 @@ class Header extends \Magento\Backend\Block\Template
      */
     public function displayNoscriptNotice()
     {
-        return $this->_scopeConfig->getValue('web/browser_capabilities/javascript', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue(
+            'web/browser_capabilities/javascript',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

@@ -171,7 +171,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
             } while ($this->getResource()->exists($code));
 
             $expirationDate = $this->getToDate();
-            if ($expirationDate instanceof \DateTime) {
+            if ($expirationDate instanceof \DateTimeInterface) {
                 $expirationDate = $expirationDate->format('Y-m-d H:i:s');
             }
 

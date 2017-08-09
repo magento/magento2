@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Block\Page\System\Config\Robots;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -53,7 +51,8 @@ class Reset extends \Magento\Config\Block\System\Config\Form\Field
     public function getRobotsDefaultCustomInstructions()
     {
         return trim((string)$this->_scopeConfig->getValue(
-            self::XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+            self::XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         ));
     }
 

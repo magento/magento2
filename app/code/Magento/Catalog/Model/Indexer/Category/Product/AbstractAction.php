@@ -11,7 +11,6 @@ namespace Magento\Catalog\Model\Indexer\Category\Product;
 use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource as CategoryProductFrontend;
 
 /**
  * Class AbstractAction
@@ -113,23 +112,16 @@ abstract class AbstractAction
     private $queryGenerator;
 
     /**
-     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource|null
-     */
-    private $categoryProductIndexerFrontend;
-
-    /**
      * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $config
      * @param QueryGenerator $queryGenerator
-     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $categoryProductIndexerFrontend
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $config,
-        QueryGenerator $queryGenerator = null,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $categoryProductIndexerFrontend = null
+        QueryGenerator $queryGenerator = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -137,8 +129,6 @@ abstract class AbstractAction
         $this->config = $config;
         $this->queryGenerator = $queryGenerator ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(QueryGenerator::class);
-        $this->categoryProductIndexerFrontend = $categoryProductIndexerFrontend
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(CategoryProductFrontend::class);
     }
 
     /**
@@ -185,7 +175,7 @@ abstract class AbstractAction
      */
     protected function getMainTable()
     {
-        return $this->categoryProductIndexerFrontend->getMainTable();
+        return $this->getTable(self::MAIN_INDEX_TABLE);
     }
 
     /**
@@ -431,6 +421,10 @@ abstract class AbstractAction
             ['ccp' => $this->getTable('catalog_category_product')],
             'ccp.category_id = cc2.child_id',
             []
+        )->joinLeft(
+            ['ccp2' => $this->getTable('catalog_category_product')],
+            'ccp2.category_id = cc2.parent_id AND ccp.product_id = ccp2.product_id',
+            []
         )->joinInner(
             ['cpe' => $this->getTable('catalog_product_entity')],
             'ccp.product_id = cpe.entity_id',
@@ -493,7 +487,7 @@ abstract class AbstractAction
             [
                 'category_id' => 'cc.entity_id',
                 'product_id' => 'ccp.product_id',
-                'position' => new \Zend_Db_Expr('ccp.position + 10000'),
+                'position' => new \Zend_Db_Expr($this->connection->getIfNullSql('ccp2.position', 'ccp.position + 10000')),
                 'is_parent' => new \Zend_Db_Expr('0'),
                 'store_id' => new \Zend_Db_Expr($store->getId()),
                 'visibility' => new \Zend_Db_Expr($this->connection->getIfNullSql('cpvs.value', 'cpvd.value')),

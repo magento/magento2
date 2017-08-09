@@ -7,6 +7,9 @@
  */
 namespace Magento\Backend\Model\Menu\Config;
 
+/**
+ * @api
+ */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

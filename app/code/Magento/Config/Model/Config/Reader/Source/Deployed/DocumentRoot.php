@@ -13,6 +13,7 @@ use Magento\Framework\App\DeploymentConfig;
 /**
  * Class DocumentRoot
  * @package Magento\Config\Model\Config\Reader\Source\Deployed
+ * @api
  */
 class DocumentRoot
 {

@@ -7,6 +7,8 @@ namespace Magento\CatalogSearch\Helper;
 
 /**
  * Catalog search helper
+ *
+ * @api
  */
 class Data extends \Magento\Search\Helper\Data
 {

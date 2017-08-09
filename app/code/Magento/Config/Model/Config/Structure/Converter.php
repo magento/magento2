@@ -5,6 +5,9 @@
  */
 namespace Magento\Config\Model\Config\Structure;
 
+/**
+ * @api
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

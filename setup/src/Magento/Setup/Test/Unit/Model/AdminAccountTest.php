@@ -6,14 +6,15 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\AdminAccount;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Setup\Model\AdminAccount;
 
 class AdminAccountTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @var \PHPUnit_Framework_MockObject_MockObject|Mysql
      */
-    private $dbAdapterMock;
+    private $dbAdapter;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Encryption\EncryptorInterface
@@ -32,16 +33,15 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->dbAdapterMock = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [], [], '', false);
+        $this->dbAdapter = $this->getMockBuilder(Mysql::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->dbAdapterMock
-            ->expects($this->any())
+        $this->dbAdapter
             ->method('getTableName')
-            ->will($this->returnCallback(
-                function ($table) {
-                    return $table;
-                }
-            ));
+            ->willReturnCallback(function ($table) {
+                return $table;
+            });
 
         $this->encryptor = $this->getMockBuilder(\Magento\Framework\Encryption\EncryptorInterface::class)
             ->getMockForAbstractClass();
@@ -58,7 +58,7 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
         $this->prefix = $data[AdminAccount::KEY_PREFIX];
 
         $this->adminAccount = new AdminAccount(
-            $this->dbAdapterMock,
+            $this->dbAdapter,
             $this->encryptor,
             $data
         );
@@ -107,15 +107,16 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
                 $existingAdminRoleData,
             ],
         ];
-        $this->dbAdapterMock
+        $this->dbAdapter
             ->expects($this->exactly(3))
             ->method('fetchRow')
             ->will($this->returnValueMap($returnValueMap));
-        $this->dbAdapterMock->expects($this->once())->method('quoteInto')->will($this->returnValue(''));
-        $this->dbAdapterMock->expects($this->once())->method('update')->will($this->returnValue(1));
+        $this->dbAdapter->expects($this->once())->method('quoteInto')->will($this->returnValue(''));
+        $this->dbAdapter->expects($this->once())->method('update')->will($this->returnValue(1));
 
-        // should never insert new row
-        $this->dbAdapterMock->expects($this->never())->method('insert');
+        $this->dbAdapter->expects($this->once())
+            ->method('insert')
+            ->with($this->equalTo('pre_admin_passwords'), $this->anything());
 
         $this->adminAccount->save();
     }
@@ -180,15 +181,23 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->dbAdapterMock
-            ->expects($this->exactly(4))
+        $this->dbAdapter
+            ->expects(self::exactly(4))
             ->method('fetchRow')
-            ->will($this->returnValueMap($returnValueMap));
-        $this->dbAdapterMock->expects($this->once())->method('quoteInto')->will($this->returnValue(''));
-        $this->dbAdapterMock->expects($this->once())->method('update')->will($this->returnValue(1));
+            ->willReturnMap($returnValueMap);
+        $this->dbAdapter->method('quoteInto')
+            ->willReturn('');
+        $this->dbAdapter->method('update')
+            ->with(self::equalTo('pre_admin_user'), self::anything())
+            ->willReturn(1);
 
+        $this->dbAdapter->expects(self::at(8))
+            ->method('insert')
+            ->with(self::equalTo('pre_admin_passwords'), self::anything());
         // should only insert once (admin role)
-        $this->dbAdapterMock->expects($this->once())->method('insert');
+        $this->dbAdapter->expects(self::at(14))
+            ->method('insert')
+            ->with(self::equalTo('pre_authorization_role'), self::anything());
 
         $this->adminAccount->save();
     }
@@ -223,14 +232,20 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->dbAdapterMock
+        $this->dbAdapter
             ->expects($this->exactly(2))
             ->method('fetchRow')
             ->will($this->returnValueMap($returnValueMap));
         // insert only once (new user)
-        $this->dbAdapterMock->expects($this->once())->method('insert');
+        $this->dbAdapter->expects($this->at(3))
+            ->method('insert')
+            ->with($this->equalTo('pre_admin_user'), $this->anything());
+        $this->dbAdapter->expects($this->at(6))
+            ->method('insert')
+            ->with($this->equalTo('pre_admin_passwords'), $this->anything());
+
         // after inserting new user
-        $this->dbAdapterMock->expects($this->once())->method('lastInsertId')->will($this->returnValue(1));
+        $this->dbAdapter->expects($this->once())->method('lastInsertId')->will($this->returnValue(1));
 
         $this->adminAccount->save();
     }
@@ -282,15 +297,15 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
 
         ];
 
-        $this->dbAdapterMock
+        $this->dbAdapter
             ->expects($this->exactly(3))
             ->method('fetchRow')
             ->will($this->returnValueMap($returnValueMap));
         // after inserting new user
-        $this->dbAdapterMock->expects($this->once())->method('lastInsertId')->will($this->returnValue(1));
+        $this->dbAdapter->expects($this->once())->method('lastInsertId')->will($this->returnValue(1));
 
-        // insert twice only (new user and new admin role)
-        $this->dbAdapterMock->expects($this->exactly(2))->method('insert');
+        // insert only (new user and new admin role and new admin password)
+        $this->dbAdapter->expects($this->exactly(3))->method('insert');
 
         $this->adminAccount->save();
     }
@@ -307,11 +322,11 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
             'username' => 'Another.name',
         ];
 
-        $this->dbAdapterMock->expects($this->exactly(2))
+        $this->dbAdapter->expects($this->exactly(2))
             ->method('fetchRow')->will($this->returnValue($existingUserData));
         // should not alter db
-        $this->dbAdapterMock->expects($this->never())->method('update');
-        $this->dbAdapterMock->expects($this->never())->method('insert');
+        $this->dbAdapter->expects($this->never())->method('update');
+        $this->dbAdapter->expects($this->never())->method('insert');
 
         $this->adminAccount->save();
     }
@@ -327,11 +342,11 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
             'username' => 'admin',
         ];
 
-        $this->dbAdapterMock->expects($this->exactly(2))
+        $this->dbAdapter->expects($this->exactly(2))
             ->method('fetchRow')->will($this->returnValue($existingUserData));
         // should not alter db
-        $this->dbAdapterMock->expects($this->never())->method('update');
-        $this->dbAdapterMock->expects($this->never())->method('insert');
+        $this->dbAdapter->expects($this->never())->method('update');
+        $this->dbAdapter->expects($this->never())->method('insert');
 
         $this->adminAccount->save();
     }
@@ -342,8 +357,8 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveExceptionSpecialAdminRoleNotFound()
     {
-        $this->dbAdapterMock->expects($this->exactly(3))->method('fetchRow')->will($this->returnValue([]));
-        $this->dbAdapterMock->expects($this->once())->method('lastInsertId')->will($this->returnValue(1));
+        $this->dbAdapter->expects($this->exactly(3))->method('fetchRow')->will($this->returnValue([]));
+        $this->dbAdapter->expects($this->once())->method('lastInsertId')->will($this->returnValue(1));
 
         $this->adminAccount->save();
     }
@@ -365,7 +380,7 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
         ];
 
         $adminAccount = new AdminAccount(
-            $this->dbAdapterMock,
+            $this->dbAdapter,
             $this->encryptor,
             $data
         );
@@ -386,12 +401,12 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
             ]
 
         ];
-        $this->dbAdapterMock
+        $this->dbAdapter
             ->expects($this->exactly(1))
             ->method('fetchRow')
             ->will($this->returnValueMap($returnValueMap));
-        $this->dbAdapterMock->expects($this->never())->method('insert');
-        $this->dbAdapterMock->expects($this->never())->method('update');
+        $this->dbAdapter->expects($this->never())->method('insert');
+        $this->dbAdapter->expects($this->never())->method('update');
 
         $adminAccount->save();
     }
@@ -413,7 +428,7 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
         ];
 
         $adminAccount = new AdminAccount(
-            $this->dbAdapterMock,
+            $this->dbAdapter,
             $this->encryptor,
             $data
         );
@@ -433,12 +448,12 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
                 $existingUserData,
             ]
         ];
-        $this->dbAdapterMock
+        $this->dbAdapter
             ->expects($this->exactly(1))
             ->method('fetchRow')
             ->will($this->returnValueMap($returnValueMap));
-        $this->dbAdapterMock->expects($this->never())->method('insert');
-        $this->dbAdapterMock->expects($this->never())->method('update');
+        $this->dbAdapter->expects($this->never())->method('insert');
+        $this->dbAdapter->expects($this->never())->method('update');
 
         $adminAccount->save();
     }

@@ -6,12 +6,12 @@
 namespace Magento\Analytics\Test\Unit\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
+use Magento\Analytics\Model\Config\Backend\Baseurl\SubscriptionUpdateHandler;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\FlagManager;
 use Magento\Framework\HTTP\ZendClient;
-use Magento\Config\Model\Config;
 use Psr\Log\LoggerInterface;
-use Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin;
 use Magento\Analytics\Model\Connector\UpdateCommand;
 use Magento\Analytics\Model\Connector\Http\ClientInterface;
 
@@ -36,7 +36,7 @@ class UpdateCommandTest extends \PHPUnit_Framework_TestCase
     private $httpClientMock;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     public $configMock;
 
@@ -65,7 +65,7 @@ class UpdateCommandTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->configMock =  $this->getMockBuilder(Config::class)
+        $this->configMock =  $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -101,12 +101,12 @@ class UpdateCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
 
         $this->configMock->expects($this->any())
-            ->method('getConfigDataValue')
+            ->method('getValue')
             ->willReturn($configVal);
 
         $this->flagManagerMock->expects($this->once())
             ->method('getFlagData')
-            ->with(BaseUrlConfigPlugin::OLD_BASE_URL_FLAG_CODE)
+            ->with(SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE)
             ->willReturn($url);
 
         $this->analyticsTokenMock->expects($this->once())

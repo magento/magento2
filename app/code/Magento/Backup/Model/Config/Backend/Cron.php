@@ -7,6 +7,7 @@ namespace Magento\Backup\Model\Config\Backend;
 
 /**
  * Backup by cron backend model
+ * @api
  */
 class Cron extends \Magento\Framework\App\Config\Value
 {

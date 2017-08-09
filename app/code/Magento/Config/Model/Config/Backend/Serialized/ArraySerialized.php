@@ -10,6 +10,9 @@
  */
 namespace Magento\Config\Model\Config\Backend\Serialized;
 
+/**
+ * @api
+ */
 class ArraySerialized extends \Magento\Config\Model\Config\Backend\Serialized
 {
     /**

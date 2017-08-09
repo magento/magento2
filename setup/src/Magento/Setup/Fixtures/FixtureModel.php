@@ -109,6 +109,11 @@ class FixtureModel
                     'fixtureModel' => $this,
                 ]
             );
+            if (isset($this->fixtures[$fixture->getPriority()])) {
+                throw new \InvalidArgumentException(
+                    sprintf('Duplicate priority %d in fixture %s', $fixture->getPriority(), $type)
+                );
+            }
             $this->fixtures[$fixture->getPriority()] = $fixture;
         }
 

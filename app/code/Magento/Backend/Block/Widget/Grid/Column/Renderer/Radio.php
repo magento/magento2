@@ -8,7 +8,8 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 /**
  * Grid radiogroup column renderer
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @deprecated in favour of UI component implementation
  */
 class Radio extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {

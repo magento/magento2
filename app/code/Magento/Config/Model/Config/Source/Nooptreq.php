@@ -5,6 +5,9 @@
  */
 namespace Magento\Config\Model\Config\Source;
 
+/**
+ * @api
+ */
 class Nooptreq implements \Magento\Framework\Option\ArrayInterface
 {
     /**

@@ -9,6 +9,7 @@ namespace Magento\Backend\Block\Dashboard;
  * Adminhtml dashboard grid
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {

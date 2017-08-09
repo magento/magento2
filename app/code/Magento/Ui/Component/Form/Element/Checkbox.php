@@ -7,6 +7,7 @@ namespace Magento\Ui\Component\Form\Element;
 
 /**
  * Class Checkbox
+ * @api
  */
 class Checkbox extends AbstractElement
 {
