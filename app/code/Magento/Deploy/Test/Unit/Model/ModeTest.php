@@ -154,6 +154,9 @@ class ModeTest extends \PHPUnit\Framework\TestCase
                 State::PARAM_MODE => State::MODE_DEVELOPER,
             ],
         ];
+        $this->configProvider->expects($this->any())
+            ->method('getConfigs')
+            ->willReturn([]);
         $this->writerMock->expects($this->once())
             ->method("saveConfig")
             ->willReturnCallback(function ($data) use (&$dataStorage) {
@@ -187,6 +190,12 @@ class ModeTest extends \PHPUnit\Framework\TestCase
                 State::PARAM_MODE => State::MODE_DEVELOPER,
             ],
         ];
+        $this->readerMock->expects($this->any())
+            ->method('load')
+            ->willReturn([State::PARAM_MODE => State::MODE_DEVELOPER]);
+        $this->configProvider->expects($this->any())
+            ->method('getConfigs')
+            ->willReturn([]);
         $this->writerMock->expects($this->exactly(2))
             ->method("saveConfig")
             ->withConsecutive(
