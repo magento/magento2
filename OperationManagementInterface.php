@@ -9,6 +9,7 @@ namespace Magento\Framework\Bulk;
 /**
  * Interface OperationManagementInterface
  * @api
+ * @since 100.2.0
  */
 interface OperationManagementInterface
 {
@@ -21,6 +22,7 @@ interface OperationManagementInterface
      * @param string|null $message property to update Result Message
      * @param string|null $data serialized data object of failed message
      * @return boolean
+     * @since 100.2.0
      */
     public function changeOperationStatus($operationId, $status, $errorCode = null, $message = null, $data = null);
 }

@@ -8,6 +8,7 @@ namespace Magento\Framework\Bulk;
 /**
  * Interface BulkSummaryInterface
  * @api
+ * @since 100.2.0
  */
 interface BulkSummaryInterface
 {
@@ -34,6 +35,7 @@ interface BulkSummaryInterface
      * Get bulk uuid
      *
      * @return string
+     * @since 100.2.0
      */
     public function getBulkId();
 
@@ -42,6 +44,7 @@ interface BulkSummaryInterface
      *
      * @param string $bulkUuid
      * @return $this
+     * @since 100.2.0
      */
     public function setBulkId($bulkUuid);
 
@@ -49,6 +52,7 @@ interface BulkSummaryInterface
      * Get bulk description
      *
      * @return string
+     * @since 100.2.0
      */
     public function getDescription();
 
@@ -57,6 +61,7 @@ interface BulkSummaryInterface
      *
      * @param string $description
      * @return $this
+     * @since 100.2.0
      */
     public function setDescription($description);
 
@@ -64,6 +69,7 @@ interface BulkSummaryInterface
      * Get bulk scheduled time
      *
      * @return string
+     * @since 100.2.0
      */
     public function getStartTime();
 
@@ -72,6 +78,7 @@ interface BulkSummaryInterface
      *
      * @param string $timestamp
      * @return $this
+     * @since 100.2.0
      */
     public function setStartTime($timestamp);
 
@@ -79,6 +86,7 @@ interface BulkSummaryInterface
      * Get user id
      *
      * @return int
+     * @since 100.2.0
      */
     public function getUserId();
 
@@ -87,6 +95,7 @@ interface BulkSummaryInterface
      *
      * @param int $userId
      * @return $this
+     * @since 100.2.0
      */
     public function setUserId($userId);
 
@@ -94,6 +103,7 @@ interface BulkSummaryInterface
      * Get total number of operations scheduled in scope of this bulk
      *
      * @return int
+     * @since 100.2.0
      */
     public function getOperationCount();
 
@@ -102,6 +112,7 @@ interface BulkSummaryInterface
      *
      * @param int $operationCount
      * @return $this
+     * @since 100.2.0
      */
     public function setOperationCount($operationCount);
 }
