@@ -6,6 +6,8 @@
 
 namespace Magento\Deploy\Model;
 
+use Magento\Deploy\App\Mode\ConfigProvider;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -14,6 +16,8 @@ use Magento\Framework\App\State;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
+use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -45,9 +49,33 @@ class Mode
     private $reader;
 
     /**
+     * @var MaintenanceMode
+     */
+    private $maintenanceMode;
+
+    /**
      * @var Filesystem
      */
     private $filesystem;
+
+    /**
+     * @var ConfigProvider
+     */
+    private $configProvider;
+
+    /**
+     * The factory for processor facade.
+     *
+     * @var ProcessorFacadeFactory
+     */
+    private $processorFacadeFactory;
+
+    /**
+     * Emulator adminhtml area for CLI command.
+     *
+     * @var EmulatedAdminhtmlAreaProcessor
+     */
+    private $emulatedAreaProcessor;
 
     /**
      * @param InputInterface $input
@@ -56,6 +84,9 @@ class Mode
      * @param Reader $reader
      * @param MaintenanceMode $maintenanceMode
      * @param Filesystem $filesystem
+     * @param ConfigProvider $configProvider
+     * @param ProcessorFacadeFactory $processorFacadeFactory
+     * @param EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor
      */
     public function __construct(
         InputInterface $input,
@@ -63,7 +94,10 @@ class Mode
         Writer $writer,
         Reader $reader,
         MaintenanceMode $maintenanceMode,
-        Filesystem $filesystem
+        Filesystem $filesystem,
+        ConfigProvider $configProvider,
+        ProcessorFacadeFactory $processorFacadeFactory,
+        EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor
     ) {
         $this->input = $input;
         $this->output = $output;
@@ -71,6 +105,9 @@ class Mode
         $this->reader = $reader;
         $this->maintenanceMode = $maintenanceMode;
         $this->filesystem = $filesystem;
+        $this->configProvider = $configProvider;
+        $this->processorFacadeFactory = $processorFacadeFactory;
+        $this->emulatedAreaProcessor = $emulatedAreaProcessor;
     }
 
     /**
@@ -145,12 +182,36 @@ class Mode
      */
     protected function setStoreMode($mode)
     {
+        $this->saveAppConfigs($mode);
         $data = [
             ConfigFilePool::APP_ENV => [
                 State::PARAM_MODE => $mode
             ]
         ];
         $this->writer->saveConfig($data);
+    }
+
+    /**
+     * Save application configs while switching mode
+     *
+     * @param string $mode
+     * @return void
+     */
+    private function saveAppConfigs($mode)
+    {
+        $configs = $this->configProvider->getConfigs($this->getMode(), $mode);
+        foreach ($configs as $path => $value) {
+            $this->emulatedAreaProcessor->process(function () use ($path, $value) {
+                $this->processorFacadeFactory->create()->process(
+                    $path,
+                    $value,
+                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                    null,
+                    true
+                );
+            });
+            $this->output->writeln('Config "' . $path . ' = ' . $value . '" has been saved.');
+        }
     }
 
     /**
