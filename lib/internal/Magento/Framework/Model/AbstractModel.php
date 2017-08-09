@@ -464,6 +464,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @deprecated 100.2.0 because resource models should be used directly
      */
     protected function _getResource()
     {

@@ -10,8 +10,6 @@ use Magento\Downloadable\Api\Data\SampleInterface;
 /**
  * Downloadable sample model
  *
- * @method \Magento\Downloadable\Model\ResourceModel\Sample _getResource()
- * @method \Magento\Downloadable\Model\ResourceModel\Sample getResource()
  * @method int getProductId()
  *
  * @api

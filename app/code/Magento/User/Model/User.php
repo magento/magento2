@@ -18,8 +18,6 @@ use Magento\User\Api\Data\UserInterface;
  * Admin user model
  *
  * @api
- * @method \Magento\User\Model\ResourceModel\User _getResource()
- * @method \Magento\User\Model\ResourceModel\User getResource()
  * @method string getLogdate()
  * @method \Magento\User\Model\User setLogdate(string $value)
  * @method int getLognum()

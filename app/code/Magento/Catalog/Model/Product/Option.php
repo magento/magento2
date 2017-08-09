@@ -20,7 +20,6 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * Catalog product option model
  *
  * @api
- * @method \Magento\Catalog\Model\ResourceModel\Product\Option getResource()
  * @method int getProductId()
  * @method \Magento\Catalog\Model\Product\Option setProductId(int $value)
  *
@@ -142,16 +141,6 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
             $resourceCollection,
             $data
         );
-    }
-
-    /**
-     * Get resource instance
-     *
-     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     */
-    protected function _getResource()
-    {
-        return $this->_resource ?: parent::_getResource();
     }
 
     /**

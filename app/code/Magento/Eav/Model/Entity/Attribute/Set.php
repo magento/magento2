@@ -7,7 +7,6 @@
 /**
  * Eav attribute set model
  *
- * @method \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set getResource()
  * @method int getEntityTypeId()
  * @method \Magento\Eav\Model\Entity\Attribute\Set setEntityTypeId(int $value)
  * @method string getAttributeSetName()
@@ -363,16 +362,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
         }
 
         return $setId ? $this->_getResource()->getDefaultGroupId($setId) : null;
-    }
-
-    /**
-     * Get resource instance
-     *
-     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     */
-    protected function _getResource()
-    {
-        return $this->_resource ?: parent::_getResource();
     }
 
     /**

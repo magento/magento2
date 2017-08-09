@@ -20,13 +20,11 @@ use Magento\Framework\Pricing\SaleableInterface;
  *
  * @api
  * @method Product setHasError(bool $value)
- * @method \Magento\Catalog\Model\ResourceModel\Product getResource()
  * @method null|bool getHasError()
  * @method array getAssociatedProductIds()
  * @method Product setNewVariationsAttributeSetId(int $value)
  * @method int getNewVariationsAttributeSetId()
  * @method int getPriceType()
- * @method \Magento\Catalog\Model\ResourceModel\Product\Collection getCollection()
  * @method string getUrlKey()
  * @method Product setUrlKey(string $urlKey)
  * @method Product setRequestPath(string $requestPath)
@@ -503,6 +501,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get collection instance
      *
      * @return object
+     * @deprecated 100.2.0 because collections should be used directly via factory
      */
     public function getResourceCollection()
     {
