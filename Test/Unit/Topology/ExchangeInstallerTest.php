@@ -11,17 +11,17 @@ use Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItemInterface;
 use PhpAmqpLib\Channel\AMQPChannel;
 use Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\BindingInterface;
 
-class ExchangeInstallerTest extends \PHPUnit_Framework_TestCase
+class ExchangeInstallerTest extends \PHPUnit\Framework\TestCase
 {
     public function testInstall()
     {
-        $bindingInstaller = $this->getMock(BindingInstallerInterface::class);
+        $bindingInstaller = $this->createMock(BindingInstallerInterface::class);
         $model = new ExchangeInstaller($bindingInstaller);
-        $channel = $this->getMock(AMQPChannel::class, [], [], '', false, false);
+        $channel = $this->createMock(AMQPChannel::class);
 
-        $binding = $this->getMock(BindingInterface::class);
+        $binding = $this->createMock(BindingInterface::class);
 
-        $exchange = $this->getMock(ExchangeConfigItemInterface::class);
+        $exchange = $this->createMock(ExchangeConfigItemInterface::class);
         $exchange->expects($this->exactly(2))->method('getName')->willReturn('magento');
         $exchange->expects($this->once())->method('getType')->willReturn('topic');
         $exchange->expects($this->once())->method('isDurable')->willReturn(true);
