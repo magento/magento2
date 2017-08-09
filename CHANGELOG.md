@@ -1,3 +1,37 @@
+2.1.10-dev
+=============
+* GitHub issues:
+    * [#6718](https://github.com/magento/magento2/issues/6718) -- Custom composer modules break Component Manager (fixed in [#9692](https://github.com/magento/magento2/pull/9692))
+    * [#4170](https://github.com/magento/magento2/issues/4170) -- Magento2 Mini Cart Items Issue (fixed in [#10050](https://github.com/magento/magento2/pull/10050))
+    * [#5377](https://github.com/magento/magento2/issues/5377) -- "No items" in minicart in 2.1 (fixed in [#10050](https://github.com/magento/magento2/pull/10050))
+    * [#6999](https://github.com/magento/magento2/issues/6999) -- Performance: getConfigurableAttributes cache is broken (fixed in [#9809](https://github.com/magento/magento2/pull/9809))
+    * [#6882](https://github.com/magento/magento2/issues/6882) -- Minicart empty if FPC disabled in Magneto 2.1.1 (fixed in [#10050](https://github.com/magento/magento2/pull/10050))
+    * [#4731](https://github.com/magento/magento2/issues/4731) -- developer mode throws an exception, but production mode is good (fixed in [#9718](https://github.com/magento/magento2/pull/9718))
+    * [#7827](https://github.com/magento/magento2/issues/7827) -- DOM schema validation error (fixed in [#9718](https://github.com/magento/magento2/pull/9718))
+    * [#3872](https://github.com/magento/magento2/issues/3872) -- Slash as category URL suffix gives 404 error on all category pages (fixed in [#10164](https://github.com/magento/magento2/pull/10164))
+    * [#4660](https://github.com/magento/magento2/issues/4660) -- Multiple URLs causes duplicated content (fixed in [#10164](https://github.com/magento/magento2/pull/10164))
+    * [#4876](https://github.com/magento/magento2/issues/4876) -- Product URL Suffix "/" results in 404 error (fixed in [#10164](https://github.com/magento/magento2/pull/10164))
+    * [#8264](https://github.com/magento/magento2/issues/8264) -- Custom URL Rewrite where the request path ends with a forward slash is not matched (fixed in [#10164](https://github.com/magento/magento2/pull/10164))
+    * [#1980](https://github.com/magento/magento2/issues/1980) -- Product attributes' labels are not translated on product edit page (fixed in [#10184](https://github.com/magento/magento2/pull/10184))
+    * [#6818](https://github.com/magento/magento2/issues/6818) -- PageCache gives error "Uncaught TypeError: element.prop is not a function" when there is an iframe (fixed in [#10218](https://github.com/magento/magento2/pull/10218))
+    * [#6175](https://github.com/magento/magento2/issues/6175) -- Unable to generate unsecure URL if current URL is secure (fixed in [#10188](https://github.com/magento/magento2/pull/10188))
+    * [#5651](https://github.com/magento/magento2/issues/5651) -- Purchase date on admin screen is always *:07:00 (fixed in [#10260](https://github.com/magento/magento2/pull/10260))
+    * [#9619](https://github.com/magento/magento2/issues/9619) -- Impossible to create Text Swatch 0 (Zero) (fixed in [#10282](https://github.com/magento/magento2/pull/10282))
+    * [#10266](https://github.com/magento/magento2/issues/10266) -- Product Attributes - Size 0 (fixed in [#10282](https://github.com/magento/magento2/pull/10282))
+* GitHub pull requests:
+    * [#9692](https://github.com/magento/magento2/pull/9692) -- Backport of MAGETWO-59256 for 2.1: Custom composer modules break Component Manager #6718 (by @JTimNolan)
+    * [#9809](https://github.com/magento/magento2/pull/9809) -- Fix issue #6999: Configurable attribute cache was never hit (by @thlassche)
+    * [#10050](https://github.com/magento/magento2/pull/10050) -- [2.1-backport] Customer-data is not updates after login when full page cache disabled (by @ihor-sviziev)
+    * [#10075](https://github.com/magento/magento2/pull/10075) -- Fix date format in adminhtml order grid (by @alessandroniciforo)
+    * [#9718](https://github.com/magento/magento2/pull/9718) -- ported fix from 237e54d - MAGETWO-55684: Fix XSD schema (by @pixelhed)
+    * [#10159](https://github.com/magento/magento2/pull/10159) -- Fix labels tranlation on category page (by @fernandofauth)
+    * [#10164](https://github.com/magento/magento2/pull/10164) -- [2.1-backport] Fix trailing slash used in url rewrites (by @ihor-sviziev)
+    * [#10184](https://github.com/magento/magento2/pull/10184) -- Fixed: Product attributes labels are not translated on product edit page (by @fernandofauth)
+    * [#10211](https://github.com/magento/magento2/pull/10211) -- Add clarification about deprecated methods in Abstract model (by @ihor-sviziev)
+    * [#10218](https://github.com/magento/magento2/pull/10218) -- Backport 1b55a64 to 2.1 - Fixes #6818 (by @ajpevers)
+    * [#10188](https://github.com/magento/magento2/pull/10188) -- magento/magento2:#6175 Fixed Unable to generate unsecure URL if current URL is secure (by @arshadpkm)
+    * [#10260](https://github.com/magento/magento2/pull/10260) -- Fix order date format in Orders Grid (by @ihor-sviziev)
+    * [#10282](https://github.com/magento/magento2/pull/10282) -- 2.1 - Allow to use text swatch 0 (by @ihor-sviziev)
 2.1.1
 =============
 To get detailed information about changes in Magento 2.1.1, please visit [Magento Community Edition (CE) Release Notes](http://devdocs.magento.com/guides/v2.1/release-notes/ReleaseNotes2.1.1CE.html "Magento Community Edition (CE) Release Notes")
