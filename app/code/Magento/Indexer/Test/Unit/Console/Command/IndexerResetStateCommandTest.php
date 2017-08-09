@@ -33,7 +33,7 @@ class IndexerResetStateCommandTest extends AbstractIndexerCommandCommonSetup
         );
         $this->initIndexerCollectionByItems([$indexerOne]);
 
-        $stateMock = $this->getMock(\Magento\Indexer\Model\Indexer\State::class, [], [], '', false);
+        $stateMock = $this->createMock(\Magento\Indexer\Model\Indexer\State::class);
         $stateMock->expects($this->exactly(1))
             ->method('setStatus')
             ->with(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID)

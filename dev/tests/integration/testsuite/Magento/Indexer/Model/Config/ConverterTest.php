@@ -7,7 +7,7 @@ namespace Magento\Indexer\Model\Config;
 
 use Magento\Framework\Exception\ConfigurationMismatchException;
 
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Indexer\Config\Converter
@@ -40,7 +40,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $path = $pathFiles . '/indexer_with_circular_dependency.xml';
         $domDocument = new \DOMDocument();
         $domDocument->load($path);
-        $this->setExpectedException(ConfigurationMismatchException::class, 'Circular dependency references from');
+        $this->expectException(ConfigurationMismatchException::class);
+        $this->expectExceptionMessage('Circular dependency references from');
         $this->model->convert($domDocument);
     }
 
@@ -53,10 +54,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $path = $pathFiles . '/dependency_on_not_existing_indexer.xml';
         $domDocument = new \DOMDocument();
         $domDocument->load($path);
-        $this->setExpectedException(
-            ConfigurationMismatchException::class,
-            "Dependency declaration 'indexer_4' in 'indexer_2' to the non-existing indexer."
-        );
+        $this->expectException(ConfigurationMismatchException::class);
+        $this->expectExceptionMessage("Dependency declaration 'indexer_4' in 'indexer_2' to the non-existing indexer.");
         $this->model->convert($domDocument);
     }
 }

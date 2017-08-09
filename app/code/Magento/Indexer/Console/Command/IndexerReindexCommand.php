@@ -18,31 +18,26 @@ use Magento\Framework\App\ObjectManagerFactory;
 
 /**
  * Command to run indexers
- * @since 2.0.0
  */
 class IndexerReindexCommand extends AbstractIndexerManageCommand
 {
     /**
      * @var array
-     * @since 2.1.0
      */
     private $sharedIndexesComplete = [];
 
     /**
      * @var ConfigInterface
-     * @since 2.1.0
      */
     private $config;
 
     /**
      * @var IndexerRegistry
-     * @since 2.2.0
      */
     private $indexerRegistry;
 
     /**
      * @var DependencyInfoProvider|null
-     * @since 2.2.0
      */
     private $dependencyInfoProvider;
 
@@ -50,7 +45,6 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      * @param ObjectManagerFactory $objectManagerFactory
      * @param IndexerRegistry|null $indexerRegistry
      * @param DependencyInfoProvider|null $dependencyInfoProvider
-     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
@@ -64,7 +58,6 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -77,7 +70,6 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -113,7 +105,6 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
 
     /**
      * {@inheritdoc} Returns the ordered list of specified indexers and related indexers.
-     * @since 2.2.0
      */
     protected function getIndexers(InputInterface $input)
     {
@@ -162,7 +153,6 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      *
      * @param string $indexerId
      * @return array
-     * @since 2.2.0
      */
     private function getRelatedIndexerIds(string $indexerId)
     {
@@ -183,7 +173,6 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      *
      * @param string $indexerId
      * @return array
-     * @since 2.2.0
      */
     private function getDependentIndexerIds(string $indexerId)
     {
@@ -208,7 +197,6 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      * @param IndexerInterface $indexer
      * @return void
      * @throws LocalizedException
-     * @since 2.1.0
      */
     private function validateIndexerStatus(IndexerInterface $indexer)
     {
@@ -227,7 +215,6 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      *
      * @param string $sharedIndex
      * @return array
-     * @since 2.1.0
      */
     private function getIndexerIdsBySharedIndex($sharedIndex)
     {
@@ -246,7 +233,6 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      *
      * @param string $sharedIndex
      * @return $this
-     * @since 2.1.0
      */
     private function validateSharedIndex($sharedIndex)
     {
@@ -272,8 +258,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      * Get config
      *
      * @return ConfigInterface
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getConfig()
     {
@@ -284,11 +269,8 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     }
 
     /**
-     * Get indexer registry.
-     *
      * @return IndexerRegistry
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getIndexerRegistry()
     {
@@ -300,8 +282,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
 
     /**
      * @return DependencyInfoProvider
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getDependencyInfoProvider()
     {

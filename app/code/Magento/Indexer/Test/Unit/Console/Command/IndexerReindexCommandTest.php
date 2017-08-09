@@ -54,7 +54,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     public function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->configMock = $this->getMock(\Magento\Indexer\Model\Config::class, [], [], '', false);
+        $this->configMock = $this->createMock(\Magento\Indexer\Model\Config::class);
         $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -440,8 +440,8 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $this->initIndexerCollectionByItems([$indexerOne]);
 
         $indexerOne->expects($this->never())->method('getTitle');
-        $this->setExpectedException(
-            \InvalidArgumentException::class,
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
             "The following requested index types are not supported: '"
             . join("', '", $inputIndexers)
             . "'." . PHP_EOL . 'Supported types: '

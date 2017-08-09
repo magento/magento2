@@ -7,7 +7,7 @@ namespace Magento\Framework\Indexer\Test\Unit\Config;
 
 use Magento\Framework\Exception\ConfigurationMismatchException;
 
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Indexer\Config\Converter|\PHPUnit_Framework_MockObject_MockObject
@@ -37,7 +37,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     {
         $dom = new \DOMDocument();
         $dom->loadXML($inputXml);
-        $this->setExpectedException(ConfigurationMismatchException::class, $exceptionMessage);
+        $this->expectException(ConfigurationMismatchException::class);
+        $this->expectExceptionMessage($exceptionMessage);
         $this->_model->convert($dom);
     }
 
@@ -75,7 +76,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     {
         $dom = new \DOMDocument();
         $dom->loadXML($inputXml);
-        $this->setExpectedException(ConfigurationMismatchException::class, $exceptionMessage);
+        $this->expectException(ConfigurationMismatchException::class);
+        $this->expectExceptionMessage($exceptionMessage);
         $this->_model->convert($dom);
     }
 

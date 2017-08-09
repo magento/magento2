@@ -14,7 +14,7 @@ use Magento\Indexer\Model\Indexer\State;
 use Magento\Indexer\Model\ResourceModel\Indexer\State\Collection as StateCollection;
 use Magento\Indexer\Model\ResourceModel\Indexer\State\CollectionFactory;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper

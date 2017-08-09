@@ -13,31 +13,26 @@ use Magento\Framework\Indexer\StateInterface;
 /**
  * Class \Magento\Indexer\Model\Processor
  *
- * @since 2.0.0
  */
 class Processor
 {
     /**
      * @var ConfigInterface
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var IndexerInterfaceFactory
-     * @since 2.0.0
      */
     protected $indexerFactory;
 
     /**
      * @var Indexer\CollectionFactory
-     * @since 2.0.0
      */
     protected $indexersFactory;
 
     /**
      * @var \Magento\Framework\Mview\ProcessorInterface
-     * @since 2.0.0
      */
     protected $mviewProcessor;
 
@@ -46,7 +41,6 @@ class Processor
      * @param IndexerInterfaceFactory $indexerFactory
      * @param Indexer\CollectionFactory $indexersFactory
      * @param \Magento\Framework\Mview\ProcessorInterface $mviewProcessor
-     * @since 2.0.0
      */
     public function __construct(
         ConfigInterface $config,
@@ -64,7 +58,6 @@ class Processor
      * Regenerate indexes for all invalid indexers
      *
      * @return void
-     * @since 2.0.0
      */
     public function reindexAllInvalid()
     {
@@ -95,7 +88,6 @@ class Processor
      * Regenerate indexes for all indexers
      *
      * @return void
-     * @since 2.0.0
      */
     public function reindexAll()
     {
@@ -110,7 +102,6 @@ class Processor
      * Update indexer views
      *
      * @return void
-     * @since 2.0.0
      */
     public function updateMview()
     {
@@ -121,7 +112,6 @@ class Processor
      * Clean indexer view changelogs
      *
      * @return void
-     * @since 2.0.0
      */
     public function clearChangelog()
     {
