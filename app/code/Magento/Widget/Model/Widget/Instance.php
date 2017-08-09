@@ -595,6 +595,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
                 $value = implode(',', $value);
             }
             if ($name && strlen((string)$value)) {
+                $value = html_entity_decode($value);
                 $xml .= '<action method="setData">' .
                     '<argument name="name" xsi:type="string">' .
                     $name .

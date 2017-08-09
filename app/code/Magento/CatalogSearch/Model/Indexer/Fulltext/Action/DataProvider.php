@@ -10,6 +10,7 @@ use Magento\Framework\App\ResourceConnection;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class DataProvider
 {

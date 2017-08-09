@@ -18,6 +18,8 @@ use Magento\Quote\Api\Data\PaymentMethodInterface;
 
 /**
  * Payment method abstract model
+ *
+ * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

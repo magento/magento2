@@ -11,6 +11,9 @@
  */
 namespace Magento\Config\Model\Config\Backend\Admin;
 
+/**
+ * @api
+ */
 class Custom extends \Magento\Framework\App\Config\Value
 {
     const CONFIG_SCOPE = 'stores';

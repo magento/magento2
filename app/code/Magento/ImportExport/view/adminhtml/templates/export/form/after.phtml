@@ -8,11 +8,11 @@
 ?>
 <fieldset class="admin__fieldset" id="export_filter_container" style="display:none;">
     <legend class="admin__legend">
-        <span><?php /* @escapeNotVerified */ echo __('Entity Attributes'); ?></span>
+        <span><?= /* @escapeNotVerified */ __('Entity Attributes') ?></span>
     </legend>
     <br />
-    <form id="export_filter_form" action="<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/export') ?>" method="post">
-        <input name="form_key" type="hidden" value="<?php /* @escapeNotVerified */ echo $block->getFormKey() ?>" />
+    <form id="export_filter_form" action="<?= /* @escapeNotVerified */ $block->getUrl('*/*/export') ?>" method="post">
+        <input name="form_key" type="hidden" value="<?= /* @escapeNotVerified */ $block->getFormKey() ?>" />
         <div id="export_filter_grid_container"><!-- --></div>
     </form>
     <button class="action- scalable" type="button" onclick="getFile();"><span><?php

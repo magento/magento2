@@ -15,11 +15,11 @@ $welcomeMessage = $block->getWelcome();
     case 'welcome': ?>
         <li class="greet welcome" data-bind="scope: 'customer'">
             <!-- ko if: customer().fullname  -->
-            <span data-bind="text: new String('<?php echo $block->escapeHtml(__('Welcome, %1!', '%1'));?>').replace('%1', customer().firstname)">
+            <span data-bind="text: new String('<?= $block->escapeHtml(__('Welcome, %1!', '%1')) ?>').replace('%1', customer().firstname)">
             </span>
             <!-- /ko -->
             <!-- ko ifnot: customer().fullname  -->
-            <span data-bind="html:'<?=$block->escapeHtml($welcomeMessage) ?>'"></span>
+            <span data-bind="html:'<?= $block->escapeHtml($welcomeMessage) ?>'"></span>
             <!-- /ko -->
         </li>
         <script type="text/x-magento-init">
@@ -38,7 +38,7 @@ $welcomeMessage = $block->getWelcome();
     <?php break; ?>
 
     <?php case 'other': ?>
-        <?php echo $block->getChildHtml(); ?>
+        <?= $block->getChildHtml() ?>
     <?php break; ?>
 
 <?php endswitch; ?>

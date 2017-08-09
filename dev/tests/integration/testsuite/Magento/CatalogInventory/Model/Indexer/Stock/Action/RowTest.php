@@ -55,11 +55,6 @@ class RowTest extends \PHPUnit_Framework_TestCase
             \Magento\Catalog\Model\ProductRepository::class
         );
 
-        /** @var \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource */
-        $indexerStockFrontendResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class
-        );
-
         $product = $productRepository->get('simple');
 
         $this->_processor->getIndexer()->setScheduled(false);
@@ -86,7 +81,7 @@ class RowTest extends \PHPUnit_Framework_TestCase
         $productCollection = $layer->getProductCollection();
         $productCollection->joinField(
             'qty',
-            $indexerStockFrontendResource->getMainTable(),
+            'cataloginventory_stock_status',
             'qty',
             'product_id=entity_id',
             '{{table}}.stock_id=1',

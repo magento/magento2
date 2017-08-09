@@ -11,6 +11,9 @@ namespace Magento\CatalogSearch\Model\ResourceModel;
 
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @api
+ */
 class EngineProvider
 {
     const CONFIG_ENGINE_PATH = 'catalog/search/engine';

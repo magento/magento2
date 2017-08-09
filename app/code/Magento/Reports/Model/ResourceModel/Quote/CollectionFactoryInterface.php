@@ -5,6 +5,9 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Quote;
 
+/**
+ * @api
+ */
 interface CollectionFactoryInterface
 {
     /**

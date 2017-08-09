@@ -24,6 +24,10 @@ class FullTest extends \PHPUnit_Framework_TestCase
         $productTypeMock = $this->getMock(\Magento\Catalog\Model\Product\Type::class, [], [], '', false);
         $connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
 
+        $productTypeMock
+            ->method('getTypesByPriority')
+            ->willReturn([]);
+
         $exceptionMessage = 'exception message';
 
         $resourceMock->expects($this->any())

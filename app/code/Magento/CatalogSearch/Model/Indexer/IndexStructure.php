@@ -14,6 +14,9 @@ use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
+/**
+ * @api
+ */
 class IndexStructure implements IndexStructureInterface
 {
     /**

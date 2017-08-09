@@ -5,17 +5,22 @@
  */
 namespace Magento\Quote\Model\Quote\Address;
 
+/**
+ * @method string getCode()
+ *
+ * @api
+ */
 class Total extends \Magento\Framework\DataObject
 {
     /**
      * @var array
      */
-    protected $totalAmounts;
+    protected $totalAmounts = [];
 
     /**
      * @var array
      */
-    protected $baseTotalAmounts;
+    protected $baseTotalAmounts = [];
 
     /**
      * Serializer interface instance.

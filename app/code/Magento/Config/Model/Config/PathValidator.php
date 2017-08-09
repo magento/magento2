@@ -9,6 +9,7 @@ use Magento\Framework\Exception\ValidatorException;
 
 /**
  * Validates the config path by config structure schema.
+ * @api
  */
 class PathValidator
 {

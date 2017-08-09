@@ -76,11 +76,6 @@ abstract class AbstractAction
     private $productResource;
 
     /**
-     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
-     */
-    private $indexerFrontendResource;
-
-    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -89,7 +84,6 @@ abstract class AbstractAction
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory $indexerPriceFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $defaultIndexerResource
-     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $indexerFrontendResource
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
@@ -99,8 +93,7 @@ abstract class AbstractAction
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory $indexerPriceFactory,
-        \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $defaultIndexerResource,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource = null
+        \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $defaultIndexerResource
     ) {
         $this->_config = $config;
         $this->_storeManager = $storeManager;
@@ -111,10 +104,6 @@ abstract class AbstractAction
         $this->_indexerPriceFactory = $indexerPriceFactory;
         $this->_defaultIndexerResource = $defaultIndexerResource;
         $this->_connection = $this->_defaultIndexerResource->getConnection();
-        $this->indexerFrontendResource = $indexerFrontendResource ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(
-                \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class
-            );
     }
 
     /**
@@ -515,13 +504,13 @@ abstract class AbstractAction
     /**
      * Retrieve index table that will be used for write operations.
      *
-     * This method is used during both partial and full reindex to identify the the table.
+     * This method is used during both partial and full reindex to identify the table.
      *
      * @return string
      */
     protected function getIndexTargetTable()
     {
-        return $this->indexerFrontendResource->getMainTable();
+        return $this->_defaultIndexerResource->getTable('catalog_product_index_price');
     }
 
     /**

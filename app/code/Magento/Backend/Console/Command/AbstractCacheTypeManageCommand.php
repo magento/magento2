@@ -11,6 +11,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\Cache\Manager;
 
+/**
+ * @api
+ */
 abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
 {
     /** @var EventManagerInterface */

@@ -12,6 +12,7 @@ use Magento\Quote\Model\Quote\Address;
 /**
  * Shopping Cart Rule data model
  *
+ * @api
  * @method \Magento\SalesRule\Model\ResourceModel\Rule _getResource()
  * @method \Magento\SalesRule\Model\ResourceModel\Rule getResource()
  * @method string getName()

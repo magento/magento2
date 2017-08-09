@@ -82,18 +82,18 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
     {
         $collection = $this->filter->getCollection($this->collectionFactory->create());
         $productIds = $collection->getAllIds();
-        $storeId = (int) $this->getRequest()->getParam('store', 0);
+        $requestStoreId = $storeId = $this->getRequest()->getParam('store', null);
+        $filterRequest = $this->getRequest()->getParam('filters', null);
         $status = (int) $this->getRequest()->getParam('status');
-        $filters = (array)$this->getRequest()->getParam('filters', []);
 
-        if (isset($filters['store_id'])) {
-            $storeId = (int)$filters['store_id'];
+        if (null !== $storeId && null !== $filterRequest) {
+            $storeId = (isset($filterRequest['store_id'])) ? (int) $filterRequest['store_id'] : 0;
         }
 
         try {
             $this->_validateMassStatus($productIds, $status);
             $this->_objectManager->get(\Magento\Catalog\Model\Product\Action::class)
-                ->updateAttributes($productIds, ['status' => $status], $storeId);
+                ->updateAttributes($productIds, ['status' => $status], (int) $storeId);
             $this->messageManager->addSuccess(__('A total of %1 record(s) have been updated.', count($productIds)));
             $this->_productPriceIndexerProcessor->reindexList($productIds);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -104,6 +104,6 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        return $resultRedirect->setPath('catalog/*/', ['store' => $storeId]);
+        return $resultRedirect->setPath('catalog/*/', ['store' => $requestStoreId]);
     }
 }

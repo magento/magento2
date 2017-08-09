@@ -54,7 +54,21 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
             ->method('getComposerJsonFiles')
             ->will($this->returnValue($fileIteratorMock));
 
-        $this->packageInfo = new PackageInfo($this->reader, $this->componentRegistrar);
+        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->getMock();
+
+        $this->serializerMock->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($serializedData) {
+                    return json_decode($serializedData, true);
+                }
+            );
+        $this->packageInfo = new PackageInfo(
+            $this->reader,
+            $this->componentRegistrar,
+            $this->serializerMock
+        );
     }
 
     public function testGetModuleName()

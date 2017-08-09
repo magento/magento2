@@ -8,6 +8,7 @@ namespace Magento\SalesRule\Model;
 /**
  * SalesRule Coupon Model
  *
+ * @api
  * @method \Magento\SalesRule\Model\ResourceModel\Coupon _getResource()
  * @method \Magento\SalesRule\Model\ResourceModel\Coupon getResource()
  */

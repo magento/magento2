@@ -8,6 +8,7 @@ namespace Magento\Framework\Config\File;
 
 /**
  * Stores file key to file name config
+ * @api
  */
 class ConfigFilePool
 {

@@ -5,6 +5,9 @@
  */
 namespace Magento\Eav\Model\Entity\Increment;
 
+/**
+ * @api
+ */
 interface IncrementInterface
 {
     /**
