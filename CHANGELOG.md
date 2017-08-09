@@ -32,6 +32,7 @@
     * [#10188](https://github.com/magento/magento2/pull/10188) -- magento/magento2:#6175 Fixed Unable to generate unsecure URL if current URL is secure (by @arshadpkm)
     * [#10260](https://github.com/magento/magento2/pull/10260) -- Fix order date format in Orders Grid (by @ihor-sviziev)
     * [#10282](https://github.com/magento/magento2/pull/10282) -- 2.1 - Allow to use text swatch 0 (by @ihor-sviziev)
+
 2.1.1
 =============
 To get detailed information about changes in Magento 2.1.1, please visit [Magento Community Edition (CE) Release Notes](http://devdocs.magento.com/guides/v2.1/release-notes/ReleaseNotes2.1.1CE.html "Magento Community Edition (CE) Release Notes")
