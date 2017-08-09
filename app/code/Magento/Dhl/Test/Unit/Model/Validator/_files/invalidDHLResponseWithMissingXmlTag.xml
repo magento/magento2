@@ -1,0 +1,11 @@
+<res:ErrorResponse xmlns:res='http://www.dhl.com' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation= 'http://www.dhl.com err-res.xsd'>
+    <Response>
+        <Status>
+            <ActionStatus>Error</ActionStatus>
+            <Condition>
+                <ConditionCode>111</ConditionCode>
+                <ConditionData>Error in parsing request XML</ConditionData>
+            </Condition>
+        </Status>
+    </Response>
+</res:ErrorResponse>

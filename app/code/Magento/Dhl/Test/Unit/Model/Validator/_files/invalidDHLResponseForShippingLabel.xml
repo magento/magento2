@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<res:ErrorResponse xmlns:res='http://www.dhl.com' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation= 'http://www.dhl.com err-res.xsd'>
+    <Response>
+        <Status>
+            <ActionStatus>Error</ActionStatus>
+            <Condition>
+                <ConditionCode />
+                <ConditionData />
+            </Condition>
+            <Condition>
+                <ConditionCode>123</ConditionCode>
+                <ConditionData>Error in shipping request XML</ConditionData>
+            </Condition>
+        </Status>
+    </Response>
+</res:ErrorResponse>

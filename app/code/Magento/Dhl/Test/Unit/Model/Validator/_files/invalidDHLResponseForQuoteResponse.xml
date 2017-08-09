@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<res:ErrorResponse xmlns:res='http://www.dhl.com' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation= 'http://www.dhl.com err-res.xsd'>
+    <GetQuoteResponse>
+        <Note>
+            <ActionStatus>Error</ActionStatus>
+            <Condition>
+                <ConditionCode>321</ConditionCode>
+                <ConditionData>Error in quote request XML</ConditionData>
+            </Condition>
+        </Note>
+    </GetQuoteResponse>
+</res:ErrorResponse>
