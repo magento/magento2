@@ -31,8 +31,6 @@ use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection as History
  *  sales_order_delete_after
  *
  * @api
- * @method \Magento\Sales\Model\ResourceModel\Order _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order getResource()
  * @method int getGiftMessageId()
  * @method \Magento\Sales\Model\Order setGiftMessageId(int $value)
  * @method bool hasBillingAddressId()

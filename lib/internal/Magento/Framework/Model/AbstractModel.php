@@ -464,6 +464,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @deprecated because resource models should be used directly
      */
     protected function _getResource()
     {
@@ -492,6 +493,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * @TODO MAGETWO-23541: Incorrect dependencies between Model\AbstractModel and Data\Collection\Db from Framework
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     * @deprecated because collections should be used directly via factory
      */
     public function getResourceCollection()
     {
@@ -512,6 +514,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @TODO MAGETWO-23541: Incorrect dependencies between Model\AbstractModel and Data\Collection\Db from Framework
      * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     * @deprecated because collections should be used directly via factory
      */
     public function getCollection()
     {
@@ -882,6 +885,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Retrieve model resource
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @deprecated because resource models should be used directly
      */
     public function getResource()
     {

@@ -14,8 +14,6 @@ use Magento\Framework\Registry;
 /**
  * Data model to retrieve synonyms by passed in phrase
  *
- * @method \Magento\Search\Model\ResourceModel\SynonymReader _getResource()
- * @method \Magento\Search\Model\ResourceModel\SynonymReader getResource()
  * @method \Magento\Search\Model\SynonymReader setGroupId(int $group)
  * @method int getGroupId()
  * @method \Magento\Search\Model\SynonymReader setStoreId(int $storeId)

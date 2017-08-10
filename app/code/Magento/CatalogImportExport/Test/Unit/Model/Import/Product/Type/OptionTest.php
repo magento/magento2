@@ -215,6 +215,8 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
 
     /**
      * Init entity adapter model
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
@@ -249,6 +251,17 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $entityMetadataMock->expects($this->any())
             ->method('getLinkField')
             ->willReturn('entity_id');
+        $optionValueCollectionFactoryMock = $this->createMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory::class
+        );
+        $optionValueCollectionMock = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection::class,
+            ['getIterator', 'addTitleToResult']
+        );
+        $optionValueCollectionMock->expects($this->any())->method('getIterator')
+            ->willReturn($this->createMock(\Traversable::class));
+        $optionValueCollectionFactoryMock->expects($this->any())
+            ->method('create')->willReturn($optionValueCollectionMock);
         $modelClassArgs = [
             $this->createMock(\Magento\ImportExport\Model\ResourceModel\Import\Data::class),
             $this->createMock(\Magento\Framework\App\ResourceConnection::class),
@@ -263,7 +276,8 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             $this->createMock(
                 \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface::class
             ),
-            $this->_getModelDependencies($addExpectations, $deleteBehavior, $doubleOptions)
+            $this->_getModelDependencies($addExpectations, $deleteBehavior, $doubleOptions),
+            $optionValueCollectionFactoryMock
         ];
 
         $modelClassName = \Magento\CatalogImportExport\Model\Import\Product\Option::class;

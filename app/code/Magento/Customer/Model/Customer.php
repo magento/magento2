@@ -27,7 +27,6 @@ use Magento\Store\Model\ScopeInterface;
  * @method Customer setWebsiteId($value)
  * @method int getStoreId() getStoreId()
  * @method string getEmail() getEmail()
- * @method ResourceCustomer _getResource()
  * @method mixed getDisableAutoGroupChange()
  * @method Customer setDisableAutoGroupChange($value)
  * @method Customer setGroupId($value)

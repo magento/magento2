@@ -11,8 +11,6 @@ use Magento\Catalog\Model\Product;
  * Catalog Compare Item Model
  *
  * @api
- *
- * @method \Magento\Catalog\Model\ResourceModel\Product\Compare\Item getResource()
  * @method \Magento\Catalog\Model\Product\Compare\Item setVisitorId(int $value)
  * @method \Magento\Catalog\Model\Product\Compare\Item setCustomerId(int $value)
  * @method int getProductId()
@@ -108,16 +106,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
     protected function _construct()
     {
         $this->_init(\Magento\Catalog\Model\ResourceModel\Product\Compare\Item::class);
-    }
-
-    /**
-     * Retrieve Resource instance
-     *
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Compare\Item
-     */
-    protected function _getResource()
-    {
-        return parent::_getResource();
     }
 
     /**

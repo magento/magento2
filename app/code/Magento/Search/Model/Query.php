@@ -20,8 +20,6 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Search query model
  *
- * @method \Magento\Search\Model\ResourceModel\Query _getResource()
- * @method \Magento\Search\Model\ResourceModel\Query getResource()
  * @method \Magento\Search\Model\Query setQueryText(string $value)
  * @method int getNumResults()
  * @method \Magento\Search\Model\Query setNumResults(int $value)
