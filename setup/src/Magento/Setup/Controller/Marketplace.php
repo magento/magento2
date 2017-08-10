@@ -12,6 +12,10 @@ use Zend\View\Model\JsonModel;
 use Magento\Setup\Model\PackagesData;
 use Magento\Setup\Model\PackagesAuth;
 
+/**
+ * Class \Magento\Setup\Controller\Marketplace
+ *
+ */
 class Marketplace extends AbstractActionController
 {
     /**

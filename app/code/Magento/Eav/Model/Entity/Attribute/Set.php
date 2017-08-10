@@ -38,11 +38,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     const KEY_ENTITY_TYPE_ID = 'entity_type_id';
     /**#@-*/
 
-    /**
-     * Resource instance
-     *
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set
-     */
+    /**#@-*/
     protected $_resource;
 
     /**

@@ -6,6 +6,10 @@
  */
 namespace Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit;
 
+/**
+ * Class \Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit\NewAction
+ *
+ */
 class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product\NewAction
 {
 }

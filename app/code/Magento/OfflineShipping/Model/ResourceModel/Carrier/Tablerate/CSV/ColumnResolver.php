@@ -6,6 +6,10 @@
 
 namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV;
 
+/**
+ * Class \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\ColumnResolver
+ *
+ */
 class ColumnResolver
 {
     const COLUMN_COUNTRY = 'Country';

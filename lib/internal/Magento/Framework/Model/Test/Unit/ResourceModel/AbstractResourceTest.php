@@ -10,7 +10,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
-class AbstractResourceTest extends \PHPUnit_Framework_TestCase
+class AbstractResourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AbstractResourceStub
@@ -25,7 +25,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->serializerMock = $this->getMock(Json::class);
+        $this->serializerMock = $this->createMock(Json::class);
         $this->abstractResource = $objectManager->getObject(AbstractResourceStub::class);
         $objectManager->setBackwardCompatibleProperty(
             $this->abstractResource,
@@ -168,7 +168,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
     public function testCommitZeroLevel()
     {
         /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connection */
-        $connection = $this->getMock(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
         /** @var DataObject|\PHPUnit_Framework_MockObject_MockObject $closureExpectation */
         $closureExpectation = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
@@ -207,7 +207,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
     public function testCommitZeroLevelCallbackException()
     {
         /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connection */
-        $connection = $this->getMock(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
 
         $this->abstractResource->setConnection($connection);
         $this->abstractResource->addCommitCallback(
@@ -228,7 +228,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
     public function testCommitNotCompletedTransaction()
     {
         /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connection */
-        $connection = $this->getMock(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
         /** @var DataObject|\PHPUnit_Framework_MockObject_MockObject $closureExpectation */
         $closureExpectation = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()

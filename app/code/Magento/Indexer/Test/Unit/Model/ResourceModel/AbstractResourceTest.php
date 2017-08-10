@@ -5,7 +5,7 @@
  */
 namespace Magento\Indexer\Test\Unit\Model\ResourceModel;
 
-class AbstractResourceTest extends \PHPUnit_Framework_TestCase
+class AbstractResourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Indexer\Test\Unit\Model\ResourceModel\AbstractResourceStub
@@ -29,13 +29,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()
             ->getMock();
 
-        $this->_tableStrategyInterface = $this->getMock(
-            \Magento\Framework\Indexer\Table\StrategyInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_tableStrategyInterface = $this->createMock(\Magento\Framework\Indexer\Table\StrategyInterface::class);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = $objectManager->getConstructArguments(
             \Magento\Indexer\Test\Unit\Model\ResourceModel\AbstractResourceStub::class,
@@ -65,7 +59,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
 
     public function testClearTemporaryIndexTable()
     {
-        $connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class, [], [], '', false);
+        $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $this->_resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $connectionMock->expects($this->once())->method('delete')->will($this->returnSelf());
         $this->model->clearTemporaryIndexTable();
@@ -77,8 +71,8 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
         $resultColumns = [0 => 'column'];
         $describeTable = ['column' => 'column'];
 
-        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
-        $connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class, [], [], '', false);
+        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
+        $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
 
         $connectionMock->expects($this->any())->method('describeTable')->will($this->returnValue($describeTable));
         $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
@@ -104,7 +98,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
     public function testSyncDataException()
     {
         $describeTable = ['column' => 'column'];
-        $connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class, [], [], '', false);
+        $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $connectionMock->expects($this->any())->method('describeTable')->will($this->returnValue($describeTable));
         $connectionMock->expects($this->any())->method('select')->will($this->throwException(new \Exception()));
         $this->_resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
@@ -124,7 +118,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
         $resultColumns = [0 => 'column'];
         $tableColumns = ['column' => 'column'];
 
-        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
         $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -134,14 +128,10 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
         $selectMock->expects($this->any())->method('from')->will($this->returnSelf());
 
         if ($readToIndex) {
-            $connectionCustomMock = $this->getMock(
-                \Magento\Framework\DB\Adapter\CustomAdapterInterface::class,
-                ['describeTable', 'query', 'select', 'insertArray'],
-                [],
-                '',
-                false
-            );
-            $pdoMock = $this->getMock(\Zend_Db_Statement_Pdo::class, [], [], '', false);
+            $connectionCustomMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+                ->setMethods(['describeTable', 'query', 'select', 'insertArray'])
+                ->getMockForAbstractClass();
+            $pdoMock = $this->createMock(\Zend_Db_Statement_Pdo::class);
             $connectionCustomMock->expects($this->any())->method('query')->will($this->returnValue($selectMock));
             $connectionCustomMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
             $connectionCustomMock->expects($this->any())->method('describeTable')->will(

@@ -6,9 +6,15 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Category\Delete
+ *
+ */
 class Delete extends \Magento\Catalog\Controller\Adminhtml\Category
 {
-    /** @var \Magento\Catalog\Api\CategoryRepositoryInterface */
+    /**
+     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
+     */
     protected $categoryRepository;
 
     /**

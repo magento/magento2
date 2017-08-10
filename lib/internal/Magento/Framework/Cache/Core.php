@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Cache;
 
+/**
+ * Class \Magento\Framework\Cache\Core
+ *
+ */
 class Core extends \Zend_Cache_Core
 {
     /**

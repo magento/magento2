@@ -5,6 +5,10 @@
  */
 namespace Magento\SalesRule\Model\Plugin;
 
+/**
+ * Class \Magento\SalesRule\Model\Plugin\Rule
+ *
+ */
 class Rule
 {
     /**

@@ -12,6 +12,10 @@ namespace Magento\Sitemap\Helper;
 
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class \Magento\Sitemap\Helper\Data
+ *
+ */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**

@@ -6,6 +6,10 @@
  */
 namespace Magento\Checkout\Controller\Index;
 
+/**
+ * Class \Magento\Checkout\Controller\Index\Index
+ *
+ */
 class Index extends \Magento\Checkout\Controller\Onepage
 {
     /**

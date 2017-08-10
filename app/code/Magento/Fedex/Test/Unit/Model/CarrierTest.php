@@ -42,7 +42,7 @@ use Psr\Log\LoggerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CarrierTest extends \PHPUnit_Framework_TestCase
+class CarrierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -161,7 +161,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
                 [
                     'scopeConfig' => $this->scope,
                     'rateErrorFactory' => $this->errorFactory,
-                    'logger' => $this->getMock(LoggerInterface::class),
+                    'logger' => $this->createMock(LoggerInterface::class),
                     'xmlSecurity' => new Security(),
                     'xmlElFactory' => $elementFactory,
                     'rateFactory' => $rateFactory,
@@ -691,7 +691,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getBaseCurrencyCode'])
             ->getMock();
-        $storeManager = $this->getMock(StoreManagerInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
         $storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($store);
@@ -705,7 +705,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
      */
     private function getRateMethodFactory()
     {
-        $priceCurrency = $this->getMock(PriceCurrencyInterface::class);
+        $priceCurrency = $this->createMock(PriceCurrencyInterface::class);
         $rateMethod = $this->getMockBuilder(Method::class)
             ->setConstructorArgs(['priceCurrency' => $priceCurrency])
             ->setMethods(null)

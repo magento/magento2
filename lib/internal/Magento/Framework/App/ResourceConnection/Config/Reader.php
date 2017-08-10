@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\App\ResourceConnection\Config;
 
+/**
+ * Class \Magento\Framework\App\ResourceConnection\Config\Reader
+ *
+ */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Locale\Bundle;
 
+/**
+ * Class \Magento\Framework\Locale\Bundle\CurrencyBundle
+ *
+ */
 class CurrencyBundle extends DataBundle
 {
     /**

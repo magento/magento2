@@ -5,6 +5,10 @@
  */
 namespace Magento\CheckoutAgreements\Model;
 
+/**
+ * Class \Magento\CheckoutAgreements\Model\AgreementModeOptions
+ *
+ */
 class AgreementModeOptions
 {
     const MODE_AUTO = 0;

@@ -12,6 +12,10 @@ use Magento\Framework\Locale\Bundle\RegionBundle;
 use Magento\Framework\Locale\ConfigInterface;
 use Magento\Framework\Locale\Resolver;
 
+/**
+ * Class \Magento\Framework\Setup\Lists
+ *
+ */
 class Lists
 {
     /**

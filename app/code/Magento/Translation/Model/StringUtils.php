@@ -18,6 +18,10 @@
  */
 namespace Magento\Translation\Model;
 
+/**
+ * Class \Magento\Translation\Model\StringUtils
+ *
+ */
 class StringUtils extends \Magento\Framework\Model\AbstractModel
 {
     /**

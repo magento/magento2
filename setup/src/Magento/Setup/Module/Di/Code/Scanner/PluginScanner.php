@@ -5,6 +5,10 @@
  */
 namespace Magento\Setup\Module\Di\Code\Scanner;
 
+/**
+ * Class \Magento\Setup\Module\Di\Code\Scanner\PluginScanner
+ *
+ */
 class PluginScanner implements ScannerInterface
 {
     /**

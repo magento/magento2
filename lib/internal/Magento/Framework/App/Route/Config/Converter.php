@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\App\Route\Config;
 
+/**
+ * Class \Magento\Framework\App\Route\Config\Converter
+ *
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

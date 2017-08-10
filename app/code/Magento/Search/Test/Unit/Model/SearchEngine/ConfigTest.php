@@ -5,7 +5,7 @@
  */
 namespace Magento\Search\Test\Unit\Model\SearchEngine;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Search\Model\SearchEngine\Config\Data|\PHPUnit_Framework_MockObject_MockObject */
     protected $dataStorageMock;
@@ -15,7 +15,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->dataStorage = $this->getMock(\Magento\Search\Model\SearchEngine\Config\Data::class, [], [], '', false);
+        $this->dataStorage = $this->createMock(\Magento\Search\Model\SearchEngine\Config\Data::class);
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 

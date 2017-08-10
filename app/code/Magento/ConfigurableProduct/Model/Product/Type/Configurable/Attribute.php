@@ -31,9 +31,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     const KEY_PRODUCT_ID = 'product_id';
     /**#@-*/
 
-    /**
-     * @var MetadataPool
-     */
+    /**#@-*/
     private $metadataPool;
 
     /**

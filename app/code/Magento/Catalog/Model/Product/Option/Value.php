@@ -41,9 +41,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     const KEY_OPTION_TYPE_ID = 'option_type_id';
     /**#@-*/
 
-    /**
-     * @var array
-     */
+    /**#@-*/
     protected $_values = [];
 
     /**

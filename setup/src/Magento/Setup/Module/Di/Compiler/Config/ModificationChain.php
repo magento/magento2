@@ -6,6 +6,10 @@
 
 namespace Magento\Setup\Module\Di\Compiler\Config;
 
+/**
+ * Class \Magento\Setup\Module\Di\Compiler\Config\ModificationChain
+ *
+ */
 class ModificationChain implements ModificationInterface
 {
     /**

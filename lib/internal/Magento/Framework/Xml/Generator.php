@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Xml;
 
+/**
+ * Class \Magento\Framework\Xml\Generator
+ *
+ */
 class Generator
 {
     /**

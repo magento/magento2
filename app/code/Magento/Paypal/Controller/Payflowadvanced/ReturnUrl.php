@@ -8,6 +8,10 @@ namespace Magento\Paypal\Controller\Payflowadvanced;
 
 use Magento\Paypal\Model\Config;
 
+/**
+ * Class \Magento\Paypal\Controller\Payflowadvanced\ReturnUrl
+ *
+ */
 class ReturnUrl extends \Magento\Paypal\Controller\Payflow\ReturnUrl
 {
     /**

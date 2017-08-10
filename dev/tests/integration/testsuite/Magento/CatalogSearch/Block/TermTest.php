@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogSearch\Block;
 
-class TermTest extends \PHPUnit_Framework_TestCase
+class TermTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Search\Block\Term

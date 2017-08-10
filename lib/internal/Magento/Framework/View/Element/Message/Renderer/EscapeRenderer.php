@@ -8,6 +8,10 @@ namespace Magento\Framework\View\Element\Message\Renderer;
 use Magento\Framework\Escaper;
 use Magento\Framework\Message\MessageInterface;
 
+/**
+ * Class \Magento\Framework\View\Element\Message\Renderer\EscapeRenderer
+ *
+ */
 class EscapeRenderer implements RendererInterface
 {
     /**

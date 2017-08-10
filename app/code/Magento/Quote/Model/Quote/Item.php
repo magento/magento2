@@ -172,7 +172,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $stockRegistry;
 
@@ -671,7 +671,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     *Remove option from item options
+     * Remove option from item options
      *
      * @param string $code
      * @return $this

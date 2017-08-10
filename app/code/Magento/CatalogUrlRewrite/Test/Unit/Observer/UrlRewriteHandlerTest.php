@@ -14,8 +14,9 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 use Magento\UrlRewrite\Model\MergeDataProvider;
+use Magento\CatalogUrlRewrite\Model\CategoryProductUrlPathGenerator;
 
-class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
+class UrlRewriteHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UrlRewriteHandler
@@ -46,6 +47,11 @@ class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
      * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $collectionFactoryMock;
+
+    /**
+     * @var CategoryProductUrlPathGenerator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $categoryBasedProductRewriteGeneratorMock;
 
     /**
      * @var MergeDataProviderFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -82,6 +88,9 @@ class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
         $mergeDataProviderMock = $this->getMockBuilder(MergeDataProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->categoryBasedProductRewriteGeneratorMock = $this->getMockBuilder(CategoryProductUrlPathGenerator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->mergeDataProviderFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($mergeDataProviderMock);
@@ -96,6 +105,7 @@ class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
             $this->productUrlRewriteGeneratorMock,
             $this->urlPersistMock,
             $this->collectionFactoryMock,
+            $this->categoryBasedProductRewriteGeneratorMock,
             $this->mergeDataProviderFactoryMock,
             $this->serializerMock
         );

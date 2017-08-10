@@ -222,6 +222,7 @@
     <type name="Magento\Framework\Message\Manager">
         <arguments>
             <argument name="session" xsi:type="object">Magento\Framework\Message\Session\Proxy</argument>
+            <argument name="exceptionMessageFactory" xsi:type="object">Magento\Framework\Message\ExceptionMessageLookupFactory</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\BlockPool" shared="false" />
@@ -1328,6 +1329,11 @@
     <type name="Magento\Framework\App\Config\MetadataConfigTypeProcessor">
         <arguments>
             <argument name="configSource" xsi:type="object">Magento\Config\App\Config\Source\EnvironmentConfigSource</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Message\ExceptionMessageFactoryPool">
+        <arguments>
+            <argument name="defaultExceptionMessageFactory" xsi:type="object">Magento\Framework\Message\ExceptionMessageFactory</argument>
         </arguments>
     </type>
 </config>

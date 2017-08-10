@@ -12,6 +12,10 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\Reporting;
 
+/**
+ * Class \Magento\Cms\Ui\Component\DataProvider
+ *
+ */
 class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
 {
     /**
@@ -57,7 +61,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
     }
 
     /**
-     * @deprecated
+     * @deprecated 101.1.0
      * @return AuthorizationInterface|mixed
      */
     private function getAuthorizationInstance()

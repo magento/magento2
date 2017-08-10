@@ -12,7 +12,7 @@ use Magento\Sales\Model\Order\Config;
 use Magento\Sales\Model\Order\StatusResolver;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class StatusResolverTest extends \PHPUnit_Framework_TestCase
+class StatusResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param OrderInterface|MockObject $order

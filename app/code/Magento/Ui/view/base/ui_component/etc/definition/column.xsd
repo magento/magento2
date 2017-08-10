@@ -98,7 +98,7 @@
                 </xs:annotation>
             </xs:element>
             <xs:element name="timeFormat" type="xs:string"/>
-            <xs:element name="skipTime" type="xs:boolean">
+            <xs:element name="skipTimeZoneConversion" type="xs:boolean">
                 <xs:annotation>
                     <xs:documentation>
                         For the Date column: If time not important for filtering.

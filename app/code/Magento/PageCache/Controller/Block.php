@@ -10,6 +10,10 @@ namespace Magento\PageCache\Controller;
 use Magento\Framework\Serialize\Serializer\Base64Json;
 use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * Class \Magento\PageCache\Controller\Block
+ *
+ */
 abstract class Block extends \Magento\Framework\App\Action\Action
 {
     /**

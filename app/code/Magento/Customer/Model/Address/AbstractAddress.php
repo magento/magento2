@@ -230,7 +230,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      */
     public function getStreetFull()
     {
-        return $this->getData('street');
+        $street = $this->getData('street');
+        return is_array($street) ? implode("\n", $street) : $street;
     }
 
     /**
@@ -652,6 +653,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     /**
      * Unset Region from address
      * @return $this
+     * @since 100.2.0
      */
     public function unsRegion()
     {
@@ -660,6 +662,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
     /**
      * @return bool
+     * @since 100.2.0
      */
     protected function isCompanyRequired()
     {
@@ -668,6 +671,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
     /**
      * @return bool
+     * @since 100.2.0
      */
     protected function isTelephoneRequired()
     {
@@ -676,6 +680,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
     /**
      * @return bool
+     * @since 100.2.0
      */
     protected function isFaxRequired()
     {

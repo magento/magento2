@@ -6,6 +6,10 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category\Widget;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Category\Widget\CategoriesJson
+ *
+ */
 class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category\Widget
 {
     /**

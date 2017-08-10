@@ -8,6 +8,10 @@ namespace Magento\Setup\Module\Di\Compiler\Log\Writer;
 use Magento\Setup\Module\Di\Compiler\Log\Log;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class \Magento\Setup\Module\Di\Compiler\Log\Writer\Console
+ *
+ */
 class Console
 {
     /**

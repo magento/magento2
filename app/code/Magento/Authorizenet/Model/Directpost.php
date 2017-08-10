@@ -983,7 +983,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     /**
      * @return \Psr\Log\LoggerInterface
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getPsrLogger()
     {

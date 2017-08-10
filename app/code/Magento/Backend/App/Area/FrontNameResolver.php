@@ -53,7 +53,9 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
      */
     protected $deploymentConfig;
 
-    /** @var ScopeConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     private $scopeConfig;
 
     /**

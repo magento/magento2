@@ -11,6 +11,10 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
 
+/**
+ * Class \Magento\Framework\Module\Dir
+ *
+ */
 class Dir
 {
     /**#@+
@@ -22,11 +26,7 @@ class Dir
     const MODULE_CONTROLLER_DIR = 'Controller';
     /**#@-*/
 
-    /**
-     * Module registry
-     *
-     * @var ComponentRegistrarInterface
-     */
+    /**#@-*/
     private $componentRegistrar;
 
     /**

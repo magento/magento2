@@ -15,6 +15,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable\AttributeFactory
 /**
  * Class Factory
  * @api
+ * @since 100.1.0
  */
 class Factory
 {
@@ -45,6 +46,7 @@ class Factory
      * @param AttributeFactory $attributeFactory
      * @param OptionValueInterfaceFactory $optionValueFactory
      * @param ProductAttributeRepositoryInterface $productAttributeRepository
+     * @since 100.1.0
      */
     public function __construct(
         Configurable $productType,
@@ -64,6 +66,7 @@ class Factory
      * @param array $attributesData
      * @return OptionInterface[]
      * @throws \InvalidArgumentException
+     * @since 100.1.0
      */
     public function create(array $attributesData)
     {

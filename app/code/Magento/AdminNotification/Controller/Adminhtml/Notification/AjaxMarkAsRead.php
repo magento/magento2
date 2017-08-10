@@ -6,6 +6,10 @@
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
+/**
+ * Class \Magento\AdminNotification\Controller\Adminhtml\Notification\AjaxMarkAsRead
+ *
+ */
 class AjaxMarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Notification
 {
     /**

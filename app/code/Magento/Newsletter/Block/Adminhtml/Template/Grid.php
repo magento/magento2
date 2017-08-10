@@ -14,6 +14,10 @@ namespace Magento\Newsletter\Block\Adminhtml\Template;
 use Magento\Backend\Block\Widget\Grid as WidgetGrid;
 use Magento\Framework\App\TemplateTypesInterface;
 
+/**
+ * Class \Magento\Newsletter\Block\Adminhtml\Template\Grid
+ *
+ */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**

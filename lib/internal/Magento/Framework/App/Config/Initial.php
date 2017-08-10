@@ -10,6 +10,10 @@ namespace Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Class \Magento\Framework\App\Config\Initial
+ *
+ */
 class Initial
 {
     /**

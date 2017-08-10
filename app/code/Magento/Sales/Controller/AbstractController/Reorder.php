@@ -9,6 +9,10 @@ namespace Magento\Sales\Controller\AbstractController;
 use Magento\Framework\App\Action;
 use Magento\Framework\Registry;
 
+/**
+ * Class \Magento\Sales\Controller\AbstractController\Reorder
+ *
+ */
 abstract class Reorder extends Action\Action
 {
     /**

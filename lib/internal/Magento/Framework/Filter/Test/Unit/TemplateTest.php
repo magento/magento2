@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Filter\Test\Unit;
 
-class TemplateTest extends \PHPUnit_Framework_TestCase
+class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Filter\Template

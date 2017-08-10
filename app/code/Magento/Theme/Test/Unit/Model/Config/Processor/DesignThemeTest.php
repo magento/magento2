@@ -10,7 +10,7 @@ use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\View\Design\Theme\ListInterface;
 use Magento\Theme\Model\Config\Processor\DesignTheme;
 
-class DesignThemeTest extends \PHPUnit_Framework_TestCase
+class DesignThemeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DesignTheme

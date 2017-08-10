@@ -8,6 +8,10 @@ namespace Magento\CatalogRule\Block\Adminhtml\Edit;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
+/**
+ * Class \Magento\CatalogRule\Block\Adminhtml\Edit\ResetButton
+ *
+ */
 class ResetButton extends GenericButton implements ButtonProviderInterface
 {
     /**

@@ -10,7 +10,7 @@ use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\RequestInterface;
 
-class ConfigChangeDetectorTest extends \PHPUnit_Framework_TestCase
+class ConfigChangeDetectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigChangeDetector

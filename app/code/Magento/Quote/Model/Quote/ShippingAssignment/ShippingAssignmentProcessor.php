@@ -15,6 +15,10 @@ use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor
+ *
+ */
 class ShippingAssignmentProcessor
 {
     /**

@@ -247,11 +247,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**#@-*/
 
-    /**
-     * Collection by pages iterator
-     *
-     * @var \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator
-     */
+    /**#@-*/
     protected $_byPagesIterator;
 
     /**

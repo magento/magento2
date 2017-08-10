@@ -11,7 +11,7 @@ use Magento\Payment\Gateway\Config\ConfigValueHandler;
 /**
  * Class ConfigValueHandlerTest
  */
-class ConfigValueHandlerTest extends \PHPUnit_Framework_TestCase
+class ConfigValueHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ConfigValueHandler */
     protected $model;

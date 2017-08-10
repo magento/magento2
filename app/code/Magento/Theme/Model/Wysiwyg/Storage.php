@@ -11,6 +11,10 @@ namespace Magento\Theme\Model\Wysiwyg;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Theme\Model\Wysiwyg\Storage
+ *
+ */
 class Storage
 {
     /**

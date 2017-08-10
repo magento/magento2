@@ -17,6 +17,7 @@ use Magento\Sales\Model\Service\InvoiceService;
  * Class InvoiceDocumentFactory
  *
  * @api
+ * @since 100.1.2
  */
 class InvoiceDocumentFactory
 {
@@ -28,6 +29,7 @@ class InvoiceDocumentFactory
     /**
      * InvoiceDocumentFactory constructor.
      * @param InvoiceService $invoiceService
+     * @since 100.1.2
      */
     public function __construct(
         InvoiceService $invoiceService
@@ -43,6 +45,7 @@ class InvoiceDocumentFactory
      * @param InvoiceCreationArgumentsInterface|null $arguments
      * @return InvoiceInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 100.1.2
      */
     public function create(
         OrderInterface $order,

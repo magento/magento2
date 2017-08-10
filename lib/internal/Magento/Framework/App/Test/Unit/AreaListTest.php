@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit;
 
 use \Magento\Framework\App\AreaList;
 
-class AreaListTest extends \PHPUnit_Framework_TestCase
+class AreaListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\AreaList
@@ -27,9 +27,9 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_resolverFactory = $this
-            ->getMock(\Magento\Framework\App\Area\FrontNameResolverFactory::class, [], [], '', false);
+            ->createMock(\Magento\Framework\App\Area\FrontNameResolverFactory::class);
     }
 
     public function testGetCodeByFrontNameWhenAreaDoesNotContainFrontName()
@@ -42,7 +42,7 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
             $expected
         );
 
-        $resolverMock = $this->getMock(\Magento\Framework\App\Area\FrontNameResolverInterface::class);
+        $resolverMock = $this->createMock(\Magento\Framework\App\Area\FrontNameResolverInterface::class);
         $this->_resolverFactory->expects(
             $this->any()
         )->method(
@@ -149,7 +149,7 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
      */
     protected function getObjectManagerMockGetArea()
     {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock
             ->expects($this->any())
             ->method('create')

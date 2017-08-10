@@ -6,6 +6,10 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
+/**
+ * Class \Magento\Widget\Controller\Adminhtml\Widget\Instance\Save
+ *
+ */
 class Save extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
 {
     /**

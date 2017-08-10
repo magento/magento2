@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Model\Product\CopyConstructor;
 
+/**
+ * Class \Magento\Catalog\Model\Product\CopyConstructor\CrossSell
+ *
+ */
 class CrossSell implements \Magento\Catalog\Model\Product\CopyConstructorInterface
 {
     /**

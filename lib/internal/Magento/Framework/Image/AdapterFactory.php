@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Image;
 
+/**
+ * Class \Magento\Framework\Image\AdapterFactory
+ *
+ */
 class AdapterFactory
 {
     /**

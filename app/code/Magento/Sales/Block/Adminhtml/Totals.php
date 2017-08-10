@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Block\Adminhtml;
 
+/**
+ * Class \Magento\Sales\Block\Adminhtml\Totals
+ *
+ */
 class Totals extends \Magento\Sales\Block\Order\Totals
 {
     /**

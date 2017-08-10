@@ -9,6 +9,10 @@ use Magento\Catalog\Model\Category as ModelCategory;
 use Magento\Catalog\Model\Product as ModelProduct;
 use Magento\Framework\Filter\Template;
 
+/**
+ * Class \Magento\Catalog\Helper\Output
+ *
+ */
 class Output extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**

@@ -54,9 +54,7 @@ class Item extends AbstractModel implements OrderItemInterface
 
     // When qty ordered = qty returned // not used at the moment
 
-    /**
-     * @var string
-     */
+    // When qty ordered = qty returned // not used at the moment
     protected $_eventPrefix = 'sales_order_item';
 
     /**
@@ -2400,6 +2398,7 @@ class Item extends AbstractModel implements OrderItemInterface
      * Check if it is possible to process item after cancellation
      *
      * @return bool
+     * @since 100.2.0
      */
     public function isProcessingAvailable()
     {

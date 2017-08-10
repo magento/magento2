@@ -8,6 +8,10 @@ namespace Magento\Framework\App\Scope;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Option\ArrayInterface;
 
+/**
+ * Class \Magento\Framework\App\Scope\Source
+ *
+ */
 class Source implements ArrayInterface
 {
     /**
