@@ -18,7 +18,7 @@ class CreateTest extends WebapiAbstract
      * Service constants
      */
     const RESOURCE_PATH = '/V1/inventory/stock';
-    const SERVICE_NAME = 'inventoryStockRepositoryV1';
+    const SERVICE_NAME = 'inventoryApiStockRepositoryV1';
     /**#@-*/
 
     /**
@@ -83,7 +83,9 @@ class CreateTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Get',
             ],
         ];
-        $response = $this->_webApiCall($serviceInfo);
+        $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
+            ? $this->_webApiCall($serviceInfo)
+            : $this->_webApiCall($serviceInfo, ['stockId' => $stockId]);
         self::assertArrayHasKey(StockInterface::STOCK_ID, $response);
         return $response;
     }

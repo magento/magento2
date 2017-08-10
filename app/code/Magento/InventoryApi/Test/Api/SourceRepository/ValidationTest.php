@@ -16,20 +16,26 @@ class ValidationTest extends WebapiAbstract
      * Service constants
      */
     const RESOURCE_PATH = '/V1/inventory/source';
-    const SERVICE_NAME = 'inventorySourceRepositoryV1';
+    const SERVICE_NAME = 'inventoryApiSourceRepositoryV1';
     /**#@-*/
+
+    /**
+     * @var array
+     */
+    private $validData = [
+        SourceInterface::NAME => 'source-name',
+        SourceInterface::POSTCODE => 'source-postcode',
+    ];
 
     /**
      * @param string $field
      * @param array $expectedErrorData
+     * @throws \Exception
      * @dataProvider dataProviderRequiredFields
      */
-    public function testCreateWithoutRequiredFields($field, array $expectedErrorData)
+    public function testCreateWithMissedRequiredFields($field, array $expectedErrorData)
     {
-        $data = [
-            SourceInterface::NAME => 'source-name',
-            SourceInterface::POSTCODE => 'source-postcode',
-        ];
+        $data = $this->validData;
         unset($data[$field]);
 
         $serviceInfo = [
@@ -42,31 +48,66 @@ class ValidationTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-
         try {
-            $this->_webApiCall($serviceInfo, ['source' => $data], null, 'all');
+            $this->_webApiCall($serviceInfo, ['source' => $data]);
             $this->fail('Expected throwing exception');
-        } catch (\SoapFault $e) {
-            self::assertContains($expectedErrorData['message'], $e->getMessage());
         } catch (\Exception $e) {
-            $errorData = $this->processRestExceptionResult($e);
-            self::assertEquals($expectedErrorData, $errorData);
-            self::assertEquals(Exception::HTTP_BAD_REQUEST, $e->getCode());
+            if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
+                $errorData = $this->processRestExceptionResult($e);
+                self::assertEquals($expectedErrorData, $errorData);
+                self::assertEquals(Exception::HTTP_BAD_REQUEST, $e->getCode());
+            } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+                $this->assertInstanceOf('SoapFault', $e);
+                $this->checkSoapFault(
+                    $e,
+                    $expectedErrorData['soap_message'],
+                    'Sender'
+                );
+            } else {
+                throw $e;
+            }
         }
     }
 
     /**
-     * @param string $field
-     * @param array $expectedErrorData
-     * @dataProvider dataProviderRequiredFields
+     * @return array
      */
-    public function testCreateWithEmptyRequiredFields($field, array $expectedErrorData)
+    public function dataProviderRequiredFields()
     {
-        $data = [
-            SourceInterface::NAME => 'source-name',
-            SourceInterface::POSTCODE => 'source-postcode',
+        return [
+            'without_' . SourceInterface::NAME => [
+                SourceInterface::NAME,
+                [
+                    'message' => '"%1" can not be empty.',
+                    'parameters' => [
+                        SourceInterface::NAME,
+                    ],
+                    'soap_message' => sprintf('object has no \'%s\' property', SourceInterface::NAME),
+                ],
+            ],
+            'without_' . SourceInterface::POSTCODE => [
+                SourceInterface::POSTCODE,
+                [
+                    'message' => '"%1" can not be empty.',
+                    'parameters' => [
+                        SourceInterface::POSTCODE,
+                    ],
+                    'soap_message' => sprintf('object has no \'%s\' property', SourceInterface::POSTCODE),
+                ],
+            ],
         ];
-        $data[$field] = null;
+    }
+
+    /**
+     * @param string $field
+     * @param string $value
+     * @param array $expectedErrorData
+     * @dataProvider failedValidationDataProvider
+     */
+    public function testFailedValidationOnCreate($field, $value, array $expectedErrorData)
+    {
+        $data = $this->validData;
+        $data[$field] = $value;
 
         $serviceInfo = [
             'rest' => [
@@ -78,43 +119,153 @@ class ValidationTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
+        $this->webApiCall($serviceInfo, $data, $expectedErrorData);
+    }
 
-        try {
-            $this->_webApiCall($serviceInfo, ['source' => $data], null, 'all');
-            $this->fail('Expected throwing exception');
-        } catch (\SoapFault $e) {
-            self::assertContains($expectedErrorData['message'], $e->getMessage());
-        } catch (\Exception $e) {
-            $errorData = $this->processRestExceptionResult($e);
-            self::assertEquals($expectedErrorData, $errorData);
-            self::assertEquals(Exception::HTTP_BAD_REQUEST, $e->getCode());
-        }
+    /**
+     * @param string $field
+     * @param string $value
+     * @param array $expectedErrorData
+     * @dataProvider failedValidationDataProvider
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source/source.php
+     */
+    public function testFailedValidationOnUpdate($field, $value, array $expectedErrorData)
+    {
+        $data = $this->validData;
+        $data[$field] = $value;
+
+        $source = $this->getSourceDataByName('source-name-1');
+        $sourceId = $source[SourceInterface::SOURCE_ID];
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceId,
+                'httpMethod' => Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+        $this->webApiCall($serviceInfo, $data, $expectedErrorData);
     }
 
     /**
      * @return array
      */
-    public function dataProviderRequiredFields()
+    public function failedValidationDataProvider()
     {
-        return[
-            'without_' . SourceInterface::NAME => [
+        return [
+            'empty_' . SourceInterface::NAME => [
                 SourceInterface::NAME,
+                null,
                 [
                     'message' => '"%1" can not be empty.',
                     'parameters' => [
-                        SourceInterface::NAME,
+                        1 => SourceInterface::NAME,
                     ],
                 ],
             ],
-            'without_' . SourceInterface::POSTCODE => [
-                SourceInterface::POSTCODE,
+            'whitespaces_' . SourceInterface::NAME => [
+                SourceInterface::NAME,
+                ' ',
                 [
                     'message' => '"%1" can not be empty.',
                     'parameters' => [
-                        SourceInterface::POSTCODE,
+                        1 => SourceInterface::NAME,
+                    ],
+                ],
+            ],
+            'empty_' . SourceInterface::POSTCODE => [
+                SourceInterface::POSTCODE,
+                null,
+                [
+                    'message' => '"%1" can not be empty.',
+                    'parameters' => [
+                        1 => SourceInterface::POSTCODE,
+                    ],
+                ],
+            ],
+            'whitespaces_' . SourceInterface::POSTCODE => [
+                SourceInterface::POSTCODE,
+                ' ',
+                [
+                    'message' => '"%1" can not be empty.',
+                    'parameters' => [
+                        1 => SourceInterface::POSTCODE,
                     ],
                 ],
             ],
         ];
+    }
+
+    /**
+     * @param array $serviceInfo
+     * @param array $data
+     * @param array $expectedErrorData
+     * @throws \Exception
+     */
+    private function webApiCall(array $serviceInfo, array $data, array $expectedErrorData)
+    {
+        try {
+            $this->_webApiCall($serviceInfo, ['source' => $data]);
+            $this->fail('Expected throwing exception');
+        } catch (\Exception $e) {
+            if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
+                $errorData = $this->processRestExceptionResult($e);
+                self::assertEquals($expectedErrorData, $errorData);
+                self::assertEquals(Exception::HTTP_BAD_REQUEST, $e->getCode());
+            } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+                $this->assertInstanceOf('SoapFault', $e);
+                $this->checkSoapFault(
+                    $e,
+                    $expectedErrorData['message'],
+                    'env:Sender',
+                    $expectedErrorData['parameters']
+                );
+            } else {
+                throw $e;
+            }
+        }
+    }
+
+    /**
+     * TODO: duplication
+     * @param string $name
+     * @return array
+     */
+    private function getSourceDataByName($name)
+    {
+        $searchCriteria = [
+            'filter_groups' => [
+                [
+                    'filters' => [
+                        [
+                            'field' => SourceInterface::NAME,
+                            'value' => $name,
+                            'condition_type' => 'eq',
+                        ],
+                    ],
+                ],
+                'page_size' => 1,
+            ],
+        ];
+        $requestData = ['searchCriteria' => $searchCriteria];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
+                'httpMethod' => Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'operation' => self::SERVICE_NAME . 'GetList',
+            ],
+        ];
+        $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
+            ? $this->_webApiCall($serviceInfo)
+            : $this->_webApiCall($serviceInfo, $requestData);
+        self::assertArrayHasKey('items', $response);
+        self::assertCount(1, $response['items']);
+        return reset($response['items']);
     }
 }

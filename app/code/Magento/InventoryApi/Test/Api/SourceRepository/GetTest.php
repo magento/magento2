@@ -19,7 +19,7 @@ class GetTest extends WebapiAbstract
      * Service constants
      */
     const RESOURCE_PATH = '/V1/inventory/source';
-    const SERVICE_NAME = 'inventorySourceRepositoryV1';
+    const SERVICE_NAME = 'inventoryApiSourceRepositoryV1';
     /**#@-*/
 
     public function testGetNoSuchEntityException()
@@ -38,15 +38,22 @@ class GetTest extends WebapiAbstract
 
         $expectedMessage = 'Source with id "%1" does not exist.';
         try {
-            $this->_webApiCall($serviceInfo);
+            (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
+                ? $this->_webApiCall($serviceInfo)
+                : $this->_webApiCall($serviceInfo, ['sourceId' => $notExistingId]);
             $this->fail('Expected throwing exception');
-        } catch (\SoapFault $e) {
-            self::assertContains($expectedMessage, $e->getMessage(), 'SoapFault does not contain expected message.');
         } catch (\Exception $e) {
-            $errorData = $this->processRestExceptionResult($e);
-            self::assertEquals($expectedMessage, $errorData['message']);
-            self::assertEquals($notExistingId, $errorData['parameters'][0]);
-            self::assertEquals(Exception::HTTP_NOT_FOUND, $e->getCode());
+            if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
+                $errorData = $this->processRestExceptionResult($e);
+                self::assertEquals($expectedMessage, $errorData['message']);
+                self::assertEquals($notExistingId, $errorData['parameters'][0]);
+                self::assertEquals(Exception::HTTP_NOT_FOUND, $e->getCode());
+            } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+                $this->assertInstanceOf('SoapFault', $e);
+                $this->checkSoapFault($e, $expectedMessage, 'env:Sender', [1 => $notExistingId]);
+            } else {
+                throw $e;
+            }
         }
     }
 }

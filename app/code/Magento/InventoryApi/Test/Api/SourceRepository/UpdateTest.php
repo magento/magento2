@@ -17,7 +17,7 @@ class UpdateTest extends WebapiAbstract
      * Service constants
      */
     const RESOURCE_PATH = '/V1/inventory/source';
-    const SERVICE_NAME = 'inventorySourceRepositoryV1';
+    const SERVICE_NAME = 'inventoryApiSourceRepositoryV1';
     /**#@-*/
 
     /**
@@ -65,7 +65,13 @@ class UpdateTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-        $this->_webApiCall($serviceInfo, ['source' => $data]);
+        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
+            $this->_webApiCall($serviceInfo, ['source' => $data]);
+        } else {
+            $requestData = $data;
+            $requestData['sourceId'] = $sourceId;
+            $this->_webApiCall($serviceInfo, ['source' => $requestData]);
+        }
 
         AssertArrayContains::assert($data, $this->getSourceDataById($sourceId));
     }
@@ -90,9 +96,10 @@ class UpdateTest extends WebapiAbstract
                 'page_size' => 1,
             ],
         ];
+        $requestData = ['searchCriteria' => $searchCriteria];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query(['searchCriteria' => $searchCriteria]),
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -100,8 +107,11 @@ class UpdateTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'GetList',
             ],
         ];
-        $response = $this->_webApiCall($serviceInfo);
+        $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
+            ? $this->_webApiCall($serviceInfo)
+            : $this->_webApiCall($serviceInfo, $requestData);
         self::assertArrayHasKey('items', $response);
+        self::assertCount(1, $response['items']);
         return reset($response['items']);
     }
 
@@ -121,7 +131,9 @@ class UpdateTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Get',
             ],
         ];
-        $response = $this->_webApiCall($serviceInfo);
+        $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
+            ? $this->_webApiCall($serviceInfo)
+            : $this->_webApiCall($serviceInfo, ['sourceId' => $sourceId]);
         self::assertArrayHasKey(SourceInterface::SOURCE_ID, $response);
         return $response;
     }

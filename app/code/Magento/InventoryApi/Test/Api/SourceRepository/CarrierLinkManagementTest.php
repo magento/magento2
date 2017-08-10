@@ -16,7 +16,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
      * Service constants
      */
     const RESOURCE_PATH = '/V1/inventory/source';
-    const SERVICE_NAME = 'inventorySourceRepositoryV1';
+    const SERVICE_NAME = 'inventoryApiSourceRepositoryV1';
     /**#@-*/
 
     /**
@@ -155,6 +155,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
         ];
         $response = $this->_webApiCall($serviceInfo);
         self::assertArrayHasKey('items', $response);
+        self::assertCount(1, $response['items']);
         return reset($response['items']);
     }
 
@@ -194,7 +195,9 @@ class CarrierLinkManagementTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Get',
             ],
         ];
-        $response = $this->_webApiCall($serviceInfo);
+        $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
+            ? $this->_webApiCall($serviceInfo)
+            : $this->_webApiCall($serviceInfo, ['sourceId' => $sourceId]);
         self::assertArrayHasKey(SourceInterface::SOURCE_ID, $response);
         return $response;
     }

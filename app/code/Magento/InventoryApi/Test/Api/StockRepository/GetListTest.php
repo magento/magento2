@@ -17,7 +17,7 @@ class GetListTest extends WebapiAbstract
      * Service constants
      */
     const RESOURCE_PATH = '/V1/inventory/stock';
-    const SERVICE_NAME = 'inventoryStockRepositoryV1';
+    const SERVICE_NAME = 'inventoryApiStockRepositoryV1';
     /**#@-*/
 
     /**
@@ -28,9 +28,10 @@ class GetListTest extends WebapiAbstract
      */
     public function testGetList(array $searchCriteria, array $expectedItemsData)
     {
+        $requestData = ['searchCriteria' => $searchCriteria];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query(['searchCriteria' => $searchCriteria]),
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -38,7 +39,9 @@ class GetListTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'GetList',
             ],
         ];
-        $response = $this->_webApiCall($serviceInfo);
+        $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
+            ? $this->_webApiCall($serviceInfo)
+            : $this->_webApiCall($serviceInfo, $requestData);
 
         self::assertEquals(count($expectedItemsData), $response['total_count']);
         AssertArrayContains::assert($searchCriteria, $response['search_criteria']);
@@ -73,6 +76,7 @@ class GetListTest extends WebapiAbstract
             ],
             'ordering_by_field' => [
                 [
+                    'filter_groups' => [], // It is need for soap mode
                     'sort_orders' => [
                         [
                             'field' => StockInterface::NAME,
