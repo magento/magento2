@@ -18,8 +18,6 @@ use Magento\Sales\Model\EntityInterface;
  * Order creditmemo model
  *
  * @api
- * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo getResource()
  * @method \Magento\Sales\Model\Order\Invoice setSendEmail(bool $value)
  * @method \Magento\Sales\Model\Order\Invoice setCustomerNote(string $value)
  * @method string getCustomerNote()
