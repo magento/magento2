@@ -64,7 +64,7 @@ class DateTimeFormatter implements DateTimeFormatterInterface
     /**
      * Implements what IntlDateFormatter::formatObject() is in PHP 5.5+
      *
-     * @param \IntlCalendar|\DateTime $object
+     * @param \IntlCalendar|\DateTimeInterface $object
      * @param string|int|array|null $format
      * @param string|null $locale
      * @return string

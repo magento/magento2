@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Model\Config\Source;
 
+/**
+ * @api
+ */
 class Locale implements \Magento\Framework\Option\ArrayInterface
 {
     /**

@@ -262,7 +262,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
             );
         }
 
-        if (!\Zend_Validate::is($taxRate->getRate(), 'NotEmpty')) {
+        if (!\Zend_Validate::is($taxRate->getRate(), 'Float')) {
             $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'percentage_rate']));
         }
 

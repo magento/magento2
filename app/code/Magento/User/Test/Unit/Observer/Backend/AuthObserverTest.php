@@ -150,6 +150,7 @@ class AuthObserverTest extends \PHPUnit_Framework_TestCase
         $lockExpires = false;
         $userPassword = [
             'expires' => 1,
+            'last_updated' => 1496248367
         ];
 
         /** @var Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserverMock */

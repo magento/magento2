@@ -12,6 +12,7 @@ use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Allows to extract configurations from environment variables.
+ * @api
  */
 class EnvironmentPlaceholder implements PreProcessorInterface
 {

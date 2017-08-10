@@ -12,6 +12,7 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address\Total as AddressTotal;
 use Magento\Sales\Model\Status;
 
 /**
@@ -1031,7 +1032,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $addresses = (array)$this->getCustomer()->getAddresses();
         $addresses[] = $address;
         $this->getCustomer()->setAddresses($addresses);
-        $this->updateCustomerData($this->customerRepository->save($this->getCustomer()));
+        $this->updateCustomerData($this->getCustomer());
         return $this;
     }
 
@@ -1444,11 +1445,17 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Retrieve item model object by item identifier
      *
      * @param   int $itemId
-     * @return  \Magento\Quote\Model\Quote\Item
+     * @return  \Magento\Quote\Model\Quote\Item|false
      */
     public function getItemById($itemId)
     {
-        return $this->getItemsCollection()->getItemById($itemId);
+        foreach ($this->getItemsCollection() as $item) {
+            if ($item->getId() == $itemId) {
+                return $item;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -1944,7 +1951,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Get all quote totals (sorted by priority)
      *
-     * @return array
+     * @return AddressTotal[]
      */
     public function getTotals()
     {

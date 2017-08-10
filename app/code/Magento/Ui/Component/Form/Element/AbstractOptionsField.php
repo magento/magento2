@@ -9,7 +9,7 @@ use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
- * Class AbstractOptionsField
+ * @api
  */
 abstract class AbstractOptionsField extends AbstractElement
 {

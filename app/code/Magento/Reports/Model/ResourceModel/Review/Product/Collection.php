@@ -11,6 +11,9 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Review\Product;
 
+/**
+ * @api
+ */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**

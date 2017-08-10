@@ -6,7 +6,8 @@
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
- * Backend Grid Renderer
+ * @api
+ * @deprecated in favour of UI component implementation
  */
 class Longtext extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {

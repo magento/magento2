@@ -166,10 +166,9 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
                 'testArray' => [
                     [
                         [
-                            'prices' =>
-                                [
-                                    'finalPrice' => ['amount' => 31.50],
-                                ],
+                            'prices' => [
+                                'finalPrice' => ['amount' => 31.50],
+                            ],
                             'somekey' => 0,
                         ],
                         [
@@ -188,11 +187,10 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
                 'expectedArray' => [
                     [
                         [
-                            'prices' =>
-                                [
-                                    'finalPrice' => ['amount' => 31.50],
-                                    'weeePrice' => ['amount' => 31.50],
-                                ],
+                            'prices' => [
+                                'finalPrice' => ['amount' => 31.50],
+                                'weeePrice' => ['amount' => 31.50],
+                            ],
                             'somekey' => 0,
                         ],
                         [

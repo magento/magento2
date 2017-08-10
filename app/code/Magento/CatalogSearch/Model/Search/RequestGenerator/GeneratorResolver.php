@@ -6,6 +6,9 @@
 
 namespace Magento\CatalogSearch\Model\Search\RequestGenerator;
 
+/**
+ * @api
+ */
 class GeneratorResolver
 {
     /**

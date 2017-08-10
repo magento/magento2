@@ -171,7 +171,14 @@ class ProductScopeRewriteGenerator
         $mergeDataProvider->merge(
             $this->anchorUrlRewriteGenerator->generate($storeId, $product, $productCategories)
         );
-
+        $mergeDataProvider->merge(
+            $this->currentUrlRewritesRegenerator->generateAnchor(
+                $storeId,
+                $product,
+                $productCategories,
+                $rootCategoryId
+            )
+        );
         return $mergeDataProvider->getData();
     }
 

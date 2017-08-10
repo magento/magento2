@@ -12,6 +12,7 @@ use Magento\Framework\Message\Manager;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Message\Session;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Message\ExceptionMessageLookupFactory;
 
 /**
  * \Magento\Framework\Message\Manager test case
@@ -60,6 +61,11 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     private $logger;
 
+    /**
+     * @var ExceptionMessageLookupFactory | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $exceptionMessageFactory;
+
     protected function setUp()
     {
         $this->messagesFactory = $this->getMockBuilder(
@@ -83,6 +89,12 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
         $this->logger = $this->getMock(\Psr\Log\LoggerInterface::class);
 
+        $this->exceptionMessageFactory = $this->getMockBuilder(
+            \Magento\Framework\Message\ExceptionMessageLookupFactory::class
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->messageMock = $this->getMock(\Magento\Framework\Message\MessageInterface::class);
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = new Manager(
@@ -90,7 +102,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             $this->messageFactory,
             $this->messagesFactory,
             $this->eventManager,
-            $this->logger
+            $this->logger,
+            Manager::DEFAULT_GROUP,
+            $this->exceptionMessageFactory
         );
     }
 
@@ -174,14 +188,16 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($messageCollection, $this->model->getMessages(true));
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     */
-    public function testAddException()
+    public function testAddExceptionWithAlternativeText()
     {
         $exceptionMessage = 'exception message';
         $alternativeText = 'alternative text';
-        $logText = "Exception message: {$exceptionMessage}\nTrace:";
+
+        $this->logger->expects(
+            $this->once()
+        )->method(
+            'critical'
+        );
 
         $messageError = $this->getMockBuilder(
             \Magento\Framework\Message\Error::class
@@ -219,6 +235,55 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
         $exception = new \Exception($exceptionMessage);
         $this->assertEquals($this->model, $this->model->addException($exception, $alternativeText));
+    }
+
+    public function testAddExceptionRenderable()
+    {
+        $exceptionMessage = 'exception message';
+        $exception = new \Exception($exceptionMessage);
+
+        $this->logger->expects(
+            $this->once()
+        )->method(
+            'critical'
+        );
+
+        $message = $this->getMock(\Magento\Framework\Message\MessageInterface::class);
+
+        $this->messageFactory->expects(
+            $this->never()
+        )->method(
+            'create'
+        );
+
+        $this->exceptionMessageFactory->expects(
+            $this->once()
+        )->method(
+            'createMessage'
+        )->with(
+            $exception
+        )->will(
+            $this->returnValue($message)
+        );
+
+        $messageCollection = $this->getMockBuilder(
+            \Magento\Framework\Message\Collection::class
+        )->disableOriginalConstructor()->setMethods(
+            ['addMessage']
+        )->getMock();
+        $messageCollection->expects($this->atLeastOnce())->method('addMessage')->with($message);
+
+        $this->session->expects(
+            $this->atLeastOnce()
+        )->method(
+            'getData'
+        )->with(
+            Manager::DEFAULT_GROUP
+        )->will(
+            $this->returnValue($messageCollection)
+        );
+
+        $this->assertEquals($this->model, $this->model->addExceptionMessage($exception));
     }
 
     /**
