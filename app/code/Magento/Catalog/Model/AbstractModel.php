@@ -222,6 +222,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Get collection instance
      *
      * @return \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
+     * @deprecated because collections should be used directly via factory
      */
     public function getResourceCollection()
     {

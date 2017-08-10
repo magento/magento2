@@ -9,8 +9,6 @@ use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * @api
- * @method \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group _getResource()
- * @method \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group getResource()
  * @method int getSortOrder()
  * @method \Magento\Eav\Model\Entity\Attribute\Group setSortOrder(int $value)
  * @method int getDefaultId()
