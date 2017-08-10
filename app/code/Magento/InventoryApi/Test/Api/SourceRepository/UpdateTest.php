@@ -27,21 +27,21 @@ class UpdateTest extends WebapiAbstract
     {
         $source = $this->getSourceDataByName('source-name-1');
         $sourceId = $source[SourceInterface::SOURCE_ID];
-        $data = [
+        $expectedData = [
             SourceInterface::NAME => 'source-name-1-updated',
-            SourceInterface::CONTACT_NAME => 'source-contact-name-1-updated',
-            SourceInterface::EMAIL => 'source-email-1-updated',
+            SourceInterface::CONTACT_NAME => 'source-contact-name-updated',
+            SourceInterface::EMAIL => 'source-email-updated',
             SourceInterface::ENABLED => false,
-            SourceInterface::DESCRIPTION => 'source-description-1-updated',
+            SourceInterface::DESCRIPTION => 'source-description-updated',
             SourceInterface::LATITUDE => 13.123456,
             SourceInterface::LONGITUDE => 14.123456,
             SourceInterface::COUNTRY_ID => 'UK',
             SourceInterface::REGION_ID => 12,
-            SourceInterface::CITY => 'source-city-1-updated',
-            SourceInterface::STREET => 'source-street-1-updated',
-            SourceInterface::POSTCODE => 'source-postcode-1-updated',
-            SourceInterface::PHONE => 'source-phone-1-updated',
-            SourceInterface::FAX => 'source-fax-1-updated',
+            SourceInterface::CITY => 'source-city-updated',
+            SourceInterface::STREET => 'source-street-updated',
+            SourceInterface::POSTCODE => 'source-postcode-updated',
+            SourceInterface::PHONE => 'source-phone-updated',
+            SourceInterface::FAX => 'source-fax-updated',
             SourceInterface::PRIORITY => 300,
             SourceInterface::USE_DEFAULT_CARRIER_CONFIG => 0,
             SourceInterface::CARRIER_LINKS => [
@@ -66,14 +66,14 @@ class UpdateTest extends WebapiAbstract
             ],
         ];
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
-            $this->_webApiCall($serviceInfo, ['source' => $data]);
+            $this->_webApiCall($serviceInfo, ['source' => $expectedData]);
         } else {
-            $requestData = $data;
+            $requestData = $expectedData;
             $requestData['sourceId'] = $sourceId;
             $this->_webApiCall($serviceInfo, ['source' => $requestData]);
         }
 
-        AssertArrayContains::assert($data, $this->getSourceDataById($sourceId));
+        AssertArrayContains::assert($expectedData, $this->getSourceDataById($sourceId));
     }
 
     /**
@@ -110,6 +110,7 @@ class UpdateTest extends WebapiAbstract
         $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, $requestData);
+
         self::assertArrayHasKey('items', $response);
         self::assertCount(1, $response['items']);
         return reset($response['items']);

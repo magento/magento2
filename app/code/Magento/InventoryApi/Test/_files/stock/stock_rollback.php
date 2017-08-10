@@ -13,10 +13,12 @@ $stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::
 /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
 $searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
 $searchCriteria = $searchCriteriaBuilder
-    ->addFilter(StockInterface::NAME, ['stock-name', 'stock-name-updated'], 'in')
+    ->addFilter(StockInterface::NAME, ['stock-name-1', 'stock-name-1-updated'], 'in')
     ->create();
 $searchResult = $stockRepository->getList($searchCriteria);
-$stocks = $searchResult->getItems();
-$stock = reset($items);
 
-$stockRepository->deleteById($stock->getStockId());
+if ($searchResult->getTotalCount()) {
+    $items = $searchResult->getItems();
+    $stock = reset($items);
+    $stockRepository->deleteById($stock->getStockId());
+}

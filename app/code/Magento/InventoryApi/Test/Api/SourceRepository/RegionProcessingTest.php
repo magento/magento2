@@ -33,7 +33,7 @@ class RegionProcessingTest extends WebapiAbstract
         $sourceData = $this->getSourceDataById($sourceId);
 
         self::assertArrayHasKey(SourceInterface::REGION_ID, $sourceData);
-        self::assertEquals($sourceData[SourceInterface::REGION_ID], $regionId);
+        self::assertEquals($regionId, $sourceData[SourceInterface::REGION_ID]);
         self::assertArrayNotHasKey(SourceInterface::REGION, $sourceData);
     }
 
@@ -50,7 +50,7 @@ class RegionProcessingTest extends WebapiAbstract
         $sourceData = $this->getSourceDataById($sourceId);
 
         self::assertArrayHasKey(SourceInterface::REGION, $sourceData);
-        self::assertEquals($sourceData[SourceInterface::REGION], $regionName);
+        self::assertEquals($regionName, $sourceData[SourceInterface::REGION]);
         self::assertArrayNotHasKey(SourceInterface::REGION_ID, $sourceData);
     }
 
@@ -69,10 +69,10 @@ class RegionProcessingTest extends WebapiAbstract
         $sourceData = $this->getSourceDataById($sourceId);
 
         self::assertArrayHasKey(SourceInterface::REGION_ID, $sourceData);
-        self::assertEquals($sourceData[SourceInterface::REGION_ID], $regionId);
+        self::assertEquals($regionId, $sourceData[SourceInterface::REGION_ID]);
 
         self::assertArrayHasKey(SourceInterface::REGION, $sourceData);
-        self::assertEquals($sourceData[SourceInterface::REGION], $regionName);
+        self::assertEquals($regionName, $sourceData[SourceInterface::REGION]);
     }
 
     protected function tearDown()

@@ -28,21 +28,24 @@ class CarrierLinkManagementTest extends WebapiAbstract
     {
         $source = $this->getSourceDataByName('source-name-1');
         $sourceId = $source[SourceInterface::SOURCE_ID];
-        $data = [
-            SourceInterface::NAME => 'source-name',
+        $expectedData = [
+            SourceInterface::NAME => 'source-name-1',
             SourceInterface::POSTCODE => 'source-postcode',
             SourceInterface::USE_DEFAULT_CARRIER_CONFIG => 0,
             SourceInterface::CARRIER_LINKS => $carrierLinks,
         ];
 
-        $this->saveSource($sourceId, $data);
+        $this->saveSource($sourceId, $expectedData);
         $sourceData = $this->getSourceDataById($sourceId);
 
         self::assertArrayHasKey(SourceInterface::USE_DEFAULT_CARRIER_CONFIG, $sourceData);
-        self::assertEquals($sourceData[SourceInterface::USE_DEFAULT_CARRIER_CONFIG], 0);
+        self::assertEquals(
+            $expectedData[SourceInterface::USE_DEFAULT_CARRIER_CONFIG],
+            $sourceData[SourceInterface::USE_DEFAULT_CARRIER_CONFIG]
+        );
 
         self::assertArrayHasKey(SourceInterface::CARRIER_LINKS, $sourceData);
-        self::assertEquals($sourceData[SourceInterface::CARRIER_LINKS], $data[SourceInterface::CARRIER_LINKS]);
+        self::assertEquals($expectedData[SourceInterface::CARRIER_LINKS], $sourceData[SourceInterface::CARRIER_LINKS]);
     }
 
     /**
@@ -90,15 +93,15 @@ class CarrierLinkManagementTest extends WebapiAbstract
     }
 
     /**
-     * TODO:
+     * TODO: add validator
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source/source.php
      */
     public function testAssignCarrierLinksIfUseGlobalConfigurationChosen()
     {
         $source = $this->getSourceDataByName('source-name-1');
         $sourceId = $source[SourceInterface::SOURCE_ID];
-        $data = [
-            SourceInterface::NAME => 'source-name',
+        $expectedData = [
+            SourceInterface::NAME => 'source-name-1',
             SourceInterface::POSTCODE => 'source-postcode',
             SourceInterface::USE_DEFAULT_CARRIER_CONFIG => 1,
             SourceInterface::CARRIER_LINKS => [
@@ -113,14 +116,17 @@ class CarrierLinkManagementTest extends WebapiAbstract
             ],
         ];
 
-        $this->saveSource($sourceId, $data);
+        $this->saveSource($sourceId, $expectedData);
         $sourceData = $this->getSourceDataById($sourceId);
 
         self::assertArrayHasKey(SourceInterface::USE_DEFAULT_CARRIER_CONFIG, $sourceData);
-        self::assertEquals($sourceData[SourceInterface::USE_DEFAULT_CARRIER_CONFIG], 1);
+        self::assertEquals(
+            $expectedData[SourceInterface::USE_DEFAULT_CARRIER_CONFIG],
+            $sourceData[SourceInterface::USE_DEFAULT_CARRIER_CONFIG]
+        );
 
         self::assertArrayHasKey(SourceInterface::CARRIER_LINKS, $sourceData);
-        self::assertEquals($sourceData[SourceInterface::CARRIER_LINKS], $data[SourceInterface::CARRIER_LINKS]);
+        self::assertEquals($expectedData[SourceInterface::CARRIER_LINKS], $sourceData[SourceInterface::CARRIER_LINKS]);
     }
 
     /**
@@ -143,9 +149,10 @@ class CarrierLinkManagementTest extends WebapiAbstract
                 'page_size' => 1,
             ],
         ];
+        $requestData = ['searchCriteria' => $searchCriteria];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query(['searchCriteria' => $searchCriteria]),
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -153,7 +160,10 @@ class CarrierLinkManagementTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'GetList',
             ],
         ];
-        $response = $this->_webApiCall($serviceInfo);
+        $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
+            ? $this->_webApiCall($serviceInfo)
+            : $this->_webApiCall($serviceInfo, $requestData);
+
         self::assertArrayHasKey('items', $response);
         self::assertCount(1, $response['items']);
         return reset($response['items']);
@@ -176,7 +186,13 @@ class CarrierLinkManagementTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-        $this->_webApiCall($serviceInfo, ['source' => $data]);
+        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
+            $this->_webApiCall($serviceInfo, ['source' => $data]);
+        } else {
+            $requestData = $data;
+            $requestData['sourceId'] = $sourceId;
+            $this->_webApiCall($serviceInfo, ['source' => $requestData]);
+        }
     }
 
     /**

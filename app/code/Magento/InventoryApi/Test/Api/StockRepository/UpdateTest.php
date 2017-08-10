@@ -26,7 +26,7 @@ class UpdateTest extends WebapiAbstract
     {
         $stock = $this->getStockDataByName('stock-name-1');
         $stockId = $stock[StockInterface::STOCK_ID];
-        $data = [
+        $expectedData = [
             StockInterface::NAME => 'stock-name-1-updated',
         ];
         $serviceInfo = [
@@ -40,13 +40,13 @@ class UpdateTest extends WebapiAbstract
             ],
         ];
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
-            $this->_webApiCall($serviceInfo, ['stock' => $data]);
+            $this->_webApiCall($serviceInfo, ['stock' => $expectedData]);
         } else {
-            $requestData = $data;
+            $requestData = $expectedData;
             $requestData['stockId'] = $stockId;
             $this->_webApiCall($serviceInfo, ['stock' => $requestData]);
         }
-        AssertArrayContains::assert($data, $this->getStockDataById($stockId));
+        AssertArrayContains::assert($expectedData, $this->getStockDataById($stockId));
     }
 
     /**
@@ -83,6 +83,7 @@ class UpdateTest extends WebapiAbstract
         $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, $requestData);
+
         self::assertArrayHasKey('items', $response);
         self::assertCount(1, $response['items']);
         return reset($response['items']);

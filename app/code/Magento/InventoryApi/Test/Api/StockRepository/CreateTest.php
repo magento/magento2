@@ -39,7 +39,7 @@ class CreateTest extends WebapiAbstract
 
     public function testCreate()
     {
-        $data = [
+        $expectedData = [
             StockInterface::NAME => 'stock-name',
         ];
         $serviceInfo = [
@@ -52,11 +52,11 @@ class CreateTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-        $stockId = $this->_webApiCall($serviceInfo, ['stock' => $data]);
+        $stockId = $this->_webApiCall($serviceInfo, ['stock' => $expectedData]);
 
         self::assertNotEmpty($stockId);
         $this->stockId = $stockId;
-        AssertArrayContains::assert($data, $this->getStockDataById($stockId));
+        AssertArrayContains::assert($expectedData, $this->getStockDataById($stockId));
     }
 
     protected function tearDown()

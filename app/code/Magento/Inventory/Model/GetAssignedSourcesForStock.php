@@ -95,6 +95,7 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
      */
     private function getAssignedSourceIds($stockId)
     {
+        // TODO: replace on direct SQL query
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(StockSourceLink::STOCK_ID, (int)$stockId)
             ->create();

@@ -233,6 +233,7 @@ class ValidationTest extends WebapiAbstract
         $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, $requestData);
+
         self::assertArrayHasKey('items', $response);
         self::assertCount(1, $response['items']);
         return reset($response['items']);

@@ -104,7 +104,8 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Check if source is enabled
      *
-     * @return bool
+     * TODO:
+     * @return bool|null
      */
     public function isEnabled();
 
@@ -112,7 +113,7 @@ interface SourceInterface extends ExtensibleDataInterface
      * Enable or disable source
      *
      * @param bool $enabled
-     * @return void
+     * @return void|null
      */
     public function setEnabled($enabled);
 
@@ -164,14 +165,14 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Get source country id
      *
-     * @return string
+     * @return string|null
      */
     public function getCountryId();
 
     /**
      * Set source country id
      *
-     * @param string $countryId
+     * @param string|null $countryId
      * @return void
      */
     public function setCountryId($countryId);
@@ -284,14 +285,14 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Get source priority
      *
-     * @return int
+     * @return int|null
      */
     public function getPriority();
 
     /**
      * Set source priority
      *
-     * @param int $priority
+     * @param int|null $priority
      * @return void
      */
     public function setPriority($priority);
@@ -310,7 +311,8 @@ interface SourceInterface extends ExtensibleDataInterface
     public function setUseDefaultCarrierConfig($useDefaultCarrierConfig);
 
     /**
-     * @return \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface[]
+     * TODO: add description
+     * @return \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface[]|null
      */
     public function getCarrierLinks();
 
