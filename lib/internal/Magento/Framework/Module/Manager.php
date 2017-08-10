@@ -21,8 +21,6 @@ class Manager
 {
     /**
      * @var Output\ConfigInterface
-     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version.
-     * The property can be removed in a future major release
      */
     private $_outputConfig;
 
@@ -33,8 +31,6 @@ class Manager
 
     /**
      * @var array
-     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version.
-     * The property can be removed in a future major release
      */
     private $_outputConfigPaths;
 
@@ -69,14 +65,18 @@ class Manager
      *
      * @param string $moduleName Fully-qualified module name
      * @return boolean
-     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
      */
     public function isOutputEnabled($moduleName)
     {
         if (!$this->isEnabled($moduleName)) {
             return false;
         }
-
+        if (!$this->_isCustomOutputConfigEnabled($moduleName)) {
+            return false;
+        }
+        if ($this->_outputConfig->isEnabled($moduleName)) {
+            return false;
+        }
         return true;
     }
 
@@ -85,7 +85,6 @@ class Manager
      *
      * @param string $moduleName Fully-qualified module name
      * @return boolean
-     * @deprecated
      */
     protected function _isCustomOutputConfigEnabled($moduleName)
     {

@@ -7,11 +7,6 @@
  */
 namespace Magento\Framework\Module\Output;
 
-/**
- * Checks whether the module is enabled in the configuration.
- *
- * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
- */
 class Config implements \Magento\Framework\Module\Output\ConfigInterface
 {
     /**
@@ -53,7 +48,7 @@ class Config implements \Magento\Framework\Module\Output\ConfigInterface
      */
     public function isEnabled($moduleName)
     {
-        return false;
+        return $this->isSetFlag(sprintf(self::XML_PATH_MODULE_OUTPUT_STATUS, $moduleName));
     }
 
     /**
@@ -65,6 +60,6 @@ class Config implements \Magento\Framework\Module\Output\ConfigInterface
      */
     public function isSetFlag($path)
     {
-        return false;
+        return $this->_scopeConfig->isSetFlag($path, $this->_storeType);
     }
 }
