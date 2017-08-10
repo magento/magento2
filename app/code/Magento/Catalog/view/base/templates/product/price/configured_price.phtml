@@ -19,22 +19,34 @@ $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
     ?>
     <p class="price-as-configured">
         <span class="special-price">
-            <?= /* @escapeNotVerified */ $block->renderAmount($finalPriceModel->getAmount(), [
-                'display_label'     => __('Special Price'),
-                'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
-                'price_type'        => 'finalPrice',
-                'include_container' => true,
-                'schema' => $schema
-            ]); ?>
+            <?= $block->escapeHtml(
+                $block->renderAmount(
+                    $finalPriceModel->getAmount(),
+                    [
+                        'display_label'     => __('Special Price'),
+                        'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
+                        'price_type'        => 'finalPrice',
+                        'include_container' => true,
+                        'schema' => $schema
+                    ]
+                ),
+                ['span']
+            ); ?>
         </span>
         <span class="old-price">
-            <?= /* @escapeNotVerified */ $block->renderAmount($priceModel->getAmount(), [
-                'display_label'     => __('Regular Price'),
-                'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
-                'price_type'        => 'oldPrice',
-                'include_container' => true,
-                'skip_adjustments'  => true
-            ]); ?>
+            <?= $block->escapeHtml(
+                $block->renderAmount(
+                    $priceModel->getAmount(),
+                    [
+                        'display_label'     => __('Regular Price'),
+                        'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
+                        'price_type'        => 'oldPrice',
+                        'include_container' => true,
+                        'skip_adjustments'  => true
+                    ]
+                ),
+                ['span']
+            ); ?>
         </span>
     </p>
 <?php else : ?>
@@ -46,12 +58,18 @@ $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
         : '';
     ?>
     <p class="price-as-configured">
-        <?= /* @escapeNotVerified */ $block->renderAmount($configuredPrice->getAmount(), [
-            'display_label'     => $priceLabel,
-            'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
-            'price_type'        => 'finalPrice',
-            'include_container' => true,
-            'schema' => $schema
-        ]); ?>
+        <?= $block->escapeHtml(
+            $block->renderAmount(
+                $configuredPrice->getAmount(),
+                [
+                    'display_label'     => $priceLabel,
+                    'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
+                    'price_type'        => 'finalPrice',
+                    'include_container' => true,
+                    'schema' => $schema
+                ]
+            ),
+            ['span']
+        ); ?>
     </p>
 <?php endif; ?>
