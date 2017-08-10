@@ -52,7 +52,7 @@ class CreateTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-        $stockId = $this->_webApiCall($serviceInfo, ['stock' => $data], null, 'all');
+        $stockId = $this->_webApiCall($serviceInfo, ['stock' => $data]);
 
         self::assertNotEmpty($stockId);
         $this->stockId = $stockId;

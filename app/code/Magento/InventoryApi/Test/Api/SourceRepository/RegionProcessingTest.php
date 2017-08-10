@@ -101,7 +101,7 @@ class RegionProcessingTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-        $sourceId = $this->_webApiCall($serviceInfo, ['source' => $data], null, 'all');
+        $sourceId = $this->_webApiCall($serviceInfo, ['source' => $data]);
         self::assertTrue(is_numeric($sourceId));
         self::assertNotEmpty($sourceId);
         return $sourceId;

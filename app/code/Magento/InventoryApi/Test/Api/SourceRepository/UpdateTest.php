@@ -33,8 +33,8 @@ class UpdateTest extends WebapiAbstract
             SourceInterface::EMAIL => 'source-email-1-updated',
             SourceInterface::ENABLED => false,
             SourceInterface::DESCRIPTION => 'source-description-1-updated',
-            SourceInterface::LATITUDE => 0.3,
-            SourceInterface::LONGITUDE => 0.2,
+            SourceInterface::LATITUDE => 13.123456,
+            SourceInterface::LONGITUDE => 14.123456,
             SourceInterface::COUNTRY_ID => 'UK',
             SourceInterface::REGION_ID => 12,
             SourceInterface::CITY => 'source-city-1-updated',
@@ -65,7 +65,7 @@ class UpdateTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-        $this->_webApiCall($serviceInfo, ['source' => $data], null, 'all');
+        $this->_webApiCall($serviceInfo, ['source' => $data]);
 
         AssertArrayContains::assert($data, $this->getSourceDataById($sourceId));
     }

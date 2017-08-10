@@ -43,7 +43,7 @@ class ValidationTest extends WebapiAbstract
         ];
 
         try {
-            $this->_webApiCall($serviceInfo, ['stock' => $data], null, 'all');
+            $this->_webApiCall($serviceInfo, ['stock' => $data]);
             $this->fail('Expected throwing exception');
         } catch (\SoapFault $e) {
             self::assertContains($expectedErrorData['message'], $e->getMessage());
@@ -78,7 +78,7 @@ class ValidationTest extends WebapiAbstract
         ];
 
         try {
-            $this->_webApiCall($serviceInfo, ['stock' => $data], null, 'all');
+            $this->_webApiCall($serviceInfo, ['stock' => $data]);
             $this->fail('Expected throwing exception');
         } catch (\SoapFault $e) {
             self::assertContains($expectedErrorData['message'], $e->getMessage());

@@ -93,7 +93,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
      * TODO:
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source/source.php
      */
-    public function testAssignCarrierLinksIfUseGlobalConfigurationIsChoosed()
+    public function testAssignCarrierLinksIfUseGlobalConfigurationChosen()
     {
         $source = $this->getSourceDataByName('source-name-1');
         $sourceId = $source[SourceInterface::SOURCE_ID];
@@ -175,7 +175,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-        $this->_webApiCall($serviceInfo, ['source' => $data], null, 'all');
+        $this->_webApiCall($serviceInfo, ['source' => $data]);
     }
 
     /**

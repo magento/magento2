@@ -6,7 +6,6 @@
 namespace Magento\InventoryApi\Test\Api\StockRepository;
 
 use Magento\Framework\Webapi\Rest\Request;
-use Magento\InventoryApi\Api\Data\StockCarrierLinkInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\TestFramework\Assert\AssertArrayContains;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -40,7 +39,7 @@ class UpdateTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-        $this->_webApiCall($serviceInfo, ['stock' => $data], null, 'all');
+        $this->_webApiCall($serviceInfo, ['stock' => $data]);
 
         AssertArrayContains::assert($data, $this->getStockDataById($stockId));
     }

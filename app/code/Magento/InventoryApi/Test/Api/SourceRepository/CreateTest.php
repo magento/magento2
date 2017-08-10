@@ -25,13 +25,13 @@ class CreateTest extends WebapiAbstract
     public function testCreate()
     {
         $data = [
-            SourceInterface::NAME => 'source-name',
+            SourceInterface::NAME => 'source-name-1',
             SourceInterface::CONTACT_NAME => 'source-contact-name',
             SourceInterface::EMAIL => 'source-email',
             SourceInterface::ENABLED => true,
             SourceInterface::DESCRIPTION => 'source-description',
-            SourceInterface::LATITUDE => 5.3,
-            SourceInterface::LONGITUDE => 10.2,
+            SourceInterface::LATITUDE => 11.123456,
+            SourceInterface::LONGITUDE => 12.123456,
             SourceInterface::COUNTRY_ID => 'US',
             SourceInterface::REGION_ID => 10,
             SourceInterface::CITY => 'source-city',
@@ -62,7 +62,7 @@ class CreateTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-        $sourceId = $this->_webApiCall($serviceInfo, ['source' => $data], null, 'all');
+        $sourceId = $this->_webApiCall($serviceInfo, ['source' => $data]);
 
         self::assertNotEmpty($sourceId);
         AssertArrayContains::assert($data, $this->getSourceDataById($sourceId));
