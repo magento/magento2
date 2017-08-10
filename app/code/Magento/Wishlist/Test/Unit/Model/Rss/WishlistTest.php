@@ -157,6 +157,12 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValueMap(
                     [
                         [
+                            'advanced/modules_disable_output/Magento_Rss',
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                            null,
+                            null,
+                        ],
+                        [
                             Data::XML_PATH_DEFAULT_LOCALE,
                             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             null,

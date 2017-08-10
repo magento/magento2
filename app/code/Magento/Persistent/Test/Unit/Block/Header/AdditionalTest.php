@@ -252,6 +252,12 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
         $this->eventManagerMock->expects($this->at(1))
             ->method('dispatch')
             ->with('view_block_abstract_to_html_after');
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(
+                'advanced/modules_disable_output/Magento_Persistent',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )->willReturn(false);
 
         // get cache
         $this->cacheStateMock->expects($this->at(0))
