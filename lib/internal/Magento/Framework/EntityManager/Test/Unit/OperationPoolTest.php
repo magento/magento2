@@ -21,7 +21,7 @@ class OperationPoolTest extends TestCase
 
         $objectManagerMock->expects($this->once())
             ->method('get')
-            ->with('Magento\Framework\EntityManager\Operation\Read');
+            ->with(\Magento\Framework\EntityManager\Operation\Read::class);
         $operationPool->getOperation('entity_type', 'read');
     }
 
