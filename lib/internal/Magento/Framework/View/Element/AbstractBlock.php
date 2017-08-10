@@ -650,7 +650,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     public function toHtml()
     {
         $this->_eventManager->dispatch('view_block_abstract_to_html_before', ['block' => $this]);
-        $this->getModuleName();
 
         $html = $this->_loadCache();
         if ($html === false) {
