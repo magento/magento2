@@ -426,4 +426,42 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
         );
         $this->model->save($rateMock);
     }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage percentage_rate is a required field.
+     */
+    public function testValidateWithWrongRate()
+    {
+        $rateTitles = ['Label 1', 'Label 2'];
+
+        $countryCode = 'US';
+        $countryMock = $this->createMock(\Magento\Directory\Model\Country::class);
+        $countryMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $countryMock->expects($this->any())->method('loadByCode')->with($countryCode)->will($this->returnSelf());
+        $this->countryFactoryMock->expects($this->once())->method('create')->will($this->returnValue($countryMock));
+
+        $regionId = 2;
+        $regionMock = $this->createMock(\Magento\Directory\Model\Region::class);
+        $regionMock->expects($this->any())->method('getId')->will($this->returnValue($regionId));
+        $regionMock->expects($this->any())->method('load')->with($regionId)->will($this->returnSelf());
+        $this->regionFactoryMock->expects($this->once())->method('create')->will($this->returnValue($regionMock));
+
+        $rateMock = $this->getTaxRateMock(
+            [
+                'id' => null,
+                'tax_country_id' => $countryCode,
+                'tax_region_id' => $regionId,
+                'region_name' => null,
+                'tax_postcode' => null,
+                'zip_is_range' => true,
+                'zip_from' => 90000,
+                'zip_to' => 90005,
+                'rate' => '7,9',
+                'code' => 'Tax Rate Code',
+                'titles' => $rateTitles,
+            ]
+        );
+        $this->model->save($rateMock);
+    }
 }
