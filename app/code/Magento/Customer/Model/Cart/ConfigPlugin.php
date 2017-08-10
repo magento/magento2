@@ -7,6 +7,10 @@ namespace Magento\Customer\Model\Cart;
 
 use Magento\Customer\Model\Checkout\ConfigProvider;
 
+/**
+ * Class \Magento\Customer\Model\Cart\ConfigPlugin
+ *
+ */
 class ConfigPlugin
 {
     /**

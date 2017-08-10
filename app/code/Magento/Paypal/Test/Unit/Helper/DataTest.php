@@ -5,7 +5,7 @@
  */
 namespace Magento\Paypal\Test\Unit\Helper;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string
@@ -162,7 +162,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      * Expected link <a target="_blank" href="https://www.sandbox.paypal.com/...</a>
      *
      * @param string $methodCode
-     * @dataProvider testGetHtmlTransactionIdProvider
+     * @dataProvider getHtmlTransactionIdProvider
      */
     public function testGetHtmlTransactionSandboxLink($methodCode)
     {
@@ -184,7 +184,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      * Expected link <a target="_blank" href="https://www.paypal.com/...  </a>
      *
      * @param string $methodCode
-     * @dataProvider testGetHtmlTransactionIdProvider
+     * @dataProvider getHtmlTransactionIdProvider
      */
     public function testGetHtmlTransactionRealLink($methodCode)
     {
@@ -204,7 +204,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function testGetHtmlTransactionIdProvider()
+    public function getHtmlTransactionIdProvider()
     {
         return [
             ['paypal_express'],

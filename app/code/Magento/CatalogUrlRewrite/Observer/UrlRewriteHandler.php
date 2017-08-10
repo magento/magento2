@@ -5,33 +5,55 @@
  */
 namespace Magento\CatalogUrlRewrite\Observer;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler
+ *
+ */
 class UrlRewriteHandler
 {
-    /** @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider
+     */
     protected $childrenCategoriesProvider;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator
+     */
     protected $categoryUrlRewriteGenerator;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator
+     */
     protected $productUrlRewriteGenerator;
 
-    /** @var \Magento\UrlRewrite\Model\UrlPersistInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlPersistInterface
+     */
     protected $urlPersist;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $isSkippedProduct;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory */
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     */
     protected $productCollectionFactory;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryProductUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryProductUrlPathGenerator
+     */
     private $categoryBasedProductRewriteGenerator;
 
-    /** @var \Magento\UrlRewrite\Model\MergeDataProvider */
+    /**
+     * @var \Magento\UrlRewrite\Model\MergeDataProvider
+     */
     private $mergeDataProviderPrototype;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json */
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
     private $serializer;
 
     /**

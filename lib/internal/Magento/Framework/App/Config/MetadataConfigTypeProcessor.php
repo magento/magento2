@@ -11,6 +11,10 @@ use Magento\Framework\App\Config\Data\ProcessorFactory;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\Framework\App\Config\MetadataConfigTypeProcessor
+ *
+ */
 class MetadataConfigTypeProcessor implements PostProcessorInterface
 {
     /**

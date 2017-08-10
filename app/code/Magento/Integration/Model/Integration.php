@@ -25,7 +25,6 @@ namespace Magento\Integration\Model;
  * @method Integration setCreatedAt(\string $createdAt)
  * @method \string getUpdatedAt()
  * @method Integration setUpdatedAt(\string $createdAt)
- * @method \Magento\Integration\Model\ResourceModel\Integration getResource()
  * @api
  */
 class Integration extends \Magento\Framework\Model\AbstractModel

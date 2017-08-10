@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Validator\Constraint\Option;
 
+/**
+ * Class \Magento\Framework\Validator\Constraint\Option\Callback
+ *
+ */
 class Callback implements \Magento\Framework\Validator\Constraint\OptionInterface
 {
     /**

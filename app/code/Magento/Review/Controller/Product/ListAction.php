@@ -10,6 +10,10 @@ use Magento\Review\Model\Review;
 use Magento\Catalog\Model\Product as CatalogProduct;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Review\Controller\Product\ListAction
+ *
+ */
 class ListAction extends ProductController
 {
     /**

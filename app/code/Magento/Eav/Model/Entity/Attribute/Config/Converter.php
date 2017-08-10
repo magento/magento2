@@ -7,6 +7,10 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute\Config;
 
+/**
+ * Class \Magento\Eav\Model\Entity\Attribute\Config\Converter
+ *
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

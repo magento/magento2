@@ -10,6 +10,10 @@ use Magento\Framework\Search\Request\QueryInterface;
 
 // @codeCoverageIgnore
 
+/**
+ * Class \Magento\Framework\Search\Adapter\Mysql\Query\MatchContainer
+ *
+ */
 class MatchContainer
 {
     /**

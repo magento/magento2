@@ -9,6 +9,10 @@ namespace Magento\Email\Model\Template\Config;
 
 use Magento\Framework\Module\Dir;
 
+/**
+ * Class \Magento\Email\Model\Template\Config\SchemaLocator
+ *
+ */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

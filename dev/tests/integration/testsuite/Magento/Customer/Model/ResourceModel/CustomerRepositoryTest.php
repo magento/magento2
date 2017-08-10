@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
+class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var AccountManagementInterface */
     private $accountManagement;
@@ -393,7 +393,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $customer = $this->customerRepository->get($fixtureCustomerEmail);
         $this->customerRepository->delete($customer);
         /** Ensure that customer was deleted */
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\NoSuchEntityException::class,
             'No such entity with email = customer@example.com, websiteId = 1'
         );
@@ -411,7 +411,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $fixtureCustomerId = 1;
         $this->customerRepository->deleteById($fixtureCustomerId);
         /** Ensure that customer was deleted */
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\NoSuchEntityException::class,
             'No such entity with email = customer@example.com, websiteId = 1'
         );

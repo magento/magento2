@@ -8,6 +8,10 @@ namespace Magento\Paypal\Model\Payflow\Service\Response\Handler;
 use Magento\Framework\DataObject;
 use Magento\Payment\Model\InfoInterface;
 
+/**
+ * Class \Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerComposite
+ *
+ */
 class HandlerComposite implements HandlerInterface
 {
     /**

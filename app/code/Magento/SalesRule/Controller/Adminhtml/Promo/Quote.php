@@ -5,6 +5,10 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo;
 
+/**
+ * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
+ *
+ */
 abstract class Quote extends \Magento\Backend\App\Action
 {
     /**

@@ -11,6 +11,10 @@
  */
 namespace Magento\Customer\Model\Config\Source\Address;
 
+/**
+ * Class \Magento\Customer\Model\Config\Source\Address\Type
+ *
+ */
 class Type implements \Magento\Framework\Option\ArrayInterface
 {
     /**

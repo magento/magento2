@@ -6,6 +6,10 @@
  */
 namespace Magento\Multishipping\Controller\Checkout\Address;
 
+/**
+ * Class \Magento\Multishipping\Controller\Checkout\Address\SaveBilling
+ *
+ */
 class SaveBilling extends \Magento\Multishipping\Controller\Checkout\Address
 {
     /**

@@ -14,7 +14,7 @@ use Magento\Framework\Authorization;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\Reporting;
 
-class DataProviderTest extends \PHPUnit_Framework_TestCase
+class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Authorization|\PHPUnit_Framework_MockObject_MockObject
@@ -84,7 +84,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManagerMock */
-        $objectManagerMock = $this->getMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->once())
             ->method('get')
             ->willReturn($this->authorizationMock);

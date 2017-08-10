@@ -25,9 +25,7 @@ class ShortcutButtons extends Template
 
     /**#@-*/
 
-    /**
-     * @var array
-     */
+    /**#@-*/
     protected $_shortcuts = [];
 
     /**

@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Mail;
 
+/**
+ * Class \Magento\Framework\Mail\Message
+ *
+ */
 class Message extends \Zend_Mail implements MessageInterface
 {
     /**

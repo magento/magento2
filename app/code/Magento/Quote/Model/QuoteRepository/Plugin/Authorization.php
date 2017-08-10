@@ -9,6 +9,10 @@ namespace Magento\Quote\Model\QuoteRepository\Plugin;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class \Magento\Quote\Model\QuoteRepository\Plugin\Authorization
+ *
+ */
 class Authorization
 {
     /**

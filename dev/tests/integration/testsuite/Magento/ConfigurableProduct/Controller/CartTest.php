@@ -31,17 +31,21 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
-        $this->assertSelectCount(
-            'button[type="submit"][title="Update Cart"]',
+        $this->assertEquals(
             1,
-            $response->getBody(),
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//button[@type="submit" and @title="Update Cart"]',
+                $response->getBody()
+            ),
             'Response for configurable product doesn\'t contain "Update Cart" button'
         );
 
-        $this->assertSelectCount(
-            'select.super-attribute-select',
+        $this->assertEquals(
             1,
-            $response->getBody(),
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//select[contains(@class,"super-attribute-select")]',
+                $response->getBody()
+            ),
             'Response for configurable product doesn\'t contain select for super attribute'
         );
     }

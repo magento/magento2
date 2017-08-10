@@ -9,6 +9,10 @@ namespace Magento\Theme\Model\Layout\Config;
 
 use Magento\Framework\Config\Dom\UrnResolver;
 
+/**
+ * Class \Magento\Theme\Model\Layout\Config\SchemaLocator
+ *
+ */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

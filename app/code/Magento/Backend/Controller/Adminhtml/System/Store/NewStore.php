@@ -6,6 +6,10 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\System\Store\NewStore
+ *
+ */
 class NewStore extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**

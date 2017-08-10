@@ -11,7 +11,7 @@ namespace Magento\Backend\Test\Unit\Block\Widget\Grid;
 
 use Magento\Backend\Block\Widget\Grid\Massaction\VisibilityCheckerInterface as VisibilityChecker;
 
-class MassactionTest extends \PHPUnit_Framework_TestCase
+class MassactionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Widget\Grid\Massaction

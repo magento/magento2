@@ -8,6 +8,10 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Framework\DataObject;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\Attribute\Validate
+ *
+ */
 class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     const DEFAULT_MESSAGE_KEY = 'message';

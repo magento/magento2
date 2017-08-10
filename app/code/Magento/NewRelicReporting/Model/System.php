@@ -6,6 +6,10 @@
 
 namespace Magento\NewRelicReporting\Model;
 
+/**
+ * Class \Magento\NewRelicReporting\Model\System
+ *
+ */
 class System extends \Magento\Framework\Model\AbstractModel
 {
     /**

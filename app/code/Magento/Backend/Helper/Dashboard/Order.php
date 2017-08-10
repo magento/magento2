@@ -21,6 +21,7 @@ class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 100.0.6
      */
     protected $_storeManager;
 
@@ -41,7 +42,7 @@ class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
      *
      * @return \Magento\Store\Model\StoreManagerInterface
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getStoreManager()
     {

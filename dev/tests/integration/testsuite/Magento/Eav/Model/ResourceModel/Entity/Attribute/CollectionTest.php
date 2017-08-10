@@ -5,7 +5,7 @@
  */
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection

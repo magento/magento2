@@ -6,6 +6,10 @@
 
 namespace Magento\Fedex\Model\Source;
 
+/**
+ * Class \Magento\Fedex\Model\Source\Unitofmeasure
+ *
+ */
 class Unitofmeasure extends Generic
 {
     /**

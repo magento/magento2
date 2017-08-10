@@ -58,7 +58,9 @@ class ProductScopeRewriteGenerator
      */
     private $canonicalUrlRewriteGenerator;
 
-    /** @var \Magento\UrlRewrite\Model\MergeDataProvider */
+    /**
+     * @var \Magento\UrlRewrite\Model\MergeDataProvider
+     */
     private $mergeDataProviderPrototype;
 
     /**

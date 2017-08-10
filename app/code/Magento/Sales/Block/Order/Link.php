@@ -13,7 +13,9 @@ namespace Magento\Sales\Block\Order;
  */
 class Link extends \Magento\Framework\View\Element\Html\Link\Current
 {
-    /** @var \Magento\Framework\Registry  */
+    /**
+     * @var \Magento\Framework\Registry
+     */
     protected $_registry;
 
     /**

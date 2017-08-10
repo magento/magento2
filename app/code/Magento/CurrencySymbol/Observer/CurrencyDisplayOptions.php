@@ -8,6 +8,10 @@ namespace Magento\CurrencySymbol\Observer;
 use Magento\Framework\Locale\Currency;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\CurrencySymbol\Observer\CurrencyDisplayOptions
+ *
+ */
 class CurrencyDisplayOptions implements ObserverInterface
 {
     /**

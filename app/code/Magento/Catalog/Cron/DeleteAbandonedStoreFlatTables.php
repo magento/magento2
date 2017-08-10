@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Cron;
 
+/**
+ * Class \Magento\Catalog\Cron\DeleteAbandonedStoreFlatTables
+ *
+ */
 class DeleteAbandonedStoreFlatTables
 {
     /**

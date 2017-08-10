@@ -11,6 +11,10 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element
+ *
+ */
 class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
 {
     /**

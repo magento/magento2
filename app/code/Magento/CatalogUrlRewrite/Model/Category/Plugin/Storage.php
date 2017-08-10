@@ -11,12 +11,20 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Model\Category\Plugin\Storage
+ *
+ */
 class Storage
 {
-    /** @var UrlFinderInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     */
     private $urlFinder;
 
-    /** @var Product */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product
+     */
     private $productResource;
 
     /**

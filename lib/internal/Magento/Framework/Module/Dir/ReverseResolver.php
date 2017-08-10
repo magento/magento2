@@ -10,6 +10,10 @@ namespace Magento\Framework\Module\Dir;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\ModuleListInterface;
 
+/**
+ * Class \Magento\Framework\Module\Dir\ReverseResolver
+ *
+ */
 class ReverseResolver
 {
     /**

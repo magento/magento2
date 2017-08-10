@@ -7,7 +7,7 @@ namespace Magento\Framework\Module\Test\Unit;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-class DirTest extends \PHPUnit_Framework_TestCase
+class DirTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Module\Dir
@@ -21,14 +21,7 @@ class DirTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->moduleRegistryMock = $this->getMock(
-            \Magento\Framework\Component\ComponentRegistrarInterface::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $this->moduleRegistryMock = $this->createMock(\Magento\Framework\Component\ComponentRegistrarInterface::class);
 
         $this->_model = new \Magento\Framework\Module\Dir($this->moduleRegistryMock);
     }

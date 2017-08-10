@@ -7,6 +7,10 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Actions
+ *
+ */
 class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Ui\Component\Layout\Tabs\TabInterface
 {
@@ -24,7 +28,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * @var \Magento\Config\Model\Config\Source\Yesno
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $_sourceYesno;
 

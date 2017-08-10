@@ -8,6 +8,10 @@ namespace Magento\Persistent\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Persistent\Observer\CheckExpirePersistentQuoteObserver
+ *
+ */
 class CheckExpirePersistentQuoteObserver implements ObserverInterface
 {
     /**

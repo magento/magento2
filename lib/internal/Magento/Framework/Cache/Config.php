@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Cache;
 
+/**
+ * Class \Magento\Framework\Cache\Config
+ *
+ */
 class Config implements ConfigInterface
 {
     /**
