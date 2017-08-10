@@ -14,8 +14,6 @@ use Magento\Framework\DataObject\IdentityInterface;
 /**
  * Catalog Rule data model
  *
- * @method \Magento\CatalogRule\Model\ResourceModel\Rule _getResource()
- * @method \Magento\CatalogRule\Model\ResourceModel\Rule getResource()
  * @method \Magento\CatalogRule\Model\Rule setFromDate(string $value)
  * @method \Magento\CatalogRule\Model\Rule setToDate(string $value)
  * @method \Magento\CatalogRule\Model\Rule setCustomerGroupIds(string $value)
