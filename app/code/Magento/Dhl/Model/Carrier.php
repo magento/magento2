@@ -8,12 +8,14 @@ namespace Magento\Dhl\Model;
 
 use Magento\Catalog\Model\Product\Type;
 use Magento\Framework\Module\Dir;
+use Magento\Sales\Exception\DocumentValidationException;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Framework\Xml\Security;
+use Magento\Dhl\Model\Validator\XmlValidator;
 
 /**
  * DHL International (API v1.4)
@@ -198,6 +200,13 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     ];
 
     /**
+     * Xml response validator
+     *
+     * @var \Magento\Dhl\Model\Validator\XmlValidator
+     */
+    private $xmlValidator;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -223,6 +232,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
      * @param array $data
+     * @param \Magento\Dhl\Model\Validator\XmlValidatorFactory $xmlValidatorFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -250,7 +260,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
-        array $data = []
+        array $data = [],
+        \Magento\Dhl\Model\Validator\XmlValidator $xmlValidator = null
     ) {
         $this->readFactory = $readFactory;
         $this->_carrierHelper = $carrierHelper;
@@ -282,6 +293,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         if ($this->getConfigData('content_type') == self::DHL_CONTENT_TYPE_DOC) {
             $this->_freeMethod = 'free_method_doc';
         }
+        $this->xmlValidator = $xmlValidator
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(XmlValidator::class);
     }
 
     /**
@@ -1043,62 +1056,30 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @return bool|\Magento\Framework\DataObject|Result|Error
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _parseResponse($response)
     {
         $responseError = __('The response is in wrong format.');
-
-        if (strlen(trim($response)) > 0) {
-            if (strpos(trim($response), '<?xml') === 0) {
-                $xml = $this->parseXml($response, \Magento\Shipping\Model\Simplexml\Element::class);
-                if (is_object($xml)) {
-                    if (in_array($xml->getName(), ['ErrorResponse', 'ShipmentValidateErrorResponse'])
-                        || isset($xml->GetQuoteResponse->Note->Condition)
-                    ) {
-                        $code = null;
-                        $data = null;
-                        if (isset($xml->Response->Status->Condition)) {
-                            $nodeCondition = $xml->Response->Status->Condition;
-                        } else {
-                            $nodeCondition = $xml->GetQuoteResponse->Note->Condition;
-                        }
-
-                        if ($this->_isShippingLabelFlag) {
-                            foreach ($nodeCondition as $condition) {
-                                $code = isset($condition->ConditionCode) ? (string)$condition->ConditionCode : 0;
-                                $data = isset($condition->ConditionData) ? (string)$condition->ConditionData : '';
-                                if (!empty($code) && !empty($data)) {
-                                    break;
-                                }
-                            }
-                            throw new \Magento\Framework\Exception\LocalizedException(
-                                __('Error #%1 : %2', trim($code), trim($data))
-                            );
-                        }
-
-                        $code = isset($nodeCondition->ConditionCode) ? (string)$nodeCondition->ConditionCode : 0;
-                        $data = isset($nodeCondition->ConditionData) ? (string)$nodeCondition->ConditionData : '';
-                        $this->_errors[$code] = __('Error #%1 : %2', trim($code), trim($data));
-                    } else {
-                        if (isset($xml->GetQuoteResponse->BkgDetails->QtdShp)) {
-                            foreach ($xml->GetQuoteResponse->BkgDetails->QtdShp as $quotedShipment) {
-                                $this->_addRate($quotedShipment);
-                            }
-                        } elseif (isset($xml->AirwayBillNumber)) {
-                            return $this->_prepareShippingLabelContent($xml);
-                        } else {
-                            $this->_errors[] = $responseError;
-                        }
-                    }
+        try {
+            $this->xmlValidator->validate($response);
+            $xml = simplexml_load_string($response);
+            if (isset($xml->GetQuoteResponse->BkgDetails->QtdShp)) {
+                foreach ($xml->GetQuoteResponse->BkgDetails->QtdShp as $quotedShipment) {
+                    $this->_addRate($quotedShipment);
                 }
+            } elseif (isset($xml->AirwayBillNumber)) {
+                return $this->_prepareShippingLabelContent($xml);
             } else {
                 $this->_errors[] = $responseError;
             }
-        } else {
-            $this->_errors[] = $responseError;
+        } catch (DocumentValidationException $e) {
+            if ($e->getCode() > 0) {
+                $this->_errors[$e->getCode()] =  $e->getMessage();
+            } else {
+                $this->_errors[] = $e->getMessage();
+            }
         }
-
         /* @var $result Result */
         $result = $this->_rateFactory->create();
         if ($this->_rates) {
@@ -1547,7 +1528,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $xml->addChild('LabelImageFormat', 'PDF', '');
 
         $request = $xml->asXML();
-        if (!$request && !mb_detect_encoding($request) == 'UTF-8') {
+        if (!$request && !(mb_detect_encoding($request) == 'UTF-8')) {
             $request = utf8_encode($request);
         }
 
@@ -1555,6 +1536,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         if ($responseBody === null) {
             $debugData = ['request' => $request];
             try {
+                /** @var \Magento\Framework\HTTP\ZendClient $client */
                 $client = $this->_httpClientFactory->create();
                 $client->setUri((string)$this->getConfigData('gateway_url'));
                 $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
@@ -1664,7 +1646,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 $packageType = 'CP';
             }
             $nodeShipmentDetails->addChild('PackageType', $packageType);
-            $nodeShipmentDetails->addChild('Weight', $rawRequest->getPackageWeight());
+            $nodeShipmentDetails->addChild('Weight', sprintf('%.3f', $rawRequest->getPackageWeight()));
             $nodeShipmentDetails->addChild('DimensionUnit', substr($this->_getDimensionUnit(), 0, 1));
             $nodeShipmentDetails->addChild('WeightUnit', substr($this->_getWeightUnit(), 0, 1));
             $nodeShipmentDetails->addChild('GlobalProductCode', $rawRequest->getShippingMethod());
@@ -1748,7 +1730,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         if ($responseBody === null) {
             $debugData = ['request' => $request];
             try {
-                $client = new \Magento\Framework\HTTP\ZendClient();
+                /** @var \Magento\Framework\HTTP\ZendClient $client */
+                $client = $this->_httpClientFactory->create();
                 $client->setUri((string)$this->getConfigData('gateway_url'));
                 $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
                 $client->setRawData($request);

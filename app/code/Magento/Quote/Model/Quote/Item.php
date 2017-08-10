@@ -12,8 +12,6 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  * Sales Quote Item Model
  *
  * @api
- * @method \Magento\Quote\Model\ResourceModel\Quote\Item _getResource()
- * @method \Magento\Quote\Model\ResourceModel\Quote\Item getResource()
  * @method string getCreatedAt()
  * @method \Magento\Quote\Model\Quote\Item setCreatedAt(string $value)
  * @method string getUpdatedAt()
