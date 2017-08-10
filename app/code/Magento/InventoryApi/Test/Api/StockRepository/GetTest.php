@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\InventoryApi\Test\Api\SourceRepository;
+namespace Magento\InventoryApi\Test\Api\StockRepository;
 
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
@@ -11,15 +11,15 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
  * Method Get is covered in CreateTest test
- * @see \Magento\InventoryApi\Test\Api\SourceRepository\CreateTest::getSourceDataById
+ * @see \Magento\InventoryApi\Test\Api\StockRepository\CreateTest::getStockDataById
  */
 class GetTest extends WebapiAbstract
 {
     /**#@+
      * Service constants
      */
-    const RESOURCE_PATH = '/V1/inventory/source';
-    const SERVICE_NAME = 'inventorySourceRepositoryV1';
+    const RESOURCE_PATH = '/V1/inventory/stock';
+    const SERVICE_NAME = 'inventoryStockRepositoryV1';
     /**#@-*/
 
     public function testGetNoSuchEntityException()
@@ -36,7 +36,7 @@ class GetTest extends WebapiAbstract
             ],
         ];
 
-        $expectedMessage = 'Source with id "%1" does not exist.';
+        $expectedMessage = 'Stock with id "%1" does not exist.';
         try {
             $this->_webApiCall($serviceInfo);
             $this->fail('Expected throwing exception');

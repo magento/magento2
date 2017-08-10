@@ -12,6 +12,10 @@
                 <resource id="Magento_InventoryApi::source" title="Inventory Sources" translate="title" sortOrder="10">
                     <resource id="Magento_InventoryApi::source_edit" title="Edit Inventory Sources" translate="title" sortOrder="10" />
                 </resource>
+                <resource id="Magento_InventoryApi::stock" title="Inventory Stocks" translate="title" sortOrder="20">
+                    <resource id="Magento_InventoryApi::stock_edit" title="Edit Inventory Stocks" translate="title" sortOrder="10" />
+                    <resource id="Magento_InventoryApi::source_delete" title="Delete Inventory Stocks" translate="title" sortOrder="20" />
+                </resource>
             </resource>
         </resources>
     </acl>

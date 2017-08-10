@@ -18,7 +18,7 @@ class CreateTest extends WebapiAbstract
     /**#@+
      * Service constants
      */
-    const SOURCE_PATH = '/V1/inventory/source';
+    const RESOURCE_PATH = '/V1/inventory/source';
     const SERVICE_NAME = 'inventorySourceRepositoryV1';
     /**#@-*/
 
@@ -54,7 +54,7 @@ class CreateTest extends WebapiAbstract
         ];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::SOURCE_PATH,
+                'resourcePath' => self::RESOURCE_PATH,
                 'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
@@ -86,7 +86,7 @@ class CreateTest extends WebapiAbstract
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::SOURCE_PATH . '/' . $sourceId,
+                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceId,
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [

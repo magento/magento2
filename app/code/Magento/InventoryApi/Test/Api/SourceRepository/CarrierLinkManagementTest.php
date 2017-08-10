@@ -15,14 +15,13 @@ class CarrierLinkManagementTest extends WebapiAbstract
     /**#@+
      * Service constants
      */
-    const SOURCE_PATH = '/V1/inventory/source';
-    const SOURCES_PATH = '/V1/inventory/sources';
+    const RESOURCE_PATH = '/V1/inventory/source';
     const SERVICE_NAME = 'inventorySourceRepositoryV1';
     /**#@-*/
 
     /**
      * @param array $carrierLinks
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source/source_1.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source/source.php
      * @dataProvider dataProviderCarrierLinks
      */
     public function testCarrierLinksManagement(array $carrierLinks)
@@ -92,7 +91,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
 
     /**
      * TODO:
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source/source_1.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source/source.php
      */
     public function testAssignCarrierLinksIfUseGlobalConfigurationIsChoosed()
     {
@@ -146,7 +145,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
         ];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::SOURCES_PATH . '?' . http_build_query(['searchCriteria' => $searchCriteria]),
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query(['searchCriteria' => $searchCriteria]),
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -168,7 +167,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::SOURCE_PATH . '/' . $sourceId,
+                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceId,
                 'httpMethod' => Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -187,7 +186,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::SOURCE_PATH . '/' . $sourceId,
+                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceId,
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [

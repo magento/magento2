@@ -3,11 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\InventoryApi\Test\Api\SourceRepository;
+namespace Magento\InventoryApi\Test\Api\StockRepository;
 
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Webapi\Rest\Request;
-use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\TestFramework\Assert\AssertArrayContains;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
@@ -16,12 +16,12 @@ class GetListTest extends WebapiAbstract
     /**#@+
      * Service constants
      */
-    const RESOURCE_PATH = '/V1/inventory/source';
-    const SERVICE_NAME = 'inventorySourceRepositoryV1';
+    const RESOURCE_PATH = '/V1/inventory/stock';
+    const SERVICE_NAME = 'inventoryStockRepositoryV1';
     /**#@-*/
 
     /**
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source/source_list.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock/stock_list.php
      * @param array $searchCriteria
      * @param array $expectedItemsData
      * @dataProvider dataProviderGetList
@@ -57,26 +57,17 @@ class GetListTest extends WebapiAbstract
                         [
                             'filters' => [
                                 [
-                                    'field' => SourceInterface::ENABLED,
-                                    'value' => 0,
+                                    'field' => StockInterface::NAME,
+                                    'value' => 'stock-name-2',
                                     'condition_type' => 'eq',
                                 ],
                             ],
                         ],
                     ],
-                    'sort_orders' => [
-                        [
-                            'field' => SourceInterface::PRIORITY,
-                            'direction' => SortOrder::SORT_DESC,
-                        ],
-                    ],
                 ],
                 [
                     [
-                        SourceInterface::NAME => 'source-name-3',
-                    ],
-                    [
-                        SourceInterface::NAME => 'source-name-4',
+                        StockInterface::NAME => 'stock-name-2',
                     ],
                 ],
             ],
@@ -84,27 +75,23 @@ class GetListTest extends WebapiAbstract
                 [
                     'sort_orders' => [
                         [
-                            'field' => SourceInterface::PRIORITY,
-                            'direction' => SortOrder::SORT_DESC,
-                        ],
-                        [
-                            'field' => SourceInterface::NAME,
+                            'field' => StockInterface::NAME,
                             'direction' => SortOrder::SORT_DESC,
                         ],
                     ],
                 ],
                 [
                     [
-                        SourceInterface::NAME => 'source-name-1',
+                        StockInterface::NAME => 'stock-name-4',
                     ],
                     [
-                        SourceInterface::NAME => 'source-name-3',
+                        StockInterface::NAME => 'stock-name-3',
                     ],
                     [
-                        SourceInterface::NAME => 'source-name-2',
+                        StockInterface::NAME => 'stock-name-2',
                     ],
                     [
-                        SourceInterface::NAME => 'source-name-4',
+                        StockInterface::NAME => 'stock-name-1',
                     ],
                 ],
             ],

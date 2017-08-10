@@ -3,11 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\InventoryApi\Test\Api\SourceRepository;
+namespace Magento\InventoryApi\Test\Api\StockRepository;
 
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
-use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class ValidationTest extends WebapiAbstract
@@ -15,8 +15,8 @@ class ValidationTest extends WebapiAbstract
     /**#@+
      * Service constants
      */
-    const RESOURCE_PATH = '/V1/inventory/source';
-    const SERVICE_NAME = 'inventorySourceRepositoryV1';
+    const RESOURCE_PATH = '/V1/inventory/stock';
+    const SERVICE_NAME = 'inventoryStockRepositoryV1';
     /**#@-*/
 
     /**
@@ -27,8 +27,7 @@ class ValidationTest extends WebapiAbstract
     public function testCreateWithoutRequiredFields($field, array $expectedErrorData)
     {
         $data = [
-            SourceInterface::NAME => 'source-name',
-            SourceInterface::POSTCODE => 'source-postcode',
+            StockInterface::NAME => 'stock-name',
         ];
         unset($data[$field]);
 
@@ -44,7 +43,7 @@ class ValidationTest extends WebapiAbstract
         ];
 
         try {
-            $this->_webApiCall($serviceInfo, ['source' => $data], null, 'all');
+            $this->_webApiCall($serviceInfo, ['stock' => $data], null, 'all');
             $this->fail('Expected throwing exception');
         } catch (\SoapFault $e) {
             self::assertContains($expectedErrorData['message'], $e->getMessage());
@@ -63,8 +62,7 @@ class ValidationTest extends WebapiAbstract
     public function testCreateWithEmptyRequiredFields($field, array $expectedErrorData)
     {
         $data = [
-            SourceInterface::NAME => 'source-name',
-            SourceInterface::POSTCODE => 'source-postcode',
+            StockInterface::NAME => 'stock-name',
         ];
         $data[$field] = null;
 
@@ -80,7 +78,7 @@ class ValidationTest extends WebapiAbstract
         ];
 
         try {
-            $this->_webApiCall($serviceInfo, ['source' => $data], null, 'all');
+            $this->_webApiCall($serviceInfo, ['stock' => $data], null, 'all');
             $this->fail('Expected throwing exception');
         } catch (\SoapFault $e) {
             self::assertContains($expectedErrorData['message'], $e->getMessage());
@@ -97,21 +95,12 @@ class ValidationTest extends WebapiAbstract
     public function dataProviderRequiredFields()
     {
         return[
-            'without_' . SourceInterface::NAME => [
-                SourceInterface::NAME,
+            'without_' . StockInterface::NAME => [
+                StockInterface::NAME,
                 [
                     'message' => '"%1" can not be empty.',
                     'parameters' => [
-                        SourceInterface::NAME,
-                    ],
-                ],
-            ],
-            'without_' . SourceInterface::POSTCODE => [
-                SourceInterface::POSTCODE,
-                [
-                    'message' => '"%1" can not be empty.',
-                    'parameters' => [
-                        SourceInterface::POSTCODE,
+                        StockInterface::NAME,
                     ],
                 ],
             ],
