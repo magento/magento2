@@ -16,8 +16,6 @@ use Magento\Framework\DataObject;
 /**
  * Sitemap model
  *
- * @method \Magento\Sitemap\Model\ResourceModel\Sitemap _getResource()
- * @method \Magento\Sitemap\Model\ResourceModel\Sitemap getResource()
  * @method string getSitemapType()
  * @method \Magento\Sitemap\Model\Sitemap setSitemapType(string $value)
  * @method string getSitemapFilename()
