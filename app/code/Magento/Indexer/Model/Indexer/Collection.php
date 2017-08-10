@@ -24,7 +24,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * Collection items
      *
      * @var IndexerInterface[]
-     * @since 2.2.0
      */
     protected $_items = [];
 
@@ -86,7 +85,6 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
-     * @since 2.2.0
      */
     public function getAllIds()
     {
@@ -100,7 +98,6 @@ class Collection extends \Magento\Framework\Data\Collection
     /**
      * @inheritdoc
      * @return IndexerInterface[]
-     * @since 2.2.0
      */
     public function getItems()
     {
@@ -109,9 +106,8 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
-     * @deprecated
+     * @deprecated Should not be used in the current implementation.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function getColumnValues($colName)
     {
@@ -120,9 +116,8 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
-     * @deprecated
+     * @deprecated Should not be used in the current implementation.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function getItemsByColumnValue($column, $value)
     {
@@ -131,9 +126,8 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
-     * @deprecated
+     * @deprecated Should not be used in the current implementation.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function getItemByColumnValue($column, $value)
     {
@@ -142,9 +136,8 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
-     * @deprecated
+     * @deprecated Should not be used in the current implementation.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function setDataToAll($key, $value = null)
     {
@@ -153,9 +146,8 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
-     * @deprecated
+     * @deprecated Should not be used in the current implementation.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function setItemObjectClass($className)
     {
@@ -164,8 +156,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
-     * @deprecated
-     * @since 2.2.0
+     * @deprecated Should not be used in the current implementation.
      */
     public function toXml()
     {
@@ -174,9 +165,8 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
-     * @deprecated
+     * @deprecated Should not be used in the current implementation.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function toArray($arrRequiredFields = [])
     {
@@ -185,8 +175,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
-     * @deprecated
-     * @since 2.2.0
+     * @deprecated Should not be used in the current implementation.
      */
     public function toOptionArray()
     {
@@ -195,8 +184,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
-     * @deprecated
-     * @since 2.2.0
+     * @deprecated Should not be used in the current implementation.
      */
     public function toOptionHash()
     {
@@ -205,9 +193,8 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
-     * @deprecated
+     * @deprecated Should not be used in the current implementation.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     protected function _toOptionArray($valueField = 'id', $labelField = 'name', $additional = [])
     {
@@ -216,9 +203,8 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
-     * @deprecated
+     * @deprecated  Should not be used in the current implementation.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     protected function _toOptionHash($valueField = 'id', $labelField = 'name')
     {

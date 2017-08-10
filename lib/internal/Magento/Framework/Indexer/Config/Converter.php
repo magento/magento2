@@ -38,6 +38,7 @@ class Converter implements ConverterInterface
             $data['shared_index'] = $this->getAttributeValue($indexerNode, 'shared_index');
             $data['title'] = '';
             $data['description'] = '';
+            $data['dependencies'] = [];
 
             /** @var $childNode \DOMNode */
             foreach ($indexerNode->childNodes as $childNode) {
@@ -46,9 +47,6 @@ class Converter implements ConverterInterface
                 }
                 /** @var $childNode \DOMElement */
                 $data = $this->convertChild($childNode, $data);
-            }
-            if (!isset($data['dependencies'])) {
-                $data['dependencies'] = [];
             }
             $output[$indexerId] = $data;
         }
@@ -176,7 +174,7 @@ class Converter implements ConverterInterface
      * @param array $data
      * @return array
      */
-    private function convertDependencies(\DOMElement $node, array $data)
+    private function convertDependencies(\DOMElement $node, array $data): array
     {
         $data['dependencies'] = $data['dependencies'] ?? [];
 
@@ -285,7 +283,7 @@ class Converter implements ConverterInterface
      * @param array $indexers
      * @return array
      */
-    private function sortByDependencies($indexers)
+    private function sortByDependencies(array $indexers): array
     {
         $expanded = [];
         foreach (array_keys($indexers) as $indexerId) {
@@ -294,11 +292,14 @@ class Converter implements ConverterInterface
                 'dependencies' => $this->expandDependencies($indexers, $indexerId),
             ];
         }
-        // Use "bubble sorting" because usort (which is using quicksort) is not a stable sort
-        $total = count($expanded);
-        for ($i = 0; $i < $total - 1; $i++) {
-            for ($j = $i; $j < $total; $j++) {
-                if (in_array($expanded[$j]['indexerId'], $expanded[$i]['dependencies'])) {
+        /**
+         * Used this algorithm of sorting not quicksort, because it guarantees
+         * correct sequence of indexers with multiple dependencies.
+         */
+        $maxIndex = count($expanded) - 1;
+        for ($i = 0; $i < $maxIndex; $i++) {
+            for ($j = $i + 1; $j <= $maxIndex; $j++) {
+                if (in_array($expanded[$j]['indexerId'], $expanded[$i]['dependencies'], true)) {
                     $temp = $expanded[$i];
                     $expanded[$i] = $expanded[$j];
                     $expanded[$j] = $temp;
@@ -317,7 +318,7 @@ class Converter implements ConverterInterface
         foreach ($orderedIndexerIds as $indexerId) {
             $result[$indexerId] = $indexers[$indexerId];
             $result[$indexerId]['dependencies'] = array_values(
-                array_intersect($orderedIndexerIds, $result[$indexerId]['dependencies'])
+                array_intersect($orderedIndexerIds, $result[$indexerId]['dependencies'] ?? [])
             );
         }
 
@@ -333,21 +334,31 @@ class Converter implements ConverterInterface
      * @return array
      * @throws ConfigurationMismatchException
      */
-    private function expandDependencies($list, $indexerId, $accumulated = [])
+    private function expandDependencies(array $list, string $indexerId, array $accumulated = []): array
     {
         $accumulated[] = $indexerId;
-        $result = $list[$indexerId]['dependencies'];
+        $result = $list[$indexerId]['dependencies'] ?? [];
         foreach ($result as $relatedIndexerId) {
             if (in_array($relatedIndexerId, $accumulated)) {
                 throw new ConfigurationMismatchException(
-                    new Phrase("Circular dependency references from '{$indexerId}' to '{$relatedIndexerId}'.")
+                    new Phrase(
+                        "Circular dependency references from '%indexerId' to '%relatedIndexerId'.",
+                        [
+                            'indexerId' => $indexerId,
+                            'relatedIndexerId' => $relatedIndexerId,
+                        ]
+                    )
                 );
             }
             if (!isset($list[$relatedIndexerId])) {
                 throw new ConfigurationMismatchException(
                     new Phrase(
-                        "Dependency declaration '{$relatedIndexerId}' in "
-                        . "'{$indexerId}' to the non-existing indexer."
+                        "Dependency declaration '%relatedIndexerId' in "
+                        . "'%indexerId' to the non-existing indexer.",
+                        [
+                            'indexerId' => $indexerId,
+                            'relatedIndexerId' => $relatedIndexerId,
+                        ]
                     )
                 );
             }

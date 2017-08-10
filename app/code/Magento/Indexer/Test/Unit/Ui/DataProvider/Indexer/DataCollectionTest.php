@@ -15,7 +15,7 @@ use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Indexer\Ui\DataProvider\Indexer\DataCollection;
 
-class DataCollectionTest extends \PHPUnit_Framework_TestCase
+class DataCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper

@@ -44,6 +44,6 @@ class Config implements ConfigInterface
      */
     public function getIndexer($indexerId)
     {
-        return $this->configData->get($indexerId);
+        return $this->configData->get($indexerId) ?: [];
     }
 }

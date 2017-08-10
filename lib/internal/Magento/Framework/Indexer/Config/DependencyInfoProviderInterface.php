@@ -17,17 +17,17 @@ interface DependencyInfoProviderInterface
      * Returns Indexer Ids on which the current indexer depends directly.
      *
      * @param string $indexerId
-     * @return array
+     * @return string[]
      * @throws NoSuchEntityException In case when the indexer with the specified Id does not exist.
      */
-    public function getIndexerIdsToRunBefore(string $indexerId);
+    public function getIndexerIdsToRunBefore(string $indexerId): array;
 
     /**
      * Returns the list of Indexer Ids which directly depend on the current indexer.
      *
      * @param string $indexerId
-     * @return array
+     * @return string[]
      * @throws NoSuchEntityException In case when the indexer with the specified Id does not exist.
      */
-    public function getIndexerIdsToRunAfter(string $indexerId);
+    public function getIndexerIdsToRunAfter(string $indexerId): array;
 }

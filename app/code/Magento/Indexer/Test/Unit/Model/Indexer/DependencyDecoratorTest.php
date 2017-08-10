@@ -10,10 +10,12 @@ use Magento\Framework\Indexer\Config\DependencyInfoProviderInterface;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\StateInterface;
+use Magento\Framework\Mview\View;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Indexer\Model\Indexer;
 use Magento\Indexer\Model\Indexer\DependencyDecorator;
 
-class DependencyDecoratorTest extends \PHPUnit_Framework_TestCase
+class DependencyDecoratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -69,17 +71,55 @@ class DependencyDecoratorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $methodName
+     * @param array $params
+     * @param mixed $result
+     * @dataProvider overloadDataProvider
+     */
+    public function testOverload(string $methodName, array $params = [], $result = null)
+    {
+        $indexerMock = $this->getMockBuilder(Indexer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dependencyDecorator = $this->objectManagerHelper->getObject(
+            DependencyDecorator::class,
+            [
+                'indexer' => $indexerMock,
+                'dependencyInfoProvider' => $this->dependencyInfoProviderMock,
+                'indexerRegistry' => $this->indexerRegistryMock,
+            ]
+        );
+        $indexerMock
+            ->expects($this->once())
+            ->method($methodName)
+            ->with(...$params)
+            ->willReturn($result);
+        $this->assertSame($result, $dependencyDecorator->{$methodName}(...$params));
+    }
+
+    /**
+     * @return array
+     */
+    public function overloadDataProvider()
+    {
+        return [
+            ['getData', [], ['field_id' => 'field_value']],
+            ['setId', ['newId'], true]
+        ];
+    }
+
+    /**
+     * @param string $methodName
+     * @param mixed $result
      * @dataProvider transitMethodsDataProvider
      */
-    public function testTransitMethods(string $methodName)
+    public function testTransitMethods(string $methodName, $result)
     {
-        $value = 42;
         $this->indexerMock
             ->expects($this->once())
             ->method($methodName)
             ->with()
-            ->willReturn($value);
-        $this->assertSame($value, $this->dependencyDecorator->{$methodName}());
+            ->willReturn($result);
+        $this->assertSame($result, $this->dependencyDecorator->{$methodName}());
     }
 
     /**
@@ -88,42 +128,66 @@ class DependencyDecoratorTest extends \PHPUnit_Framework_TestCase
     public function transitMethodsDataProvider()
     {
         return [
-            ['getId'],
-            ['getViewId'],
-            ['getActionClass'],
-            ['getDescription'],
-            ['getFields'],
-            ['getSources'],
-            ['getHandlers'],
-            ['getView'],
-            ['getState'],
-            ['isScheduled'],
-            ['isValid'],
-            ['isInvalid'],
-            ['isWorking'],
-            ['getStatus'],
-            ['getLatestUpdated'],
+            ['getId', 'indexer_1'],
+            ['getViewId', 'view1'],
+            ['getActionClass', 'className'],
+            ['getDescription', 'some_text'],
+            ['getFields', ['one', 'two']],
+            ['getSources', ['one', 'two']],
+            ['getHandlers', ['one', 'two']],
+            ['getView', $this->getMockBuilder(View::class)->disableOriginalConstructor()->getMock()],
+            ['getState', $this->getMockBuilder(StateInterface::class)->getMockForAbstractClass()],
+            ['isScheduled', true],
+            ['isValid', false],
+            ['isInvalid', true],
+            ['isWorking', true],
+            ['getStatus', 'valid'],
+            ['getLatestUpdated', '42'],
         ];
     }
 
     /**
      * @param string $methodName
      * @param array $params
-     * @dataProvider transitMethodsWithParamsDataProvider
+     * @dataProvider transitMethodsWithParamsAndEmptyReturnDataProvider
      */
-    public function testTransitMethodsWithParams(string $methodName, array $params)
+    public function testTransitMethodsWithParamsAndEmptyReturn(string $methodName, array $params)
     {
         $this->indexerMock
             ->expects($this->once())
             ->method($methodName)
             ->with(...$params);
-        $this->dependencyDecorator->{$methodName}(...$params);
+        $this->assertEmpty($this->dependencyDecorator->{$methodName}(...$params));
     }
 
     /**
      * @return array
      */
-    public function transitMethodsWithParamsDataProvider()
+    public function transitMethodsWithParamsAndEmptyReturnDataProvider()
+    {
+        return [
+            ['setScheduled', [true]],
+        ];
+    }
+
+    /**
+     * @param string $methodName
+     * @param array $params
+     * @dataProvider transitMethodsWithParamsAndSelfReturnDataProvider
+     */
+    public function testTransitMethodsWithParamsAndSelfReturn(string $methodName, array $params)
+    {
+        $this->indexerMock
+            ->expects($this->once())
+            ->method($methodName)
+            ->with(...$params);
+        $this->assertEquals($this->dependencyDecorator, $this->dependencyDecorator->{$methodName}(...$params));
+    }
+
+    /**
+     * @return array
+     */
+    public function transitMethodsWithParamsAndSelfReturnDataProvider()
     {
         return [
             [
@@ -133,19 +197,8 @@ class DependencyDecoratorTest extends \PHPUnit_Framework_TestCase
                         ->getMockForAbstractClass()
                 ]
             ],
-            ['setScheduled', [true]],
+            ['load', ['indexer_1']],
         ];
-    }
-
-    public function testLoad()
-    {
-        $inputValue = 42;
-        $this->indexerMock
-            ->expects($this->once())
-            ->method('load')
-            ->with($inputValue)
-            ->willReturn($inputValue);
-        $this->assertInstanceOf(DependencyDecorator::class, $this->dependencyDecorator->load($inputValue));
     }
 
     public function testReindexAll()

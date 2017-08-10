@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Indexer\Config;
 
@@ -31,7 +32,7 @@ class DependencyInfoProvider implements DependencyInfoProviderInterface
     /**
      * @inheritdoc
      */
-    public function getIndexerIdsToRunBefore(string $indexerId)
+    public function getIndexerIdsToRunBefore(string $indexerId): array
     {
         return $this->getIndexerDataWithValidation($indexerId)['dependencies'];
     }
@@ -39,7 +40,7 @@ class DependencyInfoProvider implements DependencyInfoProviderInterface
     /**
      * @inheritdoc
      */
-    public function getIndexerIdsToRunAfter(string  $indexerId)
+    public function getIndexerIdsToRunAfter(string $indexerId): array
     {
         /** check indexer existence */
         $this->getIndexerDataWithValidation($indexerId);
@@ -59,7 +60,7 @@ class DependencyInfoProvider implements DependencyInfoProviderInterface
      * @param string $indexerId
      * @return array
      */
-    private function getIndexerData(string $indexerId)
+    private function getIndexerData(string $indexerId): array
     {
         return $this->config->getIndexer($indexerId);
     }
@@ -71,12 +72,12 @@ class DependencyInfoProvider implements DependencyInfoProviderInterface
      * @return array
      * @throws NoSuchEntityException In case when the indexer with the specified Id does not exist.
      */
-    private function getIndexerDataWithValidation(string $indexerId)
+    private function getIndexerDataWithValidation(string $indexerId): array
     {
         $indexerData = $this->getIndexerData($indexerId);
-        if (empty($indexerData) || empty($indexerData['indexer_id']) || $indexerData['indexer_id'] != $indexerId) {
+        if (!isset($indexerData['indexer_id']) || $indexerData['indexer_id'] != $indexerId) {
             throw new NoSuchEntityException(
-                new Phrase("{$indexerId} indexer does not exist.")
+                new Phrase("%1 indexer does not exist.", [$indexerId])
             );
         }
 

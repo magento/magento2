@@ -54,17 +54,6 @@
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:simpleType name="indexerIdType">
-        <xs:annotation>
-            <xs:documentation>
-                Indexer ID can contain only [a-zA-Z0-9_].
-            </xs:documentation>
-        </xs:annotation>
-        <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9_]+" />
-        </xs:restriction>
-    </xs:simpleType>
-
     <xs:simpleType name="classType">
         <xs:annotation>
             <xs:documentation>

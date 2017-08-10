@@ -29,6 +29,73 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param string $xml
+     * @param array $indexersSequence
+     * @dataProvider convertWithDependenciesDataProvider
+     */
+    public function testConvertWithDependencies(string $xml, array $indexersSequence)
+    {
+        $dom = new \DOMDocument();
+        $dom->loadXML($xml);
+
+        $this->assertEquals($indexersSequence, array_keys($this->_model->convert($dom)));
+    }
+
+    /**
+     * @return array
+     */
+    public function convertWithDependenciesDataProvider()
+    {
+        return [
+            [
+                'xml' =>
+                    <<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <indexer id="indexer_1" view_id="view_one" class="Index\Class\Name\One">
+        <dependencies>
+            <indexer id="indexer_6" />
+        </dependencies>
+    </indexer>
+    <indexer id="indexer_2" view_id="view_two" class="Index\Class\Name\Two">
+        <dependencies>
+            <indexer id="indexer_3" />
+        </dependencies>
+    </indexer>
+    <indexer id="indexer_3" view_id="view_three" class="Index\Class\Name\Three">
+    </indexer>
+    <indexer id="indexer_4" view_id="view_four" class="Index\Class\Name\Four">
+        <dependencies>
+            <indexer id="indexer_6" />
+            <indexer id="indexer_5" />
+        </dependencies>
+    </indexer>
+    <indexer id="indexer_5" view_id="view_five" class="Index\Class\Name\Five">
+        <dependencies>
+            <indexer id="indexer_1" />
+        </dependencies>
+    </indexer>
+    <indexer id="indexer_6" view_id="view_six" class="Index\Class\Name\Six">
+        <dependencies>
+            <indexer id="indexer_2" />
+        </dependencies>
+    </indexer>
+</config>
+XML
+                ,
+                'indexersSequence' => [
+                    'indexer_3',
+                    'indexer_2',
+                    'indexer_6',
+                    'indexer_1',
+                    'indexer_5',
+                    'indexer_4',
+                ],
+            ]
+        ];
+    }
+
+    /**
      * @param string $inputXml
      * @param string $exceptionMessage
      * @dataProvider convertWithCircularDependenciesDataProvider

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Indexer\Model\Indexer;
 
@@ -10,6 +11,7 @@ use Magento\Framework\Indexer\Config\DependencyInfoProviderInterface;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\StateInterface;
+use Magento\Framework\Mview\ViewInterface;
 
 /**
  * The decorator, which implements logic of the dependency between the indexers.
@@ -51,9 +53,9 @@ class DependencyDecorator implements IndexerInterface
     /**
      * @inheritdoc
      */
-    public function __call($method, $args)
+    public function __call(string $method, array $args)
     {
-        return $this->indexer->__call($method, $args);
+        return call_user_func_array([$this->indexer, $method], $args);
     }
 
     /**
@@ -61,7 +63,7 @@ class DependencyDecorator implements IndexerInterface
      */
     public function __sleep()
     {
-        return ['indexer', 'dependencyProvider', 'indexerRegistry', 'mapperHandler'];
+        return ['indexer', 'dependencyInfoProvider', 'indexerRegistry'];
     }
 
     /**
@@ -75,7 +77,7 @@ class DependencyDecorator implements IndexerInterface
     /**
      * @inheritdoc
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->indexer->getId();
     }
@@ -83,7 +85,7 @@ class DependencyDecorator implements IndexerInterface
     /**
      * @inheritdoc
      */
-    public function getViewId()
+    public function getViewId(): string
     {
         return $this->indexer->getViewId();
     }
@@ -91,7 +93,7 @@ class DependencyDecorator implements IndexerInterface
     /**
      * @inheritdoc
      */
-    public function getActionClass()
+    public function getActionClass(): string
     {
         return $this->indexer->getActionClass();
     }
@@ -99,7 +101,7 @@ class DependencyDecorator implements IndexerInterface
     /**
      * @inheritdoc
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->indexer->getTitle();
     }
@@ -107,7 +109,7 @@ class DependencyDecorator implements IndexerInterface
     /**
      * @inheritdoc
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->indexer->getDescription();
     }
@@ -115,7 +117,7 @@ class DependencyDecorator implements IndexerInterface
     /**
      * @inheritdoc
      */
-    public function getFields()
+    public function getFields(): array
     {
         return $this->indexer->getFields();
     }
@@ -123,7 +125,7 @@ class DependencyDecorator implements IndexerInterface
     /**
      * @inheritdoc
      */
-    public function getSources()
+    public function getSources(): array
     {
         return $this->indexer->getSources();
     }
@@ -131,7 +133,7 @@ class DependencyDecorator implements IndexerInterface
     /**
      * @inheritdoc
      */
-    public function getHandlers()
+    public function getHandlers(): array
     {
         return $this->indexer->getHandlers();
     }
@@ -139,7 +141,7 @@ class DependencyDecorator implements IndexerInterface
     /**
      * @inheritdoc
      */
-    public function load($indexerId)
+    public function load($indexerId): self
     {
         $this->indexer->load($indexerId);
         return $this;
@@ -148,7 +150,7 @@ class DependencyDecorator implements IndexerInterface
     /**
      * @inheritdoc
      */
-    public function getView()
+    public function getView(): ViewInterface
     {
         return $this->indexer->getView();
     }
@@ -156,7 +158,7 @@ class DependencyDecorator implements IndexerInterface
     /**
      * @inheritdoc
      */
-    public function getState()
+    public function getState(): StateInterface
     {
         return $this->indexer->getState();
     }
@@ -164,15 +166,16 @@ class DependencyDecorator implements IndexerInterface
     /**
      * @inheritdoc
      */
-    public function setState(StateInterface $state)
+    public function setState(StateInterface $state): self
     {
-        return $this->indexer->setState($state);
+        $this->indexer->setState($state);
+        return $this;
     }
 
     /**
      * @inheritdoc
      */
-    public function isScheduled()
+    public function isScheduled(): bool
     {
         return $this->indexer->isScheduled();
     }
@@ -188,7 +191,7 @@ class DependencyDecorator implements IndexerInterface
     /**
      * @inheritdoc
      */
-    public function isValid()
+    public function isValid(): bool
     {
         return $this->indexer->isValid();
     }
@@ -196,7 +199,7 @@ class DependencyDecorator implements IndexerInterface
     /**
      * @inheritdoc
      */
-    public function isInvalid()
+    public function isInvalid(): bool
     {
         return $this->indexer->isInvalid();
     }
@@ -204,13 +207,13 @@ class DependencyDecorator implements IndexerInterface
     /**
      * @inheritdoc
      */
-    public function isWorking()
+    public function isWorking(): bool
     {
         return $this->indexer->isWorking();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function invalidate()
     {
@@ -224,7 +227,7 @@ class DependencyDecorator implements IndexerInterface
     /**
      * @inheritdoc
      */
-    public function getStatus()
+    public function getStatus(): string
     {
         return $this->indexer->getStatus();
     }
@@ -232,7 +235,7 @@ class DependencyDecorator implements IndexerInterface
     /**
      * @inheritdoc
      */
-    public function getLatestUpdated()
+    public function getLatestUpdated(): string
     {
         return $this->indexer->getLatestUpdated();
     }
@@ -246,7 +249,7 @@ class DependencyDecorator implements IndexerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function reindexRow($id)
     {
@@ -258,7 +261,7 @@ class DependencyDecorator implements IndexerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function reindexList($ids)
     {

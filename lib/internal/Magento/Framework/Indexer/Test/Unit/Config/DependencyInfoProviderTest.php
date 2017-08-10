@@ -11,7 +11,7 @@ use Magento\Framework\Indexer\Config\DependencyInfoProvider;
 use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class DependencyInfoProviderTest extends \PHPUnit_Framework_TestCase
+class DependencyInfoProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -65,75 +65,13 @@ class DependencyInfoProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetDependenciesNonExistentIndexer()
     {
         $indexerId = 'indexer_1';
-        $this->setExpectedException(
-            NoSuchEntityException::class,
-            "{$indexerId} indexer does not exist."
-        );
+        $this->configMock
+            ->method('getIndexer')
+            ->willReturn([]);
+        $this->expectException(NoSuchEntityException::class);
+        $this->expectExceptionMessage((string)__("%1 indexer does not exist.", $indexerId));
         $this->dependencyInfoProvider->getIndexerIdsToRunBefore($indexerId);
     }
-
-    /**
-     * @param string $indexerId
-     * @param array $indexersData
-     * @param array $dependencySequence
-     * @dataProvider getDependencySequenceDataProvider
-     */
-    /*public function testGetDependencySequence(string $indexerId, array $indexersData, array $dependencySequence)
-    {
-        $this->addSeparateIndexersToConfigMock($indexersData);
-        $this->addAllIndexersToConfigMock($indexersData);
-        $this->assertSame($dependencySequence, $this->dependencyProvider->getDependencySequence($indexerId));
-    }*/
-
-    /**
-     * @return array
-     */
-    /*public function getDependencySequenceDataProvider()
-    {
-        return [
-            [
-                'indexer' => 'indexer_1',
-                'indexers' => [
-                    'indexer_2' => [
-                        'indexer_id' => 'indexer_2',
-                        'dependencies' => [],
-                    ],
-                    'indexer_4' => [
-                        'indexer_id' => 'indexer_4',
-                        'dependencies' => [],
-                    ],
-                    'indexer_3' => [
-                        'indexer_id' => 'indexer_3',
-                        'dependencies' => [
-                            'indexer_4',
-                        ],
-                    ],
-                    'indexer_1' => [
-                        'indexer_id' => 'indexer_1',
-                        'dependencies' => [
-                            'indexer_2',
-                            'indexer_3',
-                        ],
-                    ],
-                    'indexer_5' => [
-                        'indexer_id' => 'indexer_5',
-                        'dependencies' => [],
-                    ],
-                ],
-                'dependency_sequence' => ['indexer_2', 'indexer_4', 'indexer_3'],
-            ]
-        ];
-    }*/
-
-    /*public function testGetDependencySequenceNonExistentIndexer()
-    {
-        $indexerId = 'indexer_1';
-        $this->setExpectedException(
-            NoSuchEntityException::class,
-            "{$indexerId} indexer does not exist."
-        );
-        $this->dependencyProvider->getDependentSequence($indexerId);
-    }*/
 
     /**
      * @param string $indexerId
@@ -196,72 +134,13 @@ class DependencyInfoProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetDependentIndexerIdsNonExistentIndexer()
     {
         $indexerId = 'indexer_1';
-        $this->setExpectedException(
-            NoSuchEntityException::class,
-            "{$indexerId} indexer does not exist."
-        );
+        $this->configMock
+            ->method('getIndexer')
+            ->willReturn([]);
+        $this->expectException(NoSuchEntityException::class);
+        $this->expectExceptionMessage((string)__("%1 indexer does not exist.", $indexerId));
         $this->dependencyInfoProvider->getIndexerIdsToRunAfter($indexerId);
     }
-
-    /**
-     * @param string $indexerId
-     * @param array $indexersData
-     * @param array $dependentSequence
-     * @dataProvider getDependentSequenceDataProvider
-     */
-    /*public function testGetDependentSequence(string $indexerId, array $indexersData, array $dependentSequence)
-    {
-        $this->addSeparateIndexersToConfigMock($indexersData);
-        $this->addAllIndexersToConfigMock($indexersData);
-        $this->assertSame(
-            $dependentSequence,
-            array_values($this->dependencyProvider->getDependentSequence($indexerId))
-        );
-    }*/
-
-    /**
-     * @return array
-     */
-    /*public function getDependentSequenceDataProvider()
-    {
-        return [
-            [
-                'indexer' => 'indexer_4',
-                'indexers' => [
-                    'indexer_2' => [
-                        'indexer_id' => 'indexer_2',
-                        'dependencies' => [],
-                    ],
-                    'indexer_4' => [
-                        'indexer_id' => 'indexer_4',
-                        'dependencies' => [
-                            'indexer_2',
-                        ],
-                    ],
-                    'indexer_3' => [
-                        'indexer_id' => 'indexer_3',
-                        'dependencies' => [
-                            'indexer_4',
-                        ],
-                    ],
-                    'indexer_1' => [
-                        'indexer_id' => 'indexer_1',
-                        'dependencies' => [
-                            'indexer_2',
-                            'indexer_3',
-                        ],
-                    ],
-                    'indexer_5' => [
-                        'indexer_id' => 'indexer_5',
-                        'dependencies' => [
-                            'indexer_1',
-                        ],
-                    ],
-                ],
-                'dependent_sequence' => ['indexer_3', 'indexer_1', 'indexer_5'],
-            ]
-        ];
-    }*/
 
     /**
      * @param array $indexers
