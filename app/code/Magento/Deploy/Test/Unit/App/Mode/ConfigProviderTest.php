@@ -7,7 +7,7 @@ namespace Magento\Deploy\Test\Unit\App\Mode;
 
 use Magento\Deploy\App\Mode\ConfigProvider;
 
-class ConfigProviderTest extends \PHPUnit_Framework_TestCase
+class ConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetConfigs()
     {
