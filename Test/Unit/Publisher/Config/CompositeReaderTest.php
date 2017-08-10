@@ -9,7 +9,7 @@ use Magento\Framework\MessageQueue\Publisher\Config\CompositeReader;
 use Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface;
 use Magento\Framework\MessageQueue\Publisher\Config\ReaderInterface;
 
-class CompositeReaderTest extends \PHPUnit_Framework_TestCase
+class CompositeReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CompositeReader
@@ -46,18 +46,12 @@ class CompositeReaderTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->validatorMock = $this->getMock(ValidatorInterface::class);
-        $this->readerOneMock = $this->getMock(ReaderInterface::class);
-        $this->readerTwoMock = $this->getMock(ReaderInterface::class);
-        $this->readerThreeMock = $this->getMock(ReaderInterface::class);
-        $this->defaultConfigProviderMock = $this->getMock(
-            \Magento\Framework\MessageQueue\DefaultValueProvider::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $this->validatorMock = $this->createMock(ValidatorInterface::class);
+        $this->readerOneMock = $this->createMock(ReaderInterface::class);
+        $this->readerTwoMock = $this->createMock(ReaderInterface::class);
+        $this->readerThreeMock = $this->createMock(ReaderInterface::class);
+        $this->defaultConfigProviderMock =
+            $this->createMock(\Magento\Framework\MessageQueue\DefaultValueProvider::class);
 
         $this->reader = new CompositeReader(
             $this->validatorMock,

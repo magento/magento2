@@ -7,7 +7,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Topology\Config\Validator;
 
 use \Magento\Framework\MessageQueue\Topology\Config\Validator\Format;
 
-class FormatTest extends \PHPUnit_Framework_TestCase
+class FormatTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Format
@@ -54,7 +54,7 @@ class FormatTest extends \PHPUnit_Framework_TestCase
             "Missing [autoDelete] field for exchange ex01." . PHP_EOL .
             "Missing [internal] field for exchange ex01." . PHP_EOL .
             "Missing [arguments] field for exchange ex01.";
-        $this->setExpectedException('\LogicException', $expectedMessage);
+        $this->expectException('\LogicException', $expectedMessage);
         $configData = [
             'ex01' => [
                 'invalid' => 'format',
@@ -81,7 +81,7 @@ class FormatTest extends \PHPUnit_Framework_TestCase
             "Missing [disabled] field for binding ex01 in exchange config." . PHP_EOL .
             "Missing [topic] field for binding ex01 in exchange config." . PHP_EOL .
             "Missing [arguments] field for binding ex01 in exchange config.";
-        $this->setExpectedException('\LogicException', $expectedMessage);
+        $this->expectException('\LogicException', $expectedMessage);
         $configData = [
             'ex01' => [
                 'name' => 'ex01',
@@ -104,7 +104,7 @@ class FormatTest extends \PHPUnit_Framework_TestCase
     public function testValidateInvalidBindingsFormat()
     {
         $expectedMessage = "Invalid bindings format for exchange ex01.";
-        $this->setExpectedException('\LogicException', $expectedMessage);
+        $this->expectException('\LogicException', $expectedMessage);
         $configData = [
             'ex01' => [
                 'name' => 'ex01',

@@ -13,19 +13,16 @@ use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
 
 /**
  * A MessageQueue Publisher to handle publishing a message.
- * @since 2.0.0
  */
 class Publisher implements PublisherInterface
 {
     /**
      * @var ExchangeRepository
-     * @since 2.0.0
      */
     private $exchangeRepository;
 
     /**
      * @var EnvelopeFactory
-     * @since 2.0.0
      */
     private $envelopeFactory;
 
@@ -58,7 +55,6 @@ class Publisher implements PublisherInterface
      * @internal param ExchangeInterface $exchange
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function __construct(
         ExchangeRepository $exchangeRepository,
@@ -75,7 +71,6 @@ class Publisher implements PublisherInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function publish($topicName, $data)
     {

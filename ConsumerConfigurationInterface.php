@@ -7,7 +7,6 @@ namespace Magento\Framework\MessageQueue;
 
 /**
  * Configuration for the consumer.
- * @since 2.0.0
  */
 interface ConsumerConfigurationInterface
 {
@@ -29,7 +28,6 @@ interface ConsumerConfigurationInterface
      * Get consumer name.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getConsumerName();
 
@@ -37,7 +35,6 @@ interface ConsumerConfigurationInterface
      * Get the name of queue which consumer will read from.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getQueueName();
 
@@ -56,7 +53,6 @@ interface ConsumerConfigurationInterface
      * Get maximum number of message, which will be read by consumer before termination of the process.
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getMaxMessages();
 
