@@ -25,52 +25,52 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
      *
      * @var int
      */
-    protected $customerGroup = Group::NOT_LOGGED_IN_ID;
+    private $customerGroup = Group::NOT_LOGGED_IN_ID;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $priceInfo;
+    private $priceInfo;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $product;
+    private $product;
 
     /**
      * @var float
      */
-    protected $quantity = 3.;
+    private $quantity = 3.;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $calculator;
+    private $calculator;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $session;
+    private $session;
 
     /**
      * @var TierPrice
      */
-    protected $model;
+    private $model;
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $priceCurrencyMock;
+    private $priceCurrencyMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $groupManagement;
+    private $groupManagement;
 
     /**
      * @var \Magento\Customer\Model\Group\RetrieverInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerGroupRetriever;
+    private $customerGroupRetriever;
 
     /**
      * Initialize base dependencies
