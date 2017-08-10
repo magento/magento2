@@ -5,11 +5,6 @@
  */
 namespace Magento\Framework\Module\Output;
 
-/**
- * Checks whether the module is enabled in the configuration.
- *
- * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
- */
 interface ConfigInterface
 {
     /**
