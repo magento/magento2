@@ -6,24 +6,20 @@
 ?>
 <?php
 /** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $block */
-/** @var \Magento\Catalog\Pricing\Price\ConfiguredPrice $configuredPrice */
-$configuredPrice = $block->getPrice();
 $schema = ($block->getZone() == 'item_view') ? true : false;
-$priceLabel = ($block->getPriceLabel() !== null)
-    ? $block->getPriceLabel()
-    : '';
-
-/** @var \Magento\Framework\Pricing\Price\PriceInterface $priceModel */
-$priceModel = $block->getPriceType('regular_price');
-
-$finalPriceModel = $block->getPriceType('final_price');
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 ?>
 
 <?php if ($block->hasSpecialPrice()) : ?>
+    <?php
+    /** @var \Magento\Framework\Pricing\Price\PriceInterface $priceModel */
+    $priceModel = $block->getPriceType('regular_price');
+
+    $finalPriceModel = $block->getPriceType('final_price');
+    ?>
     <p class="price-as-configured">
         <span class="special-price">
-            <?php /* @escapeNotVerified */ echo $block->renderAmount($finalPriceModel->getAmount(), [
+            <?= /* @escapeNotVerified */ $block->renderAmount($finalPriceModel->getAmount(), [
                 'display_label'     => __('Special Price'),
                 'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
                 'price_type'        => 'finalPrice',
@@ -32,7 +28,7 @@ $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
             ]); ?>
         </span>
         <span class="old-price">
-            <?php /* @escapeNotVerified */ echo $block->renderAmount($priceModel->getAmount(), [
+            <?= /* @escapeNotVerified */ $block->renderAmount($priceModel->getAmount(), [
                 'display_label'     => __('Regular Price'),
                 'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
                 'price_type'        => 'oldPrice',
@@ -42,14 +38,20 @@ $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
         </span>
     </p>
 <?php else : ?>
+    <?php
+    /** @var \Magento\Catalog\Pricing\Price\ConfiguredPrice $configuredPrice */
+    $configuredPrice = $block->getPrice();
+    $priceLabel = ($block->getPriceLabel() !== null)
+        ? $block->getPriceLabel()
+        : '';
+    ?>
     <p class="price-as-configured">
         <?= /* @escapeNotVerified */ $block->renderAmount($configuredPrice->getAmount(), [
             'display_label'     => $priceLabel,
-            'price_id'          => $block->getPriceId('product-price-'),
+            'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
             'price_type'        => 'finalPrice',
             'include_container' => true,
             'schema' => $schema
         ]); ?>
     </p>
 <?php endif; ?>
-
