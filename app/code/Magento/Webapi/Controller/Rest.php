@@ -281,7 +281,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $responseBody = $this->swaggerGenerator->generate(
             $requestedServices,
             $this->_request->getScheme(),
-            $this->_request->getHttpHost(),
+            $this->_request->getHttpHost(false),
             $this->_request->getRequestUri()
         );
         $this->_response->setBody($responseBody)->setHeader('Content-Type', 'application/json');
