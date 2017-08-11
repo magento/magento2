@@ -157,14 +157,8 @@ sub vcl_backend_response {
     }
 
     # validate if we need to cache it and prevent from setting cookie
-    # images, css and js are cacheable by default so we have to remove cookie also
     if (beresp.ttl > 0s && (bereq.method == "GET" || bereq.method == "HEAD")) {
         unset beresp.http.set-cookie;
-        if (bereq.url !~ "\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|ico|jpeg|jpg|js|less|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|tiff|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)(\?|$)") {
-            set beresp.http.Pragma = "no-cache";
-            set beresp.http.Expires = "-1";
-            set beresp.http.Cache-Control = "no-store, no-cache, must-revalidate, max-age=0";
-        }
     }
 
    # If page is not cacheable then bypass varnish for 2 minutes as Hit-For-Pass
