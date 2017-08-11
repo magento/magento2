@@ -154,7 +154,8 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($wishlistSharingUrl));
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValueMap(
+            ->will(
+                $this->returnValueMap(
                     [
                         [
                             'advanced/modules_disable_output/Magento_Rss',
