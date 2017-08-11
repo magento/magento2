@@ -43,7 +43,6 @@ class Mapper
      * @param QueryBuilder $queryBuilder
      * @param MatchQueryBuilder $matchQueryBuilder
      * @param FilterBuilder $filterBuilder
-     * @since 100.1.0
      */
     public function __construct(
         QueryBuilder $queryBuilder,

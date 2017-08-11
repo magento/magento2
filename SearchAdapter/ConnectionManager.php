@@ -44,7 +44,6 @@ class ConnectionManager
      * @param ClientFactoryInterface $clientFactory
      * @param ClientOptionsInterface $clientConfig
      * @param LoggerInterface $logger
-     * @since 100.1.0
      */
     public function __construct(
         ClientFactoryInterface $clientFactory,

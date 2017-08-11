@@ -24,7 +24,6 @@ class AggregationFactory
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @since 100.1.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {

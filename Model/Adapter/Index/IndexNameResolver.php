@@ -51,7 +51,6 @@ class IndexNameResolver
      * @param LoggerInterface $logger
      * @param array $options
      * @throws LocalizedException
-     * @since 100.1.0
      */
     public function __construct(
         ConnectionManager $connectionManager,

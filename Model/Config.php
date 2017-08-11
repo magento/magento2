@@ -46,7 +46,6 @@ class Config implements ClientOptionsInterface
      * Constructor
      *
      * @param ScopeConfigInterface $scopeConfig
-     * @since 100.1.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig

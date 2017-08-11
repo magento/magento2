@@ -94,7 +94,6 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
      * @param QueryContainer|null $queryContainer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 100.1.0
      */
     public function __construct(
         \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager,

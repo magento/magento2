@@ -37,7 +37,6 @@ class DocumentFactory
     /**
      * @param ObjectManagerInterface $objectManager
      * @param EntityMetadata $entityMetadata
-     * @since 100.1.0
      */
     public function __construct(ObjectManagerInterface $objectManager, EntityMetadata $entityMetadata)
     {
