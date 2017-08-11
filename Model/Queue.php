@@ -9,6 +9,7 @@ namespace Magento\MysqlMq\Model;
  * Message model for queue based on MySQL.
  *
  * @api
+ * @since 100.0.2
  */
 class Queue extends \Magento\Framework\Model\AbstractModel
 {
