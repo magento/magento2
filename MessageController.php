@@ -9,10 +9,6 @@ namespace Magento\Framework\MessageQueue;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Phrase;
 
-/**
- * Class \Magento\Framework\MessageQueue\MessageController
- *
- */
 class MessageController
 {
     /**
