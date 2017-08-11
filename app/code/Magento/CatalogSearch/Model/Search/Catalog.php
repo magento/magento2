@@ -5,6 +5,8 @@
  */
 namespace Magento\CatalogSearch\Model\Search;
 
+use Magento\Backend\Api\Search\ItemsInterface;
+use Magento\Backend\Model\Search\SearchCriteria;
 use Magento\Search\Model\QueryFactory;
 
 /**
@@ -12,7 +14,7 @@ use Magento\Search\Model\QueryFactory;
  *
  * @deprecated
  */
-class Catalog extends \Magento\Framework\DataObject
+class Catalog implements ItemsInterface
 {
     /**
      * Catalog search data
@@ -33,58 +35,53 @@ class Catalog extends \Magento\Framework\DataObject
      *
      * @var \Magento\Backend\Helper\Data
      */
-    protected $_adminhtmlData = null;
+    protected $_adminHtmlData = null;
 
     /**
-     * @param \Magento\Backend\Helper\Data $adminhtmlData
+     * @param \Magento\Backend\Helper\Data $adminHtmlData
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param QueryFactory $queryFactory
      */
     public function __construct(
-        \Magento\Backend\Helper\Data $adminhtmlData,
+        \Magento\Backend\Helper\Data $adminHtmlData,
         \Magento\Framework\Stdlib\StringUtils $string,
         QueryFactory $queryFactory
     ) {
-        $this->_adminhtmlData = $adminhtmlData;
+        $this->_adminHtmlData = $adminHtmlData;
         $this->string = $string;
         $this->queryFactory = $queryFactory;
     }
 
     /**
-     * Load search results
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function load()
+    public function getResults(SearchCriteria $searchCriteria)
     {
         $result = [];
-        if (!$this->hasStart() || !$this->hasLimit() || !$this->hasQuery()) {
-            $this->setResults($result);
-            return $this;
+        if (!$searchCriteria->getStart() || !$searchCriteria->getLimit() || !$searchCriteria->getQuery()) {
+            return $result;
         }
 
         $collection = $this->queryFactory->get()
             ->getSearchCollection()
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('description')
-            ->addBackendSearchFilter($this->getQuery())
-            ->setCurPage($this->getStart())
-            ->setPageSize($this->getLimit())
+            ->addBackendSearchFilter($searchCriteria->getQuery())
+            ->setCurPage($searchCriteria->getStart())
+            ->setPageSize($searchCriteria->getLimit())
             ->load();
 
         foreach ($collection as $product) {
+            /** @var \Magento\Catalog\Model\Product $product */
             $description = strip_tags($product->getDescription());
             $result[] = [
                 'id' => 'product/1/' . $product->getId(),
                 'type' => __('Product'),
                 'name' => $product->getName(),
                 'description' => $this->string->substr($description, 0, 30),
-                'url' => $this->_adminhtmlData->getUrl('catalog/product/edit', ['id' => $product->getId()]),
+                'url' => $this->_adminHtmlData->getUrl('catalog/product/edit', ['id' => $product->getId()]),
             ];
         }
-
-        $this->setResults($result);
-
-        return $this;
+        return $result;
     }
 }

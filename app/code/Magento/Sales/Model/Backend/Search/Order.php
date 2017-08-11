@@ -3,7 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Backend\Model\Search;
+namespace Magento\Sales\Model\Backend\Search;
+
+use Magento\Backend\Api\Search\ItemsInterface;
+use Magento\Backend\Model\Search\SearchCriteria;
 
 /**
  * Search Order Model
@@ -11,14 +14,14 @@ namespace Magento\Backend\Model\Search;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  */
-class Order extends \Magento\Framework\DataObject
+class Order implements ItemsInterface
 {
     /**
      * Adminhtml data
      *
      * @var \Magento\Backend\Helper\Data
      */
-    protected $_adminhtmlData = null;
+    protected $_adminHtmlData = null;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
@@ -27,30 +30,26 @@ class Order extends \Magento\Framework\DataObject
 
     /**
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $collectionFactory
-     * @param \Magento\Backend\Helper\Data $adminhtmlData
+     * @param \Magento\Backend\Helper\Data $adminHtmlData
      */
     public function __construct(
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $collectionFactory,
-        \Magento\Backend\Helper\Data $adminhtmlData
+        \Magento\Backend\Helper\Data $adminHtmlData
     ) {
         $this->_collectionFactory = $collectionFactory;
-        $this->_adminhtmlData = $adminhtmlData;
+        $this->_adminHtmlData = $adminHtmlData;
     }
 
     /**
-     * Load search results
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function load()
+    public function getResults(SearchCriteria $searchCriteria)
     {
         $result = [];
-        if (!$this->hasStart() || !$this->hasLimit() || !$this->hasQuery()) {
-            $this->setResults($result);
-            return $this;
+        if (!$searchCriteria->getStart() || !$searchCriteria->getLimit() || !$searchCriteria->getQuery()) {
+            return $result;
         }
-
-        $query = $this->getQuery();
+        $query = $searchCriteria->getQuery();
         //TODO: add full name logic
         $collection = $this->_collectionFactory->create()->addAttributeToSelect(
             '*'
@@ -67,23 +66,21 @@ class Order extends \Magento\Framework\DataObject
                 ['attribute' => 'shipping_postcode', 'like' => $query . '%'],
             ]
         )->setCurPage(
-            $this->getStart()
+            $searchCriteria->getStart()
         )->setPageSize(
-            $this->getLimit()
+            $searchCriteria->getLimit()
         )->load();
 
         foreach ($collection as $order) {
+            /** @var \Magento\Sales\Model\Order $order */
             $result[] = [
                 'id' => 'order/1/' . $order->getId(),
                 'type' => __('Order'),
                 'name' => __('Order #%1', $order->getIncrementId()),
                 'description' => $order->getFirstname() . ' ' . $order->getLastname(),
-                'url' => $this->_adminhtmlData->getUrl('sales/order/view', ['order_id' => $order->getId()]),
+                'url' => $this->_adminHtmlData->getUrl('sales/order/view', ['order_id' => $order->getId()]),
             ];
         }
-
-        $this->setResults($result);
-
-        return $this;
+        return $result;
     }
 }

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Backend\Model\Search;
+namespace Magento\Sales\Model\Backend\Search;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -18,7 +18,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider loadDataProvider
      */
-    public function testLoad($query, $limit, $start, $expectedResult)
+    public function testGetResults($query, $limit, $start, $expectedResult)
     {
         /** @var $order \Magento\Sales\Model\Order */
         $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);
@@ -29,15 +29,16 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
         /** Preconditions */
         $objectManager = Bootstrap::getObjectManager();
-        /** @var \Magento\Backend\Model\Search\Order $orderSearch */
-        $orderSearch = $objectManager->create(\Magento\Backend\Model\Search\Order::class);
-        $orderSearch->setQuery($query);
-        $orderSearch->setLimit($limit);
-        $orderSearch->setStart($start);
-        $orderSearch->load();
+        /** @var \Magento\Sales\Model\Backend\Search\Order $orderSearch */
+        $orderSearch = $objectManager->create(\Magento\Sales\Model\Backend\Search\Order::class);
+        /** @var \Magento\Backend\Model\Search\SearchCriteria $searchCriteria */
+        $searchCriteria = $objectManager->create(\Magento\Backend\Model\Search\SearchCriteria::class);
+        $searchCriteria->setStart($start);
+        $searchCriteria->setLimit($limit);
+        $searchCriteria->setQuery($query);
 
         /** SUT Execution */
-        $searchResults = $orderSearch->getResults();
+        $searchResults = $orderSearch->getResults($searchCriteria);
 
         /** Ensure that search results are correct */
         $this->assertCount(count($expectedResult), $searchResults, 'Quantity of search result items is invalid.');

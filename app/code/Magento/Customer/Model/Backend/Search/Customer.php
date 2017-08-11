@@ -3,32 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Backend\Model\Search;
+namespace Magento\Customer\Model\Backend\Search;
 
-/**
- * Search Customer Model
- *
- * @method Customer setQuery(string $query)
- * @method string|null getQuery()
- * @method bool hasQuery()
- * @method Customer setStart(int $startPosition)
- * @method int|null getStart()
- * @method bool hasStart()
- * @method Customer setLimit(int $limit)
- * @method int|null getLimit()
- * @method bool hasLimit()
- * @method Customer setResults(array $results)
- * @method array getResults()
- * @api
- */
-class Customer extends \Magento\Framework\DataObject
+use Magento\Backend\Api\Search\ItemsInterface;
+use Magento\Backend\Model\Search\SearchCriteria;
+
+class Customer implements ItemsInterface
 {
     /**
      * Adminhtml data
      *
      * @var \Magento\Backend\Helper\Data
      */
-    protected $_adminhtmlData = null;
+    protected $_adminHtmlData = null;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
@@ -38,7 +25,7 @@ class Customer extends \Magento\Framework\DataObject
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
-    protected $searchCriteriaBuilder;
+    protected $criteriaBuilder;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
@@ -53,52 +40,49 @@ class Customer extends \Magento\Framework\DataObject
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Backend\Helper\Data $adminhtmlData
+     * @param \Magento\Backend\Helper\Data $adminHtmlData
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Customer\Helper\View $customerViewHelper
      */
     public function __construct(
-        \Magento\Backend\Helper\Data $adminhtmlData,
+        \Magento\Backend\Helper\Data $adminHtmlData,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Customer\Helper\View $customerViewHelper
     ) {
-        $this->_adminhtmlData = $adminhtmlData;
+        $this->_adminHtmlData = $adminHtmlData;
         $this->customerRepository = $customerRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->criteriaBuilder = $criteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->_customerViewHelper = $customerViewHelper;
     }
 
     /**
-     * Load search results
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function load()
+    public function getResults(SearchCriteria $searchCriteria)
     {
         $result = [];
-        if (!$this->hasStart() || !$this->hasLimit() || !$this->hasQuery()) {
-            $this->setResults($result);
-            return $this;
+        if (!$searchCriteria->getStart() || !$searchCriteria->getLimit() || !$searchCriteria->getQuery()) {
+            return $result;
         }
 
-        $this->searchCriteriaBuilder->setCurrentPage($this->getStart());
-        $this->searchCriteriaBuilder->setPageSize($this->getLimit());
-        $searchFields = ['firstname', 'lastname', 'company'];
+        $this->criteriaBuilder->setCurrentPage($searchCriteria->getStart());
+        $this->criteriaBuilder->setPageSize($searchCriteria->getLimit());
+        $searchFields = ['firstname', 'lastname', 'company', 'email'];
         $filters = [];
         foreach ($searchFields as $field) {
             $filters[] = $this->filterBuilder
                 ->setField($field)
                 ->setConditionType('like')
-                ->setValue($this->getQuery() . '%')
+                ->setValue($searchCriteria->getQuery() . '%')
                 ->create();
         }
-        $this->searchCriteriaBuilder->addFilters($filters);
-        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $this->criteriaBuilder->addFilters($filters);
+        $searchCriteria = $this->criteriaBuilder->create();
         $searchResults = $this->customerRepository->getList($searchCriteria);
 
         foreach ($searchResults->getItems() as $customer) {
@@ -116,10 +100,9 @@ class Customer extends \Magento\Framework\DataObject
                 'type' => __('Customer'),
                 'name' => $this->_customerViewHelper->getCustomerName($customer),
                 'description' => $company,
-                'url' => $this->_adminhtmlData->getUrl('customer/index/edit', ['id' => $customer->getId()]),
+                'url' => $this->_adminHtmlData->getUrl('customer/index/edit', ['id' => $customer->getId()]),
             ];
         }
-        $this->setResults($result);
-        return $this;
+        return $result;
     }
 }
