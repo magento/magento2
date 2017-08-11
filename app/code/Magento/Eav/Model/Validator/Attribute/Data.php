@@ -13,10 +13,6 @@ namespace Magento\Eav\Model\Validator\Attribute;
 
 use Magento\Eav\Model\Attribute;
 
-/**
- * Class \Magento\Eav\Model\Validator\Attribute\Data
- *
- */
 class Data extends \Magento\Framework\Validator\AbstractValidator
 {
     /**

@@ -8,10 +8,6 @@
 
 namespace Magento\Framework\Filter\Input;
 
-/**
- * Class \Magento\Framework\Filter\Input\MaliciousCode
- *
- */
 class MaliciousCode implements \Zend_Filter_Interface
 {
     /**

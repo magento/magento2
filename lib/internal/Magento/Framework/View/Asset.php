@@ -7,10 +7,6 @@ namespace Magento\Framework\View;
 
 use Magento\Framework\View\Asset\Repository;
 
-/**
- * Class \Magento\Framework\View\Asset
- *
- */
 class Asset
 {
     /**

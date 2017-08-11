@@ -14,10 +14,6 @@ use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
-/**
- * Class \Magento\CatalogUrlRewrite\Observer\ProductToWebsiteChangeObserver
- *
- */
 class ProductToWebsiteChangeObserver implements ObserverInterface
 {
     /**

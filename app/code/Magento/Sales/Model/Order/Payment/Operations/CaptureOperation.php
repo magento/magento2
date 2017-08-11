@@ -11,10 +11,6 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 
-/**
- * Class \Magento\Sales\Model\Order\Payment\Operations\CaptureOperation
- *
- */
 class CaptureOperation extends AbstractOperation
 {
     /**

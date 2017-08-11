@@ -7,10 +7,6 @@ namespace Magento\GiftMessage\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 
-/**
- * Class \Magento\GiftMessage\Model\CompositeConfigProvider
- *
- */
 class CompositeConfigProvider implements ConfigProviderInterface
 {
     /**

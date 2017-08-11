@@ -11,10 +11,6 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Collection\AbstractDb;
 
-/**
- * Class \Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor
- *
- */
 class SortingProcessor implements CollectionProcessorInterface
 {
     /**

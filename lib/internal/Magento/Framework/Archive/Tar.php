@@ -14,10 +14,6 @@ namespace Magento\Framework\Archive;
 use Magento\Framework\Archive\Helper\File;
 use Magento\Framework\Filesystem\DriverInterface;
 
-/**
- * Class \Magento\Framework\Archive\Tar
- *
- */
 class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento\Framework\Archive\ArchiveInterface
 {
     /**

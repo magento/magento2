@@ -5,10 +5,6 @@
  */
 namespace Magento\Reports\Block\Adminhtml\Grid;
 
-/**
- * Class \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
- *
- */
 class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**

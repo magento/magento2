@@ -8,10 +8,6 @@ namespace Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use \Magento\Framework\Validator\AbstractValidator;
 
-/**
- * Class \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator
- *
- */
 class Validator extends AbstractValidator implements RowValidatorInterface
 {
     /**

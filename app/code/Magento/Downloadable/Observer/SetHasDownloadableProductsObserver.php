@@ -7,10 +7,6 @@ namespace Magento\Downloadable\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\Downloadable\Observer\SetHasDownloadableProductsObserver
- *
- */
 class SetHasDownloadableProductsObserver implements ObserverInterface
 {
     /**

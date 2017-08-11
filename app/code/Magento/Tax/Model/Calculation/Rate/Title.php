@@ -15,10 +15,6 @@ namespace Magento\Tax\Model\Calculation\Rate;
 
 use Magento\Tax\Api\Data\TaxRateTitleInterface;
 
-/**
- * Class \Magento\Tax\Model\Calculation\Rate\Title
- *
- */
 class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements TaxRateTitleInterface
 {
     /**#@+

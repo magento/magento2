@@ -9,10 +9,6 @@ namespace Magento\GoogleOptimizer\Observer\CmsPage;
 
 use Magento\Framework\Event\Observer;
 
-/**
- * Class \Magento\GoogleOptimizer\Observer\CmsPage\SaveGoogleExperimentScriptObserver
- *
- */
 class SaveGoogleExperimentScriptObserver extends \Magento\GoogleOptimizer\Observer\AbstractSave
 {
     /**

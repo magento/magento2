@@ -10,10 +10,6 @@ use Magento\Framework\Api\SearchResults;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\ObjectManagerInterface;
 
-/**
- * Class \Magento\Indexer\Model\Source\ServiceSource
- *
- */
 class ServiceSource implements DataInterface
 {
     /**

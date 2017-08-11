@@ -6,10 +6,6 @@
  */
 namespace Magento\Bundle\Controller\Adminhtml\Bundle\Selection;
 
-/**
- * Class \Magento\Bundle\Controller\Adminhtml\Bundle\Selection\Grid
- *
- */
 class Grid extends \Magento\Backend\App\Action
 {
     /**

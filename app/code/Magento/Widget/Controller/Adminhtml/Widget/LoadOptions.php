@@ -8,10 +8,6 @@ namespace Magento\Widget\Controller\Adminhtml\Widget;
 
 use Magento\Framework\App\ObjectManager;
 
-/**
- * Class \Magento\Widget\Controller\Adminhtml\Widget\LoadOptions
- *
- */
 class LoadOptions extends \Magento\Backend\App\Action
 {
     /**

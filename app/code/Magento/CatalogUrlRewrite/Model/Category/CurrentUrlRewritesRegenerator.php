@@ -8,10 +8,6 @@ namespace Magento\CatalogUrlRewrite\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\UrlRewrite\Model\OptionProvider;
 
-/**
- * Class \Magento\CatalogUrlRewrite\Model\Category\CurrentUrlRewritesRegenerator
- *
- */
 class CurrentUrlRewritesRegenerator
 {
     /**

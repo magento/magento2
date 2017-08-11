@@ -10,10 +10,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Model\Calculation\Rule as TaxRuleModel;
 use Magento\Tax\Model\Calculation\RuleFactory as TaxRuleModelFactory;
 
-/**
- * Class \Magento\Tax\Model\Calculation\TaxRuleRegistry
- *
- */
 class TaxRuleRegistry
 {
     /**

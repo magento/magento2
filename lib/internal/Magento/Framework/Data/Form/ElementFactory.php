@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Data\Form;
 
-/**
- * Class \Magento\Framework\Data\Form\ElementFactory
- *
- */
 class ElementFactory
 {
     /**

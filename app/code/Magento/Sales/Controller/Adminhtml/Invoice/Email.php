@@ -6,10 +6,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Invoice;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Invoice\Email
- *
- */
 class Email extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\Email
 {
 }

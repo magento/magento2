@@ -11,10 +11,6 @@
  */
 namespace Magento\ImportExport\Block\Adminhtml\Export\Edit;
 
-/**
- * Class \Magento\ImportExport\Block\Adminhtml\Export\Edit\Form
- *
- */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**

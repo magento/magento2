@@ -8,10 +8,6 @@
  */
 namespace Magento\Captcha\Controller\Adminhtml\Refresh;
 
-/**
- * Class \Magento\Captcha\Controller\Adminhtml\Refresh\Refresh
- *
- */
 class Refresh extends \Magento\Backend\App\Action
 {
     /**

@@ -5,10 +5,6 @@
  */
 namespace Magento\Indexer\Block\Backend\Grid;
 
-/**
- * Class \Magento\Indexer\Block\Backend\Grid\ItemsUpdater
- *
- */
 class ItemsUpdater implements \Magento\Framework\View\Layout\Argument\UpdaterInterface
 {
     /**

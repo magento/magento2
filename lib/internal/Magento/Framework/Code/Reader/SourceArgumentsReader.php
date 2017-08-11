@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Code\Reader;
 
-/**
- * Class \Magento\Framework\Code\Reader\SourceArgumentsReader
- *
- */
 class SourceArgumentsReader
 {
     /**

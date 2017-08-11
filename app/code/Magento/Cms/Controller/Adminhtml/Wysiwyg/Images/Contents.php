@@ -6,10 +6,6 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
-/**
- * Class \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\Contents
- *
- */
 class Contents extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 {
     /**

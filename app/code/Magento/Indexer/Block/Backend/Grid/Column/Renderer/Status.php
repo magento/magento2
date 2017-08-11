@@ -5,10 +5,6 @@
  */
 namespace Magento\Indexer\Block\Backend\Grid\Column\Renderer;
 
-/**
- * Class \Magento\Indexer\Block\Backend\Grid\Column\Renderer\Status
- *
- */
 class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**

@@ -11,10 +11,6 @@
  */
 namespace Magento\Cron\Model\Config\Backend;
 
-/**
- * Class \Magento\Cron\Model\Config\Backend\Sitemap
- *
- */
 class Sitemap extends \Magento\Framework\App\Config\Value
 {
     /**

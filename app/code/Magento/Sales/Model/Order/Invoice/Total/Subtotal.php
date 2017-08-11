@@ -5,10 +5,6 @@
  */
 namespace Magento\Sales\Model\Order\Invoice\Total;
 
-/**
- * Class \Magento\Sales\Model\Order\Invoice\Total\Subtotal
- *
- */
 class Subtotal extends AbstractTotal
 {
     /**

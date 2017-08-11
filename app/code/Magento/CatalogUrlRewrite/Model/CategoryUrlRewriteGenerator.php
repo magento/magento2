@@ -15,10 +15,6 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 
-/**
- * Class \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator
- *
- */
 class CategoryUrlRewriteGenerator
 {
     /** Entity type code */

@@ -7,10 +7,6 @@ namespace Magento\Framework\App\Action\Plugin;
 
 use Magento\Framework\Message\MessageInterface;
 
-/**
- * Class \Magento\Framework\App\Action\Plugin\Design
- *
- */
 class Design
 {
     /**

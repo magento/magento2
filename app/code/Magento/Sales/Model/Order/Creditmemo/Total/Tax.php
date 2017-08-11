@@ -5,10 +5,6 @@
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
-/**
- * Class \Magento\Sales\Model\Order\Creditmemo\Total\Tax
- *
- */
 class Tax extends AbstractTotal
 {
     /**

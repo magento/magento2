@@ -5,10 +5,6 @@
  */
 namespace Magento\Indexer\Model\Indexer;
 
-/**
- * Class \Magento\Indexer\Model\Indexer\Collection
- *
- */
 class Collection extends \Magento\Framework\Data\Collection
 {
     /**

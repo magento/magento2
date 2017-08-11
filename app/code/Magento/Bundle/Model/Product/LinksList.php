@@ -6,10 +6,6 @@
  */
 namespace Magento\Bundle\Model\Product;
 
-/**
- * Class \Magento\Bundle\Model\Product\LinksList
- *
- */
 class LinksList
 {
     /**

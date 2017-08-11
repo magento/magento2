@@ -5,10 +5,6 @@
  */
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
-/**
- * Class \Magento\SalesRule\Model\Rule\Action\Discount\CartFixed
- *
- */
 class CartFixed extends AbstractDiscount
 {
     /**

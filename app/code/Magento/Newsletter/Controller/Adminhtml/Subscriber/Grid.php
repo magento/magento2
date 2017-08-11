@@ -6,10 +6,6 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Subscriber;
 
-/**
- * Class \Magento\Newsletter\Controller\Adminhtml\Subscriber\Grid
- *
- */
 class Grid extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
 {
     /**
