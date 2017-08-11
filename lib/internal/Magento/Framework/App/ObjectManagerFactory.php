@@ -225,7 +225,7 @@ class ObjectManagerFactory
         $result = new \Magento\Framework\Data\Argument\Interpreter\Composite(
             [
                 'boolean' => new \Magento\Framework\Data\Argument\Interpreter\Boolean($booleanUtils),
-                'string' => new \Magento\Framework\Data\Argument\Interpreter\StringUtils($booleanUtils),
+                'string' => new \Magento\Framework\Data\Argument\Interpreter\BaseStringUtils($booleanUtils),
                 'number' => new \Magento\Framework\Data\Argument\Interpreter\Number(),
                 'null' => new \Magento\Framework\Data\Argument\Interpreter\NullType(),
                 'object' => new \Magento\Framework\Data\Argument\Interpreter\DataObject($booleanUtils),

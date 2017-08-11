@@ -70,7 +70,10 @@ class InputException extends AbstractAggregateException
     public static function invalidFieldValue($fieldName, $fieldValue, \Exception $cause = null)
     {
         return new self(
-            new Phrase('Invalid value of "%value" provided for the %fieldName field.', ['fieldName' => $fieldName, 'value' => $fieldValue]),
+            new Phrase(
+                'Invalid value of "%value" provided for the %fieldName field.',
+                ['fieldName' => $fieldName, 'value' => $fieldValue]
+            ),
             $cause
         );
     }

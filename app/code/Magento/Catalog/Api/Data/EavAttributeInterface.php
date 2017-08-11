@@ -140,6 +140,30 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
     public function getIsFilterableInGrid();
 
     /**
+     * Set is attribute used in grid
+     *
+     * @param bool|null $isUsedInGrid
+     * @return $this
+     */
+    public function setIsUsedInGrid($isUsedInGrid);
+
+    /**
+     * Set is attribute visible in grid
+     *
+     * @param bool|null $isVisibleInGrid
+     * @return $this
+     */
+    public function setIsVisibleInGrid($isVisibleInGrid);
+
+    /**
+     * Set is attribute filterable in grid
+     *
+     * @param bool|null $isFilterableInGrid
+     * @return $this
+     */
+    public function setIsFilterableInGrid($isFilterableInGrid);
+
+    /**
      * Set whether it is used in search results layered navigation
      *
      * @param bool $isFilterableInSearch

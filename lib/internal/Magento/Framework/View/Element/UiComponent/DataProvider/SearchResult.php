@@ -58,7 +58,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
      * @param Logger $logger
      * @param FetchStrategy $fetchStrategy
      * @param EventManager $eventManager
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $mainTable
+     * @param string $mainTable
      * @param null|string $resourceModel
      * @param null|string $identifierName
      * @param null|string $connectionName

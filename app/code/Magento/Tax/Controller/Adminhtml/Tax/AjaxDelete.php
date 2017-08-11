@@ -14,6 +14,7 @@ class AjaxDelete extends \Magento\Tax\Controller\Adminhtml\Tax
      * Delete Tax Class via AJAX
      *
      * @return \Magento\Framework\Controller\Result\Json
+     * @throws \InvalidArgumentException
      */
     public function execute()
     {
@@ -29,6 +30,7 @@ class AjaxDelete extends \Magento\Tax\Controller\Adminhtml\Tax
                 'error_message' => __('We can\'t delete this tax class right now.')
             ];
         }
+
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $resultJson->setData($responseContent);

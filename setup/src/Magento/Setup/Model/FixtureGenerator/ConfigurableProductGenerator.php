@@ -42,7 +42,6 @@ class ConfigurableProductGenerator
     ) {
         $this->productGeneratorFactory = $productGeneratorFactory;
         $this->autoIncrement = $autoIncrement;
-
     }
 
     /**

@@ -8,6 +8,7 @@ namespace Magento\Config\Console\Command;
 use Magento\Config\App\Config\Type\System;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
@@ -56,18 +57,28 @@ class ConfigSetCommand extends Command
     private $processorFacadeFactory;
 
     /**
+     * Application deployment configuration
+     *
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * @param EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor Emulator adminhtml area for CLI command
      * @param ChangeDetector $changeDetector The config change detector
      * @param ProcessorFacadeFactory $processorFacadeFactory The factory for processor facade
+     * @param DeploymentConfig $deploymentConfig Application deployment configuration
      */
     public function __construct(
         EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor,
         ChangeDetector $changeDetector,
-        ProcessorFacadeFactory $processorFacadeFactory
+        ProcessorFacadeFactory $processorFacadeFactory,
+        DeploymentConfig $deploymentConfig
     ) {
         $this->emulatedAreaProcessor = $emulatedAreaProcessor;
         $this->changeDetector = $changeDetector;
         $this->processorFacadeFactory = $processorFacadeFactory;
+        $this->deploymentConfig = $deploymentConfig;
 
         parent::__construct();
     }
@@ -117,6 +128,12 @@ class ConfigSetCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if (!$this->deploymentConfig->isAvailable()) {
+            $output->writeln(
+                '<error>You cannot run this command because the Magento application is not installed.</error>'
+            );
+            return Cli::RETURN_FAILURE;
+        }
         if ($this->changeDetector->hasChanges(System::CONFIG_TYPE)) {
             $output->writeln(
                 '<error>'

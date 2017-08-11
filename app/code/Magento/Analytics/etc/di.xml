@@ -181,28 +181,28 @@
     <type name="Magento\Analytics\Model\Config\Source\Vertical">
         <arguments>
             <argument name="verticals" xsi:type="array">
-                <item name="0" xsi:type="string">Apps and Games</item>
-                <item name="1" xsi:type="string">Athletic/Sporting Goods</item>
-                <item name="2" xsi:type="string">Art and Design</item>
-                <item name="3" xsi:type="string">Auto Parts</item>
-                <item name="4" xsi:type="string">Baby/Children’s Apparel, Gear and Toys</item>
-                <item name="5" xsi:type="string">Beauty and Cosmetics</item>
-                <item name="6" xsi:type="string">Books, Music and Magazines</item>
-                <item name="7" xsi:type="string">Crafts and Stationery</item>
-                <item name="8" xsi:type="string">Consumer Electronics</item>
-                <item name="9" xsi:type="string">Deal Site</item>
-                <item name="10" xsi:type="string">Fashion Apparel and Accessories</item>
-                <item name="11" xsi:type="string">Food, Beverage and Grocery</item>
-                <item name="12" xsi:type="string">Home Goods and Furniture</item>
-                <item name="13" xsi:type="string">Home Improvement</item>
-                <item name="14" xsi:type="string">Jewelry and Watches</item>
-                <item name="15" xsi:type="string">Mass Merchant</item>
-                <item name="16" xsi:type="string">Office Supplies</item>
-                <item name="17" xsi:type="string">Outdoor and Camping Gear</item>
-                <item name="18" xsi:type="string">Pet Goods</item>
-                <item name="19" xsi:type="string">Pharma and Medical Devices</item>
-                <item name="20" xsi:type="string">Technology B2B</item>
-                <item name="21" xsi:type="string">Other</item>
+                <item name="0" xsi:type="string" translatable="true">Apps and Games</item>
+                <item name="1" xsi:type="string" translatable="true">Athletic/Sporting Goods</item>
+                <item name="2" xsi:type="string" translatable="true">Art and Design</item>
+                <item name="3" xsi:type="string" translatable="true">Auto Parts</item>
+                <item name="4" xsi:type="string" translatable="true">Baby/Children’s Apparel, Gear and Toys</item>
+                <item name="5" xsi:type="string" translatable="true">Beauty and Cosmetics</item>
+                <item name="6" xsi:type="string" translatable="true">Books, Music and Magazines</item>
+                <item name="7" xsi:type="string" translatable="true">Crafts and Stationery</item>
+                <item name="8" xsi:type="string" translatable="true">Consumer Electronics</item>
+                <item name="9" xsi:type="string" translatable="true">Deal Site</item>
+                <item name="10" xsi:type="string" translatable="true">Fashion Apparel and Accessories</item>
+                <item name="11" xsi:type="string" translatable="true">Food, Beverage and Grocery</item>
+                <item name="12" xsi:type="string" translatable="true">Home Goods and Furniture</item>
+                <item name="13" xsi:type="string" translatable="true">Home Improvement</item>
+                <item name="14" xsi:type="string" translatable="true">Jewelry and Watches</item>
+                <item name="15" xsi:type="string" translatable="true">Mass Merchant</item>
+                <item name="16" xsi:type="string" translatable="true">Office Supplies</item>
+                <item name="17" xsi:type="string" translatable="true">Outdoor and Camping Gear</item>
+                <item name="18" xsi:type="string" translatable="true">Pet Goods</item>
+                <item name="19" xsi:type="string" translatable="true">Pharma and Medical Devices</item>
+                <item name="20" xsi:type="string" translatable="true">Technology B2B</item>
+                <item name="21" xsi:type="string" translatable="true">Other</item>
             </argument>
         </arguments>
     </type>
