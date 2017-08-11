@@ -6,9 +6,6 @@
 
 /**
  * Store group model
- *
- * @method \Magento\Store\Model\ResourceModel\Group _getResource()
- * @method \Magento\Store\Model\ResourceModel\Group getResource()
  */
 namespace Magento\Store\Model;
 

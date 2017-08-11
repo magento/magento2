@@ -10,8 +10,6 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Template model
  *
- * @method \Magento\Email\Model\ResourceModel\Template _getResource()
- * @method \Magento\Email\Model\ResourceModel\Template getResource()
  * @method string getTemplateCode()
  * @method \Magento\Email\Model\Template setTemplateCode(string $value)
  * @method string getTemplateText()

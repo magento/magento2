@@ -13,8 +13,6 @@ use Magento\Framework\Model\AbstractModel;
 /**
  * CMS block model
  *
- * @method ResourceCmsBlock _getResource()
- * @method ResourceCmsBlock getResource()
  * @method Block setStoreId(array $storeId)
  * @method array getStoreId()
  */

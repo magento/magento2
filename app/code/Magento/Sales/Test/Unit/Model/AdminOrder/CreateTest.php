@@ -329,7 +329,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $quoteMock->expects($this->once())->method('setCouponCode')->with($couponCode)->willReturnSelf();
 
         $addressMock->expects($this->once())->method('setCollectShippingRates')->with(true)->willReturnSelf();
-        $addressMock->expects($this->once())->method('setFreeShipping')->with(null)->willReturnSelf();
+        $addressMock->expects($this->once())->method('setFreeShipping')->with(0)->willReturnSelf();
 
         $object = $this->adminOrderCreate->applyCoupon($couponCode);
         $this->assertEquals($this->adminOrderCreate, $object);
