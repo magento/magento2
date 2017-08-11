@@ -3,23 +3,19 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Filter;
 
-/**
- * Class TemplateTest
- * @package Magento\Framework\Filter
- */
 class TemplateTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Filter\Template
+     * @var Template
      */
     private $templateFilter;
 
     protected function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->templateFilter = $objectManager->getObject('Magento\Framework\Filter\Template');
+        $this->templateFilter = \Magento\TestFramework\ObjectManager::getInstance()->create(Template::class);
     }
 
     /**
@@ -29,10 +25,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function testFilterFor($results, $values)
     {
-
-        $this->templateFilter->setVariables(array('order' => $this->getOrder(), 'things' => $this->getThings()));
+        $this->templateFilter->setVariables(['order' => $this->getOrder(), 'things' => $this->getThings()]);
         $this->assertEquals($results, $this->invokeMethod($this->templateFilter, 'filterFor', [$values]));
-
     }
 
     /**
@@ -41,7 +35,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     private function getOrder()
     {
         $order = new \Magento\Framework\DataObject();
-
         $visibleItems = [
             [
                 'sku' => 'ABC123',
@@ -50,10 +43,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'ordered_qty' => '2'
             ]
         ];
-
         $order->setAllVisibleItems($visibleItems);
         return $order;
-
     }
 
     public function getThings()
@@ -130,7 +121,6 @@ EXPECTED_RESULT;
         ];
     }
 
-
     /**
      * Call protected/private method of a class.
      *
@@ -145,7 +135,6 @@ EXPECTED_RESULT;
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
         $method->setAccessible(true);
-
         return $method->invokeArgs($object, $parameters);
     }
 }
