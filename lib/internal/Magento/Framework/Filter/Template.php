@@ -28,33 +28,34 @@ class Template implements \Zend_Filter_Interface
 
     const CONSTRUCTION_TEMPLATE_PATTERN = '/{{(template)(.*?)}}/si';
 
-    /**#@-*/
-
     /**
-     * Callbacks that will be applied after filtering
-     *
-     * @var array
+     * Looping regular expression
      */
-    private $afterFilterCallbacks = [];
+    const LOOP_PATTERN = '/{{for(?P<loopItem>.*? )(in)(?P<loopData>.*?)}}(?P<loopBody>.*?){{\/for}}/si';
 
+    /**#@-*/
     /**
      * Assigned template variables
      *
      * @var array
      */
     protected $templateVars = [];
-
     /**
      * Template processor
      *
      * @var callable|null
      */
     protected $templateProcessor = null;
-
     /**
      * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
+    /**
+     * Callbacks that will be applied after filtering
+     *
+     * @var array
+     */
+    private $afterFilterCallbacks = [];
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
@@ -78,28 +79,6 @@ class Template implements \Zend_Filter_Interface
             $this->templateVars[$name] = $value;
         }
         return $this;
-    }
-
-    /**
-     * Sets the processor for template directive.
-     *
-     * @param callable $callback it must return string
-     * @return $this
-     */
-    public function setTemplateProcessor(callable $callback)
-    {
-        $this->templateProcessor = $callback;
-        return $this;
-    }
-
-    /**
-     * Sets the processor for template directive.
-     *
-     * @return callable|null
-     */
-    public function getTemplateProcessor()
-    {
-        return is_callable($this->templateProcessor) ? $this->templateProcessor : null;
     }
 
     /**
@@ -134,6 +113,8 @@ class Template implements \Zend_Filter_Interface
             }
         }
 
+        $value = $this->filterFor($value);
+
         if (preg_match_all(self::CONSTRUCTION_PATTERN, $value, $constructions, PREG_SET_ORDER)) {
             foreach ($constructions as $construction) {
                 $callback = [$this, $construction[1] . 'Directive'];
@@ -154,6 +135,163 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * Filter the string as template.
+     *
+     * @param string $value
+     * @example syntax {{for item in order.all_visible_items}} sku: {{var item.sku}}<br>name: {{var item.name}}<br> {{/for}} order items collection.
+     * @example syntax {{for thing in things}} {{var thing.whatever}} {{/for}} e.g.:custom collection.
+     * @return string
+     */
+    protected function filterFor($value)
+    {
+        if (preg_match_all(self::LOOP_PATTERN, $value, $constructions, PREG_SET_ORDER)) {
+            foreach ($constructions as $construction) {
+
+                if (!$this->isValidLoop($construction)) {
+                    return $value;
+                }
+
+                $fullTextToReplace = $construction[0];
+                $loopData = $this->getVariable($construction['loopData'], '');
+
+                $loopTextToReplace = $construction['loopBody'];
+                $loopItem = preg_replace('/\s+/', '', $construction['loopItem']);
+
+                if (is_array($loopData) || $loopData instanceof \Traversable) {
+
+                    $loopText = [];
+                    $indexCount = 0;
+                    $loop = new \Magento\Framework\DataObject;
+
+                    foreach ($loopData as $objectData) {
+
+                        if (!$objectData instanceof \Magento\Framework\DataObject) { // is array?
+
+                            if (!is_array($objectData)) {
+                                continue;
+                            }
+
+                            $_item = new \Magento\Framework\DataObject;
+                            $_item->setData($objectData);
+                            $objectData = $_item;
+                        }
+
+                        $loop->setData('index', $indexCount++);
+                        $this->templateVars['loop'] = $loop;
+                        $this->templateVars[$loopItem] = $objectData;
+
+                        if (preg_match_all(self::CONSTRUCTION_PATTERN, $loopTextToReplace, $attributes,
+                            PREG_SET_ORDER)) {
+
+                            $subText = $loopTextToReplace;
+                            foreach ($attributes as $attribute) {
+                                $text = $this->getVariable($attribute[2], '');
+                                $subText = str_replace($attribute[0], $text, $subText);
+                            }
+                            $loopText[] = $subText;
+                        }
+                        unset($this->templateVars[$loopItem]);
+
+                    }
+                    $replaceText = implode('', $loopText);
+                    $value = str_replace($fullTextToReplace, $replaceText, $value);
+                }
+            }
+        }
+
+        return $value;
+    }
+
+    /**
+     * @param $construction
+     * @return bool
+     */
+    private function isValidLoop($construction)
+    {
+        if ((strlen(trim($construction['loopBody'])) != 0) &&
+            (strlen(trim($construction['loopItem'])) != 0) &&
+            (strlen(trim($construction['loopData'])) != 0)
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Return variable value for var construction
+     *
+     * @param string $value raw parameters
+     * @param string $default default value
+     * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    protected function getVariable($value, $default = '{no_value_defined}')
+    {
+        \Magento\Framework\Profiler::start('email_template_processing_variables');
+        $tokenizer = new Template\Tokenizer\Variable();
+        $tokenizer->setString($value);
+        $stackVars = $tokenizer->tokenize();
+        $result = $default;
+        $last = 0;
+        for ($i = 0; $i < count($stackVars); $i++) {
+            if ($i == 0 && isset($this->templateVars[$stackVars[$i]['name']])) {
+                // Getting of template value
+                $stackVars[$i]['variable'] = &$this->templateVars[$stackVars[$i]['name']];
+            } elseif (isset($stackVars[$i - 1]['variable'])
+                && $stackVars[$i - 1]['variable'] instanceof \Magento\Framework\DataObject
+            ) {
+                // If object calling methods or getting properties
+                if ($stackVars[$i]['type'] == 'property') {
+                    $caller = 'get' . $this->string->upperCaseWords($stackVars[$i]['name'], '_', '');
+                    $stackVars[$i]['variable'] = method_exists(
+                        $stackVars[$i - 1]['variable'],
+                        $caller
+                    ) ? $stackVars[$i - 1]['variable']->{$caller}() : $stackVars[$i - 1]['variable']->getData(
+                        $stackVars[$i]['name']
+                    );
+                } elseif ($stackVars[$i]['type'] == 'method') {
+                    // Calling of object method
+                    if (method_exists($stackVars[$i - 1]['variable'], $stackVars[$i]['name'])
+                        || substr($stackVars[$i]['name'], 0, 3) == 'get'
+                    ) {
+                        $stackVars[$i]['args'] = $this->getStackArgs($stackVars[$i]['args']);
+                        $stackVars[$i]['variable'] = call_user_func_array(
+                            [$stackVars[$i - 1]['variable'], $stackVars[$i]['name']],
+                            $stackVars[$i]['args']
+                        );
+                    }
+                }
+                $last = $i;
+            }
+        }
+
+        if (isset($stackVars[$last]['variable'])) {
+            // If value for construction exists set it
+            $result = $stackVars[$last]['variable'];
+        }
+        \Magento\Framework\Profiler::stop('email_template_processing_variables');
+        return $result;
+    }
+
+    /**
+     * Loops over a set of stack args to process variables into array argument values
+     *
+     * @param array $stack
+     * @return array
+     */
+    protected function getStackArgs($stack)
+    {
+        foreach ($stack as $i => $value) {
+            if (is_array($value)) {
+                $stack[$i] = $this->getStackArgs($value);
+            } elseif (substr($value, 0, 1) === '$') {
+                $stack[$i] = $this->getVariable(substr($value, 1), null);
+            }
+        }
+        return $stack;
+    }
+
+    /**
      * Runs callbacks that have been added to filter content after directive processing is finished.
      *
      * @param string $value
@@ -171,6 +309,17 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * Resets the after filter callbacks
+     *
+     * @return $this
+     */
+    protected function resetAfterFilterCallbacks()
+    {
+        $this->afterFilterCallbacks = [];
+        return $this;
+    }
+
+    /**
      * Adds a callback to run after main filtering has happened. Callback must accept a single argument and return
      * a string of the processed value.
      *
@@ -185,17 +334,6 @@ class Template implements \Zend_Filter_Interface
         }
 
         $this->afterFilterCallbacks[] = $afterFilterCallback;
-        return $this;
-    }
-
-    /**
-     * Resets the after filter callbacks
-     *
-     * @return $this
-     */
-    protected function resetAfterFilterCallbacks()
-    {
-        $this->afterFilterCallbacks = [];
         return $this;
     }
 
@@ -245,6 +383,47 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * Return associative array of parameters.
+     *
+     * @param string $value raw parameters
+     * @return array
+     */
+    protected function getParameters($value)
+    {
+        $tokenizer = new Template\Tokenizer\Parameter();
+        $tokenizer->setString($value);
+        $params = $tokenizer->tokenize();
+        foreach ($params as $key => $value) {
+            if (substr($value, 0, 1) === '$') {
+                $params[$key] = $this->getVariable(substr($value, 1), null);
+            }
+        }
+        return $params;
+    }
+
+    /**
+     * Sets the processor for template directive.
+     *
+     * @return callable|null
+     */
+    public function getTemplateProcessor()
+    {
+        return is_callable($this->templateProcessor) ? $this->templateProcessor : null;
+    }
+
+    /**
+     * Sets the processor for template directive.
+     *
+     * @param callable $callback it must return string
+     * @return $this
+     */
+    public function setTemplateProcessor(callable $callback)
+    {
+        $this->templateProcessor = $callback;
+        return $this;
+    }
+
+    /**
      * @param string[] $construction
      * @return string
      */
@@ -280,98 +459,5 @@ class Template implements \Zend_Filter_Interface
         } else {
             return $construction[2];
         }
-    }
-
-    /**
-     * Return associative array of parameters.
-     *
-     * @param string $value raw parameters
-     * @return array
-     */
-    protected function getParameters($value)
-    {
-        $tokenizer = new Template\Tokenizer\Parameter();
-        $tokenizer->setString($value);
-        $params = $tokenizer->tokenize();
-        foreach ($params as $key => $value) {
-            if (substr($value, 0, 1) === '$') {
-                $params[$key] = $this->getVariable(substr($value, 1), null);
-            }
-        }
-        return $params;
-    }
-
-    /**
-     * Return variable value for var construction
-     *
-     * @param string $value raw parameters
-     * @param string $default default value
-     * @return string
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    protected function getVariable($value, $default = '{no_value_defined}')
-    {
-        \Magento\Framework\Profiler::start('email_template_processing_variables');
-        $tokenizer = new Template\Tokenizer\Variable();
-        $tokenizer->setString($value);
-        $stackVars = $tokenizer->tokenize();
-        $result = $default;
-        $last = 0;
-        for ($i = 0; $i < count($stackVars); $i++) {
-            if ($i == 0 && isset($this->templateVars[$stackVars[$i]['name']])) {
-                // Getting of template value
-                $stackVars[$i]['variable'] = & $this->templateVars[$stackVars[$i]['name']];
-            } elseif (isset($stackVars[$i - 1]['variable'])
-                    && $stackVars[$i - 1]['variable'] instanceof \Magento\Framework\DataObject
-            ) {
-                // If object calling methods or getting properties
-                if ($stackVars[$i]['type'] == 'property') {
-                    $caller = 'get' . $this->string->upperCaseWords($stackVars[$i]['name'], '_', '');
-                    $stackVars[$i]['variable'] = method_exists(
-                        $stackVars[$i - 1]['variable'],
-                        $caller
-                    ) ? $stackVars[$i - 1]['variable']->{$caller}() : $stackVars[$i - 1]['variable']->getData(
-                        $stackVars[$i]['name']
-                    );
-                } elseif ($stackVars[$i]['type'] == 'method') {
-                    // Calling of object method
-                    if (method_exists($stackVars[$i - 1]['variable'], $stackVars[$i]['name'])
-                            || substr($stackVars[$i]['name'], 0, 3) == 'get'
-                    ) {
-                        $stackVars[$i]['args'] = $this->getStackArgs($stackVars[$i]['args']);
-                        $stackVars[$i]['variable'] = call_user_func_array(
-                            [$stackVars[$i - 1]['variable'], $stackVars[$i]['name']],
-                            $stackVars[$i]['args']
-                        );
-                    }
-                }
-                $last = $i;
-            }
-        }
-
-        if (isset($stackVars[$last]['variable'])) {
-            // If value for construction exists set it
-            $result = $stackVars[$last]['variable'];
-        }
-        \Magento\Framework\Profiler::stop('email_template_processing_variables');
-        return $result;
-    }
-
-    /**
-     * Loops over a set of stack args to process variables into array argument values
-     *
-     * @param array $stack
-     * @return array
-     */
-    protected function getStackArgs($stack)
-    {
-        foreach ($stack as $i => $value) {
-            if (is_array($value)) {
-                $stack[$i] = $this->getStackArgs($value);
-            } elseif (substr($value, 0, 1) === '$') {
-                $stack[$i] = $this->getVariable(substr($value, 1), null);
-            }
-        }
-        return $stack;
     }
 }
