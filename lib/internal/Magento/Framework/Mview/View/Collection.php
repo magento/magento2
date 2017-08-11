@@ -87,6 +87,8 @@ class Collection extends \Magento\Framework\Data\Collection implements Collectio
     }
 
     /**
+     * Return the list of ordered view Ids according to dependencies of Indexers.
+     *
      * @return array
      */
     private function getOrderedViewIds()
