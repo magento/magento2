@@ -11,10 +11,6 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
-/**
- * Class \Magento\AsynchronousOperations\Cron\BulkCleanup
- *
- */
 class BulkCleanup
 {
     /**
@@ -73,7 +69,7 @@ class BulkCleanup
     {
         $metadata = $this->metadataPool->getMetadata(BulkSummaryInterface::class);
         $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
-        
+
         $bulkLifetime = 3600 * 24 * (int)$this->scopeConfig->getValue('system/bulk/lifetime');
         $maxBulkStartTime = $this->dateTime->formatDate($this->date->gmtTimestamp() - $bulkLifetime);
         $connection->delete($metadata->getEntityTable(), ['start_time <= ?' => $maxBulkStartTime]);
