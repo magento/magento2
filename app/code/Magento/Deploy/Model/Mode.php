@@ -19,6 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\ObjectManager as ObjectManager;
 
 /**
  * A class to manage Magento modes
@@ -94,20 +95,25 @@ class Mode
         Writer $writer,
         Reader $reader,
         MaintenanceMode $maintenanceMode,
-        Filesystem $filesystem,
-        ConfigProvider $configProvider,
-        ProcessorFacadeFactory $processorFacadeFactory,
-        EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor
+        Filesystem $filesystem = null,
+        ConfigProvider $configProvider = null,
+        ProcessorFacadeFactory $processorFacadeFactory = null,
+        EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor = null
     ) {
         $this->input = $input;
         $this->output = $output;
         $this->writer = $writer;
         $this->reader = $reader;
         $this->maintenanceMode = $maintenanceMode;
-        $this->filesystem = $filesystem;
-        $this->configProvider = $configProvider;
-        $this->processorFacadeFactory = $processorFacadeFactory;
-        $this->emulatedAreaProcessor = $emulatedAreaProcessor;
+
+        $this->filesystem =
+            $filesystem ?: ObjectManager::getInstance()->get(Filesystem::class);
+        $this->configProvider =
+            $configProvider ?: ObjectManager::getInstance()->get(ConfigProvider::class);
+        $this->processorFacadeFactory =
+            $processorFacadeFactory ?: ObjectManager::getInstance()->get(ProcessorFacadeFactory::class);
+        $this->emulatedAreaProcessor =
+            $emulatedAreaProcessor ?: ObjectManager::getInstance()->get(EmulatedAdminhtmlAreaProcessor::class);
     }
 
     /**
