@@ -12,10 +12,6 @@ use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\BucketBuilderInterface;
 
-/**
- * Class \Magento\Elasticsearch\SearchAdapter\Aggregation\Builder
- *
- */
 class Builder
 {
     /**

@@ -9,10 +9,6 @@ use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Elasticsearch\Model\Adapter\Elasticsearch as ElasticsearchAdapter;
 use Magento\Framework\App\ScopeResolverInterface;
 
-/**
- * Class \Magento\Elasticsearch\Model\Indexer\IndexStructure
- *
- */
 class IndexStructure implements IndexStructureInterface
 {
     /**

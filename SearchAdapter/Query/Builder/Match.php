@@ -10,10 +10,6 @@ use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 
-/**
- * Class \Magento\Elasticsearch\SearchAdapter\Query\Builder\Match
- *
- */
 class Match implements QueryInterface
 {
     /**

@@ -9,10 +9,6 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Config;
 
-/**
- * Class \Magento\Elasticsearch\Model\Adapter\FieldMapper\FieldMapperResolver
- *
- */
 class FieldMapperResolver implements FieldMapperInterface
 {
     /**

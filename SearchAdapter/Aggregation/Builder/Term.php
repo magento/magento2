@@ -8,10 +8,6 @@ namespace Magento\Elasticsearch\SearchAdapter\Aggregation\Builder;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
 
-/**
- * Class \Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\Term
- *
- */
 class Term implements BucketBuilderInterface
 {
     /**

@@ -12,10 +12,6 @@ use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 
-/**
- * Class \Magento\Elasticsearch\SearchAdapter\Aggregation\Interval
- *
- */
 class Interval implements IntervalInterface
 {
     /**
