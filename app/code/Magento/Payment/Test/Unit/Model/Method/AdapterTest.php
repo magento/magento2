@@ -141,7 +141,6 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             $transactionInfo,
             $this->adapter->fetchTransactionInfo($paymentInfo, $transactionId)
         );
-
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved. 
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Test\Unit\Ui\DataProvider\Product\Listing\Collector;
@@ -32,7 +32,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
     /** @var PriceInfoExtensionInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $extensionAttributes;
 
-    /** * @var WeeeAdjustmentAttributeInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var WeeeAdjustmentAttributeInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
     private $weeeAdjustmentAttributeFactory;
 
     /** @var PriceInfoExtensionInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */

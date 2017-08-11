@@ -6,6 +6,7 @@
 namespace Magento\Analytics\Test\Unit\Controller\Adminhtml\Reports;
 
 use Magento\Analytics\Controller\Adminhtml\Reports\Show;
+use Magento\Analytics\Model\Exception\State\SubscriptionUpdateException;
 use Magento\Analytics\Model\ReportUrlProvider;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
@@ -151,5 +152,34 @@ class ShowTest extends \PHPUnit_Framework_TestCase
             'ExecuteWithLocalizedException' => [new LocalizedException(__('TestMessage'))],
             'ExecuteWithException' => [new \Exception('TestMessage')],
         ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testExecuteWithSubscriptionUpdateException()
+    {
+        $exception = new SubscriptionUpdateException(__('TestMessage'));
+        $this->resultFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with(ResultFactory::TYPE_REDIRECT)
+            ->willReturn($this->redirectMock);
+        $this->reportUrlProviderMock
+            ->expects($this->once())
+            ->method('getUrl')
+            ->with()
+            ->willThrowException($exception);
+        $this->messageManagerMock
+            ->expects($this->once())
+            ->method('addNoticeMessage')
+            ->with($exception->getMessage())
+            ->willReturnSelf();
+        $this->redirectMock
+            ->expects($this->once())
+            ->method('setPath')
+            ->with('adminhtml')
+            ->willReturnSelf();
+        $this->assertSame($this->redirectMock, $this->showController->execute());
     }
 }

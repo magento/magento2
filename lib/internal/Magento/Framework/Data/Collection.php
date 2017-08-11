@@ -515,7 +515,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
 
     /**
      * Call method or callback on each item in the collection.
-     * 
+     *
      * @param string|array|\Closure $objMethod
      * @param array $args
      * @return void

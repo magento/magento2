@@ -24,8 +24,10 @@ abstract class AbstractStorage implements StorageInterface
      * @param UrlRewriteFactory $urlRewriteFactory
      * @param DataObjectHelper $dataObjectHelper
      */
-    public function __construct(UrlRewriteFactory $urlRewriteFactory, DataObjectHelper $dataObjectHelper)
-    {
+    public function __construct(
+        UrlRewriteFactory $urlRewriteFactory,
+        DataObjectHelper $dataObjectHelper
+    ) {
         $this->urlRewriteFactory = $urlRewriteFactory;
         $this->dataObjectHelper = $dataObjectHelper;
     }
@@ -50,7 +52,7 @@ abstract class AbstractStorage implements StorageInterface
      * @param array $data
      * @return array
      */
-    abstract protected function doFindAllByData($data);
+    abstract protected function doFindAllByData(array $data);
 
     /**
      * {@inheritdoc}
@@ -68,7 +70,7 @@ abstract class AbstractStorage implements StorageInterface
      * @param array $data
      * @return array
      */
-    abstract protected function doFindOneByData($data);
+    abstract protected function doFindOneByData(array $data);
 
     /**
      * {@inheritdoc}
@@ -76,26 +78,19 @@ abstract class AbstractStorage implements StorageInterface
     public function replace(array $urls)
     {
         if (!$urls) {
-            return;
+            return [];
         }
-
-        try {
-            $this->doReplace($urls);
-        } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
-            throw new \Magento\Framework\Exception\AlreadyExistsException(
-                __('URL key for specified store already exists.')
-            );
-        }
+        return $this->doReplace($urls);
     }
 
     /**
      * Save new url rewrites and remove old if exist. Template method
      *
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urls
-     * @return int
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
+     * @throws \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException|\Exception
      */
-    abstract protected function doReplace($urls);
+    abstract protected function doReplace(array $urls);
 
     /**
      * Create url rewrite object

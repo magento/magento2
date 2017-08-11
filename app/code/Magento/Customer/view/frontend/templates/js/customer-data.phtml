@@ -10,6 +10,8 @@
 <?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode([
         '*' => ['Magento_Customer/js/customer-data' => [
             'sectionLoadUrl' => $block->getCustomerDataUrl('customer/section/load'),
+            'expirableSectionLifetime' => $block->getExpirableSectionLifetime(),
+            'expirableSectionNames' => $block->getExpirableSectionNames(),
             'cookieLifeTime' => $block->getCookieLifeTime(),
             'updateSessionUrl' => $block->getCustomerDataUrl('customer/account/updateSession'),
         ]],

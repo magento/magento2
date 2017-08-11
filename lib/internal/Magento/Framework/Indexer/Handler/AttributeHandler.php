@@ -23,7 +23,6 @@ class AttributeHandler implements HandlerInterface
     public function prepareSql(SourceProviderInterface $source, $alias, $fieldInfo)
     {
         if (isset($fieldInfo['bind'])) {
-
             if (!method_exists($source, 'joinAttribute')) {
                 return;
             }
