@@ -12,6 +12,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Data abstract class for url storage
  * @api
+ * @since 100.0.2
  */
 class UrlRewrite extends AbstractSimpleObject
 {

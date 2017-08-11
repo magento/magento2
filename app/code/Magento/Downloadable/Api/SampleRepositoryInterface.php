@@ -10,6 +10,7 @@ use Magento\Downloadable\Api\Data\SampleInterface;
 /**
  * Interface SampleRepositoryInterface
  * @api
+ * @since 100.0.2
  */
 interface SampleRepositoryInterface
 {

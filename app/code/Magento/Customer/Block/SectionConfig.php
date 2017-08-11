@@ -7,6 +7,7 @@ namespace Magento\Customer\Block;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class SectionConfig extends \Magento\Framework\View\Element\Template
 {

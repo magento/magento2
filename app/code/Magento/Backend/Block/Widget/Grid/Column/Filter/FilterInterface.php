@@ -11,6 +11,7 @@ use Magento\Backend\Block\Widget\Grid\Column;
  * Grid column filter interface
  *
  * @api
+ * @since 100.0.2
  */
 interface FilterInterface
 {

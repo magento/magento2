@@ -57,7 +57,7 @@ class LoadOptions extends \Magento\Backend\App\Action
 
     /**
      * @return \Magento\Widget\Helper\Conditions
-     * @deprecated 100.2.0
+     * @deprecated 100.1.4
      */
     private function getConditionsHelper()
     {

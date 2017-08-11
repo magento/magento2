@@ -18,6 +18,7 @@ namespace Magento\Eav\Model\Entity\Setup;
  *
  * @api
  * @codeCoverageIgnore
+ * @since 100.0.2
  */
 class Context extends \Magento\Framework\Module\Setup\Context
 {

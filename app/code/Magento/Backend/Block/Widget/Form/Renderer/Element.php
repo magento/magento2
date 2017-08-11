@@ -14,6 +14,7 @@ use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
  *
  * @api
  * @deprecated 100.2.0 in favour of UI component implementation
+ * @since 100.0.2
  */
 class Element extends \Magento\Backend\Block\Template implements RendererInterface
 {

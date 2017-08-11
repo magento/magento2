@@ -478,7 +478,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $image
      * @return int
-     * @since 101.1.0
+     * @since 101.0.8
      */
     public function countImageUses($image)
     {

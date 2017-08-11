@@ -12,6 +12,7 @@ use \Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Collection
 {

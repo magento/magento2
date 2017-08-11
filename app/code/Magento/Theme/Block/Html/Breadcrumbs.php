@@ -12,6 +12,7 @@ use Magento\Framework\View\Element\Template;
  * Html page breadcrumbs block
  *
  * @api
+ * @since 100.0.2
  */
 class Breadcrumbs extends \Magento\Framework\View\Element\Template
 {

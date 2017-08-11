@@ -16,6 +16,7 @@ namespace Magento\Directory\Model\Country;
  * @method \Magento\Directory\Model\Country\Format setFormat(string $value)
  *
  * @api
+ * @since 100.0.2
  */
 class Format extends \Magento\Framework\Model\AbstractModel
 {

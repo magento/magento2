@@ -9,6 +9,7 @@ namespace Magento\Eav\Model\ResourceModel\Entity\Attribute\Group;
  * Eav attribute group resource collection
  *
  * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
