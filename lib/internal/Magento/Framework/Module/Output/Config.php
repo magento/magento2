@@ -18,31 +18,19 @@ class Config implements \Magento\Framework\Module\Output\ConfigInterface
 {
     /**
      * XPath in the configuration where module statuses are stored
-     * @deprecated 100.2.0 Magento does not support disabling/enabling modules output from the Admin Panel since 2.2.0
-     * version. Module output can still be enabled/disabled in configuration files. However, this functionality should
-     * not be used in future development. Module design should explicitly state dependencies to avoid requiring output
-     * disabling. This functionality will temporarily be kept in Magento core, as there are unresolved modularity
-     * issues that will be addressed in future releases.
+     * @deprecated 100.2.0
      */
     const XML_PATH_MODULE_OUTPUT_STATUS = 'advanced/modules_disable_output/%s';
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @deprecated 100.2.0 Magento does not support disabling/enabling modules output from the Admin Panel since 2.2.0
-     * version. Module output can still be enabled/disabled in configuration files. However, this functionality should
-     * not be used in future development. Module design should explicitly state dependencies to avoid requiring output
-     * disabling. This functionality will temporarily be kept in Magento core, as there are unresolved modularity
-     * issues that will be addressed in future releases.
+     * @deprecated 100.2.0
      */
     protected $_scopeConfig;
 
     /**
      * @var string
-     * @deprecated 100.2.0 Magento does not support disabling/enabling modules output from the Admin Panel since 2.2.0
-     * version. Module output can still be enabled/disabled in configuration files. However, this functionality should
-     * not be used in future development. Module design should explicitly state dependencies to avoid requiring output
-     * disabling. This functionality will temporarily be kept in Magento core, as there are unresolved modularity
-     * issues that will be addressed in future releases.
+     * @deprecated 100.2.0
      */
     protected $_storeType;
 
