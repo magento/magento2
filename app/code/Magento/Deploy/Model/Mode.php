@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\App\ObjectManager as ObjectManager;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * A class to manage Magento modes
@@ -105,6 +105,7 @@ class Mode
         $this->writer = $writer;
         $this->reader = $reader;
         $this->maintenanceMode = $maintenanceMode;
+        $this->filesystem = $filesystem;
 
         $this->configProvider =
             $configProvider ?: ObjectManager::getInstance()->get(ConfigProvider::class);
