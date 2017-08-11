@@ -64,8 +64,7 @@ class ClientResolver
      * @param array $clientFactories
      * @param array $clientOptions
      * @param string $path
-     * @param string scope
-     * @since 100.1.0
+     * @param string $scopeType
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
