@@ -38,7 +38,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
 
         $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
         $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
-        $scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class, [], [], '', false);
+        $scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $scopeConfig->expects($this->any())
             ->method('getValue')
