@@ -73,7 +73,7 @@ class CreateTest extends WebapiAbstract
         /** @var ResourceConnection $connection */
         $connection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
         $connection->getConnection()->delete('inventory_source', [
-            SourceInterface::NAME . ' IN (?)' => ['source-name'],
+            SourceInterface::NAME . ' IN (?)' => ['source-name-1'],
         ]);
         parent::tearDown();
     }

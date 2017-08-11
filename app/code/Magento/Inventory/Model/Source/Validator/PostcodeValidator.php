@@ -9,7 +9,7 @@ use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
- * Check that postcode is not empty
+ * Check that postcode is valid
  */
 class PostcodeValidator implements SourceValidatorInterface
 {

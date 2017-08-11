@@ -31,6 +31,7 @@ interface StockRepositoryInterface
      *
      * @param \Magento\InventoryApi\Api\Data\StockInterface $stock
      * @return int
+     * @throws \Magento\Framework\Validation\ValidationException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(StockInterface $stock);

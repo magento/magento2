@@ -18,28 +18,33 @@ $sourceRepository = Bootstrap::getObjectManager()->get(SourceRepositoryInterface
 
 $sourcesData = [
     [
+        // define only required and needed for tests fields
         SourceInterface::NAME => 'source-name-1',
         SourceInterface::ENABLED => true,
         SourceInterface::PRIORITY => 300,
         SourceInterface::POSTCODE => 'postcode',
+        SourceInterface::COUNTRY_ID => 'US',
     ],
     [
         SourceInterface::NAME => 'source-name-2',
         SourceInterface::ENABLED => true,
         SourceInterface::PRIORITY => 200,
         SourceInterface::POSTCODE => 'postcode',
+        SourceInterface::COUNTRY_ID => 'US',
     ],
     [
         SourceInterface::NAME => 'source-name-3',
         SourceInterface::ENABLED => false,
         SourceInterface::PRIORITY => 200,
         SourceInterface::POSTCODE => 'postcode',
+        SourceInterface::COUNTRY_ID => 'US',
     ],
     [
         SourceInterface::NAME => 'source-name-4',
         SourceInterface::ENABLED => false,
         SourceInterface::PRIORITY => 100,
         SourceInterface::POSTCODE => 'postcode',
+        SourceInterface::COUNTRY_ID => 'US',
     ],
 ];
 foreach ($sourcesData as $sourceData) {

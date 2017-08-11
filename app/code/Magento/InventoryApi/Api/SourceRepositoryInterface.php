@@ -34,6 +34,7 @@ interface SourceRepositoryInterface
      *
      * @param \Magento\InventoryApi\Api\Data\SourceInterface $source
      * @return int
+     * @throws \Magento\Framework\Validation\ValidationException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(SourceInterface $source);

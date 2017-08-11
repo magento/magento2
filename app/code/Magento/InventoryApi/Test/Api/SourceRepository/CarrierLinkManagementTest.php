@@ -31,6 +31,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
         $expectedData = [
             SourceInterface::NAME => 'source-name-1',
             SourceInterface::POSTCODE => 'source-postcode',
+            SourceInterface::COUNTRY_ID => 'US',
             SourceInterface::USE_DEFAULT_CARRIER_CONFIG => 0,
             SourceInterface::CARRIER_LINKS => $carrierLinks,
         ];
@@ -93,7 +94,6 @@ class CarrierLinkManagementTest extends WebapiAbstract
     }
 
     /**
-     * TODO: add validator
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source/source.php
      */
     public function testAssignCarrierLinksIfUseGlobalConfigurationChosen()
@@ -103,6 +103,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
         $expectedData = [
             SourceInterface::NAME => 'source-name-1',
             SourceInterface::POSTCODE => 'source-postcode',
+            SourceInterface::COUNTRY_ID => 'US',
             SourceInterface::USE_DEFAULT_CARRIER_CONFIG => 1,
             SourceInterface::CARRIER_LINKS => [
                 [
@@ -116,17 +117,33 @@ class CarrierLinkManagementTest extends WebapiAbstract
             ],
         ];
 
-        $this->saveSource($sourceId, $expectedData);
-        $sourceData = $this->getSourceDataById($sourceId);
+        $expectedErrorData = [
+            'message' => 'You can\'t configure "%1" because you have chosen Global Shipping configuration.',
+            'parameters' => [
+                1 => SourceInterface::CARRIER_LINKS
+            ],
+        ];
 
-        self::assertArrayHasKey(SourceInterface::USE_DEFAULT_CARRIER_CONFIG, $sourceData);
-        self::assertEquals(
-            $expectedData[SourceInterface::USE_DEFAULT_CARRIER_CONFIG],
-            $sourceData[SourceInterface::USE_DEFAULT_CARRIER_CONFIG]
-        );
-
-        self::assertArrayHasKey(SourceInterface::CARRIER_LINKS, $sourceData);
-        self::assertEquals($expectedData[SourceInterface::CARRIER_LINKS], $sourceData[SourceInterface::CARRIER_LINKS]);
+        try {
+            $this->saveSource($sourceId, $expectedData);
+            $this->fail('Expected throwing exception');
+        } catch (\Exception $e) {
+            if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
+                $errorData = $this->processRestExceptionResult($e);
+                self::assertEquals($expectedErrorData, $errorData);
+                self::assertEquals(Exception::HTTP_BAD_REQUEST, $e->getCode());
+            } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+                $this->assertInstanceOf('SoapFault', $e);
+                $this->checkSoapFault(
+                    $e,
+                    $expectedErrorData['message'],
+                    'env:Sender',
+                    $expectedErrorData['parameters']
+                );
+            } else {
+                throw $e;
+            }
+        }
     }
 
     /**

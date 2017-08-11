@@ -9,9 +9,9 @@ use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
- * Check that name is valid
+ * Check that carrier links is valid
  */
-class NameValidator implements SourceValidatorInterface
+class CarrierLinks implements SourceValidatorInterface
 {
     /**
      * @var ValidationResultFactory
@@ -31,12 +31,18 @@ class NameValidator implements SourceValidatorInterface
      */
     public function validate(SourceInterface $source)
     {
-        $value = (string)$source->getName();
+        $value = $source->getCarrierLinks();
 
-        if ('' === trim($value)) {
-            $errors[] = __('"%1" can not be empty.', SourceInterface::NAME);
-        } else {
-            $errors = [];
+        $errors = [];
+        if (null !== $value) {
+            if (!is_array($value)) {
+                $errors[] = __('"%1" must be list of SourceCarrierLinkInterface.', SourceInterface::CARRIER_LINKS);
+            } else if (count($value) && $source->isUseDefaultCarrierConfig()) {
+                $errors[] = __(
+                    'You can\'t configure "%1" because you have chosen Global Shipping configuration.',
+                    SourceInterface::CARRIER_LINKS
+                );
+            }
         }
         return $this->validationResultFactory->create(['errors' => $errors]);
     }

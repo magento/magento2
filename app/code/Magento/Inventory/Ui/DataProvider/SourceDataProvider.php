@@ -120,10 +120,13 @@ class SourceDataProvider extends DataProvider
     private function getAssignedCarrierCodes($sourceId)
     {
         $source = $this->sourceRepository->get($sourceId);
-
         $carrierCodes = [];
-        foreach ($source->getCarrierLinks() as $carrierLink) {
-            $carrierCodes[] = $carrierLink->getCarrierCode();
+
+        $carrierLinks = $source->getCarrierLinks();
+        if (count($carrierLinks)) {
+            foreach ($carrierLinks as $carrierLink) {
+                $carrierCodes[] = $carrierLink->getCarrierCode();
+            }
         }
         return $carrierCodes;
     }

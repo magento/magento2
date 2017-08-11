@@ -3,15 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Model\Stock\Validator;
+namespace Magento\Inventory\Model\Source\Validator;
 
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
- * Check that name is valid
+ * Check that country id is valid
  */
-class NameValidator implements StockValidatorInterface
+class CountryValidator implements SourceValidatorInterface
 {
     /**
      * @var ValidationResultFactory
@@ -29,12 +29,12 @@ class NameValidator implements StockValidatorInterface
     /**
      * @inheritdoc
      */
-    public function validate(StockInterface $stock)
+    public function validate(SourceInterface $source)
     {
-        $value = (string)$stock->getName();
+        $value = $source->getCountryId();
 
         if ('' === trim($value)) {
-            $errors[] = __('"%1" can not be empty.', StockInterface::NAME);
+            $errors[] = __('"%1" can not be empty.', SourceInterface::COUNTRY_ID);
         } else {
             $errors = [];
         }

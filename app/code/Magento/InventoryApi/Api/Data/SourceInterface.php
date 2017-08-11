@@ -102,9 +102,8 @@ interface SourceInterface extends ExtensibleDataInterface
     public function setContactName($contactName);
 
     /**
-     * Check if source is enabled
+     * Check if source is enabled. For new entity can be null
      *
-     * TODO:
      * @return bool|null
      */
     public function isEnabled();
@@ -165,14 +164,14 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Get source country id
      *
-     * @return string|null
+     * @return string
      */
     public function getCountryId();
 
     /**
      * Set source country id
      *
-     * @param string|null $countryId
+     * @param string $countryId
      * @return void
      */
     public function setCountryId($countryId);
@@ -298,26 +297,27 @@ interface SourceInterface extends ExtensibleDataInterface
     public function setPriority($priority);
 
     /**
-     * Check is need to use default config
+     * Check is need to use default config. For new entity can be null
      *
-     * @return bool
+     * @return bool|null
      */
     public function isUseDefaultCarrierConfig();
 
     /**
-     * @param bool $useDefaultCarrierConfig
+     * @param bool|null $useDefaultCarrierConfig
      * @return $this
      */
     public function setUseDefaultCarrierConfig($useDefaultCarrierConfig);
 
     /**
-     * TODO: add description
+     * For new entity can be null
+     *
      * @return \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface[]|null
      */
     public function getCarrierLinks();
 
     /**
-     * @param \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface[] $carrierLinks
+     * @param \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface[]|null $carrierLinks
      * @return void
      */
     public function setCarrierLinks(array $carrierLinks);

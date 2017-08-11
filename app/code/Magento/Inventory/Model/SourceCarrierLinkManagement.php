@@ -74,8 +74,9 @@ class SourceCarrierLinkManagement implements SourceCarrierLinkManagementInterfac
     public function saveCarrierLinksBySource(SourceInterface $source)
     {
         $this->deleteCurrentCarrierLinks($source);
-        // TODO: check only for null value
-        if (is_array($source->getCarrierLinks()) && !empty($source->getCarrierLinks())) {
+
+        $carrierLinks = $source->getCarrierLinks();
+        if (null !== $carrierLinks && count($carrierLinks)) {
             $this->saveNewCarrierLinks($source);
         }
     }

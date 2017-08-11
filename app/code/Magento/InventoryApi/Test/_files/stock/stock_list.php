@@ -18,6 +18,7 @@ $stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::
 
 $stocksData = [
     [
+        // define only required and needed for tests fields
         StockInterface::NAME => 'stock-name-1',
     ],
     [

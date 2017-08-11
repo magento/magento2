@@ -6,6 +6,7 @@
 namespace Magento\Inventory\Model\Source\Command;
 
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
@@ -25,6 +26,7 @@ interface SaveInterface
      *
      * @param SourceInterface $source
      * @return int
+     * @throws ValidationException
      * @throws CouldNotSaveException
      */
     public function execute(SourceInterface $source);

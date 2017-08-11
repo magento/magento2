@@ -24,9 +24,10 @@ class RegionProcessingTest extends WebapiAbstract
     {
         $regionId = 10;
         $data = [
-            SourceInterface::NAME => 'source-name',
-            SourceInterface::REGION_ID => $regionId,
+            SourceInterface::NAME => 'source-name-1',
             SourceInterface::POSTCODE => 'source-postcode',
+            SourceInterface::COUNTRY_ID => 'US',
+            SourceInterface::REGION_ID => $regionId,
         ];
 
         $sourceId = $this->saveSource($data);
@@ -41,9 +42,10 @@ class RegionProcessingTest extends WebapiAbstract
     {
         $regionName = 'custom-region-name';
         $data = [
-            SourceInterface::NAME => 'source-name',
-            SourceInterface::REGION => $regionName,
+            SourceInterface::NAME => 'source-name-1',
             SourceInterface::POSTCODE => 'source-postcode',
+            SourceInterface::COUNTRY_ID => 'US',
+            SourceInterface::REGION => $regionName,
         ];
 
         $sourceId = $this->saveSource($data);
@@ -59,10 +61,11 @@ class RegionProcessingTest extends WebapiAbstract
         $regionId = 10;
         $regionName = 'custom-region-name';
         $data = [
-            SourceInterface::NAME => 'source-name',
+            SourceInterface::NAME => 'source-name-1',
             SourceInterface::REGION_ID => $regionId,
-            SourceInterface::REGION => $regionName,
             SourceInterface::POSTCODE => 'source-postcode',
+            SourceInterface::COUNTRY_ID => 'US',
+            SourceInterface::REGION => $regionName,
         ];
 
         $sourceId = $this->saveSource($data);
@@ -80,7 +83,7 @@ class RegionProcessingTest extends WebapiAbstract
         /** @var ResourceConnection $connection */
         $connection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
         $connection->getConnection()->delete('inventory_source', [
-            SourceInterface::NAME . ' IN (?)' => ['source-name'],
+            SourceInterface::NAME . ' IN (?)' => ['source-name-1'],
         ]);
         parent::tearDown();
     }

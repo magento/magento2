@@ -6,6 +6,7 @@
 namespace Magento\Inventory\Model\Stock\Command;
 
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\StockInterface;
 
 /**
@@ -25,6 +26,7 @@ interface SaveInterface
      *
      * @param StockInterface $stock
      * @return int
+     * @throws ValidationException
      * @throws CouldNotSaveException
      */
     public function execute(StockInterface $stock);
