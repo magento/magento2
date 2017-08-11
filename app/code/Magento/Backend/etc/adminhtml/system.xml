@@ -20,7 +20,7 @@
         @deprecated Magento does not support custom disabling/enabling modules output since 2.2.0 version.
         Section 'Advanced' was disabled. This section will be removed from code in one release.
         -->
-        <section id="advanced" translate="label" type="text" sortOrder="910" showInDefault="1" showInWebsite="1" showInStore="1">
+        <section id="advanced" translate="label" type="text" sortOrder="910" showInDefault="0" showInWebsite="0" showInStore="0">
             <label>Advanced</label>
             <tab>advanced</tab>
             <resource>Magento_Backend::advanced</resource>
