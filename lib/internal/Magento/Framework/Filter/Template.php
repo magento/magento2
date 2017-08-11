@@ -205,9 +205,9 @@ class Template implements \Zend_Filter_Interface
      */
     private function isValidLoop($construction)
     {
-        if ((strlen(trim($construction['loopBody'])) == 0) &&
-            (strlen(trim($construction['loopItem'])) == 0) &&
-            (strlen(trim($construction['loopData'])) == 0)
+        if ((strlen(trim($construction['loopBody'])) != 0) &&
+            (strlen(trim($construction['loopItem'])) != 0) &&
+            (strlen(trim($construction['loopData'])) != 0)
         ) {
             return true;
         }
