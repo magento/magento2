@@ -186,25 +186,21 @@ EXPECTED_RESULT;
      */
     public function testLoopPattern($construction, $variables, $expectedResult)
     {
-
         $this->templateFilter->setVariables($variables);
         $this->assertEquals($expectedResult, $this->invokeMethod($this->templateFilter, 'filterFor', [$construction]));
     }
-
 
     /**
      * @return array
      */
     public function loopPatternDataProvider()
     {
-
         return [
             'no loop tag' => $this->getTemplateAndExpectedResults('noLoopTag'),
             'no loop body tag' => $this->getTemplateAndExpectedResults('noBodyTag'),
             'no item tag' =>  $this->getTemplateAndExpectedResults('noItemTag'),
             'no item, no body tags' => $this->getTemplateAndExpectedResults('noItemNoBodyTag'),
             'no item, no data, no body tags' => $this->getTemplateAndExpectedResults('noItemNoDataNoBodyTag'),
-
         ];
     }
 
@@ -232,7 +228,6 @@ EXPECTED_RESULT;
      */
     public function getTemplateAndExpectedResults($type)
     {
-
         switch ($type) {
             case 'noLoopTag':
                 $template = $expected = '';
@@ -306,7 +301,8 @@ TEMPLATE;
 <ul>
     {{for item in order.all_visible_items}}
     <li>
-        index: {{var loop.index}} sku: {{var item.sku}} name: {{var item.name}} price: {{var item.price}} quantity: {{var item.ordered_qty}}
+        index: {{var loop.index}} sku: {{var item.sku}}
+        name: {{var item.name}} price: {{var item.price}} quantity: {{var item.ordered_qty}}
     </li>
     {{/for}}
 </ul>
@@ -315,22 +311,19 @@ TEMPLATE;
 <ul>
     
     <li>
-        index: 0 sku: ABC123 name: Product ABC price: 123 quantity: 2
+        index: 0 sku: ABC123
+        name: Product ABC price: 123 quantity: 2
     </li>
     
     <li>
-        index: 1 sku: DOREMI name: Product DOREMI price: 456 quantity: 1
+        index: 1 sku: DOREMI
+        name: Product DOREMI price: 456 quantity: 1
     </li>
     
 </ul>
 TEMPLATE;
-
         }
-        return [
-            $template,
-            ['order' => $this->getObjectData()],
-            $expected
-        ];
+        return [$template, ['order' => $this->getObjectData()], $expected];
     }
 
     /**
@@ -339,7 +332,7 @@ TEMPLATE;
     private function getObjectData()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $dataObject = $objectManager->getObject('\Magento\Framework\DataObject');
+        $dataObject = $objectManager->getObject(\Magento\Framework\DataObject::class);
 
         /* $var @dataObject \Magento\Framework\DataObject */
 

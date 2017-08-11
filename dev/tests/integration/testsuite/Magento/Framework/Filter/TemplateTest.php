@@ -54,7 +54,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ['name' => 'Jane', 'age' => 12],
             ['name' => 'Spot', 'age' => 7],
         ];
-
     }
 
     /**
@@ -94,7 +93,8 @@ EXPECTED_RESULT;
 <ul>
     {{for item in order.all_visible_items}}
     <li>
-        index: {{var loop.index}} sku: {{var item.sku}} name: {{var item.name}} price: {{var item.price}} quantity: {{var item.ordered_qty}}
+        index: {{var loop.index}} sku: {{var item.sku}}
+        name: {{var item.name}} price: {{var item.price}} quantity: {{var item.ordered_qty}}
     </li>
     {{/for}}
 </ul>
@@ -104,7 +104,8 @@ TEMPLATE;
 <ul>
     
     <li>
-        index: 0 sku: ABC123 name: Product ABC price: 123 quantity: 2
+        index: 0 sku: ABC123
+        name: Product ABC price: 123 quantity: 2
     </li>
     
 </ul>
