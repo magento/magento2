@@ -176,7 +176,6 @@ class Template implements \Zend_Filter_Interface
     {
         if (preg_match_all(self::LOOP_PATTERN, $value, $constructions, PREG_SET_ORDER)) {
             foreach ($constructions as $construction) {
-
                 if (!$this->isValidLoop($construction)) {
                     return $value;
                 }
@@ -188,45 +187,7 @@ class Template implements \Zend_Filter_Interface
                 $loopItemVariableName = preg_replace('/\s+/', '', $construction['loopItem']);
 
                 if (is_array($loopData) || $loopData instanceof \Traversable) {
-
-                    $loopText = [];
-                    $loopIndex = 0;
-                    $loopDataObject = new \Magento\Framework\DataObject();
-
-                    foreach ($loopData as $loopItemDataObject) {
-                        // Loop item can be an array or DataObject.
-                        // If loop item is an array, convert it to DataObject
-                        // to have unified interface if the collection
-                        if (!$loopItemDataObject instanceof \Magento\Framework\DataObject) {
-                            if (!is_array($loopItemDataObject)) {
-                                continue;
-                            }
-                            $loopItemDataObject = new \Magento\Framework\DataObject($loopItemDataObject);
-                        }
-
-                        $loopDataObject->setData('index', $loopIndex++);
-                        $this->templateVars['loop'] = $loopDataObject;
-                        $this->templateVars[$loopItemVariableName] = $loopItemDataObject;
-
-                        if (preg_match_all(
-                                self::CONSTRUCTION_PATTERN,
-                                $loopTextToReplace,
-                                $attributes,
-                                PREG_SET_ORDER
-                            )
-                        ) {
-
-                            $subText = $loopTextToReplace;
-                            foreach ($attributes as $attribute) {
-                                $text = $this->getVariable($attribute[2], '');
-                                $subText = str_replace($attribute[0], $text, $subText);
-                            }
-                            $loopText[] = $subText;
-                        }
-                        unset($this->templateVars[$loopItemVariableName]);
-
-                    }
-                    $replaceText = implode('', $loopText);
+                    $replaceText = $this->getLoopReplacementText($loopData, $loopItemVariableName, $loopTextToReplace);
                     $value = str_replace($fullTextToReplace, $replaceText, $value);
                 }
             }
@@ -473,5 +434,54 @@ class Template implements \Zend_Filter_Interface
             }
         }
         return $stack;
+    }
+
+    /**
+     * Process loop text to replace.
+     *
+     * @param array $loopData
+     * @param string $loopItemVariableName
+     * @param string $loopTextToReplace
+     * @return string
+     */
+    private function getLoopReplacementText(array $loopData, $loopItemVariableName, $loopTextToReplace)
+    {
+        $loopText = [];
+        $loopIndex = 0;
+        $loopDataObject = new \Magento\Framework\DataObject();
+
+        foreach ($loopData as $loopItemDataObject) {
+            // Loop item can be an array or DataObject.
+            // If loop item is an array, convert it to DataObject
+            // to have unified interface if the collection
+            if (!$loopItemDataObject instanceof \Magento\Framework\DataObject) {
+                if (!is_array($loopItemDataObject)) {
+                    continue;
+                }
+                $loopItemDataObject = new \Magento\Framework\DataObject($loopItemDataObject);
+            }
+
+            $loopDataObject->setData('index', $loopIndex++);
+            $this->templateVars['loop'] = $loopDataObject;
+            $this->templateVars[$loopItemVariableName] = $loopItemDataObject;
+
+            if (preg_match_all(
+                self::CONSTRUCTION_PATTERN,
+                $loopTextToReplace,
+                $attributes,
+                PREG_SET_ORDER
+            )
+            ) {
+                $subText = $loopTextToReplace;
+                foreach ($attributes as $attribute) {
+                    $text = $this->getVariable($attribute[2], '');
+                    $subText = str_replace($attribute[0], $text, $subText);
+                }
+                $loopText[] = $subText;
+            }
+            unset($this->templateVars[$loopItemVariableName]);
+        }
+        $replaceText = implode('', $loopText);
+        return $replaceText;
     }
 }
