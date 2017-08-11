@@ -95,7 +95,7 @@ class Mode
         Writer $writer,
         Reader $reader,
         MaintenanceMode $maintenanceMode,
-        Filesystem $filesystem = null,
+        Filesystem $filesystem,
         ConfigProvider $configProvider = null,
         ProcessorFacadeFactory $processorFacadeFactory = null,
         EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor = null
@@ -106,8 +106,6 @@ class Mode
         $this->reader = $reader;
         $this->maintenanceMode = $maintenanceMode;
 
-        $this->filesystem =
-            $filesystem ?: ObjectManager::getInstance()->get(Filesystem::class);
         $this->configProvider =
             $configProvider ?: ObjectManager::getInstance()->get(ConfigProvider::class);
         $this->processorFacadeFactory =
