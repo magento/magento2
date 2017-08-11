@@ -79,16 +79,6 @@ class Action extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Retrieve resource instance wrapper
-     *
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Action
-     */
-    protected function _getResource()
-    {
-        return parent::_getResource();
-    }
-
-    /**
      * Update attribute values for entity list per store
      *
      * @param array $productIds
