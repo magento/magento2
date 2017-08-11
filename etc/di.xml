@@ -21,12 +21,10 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\MessageQueue\BatchConsumer">
+    <type name="Magento\Framework\MessageQueue\MessageProcessorLoader">
         <arguments>
-            <argument name="messageProcessors" xsi:type="array">
-                <item name="merged" xsi:type="object">Magento\Framework\MessageQueue\MergedMessageProcessor</item>
-                <item name="default" xsi:type="object">Magento\Framework\MessageQueue\MessageProcessor</item>
-            </argument>
+            <argument name="mergedMessageProcessor" xsi:type="object">Magento\Framework\MessageQueue\MergedMessageProcessor</argument>
+            <argument name="defaultMessageProcessor" xsi:type="object">Magento\Framework\MessageQueue\MessageProcessor</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\MaintenanceMode">
