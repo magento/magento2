@@ -32,7 +32,6 @@ class CaseInfo extends Template
      * @param Context $context
      * @param CaseManagement $caseManagement
      * @param array $data
-     * @since 100.2.0
      */
     public function __construct(
         Context $context,

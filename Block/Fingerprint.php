@@ -50,7 +50,6 @@ class Fingerprint extends Template
      * @param SignifydOrderSessionId $signifydOrderSessionId
      * @param QuoteSessionInterface $quoteSession
      * @param array $data
-     * @since 100.2.0
      */
     public function __construct(
         Context $context,
