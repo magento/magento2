@@ -47,9 +47,9 @@ class BatchConsumer implements ConsumerInterface
     private $batchSize;
 
     /**
-     * @var array
+     * @var MessageProcessorLoader
      */
-    private $messageProcessors;
+    private $messageProcessorLoader;
 
     /**
      * @var Resource
@@ -69,33 +69,6 @@ class BatchConsumer implements ConsumerInterface
     private $consumerConfig;
 
     /**
-     * @var string
-     */
-    private $mergedMessageProcessorKey = 'merged';
-
-    /**
-     * @var string
-     */
-    private $defaultMessageProcessorKey = 'default';
-
-    /**
-     * This getter serves as a workaround to add this dependency to this class without breaking constructor structure.
-     *
-     * @return MessageController
-     *
-     * @deprecated 2.1.0
-     * @since 2.1.0
-     */
-    private function getMessageController()
-    {
-        if ($this->messageController === null) {
-            $this->messageController = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\MessageQueue\MessageController::class);
-        }
-        return $this->messageController;
-    }
-
-    /**
      * @param ConfigInterface $messageQueueConfig
      * @param MessageEncoder $messageEncoder
      * @param QueueRepository $queueRepository
@@ -104,7 +77,7 @@ class BatchConsumer implements ConsumerInterface
      * @param ConsumerConfigurationInterface $configuration
      * @param int $interval [optional]
      * @param int $batchSize [optional]
-     * @param array $messageProcessors [optional]
+     * @param MessageProcessorLoader $messageProcessorLoader [optional]
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -117,7 +90,7 @@ class BatchConsumer implements ConsumerInterface
         ConsumerConfigurationInterface $configuration,
         $interval = 5,
         $batchSize = 0,
-        array $messageProcessors = []
+        MessageProcessorLoader $messageProcessorLoader = null
     ) {
         $this->messageEncoder = $messageEncoder;
         $this->queueRepository = $queueRepository;
@@ -126,7 +99,7 @@ class BatchConsumer implements ConsumerInterface
         $this->batchSize = $batchSize;
         $this->resource = $resource;
         $this->configuration = $configuration;
-        $this->messageProcessors = $messageProcessors;
+        $this->messageProcessorLoader = $messageProcessorLoader;
     }
 
     /**
@@ -263,16 +236,7 @@ class BatchConsumer implements ConsumerInterface
             list($messages, $messagesToAcknowledge) = $this->lockMessages($messages);
             $decodedMessages = $this->decodeMessages($messages);
             $mergedMessages = $merger->merge($decodedMessages);
-
-            /**
-             * @var \Magento\Framework\MessageQueue\MessageProcessorInterface $messageProcessor
-             */
-            if ($this->getMergedMessage($mergedMessages) instanceof MergedMessageInterface) {
-                $messageProcessor = $this->messageProcessors[$this->mergedMessageProcessorKey];
-            } else {
-                $messageProcessor = $this->messageProcessors[$this->defaultMessageProcessorKey];
-            }
-
+            $messageProcessor = $this->getMessageLoader()->load($mergedMessages);
             $messageProcessor->process(
                 $queue,
                 $this->configuration,
@@ -306,28 +270,9 @@ class BatchConsumer implements ConsumerInterface
     }
 
     /**
-     * Get first merged message from the list of merged messages.
-     *
-     * @param array $mergedMessages
-     * @return object|null
-     */
-    private function getMergedMessage(array $mergedMessages)
-    {
-        $mergedMessage = null;
-
-        if ($mergedMessages) {
-            $topicMessages = array_shift($mergedMessages);
-
-            if ($topicMessages) {
-                $mergedMessage = array_shift($topicMessages);
-            }
-        }
-
-        return $mergedMessage;
-    }
-
-    /**
      * Get consumer config.
+     *
+     * This getter serves as a workaround to add this dependency to this class without breaking constructor structure
      *
      * @return ConsumerConfig
      *
@@ -340,5 +285,40 @@ class BatchConsumer implements ConsumerInterface
             $this->consumerConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(ConsumerConfig::class);
         }
         return $this->consumerConfig;
+    }
+
+    /**
+     * Get message controller.
+     *
+     * This getter serves as a workaround to add this dependency to this class without breaking constructor structure
+     *
+     * @return MessageController
+     *
+     * @deprecated 2.1.0
+     * @since 2.1.0
+     */
+    private function getMessageController()
+    {
+        if ($this->messageController === null) {
+            $this->messageController = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\MessageQueue\MessageController::class);
+        }
+        return $this->messageController;
+    }
+
+    /**
+     * Get message loader.
+     *
+     * This getter serves as a workaround to add this dependency to this class without breaking constructor structure
+     *
+     * @return MessageProcessorLoader
+     */
+    private function getMessageLoader()
+    {
+        if ($this->messageProcessorLoader === null) {
+            $this->messageProcessorLoader = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\MessageQueue\MessageProcessorLoader::class);
+        }
+        return $this->messageProcessorLoader;
     }
 }

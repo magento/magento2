@@ -72,7 +72,7 @@ class MergedMessageProcessor implements MessageProcessorInterface
             }
         } catch (\Exception $e) {
             $originalMessages = $this->getOriginalMessages($originalMessages, $originalMessagesIds);
-            $this->messageStatusProcessor->acknowledgeMessages($queue, $originalMessages);
+            $this->messageStatusProcessor->rejectMessages($queue, $originalMessages);
         }
     }
 

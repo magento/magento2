@@ -59,6 +59,11 @@ class BatchConsumerTest extends \PHPUnit\Framework\TestCase
     private $batchSize = 10;
 
     /**
+     * @var \Magento\Framework\MessageQueue\MessageProcessorLoader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $messageProcessorLoader;
+
+    /**
      * Set up.
      *
      * @return void
@@ -77,6 +82,10 @@ class BatchConsumerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()->getMock();
+        $this->messageProcessorLoader = $this
+            ->getMockBuilder(\Magento\Framework\MessageQueue\MessageProcessorLoader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->batchConsumer = $objectManager->getObject(
@@ -88,6 +97,7 @@ class BatchConsumerTest extends \PHPUnit\Framework\TestCase
                 'mergerFactory' => $this->mergerFactory,
                 'resource' => $this->resource,
                 'batchSize' => $this->batchSize,
+                'messageProcessorLoader' => $this->messageProcessorLoader
             ]
         );
 
@@ -108,7 +118,7 @@ class BatchConsumerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test for process method.
+     * Test for process().
      *
      * @return void
      */
@@ -139,34 +149,30 @@ class BatchConsumerTest extends \PHPUnit\Framework\TestCase
         $envelope = $this->getMockBuilder(\Magento\Framework\MessageQueue\EnvelopeInterface::class)
             ->disableOriginalConstructor()->getMock();
         $queue->expects($this->exactly($numberOfMessages))->method('dequeue')->willReturn($envelope);
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->resource->expects($this->atLeastOnce())->method('getConnection')->willReturn($connection);
-        $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
         $this->messageController->expects($this->exactly($numberOfMessages))
             ->method('lock')->with($envelope, $consumerName);
-        $queue->expects($this->exactly($numberOfMessages))
-            ->method('acknowledge')->with($envelope)->willReturn($envelope);
         $envelope->expects($this->exactly($numberOfMessages))
             ->method('getProperties')->willReturn(['topic_name' => $topicName]);
         $envelope->expects($this->exactly($numberOfMessages))
             ->method('getBody')->willReturn($messageBody);
         $this->messageEncoder->expects($this->exactly($numberOfMessages))
             ->method('decode')->with($topicName, $messageBody)->willReturn($message);
+        $messageProcessor = $this->getMockBuilder(\Magento\Framework\MessageQueue\MessageProcessorInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->messageProcessorLoader->expects($this->atLeastOnce())->method('load')->willReturn($messageProcessor);
         $merger->expects($this->once())->method('merge')
             ->with([$topicName => [$message, $message]])->willReturnArgument(0);
-        $this->configuration->expects($this->exactly($numberOfMessages))->method('getHandlers')->with($topicName)
-            ->willReturn([]);
-        $connection->expects($this->once())->method('commit')->willReturnSelf();
+
         $this->batchConsumer->process($numberOfMessages);
     }
 
     /**
-     * Test for process method with ConnectionLostException.
+     * Test for process() with MessageLockException.
      *
      * @return void
      */
-    public function testProcessWithConnectionLostException()
+    public function testProcessWithMessageLockException()
     {
         $queueName = 'queue.name';
         $consumerName = 'consumerName';
@@ -190,53 +196,15 @@ class BatchConsumerTest extends \PHPUnit\Framework\TestCase
         $envelope = $this->getMockBuilder(\Magento\Framework\MessageQueue\EnvelopeInterface::class)
             ->disableOriginalConstructor()->getMock();
         $queue->expects($this->exactly($numberOfMessages))->method('dequeue')->willReturn($envelope);
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->resource->expects($this->atLeastOnce())->method('getConnection')->willReturn($connection);
-        $connection->expects($this->once())->method('beginTransaction')->willThrowException(
-            new \Magento\Framework\MessageQueue\ConnectionLostException()
-        );
-        $connection->expects($this->once())->method('rollback')->willReturnSelf();
-        $this->batchConsumer->process($numberOfMessages);
-    }
+        $exception = new \Magento\Framework\MessageQueue\MessageLockException(__('Exception Message'));
+        $this->messageController->expects($this->atLeastOnce())
+            ->method('lock')->with($envelope, $consumerName)->willThrowException($exception);
+        $messageProcessor = $this->getMockBuilder(\Magento\Framework\MessageQueue\MessageProcessorInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->messageProcessorLoader->expects($this->atLeastOnce())->method('load')->willReturn($messageProcessor);
+        $merger->expects($this->once())->method('merge')->willReturn([]);
 
-    /**
-     * Test for process method with exception.
-     *
-     * @return void
-     */
-    public function testProcessWithException()
-    {
-        $queueName = 'queue.name';
-        $consumerName = 'consumerName';
-        $connectionName = 'connection_name';
-        $numberOfMessages = 2;
-        $this->configuration->expects($this->once())->method('getQueueName')->willReturn($queueName);
-        $this->configuration->expects($this->atLeastOnce())->method('getConsumerName')->willReturn($consumerName);
-        $consumerConfigItem = $this
-            ->getMockBuilder(\Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->consumerConfig->expects($this->once())
-            ->method('getConsumer')->with($consumerName)->willReturn($consumerConfigItem);
-        $consumerConfigItem->expects($this->once())->method('getConnection')->willReturn($connectionName);
-        $queue = $this->getMockBuilder(\Magento\Framework\MessageQueue\QueueInterface::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->queueRepository->expects($this->once())
-            ->method('get')->with($connectionName, $queueName)->willReturn($queue);
-        $merger = $this->getMockBuilder(\Magento\Framework\MessageQueue\MergerInterface::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->mergerFactory->expects($this->once())->method('create')->with($consumerName)->willReturn($merger);
-        $envelope = $this->getMockBuilder(\Magento\Framework\MessageQueue\EnvelopeInterface::class)
-            ->disableOriginalConstructor()->getMock();
-        $queue->expects($this->exactly($numberOfMessages))->method('dequeue')->willReturn($envelope);
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->resource->expects($this->atLeastOnce())->method('getConnection')->willReturn($connection);
-        $connection->expects($this->once())->method('beginTransaction')->willThrowException(
-            new \Exception()
-        );
-        $connection->expects($this->once())->method('rollback')->willReturnSelf();
-        $queue->expects($this->exactly($numberOfMessages))->method('reject');
         $this->batchConsumer->process($numberOfMessages);
     }
 }
