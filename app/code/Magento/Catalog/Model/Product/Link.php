@@ -12,8 +12,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection as Produ
  * Catalog product link model
  *
  * @api
- * @method \Magento\Catalog\Model\ResourceModel\Product\Link _getResource()
- * @method \Magento\Catalog\Model\ResourceModel\Product\Link getResource()
  * @method int getProductId()
  * @method \Magento\Catalog\Model\Product\Link setProductId(int $value)
  * @method int getLinkedProductId()

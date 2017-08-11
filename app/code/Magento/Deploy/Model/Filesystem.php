@@ -147,7 +147,8 @@ class Filesystem
                 DirectoryList::CACHE,
                 DirectoryList::GENERATED_CODE,
                 DirectoryList::GENERATED_METADATA,
-                DirectoryList::TMP_MATERIALIZATION_DIR
+                DirectoryList::TMP_MATERIALIZATION_DIR,
+                DirectoryList::STATIC_VIEW
             ]
         );
         

@@ -16,8 +16,6 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  * Catalog attribute model
  *
  * @api
- * @method \Magento\Catalog\Model\ResourceModel\Attribute _getResource()
- * @method \Magento\Catalog\Model\ResourceModel\Attribute getResource()
  * @method \Magento\Catalog\Model\ResourceModel\Eav\Attribute getFrontendInputRenderer()
  * @method string setFrontendInputRenderer(string $value)
  * @method int setIsGlobal(int $value)
