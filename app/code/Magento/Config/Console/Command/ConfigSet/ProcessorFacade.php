@@ -73,7 +73,6 @@ class ProcessorFacade
      * @param ConfigSetProcessorFactory $configSetProcessorFactory The factory for config:set processors
      * @param Hash $hash The hash manager
      * @param ScopeConfigInterface $scopeConfig The application config storage
-     * @since 100.2.0
      */
     public function __construct(
         ValidatorInterface $scopeValidator,

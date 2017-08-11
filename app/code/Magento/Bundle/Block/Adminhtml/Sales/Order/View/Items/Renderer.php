@@ -32,7 +32,6 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
-     * @since 100.2.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,

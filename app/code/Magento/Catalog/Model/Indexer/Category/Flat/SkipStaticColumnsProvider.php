@@ -22,7 +22,6 @@ class SkipStaticColumnsProvider
     /**
      * SkipStaticColumnsProvider constructor.
      * @param array $skipStaticColumns
-     * @since 101.0.0
      */
     public function __construct($skipStaticColumns = [])
     {

@@ -26,7 +26,6 @@ class MenuBuilder
      * MenuBuilder constructor.
      *
      * @param DocRootLocator $docRootLocator
-     * @since 100.1.0
      */
     public function __construct(DocRootLocator $docRootLocator)
     {

@@ -25,7 +25,6 @@ class GeneratorResolver
     /**
      * @param GeneratorInterface $defaultGenerator
      * @param GeneratorInterface[] $generators
-     * @since 100.1.6
      */
     public function __construct(GeneratorInterface $defaultGenerator, array $generators)
     {

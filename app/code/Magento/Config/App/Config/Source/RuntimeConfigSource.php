@@ -39,7 +39,6 @@ class RuntimeConfigSource implements ConfigSourceInterface
      * @param CollectionFactory $collectionFactory
      * @param ScopeCodeResolver $scopeCodeResolver
      * @param Converter $converter
-     * @since 100.1.2
      */
     public function __construct(
         CollectionFactory $collectionFactory,

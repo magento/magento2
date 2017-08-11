@@ -38,7 +38,6 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param MetadataPool $metadataPool
      * @param EntityManager $entityManager
      * @param string $connectionName
-     * @since 100.1.0
      */
     public function __construct(
         Context $context,

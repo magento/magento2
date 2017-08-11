@@ -24,7 +24,6 @@ class AddToWishlist extends \Magento\Framework\View\Element\Template
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param array $data
-     * @since 100.1.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,

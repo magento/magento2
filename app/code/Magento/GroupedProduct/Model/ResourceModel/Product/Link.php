@@ -29,7 +29,6 @@ class Link extends \Magento\Catalog\Model\ResourceModel\Product\Link
      * @param Relation $catalogProductRelation
      * @param MetadataPool $metadataPool
      * @param string|null $connectionName
-     * @since 100.1.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,

@@ -111,7 +111,6 @@ class IndexIterator implements \Iterator
      * @param array $statusIds
      *
      * @SuppressWarnings(Magento.TypeDuplication)
-     * @since 100.0.3
      */
     public function __construct(
         DataProvider $dataProvider,

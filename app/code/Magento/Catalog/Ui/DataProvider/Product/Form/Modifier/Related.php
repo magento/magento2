@@ -119,7 +119,6 @@ class Related extends AbstractModifier
      * @param AttributeSetRepositoryInterface $attributeSetRepository
      * @param string $scopeName
      * @param string $scopePrefix
-     * @since 101.0.0
      */
     public function __construct(
         LocatorInterface $locator,

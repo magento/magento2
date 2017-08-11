@@ -49,7 +49,6 @@ class UrlRewrite extends AbstractSimpleObject
      *
      * @param array $data
      * @param Json $serializer
-     * @since 100.2.0
      */
     public function __construct(
         $data = [],
