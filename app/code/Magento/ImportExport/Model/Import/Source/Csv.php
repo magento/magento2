@@ -7,6 +7,8 @@ namespace Magento\ImportExport\Model\Import\Source;
 
 /**
  * CSV import adapter
+ *
+ * @deprecated
  */
 class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
 {

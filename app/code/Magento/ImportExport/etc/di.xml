@@ -10,6 +10,8 @@
     <preference for="Magento\ImportExport\Model\Export\ConfigInterface" type="Magento\ImportExport\Model\Export\Config" />
     <preference for="Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface" type="Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator" />
     <preference for="Magento\ImportExport\Model\Report\ReportProcessorInterface" type="Magento\ImportExport\Model\Report\Csv" />
+    <preference for="Magento\ImportExport\Model\Import\Source\FileParser\ParserFactoryInterface" type="Magento\ImportExport\Model\Import\Source\FileParser\CompositeParserFactory" />
+
     <type name="Magento\Framework\Module\Setup\Migration">
         <arguments>
             <argument name="compositeModules" xsi:type="array">
@@ -17,4 +19,15 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\ImportExport\Model\Import\Source\FileParser\CompositeParserFactory">
+        <arguments>
+            <argument name="parserFactories" xsi:type="array">
+                <item name="csv" xsi:type="object">Magento\ImportExport\Model\Import\Source\FileParser\CsvParserFactory</item>
+                <!-- Because zip instance depends on composite, we have to make it a proxy -->
+                <item name="zip" xsi:type="object">Magento\ImportExport\Model\Import\Source\FileParser\ZipParserFactory\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
+
 </config>

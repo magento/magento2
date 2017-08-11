@@ -46,7 +46,7 @@ class Validate extends ImportResultController
                     $import->uploadSource(),
                     $this->_objectManager->create(\Magento\Framework\Filesystem::class)
                         ->getDirectoryWrite(DirectoryList::ROOT),
-                    $data[$import::FIELD_FIELD_SEPARATOR]
+                    $this->getSourceAdapterOptions($data)
                 );
                 $this->processValidationResult($import->validateSource($source), $resultBlock);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -118,6 +118,19 @@ class Validate extends ImportResultController
             $this->import = $this->_objectManager->get(Import::class);
         }
         return $this->import;
+    }
+
+    /**
+     * Returns options for source adapter
+     *
+     * @param $data
+     * @return array
+     */
+    protected function getSourceAdapterOptions($data)
+    {
+        return [
+            'delimiter' => $data[Import::FIELD_FIELD_SEPARATOR] ?: ','
+        ];
     }
 
     /**

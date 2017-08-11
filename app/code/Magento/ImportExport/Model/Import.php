@@ -267,7 +267,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         return \Magento\ImportExport\Model\Import\Adapter::findAdapterFor(
             $sourceFile,
             $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT),
-            $this->getData(self::FIELD_FIELD_SEPARATOR)
+            $this->getSourceAdapterOptions()
         );
     }
 
@@ -767,5 +767,17 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     public function getDeletedItemsCount()
     {
         return $this->_getEntityAdapter()->getDeletedItemsCount();
+    }
+
+    /**
+     * Returns options for source adapter
+     *
+     * @return array
+     */
+    protected function getSourceAdapterOptions()
+    {
+        return [
+            'delimiter' => $this->getData(self::FIELD_FIELD_SEPARATOR) ?: ','
+        ];
     }
 }
