@@ -8,6 +8,7 @@
         "magento/module-backend": "100.2.*",
         "magento/module-shipping": "100.2.*",
         "magento/module-catalog": "101.1.*",
+        "magento/module-sales": "100.2.*",
         "magento/module-sales-rule": "100.2.*",
         "magento/module-directory": "100.2.*",
         "magento/module-quote": "100.2.*",
@@ -15,7 +16,6 @@
     },
     "suggest": {
         "magento/module-checkout": "100.2.*",
-        "magento/module-sales": "100.2.*",
         "magento/module-offline-shipping-sample-data": "Sample Data version:100.2.*"
     },
     "type": "magento2-module",
