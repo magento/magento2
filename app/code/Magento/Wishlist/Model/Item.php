@@ -18,7 +18,6 @@ use Magento\Catalog\Model\Product\Exception as ProductException;
 /**
  * Wishlist item model
  *
- * @method \Magento\Wishlist\Model\ResourceModel\Item getResource()
  * @method int getWishlistId()
  * @method \Magento\Wishlist\Model\Item setWishlistId(int $value)
  * @method int getProductId()
@@ -124,7 +123,6 @@ class Item extends AbstractModel implements ItemInterface
      * Serializer interface instance.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -191,16 +189,6 @@ class Item extends AbstractModel implements ItemInterface
     {
         $this->setData('qty', $qty >= 0 ? $qty : 1);
         return $this;
-    }
-
-    /**
-     * Retrieve resource instance wrapper
-     *
-     * @return \Magento\Wishlist\Model\ResourceModel\Item
-     */
-    protected function _getResource()
-    {
-        return parent::_getResource();
     }
 
     /**

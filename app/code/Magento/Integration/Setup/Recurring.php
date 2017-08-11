@@ -15,19 +15,16 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 /**
  * Class Recurring
  *
- * @since 2.1.0
  */
 class Recurring implements InstallSchemaInterface
 {
     /**
      * @var ConfigBasedIntegrationManager
-     * @since 2.1.0
      */
     private $integrationManager;
 
     /**
      * @var ConsolidatedConfig
-     * @since 2.1.0
      */
     private $integrationConfig;
 
@@ -36,7 +33,6 @@ class Recurring implements InstallSchemaInterface
      *
      * @param ConfigBasedIntegrationManager $integrationManager
      * @param ConsolidatedConfig $integrationConfig
-     * @since 2.1.0
      */
     public function __construct(
         ConfigBasedIntegrationManager $integrationManager,
@@ -48,7 +44,6 @@ class Recurring implements InstallSchemaInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {

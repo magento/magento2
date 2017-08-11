@@ -44,7 +44,6 @@ class Filter
 
     /**
      * @var DataProviderInterface
-     * @since 2.2.0
      */
     private $dataProvider;
 
@@ -199,7 +198,6 @@ class Filter
      * Get data provider
      *
      * @return DataProviderInterface
-     * @since 2.2.0
      */
     private function getDataProvider()
     {
@@ -215,7 +213,6 @@ class Filter
      * Get filter ids as array
      *
      * @return int[]
-     * @since 2.2.0
      */
     private function getFilterIds()
     {

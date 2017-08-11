@@ -13,7 +13,7 @@ use Magento\Sales\Api\Data\OrderInterface;
  * Can be used as extension point.
  *
  * @api
- * @since 2.1.3
+ * @since 100.1.3
  */
 interface RefundAdapterInterface
 {
@@ -22,7 +22,7 @@ interface RefundAdapterInterface
      * @param OrderInterface $order
      * @param bool $isOnline
      * @return OrderInterface
-     * @since 2.1.3
+     * @since 100.1.3
      */
     public function refund(
         CreditmemoInterface $creditmemo,

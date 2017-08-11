@@ -11,7 +11,7 @@ use Magento\Eav\Api\AttributeSetRepositoryInterface;
 
 /**
  * @api
- * @since 2.1.0
+ * @since 101.0.0
  */
 class AttributeSetText extends \Magento\Ui\Component\Listing\Columns\Column
 {
@@ -22,7 +22,7 @@ class AttributeSetText extends \Magento\Ui\Component\Listing\Columns\Column
 
     /**
      * @var AttributeSetRepositoryInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $attributeSetRepository;
 
@@ -32,7 +32,7 @@ class AttributeSetText extends \Magento\Ui\Component\Listing\Columns\Column
      * @param AttributeSetRepositoryInterface $attributeSetRepository
      * @param array $components
      * @param array $data
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -51,7 +51,7 @@ class AttributeSetText extends \Magento\Ui\Component\Listing\Columns\Column
      *
      * @param array $dataSource
      * @return array
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -77,7 +77,7 @@ class AttributeSetText extends \Magento\Ui\Component\Listing\Columns\Column
      *
      * @param int $attributeSetId
      * @return string
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected function renderColumnText($attributeSetId)
     {

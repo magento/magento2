@@ -13,43 +13,36 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Document
- * @since 2.1.0
  */
 class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\Document
 {
     /**
      * @var string
-     * @since 2.1.0
      */
     private static $genderAttributeCode = 'gender';
 
     /**
      * @var string
-     * @since 2.1.0
      */
     private static $groupAttributeCode = 'group_id';
 
     /**
      * @var string
-     * @since 2.1.0
      */
     private static $websiteAttributeCode = 'website_id';
 
     /**
      * @var CustomerMetadataInterface
-     * @since 2.1.0
      */
     private $customerMetadata;
 
     /**
      * @var GroupRepositoryInterface
-     * @since 2.1.0
      */
     private $groupRepository;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.1.0
      */
     private $storeManager;
 
@@ -59,7 +52,6 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
      * @param GroupRepositoryInterface $groupRepository
      * @param CustomerMetadataInterface $customerMetadata
      * @param StoreManagerInterface $storeManager
-     * @since 2.1.0
      */
     public function __construct(
         AttributeValueFactory $attributeValueFactory,
@@ -75,7 +67,6 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function getCustomAttribute($attributeCode)
     {
@@ -97,7 +88,6 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
      * Update customer gender value
      * Method set gender label instead of id value
      * @return void
-     * @since 2.1.0
      */
     private function setGenderValue()
     {
@@ -121,7 +111,6 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
      * Update customer group value
      * Method set group code instead id value
      * @return void
-     * @since 2.1.0
      */
     private function setCustomerGroupValue()
     {
@@ -138,7 +127,6 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
      * Update website value
      * Method set website name instead id value
      * @return void
-     * @since 2.1.0
      */
     private function setWebsiteValue()
     {

@@ -13,7 +13,6 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
  * Class AfterEntityLoad
- * @since 2.1.0
  */
 class AfterEntityLoad implements ObserverInterface
 {
@@ -23,7 +22,6 @@ class AfterEntityLoad implements ObserverInterface
      * @param Observer $observer
      * @throws \Magento\Framework\Validator\Exception
      * @return void
-     * @since 2.1.0
      */
     public function execute(Observer $observer)
     {

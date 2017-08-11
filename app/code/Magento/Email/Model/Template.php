@@ -10,8 +10,6 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Template model
  *
- * @method \Magento\Email\Model\ResourceModel\Template _getResource()
- * @method \Magento\Email\Model\ResourceModel\Template getResource()
  * @method string getTemplateCode()
  * @method \Magento\Email\Model\Template setTemplateCode(string $value)
  * @method string getTemplateText()
@@ -95,7 +93,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 

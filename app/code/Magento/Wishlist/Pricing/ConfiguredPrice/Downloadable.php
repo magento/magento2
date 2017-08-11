@@ -12,7 +12,6 @@ use Magento\Catalog\Pricing\Price\FinalPrice;
 /**
  * Class \Magento\Wishlist\Pricing\ConfiguredPrice\Downloadable
  *
- * @since 2.1.0
  */
 class Downloadable extends FinalPrice implements ConfiguredPriceInterface
 {
@@ -23,13 +22,11 @@ class Downloadable extends FinalPrice implements ConfiguredPriceInterface
 
     /**
      * @var ItemInterface
-     * @since 2.1.0
      */
     private $item;
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function getValue()
     {
@@ -40,7 +37,6 @@ class Downloadable extends FinalPrice implements ConfiguredPriceInterface
      * Retrieve calculated links price
      *
      * @return int
-     * @since 2.1.0
      */
     private function getLinkPrice()
     {
@@ -63,7 +59,6 @@ class Downloadable extends FinalPrice implements ConfiguredPriceInterface
 
     /**
      * @return \Magento\Downloadable\Model\Link[]
-     * @since 2.1.0
      */
     private function getLinks()
     {
@@ -75,7 +70,6 @@ class Downloadable extends FinalPrice implements ConfiguredPriceInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function setItem(ItemInterface $item)
     {

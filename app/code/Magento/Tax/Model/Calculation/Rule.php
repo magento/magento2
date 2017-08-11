@@ -11,9 +11,6 @@ use Magento\Tax\Api\Data\TaxRuleInterface;
 
 /**
  * Tax Rule Model
- *
- * @method \Magento\Tax\Model\ResourceModel\Calculation\Rule _getResource()
- * @method \Magento\Tax\Model\ResourceModel\Calculation\Rule getResource()
  */
 class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements TaxRuleInterface
 {

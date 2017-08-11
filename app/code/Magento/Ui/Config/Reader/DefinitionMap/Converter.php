@@ -10,7 +10,6 @@ use Magento\Framework\View\Layout\Argument\Parser;
 
 /**
  * Converter for definition.map.xml
- * @since 2.2.0
  */
 class Converter implements ConverterInterface
 {
@@ -36,7 +35,6 @@ class Converter implements ConverterInterface
 
     /**
      * @var Parser
-     * @since 2.2.0
      */
     private $argumentParser;
 
@@ -44,7 +42,6 @@ class Converter implements ConverterInterface
      * Converter constructor.
      *
      * @param Parser $argumentParser
-     * @since 2.2.0
      */
     public function __construct(Parser $argumentParser)
     {
@@ -56,7 +53,6 @@ class Converter implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return array|string
-     * @since 2.2.0
      */
     private function toArray(\DOMNode $node)
     {
@@ -104,7 +100,6 @@ class Converter implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return string
-     * @since 2.2.0
      */
     private function getComponentName(\DOMNode $node)
     {
@@ -127,7 +122,6 @@ class Converter implements ConverterInterface
      *
      * @param \DOMDocument|null $source
      * @return array
-     * @since 2.2.0
      */
     public function convert($source)
     {
@@ -150,7 +144,6 @@ class Converter implements ConverterInterface
      * @param array $componentData
      * @param array $sourceMap
      * @return array
-     * @since 2.2.0
      */
     private function processMap($componentData, $sourceMap)
     {
@@ -176,7 +169,6 @@ class Converter implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return array
-     * @since 2.2.0
      */
     private function convertChildNodes(\DOMNode $node)
     {
@@ -201,7 +193,6 @@ class Converter implements ConverterInterface
      *
      * @param array $arguments
      * @return array
-     * @since 2.2.0
      */
     private function processArguments(array $arguments)
     {

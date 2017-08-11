@@ -32,13 +32,11 @@ class Menu extends \ArrayObject
 
     /**
      * @var Factory
-     * @since 2.2.0
      */
     private $menuItemFactory;
 
     /**
      * @var SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -277,7 +275,7 @@ class Menu extends \ArrayObject
      * Get menu data represented as an array
      *
      * @return array
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function toArray()
     {
@@ -293,7 +291,7 @@ class Menu extends \ArrayObject
      *
      * @param string $serialized
      * @return void
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function unserialize($serialized)
     {
@@ -306,7 +304,7 @@ class Menu extends \ArrayObject
      *
      * @param array $data
      * @return void
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function populateFromArray(array $data)
     {

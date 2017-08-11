@@ -16,7 +16,6 @@ class Monolog extends Logger
 {
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function __construct($name, array $handlers = [], array $processors = [])
     {

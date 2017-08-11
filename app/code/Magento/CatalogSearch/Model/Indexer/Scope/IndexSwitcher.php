@@ -11,25 +11,21 @@ use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
 /**
  * Provides a functionality to replace main index with its temporary representation
- * @since 2.2.0
  */
 class IndexSwitcher implements IndexSwitcherInterface
 {
     /**
      * @var Resource
-     * @since 2.2.0
      */
     private $resource;
 
     /**
      * @var ScopeProxy
-     * @since 2.2.0
      */
     private $resolver;
 
     /**
      * @var State
-     * @since 2.2.0
      */
     private $state;
 
@@ -37,7 +33,6 @@ class IndexSwitcher implements IndexSwitcherInterface
      * @param ResourceConnection $resource
      * @param IndexScopeResolverInterface $indexScopeResolver
      * @param State $state
-     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -52,7 +47,6 @@ class IndexSwitcher implements IndexSwitcherInterface
     /**
      * {@inheritdoc}
      * @throws IndexTableNotExistException
-     * @since 2.2.0
      */
     public function switchIndex(array $dimensions)
     {

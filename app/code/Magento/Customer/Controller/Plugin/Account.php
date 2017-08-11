@@ -46,7 +46,6 @@ class Account
      * @param AbstractAction $subject
      * @param RequestInterface $request
      * @return void
-     * @since 2.2.0
      */
     public function beforeDispatch(AbstractAction $subject, RequestInterface $request)
     {
@@ -70,7 +69,6 @@ class Account
      * @param RequestInterface $request
      * @return ResponseInterface|ResultInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterDispatch(AbstractAction $subject, $result, RequestInterface $request)
     {

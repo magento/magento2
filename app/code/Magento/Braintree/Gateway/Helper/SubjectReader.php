@@ -13,7 +13,6 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 
 /**
  * Class SubjectReader
- * @since 2.1.0
  */
 class SubjectReader
 {
@@ -22,7 +21,6 @@ class SubjectReader
      *
      * @param array $subject
      * @return object
-     * @since 2.1.0
      */
     public function readResponseObject(array $subject)
     {
@@ -39,7 +37,6 @@ class SubjectReader
      *
      * @param array $subject
      * @return PaymentDataObjectInterface
-     * @since 2.1.0
      */
     public function readPayment(array $subject)
     {
@@ -51,7 +48,6 @@ class SubjectReader
      *
      * @param array $subject
      * @return \Braintree\Transaction
-     * @since 2.1.0
      */
     public function readTransaction(array $subject)
     {
@@ -73,7 +69,6 @@ class SubjectReader
      *
      * @param array $subject
      * @return mixed
-     * @since 2.1.0
      */
     public function readAmount(array $subject)
     {
@@ -85,7 +80,6 @@ class SubjectReader
      *
      * @param array $subject
      * @return int
-     * @since 2.1.0
      */
     public function readCustomerId(array $subject)
     {
@@ -101,7 +95,6 @@ class SubjectReader
      *
      * @param array $subject
      * @return string
-     * @since 2.1.0
      */
     public function readPublicHash(array $subject)
     {
@@ -117,7 +110,6 @@ class SubjectReader
      *
      * @param Transaction $transaction
      * @return array
-     * @since 2.1.0
      */
     public function readPayPal(Transaction $transaction)
     {

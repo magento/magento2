@@ -10,25 +10,21 @@ use Magento\Framework\Indexer\IndexStructureInterface;
 /**
  * Class \Magento\CatalogSearch\Model\Indexer\IndexStructureProxy
  *
- * @since 2.1.0
  */
 class IndexStructureProxy implements IndexStructureInterface
 {
     /**
      * @var IndexStructureInterface
-     * @since 2.1.0
      */
     private $indexStructureEntity;
 
     /**
      * @var IndexStructureFactory
-     * @since 2.1.0
      */
     private $indexStructureFactory;
 
     /**
      * @param IndexStructureFactory $indexStructureFactory
-     * @since 2.1.0
      */
     public function __construct(
         IndexStructureFactory $indexStructureFactory
@@ -38,7 +34,6 @@ class IndexStructureProxy implements IndexStructureInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function delete(
         $index,
@@ -49,7 +44,6 @@ class IndexStructureProxy implements IndexStructureInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function create(
         $index,
@@ -63,7 +57,6 @@ class IndexStructureProxy implements IndexStructureInterface
      * Get instance of current index structure
      *
      * @return IndexStructureInterface
-     * @since 2.1.0
      */
     private function getEntity()
     {

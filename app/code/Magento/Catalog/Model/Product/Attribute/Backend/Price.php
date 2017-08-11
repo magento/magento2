@@ -52,7 +52,6 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
     /**
      * @var \Magento\Catalog\Model\Attribute\ScopeOverriddenValue
-     * @since 2.2.0
      */
     private $scopeOverriddenValue;
 
@@ -129,7 +128,8 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $attribute = $this->getAttribute();
         $attributeCode = $attribute->getAttributeCode();
         $value = $object->getData($attributeCode);
-        if ((float)$value > 0) {
+        // $value may be passed as null to unset the attribute
+        if ($value === null || (float)$value > 0) {
             if ($attribute->isScopeWebsite() && $object->getStoreId() != \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
                 if ($this->isUseDefault($object)) {
                     $value = null;
@@ -147,7 +147,6 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Check whether product uses default attribute's value in selected scope
      * @param \Magento\Catalog\Model\Product $object
      * @return bool
-     * @since 2.2.0
      */
     private function isUseDefault($object)
     {

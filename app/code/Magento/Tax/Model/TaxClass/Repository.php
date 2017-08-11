@@ -68,7 +68,6 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
 
     /**
      * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
-     * @since 2.2.0
      */
     private $collectionProcessor;
 
@@ -223,7 +222,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
      * @param FilterGroup $filterGroup
      * @param TaxClassCollection $collection
      * @return void
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, TaxClassCollection $collection)
     {
@@ -242,9 +241,8 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
-     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

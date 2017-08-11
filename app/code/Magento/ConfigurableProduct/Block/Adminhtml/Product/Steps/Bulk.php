@@ -27,13 +27,11 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
 
     /**
      * @var ProductFactory
-     * @since 2.0.3
      */
     private $productFactory;
 
     /**
      * @var Config
-     * @since 2.0.3
      */
     private $catalogProductMediaConfig;
 

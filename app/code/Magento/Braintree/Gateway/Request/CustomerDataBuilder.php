@@ -10,7 +10,6 @@ use Magento\Braintree\Gateway\Helper\SubjectReader;
 
 /**
  * Class CustomerDataBuilder
- * @since 2.1.0
  */
 class CustomerDataBuilder implements BuilderInterface
 {
@@ -47,7 +46,6 @@ class CustomerDataBuilder implements BuilderInterface
 
     /**
      * @var SubjectReader
-     * @since 2.1.0
      */
     private $subjectReader;
 
@@ -55,7 +53,6 @@ class CustomerDataBuilder implements BuilderInterface
      * Constructor
      *
      * @param SubjectReader $subjectReader
-     * @since 2.1.0
      */
     public function __construct(SubjectReader $subjectReader)
     {
@@ -64,7 +61,6 @@ class CustomerDataBuilder implements BuilderInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     public function build(array $buildSubject)
     {

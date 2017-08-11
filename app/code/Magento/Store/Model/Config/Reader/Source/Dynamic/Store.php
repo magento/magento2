@@ -14,37 +14,31 @@ use Magento\Store\Model\WebsiteFactory;
 
 /**
  * Class for retrieving configuration from DB by store scope
- * @since 2.1.3
  */
 class Store implements SourceInterface
 {
     /**
      * @var ScopedFactory
-     * @since 2.1.3
      */
     private $collectionFactory;
 
     /**
      * @var Converter
-     * @since 2.1.3
      */
     private $converter;
 
     /**
      * @var WebsiteFactory
-     * @since 2.1.3
      */
     private $websiteFactory;
 
     /**
      * @var Website
-     * @since 2.1.3
      */
     private $websiteSource;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.1.3
      */
     private $storeManager;
 
@@ -54,7 +48,6 @@ class Store implements SourceInterface
      * @param WebsiteFactory $websiteFactory
      * @param Website $websiteSource
      * @param StoreManagerInterface $storeManager
-     * @since 2.1.3
      */
     public function __construct(
         ScopedFactory $collectionFactory,
@@ -75,7 +68,6 @@ class Store implements SourceInterface
      *
      * @param string|null $scopeCode
      * @return array
-     * @since 2.1.3
      */
     public function get($scopeCode = null)
     {

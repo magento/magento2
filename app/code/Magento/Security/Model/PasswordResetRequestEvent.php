@@ -17,7 +17,7 @@ namespace Magento\Security\Model;
  * @method PasswordResetRequestEvent setIp(int $ip)
  *
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class PasswordResetRequestEvent extends \Magento\Framework\Model\AbstractModel
 {
@@ -39,7 +39,7 @@ class PasswordResetRequestEvent extends \Magento\Framework\Model\AbstractModel
      * Initialize resource model
      *
      * @return void
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function _construct()
     {

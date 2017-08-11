@@ -17,7 +17,6 @@ use Magento\Paypal\Model\Payflow\Transparent;
 /**
  * Class \Magento\Paypal\Gateway\Payflowpro\Command\AuthorizationCommand
  *
- * @since 2.1.0
  */
 class AuthorizationCommand implements CommandInterface
 {
@@ -25,14 +24,12 @@ class AuthorizationCommand implements CommandInterface
 
     /**
      * @var Transparent
-     * @since 2.1.0
      */
     private $payflowFacade;
 
     /**
      * AuthorizationCommand constructor.
      * @param Transparent $payflowFacade
-     * @since 2.1.0
      */
     public function __construct(
         Transparent $payflowFacade
@@ -47,7 +44,6 @@ class AuthorizationCommand implements CommandInterface
      * @return ResultInterface|null
      * @throws LocalizedException
      * @throws InvalidTransitionException
-     * @since 2.1.0
      */
     public function execute(array $commandSubject)
     {

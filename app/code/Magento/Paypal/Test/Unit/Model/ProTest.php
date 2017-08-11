@@ -19,7 +19,7 @@ use Magento\Paypal\Model\Config as PaypalConfig;
  * Class ProTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProTest extends \PHPUnit_Framework_TestCase
+class ProTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Paypal\Model\Pro
@@ -45,7 +45,10 @@ class ProTest extends \PHPUnit_Framework_TestCase
             ]
         );
         /** @var $pro \Magento\Paypal\Model\Pro */
-        $this->pro = $this->getMock(\Magento\Paypal\Model\Pro::class, ['_isPaymentReviewRequired'], $args);
+        $this->pro = $this->getMockBuilder(\Magento\Paypal\Model\Pro::class)
+            ->setMethods(['_isPaymentReviewRequired'])
+            ->setConstructorArgs($args)
+            ->getMock();
         $this->pro->setMethod(PaypalConfig::METHOD_PAYMENT_PRO, $storeId);
     }
 
@@ -209,7 +212,7 @@ class ProTest extends \PHPUnit_Framework_TestCase
         );
         $this->apiMock = $this->getMockBuilder($apiType)
             ->setConstructorArgs($args)
-            ->setMethods(['__wakeup', 'getTransactionId', 'getDataUsingMethod'])
+            ->setMethods(['__wakeup', 'getTransactionId', 'getDataUsingMethod', 'setAuthorizationId', 'setIsCaptureComplete', 'setAmount', ])
             ->getMock();
 
         $apiFactory->expects(static::any())->method('create')->with($apiType)->willReturn($this->apiMock);

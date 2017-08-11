@@ -12,26 +12,22 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class SaveHandler
- * @since 2.1.0
  */
 class SaveHandler implements ExtensionInterface
 {
     /**
      * @var MetadataPool
-     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @var Block
-     * @since 2.1.0
      */
     protected $resourceBlock;
 
     /**
      * @param MetadataPool $metadataPool
      * @param Block $resourceBlock
-     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -46,7 +42,6 @@ class SaveHandler implements ExtensionInterface
      * @param array $arguments
      * @return object
      * @throws \Exception
-     * @since 2.1.0
      */
     public function execute($entity, $arguments = [])
     {

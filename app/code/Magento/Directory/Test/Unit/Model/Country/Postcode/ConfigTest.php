@@ -5,7 +5,7 @@
  */
 namespace Magento\Directory\Test\Unit\Model\Country\Postcode;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -14,13 +14,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->dataStorageMock = $this->getMock(
-            \Magento\Directory\Model\Country\Postcode\Config\Data::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->dataStorageMock = $this->createMock(\Magento\Directory\Model\Country\Postcode\Config\Data::class);
     }
 
     public function testGet()

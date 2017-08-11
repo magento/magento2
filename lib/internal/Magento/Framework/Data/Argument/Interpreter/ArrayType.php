@@ -51,7 +51,6 @@ class ArrayType implements InterpreterInterface
      *
      * @param array $items
      * @return array
-     * @since 2.2.0
      */
     private function sortItems($items)
     {
@@ -83,7 +82,6 @@ class ArrayType implements InterpreterInterface
      * @param mixed $secondItemKey
      * @param array $indexedItems
      * @return int
-     * @since 2.2.0
      */
     private function compareItems($firstItemKey, $secondItemKey, $indexedItems)
     {
@@ -112,7 +110,6 @@ class ArrayType implements InterpreterInterface
      *
      * @param array $items
      * @return bool
-     * @since 2.2.0
      */
     private function isSortOrderDefined($items)
     {

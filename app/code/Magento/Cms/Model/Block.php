@@ -13,8 +13,6 @@ use Magento\Framework\Model\AbstractModel;
 /**
  * CMS block model
  *
- * @method ResourceCmsBlock _getResource()
- * @method ResourceCmsBlock getResource()
  * @method Block setStoreId(array $storeId)
  * @method array getStoreId()
  */
@@ -239,7 +237,6 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      * Prepare block's statuses.
      *
      * @return array
-     * @since 2.1.0
      */
     public function getAvailableStatuses()
     {

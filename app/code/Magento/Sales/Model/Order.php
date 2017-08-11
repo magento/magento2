@@ -31,8 +31,6 @@ use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection as History
  *  sales_order_delete_after
  *
  * @api
- * @method \Magento\Sales\Model\ResourceModel\Order _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order getResource()
  * @method int getGiftMessageId()
  * @method \Magento\Sales\Model\Order setGiftMessageId(int $value)
  * @method bool hasBillingAddressId()
@@ -184,7 +182,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @deprecated 2.2.0 Remove unused dependency.
+     * @deprecated 100.2.0 Remove unused dependency.
      */
     protected $productRepository;
 

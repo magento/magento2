@@ -7,7 +7,6 @@ namespace Magento\Framework\EntityManager;
 
 /**
  * MapperInterface
- * @since 2.1.0
  */
 interface MapperInterface
 {
@@ -18,7 +17,6 @@ interface MapperInterface
      * @param array $data
      * @return array
      * @throws \Exception
-     * @since 2.1.0
      */
     public function entityToDatabase($entityType, $data);
 
@@ -29,7 +27,6 @@ interface MapperInterface
      * @param array $data
      * @return array
      * @throws \Exception
-     * @since 2.1.0
      */
     public function databaseToEntity($entityType, $data);
 }

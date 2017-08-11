@@ -9,32 +9,27 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class Pool
- * @since 2.1.0
  */
 class Pool implements \Magento\Ui\DataProvider\Modifier\PoolInterface
 {
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $modifiers = [];
 
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $modifiersInstances = [];
 
     /**
      * @var ModifierFactory
-     * @since 2.1.0
      */
     protected $factory;
 
     /**
      * @param ModifierFactory $factory
      * @param array $modifiers
-     * @since 2.1.0
      */
     public function __construct(
         ModifierFactory $factory,
@@ -48,7 +43,6 @@ class Pool implements \Magento\Ui\DataProvider\Modifier\PoolInterface
      * Retrieve modifiers
      *
      * @return array
-     * @since 2.1.0
      */
     public function getModifiers()
     {
@@ -60,7 +54,6 @@ class Pool implements \Magento\Ui\DataProvider\Modifier\PoolInterface
      *
      * @return ModifierInterface[]
      * @throws LocalizedException
-     * @since 2.1.0
      */
     public function getModifiersInstances()
     {
@@ -88,7 +81,6 @@ class Pool implements \Magento\Ui\DataProvider\Modifier\PoolInterface
      *
      * @param array $data
      * @return array
-     * @since 2.1.0
      */
     protected function sort(array $data)
     {
@@ -111,7 +103,6 @@ class Pool implements \Magento\Ui\DataProvider\Modifier\PoolInterface
      *
      * @param array $variable
      * @return int
-     * @since 2.1.0
      */
     protected function getSortOrder(array $variable)
     {

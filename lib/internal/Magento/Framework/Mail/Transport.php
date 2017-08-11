@@ -50,7 +50,6 @@ class Transport extends \Zend_Mail_Transport_Sendmail implements \Magento\Framew
      * Get message
      *
      * @return string
-     * @since 2.2.0
      */
     public function getMessage()
     {

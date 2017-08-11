@@ -44,7 +44,6 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
 
     /**
      * @var SecurityCookie
-     * @since 2.1.0
      */
     private $securityCookie;
 
@@ -52,8 +51,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      * Get security cookie
      *
      * @return SecurityCookie
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getSecurityCookie()
     {
@@ -136,7 +134,6 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      * @return $this
      * @throws UserLockedException
      * @throws \Magento\Framework\Exception\AuthenticationException
-     * @since 2.1.0
      */
     protected function validateUser()
     {
@@ -153,7 +150,6 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      * @param \Magento\Authorization\Model\Role $role
      * @return $this
      * @throws \Exception
-     * @since 2.1.0
      */
     protected function processPreviousUsers(\Magento\Authorization\Model\Role $role)
     {
@@ -211,7 +207,6 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      * @param array $data
      * @param \Magento\Backend\Model\View\Result\Redirect $resultRedirect
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.1.0
      */
     protected function saveDataToSessionAndRedirect($role, $data, $resultRedirect)
     {

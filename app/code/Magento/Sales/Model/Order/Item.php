@@ -13,8 +13,6 @@ use Magento\Sales\Model\AbstractModel;
  * Order Item Model
  *
  * @api
- * @method \Magento\Sales\Model\ResourceModel\Order\Item _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Item getResource()
  * @method int getGiftMessageId()
  * @method \Magento\Sales\Model\Order\Item setGiftMessageId(int $value)
  * @method int getGiftMessageAvailable()
@@ -98,7 +96,6 @@ class Item extends AbstractModel implements OrderItemInterface
      * Serializer interface instance.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -2399,7 +2396,7 @@ class Item extends AbstractModel implements OrderItemInterface
      * Check if it is possible to process item after cancellation
      *
      * @return bool
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function isProcessingAvailable()
     {

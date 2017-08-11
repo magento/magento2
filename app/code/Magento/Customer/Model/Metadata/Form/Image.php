@@ -22,7 +22,6 @@ class Image extends File
 {
     /**
      * @var ImageContentInterfaceFactory
-     * @since 2.1.3
      */
     private $imageContentFactory;
 
@@ -43,7 +42,6 @@ class Image extends File
      * @param \Magento\Customer\Model\FileProcessorFactory|null $fileProcessorFactory
      * @param \Magento\Framework\Api\Data\ImageContentInterfaceFactory|null $imageContentInterfaceFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -152,7 +150,6 @@ class Image extends File
      *
      * @param array $value
      * @return bool|int|ImageContentInterface|string
-     * @since 2.1.3
      */
     protected function processUiComponentValue(array $value)
     {
@@ -174,7 +171,6 @@ class Image extends File
      *
      * @param array $value
      * @return string
-     * @since 2.1.3
      */
     protected function processCustomerAddressValue(array $value)
     {
@@ -187,7 +183,6 @@ class Image extends File
      *
      * @param array $value
      * @return bool|int|ImageContentInterface|string
-     * @since 2.1.3
      */
     protected function processCustomerValue(array $value)
     {

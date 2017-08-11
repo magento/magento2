@@ -8,19 +8,16 @@ namespace Magento\Framework\Indexer;
 
 /**
  * Class set MEMORY table size for indexer processes according batch size and index row size.
- * @since 2.2.0
  */
 class BatchSizeManagement implements \Magento\Framework\Indexer\BatchSizeManagementInterface
 {
     /**
      * @var \Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface
-     * @since 2.2.0
      */
     private $rowSizeEstimator;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
@@ -28,7 +25,6 @@ class BatchSizeManagement implements \Magento\Framework\Indexer\BatchSizeManagem
      * CompositeProductBatchSizeCalculator constructor.
      * @param \Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface $rowSizeEstimator
      * @param \Psr\Log\LoggerInterface $logger
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface $rowSizeEstimator,
@@ -40,7 +36,6 @@ class BatchSizeManagement implements \Magento\Framework\Indexer\BatchSizeManagem
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function ensureBatchSize(\Magento\Framework\DB\Adapter\AdapterInterface $connection, $batchSize)
     {

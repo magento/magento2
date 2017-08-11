@@ -56,7 +56,6 @@ class Plugin
      * @param DataObject $response
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function beforeValidate(
         \Magento\Catalog\Model\Product\Validator $subject,
@@ -79,7 +78,6 @@ class Plugin
      * @param \Magento\Framework\DataObject $response
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterValidate(
         \Magento\Catalog\Model\Product\Validator $subject,

@@ -20,19 +20,16 @@ use Magento\Framework\View\Asset\Minification;
  *
  * If there is a CSS file overridden in target theme and there are files in ancestor theme where this file was imported,
  * then all such parent files must be copied into target theme.
- * @since 2.2.0
  */
 class Css implements ProcessorInterface
 {
     /**
      * @var ReadInterface
-     * @since 2.2.0
      */
     private $staticDir;
 
     /**
      * @var Minification
-     * @since 2.2.0
      */
     private $minification;
 
@@ -41,7 +38,6 @@ class Css implements ProcessorInterface
      *
      * @param Filesystem $filesystem
      * @param Minification $minification
-     * @since 2.2.0
      */
     public function __construct(Filesystem $filesystem, Minification $minification)
     {
@@ -55,7 +51,6 @@ class Css implements ProcessorInterface
      * Collect information about CSS files which have been imported in other CSS files
      *
      * @var []
-     * @since 2.2.0
      */
     private $map = [];
 
@@ -63,13 +58,11 @@ class Css implements ProcessorInterface
      * Deployment procedure options
      *
      * @var array
-     * @since 2.2.0
      */
     private $options = [];
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function process(Package $package, array $options)
     {
@@ -105,7 +98,6 @@ class Css implements ProcessorInterface
      * @param PackageFile $parentFile
      * @param Package $package
      * @return bool
-     * @since 2.2.0
      */
     private function hasOverrides(PackageFile $parentFile, Package $package)
     {
@@ -134,7 +126,6 @@ class Css implements ProcessorInterface
      * @param string $filePath
      * @param string $fullPath
      * @return void
-     * @since 2.2.0
      */
     private function buildMap($packagePath, $filePath, $fullPath)
     {
@@ -186,7 +177,6 @@ class Css implements ProcessorInterface
      *
      * @param string $fileName
      * @return array
-     * @since 2.2.0
      */
     private function collectFileMap($fileName)
     {
@@ -202,7 +192,6 @@ class Css implements ProcessorInterface
      *
      * @param string $path
      * @return string
-     * @since 2.2.0
      */
     private function normalize($path)
     {

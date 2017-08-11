@@ -11,19 +11,16 @@ use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedProductType;
 
 /**
  * Class StockData hides unnecessary fields in Advanced Inventory Modal
- * @since 2.1.0
  */
 class StockData extends AbstractModifier
 {
     /**
      * @var LocatorInterface
-     * @since 2.1.0
      */
     protected $locator;
 
     /**
      * @param LocatorInterface $locator
-     * @since 2.1.0
      */
     public function __construct(LocatorInterface $locator)
     {
@@ -32,7 +29,6 @@ class StockData extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -41,7 +37,6 @@ class StockData extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {

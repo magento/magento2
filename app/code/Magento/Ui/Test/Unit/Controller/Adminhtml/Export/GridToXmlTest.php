@@ -10,7 +10,7 @@ use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Ui\Controller\Adminhtml\Export\GridToXml;
 use Magento\Ui\Model\Export\ConvertToXml;
 
-class GridToXmlTest extends \PHPUnit_Framework_TestCase
+class GridToXmlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var GridToXml

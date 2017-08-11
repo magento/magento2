@@ -10,7 +10,7 @@ use Magento\Bundle\Block\Catalog\Product\View\Type\Bundle as BundleBlock;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BundleTest extends \PHPUnit_Framework_TestCase
+class BundleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Bundle\Model\Product\PriceFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -461,6 +461,17 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $isSalable = true
     ) {
         $selection = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->setMethods(
+                [
+                    'getSelectionId',
+                    'getName',
+                    'getSelectionQty',
+                    'getPriceInfo',
+                    'getSelectionCanChangeQty',
+                    'getIsDefault',
+                    'isSalable'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         $tierPrice = $this->getMockBuilder(\Magento\Bundle\Pricing\Price\TierPrice::class)
@@ -514,7 +525,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->willReturn($selectionConnection);
         $this->product->expects($this->any())
             ->method('getTypeInstance')->willReturn($typeInstance);
-        $this->product->expects($this->any())->method('getStoreId')  ->willReturn(0);
+        $this->product->expects($this->any())->method('getStoreId')->willReturn(0);
         $this->catalogProduct->expects($this->once())->method('getSkipSaleableCheck')->willReturn(true);
 
         $this->assertEquals($newOptions, $this->bundleBlock->getOptions($stripSelection));

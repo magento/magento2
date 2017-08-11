@@ -46,7 +46,7 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
 
     /**
      * {@inheritdoc}
-     * @deprecated 2.1.0
+     * @deprecated 101.0.0
      */
     public function prepareDataSource(array $dataSource)
     {

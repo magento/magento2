@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\Indexer\Product\Price\Action;
 /**
  * Class RowTest
  */
-class RowTest extends \PHPUnit_Framework_TestCase
+class RowTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product

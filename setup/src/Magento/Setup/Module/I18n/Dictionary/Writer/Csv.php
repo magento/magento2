@@ -54,7 +54,6 @@ class Csv implements WriterInterface
      * Destructor for closing resource
      *
      * @return void
-     * @since 2.2.0
      */
     public function __destruct()
     {

@@ -13,7 +13,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Job that handles maintenance mode. E.g. "maintenance:enable", "maintenance:disable"
- * @since 2.2.0
  */
 class JobSetMaintenanceMode extends AbstractJob
 {
@@ -26,7 +25,6 @@ class JobSetMaintenanceMode extends AbstractJob
      * @param Status $status
      * @param string $name
      * @param array $params
-     * @since 2.2.0
      */
     public function __construct(
         AbstractSetupCommand $command,
@@ -45,7 +43,6 @@ class JobSetMaintenanceMode extends AbstractJob
      *
      * @throws \RuntimeException
      * @return void
-     * @since 2.2.0
      */
     public function execute()
     {
@@ -75,7 +72,6 @@ class JobSetMaintenanceMode extends AbstractJob
      *
      * @param string $msg
      * @return string
-     * @since 2.2.0
      */
     private function getExceptionMessage($msg)
     {
@@ -86,7 +82,6 @@ class JobSetMaintenanceMode extends AbstractJob
      * Get the command to be run through bin/magento
      *
      * @return string
-     * @since 2.2.0
      */
     private function getCommand()
     {

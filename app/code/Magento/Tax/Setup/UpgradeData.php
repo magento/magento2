@@ -29,19 +29,16 @@ class UpgradeData implements UpgradeDataInterface
      * Tax rate repository
      *
      * @var TaxRateRepositoryInterface
-     * @since 2.2.0
      */
     private $taxRateRepository;
 
     /**
      * @var SearchCriteriaFactory
-     * @since 2.2.0
      */
     private $searchCriteriaFactory;
 
     /**
      * @var RegionFactory
-     * @since 2.2.0
      */
     private $directoryRegionFactory;
 
@@ -89,15 +86,13 @@ class UpgradeData implements UpgradeDataInterface
             $taxRateList = $this->taxRateRepository->getList($this->searchCriteriaFactory->create());
             /** @var \Magento\Tax\Api\Data\TaxRateInterface $taxRateData */
             foreach ($taxRateList->getItems() as $taxRateData) {
-                if (!empty($taxRateData->getData('percentage_rate'))) {
-                    $regionCode = $this->parseRegionFromTaxCode($taxRateData->getCode());
-                    if ($regionCode) {
-                        /** @var \Magento\Directory\Model\Region $region */
-                        $region = $this->directoryRegionFactory->create();
-                        $region->loadByCode($regionCode, $taxRateData->getTaxCountryId());
-                        $taxRateData->setTaxRegionId($region->getRegionId());
-                        $this->taxRateRepository->save($taxRateData);
-                    }
+                $regionCode = $this->parseRegionFromTaxCode($taxRateData->getCode());
+                if ($regionCode) {
+                    /** @var \Magento\Directory\Model\Region $region */
+                    $region = $this->directoryRegionFactory->create();
+                    $region->loadByCode($regionCode, $taxRateData->getTaxCountryId());
+                    $taxRateData->setTaxRegionId($region->getRegionId());
+                    $this->taxRateRepository->save($taxRateData);
                 }
             }
         }
@@ -109,7 +104,6 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param string $taxCode
      * @return string
-     * @since 2.2.0
      */
     private function parseRegionFromTaxCode($taxCode)
     {

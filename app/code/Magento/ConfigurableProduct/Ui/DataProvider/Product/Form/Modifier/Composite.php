@@ -16,37 +16,31 @@ use Magento\Catalog\Ui\AllowedProductTypes;
 
 /**
  * Data provider for Configurable products
- * @since 2.1.0
  */
 class Composite extends AbstractModifier
 {
     /**
      * @var array
-     * @since 2.1.0
      */
     private $modifiers = [];
 
     /**
      * @var LocatorInterface
-     * @since 2.1.0
      */
     private $locator;
 
     /**
      * @var ObjectManagerInterface
-     * @since 2.1.0
      */
     private $objectManager;
 
     /**
      * @var AssociatedProducts
-     * @since 2.1.0
      */
     private $associatedProducts;
 
     /**
      * @var AllowedProductTypes
-     * @since 2.1.0
      */
     protected $allowedProductTypes;
 
@@ -56,7 +50,6 @@ class Composite extends AbstractModifier
      * @param AssociatedProducts $associatedProducts
      * @param AllowedProductTypes $allowedProductTypes,
      * @param array $modifiers
-     * @since 2.1.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -74,7 +67,6 @@ class Composite extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -99,7 +91,6 @@ class Composite extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {

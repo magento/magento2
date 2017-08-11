@@ -12,10 +12,6 @@ use Magento\Framework\Oauth\ConsumerInterface;
  *
  * @api
  * @author Magento Core Team <core@magentocommerce.com>
- * @method \Magento\Integration\Model\ResourceModel\Oauth\Consumer _getResource()
- * @method \Magento\Integration\Model\ResourceModel\Oauth\Consumer getResource()
- * @method \Magento\Integration\Model\ResourceModel\Oauth\Consumer\Collection getCollection()
- * @method \Magento\Integration\Model\ResourceModel\Oauth\Consumer\Collection getResourceCollection()
  * @method string getName()
  * @method Consumer setName() setName(string $name)
  * @method Consumer setKey() setKey(string $key)
@@ -46,7 +42,6 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.0.6
      */
     private $_dateHelper;
 
@@ -92,8 +87,7 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
      *
      * @return \Magento\Framework\Stdlib\DateTime\DateTime
      *
-     * @deprecated 2.0.6
-     * @since 2.0.6
+     * @deprecated 100.0.6
      */
     private function getDateHelper()
     {

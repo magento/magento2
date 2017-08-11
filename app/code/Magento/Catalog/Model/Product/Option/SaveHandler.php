@@ -10,19 +10,16 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class SaveHandler
- * @since 2.1.0
  */
 class SaveHandler implements ExtensionInterface
 {
     /**
      * @var OptionRepository
-     * @since 2.1.0
      */
     protected $optionRepository;
 
     /**
      * @param OptionRepository $optionRepository
-     * @since 2.1.0
      */
     public function __construct(
         OptionRepository $optionRepository
@@ -35,7 +32,6 @@ class SaveHandler implements ExtensionInterface
      * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function execute($entity, $arguments = [])
     {

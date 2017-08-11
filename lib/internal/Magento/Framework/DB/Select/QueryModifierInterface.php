@@ -9,7 +9,6 @@ use Magento\Framework\DB\Select;
 
 /**
  * Modify query, add custom conditions
- * @since 2.2.0
  */
 interface QueryModifierInterface
 {
@@ -18,7 +17,6 @@ interface QueryModifierInterface
      *
      * @param Select $select
      * @return void
-     * @since 2.2.0
      */
     public function modify(Select $select);
 }

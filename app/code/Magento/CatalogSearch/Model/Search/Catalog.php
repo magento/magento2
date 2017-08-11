@@ -10,7 +10,7 @@ use Magento\Search\Model\QueryFactory;
 /**
  * Search model for backend search
  *
- * @deprecated 2.2.0
+ * @deprecated 100.2.0
  */
 class Catalog extends \Magento\Framework\DataObject
 {

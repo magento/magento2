@@ -11,7 +11,6 @@ use Magento\Framework\Exception\NotFoundException;
 
 /**
  * Class RepositoryFactory
- * @since 2.1.0
  */
 class RepositoryFactory
 {
@@ -19,7 +18,6 @@ class RepositoryFactory
      * List of entity types and their repositories
      *
      * @var array
-     * @since 2.1.0
      */
     protected $entities;
 
@@ -27,7 +25,6 @@ class RepositoryFactory
      * Object Manager
      *
      * @var ObjectManagerInterface
-     * @since 2.1.0
      */
     protected $objectManager;
 
@@ -36,7 +33,6 @@ class RepositoryFactory
      *
      * @param ObjectManagerInterface $objectManager
      * @param array $entities
-     * @since 2.1.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -50,7 +46,6 @@ class RepositoryFactory
      * @param string $entityType
      * @return object
      * @throws NotFoundException
-     * @since 2.1.0
      */
     public function create($entityType)
     {

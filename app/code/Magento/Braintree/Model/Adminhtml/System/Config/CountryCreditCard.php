@@ -17,19 +17,16 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Class CountryCreditCard
- * @since 2.1.0
  */
 class CountryCreditCard extends Value
 {
     /**
      * @var \Magento\Framework\Math\Random
-     * @since 2.1.0
      */
     protected $mathRandom;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -43,7 +40,6 @@ class CountryCreditCard extends Value
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
-     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -66,7 +62,6 @@ class CountryCreditCard extends Value
      * Prepare data before save
      *
      * @return $this
-     * @since 2.1.0
      */
     public function beforeSave()
     {
@@ -91,7 +86,6 @@ class CountryCreditCard extends Value
      * Process data after load
      *
      * @return $this
-     * @since 2.1.0
      */
     public function afterLoad()
     {
@@ -109,7 +103,6 @@ class CountryCreditCard extends Value
      *
      * @param array $value
      * @return array
-     * @since 2.1.0
      */
     protected function encodeArrayFieldValue(array $value)
     {
@@ -127,7 +120,6 @@ class CountryCreditCard extends Value
      * @param array $countriesList
      * @param array $inputCountriesList
      * @return array
-     * @since 2.1.0
      */
     private function appendUniqueCountries(array $countriesList, array $inputCountriesList)
     {

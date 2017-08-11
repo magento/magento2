@@ -14,19 +14,16 @@ use Magento\Framework\Indexer\ConfigInterface;
 
 /**
  * Recurring data upgrade for indexer module
- * @since 2.2.0
  */
 class RecurringData implements InstallDataInterface
 {
     /**
      * @var IndexerFactory
-     * @since 2.2.0
      */
     private $indexerFactory;
 
     /**
      * @var ConfigInterface
-     * @since 2.2.0
      */
     private $configInterface;
 
@@ -35,7 +32,6 @@ class RecurringData implements InstallDataInterface
      *
      * @param IndexerFactory $indexerFactory
      * @param ConfigInterface $configInterface
-     * @since 2.2.0
      */
     public function __construct(
         IndexerFactory $indexerFactory,
@@ -47,7 +43,6 @@ class RecurringData implements InstallDataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

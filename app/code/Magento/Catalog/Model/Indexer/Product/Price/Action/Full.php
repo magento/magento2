@@ -15,25 +15,21 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
 {
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator
-     * @since 2.2.0
      */
     private $batchSizeCalculator;
 
     /**
      * @var \Magento\Framework\Indexer\BatchProviderInterface
-     * @since 2.2.0
      */
     private $batchProvider;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
-     * @since 2.2.0
      */
     private $activeTableSwitcher;
 
@@ -52,7 +48,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
@@ -164,7 +159,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     protected function getIndexTargetTable()
     {

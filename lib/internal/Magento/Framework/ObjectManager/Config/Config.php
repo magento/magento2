@@ -81,7 +81,6 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
 
     /**
      * @var \Magento\Framework\Serialize\SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -341,8 +340,7 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {

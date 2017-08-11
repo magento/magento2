@@ -14,7 +14,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
-class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
+class AuthenticationPopupTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Block\Account\AuthenticationPopup */
     private $model;
@@ -91,7 +91,7 @@ class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
      * @param string $registerUrl
      * @param string $forgotUrl
      * @param array $result
-     * @throws \PHPUnit_Framework_Exception
+     * @throws \PHPUnit\Framework\Exception
      *
      * @dataProvider dataProviderGetConfig
      */
@@ -188,7 +188,7 @@ class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
      * @param string $registerUrl
      * @param string $forgotUrl
      * @param array $result
-     * @throws \PHPUnit_Framework_Exception
+     * @throws \PHPUnit\Framework\Exception
      *
      * @dataProvider dataProviderGetConfig
      */

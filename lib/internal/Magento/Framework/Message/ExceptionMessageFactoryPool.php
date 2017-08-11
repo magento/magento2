@@ -9,7 +9,6 @@ namespace Magento\Framework\Message;
 /**
  * Class \Magento\Framework\Message\ExceptionMessageFactoryPool
  *
- * @since 2.2.0
  */
 class ExceptionMessageFactoryPool
 {
@@ -17,7 +16,6 @@ class ExceptionMessageFactoryPool
      * Instances of factories that are specific for certain exceptions
      *
      * @var ExceptionMessageFactoryInterface[]
-     * @since 2.2.0
      */
     private $exceptionMessageFactoryMap = [];
 
@@ -25,14 +23,12 @@ class ExceptionMessageFactoryPool
      * Default exception factory
      *
      * @var ExceptionMessageFactoryInterface
-     * @since 2.2.0
      */
     private $defaultExceptionMessageFactory;
 
     /**
      * @param ExceptionMessageFactoryInterface $defaultExceptionMessageFactory
      * @param ExceptionMessageFactoryInterface[] $exceptionMessageFactoryMap
-     * @since 2.2.0
      */
     public function __construct(
         ExceptionMessageFactoryInterface $defaultExceptionMessageFactory,
@@ -47,7 +43,6 @@ class ExceptionMessageFactoryPool
      *
      * @param \Exception $exception
      * @return ExceptionMessageFactoryInterface|null
-     * @since 2.2.0
      */
     public function getMessageFactory(\Exception $exception)
     {

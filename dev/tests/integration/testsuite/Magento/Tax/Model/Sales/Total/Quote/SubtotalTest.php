@@ -15,7 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SubtotalTest extends \PHPUnit_Framework_TestCase
+class SubtotalTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Object Manager

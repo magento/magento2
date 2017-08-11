@@ -18,7 +18,6 @@ class InstallExtensionGrid extends AbstractActionController
 {
     /**
      * @var PackagesData
-     * @since 2.1.0
      */
     private $packagesData;
 
@@ -68,7 +67,6 @@ class InstallExtensionGrid extends AbstractActionController
      *
      * @param array $packages
      * @return array
-     * @since 2.2.0
      */
     private function formatPackageList(array $packages)
     {

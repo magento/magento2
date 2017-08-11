@@ -10,8 +10,6 @@ use Magento\Framework\App\TemplateTypesInterface;
 /**
  * Newsletter queue model.
  *
- * @method \Magento\Newsletter\Model\ResourceModel\Queue _getResource()
- * @method \Magento\Newsletter\Model\ResourceModel\Queue getResource()
  * @method int getTemplateId()
  * @method \Magento\Newsletter\Model\Queue setTemplateId(int $value)
  * @method int getNewsletterType()

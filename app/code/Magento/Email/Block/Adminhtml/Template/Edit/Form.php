@@ -27,7 +27,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 

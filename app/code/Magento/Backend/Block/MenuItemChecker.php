@@ -9,7 +9,6 @@ use Magento\Backend\Model\Menu\Item;
 
 /**
  * Class MenuItemChecker
- * @since 2.2.0
  */
 class MenuItemChecker
 {
@@ -23,7 +22,6 @@ class MenuItemChecker
      * @param Item $item
      * @param int $level
      * @return bool
-     * @since 2.2.0
      */
     public function isItemActive($activeItem, Item $item, $level)
     {
@@ -42,7 +40,6 @@ class MenuItemChecker
      * @param Item $activeItem,
      * @param Item $item
      * @return bool
-     * @since 2.2.0
      */
     private function isActiveItemEqualOrChild($activeItem, $item)
     {

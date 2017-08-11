@@ -291,7 +291,7 @@ class ObjectManagerFactory
      * @param \Magento\Framework\ObjectManager\Config\Config $diConfig
      * @param \Magento\Framework\ObjectManager\DefinitionInterface $definitions
      * @return \Magento\Framework\Interception\PluginList\PluginList
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _createPluginList(

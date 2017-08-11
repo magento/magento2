@@ -14,31 +14,26 @@ use Magento\Framework\DataObject;
 
 /**
  * Class for reading translations from DB
- * @since 2.1.3
  */
 class InitialTranslationSource implements ConfigSourceInterface
 {
     /**
      * @var TranslateFactory
-     * @since 2.1.3
      */
     private $translateFactory;
 
     /**
      * @var StoreManager
-     * @since 2.1.3
      */
     private $storeManager;
 
     /**
      * @var array
-     * @since 2.1.3
      */
     private $data;
 
     /**
      * @var DeploymentConfig
-     * @since 2.1.3
      */
     private $deploymentConfig;
 
@@ -46,7 +41,6 @@ class InitialTranslationSource implements ConfigSourceInterface
      * @param TranslateFactory $translateFactory
      * @param StoreManager $storeManager
      * @param DeploymentConfig $deploymentConfig
-     * @since 2.1.3
      */
     public function __construct(
         TranslateFactory $translateFactory,
@@ -63,7 +57,6 @@ class InitialTranslationSource implements ConfigSourceInterface
      *
      * @param string $path
      * @return mixed
-     * @since 2.1.3
      */
     public function get($path = '')
     {

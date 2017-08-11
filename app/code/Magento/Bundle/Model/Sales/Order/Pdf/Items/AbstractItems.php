@@ -20,7 +20,6 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      * Serializer
      *
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -36,7 +35,6 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

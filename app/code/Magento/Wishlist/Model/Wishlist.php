@@ -16,8 +16,6 @@ use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection;
 /**
  * Wishlist model
  *
- * @method \Magento\Wishlist\Model\ResourceModel\Wishlist _getResource()
- * @method \Magento\Wishlist\Model\ResourceModel\Wishlist getResource()
  * @method int getShared()
  * @method \Magento\Wishlist\Model\Wishlist setShared(int $value)
  * @method string getSharingCode()
@@ -125,7 +123,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 

@@ -37,7 +37,6 @@ class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount
 
     /**
      * @var CredentialsValidator
-     * @since 2.2.0
      */
     private $credentialsValidator;
 

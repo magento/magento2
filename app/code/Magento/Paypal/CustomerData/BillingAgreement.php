@@ -15,13 +15,11 @@ use Magento\Paypal\Model\ConfigFactory;
 
 /**
  * BillingAgreement section
- * @since 2.1.0
  */
 class BillingAgreement implements SectionSourceInterface
 {
     /**
      * @var CurrentCustomer
-     * @since 2.1.0
      */
     private $currentCustomer;
 
@@ -29,13 +27,11 @@ class BillingAgreement implements SectionSourceInterface
      * Paypal data
      *
      * @var Data
-     * @since 2.1.0
      */
     private $paypalData;
 
     /**
      * @var Config
-     * @since 2.1.0
      */
     private $config;
 
@@ -43,7 +39,6 @@ class BillingAgreement implements SectionSourceInterface
      * Url Builder
      *
      * @var UrlInterface
-     * @since 2.1.0
      */
     private $urlBuilder;
 
@@ -51,7 +46,6 @@ class BillingAgreement implements SectionSourceInterface
      * Escaper
      *
      * @var Escaper
-     * @since 2.1.0
      */
     private $escaper;
 
@@ -59,7 +53,6 @@ class BillingAgreement implements SectionSourceInterface
      * Start express action
      *
      * @var string
-     * @since 2.1.0
      */
     private $startAction = 'paypal/express/start/button/1';
 
@@ -69,7 +62,6 @@ class BillingAgreement implements SectionSourceInterface
      * @param ConfigFactory $paypalConfigFactory
      * @param UrlInterface $urlBuilder
      * @param Escaper $escaper
-     * @since 2.1.0
      */
     public function __construct(
         CurrentCustomer $currentCustomer,
@@ -88,7 +80,6 @@ class BillingAgreement implements SectionSourceInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getSectionData()
     {

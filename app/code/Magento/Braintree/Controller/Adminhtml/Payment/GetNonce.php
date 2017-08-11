@@ -7,7 +7,6 @@ namespace Magento\Braintree\Controller\Adminhtml\Payment;
 
 /**
  * Class GetNonce
- * @since 2.1.0
  */
 class GetNonce extends \Magento\Braintree\Controller\Payment\GetNonce
 {

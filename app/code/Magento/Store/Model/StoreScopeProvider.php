@@ -12,19 +12,16 @@ use Magento\Framework\Model\Entity\ScopeFactory;
 
 /**
  * Class StoreScope
- * @since 2.1.0
  */
 class StoreScopeProvider implements ScopeProviderInterface
 {
     /**
      * @var StoreManagerInterface
-     * @since 2.1.0
      */
     private $storeManager;
 
     /**
      * @var ScopeFactory
-     * @since 2.1.0
      */
     private $scopeFactory;
 
@@ -33,7 +30,6 @@ class StoreScopeProvider implements ScopeProviderInterface
      *
      * @param StoreManagerInterface $storeManager
      * @param ScopeFactory $scopeFactory
-     * @since 2.1.0
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -48,7 +44,6 @@ class StoreScopeProvider implements ScopeProviderInterface
      * @param array $entityData
      * @return \Magento\Framework\Model\Entity\ScopeInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function getContext($entityType, $entityData = [])
     {

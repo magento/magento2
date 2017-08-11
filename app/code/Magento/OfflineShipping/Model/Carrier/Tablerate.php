@@ -256,7 +256,6 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
      * @param float $shippingPrice
      * @param float $cost
      * @return \Magento\Quote\Model\Quote\Address\RateResult\Method
-     * @since 2.2.0
      */
     private function createShippingMethod($shippingPrice, $cost)
     {

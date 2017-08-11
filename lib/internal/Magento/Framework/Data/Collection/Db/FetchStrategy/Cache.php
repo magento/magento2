@@ -41,7 +41,6 @@ class Cache implements \Magento\Framework\Data\Collection\Db\FetchStrategyInterf
 
     /**
      * @var SerializerInterface
-     * @since 2.2.0
      */
     private $serializer;
 

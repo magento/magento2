@@ -11,7 +11,7 @@ use Magento\Framework\App\Utility\Classes;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\App\Utility\Files;
 
-class ClassesTest extends \PHPUnit_Framework_TestCase
+class ClassesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * List of already found classes to avoid checking them over and over again
@@ -188,7 +188,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                     );
                 }
                 self::$_existingClasses[$class] = 1;
-            } catch (\PHPUnit_Framework_AssertionFailedError $e) {
+            } catch (\PHPUnit\Framework\AssertionFailedError $e) {
                 $badClasses[] = '\\' . $class;
             }
         }

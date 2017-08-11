@@ -10,19 +10,16 @@ use Magento\Framework\Serialize\Serializer\Serialize;
 
 /**
  * Convert from serialized to JSON format
- * @since 2.2.0
  */
 class SerializedToJson implements DataConverterInterface
 {
     /**
      * @var Serialize
-     * @since 2.2.0
      */
     private $serialize;
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $json;
 
@@ -31,7 +28,6 @@ class SerializedToJson implements DataConverterInterface
      *
      * @param Serialize $serialize
      * @param Json $json
-     * @since 2.2.0
      */
     public function __construct(
         Serialize $serialize,
@@ -47,7 +43,6 @@ class SerializedToJson implements DataConverterInterface
      * @param string $value
      * @return string
      * @throws DataConversionException
-     * @since 2.2.0
      */
     public function convert($value)
     {
@@ -62,7 +57,6 @@ class SerializedToJson implements DataConverterInterface
      *
      * @param string $value
      * @return bool
-     * @since 2.2.0
      */
     protected function isValidJsonValue($value)
     {
@@ -82,7 +76,6 @@ class SerializedToJson implements DataConverterInterface
      * @param string $value
      * @return mixed
      * @throws DataConversionException
-     * @since 2.2.0
      */
     protected function unserializeValue($value)
     {
@@ -105,7 +98,6 @@ class SerializedToJson implements DataConverterInterface
      * @param string $value
      * @return string
      * @throws DataConversionException
-     * @since 2.2.0
      */
     protected function encodeJson($value)
     {

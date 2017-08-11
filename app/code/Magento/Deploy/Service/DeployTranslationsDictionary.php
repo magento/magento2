@@ -11,31 +11,26 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Deploy translation dictionaries service
- * @since 2.2.0
  */
 class DeployTranslationsDictionary
 {
     /**
      * @var JsTranslationConfig
-     * @since 2.2.0
      */
     private $jsTranslationConfig;
 
     /**
      * @var DeployStaticFile
-     * @since 2.2.0
      */
     private $deployStaticFile;
 
     /**
      * @var State
-     * @since 2.2.0
      */
     private $state;
 
     /**
      * @var LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
@@ -44,7 +39,6 @@ class DeployTranslationsDictionary
      * @param DeployStaticFile $deployStaticFile
      * @param State $state
      * @param LoggerInterface $logger
-     * @since 2.2.0
      */
     public function __construct(
         JsTranslationConfig $jsTranslationConfig,
@@ -63,7 +57,6 @@ class DeployTranslationsDictionary
      * @param string $theme
      * @param string $locale
      * @return void
-     * @since 2.2.0
      */
     public function deploy($area, $theme, $locale)
     {

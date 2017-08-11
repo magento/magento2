@@ -20,8 +20,6 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Search query model
  *
- * @method \Magento\Search\Model\ResourceModel\Query _getResource()
- * @method \Magento\Search\Model\ResourceModel\Query getResource()
  * @method \Magento\Search\Model\Query setQueryText(string $value)
  * @method int getNumResults()
  * @method \Magento\Search\Model\Query setNumResults(int $value)
@@ -168,7 +166,7 @@ class Query extends AbstractModel implements QueryInterface
      *
      * @param string $text
      * @return $this
-     * @deprecated 2.1.0 "synonym for" feature has been removed
+     * @deprecated 100.1.0 "synonym for" feature has been removed
      */
     public function loadByQuery($text)
     {
@@ -310,7 +308,7 @@ class Query extends AbstractModel implements QueryInterface
     /**
      * @return bool
      * @codeCoverageIgnore
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function isQueryTextShort()
     {

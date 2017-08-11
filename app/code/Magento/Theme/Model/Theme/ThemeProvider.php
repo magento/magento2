@@ -27,31 +27,26 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
 
     /**
      * @var \Magento\Framework\App\CacheInterface
-     * @since 2.1.0
      */
     protected $cache;
 
     /**
      * @var \Magento\Framework\View\Design\ThemeInterface[]
-     * @since 2.1.1
      */
     private $themes;
 
     /**
      * @var ListInterface
-     * @since 2.1.3
      */
     private $themeList;
 
     /**
      * @var DeploymentConfig
-     * @since 2.1.3
      */
     private $deploymentConfig;
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -145,7 +140,6 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      *
      * @param string $cacheId
      * @return \Magento\Theme\Model\Theme|null
-     * @since 2.2.0
      */
     private function loadThemeFromCache($cacheId)
     {
@@ -165,7 +159,6 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      * @param \Magento\Theme\Model\Theme $theme
      * @param string $cacheId
      * @return void
-     * @since 2.2.0
      */
     private function saveThemeToCache(\Magento\Theme\Model\Theme $theme, $cacheId)
     {
@@ -174,9 +167,8 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
     }
 
     /**
-     * @deprecated 2.1.3
+     * @deprecated 100.1.3
      * @return ListInterface
-     * @since 2.1.3
      */
     private function getThemeList()
     {
@@ -187,9 +179,8 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
     }
 
     /**
-     * @deprecated 2.1.3
+     * @deprecated 100.1.3
      * @return DeploymentConfig
-     * @since 2.1.3
      */
     private function getDeploymentConfig()
     {

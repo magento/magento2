@@ -47,7 +47,6 @@ class OrderSave
      * @return \Magento\Sales\Api\Data\OrderInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws CouldNotSaveException
-     * @since 2.0.11
      */
     public function afterSave(
         \Magento\Sales\Api\OrderRepositoryInterface $subject,

@@ -67,7 +67,6 @@ abstract class AbstractAction
 
     /**
      * @var CacheCleaner
-     * @since 2.2.0
      */
     private $cacheCleaner;
 
@@ -244,7 +243,6 @@ abstract class AbstractAction
      *
      * @param array $productIds
      * @return void
-     * @since 2.2.0
      */
     private function doReindex($productIds = [])
     {
@@ -274,7 +272,6 @@ abstract class AbstractAction
 
     /**
      * @return CacheCleaner
-     * @since 2.2.0
      */
     private function getCacheCleaner()
     {

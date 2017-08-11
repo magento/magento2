@@ -13,13 +13,12 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 /**
  * PaymentTokenFactory class
  * @api
- * @since 2.2.0
+ * @since 100.3.0
  */
 class PaymentTokenFactory implements PaymentTokenFactoryInterface
 {
     /**
      * @var array
-     * @since 2.2.0
      */
     private $tokenTypes = [];
 
@@ -27,7 +26,7 @@ class PaymentTokenFactory implements PaymentTokenFactoryInterface
      * PaymentTokenFactory constructor.
      * @param ObjectManagerInterface $objectManager
      * @param array $tokenTypes
-     * @since 2.2.0
+     * @since 100.3.0
      */
     public function __construct(ObjectManagerInterface $objectManager, array $tokenTypes = [])
     {
@@ -39,7 +38,7 @@ class PaymentTokenFactory implements PaymentTokenFactoryInterface
      * Create payment token entity
      * @param $type string
      * @return PaymentTokenInterface
-     * @since 2.2.0
+     * @since 100.3.0
      */
     public function create($type = null)
     {

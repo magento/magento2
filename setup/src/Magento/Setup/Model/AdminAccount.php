@@ -33,7 +33,6 @@ class AdminAccount
      * Db connection
      *
      * @var AdapterInterface
-     * @since 2.2.0
      */
     private $connection;
 
@@ -145,7 +144,6 @@ class AdminAccount
      * @param int $adminId
      * @param string $passwordHash
      * @return void
-     * @since 2.2.0
      */
     private function trackPassword($adminId, $passwordHash)
     {
@@ -277,7 +275,6 @@ class AdminAccount
      *
      * @param string $table
      * @return string
-     * @since 2.2.0
      */
     private function getTableName($table)
     {

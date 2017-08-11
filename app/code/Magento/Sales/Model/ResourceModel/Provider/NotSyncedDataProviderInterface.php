@@ -7,7 +7,6 @@ namespace Magento\Sales\Model\ResourceModel\Provider;
 
 /**
  * Interface provides entities id list that should be updated in grid
- * @since 2.2.0
  */
 interface NotSyncedDataProviderInterface
 {
@@ -17,7 +16,6 @@ interface NotSyncedDataProviderInterface
      * @param string $mainTableName source table name
      * @param string $gridTableName grid table name
      * @return array
-     * @since 2.2.0
      */
     public function getIds($mainTableName, $gridTableName);
 }

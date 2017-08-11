@@ -122,7 +122,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * Serializer Instance.
      *
      * @var Json
-     * @since 2.2.0
+     * @since 100.2.0
      */
     protected $serializer;
 
@@ -130,7 +130,6 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * Array of attribute types that have empty string as a possible value.
      *
      * @var array
-     * @since 2.2.0
      */
     private $emptyStringTypes = [
         'int',
@@ -198,10 +197,10 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
 
     /**
      * Get Serializer instance.
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      *
      * @return Json
-     * @since 2.2.0
+     * @since 100.2.0
      */
     protected function getSerializer()
     {
@@ -661,7 +660,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      *
      * @param array|null|bool|int|float|string $value
      * @return bool
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function isAllowedEmptyTextValue($value)
     {
@@ -672,7 +671,6 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * Check is attribute type in allowed empty string types.
      *
      * @return bool
-     * @since 2.2.0
      */
     private function isInEmptyStringTypes()
     {
@@ -871,7 +869,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * Retrieve flat columns definition in old format (before MMDB support)
      * Used in database compatible mode
      *
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -1327,7 +1325,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
 
     /**
      * @inheritdoc
-     * @since 2.0.9
+     * @since 100.0.7
      */
     public function __sleep()
     {
@@ -1352,7 +1350,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
 
     /**
      * @inheritdoc
-     * @since 2.0.9
+     * @since 100.0.7
      */
     public function __wakeup()
     {

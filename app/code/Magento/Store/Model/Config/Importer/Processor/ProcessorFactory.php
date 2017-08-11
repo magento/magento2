@@ -12,7 +12,6 @@ use Magento\Framework\ObjectManagerInterface;
  * The factory for creating importing processors.
  *
  * @see ProcessorInterface
- * @since 2.2.0
  */
 class ProcessorFactory
 {
@@ -24,12 +23,7 @@ class ProcessorFactory
     const TYPE_UPDATE = 'update';
     /**#@-*/
 
-    /**
-     * The Object Manager.
-     *
-     * @var ObjectManagerInterface
-     * @since 2.2.0
-     */
+    /**#@-*/
     private $objectManager;
 
     /**
@@ -37,14 +31,12 @@ class ProcessorFactory
      *
      * @var array
      * @see ProcessorInterface
-     * @since 2.2.0
      */
     private $processors;
 
     /**
      * @param ObjectManagerInterface $objectManager The Object Manager
      * @param array $processors List of class names that implement processes
-     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -61,7 +53,6 @@ class ProcessorFactory
      * @return ProcessorInterface New processor instance
      * @throws ConfigurationMismatchException If processor type is not exists in processors array
      * or declared class has wrong implementation
-     * @since 2.2.0
      */
     public function create($processorName)
     {

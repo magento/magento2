@@ -19,7 +19,7 @@ class Date implements \Zend_Filter_Interface
      *
      * @var \Zend_Filter_LocalizedToNormalized
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     protected $_localToNormalFilter;
 
@@ -28,7 +28,7 @@ class Date implements \Zend_Filter_Interface
      *
      * @var \Zend_Filter_NormalizedToLocalized
      *
-     * @deprecated 2.1.0
+     * @deprecated 100.1.0
      */
     protected $_normalToLocalFilter;
 

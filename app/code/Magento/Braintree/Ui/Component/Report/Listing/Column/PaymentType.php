@@ -10,13 +10,11 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Class PaymentType
- * @since 2.1.0
  */
 class PaymentType implements OptionSourceInterface
 {
     /**
      * @var array
-     * @since 2.1.0
      */
     protected $options;
 
@@ -24,7 +22,6 @@ class PaymentType implements OptionSourceInterface
      * Get options
      *
      * @return array
-     * @since 2.1.0
      */
     public function toOptionArray()
     {
@@ -43,7 +40,6 @@ class PaymentType implements OptionSourceInterface
 
     /**
      * @return array
-     * @since 2.1.0
      */
     private function getAvailablePaymentTypes()
     {

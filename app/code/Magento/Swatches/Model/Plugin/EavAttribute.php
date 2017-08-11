@@ -56,7 +56,6 @@ class EavAttribute
      * Serializer from arrays to string.
      *
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -83,7 +82,6 @@ class EavAttribute
      *
      * @param Attribute $attribute
      * @return void
-     * @since 2.2.0
      */
     public function beforeBeforeSave(Attribute $attribute)
     {
@@ -459,7 +457,6 @@ class EavAttribute
      * @param Attribute $attribute
      * @param bool $result
      * @return bool
-     * @since 2.2.0
      */
     public function afterUsesSource(Attribute $attribute, $result)
     {

@@ -7,19 +7,16 @@ namespace Magento\Framework\EntityManager;
 
 /**
  * Class CompositeMapper
- * @since 2.1.0
  */
 class CompositeMapper implements MapperInterface
 {
     /**
      * @var MapperInterface[]
-     * @since 2.1.0
      */
     private $mappers;
 
     /**
      * @param MapperInterface[] $mappers
-     * @since 2.1.0
      */
     public function __construct(
         $mappers
@@ -29,7 +26,6 @@ class CompositeMapper implements MapperInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function entityToDatabase($entityType, $data)
     {
@@ -41,7 +37,6 @@ class CompositeMapper implements MapperInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function databaseToEntity($entityType, $data)
     {

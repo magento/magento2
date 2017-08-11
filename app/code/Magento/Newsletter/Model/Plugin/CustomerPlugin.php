@@ -88,7 +88,6 @@ class CustomerPlugin
      * @param CustomerInterface $customer
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterDelete(CustomerRepository $subject, $result, CustomerInterface $customer)
     {

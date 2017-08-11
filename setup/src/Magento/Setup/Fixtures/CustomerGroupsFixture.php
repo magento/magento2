@@ -12,7 +12,6 @@ use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 
 /**
  * Fixture for creating a Customer Groups
- * @since 2.2.0
  */
 class CustomerGroupsFixture extends Fixture
 {
@@ -20,31 +19,26 @@ class CustomerGroupsFixture extends Fixture
 
     /**
      * @var int
-     * @since 2.2.0
      */
     protected $priority = 60;
 
     /**
      * @var CollectionFactory
-     * @since 2.2.0
      */
     private $groupCollectionFactory;
 
     /**
      * @var GroupRepositoryInterface
-     * @since 2.2.0
      */
     private $groupRepository;
 
     /**
      * @var GroupInterfaceFactory
-     * @since 2.2.0
      */
     private $groupFactory;
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function __construct(
         FixtureModel $fixtureModel,
@@ -60,7 +54,6 @@ class CustomerGroupsFixture extends Fixture
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function execute()
     {
@@ -81,7 +74,6 @@ class CustomerGroupsFixture extends Fixture
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getActionTitle()
     {
@@ -90,7 +82,6 @@ class CustomerGroupsFixture extends Fixture
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function introduceParamLabels()
     {

@@ -8,7 +8,6 @@ namespace Magento\Framework\App\Config;
 /**
  * Config data model
  *
- * @method \Magento\Framework\Model\ResourceModel\Db\AbstractDb getResource()
  * @method string getScope()
  * @method \Magento\Framework\App\Config\ValueInterface setScope(string $value)
  * @method int getScopeId()
@@ -129,7 +128,6 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      * {@inheritdoc}. In addition, it sets status 'invalidate' for config caches
      *
      * @return $this
-     * @since 2.1.0
      */
     public function afterDelete()
     {

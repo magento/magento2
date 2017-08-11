@@ -75,7 +75,6 @@ class AfterAddressSaveObserver implements ObserverInterface
 
     /**
      * @var CustomerSession
-     * @since 2.1.0
      */
     private $customerSession;
 

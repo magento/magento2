@@ -124,7 +124,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
 
     /**
      * @inheritdoc
-     * @since 2.1.0
      */
     protected $_debugReplacePrivateDataKeys = [
         'UserId', 'Password'
@@ -777,7 +776,6 @@ XMLRequest;
      *
      * @param string $code
      * @return string
-     * @since 2.1.0
      */
     private function mapCurrencyCode($code)
     {

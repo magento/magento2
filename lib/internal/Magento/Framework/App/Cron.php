@@ -34,13 +34,11 @@ class Cron implements \Magento\Framework\AppInterface
      * Object manager
      *
      * @var ObjectManagerInterface
-     * @since 2.1.0
      */
     private $objectManager;
 
     /**
      * @var \Magento\Framework\App\AreaList
-     * @since 2.2.0
      */
     private $areaList;
 

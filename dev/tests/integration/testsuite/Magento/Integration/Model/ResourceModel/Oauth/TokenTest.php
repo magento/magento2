@@ -14,7 +14,7 @@ use Magento\Integration\Model\Oauth\Token;
  *
  * Also tests @see \Magento\Integration\Cron\CleanExpiredTokens
  */
-class TokenTest extends \PHPUnit_Framework_TestCase
+class TokenTest extends \PHPUnit\Framework\TestCase
 {
     const TOKEN_LIFETIME = 1; // in hours
     

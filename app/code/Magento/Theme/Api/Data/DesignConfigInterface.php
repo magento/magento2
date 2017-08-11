@@ -10,7 +10,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 /**
  * Interface DesignConfigInterface
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 interface DesignConfigInterface extends ExtensibleDataInterface
 {
@@ -25,7 +25,7 @@ interface DesignConfigInterface extends ExtensibleDataInterface
      * Return setting scope
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getScope();
 
@@ -33,21 +33,21 @@ interface DesignConfigInterface extends ExtensibleDataInterface
      * Return scope identifier
      *
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getScopeId();
 
     /**
      * @param string $scope
      * @return $this
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function setScope($scope);
 
     /**
      * @param string $scopeId
      * @return $this
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function setScopeId($scopeId);
 
@@ -55,7 +55,7 @@ interface DesignConfigInterface extends ExtensibleDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Theme\Api\Data\DesignConfigExtensionInterface|null
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getExtensionAttributes();
 
@@ -64,7 +64,7 @@ interface DesignConfigInterface extends ExtensibleDataInterface
      *
      * @param \Magento\Theme\Api\Data\DesignConfigExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function setExtensionAttributes(\Magento\Theme\Api\Data\DesignConfigExtensionInterface $extensionAttributes);
 }

@@ -132,7 +132,6 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Abs
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -149,7 +148,6 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Abs
      * @param \Magento\Framework\Model\AbstractModel $object
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
-     * @since 2.2.0
      */
     private function skipReservedId(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -182,7 +180,6 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Abs
      * Get main table fields except of ID field.
      *
      * @return array
-     * @since 2.2.0
      */
     private function getTableFieldsWithoutIdField()
     {

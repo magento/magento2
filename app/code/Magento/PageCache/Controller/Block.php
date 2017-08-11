@@ -23,13 +23,11 @@ abstract class Block extends \Magento\Framework\App\Action\Action
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $jsonSerializer;
 
     /**
      * @var Base64Json
-     * @since 2.2.0
      */
     private $base64jsonSerializer;
 

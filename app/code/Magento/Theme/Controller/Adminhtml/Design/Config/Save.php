@@ -14,25 +14,21 @@ use Magento\Theme\Model\Data\Design\ConfigFactory;
 
 /**
  * Save action controller
- * @since 2.1.0
  */
 class Save extends Action
 {
     /**
      * @var DesignConfigRepository
-     * @since 2.1.0
      */
     protected $designConfigRepository;
 
     /**
      * @var ConfigFactory
-     * @since 2.1.0
      */
     protected $configFactory;
 
     /**
      * @var DataPersistorInterface
-     * @since 2.1.0
      */
     protected $dataPersistor;
 
@@ -41,7 +37,6 @@ class Save extends Action
      * @param DesignConfigRepository $designConfigRepository
      * @param ConfigFactory $configFactory
      * @param DataPersistorInterface $dataPersistor
-     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -59,7 +54,6 @@ class Save extends Action
      * Check the permission to manage themes
      *
      * @return bool
-     * @since 2.1.0
      */
     protected function _isAllowed()
     {
@@ -68,7 +62,6 @@ class Save extends Action
 
     /**
      * @return \Magento\Framework\Controller\Result\Redirect
-     * @since 2.1.0
      */
     public function execute()
     {
@@ -112,7 +105,6 @@ class Save extends Action
      * Extract data from request
      *
      * @return array
-     * @since 2.1.0
      */
     protected function getRequestData()
     {
@@ -123,6 +115,15 @@ class Save extends Action
         $data = array_filter($data, function ($param) {
             return isset($param['error']) && $param['error'] > 0 ? false : true;
         });
+
+        /**
+         * Set null to theme id in case it's empty string,
+         * in order to delete value from db config but not set empty string,
+         * which may cause an error in Magento/Theme/Model/ResourceModel/Theme/Collection::getThemeByFullPath().
+         */
+        if (isset($data['theme_theme_id']) && $data['theme_theme_id'] === '') {
+            $data['theme_theme_id'] = null;
+        }
         return $data;
     }
 }

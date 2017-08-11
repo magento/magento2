@@ -23,7 +23,6 @@ class QuoteItemProductOption
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function beforeConvert(
         QuoteToOrderItem $subject,

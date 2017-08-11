@@ -157,7 +157,6 @@ class Multiline extends AbstractElement
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getEscapedValue($index = null)
     {

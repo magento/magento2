@@ -17,31 +17,26 @@ use Magento\Catalog\Model\ProductFactory;
 /**
  * Bundle product template generator. Return newly created bundle product for specified attribute set
  * with default values for product attributes
- * @since 2.2.0
  */
 class BundleProductTemplateGenerator implements TemplateEntityGeneratorInterface
 {
     /**
      * @var array
-     * @since 2.2.0
      */
     private $fixture;
 
     /**
      * @var ProductFactory
-     * @since 2.2.0
      */
     private $productFactory;
 
     /**
      * @var OptionInterfaceFactory
-     * @since 2.2.0
      */
     private $optionFactory;
 
     /**
      * @var LinkInterfaceFactory
-     * @since 2.2.0
      */
     private $linkFactory;
 
@@ -50,7 +45,6 @@ class BundleProductTemplateGenerator implements TemplateEntityGeneratorInterface
      * @param array $fixture
      * @param OptionInterfaceFactory $optionFactory
      * @param LinkInterfaceFactory $linkFactory
-     * @since 2.2.0
      */
     public function __construct(
         ProductFactory $productFactory,
@@ -66,7 +60,6 @@ class BundleProductTemplateGenerator implements TemplateEntityGeneratorInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function generateEntity()
     {
@@ -83,7 +76,6 @@ class BundleProductTemplateGenerator implements TemplateEntityGeneratorInterface
      *
      * @param int $attributeSet
      * @return ProductInterface
-     * @since 2.2.0
      */
     private function getProductTemplate($attributeSet)
     {

@@ -17,43 +17,36 @@ use Magento\Downloadable\Api\Data\LinkInterface;
 /**
  * Class Links
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
  */
 class Links
 {
     /**
      * @var LocatorInterface
-     * @since 2.1.0
      */
     protected $locator;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.1.0
      */
     protected $scopeConfig;
 
     /**
      * @var Escaper
-     * @since 2.1.0
      */
     protected $escaper;
 
     /**
      * @var DownloadableFile
-     * @since 2.1.0
      */
     protected $downloadableFile;
 
     /**
      * @var UrlInterface
-     * @since 2.1.0
      */
     protected $urlBuilder;
 
     /**
      * @var LinkModel
-     * @since 2.1.0
      */
     protected $linkModel;
 
@@ -64,7 +57,6 @@ class Links
      * @param DownloadableFile $downloadableFile
      * @param UrlInterface $urlBuilder
      * @param LinkModel $linkModel
-     * @since 2.1.0
      */
     public function __construct(
         Escaper $escaper,
@@ -86,7 +78,6 @@ class Links
      * Retrieve default links title
      *
      * @return string
-     * @since 2.1.0
      */
     public function getLinksTitle()
     {
@@ -103,7 +94,6 @@ class Links
      * Get Links can be purchased separately value for current product
      *
      * @return bool
-     * @since 2.1.0
      */
     public function isProductLinksCanBePurchasedSeparately()
     {
@@ -115,7 +105,6 @@ class Links
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @return array
-     * @since 2.1.0
      */
     public function getLinksData()
     {
@@ -160,7 +149,6 @@ class Links
      * @param array $linkData
      * @param LinkInterface $link
      * @return array
-     * @since 2.1.0
      */
     protected function addSampleFile(array $linkData, LinkInterface $link)
     {
@@ -190,7 +178,6 @@ class Links
      * @param array $linkData
      * @param LinkInterface $link
      * @return array
-     * @since 2.1.0
      */
     protected function addLinkFile(array $linkData, LinkInterface $link)
     {
@@ -219,7 +206,6 @@ class Links
      *
      * @param float $value
      * @return string
-     * @since 2.1.0
      */
     public function getPriceValue($value)
     {

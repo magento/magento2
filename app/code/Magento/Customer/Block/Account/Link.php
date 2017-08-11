@@ -44,7 +44,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements SortLink
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getSortOrder()
     {

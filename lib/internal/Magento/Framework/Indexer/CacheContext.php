@@ -17,7 +17,6 @@ class CacheContext implements \Magento\Framework\DataObject\IdentityInterface
 
     /**
      * @var array
-     * @since 2.0.11
      */
     private $tags = [];
 
@@ -40,7 +39,6 @@ class CacheContext implements \Magento\Framework\DataObject\IdentityInterface
      *
      * @param string $cacheTag
      * @return $this
-     * @since 2.0.11
      */
     public function registerTags($cacheTags)
     {

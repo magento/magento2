@@ -15,31 +15,26 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 
 /**
  * Hydrator for AttributeMetadataInterface
- * @since 2.2.0
  */
 class AttributeMetadataHydrator
 {
     /**
      * @var AttributeMetadataInterfaceFactory
-     * @since 2.2.0
      */
     private $attributeMetadataFactory;
 
     /**
      * @var OptionInterfaceFactory
-     * @since 2.2.0
      */
     private $optionFactory;
 
     /**
      * @var ValidationRuleInterfaceFactory
-     * @since 2.2.0
      */
     private $validationRuleFactory;
 
     /**
      * @var DataObjectProcessor
-     * @since 2.2.0
      */
     private $dataObjectProcessor;
 
@@ -50,7 +45,6 @@ class AttributeMetadataHydrator
      * @param OptionInterfaceFactory $optionFactory
      * @param ValidationRuleInterfaceFactory $validationRuleFactory
      * @param DataObjectProcessor $dataObjectProcessor
-     * @since 2.2.0
      */
     public function __construct(
         AttributeMetadataInterfaceFactory $attributeMetadataFactory,
@@ -69,7 +63,6 @@ class AttributeMetadataHydrator
      *
      * @param array $data
      * @return AttributeMetadataInterface
-     * @since 2.2.0
      */
     public function hydrate(array $data)
     {
@@ -91,7 +84,6 @@ class AttributeMetadataHydrator
      *
      * @param array $data
      * @return OptionInterface[]
-     * @since 2.2.0
      */
     private function createOptions(array $data)
     {
@@ -109,7 +101,6 @@ class AttributeMetadataHydrator
      *
      * @param array $data
      * @return ValidationRuleInterface[]
-     * @since 2.2.0
      */
     private function createValidationRules(array $data)
     {
@@ -124,7 +115,6 @@ class AttributeMetadataHydrator
      *
      * @param AttributeMetadataInterface $attributeMetadata
      * @return array
-     * @since 2.2.0
      */
     public function extract($attributeMetadata)
     {

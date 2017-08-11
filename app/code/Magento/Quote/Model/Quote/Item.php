@@ -12,8 +12,6 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  * Sales Quote Item Model
  *
  * @api
- * @method \Magento\Quote\Model\ResourceModel\Quote\Item _getResource()
- * @method \Magento\Quote\Model\ResourceModel\Quote\Item getResource()
  * @method string getCreatedAt()
  * @method \Magento\Quote\Model\Quote\Item setCreatedAt(string $value)
  * @method string getUpdatedAt()
@@ -172,7 +170,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected $stockRegistry;
 
@@ -180,7 +178,6 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Serializer interface instance.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 

@@ -557,7 +557,7 @@ class EavSetup
     /**
      * @param string $groupName
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function convertToAttributeGroupCode($groupName)
     {
@@ -630,7 +630,7 @@ class EavSetup
      * @param string $code
      * @param string $field
      * @return mixed
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getAttributeGroupByCode($entityTypeId, $setId, $code, $field = null)
     {

@@ -64,7 +64,6 @@ class Head implements Layout\GeneratorInterface
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.2.0
      */
     private $url;
 

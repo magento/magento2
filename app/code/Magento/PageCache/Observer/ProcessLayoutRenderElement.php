@@ -40,19 +40,16 @@ class ProcessLayoutRenderElement implements ObserverInterface
 
     /**
      * @var EntitySpecificHandlesList
-     * @since 2.2.0
      */
     private $entitySpecificHandlesList;
 
     /**
      * @var Base64Json
-     * @since 2.2.0
      */
     private $base64jsonSerializer;
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $jsonSerializer;
 

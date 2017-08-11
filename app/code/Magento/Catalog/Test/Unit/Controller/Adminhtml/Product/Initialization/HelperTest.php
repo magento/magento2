@@ -27,7 +27,7 @@ use Magento\Catalog\Model\ProductLink\Link as ProductLink;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class HelperTest extends \PHPUnit_Framework_TestCase
+class HelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -639,7 +639,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $linkTypeCode = 1;
 
         foreach ($types as $typeName) {
-            $linkType = $this->getMock(ProductLinkTypeInterface::class);
+            $linkType = $this->createMock(ProductLinkTypeInterface::class);
             $linkType->method('getCode')->willReturn($linkTypeCode++);
             $linkType->method('getName')->willReturn($typeName);
 

@@ -10,7 +10,6 @@ use Magento\Framework\DB\DataConverter\SerializedToJson;
 
 /**
  * Serializer used to additionally handle the data conversion of Vault token metadata
- * @since 2.2.0
  */
 class SalesOrderPaymentDataConverter extends SerializedToJson
 {
@@ -21,7 +20,6 @@ class SalesOrderPaymentDataConverter extends SerializedToJson
      * @return string
      *
      * @throws DataConversionException
-     * @since 2.2.0
      */
     public function convert($value)
     {

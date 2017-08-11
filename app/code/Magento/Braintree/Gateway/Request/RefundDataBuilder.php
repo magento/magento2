@@ -14,7 +14,6 @@ use Magento\Sales\Model\Order\Payment;
 /**
  * Class \Magento\Braintree\Gateway\Request\RefundDataBuilder
  *
- * @since 2.1.0
  */
 class RefundDataBuilder implements BuilderInterface
 {
@@ -22,7 +21,6 @@ class RefundDataBuilder implements BuilderInterface
 
     /**
      * @var SubjectReader
-     * @since 2.1.0
      */
     private $subjectReader;
 
@@ -30,7 +28,6 @@ class RefundDataBuilder implements BuilderInterface
      * Constructor
      *
      * @param SubjectReader $subjectReader
-     * @since 2.1.0
      */
     public function __construct(SubjectReader $subjectReader)
     {
@@ -42,7 +39,6 @@ class RefundDataBuilder implements BuilderInterface
      *
      * @param array $buildSubject
      * @return array
-     * @since 2.1.0
      */
     public function build(array $buildSubject)
     {

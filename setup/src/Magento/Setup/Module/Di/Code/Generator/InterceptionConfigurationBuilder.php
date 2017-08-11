@@ -49,7 +49,6 @@ class InterceptionConfigurationBuilder
 
     /**
      * @var InterceptableValidator
-     * @since 2.0.1
      */
     private $interceptableValidator;
 

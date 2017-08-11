@@ -19,26 +19,22 @@ use Magento\Framework\View\DesignInterface;
  * to be shared between environments where IDs can not be used, we need
  * to change theme id to full path value what can be used as an identifier.
  * @see \Magento\Config\App\Config\Source\DumpConfigSourceAggregated
- * @since 2.2.0
  */
 class Dump
 {
     /**
      * @var ListInterface
-     * @since 2.2.0
      */
     private $themeList;
 
     /**
      * @var ArrayManager
-     * @since 2.2.0
      */
     private $arrayManager;
 
     /**
      * @param ListInterface $themeList
      * @param ArrayManager $arrayManager
-     * @since 2.2.0
      */
     public function __construct(
         ListInterface $themeList,
@@ -56,7 +52,6 @@ class Dump
      * @param array $result
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterGet(DumpConfigSourceAggregated $subject, $result)
     {
@@ -79,7 +74,6 @@ class Dump
      *
      * @param array $configItems
      * @return array
-     * @since 2.2.0
      */
     private function changeThemeIdToFullPath($configItems)
     {

@@ -47,7 +47,6 @@ class Product extends AbstractPlugin
      * @param AbstractModel $product
      * @return ResourceProduct
      * @throws \Exception
-     * @since 2.1.0
      */
     private function addCommitCallback(ResourceProduct $productResource, \Closure $proceed, AbstractModel $product)
     {

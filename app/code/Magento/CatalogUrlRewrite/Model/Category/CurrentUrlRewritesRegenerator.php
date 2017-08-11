@@ -26,31 +26,28 @@ class CurrentUrlRewritesRegenerator
 
     /**
      * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite
-     * @since 2.2.0
      */
     private $urlRewritePrototype;
 
     /**
      * @var \Magento\Catalog\Model\Category
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected $category;
 
     /**
      * @var \Magento\UrlRewrite\Model\UrlFinderInterface
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     protected $urlFinder;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder
-     * @since 2.2.0
      */
     private $urlRewriteFinder;
 
     /**
      * @var \Magento\UrlRewrite\Model\MergeDataProvider
-     * @since 2.2.0
      */
     private $mergeDataProviderPrototype;
 

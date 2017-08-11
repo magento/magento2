@@ -11,7 +11,7 @@ use Magento\Catalog\Model\Locator\LocatorInterface;
  * Class Images customizes Images panel
  *
  * @api
- * @since 2.1.0
+ * @since 101.0.0
  */
 class Images extends AbstractModifier
 {
@@ -28,13 +28,13 @@ class Images extends AbstractModifier
 
     /**
      * @var LocatorInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     protected $locator;
 
     /**
      * @param LocatorInterface $locator
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function __construct(LocatorInterface $locator)
     {
@@ -43,7 +43,7 @@ class Images extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function modifyMeta(array $meta)
     {
@@ -54,7 +54,7 @@ class Images extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function modifyData(array $data)
     {

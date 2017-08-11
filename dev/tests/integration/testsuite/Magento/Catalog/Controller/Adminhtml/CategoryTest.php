@@ -59,7 +59,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
             if ($exists !== $category->getExistsStoreValueFlag($attribute)) {
                 if ($exists) {
                     $errors[] = "custom value for '{$attribute}' attribute is not found";
-                } else {
+                } elseif (!$exists && $category->getCustomAttribute($attribute) !== null) {
                     $errors[] = "custom value for '{$attribute}' attribute is found, but default one must be used";
                 }
             }

@@ -28,7 +28,6 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      * Gallery field name suffix
      *
      * @var string
-     * @since 2.1.0
      */
     protected $fieldNameSuffix = 'product';
 
@@ -36,7 +35,6 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      * Gallery html id
      *
      * @var string
-     * @since 2.1.0
      */
     protected $htmlId = 'media_gallery';
 
@@ -44,7 +42,6 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      * Gallery name
      *
      * @var string
-     * @since 2.1.0
      */
     protected $name = 'product[media_gallery]';
 
@@ -52,31 +49,26 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      * Html id for data scope
      *
      * @var string
-     * @since 2.1.0
      */
     protected $image = 'image';
 
     /**
      * @var string
-     * @since 2.1.0
      */
     protected $formName = 'product_form';
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.1.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Framework\Data\Form
-     * @since 2.1.0
      */
     protected $form;
 
     /**
      * @var Registry
-     * @since 2.1.0
      */
     protected $registry;
 
@@ -113,7 +105,6 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      * Get product images
      *
      * @return array|null
-     * @since 2.1.0
      */
     public function getImages()
     {
@@ -138,7 +129,6 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
 
     /**
      * @return string
-     * @since 2.1.0
      */
     protected function getHtmlId()
     {
@@ -147,7 +137,6 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
 
     /**
      * @return string
-     * @since 2.1.0
      */
     public function getName()
     {
@@ -156,7 +145,6 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
 
     /**
      * @return string
-     * @since 2.1.0
      */
     public function getFieldNameSuffix()
     {
@@ -165,7 +153,6 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
 
     /**
      * @return string
-     * @since 2.1.0
      */
     public function getDataScopeHtmlId()
     {

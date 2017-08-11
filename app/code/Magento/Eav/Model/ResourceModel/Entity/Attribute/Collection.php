@@ -489,7 +489,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $cond
      * @param string $cols
      * @return $this
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function joinLeft($table, $cond, $cols = '*')
     {

@@ -23,7 +23,6 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      * Prefix of model events names
      *
      * @var string
-     * @since 2.2.0
      */
     protected $_eventPrefix = 'cataloginventory_stock';
 
@@ -32,7 +31,6 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      * In observe method you can use $observer->getEvent()->getStock() in this case
      *
      * @var string
-     * @since 2.2.0
      */
     protected $_eventObject = 'stock';
 

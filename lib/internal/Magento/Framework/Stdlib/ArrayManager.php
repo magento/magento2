@@ -9,7 +9,7 @@ namespace Magento\Framework\Stdlib;
  * Provides methods for nested array manipulations
  *
  * @api
- * @since 2.1.0
+ * @since 100.1.0
  */
 class ArrayManager
 {
@@ -20,13 +20,13 @@ class ArrayManager
 
     /**
      * @var array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $parentNode;
 
     /**
      * @var string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $nodeIndex;
 
@@ -37,7 +37,7 @@ class ArrayManager
      * @param array $data
      * @param string $delimiter
      * @return bool
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function exists($path, array $data, $delimiter = self::DEFAULT_PATH_DELIMITER)
     {
@@ -52,7 +52,7 @@ class ArrayManager
      * @param null $defaultValue
      * @param string $delimiter
      * @return mixed|null
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function get($path, array $data, $defaultValue = null, $delimiter = self::DEFAULT_PATH_DELIMITER)
     {
@@ -67,7 +67,7 @@ class ArrayManager
      * @param mixed $value
      * @param string $delimiter
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function set($path, array $data, $value, $delimiter = self::DEFAULT_PATH_DELIMITER)
     {
@@ -86,7 +86,7 @@ class ArrayManager
      * @param mixed $value
      * @param string $delimiter
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function replace($path, array $data, $value, $delimiter = self::DEFAULT_PATH_DELIMITER)
     {
@@ -106,7 +106,7 @@ class ArrayManager
      * @param bool $overwrite
      * @param string $delimiter
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function move($path, $targetPath, array $data, $overwrite = false, $delimiter = self::DEFAULT_PATH_DELIMITER)
     {
@@ -133,7 +133,7 @@ class ArrayManager
      * @param array $value
      * @param string $delimiter
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function merge($path, array $data, array $value, $delimiter = self::DEFAULT_PATH_DELIMITER)
     {
@@ -154,7 +154,7 @@ class ArrayManager
      * @param array $data
      * @param string $delimiter
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function populate($path, array $data, $delimiter = self::DEFAULT_PATH_DELIMITER)
     {
@@ -170,7 +170,7 @@ class ArrayManager
      * @param array $data
      * @param string $delimiter
      * @return array
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function remove($path, array $data, $delimiter = self::DEFAULT_PATH_DELIMITER)
     {
@@ -189,7 +189,7 @@ class ArrayManager
      * @param string $delimiter
      * @param bool $populate
      * @return bool
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function find($path, array &$data, $delimiter, $populate = false)
     {
@@ -237,7 +237,7 @@ class ArrayManager
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function findPaths(
         $indexes,
@@ -295,7 +295,7 @@ class ArrayManager
      * @param string|array|null $internalPath
      * @param string $delimiter
      * @return string|null
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function findPath(
         $indexes,
@@ -317,7 +317,7 @@ class ArrayManager
      * @param int|null $length
      * @param string $delimiter
      * @return string
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function slicePath($path, $offset, $length = null, $delimiter = self::DEFAULT_PATH_DELIMITER)
     {

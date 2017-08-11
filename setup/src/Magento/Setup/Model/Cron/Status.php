@@ -57,7 +57,6 @@ class Status
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.1.0
      */
     private $logger;
 

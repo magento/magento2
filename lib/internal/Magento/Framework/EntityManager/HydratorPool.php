@@ -9,26 +9,22 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class HydratorPool
- * @since 2.1.0
  */
 class HydratorPool
 {
     /**
      * @var HydratorInterface[]
-     * @since 2.1.0
      */
     private $hydrators;
 
     /**
      * @var ObjectManagerInterface
-     * @since 2.1.0
      */
     protected $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param string[] $hydrators
-     * @since 2.1.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -41,7 +37,6 @@ class HydratorPool
     /**
      * @param string $entityType
      * @return HydratorInterface
-     * @since 2.1.0
      */
     public function getHydrator($entityType)
     {

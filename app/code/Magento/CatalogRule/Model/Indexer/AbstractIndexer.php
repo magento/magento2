@@ -30,13 +30,11 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
 
     /**
      * @var \Magento\Framework\App\CacheInterface
-     * @since 2.0.11
      */
     private $cacheManager;
 
     /**
      * @var \Magento\Framework\Indexer\CacheContext
-     * @since 2.0.11
      */
     protected $cacheContext;
 
@@ -145,8 +143,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     /**
      * @return \Magento\Framework\App\CacheInterface|mixed
      *
-     * @deprecated 2.0.11
-     * @since 2.0.11
+     * @deprecated 100.0.7
      */
     private function getCacheManager()
     {
@@ -162,8 +159,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * Get cache context
      *
      * @return \Magento\Framework\Indexer\CacheContext
-     * @deprecated 2.0.11
-     * @since 2.0.11
+     * @deprecated 100.0.7
      */
     protected function getCacheContext()
     {

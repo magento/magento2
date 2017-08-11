@@ -76,7 +76,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
 
     /**
      * @var \Magento\Framework\EntityManager\EntityManager
-     * @since 2.1.0
      */
     protected $entityManager;
 
@@ -225,7 +224,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param string $field
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
     {
@@ -237,7 +235,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param AbstractModel $object
      * @return $this
      * @throws \Exception
-     * @since 2.1.0
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -251,7 +248,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Exception
-     * @since 2.1.0
      */
     public function delete(AbstractModel $object)
     {
@@ -261,8 +257,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
 
     /**
      * @return array
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getAssociatedEntitiesMap()
     {
@@ -276,8 +271,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
 
     /**
      * @return \Magento\Framework\EntityManager\EntityManager
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getEntityManager()
     {

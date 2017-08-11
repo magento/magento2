@@ -12,7 +12,6 @@ use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Order grid collection
- * @since 2.0.11
  */
 class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult
 {
@@ -25,7 +24,6 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
      * @param EventManager $eventManager
      * @param string $mainTable
      * @param string $resourceModel
-     * @since 2.0.11
      */
     public function __construct(
         EntityFactory $entityFactory,

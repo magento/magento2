@@ -298,9 +298,8 @@ class StoreManager implements
     }
 
     /**
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @return StoreWebsiteRelation
-     * @since 2.2.0
      */
     private function getStoreWebsiteRelation()
     {
@@ -309,7 +308,6 @@ class StoreManager implements
 
     /**
      * @inheritdoc
-     * @since 2.2.0
      */
     public function getStoreByWebsiteId($websiteId)
     {

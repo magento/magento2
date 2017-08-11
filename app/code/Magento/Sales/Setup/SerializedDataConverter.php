@@ -11,7 +11,6 @@ use Magento\Framework\DB\DataConverter\SerializedToJson;
 
 /**
  * Serializer used to update nested serialized data in product_options field.
- * @since 2.2.0
  */
 class SerializedDataConverter extends SerializedToJson
 {
@@ -22,7 +21,6 @@ class SerializedDataConverter extends SerializedToJson
      * @return string
      *
      * @throws DataConversionException
-     * @since 2.2.0
      */
     public function convert($value)
     {

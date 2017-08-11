@@ -52,7 +52,7 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Random
      *
      * @var \Magento\Framework\Math\Random
-     * @since 2.0.3
+     * @since 100.0.4
      */
     protected $random;
 

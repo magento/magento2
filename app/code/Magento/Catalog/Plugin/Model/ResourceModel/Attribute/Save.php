@@ -44,7 +44,6 @@ class Save
      * @return Attribute $result
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterSave(Attribute $subject, Attribute $result)
     {

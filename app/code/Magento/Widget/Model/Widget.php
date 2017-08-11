@@ -55,7 +55,6 @@ class Widget
 
     /**
      * @var \Magento\Framework\Math\Random
-     * @since 2.1.0
      */
     private $mathRandom;
 
@@ -86,8 +85,7 @@ class Widget
     /**
      * @return \Magento\Framework\Math\Random
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getMathRandom()
     {
@@ -126,7 +124,7 @@ class Widget
      * @param string $type Widget type
      * @return null|\Magento\Framework\Simplexml\Element
      *
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      */
     public function getConfigAsXml($type)
     {
@@ -340,7 +338,6 @@ class Widget
      * @param array $params
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.1.0
      */
     private function getWidgetPageVarName($params = [])
     {

@@ -54,7 +54,6 @@ class Signature
      * @see \Magento\Framework\Url\ScopeInterface::getBaseUrl()
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterGetBaseUrl(
         \Magento\Framework\Url\ScopeInterface $subject,

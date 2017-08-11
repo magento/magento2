@@ -251,7 +251,7 @@ abstract class AbstractEntity
      * Product metadata pool
      *
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected $metadataPool;
 
@@ -259,7 +259,6 @@ abstract class AbstractEntity
      * Json Serializer Instance
      *
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -442,8 +441,7 @@ abstract class AbstractEntity
      * Workaround. Only way to implement dependency and not to break inherited child classes
      *
      * @return Json
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {
@@ -875,7 +873,7 @@ abstract class AbstractEntity
      * Get product metadata pool
      *
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @since 2.1.0
+     * @since 100.1.0
      */
     protected function getMetadataPool()
     {

@@ -50,14 +50,12 @@ class File extends AbstractData
 
     /**
      * @var FileProcessor
-     * @since 2.1.3
      */
     protected $fileProcessor;
 
     /**
      * @var FileProcessorFactory
-     * @deprecated 2.2.0
-     * @since 2.1.3
+     * @deprecated 100.2.0
      */
     protected $fileProcessorFactory;
 
@@ -308,7 +306,6 @@ class File extends AbstractData
      *
      * @param array $value
      * @return string|null
-     * @since 2.1.3
      */
     protected function processUiComponentValue(array $value)
     {
@@ -321,7 +318,6 @@ class File extends AbstractData
      *
      * @param string $value
      * @return bool|int|string
-     * @since 2.1.3
      */
     protected function processInputFieldValue($value)
     {
@@ -390,8 +386,7 @@ class File extends AbstractData
      * Get file processor
      *
      * @return FileProcessor
-     * @deprecated 2.1.3
-     * @since 2.1.3
+     * @deprecated 100.1.3
      */
     protected function getFileProcessor()
     {

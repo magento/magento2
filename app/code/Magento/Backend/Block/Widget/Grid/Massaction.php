@@ -9,7 +9,7 @@ namespace Magento\Backend\Block\Widget\Grid;
  * Grid widget massaction default block
  *
  * @api
- * @deprecated 2.2.0 in favour of UI component implementation
+ * @deprecated 100.2.0 in favour of UI component implementation
  */
 class Massaction extends \Magento\Backend\Block\Widget\Grid\Massaction\AbstractMassaction
 {

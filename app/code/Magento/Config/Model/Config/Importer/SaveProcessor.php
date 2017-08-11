@@ -12,7 +12,6 @@ use Magento\Framework\Stdlib\ArrayUtils;
 
 /**
  * Saves configuration from importer
- * @since 2.2.0
  */
 class SaveProcessor
 {
@@ -20,7 +19,6 @@ class SaveProcessor
      * Builder which creates value object according to their backend models.
      *
      * @var PreparedValueFactory
-     * @since 2.2.0
      */
     private $valueFactory;
 
@@ -28,7 +26,6 @@ class SaveProcessor
      * An array utils.
      *
      * @var ArrayUtils
-     * @since 2.2.0
      */
     private $arrayUtils;
 
@@ -36,7 +33,6 @@ class SaveProcessor
      * The application config storage.
      *
      * @var ScopeConfigInterface
-     * @since 2.2.0
      */
     private $scopeConfig;
 
@@ -44,7 +40,6 @@ class SaveProcessor
      * @param ArrayUtils $arrayUtils An array utils
      * @param PreparedValueFactory $valueBuilder Builder which creates value object according to their backend models
      * @param ScopeConfigInterface $scopeConfig The application config storage.
-     * @since 2.2.0
      */
     public function __construct(
         ArrayUtils $arrayUtils,
@@ -61,7 +56,6 @@ class SaveProcessor
      *
      * @param array $data The data to be saved
      * @return void
-     * @since 2.2.0
      */
     public function process(array $data)
     {
@@ -97,7 +91,6 @@ class SaveProcessor
      * @param string $scope The configuration scope (default, website, or store)
      * @param string $scopeCode The scope code
      * @return void
-     * @since 2.2.0
      */
     private function invokeSave(array $scopeData, $scope, $scopeCode = null)
     {

@@ -20,49 +20,41 @@ use Magento\Ui\Component\Form;
 /**
  * Class adds a grid with links
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
  */
 class Links extends AbstractModifier
 {
     /**
      * @var LocatorInterface
-     * @since 2.1.0
      */
     protected $locator;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.1.0
      */
     protected $storeManager;
 
     /**
      * @var ArrayManager
-     * @since 2.1.0
      */
     protected $arrayManager;
 
     /**
      * @var TypeUpload
-     * @since 2.1.0
      */
     protected $typeUpload;
 
     /**
      * @var Shareable
-     * @since 2.1.0
      */
     protected $shareable;
 
     /**
      * @var Data\Links
-     * @since 2.1.0
      */
     protected $linksData;
 
     /**
      * @var UrlInterface
-     * @since 2.1.0
      */
     protected $urlBuilder;
 
@@ -74,7 +66,6 @@ class Links extends AbstractModifier
      * @param TypeUpload $typeUpload
      * @param Shareable $shareable
      * @param Data\Links $linksData
-     * @since 2.1.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -96,7 +87,6 @@ class Links extends AbstractModifier
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -113,7 +103,6 @@ class Links extends AbstractModifier
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -172,7 +161,6 @@ class Links extends AbstractModifier
 
     /**
      * @return array
-     * @since 2.1.0
      */
     protected function getDynamicRows()
     {
@@ -193,7 +181,6 @@ class Links extends AbstractModifier
 
     /**
      * @return array
-     * @since 2.1.0
      */
     protected function getRecord()
     {
@@ -235,7 +222,6 @@ class Links extends AbstractModifier
 
     /**
      * @return array
-     * @since 2.1.0
      */
     protected function getTitleColumn()
     {
@@ -261,7 +247,6 @@ class Links extends AbstractModifier
 
     /**
      * @return array
-     * @since 2.1.0
      */
     protected function getPriceColumn()
     {
@@ -295,7 +280,6 @@ class Links extends AbstractModifier
 
     /**
      * @return array
-     * @since 2.1.0
      */
     protected function getFileColumn()
     {
@@ -358,7 +342,6 @@ class Links extends AbstractModifier
 
     /**
      * @return array
-     * @since 2.1.0
      */
     protected function getSampleColumn()
     {
@@ -417,7 +400,6 @@ class Links extends AbstractModifier
 
     /**
      * @return array
-     * @since 2.1.0
      */
     protected function getShareableColumn()
     {
@@ -435,7 +417,6 @@ class Links extends AbstractModifier
 
     /**
      * @return array
-     * @since 2.1.0
      */
     protected function getMaxDownloadsColumn()
     {

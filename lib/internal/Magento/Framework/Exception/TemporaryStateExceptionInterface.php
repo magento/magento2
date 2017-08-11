@@ -7,7 +7,6 @@ namespace Magento\Framework\Exception;
 
 /**
  * Temporary state exception that represent recoverable error
- * @since 2.2.0
  */
 interface TemporaryStateExceptionInterface
 {

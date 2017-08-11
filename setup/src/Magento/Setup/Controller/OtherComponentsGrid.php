@@ -41,7 +41,6 @@ class OtherComponentsGrid extends AbstractActionController
      * No index action, return 404 error page
      *
      * @return \Zend\View\Model\ViewModel
-     * @since 2.1.0
      */
     public function indexAction()
     {
@@ -82,7 +81,7 @@ class OtherComponentsGrid extends AbstractActionController
                         'id' => $packageInfo[InfoCommand::CURRENT_VERSION],
                         'name' => $packageInfo[InfoCommand::CURRENT_VERSION]
                     ];
-                    
+
                     $versions[0]['name'] .= ' (latest)';
                     $versions[count($versions) - 1]['name'] .= ' (current)';
 

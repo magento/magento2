@@ -43,19 +43,16 @@ class UrlRewriteHandler
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\CategoryProductUrlPathGenerator
-     * @since 2.2.0
      */
     private $categoryBasedProductRewriteGenerator;
 
     /**
      * @var \Magento\UrlRewrite\Model\MergeDataProvider
-     * @since 2.2.0
      */
     private $mergeDataProviderPrototype;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -113,6 +110,7 @@ class UrlRewriteHandler
         $storeId = $category->getStoreId();
         if ($category->getAffectedProductIds()) {
             $this->isSkippedProduct[$category->getEntityId()] = $category->getAffectedProductIds();
+            /* @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
             $collection = $this->productCollectionFactory->create()
                 ->setStoreId($storeId)
                 ->addIdFilter($category->getAffectedProductIds())
@@ -120,12 +118,21 @@ class UrlRewriteHandler
                 ->addAttributeToSelect('name')
                 ->addAttributeToSelect('url_key')
                 ->addAttributeToSelect('url_path');
-            foreach ($collection as $product) {
-                $product->setStoreId($storeId);
-                $product->setData('save_rewrites_history', $saveRewriteHistory);
-                $mergeDataProvider->merge(
-                    $this->productUrlRewriteGenerator->generate($product, $category->getEntityId())
-                );
+
+            $collection->setPageSize(1000);
+            $pageCount = $collection->getLastPageNumber();
+            $currentPage = 1;
+            while ($currentPage <= $pageCount) {
+                $collection->setCurPage($currentPage);
+                foreach ($collection as $product) {
+                    $product->setStoreId($storeId);
+                    $product->setData('save_rewrites_history', $saveRewriteHistory);
+                    $mergeDataProvider->merge(
+                        $this->productUrlRewriteGenerator->generate($product, $category->getEntityId())
+                    );
+                }
+                $collection->clear();
+                $currentPage++;
             }
         } else {
             $mergeDataProvider->merge(

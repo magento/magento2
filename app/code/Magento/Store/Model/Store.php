@@ -310,13 +310,11 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @var StoreManagerInterface
-     * @since 2.1.0
      */
     private $_storeManager;
 
     /**
      * @var \Magento\Framework\Url\ModifierInterface
-     * @since 2.1.0
      */
     private $urlModifier;
 
@@ -1042,9 +1040,9 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Reinit Stores on after save
      *
-     * @deprecated 2.1.3
+     * @deprecated 100.1.3
      * @return $this
-     * @since 2.1.3
+     * @since 100.1.3
      */
     public function afterSave()
     {
@@ -1116,7 +1114,7 @@ class Store extends AbstractExtensibleModel implements
      * Check if store is default
      *
      * @return boolean
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function isDefault()
     {
@@ -1303,7 +1301,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getScopeType()
     {
@@ -1312,7 +1310,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function getScopeTypeName()
     {
@@ -1340,8 +1338,7 @@ class Store extends AbstractExtensibleModel implements
      * Gets URL modifier.
      *
      * @return \Magento\Framework\Url\ModifierInterface
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getUrlModifier()
     {

@@ -12,7 +12,6 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 /**
  * Class \Magento\Ui\Component\HtmlContent
  *
- * @since 2.1.0
  */
 class HtmlContent extends AbstractComponent implements BlockWrapperInterface
 {
@@ -20,7 +19,6 @@ class HtmlContent extends AbstractComponent implements BlockWrapperInterface
 
     /**
      * @var BlockInterface
-     * @since 2.1.0
      */
     protected $block;
 
@@ -29,7 +27,6 @@ class HtmlContent extends AbstractComponent implements BlockWrapperInterface
      * @param BlockInterface $block
      * @param array $components
      * @param array $data
-     * @since 2.1.0
      */
     public function __construct(
         ContextInterface $context,
@@ -45,7 +42,6 @@ class HtmlContent extends AbstractComponent implements BlockWrapperInterface
      * Get wrapped block
      *
      * @return BlockInterface
-     * @since 2.2.0
      */
     public function getBlock()
     {
@@ -56,7 +52,6 @@ class HtmlContent extends AbstractComponent implements BlockWrapperInterface
      * Get component name
      *
      * @return string
-     * @since 2.1.0
      */
     public function getComponentName()
     {
@@ -65,7 +60,6 @@ class HtmlContent extends AbstractComponent implements BlockWrapperInterface
 
     /**
      * @inheritDoc
-     * @since 2.1.0
      */
     public function render()
     {
@@ -74,7 +68,6 @@ class HtmlContent extends AbstractComponent implements BlockWrapperInterface
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function getConfiguration()
     {

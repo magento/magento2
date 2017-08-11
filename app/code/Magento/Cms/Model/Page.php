@@ -17,8 +17,6 @@ use Magento\Cms\Helper\Page as PageHelper;
  * Cms Page Model
  *
  * @api
- * @method ResourceCmsPage _getResource()
- * @method ResourceCmsPage getResource()
  * @method Page setStoreId(array $storeId)
  * @method array getStoreId()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -56,7 +54,6 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.1.0
      */
     private $scopeConfig;
 
@@ -183,7 +180,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get meta title
      *
      * @return string|null
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function getMetaTitle()
     {
@@ -379,7 +376,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param string $metaTitle
      * @return \Magento\Cms\Api\Data\PageInterface
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function setMetaTitle($metaTitle)
     {
@@ -542,7 +539,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 101.0.0
      */
     public function beforeSave()
     {
@@ -571,7 +568,6 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
 
     /**
      * @return ScopeConfigInterface
-     * @since 2.1.0
      */
     private function getScopeConfig()
     {

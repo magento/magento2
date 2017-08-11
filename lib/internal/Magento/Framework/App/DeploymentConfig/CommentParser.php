@@ -12,7 +12,6 @@ use Magento\Framework\Config\File\ConfigFilePool;
 
 /**
  * Parses and retrieves comments from configuration files.
- * @since 2.2.0
  */
 class CommentParser implements CommentParserInterface
 {
@@ -20,7 +19,6 @@ class CommentParser implements CommentParserInterface
      * The library to work with file system.
      *
      * @var Filesystem
-     * @since 2.2.0
      */
     private $filesystem;
 
@@ -28,14 +26,12 @@ class CommentParser implements CommentParserInterface
      * Stores file key to file name config.
      *
      * @var ConfigFilePool
-     * @since 2.2.0
      */
     private $configFilePool;
 
     /**
      * @param Filesystem $filesystem The library to work with file system
      * @param ConfigFilePool $configFilePool Stores file key to file name config
-     * @since 2.2.0
      */
     public function __construct(
         Filesystem $filesystem,
@@ -64,7 +60,6 @@ class CommentParser implements CommentParserInterface
      *
      * @param string $fileName The name of config file
      * @return array
-     * @since 2.2.0
      */
     public function execute($fileName)
     {
@@ -100,7 +95,6 @@ class CommentParser implements CommentParserInterface
      *
      * @param string $commentBlock The comment
      * @return string|null
-     * @since 2.2.0
      */
     private function getCommentText($commentBlock)
     {
@@ -121,7 +115,6 @@ class CommentParser implements CommentParserInterface
      *
      * @param string $comment The comment
      * @return string|null
-     * @since 2.2.0
      */
     private function getSectionName($comment)
     {

@@ -36,7 +36,6 @@ class Layout extends Template implements RendererInterface
 
     /**
      * @var Json
-     * @since 2.2.0
      */
     private $serializer;
 
@@ -355,7 +354,6 @@ class Layout extends Template implements RendererInterface
     /**
      * @param array $pageGroup
      * @return array
-     * @since 2.2.0
      */
     private function getPageGroup(array $pageGroup)
     {

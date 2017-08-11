@@ -13,25 +13,21 @@ use Magento\Tax\Model\Config;
  * Warning is displayed in case when "Catalog Prices" = "Excluding Tax"
  * AND "Apply Discount On Prices" = "Including Tax"
  * AND "Apply Customer Tax" = "After Discount"
- * @since 2.2.0
  */
 class ApplyDiscountOnPrices implements \Magento\Tax\Model\System\Message\NotificationInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.2.0
      */
     private $urlBuilder;
 
     /**
      * @var Config
-     * @since 2.2.0
      */
     private $taxConfig;
 
@@ -39,7 +35,6 @@ class ApplyDiscountOnPrices implements \Magento\Tax\Model\System\Message\Notific
      * Stores with invalid display settings
      *
      * @var array
-     * @since 2.2.0
      */
     private $storesWithInvalidSettings;
 
@@ -47,7 +42,6 @@ class ApplyDiscountOnPrices implements \Magento\Tax\Model\System\Message\Notific
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param Config $taxConfig
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -62,7 +56,6 @@ class ApplyDiscountOnPrices implements \Magento\Tax\Model\System\Message\Notific
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.2.0
      */
     public function getIdentity()
     {
@@ -71,7 +64,6 @@ class ApplyDiscountOnPrices implements \Magento\Tax\Model\System\Message\Notific
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function isDisplayed()
     {
@@ -83,7 +75,6 @@ class ApplyDiscountOnPrices implements \Magento\Tax\Model\System\Message\Notific
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getText()
     {
@@ -110,7 +101,6 @@ class ApplyDiscountOnPrices implements \Magento\Tax\Model\System\Message\Notific
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.2.0
      */
     public function getSeverity()
     {
@@ -121,7 +111,6 @@ class ApplyDiscountOnPrices implements \Magento\Tax\Model\System\Message\Notific
      * Return list of store names which have invalid settings.
      *
      * @return array
-     * @since 2.2.0
      */
     private function getStoresWithWrongSettings()
     {
@@ -144,7 +133,6 @@ class ApplyDiscountOnPrices implements \Magento\Tax\Model\System\Message\Notific
      *
      * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
      * @return bool false if settings are incorrect
-     * @since 2.2.0
      */
     private function checkSettings($store = null)
     {

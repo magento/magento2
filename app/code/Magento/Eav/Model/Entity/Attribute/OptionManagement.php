@@ -133,7 +133,6 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
      * @param int $optionId
      * @throws NoSuchEntityException
      * @return void
-     * @since 2.1.0
      */
     protected function validateOption($attribute, $optionId)
     {
@@ -147,7 +146,6 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
     /**
      * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
      * @return string
-     * @since 2.1.0
      */
     private function getOptionId($option)
     {

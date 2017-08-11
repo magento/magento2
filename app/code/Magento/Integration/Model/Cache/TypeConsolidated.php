@@ -7,7 +7,6 @@ namespace Magento\Integration\Model\Cache;
 
 /**
  * System / Cache Management / Cache type "Integration Configuration"
- * @since 2.1.0
  */
 class TypeConsolidated extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 {
@@ -23,7 +22,6 @@ class TypeConsolidated extends \Magento\Framework\Cache\Frontend\Decorator\TagSc
 
     /**
      * @param \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool
-     * @since 2.1.0
      */
     public function __construct(\Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool)
     {

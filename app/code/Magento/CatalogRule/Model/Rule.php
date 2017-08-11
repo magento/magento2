@@ -14,8 +14,6 @@ use Magento\Framework\DataObject\IdentityInterface;
 /**
  * Catalog Rule data model
  *
- * @method \Magento\CatalogRule\Model\ResourceModel\Rule _getResource()
- * @method \Magento\CatalogRule\Model\ResourceModel\Rule getResource()
  * @method \Magento\CatalogRule\Model\Rule setFromDate(string $value)
  * @method \Magento\CatalogRule\Model\Rule setToDate(string $value)
  * @method \Magento\CatalogRule\Model\Rule setCustomerGroupIds(string $value)
@@ -135,7 +133,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * @var Data\Condition\Converter
-     * @since 2.1.0
      */
     protected $ruleConditionConverter;
 
@@ -534,7 +531,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * Init indexing process after rule save
      *
      * @return void
-     * @since 2.2.0
      */
     public function reindex()
     {
@@ -595,7 +591,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     /**
      * @param string $formName
      * @return string
-     * @since 2.1.0
      */
     public function getConditionsFieldSetId($formName = '')
     {
@@ -606,7 +601,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getRuleId()
     {
@@ -615,7 +609,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function setRuleId($ruleId)
     {
@@ -624,7 +617,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getName()
     {
@@ -633,7 +625,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function setName($name)
     {
@@ -642,7 +633,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getDescription()
     {
@@ -651,7 +641,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function setDescription($description)
     {
@@ -660,7 +649,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getIsActive()
     {
@@ -669,7 +657,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function setIsActive($isActive)
     {
@@ -678,7 +665,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getRuleCondition()
     {
@@ -687,7 +673,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function setRuleCondition($condition)
     {
@@ -699,7 +684,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getStopRulesProcessing()
     {
@@ -708,7 +692,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function setStopRulesProcessing($isStopProcessing)
     {
@@ -717,7 +700,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getSortOrder()
     {
@@ -726,7 +708,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function setSortOrder($sortOrder)
     {
@@ -735,7 +716,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getSimpleAction()
     {
@@ -744,7 +724,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function setSimpleAction($action)
     {
@@ -753,7 +732,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function getDiscountAmount()
     {
@@ -762,7 +740,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function setDiscountAmount($amount)
     {
@@ -771,7 +748,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * @return string
-     * @since 2.1.0
      */
     public function getFromDate()
     {
@@ -780,7 +756,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * @return string
-     * @since 2.1.0
      */
     public function getToDate()
     {
@@ -791,7 +766,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * {@inheritdoc}
      *
      * @return \Magento\CatalogRule\Api\Data\RuleExtensionInterface|null
-     * @since 2.1.0
      */
     public function getExtensionAttributes()
     {
@@ -803,7 +777,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      *
      * @param \Magento\CatalogRule\Api\Data\RuleExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.1.0
      */
     public function setExtensionAttributes(\Magento\CatalogRule\Api\Data\RuleExtensionInterface $extensionAttributes)
     {
@@ -812,8 +785,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * @return Data\Condition\Converter
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getRuleConditionConverter()
     {
@@ -828,7 +800,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * @inheritDoc
-     * @since 2.1.1
      */
     public function getIdentities()
     {

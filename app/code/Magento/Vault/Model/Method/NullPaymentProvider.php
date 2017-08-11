@@ -13,7 +13,6 @@ use Magento\Quote\Api\Data\CartInterface;
 /**
  * Class \Magento\Vault\Model\Method\NullPaymentProvider
  *
- * @since 2.1.0
  */
 class NullPaymentProvider implements MethodInterface
 {
@@ -22,7 +21,6 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return string
      *
-     * @since 2.1.0
      */
     public function getCode()
     {
@@ -34,8 +32,7 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return string
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     public function getFormBlockType()
     {
@@ -47,7 +44,6 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return string
      *
-     * @since 2.1.0
      */
     public function getTitle()
     {
@@ -58,7 +54,6 @@ class NullPaymentProvider implements MethodInterface
      * Store id setter
      * @param int $storeId
      * @return void
-     * @since 2.1.0
      */
     public function setStore($storeId)
     {
@@ -68,7 +63,6 @@ class NullPaymentProvider implements MethodInterface
     /**
      * Store id getter
      * @return int
-     * @since 2.1.0
      */
     public function getStore()
     {
@@ -80,7 +74,6 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return bool
      *
-     * @since 2.1.0
      */
     public function canOrder()
     {
@@ -92,7 +85,6 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return bool
      *
-     * @since 2.1.0
      */
     public function canAuthorize()
     {
@@ -104,7 +96,6 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return bool
      *
-     * @since 2.1.0
      */
     public function canCapture()
     {
@@ -116,7 +107,6 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return bool
      *
-     * @since 2.1.0
      */
     public function canCapturePartial()
     {
@@ -128,7 +118,6 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return bool
      *
-     * @since 2.1.0
      */
     public function canCaptureOnce()
     {
@@ -140,7 +129,6 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return bool
      *
-     * @since 2.1.0
      */
     public function canRefund()
     {
@@ -152,7 +140,6 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return bool
      *
-     * @since 2.1.0
      */
     public function canRefundPartialPerInvoice()
     {
@@ -163,7 +150,6 @@ class NullPaymentProvider implements MethodInterface
      * Check void availability
      * @return bool
      *
-     * @since 2.1.0
      */
     public function canVoid()
     {
@@ -175,7 +161,6 @@ class NullPaymentProvider implements MethodInterface
      * Can be used in admin
      *
      * @return bool
-     * @since 2.1.0
      */
     public function canUseInternal()
     {
@@ -186,7 +171,6 @@ class NullPaymentProvider implements MethodInterface
      * Can be used in regular checkout
      *
      * @return bool
-     * @since 2.1.0
      */
     public function canUseCheckout()
     {
@@ -198,7 +182,6 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return bool
      *
-     * @since 2.1.0
      */
     public function canEdit()
     {
@@ -210,7 +193,6 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return bool
      *
-     * @since 2.1.0
      */
     public function canFetchTransactionInfo()
     {
@@ -225,7 +207,6 @@ class NullPaymentProvider implements MethodInterface
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @since 2.1.0
      */
     public function fetchTransactionInfo(InfoInterface $payment, $transactionId)
     {
@@ -237,7 +218,6 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return bool
      *
-     * @since 2.1.0
      */
     public function isGateway()
     {
@@ -249,7 +229,6 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return bool
      *
-     * @since 2.1.0
      */
     public function isOffline()
     {
@@ -261,7 +240,6 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return bool
      *
-     * @since 2.1.0
      */
     public function isInitializeNeeded()
     {
@@ -273,7 +251,6 @@ class NullPaymentProvider implements MethodInterface
      *
      * @param string $country
      * @return bool
-     * @since 2.1.0
      */
     public function canUseForCountry($country)
     {
@@ -286,7 +263,6 @@ class NullPaymentProvider implements MethodInterface
      * @param string $currencyCode
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function canUseForCurrency($currencyCode)
     {
@@ -298,8 +274,7 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return string
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     public function getInfoBlockType()
     {
@@ -312,8 +287,7 @@ class NullPaymentProvider implements MethodInterface
      * @return InfoInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     public function getInfoInstance()
     {
@@ -326,8 +300,7 @@ class NullPaymentProvider implements MethodInterface
      * @param InfoInterface $info
      * @return void
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     public function setInfoInstance(InfoInterface $info)
     {
@@ -340,7 +313,6 @@ class NullPaymentProvider implements MethodInterface
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      *
-     * @since 2.1.0
      */
     public function validate()
     {
@@ -354,7 +326,6 @@ class NullPaymentProvider implements MethodInterface
      * @param float $amount
      * @return $this
      *
-     * @since 2.1.0
      */
     public function order(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -368,7 +339,6 @@ class NullPaymentProvider implements MethodInterface
      * @param float $amount
      * @return $this
      *
-     * @since 2.1.0
      */
     public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -382,7 +352,6 @@ class NullPaymentProvider implements MethodInterface
      * @param float $amount
      * @return $this
      *
-     * @since 2.1.0
      */
     public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -396,7 +365,6 @@ class NullPaymentProvider implements MethodInterface
      * @param float $amount
      * @return $this
      *
-     * @since 2.1.0
      */
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -409,7 +377,6 @@ class NullPaymentProvider implements MethodInterface
      * @param InfoInterface $payment
      * @return $this
      *
-     * @since 2.1.0
      */
     public function cancel(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -422,7 +389,6 @@ class NullPaymentProvider implements MethodInterface
      * @param InfoInterface $payment
      * @return $this
      *
-     * @since 2.1.0
      */
     public function void(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -433,7 +399,6 @@ class NullPaymentProvider implements MethodInterface
      * Whether this method can accept or deny payment
      * @return bool
      *
-     * @since 2.1.0
      */
     public function canReviewPayment()
     {
@@ -447,7 +412,6 @@ class NullPaymentProvider implements MethodInterface
      * @return false
      * @throws \Magento\Framework\Exception\LocalizedException
      *
-     * @since 2.1.0
      */
     public function acceptPayment(InfoInterface $payment)
     {
@@ -461,7 +425,6 @@ class NullPaymentProvider implements MethodInterface
      * @return false
      * @throws \Magento\Framework\Exception\LocalizedException
      *
-     * @since 2.1.0
      */
     public function denyPayment(InfoInterface $payment)
     {
@@ -475,7 +438,6 @@ class NullPaymentProvider implements MethodInterface
      * @param int|string|null|\Magento\Store\Model\Store $storeId
      *
      * @return mixed
-     * @since 2.1.0
      */
     public function getConfigData($field, $storeId = null)
     {
@@ -488,7 +450,6 @@ class NullPaymentProvider implements MethodInterface
      * @param DataObject $data
      * @return $this
      *
-     * @since 2.1.0
      */
     public function assignData(DataObject $data)
     {
@@ -500,7 +461,6 @@ class NullPaymentProvider implements MethodInterface
      *
      * @param CartInterface|null $quote
      * @return bool
-     * @since 2.1.0
      */
     public function isAvailable(CartInterface $quote = null)
     {
@@ -512,7 +472,6 @@ class NullPaymentProvider implements MethodInterface
      *
      * @param int|null $storeId
      * @return bool
-     * @since 2.1.0
      */
     public function isActive($storeId = null)
     {
@@ -529,8 +488,7 @@ class NullPaymentProvider implements MethodInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     public function initialize($paymentAction, $stateObject)
     {
@@ -543,7 +501,6 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return string
      *
-     * @since 2.1.0
      */
     public function getConfigPaymentAction()
     {

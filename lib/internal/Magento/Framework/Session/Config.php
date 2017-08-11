@@ -85,7 +85,6 @@ class Config implements ConfigInterface
 
     /**
      * @var string
-     * @since 2.1.0
      */
     protected $lifetimePath;
 

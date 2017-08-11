@@ -10,7 +10,6 @@ use Magento\Framework\Phrase;
 
 /**
  * Parser helper for communication-related configs.
- * @since 2.2.0
  */
 class ConfigParser
 {
@@ -23,7 +22,6 @@ class ConfigParser
      * @param string $serviceMethod
      * @return array Contains class name and method name
      * @throws LocalizedException
-     * @since 2.2.0
      */
     public function parseServiceMethod($serviceMethod)
     {

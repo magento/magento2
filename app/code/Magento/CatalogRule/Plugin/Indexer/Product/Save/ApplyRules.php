@@ -34,7 +34,6 @@ class ApplyRules
      * @param \Magento\Framework\Model\AbstractModel $product
      * @return \Magento\Catalog\Model\ResourceModel\Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterSave(
         \Magento\Catalog\Model\ResourceModel\Product $subject,

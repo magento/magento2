@@ -29,13 +29,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @var DataObject
-     * @since 2.2.0
      */
     private $itemPrototype = null;
 
     /**
      * @var \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
-     * @since 2.2.0
      */
     private $catalogRuleProcessor = null;
 
@@ -43,7 +41,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Is website scope prices joined to collection
      *
      * @var bool
-     * @since 2.2.0
      */
     private $websiteScopePriceJoined = false;
 
@@ -168,7 +165,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Add filtering of product then havent enoght stock
      *
      * @return $this
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function addQuantityFilter()
     {
@@ -186,7 +183,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @inheritDoc
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getNewEmptyItem()
     {
@@ -204,7 +201,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param bool $useRegularPrice
      *
      * @return $this
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function addPriceFilter($product, $searchMin, $useRegularPrice = false)
     {
@@ -256,8 +253,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @return \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getCatalogRuleProcessor()
     {
