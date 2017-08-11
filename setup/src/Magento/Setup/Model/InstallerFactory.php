@@ -6,10 +6,10 @@
 
 namespace Magento\Setup\Model;
 
+use Zend\EventManager\EventManagerInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Magento\Setup\Module\ResourceFactory;
 use Magento\Framework\App\ErrorHandler;
-use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Setup\LoggerInterface;
 
 /**
@@ -52,6 +52,10 @@ class InstallerFactory
      */
     public function create(LoggerInterface $log)
     {
+        /** @var \Zend\Mvc\ApplicationInterface $application */
+        $application = $this->serviceLocator->get('Application');
+        $eventManager = $application->getEventManager();
+
         return new Installer(
             $this->serviceLocator->get(\Magento\Framework\Setup\FilePermissions::class),
             $this->serviceLocator->get(\Magento\Framework\App\DeploymentConfig\Writer::class),
@@ -77,7 +81,8 @@ class InstallerFactory
             $this->serviceLocator->get(\Magento\Setup\Module\DataSetupFactory::class),
             $this->serviceLocator->get(\Magento\Framework\Setup\SampleData\State::class),
             new \Magento\Framework\Component\ComponentRegistrar(),
-            $this->serviceLocator->get(\Magento\Setup\Model\PhpReadinessCheck::class)
+            $this->serviceLocator->get(\Magento\Setup\Model\PhpReadinessCheck::class),
+            $eventManager
         );
     }
 

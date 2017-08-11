@@ -7,6 +7,8 @@
 namespace Magento\Setup\Test\Unit\Model;
 
 use \Magento\Setup\Model\InstallerFactory;
+use Zend\EventManager\EventManagerInterface;
+use Zend\Mvc\ApplicationInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -44,6 +46,10 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private function getReturnValueMap()
     {
+        $eventManagerMock = $this->getMock(EventManagerInterface::class);
+        $applicationMock = $this->getMock(ApplicationInterface::class);
+        $applicationMock->expects($this->once())->method('getEventManager')->willReturn($eventManagerMock);
+
         return [
             [
                 \Magento\Framework\Setup\FilePermissions::class,
@@ -130,6 +136,10 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
             [
                 \Magento\Setup\Model\PhpReadinessCheck::class,
                 $this->getMock(\Magento\Setup\Model\PhpReadinessCheck::class, [], [], '', false),
+            ],
+            [
+                'Application',
+                $applicationMock
             ],
         ];
     }

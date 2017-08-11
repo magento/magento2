@@ -33,12 +33,16 @@ use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
+use Magento\Setup\Model\Installer\Event\AfterDataWasInstalled;
+use Magento\Setup\Model\Installer\Event\AfterSchemaWasInstalled;
+use Magento\Setup\Model\Installer\Event\BeforeModuleIsProcessed;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\DataSetupFactory;
 use Magento\Setup\Module\Setup;
 use Magento\Setup\Module\SetupFactory;
 use Magento\Setup\Validator\DbValidator;
 use Magento\Store\Model\Store;
+use Zend\EventManager\EventManagerInterface;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -225,6 +229,11 @@ class Installer
     private $phpReadinessCheck;
 
     /**
+     * @var EventManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -248,6 +257,7 @@ class Installer
      * @param \Magento\Framework\Setup\SampleData\State $sampleDataState
      * @param ComponentRegistrar $componentRegistrar
      * @param PhpReadinessCheck $phpReadinessCheck
+     * @param EventManagerInterface $eventManager
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -272,7 +282,8 @@ class Installer
         DataSetupFactory $dataSetupFactory,
         \Magento\Framework\Setup\SampleData\State $sampleDataState,
         ComponentRegistrar $componentRegistrar,
-        PhpReadinessCheck $phpReadinessCheck
+        PhpReadinessCheck $phpReadinessCheck,
+        EventManagerInterface $eventManager
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -296,6 +307,7 @@ class Installer
         $this->sampleDataState = $sampleDataState;
         $this->componentRegistrar = $componentRegistrar;
         $this->phpReadinessCheck = $phpReadinessCheck;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -773,6 +785,8 @@ class Installer
         $this->setupCoreTables($setup);
         $this->log->log('Schema creation/updates:');
         $this->handleDBSchemaData($setup, 'schema');
+
+        $this->eventManager->trigger(new AfterSchemaWasInstalled($this, $setup, $this->context));
     }
 
     /**
@@ -789,6 +803,8 @@ class Installer
         $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
         $this->handleDBSchemaData($setup, 'data');
+
+        $this->eventManager->trigger(new AfterDataWasInstalled($this, $setup, $this->context));
     }
 
     /**
@@ -842,9 +858,21 @@ class Installer
         $moduleNames = $this->moduleList->getNames();
         $moduleContextList = $this->generateListOfModuleContext($resource, $verType);
         foreach ($moduleNames as $moduleName) {
+            $moduleContext = $moduleContextList[$moduleName];
             $this->log->log("Module '{$moduleName}':");
             $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
-            $currentVersion = $moduleContextList[$moduleName]->getVersion();
+            $currentVersion = $moduleContext->getVersion();
+
+            $event = new BeforeModuleIsProcessed($this, $setup, $moduleContext, $type);
+            $this->eventManager->trigger($event);
+
+            if ($event->propagationIsStopped()) {
+                // simulate what would happen if the code after this line was in another event listener with lower
+                // priority
+                $this->logProgress();
+                continue;
+            }
+
             // Schema/Data is installed
             if ($currentVersion !== '') {
                 $status = version_compare($configVer, $currentVersion);
@@ -852,7 +880,7 @@ class Installer
                     $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
                     if ($upgrader) {
                         $this->log->logInline("Upgrading $type.. ");
-                        $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
+                        $upgrader->upgrade($setup, $moduleContext);
                     }
                     if ($type === 'schema') {
                         $resource->setDbVersion($moduleName, $configVer);
@@ -864,12 +892,12 @@ class Installer
                 $installer = $this->getSchemaDataHandler($moduleName, $installType);
                 if ($installer) {
                     $this->log->logInline("Installing $type... ");
-                    $installer->install($setup, $moduleContextList[$moduleName]);
+                    $installer->install($setup, $moduleContext);
                 }
                 $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
                 if ($upgrader) {
                     $this->log->logInline("Upgrading $type... ");
-                    $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
+                    $upgrader->upgrade($setup, $moduleContext);
                 }
                 if ($type === 'schema') {
                     $resource->setDbVersion($moduleName, $configVer);
@@ -892,7 +920,7 @@ class Installer
             $modulePostUpdater = $this->getSchemaDataHandler($moduleName, $handlerType);
             if ($modulePostUpdater) {
                 $this->log->logInline('Running ' . str_replace('-', ' ', $handlerType) . '...');
-                $modulePostUpdater->install($setup, $moduleContextList[$moduleName]);
+                $modulePostUpdater->install($setup, $moduleContext);
             }
             $this->logProgress();
         }
@@ -1154,6 +1182,15 @@ class Installer
         } else {
             $this->log->log('No database connection defined - skipping database cleanup');
         }
+    }
+
+    /**
+     * getObjectManager
+     * @return \Magento\Framework\ObjectManagerInterface
+     */
+    public function getObjectManager()
+    {
+        return $this->objectManagerProvider->get();
     }
 
     /**
