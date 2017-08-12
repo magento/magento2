@@ -15,7 +15,7 @@ interface StockItemIndexerInterface extends \Magento\Framework\Indexer\ActionInt
     /**
      * Indexer ID in configuration
      */
-    const INDEXER_ID = 'inventory_stock_item_index';
+    const INDEXER_ID = 'inventory_stock_item';
 
     /**
      * Returns the indexer name.

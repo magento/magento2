@@ -13,8 +13,6 @@ use Magento\Framework\Indexer\SaveHandler\IndexerInterface as SaveHandlerIndexer
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\DimensionFactory;
-use Magento\Framework\Search\Request\IndexScopeResolverInterface;
-use Magento\Inventory\Model\Indexer\StockItemIndexerInterface;
 
 /**
  * @todo add comment
@@ -48,17 +46,18 @@ class IndexHandler implements SaveHandlerIndexerInterface
     private $resource;
 
     /**
-     * @var array
+     * @var string
      */
-    private $data;
+    private $indexName;
 
     /**
-     * @param IndexStructure $indexStructure
-     * @param IndexScopeResolverInterface $indexScopeResolver
+     * IndexHandler constructor.
+     * @param IndexStructureInterface $indexStructure
+     * @param IndexScopeResolver $indexScopeResolver
      * @param Batch $batch
      * @param ResourceConnection $resource
-     * @param array $data
-     * @param int $batchSize #
+     * @param string $indexName
+     * @param int $batchSize
      */
     public function __construct(
         IndexStructureInterface $indexStructure,
@@ -93,7 +92,8 @@ class IndexHandler implements SaveHandlerIndexerInterface
      */
     private function insertDocuments(array $documents, array $dimensions)
     {
-        // TODO: Implement insertDocuments() method.
+        $columns = ['sku', 'quantity', 'status', 'stock_id'];
+        $this->resource->getConnection()->insertArray($this->getTableName($dimensions), $columns, $documents);
     }
 
     /**
@@ -113,7 +113,8 @@ class IndexHandler implements SaveHandlerIndexerInterface
      */
     private function getTableName($dimensions)
     {
-        return $this->indexScopeResolver->resolve($this->getIndexName(), $dimensions);
+        $tableName =  $this->indexScopeResolver->resolve($this->getIndexName(), $dimensions);
+        return  $tableName;
     }
 
     /**
@@ -121,7 +122,15 @@ class IndexHandler implements SaveHandlerIndexerInterface
      */
     private function getIndexName()
     {
-        return StockItemIndexerInterface::INDEXER_ID;
+        return $this->indexName;
+    }
+
+    /**
+     * @param $indexName
+     */
+    public function setIndexName($indexName)
+    {
+        $this->indexName = $indexName;
     }
 
     /**
@@ -129,8 +138,8 @@ class IndexHandler implements SaveHandlerIndexerInterface
      */
     public function cleanIndex($dimensions)
     {
-        $this->indexStructure->delete($this->getIndexName(), $dimensions);
-        $this->indexStructure->create($this->getIndexName(), [], $dimensions);
+        $this->indexStructure->delete($this->getTableName($dimensions), $dimensions);
+        $this->indexStructure->create($this->getTableName($dimensions), [], $dimensions);
     }
 
     /**

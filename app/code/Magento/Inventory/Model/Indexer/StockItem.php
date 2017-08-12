@@ -6,6 +6,8 @@
 
 namespace Magento\Inventory\Model\Indexer;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Indexer\Table\StrategyInterface;
 use Magento\Inventory\Model\Indexer\StockItem\DataProvider;
 use Magento\Inventory\Model\Indexer\StockItem\DimensionFactory;
 use Magento\Inventory\Model\Indexer\StockItem\IndexHandler;
@@ -63,8 +65,10 @@ class StockItem implements StockItemIndexerInterface
 
         foreach ($storeIds as $storeId) {
             $dimension = [$this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId])];
+            $this->handler->setIndexName($this->getTemporaryIndexName());
             $this->handler->cleanIndex($dimension);
             $this->handler->saveIndex($dimension, $this->dataProvider->fetchDocuments([]));
+            // TODO Implement switch
         }
     }
 
@@ -85,6 +89,7 @@ class StockItem implements StockItemIndexerInterface
 
         foreach ($storeIds as $storeId) {
             $dimension = [$this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId])];
+            $this->handler->setIndexName($this->getIndexName());
             $this->handler->deleteIndex($dimension, new \ArrayObject($ids));
             $this->handler->saveIndex($dimension, $this->dataProvider->fetchDocuments($ids));
         }
@@ -96,5 +101,21 @@ class StockItem implements StockItemIndexerInterface
     public function getName()
     {
         return StockItem::INDEXER_ID;
+    }
+
+    /**
+     * @return string
+     */
+    private function getIndexName()
+    {
+        return StockItem::INDEXER_ID.StrategyInterface::IDX_SUFFIX;
+    }
+
+    /**
+     * @return string
+     */
+    private function getTemporaryIndexName()
+    {
+        return StockItem::INDEXER_ID. StrategyInterface::TMP_SUFFIX;
     }
 }
