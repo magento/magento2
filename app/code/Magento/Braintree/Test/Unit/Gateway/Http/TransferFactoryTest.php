@@ -12,7 +12,7 @@ use Magento\Payment\Gateway\Http\TransferInterface;
 /**
  * Class TransferFactoryTest
  */
-class TransferFactoryTest extends \PHPUnit_Framework_TestCase
+class TransferFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var TransferFactory
@@ -31,8 +31,8 @@ class TransferFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->transferBuilder = $this->getMock(TransferBuilder::class);
-        $this->transferMock = $this->getMock(TransferInterface::class);
+        $this->transferBuilder = $this->createMock(TransferBuilder::class);
+        $this->transferMock = $this->createMock(TransferInterface::class);
 
         $this->transferFactory = new TransferFactory(
             $this->transferBuilder

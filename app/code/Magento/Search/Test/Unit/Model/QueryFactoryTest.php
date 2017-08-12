@@ -19,7 +19,7 @@ use Magento\Search\Model\Query;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class QueryFactoryTest extends \PHPUnit_Framework_TestCase
+class QueryFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var QueryFactory

@@ -6,6 +6,10 @@
 
 namespace Magento\CatalogInventory\Observer;
 
+/**
+ * Class \Magento\CatalogInventory\Observer\ItemsForReindex
+ *
+ */
 class ItemsForReindex
 {
     /**

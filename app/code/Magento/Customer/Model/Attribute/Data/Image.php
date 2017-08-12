@@ -11,6 +11,10 @@
  */
 namespace Magento\Customer\Model\Attribute\Data;
 
+/**
+ * Class \Magento\Customer\Model\Attribute\Data\Image
+ *
+ */
 class Image extends \Magento\Eav\Model\Attribute\Data\Image
 {
 }

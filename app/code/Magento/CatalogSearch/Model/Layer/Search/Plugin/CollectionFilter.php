@@ -9,6 +9,10 @@ namespace Magento\CatalogSearch\Model\Layer\Search\Plugin;
 use Magento\Catalog\Model\Category;
 use Magento\Search\Model\QueryFactory;
 
+/**
+ * Class \Magento\CatalogSearch\Model\Layer\Search\Plugin\CollectionFilter
+ *
+ */
 class CollectionFilter
 {
     /**

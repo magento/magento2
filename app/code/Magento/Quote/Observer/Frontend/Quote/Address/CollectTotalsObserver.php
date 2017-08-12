@@ -7,6 +7,10 @@ namespace Magento\Quote\Observer\Frontend\Quote\Address;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver
+ *
+ */
 class CollectTotalsObserver implements ObserverInterface
 {
     /**

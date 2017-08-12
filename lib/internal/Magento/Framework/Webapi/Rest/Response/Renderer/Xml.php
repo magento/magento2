@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Webapi\Rest\Response\Renderer;
 
+/**
+ * Class \Magento\Framework\Webapi\Rest\Response\Renderer\Xml
+ *
+ */
 class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
 {
     /**
@@ -24,7 +28,9 @@ class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
      */
     const DEFAULT_ENTITY_ITEM_NAME = 'item';
 
-    /** @var \Magento\Framework\Xml\Generator */
+    /**
+     * @var \Magento\Framework\Xml\Generator
+     */
     protected $_xmlGenerator;
 
     /**

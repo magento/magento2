@@ -84,7 +84,7 @@ class Template extends \Magento\Framework\View\Element\Template
      *
      * @param string $moduleName Full module name
      * @return boolean
-     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isOutputEnabled($moduleName = null)

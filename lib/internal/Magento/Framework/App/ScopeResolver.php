@@ -7,6 +7,10 @@ namespace Magento\Framework\App;
 
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Class \Magento\Framework\App\ScopeResolver
+ *
+ */
 class ScopeResolver implements ScopeResolverInterface
 {
     /**

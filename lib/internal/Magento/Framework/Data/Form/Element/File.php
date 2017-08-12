@@ -11,6 +11,10 @@
  */
 namespace Magento\Framework\Data\Form\Element;
 
+/**
+ * Class \Magento\Framework\Data\Form\Element\File
+ *
+ */
 class File extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**

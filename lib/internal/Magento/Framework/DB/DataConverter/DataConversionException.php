@@ -6,6 +6,10 @@
 
 namespace Magento\Framework\DB\DataConverter;
 
+/**
+ * Class \Magento\Framework\DB\DataConverter\DataConversionException
+ *
+ */
 class DataConversionException extends \Exception
 {
 }

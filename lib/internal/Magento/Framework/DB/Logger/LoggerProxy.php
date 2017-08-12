@@ -7,6 +7,10 @@ namespace Magento\Framework\DB\Logger;
 
 use Magento\Framework\DB\LoggerInterface;
 
+/**
+ * Class \Magento\Framework\DB\Logger\LoggerProxy
+ *
+ */
 class LoggerProxy implements LoggerInterface
 {
     /**

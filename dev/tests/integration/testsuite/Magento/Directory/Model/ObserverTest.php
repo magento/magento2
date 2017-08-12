@@ -15,7 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Integration test for \Magento\Directory\Model\Observer
  */
-class ObserverTest extends \PHPUnit_Framework_TestCase
+class ObserverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  ObjectManagerInterface */
     protected $objectManager;
@@ -67,7 +67,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $url = str_replace('{{CURRENCY_TO}}', 'GBP', $url);
         try {
             file_get_contents($url);
-        } catch (\PHPUnit_Framework_Exception $e) {
+        } catch (\PHPUnit\Framework\Exception $e) {
             $this->markTestSkipped('http://www.webservicex.net is unavailable ');
         }
 

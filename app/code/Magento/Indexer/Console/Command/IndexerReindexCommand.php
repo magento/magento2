@@ -167,7 +167,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      * Get config
      *
      * @return \Magento\Framework\Indexer\ConfigInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getConfig()
     {
@@ -181,7 +181,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      * Get indexer factory
      *
      * @return IndexerFactory
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getIndexerFactory()
     {

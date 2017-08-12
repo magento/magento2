@@ -6,6 +6,10 @@
 
 namespace Magento\Framework\Message;
 
+/**
+ * Class \Magento\Framework\Message\ExceptionMessageFactoryPool
+ *
+ */
 class ExceptionMessageFactoryPool
 {
     /**

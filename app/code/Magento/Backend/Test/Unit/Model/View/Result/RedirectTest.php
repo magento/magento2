@@ -7,7 +7,7 @@ namespace Magento\Backend\Test\Unit\Model\View\Result;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class RedirectTest extends \PHPUnit_Framework_TestCase
+class RedirectTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Backend\Model\View\Result\Redirect */
     protected $action;
@@ -31,16 +31,10 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->session = $this->getMock(\Magento\Backend\Model\Session::class, [], [], '', false);
-        $this->actionFlag = $this->getMock(\Magento\Framework\App\ActionFlag::class, [], [], '', false);
-        $this->urlBuilder = $this->getMock(\Magento\Backend\Model\UrlInterface::class, [], [], '', false);
-        $this->redirect = $this->getMock(
-            \Magento\Framework\App\Response\RedirectInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->session = $this->createMock(\Magento\Backend\Model\Session::class);
+        $this->actionFlag = $this->createMock(\Magento\Framework\App\ActionFlag::class);
+        $this->urlBuilder = $this->createMock(\Magento\Backend\Model\UrlInterface::class);
+        $this->redirect = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->action = $this->objectManagerHelper->getObject(
             \Magento\Backend\Model\View\Result\Redirect::class,

@@ -9,6 +9,10 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget;
 
+/**
+ * Class \Magento\Widget\Controller\Adminhtml\Widget\Instance
+ *
+ */
 abstract class Instance extends \Magento\Backend\App\Action
 {
     /**

@@ -5,6 +5,10 @@
  */
 namespace Magento\GroupedProduct\Helper\Product\Configuration\Plugin;
 
+/**
+ * Class \Magento\GroupedProduct\Helper\Product\Configuration\Plugin\Grouped
+ *
+ */
 class Grouped
 {
     /**

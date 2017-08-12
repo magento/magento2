@@ -5,6 +5,10 @@
  */
 namespace Magento\Checkout\Controller\Sidebar;
 
+/**
+ * Class \Magento\Checkout\Controller\Sidebar\RemoveItem
+ *
+ */
 class RemoveItem extends \Magento\Framework\App\Action\Action
 {
     /**
@@ -91,7 +95,7 @@ class RemoveItem extends \Magento\Framework\App\Action\Action
 
     /**
      * @return \Magento\Framework\Data\Form\FormKey\Validator
-     * @deprecated
+     * @deprecated 100.0.9
      */
     private function getFormKeyValidator()
     {

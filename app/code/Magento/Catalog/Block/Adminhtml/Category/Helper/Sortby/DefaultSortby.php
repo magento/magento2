@@ -11,6 +11,10 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Helper\Sortby;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Category\Helper\Sortby\DefaultSortby
+ *
+ */
 class DefaultSortby extends \Magento\Framework\Data\Form\Element\Select
 {
     /**

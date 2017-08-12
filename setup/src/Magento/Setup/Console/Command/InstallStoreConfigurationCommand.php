@@ -42,7 +42,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
      * Object Manager
      *
      * @var ObjectManagerInterface
-     * @deprecated
+     * @deprecated 2.2.0
      */
     private $objectManager;
 

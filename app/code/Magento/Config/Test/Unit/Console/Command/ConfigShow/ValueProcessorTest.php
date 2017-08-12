@@ -21,7 +21,7 @@ use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
  *
  * @see ValueProcessor
  */
-class ValueProcessorTest extends \PHPUnit_Framework_TestCase
+class ValueProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ValueFactory|\PHPUnit_Framework_MockObject_MockObject

@@ -7,7 +7,7 @@ namespace Magento\Backend\Block\Widget\Grid;
 
 /**
  * @api
- * @deprecated in favour of UI component implementation
+ * @deprecated 100.2.0 in favour of UI component implementation
  * @method string|array getInputNames()
  */
 class Serializer extends \Magento\Framework\View\Element\Template

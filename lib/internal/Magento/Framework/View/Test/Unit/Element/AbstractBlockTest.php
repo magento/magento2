@@ -19,7 +19,7 @@ use Magento\Framework\Session\SessionManagerInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractBlockTest extends \PHPUnit_Framework_TestCase
+class AbstractBlockTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AbstractBlock
@@ -67,7 +67,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
         $this->sidResolverMock = $this->getMockForAbstractClass(SidResolverInterface::class);
         $this->sessionMock = $this->getMockForAbstractClass(SessionManagerInterface::class);
-        $contextMock = $this->getMock(Context::class, [], [], '', false);
+        $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->once())
             ->method('getEventManager')
             ->willReturn($this->eventManagerMock);
@@ -141,7 +141,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetVar()
     {
-        $config = $this->getMock(View::class, ['getVarValue'], [], '', false);
+        $config = $this->createPartialMock(View::class, ['getVarValue']);
         $module = uniqid();
 
         $config->expects($this->any())
@@ -151,7 +151,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
                 [$module, 'v2', 'two']
             ]);
 
-        $configManager = $this->getMock(ConfigInterface::class, [], [], '', false);
+        $configManager = $this->createMock(ConfigInterface::class);
         $configManager->expects($this->exactly(2))->method('getViewConfig')->willReturn($config);
 
         /** @var $block AbstractBlock|\PHPUnit_Framework_MockObject_MockObject */

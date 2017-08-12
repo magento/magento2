@@ -9,6 +9,10 @@ namespace Magento\GoogleOptimizer\Observer\CmsPage;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\GoogleOptimizer\Observer\CmsPage\DeleteCmsGoogleExperimentScriptObserver
+ *
+ */
 class DeleteCmsGoogleExperimentScriptObserver implements ObserverInterface
 {
     /**

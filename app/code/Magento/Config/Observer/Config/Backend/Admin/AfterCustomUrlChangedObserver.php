@@ -7,6 +7,10 @@ namespace Magento\Config\Observer\Config\Backend\Admin;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Config\Observer\Config\Backend\Admin\AfterCustomUrlChangedObserver
+ *
+ */
 class AfterCustomUrlChangedObserver implements ObserverInterface
 {
     /**

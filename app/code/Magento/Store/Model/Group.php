@@ -6,9 +6,6 @@
 
 /**
  * Store group model
- *
- * @method \Magento\Store\Model\ResourceModel\Group _getResource()
- * @method \Magento\Store\Model\ResourceModel\Group getResource()
  */
 namespace Magento\Store\Model;
 
@@ -403,6 +400,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function afterDelete()
     {
@@ -464,6 +462,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function getCode()
     {
@@ -472,6 +471,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function setCode($code)
     {
@@ -497,6 +497,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function getScopeType()
     {
@@ -505,6 +506,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function getScopeTypeName()
     {

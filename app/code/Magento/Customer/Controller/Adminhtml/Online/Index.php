@@ -9,6 +9,10 @@ namespace Magento\Customer\Controller\Adminhtml\Online;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Class \Magento\Customer\Controller\Adminhtml\Online\Index
+ *
+ */
 class Index extends \Magento\Backend\App\Action
 {
     /**

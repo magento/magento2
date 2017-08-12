@@ -6,6 +6,10 @@
  */
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
+/**
+ * Class \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite\CmsPageGrid
+ *
+ */
 class CmsPageGrid extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
 {
     /**

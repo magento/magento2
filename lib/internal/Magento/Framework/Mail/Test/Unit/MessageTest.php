@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Mail\Test\Unit;
 
-class MessageTest extends \PHPUnit_Framework_TestCase
+class MessageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Mail\Message
@@ -14,7 +14,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_messageMock = $this->getMock(
+        $this->_messageMock = $this->createPartialMock(
             \Magento\Framework\Mail\Message::class,
             ['setBody', 'setMessageType']
         );

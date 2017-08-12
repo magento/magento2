@@ -154,7 +154,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      *
      * @param \Magento\Framework\Registry $coreRegistry
      * @return void
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function setCustomerRegistry(\Magento\Customer\Model\CustomerRegistry $customerRegistry)
     {
@@ -166,7 +166,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Get customer registry
      *
      * @return \Magento\Customer\Model\CustomerRegistry
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function getCustomerRegistry()
     {

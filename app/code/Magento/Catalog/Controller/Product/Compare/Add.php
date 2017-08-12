@@ -8,6 +8,10 @@ namespace Magento\Catalog\Controller\Product\Compare;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class \Magento\Catalog\Controller\Product\Compare\Add
+ *
+ */
 class Add extends \Magento\Catalog\Controller\Product\Compare
 {
     /**

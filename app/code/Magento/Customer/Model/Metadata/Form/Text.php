@@ -9,6 +9,10 @@ namespace Magento\Customer\Model\Metadata\Form;
 
 use Magento\Framework\Api\ArrayObjectSearch;
 
+/**
+ * Class \Magento\Customer\Model\Metadata\Form\Text
+ *
+ */
 class Text extends AbstractData
 {
     /**

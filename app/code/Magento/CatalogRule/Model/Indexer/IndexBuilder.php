@@ -24,7 +24,8 @@ class IndexBuilder
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
-     * @deprecated
+     * @deprecated 100.2.0
+     * @since 100.1.0
      */
     protected $metadataPool;
 
@@ -34,7 +35,7 @@ class IndexBuilder
      * This array contain list of CatalogRuleGroupWebsite table columns
      *
      * @var array
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $_catalogRuleGroupWebsiteColumnsList = ['rule_id', 'customer_group_id', 'website_id'];
 
@@ -417,7 +418,7 @@ class IndexBuilder
     /**
      * @param Rule $rule
      * @return $this
-     * @deprecated
+     * @deprecated 100.2.0
      * @see \Magento\CatalogRule\Model\Indexer\ReindexRuleProduct::execute
      */
     protected function updateRuleProductData(Rule $rule)
@@ -443,7 +444,7 @@ class IndexBuilder
      * @param Product|null $product
      * @throws \Exception
      * @return $this
-     * @deprecated
+     * @deprecated 100.2.0
      * @see \Magento\CatalogRule\Model\Indexer\ReindexRuleProductPrice::execute
      * @see \Magento\CatalogRule\Model\Indexer\ReindexRuleGroupWebsite::execute
      */
@@ -458,7 +459,7 @@ class IndexBuilder
      * Update CatalogRuleGroupWebsite data
      *
      * @return $this
-     * @deprecated
+     * @deprecated 100.2.0
      * @see \Magento\CatalogRule\Model\Indexer\ReindexRuleGroupWebsite::execute
      */
     protected function updateCatalogRuleGroupWebsiteData()
@@ -482,7 +483,7 @@ class IndexBuilder
      * @param array $ruleData
      * @param null $productData
      * @return float
-     * @deprecated
+     * @deprecated 100.2.0
      * @see \Magento\CatalogRule\Model\Indexer\ProductPriceCalculator::calculate
      */
     protected function calcRuleProductPrice($ruleData, $productData = null)
@@ -495,7 +496,7 @@ class IndexBuilder
      * @param Product|null $product
      * @return \Zend_Db_Statement_Interface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @deprecated
+     * @deprecated 100.2.0
      * @see \Magento\CatalogRule\Model\Indexer\RuleProductsSelectBuilder::build
      */
     protected function getRuleProductsStmt($websiteId, Product $product = null)
@@ -507,7 +508,7 @@ class IndexBuilder
      * @param array $arrData
      * @return $this
      * @throws \Exception
-     * @deprecated
+     * @deprecated 100.2.0
      * @see \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor::execute
      */
     protected function saveRuleProductPrices($arrData)

@@ -8,7 +8,7 @@
 
 namespace Magento\Bundle\Test\Unit\Block\Catalog\Product\View\Type\Bundle;
 
-class OptionTest extends \PHPUnit_Framework_TestCase
+class OptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option
@@ -41,7 +41,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             ->with('current_product')
             ->will($this->returnValue($this->product));
 
-        $this->layout = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
+        $this->layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
 
         $context = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()
@@ -69,7 +69,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
                 new \Magento\Framework\DataObject(['bundle_option' => [15 => 315, 16 => 316]]))
             );
 
-        $option = $this->getMock(\Magento\Bundle\Model\Option::class, [], [], '', false);
+        $option = $this->createMock(\Magento\Bundle\Model\Option::class);
         $option->expects($this->any())->method('getId')->will($this->returnValue(15));
 
         $otherOption = $this->getMockBuilder(\Magento\Bundle\Model\Option::class)
@@ -77,19 +77,13 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $otherOption->expects($this->any())->method('getId')->will($this->returnValue(16));
 
-        $selection = $this->getMock(
+        $selection = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['getSelectionId', '__wakeup'],
-            [],
-            '',
-            false
+            ['getSelectionId', '__wakeup']
         );
-        $otherSelection = $this->getMock(
+        $otherSelection = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['getSelectionId', '__wakeup'],
-            [],
-            '',
-            false
+            ['getSelectionId', '__wakeup']
         );
         $otherOption->expects($this->any())->method('getSelectionById')->willReturn($selection);
         $selection->expects($this->atLeastOnce())->method('getSelectionId')->willReturn($selectionId);
@@ -117,8 +111,8 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $priceInfo = $this->getMock(\Magento\Framework\Pricing\PriceInfo\Base::class, [], [], '', false);
-        $amount = $this->getMock(\Magento\Framework\Pricing\Amount\AmountInterface::class);
+        $priceInfo = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
+        $amount = $this->createMock(\Magento\Framework\Pricing\Amount\AmountInterface::class);
 
         $priceRenderBlock = $this->getMockBuilder(\Magento\Framework\Pricing\Render::class)
             ->disableOriginalConstructor()

@@ -13,6 +13,10 @@ use Magento\Review\Model\RatingFactory;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Review\Controller\Adminhtml\Product\ProductGrid
+ *
+ */
 class ProductGrid extends ProductController
 {
     /**

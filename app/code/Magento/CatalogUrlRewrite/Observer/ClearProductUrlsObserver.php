@@ -17,7 +17,9 @@ use Magento\Framework\Event\ObserverInterface;
  */
 class ClearProductUrlsObserver implements ObserverInterface
 {
-    /** @var UrlPersistInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlPersistInterface
+     */
     protected $urlPersist;
 
     /**

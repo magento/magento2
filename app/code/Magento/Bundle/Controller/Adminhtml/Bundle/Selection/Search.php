@@ -6,6 +6,10 @@
  */
 namespace Magento\Bundle\Controller\Adminhtml\Bundle\Selection;
 
+/**
+ * Class \Magento\Bundle\Controller\Adminhtml\Bundle\Selection\Search
+ *
+ */
 class Search extends \Magento\Backend\App\Action
 {
     /**

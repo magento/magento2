@@ -9,7 +9,7 @@
  */
 namespace Magento\ImportExport\Model\Import\Entity;
 
-class EavAbstractTest extends \PHPUnit_Framework_TestCase
+class EavAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Model object which used for tests

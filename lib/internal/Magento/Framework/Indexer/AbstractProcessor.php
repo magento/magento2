@@ -8,6 +8,10 @@
 
 namespace Magento\Framework\Indexer;
 
+/**
+ * Class \Magento\Framework\Indexer\AbstractProcessor
+ *
+ */
 abstract class AbstractProcessor
 {
     /**
@@ -15,7 +19,9 @@ abstract class AbstractProcessor
      */
     const INDEXER_ID = '';
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
     protected $indexerRegistry;
 
     /**

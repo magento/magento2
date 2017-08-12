@@ -10,6 +10,10 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Store\Model\System\Store as SystemStore;
 
+/**
+ * Class \Magento\Search\Ui\Component\Listing\Column\Website\Options
+ *
+ */
 class Options implements OptionSourceInterface
 {
 

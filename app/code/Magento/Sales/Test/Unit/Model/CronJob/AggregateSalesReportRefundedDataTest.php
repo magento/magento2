@@ -10,7 +10,7 @@ use \Magento\Sales\Model\CronJob\AggregateSalesReportRefundedData;
 /**
  * Tests Magento\Sales\Model\CronJob\AggregateSalesReportRefundedDataTest
  */
-class AggregateSalesReportRefundedDataTest extends \PHPUnit_Framework_TestCase
+class AggregateSalesReportRefundedDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject

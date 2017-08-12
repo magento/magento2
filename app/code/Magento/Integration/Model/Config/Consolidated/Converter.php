@@ -21,7 +21,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
     /**#@-*/
 
-    /** @var \Magento\Framework\Acl\AclResource\ProviderInterface */
+    /**#@-*/
     protected $resourceProvider;
 
     /**
