@@ -6,9 +6,10 @@
 
 namespace Magento\Inventory\Model\Indexer;
 
-use Magento\Framework\Indexer\SaveHandler\IndexerInterface as SaveHandlerIndexerInterface;
+use Magento\Inventory\Model\Indexer\StockItem\DataProvider;
 use Magento\Inventory\Model\Indexer\StockItem\DimensionFactory;
-use Magento\Inventory\Model\Indexer\StockItem\IndexHandlerFactory;
+use Magento\Inventory\Model\Indexer\StockItem\IndexHandler;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @inheritdoc
@@ -17,9 +18,9 @@ class StockItem implements StockItemIndexerInterface
 {
 
     /**
-     * @var HandlerIndexerInterfaceFactory
+     * @var StoreManagerInterface
      */
-    private $indexerHandlerFactory;
+    private $storeManager;
 
     /**
      * @var DimensionFactory
@@ -27,32 +28,44 @@ class StockItem implements StockItemIndexerInterface
     private $dimensionFactory;
 
     /**
-     * @var array
+     * @var IndexHandler
      */
-    private $data;
+    private $handler;
 
+    /**
+     * @var DataProvider
+     */
+    private $dataProvider;
 
+    /**
+     * StockItem constructor.
+     * @param DimensionFactory $dimensionFactory
+     * @param StoreManagerInterface $storeManager
+     */
     public function __construct(
-        IndexHandlerFactory $indexerHandler,
         DimensionFactory $dimensionFactory,
-        array $data
+        StoreManagerInterface $storeManager,
+        IndexHandler $handler,
+        DataProvider $dataProvider
     ) {
-        $this->indexerHandlerFactory = $indexerHandler;
+        $this->storeManager = $storeManager;
         $this->dimensionFactory = $dimensionFactory;
-        $this->data = $data;
+        $this->handler = $handler;
+        $this->dataProvider = $dataProvider;
     }
-
 
     /**
      * @inheritdoc
      */
     public function executeFull()
     {
+        $storeIds = array_keys($this->storeManager->getStores());
 
-        $saveHandler = $this->indexerHandlerFactory->create([
-            'data' => $this->data,
-            'indexScopeResolver' => \Magento\Inventory\Model\Indexer\StockItem\TemporaryResolver::class
-        ]);
+        foreach ($storeIds as $storeId) {
+            $dimension = [$this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId])];
+            $this->handler->cleanIndex($dimension);
+            $this->handler->saveIndex($dimension, $this->dataProvider->fetchDocuments([]));
+        }
     }
 
     /**
@@ -69,13 +82,11 @@ class StockItem implements StockItemIndexerInterface
     public function executeList(array $ids)
     {
         $storeIds = array_keys($this->storeManager->getStores());
-        /** @var SaveHandlerIndexerInterface $saveHandler */
-        $saveHandler = $this->indexerHandlerFactory->create([
-            'data' => $this->data,
-            'indexScopeResolver' => '\Magento\Inventory\Model\Indexer\StockItem\TemporaryResolver'
-        ]);
+
         foreach ($storeIds as $storeId) {
-            $dimension = $this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId]);
+            $dimension = [$this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId])];
+            $this->handler->deleteIndex($dimension, new \ArrayObject($ids));
+            $this->handler->saveIndex($dimension, $this->dataProvider->fetchDocuments($ids));
         }
     }
 
