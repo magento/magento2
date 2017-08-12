@@ -69,6 +69,7 @@ class CartItemPersister
                 $buyRequestData = $this->cartItemOptionProcessor->getBuyRequest($productType, $item);
                 if (is_object($buyRequestData)) {
                     /** Update item product options */
+                    $buyRequestData->setId($itemId);
                     $item = $quote->updateItem($itemId, $buyRequestData);
                 } else {
                     if ($item->getQty() !== $currentItem->getQty()) {
