@@ -17,8 +17,14 @@ class DataProvider
     const TABLE_NAME_SOURCE_ITEM = 'inventory_source_item';
     const TABLE_NAME_STOCK_SOURCE_LINK = 'inventory_source_stock_link';
 
+    /**
+     * @var ResourceConnection
+     */
     private $resource;
 
+    /**
+     * @param ResourceConnection $resource
+     */
     public function __construct(ResourceConnection $resource)
     {
         $this->resource = $resource;
