@@ -6,49 +6,84 @@
 
 namespace Magento\Inventory\Model\Indexer;
 
+use Magento\Framework\Indexer\SaveHandler\IndexerInterface as SaveHandlerIndexerInterface;
+use Magento\Inventory\Model\Indexer\StockItem\DimensionFactory;
 use Magento\Inventory\Model\Indexer\StockItem\IndexHandlerFactory;
-use Magento\Inventory\Model\Indexer\StockItem\IndexStructure;
 
 /**
- * Stock item Indexer @todo
+ * @inheritdoc
  */
-class StockItem implements \Magento\Framework\Indexer\ActionInterface
+class StockItem implements StockItemIndexerInterface
 {
 
     /**
-     * Indexer ID in configuration
+     * @var HandlerIndexerInterfaceFactory
      */
-    const INDEXER_ID = 'inventory_stock_item_index';
+    private $indexerHandlerFactory;
 
     /**
-     * Execute full indexation
-     *
-     * @return void
+     * @var DimensionFactory
+     */
+    private $dimensionFactory;
+
+    /**
+     * @var array
+     */
+    private $data;
+
+
+    public function __construct(
+        IndexHandlerFactory $indexerHandler,
+        DimensionFactory $dimensionFactory,
+        array $data
+    ) {
+        $this->indexerHandlerFactory = $indexerHandler;
+        $this->dimensionFactory = $dimensionFactory;
+        $this->data = $data;
+    }
+
+
+    /**
+     * @inheritdoc
      */
     public function executeFull()
     {
-        // TODO: Implement executeFull() method.
+
+        $saveHandler = $this->indexerHandlerFactory->create([
+            'data' => $this->data,
+            'indexScopeResolver' => \Magento\Inventory\Model\Indexer\StockItem\TemporaryResolver::class
+        ]);
     }
 
     /**
-     * Execute partial indexation by ID list
-     *
-     * @param int[] $ids
-     * @return void
-     */
-    public function executeList(array $ids)
-    {
-        // TODO: Implement executeList() method.
-    }
-
-    /**
-     * Execute partial indexation by ID
-     *
-     * @param int $id
-     * @return void
+     * @inheritdoc
      */
     public function executeRow($id)
     {
-        // TODO: Implement executeRow() method.
+        $this->executeList([$id]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function executeList(array $ids)
+    {
+        $storeIds = array_keys($this->storeManager->getStores());
+        /** @var SaveHandlerIndexerInterface $saveHandler */
+        $saveHandler = $this->indexerHandlerFactory->create([
+            'data' => $this->data,
+            'indexScopeResolver' => '\Magento\Inventory\Model\Indexer\StockItem\TemporaryResolver'
+        ]);
+        foreach ($storeIds as $storeId) {
+            $dimension = $this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId]);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName()
+    {
+        return StockItem::INDEXER_ID;
     }
 }

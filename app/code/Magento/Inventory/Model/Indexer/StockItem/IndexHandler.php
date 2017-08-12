@@ -7,26 +7,19 @@
 namespace Magento\Inventory\Model\Indexer\StockItem;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\SaveHandler\Batch;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface as SaveHandlerIndexerInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\DimensionFactory;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
-use Magento\Inventory\Model\Indexer\StockItem;
-use Magento\InventoryApi\Api\Data\StockItemManagerInterface;
+use Magento\Inventory\Model\Indexer\StockItemIndexerInterface;
 
 /**
  * @todo add comment
  */
 class IndexHandler implements SaveHandlerIndexerInterface
 {
-    /**#@+
-     * Constants for keys of data array.
-     * @var string
-     */
-    const DATA_KEY_INDEXER_ID = 'indexer_id';
-    const DATA_KEY_INDEXER_SUFFIX = 'indexer_suffix';
-    /**#@- */
 
     /**
      * @var IndexStructure
@@ -67,14 +60,16 @@ class IndexHandler implements SaveHandlerIndexerInterface
      * @param int $batchSize #
      */
     public function __construct(
-        IndexStructure $indexStructure,
+        IndexStructureInterface $indexStructure,
         IndexScopeResolverInterface $indexScopeResolver,
         Batch $batch,
         ResourceConnection $resource,
+        IndexSwitcherInterface $indexSwitcher,
         array $data,
         $batchSize = 100
     ) {
         $this->indexStructure = $indexStructure;
+        var_export(get_class($indexScopeResolver));
         $this->indexScopeResolver = $indexScopeResolver;
         $this->batch = $batch;
         $this->resource = $resource;
@@ -99,7 +94,7 @@ class IndexHandler implements SaveHandlerIndexerInterface
     {
         foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
             $this->resource->getConnection()
-                ->delete($this->getTableName($dimensions), ['entity_id in (?)' => $batchDocuments]);
+                ->delete($this->getTableName($dimensions), ['stock_item_id in (?)' => $batchDocuments]);
         }
     }
 
@@ -140,8 +135,7 @@ class IndexHandler implements SaveHandlerIndexerInterface
      */
     private function getTableName($dimensions)
     {
-        $suffix = $this->getIndexSuffix();
-        return $suffix . $this->indexScopeResolver->resolve($this->getIndexName(), $dimensions);
+        return $this->indexScopeResolver->resolve($this->getIndexName(), $dimensions);
     }
 
     /**
@@ -149,19 +143,6 @@ class IndexHandler implements SaveHandlerIndexerInterface
      */
     private function getIndexName()
     {
-        return $this->data[self::DATA_KEY_INDEXER_ID];
-    }
-
-    /**
-     * Return the table suffix.
-     *
-     * @return string
-     */
-    private function getIndexSuffix()
-    {
-        if (isset($this->data[self::DATA_KEY_INDEXER_SUFFIX])) {
-            return $this->data[self::DATA_KEY_INDEXER_SUFFIX];
-        }
-        return '';
+        return StockItemIndexerInterface::INDEXER_ID;
     }
 }
