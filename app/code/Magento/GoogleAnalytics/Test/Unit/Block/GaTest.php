@@ -103,6 +103,7 @@ class GaTest extends PHPUnit_Framework_TestCase
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
 
         $expectedCode = "ga('require', 'ec', 'ec.js');
+            ga('set', 'currencyCode', 'USD');
             ga('ec:addProduct', {
                                     'id': 'sku0',
                                     'name': 'testName0',
@@ -165,7 +166,8 @@ class GaTest extends PHPUnit_Framework_TestCase
                     'price' => 0.00,
                     'quantity' => 1
                 ]
-            ]
+            ],
+            'currency' => 'USD'
         ];
 
         $this->gaBlock->setOrderIds([1, 2]);
@@ -213,6 +215,7 @@ class GaTest extends PHPUnit_Framework_TestCase
         $orderMock->expects($this->once())->method('getBaseGrandTotal')->willReturn(10);
         $orderMock->expects($this->once())->method('getBaseTaxAmount')->willReturn(2);
         $orderMock->expects($this->once())->method('getBaseShippingAmount')->willReturn($orderItemCount);
+        $orderMock->expects($this->once())->method('getBaseCurrencyCode')->willReturn('USD');
         return $orderMock;
     }
 

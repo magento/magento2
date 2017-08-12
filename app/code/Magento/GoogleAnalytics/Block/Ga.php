@@ -120,6 +120,7 @@ class Ga extends \Magento\Framework\View\Element\Template
         $result[] = "ga('require', 'ec', 'ec.js');";
 
         foreach ($collection as $order) {
+            $result[] = "ga('set', 'currencyCode', '" . $order->getBaseCurrencyCode() . "');";
             foreach ($order->getAllVisibleItems() as $item) {
                 $result[] = sprintf(
                     "ga('ec:addProduct', {
@@ -243,6 +244,7 @@ class Ga extends \Magento\Framework\View\Element\Template
                 'tax' => $order->getBaseTaxAmount(),
                 'shipping' => $order->getBaseShippingAmount(),
             ];
+            $result['currency'] = $order->getBaseCurrencyCode();
         }
         return $result;
     }
