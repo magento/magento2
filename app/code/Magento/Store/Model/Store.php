@@ -753,11 +753,11 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Get store identifier
      *
-     * @return  int
+     * @return int
      */
     public function getId()
     {
-        return $this->_getData(self::STORE_ID);
+        return (int)$this->_getData(self::STORE_ID);
     }
 
     /**
