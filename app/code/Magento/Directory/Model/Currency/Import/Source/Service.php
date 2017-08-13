@@ -5,6 +5,10 @@
  */
 namespace Magento\Directory\Model\Currency\Import\Source;
 
+/**
+ * Class \Magento\Directory\Model\Currency\Import\Source\Service
+ *
+ */
 class Service implements \Magento\Framework\Option\ArrayInterface
 {
     /**

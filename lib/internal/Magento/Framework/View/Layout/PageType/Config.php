@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\View\Layout\PageType;
 
+/**
+ * Class \Magento\Framework\View\Layout\PageType\Config
+ *
+ */
 class Config
 {
     /**

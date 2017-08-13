@@ -7,6 +7,10 @@
 
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
 
+/**
+ * Class \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency\SaveRates
+ *
+ */
 class SaveRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency
 {
     /**

@@ -11,6 +11,10 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 
+/**
+ * Class \Magento\CatalogSearch\Setup\InstallData
+ *
+ */
 class InstallData implements InstallDataInterface
 {
     /**

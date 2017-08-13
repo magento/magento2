@@ -27,7 +27,6 @@ use Magento\Store\Model\ScopeInterface;
  * @method Customer setWebsiteId($value)
  * @method int getStoreId() getStoreId()
  * @method string getEmail() getEmail()
- * @method ResourceCustomer _getResource()
  * @method mixed getDisableAutoGroupChange()
  * @method Customer setDisableAutoGroupChange($value)
  * @method Customer setGroupId($value)
@@ -968,7 +967,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Validate customer attribute values.
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @return bool
      */
     public function validate()
@@ -1318,6 +1317,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check if customer is locked
      *
      * @return boolean
+     * @since 100.1.0
      */
     public function isCustomerLocked()
     {
@@ -1334,6 +1334,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Return Password Confirmation
      *
      * @return string
+     * @since 100.1.0
      */
     public function getPasswordConfirm()
     {
@@ -1344,6 +1345,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Return Password
      *
      * @return string
+     * @since 100.1.0
      */
     public function getPassword()
     {

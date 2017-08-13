@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Code\Generator;
 
+/**
+ * Interface \Magento\Framework\Code\Generator\CodeGeneratorInterface
+ *
+ */
 interface CodeGeneratorInterface extends \Zend\Code\Generator\GeneratorInterface
 {
     /**

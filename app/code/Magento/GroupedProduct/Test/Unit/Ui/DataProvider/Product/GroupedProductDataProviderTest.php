@@ -12,7 +12,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 
-class GroupedProductDataProviderTest extends \PHPUnit_Framework_TestCase
+class GroupedProductDataProviderTest extends \PHPUnit\Framework\TestCase
 {
     const ALLOWED_TYPE = 'simple';
 

@@ -9,6 +9,10 @@ namespace Magento\Setup\Model;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Magento\Framework\App\DeploymentConfig;
 
+/**
+ * Class \Magento\Setup\Model\Navigation
+ *
+ */
 class Navigation
 {
     /**#@+
@@ -18,9 +22,7 @@ class Navigation
     const NAV_UPDATER = 'navUpdater';
     /**#@- */
 
-    /**
-     * @var array
-     */
+    /**#@- */
     private $navStates;
 
     /**

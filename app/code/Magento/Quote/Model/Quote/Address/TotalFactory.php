@@ -9,6 +9,10 @@
  */
 namespace Magento\Quote\Model\Quote\Address;
 
+/**
+ * Class \Magento\Quote\Model\Quote\Address\TotalFactory
+ *
+ */
 class TotalFactory
 {
     /**

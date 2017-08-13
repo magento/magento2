@@ -5,7 +5,7 @@
  */
 namespace Magento\Backend\Test\Unit\Model\Translate\Inline;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     public function testIsActive()
     {

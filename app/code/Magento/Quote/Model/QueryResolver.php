@@ -10,6 +10,10 @@ use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\App\ResourceConnection\ConfigInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Class \Magento\Quote\Model\QueryResolver
+ *
+ */
 class QueryResolver
 {
     /**

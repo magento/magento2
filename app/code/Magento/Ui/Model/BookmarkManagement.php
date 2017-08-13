@@ -6,6 +6,10 @@
 
 namespace Magento\Ui\Model;
 
+/**
+ * Class \Magento\Ui\Model\BookmarkManagement
+ *
+ */
 class BookmarkManagement implements \Magento\Ui\Api\BookmarkManagementInterface
 {
     /**

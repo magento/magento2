@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Model\ProductOptions\Config;
 
+/**
+ * Class \Magento\Catalog\Model\ProductOptions\Config\Converter
+ *
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

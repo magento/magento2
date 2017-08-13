@@ -10,6 +10,10 @@ use Magento\Sales\Controller\OrderInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Class \Magento\Sales\Controller\Order\History
+ *
+ */
 class History extends \Magento\Framework\App\Action\Action implements OrderInterface
 {
     /**

@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\View\Element\Message;
 
+/**
+ * Class \Magento\Framework\View\Element\Message\MessageConfigurationsPool
+ *
+ */
 class MessageConfigurationsPool
 {
     /**

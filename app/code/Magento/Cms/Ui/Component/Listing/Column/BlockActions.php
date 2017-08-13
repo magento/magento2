@@ -100,7 +100,7 @@ class BlockActions extends Column
     /**
      * Get instance of escaper
      * @return Escaper
-     * @deprecated
+     * @deprecated 101.1.0
      */
     private function getEscaper()
     {

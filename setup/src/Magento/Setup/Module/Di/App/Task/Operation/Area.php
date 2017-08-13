@@ -10,6 +10,10 @@ use Magento\Framework\App;
 use Magento\Setup\Module\Di\Compiler\Config;
 use Magento\Setup\Module\Di\Definition\Collection as DefinitionsCollection;
 
+/**
+ * Class \Magento\Setup\Module\Di\App\Task\Operation\Area
+ *
+ */
 class Area implements OperationInterface
 {
     /**

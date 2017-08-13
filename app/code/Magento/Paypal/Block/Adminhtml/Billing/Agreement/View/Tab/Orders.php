@@ -105,6 +105,7 @@ class Orders extends ExtendedGrid implements TabInterface
      * Get grid url
      *
      * @return string
+     * @since 100.1.0
      */
     public function getGridUrl()
     {

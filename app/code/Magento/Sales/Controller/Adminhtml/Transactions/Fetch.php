@@ -10,6 +10,10 @@ use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Transactions\Fetch
+ *
+ */
 class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
 {
     /**

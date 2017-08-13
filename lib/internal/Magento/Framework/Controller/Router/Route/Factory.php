@@ -8,6 +8,10 @@ namespace Magento\Framework\Controller\Router\Route;
 use Magento\Framework\App\RouterInterface;
 use Magento\Framework\ObjectManagerInterface as ObjectManager;
 
+/**
+ * Class \Magento\Framework\Controller\Router\Route\Factory
+ *
+ */
 class Factory
 {
     /**

@@ -5,6 +5,10 @@
  */
 namespace Magento\Paypal\Cron;
 
+/**
+ * Class \Magento\Paypal\Cron\FetchReports
+ *
+ */
 class FetchReports
 {
     /**

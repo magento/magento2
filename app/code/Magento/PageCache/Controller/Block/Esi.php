@@ -6,6 +6,10 @@
  */
 namespace Magento\PageCache\Controller\Block;
 
+/**
+ * Class \Magento\PageCache\Controller\Block\Esi
+ *
+ */
 class Esi extends \Magento\PageCache\Controller\Block
 {
     /**

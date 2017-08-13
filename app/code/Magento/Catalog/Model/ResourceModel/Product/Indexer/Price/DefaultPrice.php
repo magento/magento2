@@ -265,6 +265,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @return \Magento\Framework\DB\Select
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 101.1.0
      */
     protected function getSelect($entityIds = null, $type = null)
     {

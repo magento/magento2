@@ -10,7 +10,9 @@ namespace Magento\Config\Model\Config\Backend;
  */
 class Secure extends \Magento\Framework\App\Config\Value
 {
-    /** @var \Magento\Framework\View\Asset\MergeService */
+    /**
+     * @var \Magento\Framework\View\Asset\MergeService
+     */
     protected $_mergeService;
 
     /**

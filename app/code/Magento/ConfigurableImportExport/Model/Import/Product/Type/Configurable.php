@@ -141,7 +141,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Instance of database adapter.
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $_connection;
 

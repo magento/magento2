@@ -8,6 +8,10 @@ namespace Magento\Catalog\Model\Product\Option\Validator;
 
 use Magento\Catalog\Model\Product\Option;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Option\Validator\Text
+ *
+ */
 class Text extends DefaultValidator
 {
     /**

@@ -6,6 +6,10 @@
  */
 namespace Magento\Bundle\Model;
 
+/**
+ * Class \Magento\Bundle\Model\OptionTypeList
+ *
+ */
 class OptionTypeList implements \Magento\Bundle\Api\ProductOptionTypeListInterface
 {
     /**

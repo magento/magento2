@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
-class ReindexRuleProductTest extends \PHPUnit_Framework_TestCase
+class ReindexRuleProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\Indexer\ReindexRuleProduct
