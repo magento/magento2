@@ -11,10 +11,6 @@
  */
 namespace Magento\Multishipping\Helper;
 
-/**
- * Class \Magento\Multishipping\Helper\Url
- *
- */
 class Url extends \Magento\Framework\Url\Helper\Data
 {
     /**

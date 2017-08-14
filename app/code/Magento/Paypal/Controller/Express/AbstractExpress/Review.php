@@ -8,10 +8,6 @@ namespace Magento\Paypal\Controller\Express\AbstractExpress;
 
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\Paypal\Controller\Express\AbstractExpress\Review
- *
- */
 class Review extends \Magento\Paypal\Controller\Express\AbstractExpress
 {
     /**

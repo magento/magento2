@@ -20,7 +20,6 @@ class Notifier implements \Magento\Sales\Model\Order\Shipment\NotifierInterface
 
     /**
      * @param \Magento\Sales\Model\Order\Shipment\SenderInterface[] $senders
-     * @since 100.1.2
      */
     public function __construct(array $senders = [])
     {

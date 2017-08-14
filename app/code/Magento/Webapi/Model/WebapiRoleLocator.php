@@ -11,10 +11,6 @@ use Magento\Authorization\Model\Role;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Authorization\RoleLocatorInterface;
 
-/**
- * Class \Magento\Webapi\Model\WebapiRoleLocator
- *
- */
 class WebapiRoleLocator implements RoleLocatorInterface
 {
     /**

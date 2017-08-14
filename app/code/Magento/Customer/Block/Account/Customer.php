@@ -9,6 +9,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Customer extends \Magento\Framework\View\Element\Template
 {

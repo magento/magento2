@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Filter\Encrypt;
 
-/**
- * Class \Magento\Framework\Filter\Encrypt\Basic
- *
- */
 class Basic implements \Zend_Filter_Encrypt_Interface
 {
     /**

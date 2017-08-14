@@ -6,10 +6,6 @@
 
 namespace Magento\Weee\Plugin\Checkout\CustomerData;
 
-/**
- * Class \Magento\Weee\Plugin\Checkout\CustomerData\Cart
- *
- */
 class Cart extends \Magento\Tax\Plugin\Checkout\CustomerData\Cart
 {
     /**

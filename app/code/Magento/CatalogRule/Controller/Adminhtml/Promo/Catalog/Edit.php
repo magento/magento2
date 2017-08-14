@@ -6,10 +6,6 @@
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
-/**
- * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog\Edit
- *
- */
 class Edit extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
     /**

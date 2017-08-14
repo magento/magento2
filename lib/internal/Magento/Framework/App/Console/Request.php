@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\App\Console;
 
-/**
- * Class \Magento\Framework\App\Console\Request
- *
- */
 class Request implements \Magento\Framework\App\RequestInterface
 {
     /**

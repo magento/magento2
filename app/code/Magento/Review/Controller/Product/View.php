@@ -9,10 +9,6 @@ use Magento\Review\Controller\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Review\Model\Review;
 
-/**
- * Class \Magento\Review\Controller\Product\View
- *
- */
 class View extends ProductController
 {
     /**

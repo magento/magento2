@@ -6,10 +6,6 @@
  */
 namespace Magento\Paypal\Controller\Payflow;
 
-/**
- * Class \Magento\Paypal\Controller\Payflow\CancelPayment
- *
- */
 class CancelPayment extends \Magento\Paypal\Controller\Payflow
 {
     /**

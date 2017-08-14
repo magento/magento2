@@ -6,10 +6,6 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
-/**
- * Class \Magento\Widget\Controller\Adminhtml\Widget\Instance\Delete
- *
- */
 class Delete extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
 {
     /**

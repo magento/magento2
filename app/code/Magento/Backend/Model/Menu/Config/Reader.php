@@ -9,6 +9,7 @@ namespace Magento\Backend\Model\Menu\Config;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {

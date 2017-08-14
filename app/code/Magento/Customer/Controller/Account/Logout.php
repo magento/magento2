@@ -12,10 +12,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 
-/**
- * Class \Magento\Customer\Controller\Account\Logout
- *
- */
 class Logout extends \Magento\Customer\Controller\AbstractAccount
 {
     /**

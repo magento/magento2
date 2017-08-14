@@ -11,10 +11,6 @@ use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
 use Magento\Quote\Api\Data\ProductOptionExtensionFactory;
 use Magento\Quote\Model\Quote\ProductOptionFactory;
 
-/**
- * Class \Magento\Catalog\Model\CustomOptions\CustomOptionProcessor
- *
- */
 class CustomOptionProcessor implements CartItemProcessorInterface
 {
     /**

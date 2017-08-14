@@ -15,10 +15,6 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Main;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 
-/**
- * Class \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain
- *
- */
 abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**

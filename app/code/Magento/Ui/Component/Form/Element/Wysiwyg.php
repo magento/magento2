@@ -39,7 +39,6 @@ class Wysiwyg extends AbstractElement
      * @param array $components
      * @param array $data
      * @param array $config
-     * @since 100.1.0
      */
     public function __construct(
         ContextInterface $context,

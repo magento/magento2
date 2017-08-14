@@ -25,6 +25,7 @@ use Magento\Sales\Api\CreditmemoManagementInterface as CreditmemoManager;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Payment extends Info implements OrderPaymentInterface
 {

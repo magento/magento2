@@ -10,10 +10,6 @@ namespace Magento\Framework\Validator\Entity;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\AbstractModel;
 
-/**
- * Class \Magento\Framework\Validator\Entity\Properties
- *
- */
 class Properties extends \Magento\Framework\Validator\AbstractValidator
 {
     /**

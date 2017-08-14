@@ -5,10 +5,6 @@
  */
 namespace Magento\SalesRule\Model\Rule\Condition\Product;
 
-/**
- * Class \Magento\SalesRule\Model\Rule\Condition\Product\Found
- *
- */
 class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
 {
     /**

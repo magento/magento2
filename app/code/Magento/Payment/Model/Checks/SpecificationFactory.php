@@ -11,6 +11,7 @@ namespace Magento\Payment\Model\Checks;
  * Use this class to register predefined list of specifications that should be added to any complex specification.
  *
  * @api
+ * @since 100.0.2
  */
 class SpecificationFactory
 {

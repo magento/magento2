@@ -10,10 +10,6 @@ use Magento\Downloadable\Model\File\ContentValidator as FileContentValidator;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Url\Validator as UrlValidator;
 
-/**
- * Class \Magento\Downloadable\Model\Link\ContentValidator
- *
- */
 class ContentValidator
 {
     /**

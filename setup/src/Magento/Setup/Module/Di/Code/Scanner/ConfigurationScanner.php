@@ -7,10 +7,6 @@ namespace Magento\Setup\Module\Di\Code\Scanner;
 
 use Magento\Framework\App\Area;
 
-/**
- * Class \Magento\Setup\Module\Di\Code\Scanner\ConfigurationScanner
- *
- */
 class ConfigurationScanner
 {
     /**

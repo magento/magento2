@@ -13,10 +13,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Module\Status;
 
-/**
- * Class \Magento\Setup\Console\Command\AbstractModuleManageCommand
- *
- */
 abstract class AbstractModuleManageCommand extends AbstractModuleCommand
 {
     /**

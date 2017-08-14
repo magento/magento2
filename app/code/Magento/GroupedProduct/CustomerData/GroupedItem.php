@@ -8,10 +8,6 @@ namespace Magento\GroupedProduct\CustomerData;
 use Magento\Catalog\Model\Config\Source\Product\Thumbnail as ThumbnailSource;
 use Magento\Checkout\CustomerData\DefaultItem;
 
-/**
- * Class \Magento\GroupedProduct\CustomerData\GroupedItem
- *
- */
 class GroupedItem extends DefaultItem
 {
     /**

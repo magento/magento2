@@ -15,6 +15,7 @@ use Magento\Framework\View\Element\Template;
  * Html page top menu block
  *
  * @api
+ * @since 100.0.2
  */
 class Topmenu extends Template implements IdentityInterface
 {

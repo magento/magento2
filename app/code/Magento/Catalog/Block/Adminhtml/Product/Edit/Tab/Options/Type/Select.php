@@ -11,10 +11,6 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\Select
- *
- */
 class Select extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\AbstractType
 {
     /**

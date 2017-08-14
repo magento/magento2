@@ -9,10 +9,6 @@ namespace Magento\Framework\DataObject\Copy\Config;
 
 use Magento\Framework\Config\Dom\UrnResolver;
 
-/**
- * Class \Magento\Framework\DataObject\Copy\Config\SchemaLocator
- *
- */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

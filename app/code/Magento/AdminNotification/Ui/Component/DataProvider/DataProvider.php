@@ -22,7 +22,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param SynchronizedFactory $messageCollectionFactory
      * @param array $meta
      * @param array $data
-     * @since 100.2.0
      */
     public function __construct(
         $name,

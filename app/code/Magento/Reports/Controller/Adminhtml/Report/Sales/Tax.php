@@ -8,10 +8,6 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Sales;
 
 use Magento\Reports\Model\Flag;
 
-/**
- * Class \Magento\Reports\Controller\Adminhtml\Report\Sales\Tax
- *
- */
 class Tax extends \Magento\Reports\Controller\Adminhtml\Report\Sales
 {
     /**

@@ -7,10 +7,6 @@ namespace Magento\Review\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\Review\Observer\CatalogBlockProductCollectionBeforeToHtmlObserver
- *
- */
 class CatalogBlockProductCollectionBeforeToHtmlObserver implements ObserverInterface
 {
     /**

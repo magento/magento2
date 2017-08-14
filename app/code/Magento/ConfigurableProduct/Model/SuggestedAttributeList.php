@@ -7,10 +7,6 @@
  */
 namespace Magento\ConfigurableProduct\Model;
 
-/**
- * Class \Magento\ConfigurableProduct\Model\SuggestedAttributeList
- *
- */
 class SuggestedAttributeList
 {
     /**

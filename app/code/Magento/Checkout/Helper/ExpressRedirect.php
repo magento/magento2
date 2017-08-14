@@ -7,10 +7,6 @@ namespace Magento\Checkout\Helper;
 
 use Magento\Checkout\Controller\Express\RedirectLoginInterface;
 
-/**
- * Class \Magento\Checkout\Helper\ExpressRedirect
- *
- */
 class ExpressRedirect extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**

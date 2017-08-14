@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\ObjectManager\Factory;
 
-/**
- * Class \Magento\Framework\ObjectManager\Factory\Compiled
- *
- */
 class Compiled extends AbstractFactory
 {
     /**

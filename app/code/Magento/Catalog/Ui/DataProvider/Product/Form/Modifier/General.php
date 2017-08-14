@@ -38,7 +38,6 @@ class General extends AbstractModifier
     /**
      * @param LocatorInterface $locator
      * @param ArrayManager $arrayManager
-     * @since 101.0.0
      */
     public function __construct(
         LocatorInterface $locator,

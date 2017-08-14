@@ -14,6 +14,7 @@ use Magento\Payment\Helper\Data as PaymentHelper;
  * Direct injection as a dependency or extending of this class is not recommended.
  *
  * @api
+ * @since 100.0.2
  */
 class CcGenericConfigProvider implements ConfigProviderInterface
 {

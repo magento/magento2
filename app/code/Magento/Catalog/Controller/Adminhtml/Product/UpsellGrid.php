@@ -6,10 +6,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-/**
- * Class \Magento\Catalog\Controller\Adminhtml\Product\UpsellGrid
- *
- */
 class UpsellGrid extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**

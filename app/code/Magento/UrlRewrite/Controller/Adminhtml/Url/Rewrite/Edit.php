@@ -6,10 +6,6 @@
  */
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
-/**
- * Class \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite\Edit
- *
- */
 class Edit extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
 {
     /**#@+

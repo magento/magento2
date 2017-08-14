@@ -7,10 +7,6 @@ namespace Magento\Indexer\Model;
 
 use Magento\Framework\Indexer\ConfigInterface;
 
-/**
- * Class \Magento\Indexer\Model\Config
- *
- */
 class Config implements ConfigInterface
 {
     /**

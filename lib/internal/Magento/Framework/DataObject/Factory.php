@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\DataObject;
 
-/**
- * Class \Magento\Framework\DataObject\Factory
- *
- */
 class Factory
 {
     /**

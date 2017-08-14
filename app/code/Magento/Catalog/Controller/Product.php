@@ -10,10 +10,6 @@ namespace Magento\Catalog\Controller;
 use Magento\Catalog\Controller\Product\View\ViewInterface;
 use Magento\Catalog\Model\Product as ModelProduct;
 
-/**
- * Class \Magento\Catalog\Controller\Product
- *
- */
 abstract class Product extends \Magento\Framework\App\Action\Action implements ViewInterface
 {
     /**

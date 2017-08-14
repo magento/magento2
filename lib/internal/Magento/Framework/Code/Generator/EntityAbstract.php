@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Code\Generator;
 
-/**
- * Class \Magento\Framework\Code\Generator\EntityAbstract
- *
- */
 abstract class EntityAbstract
 {
     /**

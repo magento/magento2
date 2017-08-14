@@ -11,6 +11,7 @@ use Magento\Customer\Model\Context;
  * Html page footer block
  *
  * @api
+ * @since 100.0.2
  */
 class Footer extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
 {

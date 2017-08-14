@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\DB\Logger;
 
-/**
- * Class \Magento\Framework\DB\Logger\Quiet
- *
- */
 class Quiet implements \Magento\Framework\DB\LoggerInterface
 {
     /**
