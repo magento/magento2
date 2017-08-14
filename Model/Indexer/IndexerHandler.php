@@ -12,10 +12,6 @@ use Magento\Elasticsearch\Model\Adapter\Elasticsearch as ElasticsearchAdapter;
 use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
 use Magento\Framework\App\ScopeResolverInterface;
 
-/**
- * Class \Magento\Elasticsearch\Model\Indexer\IndexerHandler
- *
- */
 class IndexerHandler implements IndexerInterface
 {
     /**

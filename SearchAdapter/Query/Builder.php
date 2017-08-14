@@ -46,7 +46,6 @@ class Builder
      * @param SearchIndexNameResolver $searchIndexNameResolver
      * @param AggregationBuilder $aggregationBuilder
      * @param ScopeResolverInterface $scopeResolver
-     * @since 100.1.0
      */
     public function __construct(
         Config $clientConfig,

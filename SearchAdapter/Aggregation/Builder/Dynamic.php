@@ -12,10 +12,6 @@ use Magento\Framework\Search\Dynamic\EntityStorageFactory;
 use Magento\Framework\Search\Request\Aggregation\DynamicBucket;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 
-/**
- * Class \Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\Dynamic
- *
- */
 class Dynamic implements BucketBuilderInterface
 {
     /**

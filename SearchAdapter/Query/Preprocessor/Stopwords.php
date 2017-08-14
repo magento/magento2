@@ -88,7 +88,6 @@ class Stopwords implements PreprocessorInterface
      * @param \Magento\Framework\Module\Dir\Reader $moduleDirReader
      * @param string $stopwordsModule
      * @param string $stopwordsDirectory
-     * @since 100.1.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,

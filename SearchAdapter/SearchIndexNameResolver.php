@@ -22,7 +22,6 @@ class SearchIndexNameResolver
 
     /**
      * @param Config $clientConfig
-     * @since 100.1.0
      */
     public function __construct(
         Config $clientConfig

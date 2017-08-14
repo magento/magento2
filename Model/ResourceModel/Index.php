@@ -48,7 +48,6 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
      * @param Config $eavConfig
      * @param null $connectionName
      * @SuppressWarnings(Magento.TypeDuplication)
-     * @since 100.1.0
      */
     public function __construct(
         Context $context,

@@ -23,7 +23,6 @@ class Aggregation
 
     /**
      * @param FieldMapperInterface $fieldMapper
-     * @since 100.1.0
      */
     public function __construct(
         FieldMapperInterface $fieldMapper

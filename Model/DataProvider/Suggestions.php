@@ -15,10 +15,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 
-/**
- * Class \Magento\Elasticsearch\Model\DataProvider\Suggestions
- *
- */
 class Suggestions implements SuggestedQueriesInterface
 {
     /**

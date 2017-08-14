@@ -42,7 +42,6 @@ class ResponseFactory
      * @param ObjectManagerInterface $objectManager
      * @param DocumentFactory $documentFactory
      * @param AggregationFactory $aggregationFactory
-     * @since 100.1.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
