@@ -7,6 +7,8 @@
 namespace Magento\Cron\Model;
 
 use Magento\Framework\Exception\CronException;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Crontab schedule model
@@ -45,9 +47,9 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     const STATUS_ERROR = 'error';
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var TimezoneInterface
      */
-    private $dateTime;
+    private $timezoneConverter;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -55,7 +57,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime|null $dateTime
+     * @param TimezoneInterface $timezoneConverter
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -63,10 +65,10 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime = null
+        TimezoneInterface $timezoneConverter = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-        $this->dateTime = $dateTime;
+        $this->timezoneConverter = $timezoneConverter ?: ObjectManager::getInstance()->get(TimezoneInterface::class);
     }
 
     /**
@@ -102,8 +104,6 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      */
     public function trySchedule()
     {
-        $this->dateTime = $this->dateTime ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Stdlib\DateTime\DateTime::class);
         $time = $this->getScheduledAt();
         $e = $this->getCronExprArr();
 
@@ -111,7 +111,10 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
             return false;
         }
         if (!is_numeric($time)) {
-            $time = strtotime($time) + $this->dateTime->getGmtOffset();
+            //convert time from UTC to admin store timezone
+            //we assume that all schedules in configuration (crontab.xml and DB tables) are in admin store timezone
+            $time = $this->timezoneConverter->date($time)->format('Y-m-d H:i');
+            $time = strtotime($time);
         }
         $match = $this->matchCronExpression($e[0], strftime('%M', $time))
             && $this->matchCronExpression($e[1], strftime('%H', $time))

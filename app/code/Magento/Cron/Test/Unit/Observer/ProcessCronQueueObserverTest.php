@@ -675,7 +675,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $jobs = [];
-        for ($i = 0; $i<20; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $time = date('Y-m-d H:i:00', strtotime("+$i minutes"));
             $jobs[] = [
                 'age' => $time,
@@ -704,9 +704,20 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
         $this->_collection->addItem($schedule);
 
         $scheduleMock = $this->getMockBuilder(Schedule::class)->disableOriginalConstructor()
-            ->setMethods(['save', 'getCollection', 'getResource'])->getMock();
+            ->setMethods(['save', 'getCollection', 'getResource', 'trySchedule'])->getMock();
+
         $scheduleMock->expects($this->any())->method('getCollection')->will($this->returnValue($this->_collection));
         $scheduleMock->expects($this->any())->method('getResource')->will($this->returnValue($this->scheduleResource));
+
+        $callIndex = 0;
+        $scheduleMock->expects($this->any())->method('trySchedule')->willReturnCallback(
+            function () use (&$callIndex, $jobs) {
+                $output = $jobs[$callIndex]['delete'];
+                $callIndex++;
+                return !$output;
+            }
+        );
+
         $this->_scheduleFactory->expects($this->any())->method('create')->will($this->returnValue($scheduleMock));
 
         $query = [
