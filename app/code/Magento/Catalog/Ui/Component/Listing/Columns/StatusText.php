@@ -28,7 +28,6 @@ class StatusText extends \Magento\Ui\Component\Listing\Columns\Column
      * @param Status $status
      * @param array $components
      * @param array $data
-     * @since 101.0.0
      */
     public function __construct(
         ContextInterface $context,

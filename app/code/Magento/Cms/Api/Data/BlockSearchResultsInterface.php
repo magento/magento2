@@ -10,6 +10,7 @@ use Magento\Framework\Api\SearchResultsInterface;
 /**
  * Interface for cms block search results.
  * @api
+ * @since 100.0.2
  */
 interface BlockSearchResultsInterface extends SearchResultsInterface
 {

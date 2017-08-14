@@ -5,10 +5,6 @@
  */
 namespace Magento\Tax\Model\Config\Source\Apply;
 
-/**
- * Class \Magento\Tax\Model\Config\Source\Apply\On
- *
- */
 class On implements \Magento\Framework\Option\ArrayInterface
 {
     /**

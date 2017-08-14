@@ -20,6 +20,7 @@ use Magento\Sales\Model\AbstractModel;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Item extends AbstractModel implements OrderItemInterface
 {

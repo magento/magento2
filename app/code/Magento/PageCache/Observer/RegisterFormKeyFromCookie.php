@@ -8,10 +8,6 @@ namespace Magento\PageCache\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\PageCache\Observer\RegisterFormKeyFromCookie
- *
- */
 class RegisterFormKeyFromCookie implements ObserverInterface
 {
     /**

@@ -8,10 +8,6 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * Class \Magento\Customer\Controller\Adminhtml\Index\Edit
- *
- */
 class Edit extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**

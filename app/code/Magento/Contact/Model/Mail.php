@@ -10,10 +10,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Translate\Inline\StateInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
-/**
- * Class \Magento\Contact\Model\Mail
- *
- */
 class Mail implements MailInterface
 {
     /**

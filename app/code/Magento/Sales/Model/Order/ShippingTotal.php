@@ -8,10 +8,6 @@ namespace Magento\Sales\Model\Order;
 use Magento\Sales\Api\Data\TotalInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
-/**
- * Class \Magento\Sales\Model\Order\ShippingTotal
- *
- */
 class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
 {
     /**

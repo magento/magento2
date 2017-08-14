@@ -9,10 +9,6 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Store\Model\Website as StoreWebsite;
 use Magento\Theme\Model\Data\Design\Config;
 
-/**
- * Class \Magento\Theme\Model\Indexer\Design\Config\Plugin\Website
- *
- */
 class Website
 {
     /**

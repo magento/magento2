@@ -13,10 +13,6 @@ namespace Magento\Catalog\Block\Adminhtml\Category\Checkboxes;
 
 use Magento\Framework\Data\Tree\Node;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Category\Checkboxes\Tree
- *
- */
 class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
 {
     /**

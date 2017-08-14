@@ -11,10 +11,6 @@
  */
 namespace Magento\Framework\Data\Form\Filter;
 
-/**
- * Class \Magento\Framework\Data\Form\Filter\Escapehtml
- *
- */
 class Escapehtml implements \Magento\Framework\Data\Form\Filter\FilterInterface
 {
     /**

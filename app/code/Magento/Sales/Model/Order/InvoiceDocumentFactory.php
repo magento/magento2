@@ -29,7 +29,6 @@ class InvoiceDocumentFactory
     /**
      * InvoiceDocumentFactory constructor.
      * @param InvoiceService $invoiceService
-     * @since 100.1.2
      */
     public function __construct(
         InvoiceService $invoiceService

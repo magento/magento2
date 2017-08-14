@@ -14,6 +14,7 @@ use Magento\Sales\Model\AbstractModel;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class History extends AbstractModel implements OrderStatusHistoryInterface
 {

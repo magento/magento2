@@ -11,10 +11,6 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 
-/**
- * Class \Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor
- *
- */
 class FilterProcessor implements CollectionProcessorInterface
 {
     /**
@@ -79,7 +75,7 @@ class FilterProcessor implements CollectionProcessorInterface
                 $conditions[] = [$condition => $filter->getValue()];
             }
         }
-        
+
         if ($fields) {
             $collection->addFieldToFilter($fields, $conditions);
         }

@@ -11,10 +11,6 @@ use Magento\Persistent\Helper\Data as PersistentHelper;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Quote\Model\AddressAdditionalDataProcessor;
 
-/**
- * Class \Magento\Persistent\Model\Checkout\AddressDataProcessorPlugin
- *
- */
 class AddressDataProcessorPlugin
 {
     /**

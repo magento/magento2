@@ -9,10 +9,6 @@ namespace Magento\Setup\Module\Di\Code\Generator;
 
 use Magento\Framework\Interception\Code\Generator\Interceptor as FrameworkInterceptor;
 
-/**
- * Class \Magento\Setup\Module\Di\Code\Generator\Interceptor
- *
- */
 class Interceptor extends FrameworkInterceptor
 {
     /**

@@ -7,10 +7,6 @@ namespace Magento\Cms\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\Cms\Observer\NoRouteObserver
- *
- */
 class NoRouteObserver implements ObserverInterface
 {
     /**

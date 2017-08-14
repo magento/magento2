@@ -8,10 +8,6 @@ namespace Magento\Tax\Controller\Adminhtml\Rate;
 
 use Magento\Tax\Controller\RegistryConstants;
 
-/**
- * Class \Magento\Tax\Controller\Adminhtml\Rate\Add
- *
- */
 class Add extends \Magento\Tax\Controller\Adminhtml\Rate
 {
     /**

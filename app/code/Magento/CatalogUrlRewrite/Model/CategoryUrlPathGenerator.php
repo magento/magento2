@@ -8,10 +8,6 @@ namespace Magento\CatalogUrlRewrite\Model;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
 
-/**
- * Class \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
- *
- */
 class CategoryUrlPathGenerator
 {
     /**

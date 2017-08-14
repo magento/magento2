@@ -5,10 +5,6 @@
  */
 namespace Magento\CatalogInventory\Model\Plugin;
 
-/**
- * Class \Magento\CatalogInventory\Model\Plugin\Layer
- *
- */
 class Layer
 {
     /**

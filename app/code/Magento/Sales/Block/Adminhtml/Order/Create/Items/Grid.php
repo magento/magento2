@@ -16,6 +16,7 @@ use Magento\Quote\Model\Quote\Item;
  * Adminhtml sales order create items grid block
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {

@@ -10,10 +10,6 @@ use Magento\Backend\Block\Widget\Grid\ExportInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-/**
- * Class \Magento\Reports\Controller\Adminhtml\Report\Product\ExportSoldExcel
- *
- */
 class ExportSoldExcel extends \Magento\Reports\Controller\Adminhtml\Report\Product
 {
     /**

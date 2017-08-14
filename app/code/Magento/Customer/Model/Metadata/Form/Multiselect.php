@@ -10,10 +10,6 @@ namespace Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Model\Metadata\ElementFactory;
 use Magento\Framework\App\RequestInterface;
 
-/**
- * Class \Magento\Customer\Model\Metadata\Form\Multiselect
- *
- */
 class Multiselect extends Select
 {
     /**

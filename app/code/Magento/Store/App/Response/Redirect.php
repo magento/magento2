@@ -9,10 +9,6 @@ namespace Magento\Store\App\Response;
 
 use Magento\Store\Api\StoreResolverInterface;
 
-/**
- * Class \Magento\Store\App\Response\Redirect
- *
- */
 class Redirect implements \Magento\Framework\App\Response\RedirectInterface
 {
     /**

@@ -14,6 +14,7 @@ use Magento\Framework\App\ObjectManager;
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Product extends AbstractResource
 {

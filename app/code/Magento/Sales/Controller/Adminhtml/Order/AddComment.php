@@ -9,10 +9,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 use Magento\Backend\App\Action;
 use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Order\AddComment
- *
- */
 class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**

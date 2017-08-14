@@ -7,10 +7,6 @@ namespace Magento\Tax\Block\Adminhtml\Frontend\Region;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
-/**
- * Class \Magento\Tax\Block\Adminhtml\Frontend\Region\Updater
- *
- */
 class Updater extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**

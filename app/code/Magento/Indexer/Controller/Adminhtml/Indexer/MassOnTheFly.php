@@ -6,10 +6,6 @@
  */
 namespace Magento\Indexer\Controller\Adminhtml\Indexer;
 
-/**
- * Class \Magento\Indexer\Controller\Adminhtml\Indexer\MassOnTheFly
- *
- */
 class MassOnTheFly extends \Magento\Indexer\Controller\Adminhtml\Indexer
 {
     /**

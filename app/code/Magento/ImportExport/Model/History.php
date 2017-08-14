@@ -11,6 +11,7 @@ namespace Magento\ImportExport\Model;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 100.0.2
  */
 class History extends \Magento\Framework\Model\AbstractModel
 {

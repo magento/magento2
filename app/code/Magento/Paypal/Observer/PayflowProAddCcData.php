@@ -10,10 +10,6 @@ use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Quote\Api\Data\PaymentInterface;
 
-/**
- * Class \Magento\Paypal\Observer\PayflowProAddCcData
- *
- */
 class PayflowProAddCcData extends AbstractDataAssignObserver
 {
     /**

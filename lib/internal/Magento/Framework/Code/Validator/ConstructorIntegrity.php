@@ -10,10 +10,6 @@ namespace Magento\Framework\Code\Validator;
 use Magento\Framework\Code\ValidatorInterface;
 use Magento\Framework\Phrase;
 
-/**
- * Class \Magento\Framework\Code\Validator\ConstructorIntegrity
- *
- */
 class ConstructorIntegrity implements ValidatorInterface
 {
     /**

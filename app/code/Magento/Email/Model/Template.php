@@ -36,6 +36,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Template extends AbstractTemplate implements \Magento\Framework\Mail\TemplateInterface
 {

@@ -11,10 +11,6 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 
-/**
- * Class \Magento\Customer\Controller\Account\Create
- *
- */
 class Create extends \Magento\Customer\Controller\AbstractAccount
 {
     /**

@@ -11,10 +11,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection;
 use Magento\CatalogInventory\Helper\Stock;
 use Magento\CatalogInventory\Model\Configuration;
 
-/**
- * Class \Magento\CatalogInventory\Model\Plugin\ProductLinks
- *
- */
 class ProductLinks
 {
     /**

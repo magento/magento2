@@ -5,10 +5,6 @@
  */
 namespace Magento\Quote\Model\Quote\Validator\MinimumOrderAmount;
 
-/**
- * Class \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
- *
- */
 class ValidationMessage
 {
     /**

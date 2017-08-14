@@ -7,10 +7,6 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
 use Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterfaceFactory;
 
-/**
- * Class \Magento\Catalog\Model\Indexer\Product\Flat\TableBuilder
- *
- */
 class TableBuilder
 {
     /**

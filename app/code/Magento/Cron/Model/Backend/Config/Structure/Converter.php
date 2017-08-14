@@ -5,10 +5,6 @@
  */
 namespace Magento\Cron\Model\Backend\Config\Structure;
 
-/**
- * Class \Magento\Cron\Model\Backend\Config\Structure\Converter
- *
- */
 class Converter
 {
     /**

@@ -14,10 +14,6 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Options
- *
- */
 class Options extends \Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\AbstractOptions
 {
 }
